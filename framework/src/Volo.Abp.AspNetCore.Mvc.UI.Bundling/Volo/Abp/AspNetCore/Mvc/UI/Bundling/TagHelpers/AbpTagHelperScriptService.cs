@@ -36,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
         {
-            return await BundleManager.GetScriptBundleFilesAsync(bundleName).ConfigureAwait(false);
+            return await BundleManager.GetScriptBundleFilesAsync(bundleName);
         }
 
         protected override void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file)

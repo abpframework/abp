@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.Commands
             await ProjectNugetPackageAdder.AddAsync(
                 GetProjectFile(commandLineArgs),
                 commandLineArgs.Target
-            ).ConfigureAwait(false);
+            );
         }
 
         public string GetUsageInfo()

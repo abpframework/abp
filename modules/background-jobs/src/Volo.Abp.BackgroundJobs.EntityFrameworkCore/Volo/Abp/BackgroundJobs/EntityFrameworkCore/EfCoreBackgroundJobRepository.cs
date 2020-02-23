@@ -24,7 +24,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         public async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
         {
             return await GetWaitingListQuery(maxResultCount)
-                .ToListAsync().ConfigureAwait(false);
+                .ToListAsync();
         }
 
         private IQueryable<BackgroundJobRecord> GetWaitingListQuery(int maxResultCount)

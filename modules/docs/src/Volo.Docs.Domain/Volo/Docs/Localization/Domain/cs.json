@@ -15,6 +15,7 @@
     "DocumentNotFound": "Ups, vyžádaný dokument neexistuje!",
     "NavigationDocumentNotFound": "Tato verze nemá navigační dokument!",
     "DocumentNotFoundInSelectedLanguage": "Tento dokument není dostupný ve vybraném jazyce. Zobrazen dokument ve výchozím jazyce.",
-    "FilterTopics": "Filtrovat témata"
+    "FilterTopics": "Filtrovat témata",
+    "MultipleVersionDocumentInfo": "Tento dokument má více verzí. Vyberte možnosti, které vám nejlépe vyhovují."
   }
 }

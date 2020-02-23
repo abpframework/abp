@@ -32,7 +32,7 @@ describe('SortOrderIconComponent', () => {
     component.sort(newKey);
     expect(component.selectedSortKey).toBe(newKey);
     expect(component.order).toBe('asc');
-    expect(component.icon).toBe('');
+    expect(component.icon).toBe('sorting');
   });
 
   test('should change order correctly when sort function called', () => {

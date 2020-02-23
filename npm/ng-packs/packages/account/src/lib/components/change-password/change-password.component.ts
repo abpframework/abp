@@ -54,7 +54,9 @@ export class ChangePasswordComponent
       passwordRulesArr.push('capital');
     }
 
-    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
+    if (
+      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
+    ) {
       passwordRulesArr.push('special');
     }
 
@@ -72,7 +74,7 @@ export class ChangePasswordComponent
               required,
               validatePassword(passwordRulesArr),
               minLength(requiredLength),
-              maxLength(32),
+              maxLength(128),
             ],
           },
         ],
@@ -83,7 +85,7 @@ export class ChangePasswordComponent
               required,
               validatePassword(passwordRulesArr),
               minLength(requiredLength),
-              maxLength(32),
+              maxLength(128),
             ],
           },
         ],

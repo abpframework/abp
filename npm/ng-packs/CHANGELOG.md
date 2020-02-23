@@ -1,3 +1,41 @@
+# [2.0.0](https://github.com/abpframework/abp/compare/1.1.2...2.0.0) (2020-01-13)
+
+
+### Bug Fixes
+
+* **core:** fix flattedRoutes manipulation ([2b2e0be](https://github.com/abpframework/abp/commit/2b2e0be51d9fb37188348f390b56df286de7a6bc))
+* **core:** fix nullable control in the config state ([756e858](https://github.com/abpframework/abp/commit/756e8588f3dd2d1035dbc22db3773653e28b1542))
+* **core:** update flattedRoutes when patchRoute action dispatched ([15a8279](https://github.com/abpframework/abp/commit/15a82794ac5173bd080d3aec46efb43bfc0614ae))
+* **permission-management:** fix twice executing problem of visible setter([ae16916](https://github.com/abpframework/abp/commit/ae16916ae2b03dfc25d9c4c5ceeb559dee34bde2))
+* **theme-shared:** fix remember me functionality [(#2610)](https://github.com/abpframework/abp/pull/2610) ([189a77f](https://github.com/abpframework/abp/commit/189a77f4c421398b841e67280f6f19c4ef56649d)), closes [(#2602)](https://github.com/abpframework/abp/issues/2602)
+
+
+### Code Refactoring
+
+* remove deprecated functions, outputs, inputs etc. ([f1d0eba](https://github.com/abpframework/abp/commit/f1d0ebae856406213023af11632ed72849928b3e)), closes [#2476](https://github.com/abpframework/abp/issues/2476)
+
+
+### Features
+
+* add state actions to related state services ([#2431](https://github.com/abpframework/abp/pull/2431)), closes ([#2430](https://github.com/abpframework/abp/pull/2430))
+* make some components replaceable ([#2522](https://github.com/abpframework/abp/pull/2522)), closes ([#2404](https://github.com/abpframework/abp/issues/2404))
+* **account:** add autocomplete attiributes for chromium based browsers ([343c847](https://github.com/abpframework/abp/commit/343c847fb70d634218de1b156b3a15557e27acda))
+* **account:** add the enableLocalLogin condition to auth-wrapper ([#2537](https://github.com/abpframework/abp/pull/2573)) ([0fb7ba4](https://github.com/abpframework/abp/commit/0fb7ba4614ebb64a00f19a9bef277a0fb9bee764))
+* **core:** add init directive ([5ae1071](https://github.com/abpframework/abp/commit/5ae10717d73b1d76711dcd68201ed6b0609c4112))
+* **core:** add ExtractFromGeneric type to ABP namespace ([1fe3b35](https://github.com/abpframework/abp/commit/1fe3b35076c5daddf9edc2a8396b62288cf105da))
+* **core:** add init directive to emit an output when the element initialized ([31c224c](https://github.com/abpframework/abp/commit/31c224c9f9c015e94877d1eba382d1cd415704c7))
+* **core:** fill the parentName property in flattedRoutes for child rotues ([17dd0a2](https://github.com/abpframework/abp/commit/17dd0a25a7dc2fa6268ce68f4f2f5d78f78a1f23))
+* **core:** create AddRoute action to add new elements to top navigation ([#2425](https://github.com/abpframework/abp/pull/2425)), closes ([#2186](https://github.com/abpframework/abp/pull/2186))
+* **theme-shared:** trigger unload confirmation in the modal component when form is dirty ([f59a294](https://github.com/abpframework/abp/commit/f59a2945b223a19750afd46da7e33deff2583328))
+* **theme-shared:** create new toast and confirmation components ([#2606](https://github.com/abpframework/abp/pull/2606)), closes ([#2537](https://github.com/abpframework/abp/issues/2537))
+* **theme-shared:** create table, pagination, loading components  ([#2605](https://github.com/abpframework/abp/pull/2605)), related ([#2537](https://github.com/abpframework/abp/issues/2537))
+
+
+### BREAKING CHANGES
+
+* Deprecated functions, outputs, inputs addressed in issue #2476 are removed.
+
+
 # [1.1.0](https://github.com/abpframework/abp/compare/1.0.2...1.1.0) (2019-12-06)
 
 

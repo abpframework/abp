@@ -34,7 +34,7 @@ namespace Volo.Abp.Authorization
 
             foreach (var authorizationAttribute in GetAuthorizationDataAttributes(context.Method))
             {
-                await CheckAsync(authorizationAttribute).ConfigureAwait(false);
+                await CheckAsync(authorizationAttribute);
             }
         }
 
@@ -74,7 +74,7 @@ namespace Volo.Abp.Authorization
             }
             else
             {
-                await _authorizationService.CheckAsync(authorizationAttribute.Policy).ConfigureAwait(false);
+                await _authorizationService.CheckAsync(authorizationAttribute.Policy);
             }
 
             //TODO: What about roles and other props?

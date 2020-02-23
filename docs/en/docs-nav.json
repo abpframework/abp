@@ -50,6 +50,10 @@
       ]
     },
     {
+      "text": "ASP.NET Boilerplate Migration Guide",
+      "path": "AspNet-Boilerplate-Migration-Guide.md"
+    },
+    {
       "text": "CLI",
       "path": "CLI.md"
     },
@@ -59,6 +63,10 @@
         {
           "text": "Configuration",
           "path": "Configuration.md"
+        },
+        {
+          "text": "Options",
+          "path": "Options.md"
         },
         {
           "text": "Dependency Injection",
@@ -83,7 +91,14 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "Validation"
+          "text": "Validation",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation Integration",
+              "path": "FluentValidation.md"
+            }
+          ]
         },
         {
           "text": "Authorization",
@@ -94,11 +109,20 @@
           "path": "Caching.md"
         },
         {
-          "text": "Auditing"
+          "text": "Logging",
+          "path": "Logging.md"
+        },
+        {
+          "text": "Audit Logging",
+          "path": "Audit-Logging.md"
         },
         {
           "text": "Settings",
           "path": "Settings.md"
+        },
+        {
+          "text": "Data Filtering",
+          "path": "Data-Filtering.md"
         }
       ]
     },
@@ -281,6 +305,10 @@
                 {
                   "text": "Switch to SQLite",
                   "path": "Entity-Framework-Core-SQLite.md"
+                },
+                {
+                  "text": "Switch to another DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md"
                 }
               ]
             },

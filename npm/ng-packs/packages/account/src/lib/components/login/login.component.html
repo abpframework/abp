@@ -12,7 +12,7 @@
 </abp-auth-wrapper>
 <ng-template #mainContentRef>
   <h4>{{ 'AbpAccount::Login' | abpLocalization }}</h4>
-  <strong>
+  <strong *ngIf="isSelfRegistrationEnabled">
     {{ 'AbpAccount::AreYouANewUser' | abpLocalization }}
     <a class="text-decoration-none" routerLink="/account/register">{{
       'AbpAccount::Register' | abpLocalization

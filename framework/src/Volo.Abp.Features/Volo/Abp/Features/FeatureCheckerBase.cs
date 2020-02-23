@@ -10,7 +10,7 @@ namespace Volo.Abp.Features
 
         public virtual async Task<bool> IsEnabledAsync(string name)
         {
-            var value = await GetOrNullAsync(name).ConfigureAwait(false);
+            var value = await GetOrNullAsync(name);
             if (value == null)
             {
                 return false;

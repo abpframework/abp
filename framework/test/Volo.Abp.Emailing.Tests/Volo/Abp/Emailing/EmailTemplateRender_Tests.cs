@@ -44,7 +44,7 @@ namespace Volo.Abp.Emailing
                 }
             };
 
-            var result = await _templateRender.RenderAsync(template, model).ConfigureAwait(false);
+            var result = await _templateRender.RenderAsync(template, model);
             result.ShouldBe("Hello john@abp.io 1:iphone,2:ipad,");
         }
 

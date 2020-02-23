@@ -1,43 +1,72 @@
 import { Injectable } from '@angular/core';
-import { AbstractToaster } from '../abstracts/toaster';
 import { Confirmation } from '../models/confirmation';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { fromEvent, Observable, Subject } from 'rxjs';
+import { fromEvent, Observable, Subject, ReplaySubject } from 'rxjs';
 import { takeUntil, debounceTime, filter } from 'rxjs/operators';
-import { Toaster } from '../models/toaster';
+import { Config } from '@abp/ng.core';
 
 @Injectable({ providedIn: 'root' })
-export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
-  key = 'abpConfirmation';
+export class ConfirmationService {
+  status$: Subject<Confirmation.Status>;
+  confirmation$ = new ReplaySubject<Confirmation.DialogData>(1);
 
-  sticky = true;
+  info(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'info', options);
+  }
 
-  destroy$ = new Subject();
+  success(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'success', options);
+  }
 
-  constructor(protected messageService: MessageService) {
-    super(messageService);
+  warn(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'warning', options);
+  }
+
+  error(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    return this.show(message, title, 'error', options);
   }
 
   show(
-    message: string,
-    title: string,
-    severity: Toaster.Severity,
-    options?: Confirmation.Options,
-  ): Observable<Toaster.Status> {
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    severity?: Confirmation.Severity,
+    options?: Partial<Confirmation.Options>,
+  ): Observable<Confirmation.Status> {
+    this.confirmation$.next({
+      message,
+      title,
+      severity: severity || 'neutral',
+      options,
+    });
+    this.status$ = new Subject();
     this.listenToEscape();
-    return super.show(message, title, severity, options);
+    return this.status$;
   }
 
-  clear(status?: Toaster.Status) {
-    super.clear(status);
-
-    this.destroy$.next();
+  clear(status?: Confirmation.Status) {
+    this.confirmation$.next();
+    this.status$.next(status || Confirmation.Status.dismiss);
   }
 
   listenToEscape() {
     fromEvent(document, 'keyup')
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntil(this.status$),
         debounceTime(150),
         filter((key: KeyboardEvent) => key && key.key === 'Escape'),
       )

@@ -6,11 +6,13 @@
     "Permission:Edit": "编辑",
     "Permission:Delete": "删除",
     "Permission:Create": "创建",
+    "Permission:Documents": "文档",
     "Menu:DocumentManagement": "文档",
     "Menu:ProjectManagement": "项目",
     "CreateANewProject": "创建新项目",
     "Edit": "编辑",
     "Create": "创建",
+    "Pull": "拉取",
     "Projects": "项目",
     "Name": "名称",
     "ShortName": "简称",
@@ -27,6 +29,9 @@
     "DisplayName:LatestVersionBranchName": "最新版本的分支名称",
     "DisplayName:GitHubRootUrl": "GitHub根网址",
     "DisplayName:GitHubAccessToken": "GitHub访问令牌",
-    "DisplayName:GitHubUserAgent": "GitHub用户代理"
+    "DisplayName:GitHubUserAgent": "GitHub用户代理",
+    "DisplayName:All": "拉取所有",
+    "DisplayName:LanguageCode": "语言代码",
+    "DisplayName:Version": "版本"
   }
 }

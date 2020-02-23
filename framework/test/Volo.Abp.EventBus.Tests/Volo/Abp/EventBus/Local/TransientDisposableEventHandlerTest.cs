@@ -10,9 +10,9 @@ namespace Volo.Abp.EventBus.Local
         {
             LocalEventBus.Subscribe<MySimpleEventData, MySimpleTransientEventHandler>();
 
-            await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(2)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(3)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
 
             Assert.Equal(3, MySimpleTransientEventHandler.HandleCount);
             Assert.Equal(3, MySimpleTransientEventHandler.DisposeCount);

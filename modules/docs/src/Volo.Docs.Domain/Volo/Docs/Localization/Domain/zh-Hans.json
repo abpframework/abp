@@ -7,6 +7,7 @@
     "ShareOn": "分享到",
     "Version": "版本",
     "Edit": "编辑",
+    "LastEditTime": "上次编辑",
     "Delete": "删除",
     "InThisDocument": "在本文中",
     "GoToTop": "到顶部",
@@ -15,6 +16,10 @@
     "DocumentNotFound": "找不到请求的文档!",
     "NavigationDocumentNotFound": "这个版本没有导航文件!",
     "DocumentNotFoundInSelectedLanguage": "本文档不适用于所选语言, 将以默认语言显示文档.",
-    "FilterTopics": "过滤主题"
+    "FilterTopics": "过滤主题",
+    "New": "新文档",
+    "Upd": "更新",
+    "NewExplanation": "在最近两周内创建.",
+    "UpdatedExplanation": "在最近两周内更新."
   }
 }

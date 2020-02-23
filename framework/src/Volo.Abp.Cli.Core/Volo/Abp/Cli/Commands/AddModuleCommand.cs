@@ -42,7 +42,7 @@ namespace Volo.Abp.Cli.Commands
                 commandLineArgs.Target,
                 commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
                 skipDbMigrations
-            ).ConfigureAwait(false);
+            );
         }
 
         public string GetUsageInfo()

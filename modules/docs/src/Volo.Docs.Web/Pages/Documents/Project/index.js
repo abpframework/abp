@@ -4,7 +4,6 @@
 
         var $navigation = $("#" + navigationContainerId);
 
-
         var getShownDocumentLinks = function () {
             return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
         };
@@ -64,6 +63,121 @@
             }
         });
     };
+
+    var gotoFilteredDocumentIfThereIsOnlyOne = function () {
+        var $links = getShownDocumentLinks();
+        if ($links.length === 1) {
+            var url = $links.first().attr("href");
+            if (url === "javascript:;") {
+                return;
+            }
+
+            var new_uri = uri + "?";
+
+            for (var i = 0; i < comboboxes.length; i++) {
+                var key = $(comboboxes[i]).data('key');
+                var value = comboboxes[i].value;
+
+                new_uri += key + "=" + value;
+
+                if (i !== comboboxes.length - 1) {
+                    new_uri += "&";
+                }
+            }
+
+            window.history.replaceState({}, document.title, new_uri);
+        };
+
+        var getTenYearsLater = function () {
+            var tenYearsLater = new Date();
+            tenYearsLater.setTime(tenYearsLater.getTime() + (365 * 10 * 24 * 60 * 60 * 1000));
+            return tenYearsLater;
+        };
+
+        var setCookies = function () {
+            var cookie = abp.utils.getCookieValue("AbpDocsPreferences");
+
+            if (!cookie || cookie == null || cookie === null) {
+                cookie = "";
+            }
+            var keyValues = cookie.split("|");
+
+            var comboboxes = $(".doc-section-combobox");
+
+            for (var i = 0; i < comboboxes.length; i++) {
+                var key = $(comboboxes[i]).data('key');
+                var value = comboboxes[i].value;
+
+                var changed = false;
+                var keyValueslength = keyValues.length;
+                for (var k = 0; k < keyValueslength; k++) {
+                    var splitted = keyValues[k].split("=");
+
+                    if (splitted.length > 0 && splitted[0] === key) {
+                        keyValues[k] = key + "=" + value;
+                        changed = true;
+                    }
+                }
+
+                if (!changed) {
+                    keyValues.push(key + "=" + value);
+                }
+            }
+
+            abp.utils.setCookieValue("AbpDocsPreferences", keyValues.join('|'), getTenYearsLater(), '/');
+        };
+
+        $(".doc-section-combobox").change(function () {
+            setCookies();
+            clearQueryString();
+            location.reload();
+        });
+
+        setQueryString();
+    };
+
+    var filterDocumentItems = function (filterText) {
+        $navigation.find(".mCSB_container .opened").removeClass("opened");
+        $navigation.find(".mCSB_container > li, .mCSB_container > li ul").hide();
+
+        if (!filterText) {
+            $navigation.find(".mCSB_container > li").show();
+            $navigation.find(".mCSB_container .selected-tree > ul").show();
+            return;
+        }
+
+        var filteredItems = $navigation.find("li > a").filter(function () {
+            return $(this).text().toUpperCase().indexOf(filterText.toUpperCase()) > -1;
+        });
+
+        filteredItems.each(function () {
+
+            var $el = $(this);
+            $el.show();
+            var $parent = $el.parent();
+
+            var hasParent = true;
+            while (hasParent) {
+                if ($parent.attr("id") === navigationContainerId) {
+                    break;
+                }
+
+                $parent.show();
+                $parent.find("> li > label").not(".last-link").addClass("opened");
+
+                $parent = $parent.parent();
+                hasParent = $parent.length > 0;
+            }
+        });
+    };
+
+    $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
+        filterDocumentItems(e.target.value);
+
+        if (e.key === "Enter") {
+            gotoFilteredDocumentIfThereIsOnlyOne();
+        }
+    });
 
     var initAnchorTags = function (container) {
         anchors.options = {

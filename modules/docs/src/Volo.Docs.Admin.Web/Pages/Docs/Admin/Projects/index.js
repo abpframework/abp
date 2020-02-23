@@ -12,10 +12,16 @@
         modalClass: 'projectEdit'
     });
 
+    var _pullModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Docs/Admin/Projects/Pull',
+        modalClass: 'projectPull'
+    });
+
 
     var _dataTable = $('#ProjectsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
+        scrollX: true,
         paging: true,
         searching: false,
         autoWidth: false,
@@ -46,6 +52,15 @@
                                         .then(function () {
                                             _dataTable.ajax.reload();
                                         });
+                                }
+                            },
+                            {
+                                text: l('Pull'),
+                                visible: abp.auth.isGranted('Docs.Admin.Documents'),
+                                action: function (data) {
+                                    _pullModal.open({
+                                        Id: data.record.id
+                                    });
                                 }
                             }
                         ]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -8,6 +9,8 @@ namespace Volo.Abp.Uow
     public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, IDisposable
     {
         Guid Id { get; }
+
+        Dictionary<string, object> Items { get; }
 
         //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted
         event EventHandler<UnitOfWorkFailedEventArgs> Failed;

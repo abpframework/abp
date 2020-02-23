@@ -233,21 +233,21 @@ body {
                     strong {
                         font-weight: 300;
                         text-transform: uppercase;
-                        font-size: .9rem;
-                        opacity: .6;
+                        font-size: .7em; 
+                        letter-spacing: 1px;
                     }
                 }
 
                 .go-back-site {
                     color: #000;
-                    opacity: .15;
-                    transition: .4s;
-                    font-size: .75rem;
+                    opacity: .65;
+                    transition: .2s;
+                    font-size: .8em;
                     font-weight: 300;
 
                     &:hover {
                         text-decoration: none;
-                        opacity: .5;
+                        opacity: 1;
                     }
                 }
 
@@ -329,6 +329,8 @@ body {
         }
 
         article.docs-body {
+            word-break: break-word;
+
             h1 {
                 padding-top: 1rem;
                 font-size: 2.25rem;

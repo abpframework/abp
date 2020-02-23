@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer.Tokens
                 .ServiceProvider
                 .GetRequiredService<TokenCleanupService>()
                 .CleanAsync()
-                .ConfigureAwait(false);
+                ;
         }
     }
 }

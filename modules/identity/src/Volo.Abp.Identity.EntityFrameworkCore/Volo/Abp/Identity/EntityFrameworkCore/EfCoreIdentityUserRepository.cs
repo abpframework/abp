@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .FirstOrDefaultAsync(
                     u => u.NormalizedUserName == normalizedUserName,
                     GetCancellationToken(cancellationToken)
-                ).ConfigureAwait(false);
+                );
         }
 
         public virtual async Task<List<string>> GetRoleNamesAsync(
@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         where userRole.UserId == id
                         select role.Name;
 
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<IdentityUser> FindByLoginAsync(
@@ -52,7 +52,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<IdentityUser> FindByNormalizedEmailAsync(
@@ -62,7 +62,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityUser>> GetListByClaimAsync(
@@ -73,7 +73,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Claims.Any(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value))
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
@@ -83,7 +83,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var role = await DbContext.Roles
                 .Where(x => x.NormalizedName == normalizedRoleName)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
 
             if (role == null)
             {
@@ -93,7 +93,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(u => u.Roles.Any(r => r.RoleId == role.Id))
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityUser>> GetListAsync(
@@ -114,7 +114,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityRole>> GetRolesAsync(
@@ -127,7 +127,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         where userRole.UserId == id
                         select role;
 
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetCountAsync(
@@ -140,7 +140,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         u.UserName.Contains(filter) ||
                         u.Email.Contains(filter)
                 )
-                .LongCountAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<IdentityUser> WithDetails()

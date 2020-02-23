@@ -21,6 +21,7 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -37,6 +38,7 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
@@ -54,7 +56,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementHttpApiClientModule),
         typeof(AbpFeatureManagementHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule)
+        typeof(AbpPermissionManagementHttpApiClientModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebHostModule : AbpModule
     {
@@ -76,6 +79,7 @@ namespace MyCompanyName.MyProjectName
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureMenu(configuration);
             ConfigureCache(configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
@@ -85,7 +89,15 @@ namespace MyCompanyName.MyProjectName
             ConfigureMultiTenancy();
             ConfigureRedis(context, configuration, hostingEnvironment);
         }
-        
+
+        private void ConfigureMenu(IConfiguration configuration)
+        {
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new MyProjectNameWebHostMenuContributor(configuration));
+            });
+        }
+
         private void ConfigureCache(IConfiguration configuration)
         {
             Configure<AbpDistributedCacheOptions>(options =>
@@ -239,7 +251,7 @@ namespace MyCompanyName.MyProjectName
             });
 
             app.UseAuditing();
-
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

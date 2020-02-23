@@ -38,6 +38,8 @@ ABP framework provides integration packages for some common DBMSs to make the co
 
 * [MySQL](Entity-Framework-Core-MySQL.md)
 * [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
+* [SQLite](Entity-Framework-Core-SQLite.md)
+* [Others](Entity-Framework-Core-Other-DBMS.md)
 
 ## Creating DbContext
 
@@ -191,7 +193,7 @@ public class BookRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, 
 
     public async Task DeleteBooksByType(BookType type)
     {
-        await DbContext.Database.ExecuteSqlCommandAsync(
+        await DbContext.Database.ExecuteSqlRawAsync(
             $"DELETE FROM Books WHERE Type = {(int)type}"
         );
     }

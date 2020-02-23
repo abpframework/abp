@@ -3,7 +3,6 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule, Provider } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { TableModule } from 'primeng/table';
 import { AccountRoutingModule } from './account-routing.module';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { LoginComponent } from './components/login/login.component';
@@ -29,7 +28,6 @@ import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.com
     CoreModule,
     AccountRoutingModule,
     ThemeSharedModule,
-    TableModule,
     NgbDropdownModule,
     NgxValidateCoreModule,
   ],

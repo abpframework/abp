@@ -12,14 +12,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
         [Fact]
         public async Task Should_Validate_Object_Result_Success()
         {
-            var result = await GetResponseAsStringAsync("/api/validation-test/object-result-action?value1=hello").ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync("/api/validation-test/object-result-action?value1=hello");
             result.ShouldBe("hello");
         }
 
         [Fact]
         public async Task Should_Validate_Object_Result_Failing()
         {
-            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action?value1=a", HttpStatusCode.BadRequest).ConfigureAwait(false); //value1 has min length of 2 chars.
+            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action?value1=a", HttpStatusCode.BadRequest); //value1 has min length of 2 chars.
             result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
         }
 
@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
         {
             using (CultureHelper.Use("tr"))
             {
-                var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action?value1=a", HttpStatusCode.BadRequest).ConfigureAwait(false); //value1 has min length of 2 chars.
+                var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action?value1=a", HttpStatusCode.BadRequest); //value1 has min length of 2 chars.
                 result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
                 result.Error.ValidationErrors[0].Message.ShouldBe("Değer Bir alanı en az '2' uzunluğunda bir metin ya da dizi olmalıdır.");
             }
@@ -37,14 +37,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
         [Fact]
         public async Task Should_Not_Validate_Action_Result_Success()
         {
-            var result = await GetResponseAsStringAsync("/api/validation-test/action-result-action?value1=hello").ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync("/api/validation-test/action-result-action?value1=hello");
             result.ShouldBe("ModelState.IsValid: true");
         }
 
         [Fact]
         public async Task Should_Not_Validate_Action_Result_Failing()
         {
-            var result = await GetResponseAsStringAsync("/api/validation-test/action-result-action").ConfigureAwait(false); //Missed the value1
+            var result = await GetResponseAsStringAsync("/api/validation-test/action-result-action"); //Missed the value1
             result.ShouldBe("ModelState.IsValid: false");
         }
 
@@ -52,7 +52,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
         public async Task Should_Return_Custom_Validate_Errors()
         {
             var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>(
-                "/api/validation-test/object-result-action-with-custom_validate?value1=abc", HttpStatusCode.BadRequest).ConfigureAwait(false); //value1 should be hello.
+                "/api/validation-test/object-result-action-with-custom_validate?value1=abc", HttpStatusCode.BadRequest); //value1 should be hello.
 
             result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
             result.Error.ValidationErrors.ShouldContain(x => x.Message == "Value1 should be hello");

@@ -8,9 +8,11 @@ using MyCompanyName.MyProjectName.Web;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
@@ -42,6 +44,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
+        typeof(AbpAccountApplicationModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
@@ -54,7 +57,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebUnifiedModule : AbpModule
     {
@@ -94,7 +98,8 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português (Brasil)"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "Chinese"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             });
 
             Configure<AbpMultiTenancyOptions>(options =>
@@ -135,6 +140,7 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAbpRequestLocalization();
             app.UseAuditing();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
 
             using (var scope = context.ServiceProvider.CreateScope())

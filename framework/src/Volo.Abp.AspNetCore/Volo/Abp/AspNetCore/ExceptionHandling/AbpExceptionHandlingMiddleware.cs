@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
         {
             try
             {
-                await next(context).ConfigureAwait(false);
+                await next(context);
             }
             catch (Exception ex)
             {
@@ -44,7 +44,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                 {
                     if (actionInfo.IsObjectResult) //TODO: Align with AbpExceptionFilter.ShouldHandleException!
                     {
-                        await HandleAndWrapException(context, ex).ConfigureAwait(false);
+                        await HandleAndWrapException(context, ex);
                         return;
                     }
                 }
@@ -72,7 +72,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                         errorInfoConverter.Convert(exception)
                     )
                 )
-            ).ConfigureAwait(false);
+            );
         }
 
         private Task ClearCacheHeaders(object state)

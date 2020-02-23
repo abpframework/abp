@@ -50,7 +50,7 @@ export class TenantsComponent implements OnInit {
 
   _useSharedDatabase: boolean;
 
-  pageQuery: ABP.PageQueryParams = {};
+  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
 
   loading = false;
 
@@ -109,7 +109,7 @@ export class TenantsComponent implements OnInit {
     this.get();
   }
 
-  onSearch(value) {
+  onSearch(value: string) {
     this.pageQuery.filter = value;
     this.get();
   }
@@ -246,9 +246,8 @@ export class TenantsComponent implements OnInit {
       });
   }
 
-  onPageChange(data) {
-    this.pageQuery.skipCount = data.first;
-    this.pageQuery.maxResultCount = data.rows;
+  onPageChange(page: number) {
+    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
 
     this.get();
   }

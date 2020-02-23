@@ -27,7 +27,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _userAppService.GetAsync(johnNash.Id).ConfigureAwait(false);
+            var result = await _userAppService.GetAsync(johnNash.Id);
 
             //Assert
 
@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _userAppService.GetListAsync(new GetIdentityUsersInput()).ConfigureAwait(false);
+            var result = await _userAppService.GetListAsync(new GetIdentityUsersInput());
 
             //Assert
 
@@ -68,7 +68,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _userAppService.CreateAsync(input).ConfigureAwait(false);
+            var result = await _userAppService.CreateAsync(input);
 
             //Assert
 
@@ -78,7 +78,7 @@ namespace Volo.Abp.Identity
             result.LockoutEnabled.ShouldBe(input.LockoutEnabled);
             result.PhoneNumber.ShouldBe(input.PhoneNumber);
 
-            var user = await _userRepository.GetAsync(result.Id).ConfigureAwait(false);
+            var user = await _userRepository.GetAsync(result.Id);
             user.Id.ShouldBe(result.Id);
             user.UserName.ShouldBe(input.UserName);
             user.Email.ShouldBe(input.Email);
@@ -109,7 +109,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _userAppService.UpdateAsync(johnNash.Id, input).ConfigureAwait(false);
+            var result = await _userAppService.UpdateAsync(johnNash.Id, input);
 
             //Assert
 
@@ -119,7 +119,7 @@ namespace Volo.Abp.Identity
             result.LockoutEnabled.ShouldBe(input.LockoutEnabled);
             result.PhoneNumber.ShouldBe(input.PhoneNumber);
 
-            var user = await _userRepository.GetAsync(result.Id).ConfigureAwait(false);
+            var user = await _userRepository.GetAsync(result.Id);
             user.Id.ShouldBe(result.Id);
             user.UserName.ShouldBe(input.UserName);
             user.Email.ShouldBe(input.Email);
@@ -133,7 +133,7 @@ namespace Volo.Abp.Identity
         public async Task UpdateAsync_Concurrency_Exception()
         {
             //Get user
-            var johnNash = await _userAppService.GetAsync(_testData.UserJohnId).ConfigureAwait(false);
+            var johnNash = await _userAppService.GetAsync(_testData.UserJohnId);
             
             //Act
 
@@ -150,13 +150,13 @@ namespace Volo.Abp.Identity
                 ConcurrencyStamp = johnNash.ConcurrencyStamp
             };
 
-            await _userAppService.UpdateAsync(johnNash.Id, input).ConfigureAwait(false);
+            await _userAppService.UpdateAsync(johnNash.Id, input);
 
             //Second update with same input will throw exception because the entity has been modified
             (await Assert.ThrowsAsync<AbpIdentityResultException>(async () =>
             {
-                await _userAppService.UpdateAsync(johnNash.Id, input).ConfigureAwait(false);
-            }).ConfigureAwait(false)).Message.ShouldContain("Optimistic concurrency failure");
+                await _userAppService.UpdateAsync(johnNash.Id, input);
+            })).Message.ShouldContain("Optimistic concurrency failure");
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            await _userAppService.DeleteAsync(johnNash.Id).ConfigureAwait(false);
+            await _userAppService.DeleteAsync(johnNash.Id);
 
             //Assert
 
@@ -184,7 +184,7 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _userAppService.GetRolesAsync(johnNash.Id).ConfigureAwait(false);
+            var result = await _userAppService.GetRolesAsync(johnNash.Id);
 
             //Assert
 
@@ -208,11 +208,11 @@ namespace Volo.Abp.Identity
                 {
                     RoleNames = new[] { "admin", "moderator" }
                 }
-            ).ConfigureAwait(false);
+            );
 
             //Assert
 
-            var roleNames = await _userRepository.GetRoleNamesAsync(johnNash.Id).ConfigureAwait(false);
+            var roleNames = await _userRepository.GetRoleNamesAsync(johnNash.Id);
             roleNames.Count.ShouldBe(2);
             roleNames.ShouldContain("admin");
             roleNames.ShouldContain("moderator");
