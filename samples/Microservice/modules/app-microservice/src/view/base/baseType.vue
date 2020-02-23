@@ -37,16 +37,16 @@
           </Col>
         </Row>
         <FormItem label="编码" prop="code" label-position="left">
-          <Input v-model="formModel.fields.code" placeholder="请输入编码"/>
+          <Input v-model="formModel.fields.code" placeholder="请输入编码" />
         </FormItem>
         <FormItem label="名称" prop="name" label-position="left">
-          <Input v-model="formModel.fields.name" placeholder="请输入名称"/>
+          <Input v-model="formModel.fields.name" placeholder="请输入名称" />
         </FormItem>
         <FormItem label="排序码" prop="sort" label-position="left">
-          <Input v-model="formModel.fields.sort" placeholder="请输入排序码"/>
+          <Input v-model="formModel.fields.sort" placeholder="请输入排序码" />
         </FormItem>
         <FormItem label="备注" prop="remark" label-position="left">
-          <Input v-model="formModel.fields.remark" placeholder="请输入备注"/>
+          <Input v-model="formModel.fields.remark" placeholder="请输入备注" />
         </FormItem>
       </Form>
       <div class="demo-drawer-footer">
@@ -273,24 +273,12 @@ export default {
         }
       });
     },
-    validateRoleForm() {
-      let _valid = false;
-      this.$refs["form"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-          _valid = false;
-        } else {
-          _valid = true;
-        }
-      });
-      return _valid;
-    },
     add() {
       this.$refs["form"].resetFields();
       this.formModel.mode = "create";
       this.formModel.opened = true;
       this.formModel.parentName = "";
-      this.formModel.parentGuid=""
+      this.formModel.parentGuid = "";
       this.getBaseTypeViewTrees(null);
     },
     edit(data) {
@@ -301,8 +289,8 @@ export default {
       loadBaseType({ id: data.id }).then(res => {
         that.formModel.fields = res.data;
 
-        that.formModel.parentName='';
-        that.formModel.parentGuid=res.data.parentId;
+        that.formModel.parentName = "";
+        that.formModel.parentGuid = res.data.parentId;
 
         this.getBaseTypeViewTrees(data.id).then(() => {
           var selectNodes = that.$refs.tree.getSelectedNodes();
@@ -320,29 +308,32 @@ export default {
         that.formModel.data = res.data;
       });
     },
-    
+
     handleSubmit() {
-      let valid = this.validateRoleForm();
       var that = this;
-      if (valid) {
-        if (this.formModel.parentGuid != "") {
-          this.formModel.fields.parentId = this.formModel.parentGuid;
+      this.$refs["form"].validate(valid => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+        } else {
+          if (this.formModel.parentGuid != "") {
+            this.formModel.fields.parentId = this.formModel.parentGuid;
+          }
+          if (this.formModel.mode === "create") {
+            createBaseType(this.formModel.fields).then(res => {
+              this.$Message.success("新增字典类别成功");
+              that.queryCategoryList();
+              that.formModel.opened = false;
+            });
+          }
+          if (this.formModel.mode === "edit") {
+            editBaseType(this.formModel.fields).then(res => {
+              this.$Message.success("修改字典类别成功");
+              that.queryCategoryList();
+              that.formModel.opened = false;
+            });
+          }
         }
-        if (this.formModel.mode === "create") {
-          createBaseType(this.formModel.fields).then(res => {
-            this.$Message.success("新增字典类别成功");
-            that.queryCategoryList();
-            that.formModel.opened = false;
-          });
-        }
-        if (this.formModel.mode === "edit") {
-          editBaseType(this.formModel.fields).then(res => {
-            this.$Message.success("修改字典类别成功");
-            that.queryCategoryList();
-            that.formModel.opened = false;
-          });
-        }
-      }
+      });
     }
   },
   mounted() {

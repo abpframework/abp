@@ -19,6 +19,7 @@ namespace Volo.Abp.PermissionManagement.HttpApi
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementHttpApiModule).Assembly);
             });
+
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

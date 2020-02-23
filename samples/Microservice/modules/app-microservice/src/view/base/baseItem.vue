@@ -19,44 +19,44 @@ a<template>
       >
         <div slot="search">
           <section class="dnc-toolbar-wrap">
-             <Row :gutter="16">
-               <Col span="16">
+            <Row :gutter="16">
+              <Col span="16">
                 <Form inline>
                   <FormItem>
                     <Dropdown
-                        trigger="click"
-                        :transfer="true"
-                        placement="bottom-start"
-                        style="min-width:80px;"
-                        @on-visible-change="handleSearchTypeTreeVisibleChange"
-                      >
-                        <Button type="primary">
-                          <span v-text="stores.baseItem.query.typeName"></span>
-                          <Icon type="ios-arrow-down"></Icon>
-                        </Button>
-                        <div class="text-left pad10" slot="list" style="min-width:360px;">
-                          <div>
-                            <Button
-                              type="primary"
-                              size="small"
-                              icon="ios-search"
-                              @click="handleRefreshSearchTypeTreeData"
-                            >刷新菜单</Button>
-                            <Button
-                              class="ml3"
-                              type="primary"
-                              size="small"
-                              icon="md-close"
-                              @click="handleClearSearchTypeTreeSelection"
-                            >清空</Button>
-                          </div>
-                          <Tree
-                            class="text-left dropdown-tree"
-                            :data="stores.baseItem.sources.typeTree.data"
-                            @on-select-change="handleSearchTypeTreeSelectChange"
-                          ></Tree>
+                      trigger="click"
+                      :transfer="true"
+                      placement="bottom-start"
+                      style="min-width:80px;"
+                      @on-visible-change="handleSearchTypeTreeVisibleChange"
+                    >
+                      <Button type="primary">
+                        <span v-text="stores.baseItem.query.typeName"></span>
+                        <Icon type="ios-arrow-down"></Icon>
+                      </Button>
+                      <div class="text-left pad10" slot="list" style="min-width:360px;">
+                        <div>
+                          <Button
+                            type="primary"
+                            size="small"
+                            icon="ios-search"
+                            @click="handleRefreshSearchTypeTreeData"
+                          >刷新菜单</Button>
+                          <Button
+                            class="ml3"
+                            type="primary"
+                            size="small"
+                            icon="md-close"
+                            @click="handleClearSearchTypeTreeSelection"
+                          >清空</Button>
                         </div>
-                      </Dropdown>
+                        <Tree
+                          class="text-left dropdown-tree"
+                          :data="stores.baseItem.sources.typeTree.data"
+                          @on-select-change="handleSearchTypeTreeSelectChange"
+                        ></Tree>
+                      </div>
+                    </Dropdown>
                   </FormItem>
                 </Form>
               </Col>
@@ -108,16 +108,16 @@ a<template>
           </Col>
         </Row>
         <FormItem label="编码" prop="code" label-position="left">
-          <Input v-model="formModel.fields.code" placeholder="请输入编码"/>
+          <Input v-model="formModel.fields.code" placeholder="请输入编码" />
         </FormItem>
         <FormItem label="名称" prop="name" label-position="left">
-          <Input v-model="formModel.fields.name" placeholder="请输入名称"/>
+          <Input v-model="formModel.fields.name" placeholder="请输入名称" />
         </FormItem>
         <FormItem label="排序码" prop="sort" label-position="left">
-          <Input v-model="formModel.fields.sort" placeholder="请输入排序码"/>
+          <Input v-model="formModel.fields.sort" placeholder="请输入排序码" />
         </FormItem>
         <FormItem label="备注" prop="remark" label-position="left">
-          <Input v-model="formModel.fields.remark" placeholder="请输入备注"/>
+          <Input v-model="formModel.fields.remark" placeholder="请输入备注" />
         </FormItem>
       </Form>
       <div class="demo-drawer-footer">
@@ -142,7 +142,7 @@ import {
 } from "@/api/base/baseItem";
 
 export default {
-  name: "Album",
+  name: "baseItem",
   components: {
     Tables
   },
@@ -186,7 +186,7 @@ export default {
             SkipCount: 0,
             Sorting: "sort",
             typeName: "请选择...",
-            BaseTypeGuid:""
+            BaseTypeGuid: ""
           },
           sources: {
             statusSources: [
@@ -198,17 +198,17 @@ export default {
               { value: 0, text: "禁用" },
               { value: 1, text: "正常" }
             ],
-             typeTree: {
+            typeTree: {
               inited: false,
               data: []
-            },
+            }
           },
           columns: [
             { type: "selection", width: 50, key: "handle" },
             { title: "编码名称", key: "code", width: 150 },
             { title: "名称", key: "name", width: 250 },
             { title: "排序码", key: "sort", width: 250 },
-            { title: "备注", key: "remark"},
+            { title: "备注", key: "remark" },
             {
               title: "操作",
               align: "center",
@@ -319,7 +319,8 @@ export default {
       });
     },
     handlePageChanged(page) {
-      this.stores.baseItem.query.SkipCount =  (page - 1) * this.stores.baseItem.query.MaxResultCount;
+      this.stores.baseItem.query.SkipCount =
+        (page - 1) * this.stores.baseItem.query.MaxResultCount;
       this.loadbaseItemList();
     },
     handlePageSizeChanged(MaxResultCount) {
@@ -341,24 +342,12 @@ export default {
         that.loadbaseItemList();
       });
     },
-    validatebaseItemForm() {
-      let _valid = false;
-      this.$refs["form"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-          _valid = false;
-        } else {
-          _valid = true;
-        }
-      });
-      return _valid;
-    },
     handleShowCreateWindow() {
       this.$refs["form"].resetFields();
       this.formModel.mode = "create";
       this.formModel.opened = true;
       this.formModel.parentName = "";
-      this.formModel.parentGuid=""
+      this.formModel.parentGuid = "";
       this.getViewTrees(null);
     },
     handleEdit(data) {
@@ -370,7 +359,7 @@ export default {
         that.formModel.fields = res.data;
 
         that.formModel.parentName = "";
-        that.formModel.parentGuid = res.data.parentId;
+        that.formModel.parentGuid = res.data.baseTypeGuid;
 
         this.getViewTrees(data.row.baseTypeGuid).then(() => {
           var selectNodes = that.$refs.tree.getSelectedNodes();
@@ -389,29 +378,35 @@ export default {
       });
     },
     handleSubmit() {
-      let valid = this.validatebaseItemForm();
       var that = this;
-      if (valid) {
-        if (this.formModel.parentGuid == ""||this.formModel.parentGuid==undefined) {
-          this.$Message.error("请选择字典类别!");
-          return;
+      this.$refs["form"].validate(valid => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+        } else {
+          if (
+            this.formModel.parentGuid == "" ||
+            this.formModel.parentGuid == undefined
+          ) {
+            this.$Message.error("请选择字典类别!");
+            return;
+          }
+          this.formModel.fields.baseTypeGuid = this.formModel.parentGuid;
+          if (this.formModel.mode === "create") {
+            createBaseItem(this.formModel.fields).then(res => {
+              this.$Message.success("新增字典成功");
+              that.loadbaseItemList();
+              that.formModel.opened = false;
+            });
+          }
+          if (this.formModel.mode === "edit") {
+            editBaseItem(this.formModel.fields).then(res => {
+              this.$Message.success("修改字典成功");
+              that.loadbaseItemList();
+              that.formModel.opened = false;
+            });
+          }
         }
-        this.formModel.fields.baseTypeGuid = this.formModel.parentGuid;
-        if (this.formModel.mode === "create") {
-          createBaseItem(this.formModel.fields).then(res => {
-            this.$Message.success("新增字典成功");
-            that.loadbaseItemList();
-            that.formModel.opened = false;
-          });
-        }
-        if (this.formModel.mode === "edit") {
-          editBaseItem(this.formModel.fields).then(res => {
-            this.$Message.success("修改字典成功");
-            that.loadbaseItemList();
-            that.formModel.opened = false;
-          });
-        }
-      }
+      });
     },
     handleSearchTypeTreeSelectChange(nodes) {
       var node = nodes[0];
@@ -429,8 +424,8 @@ export default {
         });
       }
     },
-   handleRefreshSearchTypeTreeData() {
-     getViewTrees({}).then(res => {
+    handleRefreshSearchTypeTreeData() {
+      getViewTrees({}).then(res => {
         this.stores.baseItem.sources.typeTree.data = res.data;
       });
     },
@@ -442,7 +437,7 @@ export default {
   },
   mounted() {
     this.loadbaseItemList();
-    this.handleRefreshSearchTypeTreeData()
+    this.handleRefreshSearchTypeTreeData();
   }
 };
 </script>

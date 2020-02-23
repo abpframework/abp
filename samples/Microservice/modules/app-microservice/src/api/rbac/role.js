@@ -2,16 +2,16 @@ import axios from '@/libs/api.request'
 
 export const getRoleList = (data) => {
   return axios.request({
-    url: 'identity/identityRole',
+    url: 'identity/roles',
     method: 'get',
-    params:data
+    params: data
   })
 }
 
 // createRole
 export const createRole = (data) => {
   return axios.request({
-    url: 'identity/identityRole',
+    url: 'identity/roles',
     method: 'post',
     data
   })
@@ -20,7 +20,7 @@ export const createRole = (data) => {
 //loadRole
 export const loadRole = (data) => {
   return axios.request({
-    url: 'identity/identityRole/' + data.id,
+    url: 'identity/roles/' + data.id,
     method: 'get'
   })
 }
@@ -28,7 +28,7 @@ export const loadRole = (data) => {
 // editRole
 export const editRole = (data) => {
   return axios.request({
-    url: 'identity/identityRole/'+data.id,
+    url: 'identity/roles/' + data.id,
     method: 'put',
     data
   })
@@ -37,21 +37,21 @@ export const editRole = (data) => {
 // delete role
 export const deleteRole = (ids) => {
   return axios.request({
-    url: 'identity/identityRole/' + ids,
+    url: 'identity/roles/' + ids,
     method: 'delete'
   })
 }
 
-export const loadSimpleList=()=>{
+export const loadSimpleList = () => {
   return axios.request({
-    url: 'identity/identityRole/list',
+    url: 'identity/roles',
     method: 'get'
   })
 }
 
-export const loadRoleListByUserGuid=(user_guid)=>{
+export const loadRoleListByUserGuid = (user_guid) => {
   return axios.request({
-    url: 'identity/identityUser/'+user_guid+'/roles',
+    url: 'identity/users/' + user_guid + '/roles',
     method: 'get'
   })
 }

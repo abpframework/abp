@@ -66,36 +66,36 @@
         <Row :gutter="16">
           <Col span="12">
             <FormItem label="登录名" prop="userName">
-              <Input v-model="formModel.fields.userName" placeholder="请输入登录名"/>
+              <Input v-model="formModel.fields.userName" placeholder="请输入登录名" />
             </FormItem>
           </Col>
-          <Col span="12" v-show="formModel.fields.id==''">
+          <Col span="12">
             <FormItem label="登录密码" prop="password">
-              <Input type="password" v-model="formModel.fields.password" placeholder="请输入登录密码"/>
+              <Input type="text" v-model="formModel.fields.password" placeholder="不修改时，请留空" />
             </FormItem>
           </Col>
         </Row>
         <Row :gutter="16">
           <Col span="12">
             <FormItem label="姓" prop="surname">
-              <Input v-model="formModel.fields.surname" placeholder="请输入姓"/>
+              <Input v-model="formModel.fields.surname" placeholder="请输入姓" />
             </FormItem>
           </Col>
           <Col span="12">
             <FormItem label="名" prop="name">
-              <Input v-model="formModel.fields.name" placeholder="请输入名"/>
+              <Input v-model="formModel.fields.name" placeholder="请输入名" />
             </FormItem>
           </Col>
         </Row>
         <Row :gutter="16">
           <Col span="12">
             <FormItem label="email" prop="email">
-              <Input type="text" v-model="formModel.fields.email" placeholder="请输入email"/>
+              <Input type="text" v-model="formModel.fields.email" placeholder="请输入email" />
             </FormItem>
           </Col>
           <Col span="12">
             <FormItem label="手机号" prop="phoneNumber">
-              <Input type="text" v-model="formModel.fields.phoneNumber" placeholder="请输入手机号"/>
+              <Input type="text" v-model="formModel.fields.phoneNumber" placeholder="请输入手机号" />
             </FormItem>
           </Col>
         </Row>
@@ -195,7 +195,7 @@
     >
       <Form ref="permissionRole" :model="permissionModal" label-position="left">
         <FormItem label="用户Id" prop="entityDisplayName" label-position="left">
-          <Input v-model="permissionModal.entityDisplayName" disabled/>
+          <Input v-model="permissionModal.entityDisplayName" disabled />
         </FormItem>
         <FormItem>
           <Row :gutter="16">
@@ -238,7 +238,7 @@ export default {
   },
   data() {
     return {
-      providerName:"User",
+      providerName: "U",
       permissionModal: {
         opened: false,
         rolePermission: [],
@@ -256,7 +256,7 @@ export default {
         organizationData: [],
         visible: false,
         fields: {
-          sendActivationEmail:false,
+          sendActivationEmail: false,
           id: "",
           password: "",
           userName: "",
@@ -283,13 +283,6 @@ export default {
               required: true,
               message: "请输入email格式,大于三个字符",
               min: 3
-            }
-          ],
-          password: [
-            {
-              type: "string",
-              required: true,
-              message: "请输入密码!"
             }
           ]
         }
@@ -539,15 +532,19 @@ export default {
       this.getUserViewTrees(null);
     },
     handleSubmitUser() {
-      let valid = this.validateUserForm();
-      if (valid) {
-        if (this.formModel.mode === "create") {
-          this.doCreateUser();
+      let _valid = false;
+      this.$refs["formUser"].validate(valid => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+        } else {
+          if (this.formModel.mode === "create") {
+            this.doCreateUser();
+          }
+          if (this.formModel.mode === "edit") {
+            this.doEditUser();
+          }
         }
-        if (this.formModel.mode === "edit") {
-          this.doEditUser();
-        }
-      }
+      });
     },
     handleResetFormUser() {
       this.$refs["formUser"].resetFields();
@@ -579,21 +576,10 @@ export default {
         });
       });
     },
-    validateUserForm() {
-      let _valid = false;
-      this.$refs["formUser"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-        } else {
-          _valid = true;
-        }
-      });
-      return _valid;
-    },
     doLoadUser(id) {
       loadUser({ id: id }).then(res => {
         this.formModel.fields = res.data;
-        this.formModel.fields.password = "t";
+        this.formModel.fields.password = "";
       });
     },
     handleDelete(params) {
@@ -625,13 +611,13 @@ export default {
       var defaults = [];
       loadSimpleList().then(res => {
         var result = [];
-        for (var i = 0; i < res.data.length; i++) {
+        for (var i = 0; i < res.data.items.length; i++) {
           result.push({
-            key: res.data[i].name,
-            label: res.data[i].name
+            key: res.data.items[i].name,
+            label: res.data.items[i].name
           });
-          if (res.data[i].isDefault == true) {
-            defaults.push(res.data[i].name);
+          if (res.data.items[i].isDefault == true) {
+            defaults.push(res.data.items[i].name);
           }
         }
         this.formAssignRole.roles = result;
@@ -674,7 +660,7 @@ export default {
       this.permissionModal.opened = true;
       var that = this;
       loadPermissionTree({
-        providerName:this.providerName,
+        providerName: this.providerName,
         providerKey: params.row.id
       }).then(res => {
         that.permissionModal.name = params.row.id;
@@ -692,18 +678,22 @@ export default {
     isDisabled(isGranted, grantedProviders) {
       return (
         isGranted &&
-        grantedProviders.filter(it => it.providerName != this.providerName).length > 0
+        grantedProviders.filter(it => it.providerName != this.providerName)
+          .length > 0
       );
     },
     getShownName(item) {
-      if (!this.isDisabled(item.isGranted,item.grantedProviders)) {
-         return item.displayName;
+      if (!this.isDisabled(item.isGranted, item.grantedProviders)) {
+        return item.displayName;
       }
       return (
         item.displayName +
         "(" +
         item.grantedProviders
-          .filter(it => it.providerName != this.providerName).map(r=>{return r.providerName})
+          .filter(it => it.providerName != this.providerName)
+          .map(r => {
+            return r.providerName;
+          })
           .join(",") +
         ")"
       );

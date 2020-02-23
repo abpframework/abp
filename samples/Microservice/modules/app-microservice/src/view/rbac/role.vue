@@ -106,7 +106,7 @@
     >
       <Form ref="permissionRole" :model="permissionModal" label-position="left">
         <FormItem label="角色名称" prop="entityDisplayName" label-position="left">
-          <Input v-model="permissionModal.entityDisplayName" disabled/>
+          <Input v-model="permissionModal.entityDisplayName" disabled />
         </FormItem>
         <FormItem>
           <Row :gutter="16">
@@ -147,6 +147,7 @@ export default {
   },
   data() {
     return {
+      providerName: "R",
       formModel: {
         opened: false,
         title: "创建角色",
@@ -534,15 +535,19 @@ export default {
       this.handleResetFormRole();
     },
     handleSubmitRole() {
-      let valid = this.validateRoleForm();
-      if (valid) {
-        if (this.formModel.mode === "create") {
-          this.doCreateRole();
+      let _valid = false;
+      this.$refs["formRole"].validate(valid => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+        } else {
+          if (this.formModel.mode === "create") {
+            this.doCreateRole();
+          }
+          if (this.formModel.mode === "edit") {
+            this.doEditRole();
+          }
         }
-        if (this.formModel.mode === "edit") {
-          this.doEditRole();
-        }
-      }
+      });
     },
     handleResetFormRole() {
       this.$refs["formRole"].resetFields();
@@ -561,18 +566,6 @@ export default {
         this.loadRoleList();
         this.handleCloseFormWindow();
       });
-    },
-    validateRoleForm() {
-      let _valid = false;
-      this.$refs["formRole"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-          _valid = false;
-        } else {
-          _valid = true;
-        }
-      });
-      return _valid;
     },
     doLoadRole(id) {
       loadRole({ id: id }).then(res => {
@@ -634,7 +627,7 @@ export default {
       this.permissionModal.opened = true;
       var that = this;
       loadPermissionTree({
-        providerName: "Role",
+        providerName: that.providerName,
         providerKey: params.row.name
       }).then(res => {
         that.permissionModal.name = params.row.name;
@@ -667,7 +660,7 @@ export default {
         });
       });
 
-      editPermission("Role", that.permissionModal.name, {
+      editPermission(that.providerName, that.permissionModal.name, {
         permissions: permissions
       }).then(res => {
         this.$Message.success("配置权限成功!");

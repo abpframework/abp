@@ -2,16 +2,16 @@ import axios from '@/libs/api.request'
 
 export const getUserList = (data) => {
   return axios.request({
-    url: 'identity/identityUser',
+    url: 'identity/users',
     method: 'get',
-    params:data
+    params: data
   })
 }
 
 // createUser
 export const createUser = (data) => {
   return axios.request({
-    url: 'identity/identityUser',
+    url: 'identity/users',
     method: 'post',
     data
   })
@@ -20,7 +20,7 @@ export const createUser = (data) => {
 //loadUser
 export const loadUser = (data) => {
   return axios.request({
-    url: 'identity/identityUser/' + data.id,
+    url: 'identity/users/' + data.id,
     method: 'get'
   })
 }
@@ -28,7 +28,7 @@ export const loadUser = (data) => {
 // editUser
 export const editUser = (data) => {
   return axios.request({
-    url: 'identity/identityUser/'+data.id,
+    url: 'identity/users/' + data.id,
     method: 'put',
     data
   })
@@ -37,7 +37,7 @@ export const editUser = (data) => {
 // delete user
 export const deleteUser = (ids) => {
   return axios.request({
-    url: 'identity/identityUser/' + ids,
+    url: 'identity/users/' + ids,
     method: 'delete'
   })
 }
@@ -46,7 +46,7 @@ export const deleteUser = (ids) => {
 
 export const emailConfirmation = (data) => {
   return axios.request({
-    url: 'identity/identityUser/emailConfirmation',
+    url: 'identity/users/emailConfirmation',
     method: 'put',
     data
   })

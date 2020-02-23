@@ -2,7 +2,7 @@ import axios from "@/libs/api.request";
 
 export const getMenuList = data => {
   return axios.request({
-    url: "rbac/menu/list",
+    url: "rbac/menu",
     method: "post",
     data
   });

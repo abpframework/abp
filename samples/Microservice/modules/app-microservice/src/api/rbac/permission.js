@@ -2,9 +2,9 @@ import axios from '@/libs/api.request'
 
 
 // edit submit
-export const editPermission = (providerName,providerKey,data) => {
+export const editPermission = (providerName, providerKey, data) => {
   return axios.request({
-    url: 'abp/permissions?providerName='+providerName+'&providerKey='+providerKey,
+    url: 'abp/permissions?providerName=' + providerName + '&providerKey=' + providerKey,
     method: 'put',
     data
   })
@@ -15,6 +15,6 @@ export const loadPermissionTree = (data) => {
   return axios.request({
     url: 'abp/permissions',
     method: 'get'
-    ,params:data
+    , params: data
   })
 }

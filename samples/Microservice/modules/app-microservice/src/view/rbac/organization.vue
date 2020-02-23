@@ -6,13 +6,7 @@
       </Col>
     </Row>
     <Tree :data="treeData" :load-data="loadData" :render="renderContent"></Tree>
-    <Drawer
-      title="部门"
-      v-model="formModel.opened"
-      width="400"
-      :mask-closable="false"
-      :mask="false"
-    >
+    <Drawer title="部门" v-model="formModel.opened" width="400" :mask-closable="false" :mask="false">
       <Form :model="formModel.fields" ref="form" :rules="formModel.rules" label-position="left">
         <Row>
           <Col span="24">
@@ -37,16 +31,16 @@
           </Col>
         </Row>
         <FormItem label="编码" prop="code" label-position="left">
-          <Input v-model="formModel.fields.code" placeholder="请输入编码"/>
+          <Input v-model="formModel.fields.code" placeholder="请输入编码" />
         </FormItem>
         <FormItem label="部门名称" prop="name" label-position="left">
-          <Input v-model="formModel.fields.name" placeholder="请输入部门名称"/>
+          <Input v-model="formModel.fields.name" placeholder="请输入部门名称" />
         </FormItem>
         <FormItem label="排序码" prop="sort" label-position="left">
-          <Input v-model="formModel.fields.sort" placeholder="请输入排序码"/>
+          <Input v-model="formModel.fields.sort" placeholder="请输入排序码" />
         </FormItem>
         <FormItem label="备注" prop="remark" label-position="left">
-          <Input v-model="formModel.fields.remark" placeholder="请输入备注"/>
+          <Input v-model="formModel.fields.remark" placeholder="请输入备注" />
         </FormItem>
       </Form>
       <div class="demo-drawer-footer">
@@ -273,25 +267,20 @@ export default {
         }
       });
     },
-    validateForm() {
-      let _valid = false;
-      this.$refs["form"].validate(valid => {
-        if (!valid) {
-          this.$Message.error("请完善表单信息");
-          _valid = false;
-        } else {
-          _valid = true;
-        }
-      });
-      return _valid;
-    },
     add() {
       this.$refs["form"].resetFields();
       this.formModel.mode = "create";
       this.formModel.opened = true;
       this.formModel.parentName = "";
-      this.formModel.parentGuid=""
-      this.getViewTrees(null);
+      this.formModel.parentGuid = "";
+      (this.formModel.fields = {
+        parentId: "",
+        code: "",
+        name: "",
+        sort: 0,
+        remark: ""
+      }),
+        this.getViewTrees(null);
     },
     edit(data) {
       this.formModel.mode = "edit";
@@ -301,8 +290,8 @@ export default {
       loadOrganization({ id: data.id }).then(res => {
         that.formModel.fields = res.data;
 
-        that.formModel.parentName='';
-        that.formModel.parentGuid=res.data.parentId;
+        that.formModel.parentName = "";
+        that.formModel.parentGuid = res.data.parentId;
         this.getViewTrees(data.id).then(() => {
           var selectNodes = that.$refs.tree.getSelectedNodes();
           if (selectNodes.length > 0) {
@@ -320,27 +309,31 @@ export default {
       });
     },
     handleSubmit() {
-      let valid = this.validateForm();
       var that = this;
-      if (valid) {
-        if (this.formModel.parentGuid != "") {
-          this.formModel.fields.parentId = this.formModel.parentGuid;
+
+      this.$refs["form"].validate(valid => {
+        if (!valid) {
+          this.$Message.error("请完善表单信息");
+        } else {
+          if (this.formModel.parentGuid != "") {
+            this.formModel.fields.parentId = this.formModel.parentGuid;
+          }
+          if (this.formModel.mode === "create") {
+            createOrganization(this.formModel.fields).then(res => {
+              this.$Message.success("新增部门成功");
+              that.queryCategoryList();
+              that.formModel.opened = false;
+            });
+          }
+          if (this.formModel.mode === "edit") {
+            editOrganization(this.formModel.fields).then(res => {
+              this.$Message.success("修改部门成功");
+              that.queryCategoryList();
+              that.formModel.opened = false;
+            });
+          }
         }
-        if (this.formModel.mode === "create") {
-          createOrganization(this.formModel.fields).then(res => {
-            this.$Message.success("新增部门成功");
-            that.queryCategoryList();
-            that.formModel.opened = false;
-          });
-        }
-        if (this.formModel.mode === "edit") {
-          editOrganization(this.formModel.fields).then(res => {
-            this.$Message.success("修改部门成功");
-            that.queryCategoryList();
-            that.formModel.opened = false;
-          });
-        }
-      }
+      });
     }
   },
   mounted() {
