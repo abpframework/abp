@@ -7,6 +7,7 @@
     "ShareOn": "Share on",
     "Version": "Version",
     "Edit": "Edit",
+    "LastEditTime": "Last edit",
     "Delete": "Delete",
     "InThisDocument": "In this document",
     "GoToTop": "Go to top",
@@ -16,6 +17,10 @@
     "NavigationDocumentNotFound": "This version does not have a navigation document!",
     "DocumentNotFoundInSelectedLanguage": "Document in the language you wanted is not found. Document in the default language is shown.",
     "FilterTopics": "Filter topics",
-    "MultipleVersionDocumentInfo": "This document has multiple versions. Select the options best fit for you."
+    "MultipleVersionDocumentInfo": "This document has multiple versions. Select the options best fit for you.",
+    "New": "New",
+    "Upd": "Upd",
+    "NewExplanation": "Created in the last two weeks.",
+    "UpdatedExplanation": "Updated in the last two weeks."
   }
 }

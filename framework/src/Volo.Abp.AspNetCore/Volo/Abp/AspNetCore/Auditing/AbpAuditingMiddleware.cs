@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -34,6 +35,10 @@ namespace Volo.Abp.AspNetCore.Auditing
                 try
                 {
                     await next(context);
+                    if (_auditingManager.Current.Log.Exceptions.Any())
+                    {
+                        hasError = true;
+                    }
                 }
                 catch (Exception)
                 {

@@ -7,6 +7,7 @@
     "ShareOn": "分享到",
     "Version": "版本",
     "Edit": "編輯",
+    "LastEditTime": "上次編輯",
     "Delete": "刪除",
     "InThisDocument": "在此文件中",
     "GoToTop": "到最上方",
@@ -15,6 +16,10 @@
     "DocumentNotFound": "找不到要求的文件!",
     "NavigationDocumentNotFound": "這個版本沒有導覽文件!",
     "DocumentNotFoundInSelectedLanguage": "本文件不適用於所選語系，將以預設語系顯示.",
-    "FilterTopics": "過濾主題"
+    "FilterTopics": "過濾主題",
+    "New": "新文檔",
+    "Upd": "更新",
+    "NewExplanation": "在最近兩周內創建.",
+    "UpdatedExplanation": "在最近兩周內更新."
   }
 }

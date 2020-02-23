@@ -15,18 +15,18 @@ namespace Volo.Docs.Projects
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
-        private readonly IDocumentStoreFactory _documentStoreFactory;
+        private readonly IDocumentSourceFactory _documentSource;
         protected IDistributedCache<LanguageConfig> LanguageCache { get; }
 
         public ProjectAppService(
             IProjectRepository projectRepository,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDocumentStoreFactory documentStoreFactory,
+            IDocumentSourceFactory documentSource,
             IDistributedCache<LanguageConfig> languageCache)
         {
             _projectRepository = projectRepository;
             _versionCache = versionCache;
-            _documentStoreFactory = documentStoreFactory;
+            _documentSource = documentSource;
             LanguageCache = languageCache;
         }
 
@@ -68,7 +68,7 @@ namespace Volo.Docs.Projects
 
         protected virtual async Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
-            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+            var store = _documentSource.Create(project.DocumentStoreType);
             var versions = await store.GetVersionsAsync(project);
 
             if (!versions.Any())
@@ -108,7 +108,7 @@ namespace Volo.Docs.Projects
         private async Task<LanguageConfig> GetLanguageListInternalAsync(string shortName, string version)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
-            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+            var store = _documentSource.Create(project.DocumentStoreType);
 
             async Task<LanguageConfig> GetLanguagesAsync()
             {
