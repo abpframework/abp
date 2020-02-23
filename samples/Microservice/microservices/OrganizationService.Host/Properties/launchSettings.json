@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BloggingService.Host": {
+    "OrganizationService.Host": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:62159",

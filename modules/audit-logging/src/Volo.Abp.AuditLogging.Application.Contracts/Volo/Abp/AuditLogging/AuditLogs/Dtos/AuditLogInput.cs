@@ -11,6 +11,7 @@
 * 修改说明：
 */
 
+using System;
 using System.Net;
 using Volo.Abp.Application.Dtos;
 
@@ -18,6 +19,9 @@ namespace Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging.Audi
 {
     public class AuditLogInput : PagedAndSortedResultRequestDto
     {
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+
         public string HttpMethod { get; set; }
         public string Url { get; set; }
         public string UserName { get; set; }

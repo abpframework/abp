@@ -18,7 +18,7 @@ namespace BaseManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BaseManagementDomainModule>();
             });
@@ -28,7 +28,7 @@ namespace BaseManagement
                 options.Resources.Get<BaseManagementResource>().AddVirtualJson("/BaseManagement/Localization/Domain");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("BaseManagement", typeof(BaseManagementResource));
             });

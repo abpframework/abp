@@ -9,15 +9,9 @@ namespace IdentityService.Host
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<IdentityServiceHostModule>(options =>
-            {
-                options.UseAutofac();
-                options.Configuration.UserSecretsAssembly = typeof(Startup).Assembly;
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<IdentityServiceHostModule>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

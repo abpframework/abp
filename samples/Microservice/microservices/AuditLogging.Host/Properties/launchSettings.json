@@ -15,9 +15,9 @@
     //    "ASPNETCORE_ENVIRONMENT": "Development"
     //  }
     //},
-    "BloggingService.Host": {
+    "AuditLogging.Host": {
       "commandName": "Project",
-      "launchBrowser": false,
+      "launchBrowser": true,
       "applicationUrl": "http://localhost:62157",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

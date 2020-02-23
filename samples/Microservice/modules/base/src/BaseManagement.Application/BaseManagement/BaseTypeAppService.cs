@@ -11,7 +11,7 @@ using Volo.Abp.Domain.Repositories;
 namespace BaseManagement
 {
     [Authorize(BaseManagementPermissions.BaseTypes.Default)]
-    public class BaseTypeAppService : AsyncCrudAppService<BaseType, BaseTypeDto, Guid, BaseTypePagedRequestDto,
+    public class BaseTypeAppService : CrudAppService<BaseType, BaseTypeDto, Guid, BaseTypePagedRequestDto,
         CreateUpdateBaseTypeDto, CreateUpdateBaseTypeDto>, IBaseTypeAppService
     {
         private readonly IRepository<BaseType, Guid> _repository;
@@ -43,9 +43,9 @@ namespace BaseManagement
             return baseResults;
         }
 
-        public List<ViewTree> GetViewTrees(Guid? guid)
+        public async Task<List<ViewTree>> GetViewTrees(Guid? guid)
         {
-            List<ViewTree> viewTrees = _repository.GetList().Select(r => new ViewTree()
+            List<ViewTree> viewTrees = (await _repository.GetListAsync()).Select(r => new ViewTree()
             {
                 Guid = r.Id,
                 Title = r.Name,

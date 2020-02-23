@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace OrganizationService.EntityFrameworkCore
 {
-    public class OrganizationServiceModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class OrganizationServiceModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public OrganizationServiceModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix = OrganizationServiceConsts.DefaultDbTablePrefix,

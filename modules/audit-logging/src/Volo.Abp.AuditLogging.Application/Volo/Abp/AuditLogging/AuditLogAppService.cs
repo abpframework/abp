@@ -36,8 +36,8 @@ namespace Volo.Abp.AuditLogging.Application.Volo.Abp.AuditLogging
 
         public async Task<PagedResultDto<AuditLogDto>> GetListAsync(AuditLogInput input)
         {
-            var count = (int)await _auditLogRepository.GetCountAsync(input.HttpMethod, input.Url, input.UserName, input.ApplicationName, input.CorrelationId, input.MaxExecutionDuration, input.MinExecutionDuration, input.HasException, input.HttpStatusCode);
-            var list = await _auditLogRepository.GetListAsync(input.Sorting,input.MaxResultCount, input.SkipCount, input.HttpMethod, input.Url, input.UserName, input.ApplicationName, input.CorrelationId, input.MaxExecutionDuration, input.MinExecutionDuration, input.HasException, input.HttpStatusCode);
+            var count = (int)await _auditLogRepository.GetCountAsync(input.StartTime, input.EndTime, input.HttpMethod, input.Url, input.UserName, input.ApplicationName, input.CorrelationId, input.MaxExecutionDuration, input.MinExecutionDuration, input.HasException, input.HttpStatusCode);
+            var list = await _auditLogRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.StartTime, input.EndTime, input.HttpMethod, input.Url, input.UserName, input.ApplicationName, input.CorrelationId, input.MaxExecutionDuration, input.MinExecutionDuration, input.HasException, input.HttpStatusCode);
 
             return new PagedResultDto<AuditLogDto>(
                 count,

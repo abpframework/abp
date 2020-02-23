@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AuthServer.Host.Migrations
 {
-    public partial class Initial : Migration
+    public partial class IniT : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,15 +14,19 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ApplicationName = table.Column<string>(maxLength: 96, nullable: true),
                     UserId = table.Column<Guid>(nullable: true),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
+                    TenantName = table.Column<string>(nullable: true),
                     ImpersonatorUserId = table.Column<Guid>(nullable: true),
                     ImpersonatorTenantId = table.Column<Guid>(nullable: true),
                     ExecutionTime = table.Column<DateTime>(nullable: false),
                     ExecutionDuration = table.Column<int>(nullable: false),
                     ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
                     ClientName = table.Column<string>(maxLength: 128, nullable: true),
+                    ClientId = table.Column<string>(maxLength: 64, nullable: true),
+                    CorrelationId = table.Column<string>(maxLength: 64, nullable: true),
                     BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
                     HttpMethod = table.Column<string>(maxLength: 16, nullable: true),
                     Url = table.Column<string>(maxLength: 256, nullable: true),
@@ -123,9 +127,10 @@ namespace AuthServer.Host.Migrations
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
                     Name = table.Column<string>(maxLength: 64, nullable: true),
                     Surname = table.Column<string>(maxLength: 64, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: false),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
+                    EmailConfirmationCode = table.Column<string>(maxLength: 328, nullable: true),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: true),
                     SecurityStamp = table.Column<string>(maxLength: 256, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
@@ -147,10 +152,18 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    Enabled = table.Column<bool>(nullable: false)
+                    Enabled = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -164,6 +177,13 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
                     ClientName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
@@ -197,11 +217,35 @@ namespace AuthServer.Host.Migrations
                     IncludeJwtId = table.Column<bool>(nullable: false),
                     AlwaysSendClientClaims = table.Column<bool>(nullable: false),
                     ClientClaimsPrefix = table.Column<string>(maxLength: 200, nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true)
+                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true),
+                    UserSsoLifetime = table.Column<int>(nullable: true),
+                    UserCodeType = table.Column<string>(maxLength: 100, nullable: true),
+                    DeviceCodeLifetime = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityServerClients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityServerDeviceFlowCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    DeviceCode = table.Column<string>(maxLength: 200, nullable: false),
+                    UserCode = table.Column<string>(maxLength: 200, nullable: false),
+                    SubjectId = table.Column<string>(maxLength: 200, nullable: true),
+                    ClientId = table.Column<string>(maxLength: 200, nullable: false),
+                    Expiration = table.Column<DateTime>(nullable: false),
+                    Data = table.Column<string>(maxLength: 50000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityServerDeviceFlowCodes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,13 +255,21 @@ namespace AuthServer.Host.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -237,7 +289,7 @@ namespace AuthServer.Host.Migrations
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
-                    Data = table.Column<string>(nullable: false)
+                    Data = table.Column<string>(maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -278,6 +330,7 @@ namespace AuthServer.Host.Migrations
                     TenantId = table.Column<Guid>(nullable: true),
                     ChangeTime = table.Column<DateTime>(nullable: false),
                     ChangeType = table.Column<byte>(nullable: false),
+                    EntityTenantId = table.Column<Guid>(nullable: true),
                     EntityId = table.Column<string>(maxLength: 128, nullable: false),
                     EntityTypeFullName = table.Column<string>(maxLength: 128, nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true)
@@ -406,7 +459,7 @@ namespace AuthServer.Host.Migrations
                 name: "IdentityServerApiClaims",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -425,9 +478,9 @@ namespace AuthServer.Host.Migrations
                 columns: table => new
                 {
                     ApiResourceId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 196, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: true),
-                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
@@ -447,10 +500,10 @@ namespace AuthServer.Host.Migrations
                 name: "IdentityServerApiSecrets",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 32, nullable: false),
-                    Value = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ApiResourceId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -506,7 +559,7 @@ namespace AuthServer.Host.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    GrantType = table.Column<string>(maxLength: 196, nullable: false)
+                    GrantType = table.Column<string>(maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -524,7 +577,7 @@ namespace AuthServer.Host.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    Provider = table.Column<string>(maxLength: 64, nullable: false)
+                    Provider = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -597,7 +650,7 @@ namespace AuthServer.Host.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    Scope = table.Column<string>(maxLength: 196, nullable: false)
+                    Scope = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -614,10 +667,10 @@ namespace AuthServer.Host.Migrations
                 name: "IdentityServerClientSecrets",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 32, nullable: false),
-                    Value = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ClientId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -635,7 +688,7 @@ namespace AuthServer.Host.Migrations
                 name: "IdentityServerIdentityClaims",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     IdentityResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -676,9 +729,9 @@ namespace AuthServer.Host.Migrations
                 name: "IdentityServerApiScopeClaims",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 196, nullable: false)
+                    Name = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -784,8 +837,29 @@ namespace AuthServer.Host.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerClients_ClientId",
                 table: "IdentityServerClients",
-                column: "ClientId",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerDeviceFlowCodes_DeviceCode",
+                table: "IdentityServerDeviceFlowCodes",
+                column: "DeviceCode",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerDeviceFlowCodes_Expiration",
+                table: "IdentityServerDeviceFlowCodes",
+                column: "Expiration");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerDeviceFlowCodes_UserCode",
+                table: "IdentityServerDeviceFlowCodes",
+                column: "UserCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerPersistedGrants_Expiration",
+                table: "IdentityServerPersistedGrants",
+                column: "Expiration");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerPersistedGrants_SubjectId_ClientId_Type",
@@ -860,6 +934,9 @@ namespace AuthServer.Host.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityServerClientSecrets");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerDeviceFlowCodes");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerIdentityClaims");

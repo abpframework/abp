@@ -9,17 +9,10 @@ namespace AuditLogging.Host
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AuditLoggingHostModule>(options =>
-            {
-                options.UseAutofac();
-                options.Configuration.UserSecretsAssembly = typeof(Startup).Assembly;
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<AuditLoggingHostModule>();
         }
-
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
            app.InitializeApplication();

@@ -6,9 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
+using System.Linq;
 using IdentityServer4.AspNetIdentity;
 using IdentityServer4.Validation;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Models;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -29,7 +34,9 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Settings;
 using Volo.Abp.Threading;
+using Volo.Abp.Account.Settings;
 
 namespace AuthServer.Host
 {
@@ -49,10 +56,13 @@ namespace AuthServer.Host
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAccountWebIdentityServerModule),
+        typeof(AbpAccountApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
         )]
     public class AuthServerHostModule : AbpModule
     {
+        private const string DefaultCorsPolicyName = "Default";
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
@@ -62,40 +72,27 @@ namespace AuthServer.Host
                 options.AddDefaultRepositories();
             });
 
+  
+
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
             });
 
-             Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-            });
+            Configure<AbpLocalizationOptions>(options =>
+           {
+               options.Languages.Add(new LanguageInfo("en", "en", "English"));
+           });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
 
-            context.Services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new Info { Title = "AuthServer.Host  API", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
+            ConfigureSwaggerServices(context);
+            ConfigureCors(context, configuration);
 
-                var security = new Dictionary<string, IEnumerable<string>> { { "Bearer", new string[] { } }, };
-                options.AddSecurityRequirement(security);//添加一个必须的全局安全信息，和AddSecurityDefinition方法指定的方案名称要一致，这里是Bearer。
-                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT授权(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",//jwt默认的参数名称
-                    In = "header",//jwt默认存放Authorization信息的位置(请求头中)
-                    Type = "apiKey"
-                });
-            });
-
-
-            Configure<DefaultTenantStoreOptions>(options =>
+            Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
@@ -116,7 +113,6 @@ namespace AuthServer.Host
                 options.ApplicationName = "AuthServer";
             });
 
-            context.Services.AddCors();
             //TODO: ConnectionMultiplexer.Connect call has problem since redis may not be ready when this service has started!
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
             context.Services.AddDataProtection()
@@ -132,16 +128,14 @@ namespace AuthServer.Host
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BackendAdminApp Gateway API");
             });
-            app.UseCors(builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+            app.UseCors(DefaultCorsPolicyName);
 
             app.UseMultiTenancy();
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
+
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
@@ -157,6 +151,58 @@ namespace AuthServer.Host
                         .SeedAsync();
                 });
             }
+        }
+
+        private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
+        {
+            context.Services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    builder
+                        .WithOrigins(
+                            configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
+                        .WithAbpExposedHeaders()
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+        }
+
+        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthServer.Host  API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+                options.CustomSchemaIds(type => type.FullName);
+
+                var security = new OpenApiSecurityRequirement()
+                {
+                    { new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference()
+                        {
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    }, Array.Empty<string>() }
+                };
+                options.AddSecurityRequirement(security);//添加一个必须的全局安全信息，和AddSecurityDefinition方法指定的方案名称要一致，这里是Bearer。
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT授权(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",//jwt默认的参数名称
+                    In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
+                    Type = SecuritySchemeType.ApiKey
+                });
+            });
         }
     }
 }

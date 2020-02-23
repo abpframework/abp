@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ProductManagement;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;

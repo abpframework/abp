@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
@@ -17,15 +17,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.10" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
-    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="6.5.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="2.2.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +47,7 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identityserver\src\Volo.Abp.IdentityServer.EntityFrameworkCore\Volo.Abp.IdentityServer.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Application\Volo.Abp.Account.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.EntityFrameworkCore\Volo.Abp.AuditLogging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.EntityFrameworkCore\Volo.Abp.SettingManagement.EntityFrameworkCore.csproj" />
@@ -48,6 +58,10 @@
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">

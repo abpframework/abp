@@ -11,7 +11,7 @@ using Volo.Abp.Domain.Repositories;
 namespace OrganizationService
 {
     [Authorize(OrganizationServicePermissions.AbpOrganizations.Default)]
-    public class OrganizationAppService : AsyncCrudAppService<Organization, OrganizationDto, Guid, OrganizationPagedRequestDto,
+    public class OrganizationAppService : CrudAppService<Organization, OrganizationDto, Guid, OrganizationPagedRequestDto,
         CreateUpdateAbpOrganizationDto, CreateUpdateAbpOrganizationDto>, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _repository;
@@ -48,9 +48,9 @@ namespace OrganizationService
         }
 
 
-        public List<ViewTree> GetViewTrees(Guid? guid)
+        public async Task<List<ViewTree>> GetViewTrees(Guid? guid)
         {
-            List<ViewTree> viewTrees = _repository.GetList().Select(r => new ViewTree()
+            List<ViewTree> viewTrees = (await _repository.GetListAsync()).Select(r => new ViewTree()
             {
                 Guid = r.Id,
                 Title = r.Name,
@@ -70,7 +70,7 @@ namespace OrganizationService
 
         public async Task<List<ViewTree>> GetUserViewTrees(Guid? userId)
         {
-            List<ViewTree> viewTrees = _repository.GetList().Select(r => new ViewTree()
+            List<ViewTree> viewTrees = (await _repository.GetListAsync()).Select(r => new ViewTree()
             {
                 Guid = r.Id,
                 Title = r.Name,
@@ -80,7 +80,7 @@ namespace OrganizationService
 
             if (userId != null)
             {
-                List<Organization> organizations =await _organizationRepository.GetOrganizationsAsync((Guid)userId);
+                List<Organization> organizations = await _organizationRepository.GetOrganizationsAsync((Guid)userId);
 
                 organizations.ForEach(u =>
                 {

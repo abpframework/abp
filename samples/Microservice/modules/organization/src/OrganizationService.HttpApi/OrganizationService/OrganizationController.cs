@@ -55,9 +55,9 @@ namespace OrganizationService
         }
         [HttpGet]
         [Route("getViewTrees")]
-        public List<ViewTree> GetViewTrees(Guid? id)
+        public Task<List<ViewTree>> GetViewTrees(Guid? id)
         {
-            return  _abpOrganizationAppService.GetViewTrees(id);
+            return _abpOrganizationAppService.GetViewTrees(id);
         }
 
 

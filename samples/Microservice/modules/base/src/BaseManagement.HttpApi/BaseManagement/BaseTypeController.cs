@@ -55,7 +55,7 @@ namespace BaseManagement
 
         [HttpGet]
         [Route("getViewTrees")]
-        public List<ViewTree> GetViewTrees(Guid? id)
+        public Task<List<ViewTree>> GetViewTrees(Guid? id)
         {
             return _baseTypeAppService.GetViewTrees(id);
         }

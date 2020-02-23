@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.OAuth.Claims;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using StackExchange.Redis;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;
@@ -48,7 +48,7 @@ namespace BackendAdminApp.Host
                 })
                 .AddCookie("Cookies", options =>
                 {
-                    options.Cookie.Expiration = TimeSpan.FromDays(365);
+                    //options.Cookie.Expiration = TimeSpan.FromDays(365);
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -69,14 +69,10 @@ namespace BackendAdminApp.Host
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 
-            context.Services.AddSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new Info { Title = "Backend Admin Application API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                });
 
-            context.Services.AddDistributedRedisCache(options =>
+            ConfigureSwaggerServices(context);
+
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -92,6 +88,7 @@ namespace BackendAdminApp.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAbpRequestLocalization();
             app.UseSwagger();
@@ -100,6 +97,36 @@ namespace BackendAdminApp.Host
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend Admin Application API");
             });
             app.UseMvcWithDefaultRouteAndArea();
+        }
+
+        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend Admin Application API", Version = "v1" });
+                options.DocInclusionPredicate((docName, description) => true);
+                options.CustomSchemaIds(type => type.FullName);
+
+                var security = new OpenApiSecurityRequirement()
+                {
+                    { new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference()
+                        {
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    }, Array.Empty<string>() }
+                };
+                options.AddSecurityRequirement(security);//添加一个必须的全局安全信息，和AddSecurityDefinition方法指定的方案名称要一致，这里是Bearer。
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT授权(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",//jwt默认的参数名称
+                    In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
+                    Type = SecuritySchemeType.ApiKey
+                });
+            });
         }
     }
 }

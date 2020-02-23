@@ -24,7 +24,7 @@ namespace Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AuditLoggingApplicationContractsModule>();
             });

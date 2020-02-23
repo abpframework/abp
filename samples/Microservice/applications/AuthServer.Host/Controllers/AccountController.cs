@@ -1,16 +1,15 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel;
-using IdentityServer4;
+using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.MultiTenancy;
-using Volo.Abp.Configuration;
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 using Volo.Abp.IdentityModel;
@@ -27,19 +26,19 @@ namespace AuthServer.Host.Controllers
         private readonly IdentityUserManager _userManager;
         private readonly IConfiguration _configuration;
         private readonly ICurrentTenant _currentTenant;
-        private readonly AspNetCoreMultiTenancyOptions _aspNetCoreMultiTenancyOptions;
+        private readonly AbpAspNetCoreMultiTenancyOptions _aspNetCoreMultiTenancyOptions;
         private readonly IIdentityModelAuthenticationService _authenticator;
 
         public AccountController(IdentityUserManager userManager,
-            IConfigurationAccessor configurationAccessor,
+            IConfiguration configuration,
             ICurrentTenant currentTenant,
-            IOptions<AspNetCoreMultiTenancyOptions> options, IIdentityModelAuthenticationService authenticator)
+            IOptions<AbpAspNetCoreMultiTenancyOptions> options, IIdentityModelAuthenticationService authenticator)
         {
             _userManager = userManager;
             _currentTenant = currentTenant;
             _authenticator = authenticator;
             _aspNetCoreMultiTenancyOptions = options.Value;
-            _configuration = configurationAccessor.Configuration;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -51,42 +50,60 @@ namespace AuthServer.Host.Controllers
         //[Obsolete]
         public async Task<IActionResult> Index(UserLoginInfo login)
         {
-            var dico = await DiscoveryClient.GetAsync(_configuration["AuthServer:Authority"]);
-            if (dico.IsError)
-            {
-                Console.WriteLine(dico.Error);
-                return Json(new { code = 0, data = dico.Error });
-            }
+            HttpClient client = new HttpClient();
 
             await ReplaceEmailToUsernameOfInputIfNeeds(login);
 
-            var tokenClient = new TokenClient(dico.TokenEndpoint, _configuration["AuthServer:ClientId"], _configuration["AuthServer:ClientSecret"]);
-            TokenResponse tokenresp = await tokenClient.RequestResourceOwnerPasswordAsync(
-                login.UserNameOrEmailAddress,
-                login.Password,
-                "offline_access IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService",
-                extra: new Dictionary<string, string>
-                {
-                    {_aspNetCoreMultiTenancyOptions.TenantKey,login.TenanId?.ToString()}
-                }
-                );
-            if (tokenresp.IsError)
+            var disco = await client.GetDiscoveryDocumentAsync(_configuration["AuthServer:Authority"]);
+            if (disco.IsError)
             {
-                Console.WriteLine(tokenresp.Error);
+                Console.WriteLine(disco.Error);
                 return Json(new
                 {
                     code = 0,
-                    data = tokenresp.ErrorDescription,
-                    message = tokenresp.Error
+                    data = disco.HttpErrorReason,
+                    message = disco.Error
                 });
             }
 
-            return Json(new { code = 1, data = tokenresp.Json });
+            TokenResponse response = await client.RequestTokenAsync(new PasswordTokenRequest
+            {
+                Address = disco.TokenEndpoint,
+                GrantType = GrantType.ResourceOwnerPassword,
+
+                ClientId = _configuration["AuthServer:ClientId"],
+                ClientSecret = _configuration["AuthServer:ClientSecret"],
+                //Parameters =
+                //{
+                //    {_aspNetCoreMultiTenancyOptions.TenantKey,login.TenanId?.ToString()}
+                //},
+                Parameters =
+                {
+                    { "UserName",login.UserNameOrEmailAddress},
+                    { "Password",login.Password}
+                }
+                //UserName = login.UserNameOrEmailAddress,
+                //Password = login.Password,
+                //Scope = "offline_access IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService"
+            });
+
+            if (response.IsError)
+            {
+                Console.WriteLine(response.Error);
+                return Json(new
+                {
+                    code = 0,
+                    data = response.ErrorDescription,
+                    message = response.Error
+                });
+            }
+
+            return Json(new { code = 1, data = response.Json });
         }
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
         {
-            if (!ValidationHandler.IsValidEmailAddress(login.UserNameOrEmailAddress))
+            if (!ValidationHelper.IsValidEmailAddress(login.UserNameOrEmailAddress))
             {
                 return;
             }

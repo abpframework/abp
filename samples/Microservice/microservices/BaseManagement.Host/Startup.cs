@@ -9,15 +9,9 @@ namespace BaseManagement.Host
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<BaseManagementHostModule>(options =>
-            {
-                options.UseAutofac();
-                options.Configuration.UserSecretsAssembly = typeof(Startup).Assembly;
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<BaseManagementHostModule>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

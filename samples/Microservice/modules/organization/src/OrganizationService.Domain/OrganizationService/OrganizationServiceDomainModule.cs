@@ -18,7 +18,7 @@ namespace OrganizationService
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<OrganizationServiceDomainModule>();
             });
@@ -28,7 +28,7 @@ namespace OrganizationService
                 options.Resources.Get<OrganizationServiceResource>().AddVirtualJson("/OrganizationService/Localization/Domain");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("OrganizationService", typeof(OrganizationServiceResource));
             });
