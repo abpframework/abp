@@ -14,11 +14,8 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddConventionalRegistrar(new AbpQuartzConventionalRegistrar());
-            context.Services.Replace(ServiceDescriptor
-                .Transient<IBackgroundWorkerManager, QuartzBackgroundWorkerManager>());
-
+            context.Services.Replace(ServiceDescriptor.Transient<IBackgroundWorkerManager, QuartzBackgroundWorkerManager>());
         }
-
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {

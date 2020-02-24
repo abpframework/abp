@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using Volo.Abp.DependencyInjection;
@@ -27,7 +26,6 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             {
                 await _scheduler.PauseAll(cancellationToken);
             }
-
         }
 
         public void Add(IBackgroundWorker worker)
@@ -40,6 +38,5 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                 AsyncHelper.RunSync(() => _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger));
             }
         }
-
     }
 }

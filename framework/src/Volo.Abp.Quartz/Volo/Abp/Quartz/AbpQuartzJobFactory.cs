@@ -8,6 +8,7 @@ namespace Volo.Abp.Quartz
     public class AbpQuartzJobFactory : IJobFactory
     {
         private readonly IServiceProvider _serviceProvider;
+
         public AbpQuartzJobFactory(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using JetBrains.Annotations;
 
 namespace Volo.Abp.Quartz
 {

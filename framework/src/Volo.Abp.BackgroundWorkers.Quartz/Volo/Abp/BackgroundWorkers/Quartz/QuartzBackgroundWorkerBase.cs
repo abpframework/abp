@@ -7,8 +7,6 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
     {
         public ITrigger Trigger { get; set; }
         public IJobDetail JobDetail { get; set; }
-
-
         public abstract Task Execute(IJobExecutionContext context);
 
     }

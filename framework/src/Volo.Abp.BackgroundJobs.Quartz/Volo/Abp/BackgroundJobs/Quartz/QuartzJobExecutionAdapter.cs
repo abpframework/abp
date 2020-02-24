@@ -11,7 +11,7 @@ namespace Volo.Abp.BackgroundJobs.Quartz
         protected AbpBackgroundJobOptions Options { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
-       
+
         public QuartzJobExecutionAdapter(
             IOptions<AbpBackgroundJobOptions> options,
             IBackgroundJobExecuter jobExecuter,
@@ -21,7 +21,6 @@ namespace Volo.Abp.BackgroundJobs.Quartz
             ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
         }
-
 
         public async Task Execute(IJobExecutionContext context)
         {
