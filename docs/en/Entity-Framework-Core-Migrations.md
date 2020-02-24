@@ -14,7 +14,7 @@ This document begins by **introducing the default structure** provided by [the a
 
 When you [create a new web application](https://abp.io/get-started) (with EF Core, which is the default database provider), your solution structure will be similar to the picture below:
 
-![bookstore-visual-studio-solution-v3](D:\Github\abp\docs\en\images\bookstore-visual-studio-solution-v3.png)
+![bookstore-visual-studio-solution-v3](images/bookstore-visual-studio-solution-v3.png)
 
 > Actual solution structure may be a bit different based on your preferences, but the database part will be same.
 
@@ -22,7 +22,7 @@ When you [create a new web application](https://abp.io/get-started) (with EF Cor
 
 The startup template has some [application modules](Modules/Index.md) pre-installed. Each layer of the solution has corresponding module package references. So, the `.EntityFrameworkCore` project has the NuGet references for the `.EntityFrameworkCore` packages of the used modules:
 
-![bookstore-efcore-dependencies](D:\Github\abp\docs\en\images\bookstore-efcore-dependencies.png)
+![bookstore-efcore-dependencies](images/bookstore-efcore-dependencies.png)
 
 In this way, you collect all the EF Core dependencies under the `.EntityFrameworkCore` project.
 
@@ -30,7 +30,7 @@ In this way, you collect all the EF Core dependencies under the `.EntityFramewor
 
 While every module has its own `DbContext` class by design and can use its **own physical database**, the solution is configured to use a **single shared database** as shown in the figure below:
 
-![single-database-usage](D:\Github\abp\docs\en\images\single-database-usage.png)
+![single-database-usage](images/single-database-usage.png)
 
 This is **the simplest configuration** and suitable for most of the applications. `appsettings.json` file has a **single connection string**, named `Default`:
 
