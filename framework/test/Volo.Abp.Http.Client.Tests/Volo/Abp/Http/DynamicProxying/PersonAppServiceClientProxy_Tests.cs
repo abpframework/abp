@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute.Extensions;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
@@ -9,6 +10,7 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.TestApp.Application;
 using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Volo.Abp.Http.DynamicProxying
@@ -29,7 +31,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            var person = await _peopleAppService.GetAsync(firstPerson.Id).ConfigureAwait(false);
+            var person = await _peopleAppService.GetAsync(firstPerson.Id);
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
             person.Name.ShouldBe(firstPerson.Name);
@@ -38,7 +40,8 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetList()
         {
-            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto()).ConfigureAwait(false);
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto())
+                ;
             people.TotalCount.ShouldBeGreaterThan(0);
             people.Items.Count.ShouldBe((int) people.TotalCount);
         }
@@ -48,7 +51,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            await _peopleAppService.DeleteAsync(firstPerson.Id).ConfigureAwait(false);
+            await _peopleAppService.DeleteAsync(firstPerson.Id);
 
             firstPerson = (await _personRepository.GetListAsync()).FirstOrDefault(p => p.Id == firstPerson.Id);
             firstPerson.ShouldBeNull();
@@ -60,11 +63,11 @@ namespace Volo.Abp.Http.DynamicProxying
             var uniquePersonName = Guid.NewGuid().ToString();
 
             var person = await _peopleAppService.CreateAsync(new PersonDto
-            {
-                Name = uniquePersonName,
-                Age = 42
-            }
-            ).ConfigureAwait(false);
+                {
+                    Name = uniquePersonName,
+                    Age = 42
+                }
+            );
 
             person.ShouldNotBeNull();
             person.Id.ShouldNotBe(Guid.Empty);
@@ -74,7 +77,20 @@ namespace Volo.Abp.Http.DynamicProxying
             personInDb.ShouldNotBeNull();
             personInDb.Id.ShouldBe(person.Id);
         }
-        
+
+        [Fact]
+        public async Task Create_Validate_Exception()
+        {
+            await Assert.ThrowsAsync<AbpValidationException>(async () =>
+            {
+                var person = await _peopleAppService.CreateAsync(new PersonDto
+                    {
+                        Age = 42
+                    }
+                );
+            });
+        }
+
         [Fact]
         public async Task Update()
         {
@@ -89,7 +105,7 @@ namespace Volo.Abp.Http.DynamicProxying
                     Name = uniquePersonName,
                     Age = firstPerson.Age
                 }
-            ).ConfigureAwait(false);
+            );
 
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
@@ -108,8 +124,8 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
-                await _peopleAppService.GetWithAuthorized().ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await _peopleAppService.GetWithAuthorized();
+            });
         }
 
         [Fact]
@@ -128,7 +144,7 @@ namespace Volo.Abp.Http.DynamicProxying
                         }
                     }
                 }
-            ).ConfigureAwait(false);
+            );
 
             result.Value1.ShouldBe("value one");
             result.Inner1.Value2.ShouldBe("value two");

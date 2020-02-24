@@ -35,7 +35,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var exceptionMessage = "Remote server returns '" + (int) responseMessage.StatusCode + "-" +
                                    responseMessage.ReasonPhrase + "'. ";
 
-            var remoteServiceErrorMessage = await GetAbpRemoteServiceErrorAsync(responseMessage).ConfigureAwait(false);
+            var remoteServiceErrorMessage = await GetAbpRemoteServiceErrorAsync(responseMessage);
             if (remoteServiceErrorMessage != null)
             {
                 exceptionMessage += remoteServiceErrorMessage;
@@ -52,7 +52,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 errorResult = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>
                 (
                     await responseMessage.Content.ReadAsStringAsync()
-.ConfigureAwait(false));
+                );
             }
             catch (JsonReaderException)
             {

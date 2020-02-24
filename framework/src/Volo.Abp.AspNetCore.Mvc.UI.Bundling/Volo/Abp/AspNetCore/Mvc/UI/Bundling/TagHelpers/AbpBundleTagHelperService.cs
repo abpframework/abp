@@ -20,16 +20,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             await ResourceService.ProcessAsync(
                 context,
                 output,
-                await GetBundleItems(context, output).ConfigureAwait(false),
+                await GetBundleItems(context, output),
                 TagHelper.GetNameOrNull()
-            ).ConfigureAwait(false);
+            );
         }
 
         protected virtual async Task<List<BundleTagHelperItem>> GetBundleItems(TagHelperContext context, TagHelperOutput output)
         {
             var bundleItems = new List<BundleTagHelperItem>();
             context.Items[AbpTagHelperConsts.ContextBundleItemListKey] = bundleItems;
-            await output.GetChildContentAsync().ConfigureAwait(false); //TODO: Is there a way of executing children without getting content?
+            await output.GetChildContentAsync(); //TODO: Is there a way of executing children without getting content?
             return bundleItems;
         }
     }

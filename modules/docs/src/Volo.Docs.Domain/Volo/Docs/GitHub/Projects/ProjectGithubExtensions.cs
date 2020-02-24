@@ -21,14 +21,6 @@ namespace Volo.Docs.GitHub.Projects
                 .Replace("{version}", version);
         }
 
-        public static string GetGitHubUrlForCommitHistory([NotNull] this Project project)
-        {
-            return project
-                .GetGitHubUrl()
-                .Replace("github.com", "api.github.com/repos")
-                .Replace("tree/{version}/", "commits?path=");
-        }
-
         public static void SetGitHubUrl([NotNull] this Project project, string value)
         {
             CheckGitHubProject(project);
@@ -57,7 +49,7 @@ namespace Volo.Docs.GitHub.Projects
         {
             Check.NotNull(project, nameof(project));
 
-            if (project.DocumentStoreType != GithubDocumentStore.Type)
+            if (project.DocumentStoreType != GithubDocumentSource.Type)
             {
                 throw new ApplicationException("Given project has not a Github document store!");
             }

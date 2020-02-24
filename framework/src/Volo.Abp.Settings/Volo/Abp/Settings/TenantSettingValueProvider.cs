@@ -19,7 +19,7 @@ namespace Volo.Abp.Settings
 
         public override async Task<string> GetOrNullAsync(SettingDefinition setting)
         {
-            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString()).ConfigureAwait(false);
+            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString());
         }
     }
 }

@@ -110,7 +110,7 @@ Enqueue方法接收一些可选参数用于控制后台作业:
 
 你可能希望在你的应用程序中禁用后台作业执行. 如果你希望在另一个进程中执行后台作业并在当前进程中禁用它,通常可以使用以下命令.
 
-使用 `BackgroundJobOptions` 配置作业执行:
+使用 `AbpBackgroundJobOptions` 配置作业执行:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -118,7 +118,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobOptions>(options =>
+        Configure<AbpBackgroundJobOptions>(options =>
         {
             options.IsJobExecutionEnabled = false; //禁用作业执行
         });
@@ -142,7 +142,7 @@ ABP framework 包含一个简单的 `IBackgroundJobManager` 实现;
 
 ### 配置
 
-在你的[模块类](Module-Development-Basics.md)中使用 `BackgroundJobWorkerOptions` 配置默认作业管理器.
+在你的[模块类](Module-Development-Basics.md)中使用 `AbpBackgroundJobWorkerOptions` 配置默认作业管理器.
 示例中更改后台作业的的超时时间:
 
 ````csharp
@@ -151,7 +151,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobWorkerOptions>(options =>
+        Configure<AbpBackgroundJobWorkerOptions>(options =>
         {
             options.DefaultTimeout = 864000; //10 days (as seconds)
         });

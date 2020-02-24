@@ -49,9 +49,9 @@ namespace Volo.Abp.TestApp.Testing
 
             var personId = Guid.NewGuid();
 
-            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
+            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42));
 
-            var person = await PersonRepository.FindAsync(personId).ConfigureAwait(false);
+            var person = await PersonRepository.FindAsync(personId);
 
             person.ShouldNotBeNull();
             person.CreationTime.ShouldBeLessThanOrEqualTo(Clock.Now);
@@ -68,14 +68,14 @@ namespace Volo.Abp.TestApp.Testing
                 CurrentUserId = Guid.Parse(currentUserId);
             }
 
-            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
             douglas.LastModificationTime.ShouldBeNull();
 
             douglas.Age++;
 
-            await PersonRepository.UpdateAsync(douglas).ConfigureAwait(false);
+            await PersonRepository.UpdateAsync(douglas);
 
-            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
 
             douglas.ShouldNotBeNull();
             douglas.LastModificationTime.ShouldNotBeNull();
@@ -93,17 +93,17 @@ namespace Volo.Abp.TestApp.Testing
                 CurrentUserId = Guid.Parse(currentUserId);
             }
 
-            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
 
-            await PersonRepository.DeleteAsync(douglas).ConfigureAwait(false);
+            await PersonRepository.DeleteAsync(douglas);
 
-            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
 
             douglas.ShouldBeNull();
 
             using (DataFilter.Disable<ISoftDelete>())
             {
-                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+                douglas = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
 
                 douglas.ShouldNotBeNull();
                 douglas.DeletionTime.ShouldNotBeNull();

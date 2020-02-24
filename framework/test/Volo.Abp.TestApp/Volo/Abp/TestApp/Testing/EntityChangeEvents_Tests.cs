@@ -75,9 +75,9 @@ namespace Volo.Abp.TestApp.Testing
                     return Task.CompletedTask;
                 });
 
-                await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), personName, 15)).ConfigureAwait(false);
+                await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), personName, 15));
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
            
             creatingEventTriggered.ShouldBeTrue();

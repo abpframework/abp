@@ -14,7 +14,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await SignInManager.GetTwoFactorAuthenticationUserAsync().ConfigureAwait(false);
+            var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
                 return RedirectToPage("./Login");

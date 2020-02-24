@@ -20,7 +20,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
         public async Task OnGetAsync(Guid id)
         {
-            var defaultConnectionString = await _tenantAppService.GetDefaultConnectionStringAsync(id).ConfigureAwait(false);
+            var defaultConnectionString = await _tenantAppService.GetDefaultConnectionStringAsync(id);
             Tenant = new TenantInfoModel
             {
                 Id = id,
@@ -35,11 +35,11 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
             if (Tenant.UseSharedDatabase || Tenant.DefaultConnectionString.IsNullOrWhiteSpace())
             {
-                await _tenantAppService.DeleteDefaultConnectionStringAsync(Tenant.Id).ConfigureAwait(false);
+                await _tenantAppService.DeleteDefaultConnectionStringAsync(Tenant.Id);
             }
             else
             {
-                await _tenantAppService.UpdateDefaultConnectionStringAsync(Tenant.Id, Tenant.DefaultConnectionString).ConfigureAwait(false);
+                await _tenantAppService.UpdateDefaultConnectionStringAsync(Tenant.Id, Tenant.DefaultConnectionString);
             }
 
             return NoContent();

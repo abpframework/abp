@@ -10,6 +10,7 @@ namespace MyCompanyName.MyProjectName.Web.Pages
         protected MyProjectNamePageModel()
         {
             LocalizationResourceType = typeof(MyProjectNameResource);
+            ObjectMapperContext = typeof(MyProjectNameWebModule);
         }
     }
 }

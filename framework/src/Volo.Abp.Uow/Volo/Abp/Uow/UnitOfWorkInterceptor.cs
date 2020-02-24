@@ -22,14 +22,14 @@ namespace Volo.Abp.Uow
         {
             if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
             {
-                await invocation.ProceedAsync().ConfigureAwait(false);
+                await invocation.ProceedAsync();
                 return;
             }
 
             using (var uow = _unitOfWorkManager.Begin(CreateOptions(invocation, unitOfWorkAttribute)))
             {
-                await invocation.ProceedAsync().ConfigureAwait(false);
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await invocation.ProceedAsync();
+                await uow.CompleteAsync();
             }
         }
 

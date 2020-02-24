@@ -28,7 +28,7 @@ namespace Volo.Abp.TenantManagement
         {
             using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
-                var tenant = await _tenantRepository.FindByNameAsync(name).ConfigureAwait(false);
+                var tenant = await _tenantRepository.FindByNameAsync(name);
                 if (tenant == null)
                 {
                     return null;
@@ -42,7 +42,7 @@ namespace Volo.Abp.TenantManagement
         {
             using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
-                var tenant = await _tenantRepository.FindAsync(id).ConfigureAwait(false);
+                var tenant = await _tenantRepository.FindAsync(id);
                 if (tenant == null)
                 {
                     return null;

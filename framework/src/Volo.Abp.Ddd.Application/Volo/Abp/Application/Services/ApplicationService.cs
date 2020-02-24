@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
-using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
@@ -146,7 +145,7 @@ namespace Volo.Abp.Application.Services
                 return;
             }
 
-            await AuthorizationService.CheckAsync(policyName).ConfigureAwait(false);
+            await AuthorizationService.CheckAsync(policyName);
         }
     }
 }

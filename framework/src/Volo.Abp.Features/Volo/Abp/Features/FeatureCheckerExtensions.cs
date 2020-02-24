@@ -17,7 +17,7 @@ namespace Volo.Abp.Features
             Check.NotNull(featureChecker, nameof(featureChecker));
             Check.NotNull(name, nameof(name));
 
-            var value = await featureChecker.GetOrNullAsync(name).ConfigureAwait(false);
+            var value = await featureChecker.GetOrNullAsync(name);
             return value?.To<T>() ?? defaultValue;
         }
 
@@ -32,7 +32,7 @@ namespace Volo.Abp.Features
             {
                 foreach (var featureName in featureNames)
                 {
-                    if (!(await featureChecker.IsEnabledAsync(featureName).ConfigureAwait(false)))
+                    if (!(await featureChecker.IsEnabledAsync(featureName)))
                     {
                         return false;
                     }
@@ -43,7 +43,7 @@ namespace Volo.Abp.Features
 
             foreach (var featureName in featureNames)
             {
-                if (await featureChecker.IsEnabledAsync(featureName).ConfigureAwait(false))
+                if (await featureChecker.IsEnabledAsync(featureName))
                 {
                     return true;
                 }
@@ -54,7 +54,7 @@ namespace Volo.Abp.Features
 
         public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, string featureName)
         {
-            if (!(await featureChecker.IsEnabledAsync(featureName).ConfigureAwait(false)))
+            if (!(await featureChecker.IsEnabledAsync(featureName)))
             {
                 throw new AbpAuthorizationException("Feature is not enabled: " + featureName);
             }
@@ -71,7 +71,7 @@ namespace Volo.Abp.Features
             {
                 foreach (var featureName in featureNames)
                 {
-                    if (!(await featureChecker.IsEnabledAsync(featureName).ConfigureAwait(false)))
+                    if (!(await featureChecker.IsEnabledAsync(featureName)))
                     {
                         throw new AbpAuthorizationException(
                             "Required features are not enabled. All of these features must be enabled: " +
@@ -84,7 +84,7 @@ namespace Volo.Abp.Features
             {
                 foreach (var featureName in featureNames)
                 {
-                    if (await featureChecker.IsEnabledAsync(featureName).ConfigureAwait(false))
+                    if (await featureChecker.IsEnabledAsync(featureName))
                     {
                         return;
                     }

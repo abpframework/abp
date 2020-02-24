@@ -22,12 +22,12 @@ namespace Volo.Abp.PermissionManagement
         {
             (await _permissionStore.IsGrantedAsync("MyPermission1",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false)).ShouldBeTrue();
+                PermissionTestDataBuilder.User1Id.ToString())).ShouldBeTrue();
 
 
             (await _permissionStore.IsGrantedAsync("MyPermission1NotExist",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false)).ShouldBeFalse();
+                PermissionTestDataBuilder.User1Id.ToString())).ShouldBeFalse();
 
         }
     }

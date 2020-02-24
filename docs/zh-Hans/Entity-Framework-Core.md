@@ -1,8 +1,8 @@
-## Entity Framework Core 集成
+# Entity Framework Core 集成
 
 本文介绍了如何将EF Core作为ORM提供程序集成到基于ABP的应用程序以及如何对其进行配置.
 
-### 安装
+## 安装
 
 `Volo.Abp.EntityFrameworkCore` 是EF Core 集成的主要nuget包. 将其安装到你的项目中(在分层应用程序中适用于 数据访问/基础设施层):
 
@@ -26,7 +26,22 @@ namespace MyCompany.MyProject
 }
 ````
 
-### 创建 DbContext
+> 注: 你可以直接下载预装EF Core的[启动模板](https://abp.io/Templates).
+
+### 数据库管理系统选择
+
+EF Core支持多种数据库管理系统([查看全部](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP框架和本文档不依赖于任何特定的DBMS.
+
+如果要创建一个可重用的库,应避免依赖于特定的DBMS包.但在最终的应用程序中,始终会选择一个DBMS.
+
+ABP框架为一些常见的DBMS提供了集成包,使配置变得更加简单. [启动模板](Startup-Templates/Index.md)附带**预先配置的SQL Server (localdb)**.请参阅以下文档,了解如何配置其他DBMS提供程序:
+
+* [MySQL](Entity-Framework-Core-MySQL.md)
+* [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
+* [SQLite](Entity-Framework-Core-SQLite.md)
+* [Others](Entity-Framework-Core-Other-DBMS.md)
+
+## 创建 DbContext
 
 你可以平常一样创建DbContext,它需要继承自 `AbpDbContext<T>`. 如下所示:
 
@@ -48,7 +63,22 @@ namespace MyCompany.MyProject
 }
 ````
 
-### 将DbContext注册到依赖注入
+### 配置连接字符串选择
+
+如果你的应用程序有多个数据库,你可以使用 `connectionStringName]` Attribute为你的DbContext配置连接字符串名称.
+例：
+
+```csharp
+[ConnectionStringName("MySecondConnString")]
+public class MyDbContext : AbpDbContext<MyDbContext>
+{
+
+}
+```
+
+如果不进行配置,则使用`Default`连接字符串. 如果你配置特定的连接字符串的名称,但在应用程序配置中没有定义这个连接字符串名称,那么它会回退到`Default`连接字符串(参阅[连接字符串文档](Connection-Strings.md)了解更多信息).
+
+## 将DbContext注册到依赖注入
 
 在module中的ConfigureServices方法使用 `AddAbpDbContext` 在[依赖注入](Dependency-Injection.md)系统注册DbContext类.
 
@@ -72,7 +102,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-#### 添加默认仓储
+### 添加默认仓储
 
 ABP会自动为DbContext中的实体创建[默认仓储](Repositories.md). 需要在注册的时使用options添加`AddDefaultRepositories()`:
 
@@ -151,7 +181,7 @@ public interface IBookRepository : IRepository<Book, Guid>
 }
 ````
 
-你通常希望从IRepository派生以继承标准存储库方法. 然而,你没有必要这样做. 仓储接口在分层应用程序的领域层中定义,它在数据访问/基础设施层([启动模板](https://cn.abp.io/Templates)中的`EntityFrameworkCore`项目)中实现
+你通常希望从IRepository派生以继承标准存储库方法. 然而,你没有必要这样做. 仓储接口在分层应用程序的领域层中定义,它在数据访问/基础设施层([启动模板](https://abp.io/Templates)中的`EntityFrameworkCore`项目)中实现
 
 IBookRepository接口的实现示例:
 
@@ -165,7 +195,7 @@ public class BookRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, 
 
     public async Task DeleteBooksByType(BookType type)
     {
-        await DbContext.Database.ExecuteSqlCommandAsync(
+        await DbContext.Database.ExecuteSqlRawAsync(
             $"DELETE FROM Books WHERE Type = {(int)type}"
         );
     }
@@ -174,7 +204,7 @@ public class BookRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, 
 
 现在可以在需要时[注入](Dependency-Injection.md)`IBookRepository`并使用`DeleteBooksByType`方法.
 
-##### 覆盖默认通用仓储
+#### 覆盖默认通用仓储
 
 即使创建了自定义仓储,仍可以注入使用默认通用仓储(在本例中是 `IRepository<Book, Guid>`). 默认仓储实现不会使用你创建的自定义仓储类.
 
@@ -200,7 +230,7 @@ public override async Task DeleteAsync(
 }
 ````
 
-#### 访问 EF Core API
+### 访问 EF Core API
 
 大多数情况下应该隐藏仓储后面的EF Core API(这也是仓储的设计目地). 但是如果想要通过仓储访问DbContext实现,则可以使用`GetDbContext()`或`GetDbSet()`扩展方法. 例：
 
@@ -226,9 +256,9 @@ public class BookService
 
 > 要点: 你必须在使用`DbContext`的项目里引用`Volo.Abp.EntityFrameworkCore`包. 这会破坏封装,但在这种情况下,这就是你需要的.
 
-#### 高级主题
+### 高级主题
 
-##### 设置默认仓储类
+#### 设置默认仓储类
 
 默认的通用仓储的默认实现是`EfCoreRepository`类,你可以创建自己的实现,并将其做为默认实现
 
@@ -273,7 +303,7 @@ context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 });
 ```
 
-#### 为默认仓储设置Base DbContext类或接口
+### 为默认仓储设置Base DbContext类或接口
 
 如果你的DbContext继承了另外一个DbContext或实现了一个接口,你可以使用这个基类或接口作为默认仓储的DbContext. 例:
 
@@ -305,7 +335,7 @@ public class BookRepository : EfCoreRepository<IBookStoreDbContext, Book, Guid>,
 
 使用DbContext接口的一个优点是它可以被其他实现替换.
 
-#### 替换其他仓储
+### 替换其他仓储
 
 正确定义并使用DbContext接口后,任何其他实现都可以使用以下ReplaceDbContext options 替换它:
 

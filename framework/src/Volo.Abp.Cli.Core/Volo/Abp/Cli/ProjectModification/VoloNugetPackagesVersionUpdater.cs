@@ -27,20 +27,20 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var filePath in projectPaths)
             {
-                await UpdateInternalAsync(filePath, includePreviews).ConfigureAwait(false);
+                await UpdateInternalAsync(filePath, includePreviews);
             }
         }
 
         public async Task UpdateProjectAsync(string projectPath, bool includePreviews)
         {
-            await UpdateInternalAsync(projectPath, includePreviews).ConfigureAwait(false);
+            await UpdateInternalAsync(projectPath, includePreviews);
         }
 
         protected virtual async Task UpdateInternalAsync(string projectPath, bool includePreviews)
         {
             var fileContent = File.ReadAllText(projectPath);
 
-            File.WriteAllText(projectPath, await UpdateVoloPackagesAsync(fileContent, includePreviews).ConfigureAwait(false));
+            File.WriteAllText(projectPath, await UpdateVoloPackagesAsync(fileContent, includePreviews));
         }
 
         private async Task<string> UpdateVoloPackagesAsync(string content, bool includePreviews)
@@ -74,7 +74,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, packageVersion);
 
-                        var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews).ConfigureAwait(false);
+                        var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews);
 
                         if (latestVersion != null && packageVersion < latestVersion)
                         {
