@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Volo.Abp.Caching;
+using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
@@ -20,6 +21,8 @@ namespace Volo.Docs.Documents
         protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
         protected IDistributedCache<DocumentUpdateInfo> DocumentUpdateCache { get; }
         protected IHostEnvironment HostEnvironment { get; }
+        private readonly IDocumentFullSearch _documentFullSearch;
+
         public DocumentAppService(
             IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
@@ -27,7 +30,8 @@ namespace Volo.Docs.Documents
             IDistributedCache<LanguageConfig> languageCache,
             IDistributedCache<DocumentResourceDto> resourceCache,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
-            IHostEnvironment hostEnvironment)
+            IHostEnvironment hostEnvironment, 
+            IDocumentFullSearch documentFullSearch)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
@@ -36,6 +40,7 @@ namespace Volo.Docs.Documents
             ResourceCache = resourceCache;
             DocumentUpdateCache = documentUpdateCache;
             HostEnvironment = hostEnvironment;
+            _documentFullSearch = documentFullSearch;
         }
 
         public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
@@ -122,6 +127,22 @@ namespace Volo.Docs.Documents
                     SlidingExpiration = TimeSpan.FromMinutes(30)
                 }
             );
+        }
+
+        public async Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
+        {
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            var esDocs = await _documentFullSearch.SearchAsync(input.Context, project.Id, input.LanguageCode, input.Version);
+
+            return esDocs.Select(esDoc => new DocumentSearchOutput//TODO: auto map
+            {
+                Name = esDoc.Name,
+                FileName = esDoc.FileName,
+                Version = esDoc.Version,
+                LanguageCode = esDoc.LanguageCode,
+                Highlight = esDoc.Highlight
+            }).ToList();
         }
 
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)

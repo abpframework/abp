@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.Account;
 using Volo.Abp.Validation.Localization;
+using Volo.Docs.Documents.FullSearch.Elastic;
 
 namespace VoloDocs.Web
 {
@@ -70,6 +71,8 @@ namespace VoloDocs.Web
             {
                 options.RoutePrefix = null;
             });
+
+            Configure<DocsElasticSearchOptions>(options => { options.Enable = true; });
 
             Configure<AbpDbConnectionOptions>(options =>
             {
