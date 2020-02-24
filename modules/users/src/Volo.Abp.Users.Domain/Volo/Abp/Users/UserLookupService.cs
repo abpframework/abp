@@ -32,7 +32,7 @@ namespace Volo.Abp.Users
 
         public async Task<TUser> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var localUser = await _userRepository.FindAsync(id,cancellationToken: cancellationToken);
+            var localUser = await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
 
             if (ExternalUserLookupServiceProvider == null)
             {
