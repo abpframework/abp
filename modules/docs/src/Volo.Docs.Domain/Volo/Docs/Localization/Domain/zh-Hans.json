@@ -17,6 +17,8 @@
     "NavigationDocumentNotFound": "这个版本没有导航文件!",
     "DocumentNotFoundInSelectedLanguage": "本文档不适用于所选语言, 将以默认语言显示文档.",
     "FilterTopics": "过滤主题",
+    "FullSearch": "搜索文档",
+    "Volo.Docs.Domain:010001": "Elastic search未启用.",
     "New": "新文档",
     "Upd": "更新",
     "NewExplanation": "在最近两周内创建.",

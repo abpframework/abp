@@ -19,16 +19,12 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         {
             _clientProvider = clientProvider;
             _options = options.Value;
-
-            if (!_options.Enable)
-            {
-                //TODO: localize message
-                throw new BusinessException("", "");
-            }
         }
 
         public async Task CreateIndexIfNeededAsync(CancellationToken cancellationToken = default)
         {
+            CheckEsEnabled();
+
             var client = _clientProvider.GetClient();
 
             var existsResponse = await client.Indices.ExistsAsync(_options.IndexName, ct: cancellationToken);
@@ -55,6 +51,8 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         public async Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default)
         {
+            CheckEsEnabled();
+
             var client = _clientProvider.GetClient();
 
             var existsResponse = await client.DocumentExistsAsync<EsDocument>(DocumentPath<EsDocument>.Id(document.Id),
@@ -88,6 +86,8 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            CheckEsEnabled();
+
             HandleError(await _clientProvider.GetClient()
                 .DeleteAsync(DocumentPath<Document>.Id(id), x => x.Index(_options.IndexName), cancellationToken));
         }
@@ -96,6 +96,8 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             string version, int? skipCount = null, int? maxResultCount = null,
             CancellationToken cancellationToken = default)
         {
+            CheckEsEnabled();
+
             var request = new SearchRequest
             {
                 Size = maxResultCount ?? 10,
@@ -173,6 +175,14 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             if (!response.ApiCall.Success)
             {
                 throw response.ApiCall.OriginalException;
+            }
+        }
+
+        protected void CheckEsEnabled()
+        {
+            if (!_options.Enable)
+            {
+                throw new BusinessException(DocsDomainErrorCodes.ElasticSearchNotEnabled);
             }
         }
     }

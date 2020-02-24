@@ -72,7 +72,10 @@ namespace VoloDocs.Web
                 options.RoutePrefix = null;
             });
 
-            Configure<DocsElasticSearchOptions>(options => { options.Enable = true; });
+            Configure<DocsElasticSearchOptions>(options =>
+            {
+                options.Enable = true;
+            });
 
             Configure<AbpDbConnectionOptions>(options =>
             {
