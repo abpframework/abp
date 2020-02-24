@@ -7,5 +7,6 @@
         public const int MaxShortNameLength = 32;
 
         public const int MaxDescriptionLength = 1024;
+
     }
 }

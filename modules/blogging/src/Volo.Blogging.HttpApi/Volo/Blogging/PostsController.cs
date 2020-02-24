@@ -27,6 +27,13 @@ namespace Volo.Blogging
             return _postAppService.GetListByBlogIdAndTagName(blogId, tagName);
         }
 
+
+        [HttpGet]
+        public Task<ListResultDto<PostWithDetailsDto>> GetOrderedListPostsByTime()
+        {
+            return _postAppService.GetOrderedListPostsByTime();
+        }
+
         [HttpGet]
         [Route("read")]
         public Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
@@ -60,5 +67,6 @@ namespace Volo.Blogging
         {
             return _postAppService.DeleteAsync(id);
         }
+
     }
 }
