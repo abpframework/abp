@@ -1,6 +1,6 @@
 ﻿# EF Core Code First Migrations
 
-Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](Startup-Templates/Index.md) takes the advantage of this system to allows you to develop your application in a standard way.
+Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](Startup-Templates/Index.md) take the advantage of this system to allow you to develop your application in a standard way.
 
 > See [its own documentation](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to understand the EF Core Code First Migrations and why you need to such a system.
 
@@ -8,7 +8,7 @@ However, EF Core migration system is **not so good in a modular environment** wh
 
 Since ABP Framework cares about modularity in all aspects, it provides a **solution** to this problem. It is important to understand this solution if you need to **customize your database structure**.
 
-This document begins by **introducing the default structure** provided by [the application startup template](Startup-Templates/Application.md) and **discusses various scenarios** you may want to implement for your application.
+This document begins by **introducing the default structure** provided by [the application startup template](Startup-Templates/Application.md) and **discusses various scenarios** you may want to implement for your own application.
 
 ## The Default Solution & Database Configuration
 
@@ -42,9 +42,22 @@ This is **the simplest configuration** and suitable for most of the applications
 
 So, you have a **single database schema** which contains all the tables of the modules **sharing** this database.
 
+ABP Framework's [connection string](Connection-Strings.md) system allows you to easily **set a different connection string** for a desired module:
+
+````json
+"ConnectionStrings": {
+  "Default": "...",
+  "AbpAuditLogging": "..."
+}
+````
+
+The example configuration about tells to the ABP Framework to use the second connection string for the [Audit Logging module](Modules/Audit-Logging.md).
+
+However, this is just the beginning. You also need to create the second database, create audit log tables inside it and maintain the database tables using the code first approach. One of the main purposes of this document is to guide you on such database separation scenarios.
+
 #### Module Tables
 
-Every module uses its own databases tables. For example, the [Identity Module](Modules/Identity.md) has some tables to manage the users and roles in the system. 
+Every module uses its own databases tables. For example, the [Identity Module](Modules/Identity.md) has some tables to manage the users and roles in the system.
 
 #### Table Prefixes
 
@@ -113,11 +126,17 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 This simple `DbContext` class still needs some explanations:
 
-* It defines a `[ConnectionStringName]` attribute which tells ABP to use the `Default` connection string for this `Dbcontext` (You can see the [connection string document](Connection-Strings.md) to learn how ABP manages the connection strings. For now, you can ignore it since this document will return to this topic later).
-* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class (You can see the [EF Core integration](Entity-Framework-Core.md) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP Framework to automate some common tasks for you).
+* It defines a `[ConnectionStringName]` attribute which tells ABP to always use the `Default` connection string for this `Dbcontext`.
+* It inherits from the `AbpDbContext<T>`  instead of the standard `DbContext` class. You can see the [EF Core integration](Entity-Framework-Core.md) document for more. For now, know that the `AbpDbContext<T>` base class implements some conventions of the ABP Framework to automate some common tasks for you.
 * It declares a `DbSet` property for the `AppUser` entity. `AppUser` shares the same table (named `AbpUsers` by default) with the `IdentityUser` entity of the [Identity module](Modules/Identity.md). The startup template provides this entity inside the application since we think that the User entity is generally needs to be customized in your application.
 * The constructor takes a `DbContextOptions<T>` instance.
 * It overrides the `OnModelCreating` method to define the EF Core mappings.
   * It first calls the the `base.OnModelCreating` method to let the ABP Framework to implement the base mappings for us.
   * It then configures the mapping for the `AppUser` entity. There is a special case for this entity, which will be explained in the next sections.
   * It finally calls the `builder.ConfigureBookStore()` extension method to configure other entities of your application.
+
+This design will be explained in more details after introducing the other database related projects.
+
+#### .EntityFrameworkCore.DbMigrations Project
+
+TODO
