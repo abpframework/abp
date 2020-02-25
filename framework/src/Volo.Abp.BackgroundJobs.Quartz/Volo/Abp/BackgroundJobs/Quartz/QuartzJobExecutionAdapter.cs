@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Quartz;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs.Quartz
 {
-    public class QuartzJobExecutionAdapter<TArgs> : IJob, ITransientDependency
+    public class QuartzJobExecutionAdapter<TArgs> : IJob
     {
         protected AbpBackgroundJobOptions Options { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
