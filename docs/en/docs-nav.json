@@ -33,6 +33,7 @@
     },
     {
       "text": "Tutorials",
+      "path": "Tutorials/Index.md",
       "items": [
         {
           "text": "Application Development",
