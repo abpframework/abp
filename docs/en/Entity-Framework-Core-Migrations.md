@@ -264,7 +264,49 @@ public class BackgroundJobsDbContext
 
 In this way, the mapping configuration of a module can be shared between `DbContext` classes.
 
-##### Reusing a Table Defined by a Module
+##### Reusing a Table of a Module
+
+You may want to reuse a table of a depended module in your application. In this case, you have two options:
+
+1. You can directly use the entity defined by the module.
+2. You can create a new entity mapping to the same database table.
+
+###### Use the Entity Defined by a Module
+
+Using an entity defined a module is pretty easy and standard. For example, Identity module defines the `IdentityUser` entity. You can inject the [repository](Repositories.md) for the `IdentityUser` and perform the standard repository operations for this entity. Example:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
+
+namespace Acme.BookStore
+{
+    public class MyService : ITransientDependency
+    {
+        private readonly IRepository<IdentityUser, Guid> _identityUserRepository;
+
+        public MyService(IRepository<IdentityUser, Guid> identityUserRepository)
+        {
+            _identityUserRepository = identityUserRepository;
+        }
+
+        public async Task DoItAsync()
+        {
+            //Get all users
+            var users = await _identityUserRepository.GetListAsync();
+        }
+    }
+}
+````
+
+This example injects the `IRepository<IdentityUser, Guid>` (default repository) which defines the standard repository methods and implements the `IQueryable` interface.
+
+In addition, Identity module defines the `IIdentityUserRepository` (custom repository) that can also be injected and used by your application. `IIdentityUserRepository` provides additional custom methods for the `IdentityUser` entity while it does not implement the `IQueryable`.
+
+###### Create a New Entity
 
 TODO
 
