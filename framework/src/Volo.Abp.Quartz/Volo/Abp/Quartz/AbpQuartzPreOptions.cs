@@ -4,6 +4,11 @@ namespace Volo.Abp.Quartz
 {
     public class AbpQuartzPreOptions
     {
-        public NameValueCollection Properties => new NameValueCollection();
+        public NameValueCollection Properties { get; set; }
+
+        public AbpQuartzPreOptions()
+        {
+            Properties = new NameValueCollection();
+        }
     }
 }
