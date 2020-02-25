@@ -204,7 +204,7 @@ Instead of localizing the message while throwing the exception, you can separate
 First, define the **code-namespace** to **localization resource** mapping in the module configuration:
 
 ````C#
-services.Configure<ExceptionLocalizationOptions>(options =>
+services.Configure<AbpExceptionLocalizationOptions>(options =>
 {
     options.MapCodeNamespace("Volo.Qa", typeof(QaResource));
 });
@@ -285,7 +285,7 @@ The `IHttpExceptionStatusCodeFinder` is used to automatically determine the HTTP
 Automatic HTTP status code determination can be overrided by custom mappings. For example:
 
 ````C#
-services.Configure<ExceptionHttpStatusCodeOptions>(options =>
+services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 {
     options.Map("Volo.Qa:010002", HttpStatusCode.Conflict);
 });
