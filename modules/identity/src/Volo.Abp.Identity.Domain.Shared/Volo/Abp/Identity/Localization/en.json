@@ -78,7 +78,7 @@
     "DisplayName:Abp.Identity.Password.RequireLowercase": "Required lower case character",
     "DisplayName:Abp.Identity.Password.RequireUppercase": "Required upper case character",
     "DisplayName:Abp.Identity.Password.RequireDigit": "Required digit",
-    "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Allowed for new users",
+    "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Enabled for new users",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Lockout duration(seconds)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Max failed access attempts",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Require confirmed email",
