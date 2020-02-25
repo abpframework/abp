@@ -29,7 +29,7 @@ namespace Volo.Blogging
 
 
         [HttpGet]
-        public Task<ListResultDto<PostWithDetailsDto>> GetOrderedListPostsByTime()
+        public Task<ListResultDto<PostDto>> GetOrderedListPostsByTime()
         {
             return _postAppService.GetOrderedListPostsByTime();
         }

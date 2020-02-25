@@ -9,7 +9,7 @@ namespace Volo.Blogging.Posts
     {
         Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName);
 
-        Task<ListResultDto<PostWithDetailsDto>> GetOrderedListPostsByTime();
+        Task<ListResultDto<PostDto>> GetOrderedListPostsByTime();
 
         Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input);
 

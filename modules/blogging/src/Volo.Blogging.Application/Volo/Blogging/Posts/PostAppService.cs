@@ -72,16 +72,22 @@ namespace Volo.Blogging.Posts
             return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
-        public async Task<ListResultDto<PostWithDetailsDto>> GetOrderedListPostsByTime()
+        public async Task<ListResultDto<PostDto>> GetOrderedListPostsByTime()
         {
             var posts = (await _postRepository.GetListAsync()).OrderByDescending(x => x.CreationTime).ToList();
-            var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
+            var postDtos = new List<PostDto>(ObjectMapper.Map<List<Post>, List<PostDto>>(posts));
 
             foreach (var postDto in postDtos)
             {
-                postDto.Tags = await GetTagsOfPost(postDto.Id);
+                if (postDto.CreatorId.HasValue)
+                {
+                    var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+
+                    postDto.UserName = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser).UserName;
+                }
             }
-            return new ListResultDto<PostWithDetailsDto>(postDtos);
+
+            return new ListResultDto<PostDto>(postDtos);
         }
 
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
