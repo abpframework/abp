@@ -190,7 +190,7 @@ throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"
 "UserNameShouldBeUniqueMessage": "Username should be unique! '{0}' is already taken!"
 ````
 
-* `IUserFriendlyException`接口派生自`IBusinessException`,而 `UserFriendlyException `类派生自`BusinessException`类.
+* `IUserFriendlyException`接口派生自`IBusinessException`,而 `UserFriendlyException`类派生自`BusinessException`类.
 
 #### 使用错误代码
 
@@ -204,7 +204,7 @@ throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"
 首先,在模块配置代码中将 **code-namespace**  映射至 **本地化资源**:
 
 ````C#
-services.Configure<AbpExceptionLocalizationOptions>(options =>
+services.Configure<ExceptionLocalizationOptions>(options =>
 {
     options.MapCodeNamespace("Volo.Qa", typeof(QaResource));
 });
@@ -285,7 +285,7 @@ ABP尝试按照以下规则,自动映射常见的异常类型的HTTP状态代码
 可以重写HTTP状态代码的自动映射,示例如下:
 
 ````C#
-services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
+services.Configure<ExceptionHttpStatusCodeOptions>(options =>
 {
     options.Map("Volo.Qa:010002", HttpStatusCode.Conflict);
 });
