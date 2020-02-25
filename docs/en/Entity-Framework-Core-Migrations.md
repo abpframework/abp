@@ -85,9 +85,9 @@ From the database point of view, there are three important projects those will b
 
 #### .EntityFrameworkCore Project
 
-This project has the `DbContext` class (`BookStoreDbContext` for this sample) of your application. You typically use this `DbContext` in your application code (in your custom [repositories](Repositories.md) if you follow the best practices).
+This project has the `DbContext` class (`BookStoreDbContext` for this sample) of your application.
 
-It is almost an empty `DbContext` since your application don't have any entities at the beginning, except the pre-defined `AppUser` entity:
+Every module uses its own `DbContext` class to access to the database. Likewise, your application has its own `DbContext`. You typically use this `DbContext` in your application code (in your custom [repositories](Repositories.md) if you follow the best practices). It is almost an empty `DbContext` since your application don't have any entities at the beginning, except the pre-defined `AppUser` entity:
 
 ````csharp
 [ConnectionStringName("Default")]
@@ -136,11 +136,138 @@ This simple `DbContext` class still needs some explanations:
 * The constructor takes a `DbContextOptions<T>` instance.
 * It overrides the `OnModelCreating` method to define the EF Core mappings.
   * It first calls the the `base.OnModelCreating` method to let the ABP Framework to implement the base mappings for us.
-  * It then configures the mapping for the `AppUser` entity. There is a special case for this entity, which will be explained in the next sections.
+  * It then configures the mapping for the `AppUser` entity. There is a special case for this entity (it shares a table with the Identity module), which will be explained in the next sections.
   * It finally calls the `builder.ConfigureBookStore()` extension method to configure other entities of your application.
 
 This design will be explained in more details after introducing the other database related projects.
 
 #### .EntityFrameworkCore.DbMigrations Project
+
+As mentioned in the previous section, every module (and your application) have **their own** separate `DbContext` classes. Each `DbContext` class only defines the entity to table mappings related to its own module and each module (and your application) use the related `DbContext` class **on runtime**.
+
+As you know, EF Core Code First migration system relies on a `DbContext` class **to track and generate** the code first migrations. So, which `DbContext` we should use for the migrations? The answer is *none of them*. There is another `DbContext` defined in the `.EntityFrameworkCore.DbMigrations` project (which is the `BookStoreMigrationsDbContext` for this example solution).
+
+##### The MigrationsDbContext
+
+The `MigrationsDbContext` is only used to create and apply the database migrations. It is **not used on runtime**. It **merges** all the entity to table mappings of all the used modules plus the application's mappings.
+
+In this way, you create and maintain a **single database migration path**. However, there are some difficulties of this approach and the next sections explains how ABP Framework overcomes these difficulties. But first, see the `BookStoreMigrationsDbContext` class as an example:
+
+````csharp
+/* This DbContext is only used for database migrations.
+ * It is not used on runtime. See BookStoreDbContext for the runtime DbContext.
+ * It is a unified model that includes configuration for
+ * all used modules and your application.
+ */
+public class BookStoreMigrationsDbContext : AbpDbContext<BookStoreMigrationsDbContext>
+{
+    public BookStoreMigrationsDbContext(
+        DbContextOptions<BookStoreMigrationsDbContext> options)
+        : base(options)
+    {
+
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        /* Include modules to your migration db context */
+        builder.ConfigurePermissionManagement();
+        builder.ConfigureSettingManagement();
+        builder.ConfigureBackgroundJobs();
+        builder.ConfigureAuditLogging();
+        builder.ConfigureIdentity();
+        builder.ConfigureIdentityServer();
+        builder.ConfigureFeatureManagement();
+        builder.ConfigureTenantManagement();
+
+        /* Configure customizations for entities from the modules included  */
+        builder.Entity<IdentityUser>(b =>
+        {
+            b.ConfigureCustomUserProperties();
+        });
+
+        /* Configure your own tables/entities inside the ConfigureBookStore method */
+        builder.ConfigureBookStore();
+    }
+}
+````
+
+##### Sharing the Mapping Code
+
+First problem is that: A module uses its own `DbContext` which needs to the database mappings. The `MigrationsDbContext` also needs to the same mapping in order to create the database tables for this module. We definitely don't want to duplicate the mapping code.
+
+The solution is to define an extension method (on the `ModelBuilder`) that can be called by both `DbContext` classes. So, every module defines such an extension method.
+
+For example, the `builder.ConfigureBackgroundJobs()` method call configures the database tables for the [Background Jobs module](Modules/Background-Jobs.md). The definition of this extension method is something like that:
+
+````csharp
+public static class BackgroundJobsDbContextModelCreatingExtensions
+{
+    public static void ConfigureBackgroundJobs(
+        this ModelBuilder builder,
+        Action<BackgroundJobsModelBuilderConfigurationOptions> optionsAction = null)
+    {
+        var options = new BackgroundJobsModelBuilderConfigurationOptions(
+            BackgroundJobsDbProperties.DbTablePrefix,
+            BackgroundJobsDbProperties.DbSchema
+        );
+
+        optionsAction?.Invoke(options);
+        
+        builder.Entity<BackgroundJobRecord>(b =>
+        {
+            b.ToTable(options.TablePrefix + "BackgroundJobs", options.Schema);
+
+            b.ConfigureCreationTime();
+            b.ConfigureExtraProperties();
+
+            b.Property(x => x.JobName)
+                .IsRequired()
+                .HasMaxLength(BackgroundJobRecordConsts.MaxJobNameLength);
+            
+            //...
+        });
+    }
+}
+````
+
+This extension method also gets options to change the database table prefix and schema for this module, but it is not important here.
+
+The final application calls the extension methods inside the `MigrationsDbContext`  class, so it can decide which modules are included to the database maintained by this `MigrationsDbContext`. If you want to create a second database and move some module tables to the second database, then you need to have a second `MigrationsDbContext` class which only calls the extension methods of the related modules. This topic will be detailed in the next sections.
+
+The same `ConfigureBackgroundJobs` method is also called the `DbContext` of the Background Jobs module:
+
+````csharp
+[ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
+public class BackgroundJobsDbContext
+    : AbpDbContext<BackgroundJobsDbContext>, IBackgroundJobsDbContext
+{
+    public DbSet<BackgroundJobRecord> BackgroundJobs { get; set; }
+
+    public BackgroundJobsDbContext(DbContextOptions<BackgroundJobsDbContext> options) 
+        : base(options)
+    {
+
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        //Reuse the same extension method!
+        builder.ConfigureBackgroundJobs();
+    }
+}
+````
+
+In this way, the mapping configuration of a module can be shared between `DbContext` classes.
+
+##### Reusing a Table Defined by a Module
+
+TODO
+
+##### Discussion of an Alternative Scenario: Every Module Manages Its Own Migration Path
 
 TODO
