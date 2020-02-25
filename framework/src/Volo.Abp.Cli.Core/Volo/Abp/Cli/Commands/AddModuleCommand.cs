@@ -37,11 +37,15 @@ namespace Volo.Abp.Cli.Commands
             var skipDbMigrations = Convert.ToBoolean(
                 commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
 
+            var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+
             await SolutionModuleAdder.AddAsync(
                 GetSolutionFile(commandLineArgs),
                 commandLineArgs.Target,
                 commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
-                skipDbMigrations
+                version,
+                skipDbMigrations,
+                commandLineArgs.Options.ContainsKey("with-source-code")
             );
         }
 
@@ -125,6 +129,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "s";
                 public const string Long = "solution";
+            }
+            public static class Version
+            {
+                public const string Short = "v";
+                public const string Long = "version";
             }
 
             public static class DbMigrations
