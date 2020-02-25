@@ -1,0 +1,14 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.ButtonsDemo
+{
+    [Widget]
+    public class ButtonsDemoViewComponent : AbpViewComponent
+    {
+        public IViewComponentResult Invoke()
+        {
+            return View("/Views/Components/Themes/Shared/Demos/ButtonsDemo/Default.cshtml");
+        }
+    }
+}
