@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.FileProviders;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 using Volo.Abp.VirtualFileSystem;
 
@@ -26,17 +28,32 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            output.TagName = null;
+
             var content = await output.GetChildContentAsync();
 
+            output.PreContent.AppendHtml("<div class=\"abp-demo-section\">");
+            output.PreContent.AppendHtml("<div class=\"abp-demo-section-body\">");
+
+            /* component rendering here */
+
+            output.PostContent.AppendHtml("</div>"); //abp-demo-section-body
+
+            output.PostContent.AppendHtml("<div class=\"abp-demo-section-raw-source\">");
             output.PostContent.AppendHtml("<h3>ABP Tag Helpers</h3>");
             output.PostContent.AppendHtml("<pre>");
             output.PostContent.Append(GetRawDemoSource());
             output.PostContent.AppendHtml("</pre>");
-            output.PostContent.AppendHtml("<hr />");
+            output.PostContent.AppendHtml("</div>"); //abp-demo-section-raw-source
+
+            output.PostContent.AppendHtml("<div class=\"abp-demo-section-bs-source\">");
             output.PostContent.AppendHtml("<h3>Bootstrap</h3>");
             output.PostContent.AppendHtml("<pre>");
             output.PostContent.Append(content.GetContent());
             output.PostContent.AppendHtml("</pre>");
+            output.PostContent.AppendHtml("</div>"); //abp-demo-section-bs-source
+
+            output.PostContent.AppendHtml("</div>"); //abp-demo-section
         }
 
         private string GetRawDemoSource()

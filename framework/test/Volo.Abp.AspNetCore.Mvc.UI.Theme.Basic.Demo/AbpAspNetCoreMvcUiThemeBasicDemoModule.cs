@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
@@ -28,6 +30,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedDemoModule>(Path.Combine(env.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo", Path.DirectorySeparatorChar)));
                 });
             }
+
+            Configure<AbpBundlingOptions>(options =>
+            {
+                options.StyleBundles
+                    .Get(StandardBundles.Styles.Global)
+                    .AddFiles("/demo/styles/main.css");
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
