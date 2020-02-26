@@ -29,6 +29,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
         public SourceCodeDownloadService SourceCodeDownloadService { get; }
         public SolutionFileModifier SolutionFileModifier { get; }
+        public NugetPackageToLocalReferenceConverter NugetPackageToLocalReferenceConverter { get; }
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -40,7 +41,8 @@ namespace Volo.Abp.Cli.ProjectModification
             NpmGlobalPackagesChecker npmGlobalPackagesChecker, 
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
             SourceCodeDownloadService sourceCodeDownloadService,
-            SolutionFileModifier solutionFileModifier)
+            SolutionFileModifier solutionFileModifier,
+            NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -52,6 +54,7 @@ namespace Volo.Abp.Cli.ProjectModification
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             SourceCodeDownloadService = sourceCodeDownloadService;
             SolutionFileModifier = solutionFileModifier;
+            NugetPackageToLocalReferenceConverter = nugetPackageToLocalReferenceConverter;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
@@ -72,16 +75,17 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
-            await AddNugetAndNpmReferences(module, projectFiles);
+            //await AddNugetAndNpmReferences(module, projectFiles);
 
             if (withSourceCode)
             {
                 var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
                 await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version);
                 await SolutionFileModifier.AddModuleToSolutionFileAsync(module, solutionFile);
+                await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
             }
 
-            ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
+            //ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
         }
 
         private async Task DownloadSourceCodesToSolutionFolder(ModuleWithMastersInfo module, string modulesFolderInSolution, string version = null)
