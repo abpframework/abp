@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
@@ -36,6 +37,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
                 options.StyleBundles
                     .Get(StandardBundles.Styles.Global)
                     .AddFiles("/demo/styles/main.css");
+            });
+
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new BasicThemeDemoMenuContributor());
             });
         }
 
