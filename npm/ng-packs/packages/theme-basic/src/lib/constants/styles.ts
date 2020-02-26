@@ -123,4 +123,8 @@ background-color: rgba(0, 0, 0, 0.6);
  .confirmation .confirmation-dialog .footer .confirmation-button--confirm:hover {
 	 background-color: #2e819b;
 }
+.ui-table .pagination-wrapper {
+    background-color: #f4f4f4;
+    border: 1px solid #c8c8c8;
+}
 `;
