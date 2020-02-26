@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
@@ -15,9 +16,9 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var nugetPackageList = GetNugetPackages(module);
 
-            var projectFilesUnderModules = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "modules")); ;
-            var projectFilesUnderSrc = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "src")); ;
-            var projectFilesUnderTest = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "test")); ;
+            var projectFilesUnderModules = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "modules"));
+            var projectFilesUnderSrc = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "src"));
+            var projectFilesUnderTest = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "test"));
 
             foreach (var projectFile in projectFilesUnderModules)
             {
@@ -38,7 +39,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var content = File.ReadAllText(projectFile);
             var doc = new XmlDocument() { PreserveWhitespace = true };
 
-            doc.Load(GenerateStreamFromString(content));
+            doc.Load(StreamHelper.GenerateStreamFromString(content));
 
             var convertedProject =  ProcessReferenceNodes(doc, nugetPackageList, localPathPrefix, sourceFile);
 
@@ -114,16 +115,6 @@ namespace Volo.Abp.Cli.ProjectModification
             return Directory.GetFiles(path,
                 "*.csproj",
                 SearchOption.AllDirectories);
-        }
-
-        private static Stream GenerateStreamFromString(string s)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
         }
 
         public class NugetPackageInfoWithModuleName

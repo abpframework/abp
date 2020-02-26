@@ -16,10 +16,12 @@ namespace Volo.Abp.Cli.Commands
         public ILogger<AddModuleCommand> Logger { get; set; }
 
         protected SolutionModuleAdder SolutionModuleAdder { get; }
+        public SolutionAbpVersionFinder SolutionAbpVersionFinder { get; }
 
-        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder)
+        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionAbpVersionFinder solutionAbpVersionFinder)
         {
             SolutionModuleAdder = solutionModuleAdder;
+            SolutionAbpVersionFinder = solutionAbpVersionFinder;
             Logger = NullLogger<AddModuleCommand>.Instance;
         }
 
@@ -34,18 +36,26 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
+            var withSourceCode = commandLineArgs.Options.ContainsKey("with-source-code");
+
             var skipDbMigrations = Convert.ToBoolean(
                 commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
 
+            var solutionFile = GetSolutionFile(commandLineArgs);
+
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+            if (version == null)
+            {
+                version = SolutionAbpVersionFinder.Find(solutionFile);
+            }
 
             await SolutionModuleAdder.AddAsync(
-                GetSolutionFile(commandLineArgs),
+                solutionFile,
                 commandLineArgs.Target,
                 commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
                 version,
                 skipDbMigrations,
-                commandLineArgs.Options.ContainsKey("with-source-code")
+                withSourceCode
             );
         }
 

@@ -50,6 +50,11 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public Task AddAsync(string projectFile, NugetPackageInfo package)
         {
+            if (File.ReadAllText(projectFile).Contains($"\"{package.Name}\""))
+            {
+                return Task.CompletedTask;
+            }
+
             using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
             {
                 Logger.LogInformation($"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");

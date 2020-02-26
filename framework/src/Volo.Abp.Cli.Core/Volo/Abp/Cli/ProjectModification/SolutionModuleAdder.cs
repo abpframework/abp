@@ -75,7 +75,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
-            //await AddNugetAndNpmReferences(module, projectFiles);
+            await AddNugetAndNpmReferences(module, projectFiles);
 
             if (withSourceCode)
             {
@@ -85,7 +85,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
             }
 
-            //ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
+            ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
         }
 
         private async Task DownloadSourceCodesToSolutionFolder(ModuleWithMastersInfo module, string modulesFolderInSolution, string version = null)
@@ -174,9 +174,9 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            DbContextFileBuilderConfigureAdder.Add(dbContextFile, module.EfCoreConfigureMethodName);
+            var addedNewBuilder = DbContextFileBuilderConfigureAdder.Add(dbContextFile, module.EfCoreConfigureMethodName);
 
-            if (!skipDbMigrations)
+            if (addedNewBuilder && !skipDbMigrations)
             {
                 EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject); 
             }
