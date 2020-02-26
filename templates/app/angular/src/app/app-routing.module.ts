@@ -8,32 +8,30 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
     data: {
       routes: {
-        name: '::Menu:Home',
-      } as ABP.Route,
-    },
+        name: '::Menu:Home'
+      } as ABP.Route
+    }
   },
   {
     path: 'account',
-    loadChildren: () => import('./lazy-libs/account-wrapper.module').then(m => m.AccountWrapperModule),
+    loadChildren: () => import('@abp/ng.account').then(m => m.AccountModule)
   },
   {
     path: 'identity',
-    loadChildren: () => import('./lazy-libs/identity-wrapper.module').then(m => m.IdentityWrapperModule),
+    loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule)
   },
   {
     path: 'tenant-management',
-    loadChildren: () =>
-      import('./lazy-libs/tenant-management-wrapper.module').then(m => m.TenantManagementWrapperModule),
+    loadChildren: () => import('@abp/ng.tenant-management').then(m => m.TenantManagementModule)
   },
   {
     path: 'setting-management',
-    loadChildren: () =>
-      import('./lazy-libs/setting-management-wrapper.module').then(m => m.SettingManagementWrapperModule),
-  },
+    loadChildren: () => import('@abp/ng.setting-management').then(m => m.SettingManagementModule)
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}
