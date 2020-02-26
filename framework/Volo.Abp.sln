@@ -266,6 +266,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Quartz", "src\Volo.Abp.Quartz\Volo.Abp.Quartz.csproj", "{9467418B-4A9B-4093-9B31-01A9DEF5B372}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BackgroundWorkers.Quartz", "src\Volo.Abp.BackgroundWorkers.Quartz\Volo.Abp.BackgroundWorkers.Quartz.csproj", "{CD5770BB-2E0C-4B3C-80E0-21B8CC43DBA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo", "src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.csproj", "{29E42ADB-85F8-44AE-A9B0-078F84C1B866}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo", "test\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.csproj", "{0C498CF2-D052-4BF7-AD35-509A90F69707}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -793,6 +796,14 @@ Global
 		{CD5770BB-2E0C-4B3C-80E0-21B8CC43DBA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD5770BB-2E0C-4B3C-80E0-21B8CC43DBA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD5770BB-2E0C-4B3C-80E0-21B8CC43DBA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29E42ADB-85F8-44AE-A9B0-078F84C1B866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29E42ADB-85F8-44AE-A9B0-078F84C1B866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29E42ADB-85F8-44AE-A9B0-078F84C1B866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29E42ADB-85F8-44AE-A9B0-078F84C1B866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C498CF2-D052-4BF7-AD35-509A90F69707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C498CF2-D052-4BF7-AD35-509A90F69707}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C498CF2-D052-4BF7-AD35-509A90F69707}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C498CF2-D052-4BF7-AD35-509A90F69707}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -928,6 +939,8 @@ Global
 		{2307198B-5837-4F05-AA84-D6EC2A923D69} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{9467418B-4A9B-4093-9B31-01A9DEF5B372} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{CD5770BB-2E0C-4B3C-80E0-21B8CC43DBA9} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{29E42ADB-85F8-44AE-A9B0-078F84C1B866} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{0C498CF2-D052-4BF7-AD35-509A90F69707} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

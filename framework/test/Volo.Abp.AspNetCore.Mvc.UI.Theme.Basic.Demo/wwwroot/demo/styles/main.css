@@ -1,0 +1,29 @@
+﻿.abp-demo-section {
+    border: 1px solid #999;
+    padding: 10px;
+}
+
+.abp-demo-section-body {
+    padding-bottom: 10px;
+}
+
+.abp-demo-section-raw-source {
+    background-color: #eee;
+    padding: 5px;
+}
+
+    .abp-demo-section-raw-source pre {
+        border: 1px solid #999;
+        margin: 5px;
+    }
+
+
+.abp-demo-section-bs-source {
+    background-color: #ddd;
+    padding: 5px;
+}
+
+    .abp-demo-section-bs-source pre {
+        border: 1px solid #999;
+        margin: 5px;
+    }
