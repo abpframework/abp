@@ -141,12 +141,6 @@
     background-color: #007ad9;
   }
   @media screen and (max-width: 40em) {
-    &.ui-table-responsive .ui-paginator-top {
-      border-bottom: 1px solid #c8c8c8;
-    }
-    &.ui-table-responsive .ui-paginator-bottom {
-      border-top: 1px solid #c8c8c8;
-    }
     &.ui-table-responsive .ui-table-tbody > tr > td {
       border: 0 none;
     }
@@ -192,14 +186,6 @@
   }
 
   .ui-table-summary {
-    border-top: 0;
-  }
-
-  .ui-paginator-top {
-    border-bottom: 0;
-  }
-
-  .ui-paginator-bottom {
     border-top: 0;
   }
 
