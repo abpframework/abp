@@ -71,8 +71,9 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module <module-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
-            sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
-            sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
+            sb.AppendLine("  --with-source-code                              Downloads the source code of the module and adds it to your solution.");
+            sb.AppendLine("  -s|--solution <solution-file>                   Specify the solution file explicitly.");
+            sb.AppendLine("  --skip-db-migrations <boolean>                  Specify if a new migration will be added or not.");
             sb.AppendLine("  -sp|--startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
