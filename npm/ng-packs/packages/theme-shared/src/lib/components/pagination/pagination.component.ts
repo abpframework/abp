@@ -4,6 +4,9 @@ import { Component, Input, OnInit, Output, EventEmitter, TrackByFunction } from 
   selector: 'abp-pagination',
   templateUrl: 'pagination.component.html',
 })
+/**
+ * @deprecated
+ */
 export class PaginationComponent implements OnInit {
   private _value = 1;
   @Input()

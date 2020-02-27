@@ -10,11 +10,13 @@ import {
 } from '../actions/tenant-management.actions';
 import { TenantManagement } from '../models/tenant-management';
 import { TenantManagementService } from '../services/tenant-management.service';
+import { Injectable } from '@angular/core';
 
 @State<TenantManagement.State>({
   name: 'TenantManagementState',
   defaults: { result: {}, selectedItem: {} } as TenantManagement.State,
 })
+@Injectable()
 export class TenantManagementState {
   @Selector()
   static get({ result }: TenantManagement.State): ABP.BasicItem[] {

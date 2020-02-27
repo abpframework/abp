@@ -22,8 +22,8 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     CoreModule.forRoot({
       environment,
       requirements: {
-        layouts: LAYOUTS,
-      },
+        layouts: LAYOUTS
+      }
     }),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
@@ -35,9 +35,9 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
-    ...(environment.production ? [] : LOGGERS),
+    ...(environment.production ? [] : LOGGERS)
   ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
