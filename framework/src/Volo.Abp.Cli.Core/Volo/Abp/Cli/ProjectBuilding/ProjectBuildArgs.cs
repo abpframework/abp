@@ -19,6 +19,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public UiFramework UiFramework { get; set; }
 
+        public MobileApp MobileApp { get; set; }
+
         [CanBeNull]
         public string AbpGitHubLocalRepositoryPath { get; set; }
 
@@ -31,6 +33,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             [CanBeNull] string version = null,
             DatabaseProvider databaseProvider = DatabaseProvider.NotSpecified,
             UiFramework uiFramework = UiFramework.NotSpecified,
+            MobileApp mobileApp = MobileApp.ReactNative,
             [CanBeNull] string abpGitHubLocalRepositoryPath = null,
             Dictionary<string, string> extraProperties = null)
         {
@@ -39,6 +42,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             Version = version;
             DatabaseProvider = databaseProvider;
             UiFramework = uiFramework;
+            MobileApp = mobileApp;
             AbpGitHubLocalRepositoryPath = abpGitHubLocalRepositoryPath;
             ExtraProperties = extraProperties ?? new Dictionary<string, string>();
         }

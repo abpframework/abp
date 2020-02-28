@@ -9,4 +9,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
         None,
         ReactNative
     }
+
+    public static  class MobileAppExtensions{
+        public static string GetFolderName(this MobileApp mobileApp)
+        {
+            switch (mobileApp)
+            {
+                case MobileApp.ReactNative:
+                    return "react-native";
+                default:
+                    return null;
+            }
+        }
+    }
 }

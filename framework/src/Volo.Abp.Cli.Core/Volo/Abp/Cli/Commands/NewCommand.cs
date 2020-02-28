@@ -68,7 +68,7 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var mobileApp = GetMobilePreference(commandLineArgs);
-            if (uiFramework != UiFramework.NotSpecified)
+            if (mobileApp != MobileApp.None)
             {
                 Logger.LogInformation("Mobile App: " + mobileApp);
             }
@@ -100,6 +100,7 @@ namespace Volo.Abp.Cli.Commands
                     version,
                     databaseProvider,
                     uiFramework,
+                    mobileApp,
                     gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )
