@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Acme.BookStore.DbMigrationsForSecondDb.EntityFrameworkCore;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -43,6 +44,7 @@ namespace Acme.BookStore.Web
         typeof(BookStoreHttpApiModule),
         typeof(BookStoreApplicationModule),
         typeof(BookStoreEntityFrameworkCoreDbMigrationsModule),
+        typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebIdentityServerModule),

@@ -20,17 +20,19 @@ When you [create a new web application](https://abp.io/get-started) (with EF Cor
 
 ![bookstore-visual-studio-solution-v3](images/bookstore-visual-studio-solution-v3.png)
 
-> Actual solution structure may be a bit different based on your preferences, but the database part will be same.
+Actual solution structure may be a bit different based on your preferences, but the database part will be same.
+
+> This document will use the `Acme.BookStore` example project name to refer the projects and classes. You need to find the corresponding class/project in your solution.
 
 ### The Database Structure
 
-The startup template has some [application modules](Modules/Index.md) pre-installed. Each layer of the solution has corresponding module package references. So, the `.EntityFrameworkCore` project has the NuGet references for the `.EntityFrameworkCore` packages of the used modules:
+The startup template has some [application modules](Modules/Index.md) pre-installed. Each layer of the solution has corresponding module **package references**. So, the `.EntityFrameworkCore` project has the NuGet references for the `.EntityFrameworkCore` packages of the used modules:
 
 ![bookstore-efcore-dependencies](images/bookstore-efcore-dependencies.png)
 
-In this way, you collect all the EF Core dependencies under the `.EntityFrameworkCore` project.
+In this way, you collect all the **EF Core dependencies** under the `.EntityFrameworkCore` project.
 
-> In addition to the module references, it references to the `Volo.Abp.EntityFrameworkCore.SqlServer` package since the startup template is pre-configured for the SQL Server. See the documentation if you want to [switch to another DBMS](Entity-Framework-Core-Other-DBMS.md).
+> In addition to the module references, it references to the `Volo.Abp.EntityFrameworkCore.SqlServer` package since the startup template is pre-configured for the **SQL Server**. See the documentation if you want to [switch to another DBMS](Entity-Framework-Core-Other-DBMS.md).
 
 While every module has its own `DbContext` class by design and can use its **own physical database**, the solution is configured to use a **single shared database** as shown in the figure below:
 
@@ -57,13 +59,13 @@ ABP Framework's [connection string](Connection-Strings.md) system allows you to 
 
 The example configuration about tells to the ABP Framework to use the second connection string for the [Audit Logging module](Modules/Audit-Logging.md).
 
-However, this is just the beginning. You also need to create the second database, create audit log tables inside it and maintain the database tables using the code first approach. One of the main purposes of this document is to guide you on such database separation scenarios.
+**However, this is just the beginning**. You also need to create the second database, create audit log tables inside it and maintain the database tables using the code first migrations approach. One of the main purposes of this document is to guide you on such **database separation** scenarios.
 
 #### Module Tables
 
 Every module uses its own databases tables. For example, the [Identity Module](Modules/Identity.md) has some tables to manage the users and roles in the system.
 
-#### Table Prefixes
+##### Table Prefixes
 
 Since it is allowed to share a single database by all modules (it is the default configuration), a module typically uses a prefix to group its own tables.
 
@@ -661,7 +663,9 @@ You can just copy & modify the content of the original `.DbMigrations` project. 
 Create a new DbContext for the migrations and call the extension methods to configure database tables for the related modules:
 
 ````csharp
-public class BookStoreSecondMigrationsDbContext : AbpDbContext<BookStoreSecondMigrationsDbContext>
+[ConnectionStringName("AbpPermissionManagement")]
+public class BookStoreSecondMigrationsDbContext :
+               AbpDbContext<BookStoreSecondMigrationsDbContext>
 {
     public BookStoreSecondMigrationsDbContext(
         DbContextOptions<BookStoreSecondMigrationsDbContext> options)
@@ -681,6 +685,8 @@ public class BookStoreSecondMigrationsDbContext : AbpDbContext<BookStoreSecondMi
     }
 }
 ````
+
+> `[ConnectionStringName(...)]` attribute is important here and tells to the ABP Framework which connection string should be used for this `DbContext`.
 
 Create a Design Time Db Factory class, that is used by the EF Core tooling (by `Add-Migration` and `Update-Database` PCM commands for example):
 
@@ -778,3 +784,138 @@ Run the `Update-Database` command to delete the tables from your main database.
 
 Notice that you've also **deleted some initial seed data** (for example, permission grants for the admin role) if you haven't copied it to the new database. If you run the application, you may not login anymore. The solution is simple: **Re-run the `.DbMigrator` console application** in your solution, it will seed the new database.
 
+### Automate the Second Database Schema Migration
+
+`.DbMigrator` console application can run the seed code across multiple databases, without any additional configuration. However, it can not run the EF Core Code First Migrations inside the second database migration project. Now, you will see how to configure the console migration application to handle both databases.
+
+#### Implementing the IBookStoreDbSchemaMigrator
+
+`EntityFrameworkCoreBookStoreDbSchemaMigrator` class inside the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project is responsible to migrate the database schema for the `BookStoreMigrationsDbContext`. It should be like that:
+
+````csharp
+[Dependency(ReplaceServices = true)]
+public class EntityFrameworkCoreBookStoreDbSchemaMigrator
+    : IBookStoreDbSchemaMigrator, ITransientDependency
+{
+    private readonly IServiceProvider _serviceProvider;
+
+    public EntityFrameworkCoreBookStoreDbSchemaMigrator(
+        IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public async Task MigrateAsync()
+    {
+        /* We intentionally resolving the BookStoreMigrationsDbContext
+         * from IServiceProvider (instead of directly injecting it)
+         * to properly get the connection string of the current tenant in the
+         * current scope.
+         */
+
+        await _serviceProvider
+            .GetRequiredService<BookStoreMigrationsDbContext>()
+            .Database
+            .MigrateAsync();
+    }
+}
+````
+
+It implements the `IBookStoreDbSchemaMigrator` and replaces existing services (see the first line).
+
+Remove the `[Dependency(ReplaceServices = true)]` line, because we will have two implementations of this interface and we want to use both. We don't want to replace one of them.
+
+Create a copy of this class inside the new migration project (`Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb`), but use the `BookStoreSecondMigrationsDbContext`. Example implementation:
+
+````csharp
+public class EntityFrameworkCoreSecondBookStoreDbSchemaMigrator 
+    : IBookStoreDbSchemaMigrator, ITransientDependency
+{
+    private readonly IServiceProvider _serviceProvider;
+
+    public EntityFrameworkCoreSecondBookStoreDbSchemaMigrator(
+        IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public async Task MigrateAsync()
+    {
+        /* We intentionally resolving the BookStoreSecondMigrationsDbContext
+         * from IServiceProvider (instead of directly injecting it)
+         * to properly get the connection string of the current tenant in the
+         * current scope.
+         */
+
+        await _serviceProvider
+            .GetRequiredService<BookStoreSecondMigrationsDbContext>()
+            .Database
+            .MigrateAsync();
+    }
+}
+````
+
+> Name of this class is important for [dependency injection](Dependency-Injection.md). It should end with `BookStoreDbSchemaMigrator` to be injectable by `IBookStoreDbSchemaMigrator` reference.
+
+We, now, have two implementations of the `IBookStoreDbSchemaMigrator` interface, each one responsible to migrate the related database schema.
+
+#### Define a Module Class for the Second Migration Project
+
+It is time to define the module class for this second migrations (`Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb`) project:
+
+````csharp
+[DependsOn(
+    typeof(BookStoreEntityFrameworkCoreModule)
+    )]
+public class BookStoreEntityFrameworkCoreSecondDbMigrationsModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAbpDbContext<BookStoreSecondMigrationsDbContext>();
+    }
+}
+````
+
+Now, reference `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` project from the `Acme.BookStore.DbMigrator` project and `typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule)` to the dependency list of the `BookStoreDbMigratorModule`. `BookStoreDbMigratorModule` class should be something like that:
+
+````csharp
+[DependsOn(
+    typeof(AbpAutofacModule),
+    typeof(BookStoreEntityFrameworkCoreDbMigrationsModule),
+    typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule), // ADDED THIS!
+    typeof(BookStoreApplicationContractsModule)
+    )]
+public class BookStoreDbMigratorModule : AbpModule
+{
+    ...
+}
+````
+
+We had a reference to the `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` project from the `Acme.BookStore.Web` project, but hadn't added module dependency since we hadn't created it yet. But, now we have it and we need to add `typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule)` to the dependency list of the `BookStoreWebModule` class.
+
+#### BookStoreDbMigrationService
+
+You need one final touch to the `BookStoreDbMigrationService` inside the `Acme.BookStore.Domain` project. It is currently designed to work with a single `IBookStoreDbSchemaMigrator` implementation, but now we have two.
+
+It injects `IBookStoreDbSchemaMigrator`. Replace it with an `IEnumerable<IBookStoreDbSchemaMigrator>` injection.
+
+Now, you have a collection of migrators instead of a single one. Find the lines like:
+
+````csharp
+await _dbSchemaMigrators.MigrateAsync();
+````
+
+change them to:
+
+````csharp
+foreach (var migrator in _dbSchemaMigrators)
+{
+    await migrator.MigrateAsync();
+}
+````
+
+You can run the `.DbMigrator` application to migrate & seed the databases. To test, you can delete both databases and run the application to see if they are created.
+
+## Conclusion
+
+This document explains how to split your databases and manage your database migrations of your solution for Entity Framework Core. In brief, you need to have a separate migration project per different databases.

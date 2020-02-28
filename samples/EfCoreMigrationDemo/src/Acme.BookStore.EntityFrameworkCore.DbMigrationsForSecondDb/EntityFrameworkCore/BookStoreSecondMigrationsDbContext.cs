@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace Acme.BookStore.DbMigrationsForSecondDb.EntityFrameworkCore
 {
+    [ConnectionStringName("AbpPermissionManagement")]
     public class BookStoreSecondMigrationsDbContext : AbpDbContext<BookStoreSecondMigrationsDbContext>
     {
         public BookStoreSecondMigrationsDbContext(

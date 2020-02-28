@@ -28,6 +28,7 @@
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Autofac" Version="2.1.1" />
     <ProjectReference Include="..\Acme.BookStore.Application.Contracts\Acme.BookStore.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb\Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb.csproj" />
     <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrations\Acme.BookStore.EntityFrameworkCore.DbMigrations.csproj" />
   </ItemGroup>
 

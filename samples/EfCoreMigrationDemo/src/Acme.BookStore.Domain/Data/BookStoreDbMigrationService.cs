@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,18 +14,18 @@ namespace Acme.BookStore.Data
         public ILogger<BookStoreDbMigrationService> Logger { get; set; }
 
         private readonly IDataSeeder _dataSeeder;
-        private readonly IBookStoreDbSchemaMigrator _dbSchemaMigrator;
+        private readonly IEnumerable<IBookStoreDbSchemaMigrator> _dbSchemaMigrators;
         private readonly ITenantRepository _tenantRepository;
         private readonly ICurrentTenant _currentTenant;
 
         public BookStoreDbMigrationService(
             IDataSeeder dataSeeder,
-            IBookStoreDbSchemaMigrator dbSchemaMigrator,
+            IEnumerable<IBookStoreDbSchemaMigrator> dbSchemaMigrators,
             ITenantRepository tenantRepository,
             ICurrentTenant currentTenant)
         {
             _dataSeeder = dataSeeder;
-            _dbSchemaMigrator = dbSchemaMigrator;
+            _dbSchemaMigrators = dbSchemaMigrators;
             _tenantRepository = tenantRepository;
             _currentTenant = currentTenant;
 
@@ -59,7 +58,11 @@ namespace Acme.BookStore.Data
         private async Task MigrateHostDatabaseAsync()
         {
             Logger.LogInformation("Migrating host database schema...");
-            await _dbSchemaMigrator.MigrateAsync();
+
+            foreach (var migrator in _dbSchemaMigrators)
+            {
+                await migrator.MigrateAsync();
+            }
 
             Logger.LogInformation("Executing host database seed...");
             await _dataSeeder.SeedAsync();
@@ -70,7 +73,11 @@ namespace Acme.BookStore.Data
         private async Task MigrateTenantDatabasesAsync(Tenant tenant)
         {
             Logger.LogInformation($"Migrating schema for {tenant.Name} database...");
-            await _dbSchemaMigrator.MigrateAsync();
+            
+            foreach (var migrator in _dbSchemaMigrators)
+            {
+                await migrator.MigrateAsync();
+            }
 
             Logger.LogInformation($"Executing {tenant.Name} tenant database seed...");
             await _dataSeeder.SeedAsync(tenant.Id);

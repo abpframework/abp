@@ -7,7 +7,6 @@ using Volo.Abp.DependencyInjection;
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
-    [Dependency(ReplaceServices = true)]
     public class EntityFrameworkCoreBookStoreDbSchemaMigrator
         : IBookStoreDbSchemaMigrator, ITransientDependency
     {
