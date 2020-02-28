@@ -44,6 +44,7 @@
     <ProjectReference Include="..\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
     <ProjectReference Include="..\Acme.BookStore.HttpApi\Acme.BookStore.HttpApi.csproj" />
     <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrations\Acme.BookStore.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb\Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb.csproj" />
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="2.1.1" />
     <PackageReference Include="Volo.Abp.Autofac" Version="2.1.1" />
     <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="2.1.1" />

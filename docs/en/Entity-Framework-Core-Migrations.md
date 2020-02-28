@@ -453,7 +453,7 @@ builder.Entity<IdentityRole>(b =>
 
 In this way, we re-used the extension method that is used to configure custom property mappings for the role. But, this time, did the same customization for the `IdentityRole` entity.
 
-Now, you can add a new EF Core database migration using the standard `Add-Migration` command in the Package Manager Console (remember to select `.EntityFrameworkCore.DbMigrations` as the Default Project in the PMC):
+Now, you can add a new EF Core database migration using the standard `Add-Migration` command in the Package Manager Console (remember to select `.EntityFrameworkCore.DbMigrations` as the Default Project in the PMC and make sure that the `.Web` project is still the startup project):
 
 ![pmc-add-migration-role-title](images/pmc-add-migration-role-title.png)
 
@@ -587,5 +587,140 @@ An alternative approach would be to allow each module to have its own migrations
 * It would be harder to track and **apply changes** to database when you use multiple modules.
 
 ## Using Multiple Databases
+
+The default startup template is organized to use a single database used by all the modules and by your application. However, the ABP Framework and all the pre-built modules are designed so that they can use multiple databases. Each module can use its own database or you can group modules into a few databases.
+
+This section will explain how to move Audit Logging, Setting Management and Permission Management module tables to a second database while the remaining modules continue to use the main ("Default") database.
+
+The resulting structure will be like the figure below:
+
+![single-database-usage](images/multiple-database-usage.png)
+
+### Change the Connection Strings Section
+
+First step is to change the connection string section inside all the `appsettings.json` files. Initially, it is like that:
+
+````json
+"ConnectionStrings": {
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+````
+
+Change it as shown below:
+
+````json
+"ConnectionStrings": {
+  "Default": "Server=localhost;Database=BookStore;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "AbpPermissionManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "AbpSettingManagement": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true",
+  "AbpAuditLogging": "Server=localhost;Database=BookStore_SecondDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+````
+
+Added 3 more connection strings for the related module to target the `BookStore_SecondDb` database. `AbpPermissionManagement` is the connection string for the permission management module.
+
+The `AbpPermissionManagement` is a constant [defined](https://github.com/abpframework/abp/blob/97eaa6ff5a044f503465455c86332e5a277b077a/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain/Volo/Abp/PermissionManagement/AbpPermissionManagementDbProperties.cs#L11) by the permission management module. ABP Framework [connection string selection system](Connection-Strings.md) selects this connection string for the permission management module if you define. If you don't define, it fallbacks to the `Default` connection string.
+
+### Create a Second Migration Project
+
+Defining the connection strings as explained above is enough on runtime. However, `BookStore_SecondDb` database doesn't exist yet. You need to create the database and the tables for the related modules.
+
+Just like the main database, we want to use the EF Core Code First migration system to create and maintain the second database.
+
+The easiest way to create a second project (`.csproj`) for the second migration `DbContext`. Create a new **class library project** in your solution named `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` (or name it better if you didn't like it).
+
+`.csproj` content should be something like that:
+
+````xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Acme.BookStore.DbMigrationsForSecondDb</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0" />
+  </ItemGroup>
+
+</Project>
+````
+
+You can just copy & modify the content of the original `.DbMigrations` project. This project references to the `.EntityFrameworkCore` project. Only difference is the `RootNamespace` value.
+
+**Add a reference** to this project from the `.Web` project (otherwise, EF Core tooling doesn't allow to use the `Add-Migration` command).
+
+### Create the Second DbMigrationDbContext
+
+Create a new DbContext for the migrations and call the extension methods to configure database tables for the related modules:
+
+````csharp
+public class BookStoreSecondMigrationsDbContext : AbpDbContext<BookStoreSecondMigrationsDbContext>
+{
+    public BookStoreSecondMigrationsDbContext(
+        DbContextOptions<BookStoreSecondMigrationsDbContext> options)
+        : base(options)
+    {
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        /* Include modules to your migration db context */
+
+        builder.ConfigurePermissionManagement();
+        builder.ConfigureSettingManagement();
+        builder.ConfigureAuditLogging();
+    }
+}
+````
+
+Create a Design Time Db Factory class, that is used by the EF Core tooling (by `Add-Migration` and `Update-Database` PCM commands for example):
+
+````csharp
+/* This class is needed for EF Core console commands
+ * (like Add-Migration and Update-Database commands) */
+public class BookStoreSecondMigrationsDbContextFactory
+    : IDesignTimeDbContextFactory<BookStoreSecondMigrationsDbContext>
+{
+    public BookStoreSecondMigrationsDbContext CreateDbContext(string[] args)
+    {
+        var configuration = BuildConfiguration();
+
+        var builder = new DbContextOptionsBuilder<BookStoreSecondMigrationsDbContext>()
+            .UseSqlServer(configuration.GetConnectionString("AbpPermissionManagement"));
+
+        return new BookStoreSecondMigrationsDbContext(builder.Options);
+    }
+
+    private static IConfigurationRoot BuildConfiguration()
+    {
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false);
+
+        return builder.Build();
+    }
+}
+````
+
+This is similar to the class inside the `.EntityFrameworCore.DbMigrations`  project, except this one uses the `AbpPermissionManagement` connection string.
+
+Now, you can open the Package Manager Console, select the `.EntityFrameworkCore.DbMigrationsForSecondDb` project as the default project (make sure the `.Web` project is still the startup project) and run the `Add-Migration` and `Update-Database` commands as shown below:
+
+![pmc-add-migration-initial-update-database](images/pmc-add-migration-initial-update-database.png)
+
+Now, you should have a new database contains only the tables needed by the related modules:
+
+![bookstore-second-database](images/bookstore-second-database.png)
+
+### Remove Modules from the Main Database
 
 TODO
