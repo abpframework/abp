@@ -723,4 +723,58 @@ Now, you should have a new database contains only the tables needed by the relat
 
 ### Remove Modules from the Main Database
 
-TODO
+We've created a second database contains tables for the Audit Logging, Permission Management and Setting Management modules. So, we should delete these tables from the main database. It is pretty easy.
+
+First, remove the following lines from the `MigrationsDbContext` class (`BookStoreMigrationsDbContext` for this example):
+
+````csharp
+builder.ConfigurePermissionManagement();
+builder.ConfigureSettingManagement();
+builder.ConfigureAuditLogging();
+````
+
+Open the Package Manager Console, select the `.EntityFrameworkCore.DbMigrations` as the Default project (make sure that the `.Web` project is still the startup project) and run the following command:
+
+````
+Add-Migration "Removed_Audit_Setting_Permission_Modules"
+````
+
+This command will create a new migration class as shown below:
+
+````csharp
+public partial class Removed_Audit_Setting_Permission_Modules : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(
+            name: "AbpAuditLogActions");
+
+        migrationBuilder.DropTable(
+            name: "AbpEntityPropertyChanges");
+
+        migrationBuilder.DropTable(
+            name: "AbpPermissionGrants");
+
+        migrationBuilder.DropTable(
+            name: "AbpSettings");
+
+        migrationBuilder.DropTable(
+            name: "AbpEntityChanges");
+
+        migrationBuilder.DropTable(
+            name: "AbpAuditLogs");
+    }
+
+    ...
+}
+````
+
+Be careful in this step:
+
+* If you have a **live system**, then you should care about the **data loss**. You need to move the table contents to the second database before deleting the tables.
+* If you **haven't started** your project yet, you can consider to **remove all the migrations** and re-create the initial one to have a cleaner migration history.
+
+Run the `Update-Database` command to delete the tables from your main database.
+
+Notice that you've also **deleted some initial seed data** (for example, permission grants for the admin role) if you haven't copied it to the new database. If you run the application, you may not login anymore. The solution is simple: **Re-run the `.DbMigrator` console application** in your solution, it will seed the new database.
+
