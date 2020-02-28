@@ -63,21 +63,21 @@ The example configuration about tells to the ABP Framework to use the second con
 
 #### Module Tables
 
-Every module uses its own databases tables. For example, the [Identity Module](Modules/Identity.md) has some tables to manage the users and roles in the system.
+Every module uses its **own databases tables**. For example, the [Identity Module](Modules/Identity.md) has some tables to manage the users and roles in the system.
 
 ##### Table Prefixes
 
-Since it is allowed to share a single database by all modules (it is the default configuration), a module typically uses a prefix to group its own tables.
+Since it is allowed to share a single database by all modules (it is the default configuration), a module typically uses a **table name prefix** to group its own tables.
 
 The fundamental modules, like [Identity](Modules/Identity.md), [Tenant Management](Modules/Tenant-Management.md) and [Audit Logs](Modules/Audit-Logging.md), use the `Abp` prefix, while some other modules use their own prefixes. [Identity Server](Modules/IdentityServer.md) module uses the `IdentityServer` prefix for example.
 
-If you want, you can change the database table name prefix for a module for your application. Example:
+If you want, you can **change the database table name prefix** for a module for your application. Example:
 
 ````csharp
 Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = "Ids";
 ````
 
-This code changes the prefix of the [Identity Server](Modules/IdentityServer.md) module. Write this code at the very beginning in your application.
+This code changes the prefix of the [Identity Server](Modules/IdentityServer.md) module. Write this code **at the very beginning** in your application.
 
 > Every module also defines `DbSchema` property (near to `DbTablePrefix`), so you can set it for the databases support the schema usage.
 
@@ -89,7 +89,7 @@ From the database point of view, there are three important projects those will b
 
 This project has the `DbContext` class (`BookStoreDbContext` for this sample) of your application.
 
-Every module uses its own `DbContext` class to access to the database. Likewise, your application has its own `DbContext`. You typically use this `DbContext` in your application code (in your custom [repositories](Repositories.md) if you follow the best practices). It is almost an empty `DbContext` since your application don't have any entities at the beginning, except the pre-defined `AppUser` entity:
+**Every module uses its own `DbContext` class** to access to the database. Likewise, your application has its own `DbContext`. You typically use this `DbContext` in your application code (in your custom [repositories](Repositories.md) if you follow the best practices). It is almost an empty `DbContext` since your application don't have any entities at the beginning, except the pre-defined `AppUser` entity:
 
 ````csharp
 [ConnectionStringName("Default")]
@@ -198,9 +198,9 @@ public class BookStoreMigrationsDbContext : AbpDbContext<BookStoreMigrationsDbCo
 
 ##### Sharing the Mapping Code
 
-First problem is that: A module uses its own `DbContext` which needs to the database mappings. The `MigrationsDbContext` also needs to the same mapping in order to create the database tables for this module. We definitely don't want to duplicate the mapping code.
+First problem is that: A module uses its own `DbContext` which needs to the database mappings. The `MigrationsDbContext` also needs to the same mapping in order to create the database tables for this module. We definitely **don't want to duplicate** the mapping code.
 
-The solution is to define an extension method (on the `ModelBuilder`) that can be called by both `DbContext` classes. So, every module defines such an extension method.
+The solution is to define an **extension method** (on the `ModelBuilder`) that can be called by both `DbContext` classes. So, all modules define such extension methods.
 
 For example, the `builder.ConfigureBackgroundJobs()` method call configures the database tables for the [Background Jobs module](Modules/Background-Jobs.md). The definition of this extension method is something like that:
 
@@ -237,9 +237,9 @@ public static class BackgroundJobsDbContextModelCreatingExtensions
 
 This extension method also gets options to change the database table prefix and schema for this module, but it is not important here.
 
-The final application calls the extension methods inside the `MigrationsDbContext`  class, so it can decide which modules are included to the database maintained by this `MigrationsDbContext`. If you want to create a second database and move some module tables to the second database, then you need to have a second `MigrationsDbContext` class which only calls the extension methods of the related modules. This topic will be detailed in the next sections.
+The final application calls the extension methods inside the `MigrationsDbContext`  class, so it can decide which modules are included in the database maintained by this `MigrationsDbContext`. If you want to create a second database and move some module tables to the second database, then you need to have a second `MigrationsDbContext` class which only calls the extension methods of the related modules. This topic will be detailed in the next sections.
 
-The same `ConfigureBackgroundJobs` method is also called the `DbContext` of the Background Jobs module:
+The same `ConfigureBackgroundJobs` method is also called in the `DbContext` of the Background Jobs module:
 
 ````csharp
 [ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
@@ -264,14 +264,14 @@ public class BackgroundJobsDbContext
 }
 ````
 
-In this way, the mapping configuration of a module can be shared between `DbContext` classes.
+In this way, the mapping configuration of a module can be shared between `DbContext` classes. The code above is inside the related module NuGet package, so you don't care about it.
 
 ##### Reusing a Table of a Module
 
-You may want to reuse a table of a depended module in your application. In this case, you have two options:
+You may want to **reuse a table** of a depended module in your application. In this case, you have two options:
 
-1. You can directly use the entity defined by the module.
-2. You can create a new entity mapping to the same database table.
+1. You can **directly use the entity** defined by the module.
+2. You can **create a new entity** mapping to the same database table.
 
 ###### Use the Entity Defined by a Module
 
@@ -312,13 +312,13 @@ This example injects the `IRepository<IdentityUser, Guid>` (default repository) 
 
 Working with an entity of a module is easy if you want to use the entity as is. However, you may want to define your own entity class and map to the same database table in the following cases;
 
-* You want to add a new field to the table and map it to a property in the entity. You can't use the module's entity since it doesn't have the related property.
-* You want to use a subset of the table fields. You don't want to access to all properties of the entity and hide the unrelated properties (from a security perspective or just by design).
-* You don't want to directly depend on a module entity class.
+* You want to **add a new field** to the table and map it to a property in the entity. You can't use the module's entity since it doesn't have the related property.
+* You want to **use a subset of the table fields**. You don't want to access to all properties of the entity and hide the unrelated properties (from a security perspective or just by design).
+* You don't want to directly **depend on** a module entity class.
 
 In any case, the progress is same. Assume that you want to create an entity, named `AppRole`, mapped to the same table of the `IdentityRole` entity of the [Identity module](Modules/Identity.md).
 
-Here, we will show the implementation, then **will discuss the limitations** (and reasons of the limitations) of this approach.
+Here, we will show the implementation, then **will discuss the limitations** of this approach.
 
 First, create a new `AppRole` class in your `.Domain` project:
 
@@ -351,7 +351,7 @@ namespace Acme.BookStore.Roles
 * It's inherited from [the `AggregateRoot<Guid>` class](Entities.md) and implements [the `IMultiTenant` interface](Multi-Tenancy.md) because the `IdentityRole` also does the same.
 * You can add any properties defined by the `IdentityRole` entity. This examples add only the `TenantId` and `Name` properties since we only need them here. You can make the setters private (like in this example) to prevent changing Identity module's properties accidently.
 * You can add custom (additional) properties. This example adds the `Title` property.
-* The constructor is provide, so it is not allowed to directly create a new `AppRole` entity. Creating a role is a responsibility of the Identity module. You can query roles, set/update your custom properties, but you should not create or delete a role in your code, as a best practice (while there is nothing restricts you).
+* The **constructor is private**, so it is not allowed to directly create a new `AppRole` entity. Creating a role is a responsibility of the Identity module. You can query roles, set/update your custom properties, but you should not create or delete a role in your code, as a best practice (while there is nothing restricts you).
 
 Now, it is time to define the EF Core mappings. Open the `DbContext` of your application (`BookStoreDbContext` in this sample) and add the following property:
 
@@ -412,8 +412,8 @@ public static void ConfigureCustomRoleProperties<TRole>(this EntityTypeBuilder<T
 }
 ````
 
-* This method only defines the custom properties of your entity.
-* Unfortunately, we can not utilize the fully type safety here (by referencing the `AppRole` entity). The best we can do is to use the `Title` name as type safe.
+* This method only defines the **custom properties** of your entity.
+* Unfortunately, we can not utilize the fully **type safety** here (by referencing the `AppRole` entity). The best we can do is to use the `Title` name as type safe. This is because of EF Core migration system can not map two unrelated entity classes to the same database table.
 
 You've configured the custom property for your `DbContext` used by your application on the runtime. We also need to configure the `MigrationsDbContext`.
 
@@ -524,11 +524,11 @@ public class AppRoleAppService : ApplicationService, IAppRoleAppService
 There are some **limitations** of creating a new entity and mapping it to a table of a depended module:
 
 * Your **custom properties must be nullable**. For example, `AppRole.Title` was nullable here. Otherwise, Identity module throws exception because it doesn't know and can not fill the Title when it inserts a new role to the database.
-* As a good practice, you should not update the properties defined by the module, especially if it requires a business logic. You typically manage your own properties.
+* As a good practice, you should not update the **properties defined by the module**, especially if it requires a business logic. You typically want to manage your own properties.
 
 ##### Alternative Approaches
 
-Instead of creating an entity to add a custom property, you can use the following approaches.
+Instead of creating a new entity class to add a custom property, you can use the following approaches.
 
 ###### Using the ExtraProperties
 
@@ -568,31 +568,31 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 In this way, you can easily attach any type of value to an entity of a depended module. However, there are some drawbacks of this usage:
 
-* All the extra properties are stored as a single JSON object in the database, they are not stored as new table fields, as you can expect. Creating indexes and using SQL queries against this properties will be harder compared to simple table fields.
-* Property names are string, so they are not type safe. It is recommended to define constants for these kind of properties to prevent typo errors.
+* All the extra properties are stored as **a single JSON object** in the database. They are not stored as new table fields, as you may expect. Creating database table indexes and using SQL queries against these properties will be harder compared to simple table fields.
+* Property names are strings, so they are **not type safe**. It is recommended to define constants for these kind of properties to prevent typo errors.
 
 ###### Creating a New Table
 
-Instead of creating a new entity and mapping to the same table, you can create your own table to store your properties. You typically duplicate some values of the original entity. For example, you can add `Name` field to your own table which is a duplication of the `Name` field in the original table.
+Instead of creating a new entity and mapping to the same table, you can also create **your own table** to store your properties. You typically duplicate some values of the original entity. For example, you can add `Name` field to your own table which is a duplication of the `Name` field in the original table.
 
-In this case, you don't deal with migration problems, however you need to deal with the problems of data duplication. When the duplicated value changes, you should reflect the same change in your table. You can use local or distributed [event bus](Event-Bus.md) to subscribe to the change events for the original entity.
+In this case, you don't deal with migration problems, however you need to deal with the problems of data duplication. When the duplicated value changes, you should reflect the same change in your table. You can use local or distributed [event bus](Event-Bus.md) to subscribe to the change events for the original entity. This is the recommended way of depending on a microservice's data from another microservice, especially if they have separate physical databases (you can search on the web on data sharing on a microservice design, it is a wide topic to cover here).
 
 #### Discussion of an Alternative Scenario: Every Module Manages Its Own Migration Path
 
-As mentioned before, `.EntityFrameworkCore.DbMigrations` merges all the database mappings of all the modules (plus the application mappings) to create a unified migration path.
+As mentioned before, `.EntityFrameworkCore.DbMigrations` merges all the database mappings of all the modules (plus your application's mappings) to create a unified migration path.
 
 An alternative approach would be to allow each module to have its own migrations to maintain its database tables. While it seems more module in the beginning, it has some important drawbacks:
 
-* **EF Core migration system depends on the DBMS provider**. For example, if a module has created migrations for SQL Server, then you can not use this migration code for MySQL (it is not practical for a module to maintain migrations for all available DBMS providers). Leaving the migration to the application code (as explained in this document) allows you to **choose the DBMS in the application** code.
+* **EF Core migration system depends on the DBMS provider**. For example, if a module has created migrations for SQL Server, then you can not use this migration code for MySQL. It is not practical for a module to maintain migrations for all available DBMS providers. Leaving the migration to the application code (as explained in this document) allows you to **choose the DBMS in the application** code.
 * It would be harder or impossible to **share a table** between modules or **re-use a table** of a module in your application. Because EF Core migration system can not handle it and will throw exceptions like "Table XXX is already exists in the database".
 * It would be harder to **customize/enhance** the mapping and the resulting migration code.
 * It would be harder to track and **apply changes** to database when you use multiple modules.
 
 ## Using Multiple Databases
 
-The default startup template is organized to use a single database used by all the modules and by your application. However, the ABP Framework and all the pre-built modules are designed so that they can use multiple databases. Each module can use its own database or you can group modules into a few databases.
+The default startup template is organized to use a single database used by all the modules and by your application. However, the ABP Framework and all the pre-built modules are designed so that **they can use multiple databases**. Each module can use its own database or you can group modules into a few databases.
 
-This section will explain how to move Audit Logging, Setting Management and Permission Management module tables to a second database while the remaining modules continue to use the main ("Default") database.
+This section will explain how to move Audit Logging, Setting Management and Permission Management module tables to a **second database** while the remaining modules continue to use the main ("Default") database.
 
 The resulting structure will be like the figure below:
 
@@ -619,19 +619,21 @@ Change it as shown below:
 }
 ````
 
-Added 3 more connection strings for the related module to target the `BookStore_SecondDb` database. `AbpPermissionManagement` is the connection string for the permission management module.
+Added **three more connection strings** for the related module to target the `BookStore_SecondDb` database (they are all same). For example, `AbpPermissionManagement` is the connection string for the permission management module.
 
 The `AbpPermissionManagement` is a constant [defined](https://github.com/abpframework/abp/blob/97eaa6ff5a044f503465455c86332e5a277b077a/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain/Volo/Abp/PermissionManagement/AbpPermissionManagementDbProperties.cs#L11) by the permission management module. ABP Framework [connection string selection system](Connection-Strings.md) selects this connection string for the permission management module if you define. If you don't define, it fallbacks to the `Default` connection string.
 
 ### Create a Second Migration Project
 
-Defining the connection strings as explained above is enough on runtime. However, `BookStore_SecondDb` database doesn't exist yet. You need to create the database and the tables for the related modules.
+Defining the connection strings as explained above is enough **on runtime**. However, `BookStore_SecondDb` database doesn't exist yet. You need to create the database and the tables for the related modules.
 
 Just like the main database, we want to use the EF Core Code First migration system to create and maintain the second database.
 
-The easiest way to create a second project (`.csproj`) for the second migration `DbContext`. Create a new **class library project** in your solution named `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` (or name it better if you didn't like it).
+An easy way is to create a second project (`.csproj`) for the second migration `DbContext`.
 
-`.csproj` content should be something like that:
+So, create a new **class library project** in your solution named `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` (or name it better if you didn't like it).
+
+The `.csproj` content should be something like that:
 
 ````xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -654,13 +656,13 @@ The easiest way to create a second project (`.csproj`) for the second migration 
 </Project>
 ````
 
-You can just copy & modify the content of the original `.DbMigrations` project. This project references to the `.EntityFrameworkCore` project. Only difference is the `RootNamespace` value.
+You can just copy & modify the content of the original `.DbMigrations` project. This project references to the `.EntityFrameworkCore` project. **Only difference** is the `RootNamespace` value.
 
 **Add a reference** to this project from the `.Web` project (otherwise, EF Core tooling doesn't allow to use the `Add-Migration` command).
 
 ### Create the Second DbMigrationDbContext
 
-Create a new DbContext for the migrations and call the extension methods to configure database tables for the related modules:
+Create a new `DbContext` for the migrations and call the **extension methods** of the modules to configure the database tables for the related modules:
 
 ````csharp
 [ConnectionStringName("AbpPermissionManagement")]
@@ -686,9 +688,9 @@ public class BookStoreSecondMigrationsDbContext :
 }
 ````
 
-> `[ConnectionStringName(...)]` attribute is important here and tells to the ABP Framework which connection string should be used for this `DbContext`.
+> `[ConnectionStringName(...)]` attribute is important here and tells to the ABP Framework which connection string should be used for this `DbContext`. We've used `AbpPermissionManagement`, but all are the same.
 
-Create a Design Time Db Factory class, that is used by the EF Core tooling (by `Add-Migration` and `Update-Database` PCM commands for example):
+Create a **Design Time Db Factory** class, that is used by the EF Core tooling (by `Add-Migration` and `Update-Database` PCM commands for example):
 
 ````csharp
 /* This class is needed for EF Core console commands
@@ -719,7 +721,7 @@ public class BookStoreSecondMigrationsDbContextFactory
 
 This is similar to the class inside the `.EntityFrameworCore.DbMigrations`  project, except this one uses the `AbpPermissionManagement` connection string.
 
-Now, you can open the Package Manager Console, select the `.EntityFrameworkCore.DbMigrationsForSecondDb` project as the default project (make sure the `.Web` project is still the startup project) and run the `Add-Migration` and `Update-Database` commands as shown below:
+Now, you can open the Package Manager Console, select the `.EntityFrameworkCore.DbMigrationsForSecondDb` project as the default project (make sure the `.Web` project is still the startup project) and run the `Add-Migration "Initial"` and `Update-Database` commands as shown below:
 
 ![pmc-add-migration-initial-update-database](images/pmc-add-migration-initial-update-database.png)
 
@@ -729,7 +731,7 @@ Now, you should have a new database contains only the tables needed by the relat
 
 ### Remove Modules from the Main Database
 
-We've created a second database contains tables for the Audit Logging, Permission Management and Setting Management modules. So, we should delete these tables from the main database. It is pretty easy.
+We've **created a second database** contains tables for the Audit Logging, Permission Management and Setting Management modules. So, we should **delete these tables from the main database**. It is pretty easy.
 
 First, remove the following lines from the `MigrationsDbContext` class (`BookStoreMigrationsDbContext` for this example):
 
@@ -786,7 +788,7 @@ Notice that you've also **deleted some initial seed data** (for example, permiss
 
 ### Automate the Second Database Schema Migration
 
-`.DbMigrator` console application can run the seed code across multiple databases, without any additional configuration. However, it can not run the EF Core Code First Migrations inside the second database migration project. Now, you will see how to configure the console migration application to handle both databases.
+`.DbMigrator` console application can run the database seed code across multiple databases, without any additional configuration. However, it can not run the EF Core Code First Migrations inside the second database migration project. Now, you will see how to configure the console migration application to handle both databases.
 
 #### Implementing the IBookStoreDbSchemaMigrator
 
@@ -807,7 +809,7 @@ public class EntityFrameworkCoreBookStoreDbSchemaMigrator
 
     public async Task MigrateAsync()
     {
-        /* We intentionally resolving the BookStoreMigrationsDbContext
+        /* We are intentionally resolving the BookStoreMigrationsDbContext
          * from IServiceProvider (instead of directly injecting it)
          * to properly get the connection string of the current tenant in the
          * current scope.
@@ -821,7 +823,7 @@ public class EntityFrameworkCoreBookStoreDbSchemaMigrator
 }
 ````
 
-It implements the `IBookStoreDbSchemaMigrator` and replaces existing services (see the first line).
+It implements the `IBookStoreDbSchemaMigrator` and **replaces existing services** (see the first line).
 
 Remove the `[Dependency(ReplaceServices = true)]` line, because we will have two implementations of this interface and we want to use both. We don't want to replace one of them.
 
@@ -841,7 +843,7 @@ public class EntityFrameworkCoreSecondBookStoreDbSchemaMigrator
 
     public async Task MigrateAsync()
     {
-        /* We intentionally resolving the BookStoreSecondMigrationsDbContext
+        /* We are intentionally resolving the BookStoreSecondMigrationsDbContext
          * from IServiceProvider (instead of directly injecting it)
          * to properly get the connection string of the current tenant in the
          * current scope.
@@ -861,7 +863,7 @@ We, now, have two implementations of the `IBookStoreDbSchemaMigrator` interface,
 
 #### Define a Module Class for the Second Migration Project
 
-It is time to define the module class for this second migrations (`Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb`) project:
+It is time to define the [module](Module-Development-Basics.md) class for this second migrations (`Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb`) project:
 
 ````csharp
 [DependsOn(
@@ -891,15 +893,15 @@ public class BookStoreDbMigratorModule : AbpModule
 }
 ````
 
-We had a reference to the `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` project from the `Acme.BookStore.Web` project, but hadn't added module dependency since we hadn't created it yet. But, now we have it and we need to add `typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule)` to the dependency list of the `BookStoreWebModule` class.
+We had a reference to the `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` project from the `Acme.BookStore.Web` project, but hadn't added module dependency since we hadn't created it before. But, now we have it and we need to add `typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule)` to the dependency list of the `BookStoreWebModule` class.
 
 #### BookStoreDbMigrationService
 
 You need one final touch to the `BookStoreDbMigrationService` inside the `Acme.BookStore.Domain` project. It is currently designed to work with a single `IBookStoreDbSchemaMigrator` implementation, but now we have two.
 
-It injects `IBookStoreDbSchemaMigrator`. Replace it with an `IEnumerable<IBookStoreDbSchemaMigrator>` injection.
+It injects `IBookStoreDbSchemaMigrator`. Replace it with an `IEnumerable<IBookStoreDbSchemaMigrator>` injection ([Dependency Injection System](Dependency-Injection.md) allows to inject multiple implementations of an interface just like that).
 
-Now, you have a collection of migrators instead of a single one. Find the lines like:
+Now, you have **a collection of schema migrators** instead of a single one. Find the lines like:
 
 ````csharp
 await _dbSchemaMigrators.MigrateAsync();
@@ -914,7 +916,7 @@ foreach (var migrator in _dbSchemaMigrators)
 }
 ````
 
-You can run the `.DbMigrator` application to migrate & seed the databases. To test, you can delete both databases and run the application to see if they are created.
+You can run the `.DbMigrator` application to migrate & seed the databases. To test, you can delete both databases and run the `.DbMigrator` application again to see if it creates both of the databases.
 
 ## Conclusion
 
