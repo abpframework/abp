@@ -296,6 +296,10 @@
               "path": "Entity-Framework-Core.md",
               "items": [
                 {
+                  "text": "Database Migrations",
+                  "path": "Entity-Framework-Core-Migrations.md"
+                },
+                {
                   "text": "Switch DBMS",
                   "path": "Entity-Framework-Core-Other-DBMS.md",
                   "items": [
