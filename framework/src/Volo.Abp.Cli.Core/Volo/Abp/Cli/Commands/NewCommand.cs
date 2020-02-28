@@ -67,6 +67,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var mobileApp = GetMobilePreference(commandLineArgs);
+            if (mobileApp != MobileApp.None)
+            {
+                Logger.LogInformation("Mobile App: " + mobileApp);
+            }
+
             var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
             if (gitHubLocalRepositoryPath != null)
             {
@@ -94,6 +100,7 @@ namespace Volo.Abp.Cli.Commands
                     version,
                     databaseProvider,
                     uiFramework,
+                    mobileApp,
                     gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )
@@ -208,6 +215,20 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
+        private MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
+        {
+            var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
+            switch (optionValue)
+            {
+                case "none":
+                    return MobileApp.None;
+                case "react-native":
+                    return MobileApp.ReactNative;
+                default:
+                    return MobileApp.ReactNative;
+            }
+        }
+
         public static class Options
         {
             public static class Template
@@ -243,6 +264,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "u";
                 public const string Long = "ui";
+            }
+
+            public static class Mobile
+            {
+                public const string Short = "m";
+                public const string Long = "mobile";
             }
         }
     }
