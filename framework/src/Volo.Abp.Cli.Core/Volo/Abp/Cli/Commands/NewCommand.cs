@@ -222,7 +222,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 case "none":
                     return MobileApp.None;
-                case "react":
+                case "react-native":
                     return MobileApp.ReactNative;
                 default:
                     return MobileApp.ReactNative;
