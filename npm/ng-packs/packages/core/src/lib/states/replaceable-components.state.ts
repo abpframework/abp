@@ -2,11 +2,13 @@ import { State, Action, StateContext, Selector, createSelector } from '@ngxs/sto
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import snq from 'snq';
+import { Injectable } from '@angular/core';
 
 @State<ReplaceableComponents.State>({
   name: 'ReplaceableComponentsState',
   defaults: { replaceableComponents: [] } as ReplaceableComponents.State,
 })
+@Injectable()
 export class ReplaceableComponentsState {
   @Selector()
   static getAll({

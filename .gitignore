@@ -291,3 +291,4 @@ samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/microservices/BloggingService.Host/Logs/logs.txt
 samples/MicroserviceDemo/applications/ConsoleClientDemo/Logs/logs.txt
 modules/docs/app/Volo.DocsTestApp/Logs/logs.txt
+framework/test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo/Logs/logs.txt

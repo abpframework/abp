@@ -14,23 +14,7 @@ import {
 @Component({
   selector: 'abp-table',
   templateUrl: 'table.component.html',
-  styles: [
-    `
-      .ui-table .ui-table-tbody > tr:nth-child(even):hover,
-      .ui-table .ui-table-tbody > tr:hover {
-        filter: brightness(90%);
-      }
-
-      .ui-table .ui-table-tbody > tr.empty-row:hover {
-        filter: none;
-      }
-
-      .ui-table .ui-table-tbody > tr.empty-row > div.empty-row-content {
-        padding: 10px;
-        text-align: center;
-      }
-    `,
-  ],
+  styleUrls: ['table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class TableComponent {
