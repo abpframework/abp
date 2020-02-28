@@ -17,7 +17,7 @@
     "chart.js": "^2.9.2",
     "font-awesome": "^4.7.0",
     "primeicons": "^2.0.0",
-    "primeng": "^9.0.0-rc.4"
+    "primeng": "^9.0.0"
   },
   "publishConfig": {
     "access": "public"

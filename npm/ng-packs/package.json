@@ -79,7 +79,7 @@
     "ngxs-schematic": "^1.1.9",
     "prettier": "^1.18.2",
     "primeicons": "^2.0.0",
-    "primeng": "^9.0.0-rc.4",
+    "primeng": "^9.0.0",
     "protractor": "~5.4.0",
     "rxjs": "~6.5.4",
     "snq": "^1.0.3",
