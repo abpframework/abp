@@ -12,7 +12,7 @@ Finally, ABP has a **SPA UI** option with the latest [Angular](https://angular.i
 * Created Angular UI packages for the modules like account, identity and tenant-management.
 * Created a minimal startup template that authenticates using IdentityServer and uses the ASP.NET Core backend. This template uses the packages mentioned above.
 * Worked on the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) and the [download page](https://abp.io/get-started) to be able to generate projects with the new UI option.
-* Created a [tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Angular/Part-I) to jump start with the new UI option.
+* Created a [tutorial](https://docs.abp.io/en/abp/latest/Tutorials/Part-1?UI=NG) to jump start with the new UI option.
 
 We've created the template, document and infrastructure based on the latest Angular tools and trends:
 
