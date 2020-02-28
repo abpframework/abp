@@ -529,7 +529,7 @@
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
             "tsConfig": "apps/dev-app/tsconfig.app.json",
-            "aot": true,
+            "aot": false,
             "assets": [
               "apps/dev-app/src/favicon.ico",
               "apps/dev-app/src/assets"
