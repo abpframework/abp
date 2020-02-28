@@ -6,6 +6,7 @@
   },
   "deleteDestPath": false,
   "whitelistedNonPeerDependencies": [
+    "@angular/localize",
     "@ngxs/router-plugin",
     "@ngxs/storage-plugin",
     "@ngxs/store",

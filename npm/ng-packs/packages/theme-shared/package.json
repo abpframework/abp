@@ -10,14 +10,11 @@
     "@abp/ng.core": "^2.1.0",
     "@angular/cdk": "^9.0.1",
     "@angular/localize": "^9.0.2",
-    "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^6.0.0",
+    "@fortawesome/fontawesome-free": "^5.12.1",
     "@ngx-validate/core": "^0.0.7",
-    "bootstrap": "^4.3.1",
-    "chart.js": "^2.9.2",
-    "font-awesome": "^4.7.0",
-    "primeicons": "^2.0.0",
-    "primeng": "^9.0.0"
+    "bootstrap": "^4.4.1",
+    "chart.js": "^2.9.3"
   },
   "publishConfig": {
     "access": "public"

@@ -24,7 +24,10 @@ export class PermissionManagementState {
   constructor(private permissionManagementService: PermissionManagementService) {}
 
   @Action(GetPermissions)
-  permissionManagementGet({ patchState }: StateContext<PermissionManagement.State>, { payload }: GetPermissions) {
+  permissionManagementGet(
+    { patchState }: StateContext<PermissionManagement.State>,
+    { payload }: GetPermissions,
+  ) {
     return this.permissionManagementService.getPermissions(payload).pipe(
       tap(permissionResponse =>
         patchState({

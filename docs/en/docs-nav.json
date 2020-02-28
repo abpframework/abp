@@ -33,6 +33,7 @@
     },
     {
       "text": "Tutorials",
+      "path": "Tutorials/Index.md",
       "items": [
         {
           "text": "Application Development",
@@ -295,20 +296,26 @@
               "path": "Entity-Framework-Core.md",
               "items": [
                 {
-                  "text": "Switch to MySQL",
-                  "path": "Entity-Framework-Core-MySQL.md"
+                  "text": "Database Migrations",
+                  "path": "Entity-Framework-Core-Migrations.md"
                 },
                 {
-                  "text": "Switch to PostgreSQL",
-                  "path": "Entity-Framework-Core-PostgreSQL.md"
-                },
-                {
-                  "text": "Switch to SQLite",
-                  "path": "Entity-Framework-Core-SQLite.md"
-                },
-                {
-                  "text": "Switch to another DBMS",
-                  "path": "Entity-Framework-Core-Other-DBMS.md"
+                  "text": "Switch DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md",
+                  "items": [
+                    {
+                      "text": "To MySQL",
+                      "path": "Entity-Framework-Core-MySQL.md"
+                    },
+                    {
+                      "text": "To PostgreSQL",
+                      "path": "Entity-Framework-Core-PostgreSQL.md"
+                    },
+                    {
+                      "text": "To SQLite",
+                      "path": "Entity-Framework-Core-SQLite.md"
+                    }
+                  ]
                 }
               ]
             },

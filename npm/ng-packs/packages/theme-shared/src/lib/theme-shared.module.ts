@@ -1,7 +1,7 @@
 import { CoreModule, LazyLoadService } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
-import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
@@ -39,11 +39,7 @@ export function appendScript(injector: Injector) {
 }
 
 @NgModule({
-  imports: [
-    CoreModule,
-    NgxValidateCoreModule,
-    NgxsModule.forRoot([])
-  ],
+  imports: [CoreModule, NgxValidateCoreModule, NgbPaginationModule],
   declarations: [
     BreadcrumbComponent,
     ButtonComponent,

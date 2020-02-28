@@ -15,7 +15,10 @@ export class SettingManagementState {
   }
 
   @Action(SetSelectedSettingTab)
-  settingManagementAction({ patchState }: StateContext<SettingManagement.State>, { payload }: SetSelectedSettingTab) {
+  settingManagementAction(
+    { patchState }: StateContext<SettingManagement.State>,
+    { payload }: SetSelectedSettingTab,
+  ) {
     patchState({
       selectedTab: payload,
     });

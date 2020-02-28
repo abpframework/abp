@@ -7,6 +7,10 @@ import { Store } from '@ngxs/store';
   providedIn: 'root',
 })
 export class SettingManagementConfigService {
+  get store(): Store {
+    return this.injector.get(Store);
+  }
+
   constructor(private injector: Injector) {
     const route = {
       name: 'AbpSettingManagement::Settings',
@@ -23,7 +27,9 @@ export class SettingManagementConfigService {
     setTimeout(() => {
       const tabs = getSettingTabs();
       if (!tabs || !tabs.length) {
-        this.injector.get(Store).dispatch(new PatchRouteByName('AbpSettingManagement::Settings', { ...route, invisible: true }));
+        this.store.dispatch(
+          new PatchRouteByName('AbpSettingManagement::Settings', { ...route, invisible: true }),
+        );
       }
     });
   }
