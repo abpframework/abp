@@ -6,7 +6,8 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz
 {
-    public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ITransientDependency
+    [Dependency(ReplaceServices = true)]
+    public class QuartzBackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDependency
     {
         private readonly IScheduler _scheduler;
 
