@@ -29,7 +29,7 @@ export namespace Books {
     Horror,
     Science,
     ScienceFiction,
-    Poetry,
+    Poetry
   }
 
   export interface CreateUpdateBookInput {
