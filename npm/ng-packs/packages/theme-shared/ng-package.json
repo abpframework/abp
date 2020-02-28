@@ -6,6 +6,7 @@
   },
   "whitelistedNonPeerDependencies": [
     "@abp/ng.core",
+    "@angular/cdk",    
     "@angular/localize",
     "@fortawesome/fontawesome-free",
     "@ng-bootstrap/ng-bootstrap",
