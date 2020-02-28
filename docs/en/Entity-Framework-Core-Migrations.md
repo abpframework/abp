@@ -332,7 +332,7 @@ namespace Acme.BookStore.Roles
         // Properties shared with the IdentityRole class
         
         public Guid? TenantId { get; private set; }
-        public virtual string Name { get; protected internal set; }
+        public string Name { get; private set; }
 
         //Additional properties
 
@@ -347,7 +347,7 @@ namespace Acme.BookStore.Roles
 ````
 
 * It's inherited from [the `AggregateRoot<Guid>` class](Entities.md) and implements [the `IMultiTenant` interface](Multi-Tenancy.md) because the `IdentityRole` also does the same.
-* You can add any properties defined by the `IdentityRole` entity. This examples add only the `TenantId` and `Name` properties since we only need them here.
+* You can add any properties defined by the `IdentityRole` entity. This examples add only the `TenantId` and `Name` properties since we only need them here. You can make the setters private (like in this example) to prevent changing Identity module's properties accidently.
 * You can add custom (additional) properties. This example adds the `Title` property.
 * The constructor is provide, so it is not allowed to directly create a new `AppRole` entity. Creating a role is a responsibility of the Identity module. You can query roles, set/update your custom properties, but you should not create or delete a role in your code, as a best practice (while there is nothing restricts you).
 
@@ -400,7 +400,7 @@ builder.Entity<AppRole>(b =>
 * It maps to the same `AbpRoles` table shared with the `IdentityRole` entity.
 * `ConfigureByConvention()` configures the standard/base properties (like `TenantId`) and recommended to always call it.
 
-`ConfigureCustomRoleProperties()` has not exists yet. Define it inside the `BookStoreDbContextModelCreatingExtensions` class (near to your `DbContext` in the `EntityFrameworkCore` project):
+`ConfigureCustomRoleProperties()` has not exists yet. Define it inside the `BookStoreDbContextModelCreatingExtensions` class (near to your `DbContext` in the `.EntityFrameworkCore` project):
 
 ````csharp
 public static void ConfigureCustomRoleProperties<TRole>(this EntityTypeBuilder<TRole> b)
@@ -413,7 +413,9 @@ public static void ConfigureCustomRoleProperties<TRole>(this EntityTypeBuilder<T
 * This method only defines the custom properties of your entity.
 * Unfortunately, we can not utilize the fully type safety here (by referencing the `AppRole` entity). The best we can do is to use the `Title` name as type safe.
 
-You've configured the custom property for your `DbContext` used by your application on the runtime. We also need to configure the `MigrationsDbContext`. Open the `MigrationsDbContext` (`BookStoreMigrationsDbContext` for this example) and change as shown below:
+You've configured the custom property for your `DbContext` used by your application on the runtime. We also need to configure the `MigrationsDbContext`.
+
+Open the `MigrationsDbContext` (`BookStoreMigrationsDbContext` for this example) and change as shown below:
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)
@@ -480,6 +482,110 @@ public partial class Added_Title_To_Roles : Migration
 
 All done! Just run the `Update-Database` command in the PMC or run the `.DbMigrator` project in your solution to apply changes to database.
 
-##### Discussion of an Alternative Scenario: Every Module Manages Its Own Migration Path
+Now, you can work with the `AppRole` entity just like any other entity of your application. An example [application service](Application-Services.md) that queries and updates roles:
+
+````csharp
+public class AppRoleAppService : ApplicationService, IAppRoleAppService
+{
+    private readonly IRepository<AppRole, Guid> _appRoleRepository;
+
+    public AppRoleAppService(IRepository<AppRole, Guid> appRoleRepository)
+    {
+        _appRoleRepository = appRoleRepository;
+    }
+
+    public async Task<List<AppRoleDto>> GetListAsync()
+    {
+        var roles = await _appRoleRepository.GetListAsync();
+
+        return roles
+            .Select(r => new AppRoleDto
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Title = r.Title
+            })
+            .ToList();
+    }
+
+    public async Task UpdateTitleAsync(Guid id, string title)
+    {
+        var role = await _appRoleRepository.GetAsync(id);
+        
+        role.Title = title;
+        
+        await _appRoleRepository.UpdateAsync(role);
+    }
+}
+````
+
+There are some **limitations** of creating a new entity and mapping it to a table of a depended module:
+
+* Your **custom properties must be nullable**. For example, `AppRole.Title` was nullable here. Otherwise, Identity module throws exception because it doesn't know and can not fill the Title when it inserts a new role to the database.
+* As a good practice, you should not update the properties defined by the module, especially if it requires a business logic. You typically manage your own properties.
+
+##### Alternative Approaches
+
+Instead of creating an entity to add a custom property, you can use the following approaches.
+
+###### Using the ExtraProperties
+
+All entities derived from the `AggregateRoot ` class can store name-value pairs in their `ExtraProperties` property, which is a `Dictionary<string, object>` serialized to JSON in the database table. So, you can add values to this dictionary and query again without changing the entity.
+
+For example, you can store query the title Property inside an `IdentityRole` instead of creating a new entity. Example:
+
+````csharp
+public class IdentityRoleExtendingService : ITransientDependency
+{
+    private readonly IIdentityRoleRepository _identityRoleRepository;
+
+    public IdentityRoleExtendingService(IIdentityRoleRepository identityRoleRepository)
+    {
+        _identityRoleRepository = identityRoleRepository;
+    }
+
+    public async Task<string> GetTitleAsync(Guid id)
+    {
+        var role = await _identityRoleRepository.GetAsync(id);
+
+        return role.GetProperty<string>("Title");
+    }
+
+    public async Task SetTitleAsync(Guid id, string newTitle)
+    {
+        var role = await _identityRoleRepository.GetAsync(id);
+        
+        role.SetProperty("Title", newTitle);
+        
+        await _identityRoleRepository.UpdateAsync(role);
+    }
+}
+````
+
+* `GetProperty` and `SetProperty` methods are shortcuts to get and set a value in the `role.ExtraProperties` dictionary and they are the recommended way to work with the extra properties.
+
+In this way, you can easily attach any type of value to an entity of a depended module. However, there are some drawbacks of this usage:
+
+* All the extra properties are stored as a single JSON object in the database, they are not stored as new table fields, as you can expect. Creating indexes and using SQL queries against this properties will be harder compared to simple table fields.
+* Property names are string, so they are not type safe. It is recommended to define constants for these kind of properties to prevent typo errors.
+
+###### Creating a New Table
+
+Instead of creating a new entity and mapping to the same table, you can create your own table to store your properties. You typically duplicate some values of the original entity. For example, you can add `Name` field to your own table which is a duplication of the `Name` field in the original table.
+
+In this case, you don't deal with migration problems, however you need to deal with the problems of data duplication. When the duplicated value changes, you should reflect the same change in your table. You can use local or distributed [event bus](Event-Bus.md) to subscribe to the change events for the original entity.
+
+#### Discussion of an Alternative Scenario: Every Module Manages Its Own Migration Path
+
+As mentioned before, `.EntityFrameworkCore.DbMigrations` merges all the database mappings of all the modules (plus the application mappings) to create a unified migration path.
+
+An alternative approach would be to allow each module to have its own migrations to maintain its database tables. While it seems more module in the beginning, it has some important drawbacks:
+
+* **EF Core migration system depends on the DBMS provider**. For example, if a module has created migrations for SQL Server, then you can not use this migration code for MySQL (it is not practical for a module to maintain migrations for all available DBMS providers). Leaving the migration to the application code (as explained in this document) allows you to **choose the DBMS in the application** code.
+* It would be harder or impossible to **share a table** between modules or **re-use a table** of a module in your application. Because EF Core migration system can not handle it and will throw exceptions like "Table XXX is already exists in the database".
+* It would be harder to **customize/enhance** the mapping and the resulting migration code.
+* It would be harder to track and **apply changes** to database when you use multiple modules.
+
+## Using Multiple Databases
 
 TODO
