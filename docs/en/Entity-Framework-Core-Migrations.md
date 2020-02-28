@@ -4,6 +4,10 @@ This document begins by **introducing the default structure** provided by [the a
 
 > This document is for who want to fully understand and customize the database structure comes with [the application startup template](Startup-Templates/Application.md). If you simply want to create entities and manage your code first migrations, just follow [the startup tutorials](Tutorials/Index.md).
 
+### Source Code
+
+You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.
+
 ## About the EF Core Code First Migrations
 
 Entity Framework Core provides an easy to use and powerful [database migration system](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). ABP Framework [startup templates](Startup-Templates/Index.md) take the advantage of this system to allow you to develop your application in a standard way.
@@ -921,3 +925,7 @@ You can run the `.DbMigrator` application to migrate & seed the databases. To te
 ## Conclusion
 
 This document explains how to split your databases and manage your database migrations of your solution for Entity Framework Core. In brief, you need to have a separate migration project per different databases.
+
+## Source Code
+
+You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.
