@@ -220,11 +220,12 @@ export class ErrorHandler {
       .resolveComponentFactory(HttpErrorWrapperComponent)
       .create(this.injector);
 
-    for (const key in this.componentRef.instance) {
+    for (const key in instance) {
       if (this.componentRef.instance.hasOwnProperty(key)) {
         this.componentRef.instance[key] = instance[key];
       }
     }
+
     this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
