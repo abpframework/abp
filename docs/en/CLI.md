@@ -128,9 +128,35 @@ abp update [options]
 * `--npm`: Only updates NPM packages.
 * `--nuget`: Only updates NuGet packages.
 
+### switch-to-preview
+
+You can use this command to switch your project to latest preview version of the ABP framework packages.
+
+Usage:
+
+````bash
+abp switch-to-preview [options]
+````
+#### Options
+
+`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+
+### switch-to-stable
+
+If you're using the ABP Framework preview packages, you can switch back to stable version using this command.
+
+Usage:
+
+````bash
+abp switch-to-stable [options]
+````
+#### Options
+
+`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+
 ### login
 
-Some features of the CLI requires to be logged in to abp.io platform. To login with your username write 
+Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:
 
 ```bash
 abp login <username>
