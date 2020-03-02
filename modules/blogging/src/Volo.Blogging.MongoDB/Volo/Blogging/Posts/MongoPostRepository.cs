@@ -39,7 +39,7 @@ namespace Volo.Blogging.Posts
             {
                 return await GetMongoQueryable().Where(x => x.BlogId == blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
             }
-            return await GetMongoQueryable().Where(x => x.BlogId == blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
+            return await GetMongoQueryable().Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync();
 
         }
     }
