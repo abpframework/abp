@@ -278,6 +278,11 @@
               "path": "Entity-Framework-Core.md",
               "items": [
                 {
+                  "text": "数据库迁移",
+                  "path": "Entity-Framework-Core-Migrations.md"
+                },
+                {
+                  
                   "text": "切换DMBS",
                   "path": "Entity-Framework-Core-Other-DBMS.md",
                   "items":[
