@@ -106,7 +106,7 @@ namespace Volo.Abp.Account.Web.Pages
             }
             else
             {
-                if (ConsentInput.IdentityScopes.Any() || ConsentInput.ApiScopes.Any())
+                if (!ConsentInput.IdentityScopes.IsNullOrEmpty() || !ConsentInput.ApiScopes.IsNullOrEmpty())
                 {
                     grantedConsent = new ConsentResponse
                     {
