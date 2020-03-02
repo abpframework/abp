@@ -543,7 +543,7 @@ acme.bookStore.book.create({ name: 'Foundation', type: 7, publishDate: '1951-05-
 
 You should see a message in the console something like that:
 
-````js
+````text
 successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 ````
 
