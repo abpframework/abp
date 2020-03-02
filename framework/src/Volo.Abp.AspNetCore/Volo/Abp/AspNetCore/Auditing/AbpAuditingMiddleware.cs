@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
@@ -60,13 +58,6 @@ namespace Volo.Abp.AspNetCore.Auditing
         private bool ShouldWriteAuditLog(HttpContext httpContext, bool hasError = false)
         {
             if (!Options.IsEnabled)
-            {
-                return false;
-            }
-
-            var endpoint = httpContext.GetEndpoint();
-            var actionDescriptor = endpoint?.Metadata.GetMetadata<ActionDescriptor>();
-            if (!(actionDescriptor is ControllerActionDescriptor))
             {
                 return false;
             }
