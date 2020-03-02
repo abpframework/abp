@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using Volo.Abp.Account.Web.Pages
 @using Volo.Abp.Account.Web.Pages.Account
 @model ConsentModel
@@ -25,7 +25,7 @@
 
             <div>Uncheck the permissions you do not wish to grant.</div>
 
-            @if (Model.ConsentInput.IdentityScopes.Any())
+            @if (!Model.ConsentInput.IdentityScopes.IsNullOrEmpty())
             {
                 <h3>Personal Information</h3>
 
@@ -55,7 +55,7 @@
                 </ul>
             }
 
-            @if (Model.ConsentInput.ApiScopes.Any())
+            @if (!Model.ConsentInput.ApiScopes.IsNullOrEmpty())
             {
                 <h3>Application Access</h3>
 
