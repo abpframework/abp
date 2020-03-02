@@ -29,7 +29,7 @@ namespace Volo.Abp.Account
 
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
-            await UserManager.SetEmailAsync(user,input.EmailAddress).ConfigureAwait(false);
+            await UserManager.SetEmailAsync(user,input.EmailAddress);
 
             await SetDefaultRolesAsync(user);
 
@@ -38,9 +38,9 @@ namespace Volo.Abp.Account
 
         protected virtual async Task SetDefaultRolesAsync(IdentityUser user)
         {
-            var defaultRoles = await _roleRepository.GetDefaultOnesAsync().ConfigureAwait(false);
+            var defaultRoles = await _roleRepository.GetDefaultOnesAsync();
 
-            await UserManager.SetRolesAsync(user, defaultRoles.Select(r => r.Name)).ConfigureAwait(false);
+            await UserManager.SetRolesAsync(user, defaultRoles.Select(r => r.Name));
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()

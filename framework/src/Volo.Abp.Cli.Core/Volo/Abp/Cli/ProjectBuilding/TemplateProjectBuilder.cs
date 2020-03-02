@@ -88,6 +88,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                             !x.Key.Equals(NewCommand.Options.OutputFolder.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.UiFramework.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.UiFramework.Short, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.Mobile.Long, StringComparison.InvariantCultureIgnoreCase) &&
+                            !x.Key.Equals(NewCommand.Options.Mobile.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.Version.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.Version.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Select(x => x.Key).ToList();

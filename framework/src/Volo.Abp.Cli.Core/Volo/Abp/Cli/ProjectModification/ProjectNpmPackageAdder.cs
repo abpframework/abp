@@ -20,7 +20,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public Task AddAsync(string directory, NpmPackageInfo npmPackage)
         {
             var packageJsonFilePath = Path.Combine(directory, "package.json");
-            if (!File.Exists(packageJsonFilePath))
+            if (!File.Exists(packageJsonFilePath) || File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
             {
                 return Task.CompletedTask;
             }
