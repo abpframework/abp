@@ -38,6 +38,7 @@ namespace Volo.Abp.Cli.Commands.Services
                     version,
                     DatabaseProvider.NotSpecified,
                     UiFramework.NotSpecified,
+                    null,
                     gitHubLocalRepositoryPath,
                     options
                 )
