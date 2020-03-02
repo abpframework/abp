@@ -32,5 +32,15 @@ namespace Volo.Blogging.Posts
 
             return post;
         }
+
+        public async Task<List<Post>> GetOrderedList(Guid blogId, bool @descending = false)
+        {
+            if (!descending)
+            {
+                return await GetMongoQueryable().Where(x => x.BlogId == blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
+            }
+            return await GetMongoQueryable().Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync();
+
+        }
     }
 }
