@@ -8,5 +8,6 @@
 
         public const int MaxDescriptionLength = 1024;
 
+        public const string BlogName = "blog";
     }
 }

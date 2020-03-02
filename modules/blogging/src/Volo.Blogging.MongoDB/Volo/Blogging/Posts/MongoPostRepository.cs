@@ -32,5 +32,10 @@ namespace Volo.Blogging.Posts
 
             return post;
         }
+
+        public Task<List<Post>> GetOrderedList(Guid blogId, bool @descending = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

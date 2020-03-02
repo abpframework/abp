@@ -46,11 +46,6 @@ namespace Volo.Blogging.Posts
 
             foreach (var postDto in postDtos)
             {
-                postDto.CommentCount = await _commentRepository.GetCommentCountOfPostAsync(postDto.Id);
-            }
-
-            foreach (var postDto in postDtos)
-            {
                 if (postDto.CreatorId.HasValue)
                 {
                     if (!userDictionary.ContainsKey(postDto.CreatorId.Value))
@@ -68,26 +63,26 @@ namespace Volo.Blogging.Posts
                     }
                 }
             }
-            
+
             return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
-        public async Task<ListResultDto<PostDto>> GetOrderedListPostsByTime()
+        public async Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
         {
-            var posts = (await _postRepository.GetListAsync()).OrderByDescending(x => x.CreationTime).ToList();
-            var postDtos = new List<PostDto>(ObjectMapper.Map<List<Post>, List<PostDto>>(posts));
+            var posts = await _postRepository.GetOrderedList(blogId);
+
+            var postDtos = new List<PostWithDetailsDto>(ObjectMapper.Map<List<Post>, List<PostWithDetailsDto>>(posts));
 
             foreach (var postDto in postDtos)
             {
-                if (postDto.CreatorId.HasValue)
+                var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
+                if (creatorUser != null)
                 {
-                    var creatorUser = await UserLookupService.FindByIdAsync(postDto.CreatorId.Value);
-
-                    postDto.UserName = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser).UserName;
+                    postDto.Writer = ObjectMapper.Map<BlogUser, BlogUserDto>(creatorUser);
                 }
             }
 
-            return new ListResultDto<PostDto>(postDtos);
+            return new ListResultDto<PostWithDetailsDto>(postDtos);
         }
 
         public async Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
@@ -190,7 +185,7 @@ namespace Volo.Blogging.Posts
         {
             var postList = await _postRepository.GetListAsync();
 
-            if (postList.Where(p => p.Url == url).WhereIf(existingPost != null, p =>  existingPost.Id != p.Id).Any())
+            if (postList.Where(p => p.Url == url).WhereIf(existingPost != null, p => existingPost.Id != p.Id).Any())
             {
                 return url + "-" + Guid.NewGuid().ToString().Substring(0, 5);
             }
@@ -270,7 +265,7 @@ namespace Volo.Blogging.Posts
         private Task<List<PostWithDetailsDto>> FilterPostsByTag(IEnumerable<PostWithDetailsDto> allPostDtos, Tag tag)
         {
             var filteredPostDtos = allPostDtos.Where(p => p.Tags?.Any(t => t.Id == tag.Id) ?? false).ToList();
-           
+
             return Task.FromResult(filteredPostDtos);
         }
     }

@@ -27,11 +27,11 @@ namespace Volo.Blogging
             return _postAppService.GetListByBlogIdAndTagName(blogId, tagName);
         }
 
-
         [HttpGet]
-        public Task<ListResultDto<PostDto>> GetOrderedListPostsByTime()
+        [Route("{blogId}/all/by-time")]
+        public Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
         {
-            return _postAppService.GetOrderedListPostsByTime();
+            return _postAppService.GetTimeOrderedListAsync(blogId);
         }
 
         [HttpGet]
