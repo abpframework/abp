@@ -24,11 +24,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected IJsonSerializer JsonSerializer { get; }
         protected IApiKeyService ApiKeyService { get; }
 
-        public TemplateProjectBuilder(ISourceCodeStore sourceCodeStore, 
+        public TemplateProjectBuilder(ISourceCodeStore sourceCodeStore,
             ITemplateInfoProvider templateInfoProvider,
-            ICliAnalyticsCollect cliAnalyticsCollect, 
+            ICliAnalyticsCollect cliAnalyticsCollect,
             IOptions<AbpCliOptions> options,
-            IJsonSerializer jsonSerializer, 
+            IJsonSerializer jsonSerializer,
             IApiKeyService apiKeyService)
         {
             SourceCodeStore = sourceCodeStore;
@@ -40,7 +40,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             Logger = NullLogger<TemplateProjectBuilder>.Instance;
         }
-        
+
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
         {
             var templateInfo = GetTemplateInfo(args);
@@ -50,9 +50,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
                 SourceCodeTypes.Template,
-                args.Version
+                args.Version,
+                args.TemplateSource
             );
-             
+
             var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
             if (apiKeyResult?.ApiKey != null)
             {
@@ -82,7 +83,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var options = args.ExtraProperties
                 .Where(x => !x.Key.Equals(CliConsts.Command, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals("tiered", StringComparison.InvariantCultureIgnoreCase))
-                .Where(x => !x.Key.Equals(NewCommand.Options.DatabaseProvider.Long, StringComparison.InvariantCultureIgnoreCase) && 
+                .Where(x => !x.Key.Equals(NewCommand.Options.DatabaseProvider.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.DatabaseProvider.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.OutputFolder.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.OutputFolder.Short, StringComparison.InvariantCultureIgnoreCase))
@@ -92,6 +93,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                             !x.Key.Equals(NewCommand.Options.Mobile.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.Version.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.Version.Short, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.TemplateSource.Short, StringComparison.InvariantCultureIgnoreCase) &&
+                            !x.Key.Equals(NewCommand.Options.TemplateSource.Long, StringComparison.InvariantCultureIgnoreCase))
                 .Select(x => x.Key).ToList();
 
             await CliAnalyticsCollect.CollectAsync(new CliAnalyticsCollectInputDto

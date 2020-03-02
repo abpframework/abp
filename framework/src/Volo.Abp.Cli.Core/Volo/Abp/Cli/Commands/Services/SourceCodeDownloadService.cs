@@ -40,6 +40,7 @@ namespace Volo.Abp.Cli.Commands.Services
                     UiFramework.NotSpecified,
                     null,
                     gitHubLocalRepositoryPath,
+                    null,
                     options
                 )
             );

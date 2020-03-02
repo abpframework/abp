@@ -55,7 +55,7 @@ namespace Volo.Abp.Cli.Commands
             }
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
-
+            
             await _sourceCodeDownloadService.DownloadAsync(
                 commandLineArgs.Target, outputFolder, version, gitHubLocalRepositoryPath, commandLineArgs.Options);
         }
