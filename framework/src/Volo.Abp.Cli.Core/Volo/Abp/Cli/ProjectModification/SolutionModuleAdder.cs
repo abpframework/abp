@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
@@ -26,6 +27,9 @@ namespace Volo.Abp.Cli.ProjectModification
         protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+        public SourceCodeDownloadService SourceCodeDownloadService { get; }
+        public SolutionFileModifier SolutionFileModifier { get; }
+        public NugetPackageToLocalReferenceConverter NugetPackageToLocalReferenceConverter { get; }
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -35,7 +39,10 @@ namespace Volo.Abp.Cli.ProjectModification
             DerivedClassFinder derivedClassFinder,
             ProjectNpmPackageAdder projectNpmPackageAdder,
             NpmGlobalPackagesChecker npmGlobalPackagesChecker, 
-            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            SourceCodeDownloadService sourceCodeDownloadService,
+            SolutionFileModifier solutionFileModifier,
+            NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -45,6 +52,9 @@ namespace Volo.Abp.Cli.ProjectModification
             ProjectNpmPackageAdder = projectNpmPackageAdder;
             NpmGlobalPackagesChecker = npmGlobalPackagesChecker;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
+            SourceCodeDownloadService = sourceCodeDownloadService;
+            SolutionFileModifier = solutionFileModifier;
+            NugetPackageToLocalReferenceConverter = nugetPackageToLocalReferenceConverter;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
@@ -52,7 +62,9 @@ namespace Volo.Abp.Cli.ProjectModification
             [NotNull] string solutionFile,
             [NotNull] string moduleName,
             string startupProject,
-            bool skipDbMigrations = false)
+            string version,
+            bool skipDbMigrations = false,
+            bool withSourceCode = false)
         {
             Check.NotNull(solutionFile, nameof(solutionFile));
             Check.NotNull(moduleName, nameof(moduleName));
@@ -63,6 +75,42 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var projectFiles = ProjectFinder.GetProjectFiles(solutionFile);
 
+            await AddNugetAndNpmReferences(module, projectFiles);
+
+            if (withSourceCode)
+            {
+                var modulesFolderInSolution = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
+                await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version);
+                await SolutionFileModifier.AddModuleToSolutionFileAsync(module, solutionFile);
+                await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
+            }
+
+            ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
+        }
+
+        private async Task DownloadSourceCodesToSolutionFolder(ModuleWithMastersInfo module, string modulesFolderInSolution, string version = null)
+        {
+            await SourceCodeDownloadService.DownloadAsync(
+                module.Name,
+                Path.Combine(modulesFolderInSolution, module.Name),
+                version,
+                null,
+                null
+            );
+
+            if (module.MasterModuleInfos == null)
+            {
+                return;
+            }
+
+            foreach (var masterModule in module.MasterModuleInfos)
+            {
+                await DownloadSourceCodesToSolutionFolder(masterModule, modulesFolderInSolution, version);
+            }
+        }
+
+        private async Task AddNugetAndNpmReferences(ModuleWithMastersInfo module, string[] projectFiles)
+        {
             foreach (var nugetPackage in module.NugetPackages)
             {
                 var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetPackage.Target);
@@ -84,7 +132,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
                     foreach (var targetProject in targetProjects)
                     {
-                        foreach (var npmPackage in module.NpmPackages.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc)))
+                        foreach (var npmPackage in module.NpmPackages.Where(p =>
+                            p.ApplicationType.HasFlag(NpmApplicationType.Mvc)))
                         {
                             await ProjectNpmPackageAdder.AddAsync(Path.GetDirectoryName(targetProject), npmPackage);
                         }
@@ -95,8 +144,6 @@ namespace Volo.Abp.Cli.ProjectModification
                     Logger.LogDebug("Target project is not available for NPM packages.");
                 }
             }
-
-            ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
         }
 
         protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, string startupProject, bool skipDbMigrations = false)
@@ -127,20 +174,19 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
-            DbContextFileBuilderConfigureAdder.Add(dbContextFile, module.EfCoreConfigureMethodName);
+            var addedNewBuilder = DbContextFileBuilderConfigureAdder.Add(dbContextFile, module.EfCoreConfigureMethodName);
 
-
-            if (!skipDbMigrations)
+            if (addedNewBuilder && !skipDbMigrations)
             {
                 EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject); 
             }
         }
 
-        protected virtual async Task<ModuleInfo> FindModuleInfoAsync(string moduleName)
+        protected virtual async Task<ModuleWithMastersInfo> FindModuleInfoAsync(string moduleName)
         {
             using (var client = new CliHttpClient())
             {
-                var url = $"{CliUrls.WwwAbpIo}api/app/module/byName/?name=" + moduleName;
+                var url = $"{CliUrls.WwwAbpIo}api/app/module/byNameWithDetails/?name=" + moduleName;
 
                 var response = await client.GetAsync(url);
 
@@ -155,7 +201,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<ModuleInfo>(responseContent);
+                return JsonSerializer.Deserialize<ModuleWithMastersInfo>(responseContent);
             }
         }
     }
