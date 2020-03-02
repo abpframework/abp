@@ -76,6 +76,7 @@ namespace Volo.Abp.Cli.Commands
                     version,
                     DatabaseProvider.NotSpecified,
                     UiFramework.NotSpecified,
+                    MobileApp.None,
                     gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )

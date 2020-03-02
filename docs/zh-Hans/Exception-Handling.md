@@ -190,7 +190,7 @@ throw new UserFriendlyException(_stringLocalizer["UserNameShouldBeUniqueMessage"
 "UserNameShouldBeUniqueMessage": "Username should be unique! '{0}' is already taken!"
 ````
 
-* `IUserFriendlyException`接口派生自`IBusinessException`,而 `UserFriendlyException `类派生自`BusinessException`类.
+* `IUserFriendlyException`接口派生自`IBusinessException`,而 `UserFriendlyException`类派生自`BusinessException`类.
 
 #### 使用错误代码
 

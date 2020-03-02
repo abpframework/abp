@@ -125,6 +125,26 @@ abp update [options]
 #### Options
 
 * `--include-previews` 或 `-p`: 将预览版, 测试版本 和 rc 包 同时更新到最新版本.
+* `--npm`: 仅更新NPM包
+* `--nuget`: 仅更新的NuGet包
+
+### login
+
+CLI的一些功能需要登录到abp.io平台. 使用你的用户名登录
+
+```bash
+abp login <username>
+```
+
+请注意,新的登录将终止先前的会话并创建一个新的会话.
+
+### logout
+
+通过从计算机中删除会话令牌来注销.
+
+```
+abp logout
+```
 
 ### help
 

@@ -1,12 +1,11 @@
-import { eLayoutType, RestService, addAbpRoutes } from '@abp/ng.core';
+import { addAbpRoutes, eLayoutType } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountConfigService {
-  constructor(private router: Router, private restService: RestService) {
+  constructor() {
     addAbpRoutes({
       name: 'AbpAccount::Menu:Account',
       path: 'account',
