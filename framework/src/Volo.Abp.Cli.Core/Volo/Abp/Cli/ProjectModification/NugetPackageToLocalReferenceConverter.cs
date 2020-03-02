@@ -15,41 +15,35 @@ namespace Volo.Abp.Cli.ProjectModification
         public async Task Convert(ModuleWithMastersInfo module, string solutionFile)
         {
             var nugetPackageList = GetNugetPackages(module);
+            var modulesFolder = Path.Combine(Path.GetDirectoryName(solutionFile), "modules");
+            var srcFolder = Path.Combine(Path.GetDirectoryName(solutionFile), "src");
+            var testFolder = Path.Combine(Path.GetDirectoryName(solutionFile), "test");
 
-            var projectFilesUnderModules = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "modules"));
-            var projectFilesUnderSrc = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "src"));
-            var projectFilesUnderTest = GetProjectFilesUnder(Path.Combine(Path.GetDirectoryName(solutionFile), "test"));
+            ConvertToLocalReference(modulesFolder, nugetPackageList, "..\\..\\..\\");
+            ConvertToLocalReference(srcFolder, nugetPackageList, "..\\..\\modules\\");
+            ConvertToLocalReference(testFolder, nugetPackageList, "..\\..\\modules\\", "test");
+        }
 
-            foreach (var projectFile in projectFilesUnderModules)
+        private void ConvertToLocalReference(string folder, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
+        {
+            var projectFiles = GetProjectFilesUnder(folder);
+
+            foreach (var projectFile in projectFiles)
             {
-                ConvertToLocalReference(projectFile, nugetPackageList, "..\\..\\..\\");
-            }
-            foreach (var projectFile in projectFilesUnderSrc)
-            {
-                ConvertToLocalReference(projectFile, nugetPackageList, "..\\..\\modules\\");
-            }
-            foreach (var projectFile in projectFilesUnderTest)
-            {
-                ConvertToLocalReference(projectFile, nugetPackageList, "..\\..\\modules\\", "test");
+                var content = File.ReadAllText(projectFile);
+                var doc = new XmlDocument() { PreserveWhitespace = true };
+
+                doc.Load(StreamHelper.GenerateStreamFromString(content));
+
+                var convertedProject = ProcessReferenceNodes(folder, doc, nugetPackageList, localPathPrefix, sourceFile);
+
+                File.WriteAllText(projectFile, convertedProject);
             }
         }
 
-        private void ConvertToLocalReference(string projectFile, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
+        private string ProcessReferenceNodes(string folder, XmlDocument doc, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
         {
-            var content = File.ReadAllText(projectFile);
-            var doc = new XmlDocument() { PreserveWhitespace = true };
-
-            doc.Load(StreamHelper.GenerateStreamFromString(content));
-
-            var convertedProject =  ProcessReferenceNodes(doc, nugetPackageList, localPathPrefix, sourceFile);
-
-            File.WriteAllText(projectFile, convertedProject);
-        }
-
-
-        private string ProcessReferenceNodes(XmlDocument doc, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
-        {
-            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[@Include]");
+            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.Abp')]");
 
             if (nodes == null)
             {
@@ -60,17 +54,36 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var oldNodeIncludeValue = oldNode?.Attributes?["Include"]?.Value;
 
-                var nugetPackage = nugetPackageList.FirstOrDefault(n => n.NugetPackage.Name == oldNodeIncludeValue);
+                var moduleName = nugetPackageList.FirstOrDefault(n => n.NugetPackage.Name == oldNodeIncludeValue)?.ModuleName;
 
-                if (nugetPackage == null)
+                if (moduleName == null)
                 {
-                    continue;
+                    var localProject = GetProjectFilesUnder(folder).FirstOrDefault(f=> f.EndsWith($"{oldNodeIncludeValue}.csproj"));
+
+                    if (localProject != null)
+                    {
+                        moduleName = Directory.GetParent(Directory.GetParent(Path.GetDirectoryName(localProject)).FullName).Name;
+
+                        if (oldNodeIncludeValue.EndsWith(".test", StringComparison.InvariantCultureIgnoreCase) ||
+                            oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            sourceFile = "test";
+                        }
+                        else
+                        {
+                            sourceFile = "src";
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
 
                 var referenceProjectPath =
-                    $"{localPathPrefix}{nugetPackage.ModuleName}\\{sourceFile}\\{nugetPackage.NugetPackage.Name}\\{nugetPackage.NugetPackage.Name}.csproj";
+                    $"{localPathPrefix}{moduleName}\\{sourceFile}\\{oldNodeIncludeValue}\\{oldNodeIncludeValue}.csproj";
 
-                XmlNode newNode =  GetNewReferenceNode(doc, referenceProjectPath);
+                XmlNode newNode = GetNewReferenceNode(doc, referenceProjectPath);
 
                 oldNode?.ParentNode?.ReplaceChild(newNode, oldNode);
             }
