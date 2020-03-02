@@ -79,7 +79,7 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
             }
 
-            var templateSource = commandLineArgs.Options.GetOrNull(Options.TemplateSource.Long);
+            var templateSource = commandLineArgs.Options.GetOrNull(Options.TemplateSource.Short, Options.TemplateSource.Long);
             if (templateSource != null)
             {
                 Logger.LogInformation("Template Source: " + templateSource);
@@ -165,11 +165,11 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
+            sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
             sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
-            sb.AppendLine("--template-source                           (your local or network abp template source)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
@@ -181,8 +181,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");
             sb.AppendLine("  abp new Acme.BookStore -t module --no-ui");
+            sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
-            sb.AppendLine("  abp new Acme.BookStore --template-url \"D:\\localTemplate\\abp\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -283,6 +283,7 @@ namespace Volo.Abp.Cli.Commands
 
             public static class TemplateSource
             {
+                public const string Short = "ts";
                 public const string Long = "template-source";
             }
         }
