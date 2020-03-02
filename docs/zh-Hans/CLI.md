@@ -43,7 +43,7 @@ abp new Acme.BookStore
   * `app` (default): [应用程序模板](Startup-Templates/Application.md). 其他选项:
     * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项：
       * `mvc`: ASP.NET Core MVC.此模板的其他选项：
-        * `--tiered`: 创建分层解决方案，Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案，此解决方案没有那么复杂,适合大多数场景.
+        * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案,此解决方案没有那么复杂,适合大多数场景.
       * `angular`: Angular. 这个模板还有一些额外的选项：
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项：
@@ -53,8 +53,9 @@ abp new Acme.BookStore
       * `mongodb`: MongoDB.
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
-* `--output-folder` 或者 `-o`: 指定输出文件夹，默认是当前目录.
-* `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定，则使用最新版本.大多数情况下，您会希望使用最新的版本.
+* `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
+* `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,您会希望使用最新的版本.
+* `--template-source`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D\localTemplate` 或 `https://<your url>.zip`).
 
 ### add-package
 
