@@ -78,6 +78,7 @@ namespace Volo.Abp.Cli.Commands
                     UiFramework.NotSpecified,
                     MobileApp.None,
                     gitHubLocalRepositoryPath,
+                    null,
                     commandLineArgs.Options
                 )
             );
