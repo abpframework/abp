@@ -8,18 +8,18 @@ using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
-    public class ReplaceCommonPropsStep : ProjectBuildPipelineStep
+    public class ReplaceConfigureAwaitPropsStep : ProjectBuildPipelineStep
     {
         public override void Execute(ProjectBuildContext context)
         {
-            new CommonPropsReplacer(context.Files).Run();
+            new ConfigureAwaitPropsReplacer(context.Files).Run();
         }
 
-        private class CommonPropsReplacer
+        private class ConfigureAwaitPropsReplacer
         {
             private readonly List<FileEntry> _entries;
 
-            public CommonPropsReplacer(
+            public ConfigureAwaitPropsReplacer(
                 List<FileEntry> entries)
             {
                 _entries = entries;
@@ -60,25 +60,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 foreach (XmlNode node in importNodes)
                 {
-                    if (!(node.Attributes?["Project"]?.Value?.EndsWith("\\common.props") ?? false))
+                    if (!(node.Attributes?["Project"]?.Value?.EndsWith("\\configureawait.props") ?? false))
                     {
                         continue;
                     }
 
                     node.ParentNode?.RemoveChild(node);
                 }
-
-                var propertyGroupNodes = doc.SelectNodes("/Project/PropertyGroup");
-
-                if (propertyGroupNodes == null || propertyGroupNodes.Count < 1)
-                {
-                    return doc.OuterXml;
-                }
-
-                var firstPropertyGroupNode = propertyGroupNodes.Item(0);
-                var langNode = doc.CreateElement("LangVersion");
-                langNode.InnerText = "latest";
-                firstPropertyGroupNode?.PrependChild(langNode);
 
                 return doc.OuterXml;
             }
