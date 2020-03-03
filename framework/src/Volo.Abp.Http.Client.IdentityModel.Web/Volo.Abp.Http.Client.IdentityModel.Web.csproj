@@ -5,8 +5,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Volo.Abp.Http.Client.IdentityModel.Relay</AssemblyName>
-    <PackageId>Volo.Abp.Http.Client.IdentityModel.Relay</PackageId>
+    <AssemblyName>Volo.Abp.Http.Client.IdentityModel.Web</AssemblyName>
+    <PackageId>Volo.Abp.Http.Client.IdentityModel.Web</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

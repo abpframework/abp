@@ -6,14 +6,14 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.IdentityModel;
 
-namespace Volo.Abp.Http.Client.IdentityModel.Relay
+namespace Volo.Abp.Http.Client.IdentityModel.Web
 {
     [Dependency(ReplaceServices = true)]
-    public class IdentityModelRemoteServiceHttpClientRelayAuthenticator : IdentityModelRemoteServiceHttpClientAuthenticator, ITransientDependency
+    public class HttpContextIdentityModelRemoteServiceHttpClientAuthenticator : IdentityModelRemoteServiceHttpClientAuthenticator
     {
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 
-        public IdentityModelRemoteServiceHttpClientRelayAuthenticator(
+        public HttpContextIdentityModelRemoteServiceHttpClientAuthenticator(
             IIdentityModelAuthenticationService identityModelAuthenticationService)
             : base(identityModelAuthenticationService)
         {
