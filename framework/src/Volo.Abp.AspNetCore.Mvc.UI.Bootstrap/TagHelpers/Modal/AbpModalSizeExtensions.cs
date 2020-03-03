@@ -10,6 +10,8 @@
                     return "modal-sm";
                 case AbpModalSize.Large:
                     return "modal-lg";
+                case AbpModalSize.ExtraLarge:
+                    return "modal-xl";
                 case AbpModalSize.Default:
                     return "";
                 default:
