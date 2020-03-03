@@ -334,6 +334,20 @@
       ]
     },
     {
+      "text": "启动模板",
+      "path": "Startup-Templates/Index.md",
+      "items": [
+        {
+          "text": "应用程序",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "模块",
+          "path": "Startup-Templates/Module.md"
+        }
+      ]
+    },
+    {
       "text": "示例",
       "items": [
         {
