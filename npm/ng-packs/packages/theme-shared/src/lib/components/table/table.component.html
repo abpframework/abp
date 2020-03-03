@@ -3,12 +3,17 @@
     <ng-container
       *ngTemplateOutlet="scrollable ? scrollableTemplate : defaultTemplate"
     ></ng-container>
-    <abp-pagination
-      *ngIf="rows"
-      [totalPages]="totalPages"
-      [(value)]="page"
-      (valueChange)="pageChange.emit($event)"
-    ></abp-pagination>
+    <div class="pagination-wrapper">
+      <ngb-pagination
+        [class.op-0]="!totalPages"
+        [collectionSize]="totalPages"
+        [pageSize]="1"
+        [page]="page"
+        (pageChange)="pageChange.emit($event)"
+        [maxSize]="3"
+        [rotate]="true"
+      ></ngb-pagination>
+    </div>
   </div>
 </div>
 

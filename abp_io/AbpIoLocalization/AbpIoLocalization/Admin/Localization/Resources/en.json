@@ -53,6 +53,7 @@
     "CreateANugetPackage": "Create a Nuget package",
     "AddNew": "Add new",
     "PackageAlreadyExist{0}": "\"{0}\" package is already added.",
+    "ModuleAlreadyExist{0}": "\"{0}\" module is already added.",
     "ClearCache": "Clear cache",
     "SuccessfullyCleared": "Successfully cleared",
     "Menu:NpmPackages": "NPM Packages",
@@ -83,6 +84,7 @@
     "This{0}AlreadyExistInThisOrganization": "This {0} already exist in this organization",
     "AreYouSureYouWantToDeleteAllComputers": "Are you sure you want to delete all computers?",
     "DeleteAll": "Delete all",
-    "DoYouWantToCreateNewUser": "Do you want to create new user?" 
+    "DoYouWantToCreateNewUser": "Do you want to create new user?",
+    "MasterModules": "Master Modules"
   }
 }

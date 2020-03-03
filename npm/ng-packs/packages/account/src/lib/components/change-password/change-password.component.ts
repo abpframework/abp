@@ -24,7 +24,7 @@ export class ChangePasswordComponent
   inProgress: boolean;
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
-    if (PASSWORD_FIELDS.indexOf(control.name) < 0) return errors;
+    if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };

@@ -1,12 +1,16 @@
-﻿# Switch to another DBMS for Entity Framework Core
+﻿# Switch to Another DBMS for Entity Framework Core
 
-**[The application startup template](Startup-Templates/Application.md)** comes with SQL Server provider pre-configured for the Entity Framework Core. Entity Framework Core supports [many other DBMSs](https://docs.microsoft.com/en-us/ef/core/providers/) and you can use any of them with your ABP based applications.
+**[The application startup template](Startup-Templates/Application.md)** comes with **SQL Server provider pre-configured** for the Entity Framework Core. However, EF Core supports [many other DBMSs](https://docs.microsoft.com/en-us/ef/core/providers/) and you can use any of them within your ABP based applications.
 
-ABP framework provides integration packages for some common DBMSs to make the configuration a bit easier (see the [entity framework core document](Entity-Framework-Core.md) for a list of available integration packages). However, you can configure your DBMS provider without these integration packages.
+ABP framework provides **integration packages** for some common DBMSs to make the configuration a bit easier. You can use the following documents to learn how to **switch to your favorite DBMS**:
 
-While using the integration package is always recommended (it also makes standard for the depended version across different modules), you can do it manually if there is no integration package for your DBMS provider.
+* [MySQL](Entity-Framework-Core-MySQL.md)
+* [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
+* [SQLite](Entity-Framework-Core-SQLite.md)
 
-This document explains how to switch to MySQL without using [the MySQL integration package](Entity-Framework-Core-MySQL.md).
+However, you can configure your DBMS provider **without** these integration packages. While using the integration package is always recommended (it also makes standard for the depended version across different modules), you can do it manually if there is no integration package for your DBMS provider.
+
+For an example, this document explains how to switch to MySQL without using [the MySQL integration package](Entity-Framework-Core-MySQL.md).
 
 ## Replace the SQL Server Dependency
 
