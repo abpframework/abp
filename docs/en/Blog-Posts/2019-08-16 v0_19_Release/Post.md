@@ -16,7 +16,7 @@ Finally, ABP has a **SPA UI** option with the latest [Angular](https://angular.i
 
 We've created the template, document and infrastructure based on the latest Angular tools and trends:
 
-* Uses [NgBootstrap](https://ng-bootstrap.github.io/) as the UI component library. You can use your favorite library, no problem, but pre-built modules work with these libraries.
+* Uses [NgBootstrap](https://ng-bootstrap.github.io/) as the UI component library. You can use your favorite library, but pre-built modules work with these libraries.
 * Uses [NGXS](https://ngxs.gitbook.io/ngxs/) as the state management library.
 
 Angular was the first SPA UI option, but it is not the last. After v1.0 release, we will start to work on a second UI option. Not decided yet, but candidates are Blazor, React and Vue.js. Waiting your feedback. You can thumb up using the following issues:

@@ -1,6 +1,6 @@
 ## Getting Started With the Angular Application Template
 
-This tutorial explain how to create a new Angular application using the startup template, configure and run it.
+This tutorial explains how to create a new Angular application using the startup template, configure and run it.
 
 ### Creating a New Project
 
