@@ -103,7 +103,7 @@ Most of the application APIs require authentication & authorization. If you want
 
 #### Run the Angular Application (Client Side)
 
-Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest to the [yarn](https://yarnpkg.com) package manager while npm install will also work in most cases):
+Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest the [yarn](https://yarnpkg.com) package manager while `npm install` will also work in most cases)
 
 ````bash
 yarn
