@@ -31,8 +31,4 @@
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Components\Themes\Shared\Demos\PaginatorDemo\" />
-  </ItemGroup>
-
 </Project>
