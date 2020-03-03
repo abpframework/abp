@@ -29,6 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
                 new ApplicationMenuItem("BasicThemeDemo.Components.Buttons", "Buttons", url: "/Components/Buttons"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.ButtonGroups", "ButtonGroups", url: "/Components/ButtonGroups"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Cards", "Cards", url: "/Components/Cards"),
+                new ApplicationMenuItem("BasicThemeDemo.Components.Carousel", "Carousel", url: "/Components/Carousel"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Collapse", "Collapse", url: "/Components/Collapse"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Dropdowns", "Dropdowns", url: "/Components/Dropdowns"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.DynamicForms", "DynamicForms", url: "/Components/DynamicForms"),
