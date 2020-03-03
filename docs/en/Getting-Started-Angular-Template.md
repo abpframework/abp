@@ -1,6 +1,6 @@
 ## Getting Started With the Angular Application Template
 
-This tutorial explain how to create a new Angular application using the startup template, configure and run it.
+This tutorial explains how to create a new Angular application using the startup template, configure and run it.
 
 ### Creating a New Project
 
@@ -103,7 +103,7 @@ Most of the application APIs require authentication & authorization. If you want
 
 #### Run the Angular Application (Client Side)
 
-Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest to the [yarn](https://yarnpkg.com) package manager while npm install will also work in most cases):
+Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest the [yarn](https://yarnpkg.com) package manager while `npm install` will also work in most cases)
 
 ````bash
 yarn
@@ -123,4 +123,4 @@ The startup template includes the **identity management** and **tenant managemen
 
 ### What's Next?
 
-* [Application development tutorial](Tutorials/Angular/Part-I.md)
+* [Application development tutorial](Tutorials/Part-1.md?UI=NG)

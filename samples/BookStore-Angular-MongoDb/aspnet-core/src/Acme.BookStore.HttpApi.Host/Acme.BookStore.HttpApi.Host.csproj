@@ -4,9 +4,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Acme.BookStore</RootNamespace>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <UserSecretsId>Acme.BookStore-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,11 +16,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0" />
-    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
-    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
-    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Authentication.JwtBearer\Volo.Abp.AspNetCore.Authentication.JwtBearer.csproj" />
-    <ProjectReference Include="..\..\..\..\..\modules\account\src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj" />
+    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="2.1.1" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="2.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="2.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="2.1.1" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="2.1.1" />
+    <PackageReference Include="Volo.Abp.Account.Web.IdentityServer" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
