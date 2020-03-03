@@ -42,13 +42,13 @@ namespace Volo.Abp.Cli.Commands
 
             if (updateNpm || !updateNuget)
             {
-                UpdateNpmPackages(directory);
+                await UpdateNpmPackages(directory);
             }
         }
 
-        private void UpdateNpmPackages(string directory)
+        private async Task UpdateNpmPackages(string directory)
         {
-            _npmPackagesUpdater.Update(directory);
+            await _npmPackagesUpdater.Update(directory);
         }
 
         private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)

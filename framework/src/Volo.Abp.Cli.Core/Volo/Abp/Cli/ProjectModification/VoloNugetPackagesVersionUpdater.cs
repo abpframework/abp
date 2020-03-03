@@ -24,29 +24,29 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
-        public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews)
+        public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews = false, bool switchToStable = false)
         {
             var projectPaths = ProjectFinder.GetProjectFiles(solutionPath);
 
             foreach (var filePath in projectPaths)
             {
-                await UpdateInternalAsync(filePath, includePreviews);
+                await UpdateInternalAsync(filePath, includePreviews, switchToStable);
             }
         }
 
-        public async Task UpdateProjectAsync(string projectPath, bool includePreviews)
+        public async Task UpdateProjectAsync(string projectPath, bool includePreviews = false, bool switchToStable = false)
         {
-            await UpdateInternalAsync(projectPath, includePreviews);
+            await UpdateInternalAsync(projectPath, includePreviews, switchToStable);
         }
 
-        protected virtual async Task UpdateInternalAsync(string projectPath, bool includePreviews)
+        protected virtual async Task UpdateInternalAsync(string projectPath, bool includePreviews = false, bool switchToStable = false)
         {
             var fileContent = File.ReadAllText(projectPath);
 
-            File.WriteAllText(projectPath, await UpdateVoloPackagesAsync(fileContent, includePreviews));
+            File.WriteAllText(projectPath, await UpdateVoloPackagesAsync(fileContent, includePreviews, switchToStable));
         }
 
-        private async Task<string> UpdateVoloPackagesAsync(string content, bool includePreviews)
+        private async Task<string> UpdateVoloPackagesAsync(string content, bool includePreviews = false, bool switchToStable = false)
         {
             string packageId = null;
 
@@ -79,7 +79,7 @@ namespace Volo.Abp.Cli.ProjectModification
                         Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, packageVersion);
 
 
-                        if (currentVersion.Contains("preview") || includePreviews)
+                        if (includePreviews || (currentVersion.Contains("-preview") && !switchToStable))
                         {
                             var latestVersion = (await _myGetPackageListFinder.GetPackages()).Packages
                                 .FirstOrDefault(p => p.Id == packageId)
@@ -99,7 +99,7 @@ namespace Volo.Abp.Cli.ProjectModification
                         {
                             var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId);
 
-                            if (latestVersion != null && packageVersion < latestVersion)
+                            if (latestVersion != null && (currentVersion.Contains("-preview") || packageVersion < latestVersion))
                             {
                                 Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, packageVersion.ToString(), latestVersion.ToString());
                                 versionAttribute.Value = latestVersion.ToString();
