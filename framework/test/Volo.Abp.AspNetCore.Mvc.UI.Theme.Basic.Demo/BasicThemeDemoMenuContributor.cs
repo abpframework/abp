@@ -37,6 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
                 new ApplicationMenuItem("BasicThemeDemo.Components.ListGroups", "List Groups", url: "/Components/ListGroups"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Modals", "Modals", url: "/Components/Modals"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Navs", "Navs", url: "/Components/Navs"),
+                new ApplicationMenuItem("BasicThemeDemo.Components.Paginator", "Paginator", url: "/Components/Paginator"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Popovers", "Popovers", url: "/Components/Popovers"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.ProgressBars", "Progress Bars", url: "/Components/ProgressBars"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Tables", "Tables", url: "/Components/Tables"),
