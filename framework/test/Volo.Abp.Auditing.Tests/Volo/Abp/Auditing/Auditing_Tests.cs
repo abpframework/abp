@@ -34,8 +34,8 @@ namespace Volo.Abp.Auditing
 
             using (var scope = _auditingManager.BeginScope())
             {
-                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 }).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 });
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
@@ -80,8 +80,8 @@ namespace Volo.Abp.Auditing
             using (var scope = _auditingManager.BeginScope())
             {
                 var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithAudited, Guid>>();
-                await repository.InsertAsync(new AppEntityWithAudited(Guid.NewGuid(), "test name")).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await repository.InsertAsync(new AppEntityWithAudited(Guid.NewGuid(), "test name"));
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
@@ -95,8 +95,8 @@ namespace Volo.Abp.Auditing
             using (var scope = _auditingManager.BeginScope())
             {
                 var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithAuditedAndPropertyHasDisableAuditing, Guid>>();
-                await repository.InsertAsync(new AppEntityWithAuditedAndPropertyHasDisableAuditing(Guid.NewGuid(), "test name", "test name2")).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await repository.InsertAsync(new AppEntityWithAuditedAndPropertyHasDisableAuditing(Guid.NewGuid(), "test name", "test name2"));
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
@@ -113,12 +113,12 @@ namespace Volo.Abp.Auditing
             using (var scope = _auditingManager.BeginScope())
             {
                 var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithDisableAuditing, Guid>>();
-                await repository.InsertAsync(new AppEntityWithDisableAuditing(Guid.NewGuid(), "test name")).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await repository.InsertAsync(new AppEntityWithDisableAuditing(Guid.NewGuid(), "test name"));
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
-            _auditingStore.DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(a => !a.EntityChanges.Any()));
 #pragma warning restore 4014
         }
 
@@ -128,8 +128,8 @@ namespace Volo.Abp.Auditing
             using (var scope = _auditingManager.BeginScope())
             {
                 var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithSelector, Guid>>();
-                await repository.InsertAsync(new AppEntityWithSelector(Guid.NewGuid(), "test name")).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await repository.InsertAsync(new AppEntityWithSelector(Guid.NewGuid(), "test name"));
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
@@ -143,8 +143,8 @@ namespace Volo.Abp.Auditing
             using (var scope = _auditingManager.BeginScope())
             {
                 var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithPropertyHasAudited, Guid>>();
-                await repository.InsertAsync(new AppEntityWithPropertyHasAudited(Guid.NewGuid(), "test name")).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await repository.InsertAsync(new AppEntityWithPropertyHasAudited(Guid.NewGuid(), "test name"));
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
@@ -158,8 +158,8 @@ namespace Volo.Abp.Auditing
             using (var scope = _auditingManager.BeginScope())
             {
                 var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithDisableAuditingAndPropertyHasAudited, Guid>>();
-                await repository.InsertAsync(new AppEntityWithDisableAuditingAndPropertyHasAudited(Guid.NewGuid(), "test name", "test name2")).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await repository.InsertAsync(new AppEntityWithDisableAuditingAndPropertyHasAudited(Guid.NewGuid(), "test name", "test name2"));
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
@@ -169,5 +169,20 @@ namespace Volo.Abp.Auditing
                 nameof(AppEntityWithDisableAuditingAndPropertyHasAudited.Name)));
 #pragma warning restore 4014
         }
+
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_If_There_No_Action_And_No_EntityChanges()
+        {
+            using (var scope = _auditingManager.BeginScope())
+            {
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+#pragma warning restore 4014
+        }
+
     }
 }

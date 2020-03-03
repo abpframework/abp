@@ -5,7 +5,6 @@ using Volo.Abp.Auditing;
 namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
     [Route("api/audit-test")]
-    [Audited]
     public class AuditTestController : AbpController
     {
         private readonly AbpAuditingOptions _options;

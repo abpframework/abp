@@ -14,7 +14,7 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
@@ -41,7 +41,7 @@ namespace BackendAdminAppGateway.Host
         typeof(BloggingApplicationContractsModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementDomainIdentityServerModule),
-        typeof(AbpHttpClientIdentityModelModule)
+        typeof(AbpHttpClientIdentityModelWebModule)
         )]
     public class BackendAdminAppGatewayHostModule : AbpModule
     {

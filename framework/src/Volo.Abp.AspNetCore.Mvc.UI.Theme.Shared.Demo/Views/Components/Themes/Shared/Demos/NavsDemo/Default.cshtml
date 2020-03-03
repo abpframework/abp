@@ -1,0 +1,53 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.NavsDemo
+
+<abp-component-demo-section title="Base nav" view-path="@NavsDemoViewComponent.ViewPath">
+    <abp-nav nav-style="Pill" align="Center">
+        <abp-nav-item>
+            <a abp-nav-link active="true" href="#">Active</a>
+        </abp-nav-item>
+        <abp-nav-item>
+            <a abp-nav-link href="#">Longer nav link</a>
+        </abp-nav-item>
+        <abp-nav-item>
+            <a abp-nav-link href="#">link</a>
+        </abp-nav-item>
+        <abp-nav-item>
+            <a abp-nav-link disabled="true" href="#">disabled</a>
+        </abp-nav-item>
+    </abp-nav>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Base nav 2" view-path="@NavsDemoViewComponent.ViewPath">
+    <abp-nav-bar size="Lg" navbar-style="Dark_Warning">
+        <a abp-navbar-brand href="#">Navbar</a>
+        <abp-navbar-toggle>
+            <abp-navbar-nav>
+                <abp-nav-item active="true">
+                    <a abp-nav-link href="#">Home <span class="sr-only">(current)</span></a>
+                </abp-nav-item>
+                <abp-nav-item>
+                    <a abp-nav-link href="#">Link</a>
+                </abp-nav-item>
+                <abp-nav-item dropdown="true">
+                    <abp-dropdown>
+                        <abp-dropdown-button nav-link="true" text="Dropdown" />
+                        <abp-dropdown-menu>
+                            <abp-dropdown-header>Dropdown header</abp-dropdown-header>
+                            <abp-dropdown-item href="#" active="true">Action</abp-dropdown-item>
+                            <abp-dropdown-item href="#" disabled="true">Another disabled action</abp-dropdown-item>
+                            <abp-dropdown-item href="#">Something else here</abp-dropdown-item>
+                            <abp-dropdown-divider />
+                            <abp-dropdown-item href="#">Separated link</abp-dropdown-item>
+                        </abp-dropdown-menu>
+                    </abp-dropdown>
+                </abp-nav-item>
+                <abp-nav-item>
+                    <a abp-nav-link disabled="true" href="#">Disabled</a>
+                </abp-nav-item>
+            </abp-navbar-nav>
+            <span abp-navbar-text>
+                Sample Text
+            </span>
+        </abp-navbar-toggle>
+    </abp-nav-bar>
+</abp-component-demo-section>
