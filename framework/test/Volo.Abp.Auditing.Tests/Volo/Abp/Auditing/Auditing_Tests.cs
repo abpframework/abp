@@ -118,7 +118,7 @@ namespace Volo.Abp.Auditing
             }
 
 #pragma warning disable 4014
-            _auditingStore.DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(a => !a.EntityChanges.Any()));
 #pragma warning restore 4014
         }
 
@@ -172,7 +172,7 @@ namespace Volo.Abp.Auditing
 
 
         [Fact]
-        public virtual async Task Should_Not_Write_AuditLog_If_There_No_Action_And_No_EntityChanges()
+        public virtual async Task Should_Write_AuditLog_If_There_No_Action_And_No_EntityChanges()
         {
             using (var scope = _auditingManager.BeginScope())
             {
@@ -180,7 +180,7 @@ namespace Volo.Abp.Auditing
             }
 
 #pragma warning disable 4014
-            _auditingStore.DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+            _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
 #pragma warning restore 4014
         }
 
