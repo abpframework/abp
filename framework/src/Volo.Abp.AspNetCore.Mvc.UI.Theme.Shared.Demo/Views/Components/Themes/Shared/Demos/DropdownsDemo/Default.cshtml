@@ -1,4 +1,5 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.DropdownsDemo
+@model DropDownDemoDemoModel
 
 <abp-component-demo-section title="Single button" view-path="@DropdownsDemoViewComponent.ViewPath">
     <abp-dropdown>
@@ -152,6 +153,27 @@
         </abp-dropdown-menu>
     </abp-dropdown>
 </abp-component-demo-section>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>The form model is:</h3>
+        <hr />
+        <textarea style="width:100%;height: 320px" disabled>
+    public class LoginDto
+    {
+        [Required]
+        [EmailAddress]
+        public string EmailAddress { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
+    }
+        </textarea>
+    </div>
+</div>
 
 <abp-component-demo-section title="With Form" view-path="@DropdownsDemoViewComponent.ViewPath">
     <abp-dropdown>

@@ -61,8 +61,15 @@
 
 <abp-component-demo-section title="Vertical variation" view-path="@ButtonGroupsDemoViewComponent.ViewPath">
     <abp-button-group direction="Vertical">
-        <abp-button button-type="Secondary">Left</abp-button>
-        <abp-button button-type="Secondary">Middle</abp-button>
-        <abp-button button-type="Secondary">Right</abp-button>
+        <abp-button button-type="Secondary">Button</abp-button>
+        <abp-button button-type="Secondary">Button</abp-button>
+        <abp-button button-type="Secondary">Button</abp-button>
+        <abp-dropdown>
+            <abp-dropdown-button button-type="Secondary" text="Dropdown" />
+            <abp-dropdown-menu>
+                <abp-dropdown-item href="#"> Dropdown link </abp-dropdown-item>
+                <abp-dropdown-item href="#"> Dropdown link </abp-dropdown-item>
+            </abp-dropdown-menu>
+        </abp-dropdown>
     </abp-button-group>
 </abp-component-demo-section>

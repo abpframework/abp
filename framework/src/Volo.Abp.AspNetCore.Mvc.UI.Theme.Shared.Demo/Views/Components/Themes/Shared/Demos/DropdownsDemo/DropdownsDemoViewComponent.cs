@@ -10,7 +10,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
 
         public IViewComponentResult Invoke()
         {
-            return View(ViewPath);
+            var Model = new DropDownDemoDemoModel();
+
+            return View(ViewPath, Model);
         }
     }
 }
