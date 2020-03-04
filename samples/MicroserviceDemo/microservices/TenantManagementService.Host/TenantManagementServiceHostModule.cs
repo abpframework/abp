@@ -50,7 +50,7 @@ namespace TenantManagementService.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo {Title = "Identity Service API", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "Tenant Management Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -73,7 +73,7 @@ namespace TenantManagementService.Host
             Configure<AbpAuditingOptions>(options =>
             {
                 options.IsEnabledForGetRequests = true;
-                options.ApplicationName = "IdentityService";
+                options.ApplicationName = "TenantManagementService";
             });
 
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
@@ -109,7 +109,7 @@ namespace TenantManagementService.Host
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity Service API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tenant Management Service API");
             });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();

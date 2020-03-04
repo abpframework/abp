@@ -57,6 +57,7 @@ namespace AuthServer.Host
             };
 
             await CreateApiResourceAsync("IdentityService", commonApiUserClaims);
+            await CreateApiResourceAsync("TenantManagementService", commonApiUserClaims);
             await CreateApiResourceAsync("BloggingService", commonApiUserClaims);
             await CreateApiResourceAsync("ProductService", commonApiUserClaims);
             await CreateApiResourceAsync("InternalGateway", commonApiUserClaims);
