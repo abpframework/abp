@@ -19,6 +19,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
 using Volo.Blogging;
 
 namespace InternalGateway.Host
@@ -30,7 +31,8 @@ namespace InternalGateway.Host
         typeof(ProductManagementHttpApiModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule)
+        typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpTenantManagementHttpApiModule)
         )]
     public class InternalGatewayHostModule : AbpModule
     {

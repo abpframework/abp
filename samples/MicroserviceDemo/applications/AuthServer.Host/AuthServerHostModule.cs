@@ -22,6 +22,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 
@@ -40,8 +41,9 @@ namespace AuthServer.Host
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule)
-        )]
+        typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpTenantManagementApplicationContractsModule)
+    )]
     public class AuthServerHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
