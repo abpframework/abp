@@ -123,4 +123,4 @@ The startup template includes the **identity management** and **tenant managemen
 
 ### What's Next?
 
-* [Application development tutorial](Tutorials/Part-1.md?UI=NG)
+* [Application development tutorial](Tutorials/Part-1)
