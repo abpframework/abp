@@ -24,6 +24,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.UI.Navigation;
 using Volo.Blogging;
 
 namespace BackendAdminApp.Host
@@ -58,6 +59,11 @@ namespace BackendAdminApp.Host
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
+
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new BackendAdminAppMenuContributor(configuration));
             });
 
             context.Services.AddAuthentication(options =>
