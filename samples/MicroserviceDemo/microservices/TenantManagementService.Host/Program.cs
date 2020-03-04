@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +7,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
 
-namespace BloggingService.Host
+namespace TenantManagementService.Host
 {
     public class Program
     {
@@ -23,7 +23,7 @@ namespace BloggingService.Host
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.WithProperty("Application", "BloggingService")
+                .Enrich.WithProperty("Application", "TenantManagementService")
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
                 .WriteTo.Elasticsearch(
@@ -37,13 +37,13 @@ namespace BloggingService.Host
 
             try
             {
-                Log.Information("Starting BloggingService.Host.");
+                Log.Information("Starting TenantManagementService.Host.");
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "BloggingService.Host terminated unexpectedly!");
+                Log.Fatal(ex, "TenantManagementService.Host terminated unexpectedly!");
                 return 1;
             }
             finally
