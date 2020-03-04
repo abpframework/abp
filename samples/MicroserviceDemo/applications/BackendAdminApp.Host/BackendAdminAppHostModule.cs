@@ -13,12 +13,15 @@ using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement.Web;
 using Volo.Blogging;
 
 namespace BackendAdminApp.Host
@@ -30,13 +33,16 @@ namespace BackendAdminApp.Host
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpTenantManagementWebModule),
         typeof(BloggingApplicationContractsModule),
         typeof(AbpPermissionManagementHttpApiClientModule),
         typeof(ProductManagementHttpApiClientModule),
         typeof(ProductManagementWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpFeatureManagementHttpApiClientModule)
         )]
-    public class BackendAdminAppHostModule : AbpModule
+        public class BackendAdminAppHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -71,6 +77,7 @@ namespace BackendAdminApp.Host
                     options.Scope.Add("BackendAdminAppGateway");
                     options.Scope.Add("IdentityService");
                     options.Scope.Add("ProductService");
+                    options.Scope.Add("TenantManagementService");
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 

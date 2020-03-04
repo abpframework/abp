@@ -14,6 +14,8 @@ using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -24,6 +26,7 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
 using Volo.Blogging;
 
 namespace BackendAdminAppGateway.Host
@@ -41,8 +44,14 @@ namespace BackendAdminAppGateway.Host
         typeof(BloggingApplicationContractsModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementDomainIdentityServerModule),
-        typeof(AbpHttpClientIdentityModelWebModule)
-        )]
+        typeof(AbpHttpClientIdentityModelWebModule),
+        typeof(AbpTenantManagementApplicationContractsModule),
+        typeof(AbpTenantManagementHttpApiModule),
+        typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+        typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpFeatureManagementHttpApiModule)
+    )]
     public class BackendAdminAppGatewayHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
