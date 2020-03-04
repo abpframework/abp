@@ -15,6 +15,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.EventBus.RabbitMq;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -36,7 +37,12 @@ namespace TenantManagementService.Host
         typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpAspNetCoreMultiTenancyModule)
+        typeof(AbpAspNetCoreMultiTenancyModule),
+
+        /* TODO: Using the Identity domain here is not so good.
+           It is needed to create admin role and user for newly created tenants.
+           We can convert this to a distributed event subscribed by the IdentityService */
+        typeof(AbpIdentityEntityFrameworkCoreModule)
         )]
     public class TenantManagementServiceHostModule : AbpModule
     {
