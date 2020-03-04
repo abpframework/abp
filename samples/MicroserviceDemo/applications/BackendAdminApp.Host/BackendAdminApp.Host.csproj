@@ -36,6 +36,7 @@
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.Application.Contracts\Volo.Blogging.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\modules\product\src\ProductManagement.HttpApi.Client\ProductManagement.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\modules\product\src\ProductManagement.Web\ProductManagement.Web.csproj" />
+    <ProjectReference Include="..\..\shared\MsDemo.Shared\MsDemo.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

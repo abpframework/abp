@@ -9,13 +9,16 @@ using Ocelot.Middleware;
 using ProductManagement;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -32,13 +35,19 @@ namespace InternalGateway.Host
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementHttpApiModule)
+        typeof(AbpTenantManagementHttpApiModule),
+        typeof(AbpAspNetCoreMultiTenancyModule)
         )]
     public class InternalGatewayHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -95,7 +104,10 @@ namespace InternalGateway.Host
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
-
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

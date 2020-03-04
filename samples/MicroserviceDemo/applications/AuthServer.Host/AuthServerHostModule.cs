@@ -2,6 +2,7 @@ using AuthServer.Host.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
+using MsDemo.Shared;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -57,7 +58,7 @@ namespace AuthServer.Host
 
             Configure<AbpMultiTenancyOptions>(options =>
             {
-                options.IsEnabled = true;
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
             });
 
             Configure<AbpDbContextOptions>(options =>
@@ -94,7 +95,10 @@ namespace AuthServer.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseMultiTenancy();
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();

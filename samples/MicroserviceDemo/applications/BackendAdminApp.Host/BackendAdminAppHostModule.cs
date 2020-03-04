@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ProductManagement;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
@@ -19,6 +20,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
@@ -51,6 +53,11 @@ namespace BackendAdminApp.Host
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            });
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
             });
 
             context.Services.AddAuthentication(options =>
@@ -106,6 +113,10 @@ namespace BackendAdminApp.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseSwagger();

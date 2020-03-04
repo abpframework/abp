@@ -9,8 +9,10 @@ using Ocelot.Middleware;
 using ProductManagement;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
@@ -19,6 +21,7 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
@@ -50,13 +53,19 @@ namespace BackendAdminAppGateway.Host
         typeof(AbpTenantManagementHttpApiClientModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpFeatureManagementHttpApiModule)
+        typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpAspNetCoreMultiTenancyModule)
     )]
     public class BackendAdminAppGatewayHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -113,7 +122,10 @@ namespace BackendAdminAppGateway.Host
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
-
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
