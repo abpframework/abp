@@ -37,7 +37,7 @@ namespace Acme.BookStore
                 }
             }
         }
-        
+
         protected virtual Task<TResult> WithUnitOfWorkAsync<TResult>(Func<Task<TResult>> func)
         {
             return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);

@@ -21,13 +21,16 @@ namespace Volo.Abp.IdentityModel
         public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
         protected AbpIdentityClientOptions ClientOptions { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        protected IHttpClientFactory HttpClientFactory { get; }
 
         public IdentityModelAuthenticationService(
             IOptions<AbpIdentityClientOptions> options,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            IHttpClientFactory httpClientFactory)
         {
-            CancellationTokenProvider = cancellationTokenProvider;
             ClientOptions = options.Value;
+            CancellationTokenProvider = cancellationTokenProvider;
+            HttpClientFactory = httpClientFactory;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
 
@@ -95,7 +98,7 @@ namespace Volo.Abp.IdentityModel
         protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = HttpClientFactory.CreateClient())
             {
                 return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                 {
@@ -109,10 +112,10 @@ namespace Volo.Abp.IdentityModel
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
-            DiscoveryDocumentResponse discoveryResponse, 
+            DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = HttpClientFactory.CreateClient())
             {
                 switch (configuration.GrantType)
                 {
@@ -134,7 +137,7 @@ namespace Volo.Abp.IdentityModel
 
         protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
         {
-            var request =  new PasswordTokenRequest
+            var request = new PasswordTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
                 Scope = configuration.Scope,
@@ -149,11 +152,11 @@ namespace Volo.Abp.IdentityModel
             return Task.FromResult(request);
         }
 
-        protected virtual Task<ClientCredentialsTokenRequest>  CreateClientCredentialsTokenRequestAsync(
-            DiscoveryDocumentResponse discoveryResponse, 
+        protected virtual Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(
+            DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            var request =  new ClientCredentialsTokenRequest
+            var request = new ClientCredentialsTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
                 Scope = configuration.Scope,
