@@ -42,13 +42,13 @@ namespace Volo.Abp.Cli.Commands
 
             if (updateNpm || !updateNuget)
             {
-                UpdateNpmPackages(directory);
+                await UpdateNpmPackages(directory);
             }
         }
 
-        private void UpdateNpmPackages(string directory)
+        private async Task UpdateNpmPackages(string directory)
         {
-            _npmPackagesUpdater.Update(directory);
+            await _npmPackagesUpdater.Update(directory);
         }
 
         private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)
@@ -94,7 +94,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Usage:");
             sb.AppendLine("");
-            sb.AppendLine("  abp update  [options]");
+            sb.AppendLine("  abp update [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("-p|--include-previews                       (if supported by the template)");

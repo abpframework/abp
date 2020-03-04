@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
     [Widget]
     public class FormElementsDemoViewComponent : AbpViewComponent
     {
-        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/FormElements/Default.cshtml";
+        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/FormElementsDemo/Default.cshtml";
 
         public IViewComponentResult Invoke()
         {

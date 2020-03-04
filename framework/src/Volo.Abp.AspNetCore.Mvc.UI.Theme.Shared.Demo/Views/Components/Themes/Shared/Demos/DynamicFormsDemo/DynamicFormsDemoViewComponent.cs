@@ -6,7 +6,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
     [Widget]
     public class DynamicFormsDemoViewComponent : AbpViewComponent
     {
-        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/DynamicForms/Default.cshtml";
+        public const string ViewPath = "/Views/Components/Themes/Shared/Demos/DynamicFormsDemo/Default.cshtml";
 
         public IViewComponentResult Invoke()
         {
