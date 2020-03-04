@@ -227,12 +227,14 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseAuthorization();
+
 
             app.UseAbpRequestLocalization();
 
