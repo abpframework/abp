@@ -5,6 +5,7 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace AuthServer.Host.EntityFrameworkCore
 {
@@ -25,6 +26,7 @@ namespace AuthServer.Host.EntityFrameworkCore
             modelBuilder.ConfigureAuditLogging();
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();
+            modelBuilder.ConfigureTenantManagement();
         }
     }
 }
