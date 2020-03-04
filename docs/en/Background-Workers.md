@@ -20,7 +20,7 @@ public class AppStatusService : ITransientDependency
     {
         var ping = new System.Net.NetworkInformation.Ping();
 
-        var result = ping.Send("www.google.com");
+        var result = ping.Send("www.github.com");
 
         // save the result
     }
