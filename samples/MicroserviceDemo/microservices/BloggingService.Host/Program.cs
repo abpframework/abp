@@ -23,6 +23,7 @@ namespace BloggingService.Host
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .Enrich.WithProperty("Application", "BloggingService")
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
