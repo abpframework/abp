@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Background workers are used to execute some tasks in the background. You may need background workers for several reasons.
+Background workers are used to execute some tasks in the background periodically.
 
 ### Create a Background Worker
 
