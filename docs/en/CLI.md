@@ -51,10 +51,11 @@ abp new Acme.BookStore
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
-  *  `module`: [Module template](Startup-Templates/Module.md). Additional options:
-      * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
+  * `module`: [Module template](Startup-Templates/Module.md). Additional options:
+    * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
+* `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D\localTemplate` or `https://<your url>.zip`).
 
 ### add-package
 
@@ -128,9 +129,35 @@ abp update [options]
 * `--npm`: Only updates NPM packages.
 * `--nuget`: Only updates NuGet packages.
 
+### switch-to-preview
+
+You can use this command to switch your project to latest preview version of the ABP framework packages.
+
+Usage:
+
+````bash
+abp switch-to-preview [options]
+````
+#### Options
+
+`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+
+### switch-to-stable
+
+If you're using the ABP Framework preview packages, you can switch back to stable version using this command.
+
+Usage:
+
+````bash
+abp switch-to-stable [options]
+````
+#### Options
+
+`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+
 ### login
 
-Some features of the CLI requires to be logged in to abp.io platform. To login with your username write 
+Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:
 
 ```bash
 abp login <username>
@@ -162,4 +189,3 @@ Examples:
 abp help        # Shows a general help.
 abp help new    # Shows help about the "new" command.
 ````
-

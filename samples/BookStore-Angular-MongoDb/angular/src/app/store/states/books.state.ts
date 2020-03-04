@@ -1,12 +1,16 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Books } from '../models/books';
-import { BooksService } from '../../books/shared/books.service';
-import { tap, switchMap } from 'rxjs/operators';
-import { GetBooks, CreateUpdateBook, DeleteBook } from '../actions/books.actions';
+import { State, Action, StateContext, Selector } from "@ngxs/store";
+import {
+  GetBooks,
+  CreateUpdateBook,
+  DeleteBook
+} from "../actions/books.actions";
+import { Books } from "../models/books";
+import { BooksService } from "../../books/shared/books.service";
+import { tap } from "rxjs/operators";
 
 @State<Books.State>({
-  name: 'BooksState',
-  defaults: { books: {} } as Books.State,
+  name: "BooksState",
+  defaults: { books: {} } as Books.State
 })
 export class BooksState {
   @Selector()
@@ -21,27 +25,23 @@ export class BooksState {
     return this.booksService.get().pipe(
       tap(booksResponse => {
         ctx.patchState({
-          books: booksResponse,
+          books: booksResponse
         });
-      }),
+      })
     );
   }
 
   @Action(CreateUpdateBook)
   save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
-    let request;
-
     if (action.id) {
-      request = this.booksService.update(action.payload, action.id);
+      return this.booksService.update(action.payload, action.id);
     } else {
-      request = this.booksService.create(action.payload);
+      return this.booksService.create(action.payload);
     }
-
-    return request.pipe(switchMap(() => ctx.dispatch(new GetBooks())));
   }
 
   @Action(DeleteBook)
   delete(ctx: StateContext<Books.State>, action: DeleteBook) {
-    return this.booksService.delete(action.id).pipe(switchMap(() => ctx.dispatch(new GetBooks())));
+    return this.booksService.delete(action.id);
   }
 }

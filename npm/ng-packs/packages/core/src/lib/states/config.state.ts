@@ -14,11 +14,13 @@ import { Config } from '../models/config';
 import { ApplicationConfigurationService } from '../services/application-configuration.service';
 import { organizeRoutes } from '../utils/route-utils';
 import { SessionState } from './session.state';
+import { Injectable } from '@angular/core';
 
 @State<Config.State>({
   name: 'ConfigState',
   defaults: {} as Config.State,
 })
+@Injectable()
 export class ConfigState {
   @Selector()
   static getAll(state: Config.State) {

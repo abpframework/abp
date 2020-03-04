@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using CommonMark;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -30,30 +32,27 @@ namespace Volo.Blogging.Pages.Blog
 
         public string GetShortContent(string content) //TODO: This should be moved to its own place!
         {
-            var openingTag = "<p>";
-            var closingTag = "</p>";
-
             var html = RenderMarkdownToString(content);
-            if (string.IsNullOrWhiteSpace(html))
-            {
-                return "";
-            }
-            var splittedHtml = html.Split(closingTag);
+            var plainText = Regex.Replace(html, "<[^>]*>", "");
 
-            if (splittedHtml.Length < 1)
+            if (string.IsNullOrWhiteSpace(plainText))
             {
                 return "";
             }
 
-            var firstHtmlPart = splittedHtml[0];
-            var paragraphStartIndex = firstHtmlPart.IndexOf(openingTag, StringComparison.Ordinal) + openingTag.Length;
+            var firsParag = plainText.Split(Environment.NewLine).FirstOrDefault(s => !string.IsNullOrWhiteSpace(s));
 
-            if (firstHtmlPart.Length - paragraphStartIndex <= MaxShortContentLength)
+            if (firsParag == null)
             {
-                return firstHtmlPart.Substring(paragraphStartIndex);
+                return plainText;
             }
 
-            return firstHtmlPart.Substring(paragraphStartIndex, MaxShortContentLength) + "...";
+            if (firsParag.Length <= MaxShortContentLength)
+            {
+                return firsParag;
+            }
+
+            return firsParag.Substring(0, MaxShortContentLength) + "...";
         }
 
         public IHtmlContent RenderMarkdownToHtml(string content)

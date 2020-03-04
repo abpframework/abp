@@ -114,20 +114,7 @@ namespace Volo.Abp.Auditing
         {
             BeforeSave(saveHandle);
 
-            if (ShouldSave(saveHandle.AuditLog))
-            {
-                await _auditingStore.SaveAsync(saveHandle.AuditLog);
-            }
-        }
-
-        protected bool ShouldSave(AuditLogInfo auditLog)
-        {
-            if (!auditLog.Actions.Any() && !auditLog.EntityChanges.Any())
-            {
-                return false;
-            }
-
-            return true;
+            await _auditingStore.SaveAsync(saveHandle.AuditLog);
         }
 
         protected class DisposableSaveHandle : IAuditLogSaveHandle

@@ -154,6 +154,8 @@
     "SeeTheDocumentForMoreInformation": "See the <a href=\"{1}\">{0} document</a> for more information",
     "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>open source</strong></span><span class=\"second-line text-uppercase\">Web Application<br />Framework </span><span class=\"third-line shine2\"><strong>for asp.net core</strong></span>",
     "UiFramework": "UI Framework",
-    "EmailAddress": "Email address"
+    "EmailAddress": "Email address",
+    "Mobile": "Mobile",
+    "ReactNative": "React Native"
   }
 }

@@ -30,7 +30,7 @@ namespace Volo.Abp.Cli.Commands
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             var projectName = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
-            
+
             if (projectName == null)
             {
                 throw new CliUsageException(
@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli.Commands
                     GetUsageInfo()
                 );
             }
-            
+
             Logger.LogInformation("Creating your project...");
             Logger.LogInformation("Project name: " + projectName);
 
@@ -67,10 +67,22 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var mobileApp = GetMobilePreference(commandLineArgs);
+            if (mobileApp != MobileApp.None)
+            {
+                Logger.LogInformation("Mobile App: " + mobileApp);
+            }
+
             var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
             if (gitHubLocalRepositoryPath != null)
             {
                 Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+            }
+
+            var templateSource = commandLineArgs.Options.GetOrNull(Options.TemplateSource.Short, Options.TemplateSource.Long);
+            if (templateSource != null)
+            {
+                Logger.LogInformation("Template Source: " + templateSource);
             }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
@@ -94,7 +106,9 @@ namespace Volo.Abp.Cli.Commands
                     version,
                     databaseProvider,
                     uiFramework,
+                    mobileApp,
                     gitHubLocalRepositoryPath,
+                    templateSource,
                     commandLineArgs.Options
                 )
             );
@@ -151,6 +165,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
+            sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
@@ -166,6 +181,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");
             sb.AppendLine("  abp new Acme.BookStore -t module --no-ui");
+            sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
@@ -208,6 +224,20 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
+        private MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
+        {
+            var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
+            switch (optionValue)
+            {
+                case "none":
+                    return MobileApp.None;
+                case "react-native":
+                    return MobileApp.ReactNative;
+                default:
+                    return MobileApp.ReactNative;
+            }
+        }
+
         public static class Options
         {
             public static class Template
@@ -243,6 +273,18 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "u";
                 public const string Long = "ui";
+            }
+
+            public static class Mobile
+            {
+                public const string Short = "m";
+                public const string Long = "mobile";
+            }
+
+            public static class TemplateSource
+            {
+                public const string Short = "ts";
+                public const string Long = "template-source";
             }
         }
     }

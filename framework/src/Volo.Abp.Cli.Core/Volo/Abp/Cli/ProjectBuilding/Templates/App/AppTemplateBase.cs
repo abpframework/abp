@@ -74,6 +74,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 steps.Add(new RemoveFolderStep("/angular"));
             }
+
+            if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
+            {
+                steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName()?.EnsureStartsWith('/')));
+            }
         }
 
         private static void ConfigureWithoutUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
@@ -156,7 +161,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            if (context.BuildArgs.UiFramework == UiFramework.Mvc)
+            if (context.BuildArgs.UiFramework == UiFramework.Mvc && context.BuildArgs.MobileApp == MobileApp.None)
             {
                 steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
             }

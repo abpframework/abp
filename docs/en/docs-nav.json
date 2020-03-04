@@ -38,12 +38,16 @@
           "text": "Application Development",
           "items": [
             {
-              "text": "With ASP.NET Core MVC UI",
-              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+              "text": "Part-1: Creating a new solution and listing items",
+              "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "With Angular UI",
-              "path": "Tutorials/Angular/Part-I.md"
+              "text": "Part-2: CRUD operations",
+              "path": "Tutorials/Part-2.md"
+            },
+            {
+              "text": "Part-3: Integration tests",
+              "path": "Tutorials/Part-3.md"
             }
           ]
         }
@@ -241,7 +245,7 @@
       "items": [
         {
           "text": "API",
-          "items": [            
+          "items": [
             {
               "text": "Auto API Controllers",
               "path": "AspNetCore/Auto-API-Controllers.md"
@@ -295,20 +299,26 @@
               "path": "Entity-Framework-Core.md",
               "items": [
                 {
-                  "text": "Switch to MySQL",
-                  "path": "Entity-Framework-Core-MySQL.md"
+                  "text": "Database Migrations",
+                  "path": "Entity-Framework-Core-Migrations.md"
                 },
                 {
-                  "text": "Switch to PostgreSQL",
-                  "path": "Entity-Framework-Core-PostgreSQL.md"
-                },
-                {
-                  "text": "Switch to SQLite",
-                  "path": "Entity-Framework-Core-SQLite.md"
-                },
-                {
-                  "text": "Switch to another DBMS",
-                  "path": "Entity-Framework-Core-Other-DBMS.md"
+                  "text": "Switch DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md",
+                  "items": [
+                    {
+                      "text": "To MySQL",
+                      "path": "Entity-Framework-Core-MySQL.md"
+                    },
+                    {
+                      "text": "To PostgreSQL",
+                      "path": "Entity-Framework-Core-PostgreSQL.md"
+                    },
+                    {
+                      "text": "To SQLite",
+                      "path": "Entity-Framework-Core-SQLite.md"
+                    }
+                  ]
                 }
               ]
             },
