@@ -419,7 +419,7 @@ A screenshot from the Products page:
 
 #### Using Microservices
 
-Publc web site application uses the Blogging and Product microservices for all operations, over the Public  Web Site Gateway (PublicWebSiteGateway.Host).
+Public web site application uses the Blogging and Product microservices for all operations, over the Public  Web Site Gateway (PublicWebSiteGateway.Host).
 
 ##### Remote End Point
 
