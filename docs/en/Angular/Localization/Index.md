@@ -85,16 +85,16 @@ After that, you are able to use localization service.
 > You can add interpolation parameters as arguments to `instant()` and `get()` methods.
 
 ```ts
-this.localizationService.instant('AbpIdentity::UserDeletionConfirmation', 'UserName');
+this.localizationService.instant('AbpIdentity::UserDeletionConfirmation', 'John');
 
 // with fallback value
 this.localizationService.instant(
   { key: 'AbpIdentity::UserDeletionConfirmation', defaultValue: 'Default Value' },
-  'UserName',
+  'John',
 );
 
 // Output
-// User 'UserName' will be deleted. Do you confirm that?
+// User 'John' will be deleted. Do you confirm that?
 ```
 
 To get a localized text as [_Observable_](https://rxjs.dev/guide/observable) use `get` method instead of `instant`:
@@ -126,10 +126,10 @@ this.store.selectSnapshot(ConfigState.getLocalization('ResourceName::Key'));
 this.store.selectSnapshot(
   ConfigState.getLocalization(
     {
-      key: 'ResourceName::Key',
+      key: 'AbpIdentity::UserDeletionConfirmation',
       defaultValue: 'Default Value',
     },
-    ...interpolationParameters,
+    'John',
   ),
 );
 ```
