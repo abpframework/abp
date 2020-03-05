@@ -27,6 +27,12 @@ namespace Volo.Abp.Identity
                 await _roleManager.GetByIdAsync(id));
         }
 
+        public virtual async Task<List<IdentityRoleDto>> GetAllListAsync()
+        {
+            var list = await _roleRepository.GetListAsync();
+            return ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list);
+        }
+
         public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
             var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);

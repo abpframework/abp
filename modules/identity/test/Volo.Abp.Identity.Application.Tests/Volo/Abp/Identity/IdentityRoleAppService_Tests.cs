@@ -35,6 +35,18 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetAllListAsync()
+        {
+            //Act
+
+            var result = await _roleAppService.GetAllListAsync();
+
+            //Assert
+
+            result.Count.ShouldBeGreaterThan(0);
+        }
+        
+        [Fact]
         public async Task GetListAsync()
         {
             //Act
