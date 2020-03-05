@@ -1,17 +1,38 @@
 ## Permission Management in Angular Projects
 
-To get permission of authenticated user you can use `getGrantedPolicy` method of `ConfigState`.
+You can get permission of authenticated user using `getGrantedPolicy` selector of `ConfigState`.
 
-You can use it as store selector:
+You can get permission as boolean value from store:
 
 ```ts
-this.store.selectSnapshot(ConfigState.getGrantedPolicy('AbpIdentity.Roles.Create'));
+import { Store } from '@ngxs/store';
+import { ConfigState } from '../states';
+
+export class YourComponent {
+  constructor(private store: Store) {}
+
+  ngOnInit(): void {
+    const canCreate = this.store.selectSnapshot(ConfigState.getGrantedPolicy('AbpIdentity.Roles.Create'));
+  }
+
+  // ...
+}
 ```
 
-Or you can use it via `ConfigStateService`:
+Or you can get it via `ConfigStateService`:
 
 ```ts
-this.configStateService.getGrantedPolicy('AbpIdentity.Roles.Create');
+import { ConfigStateService } from '../services/config-state.service';
+
+export class YourComponent {
+  constructor(private configStateService: ConfigStateService) {}
+
+  ngOnInit(): void {
+    const canCreate = this.configStateService.getGrantedPolicy('AbpIdentity.Roles.Create');
+  }
+
+  // ...
+}
 ```
 
 ### Permission Directive
@@ -19,20 +40,20 @@ this.configStateService.getGrantedPolicy('AbpIdentity.Roles.Create');
 You can use the `PermissionDirective` to manage visibility of a DOM Element accordingly to user's permission.
 
 ```html
-<div *abpPermission="Policy Key">
-  This content is only visible if the user has 'Policy Key' permission.
+<div *abpPermission="AbpIdentity.Roles">
+  This content is only visible if the user has 'AbpIdentity.Roles' permission.
 </div>
 ```
 
-As shown above you can remove elements from DOM with structural abpPermission directive.
+As shown above you can remove elements from DOM with `abpPermission` structural directive.
 
 The directive can also be used as an attribute directive but we recommend to you to use it as a structural directive.
 
 ### Permission Guard
 
-Use can use `PermissionGuard` if you want to control authenticated user's permission before navigating to the route.
+You can use `PermissionGuard` if you want to control authenticated user's permission to access to the route during navigation.
 
-Add `requiredPolicy` to the data of the route in your routing module.
+Add `requiredPolicy` to the `routes` property in your routing module.
 
 ```ts
 const routes: Routes = [
@@ -41,7 +62,9 @@ const routes: Routes = [
     component: YourComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'AbpIdentity.Roles.Create',
+      routes: {
+        requiredPolicy: 'AbpIdentity.Roles.Create',
+      },
     },
   },
 ];
@@ -49,4 +72,4 @@ const routes: Routes = [
 
 ---
 
-Policies and Granted Policies are stored in the `auth` property of `ConfigState`.
+Granted Policies are stored in the `auth` property of `ConfigState`.
