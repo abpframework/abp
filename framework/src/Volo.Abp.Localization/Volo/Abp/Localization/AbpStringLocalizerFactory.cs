@@ -38,10 +38,18 @@ namespace Volo.Abp.Localization
                 return _innerFactory.Create(resourceType);
             }
 
-            return _localizerCache.GetOrAdd(
-                resourceType,
-                _ => CreateStringLocalizerCacheItem(resource)
-            ).Localizer;
+            if (_localizerCache.TryGetValue(resourceType, out var cacheItem))
+            {
+                return cacheItem.Localizer;
+            }
+
+            lock (_localizerCache)
+            {
+                return _localizerCache.GetOrAdd(
+                    resourceType,
+                    _ => CreateStringLocalizerCacheItem(resource)
+                ).Localizer;
+            }
         }
 
         private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResource resource)
