@@ -9,12 +9,13 @@ There are three ways to use localization in your project:
 Before you read about _the Localization Pipe_ and _the Localization Service_, you should know about localization keys.
 
 The Localization key format consists of 2 sections which are **Resource Name** and **Key**.
-`{{ ResourceName::Key }}`
+`ResourceName::Key`
 
-> If you do not specify the resource name, it will be `defaultResourceName` which declared in _environment.ts_
+> If you do not specify the resource name, it will be `defaultResourceName` which is declared in _environment.ts_
 
 ```ts
 const environment = {
+  //...
   localization: {
     defaultResourceName: 'MyProjectName',
   },
@@ -39,16 +40,32 @@ You can use the `abpLocalization` pipe to get localized text as in this example:
 
 The pipe will replace the key with the localized text.
 
-You can also specify a default value using [`LocalizationWithDefault`](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/config.ts#L34) interface as followed:
+You can also specify a default value as shown below:
 
 ```html
 <h1>{{ { key: 'Resource::Key', defaultValue: 'Default Value' } | abpLocalization }}</h1>
 ```
 
-To use interpolation, you must give the values for interpolation as pipe parameters:
+To use interpolation, you must give the values for interpolation as pipe parameters, for example:
+
+Localization data is stored in key-value pairs:
+
+```js
+{
+  //...
+  AbpAccount: { // This is the resource name
+    Key: "Value",
+    PagerInfo: "Showing {0} to {1} of {2} entries"
+  }
+}
+```
+
+So we can use this key like this:
 
 ```html
-<h1>{{ 'Resource::Key' | abpLocalization:'Parameter 1':'Parameter 2' }}</h1>
+<h1>{{ 'AbpAccount::PagerInfo' | abpLocalization:'20':'30':'50' }}</h1>
+
+<!-- Output: Showing 20 to 30 of 50 entries -->
 ```
 
 ### Using the Localization Service
@@ -65,11 +82,19 @@ class MyClass {
 
 After that, you are able to use localization service.
 
+> You can add interpolation parameters as arguments to `instant()` and `get()` methods.
+
 ```ts
-this.localizationService.instant('Resource::Key');
+this.localizationService.instant('AbpIdentity::UserDeletionConfirmation', 'UserName');
 
 // with fallback value
-this.localizationService.instant({ key: 'Resource::Key', defaultValue: 'Default Value' });
+this.localizationService.instant(
+  { key: 'AbpIdentity::UserDeletionConfirmation', defaultValue: 'Default Value' },
+  'UserName',
+);
+
+// Output
+// User 'UserName' will be deleted. Do you confirm that?
 ```
 
 To get a localized text as [_Observable_](https://rxjs.dev/guide/observable) use `get` method instead of `instant`:
@@ -99,10 +124,13 @@ this.store.selectSnapshot(ConfigState.getLocalization('ResourceName::Key'));
 
 ```ts
 this.store.selectSnapshot(
-  ConfigState.getLocalization({
-    key: 'ResourceName::Key',
-    defaultValue: 'Default Value',
-  }),
+  ConfigState.getLocalization(
+    {
+      key: 'ResourceName::Key',
+      defaultValue: 'Default Value',
+    },
+    ...interpolationParameters,
+  ),
 );
 ```
 
