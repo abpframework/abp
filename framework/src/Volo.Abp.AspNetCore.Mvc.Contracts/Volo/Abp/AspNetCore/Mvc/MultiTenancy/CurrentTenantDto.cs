@@ -10,6 +10,6 @@ namespace Volo.Abp.AspNetCore.Mvc.MultiTenancy
 
         public string Name { get; set; }
 
-        public bool isAvailable  { get; set; }
+        public bool IsAvailable  { get; set; }
     }
 }
