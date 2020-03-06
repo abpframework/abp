@@ -24,13 +24,13 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(
-                await _roleManager.GetByIdAsync(id).ConfigureAwait(false));
+                await _roleManager.GetByIdAsync(id));
         }
 
         public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount).ConfigureAwait(false);
-            var totalCount = await _roleRepository.GetCountAsync().ConfigureAwait(false);
+            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            var totalCount = await _roleRepository.GetCountAsync();
 
             return new PagedResultDto<IdentityRoleDto>(
                 totalCount,
@@ -46,8 +46,8 @@ namespace Volo.Abp.Identity
             role.IsDefault = input.IsDefault;
             role.IsPublic = input.IsPublic;
 
-            (await _roleManager.CreateAsync(role).ConfigureAwait(false)).CheckErrors();
-            await CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(false);
+            (await _roleManager.CreateAsync(role)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
@@ -55,16 +55,16 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Roles.Update)]
         public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
-            var role = await _roleManager.GetByIdAsync(id).ConfigureAwait(false);
+            var role = await _roleManager.GetByIdAsync(id);
             role.ConcurrencyStamp = input.ConcurrencyStamp;
 
-            (await _roleManager.SetRoleNameAsync(role, input.Name).ConfigureAwait(false)).CheckErrors();
+            (await _roleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
 
             role.IsDefault = input.IsDefault;
             role.IsPublic = input.IsPublic;
 
-            (await _roleManager.UpdateAsync(role).ConfigureAwait(false)).CheckErrors();
-            await CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(false);
+            (await _roleManager.UpdateAsync(role)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
@@ -72,13 +72,13 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Roles.Delete)]
         public virtual async Task DeleteAsync(Guid id)
         {
-            var role = await _roleManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
+            var role = await _roleManager.FindByIdAsync(id.ToString());
             if (role == null)
             {
                 return;
             }
 
-            (await _roleManager.DeleteAsync(role).ConfigureAwait(false)).CheckErrors();
+            (await _roleManager.DeleteAsync(role)).CheckErrors();
         }
     }
 }

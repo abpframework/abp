@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { NgxsModule } from '@ngxs/store';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { ToasterService } from '../services/toaster.service';
 import { ThemeSharedModule } from '../theme-shared.module';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -24,7 +23,6 @@ describe('ToasterService', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
-    providers: [MessageService],
     mocks: [OAuthService],
   });
 

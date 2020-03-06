@@ -21,12 +21,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
             if (!context.ActionDescriptor.IsControllerAction() ||
                 !context.ActionDescriptor.HasObjectResult())
             {
-                await next().ConfigureAwait(false);
+                await next();
                 return;
             }
 
             _validator.Validate(context.ModelState);
-            await next().ConfigureAwait(false);
+            await next();
         }
     }
 }

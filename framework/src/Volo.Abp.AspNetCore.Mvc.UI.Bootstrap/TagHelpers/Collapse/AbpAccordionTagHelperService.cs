@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             
             var items = InitilizeFormGroupContentsContext(context, output);
 
-            await output.GetChildContentAsync().ConfigureAwait(false);
+            await output.GetChildContentAsync();
 
             var content = GetContent(items);
 

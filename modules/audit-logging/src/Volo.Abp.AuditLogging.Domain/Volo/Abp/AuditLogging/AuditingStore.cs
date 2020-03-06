@@ -37,13 +37,13 @@ namespace Volo.Abp.AuditLogging
         {
             if (!Options.HideErrors)
             {
-                await SaveLogAsync(auditInfo).ConfigureAwait(false);
+                await SaveLogAsync(auditInfo);
                 return;
             }
 
             try
             {
-                await SaveLogAsync(auditInfo).ConfigureAwait(false);
+                await SaveLogAsync(auditInfo);
             }
             catch (Exception ex)
             {
@@ -56,8 +56,8 @@ namespace Volo.Abp.AuditLogging
         {
             using (var uow = _unitOfWorkManager.Begin(true))
             {
-                await _auditLogRepository.InsertAsync(new AuditLog(_guidGenerator, auditInfo)).ConfigureAwait(false);
-                await uow.SaveChangesAsync().ConfigureAwait(false);
+                await _auditLogRepository.InsertAsync(new AuditLog(_guidGenerator, auditInfo));
+                await uow.SaveChangesAsync();
             }
         }
     }

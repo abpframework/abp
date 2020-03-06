@@ -32,10 +32,10 @@ namespace Volo.Docs
                     .AddVirtualJson("/Volo/Docs/Localization/Domain");
             });
 
-            Configure<DocumentStoreOptions>(options =>
+            Configure<DocumentSourceOptions>(options =>
             {
-                options.Stores[GithubDocumentStore.Type] = typeof(GithubDocumentStore);
-                options.Stores[FileSystemDocumentStore.Type] = typeof(FileSystemDocumentStore);
+                options.Sources[GithubDocumentSource.Type] = typeof(GithubDocumentSource);
+                options.Sources[FileSystemDocumentSource.Type] = typeof(FileSystemDocumentSource);
             });
 
             context.Services.AddHttpClient(GithubRepositoryManager.HttpClientName, client =>

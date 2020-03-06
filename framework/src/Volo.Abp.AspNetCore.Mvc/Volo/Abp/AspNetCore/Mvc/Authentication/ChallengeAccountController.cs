@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
         [HttpGet]
         public async Task<ActionResult> Logout(string returnUrl = "", string returnUrlHash = "")
         {
-            await HttpContext.SignOutAsync().ConfigureAwait(false);
+            await HttpContext.SignOutAsync();
 
             if (HttpContext.User.Identity.AuthenticationType == AuthenticationType)
             {

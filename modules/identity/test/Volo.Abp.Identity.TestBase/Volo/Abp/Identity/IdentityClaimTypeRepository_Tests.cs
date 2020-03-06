@@ -28,11 +28,11 @@ namespace Volo.Abp.Identity
         {
             var claim = (await ClaimTypeRepository.GetListAsync()).FirstOrDefault();
 
-            var result1 = await ClaimTypeRepository.AnyAsync(claim.Name).ConfigureAwait(false);
+            var result1 = await ClaimTypeRepository.AnyAsync(claim.Name);
 
             result1.ShouldBe(true);
 
-            var result2 = await ClaimTypeRepository.AnyAsync(Guid.NewGuid().ToString()).ConfigureAwait(false);
+            var result2 = await ClaimTypeRepository.AnyAsync(Guid.NewGuid().ToString());
 
             result2.ShouldBe(false);
         }

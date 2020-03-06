@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         {
             var applicationConfigurationBuilder = GetRequiredService<IAbpApplicationConfigurationAppService>();
 
-            var config = await applicationConfigurationBuilder.GetAsync().ConfigureAwait(false);
+            var config = await applicationConfigurationBuilder.GetAsync();
 
             config.Auth.ShouldNotBeNull();
             config.Localization.ShouldNotBeNull();

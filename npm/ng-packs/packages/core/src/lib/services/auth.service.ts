@@ -48,4 +48,18 @@ export class AuthService {
       take(1),
     );
   }
+
+  logout(): Observable<void> {
+    return this.rest
+      .request({
+        method: 'GET',
+        url: '/api/account/logout',
+      })
+      .pipe(
+        switchMap(() => {
+          this.oAuthService.logOut();
+          return this.store.dispatch(new GetAppConfiguration());
+        }),
+      );
+  }
 }

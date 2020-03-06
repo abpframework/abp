@@ -98,7 +98,7 @@ The first thing for a multi-tenant application is to determine the current tenan
 
 ##### Custom Tenant Resolvers
 
-You can add your custom tenant resolver to **TenantResolveOptions** in your module's ConfigureServices method as like below:
+You can add your custom tenant resolver to **AbpTenantResolveOptions** in your module's ConfigureServices method as like below:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -112,7 +112,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
@@ -323,7 +323,7 @@ services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 
 ##### Domain Tenant Resolver
 
-In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure TenantResolveOptions to add a domain tenant resolver.
+In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure AbpTenantResolveOptions to add a domain tenant resolver.
 
 ###### Example: Add a subdomain resolver
 
@@ -340,7 +340,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
                 //Subdomain format: {0}.mydomain.com (adding as the highest priority resolver)
                 options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));
