@@ -17,7 +17,7 @@ See the <a href="https://docs.abp.io/" target="_blank">documentation</a>.
 
 #### Pre Requirements
 
-- Visual Studio 2019 16.3.0+
+- Visual Studio 2019 16.4.0+
 
 #### Framework
 
