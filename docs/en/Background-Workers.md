@@ -2,73 +2,56 @@
 
 ## Introduction
 
-Background workers are used to execute some tasks in the background periodically.
+Background workers are different than [background jobs](Background-Jobs.md). They are simple independent threads in the application running in the background. Generally, they run periodically to perform some tasks. Examples;
+
+* A background worker can run periodically to delete old logs.
+* A background worker can run periodically to determine inactive users and send emails to get users to return to your application.
+
 
 ### Create a Background Worker
 
-A background worker is a class that derives from the `AsyncPeriodicBackgroundWorkerBase` or `PeriodicBackgroundWorkerBase` class. Both base classes are derived from `ISingletonDependency`.
+A background worker is a `Singleton Depency` class that derives from the `AsyncPeriodicBackgroundWorkerBase` or `PeriodicBackgroundWorkerBase`.
 
-### Status Checker
-This example is used to simple check remote application status. Just suppose that, we want to check and store some web applications are running or not? 
+Assume that we want to make a user passive, if he did not login to the application in last 30 days. See the code:
 
 ````csharp
-public class AppStatusService : ITransientDependency
+public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 {
-    .
-    .
-    public void CheckAppStatus()
+    private readonly IUserRepository _userRepository;
+    private readonly ILogger<PassiveUserCheckerWorker> _logger;
+
+    public PassiveUserCheckerWorker(
+                AbpTimer timer,
+                IServiceScopeFactory serviceScopeFactory,
+                IUserRepository userRepository,
+                ILogger<GithubDataCollectingWorker> logger
+            ) : base(timer, serviceScopeFactory)
     {
-        var ping = new System.Net.NetworkInformation.Ping();
-
-        var result = ping.Send("www.github.com");
-
-        // save the result
+        _userRepository = userRepository;
+        _logger = logger;
+        Timer.Period = 5_000; //5 seconds (good for tests)
     }
-    .
-    .
-}
-````
 
-Then create a background worker class that derived from the `PeriodicBackgroundWorkerBase`:
-
-````csharp
-.
-.
-using Volo.Abp.BackgroundWorkers;
-
-namespace Volo.Www.Application
-{
-    public class AppStatusCheckingWorker : PeriodicBackgroundWorkerBase
+    protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
     {
-        private readonly IAppStatusService _appStatusService;
+        _logger.LogInformation($"{nameof(PassiveUserCheckerWorker)} started to work.");
+        
+        // UserRepository sets statuses of inactive users as a passive.
+        await _userRepository.UpdateInactiveUserStatusesAsync();
 
-        public AppStatusCheckingWorker(
-            AbpTimer timer,
-            IServiceScopeFactory scopeFactory, 
-            IAppStatusService appStatusService)
-            : base(timer, scopeFactory)
-        {
-            _appStatusService = appStatusService;
-            Timer.Period = 10_000; // 10 secs
-        }
-
-        protected override void DoWork(PeriodicBackgroundWorkerContext workerContext)
-        {
-            _appStatusService.CheckAppStatus();
-        }
+        _logger.LogInformation($"{nameof(PassiveUserCheckerWorker)} finished it's work.");
     }
 }
 ````
 
-This worker will call DoWorkAsync() method every 10 seconds while the application is running.
+* If your background worker derive from `PeriodicBackgroundWorkerBase`, you should implement the `DoWork` method to perform your periodic working code.
+* If you directly implement IBackgroundWorker, you will override/implement the Start and Stop methods.
 
-### Configuration
+### Register Background Worker
 
-Add your BackgroundWorker at `OnApplicationInitialization` in your [module class](Module-Development-Basics.md). The example below initialize the background worker to your module:
+After creating a background worker, add it to the IBackgroundWorkerManager. The most common place is the `OnApplicationInitialization` method of your module:
 
 ````csharp
-using Volo.Abp.BackgroundWorkers;
-
 public class MyModule : AbpModule
 {
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -76,8 +59,17 @@ public class MyModule : AbpModule
             context.ServiceProvider
                 .GetRequiredService<IBackgroundWorkerManager>()
                 .Add(
-                    context.ServiceProvider.GetRequiredService<AppStatusCheckingWorker>()
+                    context.ServiceProvider.GetRequiredService<PassiveUserCheckerWorker>()
                 );
         }
 }
 ````
+
+While we generally add workers in OnApplicationInitialization, there are no restrictions on that. You can inject IBackgroundWorkerManager anywhere and add workers at runtime. IBackgroundWorkerManager will stop and release all registered workers when your application is being shut down.
+
+## Making Your Application Always Run
+
+Background jobs and workers only work if your application is running. If you host the background job execution in your web application (this is the default behavior), you should ensure that your web application is configured to always be running. Otherwise, background jobs only work while your application is in use.
+
+## See More
+* [Background Jobs](Background-Jobs.md)
