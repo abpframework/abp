@@ -243,4 +243,11 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }
+
+  openPermissionsModal(providerKey: string) {
+    this.providerKey = providerKey;
+    setTimeout(() => {
+      this.visiblePermissions = true;
+    }, 0);
+  }
 }

@@ -8,9 +8,11 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
@@ -19,6 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
     public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApplicationConfigurationAppService
     {
         private readonly AbpLocalizationOptions _localizationOptions;
+        private readonly AbpMultiTenancyOptions _multiTenancyOptions;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
         private readonly IAuthorizationService _authorizationService;
@@ -30,6 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
+            IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
             IServiceProvider serviceProvider,
             IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
             IAuthorizationService authorizationService,
@@ -48,6 +52,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _featureDefinitionManager = featureDefinitionManager;
             _languageProvider = languageProvider;
             _localizationOptions = localizationOptions.Value;
+            _multiTenancyOptions = multiTenancyOptions.Value;
         }
 
         public virtual async Task<ApplicationConfigurationDto> GetAsync()
@@ -60,8 +65,28 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Features = await GetFeaturesConfigAsync(),
                 Localization = await GetLocalizationConfigAsync(),
                 CurrentUser = GetCurrentUser(),
-                Setting = await GetSettingConfigAsync()
+                Setting = await GetSettingConfigAsync(),
+                MultiTenancy = GetMultiTenancy(),
+                CurrentTenant = GetCurrentTenant()
 
+            };
+        }
+
+        protected  virtual  CurrentTenantDto GetCurrentTenant()
+        {
+            return new CurrentTenantDto()
+            {
+                Id = CurrentTenant.Id,
+                Name = CurrentTenant.Name,
+                IsAvailable = CurrentTenant.IsAvailable
+            };
+        }
+
+        protected virtual MultiTenancyInfoDto GetMultiTenancy()
+        {
+            return new MultiTenancyInfoDto
+            {
+                IsEnabled = _multiTenancyOptions.IsEnabled
             };
         }
 

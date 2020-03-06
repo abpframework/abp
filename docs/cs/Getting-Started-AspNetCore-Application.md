@@ -4,7 +4,7 @@ Tento tutoriál vysvětluje jak začít s ABP z ničeho s minimem závislostí. 
 
 ## Tvorba nového projektu
 
-1. Vytvořte novou AspNet Core Web aplikaci ve Visual Studio 2019 (16.3.0+):
+1. Vytvořte novou AspNet Core Web aplikaci ve Visual Studio 2019 (16.4.0+):
 
 ![](images/create-new-aspnet-core-application-v2.png)
 

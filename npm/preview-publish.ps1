@@ -4,7 +4,7 @@ param(
 
 npm install
 
-$NextVersion = $(node get-version.js) + '-preview' + (Get-Date).tostring(“yyyyMMdd”) + '-1'
+$NextVersion = $(node get-version.js) + '-preview' + (Get-Date).tostring(“yyyyMMdd”)
 $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
 if(-Not $Version) {
@@ -16,7 +16,7 @@ $commands = (
   "npm install",
   "npm run publish-packages -- --nextVersion $Version --preview",
   "cd ../../",
-  "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish --dist-tag preview"
+  "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish --dist-tag preview --registry http://localhost:4873"
 )
 
 foreach ($command in $commands) { 

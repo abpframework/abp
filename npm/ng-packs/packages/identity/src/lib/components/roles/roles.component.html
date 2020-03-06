@@ -76,7 +76,7 @@
                 <button
                   *abpPermission="'AbpIdentity.Roles.ManagePermissions'"
                   ngbDropdownItem
-                  (click)="providerKey = data.name; visiblePermissions = true"
+                  (click)="openPermissionsModal(data.name)"
                 >
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>

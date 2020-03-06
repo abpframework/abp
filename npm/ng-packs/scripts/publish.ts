@@ -19,6 +19,8 @@ const publish = async () => {
     process.exit(1);
   }
 
+  const registry = program.preview ? 'http://localhost:4873' : 'https://registry.npmjs.org';
+
   try {
     await execa('yarn', ['install-new-dependencies'], { stdout: 'inherit' });
 
@@ -44,9 +46,7 @@ const publish = async () => {
         'lerna',
         'exec',
         '--',
-        `"npm publish --registry https://registry.npmjs.org${
-          program.preview ? ' --tag preview' : ''
-        }"`,
+        `"npm publish --registry ${registry}${program.preview ? ' --tag preview' : ''}"`,
       ],
       {
         stdout: 'inherit',
@@ -56,12 +56,14 @@ const publish = async () => {
 
     await fse.rename('../lerna.json', '../lerna.publish.json');
 
-    await execa('git', ['add', '../packages/*', '../package.json', '../lerna.version.json'], {
-      stdout: 'inherit',
-    });
-    await execa('git', ['commit', '-m', 'Upgrade ng package versions', '--no-verify'], {
-      stdout: 'inherit',
-    });
+    if (!program.preview) {
+      await execa('git', ['add', '../packages/*', '../package.json', '../lerna.version.json'], {
+        stdout: 'inherit',
+      });
+      await execa('git', ['commit', '-m', 'Upgrade ng package versions', '--no-verify'], {
+        stdout: 'inherit',
+      });
+    }
   } catch (error) {
     console.error(error.stderr);
     process.exit(1);

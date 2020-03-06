@@ -33,18 +33,21 @@
     },
     {
       "text": "Tutorials",
-      "path": "Tutorials/Index.md",
       "items": [
         {
           "text": "Application Development",
           "items": [
             {
-              "text": "With ASP.NET Core MVC UI",
-              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+              "text": "Part-1: Creating a new solution and listing items",
+              "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "With Angular UI",
-              "path": "Tutorials/Angular/Part-I.md"
+              "text": "Part-2: CRUD operations",
+              "path": "Tutorials/Part-2.md"
+            },
+            {
+              "text": "Part-3: Integration tests",
+              "path": "Tutorials/Part-3.md"
             }
           ]
         }
@@ -242,7 +245,7 @@
       "items": [
         {
           "text": "API",
-          "items": [            
+          "items": [
             {
               "text": "Auto API Controllers",
               "path": "AspNetCore/Auto-API-Controllers.md"
@@ -345,6 +348,20 @@
             {
               "text": "RabbitMQ Integration",
               "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Jobs-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "Background Workers",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Workers-Quartz.md"
             }
           ]
         }

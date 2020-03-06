@@ -272,4 +272,11 @@ export class TenantsComponent implements OnInit {
       }, 0);
     }
   }
+
+  openFeaturesModal(providerKey: string) {
+    this.providerKey = providerKey;
+    setTimeout(() => {
+      this.visibleFeatures = true;
+    }, 0);
+  }
 }

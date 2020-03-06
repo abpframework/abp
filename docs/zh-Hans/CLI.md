@@ -129,6 +129,26 @@ abp update [options]
 * `--npm`: 仅更新NPM包
 * `--nuget`: 仅更新的NuGet包
 
+### 切换到每晚构建(预览)包
+
+想要切换到ABP框架的最新预览版可以使用此命令.
+
+用法:
+
+````bash
+abp switch-to-preview [options]
+````
+
+你也可以使用切换回稳定版本:
+
+````bash
+abp switch-to-stable [options]
+````
+
+#### Options
+
+`--solution-path` 或 `-sp`: 指定解决方案(.sln)文件路径. 如果未指定,CLI试寻找当前目录中的.sln文件.
+
 ### login
 
 CLI的一些功能需要登录到abp.io平台. 使用你的用户名登录

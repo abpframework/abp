@@ -13,7 +13,7 @@ using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
@@ -27,7 +27,7 @@ namespace BackendAdminApp.Host
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreAuthenticationOAuthModule),
-        typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpIdentityWebModule),
         typeof(BloggingApplicationContractsModule),
