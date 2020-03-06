@@ -1,0 +1,17 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.ProgressBarsDemo
+
+<abp-component-demo-section title="Example" view-path="@ProgressBarsDemoViewComponent.ViewPath">
+    <abp-progress-bar value="70" />
+
+    <abp-progress-bar type="Warning" value="25"> %25 </abp-progress-bar>
+
+    <abp-progress-bar type="Success" value="40" strip="true" />
+
+    <abp-progress-bar type="Dark" value="10" min-value="5" max-value="15" strip="true"> %50 </abp-progress-bar>
+
+    <abp-progress-group>
+        <abp-progress-part type="Success" value="25" />
+        <abp-progress-part type="Danger" value="10" strip="true"> %10 </abp-progress-part>
+        <abp-progress-part type="Primary" value="50" animation="true" strip="true" />
+    </abp-progress-group>
+</abp-component-demo-section>

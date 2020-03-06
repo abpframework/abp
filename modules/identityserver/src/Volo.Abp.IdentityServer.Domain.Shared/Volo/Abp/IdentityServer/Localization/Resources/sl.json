@@ -1,0 +1,12 @@
+﻿{
+  "culture": "sl",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Naziv vira identitete že obstaja: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Naziv vira Api že obstaja: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId že obstaja: {ClientId}",
+	"UserLockedOut": "Uporabniški račun je bil blokiran zaradi neveljavnih poskusov prijave. Počakajte nekaj časa in poskusite znova.",
+    "InvalidUserNameOrPassword": "Napačno uporabniško ime ali geslo!",
+    "LoginIsNotAllowed": "Nimate dovoljenja za prijavo! Potrditi morate svojo e-pošto / telefonsko številko.",
+    "InvalidUsername": "Napačno uporabniško ime ali geslo!"
+  }
+}

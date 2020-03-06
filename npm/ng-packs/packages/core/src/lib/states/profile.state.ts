@@ -3,11 +3,13 @@ import { tap } from 'rxjs/operators';
 import { ChangePassword, GetProfile, UpdateProfile } from '../actions/profile.actions';
 import { Profile } from '../models/profile';
 import { ProfileService } from '../services/profile.service';
+import { Injectable } from '@angular/core';
 
 @State<Profile.State>({
   name: 'ProfileState',
   defaults: {} as Profile.State,
 })
+@Injectable()
 export class ProfileState {
   @Selector()
   static getProfile({ profile }: Profile.State): Profile.Response {

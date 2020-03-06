@@ -32,14 +32,9 @@ namespace MyCompany.MyProject
 
 Entity Framework Core supports various database management systems ([see all](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP framework and this document doesn't depend on any specific DBMS.
 
-If you are creating a reusable library, avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
+If you are creating a [reusable application module](Modules/Index.md), avoid to depend on a specific DBMS package. However, in a final application you eventually will select a DBMS.
 
-ABP framework provides integration packages for some common DBMSs to make the configuration a bit easier. [The startup templates](Startup-Templates/Index.md) come with **SQL Server (localdb) pre-configured**. See the following documents to learn how to configure for the other DBMS providers:
-
-* [MySQL](Entity-Framework-Core-MySQL.md)
-* [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
-* [SQLite](Entity-Framework-Core-SQLite.md)
-* [Others](Entity-Framework-Core-Other-DBMS.md)
+See [Switch to Another DBMS for Entity Framework Core](Entity-Framework-Core-Other-DBMS.md) document to learn how to switch the DBMS.
 
 ## Creating DbContext
 

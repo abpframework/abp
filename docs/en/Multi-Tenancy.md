@@ -302,6 +302,7 @@ TODO:...
 
 Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to determine current tenant from current web request (ordered by priority). These resolvers are added and work out of the box:
 
+* **CurrentUserTenantResolveContributor**: Gets the tenant id from claims of the current user, if the current user has logged in. **This should always be stay as the first contributor for security**.
 * **QueryStringTenantResolver**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
 * **RouteTenantResolver**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
 * **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.

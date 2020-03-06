@@ -303,6 +303,7 @@ TODO:...
 
 Volo.Abp.AspNetCore.MultiTenancy 添加了下面这些租户解析器,从当前Web请求(按优先级排序)中确定当前租户.
 
+* **CurrentUserTenantResolveContributor**: 如果当前用户已登录,从当前用户的声明中获取租户Id. **出于安全考虑,应该始终将其做为第一个Contributor**.
 * **QueryStringTenantResolver**: 尝试从query string参数中获取当前租户,默认参数名为"__tenant".
 * **RouteTenantResolver**:尝试从当前路由中获取(URL路径),默认是变量名是"__tenant".所以,如果你的路由中定义了这个变量,就可以从路由中确定当前租户.
 * **HeaderTenantResolver**: 尝试从HTTP header中获取当前租户,默认的header名称是"__tenant".
