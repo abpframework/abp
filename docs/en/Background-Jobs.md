@@ -173,5 +173,5 @@ See pre-built job manager alternatives:
 * [Hangfire Background Job Manager](Background-Jobs-Hangfire.md)
 * [RabbitMQ Background Job Manager](Background-Jobs-RabbitMq.md)
 
-## See More
+## See Also
 * [Background Workers](Background-Workers.md)

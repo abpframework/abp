@@ -71,5 +71,5 @@ While we generally add workers in OnApplicationInitialization, there are no rest
 
 Background jobs and workers only work if your application is running. If you host the background job execution in your web application (this is the default behavior), you should ensure that your web application is configured to always be running. Otherwise, background jobs only work while your application is in use.
 
-## See More
+## See Also
 * [Background Jobs](Background-Jobs.md)
