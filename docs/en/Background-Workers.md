@@ -45,7 +45,7 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 ````
 
 * If your background worker derive from `PeriodicBackgroundWorkerBase`, you should implement the `DoWork` method to perform your periodic working code.
-* If you directly implement IBackgroundWorker, you will override/implement the Start and Stop methods.
+* If you directly implement IBackgroundWorker, you will override/implement the `StartAsync` and `StopAsync` methods.
 
 ### Register Background Worker
 
