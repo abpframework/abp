@@ -78,7 +78,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             {
                 Id = CurrentTenant.Id,
                 Name = CurrentTenant.Name,
-                isAvailable = CurrentTenant.IsAvailable
+                IsAvailable = CurrentTenant.IsAvailable
             };
         }
 
