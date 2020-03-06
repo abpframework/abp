@@ -8,7 +8,7 @@ ABP framework has a special Tag Helper to create bootstrap button easily.
 
 `<abp-button>` has 7 different attribute.
 
-* [`button-type`](#`button-type`)
+* [`button-type`](#button-type)
 * [`size`](#`size`)
 * [`busy-text`](#`busy-text`)
 * [`text`](#`text`)
