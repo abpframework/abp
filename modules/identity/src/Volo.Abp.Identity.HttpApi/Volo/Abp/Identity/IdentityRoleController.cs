@@ -22,7 +22,7 @@ namespace Volo.Abp.Identity
 
         [HttpGet]
         [Route("all")]
-        public virtual Task<List<IdentityRoleDto>> GetAllListAsync()
+        public virtual Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
         {
             return _roleAppService.GetAllListAsync();
         }

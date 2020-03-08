@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity
 
             //Assert
 
-            result.Count.ShouldBeGreaterThan(0);
+            result.Items.Count.ShouldBeGreaterThan(0);
         }
         
         [Fact]
