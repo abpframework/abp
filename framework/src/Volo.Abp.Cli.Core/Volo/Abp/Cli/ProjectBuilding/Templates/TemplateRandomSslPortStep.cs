@@ -137,12 +137,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                     {
                         environment.NormalizeLineEndings();
 
+                        var buildInUrlHttp = buildInUrl.Replace("https://", "http://");
+                        var buildInUrlWithoutPortHttp = buildInUrlWithoutPort.Replace("https://", "http://");
+
                         var environmentLines = environment.GetLines();
                         for (var i = 0; i < environmentLines.Length; i++)
                         {
-                            if (environmentLines[i].Contains(buildInUrl))
+                            if (environmentLines[i].Contains(buildInUrlHttp))
                             {
-                                environmentLines[i] = environmentLines[i].Replace(buildInUrl, $"{buildInUrlWithoutPort}:{newPort}");
+                                environmentLines[i] = environmentLines[i].Replace(buildInUrlHttp, $"{buildInUrlWithoutPortHttp}:{newPort}");
                             }
                         }
                         environment.SetLines(environmentLines);

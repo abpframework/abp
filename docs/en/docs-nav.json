@@ -348,6 +348,20 @@
             {
               "text": "RabbitMQ Integration",
               "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Jobs-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "Background Workers",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Workers-Quartz.md"
             }
           ]
         }

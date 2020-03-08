@@ -328,6 +328,20 @@
             {
               "text": "RabbitMQ 集成",
               "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Jobs-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "后台工作者",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Workers-Quartz.md"
             }
           ]
         }

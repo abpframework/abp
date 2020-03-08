@@ -899,26 +899,7 @@ public class BookStoreDbMigratorModule : AbpModule
 
 We had a reference to the `Acme.BookStore.EntityFrameworkCore.DbMigrationsForSecondDb` project from the `Acme.BookStore.Web` project, but hadn't added module dependency since we hadn't created it before. But, now we have it and we need to add `typeof(BookStoreEntityFrameworkCoreSecondDbMigrationsModule)` to the dependency list of the `BookStoreWebModule` class.
 
-#### BookStoreDbMigrationService
-
-You need one final touch to the `BookStoreDbMigrationService` inside the `Acme.BookStore.Domain` project. It is currently designed to work with a single `IBookStoreDbSchemaMigrator` implementation, but now we have two.
-
-It injects `IBookStoreDbSchemaMigrator`. Replace it with an `IEnumerable<IBookStoreDbSchemaMigrator>` injection ([Dependency Injection System](Dependency-Injection.md) allows to inject multiple implementations of an interface just like that).
-
-Now, you have **a collection of schema migrators** instead of a single one. Find the lines like:
-
-````csharp
-await _dbSchemaMigrators.MigrateAsync();
-````
-
-change them to:
-
-````csharp
-foreach (var migrator in _dbSchemaMigrators)
-{
-    await migrator.MigrateAsync();
-}
-````
+#### Run the Database Migrator!
 
 You can run the `.DbMigrator` application to migrate & seed the databases. To test, you can delete both databases and run the `.DbMigrator` application again to see if it creates both of the databases.
 

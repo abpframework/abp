@@ -11,7 +11,7 @@ Background jobs are **persistent** that means they will be **re-tried** and **ex
 
 ## Abstraction Package
 
-ABP provides an **abstraction** module and **several implementations** for background jobs. It has a built-in/default implementation as well as Hangfire and RabbitMQ integrations.
+ABP provides an **abstraction** module and **several implementations** for background jobs. It has a built-in/default implementation as well as Hangfire, RabbitMQ and Quartz integrations.
 
 `Volo.Abp.BackgroundJobs.Abstractions` nuget package provides needed services to create background jobs and queue background job items. If your module only depend on this package, it can be independent from the actual implementation/integration.
 

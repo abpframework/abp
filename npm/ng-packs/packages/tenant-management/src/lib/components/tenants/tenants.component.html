@@ -93,7 +93,7 @@
                 <button
                   *abpPermission="'AbpTenantManagement.Tenants.ManageFeatures'"
                   ngbDropdownItem
-                  (click)="providerKey = data.id; visibleFeatures = true"
+                  (click)="openFeaturesModal(data.id)"
                 >
                   {{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}
                 </button>
