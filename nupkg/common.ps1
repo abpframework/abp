@@ -76,6 +76,7 @@ $projects = (
     "framework/src/Volo.Abp.FluentValidation",
     "framework/src/Volo.Abp.Guids",
     "framework/src/Volo.Abp.HangFire",
+    "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.Http.Abstractions",
     "framework/src/Volo.Abp.Http.Client",
     "framework/src/Volo.Abp.Http.Client.IdentityModel",
