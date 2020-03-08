@@ -42,7 +42,7 @@ public class BlogModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //Configure default connection string for the application
-        Configure<DbConnectionOptions>(options =>
+        Configure<AbpDbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = "......";
         });

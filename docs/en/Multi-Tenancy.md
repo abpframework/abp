@@ -168,7 +168,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ConfigurationTenantStoreOptions>(options =>
+            Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
@@ -214,7 +214,7 @@ namespace MyCompany.MyProject
         {
             var configuration = BuildConfiguration();
 
-            Configure<ConfigurationTenantStoreOptions>(configuration);
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
