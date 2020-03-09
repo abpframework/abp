@@ -269,7 +269,16 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "AspNetCore/Tag-Helpers/Index.md"
+              "items":[
+                {
+                  "text": "Live Demo",
+                  "path": "AspNetCore/Tag-Helpers/Index.md"
+                },
+                {
+                  "text": "Buttons",
+                  "path": "AspNetCore/Tag-Helpers/Buttons.md"
+                }
+              ]
             },
             {
               "text": "Widgets",
