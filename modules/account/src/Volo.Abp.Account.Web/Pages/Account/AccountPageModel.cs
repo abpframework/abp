@@ -14,6 +14,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
     {
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
+        public IdentityRoleManager RoleManager { get; set; }
 
         protected AccountPageModel()
         {
