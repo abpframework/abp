@@ -87,8 +87,15 @@ namespace Volo.Docs.Admin.Documents
         public async Task ReindexAsync()
         {
             var docs = await _documentRepository.GetListAsync();
+            var projects = await _projectRepository.GetListAsync();
             foreach (var doc in docs)
             {
+                var project = projects.FirstOrDefault(x => x.Id == doc.ProjectId);
+                if (project != null && (doc.FileName == project.NavigationDocumentName || doc.FileName == project.ParametersDocumentName))
+                {
+                    continue;
+                }
+                
                 await _documentFullSearch.AddOrUpdateAsync(doc);
             }
         }
