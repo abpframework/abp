@@ -136,8 +136,6 @@
     }
 
 
-    $(".post-content a[href^='http']").each(function () {
-        $(this).attr('target','_blank');
-    });
+    $(".post-content a[href^='http']").attr('target', '_blank');
 
 })(jQuery);
