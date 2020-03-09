@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Volo.Abp.Caching;
 using Volo.Docs.Documents.FullSearch.Elastic;
@@ -22,6 +23,7 @@ namespace Volo.Docs.Documents
         protected IDistributedCache<DocumentUpdateInfo> DocumentUpdateCache { get; }
         protected IHostEnvironment HostEnvironment { get; }
         private readonly IDocumentFullSearch _documentFullSearch;
+        private readonly DocsElasticSearchOptions _docsElasticSearchOptions;
 
         public DocumentAppService(
             IProjectRepository projectRepository,
@@ -31,7 +33,8 @@ namespace Volo.Docs.Documents
             IDistributedCache<DocumentResourceDto> resourceCache,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IHostEnvironment hostEnvironment, 
-            IDocumentFullSearch documentFullSearch)
+            IDocumentFullSearch documentFullSearch, 
+            IOptions<DocsElasticSearchOptions> docsElasticSearchOptions)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
@@ -41,6 +44,7 @@ namespace Volo.Docs.Documents
             DocumentUpdateCache = documentUpdateCache;
             HostEnvironment = hostEnvironment;
             _documentFullSearch = documentFullSearch;
+            _docsElasticSearchOptions = docsElasticSearchOptions.Value;
         }
 
         public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
@@ -143,6 +147,11 @@ namespace Volo.Docs.Documents
                 LanguageCode = esDoc.LanguageCode,
                 Highlight = esDoc.Highlight
             }).ToList();
+        }
+
+        public async Task<bool> FullSearchEnabledAsync()
+        {
+            return await Task.FromResult(_docsElasticSearchOptions.Enable);
         }
 
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)

@@ -55,6 +55,13 @@ namespace Volo.Docs.Documents
         }
 
         [HttpGet]
+        [Route("fullsearchenabled")]
+        public Task<bool> FullSearchEnabledAsync()
+        {
+            return DocumentAppService.FullSearchEnabledAsync();
+        }
+
+        [HttpGet]
         [Route("parameters")]
         public Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {

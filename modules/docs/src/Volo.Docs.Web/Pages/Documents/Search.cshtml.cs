@@ -41,6 +41,11 @@ namespace Volo.Docs.Pages.Documents
 
         public async Task<IActionResult> OnGetAsync(string keyword)
         {
+            if (!await _documentAppService.FullSearchEnabledAsync())
+            {
+                return RedirectToPage("Index");
+            }
+            
             KeyWord = keyword;
 
             Project = await _projectAppService.GetAsync(ProjectName);

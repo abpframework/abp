@@ -17,5 +17,7 @@ namespace Volo.Docs.Documents
         Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input);
 
         Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input);
+        
+        Task<bool> FullSearchEnabledAsync();
     }
 }
