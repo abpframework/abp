@@ -55,7 +55,7 @@ namespace Volo.Docs.Documents
         }
 
         [HttpGet]
-        [Route("fullsearchenabled")]
+        [Route("full-search-enabled")]
         public Task<bool> FullSearchEnabledAsync()
         {
             return DocumentAppService.FullSearchEnabledAsync();
