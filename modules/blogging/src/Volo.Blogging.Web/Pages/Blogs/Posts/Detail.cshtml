@@ -147,7 +147,7 @@
                                             </a>
                                         }
 
-                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
+                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                         {
                                             <span class="seperator">|</span>
                                             <a href="#" class="tag deleteLink" data-deleteid="@commentWithRepliesDto.Comment.Id">
