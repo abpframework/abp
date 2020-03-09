@@ -219,7 +219,8 @@
               "text": "Domain Services"
             },
             {
-              "text": "Specifications"
+              "text": "Specifications",
+              "path": "Specifications.md"
             }
           ]
         },
