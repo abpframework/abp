@@ -284,6 +284,32 @@
       ]
     },
     {
+      "text": "User Interface",
+      "items": [
+        {
+          "text": "Angular",
+          "items": [
+            {
+              "text": "Localization",
+              "path": "Angular/Localization/Index.md"
+            },
+            {
+              "text": "Adding a Settings Tab",
+              "path": "Angular/AddingASettingsTab/index.md"
+            },
+            {
+              "text": "Permission",
+              "path": "Angular/PermissionManagement/index.md"
+            },
+            {
+              "text": "Component Replacement",
+              "path": "Angular/ReplaceableComponents/index.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "text": "Data Access",
       "path": "Data-Access.md",
       "items": [
