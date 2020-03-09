@@ -38,7 +38,7 @@ public class YourModule : AbpModule
 
 ### Configuration
 
-See [Configuration](Background-Jobs-Quartz.md#Configuration).
+See [Configuration](Background-Jobs-Quartz#Configuration).
 
 ### Create a Background Worker
 
@@ -61,7 +61,7 @@ public class MyLogWorker : QuartzBackgroundWorkerBase
 }
 ````
 
-We simply implemented the Execute method to write a log. The background worker is a **singleton by default**. If you want, you can also implement a [dependency interface](Dependency-Injection.md#DependencyInterfaces) to register it as another life cycle.
+We simply implemented the Execute method to write a log. The background worker is a **singleton by default**. If you want, you can also implement a [dependency interface](Dependency-Injection#DependencyInterfaces) to register it as another life cycle.
 
 ### More
 
