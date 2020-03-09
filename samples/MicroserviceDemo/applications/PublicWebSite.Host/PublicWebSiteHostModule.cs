@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using MsDemo.Shared;
 using ProductManagement;
 using StackExchange.Redis;
 using Volo.Abp;
@@ -14,6 +15,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.UI.Navigation;
 using Volo.Blogging;
 
@@ -38,6 +40,11 @@ namespace PublicWebSite.Host
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            });
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
             });
 
             Configure<AbpNavigationOptions>(options =>
@@ -90,6 +97,11 @@ namespace PublicWebSite.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseMvcWithDefaultRouteAndArea();
         }
