@@ -135,4 +135,9 @@
         }, 500);
     }
 
+
+    $(".post-content a[href^='http']").each(function () {
+        $(this).attr('target','_blank');
+    });
+
 })(jQuery);
