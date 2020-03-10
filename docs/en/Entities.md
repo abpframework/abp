@@ -333,7 +333,7 @@ public class ExtraPropertiesDemoService : ITransientDependency
 }
 ````
 
-* Propert's **value is object** and can be any type of object (string, int, bool... etc).
+* Property's **value is object** and can be any type of object (string, int, bool... etc).
 * `GetProperty` returns `null` if given property was not set before.
 
 It would be a good practice to **define a constant** for the property name to prevent typo errors. It would be even a better practice to **define extension methods** to take the advantage of the intellisense. Example:
@@ -359,7 +359,7 @@ Then you can directly use `user.SetTitle("...")` and `user.GetTitle()` for an `I
 
 ### HasProperty & RemoveProperty Extension Methods
 
-* `HasProperty` is used to check if the object has a property set before. Most
+* `HasProperty` is used to check if the object has a property set before.
 * `RemoveProperty` is used to remove a property from the object. You can use this instead of setting a `null` value.
 
 ### How it is Implemented?
@@ -368,7 +368,7 @@ Then you can directly use `user.SetTitle("...")` and `user.GetTitle()` for an `I
 
 So, you can directly use the `ExtraProperties` property to use  the dictionary API, if you like. However, `SetProperty` and `GetProperty` methods are the recommended ways since they also check for `null`s.
 
-#### How is is Stored?
+#### How is it Stored?
 
 The way to store this dictionary in the database depends on the database provider you're using.
 
