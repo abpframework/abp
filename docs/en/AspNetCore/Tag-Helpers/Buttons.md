@@ -63,7 +63,7 @@ You can choose one of the size type listed below.
 
 ### `busy-text`
 
-`busy-text` is a string parameter. IT shows the text while the button is busy.
+`busy-text` is a string parameter. It shows the text while the button is busy.
 
 ### `text`
 

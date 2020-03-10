@@ -27,7 +27,7 @@ abp new Acme.BookStore
 * [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/)
 * [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
 * [Node v12+](https://nodejs.org)
-* [Yarn v1.19+](https://yarnpkg.com/)
+* [Yarn v1.19+](https://classic.yarnpkg.com/)
 
 ### 解决方案结构
 
