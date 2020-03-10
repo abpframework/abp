@@ -72,6 +72,8 @@ const routes: Routes = [
 ];
 ```
 
----
-
 Granted Policies are stored in the `auth` property of `ConfigState`.
+
+## See Also
+
+* [Authorization](../../Authorization.md)

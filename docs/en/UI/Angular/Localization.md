@@ -1,17 +1,11 @@
 ## Localization in Angular Projects
 
-There are three ways to use localization in your project:
-
-- [Localization pipe](#using-the-localization-pipe) in your component's template
-- [Localization service](#using-the-localization-service) in your TypeScript files.
-- [Config State](#using-the-config-state)
-
 Before you read about _the Localization Pipe_ and _the Localization Service_, you should know about localization keys.
 
 The Localization key format consists of 2 sections which are **Resource Name** and **Key**.
 `ResourceName::Key`
 
-> If you do not specify the resource name, it will be `defaultResourceName` which is declared in _environment.ts_
+> If you do not specify the resource name, it will be `defaultResourceName` which is declared in `environment.ts`
 
 ```js
 const environment = {
@@ -25,9 +19,9 @@ const environment = {
 So these two are the same:
 
 ```html
-<h1>{%{{ '::Key' | abpLocalization }}%}</h1>
+<h1>{%{{{ '::Key' | abpLocalization }}}%}</h1>
 
-<h1>{%{{ 'MyProjectName::Key' | abpLocalization }}%}</h1>
+<h1>{%{{{ 'MyProjectName::Key' | abpLocalization }}}%}</h1>
 ```
 
 ### Using the Localization Pipe
@@ -35,7 +29,7 @@ So these two are the same:
 You can use the `abpLocalization` pipe to get localized text as in this example:
 
 ```html
-<h1>{%{{ 'Resource::Key' | abpLocalization }}%}</h1>
+<h1>{%{{{ 'Resource::Key' | abpLocalization }}}%}</h1>
 ```
 
 The pipe will replace the key with the localized text.
@@ -43,7 +37,7 @@ The pipe will replace the key with the localized text.
 You can also specify a default value as shown below:
 
 ```html
-<h1>{%{{ { key: 'Resource::Key', defaultValue: 'Default Value' } | abpLocalization }}%}</h1>
+<h1>{%{{{ { key: 'Resource::Key', defaultValue: 'Default Value' } | abpLocalization }}}%}</h1>
 ```
 
 To use interpolation, you must give the values for interpolation as pipe parameters, for example:
@@ -53,7 +47,7 @@ Localization data is stored in key-value pairs:
 ```js
 {
   //...
-  AbpAccount: { // This is the resource name
+  AbpAccount: { // AbpAccount is the resource name
     Key: "Value",
     PagerInfo: "Showing {0} to {1} of {2} entries"
   }
@@ -63,7 +57,7 @@ Localization data is stored in key-value pairs:
 So we can use this key like this:
 
 ```html
-<h1>{%{{ 'AbpAccount::PagerInfo' | abpLocalization:'20':'30':'50' }}%}</h1>
+<h1>{%{{{ 'AbpAccount::PagerInfo' | abpLocalization:'20':'30':'50' }}}%}</h1>
 
 <!-- Output: Showing 20 to 30 of 50 entries -->
 ```
@@ -134,6 +128,9 @@ this.store.selectSnapshot(
 );
 ```
 
----
-
 Localization resources are stored in the `localization` property of `ConfigState`.
+
+
+## See Also
+
+* [Localization in ASP.NET Core](../../Localization.md)

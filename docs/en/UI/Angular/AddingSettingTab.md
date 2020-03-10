@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-your-custom-settings',
   template: `
-    your-custom-settings works! mySetting: {%{{ mySetting$ | async }}%}
+    your-custom-settings works! mySetting: {%{{{ mySetting$ | async }}}%}
   `,
 })
 export class YourCustomSettingsComponent {

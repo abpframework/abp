@@ -27,7 +27,7 @@ export class AppComponent {
 }
 ```
 
-![Example Usage](./images/inaction.gif)
+![Example Usage](./images/component-replacement.gif)
 
 ## Available Replaceable Components
 
