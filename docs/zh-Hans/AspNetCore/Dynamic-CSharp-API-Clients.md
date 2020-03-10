@@ -106,12 +106,12 @@ public class MyService : ITransientDependency
 
 ### RemoteServiceOptions
 
-默认情况下`RemoteServiceOptions`从`appsettings.json`获取.或者,你可以使用`Configure`方法来设置或重写它.如:
+默认情况下`AbpRemoteServiceOptions`从`appsettings.json`获取.或者,你可以使用`Configure`方法来设置或重写它.如:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    context.Services.Configure<RemoteServiceOptions>(options =>
+    context.Services.Configure<AbpRemoteServiceOptions>(options =>
     {
         options.RemoteServices.Default =
             new RemoteServiceConfiguration("http://localhost:53929/");
@@ -147,7 +147,7 @@ context.Services.AddHttpClientProxies(
 );
 ````
 
-`remoteServiceName`参数会匹配通过`RemoteServiceOptions`配置的服务端点.如果`BookStore`端点没有定义就会使用默认的`Default`端点.
+`remoteServiceName`参数会匹配通过`AbpRemoteServiceOptions`配置的服务端点.如果`BookStore`端点没有定义就会使用默认的`Default`端点.
 
 ### 作为默认服务
 
