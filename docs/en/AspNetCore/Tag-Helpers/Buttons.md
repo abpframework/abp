@@ -16,7 +16,6 @@ ABP framework has a special Tag Helper to create bootstrap button easily.
 * [`disabled`](#disabled)
 * [`icon-type`](#icon-type)
 
-
 ### `button-type`
 
 `button-type` is a selectable parameter. It's default value is `Default`.
@@ -89,7 +88,7 @@ You can choose one of the size type listed below.
 
 `icon-type` is a selectable parameter. It's default value is `FontAwesome`. You can create your own icon type provider and change it.
 
-You can choose one of the size type listed below.
+You can choose one of the icon type listed below.
 
 * `FontAwesome`
 * `Other`
