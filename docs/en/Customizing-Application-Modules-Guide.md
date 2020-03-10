@@ -80,4 +80,11 @@ See the [entities document](Entities.md) for more about the extra properties sys
 
 #### Creating a New Entity Maps to the Same Database Table/Collection
 
-TODO
+While using the extra properties approach is easy to use and suitable for some scenarios, it has some drawbacks described in the [entities document](Entities.md).
+
+Another approach can be creating your own entity mapped to the same database table (or collection for a MongoDB database).
+
+`AppUser` entity in the [application startup template](Startup-Templates/Application.md) already implements this approach. [EF Core Migrations document](Entity-Framework-Core-Migrations.md) describes how to implement it and manage database migrations in such a case. It is also possible for MongoDB, while this time you won't deal with the database migration problems.
+
+#### Creating a New Entity with Its Own Database Table/Collection
+
