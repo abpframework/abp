@@ -49,4 +49,35 @@ One alternative scenario could be re-packaging the module source code (as NuGet/
 
 This section suggests some approaches if you decided to use pre-built application modules as NuGet/NPM package references.
 
+### Extending Entities
+
+In some cases, you may want to add some additional properties (and database fields) for an entity defined in a depended module. This section will cover some different approaches to make this possible.
+
+#### Extra Properties
+
+[Extra properties](Entities.md) is a way of storing some additional data on an entity without changing it. The entity should implement the `IHasExtraProperties` interface to allow it. All the aggregate root entities defined in the pre-built modules implement the `IHasExtraProperties` interface, so you can store extra properties on these entities.
+
+Example:
+
+````csharp
+//SET AN EXTRA PROPERTY
+var user = await _identityUserRepository.GetAsync(userId);
+user.SetProperty("Title", "My custom title value!");
+await _identityUserRepository.UpdateAsync(user);
+
+//GET AN EXTRA PROPERTY
+var user = await _identityUserRepository.GetAsync(userId);
+return user.GetProperty<string>("Title");
+````
+
+This approach is very easy to use and available out of the box. No extra code needed. You can store more than one property at the same time by using different property names (like `Title` here).
+
+Extra properties are stored as a single `JSON` formatted string value in the database for the EF Core. For MongoDB, they are stored as separate fields of the document.
+
+See the [entities document](Entities.md) for more about the extra properties system.
+
+> It is possible to perform a **business logic** based on the value of an extra property. You can **override** a service method and get or set the value as shown above. Overriding services will be discussed below.
+
+#### Creating a New Entity Maps to the Same Database Table/Collection
+
 TODO

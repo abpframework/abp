@@ -335,6 +335,7 @@ public class ExtraPropertiesDemoService : ITransientDependency
 
 * Property's **value is object** and can be any type of object (string, int, bool... etc).
 * `GetProperty` returns `null` if given property was not set before.
+* You can store more than one property at the same time by using different **property names** (like `Title` here).
 
 It would be a good practice to **define a constant** for the property name to prevent typo errors. It would be even a better practice to **define extension methods** to take the advantage of the intellisense. Example:
 
