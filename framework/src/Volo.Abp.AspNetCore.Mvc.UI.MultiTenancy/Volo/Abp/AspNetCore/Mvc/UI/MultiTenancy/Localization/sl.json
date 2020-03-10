@@ -5,7 +5,7 @@
     "Tenant": "Najemnik",
     "Switch": "Zamenjaj",
     "Name": "Naziv",
-    "SwitchTenantHint": "Pustite polje z imenom prazno, da preklopite na gostiteljsko stran.",
+    "SwitchTenantHint": "Pustite polje z imenom prazno, da preklopite na stran za upravnike.",
     "SwitchTenant": "Zamenjaj najemnika",
     "NotSelected": "Ni izbran"
   }
