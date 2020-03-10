@@ -54,8 +54,17 @@
       ]
     },
     {
-      "text": "ASP.NET Boilerplate Migration Guide",
-      "path": "AspNet-Boilerplate-Migration-Guide.md"
+      "text": "Guides",
+      "items": [
+        {
+          "text": "Customizing the Application Modules",
+          "path": "Customizing-Application-Modules-Guide.md"
+        },
+        {
+          "text": "Migrating from the ASP.NET Boilerplate",
+          "path": "AspNet-Boilerplate-Migration-Guide.md"
+        }
+      ]
     },
     {
       "text": "CLI",
