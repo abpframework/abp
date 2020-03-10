@@ -1,10 +1,12 @@
-## Permission Management in Angular Projects
+## Permissions in Angular Projects
+
+A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](Authorization.md) document.
 
 You can get permission of authenticated user using `getGrantedPolicy` selector of `ConfigState`.
 
 You can get permission as boolean value from store:
 
-```ts
+```js
 import { Store } from '@ngxs/store';
 import { ConfigState } from '../states';
 
@@ -21,7 +23,7 @@ export class YourComponent {
 
 Or you can get it via `ConfigStateService`:
 
-```ts
+```js
 import { ConfigStateService } from '../services/config-state.service';
 
 export class YourComponent {
@@ -55,7 +57,7 @@ You can use `PermissionGuard` if you want to control authenticated user's permis
 
 Add `requiredPolicy` to the `routes` property in your routing module.
 
-```ts
+```js
 const routes: Routes = [
   {
     path: 'path',

@@ -4,14 +4,14 @@ There are several settings tabs from different modules. You can add custom setti
 
 1. Create a Component
 
-```ts
+```js
 import { Select } from '@ngxs/store';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-your-custom-settings',
   template: `
-    your-custom-settings works! mySetting: {{ mySetting$ | async }}
+    your-custom-settings works! mySetting: {%{{ mySetting$ | async }}%}
   `,
 })
 export class YourCustomSettingsComponent {
@@ -24,7 +24,7 @@ export class YourCustomSettingsComponent {
 
 3. Open the `app.component.ts` and add the below content to the `ngOnInit`
 
-```ts
+```js
 import { addSettingTab } from '@abp/ng.theme.shared';
 // ...
 
