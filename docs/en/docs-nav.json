@@ -241,43 +241,60 @@
       ]
     },
     {
-      "text": "ASP.NET Core",
+      "text": "API",
       "items": [
         {
-          "text": "API",
+          "text": "Auto API Controllers",
+          "path": "API/Auto-API-Controllers.md"
+        },
+        {
+          "text": "Dynamic C# API Clients",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
+        }
+      ]
+    },
+    {
+      "text": "User Interface",
+      "items": [
+        {
+          "text": "ASP.NET Core",
           "items": [
             {
-              "text": "Auto API Controllers",
-              "path": "AspNetCore/Auto-API-Controllers.md"
+              "text": "Client Side Package Management",
+              "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
-              "text": "Dynamic C# API Clients",
-              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+              "text": "Bundling & Minification",
+              "path": "UI/AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "Widgets",
+              "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "Theming",
+              "path": "UI/AspNetCore/Theming.md"
             }
           ]
         },
         {
-          "text": "User Interface",
+          "text": "Angular",
           "items": [
             {
-              "text": "Client Side Package Management",
-              "path": "AspNetCore/Client-Side-Package-Management.md"
+              "text": "Localization",
+              "path": "UI/Angular/Localization.md"
             },
             {
-              "text": "Bundling & Minification",
-              "path": "AspNetCore/Bundling-Minification.md"
+              "text": "Permission Management",
+              "path": "UI/Angular/PermissionManagement.md"
             },
             {
-              "text": "Tag Helpers",
-              "path": "AspNetCore/Tag-Helpers/Index.md"
-            },
-            {
-              "text": "Widgets",
-              "path": "AspNetCore/Widgets.md"
-            },
-            {
-              "text": "Theming",
-              "path": "AspNetCore/Theming.md"
+              "text": "Component Replacement",
+              "path": "UI/Angular/ComponentReplacement.md"
             }
           ]
         }

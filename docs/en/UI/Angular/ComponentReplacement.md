@@ -1,4 +1,4 @@
-# Component Replacement in Angular
+# Component Replacement
 
 You can replace some ABP components with your custom components.
 

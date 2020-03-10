@@ -12,8 +12,8 @@ One of the major goals of the ABP framework is to provide a convenient infrastru
 * Offers an [architectural model](Best-Practices/Module-Architecture.md) to develop your modules to be compatible to microservice development and deployment.
 * Provides [best practices guide](Best-Practices/Index.md) to develop your module standards-compliance.
 * Provides base infrastructure to implement [Domain Driven Design](Domain-Driven-Design.md) in your microservices.
-* Provide services to [automatically create REST-style APIs](AspNetCore/Auto-API-Controllers.md) from your application services.
-* Provide services to [automatically create C# API clients](AspNetCore/Dynamic-CSharp-API-Clients.md) that makes easy to consume your services from another service/application.
+* Provide services to [automatically create REST-style APIs](API/Auto-API-Controllers.md) from your application services.
+* Provide services to [automatically create C# API clients](API/Dynamic-CSharp-API-Clients.md) that makes easy to consume your services from another service/application.
 * Provides a [distributed event bus](Event-Bus.md) to communicate your services.
 * Provides many other services to make your daily development easier.
 

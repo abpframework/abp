@@ -254,7 +254,7 @@ You may need to check a policy/permission on the client side. For ASP.NET Core M
 abp.auth.isGranted('MyPermissionName');
 ````
 
-See [abp.auth](AspNetCore/JavaScript-API/Auth.md) API documentation for details.
+See [abp.auth](API/JavaScript-API/Auth.md) API documentation for details.
 
 ## Permission Management
 
@@ -366,4 +366,4 @@ This is already done for the startup template integration tests.
 ## See Also
 
 * [Permission Management Module](Modules/Permission-Management.md)
-* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](AspNetCore/JavaScript-API/Auth.md)
+* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](API/JavaScript-API/Auth.md)
