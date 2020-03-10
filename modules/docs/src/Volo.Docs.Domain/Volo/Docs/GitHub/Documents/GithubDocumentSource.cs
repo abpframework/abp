@@ -21,13 +21,15 @@ namespace Volo.Docs.GitHub.Documents
         public const string Type = "GitHub";
 
         private readonly IGithubRepositoryManager _githubRepositoryManager;
+        private readonly IGithubPatchAnalyzer _githubPatchAnalyzer;
 
-        public GithubDocumentSource(IGithubRepositoryManager githubRepositoryManager)
+        public GithubDocumentSource(IGithubRepositoryManager githubRepositoryManager, IGithubPatchAnalyzer githubPatchAnalyzer)
         {
             _githubRepositoryManager = githubRepositoryManager;
+            _githubPatchAnalyzer = githubPatchAnalyzer;
         }
         
-        public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version)
+        public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version, DateTime? lastKnownSignificantUpdateTime = null)
         {
             var token = project.GetGitHubAccessTokenOrNull();
             var rootUrl = project.GetGitHubUrl(version);
@@ -46,7 +48,9 @@ namespace Volo.Docs.GitHub.Documents
                 fileName = documentName.Substring(documentName.LastIndexOf('/') + 1);
             }
 
-            var fileCommits = await GetFileCommitsAsync(project, version, $"docs/{languageCode}/{documentName}");
+            var fileCommits = await GetFileCommitsAsync(project, version, project.GetGitHubInnerUrl(languageCode, documentName));
+
+            var documentCreationTime = fileCommits.LastOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue;
 
             var document=  new Document(GuidGenerator.Create(), 
                 project.Id, 
@@ -60,9 +64,10 @@ namespace Volo.Docs.GitHub.Documents
                 rootUrl,
                 rawRootUrl, 
                 localDirectory,
-                fileCommits.LastOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
+                documentCreationTime,
                 fileCommits.FirstOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
-                DateTime.Now);
+                DateTime.Now,
+                GetLastSignificantUpdateTime(fileCommits, project.GetGitHubInnerUrl(languageCode, documentName), lastKnownSignificantUpdateTime, documentCreationTime) ?? lastKnownSignificantUpdateTime);
 
             var authors =  fileCommits
                 .Where(x => x.Author != null)
@@ -80,6 +85,24 @@ namespace Volo.Docs.GitHub.Documents
             }
 
             return document;
+        }
+
+        private DateTime? GetLastSignificantUpdateTime(IReadOnlyList<GitHubCommit> fileCommits, string fileName,
+            DateTime? lastKnownSignificantUpdateTime, DateTime documentCreationTime)
+        {
+            var commitsToEvaluate = (lastKnownSignificantUpdateTime != null
+                ? fileCommits.Where(c => c.Commit.Author.Date.DateTime > lastKnownSignificantUpdateTime)
+                :fileCommits).Where(c=>c.Commit.Author.Date.DateTime > DateTime.Now.AddDays(-14) && c.Commit.Author.Date.DateTime > documentCreationTime);
+
+            foreach (var gitHubCommit in commitsToEvaluate)
+            {
+                if (_githubPatchAnalyzer.HasPatchSignificantChanges(gitHubCommit.Files.First(f=>f.Filename == fileName).Patch))
+                {
+                    return gitHubCommit.Commit.Author.Date.DateTime;
+                }
+            }
+
+            return null;
         }
 
         public async Task<List<VersionInfo>> GetVersionsAsync(Project project)
