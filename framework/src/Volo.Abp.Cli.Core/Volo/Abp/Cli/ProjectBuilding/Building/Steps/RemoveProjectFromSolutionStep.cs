@@ -27,12 +27,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             new RemoveFolderStep(_projectFolderPath).Execute(context);
             var solutionFile = context.GetFile(_solutionFilePath);
             solutionFile.NormalizeLineEndings();
-            solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList()));
+            solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList(), context.BuildArgs));
         }
 
-        private List<string> RemoveProject(List<string> solutionFileLines)
+        private List<string> RemoveProject(List<string> solutionFileLines, ProjectBuildArgs args)
         {
-            var projectKey = FindProjectKey(solutionFileLines);
+            var projectKey = FindProjectKey(solutionFileLines, args);
+            if (projectKey == null)
+            {
+                return solutionFileLines;
+            }
+
             var newSolutionFileLines = new List<string>();
             var firstOccurence = true;
 
@@ -55,7 +60,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             return newSolutionFileLines;
         }
 
-        private string FindProjectKey(List<string> solutionFileLines)
+        private string FindProjectKey(List<string> solutionFileLines, ProjectBuildArgs args)
         {
             foreach (var solutionFileLine in solutionFileLines)
             {
@@ -67,7 +72,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 }
             }
 
-            throw new ApplicationException($"The solution file '{_solutionFilePath}' does not contain a project '{_projectName}'");
+            if (args.TemplateSource.IsNullOrEmpty())
+            {
+                throw new ApplicationException($"The solution file '{_solutionFilePath}' does not contain a project '{_projectName}'");
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
