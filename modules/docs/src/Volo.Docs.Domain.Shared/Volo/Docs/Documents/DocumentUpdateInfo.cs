@@ -11,8 +11,6 @@ namespace Volo.Docs.Documents
 
         public virtual DateTime LastUpdatedTime { get; set; }
 
-        public virtual bool HasSignificantUpdates { get; set; }
-
         public DateTime? LastSignificantUpdateTime { get; set; }
     }
 }

@@ -104,9 +104,16 @@ namespace Volo.Docs.GitHub.Documents
             DateTime? lastKnownSignificantUpdateTime,
             DateTime documentCreationTime)
         {
+            if (!fileCommits.Any())
+            {
+                return null;
+            }
+
+            var fileCommitsAfterCreation = fileCommits.Take(fileCommits.Count - 1);
+
             var commitsToEvaluate = (lastKnownSignificantUpdateTime != null
-                ? fileCommits.Where(c => c.Commit.Author.Date.DateTime > lastKnownSignificantUpdateTime)
-                : fileCommits).Where(c => c.Commit.Author.Date.DateTime > DateTime.Now.AddDays(-14) && c.Commit.Author.Date.DateTime > documentCreationTime);
+                ? fileCommitsAfterCreation.Where(c => c.Commit.Author.Date.DateTime > lastKnownSignificantUpdateTime)
+                : fileCommitsAfterCreation).Where(c => c.Commit.Author.Date.DateTime > DateTime.Now.AddDays(-14));
 
             foreach (var gitHubCommit in commitsToEvaluate)
             {
