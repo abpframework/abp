@@ -18,7 +18,8 @@ namespace Volo.Abp.Account
         typeof(AbpAuthorizationModule),
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpAccountApplicationModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule)
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule)
     )]
     public class AbpAccountApplicationTestModule : AbpModule
     {
