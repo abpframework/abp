@@ -203,6 +203,8 @@ Replacing a service is possible for any type of class registered to the dependen
 
 You have different options can be used based on your requirement those will be explained in the next sections.
 
+> Notice that some service methods may not be virtual, so you may not be able to override. We make all virtual by design. If you find any method that is not overridable, please [create an issue](https://github.com/abpframework/abp/issues/new) or do it yourself and send a **pull request** on GitHub.
+
 #### Replacing an Interface
 
 If given service defines an interface, like the `IdentityUserAppService` class implements the `IIdentityAppService`, you can re-implement the same interface and replace the current implementation by your class. Example:
@@ -353,5 +355,53 @@ This example class inherits from the `IdentityUserManager` and overrides the `Cr
 Check the [localization system](Localization.md) to learn how to localize the error messages.
 
 ##### Example: Overriding a Page Model
+
+````csharp
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.Web.Pages.Identity.Users;
+
+namespace Acme.BookStore.Web.Pages.Identity.Users
+{
+    [Dependency(ReplaceServices = true)]
+    [ExposeServices(typeof(EditModalModel))]
+    public class MyEditModalModel : EditModalModel
+    {
+        public MyEditModalModel(
+            IIdentityUserAppService identityUserAppService, 
+            IIdentityRoleAppService identityRoleAppService
+            ) : base(
+                identityUserAppService, 
+                identityRoleAppService)
+        {
+        }
+
+        public override async Task<IActionResult> OnPostAsync()
+        {
+            //TODO: Additional logic
+            await base.OnPostAsync();
+            //TODO: Additional logic
+        }
+    }
+}
+````
+
+This class replaces `EditModalModel` for the users and overrides the `OnPostAsync` method.
+
+##### Overriding Other Classes
+
+Overriding controllers, framework services, view component classes and any other type of classes registered to dependency injection can be overridden just like the examples above.
+
+### Overriding the User Interface
+
+You may want to override a razor page, a razor component, a JavaScript, CSS or an image file of your depended module.
+
+Overriding the UI completely depends on the UI framework you're using.
+
+TODO
+
+### Overriding the Theme
 
 TODO
