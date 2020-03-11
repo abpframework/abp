@@ -290,11 +290,11 @@
             },
             {
               "text": "Permission Management",
-              "path": "UI/Angular/PermissionManagement.md"
+              "path": "UI/Angular/Permission-Management.md"
             },
             {
               "text": "Component Replacement",
-              "path": "UI/Angular/ComponentReplacement.md"
+              "path": "UI/Angular/Component-Replacement.md"
             }
           ]
         }

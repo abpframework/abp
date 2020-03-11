@@ -367,4 +367,4 @@ This is already done for the startup template integration tests.
 
 * [Permission Management Module](Modules/Permission-Management.md)
 * [ASP.NET Core MVC / Razor Pages JavaScript Auth API](API/JavaScript-API/Auth.md)
-* [Permissions in Angular Projects](UI/Angular/PermissionManagement.md)
+* [Permission Management in Angular UI](UI/Angular/Permission-Management.md)

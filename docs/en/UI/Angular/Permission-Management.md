@@ -1,6 +1,6 @@
-## Permissions in Angular Projects
+# Permission Management
 
-A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](Authorization.md) document.
+A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](../../Authorization.md) document.
 
 You can get permission of authenticated user using `getGrantedPolicy` selector of `ConfigState`.
 
@@ -37,7 +37,7 @@ export class YourComponent {
 }
 ```
 
-### Permission Directive
+## Permission Directive
 
 You can use the `PermissionDirective` to manage visibility of a DOM Element accordingly to user's permission.
 
@@ -51,7 +51,7 @@ As shown above you can remove elements from DOM with `abpPermission` structural 
 
 The directive can also be used as an attribute directive but we recommend to you to use it as a structural directive.
 
-### Permission Guard
+## Permission Guard
 
 You can use `PermissionGuard` if you want to control authenticated user's permission to access to the route during navigation.
 
@@ -74,6 +74,6 @@ const routes: Routes = [
 
 Granted Policies are stored in the `auth` property of `ConfigState`.
 
-## See Also
+## What's Next?
 
-* [Authorization](../../Authorization.md)
+* [Component Replacement](./Component-Replacement.md)

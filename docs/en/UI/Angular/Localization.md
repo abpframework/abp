@@ -1,4 +1,4 @@
-## Localization in Angular Projects
+# Localization
 
 Before you read about _the Localization Pipe_ and _the Localization Service_, you should know about localization keys.
 
@@ -24,7 +24,7 @@ So these two are the same:
 <h1>{%{{{ 'MyProjectName::Key' | abpLocalization }}}%}</h1>
 ```
 
-### Using the Localization Pipe
+## Using the Localization Pipe
 
 You can use the `abpLocalization` pipe to get localized text as in this example:
 
