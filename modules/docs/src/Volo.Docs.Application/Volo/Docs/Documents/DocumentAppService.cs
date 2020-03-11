@@ -246,11 +246,6 @@ namespace Volo.Docs.Documents
             return CreateDocumentWithDetailsDto(project, document);
         }
 
-        private bool DoesDocuemntHasSignificantUpdates(Document sourceDocument, Document oldDocument)
-        {
-            throw new NotImplementedException();
-        }
-
         protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
         {
             var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
