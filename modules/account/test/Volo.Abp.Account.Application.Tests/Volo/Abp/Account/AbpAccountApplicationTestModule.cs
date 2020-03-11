@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using Volo.Abp.Authorization;
+using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -12,9 +13,12 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 namespace Volo.Abp.Account
 {
     [DependsOn(
+        typeof(AbpAutofacModule),
+        typeof(AbpTestBaseModule),
+        typeof(AbpAuthorizationModule),
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpAccountApplicationModule),
-        typeof(AbpIdentityDomainTestModule)
+        typeof(AbpIdentityEntityFrameworkCoreModule)
     )]
     public class AbpAccountApplicationTestModule : AbpModule
     {
@@ -30,7 +34,6 @@ namespace Volo.Abp.Account
                 });
             });
         }
-
         private static SqliteConnection CreateDatabaseAndGetConnection()
         {
             var connection = new SqliteConnection("Data Source=:memory:");
