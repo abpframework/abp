@@ -38,7 +38,7 @@ Note that this document covers `Entity Framework Core` provider but you can also
 
 ### 2- Running The Empty Application
 
-After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Application.Contrawcts`, `DbMigrator`, `Domain`, `Domain.Shared`, `EntityFrameworkCore`, `EntityFrameworkCore.DbMigations`, `HttpApi`, `HttpApi.Client` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
+After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Application.Contracts`, `DbMigrator`, `Domain`, `Domain.Shared`, `EntityFrameworkCore`, `EntityFrameworkCore.DbMigations`, `HttpApi`, `HttpApi.Client` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
 
 ![Create a new project](../images/docs-module_solution-explorer.png)
 
@@ -62,21 +62,27 @@ To login your website enter `admin` as the username and `1q2w3E*` as the passwor
 
 Docs module packages are hosted on NuGet. There are 4 packages that needs be to installed to your application. Each package has to be installed to the relevant project.  
 
-Install [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Domain` project.
+It is recommended to use the ABP CLI to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
 
-`Install-Package Volo.Docs.Domain`
+`abp add-module Volo.Docs`
 
-Install [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget package to `Acme.MyProject.EntityFrameworkCore` project.
+Or you can also manually install nuget package to each project:
 
-`Install-Package Volo.Docs.EntityFrameworkCore`
+* Install [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Domain` project.
 
-Install [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget package to `Acme.MyProject.Application` project.
+  `Install-Package Volo.Docs.Domain`
 
-`Install-Package Volo.Docs.Application`
+* Install [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget package to `Acme.MyProject.EntityFrameworkCore` project.
 
-Install [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Web` project.
+  `Install-Package Volo.Docs.EntityFrameworkCore`
 
-`Install-Package Volo.Docs.Web`
+* Install [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget package to `Acme.MyProject.Application` project.
+
+  `Install-Package Volo.Docs.Application`
+
+* Install [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Web` project.
+
+  `Install-Package Volo.Docs.Web`
 
 ### 3- Adding Module Dependencies
 
@@ -165,33 +171,45 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
 
 If you choose Entity Framework as your database provider, you need to configure the Docs Module. To do this;
 
-- Open `QaDocDbContextModelCreatingExtensions.cs` and add `modelBuilder.ConfigureDocs()` to the `ConfigureMyProject()`.
+- Open `MyProjectMigrationsDbContext.cs` and add `builder.ConfigureDocs()` to the `OnModelCreating()`.
 
   ```csharp
-  public static class QaDocDbContextModelCreatingExtensions
-  {
-      public static void ConfigureMyProject(this ModelBuilder builder)
-      {
-          Check.NotNull(builder, nameof(builder));
+  public class MyProjectMigrationsDbContext : AbpDbContext<MyProjectMigrationsDbContext>
+    {
+        public MyProjectMigrationsDbContext(DbContextOptions<MyProjectMigrationsDbContext> options)
+            : base(options)
+        {
 
-          /* Configure your own tables/entities inside here */
+        }
 
-          //builder.Entity<YourEntity>(b =>
-          //{
-          //    b.ToTable(QaDocConsts.DbTablePrefix + "YourEntities", QaDocConsts.DbSchema);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-          //    //...
-          //});
+            /* Include modules to your migration db context */
 
-          builder.ConfigureDocs();
-      }
+            builder.ConfigurePermissionManagement();
+            builder.ConfigureSettingManagement();
+            builder.ConfigureBackgroundJobs();
+            builder.ConfigureAuditLogging();
+            builder.ConfigureIdentity();
+            builder.ConfigureIdentityServer();
+            builder.ConfigureFeatureManagement();
+            builder.ConfigureTenantManagement();
+            builder.ConfigureDocs(); //Add this line to configure the Docs Module
 
-      public static void ConfigureCustomUserProperties<TUser>(this EntityTypeBuilder<TUser> b)
-          where TUser: class, IUser
-      {
-          //b.Property<string>(nameof(AppUser.MyProperty))...
-      }
-  }
+            /* Configure customizations for entities from the modules included  */
+
+            builder.Entity<IdentityUser>(b =>
+            {
+                b.ConfigureCustomUserProperties();
+            });
+
+            /* Configure your own tables/entities inside the ConfigureQaDoc method */
+
+            builder.ConfigureMyProject();
+        }
+    }
   ```
 
 * Open `Package Manager Console` in `Visual Studio` and choose `Acme.MyProject.EntityFrameworkCore.DbMigrations` as default project. Then write the below command to add the migration for Docs Module.
@@ -310,7 +328,7 @@ You can use [ABP Framework](https://github.com/abpframework/abp/) GitHub documen
 
   Note that `GitHubAccessToken` is masked with `***`. It's a private token that you must get it from GitHub. See https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
 
-- MainWebsiteUrl: `/` 
+- MainWebsiteUrl: `/`
 
 - LatestVersionBranchName: `master`
 

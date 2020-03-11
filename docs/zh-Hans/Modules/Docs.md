@@ -60,21 +60,28 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
 ### 2- 引用文档模块包
 
-文档模块包托管在Nuget上面. 需要有四个包安装到你的应用程序中. 每个包必须安装到相关的项目.  
+文档模块包托管在Nuget上面. 需要有四个包安装到你的应用程序中. 每个包必须安装到相关的项目.
 
-安装[Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget包到 `Acme.MyProject.Domain` 项目.
+建议使用ABP CLI安装模块,在解决方案文件 (`.sln`) 目录打开 `CMD` 窗口,运行以下命令:
 
-`Install-Package Volo.Docs.Domain`
+`abp add-module Volo.Docs`
 
-安装[Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget包到 `Acme.MyProject.EntityFrameworkCore` 项目.
+或者你也可以手动安装nuget包到每个项目:
 
-`Install-Package Volo.Docs.EntityFrameworkCore`
+* 安装[Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget包到 `Acme.MyProject.Domain` 项目.
 
-安装[Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget包到 `Acme.MyProject.Application` 项目.
+  `Install-Package Volo.Docs.Domain`
 
-`Install-Package Volo.Docs.Application`
+* 安装[Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget包到 `Acme.MyProject.EntityFrameworkCore` 项目.
 
-安装[Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget包到 `Acme.MyProject.Web` 项目.
+  `Install-Package Volo.Docs.EntityFrameworkCore`
+
+* 安装[Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget包到 `Acme.MyProject.Application` 项目.
+
+  `Install-Package Volo.Docs.Application`
+
+* 安装[Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget包到 `Acme.MyProject.Web` 项目.
+  `Install-Package Volo.Docs.Web`
 
 ### 3- 添加模块依赖
 
@@ -164,33 +171,45 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
 如果你选择了Entity Framework 做为数据库供应者,你需要配置文档模块. 做以下操作;
 
-* 打开 `QaDocDbContextModelCreatingExtensions.cs` 并且添加 `modelBuilder.ConfigureDocs()` 到 `ConfigureMyProject()` 方法中
+* 打开 `MyProjectMigrationsDbContext.cs` 并且添加 `builder.ConfigureDocs()` 到 `OnModelCreating()` 方法中
 
   ```csharp
-  public static class QaDocDbContextModelCreatingExtensions
-  {
-      public static void ConfigureMyProject(this ModelBuilder builder)
-      {
-          Check.NotNull(builder, nameof(builder));
+  public class MyProjectMigrationsDbContext : AbpDbContext<MyProjectMigrationsDbContext>
+    {
+        public MyProjectMigrationsDbContext(DbContextOptions<MyProjectMigrationsDbContext> options)
+            : base(options)
+        {
 
-          /* Configure your own tables/entities inside here */
+        }
 
-          //builder.Entity<YourEntity>(b =>
-          //{
-          //    b.ToTable(QaDocConsts.DbTablePrefix + "YourEntities", QaDocConsts.DbSchema);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-          //    //...
-          //});
+            /* Include modules to your migration db context */
 
-          builder.ConfigureDocs();
-      }
+            builder.ConfigurePermissionManagement();
+            builder.ConfigureSettingManagement();
+            builder.ConfigureBackgroundJobs();
+            builder.ConfigureAuditLogging();
+            builder.ConfigureIdentity();
+            builder.ConfigureIdentityServer();
+            builder.ConfigureFeatureManagement();
+            builder.ConfigureTenantManagement();
+            builder.ConfigureDocs(); //Add this line to configure the Docs Module
 
-      public static void ConfigureCustomUserProperties<TUser>(this EntityTypeBuilder<TUser> b)
-          where TUser: class, IUser
-      {
-          //b.Property<string>(nameof(AppUser.MyProperty))...
-      }
-  }
+            /* Configure customizations for entities from the modules included  */
+
+            builder.Entity<IdentityUser>(b =>
+            {
+                b.ConfigureCustomUserProperties();
+            });
+
+            /* Configure your own tables/entities inside the ConfigureQaDoc method */
+
+            builder.ConfigureMyProject();
+        }
+    }
   ```
 
 * 打开 `Visual Studio` 的 `包管理控制台` 选择 `Acme.MyProject.EntityFrameworkCore.DbMigrations` 做为默认项目. 然后编写以下命令为文档模块添加迁移.
