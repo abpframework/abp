@@ -276,7 +276,7 @@ Backend admin application uses the Identity and Product microservices for all op
 
 ##### HTTP Clients
 
-ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
+ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
 
 For that purpose, `BackendAdminAppHostModule` class declares dependencies for `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule`.
 
@@ -1038,7 +1038,7 @@ Product Management is a module that consists of several layers and packages/proj
 * `ProductManagement.Application` contains the implementation of application services.
 * `ProductManagement.EntityFrameworkCore` contains DbConext and other EF Core related classes and configuration.
 * `ProductManagement.HttpApi` contains API Controllers.
-* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework.
+* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature of the ABP framework.
 * `ProductManagement.Web` contains the UI elements (pages, scripts, styles... etc).
 
 By the help of this layering, it is possible to use the same module as a package reference in a monolithic application or use as a service that runs in another server. It is possible to separate UI (Web) and API layers, so they run in different servers.
