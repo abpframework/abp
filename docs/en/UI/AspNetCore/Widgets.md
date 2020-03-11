@@ -1,3 +1,7 @@
+# Widgets
+
+ABP provides a model and infrastructure to create **reusable widgets**. Widget system is an extension to [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components). Widgets are especially useful when you want to;
+
 * Have **scripts & styles** dependencies for your widget.
 * Create **dashboards** with widgets used inside.
 * Define widgets in reusable **[modules](../Module-Development-Basics.md)**.
