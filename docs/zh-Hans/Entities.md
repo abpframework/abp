@@ -287,6 +287,99 @@ ABP框架不强制你应用任何DDD规则或模式.但是,当你准备应用的
 
 所有这些基类也有 `... WithUser`，像 `FullAuditedAggregateRootWithUser<TUser>` 和 `FullAuditedAggregateRootWithUser<TKey, TUser>`. 这样就可以将导航属性添加到你的用户实体. 但在聚合根之间添加导航属性不是一个好做法,所以这种用法是不建议的(除非你使用EF Core之类的ORM可以很好地支持这种情况,并且你真的需要它. 请记住这种方法不适用于NoSQL数据库(如MongoDB),你必须真正实现聚合模式）.
 
+## 额外的属性
+
+ABP定义了 `IHasExtraProperties` 接口,可以由实体实现,以便能够动态地设置和获取的实体属性. `AggregateRoot` 基类已经实现了 `IHasExtraProperties` 接口. 如果你从这个类(或者上面定义的一个相关审计类)派生,那么你可以直接使用API​.
+
+### GetProperty 和 SetProperty 扩展方法
+
+这些扩展方法是获取和设置实体数据的推荐方法. 例:
+
+````csharp
+public class ExtraPropertiesDemoService : ITransientDependency
+{
+    private readonly IIdentityUserRepository _identityUserRepository;
+
+    public ExtraPropertiesDemoService(IIdentityUserRepository identityUserRepository)
+    {
+        _identityUserRepository = identityUserRepository;
+    }
+
+    public async Task SetTitle(Guid userId, string title)
+    {
+        var user = await _identityUserRepository.GetAsync(userId);
+
+        //SET A PROPERTY
+        user.SetProperty("Title", title);
+
+        await _identityUserRepository.UpdateAsync(user);
+    }
+
+    public async Task<string> GetTitle(Guid userId)
+    {
+        var user = await _identityUserRepository.GetAsync(userId);
+
+        //GET A PROPERTY
+        return user.GetProperty<string>("Title");
+    }
+}
+````
+
+* 属性的**值是object**,可以是任何类型的对象(string,int,bool...等).
+* 如果给定的属性未设置值, `GetProperty` 方法会返回 `null`.
+* 你可以使用不同的**属性名称**(如这里的`Title`)同时存储多个属性.
+
+最好为属性名**定义一个常量**防止拼写错误. 最佳方式是定义**扩展方法**来利用智能感知. 例:
+
+````csharp
+public static class IdentityUserExtensions
+{
+    private const string TitlePropertyName = "Title";
+
+    public static void SetTitle(this IdentityUser user, string title)
+    {
+        user.SetProperty(TitlePropertyName, title);
+    }
+
+    public static string GetTitle(this IdentityUser user)
+    {
+        return user.GetProperty<string>(TitlePropertyName);
+    }
+}
+````
+
+然后你可以直接使用 `IdentityUser` 对象的 `user.SetTitle("...")` 和 `user.GetTitle()`.
+
+### HasProperty 和 RemoveProperty 扩展方法
+
+* `HasProperty` 用于检查对象是否设置了属性.
+* `RemoveProperty` 用于从对象中删除属性. 你可以使用它来替代设置 `null` 值.
+
+### 它是如何实现的?
+
+`IHasExtraProperties` 要求实现类定义一个名称为 `ExtraProperties` 的`Dictionary<string, object>` 属性.
+
+所以,如果你需要你可以直接使用 `ExtraProperties` 属性来使用字典API,但是推荐使用 `SetProperty` 和 `GetProperty` 方法,因为它们会检查 `null` 值.
+
+#### 它是如何存储的?
+
+存储字典的方式取决于你使用的数据库提供程序.
+
+* 对于 [Entity Framework Core](Entity-Framework-Core.md), 它以 `JSON` 字符串形式存储在 `ExtraProperties` 字段中. 序列化到 `JSON` 和反序列化到 `JSON` 由ABP使用EF Core的[值转换](https://docs.microsoft.com/zh-cn/ef/core/modeling/value-conversions)系统自动完成.
+* 对于 [MongoDB](MongoDB.md), 它以 **常规字段** 存储, 因为 MongoDB 天生支持这种 [额外](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) 系统.
+
+### 讨论额外的属性
+
+如果你使用**可重复使用的模块**,其中定义了一个实体,你想使用简单的方式get/set此实体相关的一些数据,那么额外的属性系统是非常有用的. 通常 **不需要** 为自己的实体使用这个系统,是因为它有以下缺点:
+
+* 它不是**完全类型安全的**.
+* 这些属性**不容易[自动映射](Object-To-Object-Mapping.md)到其他对象**.
+* 它**不会**为EF Core在数据库表中**创建字段**,因此在数据库中针对这个字段创建索引或搜索/排序并不容易.
+
+###　额外属性背后的实体
+
+`IHasExtraProperties` 不限于与实体一起使用. 你可以为任何类型的类实现这个接口,使用 `GetProperty`,`SetProperty` 和其他相关方法.
+
 ## 另请参阅
 
 * [实体设计最佳实践指南](Best-Practices/Entities.md)

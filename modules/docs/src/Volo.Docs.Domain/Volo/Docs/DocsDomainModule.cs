@@ -1,10 +1,14 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.Domain;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Docs.Documents;
+using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.FileSystem.Documents;
 using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Localization;
@@ -42,6 +46,18 @@ namespace Volo.Docs
             {
                 client.Timeout = TimeSpan.FromMilliseconds(15000);
             });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                if (scope.ServiceProvider.GetRequiredService<IOptions<DocsElasticSearchOptions>>().Value.Enable)
+                {
+                    var documentFullSearch = scope.ServiceProvider.GetRequiredService<IDocumentFullSearch>();
+                    AsyncHelper.RunSync(() => documentFullSearch.CreateIndexIfNeededAsync());
+                }
+            }
         }
     }
 }

@@ -29,6 +29,7 @@
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.HttpApi.Client\Volo.Blogging.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\modules\blogging\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
     <ProjectReference Include="..\..\modules\product\src\ProductManagement.HttpApi.Client\ProductManagement.HttpApi.Client.csproj" />
+    <ProjectReference Include="..\..\shared\MsDemo.Shared\MsDemo.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

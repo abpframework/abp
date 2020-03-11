@@ -35,6 +35,11 @@ namespace Volo.Blogging.Comments
 
         private async Task<bool> HasDeletePermission(AuthorizationHandlerContext context, Comment resource)
         {
+            if (resource.CreatorId != null && resource.CreatorId == context.User.FindUserId())
+            {
+                return true;
+            }
+
             if (await _permissionChecker.IsGrantedAsync(context.User, BloggingPermissions.Comments.Delete))
             {
                 return true;

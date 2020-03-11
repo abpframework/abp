@@ -8,5 +8,7 @@ namespace Volo.Docs.Admin.Documents
         Task PullAllAsync(PullAllDocumentInput input);
 
         Task PullAsync(PullDocumentInput input);
+
+        Task ReindexAsync();
     }
 }

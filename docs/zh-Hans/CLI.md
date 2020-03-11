@@ -1,4 +1,4 @@
-﻿# ABP CLI
+# ABP CLI
 
 ABP CLI (命令行接口) 是一个命令行工具,用来执行基于ABP解决方案的一些常见操作.
 
@@ -109,6 +109,7 @@ abp add-module Volo.Blogging
 * `--solution` 或 `-s`: 指定解决方案 (.sln) 路径. 如果未指定,CLI会尝试在当前目录中寻找.sln文件.
 * `--skip-db-migrations`: 对于EF Core 数据库提供程序,它会自动添加新代码的第一次迁移 (`Add-Migration`) 并且在需要时更新数据库 (`Update-Database`). 指定此选项可跳过此操作.
 * `-sp` 或 `--startup-project`: 启动项目的项目文件夹的相对路径. 默认值是当前文件夹.
+* `--with-source-code`: 添加模块的源代码,而不是NuGet/NPM软件包.
 
 ### update
 

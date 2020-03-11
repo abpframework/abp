@@ -902,26 +902,7 @@ public class BookStoreDbMigratorModule : AbpModule
 }
 ````
 
-#### BookStoreDbMigrationService
-
-最后还需要找到 `Acme.BookStore.Domain` 项目的 `BookStoreDbMigrationService` 类,它当前被设计为使用单个 `IBookStoreDbSchemaMigrator` 实现,但现在我们有了两个.
-
-它注入了 `IBookStoreDbSchemaMigrator`. 使用 `IEnumerable<IBookStoreDbSchemaMigrator>` 注入替换它, ([依赖注入系统](Dependency-Injection.md) 允许像这样注入接口的多个实现).
-
-现在你有 **模式迁移器的集合** ,找到以下行:
-
-````csharp
-await _dbSchemaMigrators.MigrateAsync();
-````
-
-将这行代码进行以下改变:
-
-````csharp
-foreach (var migrator in _dbSchemaMigrators)
-{
-    await migrator.MigrateAsync();
-}
-````
+#### 运行数据库迁移程序
 
 你可以运行 `.DbMigrator` 应用程序应用迁移和初始化种子数据. 你可以删除这两个数据库进行测试,然后再次运行 `.DbMigrator` 应用程序,它会创建两个数据库.
 

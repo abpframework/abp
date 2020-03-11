@@ -251,19 +251,19 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 ## 部件选项
 
-`WidgetOptions` 是 `Widget` attribute 替代, 你可以使用它去配置部件:
+`AbpWidgetOptions` 是 `Widget` attribute 替代, 你可以使用它去配置部件:
 
 ```csharp
-Configure<WidgetOptions>(options =>
+Configure<AbpWidgetOptions>(options =>
 {
     options.Widgets.Add<MySimpleWidgetViewComponent>();
 });
 ```
 
-将上面的代码写到[模块](../Module-Development-Basics.md)的 `ConfigureServices` 方法中. `Widgetoptions` 可以完成 `Widget` attribute 的所有功能. 比如为组件添加样式:
+将上面的代码写到[模块](../Module-Development-Basics.md)的 `ConfigureServices` 方法中. `AbpWidgetOptions` 可以完成 `Widget` attribute 的所有功能. 比如为组件添加样式:
 
 ````csharp
-Configure<WidgetOptions>(options =>
+Configure<AbpWidgetOptions>(options =>
 {
     options.Widgets
         .Add<MySimpleWidgetViewComponent>()
@@ -271,4 +271,4 @@ Configure<WidgetOptions>(options =>
 });
 ````
 
-> 提示: `WidgetOptions` 还可以更改现有的部件配置. 如果要修改应用程序使用的模块内的组件配置,这会很有用. 使用 `options.Widgets.Find` 获取现有的 `WidgetDefinition`.
+> 提示: `AbpWidgetOptions` 还可以更改现有的部件配置. 如果要修改应用程序使用的模块内的组件配置,这会很有用. 使用 `options.Widgets.Find` 获取现有的 `WidgetDefinition`.

@@ -5,7 +5,7 @@ ABP框架可以与任何类型的客户端包管理系统一起使用. 甚至你
 
 但是, ABP框架最适用于**NPM/Yarn**. 默认情况下,内置模块配置为与NPM/Yarn一起使用.
 
-最后, 我们建议[**Yarn**](https://yarnpkg.com/)而不是NPM,因为它更快,更稳定并且与NPM兼容.
+最后, 我们建议[**Yarn**](https://classic.yarnpkg.com/)而不是NPM,因为它更快,更稳定并且与NPM兼容.
 
 ### @ABP NPM Packages
 
@@ -41,7 +41,7 @@ ABP是一个模块化平台. 每个开发人员都可以创建模块, 模块应�
 yarn
 ````
 
-虽然你可以使用`npm install`,但如前所述,建议使用[Yarn](https://yarnpkg.com/).
+虽然你可以使用`npm install`,但如前所述,建议使用[Yarn](https://classic.yarnpkg.com/).
 
 #### 贡献包
 

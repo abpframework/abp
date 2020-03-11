@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
@@ -14,5 +15,9 @@ namespace Volo.Docs.Documents
         Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input);
 
         Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input);
+
+        Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input);
+        
+        Task<bool> FullSearchEnabledAsync();
     }
 }

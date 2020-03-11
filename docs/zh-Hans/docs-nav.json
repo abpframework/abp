@@ -198,7 +198,8 @@
               "text": "领域服务"
             },
             {
-              "text": "规约"
+              "text": "规约",
+              "path": "Specifications.md"
             }
           ]
         },
@@ -248,7 +249,16 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "AspNetCore/Tag-Helpers/Index.md"
+              "items":[
+                {
+                  "text": "在线演示",
+                  "path": "AspNetCore/Tag-Helpers/Index.md"
+                },
+                {
+                  "text": "按钮",
+                  "path": "AspNetCore/Tag-Helpers/Buttons.md"
+                }
+              ]
             },
             {
               "text": "仪表板和小部件(Widget)系统",
@@ -328,6 +338,20 @@
             {
               "text": "RabbitMQ 集成",
               "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Jobs-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "后台工作者",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Workers-Quartz.md"
             }
           ]
         }

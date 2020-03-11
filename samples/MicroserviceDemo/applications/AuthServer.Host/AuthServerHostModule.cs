@@ -2,6 +2,7 @@ using AuthServer.Host.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
+using MsDemo.Shared;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -9,7 +10,6 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -20,9 +20,11 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 
 namespace AuthServer.Host
@@ -39,8 +41,10 @@ namespace AuthServer.Host
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
-        )]
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpTenantManagementApplicationContractsModule)
+    )]
     public class AuthServerHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -50,6 +54,11 @@ namespace AuthServer.Host
             context.Services.AddAbpDbContext<AuthServerDbContext>(options =>
             {
                 options.AddDefaultRepositories();
+            });
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
             });
 
             Configure<AbpDbContextOptions>(options =>
@@ -86,6 +95,10 @@ namespace AuthServer.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();

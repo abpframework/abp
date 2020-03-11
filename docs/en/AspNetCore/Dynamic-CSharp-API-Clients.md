@@ -106,12 +106,12 @@ While you can inject `IBookAppService` like above to use the client proxy, you c
 
 ### RemoteServiceOptions
 
-`RemoteServiceOptions` is automatically set from the `appsettings.json` by default. Alternatively, you can use `Configure` method to set or override it. Example:
+`AbpRemoteServiceOptions` is automatically set from the `appsettings.json` by default. Alternatively, you can use `Configure` method to set or override it. Example:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    context.Services.Configure<RemoteServiceOptions>(options =>
+    context.Services.Configure<AbpRemoteServiceOptions>(options =>
     {
         options.RemoteServices.Default =
             new RemoteServiceConfiguration("http://localhost:53929/");
@@ -147,7 +147,7 @@ context.Services.AddHttpClientProxies(
 );
 ````
 
-`remoteServiceName` parameter matches the service endpoint configured via `RemoteServiceOptions`. If the `BookStore` endpoint is not defined then it fallbacks to the `Default` endpoint.
+`remoteServiceName` parameter matches the service endpoint configured via `AbpRemoteServiceOptions`. If the `BookStore` endpoint is not defined then it fallbacks to the `Default` endpoint.
 
 ### As Default Services
 
