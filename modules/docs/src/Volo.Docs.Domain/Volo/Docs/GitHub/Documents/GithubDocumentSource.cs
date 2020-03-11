@@ -28,7 +28,7 @@ namespace Volo.Docs.GitHub.Documents
             _githubRepositoryManager = githubRepositoryManager;
             _githubPatchAnalyzer = githubPatchAnalyzer;
         }
-        
+
         public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version, DateTime? lastKnownSignificantUpdateTime = null)
         {
             var token = project.GetGitHubAccessTokenOrNull();
@@ -52,13 +52,15 @@ namespace Volo.Docs.GitHub.Documents
 
             var documentCreationTime = fileCommits.LastOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue;
 
-
-            var lastSignificantUpdateTime = !isNavigationDocument && !isParameterDocument ? 
-                await GetLastSignificantUpdateTime(fileCommits, project.GetGitHubInnerUrl(languageCode, documentName),
-                        lastKnownSignificantUpdateTime, documentCreationTime,
-                        GetOwnerNameFromUrl(project.GetGitHubUrl()),
-                        GetRepositoryNameFromUrl(project.GetGitHubUrl()),
-                        project.GetGitHubAccessTokenOrNull()) ?? lastKnownSignificantUpdateTime : null;
+            var lastSignificantUpdateTime = !isNavigationDocument && !isParameterDocument && version == project.LatestVersionBranchName ?
+                await GetLastSignificantUpdateTime(
+                    fileCommits,
+                    project, 
+                    project.GetGitHubInnerUrl(languageCode, documentName),
+                    lastKnownSignificantUpdateTime,
+                    documentCreationTime
+                    ) ?? lastKnownSignificantUpdateTime 
+                : null;
 
             var document = new Document(GuidGenerator.Create(),
                 project.Id,
@@ -77,7 +79,7 @@ namespace Volo.Docs.GitHub.Documents
                 DateTime.Now,
                 lastSignificantUpdateTime);
 
-            var authors =  fileCommits
+            var authors = fileCommits
                 .Where(x => x.Author != null)
                 .Select(x => x.Author)
                 .GroupBy(x => x.Id)
@@ -95,20 +97,27 @@ namespace Volo.Docs.GitHub.Documents
             return document;
         }
 
-        private async Task<DateTime?> GetLastSignificantUpdateTime(IReadOnlyList<GitHubCommit> fileCommits, string fileName,
-            DateTime? lastKnownSignificantUpdateTime, DateTime documentCreationTime, string repoOwnerName, string repoName, string token)
+        private async Task<DateTime?> GetLastSignificantUpdateTime(
+            IReadOnlyList<GitHubCommit> fileCommits,
+            Project project,
+            string fileName,
+            DateTime? lastKnownSignificantUpdateTime,
+            DateTime documentCreationTime)
         {
             var commitsToEvaluate = (lastKnownSignificantUpdateTime != null
                 ? fileCommits.Where(c => c.Commit.Author.Date.DateTime > lastKnownSignificantUpdateTime)
-                :fileCommits).Where(c=>c.Commit.Author.Date.DateTime > DateTime.Now.AddDays(-14) && c.Commit.Author.Date.DateTime > documentCreationTime);
+                : fileCommits).Where(c => c.Commit.Author.Date.DateTime > DateTime.Now.AddDays(-14) && c.Commit.Author.Date.DateTime > documentCreationTime);
 
             foreach (var gitHubCommit in commitsToEvaluate)
             {
 
-                var fullCommit =
-                    await _githubRepositoryManager.GetSingleCommitsAsync(repoOwnerName, repoName, gitHubCommit.Sha, token);
+                var fullCommit = await _githubRepositoryManager.GetSingleCommitsAsync(
+                    GetOwnerNameFromUrl(project.GetGitHubUrl()),
+                    GetRepositoryNameFromUrl(project.GetGitHubUrl()),
+                    gitHubCommit.Sha,
+                    project.GetGitHubAccessTokenOrNull());
 
-                if (_githubPatchAnalyzer.HasPatchSignificantChanges(fullCommit.Files.First(f=>f.Filename == fileName).Patch))
+                if (_githubPatchAnalyzer.HasPatchSignificantChanges(fullCommit.Files.First(f => f.Filename == fileName).Patch))
                 {
                     return gitHubCommit.Commit.Author.Date.DateTime;
                 }

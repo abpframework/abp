@@ -8,37 +8,15 @@ namespace Volo.Docs.GitHub.Documents
 {
     public class GithubPatchAnalyzer : DomainService, IGithubPatchAnalyzer
     {
-        private const string OldChangeStart = "\\n-";
-        private const string NewChangeStart = "\\n+";
-
         public bool HasPatchSignificantChanges(string patch)
         {
             var changes = GetChanges(patch);
 
-            var mergedChanges = MergeChanges(changes);
-
-            if (IsChangeSignificant(mergedChanges))
-            {
-                return true;
-            }
-
-            return false;
+            return IsChangesSignificant(changes);
         }
 
-        private CommitChanges MergeChanges(List<CommitChanges> changes)
-        {
-            var mergedChanges = new CommitChanges();
 
-            foreach (var commitChanges in changes)
-            {
-                mergedChanges.NewLines.AddRange(commitChanges.NewLines);
-                mergedChanges.OldLines.AddRange(commitChanges.OldLines);
-            }
-
-            return mergedChanges;
-        }
-
-        private bool IsChangeSignificant(CommitChanges change)
+        private bool IsChangesSignificant(CommitChanges change)
         {
             if (CompareLineCount(change))
             {
@@ -58,26 +36,9 @@ namespace Volo.Docs.GitHub.Documents
             return false;
         }
 
-        private bool CompareWords(CommitChanges change)
-        {
-            var wordsInNewLines = GetDistinctWordsFromLineList(change.NewLines);
-            var wordsInOldLines = GetDistinctWordsFromLineList(change.OldLines);
-
-            var differentWordsInNewLines = wordsInNewLines.Except(wordsInOldLines).Count();
-            var differentWordsInOldLines = wordsInOldLines.Except(wordsInNewLines).Count();
-
-            return differentWordsInNewLines + differentWordsInOldLines > 10;
-        }
-
-        private List<string> GetDistinctWordsFromLineList(List<string> lines)
-        {
-            return string.Join(" ", lines).Split(" ").Where(s => !string.IsNullOrWhiteSpace(s))
-                .Select(TrimAndRemovePunctuation).Distinct().ToList();
-        }
-
         private static bool CompareLineCount(CommitChanges change)
         {
-            return Math.Abs(change.NewLines.Count - change.OldLines.Count) > 3;
+            return Math.Abs(change.NewLines.Count - change.OldLines.Count) >= 3;
         }
 
         private static bool CompareWordCount(CommitChanges change)
@@ -87,10 +48,21 @@ namespace Volo.Docs.GitHub.Documents
             var wordCountInOldLines =
                 string.Join(" ", change.OldLines).Split(" ").Count(s => !string.IsNullOrWhiteSpace(s));
 
-            return Math.Abs(wordCountInNewLines - wordCountInOldLines) > 15;
+            return Math.Abs(wordCountInNewLines - wordCountInOldLines) >= 15;
         }
 
-        private List<CommitChanges> GetChanges(string patch)
+        private bool CompareWords(CommitChanges change)
+        {
+            var wordsInNewLines = GetDistinctWordsFromLineList(change.NewLines);
+            var wordsInOldLines = GetDistinctWordsFromLineList(change.OldLines);
+
+            var differentWordsInNewLines = wordsInNewLines.Except(wordsInOldLines).Count();
+            var differentWordsInOldLines = wordsInOldLines.Except(wordsInNewLines).Count();
+
+            return differentWordsInNewLines + differentWordsInOldLines >= 10;
+        }
+
+        private CommitChanges GetChanges(string patch)
         {
             var changes = new List<CommitChanges>();
             var pathSplited = patch.Split("@@");
@@ -107,7 +79,25 @@ namespace Volo.Docs.GitHub.Documents
                 changes.Add(commitChange);
             }
 
-            return changes;
+            return MergeChanges(changes);
+        }
+        private CommitChanges MergeChanges(List<CommitChanges> changes)
+        {
+            var mergedChanges = new CommitChanges();
+
+            foreach (var commitChanges in changes)
+            {
+                mergedChanges.NewLines.AddRange(commitChanges.NewLines);
+                mergedChanges.OldLines.AddRange(commitChanges.OldLines);
+            }
+
+            return mergedChanges;
+        }
+
+        private List<string> GetDistinctWordsFromLineList(List<string> lines)
+        {
+            return string.Join(" ", lines).Split(" ").Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(TrimAndRemovePunctuation).Distinct().ToList();
         }
 
         private string TrimAndRemovePunctuation(string str)
