@@ -61,6 +61,16 @@ namespace Volo.Abp.Validation
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="validationErrors">Validation errors</param>
+        public AbpValidationException(IList<ValidationResult> validationErrors)
+        {
+            ValidationErrors = validationErrors;
+            LogLevel = LogLevel.Warning;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="validationErrors">Validation errors</param>
         public AbpValidationException(string message, IList<ValidationResult> validationErrors)
