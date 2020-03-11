@@ -26,15 +26,19 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
 如果你没有现有的ABP项目, 这个步骤向你展示如何在[abp.io](https://abp.io)创建一个新项目并添加文档模块. 如果你本地已经有了一个ABP项目, 那么你可以跳过这一步.
 
-打开 https://abp.io/Templates. 输入项目名称为 `Acme.MyProject`, 选择 `ASP.NET Core Mvc Application` 和选择 `Entity Framework Core` 做为数据库提供者.
+推荐使用ABP CLI创建新项目,使用以下命令行:
 
-请注意,本文档包含了 `Entity Framework Core` 提供者 不过你也可以选择 `MongoDB` 做为数据库提供者. 
+`abp new Acme.MyProject`
+
+你也可以在浏览器中导航到 https://abp.io/get-started. 输入项目名称为 `Acme.MyProject`, 其它保持默认选项.
+
+请注意,本文档包含了 `Entity Framework Core` 提供者 不过你也可以选择 `MongoDB` 做为数据库提供者.
 
 ![创建新项目](../images/docs-module_download-new-abp-project.png)
 
 ### 2- 运行这个空项目
 
-下载项目后, 解压压缩文档并且打开 `Acme.MyProject.sln`. 你可以看到这个解决方案包含了 `Application`, `Domain`, `EntityFrameworkCore` 和 `Web` 项目. 右键选择 `Acme.MyProject.Web` 项目**设置为启动项目**.
+下载项目后, 解压压缩文档并且打开 `Acme.MyProject.sln`. 你可以看到这个解决方案包含了 `Application`, `Application.Contrawcts`, `DbMigrator`, `Domain`, `Domain.Shared`, `EntityFrameworkCore`, `EntityFrameworkCore.DbMigations`, `HttpApi`, `HttpApi.Client` 和 `Web` 项目. 右键选择 `Acme.MyProject.Web` 项目**设置为启动项目**.
 
 ![创建新项目](../images/docs-module_solution-explorer.png)
 
@@ -43,12 +47,12 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 ```json
 {
   "ConnectionStrings": {
-    "Default": "Server=localhost;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True;MultipleActiveResultSets=true"
   }
 }
 ```
 
-打开Visual Studio包管理控制台选择`src\Acme.MyProject.EntityFrameworkCore` 做为默认项目. 运行 `Update-Database` 命令创建数据库. 数据库`MyProject`将在数据库服务器中创建.
+运行 `Acme.MyProject.DbMigrator` 项目,它会负责应用迁移与初始化种子数据. 数据库`MyProject`将在数据库服务器中创建.
 
 现在一个空的ABP项目已经创建完成! 现在你可以运行项目并且查看网站.
 
@@ -58,37 +62,19 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
 文档模块包托管在Nuget上面. 需要有四个包安装到你的应用程序中. 每个包必须安装到相关的项目.  
 
-* [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) 需要安装到 `Acme.MyProject.Domain` 项目.
+安装[Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget包到 `Acme.MyProject.Domain` 项目.
 
-  * 修改 `Acme.MyProject.Domain.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+`Install-Package Volo.Docs.Domain`
 
-    ```csharp
-     <PackageReference Include="Volo.Docs.Domain" Version="0.9.0" />
-    ```
+安装[Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget包到 `Acme.MyProject.EntityFrameworkCore` 项目.
 
-* [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) 需要安装到 `Acme.MyProject.EntityFrameworkCore` 项目.
+`Install-Package Volo.Docs.EntityFrameworkCore`
 
-  * 修改 `Acme.MyProject.EntityFrameworkCore.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+安装[Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget包到 `Acme.MyProject.Application` 项目.
 
-    ```csharp
-    <PackageReference Include="Volo.Docs.EntityFrameworkCore" Version="0.9.0" />
-    ```
+`Install-Package Volo.Docs.Application`
 
-* [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) 需要安装到 `Acme.MyProject.Application` 项目.
-
-  * 修改 `Acme.MyProject.Application.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
-
-    ```csharp
-    <PackageReference Include="Volo.Docs.Application" Version="0.9.0" />
-    ```
-
-* [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Web/) 需要安装到 `Acme.MyProject.Web` 项目.
-
-  * 修改 `Acme.MyProject.Web.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
-
-    ```csharp
-    <PackageReference Include="Volo.Docs.Web" Version="0.9.0" />
-    ```
+安装[Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget包到 `Acme.MyProject.Web` 项目.
 
 ### 3- 添加模块依赖
 
@@ -176,37 +162,46 @@ ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
 #### 4.1- Entity Framework 集成
 
-如果你选择了Entity Framework 做为数据库供应者,你需要在DbContext中配置文档模块. 做以下操作;
+如果你选择了Entity Framework 做为数据库供应者,你需要配置文档模块. 做以下操作;
 
-* 打开 `MyProjectDbContext.cs` 并且添加 `modelBuilder.ConfigureDocs()` 到 `OnModelCreating()` 方法中
+* 打开 `QaDocDbContextModelCreatingExtensions.cs` 并且添加 `modelBuilder.ConfigureDocs()` 到 `ConfigureMyProject()` 方法中
 
   ```csharp
-  [ConnectionStringName("Default")]
-  public class MyProjectDbContext : AbpDbContext<MyProjectDbContext>
+  public static class QaDocDbContextModelCreatingExtensions
   {
-      public MyProjectDbContext(DbContextOptions<MyProjectDbContext> options)
-          : base(options)
+      public static void ConfigureMyProject(this ModelBuilder builder)
       {
-  
+          Check.NotNull(builder, nameof(builder));
+
+          /* Configure your own tables/entities inside here */
+
+          //builder.Entity<YourEntity>(b =>
+          //{
+          //    b.ToTable(QaDocConsts.DbTablePrefix + "YourEntities", QaDocConsts.DbSchema);
+
+          //    //...
+          //});
+
+          builder.ConfigureDocs();
       }
-  
-      protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+      public static void ConfigureCustomUserProperties<TUser>(this EntityTypeBuilder<TUser> b)
+          where TUser: class, IUser
       {
-         //...
-         modelBuilder.ConfigureDocs();
+          //b.Property<string>(nameof(AppUser.MyProperty))...
       }
   }
   ```
 
-* 打开 `Visual Studio` 的 `包管理控制台` 选择 `Acme.MyProject.EntityFrameworkCore` 做为默认项目. 然后编写以下命令为文档模块添加迁移.
+* 打开 `Visual Studio` 的 `包管理控制台` 选择 `Acme.MyProject.EntityFrameworkCore.DbMigrations` 做为默认项目. 然后编写以下命令为文档模块添加迁移.
 
   ```csharp
   add-migration Added_Docs_Module
   ```
 
-  当命令执行成功后 , 你会看到`Acme.MyProject.EntityFrameworkCore\Migrations` 目录下有名为 `20181221111621_Added_Docs_Module` 的迁移文件.
+  当命令执行成功后 , 你会看到`Acme.MyProject.EntityFrameworkCore.DbMigrations\Migrations` 目录下有名为 `20181221111621_Added_Docs_Module` 的迁移文件.
 
-  现在更新数据库. 在 `Visual Studio` 的 `包管理控制台` 中执行以下代码. 要确认已 `Acme.MyProject.EntityFrameworkCore` 项目设置为默认项目.
+  现在更新数据库. 在 `Visual Studio` 的 `包管理控制台` 中执行以下代码. 要确认已 `Acme.MyProject.EntityFrameworkCore.DbMigrations` 项目设置为默认项目.
 
   ```csharp
   update-database
@@ -309,7 +304,7 @@ There are no projects yet!
 - ExtraProperties: 
 
   ```json
-  {"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/zh-Hans/","GitHubAccessToken":"***"}
+  {"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/zh-Hans/","GitHubAccessToken":"***","GitHubUserAgent":""}
   ```
 
   注意 `GitHubAccessToken` 用 `***` 掩盖. 这是一个私人令牌，你必须从GitHub获取它. 请参阅 https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
@@ -321,10 +316,12 @@ There are no projects yet!
 对于 `SQL` 数据库,你可以使用下面的 `T-SQL` 命令将指定的示例插入到 `DocsProjects` 表中:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***"}', N'/', N'master', N'')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'master', N'')
 ```
 
 请注意，`GitHubAccessToken` 被屏蔽了.它是一个私人令牌,你必须获得自己的令牌并替换 `***` 字符串.
+
+现在你可以运行应用程序并导航到 `/Documents`.
 
 #### "FileSystem" 项目的示例记录
 
