@@ -1,7 +1,3 @@
-# Widgets
-
-ABP provides a model and infrastructure to create **reusable widgets**. Widget system is an extension to [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components). Widgets are especially useful when you want to;
-
 * Have **scripts & styles** dependencies for your widget.
 * Create **dashboards** with widgets used inside.
 * Define widgets in reusable **[modules](../Module-Development-Basics.md)**.
@@ -13,7 +9,7 @@ ABP provides a model and infrastructure to create **reusable widgets**. Widget s
 
 As the first step, create a new regular ASP.NET Core View Component:
 
-![widget-basic-files](../../images/widget-basic-files.png)
+![widget-basic-files](../images/widget-basic-files.png)
 
 **MySimpleWidgetViewComponent.cs**:
 
@@ -478,19 +474,19 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 ## WidgetOptions
 
-As alternative to the `Widget` attribute, you can use the `WidgetOptions` to configure widgets:
+As alternative to the `Widget` attribute, you can use the `AbpWidgetOptions` to configure widgets:
 
 ```csharp
-Configure<WidgetOptions>(options =>
+Configure<AbpWidgetOptions>(options =>
 {
     options.Widgets.Add<MySimpleWidgetViewComponent>();
 });
 ```
 
-Write this into the `ConfigureServices` method of your [module](../Module-Development-Basics.md). All the configuration done with the `Widget` attribute is also possible with the `WidgetOptions`. Example configuration that adds a style for the widget:
+Write this into the `ConfigureServices` method of your [module](../Module-Development-Basics.md). All the configuration done with the `Widget` attribute is also possible with the `AbpWidgetOptions`. Example configuration that adds a style for the widget:
 
 ````csharp
-Configure<WidgetOptions>(options =>
+Configure<AbpWidgetOptions>(options =>
 {
     options.Widgets
         .Add<MySimpleWidgetViewComponent>()
@@ -498,7 +494,7 @@ Configure<WidgetOptions>(options =>
 });
 ````
 
-> Tip: `WidgetOptions` can also be used to get an existing widget and change its configuration. This is especially useful if you want to modify the configuration of a widget inside a module used by your application. Use `options.Widgets.Find` to get an existing `WidgetDefinition`.
+> Tip: `AbpWidgetOptions` can also be used to get an existing widget and change its configuration. This is especially useful if you want to modify the configuration of a widget inside a module used by your application. Use `options.Widgets.Find` to get an existing `WidgetDefinition`.
 
 ## See Also
 

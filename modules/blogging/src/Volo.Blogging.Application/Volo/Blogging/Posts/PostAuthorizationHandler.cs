@@ -35,6 +35,11 @@ namespace Volo.Blogging.Posts
 
         private async Task<bool> HasDeletePermission(AuthorizationHandlerContext context, Post resource)
         {
+            if (resource.CreatorId != null && resource.CreatorId == context.User.FindUserId())
+            {
+                return true;
+            }
+
             if (await _permissionChecker.IsGrantedAsync(context.User, BloggingPermissions.Posts.Delete))
             {
                 return true;

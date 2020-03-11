@@ -64,6 +64,8 @@ namespace Volo.Docs.Pages.Documents.Project
         public DocumentParametersDto DocumentPreferences { get; set; }
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
+        
+        public bool FullSearchEnabled { get; set; }
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
@@ -106,6 +108,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
+            FullSearchEnabled = await _documentAppService.FullSearchEnabledAsync();
 
             try
             {

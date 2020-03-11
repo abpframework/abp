@@ -1,11 +1,8 @@
-
-## ASP.NET Core MVC Client Side Package Management
-
 ABP framework can work with any type of client side package management systems. You can even decide to use no package management system and manage your dependencies manually.
 
 However, ABP framework works best with **NPM/Yarn**. By default, built-in modules are configured to work with NPM/Yarn.
 
-Finally, we suggest the [**Yarn**](https://yarnpkg.com/) over the NPM since it's faster, stable and also compatible with the NPM.
+Finally, we suggest the [**Yarn**](https://classic.yarnpkg.com/) over the NPM since it's faster, stable and also compatible with the NPM.
 
 ### @ABP NPM Packages
 
@@ -41,7 +38,7 @@ After depending on a NPM package, all you should do is to run the **yarn** comma
 yarn
 ````
 
-Alternatively, you can use `npm install` but [Yarn](https://yarnpkg.com/) is suggested as mentioned before.
+Alternatively, you can use `npm install` but [Yarn](https://classic.yarnpkg.com/) is suggested as mentioned before.
 
 #### Package Contribution
 
