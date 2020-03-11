@@ -75,5 +75,15 @@ namespace Volo.Docs.GitHub.Documents
             var request = new CommitRequest { Path = filename, Sha = version };
             return await client.Repository.Commit.GetAll(repo.Id, request);
         }
+
+        public async Task<GitHubCommit> GetSingleCommitsAsync(string name, string repositoryName, string sha, string token)
+        {
+            var client = token.IsNullOrWhiteSpace()
+                ? new GitHubClient(new ProductHeaderValue(name))
+                : new GitHubClient(new ProductHeaderValue(name), new InMemoryCredentialStore(new Credentials(token)));
+
+            var repo = await client.Repository.Get(name, repositoryName);
+            return await client.Repository.Commit.Get(repo.Id, sha);
+        }
     }
 }
