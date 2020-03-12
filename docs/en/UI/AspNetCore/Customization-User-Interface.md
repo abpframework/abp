@@ -158,3 +158,153 @@ If you need, you can also replace [the code behind c# class](https://github.com/
 
 Just as explained above, you can replace any component, layout or c# class of the used theme. See the [theming document](Theming.md) for more information on the theming system.
 
+## Overriding Static Resources
+
+Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the Virtual File System to handle it.
+
+## Manipulating the Bundles
+
+The [Bundling & Minification](Bundling-Minification.md) system provides an extensible and dynamic system to create script and style bundles. It allows to extend and manipulate existing bundles by design.
+
+### Example: Add a Global CSS File
+
+For example, ABP Framework defines a global CSS bundle which is added to every page (actually, added to the layout file by the themes). Let's add a custom CSS file to the end of the bundle files, so we can override any global style.
+
+First, create a CSS file and locate it in a folder inside the `wwwroot`:
+
+![bookstore-global-css-file](../../images/bookstore-global-css-file.png)
+
+Define some custom CSS rules inside the file. Example:
+
+````css
+.card-title {
+    color: orange;
+    font-size: 2em;
+    text-decoration: underline;
+}
+
+.btn-primary {
+    background-color: red;
+}
+````
+
+Then add this file to the standard global style bundle in the `ConfigureServices` method of your [module](../../Module-Development-Basics.md):
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.StyleBundles.Configure(
+        StandardBundles.Styles.Global, //The bundle name!
+        bundleConfiguration =>
+        {
+            bundleConfiguration.AddFiles("/styles/my-global-styles.css");
+        }
+    );
+});
+````
+
+#### The Global Script Bundle
+
+Just like the `StandardBundles.Styles.Global`, there is a `StandardBundles.Scripts.Global` that you can add files or manipulate the existing ones.
+
+### Example: Manipulate the Bundle Files
+
+The example above adds a new file to the bundle. You can do more if you create a bundle contributor class. Example:
+
+````csharp
+public class MyGlobalStyleBundleContributor : BundleContributor
+{
+    public override void ConfigureBundle(BundleConfigurationContext context)
+    {
+        context.Files.Clear();
+        context.Files.Add("/styles/my-global-styles.css");
+    }
+}
+````
+
+Then you can add the contributor to an existing bundle:
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.StyleBundles.Configure(
+        StandardBundles.Styles.Global,
+        bundleConfiguration =>
+        {
+            bundleConfiguration.AddContributors(typeof(MyGlobalStyleBundleContributor));
+        }
+    );
+});
+````
+
+It is not a good idea to clear all CSS files. In a real world scenario, you can find and replace a specific file with your own file.
+
+### Example: Add a JavaScript File for a Specific Page
+
+The examples above works with the global bundle added to the layout. What if you want to add a CSS/JavaScript file (or replace a file) for a specific page defines inside a depended module.
+
+Assume that you want to run a JavaScript code once user enters to the Role Management page of the Identity Module.
+
+First, create a standard JavaScript file under the `wwwroot`, `Pages` or `Views` folder (ABP support to add static resources inside these folders by default). We prefer the `Pages/Identity/Roles` folder to follow the conventions:
+
+![bookstore-added-role-js-file](../../images/bookstore-added-role-js-file.png)
+
+Content of the file is simple:
+
+````js
+$(function() {
+    abp.log.info('My custom role script file has been loaded!');
+});
+````
+
+Then add this file to the bundle of the role management page:
+
+````csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.ScriptBundles
+        .Configure(
+            typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel).FullName,
+            bundleConfig =>
+            {
+                bundleConfig.AddFiles("/Pages/Identity/Roles/my-role-script.js");
+            });
+});
+````
+
+`typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.IndexModel).FullName` is the safe way to get the bundle name for the role management page.
+
+> Notice that not every page defines such page bundles. They define only if needed.
+
+In addition to adding new CSS/JavaScript file to a page, you know you also can replace the existing one.
+
+## Layout Customization
+
+Layouts are defined by the theme ([see the theming](Theming.md)) by design. They are not included in a downloaded application solution. In this way you can easily upgrade the theme and get new features.
+
+However, there are some common ways to customize the layout described in the next sections.
+
+### Menu Contributors
+
+There are two standard menus defined by the ABP Framework:
+
+![bookstore-menus-highlighted](../../images/bookstore-menus-highlighted.png)
+
+* `StandardMenus.Main`: The main menu of the application.
+* `StandardMenus.User`: The user menu (generally at the top right of the screen).
+
+Rendering the menus is a responsibility of the theme, but menu items are determined by the modules and your application code. Just implement the `IMenuContributor` interface and manipulate the menu items in the `ConfigureMenuAsync` method.
+
+Menu contributors are executed whenever need to render the menu. There is already a menu contributor defined in the application startup template, so you can take it as an example and improve if necessary. See the [navigation menu](Navigation-Menu.md) document for more.
+
+### Toolbar Contributors
+
+TODO
+
+### Layouts
+
+TODO
+
+### Layout Hooks
+
+TODO
