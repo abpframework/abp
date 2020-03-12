@@ -157,42 +157,6 @@ This example class inherits from the `IdentityUserManager` [domain service](Doma
 
 Check the [localization system](Localization.md) to learn how to localize the error messages.
 
-### Example: Overriding a Page Model
-
-````csharp
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
-using Volo.Abp.Identity.Web.Pages.Identity.Users;
-
-namespace Acme.BookStore.Web.Pages.Identity.Users
-{
-    [Dependency(ReplaceServices = true)]
-    [ExposeServices(typeof(EditModalModel))]
-    public class MyEditModalModel : EditModalModel
-    {
-        public MyEditModalModel(
-            IIdentityUserAppService identityUserAppService, 
-            IIdentityRoleAppService identityRoleAppService
-            ) : base(
-                identityUserAppService, 
-                identityRoleAppService)
-        {
-        }
-
-        public override async Task<IActionResult> OnPostAsync()
-        {
-            //TODO: Additional logic
-            await base.OnPostAsync();
-            //TODO: Additional logic
-        }
-    }
-}
-````
-
-This class replaces `EditModalModel` for the users and overrides the `OnPostAsync` method.
-
 ### Overriding Other Classes
 
 Overriding controllers, framework services, view component classes and any other type of classes registered to dependency injection can be overridden just like the examples above.
