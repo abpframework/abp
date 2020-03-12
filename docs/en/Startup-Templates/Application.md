@@ -270,4 +270,4 @@ The files under the `angular/src/environments` folder has the essential configur
 ## What's Next?
 
 - See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.
-- See the [ASP.NET Core MVC Tutorial](../Tutorials/Part-1.md?UI=MVC) to learn how to develop applications using this template.
+- See the [ASP.NET Core MVC Tutorial](../Tutorials/Part-1.md) to learn how to develop applications using this template.
