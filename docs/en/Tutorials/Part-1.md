@@ -727,7 +727,7 @@ $(function () {
 
 * `abp.libs.datatables.createAjax` is a helper function to adapt ABP's dynamic JavaScript API proxies to [Datatable](https://datatables.net/)'s format.
 * `abp.libs.datatables.normalizeConfiguration` is another helper function. There's no requirement to use it, but it simplifies the [Datatables](https://datatables.net/) configuration by providing conventional values for missing options.
-* `acme.bookStore.book.getList` is the function to get list of books (as described in [dynamic JavaScript proxies](#dynamic-javaScript-proxies)).
+* `acme.bookStore.book.getList` is the function to get list of books (as described in [dynamic JavaScript proxies](#dynamic-javascript-proxies)).
 * See [Datatables documentation](https://datatables.net/manual/) for all configuration options.
 
 It's end of this part. The final UI of this work is shown as below:
