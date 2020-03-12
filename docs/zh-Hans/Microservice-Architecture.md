@@ -12,8 +12,8 @@ ABP框架的主要目标之一就是提供**便捷的基础设施来创建微服
 * 提供[架构模型](Best-Practices/Module-Architecture.md)来开发模块,与微服务开发和部署兼容.
 * 提供[最佳实践指南](Best-Practices/Index.md)制定模块开发标准.
 * 提供基础设施来实现微服务中的[领域驱动设计](Domain-Driven-Design.md).
-* 提供从应用程序服务[自动生成REST风格的API](AspNetCore/Auto-API-Controllers.md)的服务.
-* 提供[自动创建C＃API客户端](AspNetCore/Dynamic-CSharp-API-Clients.md)服务,以便从其他服务/应用程序使用你服务.
+* 提供从应用程序服务[自动生成REST风格的API](API/Auto-API-Controllers.md)的服务.
+* 提供[自动创建C＃API客户端](API/Dynamic-CSharp-API-Clients.md)服务,以便从其他服务/应用程序使用你服务.
 * 提供[分布式事件总线](Event-Bus.md)用于服务通信.
 * 提供更多其他服务,使日常开发更加简便.
 

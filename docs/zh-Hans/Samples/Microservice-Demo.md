@@ -341,7 +341,7 @@ BackendAdminApp.Host项目本身没有单个UI元素/页面. 它仅用于提供�
 
 ##### HTTP Clients
 
-ABP应用程序模块通常提供C＃客户端库以轻松地使用服务(API)(它们通常使用ABP框架的[Dynamic C# API客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)). 这意味着如果你需要使用Identity Service API, 你可以引用其客户端软件包,并通过提供的接口轻松使用API.
+ABP应用程序模块通常提供C＃客户端库以轻松地使用服务(API)(它们通常使用ABP框架的[Dynamic C# API客户端](../API/Dynamic-CSharp-API-Clients.md)). 这意味着如果你需要使用Identity Service API, 你可以引用其客户端软件包,并通过提供的接口轻松使用API.
 
 为此`BackendAdminAppHostModule`类声明了`AbpIdentityHttpApiClientModule`和`ProductManagementHttpApiClientModule`的依赖关系.
 
@@ -1104,7 +1104,7 @@ ABP提供强大的基础架构,通过提供服务和架构,使模块化应用程
 * `ProductManagement.Application` 包含应用程序服务的实现.
 * `ProductManagement.EntityFrameworkCore` 包含DbContext和其他与EF Core相关的类和配置.
 * `ProductManagement.HttpApi` 包含API控制器.
-* `ProductManagement.HttpApi.Client` 包含C#代理以远程直接使用HTTP API. 使用ABP的[Dynamic C＃API客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功能.
+* `ProductManagement.HttpApi.Client` 包含C#代理以远程直接使用HTTP API. 使用ABP的[Dynamic C＃API客户端](../API/Dynamic-CSharp-API-Clients.md)功能.
 
 * `ProductManagement.Web` 包含UI元素(页面,脚本,样式..等).
 
