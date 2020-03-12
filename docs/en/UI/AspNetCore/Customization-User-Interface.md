@@ -123,3 +123,38 @@ That's all! Make any change in the view and run your application.
 #### Replacing Page Model Without Inheritance
 
 You don't have to inherit from the original page model class (like done in the previous example). Instead, you can completely re-implement the page yourself. In this case, just derive from `PageModel`, `AbpPageModel` or any suitable base class you need.
+
+## Overriding a View Component
+
+The ABP Framework, pre-built themes and modules define some re-usable view components. These view components can be replaced just like a page described above.
+
+### Example
+
+The screenshot below was taken from the basic theme comes with the application startup template.
+
+![bookstore-brand-area-highlighted](../../images/bookstore-brand-area-highlighted.png)
+
+[The basic theme](../../Themes/Basic.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called Brand component. You probably want to customize this component by adding your own application logo. Let's see how to do it.
+
+First, create your logo and place under a folder in your web application. We used `wwwroot/logos/bookstore-logo.png` path. Then copy the Brand component's view ([from here](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml)) from the basic theme files under the `Themes/Basic/Components/Brand` folder. The result should be similar the picture below:
+
+![bookstore-added-brand-files](../../images/bookstore-added-brand-files.png)
+
+Then change the `Default.cshtml` as you like. Example content can be like that:
+
+````xml
+<a href="/">
+    <img src="~/logos/bookstore-logo.png" width="250" height="60"/>
+</a>
+````
+
+Now, you can run the application to see the result:
+
+![bookstore-added-logo](../../images/bookstore-added-logo.png)
+
+If you need, you can also replace [the code behind c# class](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs) of the component just using the dependency injection system.
+
+## Overriding the Theme
+
+Just as explained above, you can replace any component, layout or c# class of the used theme. See the [theming document](Theming.md) for more information on the theming system.
+
