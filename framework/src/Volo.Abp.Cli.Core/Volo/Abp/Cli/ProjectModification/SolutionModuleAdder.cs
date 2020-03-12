@@ -30,6 +30,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public SourceCodeDownloadService SourceCodeDownloadService { get; }
         public SolutionFileModifier SolutionFileModifier { get; }
         public NugetPackageToLocalReferenceConverter NugetPackageToLocalReferenceConverter { get; }
+        public AngularModuleSourceCodeAdder AngularModuleSourceCodeAdder { get; }
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -42,7 +43,8 @@ namespace Volo.Abp.Cli.ProjectModification
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
             SourceCodeDownloadService sourceCodeDownloadService,
             SolutionFileModifier solutionFileModifier,
-            NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter)
+            NugetPackageToLocalReferenceConverter nugetPackageToLocalReferenceConverter,
+            AngularModuleSourceCodeAdder angularModuleSourceCodeAdder)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -55,6 +57,7 @@ namespace Volo.Abp.Cli.ProjectModification
             SourceCodeDownloadService = sourceCodeDownloadService;
             SolutionFileModifier = solutionFileModifier;
             NugetPackageToLocalReferenceConverter = nugetPackageToLocalReferenceConverter;
+            AngularModuleSourceCodeAdder = angularModuleSourceCodeAdder;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
@@ -83,9 +86,23 @@ namespace Volo.Abp.Cli.ProjectModification
                 await DownloadSourceCodesToSolutionFolder(module, modulesFolderInSolution, version);
                 await SolutionFileModifier.AddModuleToSolutionFileAsync(module, solutionFile);
                 await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
+
+                await HandleAngularProject(module, solutionFile);
             }
 
             ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
+        }
+
+        private async Task HandleAngularProject(ModuleWithMastersInfo module, string solutionFilePath)
+        {
+            var angularPath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(solutionFilePath)), "angular");
+
+            if (!Directory.Exists(angularPath))
+            {
+                return;
+            }
+
+            await AngularModuleSourceCodeAdder.AddAsync(solutionFilePath, angularPath);
         }
 
         private async Task DownloadSourceCodesToSolutionFolder(ModuleWithMastersInfo module, string modulesFolderInSolution, string version = null)
