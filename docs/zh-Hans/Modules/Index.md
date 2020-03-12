@@ -11,16 +11,20 @@ ABP是一个 **模块化的应用程序框架** 由十多个 **nuget packages** 
 
 有一些由ABP社区开发和维护的 **开源免费** 的应用程序模块:
 
-* **Account**: 用于用户登录/注册应用程序.
-* **Audit Logging**: 用于将审计日志持久化到数据库.
+* **Account**: 提供账户管理UI,并允许用户登录/注册应用程序.
+* [**Audit Logging**](Audit-Logging.md): 用于将审计日志持久化到数据库.
 * **Background Jobs**: 用于在使用默认后台作业管理器时保存后台作业.
-* **Blogging**: 用于创建精美的博客. ABP的[博客](https://abp.io/blog/abp/) 就使用了此模块.
+* **Blogging**: 用于创建精美的博客. ABP的[博客](https://blog.abp.io/) 就使用了此模块.
 * [**Docs**](Docs.md): 用于创建技术文档页面. ABP的[文档](https://abp.io/documents/) 就使用了此模块.
-* **Identity**: 用于管理角色,用户和他们的权限.
+* **Identity**: 基于Microsoft Identity管理角色,用户和他们的权限.
 * **Identity Server**: 集成了IdentityServer4.
 * **Permission Management**: 用于保存权限.
 * **Setting Management**: 用于保存设置.
-* **Tenant Management**: 用于管理[多租户](../Multi-Tenancy.md)应用程序的租户.
-* **Users**: 用于抽象用户, 因此其他模块可以依赖此模块而不是Identity模块.
+* **Tenant Management**: 管理[多租户](../Multi-Tenancy.md)应用程序的租户.
+* **Users**: 抽象用户, 因此其他模块可以依赖此模块而不是Identity模块.
 
 模块化文档正在编写中. 请参阅[这个仓库](https://github.com/abpframework/abp/tree/master/modules)获取所有模块的源代码.
+
+## 商业应用模块
+
+[ABP商业](https://commercial.abp.io/)许可证在ABP框架上提供了额外的预构建应用程序模块. 参见ABP商业版提供的[模块列表](https://commercial.abp.io/module).

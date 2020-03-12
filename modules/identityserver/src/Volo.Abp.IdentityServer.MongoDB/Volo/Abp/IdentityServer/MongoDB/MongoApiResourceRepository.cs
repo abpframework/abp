@@ -22,7 +22,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(ar => ar.Name == name)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListByScopesAsync(string[] scopeNames, bool includeDetails = false,
@@ -30,7 +30,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Name)))
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
@@ -40,17 +40,17 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .OrderBy(sorting ?? nameof(ApiResource.Name))
                 .As<IMongoQueryable<ApiResource>>()
                 .PageBy<ApiResource, IMongoQueryable<ApiResource>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetTotalCount()
         {
-            return await GetCountAsync().ConfigureAwait(false);
+            return await GetCountAsync();
         }
 
         public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
         public async Task<ActionResult> Get()
         {
-            var script = CreateAbpExtendScript(await _configurationAppService.GetAsync().ConfigureAwait(false));
+            var script = CreateAbpExtendScript(await _configurationAppService.GetAsync());
 
             return Content(
                 _options.MinifyGeneratedScript == true

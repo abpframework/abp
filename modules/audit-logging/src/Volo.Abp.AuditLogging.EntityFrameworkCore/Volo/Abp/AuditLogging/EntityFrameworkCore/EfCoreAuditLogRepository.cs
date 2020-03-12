@@ -54,7 +54,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return auditLogs;
         }
@@ -87,7 +87,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 httpStatusCode
             );
 
-            var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
             return totalCount;
         }
@@ -106,6 +106,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false)
         {
+            var nHttpStatusCode = (int?) httpStatusCode;
             return DbSet.AsNoTracking()
                 .IncludeDetails(includeDetails)
                 .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
@@ -117,7 +118,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
                 .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
                 .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
-                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
+                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == nHttpStatusCode)
                 .WhereIf(maxExecutionDuration != null && maxExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
                 .WhereIf(minExecutionDuration != null && minExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
         }
@@ -129,7 +130,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .OrderBy(t => t.ExecutionTime)
                 .GroupBy(t => new { t.ExecutionTime.Date })
                 .Select(g => new { Day = g.Min(t => t.ExecutionTime), avgExecutionTime = g.Average(t => t.ExecutionDuration) })
-                .ToListAsync().ConfigureAwait(false);
+                .ToListAsync();
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }

@@ -1,0 +1,223 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.GridsDemo
+
+<abp-component-demo-section title="Equal-width" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row>
+            <abp-column>1 of 2</abp-column>
+            <abp-column>2 of 2</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column>1 of 3</abp-column>
+            <abp-column>2 of 3</abp-column>
+            <abp-column>3 of 3</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Column Breaker" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row>
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+            <abp-column-breaker />
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Setting one column width" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row>
+            <abp-column>1 of 3</abp-column>
+            <abp-column size="_6">2 of 3 (wider)</abp-column>
+            <abp-column>3 of 3</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column>1 of 3</abp-column>
+            <abp-column size="_5">2 of 3 (wider)</abp-column>
+            <abp-column>3 of 3</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Variable width content" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row h-align="Center">
+            <abp-column size-lg="_2">1 of 3</abp-column>
+            <abp-column size-md="Auto">Variable width content</abp-column>
+            <abp-column size-lg="_2">3 of 3</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column>1 of 3</abp-column>
+            <abp-column size-md="Auto">Variable width content</abp-column>
+            <abp-column size-lg="_2">3 of 3</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Responsive classes" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-row>
+        <abp-column>col</abp-column>
+        <abp-column>col</abp-column>
+        <abp-column>col</abp-column>
+        <abp-column>col</abp-column>
+    </abp-row>
+    <abp-row>
+        <abp-column size="_8">col-8</abp-column>
+        <abp-column size="_4">col-4</abp-column>
+    </abp-row>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="All breakpoints" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-row>
+        <abp-column size-sm="_8">col-sm-8</abp-column>
+        <abp-column size-sm="_4">col-sm-4</abp-column>
+    </abp-row>
+    <abp-row>
+        <abp-column size-sm="_">col-sm</abp-column>
+        <abp-column size-sm="_">col-sm</abp-column>
+        <abp-column size-sm="_">col-sm</abp-column>
+        <abp-column size-sm="_">col-sm</abp-column>
+    </abp-row>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Mix and match" view-path="@GridsDemoViewComponent.ViewPath">
+    <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+    <abp-row>
+        <abp-column size="_12" size-md="_8">.col-12 .col-md-8</abp-column>
+        <abp-column size="_6" size-md="_4">.col-6 .col-md-4</abp-column>
+    </abp-row>
+
+    <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+    <abp-row>
+        <abp-column size="_6" size-md="_4">.col-6 .col-md-4</abp-column>
+        <abp-column size="_6" size-md="_4">.col-6 .col-md-4</abp-column>
+        <abp-column size="_6" size-md="_4">.col-6 .col-md-4</abp-column>
+    </abp-row>
+
+    <!-- Columns are always 50% wide, on mobile and desktop -->
+    <abp-row>
+        <abp-column size="_6">.col-6</abp-column>
+        <abp-column size="_6">.col-6</abp-column>
+    </abp-row>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Vertical Alignment" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row v-align="Start">
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+        </abp-row>
+        <abp-row v-align="Center">
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+        </abp-row>
+        <abp-row v-align="End">
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+            <abp-column>column</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Vertical Alignment 2" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row v-align="Start">
+            <abp-column v-align="Start">column</abp-column>
+            <abp-column v-align="Center">column</abp-column>
+            <abp-column v-align="End">column</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Horizontal alignment" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row h-align="Start">
+            <abp-column size="_4">One of two columns</abp-column>
+            <abp-column size="_4">One of two columns</abp-column>
+        </abp-row>
+        <abp-row h-align="Center">
+            <abp-column size="_4">One of two columns</abp-column>
+            <abp-column size="_4">One of two columns</abp-column>
+        </abp-row>
+        <abp-row h-align="End">
+            <abp-column size="_4">One of two columns</abp-column>
+            <abp-column size="_4">One of two columns</abp-column>
+        </abp-row>
+        <abp-row h-align="Around">
+            <abp-column size="_4">One of two columns</abp-column>
+            <abp-column size="_4">One of two columns</abp-column>
+        </abp-row>
+        <abp-row h-align="Between">
+            <abp-column size="_4">One of two columns</abp-column>
+            <abp-column size="_4">One of two columns</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="No gutters" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-row gutters="false">
+        <abp-column size="_8">One of two columns</abp-column>
+        <abp-column size="_4">One of two columns</abp-column>
+    </abp-row>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Column wrapping" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-row>
+        <abp-column size="_9">.col-9</abp-column>
+        <abp-column size="_4">.col-4<br>Since 9 + 4 = 13 &gt; 12, this 4-column-wide div gets wrapped onto a new line as one contiguous unit.</abp-column>
+        <abp-column size="_6">.col-6<br>Subsequent columns continue along the new line.s</abp-column>
+    </abp-row>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Reordering" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row>
+            <abp-column order="_12">First, but Last</abp-column>
+            <abp-column>Second, but unordered</abp-column>
+            <abp-column order="_6">Third, but Second</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Reordering 2" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row>
+            <abp-column order="Last">First, but Last</abp-column>
+            <abp-column>Second, but unordered</abp-column>
+            <abp-column order="First">Third, but First</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Offsetting columns" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row>
+            <abp-column size-md="_4">.col-md-4</abp-column>
+            <abp-column size-md="_4" offset-md="_4">.col-md-4 .offset-md-4</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column size-md="_3" offset-md="_3">.col-md-3 .offset-md-3</abp-column>
+            <abp-column size-md="_3" offset-md="_3">.col-md-3 .offset-md-3</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column size-md="_6" offset-md="_3">.col-md-6 .offset-md-3</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Offsetting columns 2" view-path="@GridsDemoViewComponent.ViewPath">
+    <abp-container>
+        <abp-row>
+            <abp-column size-sm="_5" size-md="_6">.col-sm-5 .col-md-6</abp-column>
+            <abp-column size-sm="_5" offset-sm="_2" size-md="_6" offset-md="_">.col-sm-5 .offset-sm-2 .col-md-6 .offset-md-0</abp-column>
+        </abp-row>
+        <abp-row>
+            <abp-column size-sm="_6" size-md="_5" size-lg="_6">col-sm-6 .col-md-5 .col-lg-6</abp-column>
+            <abp-column size-sm="_6" size-md="_5" offset-md="_2" size-lg="_6" offset-lg="_">.col-sm-6 .col-md-5 .offset-md-2 .col-lg-6 .offset-lg-0</abp-column>
+        </abp-row>
+    </abp-container>
+</abp-component-demo-section>

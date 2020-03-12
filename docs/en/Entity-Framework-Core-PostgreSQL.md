@@ -12,12 +12,12 @@ Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFra
 
 ## UsePostgreSql()
 
-Find `UseSqlServer()` calls in your solution, replace with `UsePostgreSql()`. Check the following files:
+Find `UseSqlServer()` call in *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project and replace with `UsePostgreSql()`.
 
-* *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
-* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
 
-> Depending on your solution structure, you may find more code files need to be changed.
+Find `UseSqlServer()` call in *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project and replace with `UseNpgsql()`.
+
+> Depending on your solution structure, you may find more `UseSqlServer()` calls that needs to be changed.
 
 ## Change the Connection Strings
 

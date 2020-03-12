@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "microservices", "microservices", "{3B26D176-390B-4F51-BE52-E9B422C28A88}"
 EndProject
@@ -60,6 +60,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleClientDemo", "applications\ConsoleClientDemo\ConsoleClientDemo.csproj", "{BB8FA269-460D-42BE-90A0-E97D6A3FDEB1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicWebSite.Host", "applications\PublicWebSite.Host\PublicWebSite.Host.csproj", "{29A3A4EF-DEC4-4E43-B6B8-D565667F85EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TenantManagementService.Host", "microservices\TenantManagementService.Host\TenantManagementService.Host.csproj", "{3E1DDEDA-A897-470F-81C2-5A3AFA6D0B61}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{2B3B460C-0293-44A1-BEF4-91A778CE73CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsDemo.Shared", "shared\MsDemo.Shared\MsDemo.Shared.csproj", "{D4549E30-18CC-4157-B994-C0097216C2C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,6 +161,14 @@ Global
 		{29A3A4EF-DEC4-4E43-B6B8-D565667F85EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29A3A4EF-DEC4-4E43-B6B8-D565667F85EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29A3A4EF-DEC4-4E43-B6B8-D565667F85EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E1DDEDA-A897-470F-81C2-5A3AFA6D0B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E1DDEDA-A897-470F-81C2-5A3AFA6D0B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E1DDEDA-A897-470F-81C2-5A3AFA6D0B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E1DDEDA-A897-470F-81C2-5A3AFA6D0B61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4549E30-18CC-4157-B994-C0097216C2C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4549E30-18CC-4157-B994-C0097216C2C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4549E30-18CC-4157-B994-C0097216C2C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4549E30-18CC-4157-B994-C0097216C2C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +199,8 @@ Global
 		{2199D857-C926-4948-A7F7-A11E344F90AA} = {8F6834D7-E6FA-4A04-83BB-955F68EA0A0A}
 		{BB8FA269-460D-42BE-90A0-E97D6A3FDEB1} = {8F6834D7-E6FA-4A04-83BB-955F68EA0A0A}
 		{29A3A4EF-DEC4-4E43-B6B8-D565667F85EC} = {8F6834D7-E6FA-4A04-83BB-955F68EA0A0A}
+		{3E1DDEDA-A897-470F-81C2-5A3AFA6D0B61} = {3B26D176-390B-4F51-BE52-E9B422C28A88}
+		{D4549E30-18CC-4157-B994-C0097216C2C8} = {2B3B460C-0293-44A1-BEF4-91A778CE73CE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37474F0D-2E52-4D2F-B39B-7FE3FF31B4EC}

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
@@ -32,6 +33,8 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string LanguageCode { get; set; }
 
+        public bool DocumentFound { get; set; } = true;
+
         public string DefaultLanguageCode { get; set; }
 
         public ProjectDto Project { get; set; }
@@ -48,7 +51,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public List<SelectListItem> ProjectSelectItems { get; private set; }
 
-        public NavigationWithDetailsDto Navigation { get; private set; }
+        public NavigationNode Navigation { get; private set; }
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
@@ -60,7 +63,9 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentParametersDto DocumentPreferences { get; set; }
 
-        public DocumentRenderParameters UserPreferences { get; set; }
+        public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
+        
+        public bool FullSearchEnabled { get; set; }
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
@@ -86,8 +91,24 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public async Task<IActionResult> OnGetAsync()
         {
+            try
+            {
+                return await SetPageAsync();
+            }
+            catch (DocumentNotFoundException exception)
+            {
+                Logger.LogWarning(exception.Message);
+
+                DocumentFound = false;
+                return Page();
+            }
+        }
+
+        private async Task<IActionResult> SetPageAsync()
+        {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
+            FullSearchEnabled = await _documentAppService.FullSearchEnabledAsync();
 
             try
             {
@@ -270,7 +291,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             try
             {
-                var document = await _documentAppService.GetNavigationAsync(
+                Navigation = await _documentAppService.GetNavigationAsync(
                     new GetNavigationDocumentInput
                     {
                         ProjectId = Project.Id,
@@ -278,15 +299,11 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     }
                 );
-
-                Navigation = ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(document);
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {
                 return;
             }
-
-            Navigation.ConvertItems();
         }
 
         public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)
@@ -394,10 +411,9 @@ namespace Volo.Docs.Pages.Documents.Project
             await SetDocumentPreferencesAsync();
             SetUserPreferences();
 
-            UserPreferences.Add("Document_Language_Code", LanguageCode);
-            UserPreferences.Add("Document_Version", Version);
+            var partialTemplates = await GetDocumentPartialTemplatesAsync();
 
-            Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences);
+            Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
@@ -418,9 +434,56 @@ namespace Volo.Docs.Pages.Documents.Project
             Document.Content = content;
         }
 
+        private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
+        {
+            var partialTemplatesInDocument = await _documentSectionRenderer.GetPartialTemplatesInDocumentAsync(Document.Content);
+
+            if (!partialTemplatesInDocument?.Any(t => t.Parameters != null) ?? true)
+            {
+                return null;
+            }
+
+            foreach (var partialTemplates in partialTemplatesInDocument)
+            {
+                foreach (var parameter in partialTemplates.Parameters)
+                {
+                    if (!UserPreferences.ContainsKey(parameter.Key))
+                    {
+                        UserPreferences.Add(parameter.Key, parameter.Value);
+                    }
+                    else
+                    {
+                        UserPreferences[parameter.Key] = parameter.Value;
+                    }
+                }
+            }
+
+            var contents = new List<DocumentPartialTemplateContent>();
+
+            foreach (var partialTemplate in partialTemplatesInDocument)
+            {
+                var content = (await _documentAppService.GetAsync(new GetDocumentInput
+                {
+                    LanguageCode = LanguageCode,
+                    Name = partialTemplate.Path,
+                    ProjectId = Project.Id,
+                    Version = Version
+                })).Content;
+
+                contents.Add(new DocumentPartialTemplateContent
+                {
+                    Path = partialTemplate.Path,
+                    Content = content
+                });
+            }
+
+            return contents;
+        }
+
         private void SetUserPreferences()
         {
-            UserPreferences = new DocumentRenderParameters();
+            UserPreferences.Add("Document_Language_Code", LanguageCode);
+            UserPreferences.Add("Document_Version", Version);
 
             var cookie = Request.Cookies["AbpDocsPreferences"];
 
@@ -439,7 +502,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     var value = keyValue.Split("=")[1];
 
                     UserPreferences.Add(key, value);
-                    UserPreferences.Add(key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == key)
+                    UserPreferences.Add(key + "_Value", DocumentPreferences?.Parameters?.FirstOrDefault(p => p.Name == key)
                         ?.Values.FirstOrDefault(v => v.Key == value).Value);
                 }
             }
@@ -456,7 +519,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
                 UserPreferences.Add(key, value);
                 UserPreferences.Add(key + "_Value",
-                    DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == key)?.Values
+                    DocumentPreferences?.Parameters?.FirstOrDefault(p => p.Name == key)?.Values
                         .FirstOrDefault(v => v.Key == value).Value);
             }
 
@@ -473,6 +536,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     UserPreferences.Add(parameter.Name + "_Value", parameter.Values.FirstOrDefault().Value);
                 }
             }
+
         }
 
         public async Task SetDocumentPreferencesAsync()
@@ -484,6 +548,7 @@ namespace Volo.Docs.Pages.Documents.Project
                         LanguageCode = LanguageCode,
                         Version = Version
                     });
+
 
             if (projectParameters?.Parameters == null)
             {

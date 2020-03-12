@@ -14,21 +14,19 @@
 
 ### 版本
 
-当你使用GitHub存储文档时,文档模块支持多版本. 如果你的文档具有多个版本, UI上有一个组合框,用于切换版本. 如果你选择使用文件系统存储文档, 那么它不支持多版本. 
+当你使用GitHub存储文档时,文档模块支持多版本. 如果你的文档具有多个版本, UI上有一个组合框,用于切换版本. 如果你选择使用文件系统存储文档, 那么它不支持多版本.
 
-ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
+ABP框架的[文档](docs.abp.io)也是使用的此模块.
 
 > 文档模块遵循 [模块化架构最佳实践](../Best-Practices/Module-Architecture.md) 指南.
-
-
 
 ## 安装
 
 ### 1- 下载
 
-如果你没有现有的ABP项目, 这个步骤向你展示如何在[abp.io](https://cn.abp.io)创建一个新项目并添加文档模块. 如果你本地已经有了一个ABP项目, 那么你可以跳过这一步. 
+如果你没有现有的ABP项目, 这个步骤向你展示如何在[abp.io](https://abp.io)创建一个新项目并添加文档模块. 如果你本地已经有了一个ABP项目, 那么你可以跳过这一步.
 
-打开 https://cn.abp.io/Templates. 输入项目名称为 `Acme.MyProject`, 选择 `ASP.NET Core Mvc Application` 和选择 `Entity Framework Core` 做为数据库提供者.
+打开 https://abp.io/Templates. 输入项目名称为 `Acme.MyProject`, 选择 `ASP.NET Core Mvc Application` 和选择 `Entity Framework Core` 做为数据库提供者.
 
 请注意,本文档包含了 `Entity Framework Core` 提供者 不过你也可以选择 `MongoDB` 做为数据库提供者. 
 
@@ -36,7 +34,7 @@ ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
 
 ### 2- 运行这个空项目
 
-下载项目后, 解压压缩文档并且打开 `Acme.MyProject.sln`. 你可以看到这个解决方案包含了 `Application`, `Domain `, `EntityFrameworkCore` 和 `Web` 项目. 右键选择 `Acme.MyProject.Web` 项目**设置为启动项目**.
+下载项目后, 解压压缩文档并且打开 `Acme.MyProject.sln`. 你可以看到这个解决方案包含了 `Application`, `Domain`, `EntityFrameworkCore` 和 `Web` 项目. 右键选择 `Acme.MyProject.Web` 项目**设置为启动项目**.
 
 ![创建新项目](../images/docs-module_solution-explorer.png)
 
@@ -67,31 +65,32 @@ ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
     ```csharp
      <PackageReference Include="Volo.Docs.Domain" Version="0.9.0" />
     ```
+
 * [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) 需要安装到 `Acme.MyProject.EntityFrameworkCore` 项目.
 
-  - 修改 `Acme.MyProject.EntityFrameworkCore.csproj`文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+  * 修改 `Acme.MyProject.EntityFrameworkCore.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
 
     ```csharp
     <PackageReference Include="Volo.Docs.EntityFrameworkCore" Version="0.9.0" />
     ```
+
 * [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) 需要安装到 `Acme.MyProject.Application` 项目.
 
-  * 修改 `Acme.MyProject.Application.csproj`文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+  * 修改 `Acme.MyProject.Application.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
 
     ```csharp
     <PackageReference Include="Volo.Docs.Application" Version="0.9.0" />
     ```
-* [Volo.Docs.Web ](https://www.nuget.org/packages/Volo.Docs.Web/) 需要安装到 `Acme.MyProject.Web` 项目.
 
-  - 修改 `Acme.MyProject.Web.csproj`文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
+* [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Web/) 需要安装到 `Acme.MyProject.Web` 项目.
+
+  * 修改 `Acme.MyProject.Web.csproj` 文件并且添加以下行. 需要注意它要设置(v0.9.0)为Latest版本.
 
     ```csharp
     <PackageReference Include="Volo.Docs.Web" Version="0.9.0" />
     ```
 
-
-
-### 3- 添加模块添加
+### 3- 添加模块依赖
 
 一个ABP模块必须声明 `[DependsOn]` attribute 如果它依赖于另一个模块. 每个模块都必须在相关的项目的`[DependsOn]`Attribute 中添加.
 
@@ -155,7 +154,6 @@ ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
       }
   ```
 
-
 * 打开 `MyProjectWebModule.cs`并且添加 `typeof(DocsWebModule)` 如下所示;
 
   ```csharp
@@ -174,15 +172,13 @@ ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
       }
   ```
 
-
-
 ### 4- 数据库集成
 
 #### 4.1- Entity Framework 集成
 
 如果你选择了Entity Framework 做为数据库供应者,你需要在DbContext中配置文档模块. 做以下操作;
 
-- 打开 `MyProjectDbContext.cs` 并且添加 `modelBuilder.ConfigureDocs()` 到 `OnModelCreating()` 方法中
+* 打开 `MyProjectDbContext.cs` 并且添加 `modelBuilder.ConfigureDocs()` 到 `OnModelCreating()` 方法中
 
   ```csharp
   [ConnectionStringName("Default")]
@@ -195,7 +191,7 @@ ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
       }
   
       protected override void OnModelCreating(ModelBuilder modelBuilder)
-      {      
+      {
          //...
          modelBuilder.ConfigureDocs();
       }
@@ -217,7 +213,6 @@ ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
   ```
 
   最后你可以查看数据库中创建的新表,例如你可以看到 `DocsProjects` 表已经添加到数据库中.
-
 
 ### 5- 链接文档模块
 
@@ -262,7 +257,7 @@ ABP框架的[文档](https://abp.io/documents/)也是使用的此模块.
   "texts": {
     "Menu:Home": "首页",
       "Welcome": "欢迎",
-      "LongWelcomeMessage": "欢迎来到该应用程序. 这是一个基于ABP框架的启动项目. 有关更多信息, 请访问 cn.abp.io.",
+      "LongWelcomeMessage": "欢迎来到该应用程序. 这是一个基于ABP框架的启动项目. 有关更多信息, 请访问 abp.io.",
     "Menu:Docs": "文档"
   }
 }
@@ -326,7 +321,7 @@ There are no projects yet!
 对于 `SQL` 数据库,你可以使用下面的 `T-SQL` 命令将指定的示例插入到 `DocsProjects` 表中:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/zh-Hans/","GitHubAccessToken":"***"}', N'/', N'master')
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***"}', N'/', N'master', N'')
 ```
 
 请注意，`GitHubAccessToken` 被屏蔽了.它是一个私人令牌,你必须获得自己的令牌并替换 `***` 字符串.
@@ -352,10 +347,10 @@ INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocume
 - ExtraProperties: 
 
   ```json
-  {"Path":"C:\\Github\\abp\\docs\\zh-Hans"}
+  {"Path":"C:\\Github\\abp\\docs"}
   ```
 
-  请注意 `Path` 必须使用本地docs目录替换. 你可以从https://github.com/abpframework/abp/tree/master/docs/zh-hans获取ABP Framework的文档并且复制到该目录 `C:\\Github\\abp\\docs\\zh-Hans` 使其正常工作.
+  请注意 `Path` 必须使用本地docs目录替换. 你可以从https://github.com/abpframework/abp/tree/master/docs获取ABP Framework的文档并且复制到该目录 `C:\\Github\\abp\\docs` 使其正常工作.
 
 - MainWebsiteUrl: `/`
 
@@ -364,7 +359,7 @@ INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocume
 对于 `SQL` 数据库,你可以使用下面的 `T-SQL` 命令将指定的示例插入到 `DocsProjects` 表中:
 
 ```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs\\zh-Hans"}', N'/', NULL)
+INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'')
 ```
 
 添加上面的一个示例项目后运行该应用程序. 在菜单中你会看到`文档` 链接，点击菜单链接打开文档页面.
@@ -407,6 +402,101 @@ public class Person
 你可以使用 ABP Framework 的文档做为示例:
 
 [https://github.com/abpframework/abp/blob/master/docs/zh-Hans/](https://github.com/abpframework/abp/blob/master/docs/zh-Hans/)
+
+#### 有条件的部分功能(使用Scriban)
+
+文档模块使用[Scriban](<https://github.com/lunet-io/scriban/tree/master/doc>)有条件的显示或隐藏文档的某些部分. 使用该功能你需要为每一种语言创建一个JSON文件做为**参数文档**. 它包含所有键值以及它们的显示名称.
+
+例如 [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/blob/master/en/docs-params.json):
+
+```json
+{
+    "parameters": [{
+        "name": "UI",
+        "displayName": "UI",
+        "values": {
+          "MVC": "MVC / Razor Pages",
+          "NG": "Angular"
+        }
+      },
+      {
+        "name": "DB",
+        "displayName": "Database",
+        "values": {
+          "EF": "Entity Framework Core",
+          "Mongo": "MongoDB"
+        }
+      },
+      {
+        "name": "Tiered",
+        "displayName": "Tiered",
+        "values": {
+          "No": "Not Tiered",
+          "Yes": "Tiered"
+        }
+      }]
+}
+```
+
+因为并不是项目中的每个文档都有章节或者不需要所有的参数,你必须声明哪些参数将用于对文档进行分段，在文档的任何地方都可以使用JSON块.
+
+例如 [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/blob/master/en/getting-started.md):
+
+```
+.....
+
+​````json
+//[doc-params]
+{
+    "UI": ["MVC","NG"],
+    "DB": ["EF", "Mongo"],
+    "Tiered": ["Yes", "No"]
+}
+​````
+
+........
+```
+
+这个部分会在渲染时自动删除.前提是这些键值必须与**参数文档**中的键值匹配.
+
+![Interface](../images/docs-section-ui.png)
+
+现在你可以使用 **Scriban** 语法在文档中创建章节.
+
+示例 :
+
+````
+{{ if UI == "NG" }}
+
+* `-u` argument specifies the UI framework, `angular` in this case.
+
+{{ end }}
+
+{{ if DB == "Mongo" }}
+
+* `-d` argument specifies the database provider, `mongodb` in this case.
+
+{{ end }}
+
+{{ if Tiered == "Yes" }}
+
+* `--tiered` argument is used to create N-tiered solution where authentication server, UI and API layers are physically separated.
+
+{{ end }}
+
+````
+
+还可以在文本中使用变量,在其键中添加 **_Value** 后缀:
+
+````
+This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider.
+````
+
+如果你想要得到的当前文档的语言或版本,可以使用预定义的 **Document_Language_Code** 和 **DOCUMENT_VERSION** 键(这对于创建重定向到另一个地区中另一个文档系统的链接很有用).
+
+------
+
+**重要提示**: Scriban 的语法是 "{{" and "}}". 如果要在文档(如Angular文档)中使用转义,则必须使用转义块. 参阅 [Scriban文档](<https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block> ) 了解更多信息.
 
 ### 8- 创建文档导航
 
@@ -465,3 +555,7 @@ public class Person
 ![Navigation menu](../images/docs-module_download-sample-navigation-menu.png)
 
 最后，为您的项目添加了一个新的Docs模块, 该模块由GitHub提供.
+
+## 下一步
+
+文档模块也可以做为独立的应用程序. 查看 [VoloDocs](../Apps/VoloDocs).

@@ -40,7 +40,7 @@ namespace Volo.Abp.BackgroundJobs
             {
                 if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
                 {
-                    await ((Task) jobExecuteMethod.Invoke(job, new[] {context.JobArgs})).ConfigureAwait(false);
+                    await ((Task) jobExecuteMethod.Invoke(job, new[] {context.JobArgs}));
                 }
                 else
                 {

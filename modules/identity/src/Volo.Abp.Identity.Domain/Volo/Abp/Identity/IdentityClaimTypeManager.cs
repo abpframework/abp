@@ -15,17 +15,17 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
         {
-            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name).ConfigureAwait(false))
+            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name))
             {
                 throw new AbpException($"Name Exist: {claimType.Name}");
             }
 
-            return await _identityClaimTypeRepository.InsertAsync(claimType).ConfigureAwait(false);
+            return await _identityClaimTypeRepository.InsertAsync(claimType);
         }
 
         public virtual async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
         {
-            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id).ConfigureAwait(false))
+            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id))
             {
                 throw new AbpException($"Name Exist: {claimType.Name}");
             }
@@ -36,7 +36,7 @@ namespace Volo.Abp.Identity
             }
             
 
-            return await _identityClaimTypeRepository.UpdateAsync(claimType).ConfigureAwait(false);
+            return await _identityClaimTypeRepository.UpdateAsync(claimType);
         }
     }
 }

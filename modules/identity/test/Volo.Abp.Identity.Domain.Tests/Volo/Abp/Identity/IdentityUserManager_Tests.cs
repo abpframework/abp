@@ -31,7 +31,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetByIdAsync()
         {
-            var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId).ConfigureAwait(false);
+            var user = await _identityUserManager.GetByIdAsync(_testData.UserJohnId);
 
             user.ShouldNotBeNull();
             user.UserName.ShouldBe("john.nash");
@@ -43,18 +43,18 @@ namespace Volo.Abp.Identity
             using (var uow = _unitOfWorkManager.Begin())
             {
                 var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.NormalizeName("david")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("david"));
                 user.ShouldNotBeNull();
 
                 var identityResult = await _identityUserManager.SetRolesAsync(user, new List<string>()
                 {
                     "moderator",
-                }).ConfigureAwait(false);
+                });
 
                 identityResult.Succeeded.ShouldBeTrue();
                 user.Roles.ShouldContain(x => x.RoleId == _testData.RoleModeratorId);
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
         }
 
@@ -64,23 +64,23 @@ namespace Volo.Abp.Identity
             using (var uow = _unitOfWorkManager.Begin())
             {
                 var roleSupporter =
-                    await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("supporter")).ConfigureAwait(false);
+                    await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("supporter"));
                 roleSupporter.ShouldNotBeNull();
 
                 var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.NormalizeName("john.nash")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 var identityResult = await _identityUserManager.SetRolesAsync(user, new List<string>()
                 {
                     "admin",
-                }).ConfigureAwait(false);
+                });
 
                 identityResult.Succeeded.ShouldBeTrue();
                 user.Roles.ShouldNotContain(x => x.RoleId == _testData.RoleModeratorId);
                 user.Roles.ShouldNotContain(x => x.RoleId == roleSupporter.Id);
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
         }
     }

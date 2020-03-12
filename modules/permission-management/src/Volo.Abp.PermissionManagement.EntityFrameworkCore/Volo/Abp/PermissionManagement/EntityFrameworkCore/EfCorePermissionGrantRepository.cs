@@ -30,7 +30,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey,
                     GetCancellationToken(cancellationToken)
-                ).ConfigureAwait(false);
+                );
         }
 
         public async Task<List<PermissionGrant>> GetListAsync(
@@ -42,7 +42,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                 .Where(s =>
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey
-                ).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                ).ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -3,14 +3,14 @@ import { Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { NgxsModule } from '@ngxs/store';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { ToasterService } from '../services/toaster.service';
 import { ThemeSharedModule } from '../theme-shared.module';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'abp-dummy',
   template: `
-    <abp-toast></abp-toast>
+    <abp-toast-container></abp-toast-container>
   `,
 })
 class DummyComponent {
@@ -23,7 +23,7 @@ describe('ToasterService', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
-    providers: [MessageService],
+    mocks: [OAuthService],
   });
 
   beforeEach(() => {
@@ -31,59 +31,57 @@ describe('ToasterService', () => {
     service = spectator.get(ToasterService);
   });
 
-  it('should display an error toast', () => {
+  test('should display an error toast', () => {
     service.error('test', 'title');
 
     spectator.detectChanges();
 
-    expect(spectator.query('p-toast')).toBeTruthy();
-    expect(spectator.query('p-toastitem')).toBeTruthy();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-times');
-    expect(spectator.query('div.ui-toast-summary')).toHaveText('title');
-    expect(spectator.query('div.ui-toast-detail')).toHaveText('test');
+    expect(spectator.query('div.toast')).toBeTruthy();
+    expect(spectator.query('.toast-icon i')).toHaveClass('fa-times-circle');
+    expect(spectator.query('div.toast-title')).toHaveText('title');
+    expect(spectator.query('p.toast-message')).toHaveText('test');
   });
 
-  it('should display a warning toast', () => {
+  test('should display a warning toast', () => {
     service.warn('test', 'title');
     spectator.detectChanges();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-exclamation-triangle');
+    expect(spectator.query('.toast-icon i')).toHaveClass('fa-exclamation-triangle');
   });
 
-  it('should display a success toast', () => {
+  test('should display a success toast', () => {
     service.success('test', 'title');
     spectator.detectChanges();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-check');
+    expect(spectator.query('.toast-icon i')).toHaveClass('fa-check-circle');
   });
 
-  it('should display an info toast', () => {
+  test('should display an info toast', () => {
     service.info('test', 'title');
     spectator.detectChanges();
-    expect(spectator.query('span.ui-toast-icon')).toHaveClass('pi-info-circle');
+    expect(spectator.query('.toast-icon i')).toHaveClass('fa-info-circle');
   });
 
-  it('should display multiple toasts', () => {
-    service.addAll([
-      { summary: 'summary1', detail: 'detail1' },
-      { summary: 'summary2', detail: 'detail2' },
-    ]);
+  test('should display multiple toasts', () => {
+    service.info('detail1', 'summary1');
+    service.info('detail2', 'summary2');
+
     spectator.detectChanges();
-    expect(spectator.queryAll('div.ui-toast-summary').map(node => node.textContent.trim())).toEqual([
+    expect(spectator.queryAll('div.toast-title').map(node => node.textContent.trim())).toEqual([
       'summary1',
       'summary2',
     ]);
-    expect(spectator.queryAll('div.ui-toast-detail').map(node => node.textContent.trim())).toEqual([
+    expect(spectator.queryAll('p.toast-message').map(node => node.textContent.trim())).toEqual([
       'detail1',
       'detail2',
     ]);
   });
 
-  it('should remove the opened toast', () => {
+  test('should remove the opened toasts', () => {
     service.info('test', 'title');
     spectator.detectChanges();
-    expect(spectator.query('p-toastitem')).toBeTruthy();
+    expect(spectator.query('div.toast')).toBeTruthy();
 
     service.clear();
     spectator.detectChanges();
-    expect(spectator.query('p-toastitem')).toBeFalsy();
+    expect(spectator.query('p-div.toast')).toBeFalsy();
   });
 });

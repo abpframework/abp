@@ -17,14 +17,14 @@ namespace Volo.Abp.Dapper.Repositories
 
         public virtual async Task<List<string>> GetAllPersonNames()
         {
-            return (await DbConnection.QueryAsync<string>("select Name from People", transaction: DbTransaction).ConfigureAwait(false))
+            return (await DbConnection.QueryAsync<string>("select Name from People", transaction: DbTransaction))
                 .ToList();
         }
 
         public virtual async Task<int> UpdatePersonNames(string name)
         {
             return await DbConnection.ExecuteAsync("update People set Name = @NewName", new { NewName = name },
-                DbTransaction).ConfigureAwait(false);
+                DbTransaction);
         }
     }
 }

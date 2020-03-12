@@ -23,52 +23,52 @@ namespace Volo.Abp.FeatureManagement
 
         public async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
-            var cacheItem = await GetCacheItemAsync(name, providerName, providerKey).ConfigureAwait(false);
+            var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
             return cacheItem.Value;
         }
 
         public async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
-            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey).ConfigureAwait(false);
+            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
             if (featureValue == null)
             {
                 featureValue = new FeatureValue(GuidGenerator.Create(), name, value, providerName, providerKey);
-                await FeatureValueRepository.InsertAsync(featureValue).ConfigureAwait(false);
+                await FeatureValueRepository.InsertAsync(featureValue);
             }
             else
             {
                 featureValue.Value = value;
-                await FeatureValueRepository.UpdateAsync(featureValue).ConfigureAwait(false);
+                await FeatureValueRepository.UpdateAsync(featureValue);
             }
         }
 
         public async Task DeleteAsync(string name, string providerName, string providerKey)
         {
-            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey).ConfigureAwait(false);
+            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
             if (featureValue != null)
             {
-                await FeatureValueRepository.DeleteAsync(featureValue).ConfigureAwait(false);
+                await FeatureValueRepository.DeleteAsync(featureValue);
             }
         }
 
         protected virtual async Task<FeatureValueCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
         {
             var cacheKey = CalculateCacheKey(name, providerName, providerKey);
-            var cacheItem = await Cache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await Cache.GetAsync(cacheKey);
 
             if (cacheItem != null)
             {
                 return cacheItem;
             }
 
-            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey).ConfigureAwait(false);
+            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
 
             cacheItem = new FeatureValueCacheItem(featureValue?.Value);
 
             await Cache.SetAsync(
                 cacheKey,
                 cacheItem
-            ).ConfigureAwait(false);
+            );
 
             return cacheItem;
         }

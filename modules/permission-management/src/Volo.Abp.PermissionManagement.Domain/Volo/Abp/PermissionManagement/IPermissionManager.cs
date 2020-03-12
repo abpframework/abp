@@ -13,5 +13,7 @@ namespace Volo.Abp.PermissionManagement
         Task<List<PermissionWithGrantedProviders>> GetAllAsync([NotNull] string providerName, [NotNull] string providerKey);
 
         Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted);
+
+        Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey);
     }
 }

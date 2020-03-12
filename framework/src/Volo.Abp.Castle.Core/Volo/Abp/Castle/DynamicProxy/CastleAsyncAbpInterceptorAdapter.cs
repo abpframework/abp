@@ -19,7 +19,7 @@ namespace Volo.Abp.Castle.DynamicProxy
         {
             await _abpInterceptor.InterceptAsync(
                 new CastleAbpMethodInvocationAdapter(invocation, proceedInfo, proceed)
-            ).ConfigureAwait(false);
+            );
         }
 
         protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
@@ -28,7 +28,7 @@ namespace Volo.Abp.Castle.DynamicProxy
 
             await _abpInterceptor.InterceptAsync(
                 adapter
-            ).ConfigureAwait(false);
+            );
 
             return (TResult)adapter.ReturnValue;
         }

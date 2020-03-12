@@ -37,7 +37,7 @@ namespace Volo.Abp.Emailing
         /// <returns>Value of the setting</returns>
         protected async Task<string> GetNotEmptySettingValueAsync(string name)
         {
-            var value = await SettingProvider.GetOrNullAsync(name).ConfigureAwait(false);
+            var value = await SettingProvider.GetOrNullAsync(name);
 
             if (value.IsNullOrEmpty())
             {

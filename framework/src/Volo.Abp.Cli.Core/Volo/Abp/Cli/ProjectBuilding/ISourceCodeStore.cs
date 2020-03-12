@@ -8,7 +8,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
         Task<TemplateFile> GetAsync(
             string name,
             string type,
-            [CanBeNull] string version = null
+            [CanBeNull] string version = null,
+            [CanBeNull] string templateSource = null
         );
     }
 }

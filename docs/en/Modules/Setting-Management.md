@@ -67,6 +67,8 @@ namespace Demo
 
 So, you can get or set a setting value for different setting value providers (Default, Global, User, Tenant... etc).
 
+> Use the `ISettingProvider` instead of the `ISettingManager` if you only need to read the setting values, because it implements caching and supports all deployment scenarios. You can use the `ISettingManager` if you are creating a setting management UI.
+
 ### Setting Cache
 
 Setting values are cached using the [distributed cache](../Caching.md) system. Always use the `ISettingManager` to change the setting values which manages the cache for you.

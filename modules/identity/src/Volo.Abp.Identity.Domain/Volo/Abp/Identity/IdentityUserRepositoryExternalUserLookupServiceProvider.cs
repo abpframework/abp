@@ -30,7 +30,7 @@ namespace Volo.Abp.Identity
                     includeDetails: false,
                     cancellationToken: cancellationToken
                 )
-.ConfigureAwait(false))?.ToAbpUserData();
+)?.ToAbpUserData();
         }
 
         public virtual async Task<IUserData> FindByUserNameAsync(
@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity
                     includeDetails: false,
                     cancellationToken: cancellationToken
                 )
-.ConfigureAwait(false))?.ToAbpUserData();
+)?.ToAbpUserData();
         }
     }
 }

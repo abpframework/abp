@@ -1,0 +1,30 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "OrganizationManagement": "組織管理",
+    "OrganizationList": "組織列表",
+    "Volo.AbpIo.Commercial:010003": "您不是該組織的擁有者!",
+    "OrganizationNotFoundMessage": "找不到任何組織!",
+    "DeveloperCount": "開發者數量",
+    "Owners": "擁有者",
+    "AddMember": "加入成員",
+    "AddOwner": "加入擁有者",
+    "AddDeveloper": "加入開發者",
+    "UserName": "使用者名稱",
+    "Name": "名稱",
+    "EmailAddress": "電子信箱地址",
+    "Developers": "開發者",
+    "LicenseType": "許可證類型",
+    "Manage": "管理",
+    "StartDate": "開始日期",
+    "EndDate": "結束日期",
+    "Modules": "模組",
+    "LicenseExtendMessage": "您的許可已經延長至{0}",
+    "LicenseUpgradeMessage": "您的許可已升級為{0}",
+    "LicenseAddDeveloperMessage": "{0}個開發者已加入到您的許可",
+    "Volo.AbpIo.Commercial:010004": "不能找到指定的使用者! 使用者必須已經註冊.",
+    "MyOrganizations": "我的組織",
+    "ApiKey": "API key",
+    "UserNameNotFound": "沒有使用者名稱為{0}的使用者"
+  }
+}

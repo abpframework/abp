@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApiExploring
         [Fact]
         public async Task GetAsync()
         {
-            var model = await GetResponseAsObjectAsync<ApplicationApiDescriptionModel>("/api/abp/api-definition").ConfigureAwait(false);
+            var model = await GetResponseAsObjectAsync<ApplicationApiDescriptionModel>("/api/abp/api-definition");
             model.ShouldNotBeNull();
         }
     }

@@ -6,11 +6,13 @@
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
     "Permission:Create": "Create",
+    "Permission:Documents": "Documents",
     "Menu:DocumentManagement": "Documents",
     "Menu:ProjectManagement": "Projects",
     "CreateANewProject": "Create new project",
     "Edit": "Edit",
     "Create": "Create",
+    "Pull": "Pull",
     "Projects": "Projects",
     "Name": "Name",
     "ShortName": "ShortName",
@@ -27,6 +29,9 @@
     "DisplayName:LatestVersionBranchName": "Latest version branch name",
     "DisplayName:GitHubRootUrl": "GitHub root URL",
     "DisplayName:GitHubAccessToken": "GitHub access token",
-    "DisplayName:GitHubUserAgent": "GitHub user agent"
+    "DisplayName:GitHubUserAgent": "GitHub user agent",
+    "DisplayName:All": "Pull all",
+    "DisplayName:LanguageCode": "Language code",
+    "DisplayName:Version": "Version"
   }
 }

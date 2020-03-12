@@ -22,13 +22,13 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task FindByKeyAsync()
         {
-            (await _persistentGrantRepository.FindByKeyAsync("PersistedGrantKey1").ConfigureAwait(false)).ShouldNotBeNull();
+            (await _persistentGrantRepository.FindByKeyAsync("PersistedGrantKey1")).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task GetListBySubjectIdAsync()
         {
-            var persistedGrants = await _persistentGrantRepository.GetListBySubjectIdAsync("PersistedGrantSubjectId1").ConfigureAwait(false);
+            var persistedGrants = await _persistentGrantRepository.GetListBySubjectIdAsync("PersistedGrantSubjectId1");
             persistedGrants.ShouldNotBeEmpty();
             persistedGrants.ShouldContain(x => x.Key == "PersistedGrantKey1");
         }
@@ -36,9 +36,9 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task DeleteBySubjectIdAndClientId()
         {
-            await _persistentGrantRepository.DeleteAsync("PersistedGrantSubjectId1", "PersistedGrantClientId1").ConfigureAwait(false);
+            await _persistentGrantRepository.DeleteAsync("PersistedGrantSubjectId1", "PersistedGrantClientId1");
 
-            var persistedGrants = await _persistentGrantRepository.GetListAsync().ConfigureAwait(false);
+            var persistedGrants = await _persistentGrantRepository.GetListAsync();
             persistedGrants.ShouldNotBeEmpty();
             persistedGrants.ShouldNotContain(x =>
                 x.Key == "PersistedGrantKey1" && x.SubjectId == "PersistedGrantSubjectId1" &&
@@ -49,9 +49,9 @@ namespace Volo.Abp.IdentityServer
         public async Task DeleteBySubjectIdAndClientIdAndType()
         {
             await _persistentGrantRepository.DeleteAsync("PersistedGrantSubjectId1", "PersistedGrantClientId1",
-                "PersistedGrantClientId1").ConfigureAwait(false);
+                "PersistedGrantClientId1");
 
-            var persistedGrants = await _persistentGrantRepository.GetListAsync().ConfigureAwait(false);
+            var persistedGrants = await _persistentGrantRepository.GetListAsync();
             persistedGrants.ShouldNotBeEmpty();
             persistedGrants.ShouldNotContain(x =>
                 x.Key == "PersistedGrantKey1" && x.SubjectId == "PersistedGrantSubjectId1" &&

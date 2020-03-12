@@ -1,0 +1,12 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity資源名稱已存在: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api資源名稱已存在: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId已經存在: {ClientId}",
+    "UserLockedOut": "登錄失敗,用戶賬戶已被鎖定.請稍後再試.",
+    "InvalidUserNameOrPassword": "用戶名或密碼錯誤!",
+    "LoginIsNotAllowed": "無法登錄!妳需要驗證郵箱地址/手機號.",
+    "InvalidUsername": "用戶名或密碼錯誤!"
+  }
+}

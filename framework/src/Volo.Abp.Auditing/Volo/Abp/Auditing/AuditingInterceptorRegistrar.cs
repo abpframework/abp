@@ -32,6 +32,8 @@ namespace Volo.Abp.Auditing
         //TODO: Move to a better place
         public static bool ShouldAuditTypeByDefault(Type type)
         {
+            //TODO: In an inheritance chain, it would be better to check the attributes on the top class first.
+
             if (type.IsDefined(typeof(AuditedAttribute), true))
             {
                 return true;

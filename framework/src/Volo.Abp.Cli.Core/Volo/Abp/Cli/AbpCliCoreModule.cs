@@ -30,6 +30,8 @@ namespace Volo.Abp.Cli
                 options.Commands["login"] = typeof(LoginCommand);
                 options.Commands["logout"] = typeof(LogoutCommand);
                 options.Commands["suite"] = typeof(SuiteCommand);
+                options.Commands["switch-to-preview"] = typeof(SwitchNightlyPreviewCommand);
+                options.Commands["switch-to-stable"] = typeof(SwitchStableCommand);
             });
         }
     }

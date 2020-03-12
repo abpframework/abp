@@ -38,7 +38,8 @@ If you want to add multiple files, this can be tedious. Alternatively, you can d
 
 ````C#
 <ItemGroup>
-  <None Remove="MyResources\**\*.*" />
+  <EmbeddedResource Include="MyResources\**\*.*" />
+  <Content Remove="MyResources\**\*.*" />
 </ItemGroup>
 ````
 

@@ -52,7 +52,6 @@ Generic Repositories provides some standard CRUD features out of the box:
 * Provides `Update` and `Delete` methods to update or delete an entity by entity object or it's id.
 * Provides `Delete` method to delete multiple entities by a filter.
 * Implements `IQueryable<TEntity>`, so you can use LINQ and extension methods like `FirstOrDefault`, `Where`, `OrderBy`, `ToList` and so on...
-* Have **sync** and **async** versions for all methods. 
 
 ### Basic Repositories
 

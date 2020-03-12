@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity
 
         public async Task<string[]> GetRolesAsync(Guid userId)
         {
-            var output = await _userAppService.GetRolesAsync(userId).ConfigureAwait(false);
+            var output = await _userAppService.GetRolesAsync(userId);
             return output.Items.Select(r => r.Name).ToArray();
         }
     }

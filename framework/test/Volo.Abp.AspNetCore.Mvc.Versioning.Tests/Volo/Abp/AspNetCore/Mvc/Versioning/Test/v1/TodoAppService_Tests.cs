@@ -18,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.v1
         [Fact]
         public async Task GetAsync()
         {
-            (await _todoAppService.GetAsync(42).ConfigureAwait(false)).ShouldBe("Compat-42-1.0");
+            (await _todoAppService.GetAsync(42)).ShouldBe("Compat-42-1.0");
         }
     }
 }
