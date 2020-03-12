@@ -572,6 +572,30 @@ This document assumes that you prefer to use **{{ UI_Value }}** as the UI framew
 
 最后，为您的项目添加了一个新的Docs模块, 该模块由GitHub提供.
 
+## 全文搜索(Elastic Search)
+
+文档模块支持使用Elastic Search对内容进行全文搜索. 默认没有启用, 你可以配置`DocsElasticSearchOptions`启用它.
+
+```
+Configure<DocsElasticSearchOptions>(options =>
+{
+    options.Enable = true;
+    options.IndexName = "your_index_name"; //default IndexName is abp_documents
+});
+```
+
+应用程序启动后如果`Index`不存在则会自动创建`Index`.
+
+`DefaultElasticClientProvider`负责创建`IElasticClient`, 默认情况下它会从`IConfiguration`中读取Elastic Search的`Url`.
+如果你的IElasticClient需要其它配置请使用重写IElasticClientProvider服务并在依赖注入系统中替换它.
+```
+{
+  "ElasticSearch": {
+    "Url": "http://localhost:9200"
+  }
+}
+```
+
 ## 下一步
 
 文档模块也可以做为独立的应用程序. 查看 [VoloDocs](../Apps/VoloDocs).

@@ -572,6 +572,32 @@ The upper sample `JSON` file renders the below navigation menu as `HTML`.
 
 Finally a new Docs Module is added to your project which is feeded with GitHub.
 
+
+## Full-Text Search(Elastic Search)
+
+The Docs module supports full-text search using Elastic Search. It is not enabled by default. You can configure `DocsElasticSearchOptions` to enable it.
+
+```
+Configure<DocsElasticSearchOptions>(options =>
+{
+    options.Enable = true;
+    options.IndexName = "your_index_name"; //default IndexName is abp_documents
+});
+```
+
+The `Index` is automatically created after the application starts if the `Index` does not exist.
+
+`DefaultElasticClientProvider` is responsible for creating `IElasticClient`. By default, it reads Elastic Search's `Url` from `IConfiguration`.
+If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](Dependency-Injection.md) system.
+
+```
+{
+  "ElasticSearch": {
+    "Url": "http://localhost:9200"
+  }
+}
+```
+
 ## Next
 
 Docs Module is also available as a standalone application. Check out [VoloDocs](../Apps/VoloDocs).
