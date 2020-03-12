@@ -27,7 +27,7 @@ Angular是第一个SPA UI选项,但它不是最后一个.在v1.0发布之后,我
 
 ### Widget系统
 
-[Widget系统](https://docs.abp.io/en/abp/latest/AspNetCore/Widgets)允许为ASP.NET Core MVC应用程序**定义和重用**Widget.Widget可能有自己的脚本和样式资源以及由ABP框架管理的第三方库的依赖关系.
+[Widget系统](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets)允许为ASP.NET Core MVC应用程序**定义和重用**Widget.Widget可能有自己的脚本和样式资源以及由ABP框架管理的第三方库的依赖关系.
 
 ### 其他
 
