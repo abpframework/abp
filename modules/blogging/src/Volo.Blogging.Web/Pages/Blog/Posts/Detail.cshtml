@@ -156,7 +156,7 @@
                                         </a>
                                     }
 
-                                    @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                    @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id.HasValue && CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                     {
                                         <span class="seperator">|</span>
                                         <a href="#" class="tag updateLink" data-updateid="@commentWithRepliesDto.Comment.Id">
@@ -188,7 +188,7 @@
                                         </div>
                                     </div>
                                 }
-                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id.HasValue && CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                 {
                                     <div class="comment-form mt-4 editForm">
                                         <div class="clearfix p-4">
@@ -234,7 +234,7 @@
                                                     </a>
                                                 }
 
-                                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id.HasValue && CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                                 {
                                                     <span class="seperator">|</span>
                                                     <a href="#" class="tag updateLink" data-updateid="@reply.Id">
@@ -264,7 +264,7 @@
                                                     </div>
                                                 </div>
                                             }
-                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id.HasValue && CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                             {
                                                 <div class="comment-form mt-4 editForm">
                                                     <div class="clearfix bg-light p-4">
