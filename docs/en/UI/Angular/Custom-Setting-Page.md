@@ -1,4 +1,4 @@
-## Creating a Settings Tab
+# Custom Setting Page
 
 There are several settings tabs from different modules. You can add custom settings tabs to your project in 3 steps.
 
