@@ -10,7 +10,7 @@
 @model DetailModel
 @{
     ViewBag.PageTitle = "Blog";
-    var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
+    var hasCommentingPermission = await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Create);
 }
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
