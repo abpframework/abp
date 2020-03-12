@@ -221,55 +221,72 @@
       ]
     },
     {
-      "text": "ASP.NET Core",
+      "text": "API",
       "items": [
         {
-          "text": "API",
-          "items": [
-            {
-              "text": "自动API控制器",
-              "path": "AspNetCore/Auto-API-Controllers.md"
-            },
-            {
-              "text": "动态C# API客户端",
-              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
-            }
-          ]
+          "text": "自动API控制器",
+          "path": "API/Auto-API-Controllers.md"
         },
         {
-          "text": "用户界面",
+          "text": "动态C# API客户端",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
+        }
+      ]
+    },
+    {
+      "text": "用户界面",
+      "items": [
+        {
+          "text": "ASP.NET Core",
           "items": [
             {
               "text": "客户端包管理",
-              "path": "AspNetCore/Client-Side-Package-Management.md"
+              "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
               "text": "捆绑&压缩",
-              "path": "AspNetCore/Bundling-Minification.md"
+              "path": "UI/AspNetCore/Bundling-Minification.md"
             },
             {
               "text": "Tag Helpers",
               "items":[
                 {
                   "text": "在线演示",
-                  "path": "AspNetCore/Tag-Helpers/Index.md"
+                  "path": "UI/AspNetCore/Tag-Helpers/Index.md"
                 },
                 {
                   "text": "按钮",
-                  "path": "AspNetCore/Tag-Helpers/Buttons.md"
+                  "path": "UI/AspNetCore/Tag-Helpers/Buttons.md"
                 }
               ]
             },
             {
               "text": "仪表板和小部件(Widget)系统",
-              "path": "AspNetCore/Widgets.md"
+              "path": "UI/AspNetCore/Widgets.md"
             },
             {
               "text": "主题化",
-              "path": "AspNetCore/Theming.md"
+              "path": "UI/AspNetCore/Theming.md"
             }
           ]
-        }
+        },
+        {
+          "text": "Angular",
+          "items": [
+            {
+              "text": "本地化",
+              "path": "UI/Angular/Localization.md"
+            },
+            {
+              "text": "权限管理",
+              "path": "UI/Angular/Permission-Management.md"
+            },
+            {
+              "text": "替换组件",
+              "path": "UI/Angular/Component-Replacement.md"
+            }
+          ]
+        } 
       ]
     },
     {
