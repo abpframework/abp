@@ -6,7 +6,9 @@
 
 In order to use the `ConfigStateService` you must inject it in your class as a dependency.
 
-```typescript
+```js
+import { ConfigStateService } from '@abp/ng.core';
+
 @Component({
   /* class metadata here */
 })
@@ -25,7 +27,7 @@ You do not have to provide the `ConfigStateService` at module or component/direc
 
 You can use the `getAll` method of `ConfigStateService` to get all of the configuration object from the store. It is used as follows:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const config = this.config.getAll();
@@ -35,7 +37,7 @@ const config = this.config.getAll();
 
 You can use the `getOne` method of `ConfigStateService` to get a specific configuration property from the store. For that, the property name should be passed to the method as parameter.
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const currentUser = this.config.getOne("currentUser");
@@ -43,13 +45,13 @@ const currentUser = this.config.getOne("currentUser");
 
 On occasion, you will probably want to be more specific than getting just the current user. For example, here is how you can get the `tenantId`:
 
-```typescript
+```js
 const tenantId = this.config.getDeep("currentUser.tenantId");
 ```
 
 or by giving an array of keys as parameter:
 
-```typescript
+```js
 const tenantId = this.config.getDeep(["currentUser", "tenantId"]);
 ```
 
@@ -63,7 +65,7 @@ Please refer to `Config.State` type for all the properties you can get with `get
 
 The `getApplicationInfo` method is used to get the application information from the environment variables stored as the config state. This is how you can use it:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const appInfo = this.config.getApplicationInfo();
@@ -79,7 +81,7 @@ Please refer to `Config.Application` type for all the properties you can get wit
 
 The `getApplicationInfo` method is used to get a specific API URL from the environment variables stored as the config state. This is how you can use it:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const apiUrl = this.config.getApiUrl();
@@ -95,7 +97,7 @@ This method returns the `url` of a specific API based on the key given as its on
 
 You can use the `getSettings` method of `ConfigStateService` to get all of the settings object from the configuration state. Here is how you get all settings:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const settings = this.config.getSettings();
@@ -103,7 +105,7 @@ const settings = this.config.getSettings();
 
 In addition, the method lets you search settings by **passing a keyword** to it.
 
-```typescript
+```js
 const localizationSettings = this.config.getSettings("Localization");
 /*
 {
@@ -118,7 +120,7 @@ Beware though, **settings search is case sensitive**.
 
 You can use the `getSetting` method of `ConfigStateService` to get a specific setting from the configuration state. Here is an example:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const defaultLang = this.config.getSetting("Abp.Localization.DefaultLanguage");
@@ -129,7 +131,7 @@ const defaultLang = this.config.getSetting("Abp.Localization.DefaultLanguage");
 
 You can use the `getGrantedPolicy` method of `ConfigStateService` to get a specific permission from the configuration state. For that, you should pass a policy key as parameter to the method.
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const hasIdentityPermission = this.config.getGrantedPolicy("Abp.Identity");
@@ -138,7 +140,7 @@ const hasIdentityPermission = this.config.getGrantedPolicy("Abp.Identity");
 
 You may also **combine policy keys** to fine tune your selection:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const hasIdentityAndAccountPermission = this.config.getGrantedPolicy(
@@ -164,7 +166,7 @@ Please consider the following **rules** when creating your permission selectors:
 
 The `getLocalization` method of `ConfigStateService` is used for translations. Here are some examples:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const identity = this.config.getLocalization("AbpIdentity::Identity");
@@ -190,7 +192,7 @@ Please check out the [localization documentation](./Localization.md) for details
 
 The `dispatchGetAppConfiguration` triggers a request to an endpoint that responds with the application state and then places this response to the `Store` as configuration state.
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 this.config.dispatchGetAppConfiguration();
@@ -203,7 +205,7 @@ Note that **you do not have to call this method at application initiation**, bec
 
 The `dispatchPatchRouteByName` finds a route by its name and replaces its configuration in the `Store` with the new configuration passed as the second parameter.
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const newRouteConfig: Partial<ABP.Route> = {
@@ -225,7 +227,7 @@ this.config.dispatchPatchRouteByName("::Menu:Home", newRouteConfig);
 
 The `dispatchPatchRouteByName` triggers a state method that finds a route by its name and replaces its configuration in the `Store` with the new configuration passed as the second parameter.
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const newRoute: ABP.Route = {
@@ -245,7 +247,7 @@ The `newRoute` will be placed as at root level, i.e. without any parent routes a
 
 If you want **to add a child route, you can do this:**
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 const newRoute: ABP.Route = {
@@ -272,7 +274,7 @@ Please refer to `ABP.Route` type for all the properties you can pass to `dispatc
 
 The `dispatchSetEnvironment` places environment variables passed to it in the `Store` under the configuration state. Here is how it is used:
 
-```typescript
+```js
 // this.config is instance of ConfigStateService
 
 this.config.dispatchSetEnvironment({

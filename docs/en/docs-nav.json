@@ -317,6 +317,10 @@
               "path": "UI/Angular/Permission-Management.md"
             },
             {
+              "text": "Config State",
+              "path": "UI/Angular/Config-State.md"
+            },
+            {
               "text": "Component Replacement",
               "path": "UI/Angular/Component-Replacement.md"
             },
