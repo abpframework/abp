@@ -170,7 +170,7 @@ export class ConfigState {
           );
         }
 
-        keys[0] = snq(() => defaultResourceName);
+        keys[0] = defaultResourceName;
       }
 
       let localization = (keys as any).reduce((acc, val) => {
