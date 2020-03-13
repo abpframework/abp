@@ -143,7 +143,7 @@ This time, no file defined in the tag helper definition because the bundle files
 
 ### Configuring An Existing Bundle
 
-ABP supports [modularity](../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a dependant module. Example:
+ABP supports [modularity](../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a depended module. Example:
 
 ````C#
 [DependsOn(typeof(MyWebModule))]
