@@ -44,11 +44,6 @@ namespace Volo.Abp.TenantManagement
         [Authorize(TenantManagementPermissions.Tenants.Create)]
         public virtual async Task<TenantDto> CreateAsync(TenantCreateDto input)
         {
-            if (string.IsNullOrWhiteSpace(input.AdminEmailAddress) || string.IsNullOrWhiteSpace(input.AdminPassword))
-            {
-                throw new BusinessException(message: L["InvalidAdminProperties"]);
-            }
-
             var tenant = await TenantManager.CreateAsync(input.Name);
             await TenantRepository.InsertAsync(tenant);
 
