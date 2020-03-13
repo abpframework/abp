@@ -156,7 +156,7 @@ export class ConfigState {
     const selector = createSelector([ConfigState], (state: Config.State) => {
       if (!state.localization) return defaultValue || key;
 
-      const { defaultResourceName } = state.environment.localization;
+      const defaultResourceName = snq(() => state.environment.localization.defaultResourceName);
       if (keys[0] === '') {
         if (!defaultResourceName) {
           throw new Error(
