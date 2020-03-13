@@ -204,6 +204,10 @@ If you define and register a policy to the ASP.NET Core authorization system wit
 
 See [policy based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) document to learn how to define a custom policy.
 
+### Changing Permission Definitions of a Depended Module
+
+A class deriving from the `PermissionDefinitionProvider` (just like the example above) can also get existing permission definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
+
 ## IAuthorizationService
 
 ASP.NET Core provides the `IAuthorizationService` that can be used to check for authorization. Once you inject, you can use it in your code to conditionally control the authorization.

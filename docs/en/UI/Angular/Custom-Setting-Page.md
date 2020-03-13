@@ -1,6 +1,6 @@
-## Creating a Settings Tab
+# Custom Setting Page
 
-There are several settings tabs from different modules. You can add custom settings tabs to your project in 3 steps.
+There are several settings tabs from different modules. You can add custom settings page to your project in 3 steps.
 
 1. Create a Component
 
@@ -11,12 +11,11 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-your-custom-settings',
   template: `
-    your-custom-settings works! mySetting: {%{{{ mySetting$ | async }}}%}
+    custom-settings works! 
   `,
 })
 export class YourCustomSettingsComponent {
-  @Select(ConfigState.getSetting('MyProjectName.MySetting1')) // Gets a setting. MyProjectName.MySetting1 is a setting key.
-  mySetting$: Observable<string>; // The selected setting is set to the mySetting variable as Observable.
+  // Your component logic
 }
 ```
 
@@ -38,6 +37,6 @@ ngOnInit() {
 }
 ```
 
-Open the `setting-management` page to see the changes:
+Navigate to `/setting-management` route to see the changes:
 
 ![Custom Settings Tab](./images/custom-settings.png)

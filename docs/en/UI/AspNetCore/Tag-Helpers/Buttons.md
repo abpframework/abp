@@ -1,30 +1,26 @@
 # Buttons
 
-ABP framework has a special Tag Helper to create bootstrap button easily.
+## Introduction
 
-`<abp-button>`
+`abp-button` is the main element to create buttons.
+
+Basic usage:
+
+````xml
+<abp-button button-type="Primary">Click Me</abp-button>
+````
+
+## Demo
+
+See the [buttons demo page](https://bootstrap-taghelpers.abp.io/Components/Buttons) to see it in action.
 
 ## Attributes
 
-`<abp-button>` has 7 different attribute.
+### button-type
 
-* [`button-type`](#button-type)
-* [`size`](#size)
-* [`busy-text`](#busy-text)
-* [`text`](#text)
-* [`icon`](#icon)
-* [`disabled`](#disabled)
-* [`icon-type`](#icon-type)
+A value indicates the main style/type of the button. Should be one of the following values:
 
-### `button-type`
-
-`button-type` is a selectable parameter. It's default value is `Default`.
-
-`<abp-button button-type="Primary">Button</abp-button>`
-
-You can choose one of the button type listed below.
-
-* `Default`
+* `Default` (default value)
 * `Primary`
 * `Secondary`
 * `Success`
@@ -43,15 +39,11 @@ You can choose one of the button type listed below.
 * `Outline_Dark`
 * `Link`
 
-### `size`
+### size
 
-`size` is a selectable parameter. It's default value is `Default`.
+A value indicates the size of the button. Should be one of the following values:
 
-`<abp-button size="Default">Button</abp-button>`
-
-You can choose one of the size type listed below.
-
-* `Default`
+* `Default` (default value)
 * `Small`
 * `Medium`
 * `Large`
@@ -60,35 +52,35 @@ You can choose one of the size type listed below.
 * `Block_Medium`
 * `Block_Large`
 
-### `busy-text`
+### busy-text
 
-`busy-text` is a string parameter. It shows the text while the button is busy.
+A text that is shown when the button is busy.
 
-### `text`
+### text
 
-`text` is a string parameter that displaying on button.
+The text of the button. This is a shortcut if you simply want to set a text to the button. Example:
 
-### `icon`
+````xml
+<abp-button button-type="Primary" text="Click Me" />
+````
 
-`icon` is a string parameter. It is depending to [`icon-type`](#`icon-type`). For default, we use [Font Awesome](https://fontawesome.com/) for icons. To use it, you need to set `icon` parameter as a icon name. 
+In this case, you can use a self-closing tag to make it shorter.
 
-##### Example
+### icon
 
-[fa-address-card](https://fontawesome.com/icons/address-card): ![fa-address-card](fa-address-card.png "Address Card")
+Used to set an icon for the button. It works with the [Font Awesome](https://fontawesome.com/) icon classes by default. Example:
 
-`<abp-button icon="address-card" text="Address" />`
+````xml
+<abp-button icon="address-card" text="Address" />
+````
 
-> Don't forget: You dont need to write prefix! It will add automatically "fa" prefix for [Font Awesome](https://fontawesome.com/) icons while you did not change `icon-type`.
+##### icon-type
 
-### `disabled`
+If you don't want to use font-awesome, you have two options:
 
-`disabled` is a boolean parameter. If you set it `true`, your button will be disabled.
+1. Set `icon-type` to `Other` and write the CSS class of the font icon you're using.
+2. If you don't use a font icon use the opening and closing tags manually and write any code inside the tags.
 
-### `icon-type`
+### disabled
 
-`icon-type` is a selectable parameter. It's default value is `FontAwesome`. You can create your own icon type provider and change it.
-
-You can choose one of the icon type listed below.
-
-* `FontAwesome`
-* `Other`
+Set `true` to make the button initially disabled.

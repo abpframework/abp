@@ -293,16 +293,7 @@
             },
             {
               "text": "Tag Helpers",
-              "items": [
-                {
-                  "text": "Live Demo",
-                  "path": "UI/AspNetCore/Tag-Helpers/Index.md"
-                },
-                {
-                  "text": "Buttons",
-                  "path": "UI/AspNetCore/Tag-Helpers/Buttons.md"
-                }
-              ]
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
             },
             {
               "text": "Widgets",
@@ -326,8 +317,16 @@
               "path": "UI/Angular/Permission-Management.md"
             },
             {
+              "text": "Config State",
+              "path": "UI/Angular/Config-State.md"
+            },
+            {
               "text": "Component Replacement",
               "path": "UI/Angular/Component-Replacement.md"
+            },
+            {
+              "text": "Custom Setting Page",
+              "path": "UI/Angular/Custom-Setting-Page.md"
             }
           ]
         }
