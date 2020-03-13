@@ -33,6 +33,17 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             [StringLength(TenantConsts.MaxNameLength)]
             [Display(Name = "DisplayName:TenantName")]
             public string Name { get; set; }
+
+            [Required]
+            [StringLength(TenantConsts.MaxNameLength)]
+            [Display(Name = "DisplayName:AdminEmailAddress")]
+            public string AdminEmailAddress { get; set; }
+
+            [Required]
+            [StringLength(TenantConsts.MaxNameLength)]
+            [EmailAddress]
+            [Display(Name = "DisplayName:AdminPassword")]
+            public string AdminPassword { get; set; }
         }
     }
 }
