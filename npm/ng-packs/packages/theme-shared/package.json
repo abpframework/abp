@@ -7,7 +7,7 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.core": "^2.2.0",
+    "@abp/ng.core": "~2.2.0",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@ng-bootstrap/ng-bootstrap": "^5.3.0",
     "@ngx-validate/core": "^0.0.7",
