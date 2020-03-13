@@ -88,13 +88,15 @@ export class ConfigState {
   }
 
   static getSetting(key: string) {
-    return createSelector([ConfigState], (state: Config.State) => {
+    const selector = createSelector([ConfigState], (state: Config.State) => {
       return snq(() => state.setting.values[key]);
     });
+
+    return selector;
   }
 
   static getSettings(keyword?: string) {
-    return createSelector([ConfigState], (state: Config.State) => {
+    const selector = createSelector([ConfigState], (state: Config.State) => {
       const settings = snq(() => state.setting.values, {});
 
       if (!keyword) return settings;
@@ -106,6 +108,8 @@ export class ConfigState {
         return acc;
       }, {});
     });
+
+    return selector;
   }
 
   static getGrantedPolicy(key: string) {
