@@ -299,7 +299,7 @@ Menu contributors are executed whenever need to render the menu. There is alread
 
 ### Toolbar Contributors
 
-Toolbar system is used to define toolbars. Modules (or your application) can add items to a toolbar, then the theme renders the toolbar on the layout.
+[Toolbar system](Toolbars.md) is used to define toolbars on the user interface. Modules (or your application) can add items to a toolbar, then the theme renders the toolbar on the layout.
 
 There is only one standard toolbar (named "Main" - defined as a constant: `StandardToolbars.Main`). For the basic theme, it is rendered as shown below:![bookstore-toolbar-highlighted](../../images/bookstore-toolbar-highlighted.png)
 
@@ -368,10 +368,84 @@ That's all, you will see the notification icon on the toolbar when you run the a
 
 `NotificationViewComponent` in this sample simply returns a view without any data. In real life, you probably want to query database (or an HTTP API) to get notifications and pass to the view. If you need, you can add a `JavaScript` or `CSS` file to the global bundle (as described before) for your toolbar item.
 
-### Layouts
-
-TODO
+See the [toolbars document](Toolbars.md) for more about the toolbar system.
 
 ### Layout Hooks
+
+[Layout Hooks](Layout-Hooks.md) system allows you to add code at some specific parts of the layout. Given standard hook names are defined by the ABP framework:
+
+* **"Header.First"** (Defined as a constant: `LayoutHooks.Head.First`): To add code to the beginning in the `head` HTML element.
+* **"Header.Last"** (Defined as a constant: `LayoutHooks.Head.Last`): To add code to the end in the `head` HTML element.
+* **"Body.First"** (Defined as a constant: `LayoutHooks.Body.First`): To add code to the beginning in the `head` HTML element.
+* **"Body.Last"** (Defined as a constant: `LayoutHooks.Body.Last`): To add code to the end in the `head` HTML element.
+
+All layouts of all themes should implement these hooks. You can then add a view component into any of the hook points.
+
+#### Example: Add Google Analytics Script
+
+Assume that you need to add the Google Analytics script to the layout (that will be available for all the pages).
+
+First, create a view component in your project:
+
+![bookstore-google-analytics-view-component](../../images/bookstore-google-analytics-view-component.png)
+
+**NotificationViewComponent.cs**
+
+````csharp
+public class GoogleAnalyticsViewComponent : AbpViewComponent
+{
+    public IViewComponentResult Invoke()
+    {
+        return View("/Pages/Shared/Components/GoogleAnalytics/Default.cshtml");
+    }
+}
+````
+
+**Default.cshtml**
+
+````html
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-xxxxxx-1', 'auto');
+    ga('send', 'pageview');
+</script>
+````
+
+Change `UA-xxxxxx-1` with your own code.
+
+You can then add this component to any of the hook points in the `ConfigureServices` of your module:
+
+````csharp
+Configure<AbpLayoutHookOptions>(options =>
+{
+    options.Add(
+        LayoutHooks.Head.Last, //The hook name
+        typeof(GoogleAnalyticsViewComponent) //The component to add
+    );
+});
+````
+
+Now, the GA code will be inserted in the `head` of the page as the last item. You (or the modules you are using) can add multiple items to the same hook. All of them will be added to the layout.
+
+The configuration above adds the `GoogleAnalyticsViewComponent` to all layouts. You may want to only add to a specific layout:
+
+````csharp
+Configure<AbpLayoutHookOptions>(options =>
+{
+    options.Add(
+        LayoutHooks.Head.Last,
+        typeof(GoogleAnalyticsViewComponent),
+        layout: StandardLayouts.Application //The layout to add
+    );
+});
+````
+
+See the layouts section below to learn more about the layout system.
+
+### Layouts
 
 TODO
