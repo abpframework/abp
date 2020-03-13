@@ -1,10 +1,9 @@
-﻿(function ($) {
+(function ($) {
 
     $(function () {
         var initNavigationFilter = function (navigationContainerId) {
 
             var $navigation = $("#" + navigationContainerId);
-
 
             var getShownDocumentLinks = function () {
                 return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
@@ -57,11 +56,17 @@
                 });
             };
 
-            $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
+            $("#filter").keyup(function (e) {
                 filterDocumentItems(e.target.value);
 
                 if (e.key === "Enter") {
                     gotoFilteredDocumentIfThereIsOnlyOne();
+                }
+            });
+
+            $("#fullsearch").keyup(function (e) {
+                if (e.key === "Enter") {
+                    window.open($(this).data("fullsearch-url") + this.value);
                 }
             });
         };
@@ -140,6 +145,12 @@
                 window.history.replaceState({}, document.title, new_uri);
             };
 
+            var getTenYearsLater = function () {
+                var tenYearsLater = new Date();
+                tenYearsLater.setTime(tenYearsLater.getTime() + (365 * 10 * 24 * 60 * 60 * 1000));
+                return tenYearsLater;
+            };
+
             var setCookies = function () {
                 var cookie = abp.utils.getCookieValue("AbpDocsPreferences");
 
@@ -161,7 +172,6 @@
 
                         if (splitted.length > 0 && splitted[0] === key) {
                             keyValues[k] = key + "=" + value;
-                            console.log(keyValues[k]);
                             changed = true;
                         }
                     }
@@ -171,7 +181,7 @@
                     }
                 }
 
-                abp.utils.setCookieValue("AbpDocsPreferences", keyValues.join('|'));
+                abp.utils.setCookieValue("AbpDocsPreferences", keyValues.join('|'), getTenYearsLater(), '/');
             };
 
             $(".doc-section-combobox").change(function () {

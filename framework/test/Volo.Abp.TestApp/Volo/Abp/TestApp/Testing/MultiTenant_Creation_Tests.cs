@@ -42,9 +42,9 @@ namespace Volo.Abp.TestApp.Testing
                 Id = personId,
                 Name = "Person1",
                 Age = 21
-            }).ConfigureAwait(false);
+            });
 
-            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
+            var person = await _personRepository.FindAsync(personId);
 
             person.ShouldNotBeNull();
             person.TenantId.ShouldNotBeNull();
@@ -63,9 +63,9 @@ namespace Volo.Abp.TestApp.Testing
                 Id = personId,
                 Name = "Person1",
                 Age = 21
-            }).ConfigureAwait(false);
+            });
 
-            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
+            var person = await _personRepository.FindAsync(personId);
 
             person.ShouldNotBeNull();
             person.TenantId.ShouldBeNull();

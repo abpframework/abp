@@ -1,8 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.Auditing;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -11,6 +15,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 {
     public class RegisterModel : AccountPageModel
     {
+        private readonly IAccountAppService _accountAppService;
+
         [BindProperty(SupportsGet = true)]
         public string ReturnUrl { get; set; }
 
@@ -20,9 +26,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [BindProperty]
         public PostInput Input { get; set; }
 
-        public virtual async Task OnGet()
+        public RegisterModel(IAccountAppService accountAppService)
         {
-            await CheckSelfRegistrationAsync().ConfigureAwait(false);
+            _accountAppService = accountAppService;
+        }
+
+        public virtual async Task OnGetAsync()
+        {
+            await CheckSelfRegistrationAsync();
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter
@@ -30,22 +41,30 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             ValidateModel();
 
-            await CheckSelfRegistrationAsync().ConfigureAwait(false);
+            await CheckSelfRegistrationAsync();
 
-            var user = new IdentityUser(GuidGenerator.Create(), Input.UserName, Input.EmailAddress, CurrentTenant.Id);
+            var registerDto = new RegisterDto
+            {
+                AppName = "MVC",
+                EmailAddress = Input.EmailAddress,
+                Password = Input.Password,
+                UserName = Input.UserName
+            };
 
-            (await UserManager.CreateAsync(user, Input.Password).ConfigureAwait(false)).CheckErrors();
+            var userDto = await _accountAppService.RegisterAsync(registerDto);
+            var user = await UserManager.GetByIdAsync(userDto.Id);
 
-            await UserManager.SetEmailAsync(user, Input.EmailAddress).ConfigureAwait(false);
+            await UserManager.SetEmailAsync(user, Input.EmailAddress);
 
-            await SignInManager.SignInAsync(user, isPersistent: false).ConfigureAwait(false);
+            await SignInManager.SignInAsync(user, isPersistent: false);
 
             return Redirect(ReturnUrl ?? "/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
         {
-            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled).ConfigureAwait(false))
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled) ||
+                !await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
             {
                 throw new UserFriendlyException(L["SelfRegistrationDisabledMessage"]);
             }
@@ -54,17 +73,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
         public class PostInput
         {
             [Required]
-            [StringLength(32)]
+            [StringLength(IdentityUserConsts.MaxUserNameLength)]
             public string UserName { get; set; }
 
             [Required]
             [EmailAddress]
-            [StringLength(255)]
+            [StringLength(IdentityUserConsts.MaxEmailLength)]
             public string EmailAddress { get; set; }
 
             [Required]
-            [StringLength(32)]
+            [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
         }
     }

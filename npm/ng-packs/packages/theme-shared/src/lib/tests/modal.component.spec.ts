@@ -1,20 +1,21 @@
 import { LocalizationPipe } from '@abp/ng.core';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { ToastModule } from 'primeng/toast';
 import { timer } from 'rxjs';
 import { ButtonComponent, ConfirmationComponent, ModalComponent } from '../components';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ModalComponent', () => {
-  let spectator: SpectatorHost<ModalComponent, { visible: boolean; busy: boolean; ngDirty: boolean }>;
+  let spectator: SpectatorHost<
+    ModalComponent,
+    { visible: boolean; busy: boolean; ngDirty: boolean }
+  >;
   let appearFn;
   let disappearFn;
   const createHost = createHostFactory({
     component: ModalComponent,
-    imports: [ToastModule],
+    imports: [RouterTestingModule],
     declarations: [ConfirmationComponent, LocalizationPipe, ButtonComponent],
-    providers: [MessageService],
     mocks: [Store],
   });
 
@@ -82,7 +83,7 @@ describe('ModalComponent', () => {
       spectator.click('#abp-modal-close-button');
       expect(disappearFn).not.toHaveBeenCalled();
 
-      expect(spectator.query('p-toast')).toBeTruthy();
+      expect(spectator.query('div.confirmation')).toBeTruthy();
       spectator.click('button#cancel');
       expect(spectator.query('div.modal')).toBeTruthy();
 

@@ -454,7 +454,8 @@ $(function () {
 Abra o `en.json`no `Acme.BookStore.Domain.Shared`projeto e adicione a seguinte linha:
 
 ```json
-"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?" 
+"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
+"SuccessfullyDeleted": "Successfully deleted"
 ```
 
 

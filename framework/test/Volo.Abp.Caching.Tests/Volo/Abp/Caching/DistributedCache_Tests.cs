@@ -17,23 +17,23 @@ namespace Volo.Abp.Caching
             const string personName = "john nash";
 
             //Get (not exists yet)
-            var cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
             //Set
             cacheItem = new PersonCacheItem(personName);
-            await personCache.SetAsync(cacheKey, cacheItem).ConfigureAwait(false);
+            await personCache.SetAsync(cacheKey, cacheItem);
 
             //Get (it should be available now
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
             //Remove 
-            await personCache.RemoveAsync(cacheKey).ConfigureAwait(false);
+            await personCache.RemoveAsync(cacheKey);
 
             //Get (not exists since removed)
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
         }
 
@@ -85,41 +85,41 @@ namespace Volo.Abp.Caching
             const string personName = "john nash";
 
             //Get (not exists yet)
-            var cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
-            var cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldBeNull();
 
             //Set
             cacheItem = new PersonCacheItem(personName);
-            await personCache.SetAsync(cacheKey, cacheItem).ConfigureAwait(false);
+            await personCache.SetAsync(cacheKey, cacheItem);
 
             //Get (it should be available now, but otherPersonCache not exists now.
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
-            cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldBeNull();
 
             //set other person cache
             cacheItem1 = new Sail.Testing.Caching.PersonCacheItem(personName);
-            await otherPersonCache.SetAsync(cacheKey, cacheItem1).ConfigureAwait(false);
+            await otherPersonCache.SetAsync(cacheKey, cacheItem1);
 
-            cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldNotBeNull();
             cacheItem1.Name.ShouldBe(personName);
 
             //Remove 
-            await personCache.RemoveAsync(cacheKey).ConfigureAwait(false);
+            await personCache.RemoveAsync(cacheKey);
 
 
             //Get (not exists since removed)
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
-            cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldNotBeNull();
 
         }
@@ -133,23 +133,23 @@ namespace Volo.Abp.Caching
             const string personName = "john nash";
 
             //Get (not exists yet)
-            var cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
             //Set
             cacheItem = new PersonCacheItem(personName);
-            await personCache.SetAsync(cacheKey, cacheItem).ConfigureAwait(false);
+            await personCache.SetAsync(cacheKey, cacheItem);
 
             //Get (it should be available now
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
             //Remove 
-            await personCache.RemoveAsync(cacheKey).ConfigureAwait(false);
+            await personCache.RemoveAsync(cacheKey);
 
             //Get (not exists since removed)
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
         }
 
@@ -184,7 +184,7 @@ namespace Volo.Abp.Caching
                 {
                     factoryExecuted = true;
                     return new PersonCacheItem(personName);
-                }).ConfigureAwait(false);
+                });
 
             factoryExecuted.ShouldBeFalse();
             cacheItem.Name.ShouldBe(personName);
@@ -201,41 +201,41 @@ namespace Volo.Abp.Caching
             const string personName = "john nash";
 
             //Get (not exists yet)
-            var cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
-            var cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldBeNull();
 
             //Set
             cacheItem = new PersonCacheItem(personName);
-            await personCache.SetAsync(cacheKey, cacheItem).ConfigureAwait(false);
+            await personCache.SetAsync(cacheKey, cacheItem);
 
             //Get (it should be available now, but otherPersonCache not exists now.
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
-            cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldBeNull();
 
             //set other person cache
             cacheItem1 = new Sail.Testing.Caching.PersonCacheItem(personName);
-            await otherPersonCache.SetAsync(cacheKey, cacheItem1).ConfigureAwait(false);
+            await otherPersonCache.SetAsync(cacheKey, cacheItem1);
 
-            cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldNotBeNull();
             cacheItem1.Name.ShouldBe(personName);
 
             //Remove 
-            await personCache.RemoveAsync(cacheKey).ConfigureAwait(false);
+            await personCache.RemoveAsync(cacheKey);
 
 
             //Get (not exists since removed)
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
-            cacheItem1 = await otherPersonCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem1 = await otherPersonCache.GetAsync(cacheKey);
             cacheItem1.ShouldNotBeNull();
 
         }
@@ -249,23 +249,23 @@ namespace Volo.Abp.Caching
             const string personName = "john nash";
 
             //Get (not exists yet)
-            var cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
             //Set
             cacheItem = new PersonCacheItem(personName);
-            await personCache.SetAsync(cacheKey, cacheItem).ConfigureAwait(false);
+            await personCache.SetAsync(cacheKey, cacheItem);
 
             //Get (it should be available now
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
             //Remove 
-            await personCache.RemoveAsync(cacheKey).ConfigureAwait(false);
+            await personCache.RemoveAsync(cacheKey);
 
             //Get (not exists since removed)
-            cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
         }
 
@@ -279,34 +279,34 @@ namespace Volo.Abp.Caching
             const string personName = "john nash";
 
             //Get (not exists yet)
-            var cacheItem1 = await personCache.GetAsync(cache1Key).ConfigureAwait(false);
-            var cacheItem2 = await personCache.GetAsync(cache2Key).ConfigureAwait(false);
+            var cacheItem1 = await personCache.GetAsync(cache1Key);
+            var cacheItem2 = await personCache.GetAsync(cache2Key);
             cacheItem1.ShouldBeNull();
             cacheItem2.ShouldBeNull();
 
             //Set
             cacheItem1 = new PersonCacheItem(personName);
             cacheItem2 = new PersonCacheItem(personName);
-            await personCache.SetAsync(cache1Key, cacheItem1).ConfigureAwait(false);
-            await personCache.SetAsync(cache2Key, cacheItem2).ConfigureAwait(false);
+            await personCache.SetAsync(cache1Key, cacheItem1);
+            await personCache.SetAsync(cache2Key, cacheItem2);
 
             //Get (it should be available now
-            cacheItem1 = await personCache.GetAsync(cache1Key).ConfigureAwait(false);
+            cacheItem1 = await personCache.GetAsync(cache1Key);
             cacheItem1.ShouldNotBeNull();
             cacheItem1.Name.ShouldBe(personName);
 
-            cacheItem2 = await personCache.GetAsync(cache2Key).ConfigureAwait(false);
+            cacheItem2 = await personCache.GetAsync(cache2Key);
             cacheItem2.ShouldNotBeNull();
             cacheItem2.Name.ShouldBe(personName);
 
             //Remove 
-            await personCache.RemoveAsync(cache1Key).ConfigureAwait(false);
-            await personCache.RemoveAsync(cache2Key).ConfigureAwait(false);
+            await personCache.RemoveAsync(cache1Key);
+            await personCache.RemoveAsync(cache2Key);
 
             //Get (not exists since removed)
-            cacheItem1 = await personCache.GetAsync(cache1Key).ConfigureAwait(false);
+            cacheItem1 = await personCache.GetAsync(cache1Key);
             cacheItem1.ShouldBeNull();
-            cacheItem2 = await personCache.GetAsync(cache2Key).ConfigureAwait(false);
+            cacheItem2 = await personCache.GetAsync(cache2Key);
             cacheItem2.ShouldBeNull();
         }
 

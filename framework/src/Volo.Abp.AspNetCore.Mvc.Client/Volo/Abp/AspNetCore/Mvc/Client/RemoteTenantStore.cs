@@ -39,13 +39,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name).ConfigureAwait(false)),
+                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name)),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
                         TimeSpan.FromMinutes(5) //TODO: Should be configurable.
                 }
-            ).ConfigureAwait(false);
+            );
 
             if (httpContext != null)
             {
@@ -67,13 +67,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id).ConfigureAwait(false)),
+                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id)),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
                         TimeSpan.FromMinutes(5) //TODO: Should be configurable.
                 }
-            ).ConfigureAwait(false);
+            );
 
             if (httpContext != null)
             {
@@ -95,7 +95,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = Cache.GetOrAdd(
                 cacheKey,
-                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name).ConfigureAwait(false))),
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name))),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
@@ -123,7 +123,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             
             tenantConfiguration = Cache.GetOrAdd(
                 cacheKey,
-                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id).ConfigureAwait(false))),
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id))),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =

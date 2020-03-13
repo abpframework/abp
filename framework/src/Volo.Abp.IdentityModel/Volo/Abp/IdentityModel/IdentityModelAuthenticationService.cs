@@ -21,13 +21,16 @@ namespace Volo.Abp.IdentityModel
         public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
         protected AbpIdentityClientOptions ClientOptions { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        protected IHttpClientFactory HttpClientFactory { get; }
 
         public IdentityModelAuthenticationService(
             IOptions<AbpIdentityClientOptions> options,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            IHttpClientFactory httpClientFactory)
         {
-            CancellationTokenProvider = cancellationTokenProvider;
             ClientOptions = options.Value;
+            CancellationTokenProvider = cancellationTokenProvider;
+            HttpClientFactory = httpClientFactory;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
 
@@ -35,7 +38,7 @@ namespace Volo.Abp.IdentityModel
             [NotNull] HttpClient client,
             string identityClientName = null)
         {
-            var accessToken = await GetAccessTokenOrNullAsync(identityClientName).ConfigureAwait(false);
+            var accessToken = await GetAccessTokenOrNullAsync(identityClientName);
             if (accessToken == null)
             {
                 return false;
@@ -55,18 +58,18 @@ namespace Volo.Abp.IdentityModel
                 return null;
             }
 
-            return await GetAccessTokenAsync(configuration).ConfigureAwait(false);
+            return await GetAccessTokenAsync(configuration);
         }
 
         public virtual async Task<string> GetAccessTokenAsync(IdentityClientConfiguration configuration)
         {
-            var discoveryResponse = await GetDiscoveryResponse(configuration).ConfigureAwait(false);
+            var discoveryResponse = await GetDiscoveryResponse(configuration);
             if (discoveryResponse.IsError)
             {
                 throw new AbpException($"Could not retrieve the OpenId Connect discovery document! ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
             }
 
-            var tokenResponse = await GetTokenResponse(discoveryResponse, configuration).ConfigureAwait(false);
+            var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
             if (tokenResponse.IsError)
             {
                 throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
@@ -95,7 +98,7 @@ namespace Volo.Abp.IdentityModel
         protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = HttpClientFactory.CreateClient())
             {
                 return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                 {
@@ -104,28 +107,28 @@ namespace Volo.Abp.IdentityModel
                     {
                         RequireHttps = configuration.RequireHttps
                     }
-                }).ConfigureAwait(false);
+                });
             }
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
-            DiscoveryDocumentResponse discoveryResponse, 
+            DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = HttpClientFactory.CreateClient())
             {
                 switch (configuration.GrantType)
                 {
                     case OidcConstants.GrantTypes.ClientCredentials:
                         return await httpClient.RequestClientCredentialsTokenAsync(
-                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration).ConfigureAwait(false),
+                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
                             CancellationTokenProvider.Token
-                        ).ConfigureAwait(false);
+                        );
                     case OidcConstants.GrantTypes.Password:
                         return await httpClient.RequestPasswordTokenAsync(
-                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration).ConfigureAwait(false),
+                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
                             CancellationTokenProvider.Token
-                        ).ConfigureAwait(false);
+                        );
                     default:
                         throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
                 }
@@ -134,7 +137,7 @@ namespace Volo.Abp.IdentityModel
 
         protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
         {
-            var request =  new PasswordTokenRequest
+            var request = new PasswordTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
                 Scope = configuration.Scope,
@@ -149,11 +152,11 @@ namespace Volo.Abp.IdentityModel
             return Task.FromResult(request);
         }
 
-        protected virtual Task<ClientCredentialsTokenRequest>  CreateClientCredentialsTokenRequestAsync(
-            DiscoveryDocumentResponse discoveryResponse, 
+        protected virtual Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(
+            DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            var request =  new ClientCredentialsTokenRequest
+            var request = new ClientCredentialsTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
                 Scope = configuration.Scope,

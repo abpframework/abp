@@ -45,11 +45,16 @@ namespace Volo.Abp.Cli.ProjectModification
             await AddAsync(
                 projectFile,
                 await FindNugetPackageInfoAsync(packageName)
-.ConfigureAwait(false)).ConfigureAwait(false);
+            );
         }
 
         public Task AddAsync(string projectFile, NugetPackageInfo package)
         {
+            if (File.ReadAllText(projectFile).Contains($"\"{package.Name}\""))
+            {
+                return Task.CompletedTask;
+            }
+
             using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
             {
                 Logger.LogInformation($"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
@@ -81,7 +86,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/byName/?name=" + moduleName;
 
-                var response = await client.GetAsync(url).ConfigureAwait(false);
+                var response = await client.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -90,10 +95,10 @@ namespace Volo.Abp.Cli.ProjectModification
                         throw new CliUsageException($"'{moduleName}' nuget package could not be found!");
                     }
 
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response).ConfigureAwait(false);
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                 }
 
-                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<NugetPackageInfo>(responseContent);
             }
         }

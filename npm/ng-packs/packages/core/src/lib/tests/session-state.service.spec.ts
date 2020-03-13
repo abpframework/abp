@@ -3,13 +3,17 @@ import { SessionStateService } from '../services/session-state.service';
 import { SessionState } from '../states/session.state';
 import { Store } from '@ngxs/store';
 import * as SessionActions from '../actions';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 describe('SessionStateService', () => {
   let service: SessionStateService;
   let spectator: SpectatorService<SessionStateService>;
   let store: SpyObject<Store>;
 
-  const createService = createServiceFactory({ service: SessionStateService, mocks: [Store] });
+  const createService = createServiceFactory({
+    service: SessionStateService,
+    mocks: [Store, OAuthService],
+  });
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;

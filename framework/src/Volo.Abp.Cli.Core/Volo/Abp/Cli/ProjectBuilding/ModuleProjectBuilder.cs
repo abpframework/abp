@@ -43,15 +43,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
         {
-            var moduleInfo = await GetModuleInfoAsync(args).ConfigureAwait(false);
+            var moduleInfo = await GetModuleInfoAsync(args);
 
             var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
                 SourceCodeTypes.Module,
                 args.Version
-            ).ConfigureAwait(false);
+            );
 
-            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync().ConfigureAwait(false);
+            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
             if (apiKeyResult?.ApiKey != null)
             {
                 args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
@@ -83,6 +83,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                             !x.Key.Equals(NewCommand.Options.OutputFolder.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.Version.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.Version.Short, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.TemplateSource.Short, StringComparison.InvariantCultureIgnoreCase) &&
+                            !x.Key.Equals(NewCommand.Options.TemplateSource.Long, StringComparison.InvariantCultureIgnoreCase))
                 .Select(x => x.Key).ToList();
 
             await CliAnalyticsCollect.CollectAsync(new CliAnalyticsCollectInputDto
@@ -96,14 +98,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 ProjectName = null,
                 TemplateName = args.TemplateName,
                 TemplateVersion = templateFile.Version
-            }).ConfigureAwait(false);
+            });
 
             return new ProjectBuildResult(context.Result.ZipContent, args.TemplateName);
         }
 
         private async Task<ModuleInfo> GetModuleInfoAsync(ProjectBuildArgs args)
         {
-            return await ModuleInfoProvider.GetAsync(args.TemplateName).ConfigureAwait(false);
+            return await ModuleInfoProvider.GetAsync(args.TemplateName);
         }
     }
 }

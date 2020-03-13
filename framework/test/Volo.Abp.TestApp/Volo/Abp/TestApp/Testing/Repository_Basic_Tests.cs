@@ -23,7 +23,7 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task GetAsync()
         {
-            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
             person.Name.ShouldBe("Douglas");
             person.Phones.Count.ShouldBe(2);
         }
@@ -31,29 +31,29 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity()
         {
-            var person = await PersonRepository.FindAsync(Guid.NewGuid()).ConfigureAwait(false);
+            var person = await PersonRepository.FindAsync(Guid.NewGuid());
             person.ShouldBeNull();
         }
 
         [Fact]
         public async Task DeleteAsync()
         {
-            await PersonRepository.DeleteAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            await PersonRepository.DeleteAsync(TestDataBuilder.UserDouglasId);
 
-            (await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false)).ShouldBeNull();
+            (await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId)).ShouldBeNull();
         }
 
         [Fact]
         public async Task Should_Access_To_Other_Collections_In_Same_Context_In_A_Custom_Method()
         {
-            var people = await CityRepository.GetPeopleInTheCityAsync("London").ConfigureAwait(false);
+            var people = await CityRepository.GetPeopleInTheCityAsync("London");
             people.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task Custom_Repository_Method()
         {
-            var city = await CityRepository.FindByNameAsync("Istanbul").ConfigureAwait(false);
+            var city = await CityRepository.FindByNameAsync("Istanbul");
             city.ShouldNotBeNull();
             city.Name.ShouldBe("Istanbul");
         }
@@ -63,9 +63,9 @@ namespace Volo.Abp.TestApp.Testing
         {
             var personId = Guid.NewGuid();
 
-            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
+            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42));
 
-            var person = await PersonRepository.FindAsync(personId).ConfigureAwait(false);
+            var person = await PersonRepository.FindAsync(personId);
             person.ShouldNotBeNull();
         }
     }

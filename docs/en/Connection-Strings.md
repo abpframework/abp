@@ -35,6 +35,21 @@ This configuration defines three different connection strings:
 
 [Pre-built application modules](Modules/Index.md) define constants for the connection string names. For example, the IdentityServer module defines a ` ConnectionStringName ` constant in the ` AbpIdentityServerDbProperties ` class (located in the ` Volo.Abp.IdentityServer ` namespace). Other modules similarly define constants, so you can investigate the connection string name.
 
+### AbpDbConnectionOptions
+
+ABP actually uses the `AbpDbConnectionOptions` to get the connection strings. If you set the connection strings as explained above, `AbpDbConnectionOptions` is automatically filled. However, you can set or override the connection strings using [the options pattern](Options.md). You can configure the `AbpDbConnectionOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) as shown below:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpDbConnectionOptions>(options =>
+    {
+        options.ConnectionStrings.Default = "...";
+        options.ConnectionStrings["AbpPermissionManagement"] = "...";
+    });
+}
+````
+
 ## Set the Connection String Name
 
 A module typically has a unique connection string name associated to its `DbContext` class using the `ConnectionStringName` attribute. Example:
@@ -62,3 +77,12 @@ Once you want to separate a module's database, you typically will need to create
 ## Multi-Tenancy
 
 See [the multi-tenancy document](Multi-Tenancy.md) to learn how to use separate databases for tenants.
+
+## Replace the Connection String Resolver
+
+ABP defines the `IConnectionStringResolver` and uses it whenever it needs a connection string. It has two pre-built implementations:
+
+* `DefaultConnectionStringResolver` uses the `AbpDbConnectionOptions` to select the connection string based on the rules defined in the "Configure the Connection Strings" section above.
+* `MultiTenantConnectionStringResolver` used for multi-tenant applications and tries to get the configured connection string for the current tenant if available. It uses the `ITenantStore` to find the connection strings. It inherits from the `DefaultConnectionStringResolver` and fallbacks to the base logic if no connection string specified for the current tenant.
+
+If you need a custom logic to determine the connection string, implement the `IConnectionStringResolver` interface (optionally derive from the existing implementations) and replace the existing implementation using the [dependency injection](Dependency-Injection.md) system.

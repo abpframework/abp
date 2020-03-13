@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
-import { OAuthModule } from 'angular-oauth2-oidc';
+import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
 import { RouterOutletComponent } from './components/router-outlet.component';
@@ -34,12 +34,15 @@ import { ReplaceableComponentsState } from './states/replaceable-components.stat
 import { InitDirective } from './directives/init.directive';
 import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 
+export function storageFactory(): OAuthStorage {
+  return localStorage;
+}
 @NgModule({
   imports: [
     NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
-    OAuthModule.forRoot(),
+    OAuthModule,
     CommonModule,
     HttpClientModule,
     FormsModule,
@@ -127,6 +130,8 @@ export class CoreModule {
           deps: [Injector],
           useFactory: localeInitializer,
         },
+        ...OAuthModule.forRoot().providers,
+        { provide: OAuthStorage, useFactory: storageFactory },
       ],
     };
   }

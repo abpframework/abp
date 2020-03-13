@@ -1,51 +1,61 @@
-import { IDENTITY_ROUTES } from '@abp/ng.identity';
-import { ACCOUNT_ROUTES } from '@abp/ng.account';
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ABP } from '@abp/ng.core';
-import { TENANT_MANAGEMENT_ROUTES } from '@abp/ng.tenant-management';
-import { ApplicationLayoutComponent } from '@abp/ng.theme.basic';
+import { ABP } from "@abp/ng.core";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { ApplicationLayoutComponent } from "@abp/ng.theme.basic";
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+    path: "",
+    loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
     data: {
       routes: {
-        name: '::Menu:Home',
-      } as ABP.Route,
-    },
+        name: "::Menu:Home"
+      } as ABP.Route
+    }
   },
   {
-    path: 'account',
-    loadChildren: () => import('./lazy-libs/account-wrapper.module').then(m => m.AccountWrapperModule),
-    data: { routes: ACCOUNT_ROUTES },
-  },
-  {
-    path: 'identity',
-    loadChildren: () => import('./lazy-libs/identity-wrapper.module').then(m => m.IdentityWrapperModule),
-    data: { routes: IDENTITY_ROUTES },
-  },
-  {
-    path: 'tenant-management',
+    path: "account",
     loadChildren: () =>
-      import('./lazy-libs/tenant-management-wrapper.module').then(m => m.TenantManagementWrapperModule),
-    data: { routes: TENANT_MANAGEMENT_ROUTES },
+      import("./lazy-libs/account-wrapper.module").then(
+        m => m.AccountWrapperModule
+      )
   },
   {
-    path: 'books',
+    path: "identity",
+    loadChildren: () =>
+      import("./lazy-libs/identity-wrapper.module").then(
+        m => m.IdentityWrapperModule
+      )
+  },
+  {
+    path: "tenant-management",
+    loadChildren: () =>
+      import("./lazy-libs/tenant-management-wrapper.module").then(
+        m => m.TenantManagementWrapperModule
+      )
+  },
+  {
+    path: "setting-management",
+    loadChildren: () =>
+      import("./lazy-libs/setting-management-wrapper.module").then(
+        m => m.SettingManagementWrapperModule
+      )
+  },
+  {
+    path: "books",
     component: ApplicationLayoutComponent,
-    loadChildren: () => import('./books/books.module').then(m => m.BooksModule),
+    loadChildren: () => import("./books/books.module").then(m => m.BooksModule),
     data: {
       routes: {
-        name: 'Books',
-      } as ABP.Route,
-    },
-  },
+        name: "::Menu:Books",
+        iconClass: "fas fa-book"
+      } as ABP.Route
+    }
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

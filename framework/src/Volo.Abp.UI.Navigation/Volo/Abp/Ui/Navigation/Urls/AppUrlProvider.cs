@@ -33,7 +33,7 @@ namespace Volo.Abp.UI.Navigation.Urls
                     appName,
                     urlName
                 )
-.ConfigureAwait(false)).ConfigureAwait(false);
+            );
         }
 
         protected virtual Task<string> GetConfiguredUrl(string appName, string urlName)
@@ -89,7 +89,7 @@ namespace Volo.Abp.UI.Navigation.Urls
 
             if (CurrentTenant.Id.HasValue)
             {
-                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync().ConfigureAwait(false));
+                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync());
             }
             else
             {
@@ -103,7 +103,7 @@ namespace Volo.Abp.UI.Navigation.Urls
         {
             if (CurrentTenant.Id.HasValue && CurrentTenant.Name.IsNullOrEmpty())
             {
-                var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value).ConfigureAwait(false);
+                var tenantConfiguration = await TenantStore.FindAsync(CurrentTenant.Id.Value);
                 return tenantConfiguration.Name;
             }
 

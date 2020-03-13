@@ -23,29 +23,40 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByNormalizedNameAsync()
         {
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("admin")).ConfigureAwait(false)).ShouldNotBeNull();
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("undefined-role")).ConfigureAwait(false)).ShouldBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("admin"))).ShouldNotBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("undefined-role"))).ShouldBeNull();
         }
 
         [Fact]
         public async Task GetListAsync()
         {
-            var roles = await RoleRepository.GetListAsync().ConfigureAwait(false);
+            var roles = await RoleRepository.GetListAsync();
             roles.ShouldContain(r => r.Name == "admin");
             roles.ShouldContain(r => r.Name == "moderator");
             roles.ShouldContain(r => r.Name == "supporter");
         }
 
         [Fact]
+        public async Task GetDefaultOnesAsync()
+        {
+            var roles = await RoleRepository.GetDefaultOnesAsync();
+
+            foreach (var role in roles)
+            {
+                role.IsDefault.ShouldBe(true);
+            }
+        }
+
+        [Fact]
         public async Task GetCountAsync()
         {
-            (await RoleRepository.GetCountAsync().ConfigureAwait(false)).ShouldBeGreaterThan(0);
+            (await RoleRepository.GetCountAsync()).ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task Should_Eager_Load_Role_Collections()
         {
-            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator")).ConfigureAwait(false);
+            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"));
             role.Claims.ShouldNotBeNull();
             role.Claims.Any().ShouldBeTrue();
         }

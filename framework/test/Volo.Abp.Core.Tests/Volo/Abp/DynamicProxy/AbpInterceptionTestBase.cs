@@ -43,7 +43,7 @@ namespace Volo.Abp.DynamicProxy
 
             //Act
 
-            await target.DoItAsync().ConfigureAwait(false);
+            await target.DoItAsync();
 
 		    //Assert
 
@@ -66,7 +66,7 @@ namespace Volo.Abp.DynamicProxy
 
 		    //Act
 
-		    var result = await target.GetValueAsync().ConfigureAwait(false);
+		    var result = await target.GetValueAsync();
 
 		    //Assert
 
@@ -90,9 +90,9 @@ namespace Volo.Abp.DynamicProxy
 
 		    //Act & Assert
 
-		    (await target.GetValueAsync(42).ConfigureAwait(false)).ShouldBe(42); //First run, not cached yet
-		    (await target.GetValueAsync(43).ConfigureAwait(false)).ShouldBe(42); //First run, cached previous value
-		    (await target.GetValueAsync(44).ConfigureAwait(false)).ShouldBe(42); //First run, cached previous value
+		    (await target.GetValueAsync(42)).ShouldBe(42); //First run, not cached yet
+		    (await target.GetValueAsync(43)).ShouldBe(42); //First run, cached previous value
+		    (await target.GetValueAsync(44)).ShouldBe(42); //First run, cached previous value
 	    }
 	}
 }

@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 select apiResource;
 
             return await query
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListByScopesAsync(
@@ -40,7 +40,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 where api.Scopes.Any(x => scopeNames.Contains(x.Name))
                 select api;
 
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
@@ -49,7 +49,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
             return await DbSet
                 .IncludeDetails(includeDetails).OrderBy(sorting ?? "name desc")
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListAsync(
@@ -58,12 +58,12 @@ namespace Volo.Abp.IdentityServer.ApiResources
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
         }
 
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -82,7 +82,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 DbContext.Set<ApiScope>().Remove(scope);
             }
 
-            await base.DeleteAsync(id, autoSave, cancellationToken).ConfigureAwait(false);
+            await base.DeleteAsync(id, autoSave, cancellationToken);
         }
 
         public override IQueryable<ApiResource> WithDetails()

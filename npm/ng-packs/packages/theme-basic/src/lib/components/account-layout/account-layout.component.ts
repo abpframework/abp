@@ -6,7 +6,7 @@ import { eLayoutType } from '@abp/ng.core';
   template: `
     <router-outlet></router-outlet>
     <abp-confirmation></abp-confirmation>
-    <abp-toast></abp-toast>
+    <abp-toast-container right="30px" bottom="30px"></abp-toast-container>
   `,
 })
 export class AccountLayoutComponent {

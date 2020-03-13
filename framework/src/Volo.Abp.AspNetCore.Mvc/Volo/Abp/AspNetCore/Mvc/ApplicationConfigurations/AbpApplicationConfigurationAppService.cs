@@ -8,9 +8,11 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
@@ -19,6 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
     public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApplicationConfigurationAppService
     {
         private readonly AbpLocalizationOptions _localizationOptions;
+        private readonly AbpMultiTenancyOptions _multiTenancyOptions;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
         private readonly IAuthorizationService _authorizationService;
@@ -30,6 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
+            IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
             IServiceProvider serviceProvider,
             IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
             IAuthorizationService authorizationService,
@@ -48,6 +52,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _featureDefinitionManager = featureDefinitionManager;
             _languageProvider = languageProvider;
             _localizationOptions = localizationOptions.Value;
+            _multiTenancyOptions = multiTenancyOptions.Value;
         }
 
         public virtual async Task<ApplicationConfigurationDto> GetAsync()
@@ -56,12 +61,32 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
             return new ApplicationConfigurationDto
             {
-                Auth = await GetAuthConfigAsync().ConfigureAwait(false),
-                Features = await GetFeaturesConfigAsync().ConfigureAwait(false),
-                Localization = await GetLocalizationConfigAsync().ConfigureAwait(false),
+                Auth = await GetAuthConfigAsync(),
+                Features = await GetFeaturesConfigAsync(),
+                Localization = await GetLocalizationConfigAsync(),
                 CurrentUser = GetCurrentUser(),
-                Setting = await GetSettingConfigAsync()
-.ConfigureAwait(false)
+                Setting = await GetSettingConfigAsync(),
+                MultiTenancy = GetMultiTenancy(),
+                CurrentTenant = GetCurrentTenant()
+
+            };
+        }
+
+        protected  virtual  CurrentTenantDto GetCurrentTenant()
+        {
+            return new CurrentTenantDto()
+            {
+                Id = CurrentTenant.Id,
+                Name = CurrentTenant.Name,
+                IsAvailable = CurrentTenant.IsAvailable
+            };
+        }
+
+        protected virtual MultiTenancyInfoDto GetMultiTenancy()
+        {
+            return new MultiTenancyInfoDto
+            {
+                IsEnabled = _multiTenancyOptions.IsEnabled
             };
         }
 
@@ -82,7 +107,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
             var authConfig = new ApplicationAuthConfigurationDto();
 
-            var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync().ConfigureAwait(false);
+            var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
 
             Logger.LogDebug($"GetPoliciesNamesAsync returns {policyNames.Count} items.");
 
@@ -92,7 +117,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
                 Logger.LogDebug($"_authorizationService.IsGrantedAsync? {policyName}");
 
-                if (await _authorizationService.IsGrantedAsync(policyName).ConfigureAwait(false))
+                if (await _authorizationService.IsGrantedAsync(policyName))
                 {
                     authConfig.GrantedPolicies[policyName] = true;
                 }
@@ -175,7 +200,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                     continue;
                 }
 
-                result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name).ConfigureAwait(false);
+                result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name);
             }
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetSettingConfigAsync()");
@@ -196,7 +221,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                     continue;
                 }
 
-                result.Values[featureDefinition.Name] = await FeatureChecker.GetOrNullAsync(featureDefinition.Name).ConfigureAwait(false);
+                result.Values[featureDefinition.Name] = await FeatureChecker.GetOrNullAsync(featureDefinition.Name);
             }
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetFeaturesConfigAsync()");

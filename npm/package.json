@@ -1,4 +1,5 @@
 {
+  "version": "2.3.0",
   "scripts": {
     "lerna": "lerna",
     "gulp:app": "node run-gulp-script.js ../templates/app/aspnet-core",
@@ -7,11 +8,13 @@
     "update:templates": "node abp-package-update-script.js ../templates"
   },
   "devDependencies": {
+    "@types/fs-extra": "^8.0.1",
     "glob": "^7.1.5",
     "lerna": "^3.18.4",
     "npm-check-updates": "^3.1.25"
   },
   "dependencies": {
-    "execa": "^3.4.0"
+    "execa": "^3.4.0",
+    "fs-extra": "^8.1.0"
   }
 }

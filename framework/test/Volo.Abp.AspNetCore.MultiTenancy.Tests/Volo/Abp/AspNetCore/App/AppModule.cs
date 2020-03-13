@@ -41,7 +41,7 @@ namespace Volo.Abp.AspNetCore.App
                 };
 
                 var result = jsonSerializer.Serialize(dictionary, camelCase: false);
-                await ctx.Response.WriteAsync(result).ConfigureAwait(false);
+                await ctx.Response.WriteAsync(result);
             });
         }
     }

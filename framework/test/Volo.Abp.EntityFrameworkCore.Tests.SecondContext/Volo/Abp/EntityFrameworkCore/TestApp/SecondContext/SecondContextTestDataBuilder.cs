@@ -24,7 +24,7 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
                     _guidGenerator.Create(),
                     "TestBook1"
                 )
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

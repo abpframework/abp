@@ -46,7 +46,7 @@ namespace Volo.Abp.Features
                 providers = providers.Where(p => featureDefinition.AllowedProviders.Contains(p.Name));
             }
 
-            return await GetOrNullValueFromProvidersAsync(providers, featureDefinition).ConfigureAwait(false);
+            return await GetOrNullValueFromProvidersAsync(providers, featureDefinition);
         }
 
         protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
@@ -55,7 +55,7 @@ namespace Volo.Abp.Features
         {
             foreach (var provider in providers)
             {
-                var value = await provider.GetOrNullAsync(feature).ConfigureAwait(false);
+                var value = await provider.GetOrNullAsync(feature);
                 if (value != null)
                 {
                     return value;

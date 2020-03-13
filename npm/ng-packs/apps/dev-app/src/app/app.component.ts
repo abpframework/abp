@@ -14,13 +14,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.lazyLoadService
       .load(
-        [
-          'primeng.min.css',
-          'primeicons.css',
-          'primeng-nova-light-theme.css',
-          'fontawesome-all.min.css',
-          'fontawesome-v4-shims.min.css',
-        ],
+        ['fontawesome-all.min.css', 'fontawesome-v4-shims.min.css'],
         'style',
         null,
         'head',
