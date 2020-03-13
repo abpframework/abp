@@ -122,19 +122,19 @@ That's all! Make any change in the view and run your application.
 
 #### Replacing Page Model Without Inheritance
 
-You don't have to inherit from the original page model class (like done in the previous example). Instead, you can completely re-implement the page yourself. In this case, just derive from `PageModel`, `AbpPageModel` or any suitable base class you need.
+You don't have to inherit from the original page model class (like done in the previous example). Instead, you can completely **re-implement** the page yourself. In this case, just derive from `PageModel`, `AbpPageModel` or any suitable base class you need.
 
 ## Overriding a View Component
 
-The ABP Framework, pre-built themes and modules define some re-usable view components. These view components can be replaced just like a page described above.
+The ABP Framework, pre-built themes and modules define some **re-usable view components**. These view components can be replaced just like a page described above.
 
 ### Example
 
-The screenshot below was taken from the basic theme comes with the application startup template.
+The screenshot below was taken from the **basic theme** comes with the application startup template.
 
 ![bookstore-brand-area-highlighted](../../images/bookstore-brand-area-highlighted.png)
 
-[The basic theme](../../Themes/Basic.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called Brand component. You probably want to customize this component by adding your own application logo. Let's see how to do it.
+[The basic theme](../../Themes/Basic.md) defines some view components for the layout. For example, the highlighted area with the red rectangle above is called **Brand component**. You probably want to customize this component by adding your **own application logo**. Let's see how to do it.
 
 First, create your logo and place under a folder in your web application. We used `wwwroot/logos/bookstore-logo.png` path. Then copy the Brand component's view ([from here](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/Default.cshtml)) from the basic theme files under the `Themes/Basic/Components/Brand` folder. The result should be similar the picture below:
 
@@ -154,21 +154,21 @@ Now, you can run the application to see the result:
 
 If you need, you can also replace [the code behind c# class](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Components/Brand/MainNavbarBrandViewComponent.cs) of the component just using the dependency injection system.
 
-## Overriding the Theme
+### Overriding the Theme
 
 Just as explained above, you can replace any component, layout or c# class of the used theme. See the [theming document](Theming.md) for more information on the theming system.
 
-## Overriding Static Resources
+### Overriding Static Resources
 
 Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the Virtual File System to handle it.
 
 ## Manipulating the Bundles
 
-The [Bundling & Minification](Bundling-Minification.md) system provides an extensible and dynamic system to create script and style bundles. It allows to extend and manipulate existing bundles by design.
+The [Bundling & Minification](Bundling-Minification.md) system provides an **extensible and dynamic** system to create **script** and **style** bundles. It allows you to extend and manipulate the existing bundles.
 
 ### Example: Add a Global CSS File
 
-For example, ABP Framework defines a global CSS bundle which is added to every page (actually, added to the layout file by the themes). Let's add a custom CSS file to the end of the bundle files, so we can override any global style.
+For example, ABP Framework defines a **global style bundle** which is added to every page (actually, added to the layout by the themes). Let's add a **custom style file** to the end of the bundle files, so we can override any global style.
 
 First, create a CSS file and locate it in a folder inside the `wwwroot`:
 
@@ -209,7 +209,7 @@ Just like the `StandardBundles.Styles.Global`, there is a `StandardBundles.Scrip
 
 ### Example: Manipulate the Bundle Files
 
-The example above adds a new file to the bundle. You can do more if you create a bundle contributor class. Example:
+The example above adds a new file to the bundle. You can do more if you create a **bundle contributor** class. Example:
 
 ````csharp
 public class MyGlobalStyleBundleContributor : BundleContributor
@@ -241,9 +241,9 @@ It is not a good idea to clear all CSS files. In a real world scenario, you can 
 
 ### Example: Add a JavaScript File for a Specific Page
 
-The examples above works with the global bundle added to the layout. What if you want to add a CSS/JavaScript file (or replace a file) for a specific page defines inside a depended module.
+The examples above works with the global bundle added to the layout. What if you want to add a CSS/JavaScript file (or replace a file) for a specific page defines inside a depended module?
 
-Assume that you want to run a JavaScript code once user enters to the Role Management page of the Identity Module.
+Assume that you want to run a **JavaScript code** once the user enters to the **Role Management** page of the Identity Module.
 
 First, create a standard JavaScript file under the `wwwroot`, `Pages` or `Views` folder (ABP support to add static resources inside these folders by default). We prefer the `Pages/Identity/Roles` folder to follow the conventions:
 
@@ -276,40 +276,38 @@ Configure<AbpBundlingOptions>(options =>
 
 > Notice that not every page defines such page bundles. They define only if needed.
 
-In addition to adding new CSS/JavaScript file to a page, you know you also can replace the existing one.
+In addition to adding new CSS/JavaScript file to a page, you also can replace the existing one (by defining a bundle contributor).
 
 ## Layout Customization
 
-Layouts are defined by the theme ([see the theming](Theming.md)) by design. They are not included in a downloaded application solution. In this way you can easily upgrade the theme and get new features.
+Layouts are defined by the theme ([see the theming](Theming.md)) by design. They are not included in a downloaded application solution. In this way you can easily **upgrade** the theme and get new features. You can not **directly change** the layout code in your application unless you replace it by your own layout (will be explained in the next sections).
 
-However, there are some common ways to customize the layout described in the next sections.
+There are some common ways to **customize the layout** described in the next sections.
 
 ### Menu Contributors
 
-There are two standard menus defined by the ABP Framework:
+There are two **standard menus** defined by the ABP Framework:
 
 ![bookstore-menus-highlighted](../../images/bookstore-menus-highlighted.png)
 
 * `StandardMenus.Main`: The main menu of the application.
 * `StandardMenus.User`: The user menu (generally at the top right of the screen).
 
-Rendering the menus is a responsibility of the theme, but menu items are determined by the modules and your application code. Just implement the `IMenuContributor` interface and manipulate the menu items in the `ConfigureMenuAsync` method.
+Rendering the menus is a responsibility of the theme, but **menu items** are determined by the modules and your application code. Just implement the `IMenuContributor` interface and **manipulate the menu items** in the `ConfigureMenuAsync` method.
 
-Menu contributors are executed whenever need to render the menu. There is already a menu contributor defined in the application startup template, so you can take it as an example and improve if necessary. See the [navigation menu](Navigation-Menu.md) document for more.
+Menu contributors are executed whenever need to render the menu. There is already a menu contributor defined in the **application startup template**, so you can take it as an example and improve if necessary. See the [navigation menu](Navigation-Menu.md) document for more.
 
 ### Toolbar Contributors
 
-[Toolbar system](Toolbars.md) is used to define toolbars on the user interface. Modules (or your application) can add items to a toolbar, then the theme renders the toolbar on the layout.
+[Toolbar system](Toolbars.md) is used to define **toolbars** on the user interface. Modules (or your application) can add **items** to a toolbar, then the theme renders the toolbar on the **layout**.
 
-There is only one standard toolbar (named "Main" - defined as a constant: `StandardToolbars.Main`). For the basic theme, it is rendered as shown below:![bookstore-toolbar-highlighted](../../images/bookstore-toolbar-highlighted.png)
+There is only one **standard toolbar** (named "Main" - defined as a constant: `StandardToolbars.Main`). For the basic theme, it is rendered as shown below:![bookstore-toolbar-highlighted](../../images/bookstore-toolbar-highlighted.png)
 
 In the screenshot above, there are two items added to the main toolbar: Language switch component & user menu. You can add your own items here.
 
 #### Example: Add a Notification Icon
 
-In this example, we will add a notification (bell) icon to the left of the language switch item.
-
-A item in the toolbar should be a **view component**. So, first, create a new view component in your project:
+In this example, we will add a **notification (bell) icon** to the left of the language switch item. A item in the toolbar should be a **view component**. So, first, create a new view component in your project:
 
 ![bookstore-notification-view-component](../../images/bookstore-notification-view-component.png)
 
@@ -366,26 +364,17 @@ That's all, you will see the notification icon on the toolbar when you run the a
 
 ![bookstore-notification-icon-on-toolbar](../../images/bookstore-notification-icon-on-toolbar.png)
 
-`NotificationViewComponent` in this sample simply returns a view without any data. In real life, you probably want to query database (or an HTTP API) to get notifications and pass to the view. If you need, you can add a `JavaScript` or `CSS` file to the global bundle (as described before) for your toolbar item.
+`NotificationViewComponent` in this sample simply returns a view without any data. In real life, you probably want to **query database** (or call an HTTP API) to get notifications and pass to the view. If you need, you can add a `JavaScript` or `CSS` file to the global bundle (as described before) for your toolbar item.
 
 See the [toolbars document](Toolbars.md) for more about the toolbar system.
 
 ### Layout Hooks
 
-[Layout Hooks](Layout-Hooks.md) system allows you to add code at some specific parts of the layout. Given standard hook names are defined by the ABP framework:
-
-* **"Header.First"** (Defined as a constant: `LayoutHooks.Head.First`): To add code to the beginning in the `head` HTML element.
-* **"Header.Last"** (Defined as a constant: `LayoutHooks.Head.Last`): To add code to the end in the `head` HTML element.
-* **"Body.First"** (Defined as a constant: `LayoutHooks.Body.First`): To add code to the beginning in the `head` HTML element.
-* **"Body.Last"** (Defined as a constant: `LayoutHooks.Body.Last`): To add code to the end in the `head` HTML element.
-
-All layouts of all themes should implement these hooks. You can then add a view component into any of the hook points.
+[Layout Hooks](Layout-Hooks.md) system allows you to **add code** at some specific parts of the layout. All layouts of all themes should implement these hooks. Then you can then add a **view component** into a hook point.
 
 #### Example: Add Google Analytics Script
 
-Assume that you need to add the Google Analytics script to the layout (that will be available for all the pages).
-
-First, create a view component in your project:
+Assume that you need to add the Google Analytics script to the layout (that will be available for all the pages). First, **create a view component** in your project:
 
 ![bookstore-google-analytics-view-component](../../images/bookstore-google-analytics-view-component.png)
 
@@ -439,7 +428,7 @@ Configure<AbpLayoutHookOptions>(options =>
     options.Add(
         LayoutHooks.Head.Last,
         typeof(GoogleAnalyticsViewComponent),
-        layout: StandardLayouts.Application //The layout to add
+        layout: StandardLayouts.Application //Set the layout to add
     );
 });
 ````
