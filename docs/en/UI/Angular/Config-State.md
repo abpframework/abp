@@ -225,7 +225,7 @@ this.config.dispatchPatchRouteByName("::Menu:Home", newRouteConfig);
 
 ### How to Add a New Route Configuration
 
-The `dispatchPatchRouteByName` triggers a state method that finds a route by its name and replaces its configuration in the `Store` with the new configuration passed as the second parameter.
+The `dispatchAddRoute` adds a new route to the configuration state in the `Store`. For this, the route config should be passed as the parameter of the method.
 
 ```js
 // this.config is instance of ConfigStateService
