@@ -1,6 +1,6 @@
 # Custom Setting Page
 
-There are several settings tabs from different modules. You can add custom settings tabs to your project in 3 steps.
+There are several settings tabs from different modules. You can add custom settings page to your project in 3 steps.
 
 1. Create a Component
 
@@ -37,6 +37,6 @@ ngOnInit() {
 }
 ```
 
-Open the `setting-management` page to see the changes:
+Navigate to `/setting-management` route to see the changes:
 
 ![Custom Settings Tab](./images/custom-settings.png)
