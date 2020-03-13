@@ -299,7 +299,74 @@ Menu contributors are executed whenever need to render the menu. There is alread
 
 ### Toolbar Contributors
 
-TODO
+Toolbar system is used to define toolbars. Modules (or your application) can add items to a toolbar, then the theme renders the toolbar on the layout.
+
+There is only one standard toolbar (named "Main" - defined as a constant: `StandardToolbars.Main`). For the basic theme, it is rendered as shown below:![bookstore-toolbar-highlighted](../../images/bookstore-toolbar-highlighted.png)
+
+In the screenshot above, there are two items added to the main toolbar: Language switch component & user menu. You can add your own items here.
+
+#### Example: Add a Notification Icon
+
+In this example, we will add a notification (bell) icon to the left of the language switch item.
+
+A item in the toolbar should be a **view component**. So, first, create a new view component in your project:
+
+![bookstore-notification-view-component](../../images/bookstore-notification-view-component.png)
+
+**NotificationViewComponent.cs**
+
+````csharp
+public class NotificationViewComponent : AbpViewComponent
+{
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        return View("/Pages/Shared/Components/Notification/Default.cshtml");
+    }
+}
+````
+
+**Default.cshtml**
+
+````xml
+<div id="MainNotificationIcon" style="color: white; margin: 8px;">
+    <i class="far fa-bell"></i>
+</div>
+````
+
+Now, we can create a class implementing the `IToolbarContributor` interface:
+
+````csharp
+public class MyToolbarContributor : IToolbarContributor
+{
+    public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+    {
+        if (context.Toolbar.Name == StandardToolbars.Main)
+        {
+            context.Toolbar.Items
+                .Insert(0, new ToolbarItem(typeof(NotificationViewComponent)));
+        }
+
+        return Task.CompletedTask;
+    }
+}
+````
+
+This class adds the `NotificationViewComponent` as the first item in the `Main` toolbar.
+
+Finally, you need to add this contributor to the `AbpToolbarOptions`, in the `ConfigureServices` of your module:
+
+````csharp
+Configure<AbpToolbarOptions>(options =>
+{
+    options.Contributors.Add(new MyToolbarContributor());
+});
+````
+
+That's all, you will see the notification icon on the toolbar when you run the application:
+
+![bookstore-notification-icon-on-toolbar](../../images/bookstore-notification-icon-on-toolbar.png)
+
+`NotificationViewComponent` in this sample simply returns a view without any data. In real life, you probably want to query database (or an HTTP API) to get notifications and pass to the view. If you need, you can add a `JavaScript` or `CSS` file to the global bundle (as described before) for your toolbar item.
 
 ### Layouts
 
