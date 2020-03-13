@@ -53,3 +53,10 @@ This section suggests some approaches if you decided to use pre-built applicatio
 * [Overriding Services](Customizing-Application-Modules-Overriding-Services.md)
 * [Overriding the User Interface](Customizing-Application-Modules-Overriding-User-Interface.md)
 
+### See Also
+
+Also, see the following documents:
+
+* See [the localization document](Localization.md) to learn how to extend existing localization resources.
+* See [the settings document](Settings.md) to learn how to change setting definitions of a depended module.
+* See [the authorization document](Authorization.md) to learn how to change permission definitions of a depended module.
