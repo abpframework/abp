@@ -2,10 +2,10 @@
 
 ABP为创建**可重用的部件**提供了模型和基础设施. 部件系统是[ASP.NET Core ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components)的扩展. 在你有以下需求时,小部件会非常有用;
 
-* 在可复用的 **[模块](../Module-Development-Basics.md)** 中定义部件.
+* 在可复用的 **[模块](../../Module-Development-Basics.md)** 中定义部件.
 * 在部件中引用 **scripts & styles** 脚本.
-* 使用部件创建 **[仪表盘](Dashboards.md)**.
-* 支持 **[授权](../Authorization.md)** 与 **[捆绑`bundling`](Bundling-Minification.md)** 的部件
+* 使用部件创建 **仪表盘**.
+* 支持 **[授权](../../Authorization.md)** 与 **[捆绑`bundling`](Bundling-Minification.md)** 的部件
 
 ## 基本部件定义
 
@@ -13,7 +13,7 @@ ABP为创建**可重用的部件**提供了模型和基础设施. 部件系统�
 
 第一部,创建一个新的ASP.NET Core View Component:
 
-![widget-basic-files](../images/widget-basic-files.png)
+![widget-basic-files](../../images/widget-basic-files.png)
 
 **MySimpleWidgetViewComponent.cs**:
 
