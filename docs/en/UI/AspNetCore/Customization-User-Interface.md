@@ -158,7 +158,7 @@ If you need, you can also replace [the code behind c# class](https://github.com/
 
 Just as explained above, you can replace any component, layout or c# class of the used theme. See the [theming document](Theming.md) for more information on the theming system.
 
-### Overriding Static Resources
+## Overriding Static Resources
 
 Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the Virtual File System to handle it.
 
@@ -437,4 +437,34 @@ See the layouts section below to learn more about the layout system.
 
 ### Layouts
 
-TODO
+Layout system allows themes to define standard, named layouts and allows any page to select a proper layout for its purpose. There are three pre-defined layouts:
+
+* "**Application**": The main (and the default) layout for an application. It typically contains header, menu (sidebar), footer, toolbar... etc. 
+* "**Account**": This layout is used by login, register and other similar pages. It is used for the pages under the `/Pages/Account` folder by default.
+* "**Empty**": Empty and minimal layout.
+
+These names are defined in the `StandardLayouts` class as constants. You can definitely create your own layouts, but these are standard layout names and implemented by all the themes out of the box.
+
+#### Layout Location
+
+You can find the layout files [here](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic/Themes/Basic/Layouts) for the basic theme. You can take them as references to build your own layouts or you can override them if necessary.
+
+#### ITheme
+
+ABP Framework uses the `ITheme` service to get the layout location by the layout name. You can replace this service to dynamically select the layout location.
+
+#### IThemeManager
+
+`IThemeManager` is used to obtain the current theme and get the layout path. Any page can determine the layout of its own. Example:
+
+````html
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@{
+    Layout = ThemeManager.CurrentTheme.GetLayout(StandardLayouts.Empty);
+}
+````
+
+This page will use the empty layout. You use `ThemeManager.CurrentTheme.GetEmptyLayout();` extension method as a shortcut.
+
+If you want to set the layout for all the pages under a specific folder, then write the code above in a `_ViewStart.cshtml` file under that folder.
