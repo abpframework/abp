@@ -4,8 +4,8 @@ ABP provides a model and infrastructure to create **reusable widgets**. Widget s
 
 * Have **scripts & styles** dependencies for your widget.
 * Create **dashboards** with widgets used inside.
-* Define widgets in reusable **[modules](../Module-Development-Basics.md)**.
-* Co-operate widgets with **[authorization](../Authorization.md)** and **[bundling](Bundling-Minification.md)** systems.
+* Define widgets in reusable **[modules](../../Module-Development-Basics.md)**.
+* Co-operate widgets with **[authorization](../../Authorization.md)** and **[bundling](Bundling-Minification.md)** systems.
 
 ## Basic Widget Definition
 
@@ -13,7 +13,7 @@ ABP provides a model and infrastructure to create **reusable widgets**. Widget s
 
 As the first step, create a new regular ASP.NET Core View Component:
 
-![widget-basic-files](../images/widget-basic-files.png)
+![widget-basic-files](../../images/widget-basic-files.png)
 
 **MySimpleWidgetViewComponent.cs**:
 
@@ -184,7 +184,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-See [the localization document](../Localization.md) to learn about localization resources and keys.
+See [the localization document](../../Localization.md) to learn about localization resources and keys.
 
 ## Style & Script Dependencies
 
@@ -220,7 +220,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-ABP takes account these dependencies and properly adds to the view/page when you use the widget. Style/script files can be **physical or virtual**. It is completely integrated to the [Virtual File System](../Virtual-File-System.md).
+ABP takes account these dependencies and properly adds to the view/page when you use the widget. Style/script files can be **physical or virtual**. It is completely integrated to the [Virtual File System](../../Virtual-File-System.md).
 
 ### Defining Bundle Contributors
 
@@ -454,7 +454,7 @@ Used to refresh the widget when needed. It has a filter argument that can be use
 Some widgets may need to be available only for authenticated or authorized users. In this case, use the following properties of the `Widget` attribute:
 
 * `RequiresAuthentication` (`bool`): Set to true to make this widget usable only for authentication users (user have logged in to the application).
-* `RequiredPolicies` (`List<string>`): A list of policy names to authorize the user. See [the authorization document](../Authorization.md) for more info about policies.
+* `RequiredPolicies` (`List<string>`): A list of policy names to authorize the user. See [the authorization document](../../Authorization.md) for more info about policies.
 
 Example:
 
@@ -487,7 +487,7 @@ Configure<AbpWidgetOptions>(options =>
 });
 ```
 
-Write this into the `ConfigureServices` method of your [module](../Module-Development-Basics.md). All the configuration done with the `Widget` attribute is also possible with the `AbpWidgetOptions`. Example configuration that adds a style for the widget:
+Write this into the `ConfigureServices` method of your [module](../../Module-Development-Basics.md). All the configuration done with the `Widget` attribute is also possible with the `AbpWidgetOptions`. Example configuration that adds a style for the widget:
 
 ````csharp
 Configure<AbpWidgetOptions>(options =>
