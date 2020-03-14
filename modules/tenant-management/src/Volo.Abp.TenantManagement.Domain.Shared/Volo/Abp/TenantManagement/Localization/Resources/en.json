@@ -15,9 +15,6 @@
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
     "Permission:ManageConnectionStrings": "Manage connection strings",
-    "Permission:ManageFeatures": "Manage features",
-    "DisplayName:AdminEmailAddress": "Admin Email Address",
-    "DisplayName:AdminPassword": "Admin Password",
-    "InvalidAdminProperties": "Admin email address or password is invalid."
+    "Permission:ManageFeatures": "Manage features"
   }
 }
