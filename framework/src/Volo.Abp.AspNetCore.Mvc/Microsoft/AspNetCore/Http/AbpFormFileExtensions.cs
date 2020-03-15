@@ -15,8 +15,10 @@ namespace Microsoft.AspNetCore.Http
 
         public static async Task<byte[]> GetAllBytesAsync(this IFormFile file)
         {
-            using var stream = file.OpenReadStream();
-            return await stream.GetAllBytesAsync();
+            using (var stream = file.OpenReadStream())
+            {
+                return await stream.GetAllBytesAsync();
+            }
         }
     }
 }
