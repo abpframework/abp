@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "GetStarted": "Get Started",
+    "GetStarted": "Get Started - Startup Templates",
     "Create": "Create",
     "NewProject": "New Project",
     "DirectDownload": "Direct Download",
@@ -86,7 +86,7 @@
     "BasedOnFamiliarToolsExplanation": "Built on and integrated to popular tools you already know. Low learning curve, easy adaptation, comfortable development.",
     "ORMIndependent": "ORM Independent",
     "ORMIndependentExplanation": "The core framework is ORM/database independent and can work with any data source. Entity Framework Core and MongoDB providers are already available.",
-    "Features": "Features",
+    "Features": "Explore the ABP Framework Features",
     "ABPCLI": "ABP CLI",
     "Modularity": "Modularity",
     "BootstrapTagHelpers": "Bootstrap Tag Helpers",
