@@ -246,6 +246,11 @@ namespace Volo.Abp.Domain.Repositories
                 throw new NotImplementedException();
             }
 
+            public override Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate, bool includeDetails = true, CancellationToken cancellationToken = default)
+            {
+                throw new NotImplementedException();
+            }
+
             public override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
             {
                 throw new NotImplementedException();
