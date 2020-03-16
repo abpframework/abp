@@ -82,7 +82,7 @@
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Lockout duration(seconds)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Max failed access attempts",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Require confirmed email",
-    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Enable phoneNumber confirmation",
+    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Enable phone number confirmation",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Require confirmed phoneNumber",
     "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "Is username update enabled",
     "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "Is email update enabled",
