@@ -14,7 +14,7 @@ import {
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { fadeAnimation } from '../../animations/modal.animations';
-import { Toaster } from '../../models/toaster';
+import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
 
@@ -133,9 +133,9 @@ export class ModalComponent implements OnDestroy {
           'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
           'AbpAccount::AreYouSure',
         )
-        .subscribe((status: Toaster.Status) => {
+        .subscribe((status: Confirmation.Status) => {
           this.isConfirmationOpen = false;
-          if (status === Toaster.Status.confirm) {
+          if (status === Confirmation.Status.confirm) {
             this.visible = false;
           }
         });
