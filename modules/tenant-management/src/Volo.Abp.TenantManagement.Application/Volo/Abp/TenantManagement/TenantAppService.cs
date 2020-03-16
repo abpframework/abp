@@ -15,7 +15,7 @@ namespace Volo.Abp.TenantManagement
         protected ITenantManager TenantManager { get; }
 
         public TenantAppService(
-            ITenantRepository tenantRepository, 
+            ITenantRepository tenantRepository,
             ITenantManager tenantManager,
             IDataSeeder dataSeeder)
         {
@@ -51,9 +51,13 @@ namespace Volo.Abp.TenantManagement
             {
                 //TODO: Handle database creation?
 
-                await DataSeeder.SeedAsync(tenant.Id, input);
+                await DataSeeder.SeedAsync(
+                                new DataSeedContext(tenant.Id)
+                                    .WithProperty("AdminEmail", input.AdminEmailAddress)
+                                    .WithProperty("AdminPassword", input.AdminPassword)
+                                );
             }
-            
+
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }
 
