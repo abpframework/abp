@@ -51,7 +51,7 @@ namespace Volo.Abp.TenantManagement
             {
                 //TODO: Handle database creation?
 
-                await DataSeeder.SeedAsync(tenant.Id, input.AdminEmailAddress, input.AdminPassword);
+                await DataSeeder.SeedAsync(tenant.Id, input);
             }
             
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
