@@ -35,11 +35,11 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
             [Required]
             [EmailAddress]
-            [StringLength(TenantConsts.MaxNameLength)]
+            [MaxLength(256)]
             public string AdminEmailAddress { get; set; }
 
             [Required]
-            [StringLength(TenantConsts.MaxNameLength)]
+            [MaxLength(128)]
             public string AdminPassword { get; set; }
         }
     }
