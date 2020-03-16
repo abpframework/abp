@@ -1,12 +1,12 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../out-tsc/theme-shared",
+  "dest": "../../dist/theme-shared",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
   "whitelistedNonPeerDependencies": [
     "@abp/ng.core",
-    "@angular/cdk",    
+    "@angular/cdk",
     "@angular/localize",
     "@fortawesome/fontawesome-free",
     "@ng-bootstrap/ng-bootstrap",

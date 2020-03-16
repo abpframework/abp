@@ -1,5 +1,5 @@
 import { ABP, ConfigState } from '@abp/ng.core';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
   AbstractControl,
@@ -223,8 +223,8 @@ export class UsersComponent implements OnInit {
       .warn('AbpIdentity::UserDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
         messageLocalizationParams: [userName],
       })
-      .subscribe((status: Toaster.Status) => {
-        if (status === Toaster.Status.confirm) {
+      .subscribe((status: Confirmation.Status) => {
+        if (status === Confirmation.Status.confirm) {
           this.store.dispatch(new DeleteUser(id)).subscribe(() => this.get());
         }
       });

@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../out-tsc/tenant-management",
+  "dest": "../../dist/tenant-management",
   "lib": {
     "entryFile": "src/public-api.ts"
   },
