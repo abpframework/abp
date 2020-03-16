@@ -9,7 +9,7 @@ This section covers the [Razor Pages](https://docs.microsoft.com/en-us/aspnet/co
 You typically have three kind of override requirement for a page:
 
 * Overriding **only the Page Model** (C#) side to perform additional logic without changing the page UI.
-* Overring **only the Razor Page** (.chtml file) to change the UI without changing the c# behind the page.
+* Overriding **only the Razor Page** (.chtml file) to change the UI without changing the c# behind the page.
 * **Completely overriding** the page.
 
 ### Overriding a Page Model (C#)
