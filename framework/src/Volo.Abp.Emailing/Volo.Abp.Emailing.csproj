@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -19,7 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" Version="2.1.0" />
+    <Content Remove="Volo\Abp\Emailing\Localization\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Scriban" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -24,7 +24,7 @@
 
                         <spam class="mr-2">@feature.Name</spam>
 
-                        <input type="text" name="Features[@i].Type" value="@feature.ValueType.Name" hidden />
+                        <input type="text" name="Features[@i].Type" value="@feature.ValueType?.Name" hidden />
                         @if (feature.ValueType is FreeTextStringValueType)
                         {
                             <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />

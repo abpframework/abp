@@ -53,20 +53,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
         }
 
-        public override TEntity Insert(TEntity entity, bool autoSave = false)
-        {
-            /* EntityCreatedEvent (OnUowCompleted) is triggered as the first because it should be
-             * triggered before other events triggered inside an EntityCreating event handler.
-             * This is also true for other "ed" & "ing" events.
-             */
-
-            AsyncHelper.RunSync(() => ApplyAbpConceptsForAddedEntityAsync(entity));
-
-            Collection.InsertOne(entity);
-
-            return entity;
-        }
-
         public override async Task<TEntity> InsertAsync(
             TEntity entity,
             bool autoSave = false,
@@ -78,37 +64,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 entity,
                 cancellationToken: GetCancellationToken(cancellationToken)
             );
-
-            return entity;
-        }
-
-        public override TEntity Update(TEntity entity, bool autoSave = false)
-        {
-            SetModificationAuditProperties(entity);
-
-            if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
-            {
-                SetDeletionAuditProperties(entity);
-                AsyncHelper.RunSync(() => TriggerEntityDeleteEventsAsync(entity));
-            }
-            else
-            {
-                AsyncHelper.RunSync(() => TriggerEntityUpdateEventsAsync(entity));
-            }
-
-            AsyncHelper.RunSync(() => TriggerDomainEventsAsync(entity));
-
-            var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
-
-            var result = Collection.ReplaceOne(
-                CreateEntityFilter(entity, true, oldConcurrencyStamp),
-                entity
-            );
-
-            if (result.MatchedCount <= 0)
-            {
-                ThrowOptimisticConcurrencyException();
-            }
 
             return entity;
         }
@@ -148,37 +103,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return entity;
         }
 
-        public override void Delete(TEntity entity, bool autoSave = false)
-        {
-            AsyncHelper.RunSync(() => ApplyAbpConceptsForDeletedEntityAsync(entity));
-            var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
-
-            if (entity is ISoftDelete softDeleteEntity)
-            {
-                softDeleteEntity.IsDeleted = true;
-                var result = Collection.ReplaceOne(
-                    CreateEntityFilter(entity, true, oldConcurrencyStamp),
-                    entity
-                );
-
-                if (result.MatchedCount <= 0)
-                {
-                    ThrowOptimisticConcurrencyException();
-                }
-            }
-            else
-            {
-                var result = Collection.DeleteOne(
-                    CreateEntityFilter(entity, true, oldConcurrencyStamp)
-                );
-
-                if (result.DeletedCount <= 0)
-                {
-                    ThrowOptimisticConcurrencyException();
-                }
-            }
-        }
-
         public override async Task DeleteAsync(
             TEntity entity,
             bool autoSave = false,
@@ -187,7 +111,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             await ApplyAbpConceptsForDeletedEntityAsync(entity);
             var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
 
-            if (entity is ISoftDelete softDeleteEntity)
+            if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
             {
                 softDeleteEntity.IsDeleted = true;
                 var result = await Collection.ReplaceOneAsync(
@@ -215,36 +139,14 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
         }
 
-        public override List<TEntity> GetList(bool includeDetails = false)
-        {
-            return GetMongoQueryable().ToList();
-        }
-
         public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public override long GetCount()
-        {
-            return GetMongoQueryable().LongCount();
-        }
-
         public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().LongCountAsync(GetCancellationToken(cancellationToken));
-        }
-
-        public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
-        {
-            var entities = GetMongoQueryable()
-                .Where(predicate)
-                .ToList();
-
-            foreach (var entity in entities)
-            {
-                Delete(entity, autoSave);
-            }
         }
 
         public override async Task DeleteAsync(
@@ -273,11 +175,21 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 Collection.AsQueryable()
             );
         }
+        protected virtual bool IsHardDeleted(TEntity entity)
+        {
+            var hardDeletedEntities = UnitOfWorkManager?.Current?.Items.GetOrDefault(UnitOfWorkItemNames.HardDeletedEntities) as HashSet<IEntity>;
+            if (hardDeletedEntities == null)
+            {
+                return false;
+            }
+
+            return hardDeletedEntities.Contains(entity);
+        }
 
         protected virtual FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
         {
             throw new NotImplementedException(
-                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overrided and implemented by the deriving class!"
+                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
             );
         }
 
@@ -417,18 +329,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         }
 
-        public virtual TEntity Get(TKey id, bool includeDetails = true)
-        {
-            var entity = Find(id, includeDetails);
-
-            if (entity == null)
-            {
-                throw new EntityNotFoundException(typeof(TEntity), id);
-            }
-
-            return entity;
-        }
-
         public virtual async Task<TEntity> GetAsync(
             TKey id,
             bool includeDetails = true,
@@ -452,16 +352,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return await Collection
                 .Find(CreateEntityFilter(id, true))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
-        }
-
-        public virtual TEntity Find(TKey id, bool includeDetails = true)
-        {
-            return Collection.Find(CreateEntityFilter(id, true)).FirstOrDefault();
-        }
-
-        public virtual void Delete(TKey id, bool autoSave = false)
-        {
-            Collection.DeleteOne(CreateEntityFilter(id));
         }
 
         public virtual Task DeleteAsync(

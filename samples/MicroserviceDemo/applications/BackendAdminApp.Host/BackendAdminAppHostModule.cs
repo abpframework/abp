@@ -7,18 +7,24 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ProductManagement;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.UI.Navigation;
 using Volo.Blogging;
 
 namespace BackendAdminApp.Host
@@ -27,16 +33,19 @@ namespace BackendAdminApp.Host
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreAuthenticationOAuthModule),
-        typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpTenantManagementWebModule),
         typeof(BloggingApplicationContractsModule),
         typeof(AbpPermissionManagementHttpApiClientModule),
         typeof(ProductManagementHttpApiClientModule),
         typeof(ProductManagementWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpFeatureManagementHttpApiClientModule)
         )]
-    public class BackendAdminAppHostModule : AbpModule
+        public class BackendAdminAppHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -45,6 +54,16 @@ namespace BackendAdminApp.Host
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+            });
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
+
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new BackendAdminAppMenuContributor(configuration));
             });
 
             context.Services.AddAuthentication(options =>
@@ -71,6 +90,7 @@ namespace BackendAdminApp.Host
                     options.Scope.Add("BackendAdminAppGateway");
                     options.Scope.Add("IdentityService");
                     options.Scope.Add("ProductService");
+                    options.Scope.Add("TenantManagementService");
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 
@@ -99,6 +119,10 @@ namespace BackendAdminApp.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseSwagger();

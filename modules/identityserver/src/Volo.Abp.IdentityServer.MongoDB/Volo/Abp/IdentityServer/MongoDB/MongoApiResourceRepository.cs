@@ -21,7 +21,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public virtual async Task<ApiResource> FindByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar=>ar.Name == name)
+                .Where(ar => ar.Name == name)
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -29,7 +29,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar=>ar.Scopes.Any(x=> scopeNames.Contains(x.Name)))
+                .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Name)))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 

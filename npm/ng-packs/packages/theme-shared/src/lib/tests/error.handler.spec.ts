@@ -6,11 +6,14 @@ import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
 import { NgxsModule, Store } from '@ngxs/store';
 import { DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ThemeSharedModule } from '../theme-shared.module';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { RouterError, RouterDataResolved } from '@ngxs/router-plugin';
 import { NavigationError, ResolveEnd } from '@angular/router';
+import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 
-@Component({ selector: 'abp-dummy', template: 'dummy works! <abp-confirmation></abp-confirmation>' })
+@Component({
+  selector: 'abp-dummy',
+  template: 'dummy works! <abp-confirmation></abp-confirmation>',
+})
 class DummyComponent {
   constructor(public errorHandler: ErrorHandler) {}
 }
@@ -21,47 +24,71 @@ describe('ErrorHandler', () => {
   const createComponent = createRoutingFactory({
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot([])],
+    mocks: [OAuthService],
     stubsEnabled: false,
-    routes: [{ path: '', component: DummyComponent }, { path: 'account/login', component: RouterOutletComponent }],
+    routes: [
+      { path: '', component: DummyComponent },
+      { path: 'account/login', component: RouterOutletComponent },
+    ],
   });
 
   beforeEach(() => {
     spectator = createComponent();
     store = spectator.get(Store);
 
-    const abpError = document.querySelector('abp-error');
+    const abpError = document.querySelector('abp-http-error-wrapper');
     if (abpError) document.body.removeChild(abpError);
   });
 
   it('should display the error component when server error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 500 })));
-    expect(document.querySelector('.error-template')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError500.title);
-    expect(document.querySelector('.error-details')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError500.details);
+    expect(document.querySelector('.error-template')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError500.title,
+    );
+    expect(document.querySelector('.error-details')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError500.details,
+    );
   });
 
   it('should display the error component when authorize error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 403 })));
-    expect(document.querySelector('.error-template')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError403.title);
-    expect(document.querySelector('.error-details')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError403.details);
+    expect(document.querySelector('.error-template')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError403.title,
+    );
+    expect(document.querySelector('.error-details')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError403.details,
+    );
   });
 
   it('should display the error component when unknown error occurs', () => {
-    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' })));
-    expect(document.querySelector('.error-template')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError.title);
+    store.dispatch(
+      new RestOccurError(new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' })),
+    );
+    expect(document.querySelector('.error-template')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError.title,
+    );
   });
 
   it('should display the confirmation when not found error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 404 })));
     spectator.detectChanges();
-    expect(spectator.query('.abp-confirm-summary')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError404.title);
-    expect(spectator.query('.abp-confirm-body')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError404.details);
+    expect(spectator.query('.confirmation .title')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError404.title,
+    );
+    expect(spectator.query('.confirmation .message')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError404.details,
+    );
   });
 
   it('should display the confirmation when default error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 412 })));
     spectator.detectChanges();
-    expect(spectator.query('.abp-confirm-summary')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError.title);
-    expect(spectator.query('.abp-confirm-body')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError.details);
+    expect(spectator.query('.confirmation .title')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError.title,
+    );
+    expect(spectator.query('.confirmation .message')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError.details,
+    );
   });
 
   it('should display the confirmation when authenticated error occurs', async () => {
@@ -100,14 +127,15 @@ describe('ErrorHandler', () => {
     );
     spectator.detectChanges();
 
-    expect(spectator.query('.abp-confirm-summary')).toHaveText('test message');
-    expect(spectator.query('.abp-confirm-body')).toHaveText('test detail');
+    expect(spectator.query('.title')).toHaveText('test message');
+    expect(spectator.query('.confirmation .message')).toHaveText('test detail');
   });
 });
 
 @Component({
   selector: 'abp-dummy-error',
-  template: '<p>{{errorStatus}}</p><button id="close-dummy" (click)="destroy$.next()">Close</button>',
+  template:
+    '<p>{{errorStatus}}</p><button id="close-dummy" (click)="destroy$.next()">Close</button>',
 })
 class DummyErrorComponent {
   errorStatus;
@@ -127,20 +155,27 @@ describe('ErrorHandler with custom error component', () => {
     imports: [
       CoreModule,
       ThemeSharedModule.forRoot({
-        httpErrorConfig: { errorScreen: { component: DummyErrorComponent, forWhichErrors: [401, 403, 404, 500] } },
+        httpErrorConfig: {
+          errorScreen: { component: DummyErrorComponent, forWhichErrors: [401, 403, 404, 500] },
+        },
       }),
       NgxsModule.forRoot([]),
       ErrorModule,
     ],
+    mocks: [OAuthService],
     stubsEnabled: false,
-    routes: [{ path: '', component: DummyComponent }, { path: 'account/login', component: RouterOutletComponent }],
+
+    routes: [
+      { path: '', component: DummyComponent },
+      { path: 'account/login', component: RouterOutletComponent },
+    ],
   });
 
   beforeEach(() => {
     spectator = createComponent();
     store = spectator.get(Store);
 
-    const abpError = document.querySelector('abp-error');
+    const abpError = document.querySelector('abp-http-error-wrapper');
     if (abpError) document.body.removeChild(abpError);
   });
 

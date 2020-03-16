@@ -104,5 +104,20 @@ namespace Volo.Abp.PermissionManagement
                 true));
         }
 
+        [Fact]
+        public async Task UpdateProviderKey()
+        {
+            await _permissionGrantRepository.InsertAsync(new PermissionGrant(
+                Guid.NewGuid(),
+                "MyPermission1",
+                "Test",
+                "Test")
+            );
+            var permissionGrant = await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "Test");
+            permissionGrant.ProviderKey.ShouldBe("Test");
+
+            await _permissionManager.UpdateProviderKeyAsync(permissionGrant, "NewProviderKey");
+            (await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "NewProviderKey")).ShouldNotBeNull();
+        }
     }
 }

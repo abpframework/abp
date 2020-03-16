@@ -1,0 +1,67 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Docs.Localization
+@using Volo.Docs.Pages.Documents
+@inject IHtmlLocalizer<DocsResource> L
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+@model SearchModel
+@{
+    Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
+}
+@section styles {
+    <style>
+        highlight {
+            font-weight: bold;
+            color: red;
+            font-style: italic;
+        }
+    </style>
+}
+
+<div class="container">
+    <form method="get" action="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" class="mt-4">
+        <input type="text" asp-for="@Model.KeyWord" class="form-control" />
+        <button type="submit" class="btn-block btn-primary btn-lg mt-3">Search</button>
+    </form>
+
+    <div class="my-3 p-3 bg-white rounded">
+        <h6 class="border-bottom pb-4 mb-0">Search results</h6>
+
+        @foreach (var docs in Model.SearchOutputs)
+        {
+            <div class="media text-muted pt-3">
+                <div class="media-body pb-3 mb-0 small border-bottom">
+                    <div class="list-group">
+
+                        @functions
+                        {
+                            string RemoveFileExtensionFromPath(string path)
+                            {
+                                if (path == null)
+                                {
+                                    return null;
+                                }
+
+                                return path.EndsWith("." + @Model.Project.Format)
+                                    ? path.Left(path.Length - Model.Project.Format.Length - 1)
+                                    : path;
+                            }
+                        }
+
+                        <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
+                            <h3>@RemoveFileExtensionFromPath(docs.Name)</h3></a>
+
+                        @foreach (var highlight in docs.Highlight)
+                        {
+                            <p class="list-group-item list-group-item-action">@Html.Raw(highlight)</p>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,11 +1,12 @@
 ﻿@page
-@model Volo.Abp.Account.Web.Pages.Account.ManageModel
+@using Volo.Abp.Account.Web.Pages.Account
 @using Volo.Abp.Identity.Settings
 @using Volo.Abp.Settings
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @inject ISettingProvider SettingManager
 @inject IThemeManager ThemeManager
 @inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
+@model ManageModel
 @{
     Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
     var isUserNameUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled), "true",
@@ -15,10 +16,12 @@
         StringComparison.OrdinalIgnoreCase);
 }
 @section scripts {
-    <abp-script src="/Pages/Account/Manage.js" />
+    <abp-script-bundle name="@typeof(ManageModel).FullName">
+        <abp-script src="/Pages/Account/Manage.js" />
+    </abp-script-bundle>
 }
 <abp-card>
-    <abp-card-body> 
+    <abp-card-body>
         <abp-tabs tab-style="PillVertical">
             <abp-tab title="@L["ChangePassword"].Value">
                 <h4>@L["ChangePassword"].Value</h4><hr />

@@ -1,12 +1,12 @@
-import { Directive, ElementRef, EventEmitter, OnInit, Output, Renderer2, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { fromEvent } from 'rxjs';
-import { takeUntilDestroy } from '@ngx-validate/core';
+import { takeUntilDestroy } from '../utils/rxjs-utils';
 
 @Directive({
   // tslint:disable-next-line: directive-selector
   selector: '[click.stop]',
 })
-export class ClickEventStopPropagationDirective implements OnInit, OnDestroy {
+export class StopPropagationDirective implements OnInit, OnDestroy {
   @Output('click.stop') readonly stopPropEvent = new EventEmitter<MouseEvent>();
 
   constructor(private el: ElementRef) {}

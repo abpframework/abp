@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
@@ -16,9 +17,9 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
             _guidGenerator = guidGenerator;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            _bookRepository.Insert(
+            await _bookRepository.InsertAsync(
                 new BookInSecondDbContext(
                     _guidGenerator.Create(),
                     "TestBook1"

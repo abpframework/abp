@@ -1,0 +1,14 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.PaginatorDemo
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Paginator
+@model IndexModel
+
+@section scripts {
+    <abp-script-bundle name="@typeof(IndexModel).FullName">
+        <abp-script src="/Pages/Components/Paginator/index.js" />
+    </abp-script-bundle>
+}
+
+<h2>Paginator</h2>
+
+@await Component.InvokeAsync(typeof(PaginatorDemoViewComponent), new { pagerModel = Model.PagerModel })

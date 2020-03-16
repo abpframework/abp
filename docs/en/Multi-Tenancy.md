@@ -98,7 +98,7 @@ The first thing for a multi-tenant application is to determine the current tenan
 
 ##### Custom Tenant Resolvers
 
-You can add your custom tenant resolver to **TenantResolveOptions** in your module's ConfigureServices method as like below:
+You can add your custom tenant resolver to **AbpTenantResolveOptions** in your module's ConfigureServices method as like below:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -112,7 +112,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
@@ -168,7 +168,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ConfigurationTenantStoreOptions>(options =>
+            Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
@@ -214,7 +214,7 @@ namespace MyCompany.MyProject
         {
             var configuration = BuildConfiguration();
 
-            Configure<ConfigurationTenantStoreOptions>(configuration);
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
@@ -302,6 +302,7 @@ TODO:...
 
 Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to determine current tenant from current web request (ordered by priority). These resolvers are added and work out of the box:
 
+* **CurrentUserTenantResolveContributor**: Gets the tenant id from claims of the current user, if the current user has logged in. **This should always be stay as the first contributor for security**.
 * **QueryStringTenantResolver**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
 * **RouteTenantResolver**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
 * **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
@@ -312,10 +313,10 @@ http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
 http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
 
 
-"__tenant" parameter name can be changed using AspNetCoreMultiTenancyOptions. Example:
+"__tenant" parameter name can be changed using AbpAspNetCoreMultiTenancyOptions. Example:
 
 ````C#
-services.Configure<AspNetCoreMultiTenancyOptions>(options =>
+services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 {
     options.TenantKey = "MyTenantKey";
 });
@@ -323,7 +324,7 @@ services.Configure<AspNetCoreMultiTenancyOptions>(options =>
 
 ##### Domain Tenant Resolver
 
-In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure TenantResolveOptions to add a domain tenant resolver.
+In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure AbpTenantResolveOptions to add a domain tenant resolver.
 
 ###### Example: Add a subdomain resolver
 
@@ -340,7 +341,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
                 //Subdomain format: {0}.mydomain.com (adding as the highest priority resolver)
                 options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));

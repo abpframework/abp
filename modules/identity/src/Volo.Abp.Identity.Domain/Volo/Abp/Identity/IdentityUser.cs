@@ -34,7 +34,7 @@ namespace Volo.Abp.Identity
         public virtual string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the Surame for the user.
+        /// Gets or sets the Surname for the user.
         /// </summary>
         public virtual string Surname { get; set; }
 
@@ -130,16 +130,17 @@ namespace Volo.Abp.Identity
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public IdentityUser(Guid id, [NotNull] string userName, string email = null, Guid? tenantId = null)
+        public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
         {
             Check.NotNull(userName, nameof(userName));
+            Check.NotNull(email, nameof(email));
 
             Id = id;
             TenantId = tenantId;
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
             Email = email;
-            NormalizedEmail = email?.ToUpperInvariant();
+            NormalizedEmail = email.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
             SecurityStamp = Guid.NewGuid().ToString();
 

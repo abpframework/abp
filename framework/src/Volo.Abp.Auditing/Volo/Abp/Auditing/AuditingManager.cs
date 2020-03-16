@@ -23,8 +23,8 @@ namespace Volo.Abp.Auditing
         private readonly IAuditingStore _auditingStore;
 
         public AuditingManager(
-            IAmbientScopeProvider<IAuditLogScope> ambientScopeProvider, 
-            IAuditingHelper auditingHelper, 
+            IAmbientScopeProvider<IAuditLogScope> ambientScopeProvider,
+            IAuditingHelper auditingHelper,
             IAuditingStore auditingStore,
             IServiceProvider serviceProvider,
             IOptions<AbpAuditingOptions> options)
@@ -84,7 +84,7 @@ namespace Volo.Abp.Auditing
         {
             var changeGroups = auditLog.EntityChanges
                 .Where(e => e.ChangeType == EntityChangeType.Updated)
-                .GroupBy(e => new {e.EntityTypeFullName, e.EntityId})
+                .GroupBy(e => new { e.EntityTypeFullName, e.EntityId })
                 .ToList();
 
             foreach (var changeGroup in changeGroups)
@@ -114,30 +114,7 @@ namespace Volo.Abp.Auditing
         {
             BeforeSave(saveHandle);
 
-            if (ShouldSave(saveHandle.AuditLog))
-            {
-                await _auditingStore.SaveAsync(saveHandle.AuditLog);
-            }
-        }
-
-        protected virtual void Save(DisposableSaveHandle saveHandle)
-        {
-            BeforeSave(saveHandle);
-
-            if (ShouldSave(saveHandle.AuditLog))
-            {
-                _auditingStore.Save(saveHandle.AuditLog);
-            }
-        }
-
-        protected bool ShouldSave(AuditLogInfo auditLog)
-        {
-            if (!auditLog.Actions.Any() && !auditLog.EntityChanges.Any())
-            {
-                return false;
-            }
-
-            return true;
+            await _auditingStore.SaveAsync(saveHandle.AuditLog);
         }
 
         protected class DisposableSaveHandle : IAuditLogSaveHandle
@@ -151,7 +128,7 @@ namespace Volo.Abp.Auditing
             public DisposableSaveHandle(
                 AuditingManager auditingManager,
                 IDisposable scope,
-                AuditLogInfo auditLog, 
+                AuditLogInfo auditLog,
                 Stopwatch stopWatch)
             {
                 _auditingManager = auditingManager;
@@ -163,11 +140,6 @@ namespace Volo.Abp.Auditing
             public async Task SaveAsync()
             {
                 await _auditingManager.SaveAsync(this);
-            }
-
-            public void Save()
-            {
-                _auditingManager.Save(this);
             }
 
             public void Dispose()

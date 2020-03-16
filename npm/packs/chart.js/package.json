@@ -1,11 +1,11 @@
 {
-  "version": "1.0.3",
+  "version": "2.2.0",
   "name": "@abp/chart.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "chart.js": "^2.8.0"
+    "chart.js": "^2.9.3"
   },
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "gitHead": "d5707967977fb14328661ae403c41eaa679ee263"
 }

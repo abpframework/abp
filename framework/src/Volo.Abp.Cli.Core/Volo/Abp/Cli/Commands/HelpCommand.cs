@@ -24,12 +24,19 @@ namespace Volo.Abp.Cli.Commands
             AbpCliOptions = cliOptions.Value;
         }
 
-        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             if (string.IsNullOrWhiteSpace(commandLineArgs.Target))
             {
                 Logger.LogInformation(GetUsageInfo());
-                return;
+                return Task.CompletedTask;
+            }
+
+            if (!AbpCliOptions.Commands.ContainsKey(commandLineArgs.Target))
+            {
+                Logger.LogWarning($"There is no command named {commandLineArgs.Target}.");
+                Logger.LogInformation(GetUsageInfo());
+                return Task.CompletedTask;
             }
 
             var commandType = AbpCliOptions.Commands[commandLineArgs.Target];
@@ -39,6 +46,8 @@ namespace Volo.Abp.Cli.Commands
                 var command = (IConsoleCommand) scope.ServiceProvider.GetRequiredService(commandType);
                 Logger.LogInformation(command.GetUsageInfo());
             }
+
+            return Task.CompletedTask;
         }
 
         public string GetUsageInfo()
@@ -82,7 +91,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return string.Empty;
+            return "Show command line help. Write ` abp help <command> `";
         }
     }
 }

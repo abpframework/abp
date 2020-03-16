@@ -34,6 +34,11 @@ namespace Volo.Docs.Projects
         /// </summary>
         public virtual string NavigationDocumentName { get; protected set; }
 
+        /// <summary>
+        /// The document to be used for the parameters file (index).
+        /// </summary>
+        public virtual string ParametersDocumentName { get; protected set; }
+
         public virtual string MinimumVersion { get; set; }
 
         /// <summary>
@@ -56,8 +61,9 @@ namespace Volo.Docs.Projects
             [NotNull] string shortName, 
             [NotNull] string documentStoreType,
             [NotNull] string format,
-            [NotNull] string defaultDocumentName, 
-            [NotNull] string navigationDocumentName)
+            [NotNull] string defaultDocumentName = "Index", 
+            [NotNull] string navigationDocumentName = "docs-nav.json", 
+            [NotNull] string parametersDocumentName = "docs-params.json")
         {
             Id = id;
 
@@ -67,6 +73,7 @@ namespace Volo.Docs.Projects
             Format = Check.NotNullOrWhiteSpace(format, nameof(format));
             DefaultDocumentName = Check.NotNullOrWhiteSpace(defaultDocumentName, nameof(defaultDocumentName));
             NavigationDocumentName = Check.NotNullOrWhiteSpace(navigationDocumentName, nameof(navigationDocumentName));
+            ParametersDocumentName = Check.NotNullOrWhiteSpace(parametersDocumentName, nameof(parametersDocumentName));
 
             ExtraProperties = new Dictionary<string, object>();
         }
@@ -84,6 +91,11 @@ namespace Volo.Docs.Projects
         public void SetNavigationDocumentName(string navigationDocumentName)
         {
             NavigationDocumentName = Check.NotNullOrWhiteSpace(navigationDocumentName, nameof(navigationDocumentName));
+        }
+
+        public void SetParametersDocumentName(string parametersDocumentName)
+        {
+            ParametersDocumentName = Check.NotNullOrWhiteSpace(parametersDocumentName, nameof(parametersDocumentName));
         }
 
         public void SetDefaultDocumentName(string defaultDocumentName)

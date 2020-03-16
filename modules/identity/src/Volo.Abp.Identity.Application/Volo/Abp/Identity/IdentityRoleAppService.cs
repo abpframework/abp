@@ -24,15 +24,18 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(
-                await _roleManager.GetByIdAsync(id)
-            );
+                await _roleManager.GetByIdAsync(id));
         }
 
-        public virtual async Task<ListResultDto<IdentityRoleDto>> GetListAsync()
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var list = await _roleRepository.GetListAsync();
+            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
+            var totalCount = await _roleRepository.GetCountAsync();
 
-            return new ListResultDto<IdentityRoleDto>(ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
+            return new PagedResultDto<IdentityRoleDto>(
+                totalCount,
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list)
+                );
         }
 
         [Authorize(IdentityPermissions.Roles.Create)]

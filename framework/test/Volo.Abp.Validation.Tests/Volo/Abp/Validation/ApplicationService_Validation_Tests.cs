@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Validation
@@ -25,36 +29,37 @@ namespace Volo.Abp.Validation
         }
 
         [Fact]
-        public void Should_Work_Proper_With_Right_Inputs()
+        public async Task Should_Work_Proper_With_Right_Inputs()
         {
-            var output = _myAppService.MyMethod(new MyMethodInput { MyStringValue = "test" });
+            var output = await _myAppService.MyMethod(new MyMethodInput { MyStringValue = "test" });
             output.Result.ShouldBe(42);
         }
 
         [Fact]
-        public void Should_Not_Work_With_Wrong_Inputs()
+        public async Task Should_Not_Work_With_Wrong_Inputs()
         {
-            Assert.Throws<AbpValidationException>(() => _myAppService.MyMethod(new MyMethodInput())); //MyStringValue is not supplied!
-            Assert.Throws<AbpValidationException>(() => _myAppService.MyMethod(new MyMethodInput { MyStringValue = "a" })); //MyStringValue's min length should be 3!
+            await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethod(new MyMethodInput())); //MyStringValue is not supplied!
+            await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethod(new MyMethodInput { MyStringValue = "a" })); //MyStringValue's min length should be 3!
         }
 
         [Fact]
-        public void Should_Work_With_Right_Nesned_Inputs()
+        public async Task Should_Work_With_Right_Nesned_Inputs()
         {
-            var output = _myAppService.MyMethod2(new MyMethod2Input
+            var output = await _myAppService.MyMethod2(new MyMethod2Input
             {
                 MyStringValue2 = "test 1",
                 Input1 = new MyMethodInput { MyStringValue = "test 2" },
                 DateTimeValue = DateTime.Now
             });
+
             output.Result.ShouldBe(42);
         }
 
         [Fact]
-        public void Should_Not_Work_With_Wrong_Nesned_Inputs_1()
+        public async Task Should_Not_Work_With_Wrong_Nesned_Inputs_1()
         {
-            Assert.Throws<AbpValidationException>(() =>
-                _myAppService.MyMethod2(new MyMethod2Input
+            await Assert.ThrowsAsync<AbpValidationException>(async () =>
+                await _myAppService.MyMethod2(new MyMethod2Input
                 {
                     MyStringValue2 = "test 1",
                     Input1 = new MyMethodInput() //MyStringValue is not set
@@ -62,20 +67,20 @@ namespace Volo.Abp.Validation
         }
 
         [Fact]
-        public void Should_Not_Work_With_Wrong_Nesned_Inputs_2()
+        public async Task Should_Not_Work_With_Wrong_Nesned_Inputs_2()
         {
-            Assert.Throws<AbpValidationException>(() =>
-                _myAppService.MyMethod2(new MyMethod2Input //Input1 is not set
+            await Assert.ThrowsAsync<AbpValidationException>(async () =>
+                await _myAppService.MyMethod2(new MyMethod2Input //Input1 is not set
                 {
                     MyStringValue2 = "test 1"
                 }));
         }
 
         [Fact]
-        public void Should_Not_Work_With_Wrong_List_Input_1()
+        public async Task Should_Not_Work_With_Wrong_List_Input_1()
         {
-            Assert.Throws<AbpValidationException>(() =>
-                _myAppService.MyMethod3(
+            await Assert.ThrowsAsync<AbpValidationException>(async () =>
+                await _myAppService.MyMethod3(
                     new MyMethod3Input
                     {
                         MyStringValue2 = "test 1",
@@ -87,10 +92,10 @@ namespace Volo.Abp.Validation
         }
 
         [Fact]
-        public void Should_Not_Work_With_Wrong_Array_Input_1()
+        public async Task Should_Not_Work_With_Wrong_Array_Input_1()
         {
-            Assert.Throws<AbpValidationException>(() =>
-                _myAppService.MyMethod3(
+            await Assert.ThrowsAsync<AbpValidationException>(async () =>
+                await _myAppService.MyMethod3(
                     new MyMethod3Input
                     {
                         MyStringValue2 = "test 1",
@@ -102,63 +107,87 @@ namespace Volo.Abp.Validation
         }
 
         [Fact]
-        public void Should_Not_Work_If_Array_Is_Null()
+        public async Task Should_Not_Work_If_Array_Is_Null()
         {
-            Assert.Throws<AbpValidationException>(() =>
-                _myAppService.MyMethod4(new MyMethod4Input()) //ArrayItems is null!
-                );
+            await Assert.ThrowsAsync<AbpValidationException>(async () =>
+                await _myAppService.MyMethod4(new MyMethod4Input()) //ArrayItems is null!
+            );
         }
 
         [Fact]
-        public void Should_Work_If_Array_Is_Null_But_DisabledValidation_For_Method()
+        public async Task Should_Work_If_Array_Is_Null_But_DisabledValidation_For_Method()
         {
-            _myAppService.MyMethod4_2(new MyMethod4Input());
+            await _myAppService.MyMethod4_2(new MyMethod4Input());
         }
 
         [Fact]
-        public void Should_Work_If_Array_Is_Null_But_DisabledValidation_For_Property()
+        public async Task Should_Work_If_Array_Is_Null_But_DisabledValidation_For_Property()
         {
-            _myAppService.MyMethod5(new MyMethod5Input());
+            await _myAppService.MyMethod5(new MyMethod5Input());
         }
 
         [Fact]
-        public void Should_Use_IValidatableObject()
+        public async Task Should_Use_IValidatableObject()
         {
-            Assert.Throws<AbpValidationException>(() =>
+            await Assert.ThrowsAsync<AbpValidationException>(async () =>
             {
-                _myAppService.MyMethod6(new MyMethod6Input
+                await _myAppService.MyMethod6(new MyMethod6Input
                 {
                     MyStringValue = "test value" //MyIntValue has not set!
                 });
             });
         }
 
+        //TODO: Create a Volo.Abp.Ddd.Application.Contracts.Tests project and move this to there and remove Volo.Abp.Ddd.Application.Contracts dependency from this project.
         [Fact]
-        public void Should_Stop_Recursive_Validation_In_A_Constant_Depth()
+        public async Task LimitedResultRequestDto_Should_Throw_Exception_For_Requests_More_Than_MaxMaxResultCount()
         {
-            _myAppService.MyMethod8(new MyClassWithRecursiveReference { Value = "42" }).Result.ShouldBe(42);
+            var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
+            {
+                await _myAppService.MyMethodWithLimitedResult(new LimitedResultRequestDto
+                {
+                    MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount + 1
+                });
+            });
+
+            exception.ValidationErrors.ShouldContain(e => e.MemberNames.Contains(nameof(LimitedResultRequestDto.MaxResultCount)));
         }
 
         [Fact]
-        public void Should_Allow_Null_For_Nullable_Enums()
+        public async Task LimitedResultRequestDto_Should_Be_Valid_For_Requests_Less_Than_MaxMaxResultCount()
         {
-            _myAppService.MyMethodWithNullableEnum(null);
+            await _myAppService.MyMethodWithLimitedResult(new LimitedResultRequestDto
+            {
+                MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount - 1
+            });
+        }
+
+        [Fact]
+        public async Task Should_Stop_Recursive_Validation_In_A_Constant_Depth()
+        {
+            (await _myAppService.MyMethod8(new MyClassWithRecursiveReference { Value = "42" })).Result.ShouldBe(42);
+        }
+
+        [Fact]
+        public async Task Should_Allow_Null_For_Nullable_Enums()
+        {
+            await _myAppService.MyMethodWithNullableEnum(null);
         }
 
         [Fact]
         public void Should_Validate_Emails()
         {
             //Valid
-            ValidationHandler.IsValidEmailAddress("john.doe@domain.com").ShouldBe(true);
-            ValidationHandler.IsValidEmailAddress("ip@1.2.3.123").ShouldBe(true);
-            ValidationHandler.IsValidEmailAddress("pharaoh@egyptian.museum").ShouldBe(true);
-            ValidationHandler.IsValidEmailAddress("john.doe+regexbuddy@gmail.com").ShouldBe(true);
-            ValidationHandler.IsValidEmailAddress("Mike.O'Dell@ireland.com").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("john.doe@domain.com").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("ip@1.2.3.123").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("pharaoh@egyptian.museum").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("john.doe+regexbuddy@gmail.com").ShouldBe(true);
+            ValidationHelper.IsValidEmailAddress("Mike.O'Dell@ireland.com").ShouldBe(true);
 
             //Invalid
-            ValidationHandler.IsValidEmailAddress("1024x768@60Hz").ShouldBe(false);
-            ValidationHandler.IsValidEmailAddress("not.a.valid.email").ShouldBe(false);
-            ValidationHandler.IsValidEmailAddress("john@aol...com").ShouldBe(false);
+            ValidationHelper.IsValidEmailAddress("1024x768@60Hz").ShouldBe(false);
+            ValidationHelper.IsValidEmailAddress("not.a.valid.email").ShouldBe(false);
+            ValidationHelper.IsValidEmailAddress("john@aol...com").ShouldBe(false);
         }
 
         [DependsOn(typeof(AbpAutofacModule))]
@@ -184,63 +213,69 @@ namespace Volo.Abp.Validation
 
         public interface IMyAppService
         {
-            MyMethodOutput MyMethod(MyMethodInput input);
-            MyMethodOutput MyMethod2(MyMethod2Input input);
-            MyMethodOutput MyMethod3(MyMethod3Input input);
-            MyMethodOutput MyMethod4(MyMethod4Input input);
-            MyMethodOutput MyMethod4_2(MyMethod4Input input);
-            MyMethodOutput MyMethod5(MyMethod5Input input);
-            MyMethodOutput MyMethod6(MyMethod6Input input);
-            MyMethodOutput MyMethod8(MyClassWithRecursiveReference input);
-            void MyMethodWithNullableEnum(MyEnum? value);
+            Task<MyMethodOutput> MyMethod(MyMethodInput input);
+            Task<MyMethodOutput> MyMethod2(MyMethod2Input input);
+            Task<MyMethodOutput> MyMethod3(MyMethod3Input input);
+            Task<MyMethodOutput> MyMethod4(MyMethod4Input input);
+            Task<MyMethodOutput> MyMethod4_2(MyMethod4Input input);
+            Task<MyMethodOutput> MyMethod5(MyMethod5Input input);
+            Task<MyMethodOutput> MyMethod6(MyMethod6Input input);
+            Task<MyMethodOutput> MyMethod8(MyClassWithRecursiveReference input);
+            Task MyMethodWithNullableEnum(MyEnum? value);
+            Task MyMethodWithLimitedResult(LimitedResultRequestDto input);
         }
 
         public class MyAppService : IMyAppService, ITransientDependency
         {
-            public MyMethodOutput MyMethod(MyMethodInput input)
+            public Task<MyMethodOutput> MyMethod(MyMethodInput input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
-            public MyMethodOutput MyMethod2(MyMethod2Input input)
+            public Task<MyMethodOutput> MyMethod2(MyMethod2Input input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
-            public MyMethodOutput MyMethod3(MyMethod3Input input)
+            public Task<MyMethodOutput> MyMethod3(MyMethod3Input input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
-            public MyMethodOutput MyMethod4(MyMethod4Input input)
+            public Task<MyMethodOutput> MyMethod4(MyMethod4Input input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
             [DisableValidation]
-            public MyMethodOutput MyMethod4_2(MyMethod4Input input)
+            public Task<MyMethodOutput> MyMethod4_2(MyMethod4Input input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
-            public MyMethodOutput MyMethod5(MyMethod5Input input)
+            public Task<MyMethodOutput> MyMethod5(MyMethod5Input input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
-            public MyMethodOutput MyMethod6(MyMethod6Input input)
+            public Task<MyMethodOutput> MyMethod6(MyMethod6Input input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
-            public MyMethodOutput MyMethod8(MyClassWithRecursiveReference input)
+            public Task<MyMethodOutput> MyMethod8(MyClassWithRecursiveReference input)
             {
-                return new MyMethodOutput { Result = 42 };
+                return Task.FromResult(new MyMethodOutput { Result = 42 });
             }
 
-            public void MyMethodWithNullableEnum(MyEnum? value)
+            public Task MyMethodWithLimitedResult(LimitedResultRequestDto input)
             {
+                return Task.CompletedTask;
+            }
 
+            public Task MyMethodWithNullableEnum(MyEnum? value)
+            {
+                return Task.CompletedTask;
             }
         }
 

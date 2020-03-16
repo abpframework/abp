@@ -70,7 +70,7 @@ namespace Volo.Abp.TenantManagement
         {
             using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
-                var tenant = _tenantRepository.Find(id);
+                var tenant = _tenantRepository.FindById(id);
                 if (tenant == null)
                 {
                     return null;

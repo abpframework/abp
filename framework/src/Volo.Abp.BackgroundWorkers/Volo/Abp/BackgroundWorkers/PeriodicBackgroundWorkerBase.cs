@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Threading;
 
@@ -11,14 +12,14 @@ namespace Volo.Abp.BackgroundWorkers
     /// </summary>
     public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
     {
-        protected readonly AbpTimer Timer;
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+        protected AbpTimer Timer { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PeriodicBackgroundWorkerBase"/> class.
-        /// </summary>
-        /// <param name="timer">A timer.</param>
-        protected PeriodicBackgroundWorkerBase(AbpTimer timer)
+        protected PeriodicBackgroundWorkerBase(
+            AbpTimer timer,
+            IServiceScopeFactory serviceScopeFactory)
         {
+            ServiceScopeFactory = serviceScopeFactory;
             Timer = timer;
             Timer.Elapsed += Timer_Elapsed;
         }
@@ -34,12 +35,15 @@ namespace Volo.Abp.BackgroundWorkers
             Timer.Stop(cancellationToken);
             await base.StopAsync(cancellationToken);
         }
-        
+
         private void Timer_Elapsed(object sender, System.EventArgs e)
         {
             try
             {
-                DoWork();
+                using (var scope = ServiceScopeFactory.CreateScope())
+                {
+                    DoWork(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
+                }
             }
             catch (Exception ex)
             {
@@ -50,6 +54,6 @@ namespace Volo.Abp.BackgroundWorkers
         /// <summary>
         /// Periodic works should be done by implementing this method.
         /// </summary>
-        protected abstract void DoWork();
+        protected abstract void DoWork(PeriodicBackgroundWorkerContext workerContext);
     }
 }

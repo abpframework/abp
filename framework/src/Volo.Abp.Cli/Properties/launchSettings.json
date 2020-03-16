@@ -1,8 +1,9 @@
 {
   "profiles": {
-    "Volo.Abp.Cli": {
+    "Volo.Abp.Cli": { 
       "commandName": "Project",
-      "commandLineArgs": "generate-proxy --apiUrl https://www.abp.io/api/abp/api-definition?types=true -u angular"
+      "commandLineArgs": "generate-proxy --apiUrl https://www.abp.io/api/abp/api-definition?types=true -u angular" 
+      "commandName": "Project" 
     }
   }
 }

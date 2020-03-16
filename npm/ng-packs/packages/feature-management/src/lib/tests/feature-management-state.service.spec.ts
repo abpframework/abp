@@ -2,13 +2,17 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { Store } from '@ngxs/store';
 import { FeatureManagementStateService } from '../services/feature-management-state.service';
 import { FeatureManagementState } from '../states';
+import * as FeatureManagementActions from '../actions';
 
 describe('FeatureManagementStateService', () => {
   let service: FeatureManagementStateService;
   let spectator: SpectatorService<FeatureManagementStateService>;
   let store: SpyObject<Store>;
 
-  const createService = createServiceFactory({ service: FeatureManagementStateService, mocks: [Store] });
+  const createService = createServiceFactory({
+    service: FeatureManagementStateService,
+    mocks: [Store],
+  });
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
@@ -35,6 +39,23 @@ describe('FeatureManagementStateService', () => {
           service[fnName]();
           expect(spy).toHaveBeenCalledWith(FeatureManagementState[fnName]);
         }
+      });
+  });
+
+  test('should have a dispatch method for every FeatureManagementState action', () => {
+    const reg = /(?<=dispatch)(\w+)(?=\()/gm;
+    FeatureManagementStateService.toString()
+      .match(reg)
+      .forEach(fnName => {
+        expect(FeatureManagementActions[fnName]).toBeTruthy();
+
+        const spy = jest.spyOn(store, 'dispatch');
+        spy.mockClear();
+
+        const params = Array.from(new Array(FeatureManagementActions[fnName].length));
+
+        service[`dispatch${fnName}`](...params);
+        expect(spy).toHaveBeenCalledWith(new FeatureManagementActions[fnName](...params));
       });
   });
 });

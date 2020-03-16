@@ -26,8 +26,10 @@ abp new Acme.BookStore
 
 The created solution requires;
 
-* [Visual Studio 2017 (v15.9.0+)](https://visualstudio.microsoft.com/tr/downloads/)
-* [.NET Core 2.2+](https://www.microsoft.com/net/download/dotnet-core/)
+* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/)
+* [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
+* [Node v12+](https://nodejs.org)
+* [Yarn v1.19+](https://classic.yarnpkg.com/)
 
 ### The Solution Structure
 
@@ -99,4 +101,4 @@ The startup template includes the **identity management** and **tenant managemen
 
 ### What's Next?
 
-* [Application development tutorial](Tutorials/AspNetCore-Mvc/Part-I.md)
+* [Application development tutorial](Tutorials/Part-1.md)

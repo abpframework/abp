@@ -56,4 +56,8 @@
 .field-validation-error {
     font-size: 0.8em;
 }
- 
+
+
+.dataTables_scrollBody {
+    min-height: 248px;
+}

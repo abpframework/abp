@@ -106,6 +106,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false)
         {
+            var nHttpStatusCode = (int?) httpStatusCode;
             return DbSet.AsNoTracking()
                 .IncludeDetails(includeDetails)
                 .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
@@ -117,7 +118,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
                 .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
                 .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
-                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
+                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == nHttpStatusCode)
                 .WhereIf(maxExecutionDuration != null && maxExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
                 .WhereIf(minExecutionDuration != null && minExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
         }

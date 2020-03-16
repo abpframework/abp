@@ -27,7 +27,7 @@ namespace Volo.Abp.Users.MongoDB
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().Where(u => ids.Contains(u.Id)) .ToListAsync(GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

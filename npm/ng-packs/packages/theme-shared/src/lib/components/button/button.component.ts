@@ -1,9 +1,17 @@
-import { Component, EventEmitter, Input, Output, ViewChild, ElementRef, Renderer2, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  ElementRef,
+  Renderer2,
+  OnInit,
+} from '@angular/core';
 import { ABP } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-button',
-  // tslint:disable-next-line: component-max-inline-declarations
   template: `
     <button
       #button
@@ -41,37 +49,18 @@ export class ButtonComponent implements OnInit {
   @Input()
   attributes: ABP.Dictionary<string>;
 
-  /*
-   *
-   *
-   * @deprecated use abpClick instead
-   */
-  // tslint:disable-next-line: no-output-native
+  // tslint:disable
   @Output() readonly click = new EventEmitter<MouseEvent>();
 
-  /*
-   *
-   *
-   * @deprecated use abpFocus instead
-   */
-  // tslint:disable-next-line: no-output-native
   @Output() readonly focus = new EventEmitter<FocusEvent>();
 
-  /*
-   *
-   *
-   * @deprecated use abpBlur instead
-   */
-  // tslint:disable-next-line: no-output-native
   @Output() readonly blur = new EventEmitter<FocusEvent>();
+  // tslint:enable
 
-  // tslint:disable-next-line: no-output-native
   @Output() readonly abpClick = new EventEmitter<MouseEvent>();
 
-  // tslint:disable-next-line: no-output-native
   @Output() readonly abpFocus = new EventEmitter<FocusEvent>();
 
-  // tslint:disable-next-line: no-output-native
   @Output() readonly abpBlur = new EventEmitter<FocusEvent>();
 
   @ViewChild('button', { static: true })

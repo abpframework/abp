@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Domain.Entities
 {
@@ -11,6 +13,7 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
+
         public static bool IsEntity([NotNull] Type type)
         {
             return typeof(IEntity).IsAssignableFrom(type);
@@ -82,10 +85,10 @@ namespace Volo.Abp.Domain.Entities
             var lambdaBody = Expression.Equal(leftExpression, rightExpression);
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
-
+        
         public static void TrySetId<TKey>(
-            IEntity<TKey> entity, 
-            Func<TKey> idFactory, 
+            IEntity<TKey> entity,
+            Func<TKey> idFactory,
             bool checkForDisableGuidGenerationAttribute = false)
         {
             //TODO: Can be optimized (by caching per entity type)?
@@ -94,7 +97,7 @@ namespace Volo.Abp.Domain.Entities
                 nameof(entity.Id)
             );
 
-            if (idProperty == null)
+            if (idProperty == null || idProperty.GetSetMethod(true) == null)
             {
                 return;
             }

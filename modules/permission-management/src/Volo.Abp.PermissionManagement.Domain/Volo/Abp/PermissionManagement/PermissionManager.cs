@@ -99,6 +99,12 @@ namespace Volo.Abp.PermissionManagement
             await provider.SetAsync(permissionName, providerKey, isGranted);
         }
 
+        public async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
+        {
+            permissionGrant.ProviderKey = providerKey;
+            return await PermissionGrantRepository.UpdateAsync(permissionGrant);
+        }
+
         protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
         {
             var result = new PermissionWithGrantedProviders(permission.Name, false);

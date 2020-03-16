@@ -32,7 +32,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 return;
             }
 
-            var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+            var exceptionMessage = "Remote server returns '" + (int) responseMessage.StatusCode + "-" +
+                                   responseMessage.ReasonPhrase + "'. ";
 
             var remoteServiceErrorMessage = await GetAbpRemoteServiceErrorAsync(responseMessage);
             if (remoteServiceErrorMessage != null)
@@ -45,10 +46,18 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public async Task<string> GetAbpRemoteServiceErrorAsync(HttpResponseMessage responseMessage)
         {
-            var errorResult = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>
-            (
-                await responseMessage.Content.ReadAsStringAsync()
-            );
+            RemoteServiceErrorResponse errorResult;
+            try
+            {
+                errorResult = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>
+                (
+                    await responseMessage.Content.ReadAsStringAsync()
+                );
+            }
+            catch (JsonReaderException)
+            {
+                return null;
+            }
 
             if (errorResult?.Error == null)
             {
@@ -82,7 +91,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 for (var i = 0; i < errorResult.Error.ValidationErrors.Length; i++)
                 {
                     var validationError = errorResult.Error.ValidationErrors[i];
-                    sbError.AppendLine("Validation error #" + i + ": " + validationError.Message + " - Members: " + validationError.Members.JoinAsString(", ") + ".");
+                    sbError.AppendLine("Validation error #" + i + ": " + validationError.Message + " - Members: " +
+                                       validationError.Members.JoinAsString(", ") + ".");
                 }
             }
 

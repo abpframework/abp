@@ -46,4 +46,19 @@ describe('BreadcrumbComponent', () => {
     expect(elements[1]).toHaveText('Identity');
     expect(elements[2]).toHaveText('Users');
   });
+
+  it('should not display the breadcrumb', () => {
+    const router = spectator.get(Router);
+    (router as any).url = '/identity/users';
+    spectator.detectChanges();
+    expect(spectator.query('ol.breadcrumb')).toBeFalsy();
+  });
+
+  it('should not display the breadcrumb when abp route not found', () => {
+    const router = spectator.get(Router);
+    (router as any).url = '/identity/users';
+    store.selectSnapshot.mockReturnValueOnce({ LeptonLayoutState: {} });
+    spectator.detectChanges();
+    expect(spectator.query('ol.breadcrumb')).toBeFalsy();
+  });
 });

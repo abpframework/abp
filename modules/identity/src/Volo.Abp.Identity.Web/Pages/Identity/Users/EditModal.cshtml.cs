@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Auditing;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
@@ -30,7 +32,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await _identityUserAppService.GetAsync(id));
 
             Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(
-                (await _identityRoleAppService.GetListAsync()).Items
+                (await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items
             );
 
             var userRoleNames = (await _identityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();
@@ -74,6 +76,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
             [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
 
             [Required]

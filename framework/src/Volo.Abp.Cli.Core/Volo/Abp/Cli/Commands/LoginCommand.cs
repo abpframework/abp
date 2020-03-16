@@ -33,15 +33,19 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            Console.Write("Password: ");
-            var password = ConsoleHelper.ReadSecret();
-            if (password.IsNullOrWhiteSpace())
+            var password = commandLineArgs.Options.GetOrNull(Options.Password.Short, Options.Password.Long);
+            if (password == null)
             {
-                throw new CliUsageException(
-                    "Password is missing!" +
-                    Environment.NewLine + Environment.NewLine +
-                    GetUsageInfo()
-                );
+                Console.Write("Password: ");
+                password = ConsoleHelper.ReadSecret();
+                if (password.IsNullOrWhiteSpace())
+                {
+                    throw new CliUsageException(
+                        "Password is missing!" +
+                        Environment.NewLine + Environment.NewLine +
+                        GetUsageInfo()
+                    );
+                }
             }
 
             await AuthService.LoginAsync(
@@ -60,10 +64,12 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Usage:");
             sb.AppendLine("  abp login <username>");
+            sb.AppendLine("  abp login <username> -p <password>");
             sb.AppendLine("");
             sb.AppendLine("Example:");
             sb.AppendLine("");
             sb.AppendLine("  abp login john");
+            sb.AppendLine("  abp login john -p 1234");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -72,7 +78,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return string.Empty;
+            return "Sign in to " + CliUrls.AccountAbpIo + ".";
         }
 
         public static class Options
@@ -81,6 +87,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "o";
                 public const string Long = "organization";
+            }
+
+            public static class Password
+            {
+                public const string Short = "p";
+                public const string Long = "password";
             }
         }
     }

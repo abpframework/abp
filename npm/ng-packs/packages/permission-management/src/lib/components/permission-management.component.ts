@@ -1,17 +1,7 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  Renderer2,
-  SimpleChanges,
-  TrackByFunction,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, Renderer2, TrackByFunction } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { from, Observable } from 'rxjs';
-import { map, pluck, take, finalize } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map, pluck, take, tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
@@ -23,15 +13,22 @@ type PermissionWithMargin = PermissionManagement.Permission & {
 @Component({
   selector: 'abp-permission-management',
   templateUrl: './permission-management.component.html',
+  exportAs: 'abpPermissionManagement',
 })
-export class PermissionManagementComponent implements OnInit, OnChanges {
+export class PermissionManagementComponent
+  implements
+    PermissionManagement.PermissionManagementComponentInputs,
+    PermissionManagement.PermissionManagementComponentOutputs {
   @Input()
-  providerName: string;
+  readonly providerName: string;
 
   @Input()
-  providerKey: string;
+  readonly providerKey: string;
 
-  protected _visible;
+  @Input()
+  readonly hideBadges = false;
+
+  protected _visible = false;
 
   @Input()
   get visible(): boolean {
@@ -39,13 +36,17 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   }
 
   set visible(value: boolean) {
-    if (!this.selectedGroup) return;
+    if (value === this._visible) return;
 
-    this._visible = value;
-    this.visibleChange.emit(value);
-
-    if (!value) {
+    if (value) {
+      this.openModal().subscribe(() => {
+        this._visible = true;
+        this.visibleChange.emit(true);
+      });
+    } else {
       this.selectedGroup = null;
+      this._visible = false;
+      this.visibleChange.emit(false);
     }
   }
 
@@ -72,7 +73,9 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
     return this.groups$.pipe(
       map(groups =>
-        this.selectedGroup ? groups.find(group => group.name === this.selectedGroup.name).permissions : [],
+        this.selectedGroup
+          ? groups.find(group => group.name === this.selectedGroup.name).permissions
+          : [],
       ),
       map<PermissionManagement.Permission[], PermissionWithMargin[]>(permissions =>
         permissions.map(
@@ -89,8 +92,6 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
   constructor(private store: Store, private renderer: Renderer2) {}
 
-  ngOnInit(): void {}
-
   getChecked(name: string) {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
@@ -103,7 +104,11 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   }
 
   onClickCheckbox(clickedPermission: PermissionManagement.Permission, value) {
-    if (clickedPermission.isGranted && this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)) return;
+    if (
+      clickedPermission.isGranted &&
+      this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)
+    )
+      return;
 
     setTimeout(() => {
       this.permissions = this.permissions.map(per => {
@@ -158,7 +163,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectThisTab() {
     this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
       permissions.forEach(permission => {
-        if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders)) return;
+        if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders))
+          return;
 
         const index = this.permissions.findIndex(per => per.name === permission.name);
 
@@ -176,7 +182,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectAll() {
     this.permissions = this.permissions.map(permission => ({
       ...permission,
-      isGranted: this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
+      isGranted:
+        this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
     }));
 
     this.selectThisTab = !this.selectAllTab;
@@ -195,7 +202,10 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
     const changedPermissions: PermissionManagement.MinimumPermission[] = this.permissions
       .filter(per =>
-        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted === per.isGranted ? false : true,
+        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted ===
+        per.isGranted
+          ? false
+          : true,
       )
       .map(({ name, isGranted }) => ({ name, isGranted }));
 
@@ -223,39 +233,32 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
       throw new Error('Provider Key and Provider Name are required.');
     }
 
-    this.store
+    return this.store
       .dispatch(
         new GetPermissions({
           providerKey: this.providerKey,
           providerName: this.providerName,
         }),
       )
-      .pipe(pluck('PermissionManagementState', 'permissionRes'))
-      .subscribe((permissionRes: PermissionManagement.Response) => {
-        this.selectedGroup = permissionRes.groups[0];
-        this.permissions = getPermissions(permissionRes.groups);
-
-        this.visible = true;
-      });
+      .pipe(
+        pluck('PermissionManagementState', 'permissionRes'),
+        tap((permissionRes: PermissionManagement.Response) => {
+          this.selectedGroup = permissionRes.groups[0];
+          this.permissions = getPermissions(permissionRes.groups);
+        }),
+      );
   }
 
   initModal() {
     this.setTabCheckboxState();
     this.setGrantCheckboxState();
   }
-
-  ngOnChanges({ visible }: SimpleChanges): void {
-    if (!visible) return;
-
-    if (visible.currentValue) {
-      this.openModal();
-    } else if (visible.currentValue === false && this.visible) {
-      this.visible = false;
-    }
-  }
 }
 
-function findMargin(permissions: PermissionManagement.Permission[], permission: PermissionManagement.Permission) {
+function findMargin(
+  permissions: PermissionManagement.Permission[],
+  permission: PermissionManagement.Permission,
+) {
   const parentPermission = permissions.find(per => per.name === permission.parentName);
 
   if (parentPermission && parentPermission.parentName) {

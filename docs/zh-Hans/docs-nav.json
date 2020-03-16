@@ -29,6 +29,7 @@
     },
     {
       "text": "教程",
+      "path": "Tutorials/Index.md",
       "items": [
         {
           "text": "应用开发",
@@ -53,6 +54,10 @@
           "path": "Configuration.md"
         },
         {
+          "text": "选项",
+          "path": "Options.md"
+        },
+        {
           "text": "依赖注入",
           "path": "Dependency-Injection.md",
           "items": [
@@ -75,18 +80,31 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "验证"
+          "text": "验证",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation集成",
+              "path": "FluentValidation.md"
+            }
+          ]
         },
         {
-          "text": "授权"
+          "text": "授权",
+          "path": "Authorization.md"
         },
         {
           "text": "缓存",
           "path": "Caching.md"
         },
         {
-          "text": "审计"
-        }, 
+          "text": "日志",
+          "path": "Logging.md"
+        },
+        {
+          "text": "审计日志",
+          "path": "Audit-Logging.md"
+        },
         {
           "text": "设置管理",
           "path": "Settings.md"
@@ -180,7 +198,8 @@
               "text": "领域服务"
             },
             {
-              "text": "规约"
+              "text": "规约",
+              "path": "Specifications.md"
             }
           ]
         },
@@ -202,68 +221,123 @@
       ]
     },
     {
-      "text": "ASP.NET Core",
+      "text": "API",
       "items": [
         {
-          "text": "API",
-          "items": [
-            {
-              "text": "自动API控制器",
-              "path": "AspNetCore/Auto-API-Controllers.md"
-            },
-            {
-              "text": "动态C# API客户端",
-              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
-            }
-          ]
+          "text": "自动API控制器",
+          "path": "API/Auto-API-Controllers.md"
         },
         {
-          "text": "用户界面",
-          "items": [
-            {
-              "text": "客户端包管理",
-              "path": "AspNetCore/Client-Side-Package-Management.md"
-            },
-            {
-              "text": "捆绑&压缩",
-              "path": "AspNetCore/Bundling-Minification.md"
-            },
-            {
-              "text": "Tag Helpers",
-              "path": "AspNetCore/Tag-Helpers/Index.md"
-            },
-            {
-              "text": "仪表板和小部件(Widget)系统",
-              "path": "AspNetCore/Widgets.md"
-            },
-            {
-              "text": "主题化",
-              "path": "AspNetCore/Theming.md"
-            }
-          ]
+          "text": "动态C# API客户端",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
         }
       ]
     },
     {
-      "text": "数据访问",
+      "text": "用户界面",
       "items": [
         {
-          "text": "Entity Framework Core 集成",
-          "path": "Entity-Framework-Core.md",
-          "items": [            
+          "text": "ASP.NET Core",
+          "items": [
             {
-              "text": "PostgreSQL 集成",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "text": "客户端包管理",
+              "path": "UI/AspNetCore/Client-Side-Package-Management.md"
+            },
+            {
+              "text": "捆绑&压缩",
+              "path": "UI/AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "items":[
+                {
+                  "text": "在线演示",
+                  "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+                },
+                {
+                  "text": "按钮",
+                  "path": "UI/AspNetCore/Tag-Helpers/Buttons.md"
+                }
+              ]
+            },
+            {
+              "text": "仪表板和小部件(Widget)系统",
+              "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "主题化",
+              "path": "UI/AspNetCore/Theming.md"
             }
           ]
         },
         {
-          "text": "MongoDB 集成",
-          "path": "MongoDB.md"
+          "text": "Angular",
+          "items": [
+            {
+              "text": "本地化",
+              "path": "UI/Angular/Localization.md"
+            },
+            {
+              "text": "权限管理",
+              "path": "UI/Angular/Permission-Management.md"
+            },
+            {
+              "text": "替换组件",
+              "path": "UI/Angular/Component-Replacement.md"
+            }
+          ]
+        } 
+      ]
+    },
+    {
+      "text": "数据访问",
+      "path":"Data-Access.md",
+      "items": [
+        {
+          "text": "连接字符串",
+          "path": "Connection-Strings.md"
         },
         {
-          "text": "Dapper 集成",
-          "path": "Dapper.md"
+          "text": "数据库提供程序",
+          "items": [
+            {
+              "text": "Entity Framework Core",
+              "path": "Entity-Framework-Core.md",
+              "items": [
+                {
+                  "text": "数据库迁移",
+                  "path": "Entity-Framework-Core-Migrations.md"
+                },
+                {
+                  
+                  "text": "切换DMBS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md",
+                  "items":[
+                    {
+                      "text": "到MySql",
+                      "path": "Entity-Framework-Core-MySQL.md"
+                    },
+                    {
+                      "text": "到PostgreSQL",
+                      "path": "Entity-Framework-Core-PostgreSQL.md"
+                    },
+                    {
+                      "text": "到SQLite",
+                      "path": "Entity-Framework-Core-SQLite.md"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "MongoDB",
+              "path": "MongoDB.md"
+            },
+            {
+              "text": "Dapper",
+              "path": "Dapper.md"
+            }
+          ]
         }
       ]
     },
@@ -281,8 +355,36 @@
             {
               "text": "RabbitMQ 集成",
               "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Jobs-Quartz.md"
             }
           ]
+        },
+        {
+          "text": "后台工作者",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz 集成",
+              "path": "Background-Workers-Quartz.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "启动模板",
+      "path": "Startup-Templates/Index.md",
+      "items": [
+        {
+          "text": "应用程序",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "模块",
+          "path": "Startup-Templates/Module.md"
         }
       ]
     },

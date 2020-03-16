@@ -57,7 +57,7 @@ namespace Volo.Abp.Identity
                 throw new BusinessException(_localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
             }
 
-            return await base.SetRoleNameAsync(role,name);
+            return await base.SetRoleNameAsync(role, name);
         }
 
         public override async Task<IdentityResult> DeleteAsync(IdentityRole role)

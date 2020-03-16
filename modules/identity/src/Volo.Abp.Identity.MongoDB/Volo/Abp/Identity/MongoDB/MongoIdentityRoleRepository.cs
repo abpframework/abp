@@ -44,10 +44,10 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
+            bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
-                .LongCountAsync(GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().Where(r => r.IsDefault).ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }

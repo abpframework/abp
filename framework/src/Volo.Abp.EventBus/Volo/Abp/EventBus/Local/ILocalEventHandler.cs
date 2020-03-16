@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus
 {
+    //TODO: Move to the right namespace in v3.0
     public interface ILocalEventHandler<in TEvent> : IEventHandler
     {
         /// <summary>

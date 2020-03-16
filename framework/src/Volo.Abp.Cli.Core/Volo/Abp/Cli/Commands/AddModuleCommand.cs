@@ -16,10 +16,12 @@ namespace Volo.Abp.Cli.Commands
         public ILogger<AddModuleCommand> Logger { get; set; }
 
         protected SolutionModuleAdder SolutionModuleAdder { get; }
+        public SolutionAbpVersionFinder SolutionAbpVersionFinder { get; }
 
-        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder)
+        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder, SolutionAbpVersionFinder solutionAbpVersionFinder)
         {
             SolutionModuleAdder = solutionModuleAdder;
+            SolutionAbpVersionFinder = solutionAbpVersionFinder;
             Logger = NullLogger<AddModuleCommand>.Instance;
         }
 
@@ -34,14 +36,26 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
+            var withSourceCode = commandLineArgs.Options.ContainsKey("with-source-code");
+
             var skipDbMigrations = Convert.ToBoolean(
                 commandLineArgs.Options.GetOrNull(Options.DbMigrations.Skip) ?? "false");
 
+            var solutionFile = GetSolutionFile(commandLineArgs);
+
+            var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+            if (version == null)
+            {
+                version = SolutionAbpVersionFinder.Find(solutionFile);
+            }
+
             await SolutionModuleAdder.AddAsync(
-                GetSolutionFile(commandLineArgs),
+                solutionFile,
                 commandLineArgs.Target,
                 commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
-                skipDbMigrations
+                version,
+                skipDbMigrations,
+                withSourceCode
             );
         }
 
@@ -57,8 +71,9 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module <module-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
-            sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
-            sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
+            sb.AppendLine("  --with-source-code                              Downloads the source code of the module and adds it to your solution.");
+            sb.AppendLine("  -s|--solution <solution-file>                   Specify the solution file explicitly.");
+            sb.AppendLine("  --skip-db-migrations <boolean>                  Specify if a new migration will be added or not.");
             sb.AppendLine("  -sp|--startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
@@ -75,9 +90,8 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Adds a multi-package module to a solution by finding all packages of the module, " +
-                   "finding related projects in the solution and adding each package to the" +
-                   " corresponding project in the solution.";
+            return "Add a multi-package module to a solution by finding all packages of the module, " +
+                   "finding related projects in the solution and adding each package to the corresponding project in the solution.";
         }
 
         protected virtual string GetSolutionFile(CommandLineArgs commandLineArgs)
@@ -126,6 +140,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "s";
                 public const string Long = "solution";
+            }
+            public static class Version
+            {
+                public const string Short = "v";
+                public const string Long = "version";
             }
 
             public static class DbMigrations

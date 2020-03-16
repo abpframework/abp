@@ -1,0 +1,25 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.CarouselDemo
+
+<abp-component-demo-section title="Example" view-path="@CarouselDemoViewComponent.ViewPath">
+    <abp-carousel style="width: 500px; height:250px" indicators="false" controls="false">
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=First+Slide"></abp-carousel-item>
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=Second+Slide"></abp-carousel-item>
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=Third+Slide"></abp-carousel-item>
+    </abp-carousel>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="With indicators" view-path="@CarouselDemoViewComponent.ViewPath">
+    <abp-carousel style="width: 500px; height:250px" indicators="true" controls="false">
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=First+Slide"></abp-carousel-item>
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=Second+Slide"></abp-carousel-item>
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=Third+Slide"></abp-carousel-item>
+    </abp-carousel>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="With controls" view-path="@CarouselDemoViewComponent.ViewPath">
+    <abp-carousel style="width: 500px; height:250px" indicators="true" controls="true">
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=First+Slide"></abp-carousel-item>
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=Second+Slide"></abp-carousel-item>
+        <abp-carousel-item src="https://via.placeholder.com/500x250.png?text=Third+Slide"></abp-carousel-item>
+    </abp-carousel>
+</abp-component-demo-section>

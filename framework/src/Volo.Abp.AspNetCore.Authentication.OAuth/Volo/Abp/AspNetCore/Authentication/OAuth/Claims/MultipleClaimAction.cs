@@ -14,7 +14,11 @@ namespace Volo.Abp.AspNetCore.Authentication.OAuth.Claims
 
         public override void Run(JsonElement userData, ClaimsIdentity identity, string issuer)
         {            
-            var prop = userData.GetProperty(ValueType);
+            JsonElement prop;
+
+            if (!userData.TryGetProperty(ValueType, out prop))
+                return;
+                
             if (prop.ValueKind == JsonValueKind.Null)
             {
                 return;

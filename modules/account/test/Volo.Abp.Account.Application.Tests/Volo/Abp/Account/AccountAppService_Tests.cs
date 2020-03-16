@@ -4,7 +4,7 @@ using Shouldly;
 using Volo.Abp.Identity;
 using Xunit;
 
-namespace Volo.Abp.Account.Pro.Application.Tests.Volo.Abp.Account
+namespace Volo.Abp.Account
 {
     public class AccountAppService_Tests : AbpAccountApplicationTestBase
     {
@@ -12,8 +12,7 @@ namespace Volo.Abp.Account.Pro.Application.Tests.Volo.Abp.Account
         private readonly IIdentityUserRepository _identityUserRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IdentityUserManager _userManager;
-
-
+        
         public AccountAppService_Tests()
         {
             _accountAppService = GetRequiredService<IAccountAppService>();

@@ -11,6 +11,7 @@
     "InvalidUserNameOrPassword": "用户名或密码错误!",
     "LoginIsNotAllowed": "无法登录!你需要验证邮箱地址/手机号.",
     "SelfRegistrationDisabledMessage": "应用程序未开放注册,请联系管理员添加新用户.",
+    "LocalLoginDisabledMessage": "应用程序未开放本地账户登录.",
     "Login": "登录",
     "Cancel": "取消",
     "Register": "注册",
@@ -29,12 +30,16 @@
     "DisplayName:Surname": "姓",
     "DisplayName:Password": "密码",
     "DisplayName:EmailAddress": "电子邮件地址",
-    "DisplayName:PhoneNumber": "电话号码",
+    "DisplayName:PhoneNumber": "手机号码",
     "PersonalSettings": "个人设置",
     "PersonalSettingsSaved": "个人设置已保存",
     "PasswordChanged": "修改密码",
     "NewPasswordConfirmFailed": "请确认新密码",
     "Manage": "管理",
-    "ManageYourProfile": "管理你的个人资料"
+    "ManageYourProfile": "管理你的个人资料",
+    "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "启用自行注册",
+    "Description:Abp.Account.IsSelfRegistrationEnabled": "是否允许用户自行注册帐户.",
+    "DisplayName:Abp.Account.EnableLocalLogin": "使用本地帐户进行身份验证",
+    "Description:Abp.Account.EnableLocalLogin": "服务器是否将允许用户使用本地帐户进行身份验证。"
   }
 }

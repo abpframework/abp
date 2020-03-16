@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
-import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks, CreateUpdateBook, DeleteBook } from '../../store/actions';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { BooksService } from '../shared/books.service';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { Component, OnInit } from "@angular/core";
+import { Store, Select } from "@ngxs/store";
+import { BooksState } from "../../store/states";
+import { Observable } from "rxjs";
+import { Books } from "../../store/models";
+import { GetBooks, CreateUpdateBook, DeleteBook } from "../../store/actions";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import {
+  NgbDateNativeAdapter,
+  NgbDateAdapter
+} from "@ng-bootstrap/ng-bootstrap";
+import { BooksService } from "../shared/books.service";
+import { ConfirmationService, Confirmation } from "@abp/ng.theme.shared";
 
 @Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
+  selector: "app-book-list",
+  templateUrl: "./book-list.component.html",
+  styleUrls: ["./book-list.component.scss"],
+  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }]
 })
 export class BookListComponent implements OnInit {
   @Select(BooksState.getBooks)
@@ -21,13 +24,15 @@ export class BookListComponent implements OnInit {
 
   booksType = Books.BookType;
 
+  bookTypeArr = Object.keys(Books.BookType).filter(
+    bookType => typeof this.booksType[bookType] === "number"
+  );
+
   loading = false;
 
   isModalOpen = false;
 
   form: FormGroup;
-
-  bookTypeArr = Object.keys(Books.BookType).filter(bookType => typeof this.booksType[bookType] === 'number');
 
   selectedBook = {} as Books.Book;
 
@@ -35,22 +40,17 @@ export class BookListComponent implements OnInit {
     private store: Store,
     private fb: FormBuilder,
     private booksService: BooksService,
-    private confirmationService: ConfirmationService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
+    this.get();
+  }
+
+  get() {
     this.loading = true;
     this.store.dispatch(new GetBooks()).subscribe(() => {
       this.loading = false;
-    });
-  }
-
-  buildForm() {
-    this.form = this.fb.group({
-      name: [this.selectedBook.name || '', Validators.required],
-      type: this.selectedBook.type || null,
-      publishDate: this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
-      price: this.selectedBook.price || null,
     });
   }
 
@@ -68,23 +68,41 @@ export class BookListComponent implements OnInit {
     });
   }
 
+  buildForm() {
+    console.warn(this.selectedBook);
+    this.form = this.fb.group({
+      name: [this.selectedBook.name || "", Validators.required],
+      type: [this.selectedBook.type || null, Validators.required],
+      publishDate: [
+        this.selectedBook.publishDate
+          ? new Date(this.selectedBook.publishDate)
+          : null,
+        Validators.required
+      ],
+      price: [this.selectedBook.price || null, Validators.required]
+    });
+  }
+
   save() {
     if (this.form.invalid) {
       return;
     }
 
-    this.store.dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id)).subscribe(() => {
-      this.isModalOpen = false;
-      this.form.reset();
-    });
+    this.store
+      .dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id))
+      .subscribe(() => {
+        this.isModalOpen = false;
+        this.form.reset();
+        this.get();
+      });
   }
 
   delete(id: string, name: string) {
     this.confirmationService
-      .error(`${name} will be deleted. Do you confirm that?`, 'Are you sure?')
+      .warn("::AreYouSureToDelete", "AbpAccount::AreYouSure")
       .subscribe(status => {
-        if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new DeleteBook(id));
+        if (status === Confirmation.Status.confirm) {
+          this.store.dispatch(new DeleteBook(id)).subscribe(() => this.get());
         }
       });
   }

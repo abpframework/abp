@@ -1,1 +1,0 @@
-# @abp/ng.identity.config

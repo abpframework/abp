@@ -5,48 +5,47 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './sort-order-icon.component.html',
 })
 export class SortOrderIconComponent {
-  private _order: string;
-  private _selectedKey: string;
+  private _order: 'asc' | 'desc' | '';
+  private _selectedSortKey: string;
 
   @Input()
-  set selectedKey(value: string) {
-    this._selectedKey = value;
-    this.selectedKeyChange.emit(value);
+  sortKey: string;
+
+  @Input()
+  set selectedSortKey(value: string) {
+    this._selectedSortKey = value;
+    this.selectedSortKeyChange.emit(value);
   }
-  get selectedKey(): string {
-    return this._selectedKey;
+  get selectedSortKey(): string {
+    return this._selectedSortKey;
   }
 
-  @Output() readonly selectedKeyChange = new EventEmitter<string>();
-
   @Input()
-  key: string;
-
-  @Input()
-  set order(value: string) {
+  set order(value: 'asc' | 'desc' | '') {
     this._order = value;
     this.orderChange.emit(value);
   }
-  get order(): string {
+  get order(): 'asc' | 'desc' | '' {
     return this._order;
   }
 
   @Output() readonly orderChange = new EventEmitter<string>();
+  @Output() readonly selectedSortKeyChange = new EventEmitter<string>();
 
   @Input()
   iconClass: string;
 
   get icon(): string {
-    if (!this.selectedKey) return 'fa-sort';
-    if (this.selectedKey === this.key) return `fa-sort-${this.order}`;
-    else return '';
+    if (this.selectedSortKey === this.sortKey) return `sorting_${this.order}`;
+    else return 'sorting';
   }
 
   sort(key: string) {
-    this.selectedKey = key;
+    this.selectedSortKey = key;
     switch (this.order) {
       case '':
         this.order = 'asc';
+        this.orderChange.emit('asc');
         break;
       case 'asc':
         this.order = 'desc';
@@ -54,7 +53,7 @@ export class SortOrderIconComponent {
         break;
       case 'desc':
         this.order = '';
-        this.selectedKey = '';
+        this.orderChange.emit('');
         break;
     }
   }

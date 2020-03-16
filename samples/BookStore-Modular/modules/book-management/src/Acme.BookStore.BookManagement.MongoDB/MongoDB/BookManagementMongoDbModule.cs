@@ -14,6 +14,7 @@ namespace Acme.BookStore.BookManagement.MongoDB
         {
             context.Services.AddMongoDbContext<BookManagementMongoDbContext>(options =>
             {
+                options.AddDefaultRepositories();
                 /* Add custom repositories here. Example:
                  * options.AddRepository<Question, MongoQuestionRepository>();
                  */

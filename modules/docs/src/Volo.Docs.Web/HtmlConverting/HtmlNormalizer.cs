@@ -28,7 +28,6 @@ namespace Volo.Docs.HtmlConverting
 
                 }, RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Multiline);
 
-
             return content;
         }
 
@@ -36,6 +35,5 @@ namespace Volo.Docs.HtmlConverting
         {
             return Regex.Replace(content, "<code class=\"" + currentLanguage + "\">", "<code class=\"" + newLanguage + "\">", RegexOptions.IgnoreCase);
         }
-
     }
 }

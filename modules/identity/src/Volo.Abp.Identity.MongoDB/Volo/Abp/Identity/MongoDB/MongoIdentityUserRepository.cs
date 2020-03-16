@@ -51,7 +51,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(u=> u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
+                .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 

@@ -33,33 +33,6 @@ namespace Volo.Abp.AuditLogging
             Logger = NullLogger<AuditingStore>.Instance;
         }
 
-        public void Save(AuditLogInfo auditInfo)
-        {
-            if (!Options.HideErrors)
-            {
-                SaveLog(auditInfo);
-                return;
-            }
-
-            try
-            {
-                SaveLog(auditInfo);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex, LogLevel.Error);
-            }
-        }
-
-        protected virtual void SaveLog(AuditLogInfo auditInfo)
-        {
-            using (var uow = _unitOfWorkManager.Begin(true))
-            {
-                _auditLogRepository.Insert(new AuditLog(_guidGenerator, auditInfo));
-                uow.SaveChanges();
-            }
-        }
-
         public async Task SaveAsync(AuditLogInfo auditInfo)
         {
             if (!Options.HideErrors)
@@ -74,6 +47,7 @@ namespace Volo.Abp.AuditLogging
             }
             catch (Exception ex)
             {
+                Logger.LogWarning("Could not save the audit log object: " + Environment.NewLine + auditInfo.ToString());
                 Logger.LogException(ex, LogLevel.Error);
             }
         }

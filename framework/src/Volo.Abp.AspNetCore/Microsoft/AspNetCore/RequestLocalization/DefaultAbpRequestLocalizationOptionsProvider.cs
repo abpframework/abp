@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
@@ -14,55 +18,72 @@ namespace Microsoft.AspNetCore.RequestLocalization
 {
     public class DefaultAbpRequestLocalizationOptionsProvider : IAbpRequestLocalizationOptionsProvider, ISingletonDependency
     {
-        private readonly IServiceProvider _serviceProvider;
-        private Lazy<RequestLocalizationOptions> _lazyRequestLocalizationOptions;
+        private readonly IServiceScopeFactory _serviceProviderFactory;
+        private readonly SemaphoreSlim _syncSemaphore;
+        private Action<RequestLocalizationOptions> _optionsAction;
+        private RequestLocalizationOptions _requestLocalizationOptions;
 
-        public DefaultAbpRequestLocalizationOptionsProvider(IServiceProvider serviceProvider)
+        public DefaultAbpRequestLocalizationOptionsProvider(IServiceScopeFactory serviceProviderFactory)
         {
-            _serviceProvider = serviceProvider;
+            _serviceProviderFactory = serviceProviderFactory;
+            _syncSemaphore = new SemaphoreSlim(1, 1);
         }
 
         public void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null)
         {
-            _lazyRequestLocalizationOptions = new Lazy<RequestLocalizationOptions>(() =>
-            {
-                using (var serviceScope = _serviceProvider.CreateScope())
-                {
-                    var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
-                    var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
-
-                    var languages = AsyncHelper.RunSync(languageProvider.GetLanguagesAsync);
-                    var defaultLanguage = AsyncHelper.RunSync(() =>
-                        settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage));
-
-                    var options = !languages.Any()
-                        ? new RequestLocalizationOptions()
-                        : new RequestLocalizationOptions
-                        {
-                            DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
-
-                            SupportedCultures = languages
-                                .Select(l => l.CultureName)
-                                .Distinct()
-                                .Select(c => new CultureInfo(c))
-                                .ToArray(),
-
-                            SupportedUICultures = languages
-                                .Select(l => l.UiCultureName)
-                                .Distinct()
-                                .Select(c => new CultureInfo(c))
-                                .ToArray()
-                        };
-
-                    optionsAction?.Invoke(options);
-                    return options;
-                }
-            }, true);
+            _optionsAction = optionsAction;
         }
 
         public RequestLocalizationOptions GetLocalizationOptions()
         {
-            return _lazyRequestLocalizationOptions.Value;
+            if (_requestLocalizationOptions != null)
+            {
+                return _requestLocalizationOptions;
+            }
+
+            return AsyncHelper.RunSync(GetLocalizationOptionsAsync);
+        }
+
+        public async Task<RequestLocalizationOptions> GetLocalizationOptionsAsync()
+        {
+            if (_requestLocalizationOptions == null)
+            {
+                using (await _syncSemaphore.LockAsync())
+                {
+                    using (var serviceScope = _serviceProviderFactory.CreateScope())
+                    {
+                        var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
+                        var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
+
+                        var languages = await languageProvider.GetLanguagesAsync();
+                        var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
+
+                        var options = !languages.Any()
+                            ? new RequestLocalizationOptions()
+                            : new RequestLocalizationOptions
+                            {
+                                DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
+
+                                SupportedCultures = languages
+                                    .Select(l => l.CultureName)
+                                    .Distinct()
+                                    .Select(c => new CultureInfo(c))
+                                    .ToArray(),
+
+                                SupportedUICultures = languages
+                                    .Select(l => l.UiCultureName)
+                                    .Distinct()
+                                    .Select(c => new CultureInfo(c))
+                                    .ToArray()
+                            };
+
+                        _optionsAction?.Invoke(options);
+                        _requestLocalizationOptions = options;
+                    }
+                }
+            }
+
+            return _requestLocalizationOptions;
         }
 
         private static RequestCulture DefaultGetRequestCulture(string defaultLanguage, IReadOnlyList<LanguageInfo> languages)

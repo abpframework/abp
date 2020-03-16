@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.TestApp.Domain;
@@ -29,48 +30,53 @@ namespace Volo.Abp.TestApp
             _entityWithIntPksRepository = entityWithIntPksRepository;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            AddCities();
-            AddPeople();
-            AddEntitiesWithPks();
+            await AddCities();
+            await AddPeople();
+            await AddEntitiesWithPks();
         }
 
-        private void AddCities()
+        private async Task AddCities()
         {
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Tokyo"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Madrid"));
-            _cityRepository.Insert(new City(LondonCityId, "London") {ExtraProperties = { { "Population", 10_470_000 } } });
-            _cityRepository.Insert(new City(IstanbulCityId, "Istanbul"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Paris"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Washington"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Sao Paulo"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Berlin"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Amsterdam"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Beijing"));
-            _cityRepository.Insert(new City(Guid.NewGuid(), "Rome"));
+            var istanbul = new City(IstanbulCityId, "Istanbul");
+            istanbul.Districts.Add(new District(istanbul.Id, "Bakirkoy", 1283999));
+            istanbul.Districts.Add(new District(istanbul.Id, "Mecidiyek�y", 2222321));
+            istanbul.Districts.Add(new District(istanbul.Id, "Uskudar", 726172));
+
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Tokyo"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Madrid"));
+            await _cityRepository.InsertAsync(new City(LondonCityId, "London") { ExtraProperties = { { "Population", 10_470_000 } } });
+            await _cityRepository.InsertAsync(istanbul);
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Paris"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Washington"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Sao Paulo"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Berlin"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Amsterdam"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Beijing"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Rome"));
         }
 
-        private void AddPeople()
+        private async Task AddPeople()
         {
             var douglas = new Person(UserDouglasId, "Douglas", 42, cityId: LondonCityId);
             douglas.Phones.Add(new Phone(douglas.Id, "123456789"));
             douglas.Phones.Add(new Phone(douglas.Id, "123456780", PhoneType.Home));
 
-            _personRepository.Insert(douglas);
+            await _personRepository.InsertAsync(douglas);
 
-            _personRepository.Insert(new Person(UserJohnDeletedId, "John-Deleted", 33) { IsDeleted = true });
+            await _personRepository.InsertAsync(new Person(UserJohnDeletedId, "John-Deleted", 33) { IsDeleted = true });
 
             var tenant1Person1 = new Person(Guid.NewGuid(), TenantId1 + "-Person1", 42, TenantId1);
             var tenant1Person2 = new Person(Guid.NewGuid(), TenantId1 + "-Person2", 43, TenantId1);
 
-            _personRepository.Insert(tenant1Person1);
-            _personRepository.Insert(tenant1Person2);
+            await _personRepository.InsertAsync(tenant1Person1);
+            await _personRepository.InsertAsync(tenant1Person2);
         }
 
-        private void AddEntitiesWithPks()
+        private async Task AddEntitiesWithPks()
         {
-            _entityWithIntPksRepository.Insert(new EntityWithIntPk("Entity1"));
+            await _entityWithIntPksRepository.InsertAsync(new EntityWithIntPk("Entity1"));
         }
     }
 }

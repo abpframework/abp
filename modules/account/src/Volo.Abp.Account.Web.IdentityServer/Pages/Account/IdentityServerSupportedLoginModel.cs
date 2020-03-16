@@ -1,4 +1,4 @@
-﻿using IdentityModel;
+using IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -12,8 +12,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
@@ -40,7 +42,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             IdentityServerEvents = identityServerEvents;
         }
 
-        public override async Task OnGetAsync()
+        public override async Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
@@ -63,7 +65,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
                 ExternalProviders = new[] { new ExternalProviderModel { AuthenticationScheme = context.IdP } };
-                return;
+                return Page();
             }
 
             var schemes = await _schemeProvider.GetAllSchemesAsync();
@@ -77,7 +79,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 })
                 .ToList();
 
-            EnableLocalLogin = true; //TODO: We can get default from a setting?
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
             if (context?.ClientId != null)
             {
                 var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
@@ -96,16 +98,15 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (IsExternalLoginOnly)
             {
-                //return await ExternalLogin(vm.ExternalLoginScheme, returnUrl);
-                throw new NotImplementedException();
+                return await base.OnPostExternalLogin(providers.First().AuthenticationScheme);
             }
+
+            return Page();
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public override async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = true; //TODO: We can get default from a setting?
-
             if (action == "Cancel")
             {
                 var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
@@ -118,6 +119,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
                 return Redirect(ReturnUrl);
             }
+
+            await CheckLocalLoginAsync();
 
             ValidateModel();
 

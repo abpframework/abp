@@ -7,6 +7,7 @@
     "ShareOn": "Paylaş",
     "Version": "Versiyon",
     "Edit": "Düzenle",
+    "LastEditTime": "Son Düzenleme",
     "Delete": "Sil",
     "InThisDocument": "Bu dökümanda",
     "GoToTop": "En üste çık",
@@ -14,6 +15,11 @@
     "NoProjectWarning": "Hiç proje yok!",
     "DocumentNotFound": "Aradığınız döküman bulunamadı!",
     "NavigationDocumentNotFound": "Bu döküman için menü bulunamadı!",
-    "DocumentNotFoundInSelectedLanguage": "İstediğiniz dilde belge bulunamadı. Varsayılan dilde belge gösterilir."
+    "DocumentNotFoundInSelectedLanguage": "İstediğiniz dilde belge bulunamadı. Varsayılan dilde belge gösterilir.",
+    "MultipleVersionDocumentInfo": "Bu dökümanın birden çok versiyonu bulunmaktadır. Sizin için en uygun olan seçenekleri seçiniz.",
+    "New": "Yeni",
+    "Upd": "Günc",
+    "NewExplanation": "Son iki hafta içinde oluşturuldu.",
+    "UpdatedExplanation": "Son iki hafta içinde güncellendi."
   }
 }

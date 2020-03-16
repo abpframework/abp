@@ -171,7 +171,7 @@ namespace Volo.Abp.EventBus
                                 new[] { eventType }
                             );
 
-                        await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
+                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
                     }
                     else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
                     {
@@ -182,7 +182,7 @@ namespace Volo.Abp.EventBus
                                 new[] { eventType }
                             );
 
-                        await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
+                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
                     }
                     else
                     {

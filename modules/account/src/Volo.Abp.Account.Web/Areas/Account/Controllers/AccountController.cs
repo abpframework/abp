@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Account.Localization;
+using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
+using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using UserLoginInfo = Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo;
@@ -21,21 +24,27 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IdentityUserManager _userManager;
+        private readonly ISettingProvider _settingProvider;
 
-        public AccountController(SignInManager<IdentityUser> signInManager, IdentityUserManager userManager)
+        public AccountController(SignInManager<IdentityUser> signInManager, IdentityUserManager userManager, ISettingProvider settingProvider)
         {
+            LocalizationResource = typeof(AccountResource);
+
             _signInManager = signInManager;
             _userManager = userManager;
+            _settingProvider = settingProvider;
         }
 
         [HttpPost]
         [Route("login")]
         public virtual async Task<AbpLoginResult> Login(UserLoginInfo login)
         {
+            await CheckLocalLoginAsync();
+
             ValidateLoginInfo(login);
 
             await ReplaceEmailToUsernameOfInputIfNeeds(login);
-
+            
             return GetAbpLoginResult(await _signInManager.PasswordSignInAsync(
                 login.UserNameOrEmailAddress,
                 login.Password,
@@ -44,11 +53,21 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             ));
         }
 
+        [HttpGet]
+        [Route("logout")]
+        public virtual async Task Logout()
+        {
+           await _signInManager.SignOutAsync();
+        }
+
         [HttpPost]
         [Route("checkPassword")]
         public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
         {
             ValidateLoginInfo(login);
+
+            await ReplaceEmailToUsernameOfInputIfNeeds(login);
+
             var identityUser = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress);
 
             if (identityUser == null)
@@ -61,7 +80,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
         {
-            if (!ValidationHandler.IsValidEmailAddress(login.UserNameOrEmailAddress))
+            if (!ValidationHelper.IsValidEmailAddress(login.UserNameOrEmailAddress))
             {
                 return;
             }
@@ -121,6 +140,14 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             if (login.Password.IsNullOrEmpty())
             {
                 throw new ArgumentNullException(nameof(login.Password));
+            }
+        }
+
+        private async Task CheckLocalLoginAsync()
+        {
+            if (!await _settingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
+            {
+                throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
             }
         }
     }
