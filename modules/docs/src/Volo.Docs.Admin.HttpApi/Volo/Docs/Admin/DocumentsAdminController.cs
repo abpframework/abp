@@ -32,5 +32,12 @@ namespace Volo.Docs.Admin
         {
              return _documentAdminAppService.PullAsync(input);
         }
+
+        [HttpPost]
+        [Route("Reindex")]
+        public Task ReindexAsync()
+        {
+            return _documentAdminAppService.ReindexAsync();
+        }
     }
 }

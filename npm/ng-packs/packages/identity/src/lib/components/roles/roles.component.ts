@@ -142,4 +142,11 @@ export class RolesComponent implements OnInit {
       new Event('submit', { bubbles: true, cancelable: true }),
     );
   }
+
+  openPermissionsModal(providerKey: string) {
+    this.providerKey = providerKey;
+    setTimeout(() => {
+      this.visiblePermissions = true;
+    }, 0);
+  }
 }

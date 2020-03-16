@@ -28,6 +28,13 @@ namespace Volo.Blogging
         }
 
         [HttpGet]
+        [Route("{blogId}/all/by-time")]
+        public Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
+        {
+            return _postAppService.GetTimeOrderedListAsync(blogId);
+        }
+
+        [HttpGet]
         [Route("read")]
         public Task<PostWithDetailsDto> GetForReadingAsync(GetPostInput input)
         {
@@ -60,5 +67,6 @@ namespace Volo.Blogging
         {
             return _postAppService.DeleteAsync(id);
         }
+
     }
 }

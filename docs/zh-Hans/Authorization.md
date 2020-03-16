@@ -367,4 +367,5 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 ## 接下来
 
 * [权限管理模块](Modules/Permission-Management.md)
-* [ASP.NET Core MVC / Razor 页面 JavaScript Auth API](AspNetCore/JavaScript-API/Auth.md)
+* [ASP.NET Core MVC / Razor 页面 JavaScript Auth API](API/JavaScript-API/Auth.md)
+* [Angular界面中的权限管理](UI/Angular/Permission-Management.md)

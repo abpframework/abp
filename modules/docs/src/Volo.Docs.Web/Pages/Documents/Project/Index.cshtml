@@ -135,18 +135,32 @@
                             }
                         </div>
 
-                        <div class="docs-version mb-4">
+                        <div class="docs-version">
                             <div class="version-select">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text"><i class="fa fa-filter"></i></label>
                                     </div>
 
-                                    <input class="form-control" type="search" placeholder="@L["FilterTopics"].Value" aria-label="Filter">
+                                    <input class="form-control" id="filter" type="search" data-search-url="@Model." placeholder="@L["FilterTopics"].Value" aria-label="Filter">
                                 </div>
                             </div>
                         </div>
 
+                        @if (Model.FullSearchEnabled)
+                        {
+                            <div class="docs-version mb-4">
+                                <div class="version-select">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text"><i class="fa fa-filter"></i></label>
+                                        </div>
+
+                                        <input class="form-control" id="fullsearch" type="search" data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" placeholder="@L["FullSearch"].Value" aria-label="Filter">
+                                    </div>
+                                </div>
+                            </div>
+                        }
 
                         @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
                         {
