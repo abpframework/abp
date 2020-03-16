@@ -25,7 +25,6 @@ import { chartJsLoaded$ } from './utils/widget-utils';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { LoadingDirective } from './directives/loading.directive';
-import { NgxsModule } from '@ngxs/store';
 
 export function appendScript(injector: Injector) {
   const fn = () => {
@@ -57,7 +56,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
-    ToastContainerComponent
+    ToastContainerComponent,
   ],
   exports: [
     BreadcrumbComponent,
@@ -75,7 +74,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
-    ToastContainerComponent
+    ToastContainerComponent,
   ],
   providers: [DatePipe],
   entryComponents: [HttpErrorWrapperComponent, LoadingComponent],
