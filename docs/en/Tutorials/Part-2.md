@@ -641,7 +641,6 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
   </div>
   <div class="card-body">
     <abp-table
-      *ngIf="[150, 0] as columnWidths"
       [value]="books$ | async"
       [abpLoading]="loading"
       [headerTemplate]="tableHeader"

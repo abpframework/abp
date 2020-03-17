@@ -29,7 +29,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             }
             else
             {
-                var nugetPackageVersion = context.TemplateFile.Version;
+                var nugetPackageVersion = context.TemplateFile.RepositoryNugetVersion;
 
                 if (IsBranchName(nugetPackageVersion))
                 {

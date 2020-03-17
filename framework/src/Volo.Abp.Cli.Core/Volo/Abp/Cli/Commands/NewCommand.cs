@@ -162,6 +162,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("-t|--template <template-name>               (default: app)");
             sb.AppendLine("-u|--ui <ui-framework>                      (if supported by the template)");
+            sb.AppendLine("-m|--mobile <mobile-framework>              (if supported by the template)");
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
@@ -177,6 +178,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore --tiered");
             sb.AppendLine("  abp new Acme.BookStore -u angular");
             sb.AppendLine("  abp new Acme.BookStore -u angular -d mongodb");
+            sb.AppendLine("  abp new Acme.BookStore -m none");
+            sb.AppendLine("  abp new Acme.BookStore -m react-native");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");

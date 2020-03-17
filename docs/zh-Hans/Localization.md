@@ -190,3 +190,7 @@ var testResource = abp.localization.getResource('Test');
 ````js
 var str = testResource('HelloWorld');
 ````
+
+## See Also
+
+* [Angular UI中的本地化](UI/Angular/Localization.md)

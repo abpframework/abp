@@ -35,6 +35,7 @@ namespace Volo.Abp.TenantManagement
         [HttpPost]
         public virtual Task<TenantDto> CreateAsync(TenantCreateDto input)
         {
+            ValidateModel();
             return _service.CreateAsync(input);
         }
 

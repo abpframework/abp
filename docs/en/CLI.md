@@ -48,7 +48,10 @@ abp new Acme.BookStore
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `none`: Without UI. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
-    * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+    * `--mobile` or `-m`: Specifies the mobile application framework. Default framework is `react-native`. Available frameworks:
+      * `none`: no mobile application.
+      * `react-native`: React Native.
+	* `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
   * `module`: [Module template](Startup-Templates/Module.md). Additional options:
@@ -141,7 +144,7 @@ abp switch-to-preview [options]
 ````
 #### Options
 
-`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-stable
 
@@ -154,7 +157,7 @@ abp switch-to-stable [options]
 ````
 #### Options
 
-`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### login
 
