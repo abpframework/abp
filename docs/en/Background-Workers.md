@@ -2,74 +2,137 @@
 
 ## Introduction
 
-Background workers are different than [background jobs](Background-Jobs.md). They are simple independent threads in the application running in the background. Generally, they run periodically to perform some tasks. Examples;
+Background workers are simple independent threads in the application running in the background. Generally, they run periodically to perform some tasks. Examples;
 
-* A background worker can run periodically to delete old logs.
-* A background worker can run periodically to determine inactive users and send emails to get users to return to your application.
+* A background worker can run periodically to **delete old logs**.
+* A background worker can run periodically to **determine inactive users** and **send emails** to get users to return to your application.
 
 
-### Create a Background Worker
+## Create a Background Worker
 
-A background worker is a `Singleton Depency` class that derives from the `AsyncPeriodicBackgroundWorkerBase` or `PeriodicBackgroundWorkerBase`.
+A background worker should directly or indirectly implement the `IBackgroundWorker` interface.
 
-Assume that we want to make a user passive, if he did not login to the application in last 30 days. See the code:
+> A background worker is inherently [singleton](Dependency-Injection.md). So, only a single instance of your worker class is instantiated and run.
+
+### BackgroundWorkerBase
+
+`BackgroundWorkerBase` is an easy way to create a background worker.
+
+````csharp
+public class MyWorker : BackgroundWorkerBase
+{
+    public override Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        //...
+    }
+
+    public override Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        //...
+    }
+}
+````
+
+Start your worker in the `StartAsync` (which is called when the application begins) and stop in the `StopAsync` (which is called when the application shuts down).
+
+> You can directly implement the `IBackgroundWorker`, but `BackgroundWorkerBase` provides some useful properties like `Logger`.
+
+### AsyncPeriodicBackgroundWorkerBase
+
+Assume that we want to make a user passive, if the user has not logged in to the application in last 30 days. `AsyncPeriodicBackgroundWorkerBase` class simplifies to create periodic workers, so we will use it for the example below:
 
 ````csharp
 public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ILogger<PassiveUserCheckerWorker> _logger;
-
     public PassiveUserCheckerWorker(
-                AbpTimer timer,
-                IServiceScopeFactory serviceScopeFactory,
-                IUserRepository userRepository,
-                ILogger<GithubDataCollectingWorker> logger
-            ) : base(timer, serviceScopeFactory)
+            AbpTimer timer,
+            IServiceScopeFactory serviceScopeFactory
+        ) : base(
+            timer, 
+            serviceScopeFactory)
     {
-        _userRepository = userRepository;
-        _logger = logger;
-        Timer.Period = 5_000; //5 seconds (good for tests)
+        Timer.Period = 600000; //10 minutes
     }
 
-    protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
+    protected override async Task DoWorkAsync(
+        PeriodicBackgroundWorkerContext workerContext)
     {
-        _logger.LogInformation($"{nameof(PassiveUserCheckerWorker)} started to work.");
-        
-        // UserRepository sets statuses of inactive users as a passive.
-        await _userRepository.UpdateInactiveUserStatusesAsync();
+        Logger.LogInformation("Starting: Setting status of inactive users...");
 
-        _logger.LogInformation($"{nameof(PassiveUserCheckerWorker)} finished it's work.");
+        //Resolve dependencies
+        var userRepository = workerContext
+            .ServiceProvider
+            .GetRequiredService<IUserRepository>();
+
+        //Do the work
+        await userRepository.UpdateInactiveUserStatusesAsync();
+
+        Logger.LogInformation("Completed: Setting status of inactive users...");
     }
 }
 ````
 
-* If your background worker derive from `PeriodicBackgroundWorkerBase`, you should implement the `DoWork` method to perform your periodic working code.
+* `AsyncPeriodicBackgroundWorkerBase` uses the `AbpTimer` (a thread-safe timer) object to determine **the period**. We can set its `Period` property in the constructor.
+* It required to implement the `DoWorkAsync` method to **execute** the periodic work.
+* It is a good practice to **resolve dependencies** from the `PeriodicBackgroundWorkerContext` instead of constructor injection. Because `AsyncPeriodicBackgroundWorkerBase` uses a `IServiceScope` that is **disposed** when your work finishes.
+* `AsyncPeriodicBackgroundWorkerBase` **catches and logs exceptions** thrown by the `DoWorkAsync` method.
 
 
-### Register Background Worker
+## Register Background Worker
 
-After creating a background worker, add it to the IBackgroundWorkerManager. The most common place is the `OnApplicationInitialization` method of your module:
+After creating a background worker class, you should to add it to the `IBackgroundWorkerManager`. The most common place is the `OnApplicationInitialization` method of your module class:
 
 ````csharp
+[DependsOn(typeof(AbpBackgroundWorkersModule))]
 public class MyModule : AbpModule
 {
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            context.ServiceProvider
-                .GetRequiredService<IBackgroundWorkerManager>()
-                .Add(
-                    context.ServiceProvider.GetRequiredService<PassiveUserCheckerWorker>()
-                );
-        }
+    public override void OnApplicationInitialization(
+        ApplicationInitializationContext context)
+    {
+        context.AddBackgroundWorker<PassiveUserCheckerWorker>();
+    }
 }
 ````
 
-While we generally add workers in OnApplicationInitialization, there are no restrictions on that. You can inject IBackgroundWorkerManager anywhere and add workers at runtime. IBackgroundWorkerManager will stop and release all registered workers when your application is being shut down.
+`context.AddBackgroundWorker(...)` is a shortcut extension method for the expression below:
+
+````
+context.ServiceProvider
+    .GetRequiredService<IBackgroundWorkerManager>()
+    .Add(
+        context
+            .ServiceProvider
+            .GetRequiredService<PassiveUserCheckerWorker>()
+    );
+````
+
+So, it resolves the given background worker and adds to the `IBackgroundWorkerManager`.
+
+While we generally add workers in `OnApplicationInitialization`, there are no restrictions on that. You can inject `IBackgroundWorkerManager` anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.
+
+## Options
+
+`AbpBackgroundWorkerOptions` is used to set options for the background workers. There is only one option currently:
+
+* `IsEnabled` (default: true): Used to enable/disable the background worker system for your application.
 
 ## Making Your Application Always Run
 
-Background jobs and workers only work if your application is running. If you host the background job execution in your web application (this is the default behavior), you should ensure that your web application is configured to always be running. Otherwise, background jobs only work while your application is in use.
+Background workers only work if your application is running. If you host the background job execution in your web application (this is the default behavior), you should ensure that your web application is configured to always be running. Otherwise, background jobs only work while your application is in use.
+
+## Running On a Cluster
+
+Be careful if you run multiple instances of your application simultaneously in a clustered environment. In that case, every application runs the same worker which may create conflicts if your workers are running on the same resources (processing the same data, for example).
+
+If that's a problem for your workers, you have two options;
+
+* Disable the background worker system using the `AbpBackgroundWorkerOptions` described above, for all the application instances, except one of them.
+* Disable the background worker system for all the application instances and create another special application that runs on a single server and execute the workers.
+
+## Quartz Integration
+
+ABP Framework's background worker system is good to implement periodic tasks. However, you may want to use an advanced task scheduler like [Quartz](https://www.quartz-scheduler.net/). See the community contributed [quartz integration](Background-Workers-Quartz.md) for the background workers.
 
 ## See Also
+* [Quartz Integration for the background workers](Background-Workers-Quartz.md) 
 * [Background Jobs](Background-Jobs.md)
