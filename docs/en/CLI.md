@@ -141,7 +141,7 @@ abp switch-to-preview [options]
 ````
 #### Options
 
-`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-stable
 
@@ -154,7 +154,7 @@ abp switch-to-stable [options]
 ````
 #### Options
 
-`--solution-path` or `-sp`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
+`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### login
 
