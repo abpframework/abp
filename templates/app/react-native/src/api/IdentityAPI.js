@@ -1,11 +1,8 @@
 import api from './API';
 
-const maxMaxResultCount = 1000;
-
 export const getProfileDetail = () => api.get('/api/identity/my-profile').then(({ data }) => data);
 
-export const getRoles = (params = { maxResultCount: maxMaxResultCount, skipCount: 0 }) =>
-  api.get('/api/identity/roles', { params }).then(({ data }) => data.items);
+export const getAllRoles = () => api.get('/api/identity/roles/all').then(({ data }) => data.items);
 
 export const getUserRoles = id =>
   api.get(`/api/identity/users/${id}/roles`).then(({ data }) => data.items);

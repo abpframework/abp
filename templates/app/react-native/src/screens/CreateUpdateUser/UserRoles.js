@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem, CheckBox, Body, Text } from 'native-base';
 import { TouchableOpacity } from 'react-native';
-import { getRoles, getUserRoles } from '../../api/IdentityAPI';
+import { getAllRoles, getUserRoles } from '../../api/IdentityAPI';
 
 function UserRoles({ editingUser = {}, onChangeRoles }) {
   const [roles, setRoles] = useState([]);
@@ -17,7 +17,7 @@ function UserRoles({ editingUser = {}, onChangeRoles }) {
   };
 
   useEffect(() => {
-    const requests = [getRoles()];
+    const requests = [getAllRoles()];
     if (editingUser.id) requests.push(getUserRoles(editingUser.id));
 
     Promise.all(requests).then(([allRoles = [], userRoles = []]) => {
