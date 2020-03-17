@@ -148,7 +148,7 @@ abp switch-to-stable [options]
 
 #### Options
 
-`--solution-path` 或 `-sp`: 指定解决方案(.sln)文件路径. 如果未指定,CLI试寻找当前目录中的.sln文件.
+`--solution-directory` 或 `-sd`: 指定解决方案文件夹. 解决方案应该在指定文件夹或子文件夹中. 如果未指定,默认为当前目录.
 
 ### login
 
