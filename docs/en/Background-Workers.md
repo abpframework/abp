@@ -112,9 +112,11 @@ While we generally add workers in `OnApplicationInitialization`, there are no re
 
 ## Options
 
-`AbpBackgroundWorkerOptions` is used to set options for the background workers. There is only one option currently:
+`AbpBackgroundWorkerOptions` class is used to [set options](Options.md) for the background workers. Currently, there is only one option:
 
-* `IsEnabled` (default: true): Used to enable/disable the background worker system for your application.
+* `IsEnabled` (default: true): Used to **enable/disable** the background worker system for your application.
+
+> See the [Options](Options.md) document to learn how to set options.
 
 ## Making Your Application Always Run
 
