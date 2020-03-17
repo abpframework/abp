@@ -22,7 +22,7 @@ export const login = ({ username, password }) => {
   }).then(({ data }) => data);
 };
 
-export const Logout = () =>
+export const logout = () =>
   api({
     method: 'GET',
     url: '/api/account/logout',
