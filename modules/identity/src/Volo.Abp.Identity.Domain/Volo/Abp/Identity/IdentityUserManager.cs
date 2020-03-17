@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Threading;
 
@@ -15,12 +16,17 @@ namespace Volo.Abp.Identity
 {
     public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
+        protected IIdentityRoleRepository RoleRepository { get; }
+        protected IIdentityUserRepository UserRepository { get; }
+
         protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
 
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
         public IdentityUserManager(
             IdentityUserStore store,
+            IIdentityRoleRepository roleRepository,
+            IIdentityUserRepository userRepository,
             IOptions<IdentityOptions> optionsAccessor,
             IPasswordHasher<IdentityUser> passwordHasher,
             IEnumerable<IUserValidator<IdentityUser>> userValidators,
@@ -41,6 +47,8 @@ namespace Volo.Abp.Identity
                   services,
                   logger)
         {
+            RoleRepository = roleRepository;
+            UserRepository = userRepository;
             _cancellationTokenProvider = cancellationTokenProvider;
         }
 
@@ -75,6 +83,21 @@ namespace Volo.Abp.Identity
             }
 
             return IdentityResult.Success;
+        }
+
+        public virtual async Task<IdentityResult> AddDefaultRolesAsync([NotNull] IdentityUser user)
+        {
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, CancellationToken);
+            
+            foreach (var role in await RoleRepository.GetDefaultOnesAsync(cancellationToken: CancellationToken))
+            {
+                if (!user.IsInRole(role.Id))
+                {
+                    user.AddRole(role.Id);
+                }
+            }
+            
+            return await UpdateUserAsync(user);
         }
     }
 }

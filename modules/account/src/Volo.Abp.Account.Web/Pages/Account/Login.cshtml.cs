@@ -212,6 +212,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             CheckIdentityErrors(await UserManager.CreateAsync(user));
             CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
             CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
+            CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
 
             return user;
         }
@@ -240,7 +241,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual async Task CheckLocalLoginAsync()
         {
-            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false))
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
             {
                 throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
             }

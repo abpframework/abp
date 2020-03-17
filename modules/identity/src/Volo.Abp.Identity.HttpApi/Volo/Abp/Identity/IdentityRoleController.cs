@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
@@ -17,6 +18,13 @@ namespace Volo.Abp.Identity
         public IdentityRoleController(IIdentityRoleAppService roleAppService)
         {
             _roleAppService = roleAppService;
+        }
+
+        [HttpGet]
+        [Route("all")]
+        public virtual Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
+        {
+            return _roleAppService.GetAllListAsync();
         }
 
         [HttpGet]

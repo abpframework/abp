@@ -2,9 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +44,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public async Task<TemplateFile> GetAsync(
             string name,
             string type,
-            string version = null)
+            string version = null,
+            string templateSource = null)
         {
 
             var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
@@ -55,13 +54,21 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 version = latestVersion;
             }
 
+            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
+
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
 
+            if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
+            {
+                Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
+                return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")), version, latestVersion, nugetVersion);
+            }
+
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
-            if (Options.CacheTemplates && File.Exists(localCacheFile))
+            if (Options.CacheTemplates && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
             {
                 Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
-                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion);
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
             }
 
             Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
@@ -71,16 +78,17 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 {
                     Name = name,
                     Type = type,
+                    TemplateSource = templateSource,
                     Version = version
                 }
             );
 
-            if (Options.CacheTemplates)
+            if (Options.CacheTemplates && templateSource.IsNullOrWhiteSpace())
             {
                 File.WriteAllBytes(localCacheFile, fileContent);
             }
 
-            return new TemplateFile(fileContent, version, latestVersion);
+            return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
 
         }
 
@@ -104,7 +112,38 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
                 var result = await response.Content.ReadAsStringAsync();
 
-                return JsonSerializer.Deserialize<GetLatestSourceCodeVersionResultDto>(result).Version;
+                return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
+            }
+        }
+
+        private async Task<string> GetTemplateNugetVersionAsync(string name, string type, string version)
+        {
+            try
+            {
+                using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
+                {
+                    var response = await client.PostAsync(
+                        $"{CliUrls.WwwAbpIo}api/download/{type}/get-nuget-version/",
+                        new StringContent(
+                            JsonSerializer.Serialize(
+                                new GetTemplateNugetVersionDto { Name = name, Version = version }
+                            ),
+                            Encoding.UTF8,
+                            MimeTypes.Application.Json
+                        ),
+                        CancellationTokenProvider.Token
+                    );
+
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -114,16 +153,30 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
             {
-                var responseMessage = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/{input.Type}/",
-                    new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
-                    CancellationTokenProvider.Token
-                );
+                HttpResponseMessage responseMessage;
+
+                if (input.TemplateSource.IsNullOrWhiteSpace())
+                {
+                    responseMessage = await client.PostAsync(
+                        $"{CliUrls.WwwAbpIo}api/download/{input.Type}/",
+                        new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
+                        CancellationTokenProvider.Token
+                    );
+                }
+                else
+                {
+                    responseMessage = await client.GetAsync(input.TemplateSource, CancellationTokenProvider.Token);
+                }
 
                 await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 return await responseMessage.Content.ReadAsByteArrayAsync();
             }
+        }
+
+        private bool IsNetworkSource(string source)
+        {
+            return source.ToLower().StartsWith("http");
         }
 
         public class SourceCodeDownloadInputDto
@@ -133,6 +186,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string Version { get; set; }
 
             public string Type { get; set; }
+
+            public string TemplateSource { get; set; }
         }
 
         public class GetLatestSourceCodeVersionDto
@@ -140,7 +195,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string Name { get; set; }
         }
 
-        public class GetLatestSourceCodeVersionResultDto
+        public class GetTemplateNugetVersionDto
+        {
+            public string Name { get; set; }
+
+            public string Version { get; set; }
+        }
+
+        public class GetVersionResultDto
         {
             public string Version { get; set; }
         }

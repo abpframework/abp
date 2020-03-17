@@ -2,7 +2,7 @@
 
 ### 创建新项目
 
-本教程使用 **ABP CLI** 创建一个新项目. 更多选项, 请参阅[入门](https://cn.abp.io/get-started)页面.
+本教程使用 **ABP CLI** 创建一个新项目. 更多选项, 请参阅[入门](https://abp.io/get-started)页面.
 
 如果你之前未安装，请使用命令行安装ABP CLI:
 
@@ -24,10 +24,10 @@ abp new Acme.BookStore
 
 创建项目的要求:
 
-* [Visual Studio 2019 (v16.3+)](https://visualstudio.microsoft.com/vs/)
+* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/)
 * [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
 * [Node v12+](https://nodejs.org)
-* [Yarn v1.19+](https://yarnpkg.com/)
+* [Yarn v1.19+](https://classic.yarnpkg.com/)
 
 ### 解决方案结构
 

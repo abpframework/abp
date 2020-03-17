@@ -29,18 +29,10 @@ namespace Volo.Abp.Account
 
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
-            await UserManager.SetEmailAsync(user,input.EmailAddress).ConfigureAwait(false);
-
-            await SetDefaultRolesAsync(user);
+            await UserManager.SetEmailAsync(user,input.EmailAddress);
+            await UserManager.AddDefaultRolesAsync(user);
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
-        }
-
-        protected virtual async Task SetDefaultRolesAsync(IdentityUser user)
-        {
-            var defaultRoles = await _roleRepository.GetDefaultOnesAsync().ConfigureAwait(false);
-
-            await UserManager.SetRolesAsync(user, defaultRoles.Select(r => r.Name)).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()

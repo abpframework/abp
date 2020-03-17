@@ -6,11 +6,13 @@
     "Permission:Edit": "Düzenle",
     "Permission:Delete": "Sil",
     "Permission:Create": "Oluştur",
+    "Permission:Documents": "Döküman",
     "Menu:DocumentManagement": "Dökümanlar",
     "Menu:ProjectManagement": "Projeler",
     "CreateANewProject": "Yeni proje oluştur",
     "Edit": "Düzenle",
     "Create": "Yeni oluştur",
+    "Pull": "çekme",
     "Projects": "Projeler",
     "Name": "İsim",
     "ShortName": "Kısa isim",
@@ -26,6 +28,9 @@
     "DisplayName:MainWebsiteUrl": "Ana web site URL",
     "DisplayName:LatestVersionBranchName": "Son versiyon Branch adı",
     "DisplayName:GitHubRootUrl": "GitHub kök adresi",
-    "DisplayName:GitHubAccessToken": "GitHub erişim token"
+    "DisplayName:GitHubAccessToken": "GitHub erişim token",
+    "DisplayName:All": "Çekme bütün",
+    "DisplayName:LanguageCode": "Dil kodu",
+    "DisplayName:Version": "versiyon"
   }
 }

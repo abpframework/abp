@@ -9,14 +9,20 @@ using Ocelot.Middleware;
 using ProductManagement;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.FeatureManagement;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
@@ -24,6 +30,8 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Blogging;
 
 namespace BackendAdminAppGateway.Host
@@ -41,13 +49,26 @@ namespace BackendAdminAppGateway.Host
         typeof(BloggingApplicationContractsModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementDomainIdentityServerModule),
-        typeof(AbpHttpClientIdentityModelModule)
-        )]
+        typeof(AbpHttpClientIdentityModelWebModule),
+        typeof(AbpTenantManagementApplicationContractsModule),
+        typeof(AbpTenantManagementHttpApiModule),
+        typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+        typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpFeatureManagementHttpApiModule),
+        typeof(AbpAspNetCoreMvcUiMultiTenancyModule)
+    )]
     public class BackendAdminAppGatewayHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -104,7 +125,10 @@ namespace BackendAdminAppGateway.Host
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
-
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

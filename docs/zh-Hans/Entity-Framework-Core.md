@@ -32,14 +32,9 @@ namespace MyCompany.MyProject
 
 EF Core支持多种数据库管理系统([查看全部](https://docs.microsoft.com/en-us/ef/core/providers/)). ABP框架和本文档不依赖于任何特定的DBMS.
 
-如果要创建一个可重用的库,应避免依赖于特定的DBMS包.但在最终的应用程序中,始终会选择一个DBMS.
+如果要创建一个可重用的[应用程序模块](Modules/Index.md),应避免依赖于特定的DBMS包.但在最终的应用程序中,始终会选择一个DBMS.
 
-ABP框架为一些常见的DBMS提供了集成包,使配置变得更加简单. [启动模板](Startup-Templates/Index.md)附带**预先配置的SQL Server (localdb)**.请参阅以下文档,了解如何配置其他DBMS提供程序:
-
-* [MySQL](Entity-Framework-Core-MySQL.md)
-* [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
-* [SQLite](Entity-Framework-Core-SQLite.md)
-* [Others](Entity-Framework-Core-Other-DBMS.md)
+参阅[为Entity Framework Core切换到其他DBMS](Entity-Framework-Core-Other-DBMS.md)文档学习如何切换DBMS.
 
 ## 创建 DbContext
 
@@ -181,7 +176,7 @@ public interface IBookRepository : IRepository<Book, Guid>
 }
 ````
 
-你通常希望从IRepository派生以继承标准存储库方法. 然而,你没有必要这样做. 仓储接口在分层应用程序的领域层中定义,它在数据访问/基础设施层([启动模板](https://cn.abp.io/Templates)中的`EntityFrameworkCore`项目)中实现
+你通常希望从IRepository派生以继承标准存储库方法. 然而,你没有必要这样做. 仓储接口在分层应用程序的领域层中定义,它在数据访问/基础设施层([启动模板](https://abp.io/Templates)中的`EntityFrameworkCore`项目)中实现
 
 IBookRepository接口的实现示例:
 

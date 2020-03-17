@@ -80,7 +80,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         {
             return includeDetails
                 ? await WithDetails().ToListAsync(GetCancellationToken(cancellationToken))
- : await DbSet.ToListAsync(GetCancellationToken(cancellationToken));
+                : await DbSet.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
@@ -91,6 +91,20 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         protected override IQueryable<TEntity> GetQueryable()
         {
             return DbSet.AsQueryable();
+        }
+
+        public override async Task<TEntity> FindAsync(
+            Expression<Func<TEntity, bool>> predicate, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return includeDetails
+                ? await WithDetails()
+                    .Where(predicate)
+                    .SingleOrDefaultAsync(GetCancellationToken(cancellationToken))
+                : await DbSet
+                    .Where(predicate)
+                    .SingleOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -173,18 +187,6 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         }
 
-        public virtual TEntity Get(TKey id, bool includeDetails = true)
-        {
-            var entity = Find(id, includeDetails);
-
-            if (entity == null)
-            {
-                throw new EntityNotFoundException(typeof(TEntity), id);
-            }
-
-            return entity;
-        }
-
         public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             var entity = await FindAsync(id, includeDetails, GetCancellationToken(cancellationToken));
@@ -197,18 +199,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return entity;
         }
 
-        public virtual TEntity Find(TKey id, bool includeDetails = true)
-        {
-            return includeDetails
-                ? WithDetails().FirstOrDefault(e => e.Id.Equals(id))
-                : DbSet.Find(id);
-        }
-
         public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return includeDetails
                 ? await WithDetails().FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
- : await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
+                : await DbSet.FindAsync(new object[] {id}, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)

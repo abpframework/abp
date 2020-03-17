@@ -111,7 +111,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             await ApplyAbpConceptsForDeletedEntityAsync(entity);
             var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
 
-            if (entity is ISoftDelete softDeleteEntity)
+            if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
             {
                 softDeleteEntity.IsDeleted = true;
                 var result = await Collection.ReplaceOneAsync(
@@ -169,17 +169,37 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return GetMongoQueryable();
         }
 
+        public override async Task<TEntity> FindAsync(
+            Expression<Func<TEntity, bool>> predicate, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .Where(predicate)
+                .SingleOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual IMongoQueryable<TEntity> GetMongoQueryable()
         {
             return ApplyDataFilters(
                 Collection.AsQueryable()
             );
         }
+        protected virtual bool IsHardDeleted(TEntity entity)
+        {
+            var hardDeletedEntities = UnitOfWorkManager?.Current?.Items.GetOrDefault(UnitOfWorkItemNames.HardDeletedEntities) as HashSet<IEntity>;
+            if (hardDeletedEntities == null)
+            {
+                return false;
+            }
+
+            return hardDeletedEntities.Contains(entity);
+        }
 
         protected virtual FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
         {
             throw new NotImplementedException(
-                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overrided and implemented by the deriving class!"
+                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
             );
         }
 

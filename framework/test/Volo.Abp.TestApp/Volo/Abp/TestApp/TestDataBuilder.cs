@@ -41,7 +41,7 @@ namespace Volo.Abp.TestApp
         {
             var istanbul = new City(IstanbulCityId, "Istanbul");
             istanbul.Districts.Add(new District(istanbul.Id, "Bakirkoy", 1283999));
-            istanbul.Districts.Add(new District(istanbul.Id, "Mecidiyek�y", 2222321));
+            istanbul.Districts.Add(new District(istanbul.Id, "Mecidiyekoy", 2222321));
             istanbul.Districts.Add(new District(istanbul.Id, "Uskudar", 726172));
 
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Tokyo"));

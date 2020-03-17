@@ -67,6 +67,8 @@ namespace Demo
 
 你可以从不同的设置值提供程序中(默认,全局,用户,租户...等)中获取或设定设置值.
 
+> 如果只需要读取设置值,建议使用 `ISettingProvider` 而不是`ISettingManager`,因为它实现了缓存并支持所有部署场景. 如果要创建设置管理UI,可以使用ISettingManager.
+
 ### Setting Cache
 
 设置值缓存在 [分布式缓存](../Caching.md) 系统中. 建议始终使用 `ISettingManager` 更改设置值.

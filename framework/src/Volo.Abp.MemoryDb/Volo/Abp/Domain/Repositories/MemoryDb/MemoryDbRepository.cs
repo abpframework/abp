@@ -31,6 +31,14 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return ApplyDataFilters(Collection.AsQueryable());
         }
 
+        public override Task<TEntity> FindAsync(
+            Expression<Func<TEntity, bool>> predicate,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Collection.AsQueryable().Where(predicate).SingleOrDefault());
+        }
+
         public override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entities = Collection.AsQueryable().Where(predicate).ToList();

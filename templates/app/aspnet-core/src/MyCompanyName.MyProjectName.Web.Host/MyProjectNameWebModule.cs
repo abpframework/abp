@@ -27,7 +27,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -48,7 +48,7 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
         typeof(AbpFeatureManagementWebModule),
-        typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpAspNetCoreSerilogModule)
@@ -227,12 +227,14 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseAuthorization();
+
 
             app.UseAbpRequestLocalization();
 

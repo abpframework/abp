@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\configureawait.props" />
+  <Import Project="..\..\..\common.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Abp.Core</AssemblyName>
