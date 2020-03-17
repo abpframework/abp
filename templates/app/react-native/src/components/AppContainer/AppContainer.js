@@ -53,13 +53,11 @@ function AppContainer({ language, fetchAppConfig, token, setToken }) {
   useEffect(() => {
     fetchAppConfig();
 
-    Promise.all([
-      Font.loadAsync({
-        Roboto: require('native-base/Fonts/Roboto.ttf'),
-        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-        ...Ionicons.font,
-      }),
-    ]).then(() => setIsReady(true));
+    Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+      ...Ionicons.font,
+    }).then(() => setIsReady(true));
   }, []);
 
   return (
