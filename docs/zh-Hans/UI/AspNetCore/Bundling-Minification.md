@@ -52,7 +52,7 @@ namespace MyCompany.MyProject
 
 * 当首次请求时,ABP从提供的文件中 **(延迟)lazy** 创建. 后续将从 **缓存** 中返回内容. 这意味着如果你有条件地将文件添加到包中,它只执行一次, 并且条件的任何更改都不会影响下一个请求的包.
 * 在`development`环境中ABP会将包文件**单独**添加到页面中, 其他环境(`staging`,`production`...)会自动捆绑和压缩.
-* 捆绑文件可以是**物理**文件或[**虚拟/嵌入**](../Virtual-File-System.md)的文件.
+* 捆绑文件可以是**物理**文件或[**虚拟/嵌入**](../../Virtual-File-System.md)的文件.
 * ABP自动将 **版本查询字符串(version query string)** 添加到捆绑文件的URL中,以防止浏览器缓存. 如:?_v=67872834243042(从文件的上次更改日期生成). 即使捆绑文件单独添加到页面(在`development`环境中), 版本控制仍然有效.
 
 #### 导入 Bundling Tag Helpers
@@ -103,7 +103,7 @@ namespace MyCompany.MyProject
 
 ### Bundling 选项
 
-如果你需要在 **多个页面中使用相同的包** 或想要使用更多 **强大功能**, 你可以在[模块](../Module-Development-Basics.md)类中进行**配置**.
+如果你需要在 **多个页面中使用相同的包** 或想要使用更多 **强大功能**, 你可以在[模块](../../Module-Development-Basics.md)类中进行**配置**.
 
 #### 创建一个新的捆绑包
 
@@ -144,7 +144,7 @@ public class MyWebModule : AbpModule
 
 #### 配置现有的 Bundle
 
-ABP也支持[模块化](../Module-Development-Basics.md)捆绑. 模块可以修改由依赖模块创建的捆绑包.
+ABP也支持[模块化](../../Module-Development-Basics.md)捆绑. 模块可以修改由依赖模块创建的捆绑包.
 例如:
 
 ````C#

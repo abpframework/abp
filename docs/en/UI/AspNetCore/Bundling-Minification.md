@@ -51,7 +51,7 @@ This bundle defines a style bundle with a **unique name**: `MyGlobalBundle`. It'
 
 * ABP creates the bundle as **lazy** from the provided files when it's **first requested**. For the subsequent calls, it's returned from the **cache**. That means if you conditionally add the files to the bundle, it's executed only once and any changes of the condition will not effect the bundle for the next requests.
 * ABP adds bundle files **individually** to the page for the `development` environment. It automatically bundles & minifies for other environments (`staging`, `production`...).
-* The bundle files may be **physical** files or [**virtual/embedded** files](../Virtual-File-System.md).
+* The bundle files may be **physical** files or [**virtual/embedded** files](../../Virtual-File-System.md).
 * ABP automatically adds **version query string** to the bundle file URL to prevent browsers from caching when the bundle is being updated. (like ?_v=67872834243042 - generated from last change date of the related files). The versioning works even if the bundle files are individually added to the page (on the development environment).
 
 ### Importing The Bundling Tag Helpers
@@ -102,7 +102,7 @@ The bundle name will be *scripts.my-scripts* for the example above ("/" is repla
 
 ## Bundling Options
 
-If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../Module-Development-Basics.md) class.
+If you need to use same bundle in **multiple pages** or want to use some more **powerful features**, you can configure bundles **by code** in your [module](../../Module-Development-Basics.md) class.
 
 ### Creating A New Bundle
 
@@ -143,7 +143,7 @@ This time, no file defined in the tag helper definition because the bundle files
 
 ### Configuring An Existing Bundle
 
-ABP supports [modularity](../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a depended module. Example:
+ABP supports [modularity](../../Module-Development-Basics.md) for bundling as well. A module can modify an existing bundle that is created by a depended module. Example:
 
 ````C#
 [DependsOn(typeof(MyWebModule))]
@@ -159,7 +159,7 @@ public class MyWebExtensionModule : AbpModule
                     bundle.AddFiles(
                         "/scripts/my-extension-script.js"
                     );
-                });                
+                });
         });
     }
 }
@@ -195,7 +195,7 @@ services.Configure<AbpBundlingOptions>(options =>
         .ScriptBundles
         .Configure("MyGlobalBundle", bundle => {
             bundle.AddContributors(typeof(MyExtensionGlobalStyleContributor));
-        });        
+        });
 });
 ````
 
@@ -327,7 +327,7 @@ services.Configure<AbpBundlingOptions>(options =>
                 .AddFiles(
                     "/styles/mytheme-global-styles.css"
                 );
-        });                
+        });
 });
 ````
 
