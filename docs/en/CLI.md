@@ -48,7 +48,10 @@ abp new Acme.BookStore
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `none`: Without UI. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
-    * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+    * `--mobile` or `-m`: Specifies the mobile application framework. Default framework is `react-native`. Available frameworks:
+      * `none`: no mobile application.
+      * `react-native`: React Native.
+	* `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
   * `module`: [Module template](Startup-Templates/Module.md). Additional options:
