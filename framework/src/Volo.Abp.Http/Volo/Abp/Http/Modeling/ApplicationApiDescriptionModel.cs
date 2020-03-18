@@ -10,6 +10,8 @@ namespace Volo.Abp.Http.Modeling
     {
         public IDictionary<string, ModuleApiDescriptionModel> Modules { get; set; }
 
+        public IDictionary<string, TypeApiDescriptionModel> Types { get; set; }
+
         private ApplicationApiDescriptionModel()
         {
             
@@ -19,8 +21,8 @@ namespace Volo.Abp.Http.Modeling
         {
             return new ApplicationApiDescriptionModel
             {
-                //TODO: Why ConcurrentDictionary?
-                Modules = new ConcurrentDictionary<string, ModuleApiDescriptionModel>()
+                Modules = new ConcurrentDictionary<string, ModuleApiDescriptionModel>(), //TODO: Why ConcurrentDictionary?
+                Types = new Dictionary<string, TypeApiDescriptionModel>()
             };
         }
 
