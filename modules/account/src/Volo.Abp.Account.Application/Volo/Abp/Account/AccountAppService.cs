@@ -10,14 +10,14 @@ namespace Volo.Abp.Account
 {
     public class AccountAppService : ApplicationService, IAccountAppService
     {
-        private readonly IIdentityRoleRepository _roleRepository;
+        protected IIdentityRoleRepository RoleRepository { get; }
         protected IdentityUserManager UserManager { get; }
 
         public AccountAppService(
             IdentityUserManager userManager,
             IIdentityRoleRepository roleRepository)
         {
-            _roleRepository = roleRepository;
+            RoleRepository = roleRepository;
             UserManager = userManager;
         }
 
