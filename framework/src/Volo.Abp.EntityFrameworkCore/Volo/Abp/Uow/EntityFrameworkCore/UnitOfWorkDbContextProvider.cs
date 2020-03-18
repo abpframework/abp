@@ -54,15 +54,15 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             {
                 var dbContext = CreateDbContext(unitOfWork);
 
-                if (unitOfWork.Options.Timeout.HasValue &&
-                    dbContext.Database.IsRelational() &&
-                    !dbContext.Database.GetCommandTimeout().HasValue)
+                if (dbContext is IAbpEfCoreDbContext abpEfCoreDbContext)
                 {
-                    dbContext.Database.SetCommandTimeout(unitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
+                    abpEfCoreDbContext.Initialize(
+                        new AbpEfCoreDbContextInitializationContext(
+                            unitOfWork
+                        )
+                    );
                 }
 
-                dbContext.ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
-                dbContext.ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
                 return dbContext;
             }
         }
