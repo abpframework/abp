@@ -72,7 +72,7 @@ namespace Volo.Abp.TenantManagement
             }
         }
 
-        internal void SetName([NotNull] string name)
+        protected internal virtual void SetName([NotNull] string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
         }

@@ -26,7 +26,7 @@ namespace Volo.Abp.IdentityServer
             Logger = NullLogger<AbpCorsPolicyService>.Instance;
         }
 
-        public async Task<bool> IsOriginAllowedAsync(string origin)
+        public virtual async Task<bool> IsOriginAllowedAsync(string origin)
         {
             var cacheItem = await Cache.GetOrAddAsync(AllowedCorsOriginsCacheItem.AllOrigins, CreateCacheItemAsync);
 

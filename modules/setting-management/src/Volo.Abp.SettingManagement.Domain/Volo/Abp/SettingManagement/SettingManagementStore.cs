@@ -24,13 +24,13 @@ namespace Volo.Abp.SettingManagement
             Cache = cache;
         }
 
-        public async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
+        public virtual async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
             var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
             return cacheItem.Value;
         }
 
-        public async Task SetAsync(string name, string value, string providerName, string providerKey)
+        public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
             var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
             if (setting == null)
@@ -45,13 +45,13 @@ namespace Volo.Abp.SettingManagement
             }
         }
 
-        public async Task<List<SettingValue>> GetListAsync(string providerName, string providerKey)
+        public virtual async Task<List<SettingValue>> GetListAsync(string providerName, string providerKey)
         {
             var settings = await SettingRepository.GetListAsync(providerName, providerKey);
             return settings.Select(s => new SettingValue(s.Name, s.Value)).ToList();
         }
 
-        public async Task DeleteAsync(string name, string providerName, string providerKey)
+        public virtual async Task DeleteAsync(string name, string providerName, string providerKey)
         {
             var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
             if (setting != null)

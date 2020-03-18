@@ -11,16 +11,16 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
         [BindProperty]
         public TenantInfoModel Tenant { get; set; }
 
-        private readonly ITenantAppService _tenantAppService;
+        protected ITenantAppService TenantAppService { get; }
 
         public ConnectionStringsModal(ITenantAppService tenantAppService)
         {
-            _tenantAppService = tenantAppService;
+            TenantAppService = tenantAppService;
         }
 
-        public async Task OnGetAsync(Guid id)
+        public virtual async Task OnGetAsync(Guid id)
         {
-            var defaultConnectionString = await _tenantAppService.GetDefaultConnectionStringAsync(id);
+            var defaultConnectionString = await TenantAppService.GetDefaultConnectionStringAsync(id);
             Tenant = new TenantInfoModel
             {
                 Id = id,
@@ -29,17 +29,17 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             };
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
 
             if (Tenant.UseSharedDatabase || Tenant.DefaultConnectionString.IsNullOrWhiteSpace())
             {
-                await _tenantAppService.DeleteDefaultConnectionStringAsync(Tenant.Id);
+                await TenantAppService.DeleteDefaultConnectionStringAsync(Tenant.Id);
             }
             else
             {
-                await _tenantAppService.UpdateDefaultConnectionStringAsync(Tenant.Id, Tenant.DefaultConnectionString);
+                await TenantAppService.UpdateDefaultConnectionStringAsync(Tenant.Id, Tenant.DefaultConnectionString);
             }
 
             return NoContent();

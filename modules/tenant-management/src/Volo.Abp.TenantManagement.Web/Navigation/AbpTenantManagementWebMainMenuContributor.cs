@@ -9,7 +9,7 @@ namespace Volo.Abp.TenantManagement.Web.Navigation
 {
     public class AbpTenantManagementWebMainMenuContributor : IMenuContributor
     {
-        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public virtual async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name != StandardMenus.Main)
             {
