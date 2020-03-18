@@ -30,7 +30,7 @@ namespace Volo.Abp.Identity
 
         }
 
-        public string LocalizeMessage(LocalizationContext context)
+        public virtual string LocalizeMessage(LocalizationContext context)
         {
             return IdentityResult.LocalizeErrors(context.LocalizerFactory.Create<IdentityResource>());
         }

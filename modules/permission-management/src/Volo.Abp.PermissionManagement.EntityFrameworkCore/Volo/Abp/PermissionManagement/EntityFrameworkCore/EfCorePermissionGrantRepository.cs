@@ -18,7 +18,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 
         }
 
-        public async Task<PermissionGrant> FindAsync(
+        public virtual async Task<PermissionGrant> FindAsync(
             string name, 
             string providerName, 
             string providerKey,
@@ -33,7 +33,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                 );
         }
 
-        public async Task<List<PermissionGrant>> GetListAsync(
+        public virtual async Task<List<PermissionGrant>> GetListAsync(
             string providerName,
             string providerKey,
             CancellationToken cancellationToken = default)

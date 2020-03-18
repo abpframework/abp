@@ -10,7 +10,7 @@ using VoloDocs.EntityFrameworkCore;
 namespace VoloDocs.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(VoloDocsDbContext))]
-    [Migration("20200218014727_init")]
+    [Migration("20200312050853_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -490,6 +490,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                         .HasMaxLength(128);
 
                     b.Property<DateTime>("LastCachedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastSignificantUpdateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastUpdatedTime")

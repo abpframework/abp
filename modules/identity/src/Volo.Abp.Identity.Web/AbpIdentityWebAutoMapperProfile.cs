@@ -14,7 +14,7 @@ namespace Volo.Abp.Identity.Web
             CreateRoleMappings();
         }
 
-        private void CreateUserMappings()
+        protected virtual void CreateUserMappings()
         {
             //List
             CreateMap<IdentityUserDto, EditUserModalModel.UserInfoViewModel>()
@@ -35,7 +35,7 @@ namespace Volo.Abp.Identity.Web
                 .ForMember(dest => dest.IsAssigned, opt => opt.Ignore());
         }
 
-        private void CreateRoleMappings()
+        protected virtual void CreateRoleMappings()
         {
             //List
             CreateMap<IdentityRoleDto, EditModalModel.RoleInfoModel>();

@@ -68,10 +68,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return Page();
             }
 
-            var schemes = await _schemeProvider.GetAllSchemesAsync();
+            var schemes = await SchemeProvider.GetAllSchemesAsync();
 
             var providers = schemes
-                .Where(x => x.DisplayName != null || x.Name.Equals(_accountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
                 .Select(x => new ExternalProviderModel
                 {
                     DisplayName = x.DisplayName,
@@ -174,7 +174,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork]
         public override async Task<IActionResult> OnPostExternalLogin(string provider)
         {
-            if (_accountOptions.WindowsAuthenticationSchemeName == provider)
+            if (AccountOptions.WindowsAuthenticationSchemeName == provider)
             {
                 return await ProcessWindowsLoginAsync();
             }
@@ -184,10 +184,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         private async Task<IActionResult> ProcessWindowsLoginAsync()
         {
-            var result = await HttpContext.AuthenticateAsync(_accountOptions.WindowsAuthenticationSchemeName);
+            var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
             if (!(result?.Principal is WindowsPrincipal windowsPrincipal))
             {
-                return Challenge(_accountOptions.WindowsAuthenticationSchemeName);
+                return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
             }
 
             var props = new AuthenticationProperties
@@ -195,11 +195,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash }),
                 Items =
                 {
-                    {"scheme", _accountOptions.WindowsAuthenticationSchemeName},
+                    {"scheme", AccountOptions.WindowsAuthenticationSchemeName},
                 }
             };
 
-            var identity = new ClaimsIdentity(_accountOptions.WindowsAuthenticationSchemeName);
+            var identity = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
             identity.AddClaim(new Claim(JwtClaimTypes.Subject, windowsPrincipal.Identity.Name));
             identity.AddClaim(new Claim(JwtClaimTypes.Name, windowsPrincipal.Identity.Name));
 
