@@ -17,7 +17,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
         public virtual string Data { get; set; }
 
-        private DeviceFlowCodes()
+        protected DeviceFlowCodes()
         {
 
         }
