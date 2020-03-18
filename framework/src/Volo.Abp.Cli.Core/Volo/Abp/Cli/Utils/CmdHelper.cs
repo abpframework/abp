@@ -27,19 +27,14 @@ namespace Volo.Abp.Cli.Utils
             }
         }
 
-        public static string RunCmdAndGetOutput(string command)
-        {
-            return RunCmdAndGetOutput(command, out int _);
-        }
-
         public static string RunCmdAndGetOutput(string command, out bool isExitCodeSuccessful)
         {
-            var output = RunCmdAndGetOutput(command, out int exitCode);
-            isExitCodeSuccessful = exitCode == SuccessfulExitCode;
+            var output = RunCmdAndGetOutput(command);
+            isExitCodeSuccessful = true;
             return output;
         }
 
-        public static string RunCmdAndGetOutput(string command, out int exitCode)
+        public static string RunCmdAndGetOutput(string command)
         {
             string output;
 
@@ -65,7 +60,6 @@ namespace Volo.Abp.Cli.Utils
                     }
                 }
 
-                exitCode = process.ExitCode;
             }
 
             return output.Trim();
