@@ -106,7 +106,7 @@ namespace Volo.Abp.Cli.ProjectModification
                             }
                             else
                             {
-                                Logger.LogDebug("Package: \"{0}-v{1}\" is up to date.", packageId, packageVersion);
+                                Logger.LogInformation("Package: \"{0}-v{1}\" is up to date.", packageId, packageVersion);
                             }
                         }
                     }

@@ -107,13 +107,17 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private async Task DownloadSourceCodesToSolutionFolder(ModuleWithMastersInfo module, string modulesFolderInSolution, string version = null)
         {
+            var targetModuleFolder = Path.Combine(modulesFolderInSolution, module.Name);
+
             await SourceCodeDownloadService.DownloadAsync(
                 module.Name,
-                Path.Combine(modulesFolderInSolution, module.Name),
+                targetModuleFolder,
                 version,
                 null,
                 null
             );
+
+            await DeleteAppFolderAsync(targetModuleFolder);
 
             if (module.MasterModuleInfos == null)
             {
@@ -123,6 +127,15 @@ namespace Volo.Abp.Cli.ProjectModification
             foreach (var masterModule in module.MasterModuleInfos)
             {
                 await DownloadSourceCodesToSolutionFolder(masterModule, modulesFolderInSolution, version);
+            }
+        }
+
+        private async Task DeleteAppFolderAsync(string targetModuleFolder)
+        {
+            var appFolder = Path.Combine(targetModuleFolder, "app");
+            if (Directory.Exists(appFolder))
+            {
+                Directory.Delete(appFolder, true);
             }
         }
 

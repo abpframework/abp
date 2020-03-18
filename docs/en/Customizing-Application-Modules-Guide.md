@@ -21,7 +21,7 @@ This approach has the following benefits:
 
 However, there is a drawback:
 
-* You may not able to **customize** the module source code as it is in your own solution.
+* You may not able to **customize** the module because the module source is not in your solution.
 
 This document explains **how to customize or extend** a depended module without need to change its source code. While it is limited compared to a full source code change opportunity, there are still some good ways to make some customizations.
 

@@ -169,6 +169,16 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return GetMongoQueryable();
         }
 
+        public override async Task<TEntity> FindAsync(
+            Expression<Func<TEntity, bool>> predicate, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .Where(predicate)
+                .SingleOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual IMongoQueryable<TEntity> GetMongoQueryable()
         {
             return ApplyDataFilters(

@@ -5,11 +5,12 @@
         position: relative;
         overflow: hidden;
 
-        .hero-content { 
+        .hero-content {
             h2 {
                 margin-top: .5rem;
-                font-size: 2em;
+                font-size: 1.75em;
                 font-weight: bold;
+                line-height: 1.25;
             }
         }
 
@@ -25,9 +26,9 @@
             }
         }
 
-        .article-owner { 
+        .article-owner {
             .article-infos {
-                color: black; 
+                color: black;
 
 
                 .seperator {
@@ -35,17 +36,17 @@
                     color: rgba(255, 255, 255, 0.2);
                 }
 
-                img.article-avatar {  
+                img.article-avatar {
                     display: inline-block;
                     border-radius: 50%;
                 }
             }
         }
 
-        .img-container {  
+        .img-container {
             img {
                 width: 100%;
-            } 
+            }
         }
 
         &:hover {
@@ -128,7 +129,7 @@
 }
 
 .article-owner {
-    font-size: .85em;
+    font-size: .72em;
 }
 
 .user-link-icons {

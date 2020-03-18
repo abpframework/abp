@@ -200,7 +200,7 @@ public async Task<BookDto> GetAsync(Guid id)
 
 ### CRUD应用服务
 
-如果需要创建具有Create,Update,Delete和Get方法的简单CRUD应用服务,则可以使用ABP的基类轻松构建服务. 你可以继承CrudAppService.
+如果需要创建具有Create,Update,Delete和Get方法的简单**CRUD应用服务**,则可以使用ABP的基类轻松构建服务. 你可以继承CrudAppService.
 
 示例:
 
@@ -218,7 +218,9 @@ public interface IBookAppService :
 }
 ````
 
-* ICrudAppService有泛型参数来获取实体的主键类型和CRUD操作的DTO类型(它不获取实体类型,因为实体类型未向客户端公开使用此接口).
+`ICrudAppService` 有泛型参数来获取实体的主键类型和CRUD操作的DTO类型(它不获取实体类型,因为实体类型未向客户端公开使用此接口).
+
+> 为应用程序服务创建一个接口是最佳做法,但是ABP框架并不强制你这么做,你可以跳过接口部分.
 
 `ICrudAppService`声明以下方法:
 
@@ -291,7 +293,52 @@ public class BookAppService :
 
 `CrudAppService`实现了`ICrudAppService`接口中声明的所有方法. 然后,你可以添加自己的自定义方法或覆盖和自定义实现.
 
+> `CrudAppService` 有不同数量泛型参数的版本,你可以选择适合的使用.
+
+### AbstractKeyCrudAppService
+
+`CrudAppService` 要求你的实体拥有一个Id属性做为主键. 如果你使用的是复合主键,那么你无法使用它.
+
+`AbstractKeyCrudAppService` 实现了相同的 `ICrudAppService` 接口,但它没有假设你的主键.
+
+#### 示例
+
+假设你有实体 `District`,它的`CityId` 和 `Name` 做为复合主键,使用 `AbstractKeyCrudAppService` 时需要你自己实现 `DeleteByIdAsync` 和 `GetEntityByIdAsync` 方法:
+
+````csharp
+public class DistrictAppService
+    : AbstractKeyCrudAppService<District, DistrictDto, DistrictKey>
+{
+    public DistrictAppService(IRepository<District> repository)
+        : base(repository)
+    {
+    }
+
+    protected override async Task DeleteByIdAsync(DistrictKey id)
+    {
+        await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
+    }
+
+    protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
+    {
+        return await AsyncQueryableExecuter.FirstOrDefaultAsync(
+            Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
+        );
+    }
+}
+````
+
+这个实现需要你创建一个类做为复合键:
+
+````csharp
+public class DistrictKey
+{
+    public Guid CityId { get; set; }
+
+    public string Name { get; set; }
+}
+````
+
 ### 生命周期
 
 应用服务的生命周期是[transient](Dependency-Injection)的，它们会自动注册到依赖注入系统.
-

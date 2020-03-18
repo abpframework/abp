@@ -14,6 +14,7 @@ namespace Volo.Abp.Cli
                 .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
+                .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Warning)
 #if DEBUG
                 .MinimumLevel.Override("Volo.Abp.Cli", LogEventLevel.Debug)
 #else
