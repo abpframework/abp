@@ -21,14 +21,14 @@ namespace Volo.Abp.Identity
 
         [HttpGet]
         [Route("{id}")]
-        public Task<UserData> FindByIdAsync(Guid id)
+        public virtual Task<UserData> FindByIdAsync(Guid id)
         {
             return LookupAppService.FindByIdAsync(id);
         }
 
         [HttpGet]
         [Route("by-username/{userName}")]
-        public Task<UserData> FindByUserNameAsync(string userName)
+        public virtual Task<UserData> FindByUserNameAsync(string userName)
         {
             return LookupAppService.FindByUserNameAsync(userName);
         }

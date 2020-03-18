@@ -19,9 +19,9 @@ namespace Volo.Abp.Identity
         protected IIdentityRoleRepository RoleRepository { get; }
         protected IIdentityUserRepository UserRepository { get; }
 
-        protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
+        protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
-        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public IdentityUserManager(
             IdentityUserStore store,
@@ -49,7 +49,7 @@ namespace Volo.Abp.Identity
         {
             RoleRepository = roleRepository;
             UserRepository = userRepository;
-            _cancellationTokenProvider = cancellationTokenProvider;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
         public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
