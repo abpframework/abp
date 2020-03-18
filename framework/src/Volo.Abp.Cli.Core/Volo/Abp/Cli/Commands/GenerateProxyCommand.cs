@@ -103,7 +103,7 @@ namespace Volo.Abp.Cli.Commands
                     serviceFileText.AppendLine("import { Observable } from 'rxjs';");
                     serviceFileText.AppendLine("[secondTypeList]");
                     serviceFileText.AppendLine("");
-                    serviceFileText.AppendLine("@Injectable()");
+                    serviceFileText.AppendLine("@Injectable({providedIn: 'root'})");
                     serviceFileText.AppendLine("export class [controllerName]Service {");
                     serviceFileText.AppendLine("  constructor(private restService: RestService) {}");
                     serviceFileText.AppendLine("");
@@ -193,7 +193,13 @@ namespace Volo.Abp.Cli.Commands
                                 {
                                     parametersText.Append($"params = {{}} as {type}");
                                     modelBindingExtra = ", params";
-                                    secondTypeList.Add(type);
+                                    if (!string.IsNullOrWhiteSpace(modelIndex))
+                                    {
+                                        secondTypeList.Add(type);
+                                    }
+                                    else {
+                                        firstTypeList.Add(type);
+                                    }
                                     break;
                                 }
                             }
@@ -254,6 +260,7 @@ namespace Volo.Abp.Cli.Commands
                                     "Void" => "void",
                                     "String" => "string",
                                     "IActionResult" => "void",
+                                    "ActionResult" => "void",
                                     _ => type
                                 };
 
@@ -279,7 +286,7 @@ namespace Volo.Abp.Cli.Commands
                             modelBindingExtra = ", params: { " + string.Join(", ", modelBindingExtraList.ToArray()) + " }";
                         }
 
-                        var url = ((string)action["url"]).Replace("/{", "/${");
+                        var url = (((string)action["url"]).Replace("/{", "/${")).ToLower();
                         var httpMethod = (string)action["httpMethod"];
 
                         serviceFileText.AppendLine(
@@ -384,6 +391,7 @@ namespace Volo.Abp.Cli.Commands
                  || returnValueType == "System.String"
                  || returnValueType == "System.Void"
                  || returnValueType.Contains("IActionResult")
+                 || returnValueType.Contains("ActionResult")
                  || returnValueType.Contains("IStringValueType")
                  || returnValueType.Contains("IValueValidator")
                  )
@@ -459,10 +467,6 @@ namespace Volo.Abp.Cli.Commands
                 foreach (var property in type["properties"])
                 {
                     var propertyName = (string)property["name"];
-                    if (propertyName == "RoleNames")
-                    {
-
-                    }
                     propertyName = (char.ToLower(propertyName[0]) + propertyName.Substring(1));
                     var typeSimple = (string)property["typeSimple"]; 
 
@@ -498,7 +502,12 @@ namespace Volo.Abp.Cli.Commands
                      && typeSimple != "number[]"
                       )
                     {
-                        typeSimple = "any" + (typeSimple.Contains("[]") ? "[]" : "");
+                        var typeSimpleModelName = typeSimple.PascalToKebabCase() + ".ts";
+                        var modelPath = $"src/app/{rootPath}/shared/models/{typeSimpleModelName}";
+                        if (!File.Exists(modelPath))
+                        {
+                            typeSimple = "any" + (typeSimple.Contains("[]") ? "[]" : "");
+                        } 
                     }
 
                     if (propertyList.Any(p => p.Key == baseTypeName && p.Value.Any(q => q.Key == propertyName && q.Value == typeSimple)))
