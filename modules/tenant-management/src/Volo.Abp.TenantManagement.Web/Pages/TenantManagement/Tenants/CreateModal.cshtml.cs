@@ -10,19 +10,24 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
         [BindProperty]
         public TenantInfoModel Tenant { get; set; }
 
-        private readonly ITenantAppService _tenantAppService;
+        protected ITenantAppService TenantAppService { get; }
 
         public CreateModalModel(ITenantAppService tenantAppService)
         {
-            _tenantAppService = tenantAppService;
+            TenantAppService = tenantAppService;
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual Task OnGetAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
 
             var input = ObjectMapper.Map<TenantInfoModel, TenantCreateDto>(Tenant);
-            await _tenantAppService.CreateAsync(input);
+            await TenantAppService.CreateAsync(input);
 
             return NoContent();
         }
