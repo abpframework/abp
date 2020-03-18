@@ -96,7 +96,7 @@ public class MyModule : AbpModule
 
 `context.AddBackgroundWorker(...)` is a shortcut extension method for the expression below:
 
-````
+````csharp
 context.ServiceProvider
     .GetRequiredService<IBackgroundWorkerManager>()
     .Add(
