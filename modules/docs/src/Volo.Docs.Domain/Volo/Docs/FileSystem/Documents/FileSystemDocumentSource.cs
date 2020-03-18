@@ -16,7 +16,7 @@ namespace Volo.Docs.FileSystem.Documents
     {
         public const string Type = "FileSystem";
 
-        public async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version)
+        public async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version, DateTime? lastKnownSignificantUpdateTime = null)
         {
             var projectFolder = project.GetFileSystemPath();
             var path = Path.Combine(projectFolder, languageCode, documentName);

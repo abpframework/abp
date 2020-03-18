@@ -14,6 +14,12 @@ namespace Volo.Docs.GitHub.Projects
             return project.ExtraProperties["GitHubRootUrl"] as string;
         }
 
+        public static string GetGitHubInnerUrl([NotNull] this Project project, string languageCode, string documentName)
+        {
+            return project
+                       .GetGitHubUrl().Split("{version}")[1].EnsureEndsWith('/').TrimStart('/') + languageCode + '/' + documentName;
+        }
+
         public static string GetGitHubUrl([NotNull] this Project project, string version)
         {
             return project
