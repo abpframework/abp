@@ -60,6 +60,10 @@ export class TenantsComponent implements OnInit {
 
   sortKey = '';
 
+  get hasSelectedTenant(): boolean {
+    return Boolean(this.selected.id);
+  }
+
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
   }
@@ -115,9 +119,18 @@ export class TenantsComponent implements OnInit {
   }
 
   private createTenantForm() {
-    this.tenantForm = this.fb.group({
+    const tenantForm = this.fb.group({
       name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
+      adminEmailAddress: [null, [Validators.required, Validators.maxLength(256), Validators.email]],
+      adminPassword: [null, [Validators.required]],
     });
+
+    if (this.hasSelectedTenant) {
+      tenantForm.removeControl('adminEmailAddress');
+      tenantForm.removeControl('adminPassword');
+    }
+
+    this.tenantForm = tenantForm;
   }
 
   private createDefaultConnectionStringForm() {
