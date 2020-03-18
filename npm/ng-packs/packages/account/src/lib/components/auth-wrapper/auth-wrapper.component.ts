@@ -1,6 +1,7 @@
 import { ConfigState, takeUntilDestroy } from '@abp/ng.core';
 import { Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { Account } from '../../models/account';
 
 @Component({
@@ -19,6 +20,9 @@ export class AuthWrapperComponent
 
   @Input()
   readonly cancelContentRef: TemplateRef<any>;
+
+  @Select(ConfigState.getDeep('multiTenancy.isEnabled'))
+  isMultiTenancyEnabled$: Observable<boolean>;
 
   enableLocalLogin = true;
 

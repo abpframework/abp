@@ -18,8 +18,7 @@
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
-   @* PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");*@
-    ViewBag.Title = "Documentation Center";
+    PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">

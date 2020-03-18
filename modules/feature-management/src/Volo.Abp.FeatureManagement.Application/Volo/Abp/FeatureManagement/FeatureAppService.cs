@@ -17,18 +17,15 @@ namespace Volo.Abp.FeatureManagement
     {
         protected FeatureManagementOptions Options { get; }
 
-        private readonly IFeatureManager _featureManager;
-        private readonly IFeatureDefinitionManager _featureDefinitionManager;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        protected IFeatureManager FeatureManager { get; }
+        protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
 
         public FeatureAppService(IFeatureManager featureManager,
             IFeatureDefinitionManager featureDefinitionManager,
-            IStringLocalizerFactory stringLocalizerFactory,
             IOptions<FeatureManagementOptions> options)
         {
-            _featureManager = featureManager;
-            _featureDefinitionManager = featureDefinitionManager;
-            _stringLocalizerFactory = stringLocalizerFactory;
+            FeatureManager = featureManager;
+            FeatureDefinitionManager = featureDefinitionManager;
             Options = options.Value;
         }
 
@@ -36,7 +33,7 @@ namespace Volo.Abp.FeatureManagement
         {
             await CheckProviderPolicy(providerName);
 
-            var featureDefinitions = _featureDefinitionManager.GetAll();
+            var featureDefinitions = FeatureDefinitionManager.GetAll();
             var features = new List<FeatureDto>();
 
             foreach (var featureDefinition in featureDefinitions)
@@ -44,11 +41,11 @@ namespace Volo.Abp.FeatureManagement
                 features.Add(new FeatureDto
                 {
                     Name = featureDefinition.Name,
-                    DisplayName = featureDefinition.DisplayName?.Localize(_stringLocalizerFactory),
+                    DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
                     ValueType = featureDefinition.ValueType,
-                    Description = featureDefinition.Description?.Localize(_stringLocalizerFactory),
+                    Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
                     ParentName = featureDefinition.Parent?.Name,
-                    Value = await _featureManager.GetOrNullAsync(featureDefinition.Name, providerName, providerKey)
+                    Value = await FeatureManager.GetOrNullAsync(featureDefinition.Name, providerName, providerKey)
                 });
             }
 
@@ -63,11 +60,11 @@ namespace Volo.Abp.FeatureManagement
 
             foreach (var feature in input.Features)
             {
-                await _featureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
+                await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
             }
         }
 
-        private void SetFeatureDepth(List<FeatureDto> features, string providerName, string providerKey,
+        protected virtual void SetFeatureDepth(List<FeatureDto> features, string providerName, string providerKey,
             FeatureDto parentFeature = null, int depth = 0)
         {
             foreach (var feature in features)

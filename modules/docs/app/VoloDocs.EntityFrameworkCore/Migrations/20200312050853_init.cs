@@ -132,6 +132,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     LocalDirectory = table.Column<string>(maxLength: 512, nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     LastUpdatedTime = table.Column<DateTime>(nullable: false),
+                    LastSignificantUpdateTime = table.Column<DateTime>(nullable: true),
                     LastCachedTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

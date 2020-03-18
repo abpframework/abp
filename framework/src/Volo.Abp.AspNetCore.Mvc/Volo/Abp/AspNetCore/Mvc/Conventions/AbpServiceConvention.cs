@@ -12,6 +12,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions
@@ -81,7 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                         continue;
                     }
 
-                    if (!TypeHelper.IsPrimitiveExtended(prm.ParameterInfo.ParameterType))
+                    if (!TypeHelper.IsPrimitiveExtended(prm.ParameterInfo.ParameterType, includeEnums: true))
                     {
                         if (CanUseFormBodyBinding(action, prm))
                         {
@@ -94,7 +95,15 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual bool CanUseFormBodyBinding(ActionModel action, ParameterModel parameter)
         {
-            if (_options.ConventionalControllers.FormBodyBindingIgnoredTypes.Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
+            //We want to use "id" as path parameter, not body!
+            if (parameter.ParameterName == "id")
+            {
+                return false;
+            }
+
+            if (_options.ConventionalControllers
+                .FormBodyBindingIgnoredTypes
+                .Any(t => t.IsAssignableFrom(parameter.ParameterInfo.ParameterType)))
             {
                 return false;
             }
@@ -251,7 +260,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
                 if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
                 {
-                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] {httpMethod}));
+                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
                 }
             }
         }
@@ -295,9 +304,24 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
             var url = $"api/{rootPath}/{controllerNameInUrl.ToCamelCase()}";
 
             //Add {id} path if needed
-            if (action.Parameters.Any(p => p.ParameterName == "id"))
+            var idParameterModel = action.Parameters.FirstOrDefault(p => p.ParameterName == "id");
+            if (idParameterModel != null)
             {
-                url += "/{id}";
+                if (TypeHelper.IsPrimitiveExtended(idParameterModel.ParameterType, includeEnums: true))
+                {
+                    url += "/{id}";
+                }
+                else
+                {
+                    var properties = idParameterModel
+                        .ParameterType
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+                    foreach (var property in properties)
+                    {
+                        url += "/{" + property.Name + "}";
+                    }
+                }
             }
 
             //Add action name if needed
@@ -341,7 +365,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual string NormalizeUrlControllerName(string rootPath, string controllerName, ActionModel action, string httpMethod, [CanBeNull] ConventionalControllerSetting configuration)
         {
-            if(configuration?.UrlControllerNameNormalizer == null)
+            if (configuration?.UrlControllerNameNormalizer == null)
             {
                 return controllerName;
             }
@@ -364,7 +388,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual bool IsEmptySelector(SelectorModel selector)
         {
-            return selector.AttributeRouteModel == null 
+            return selector.AttributeRouteModel == null
                    && selector.ActionConstraints.IsNullOrEmpty()
                    && selector.EndpointMetadata.IsNullOrEmpty();
         }

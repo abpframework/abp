@@ -10,18 +10,23 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public PersonalSettingsInfoModel PersonalSettingsInfoModel { get; set; }
 
-        private readonly IProfileAppService _profileAppService;
+        protected IProfileAppService ProfileAppService { get; }
 
         public ManageModel(IProfileAppService profileAppService)
         {
-            _profileAppService = profileAppService;
+            ProfileAppService = profileAppService;
         }
 
-        public async Task OnGetAsync()
+        public virtual async Task OnGetAsync()
         {
-            var user = await _profileAppService.GetAsync();
+            var user = await ProfileAppService.GetAsync();
 
             PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
+        }
+
+        public virtual Task OnPostAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 
