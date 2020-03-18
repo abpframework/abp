@@ -14,12 +14,9 @@ namespace Volo.Abp.Identity.MongoDB
 {
     public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentityRole, Guid>, IIdentityRoleRepository
     {
-        private readonly IGuidGenerator _guidGenerator;
-
-        public MongoIdentityRoleRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IGuidGenerator guidGenerator) 
+        public MongoIdentityRoleRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
-            _guidGenerator = guidGenerator;
         }
 
         public async Task<IdentityRole> FindByNormalizedNameAsync(
