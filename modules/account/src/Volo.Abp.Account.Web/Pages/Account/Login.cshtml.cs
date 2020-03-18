@@ -212,6 +212,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             CheckIdentityErrors(await UserManager.CreateAsync(user));
             CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
             CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
+            CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
 
             return user;
         }

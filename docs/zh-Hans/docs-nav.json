@@ -43,6 +43,33 @@
       ]
     },
     {
+      "text": "指南",
+      "items": [
+        {
+          "text": "自定义应用模块",
+          "path": "Customizing-Application-Modules-Guide.md",
+          "items": [
+            {
+              "text": "扩展实体",
+              "path": "Customizing-Application-Modules-Extending-Entities.md"
+            },
+            {
+              "text": "重写服务",
+              "path": "Customizing-Application-Modules-Overriding-Services.md"
+            },
+            {
+              "text": "重写用户界面",
+              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+            }
+          ]
+        },
+        {
+          "text": "从ASP.NET Boilerplate迁移",
+          "path": "AspNet-Boilerplate-Migration-Guide.md"
+        }
+      ]
+    },
+    {
       "text": "CLI",
       "path": "CLI.md"
     },
@@ -249,16 +276,7 @@
             },
             {
               "text": "Tag Helpers",
-              "items":[
-                {
-                  "text": "在线演示",
-                  "path": "UI/AspNetCore/Tag-Helpers/Index.md"
-                },
-                {
-                  "text": "按钮",
-                  "path": "UI/AspNetCore/Tag-Helpers/Buttons.md"
-                }
-              ]
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
             },
             {
               "text": "仪表板和小部件(Widget)系统",
