@@ -73,7 +73,7 @@ function CreateUpdateTenantForm({ editingTenant = {}, submit, remove }) {
                 />
               </InputGroup>
               <ValidationMessage>{errors.name}</ValidationMessage>
-              {!editingTenant || !editingTenant.id ? (
+              {!editingTenant.id ? (
                 <>
                   <InputGroup abpInputGroup>
                     <Label abpLabel>
