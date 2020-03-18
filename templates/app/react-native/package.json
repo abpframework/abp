@@ -24,7 +24,7 @@
     "formik": "^2.1.2",
     "i18n-js": "^3.5.1",
     "lodash": "^4.17.15",
-    "native-base": "^2.13.8",
+    "native-base": "2.13.8",
     "prop-types": "^15.7.2",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
