@@ -81,9 +81,6 @@ namespace Volo.Abp.EntityFrameworkCore
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
-            ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges; 
-            ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
-                            
             GuidGenerator = SimpleGuidGenerator.Instance;
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
             EntityHistoryHelper = NullEntityHistoryHelper.Instance;
