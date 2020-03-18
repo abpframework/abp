@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Shouldly;
 using Xunit;
 
@@ -15,6 +14,40 @@ namespace Volo.Abp.Reflection
             var guidType = nullableType.GetFirstGenericArgumentIfNullable();
 
             guidType.ShouldBe(typeof(Guid));
+        }
+
+        [Fact]
+        public void IsDictionary()
+        {
+            //Dictionary<string, int>
+            TypeHelper.IsDictionary(
+                typeof(Dictionary<string, int>),
+                out var keyType,
+                out var valueType
+            ).ShouldBeTrue();
+            keyType.ShouldBe(typeof(string));
+            valueType.ShouldBe(typeof(int));
+
+            //MyDictionary
+            TypeHelper.IsDictionary(
+                typeof(MyDictionary),
+                out keyType,
+                out valueType
+            ).ShouldBeTrue();
+            keyType.ShouldBe(typeof(bool));
+            valueType.ShouldBe(typeof(TypeHelper_Tests));
+
+            //TypeHelper_Tests
+            TypeHelper.IsDictionary(
+                typeof(TypeHelper_Tests),
+                out keyType,
+                out valueType
+            ).ShouldBeFalse();
+        }
+
+        public class MyDictionary : Dictionary<bool, TypeHelper_Tests>
+        {
+
         }
     }
 }

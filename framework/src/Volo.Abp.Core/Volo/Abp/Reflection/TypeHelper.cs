@@ -84,11 +84,16 @@ namespace Volo.Abp.Reflection
 
         public static bool IsDictionary(Type type, out Type keyType, out Type valueType)
         {
-            var enumerableTypes = ReflectionHelper.GetImplementedGenericTypes(type, typeof(IDictionary<,>));
-            if (enumerableTypes.Count == 1)
+            var dictionaryTypes = ReflectionHelper
+                .GetImplementedGenericTypes(
+                    type,
+                    typeof(IDictionary<,>)
+                );
+
+            if (dictionaryTypes.Count == 1)
             {
-                keyType = enumerableTypes[0].GenericTypeArguments[0];
-                valueType = enumerableTypes[0].GenericTypeArguments[2];
+                keyType = dictionaryTypes[0].GenericTypeArguments[0];
+                valueType = dictionaryTypes[0].GenericTypeArguments[1];
                 return true;
             }
 
@@ -101,6 +106,7 @@ namespace Volo.Abp.Reflection
 
             keyType = null;
             valueType = null;
+
             return false;
         }
 
