@@ -61,8 +61,6 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     dbContext.Database.SetCommandTimeout(unitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
                 }
 
-                dbContext.ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
-                dbContext.ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
                 return dbContext;
             }
         }
