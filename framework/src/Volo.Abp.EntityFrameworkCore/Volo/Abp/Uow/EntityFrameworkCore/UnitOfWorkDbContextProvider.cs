@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
@@ -60,6 +61,8 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
                     dbContext.Database.SetCommandTimeout(unitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
                 }
 
+                dbContext.ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
+                dbContext.ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
                 return dbContext;
             }
         }
