@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Volo.Abp.Cli": {
-      "commandName": "Project",
-      "commandLineArgs": "generate-proxy -u angular -m all"
+      "commandName": "Project"
     }
   }
 }
