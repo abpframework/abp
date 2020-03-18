@@ -17,6 +17,27 @@ namespace Volo.Abp.Reflection
         }
 
         [Fact]
+        public void IsEnumerable()
+        {
+            TypeHelper.IsEnumerable(
+                typeof(IEnumerable<string>),
+                out var itemType
+            ).ShouldBeTrue();
+            itemType.ShouldBe(typeof(string));
+
+            TypeHelper.IsEnumerable(
+                typeof(List<TypeHelper_Tests>),
+                out itemType
+            ).ShouldBeTrue();
+            itemType.ShouldBe(typeof(TypeHelper_Tests));
+
+            TypeHelper.IsEnumerable(
+                typeof(TypeHelper_Tests),
+                out itemType
+            ).ShouldBeFalse();
+        }
+
+        [Fact]
         public void IsDictionary()
         {
             //Dictionary<string, int>
