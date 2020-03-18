@@ -614,16 +614,17 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Usage:");
             sb.AppendLine("");
-            sb.AppendLine("  abp generate-proxy --apiUrl <api-url> [options]");
+            sb.AppendLine("  abp generate-proxy [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("");
+            sb.AppendLine("-a|--apiUrl <api-url>               (default: environment.ts>apis>default>url)");
             sb.AppendLine("-u|--ui <ui-framework>               (default: angular)");
             sb.AppendLine("-m|--module <module>               (default: app)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
-            sb.AppendLine("  abp new --apiUrl https://www.abp.io");
+            sb.AppendLine("  abp generate-proxy --apiUrl https://www.volosoft.com");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -632,7 +633,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Generates a ...";
+            return "Generates typescript service proxies and DTOs";
         }
 
         private UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
@@ -647,7 +648,7 @@ namespace Volo.Abp.Cli.Commands
                 case "angular":
                     return UiFramework.Angular;
                 default:
-                    return UiFramework.NotSpecified;
+                    return UiFramework.Angular;
             }
         }
 
@@ -661,7 +662,7 @@ namespace Volo.Abp.Cli.Commands
 
             public static class ApiUrl
             {
-                public const string Short = "au";
+                public const string Short = "a";
                 public const string Long = "apiUrl";
             }
 
