@@ -32,4 +32,8 @@
     <ProjectReference Include="..\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
+  </ItemGroup>
+
 </Project>

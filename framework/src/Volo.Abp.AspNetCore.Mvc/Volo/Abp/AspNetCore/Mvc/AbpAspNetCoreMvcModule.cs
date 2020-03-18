@@ -43,21 +43,6 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            //Configure Razor
-            context.Services.Insert(0,
-                ServiceDescriptor.Singleton<IConfigureOptions<MvcRazorRuntimeCompilationOptions>>(
-                    new ConfigureOptions<MvcRazorRuntimeCompilationOptions>(options =>
-                        {
-                            options.FileProviders.Add(
-                                new RazorViewEngineVirtualFileProvider(
-                                    context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
-                                )
-                            );
-                        }
-                    )
-                )
-            );
-
             Configure<AbpApiDescriptionModelOptions>(options =>
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
@@ -101,7 +86,16 @@ namespace Volo.Abp.AspNetCore.Mvc
                     };
                 })                
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
-            
+
+            Configure<MvcRazorRuntimeCompilationOptions>(options =>
+            {
+                options.FileProviders.Add(
+                    new RazorViewEngineVirtualFileProvider(
+                        context.Services.GetSingletonInstance<IObjectAccessor<IServiceProvider>>()
+                    )
+                );
+            });
+
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
             //TODO: AddViewLocalization by default..?

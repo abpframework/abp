@@ -1,3 +1,3 @@
-# abp.auth JavaScript API
+This document has moved. 
 
-TODO
+[Click to navigate to JavaScript Auth document](../../API/JavaScript-API/Auth.md)

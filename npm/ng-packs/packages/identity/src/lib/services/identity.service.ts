@@ -19,6 +19,15 @@ export class IdentityService {
     return this.rest.request<null, Identity.RoleResponse>(request);
   }
 
+  getAllRoles(): Observable<Identity.RoleResponse> {
+    const request: Rest.Request<null> = {
+      method: 'GET',
+      url: '/api/identity/roles/all',
+    };
+
+    return this.rest.request<null, Identity.RoleResponse>(request);
+  }
+
   getRoleById(id: string): Observable<Identity.RoleItem> {
     const request: Rest.Request<null> = {
       method: 'GET',

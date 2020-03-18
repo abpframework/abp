@@ -23,6 +23,7 @@ namespace BloggingService.Host
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .Enrich.WithProperty("Application", "BloggingService")
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
@@ -37,13 +38,13 @@ namespace BloggingService.Host
 
             try
             {
-                Log.Information("Starting IdentityService.Host.");
+                Log.Information("Starting BloggingService.Host.");
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "IdentityService.Host terminated unexpectedly!");
+                Log.Fatal(ex, "BloggingService.Host terminated unexpectedly!");
                 return 1;
             }
             finally

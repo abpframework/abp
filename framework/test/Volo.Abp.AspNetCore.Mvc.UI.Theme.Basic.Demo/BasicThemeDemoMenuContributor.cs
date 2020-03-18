@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
@@ -38,6 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
                 new ApplicationMenuItem("BasicThemeDemo.Components.ListGroups", "List Groups", url: "/Components/ListGroups"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Modals", "Modals", url: "/Components/Modals"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Navs", "Navs", url: "/Components/Navs"),
+                new ApplicationMenuItem("BasicThemeDemo.Components.Navbars", "Navbars", url: "/Components/Navbars"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Paginator", "Paginator", url: "/Components/Paginator"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Popovers", "Popovers", url: "/Components/Popovers"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.ProgressBars", "Progress Bars", url: "/Components/ProgressBars"),
@@ -45,8 +47,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
                 new ApplicationMenuItem("BasicThemeDemo.Components.Tabs", "Tabs", url: "/Components/Tabs"),
                 new ApplicationMenuItem("BasicThemeDemo.Components.Tooltips", "Tooltips", url: "/Components/Tooltips")
             };
-
-            items.ForEach(x => menuItem.AddItem(x));
+            
+            items.OrderBy(x => x.Name)
+                 .ToList()
+                 .ForEach(x => menuItem.AddItem(x));
 
             context.Menu.AddItem(menuItem);
         }

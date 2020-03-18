@@ -73,6 +73,11 @@ namespace Volo.Abp.Identity
                     L("Description:Abp.Identity.SignIn.RequireConfirmedEmail"), 
                     true),
                 new SettingDefinition(
+                    IdentitySettingNames.SignIn.EnablePhoneNumberConfirmation, 
+                    true.ToString(), L("DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation"), 
+                    L("Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation"), 
+                    true),
+                new SettingDefinition(
                     IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, 
                     false.ToString(), L("DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber"), 
                     L("Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber"), 

@@ -27,7 +27,7 @@ Angular was the first SPA UI option, but it is not the last. After v1.0 release,
 
 ### Widget System
 
-[Widget system](https://docs.abp.io/en/abp/latest/AspNetCore/Widgets) allows to **define and reuse** widgets for ASP.NET Core MVC applications. Widgets may have their own script and style resources and dependencies to 3rd-party libraries which are managed by the ABP framework.
+[Widget system](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets) allows to **define and reuse** widgets for ASP.NET Core MVC applications. Widgets may have their own script and style resources and dependencies to 3rd-party libraries which are managed by the ABP framework.
 
 ### Others
 

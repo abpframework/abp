@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
+using MsDemo.Shared;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
@@ -18,9 +19,11 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace IdentityService.Host
 {
@@ -33,13 +36,20 @@ namespace IdentityService.Host
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityApplicationModule)
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpTenantManagementEntityFrameworkCoreModule)
         )]
     public class IdentityServiceHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -90,7 +100,10 @@ namespace IdentityService.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.Use(async (ctx, next) =>
             {
                 var currentPrincipalAccessor = ctx.RequestServices.GetRequiredService<ICurrentPrincipalAccessor>();

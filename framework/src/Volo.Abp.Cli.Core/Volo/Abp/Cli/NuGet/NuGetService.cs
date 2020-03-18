@@ -95,21 +95,19 @@ namespace Volo.Abp.Cli.NuGet
                 .OrResult(msg => !msg.IsSuccessStatusCode)
                 .WaitAndRetryAsync(new[]
                     {
-                        TimeSpan.FromSeconds(1),
-                        TimeSpan.FromSeconds(3),
-                        TimeSpan.FromSeconds(7)
+                        TimeSpan.FromSeconds(1)
                     },
                     (responseMessage, timeSpan, retryCount, context) =>
                     {
                         if (responseMessage.Exception != null)
                         {
-                            Logger.LogWarning(
+                            Logger.LogDebug(
                                 $"{retryCount}. HTTP request attempt failed to {url} with an error: HTTP {(int)responseMessage.Result.StatusCode}-{responseMessage.Exception.Message}. " +
                                 $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
                         }
                         else if (responseMessage.Result != null)
                         {
-                            Logger.LogWarning(
+                            Logger.LogDebug(
                                 $"{retryCount}. HTTP request attempt failed to {url} with an error: {(int)responseMessage.Result.StatusCode}-{responseMessage.Result.ReasonPhrase}. " +
                                 $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
                         }

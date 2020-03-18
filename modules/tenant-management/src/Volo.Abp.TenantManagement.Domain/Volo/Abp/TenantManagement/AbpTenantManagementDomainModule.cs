@@ -2,6 +2,7 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Domain;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.UI;
@@ -19,9 +20,15 @@ namespace Volo.Abp.TenantManagement
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<AbpTenantManagementDomainModule>();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementDomainMappingProfile>(validate: true);
+            });
+
+            Configure<AbpDistributedEventBusOptions>(options =>
+            {
+                options.EtoMappings.Add<Tenant, TenantEto>();
             });
         }
     }

@@ -45,7 +45,7 @@ namespace Volo.Blogging
         [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _commentAppService.DeleteAsync(id);
         }
     }
 }

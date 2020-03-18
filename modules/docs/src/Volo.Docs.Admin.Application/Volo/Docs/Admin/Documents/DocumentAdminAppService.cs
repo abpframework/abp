@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Documents;
+using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Documents
@@ -18,16 +19,19 @@ namespace Volo.Docs.Admin.Documents
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentSourceFactory _documentStoreFactory;
         private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
+        private readonly IDocumentFullSearch _documentFullSearch;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentSourceFactory documentStoreFactory, 
-            IDistributedCache<DocumentUpdateInfo> documentUpdateCache)
+            IDistributedCache<DocumentUpdateInfo> documentUpdateCache, 
+            IDocumentFullSearch documentFullSearch)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
             _documentStoreFactory = documentStoreFactory;
             _documentUpdateCache = documentUpdateCache;
+            _documentFullSearch = documentFullSearch;
         }
 
         public async Task PullAllAsync(PullAllDocumentInput input)
@@ -78,6 +82,22 @@ namespace Volo.Docs.Admin.Documents
                 sourceDocument.LanguageCode, sourceDocument.Version);
             await _documentRepository.InsertAsync(sourceDocument, true);
             await UpdateDocumentUpdateInfoCache(sourceDocument);
+        }
+
+        public async Task ReindexAsync()
+        {
+            var docs = await _documentRepository.GetListAsync();
+            var projects = await _projectRepository.GetListAsync();
+            foreach (var doc in docs)
+            {
+                var project = projects.FirstOrDefault(x => x.Id == doc.ProjectId);
+                if (project != null && (doc.FileName == project.NavigationDocumentName || doc.FileName == project.ParametersDocumentName))
+                {
+                    continue;
+                }
+                
+                await _documentFullSearch.AddOrUpdateAsync(doc);
+            }
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

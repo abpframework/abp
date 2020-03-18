@@ -24,16 +24,16 @@
 
 ![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
 
-> 你可以查看[应用程序模板文档](../../../Startup-Templates/Application.md)以详细了解解决方案结构.但是,你将通过本教程了解基础知识.
+> 你可以查看[应用程序模板文档](../startup-templates/application#solution-structure)以详细了解解决方案结构.但是,你将通过本教程了解基础知识.
 
 ### 创建Book实体
 
 启动模板中的域层分为两个项目:
 
- - `Acme.BookStore.Domain`包含你的[实体](../../../Entities.md), [领域服务](../../../Domain-Services.md)和其他核心域对象.
+ - `Acme.BookStore.Domain`包含你的[实体](https://docs.abp.io/zh-Hans/abp/latest/Entities), [领域服务](https://docs.abp.io/zh-Hans/abp/latest/Domain-Services)和其他核心域对象.
  - `Acme.BookStore.Domain.Shared`包含可与客户共享的常量,枚举或其他域相关对象.
 
-在解决方案的**领域层**(`Acme.BookStore.Domain`项目)中定义[实体](../../../Entities.md). 该应用程序的主要实体是`Book`. 在`Acme.BookStore.Domain`项目中创建一个名为`Book`的类，如下所示：
+在解决方案的**领域层**(`Acme.BookStore.Domain`项目)中定义[实体](https://docs.abp.io/zh-Hans/abp/latest/Entities). 该应用程序的主要实体是`Book`. 在`Acme.BookStore.Domain`项目中创建一个名为`Book`的类，如下所示：
 
 ````C#
 using System;
@@ -66,7 +66,7 @@ namespace Acme.BookStore
 }
 ````
 
-* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是**域驱动设计(DDD)** 概念之一. 有关详细信息和最佳做法,请参阅[实体文档](../../../Entities.md).
+* ABP为实体提供了两个基本的基类: `AggregateRoot`和`Entity`. **Aggregate Root**是**域驱动设计(DDD)** 概念之一. 有关详细信息和最佳做法,请参阅[实体文档](https://docs.abp.io/zh-Hans/abp/latest/Entities).
 * `Book`实体继承了`AuditedAggregateRoot`,`AuditedAggregateRoot`类在`AggregateRoot`类的基础上添加了一些审计属性(`CreationTime`, `CreatorId`, `LastModificationTime` 等).
 * `Guid`是`Book`实体的主键类型.
 * 使用 **数据注解** 为EF Core添加映射.或者你也可以使用 EF Core 自带的[fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling).
@@ -166,7 +166,7 @@ namespace Acme.BookStore
 }
 ````
 
-* **DTO**类被用来在 **表示层** 和 **应用层** **传递数据**.查看[DTO文档](../../../Data-Transfer-Objects.md)查看更多信息.
+* **DTO**类被用来在 **表示层** 和 **应用层** **传递数据**.查看[DTO文档](https://docs.abp.io/zh-Hans/abp/latest/Data-Transfer-Objects)查看更多信息.
 * 为了在页面上展示书籍信息,`BookDto`被用来将书籍数据传递到表示层.
 * `BookDto`继承自 `AuditedEntityDto<Guid>`.跟上面定义的`Book`类一样具有一些审计属性.
 
@@ -217,7 +217,7 @@ namespace Acme.BookStore
 ````
 
 * 这个DTO类被用于在创建或更新书籍的时候从用户界面获取图书信息.
-* 它定义了数据注释属性(如`[Required]`)来定义属性的验证. DTO由ABP框架[自动验证](../../../Validation.md).
+* 它定义了数据注释属性(如`[Required]`)来定义属性的验证. DTO由ABP框架[自动验证](https://docs.abp.io/zh-Hans/abp/latest/Validation).
 
 就像上面的`BookDto`一样,创建一个从`CreateUpdateBookDto`对象到`Book`实体的映射:
 
@@ -281,12 +281,12 @@ namespace Acme.BookStore
 ````
 
 * `BookAppService`继承了`CrudAppService<...>`.它实现了上面定义的CRUD方法.
-* `BookAppService`注入`IRepository <Book,Guid>`,这是`Book`实体的默认仓储. ABP自动为每个聚合根(或实体)创建默认仓储. 请参阅[仓储文档](../../../Repositories.md)
+* `BookAppService`注入`IRepository <Book,Guid>`,这是`Book`实体的默认仓储. ABP自动为每个聚合根(或实体)创建默认仓储. 请参阅[仓储文档](https://docs.abp.io/zh-Hans/abp/latest/Repositories)
 * `BookAppService`使用`IObjectMapper`将`Book`对象转换为`BookDto`对象, 将`CreateUpdateBookDto`对象转换为`Book`对象. 启动模板使用[AutoMapper](http://automapper.org/)库作为对象映射提供程序. 你之前定义了映射, 因此它将按预期工作.
 
 ### 自动生成API Controllers
 
-你通常创建**Controller**以将应用程序服务公开为**HTTP API**端点. 因此允许浏览器或第三方客户端通过AJAX调用它们. ABP可以[**自动**](../../../AspNetCore/Auto-API-Controllers.md)按照惯例将你的应用程序服务配置为MVC API控制器.
+你通常创建**Controller**以将应用程序服务公开为**HTTP API**端点. 因此允许浏览器或第三方客户端通过AJAX调用它们. ABP可以[**自动**](https://docs.abp.io/zh-Hans/abp/latest/API/Auto-API-Controllers)按照惯例将你的应用程序服务配置为MVC API控制器.
 
 #### Swagger UI
 
@@ -392,7 +392,7 @@ context.Menu.AddItem(
 }
 ````
 
-* ABP的本地化功能建立在[ASP.NET Core's standard localization]((https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization))之上并增加了一些扩展.查看[本地化文档](../../../Localization.md).
+* ABP的本地化功能建立在[ASP.NET Core's standard localization]((https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization))之上并增加了一些扩展.查看[本地化文档](https://docs.abp.io/zh-Hans/abp/latest/Localization).
 * 本地化key是任意的. 你可以设置任何名称. 我们更喜欢为菜单项添加`Menu:`前缀以区别于其他文本. 如果未在本地化文件中定义文本,则它将**返回**到本地化的key(ASP.NET Core的标准行为).
 
 运行该应用程序,看到新菜单项已添加到顶部栏:
@@ -437,8 +437,8 @@ context.Menu.AddItem(
 </abp-card>
 ````
 
-* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro)用于将外部的 **脚本** 添加到页面中.它比标准的`script`标签多了很多额外的功能.它可以处理 **最小化**和 **版本**.查看[捆绑 & 压缩文档](../../../AspNetCore/Bundling-Minification.md)获取更多信息.
-* `abp-card` 和 `abp-table` 是为Twitter Bootstrap的[card component](http://getbootstrap.com/docs/4.1/components/card/)封装的 **tag helpers**.ABP中有很多tag helpers,可以很方便的使用大多数[bootstrap](https://getbootstrap.com/)组件.你也可以使用原生的HTML标签代替tag helpers.使用tag helper可以通过智能提示和编译时类型检查减少HTML代码并防止错误.查看[tag helpers 文档](../../../AspNetCore/Tag-Helpers/Index.md).
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro)用于将外部的 **脚本** 添加到页面中.它比标准的`script`标签多了很多额外的功能.它可以处理 **最小化**和 **版本**.查看[捆绑 & 压缩文档](https://docs.abp.io/zh-Hans/abp/latest/UI/AspNetCore/Bundling-Minification)获取更多信息.
+* `abp-card` 和 `abp-table` 是为Twitter Bootstrap的[card component](http://getbootstrap.com/docs/4.1/components/card/)封装的 **tag helpers**.ABP中有很多tag helpers,可以很方便的使用大多数[bootstrap](https://getbootstrap.com/)组件.你也可以使用原生的HTML标签代替tag helpers.使用tag helper可以通过智能提示和编译时类型检查减少HTML代码并防止错误.查看[tag helpers 文档](https://docs.abp.io/zh-Hans/abp/latest/UI/AspNetCore/Tag-Helpers/Index).
 * 你可以像上面本地化菜单一样 **本地化** 列名.
 
 #### 添加脚本文件
