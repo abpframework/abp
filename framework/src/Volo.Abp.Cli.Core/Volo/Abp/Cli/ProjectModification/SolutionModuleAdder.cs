@@ -143,7 +143,12 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             foreach (var nugetPackage in module.NugetPackages)
             {
-                var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetPackage.Target);
+                var nugetTarget =
+                    await IsProjectTiered(projectFiles) && nugetPackage.TieredTarget != NuGetPackageTarget.Undefined
+                        ? nugetPackage.TieredTarget
+                        : nugetPackage.Target;
+
+                var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetTarget);
                 if (targetProjectFile == null)
                 {
                     Logger.LogDebug($"Target project is not available for this NuGet package '{nugetPackage.Name}'");
@@ -233,6 +238,12 @@ namespace Volo.Abp.Cli.ProjectModification
                 var responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ModuleWithMastersInfo>(responseContent);
             }
+        }
+
+        protected virtual async Task<bool> IsProjectTiered(string[] projectFiles)
+        {
+            return projectFiles.Select(ProjectFileNameHelper.GetAssemblyNameFromProjectPath)
+                .Any(p => p.EndsWith(".IdentityServer") || p.EndsWith(".HttpApi.Host"));
         }
     }
 }
