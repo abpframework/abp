@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity
         public IdentityDomainMappingProfile()
         {
             CreateMap<IdentityClaimType, IdentityClaimTypeEto>();
-            CreateMap<IdentityRoleEto, IdentityRoleEto>();
+            CreateMap<IdentityRole, IdentityRoleEto>();
         }
     }
 }

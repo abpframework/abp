@@ -9,18 +9,18 @@ namespace Volo.Abp.Identity
 
         public Guid? TenantId { get; set; }
 
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
 
-        public virtual bool Required { get; set; }
+        public bool Required { get; set; }
 
-        public virtual bool IsStatic { get; set; }
+        public bool IsStatic { get; set; }
 
-        public virtual string Regex { get; set; }
+        public string Regex { get; set; }
 
-        public virtual string RegexDescription { get; set; }
+        public string RegexDescription { get; set; }
 
-        public virtual string Description { get; set; }
+        public string Description { get; set; }
 
-        public virtual IdentityClaimValueType ValueType { get; set; }
+        public IdentityClaimValueType ValueType { get; set; }
     }
 }
