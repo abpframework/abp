@@ -8,6 +8,7 @@ using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -55,9 +56,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
             );
 
             var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
-            if (apiKeyResult?.ApiKey != null)
+            if (apiKeyResult != null)
             {
-                args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
+                if (apiKeyResult.ApiKey != null)
+                {
+                    args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
+                }
+                else if (templateInfo.Name == AppProTemplate.TemplateName)
+                {
+                    throw new UserFriendlyException(apiKeyResult.ErrorMessage);
+                }
             }
 
             if (apiKeyResult?.LicenseCode != null)
