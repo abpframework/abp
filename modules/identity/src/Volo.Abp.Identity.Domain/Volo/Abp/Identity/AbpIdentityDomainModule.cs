@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Modularity;
@@ -21,6 +22,13 @@ namespace Volo.Abp.Identity
             Configure<AbpDistributedEventBusOptions>(options =>
             {
                 options.EtoMappings.Add<IdentityUser, UserEto>();
+                options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>();
+                options.EtoMappings.Add<IdentityRole, IdentityRoleEto>();
+            });
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<IdentityDomainMappingProfile>(validate: true);
             });
 
             var identityBuilder = context.Services.AddAbpIdentity(options =>
