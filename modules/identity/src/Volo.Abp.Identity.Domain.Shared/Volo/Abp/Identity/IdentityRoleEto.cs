@@ -2,6 +2,7 @@
 
 namespace Volo.Abp.Identity
 {
+    [Serializable]
     public class IdentityRoleEto
     {
         public Guid Id { get; set; }
