@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Domain;
+﻿using Volo.Abp.AutoMapper;
+using Volo.Abp.Domain;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Blogging.Blogs;
@@ -21,6 +22,11 @@ namespace Volo.Blogging
                 options.EtoMappings.Add<Comment, CommentEto>();
                 options.EtoMappings.Add<Post, PostEto>();
                 options.EtoMappings.Add<Tag, TagEto>();
+            });
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<BloggingDomainMappingProfile>(validate: true);
             });
         }
     }
