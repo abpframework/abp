@@ -59,6 +59,7 @@ abp new Acme.BookStore
 * `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
 * `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,您会希望使用最新的版本.
 * `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D\localTemplate` 或 `https://<your url>.zip`).
+* `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
 
 ### add-package
 
@@ -170,6 +171,28 @@ abp login <username>
 ```
 abp logout
 ```
+
+### generate-proxy
+
+生成typescript服务和DTO代理
+
+基本用法:
+
+````bash
+abp generate-proxy [options] 
+````
+
+示例:
+
+````bash
+abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
+````
+
+#### Options
+
+* `--apiUrl` 或者 `-a`：如果未指定这个选项,默认使用你的environment.ts文件的API URL, 你可以随时使用这个选项指定API源.
+* `--ui` 或者 `-u`: 指定UI框架,默认框架是angular.当前只有angular一个选项, 但我们会通过更改CLI增加新的选项. 尽请关注!
+* `--module` 或者 `-m`：指定模块名. 默认模块名称为app. 如果你想所有模块,你可以指定 `--module all` 命令.
 
 ### help
 
