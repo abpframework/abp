@@ -24,15 +24,15 @@ export namespace Config {
     logoUrl?: string;
   }
 
-  export type ApiConfig = {
+  export interface ApiConfig {
     [key: string]: string;
     url: string;
-  };
+  }
 
-  export type Apis = {
+  export interface Apis {
     [key: string]: ApiConfig;
     default: ApiConfig;
-  };
+  }
 
   export interface Requirements {
     layouts: Type<any>[];
