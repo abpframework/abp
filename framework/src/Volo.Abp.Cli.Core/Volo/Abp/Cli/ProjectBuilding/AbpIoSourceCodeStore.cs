@@ -94,36 +94,48 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
         {
-            using (var client = new CliHttpClient())
-            {
-                var response = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/",
-                    new StringContent(
-                        JsonSerializer.Serialize(
-                            new GetLatestSourceCodeVersionDto { Name = name }
-                        ),
-                        Encoding.UTF8,
-                        MimeTypes.Application.Json
-                    ),
-                    CancellationTokenProvider.Token
-                );
+            var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/";
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
-
-                var result = await response.Content.ReadAsStringAsync();
-
-                return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
-            }
-        }
-
-        private async Task<string> GetTemplateNugetVersionAsync(string name, string type, string version)
-        {
             try
             {
                 using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
                 {
                     var response = await client.PostAsync(
-                        $"{CliUrls.WwwAbpIo}api/download/{type}/get-nuget-version/",
+                        url,
+                        new StringContent(
+                            JsonSerializer.Serialize(
+                                new GetLatestSourceCodeVersionDto { Name = name }
+                            ),
+                            Encoding.UTF8,
+                            MimeTypes.Application.Json
+                        ),
+                        CancellationTokenProvider.Token
+                    );
+
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occured while getting the latest version from {0} : {1}", url, ex.Message);
+                throw;
+            }
+        }
+
+        private async Task<string> GetTemplateNugetVersionAsync(string name, string type, string version)
+        {
+            var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-nuget-version/";
+
+            try
+            {
+                using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
+                {
+                    var response = await client.PostAsync(
+                        url,
                         new StringContent(
                             JsonSerializer.Serialize(
                                 new GetTemplateNugetVersionDto { Name = name, Version = version }
@@ -141,40 +153,49 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine("Error occured while getting the NuGet version from {0} : {1}", url, ex.Message);
                 return null;
             }
         }
 
         private async Task<byte[]> DownloadSourceCodeContentAsync(SourceCodeDownloadInputDto input)
         {
-            var postData = JsonSerializer.Serialize(input);
+            var url = $"{CliUrls.WwwAbpIo}api/download/{input.Type}/";
 
-            using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
+            try
             {
-                HttpResponseMessage responseMessage;
-
-                if (input.TemplateSource.IsNullOrWhiteSpace())
+                using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
                 {
-                    responseMessage = await client.PostAsync(
-                        $"{CliUrls.WwwAbpIo}api/download/{input.Type}/",
-                        new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
-                        CancellationTokenProvider.Token
-                    );
-                }
-                else
-                {
-                    responseMessage = await client.GetAsync(input.TemplateSource, CancellationTokenProvider.Token);
-                }
+                    HttpResponseMessage responseMessage;
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                    if (input.TemplateSource.IsNullOrWhiteSpace())
+                    {
+                        responseMessage = await client.PostAsync(
+                            url,
+                            new StringContent(JsonSerializer.Serialize(input), Encoding.UTF8, MimeTypes.Application.Json),
+                            CancellationTokenProvider.Token
+                        );
+                    }
+                    else
+                    {
+                        responseMessage = await client.GetAsync(input.TemplateSource, CancellationTokenProvider.Token);
+                    }
 
-                return await responseMessage.Content.ReadAsByteArrayAsync();
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+
+                    return await responseMessage.Content.ReadAsByteArrayAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occured while downloading source-code from {0} : {1}", url, ex.Message);
+                throw;
             }
         }
 
-        private bool IsNetworkSource(string source)
+        private static bool IsNetworkSource(string source)
         {
             return source.ToLower().StartsWith("http");
         }
