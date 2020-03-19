@@ -168,7 +168,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ConfigurationTenantStoreOptions>(options =>
+            Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
@@ -214,7 +214,7 @@ namespace MyCompany.MyProject
         {
             var configuration = BuildConfiguration();
 
-            Configure<ConfigurationTenantStoreOptions>(configuration);
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
@@ -343,8 +343,8 @@ namespace MyCompany.MyProject
         {
             Configure<AbpTenantResolveOptions>(options =>
             {
-                //子域名格式: {0}.mydomain.com (作为最高优先级解析器添加)
-                options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));
+                //子域名格式: {0}.mydomain.com (作为第二优先级解析器添加, 位于CurrentUserTenantResolveContributor之后)
+                options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));
             });
 
             //...
@@ -355,7 +355,7 @@ namespace MyCompany.MyProject
 
 {0}是用来确定当前租户唯一名称的占位符.
 
-你可以使用下面的方法,代替``options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));``:
+你可以使用下面的方法,代替``options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));``:
 
 ````C#
 options.AddDomainTenantResolver("{0}.mydomain.com");

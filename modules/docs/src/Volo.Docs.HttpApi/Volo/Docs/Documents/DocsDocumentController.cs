@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -44,6 +45,20 @@ namespace Volo.Docs.Documents
         public Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
         {
             return DocumentAppService.GetResourceAsync(input);
+        }
+
+        [HttpPost]
+        [Route("search")]
+        public Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
+        {
+            return DocumentAppService.SearchAsync(input);
+        }
+
+        [HttpGet]
+        [Route("full-search-enabled")]
+        public Task<bool> FullSearchEnabledAsync()
+        {
+            return DocumentAppService.FullSearchEnabledAsync();
         }
 
         [HttpGet]

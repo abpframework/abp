@@ -1,5 +1,5 @@
 import { ABP, ConfigState } from '@abp/ng.core';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
   AbstractControl,
@@ -17,7 +17,6 @@ import snq from 'snq';
 import {
   CreateUser,
   DeleteUser,
-  GetRoles,
   GetUserById,
   GetUserRoles,
   GetUsers,
@@ -25,6 +24,7 @@ import {
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
+import { IdentityService } from '../../services/identity.service';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
@@ -81,6 +81,7 @@ export class UsersComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
+    private identityService: IdentityService,
   ) {}
 
   ngOnInit() {
@@ -119,8 +120,8 @@ export class UsersComponent implements OnInit {
   }
 
   buildForm() {
-    this.store.dispatch(new GetRoles({ maxResultCount: 1000, skipCount: 0 })).subscribe(() => {
-      this.roles = this.store.selectSnapshot(IdentityState.getRoles);
+    this.identityService.getAllRoles().subscribe(({ items }) => {
+      this.roles = items;
       this.form = this.fb.group({
         userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
         email: [
@@ -223,8 +224,8 @@ export class UsersComponent implements OnInit {
       .warn('AbpIdentity::UserDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
         messageLocalizationParams: [userName],
       })
-      .subscribe((status: Toaster.Status) => {
-        if (status === Toaster.Status.confirm) {
+      .subscribe((status: Confirmation.Status) => {
+        if (status === Confirmation.Status.confirm) {
           this.store.dispatch(new DeleteUser(id)).subscribe(() => this.get());
         }
       });

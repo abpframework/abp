@@ -7,7 +7,7 @@
 @inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
 @{
-    ViewBag.PageTitle = "Blog";
+    ViewBag.Title = "Blog";
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
@@ -43,6 +43,7 @@
                                     </h2>
                                     <p class="article-sum">
                                         @Html.Raw(GetShortContent(post.Content))
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">Continue Reading</a>
                                     </p>
                                 </div>
                                 @if (post.Writer != null)
@@ -156,6 +157,7 @@
                                             </h3>
                                             <p>
                                                 @Html.Raw(GetShortContent(post.Content))
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url"  asp-route-blogShortName="@Model.BlogShortName">Continue Reading</a>
                                             </p>
                                             <div class="article-owner">
                                                 <div class="article-infos">

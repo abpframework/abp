@@ -92,3 +92,17 @@ Run the `.DbMigrator` project to create the database and seed the initial data.
 ## Run the Application
 
 It is ready. Just run the application and enjoy coding.
+
+## DBMS restrictions
+
+Different DBMS may have some restrictions, such as the maximum length of field names, index length, etc.
+The module may provide some built-in solutions. You can configure it via `ModelBuilder`. eg: `Identity Server` module.
+
+```csharp
+builder.ConfigureIdentityServer(options =>
+{
+    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
+});
+```
+
+Related discussions: https://github.com/abpframework/abp/issues/1920

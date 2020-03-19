@@ -2,6 +2,34 @@
 
     var l = abp.localization.getResource('Blogging');
 
+    var initSocialShareLinks = function () {
+
+        var re = new RegExp(/^.*\//);
+        var rootUrl = re.exec(window.location.href);
+
+        var pageHeader = $("#PostTitle").text();
+        var blogName = $('#BlogFullName').attr('name');
+
+        $('#TwitterShareLink').attr('href',
+            'https://twitter.com/intent/tweet?text=' + encodeURI(pageHeader + " | " + blogName + " | " + window.location.href)
+        );
+
+        $('#LinkedinShareLink').attr('href',
+            'https://www.linkedin.com/shareArticle?'
+            + 'url=' + encodeURI(window.location.href) + '&'
+            + 'mini=true&'
+            + "summary=" + encodeURI(blogName) + '&'
+            + "title=" + encodeURI(pageHeader) + '&'
+            + "source=" + encodeURI(rootUrl)
+        );
+
+        $('#EmailShareLink').attr('href',
+            'mailto:?'
+            + 'body=' + encodeURI('I want you to look at ' + window.location.href) + '&'
+            + "subject=" + encodeURI(pageHeader + ' | ' + blogName) + '&'
+        );
+    };
+
     $('div .replyForm').hide();
 
     $('div .editForm').hide();
@@ -134,5 +162,9 @@
             scrollTop: ($('#' + $('#FocusCommentId').val()).offset().top - 150)
         }, 500);
     }
+
+    $(".post-content a[href^='http']").attr('target', '_blank');
+
+    initSocialShareLinks();
 
 })(jQuery);

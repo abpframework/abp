@@ -43,6 +43,33 @@
       ]
     },
     {
+      "text": "指南",
+      "items": [
+        {
+          "text": "自定义应用模块",
+          "path": "Customizing-Application-Modules-Guide.md",
+          "items": [
+            {
+              "text": "扩展实体",
+              "path": "Customizing-Application-Modules-Extending-Entities.md"
+            },
+            {
+              "text": "重写服务",
+              "path": "Customizing-Application-Modules-Overriding-Services.md"
+            },
+            {
+              "text": "重写用户界面",
+              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+            }
+          ]
+        },
+        {
+          "text": "从ASP.NET Boilerplate迁移",
+          "path": "AspNet-Boilerplate-Migration-Guide.md"
+        }
+      ]
+    },
+    {
       "text": "CLI",
       "path": "CLI.md"
     },
@@ -198,7 +225,8 @@
               "text": "领域服务"
             },
             {
-              "text": "规约"
+              "text": "规约",
+              "path": "Specifications.md"
             }
           ]
         },
@@ -220,46 +248,63 @@
       ]
     },
     {
-      "text": "ASP.NET Core",
+      "text": "API",
       "items": [
         {
-          "text": "API",
+          "text": "自动API控制器",
+          "path": "API/Auto-API-Controllers.md"
+        },
+        {
+          "text": "动态C# API客户端",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
+        }
+      ]
+    },
+    {
+      "text": "用户界面",
+      "items": [
+        {
+          "text": "ASP.NET Core",
           "items": [
             {
-              "text": "自动API控制器",
-              "path": "AspNetCore/Auto-API-Controllers.md"
+              "text": "客户端包管理",
+              "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
-              "text": "动态C# API客户端",
-              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+              "text": "捆绑&压缩",
+              "path": "UI/AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "仪表板和小部件(Widget)系统",
+              "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "主题化",
+              "path": "UI/AspNetCore/Theming.md"
             }
           ]
         },
         {
-          "text": "用户界面",
+          "text": "Angular",
           "items": [
             {
-              "text": "客户端包管理",
-              "path": "AspNetCore/Client-Side-Package-Management.md"
+              "text": "本地化",
+              "path": "UI/Angular/Localization.md"
             },
             {
-              "text": "捆绑&压缩",
-              "path": "AspNetCore/Bundling-Minification.md"
+              "text": "权限管理",
+              "path": "UI/Angular/Permission-Management.md"
             },
             {
-              "text": "Tag Helpers",
-              "path": "AspNetCore/Tag-Helpers/Index.md"
-            },
-            {
-              "text": "仪表板和小部件(Widget)系统",
-              "path": "AspNetCore/Widgets.md"
-            },
-            {
-              "text": "主题化",
-              "path": "AspNetCore/Theming.md"
+              "text": "替换组件",
+              "path": "UI/Angular/Component-Replacement.md"
             }
           ]
-        }
+        } 
       ]
     },
     {

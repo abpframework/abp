@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
 
     $(function () {
         var initNavigationFilter = function (navigationContainerId) {
@@ -56,11 +56,17 @@
                 });
             };
 
-            $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
+            $("#filter").keyup(function (e) {
                 filterDocumentItems(e.target.value);
 
                 if (e.key === "Enter") {
                     gotoFilteredDocumentIfThereIsOnlyOne();
+                }
+            });
+
+            $("#fullsearch").keyup(function (e) {
+                if (e.key === "Enter") {
+                    window.open($(this).data("fullsearch-url") + this.value);
                 }
             });
         };

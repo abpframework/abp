@@ -54,8 +54,31 @@
       ]
     },
     {
-      "text": "ASP.NET Boilerplate Migration Guide",
-      "path": "AspNet-Boilerplate-Migration-Guide.md"
+      "text": "Guides",
+      "items": [
+        {
+          "text": "Customizing the Application Modules",
+          "path": "Customizing-Application-Modules-Guide.md",
+          "items": [
+            {
+              "text": "Extending Entities",
+              "path": "Customizing-Application-Modules-Extending-Entities.md"
+            },
+            {
+              "text": "Overriding Services",
+              "path": "Customizing-Application-Modules-Overriding-Services.md"
+            },
+            {
+              "text": "Overriding the User Interface",
+              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+            }
+          ]
+        },
+        {
+          "text": "Migrating from the ASP.NET Boilerplate",
+          "path": "AspNet-Boilerplate-Migration-Guide.md"
+        }
+      ]
     },
     {
       "text": "CLI",
@@ -219,7 +242,8 @@
               "text": "Domain Services"
             },
             {
-              "text": "Specifications"
+              "text": "Specifications",
+              "path": "Specifications.md"
             }
           ]
         },
@@ -241,43 +265,68 @@
       ]
     },
     {
-      "text": "ASP.NET Core",
+      "text": "API",
       "items": [
         {
-          "text": "API",
+          "text": "Auto API Controllers",
+          "path": "API/Auto-API-Controllers.md"
+        },
+        {
+          "text": "Dynamic C# API Clients",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
+        }
+      ]
+    },
+    {
+      "text": "User Interface",
+      "items": [
+        {
+          "text": "ASP.NET Core",
           "items": [
             {
-              "text": "Auto API Controllers",
-              "path": "AspNetCore/Auto-API-Controllers.md"
+              "text": "Client Side Package Management",
+              "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
-              "text": "Dynamic C# API Clients",
-              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+              "text": "Bundling & Minification",
+              "path": "UI/AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "Widgets",
+              "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "Theming",
+              "path": "UI/AspNetCore/Theming.md"
             }
           ]
         },
         {
-          "text": "User Interface",
+          "text": "Angular",
           "items": [
             {
-              "text": "Client Side Package Management",
-              "path": "AspNetCore/Client-Side-Package-Management.md"
+              "text": "Localization",
+              "path": "UI/Angular/Localization.md"
             },
             {
-              "text": "Bundling & Minification",
-              "path": "AspNetCore/Bundling-Minification.md"
+              "text": "Permission Management",
+              "path": "UI/Angular/Permission-Management.md"
             },
             {
-              "text": "Tag Helpers",
-              "path": "AspNetCore/Tag-Helpers/Index.md"
+              "text": "Config State",
+              "path": "UI/Angular/Config-State.md"
             },
             {
-              "text": "Widgets",
-              "path": "AspNetCore/Widgets.md"
+              "text": "Component Replacement",
+              "path": "UI/Angular/Component-Replacement.md"
             },
             {
-              "text": "Theming",
-              "path": "AspNetCore/Theming.md"
+              "text": "Custom Setting Page",
+              "path": "UI/Angular/Custom-Setting-Page.md"
             }
           ]
         }

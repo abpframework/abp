@@ -13,7 +13,7 @@ namespace Volo.Abp.FeatureManagement
             FeatureManagementStore = featureManagementStore;
         }
 
-        public Task<string> GetOrNullAsync(
+        public virtual Task<string> GetOrNullAsync(
             string name,
             string providerName,
             string providerKey)

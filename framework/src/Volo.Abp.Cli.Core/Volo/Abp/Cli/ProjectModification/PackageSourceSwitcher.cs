@@ -31,55 +31,74 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             _packageSourceAdder.Add("ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
+            var solutionPath = GetSolutionPath(commandLineArgs);
+            var solutionFolder = GetSolutionFolder(commandLineArgs);
+
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
-                GetSolutionPath(commandLineArgs),
+                solutionPath,
                 true);
 
             await _npmPackagesUpdater.Update(
-                Path.GetFileName(GetSolutionPath(commandLineArgs)),
+                solutionFolder,
                 true);
         }
 
         public async Task SwitchToStable(CommandLineArgs commandLineArgs)
         {
+            var solutionPath = GetSolutionPath(commandLineArgs);
+            var solutionFolder = GetSolutionFolder(commandLineArgs);
+
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
-                GetSolutionPath(commandLineArgs),
+                solutionPath,
                 false,
                 true);
 
             await _npmPackagesUpdater.Update(
-                Path.GetFileName(GetSolutionPath(commandLineArgs)),
-                false, 
+                solutionFolder,
+                false,
                 true);
         }
 
-      
         private string GetSolutionPath(CommandLineArgs commandLineArgs)
         {
-            var solutionPath = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long);
+            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
+                            ?? Directory.GetCurrentDirectory();
+
+            var solutionPath = Directory.GetFiles(directory, "*.sln").FirstOrDefault();
 
             if (solutionPath == null)
             {
-                try
+                var subDirectories = Directory.GetDirectories(directory);
+
+                foreach (var subDirectory in subDirectories)
                 {
-                    solutionPath = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln").Single();
+                    var slnInSubDirectory = Directory.GetFiles(subDirectory, "*.sln").FirstOrDefault();
+
+                    if (slnInSubDirectory != null)
+                    {
+                        return Path.Combine(subDirectory, slnInSubDirectory);
+                    }
                 }
-                catch (Exception)
-                {
-                    Logger.LogError("There is no solution or more that one solution in current directory.");
-                    throw;
-                }
+
+                Logger.LogError("There is no solution or more that one solution in current directory.");
+                return null;
             }
 
             return solutionPath;
         }
 
+        private string GetSolutionFolder(CommandLineArgs commandLineArgs)
+        {
+            return commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
+                   ?? Directory.GetCurrentDirectory();
+        }
+
         public static class Options
         {
-            public static class SolutionPath
+            public static class SolutionDirectory
             {
-                public const string Short = "sp";
-                public const string Long = "solution-path";
+                public const string Short = "sd";
+                public const string Long = "solution-directory";
             }
         }
     }

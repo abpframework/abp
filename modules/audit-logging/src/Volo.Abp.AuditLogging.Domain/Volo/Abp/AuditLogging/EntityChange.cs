@@ -26,7 +26,7 @@ namespace Volo.Abp.AuditLogging
 
         public virtual string EntityTypeFullName { get; protected set; }
 
-        public ICollection<EntityPropertyChange> PropertyChanges { get; protected set; }
+        public virtual ICollection<EntityPropertyChange> PropertyChanges { get; protected set; }
 
         public virtual Dictionary<string, object> ExtraProperties { get; protected set; }
 

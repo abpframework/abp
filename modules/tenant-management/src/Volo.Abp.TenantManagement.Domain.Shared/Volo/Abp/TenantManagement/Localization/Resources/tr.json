@@ -15,6 +15,8 @@
     "Permission:Edit": "Düzenleme",
     "Permission:Delete": "Silme",
     "Permission:ManageConnectionStrings": "Bağlantı cümlelerini yönet",
-    "Permission:ManageFeatures": "Özellikleri yönet"
+    "Permission:ManageFeatures": "Özellikleri yönet",
+    "DisplayName:AdminEmailAddress": "Admin Eposta Adresi",
+    "DisplayName:AdminPassword": "Admin Şifresi"
   }
 }

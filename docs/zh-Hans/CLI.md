@@ -1,4 +1,4 @@
-﻿# ABP CLI
+# ABP CLI
 
 ABP CLI (命令行接口) 是一个命令行工具,用来执行基于ABP解决方案的一些常见操作.
 
@@ -48,6 +48,9 @@ abp new Acme.BookStore
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项：
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+    * `--mobile` 或者 `-m`: 指定移动应用程序框架. 默认框架是 `react-native`. 其他选项:
+      * `none`: 不包含移动应用程序.
+      * `react-native`: React Native.
     * `--database-provider` 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
@@ -109,6 +112,7 @@ abp add-module Volo.Blogging
 * `--solution` 或 `-s`: 指定解决方案 (.sln) 路径. 如果未指定,CLI会尝试在当前目录中寻找.sln文件.
 * `--skip-db-migrations`: 对于EF Core 数据库提供程序,它会自动添加新代码的第一次迁移 (`Add-Migration`) 并且在需要时更新数据库 (`Update-Database`). 指定此选项可跳过此操作.
 * `-sp` 或 `--startup-project`: 启动项目的项目文件夹的相对路径. 默认值是当前文件夹.
+* `--with-source-code`: 添加模块的源代码,而不是NuGet/NPM软件包.
 
 ### update
 
@@ -147,7 +151,7 @@ abp switch-to-stable [options]
 
 #### Options
 
-`--solution-path` 或 `-sp`: 指定解决方案(.sln)文件路径. 如果未指定,CLI试寻找当前目录中的.sln文件.
+`--solution-directory` 或 `-sd`: 指定解决方案文件夹. 解决方案应该在指定文件夹或子文件夹中. 如果未指定,默认为当前目录.
 
 ### login
 

@@ -29,7 +29,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp switch-to-preview [options]");
             sb.AppendLine(""); 
             sb.AppendLine("Options:");
-            sb.AppendLine("-sp|--solution-path");
+            sb.AppendLine("-sd|--solution-directory");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
