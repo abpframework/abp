@@ -82,7 +82,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             // Exclude unwanted or known options.
             var options = args.ExtraProperties
                 .Where(x => !x.Key.Equals(CliConsts.Command, StringComparison.InvariantCultureIgnoreCase))
-                .Where(x => !x.Key.Equals("tiered", StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.Tiered.Long, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.DatabaseProvider.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.DatabaseProvider.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.OutputFolder.Long, StringComparison.InvariantCultureIgnoreCase) &&
@@ -102,7 +102,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 Tool = Options.ToolName,
                 Command = args.ExtraProperties.ContainsKey(CliConsts.Command) ? args.ExtraProperties[CliConsts.Command] : "",
                 DatabaseProvider = args.DatabaseProvider.ToProviderName(),
-                IsTiered = args.ExtraProperties.ContainsKey("tiered"),
+                IsTiered = args.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long),
                 UiFramework = args.UiFramework.ToFrameworkName(),
                 Options = JsonSerializer.Serialize(options),
                 ProjectName = args.SolutionName.FullName,
