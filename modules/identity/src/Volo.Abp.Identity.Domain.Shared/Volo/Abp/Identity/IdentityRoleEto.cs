@@ -9,9 +9,9 @@ namespace Volo.Abp.Identity
 
         public Guid? TenantId { get; set; }
 
-        public virtual string Name { get; protected internal set; }
+        public virtual string Name { get; set; }
 
-        public virtual string NormalizedName { get; protected internal set; }
+        public virtual string NormalizedName { get; set; }
 
         public virtual bool IsDefault { get; set; }
 
