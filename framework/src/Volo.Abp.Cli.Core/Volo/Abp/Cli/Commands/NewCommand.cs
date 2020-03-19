@@ -55,6 +55,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Version: " + version);
             }
 
+            var isTiered = commandLineArgs.Options.ContainsKey(Options.Tiered.Long);
+            if (isTiered)
+            {
+                Logger.LogInformation("Tiered: yes");
+            }
+
             var databaseProvider = GetDatabaseProvider(commandLineArgs);
             if (databaseProvider != DatabaseProvider.NotSpecified)
             {
@@ -96,14 +102,9 @@ namespace Volo.Abp.Cli.Commands
             var outputFolderRoot =
                 outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory();
 
-            if (createSolutionFolder)
-            {
-                outputFolder = Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName);
-            }
-            else
-            {
-                outputFolder = outputFolderRoot;
-            }
+            outputFolder = createSolutionFolder ?
+                Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
+                outputFolderRoot;
 
             if (!Directory.Exists(outputFolder))
             {
@@ -232,7 +233,7 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
+        protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
             switch (optionValue)
@@ -248,7 +249,7 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
+        protected virtual MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
             switch (optionValue)
@@ -315,6 +316,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "csf";
                 public const string Long = "create-solution-folder";
+            }
+
+            public static class Tiered
+            {
+                public const string Long = "tiered";
             }
         }
     }
