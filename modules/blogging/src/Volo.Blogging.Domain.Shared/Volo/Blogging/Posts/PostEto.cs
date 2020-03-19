@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using Volo.Blogging.Tagging;
 
 namespace Volo.Blogging.Posts
 {
@@ -24,6 +25,6 @@ namespace Volo.Blogging.Posts
 
         public int ReadCount { get; set; }
 
-        public ICollection<PostTag> Tags { get; set; }
+        public ICollection<TagEto> Tags { get; set; }
     }
 }
