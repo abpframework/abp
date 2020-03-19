@@ -186,5 +186,3 @@ Cards has default 100% with and can be changed with custom CSS, grid classes, gr
     </abp-card>
 </div>
 ````
-
-###  
