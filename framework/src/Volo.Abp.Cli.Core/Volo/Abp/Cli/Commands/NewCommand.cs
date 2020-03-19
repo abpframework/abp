@@ -135,6 +135,12 @@ namespace Volo.Abp.Cli.Commands
                     var zipEntry = zipInputStream.GetNextEntry();
                     while (zipEntry != null)
                     {
+                        if (string.IsNullOrWhiteSpace(zipEntry.Name))
+                        {
+                            zipEntry = zipInputStream.GetNextEntry();
+                            continue;
+                        }
+
                         var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
                         var directoryName = Path.GetDirectoryName(fullZipToPath);
 
