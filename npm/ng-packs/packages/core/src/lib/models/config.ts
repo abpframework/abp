@@ -1,5 +1,5 @@
-import { AuthConfig } from 'angular-oauth2-oidc';
 import { Type } from '@angular/core';
+import { AuthConfig } from 'angular-oauth2-oidc';
 import { ApplicationConfiguration } from './application-configuration';
 import { ABP } from './common';
 
@@ -13,6 +13,7 @@ export namespace Config {
   export interface Environment {
     application: Application;
     production: boolean;
+    hmr?: boolean;
     oAuthConfig: AuthConfig;
     apis: Apis;
     localization: { defaultResourceName: string };
@@ -23,9 +24,15 @@ export namespace Config {
     logoUrl?: string;
   }
 
-  export interface Apis {
-    [key: string]: { [key: string]: string };
-  }
+  export type ApiConfig = {
+    [key: string]: string;
+    url: string;
+  };
+
+  export type Apis = {
+    [key: string]: ApiConfig;
+    default: ApiConfig;
+  };
 
   export interface Requirements {
     layouts: Type<any>[];
