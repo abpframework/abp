@@ -20,7 +20,6 @@ $Registry = "http://localhost:4873";
 }
 
 $commands = (
-  "npm-cli-login -u $User -p $Pass -e $Email -r $Registry",
   "cd ng-packs\scripts",
   "npm install",
   "npm run publish-packages -- --nextVersion $Version --preview",
