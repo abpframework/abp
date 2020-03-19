@@ -178,6 +178,29 @@ Logs you out by removing the session token from your computer.
 abp logout
 ```
 
+### generate-proxy
+
+Generates typescript service proxies and DTOs
+
+Basic usage:
+
+````bash
+abp generate-proxy [options] 
+````
+
+Example:
+
+````bash
+abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
+````
+
+#### Options
+
+* `--apiUrl` or `-a`: If you don't give this option, the default api url in your environment.ts file is used, but you can always use a specific api source with this option.
+* `--ui` or `-u`: Specifies the UI framework. Default framework is angular. Currently there is only angular option, but we will increase the options with our new cli updates. Stay tuned!
+* `--module` or `-m`: Specifies the module name. Default module name is app. If you want to all modules. You can give `--module all` command.
+
+
 ### help
 
 Writes basic usage information of the CLI.
