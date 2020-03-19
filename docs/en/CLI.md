@@ -59,6 +59,7 @@ abp new Acme.BookStore
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D\localTemplate` or `https://<your url>.zip`).
+* `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 
 ### add-package
 
@@ -176,6 +177,29 @@ Logs you out by removing the session token from your computer.
 ```
 abp logout
 ```
+
+### generate-proxy
+
+Generates typescript service proxies and DTOs
+
+Basic usage:
+
+````bash
+abp generate-proxy [options] 
+````
+
+Example:
+
+````bash
+abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
+````
+
+#### Options
+
+* `--apiUrl` or `-a`: If you don't give this option, the default api url in your environment.ts file is used, but you can always use a specific api source with this option.
+* `--ui` or `-u`: Specifies the UI framework. Default framework is angular. Currently there is only angular option, but we will increase the options with our new cli updates. Stay tuned!
+* `--module` or `-m`: Specifies the module name. Default module name is app. If you want to all modules. You can give `--module all` command.
+
 
 ### help
 

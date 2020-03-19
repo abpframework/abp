@@ -92,6 +92,7 @@ $projects = (
     "framework/src/Volo.Abp.MultiTenancy",
     "framework/src/Volo.Abp.Minify",
     "framework/src/Volo.Abp.ObjectMapping",
+    "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.RabbitMQ",
     "framework/src/Volo.Abp.Security",
     "framework/src/Volo.Abp.Serialization",

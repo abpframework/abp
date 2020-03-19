@@ -85,10 +85,25 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Template Source: " + templateSource);
             }
 
+            var createSolutionFolder = (commandLineArgs.Options.GetOrNull(Options.CreateSolutionFolder.Short, Options.CreateSolutionFolder.Long) ?? "true").ToLowerInvariant() != "false";
+            if (!createSolutionFolder)
+            {
+                Logger.LogInformation("Create Solution Folder: false");
+            }
+
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
 
-            outputFolder = Path.Combine(outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory(),
-                    SolutionName.Parse(projectName).FullName);
+            var outputFolderRoot =
+                outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory();
+
+            if (createSolutionFolder)
+            {
+                outputFolder = Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName);
+            }
+            else
+            {
+                outputFolder = outputFolderRoot;
+            }
 
             if (!Directory.Exists(outputFolder))
             {
@@ -120,6 +135,12 @@ namespace Volo.Abp.Cli.Commands
                     var zipEntry = zipInputStream.GetNextEntry();
                     while (zipEntry != null)
                     {
+                        if (string.IsNullOrWhiteSpace(zipEntry.Name))
+                        {
+                            zipEntry = zipInputStream.GetNextEntry();
+                            continue;
+                        }
+
                         var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
                         var directoryName = Path.GetDirectoryName(fullZipToPath);
 
@@ -288,6 +309,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "ts";
                 public const string Long = "template-source";
+            }
+
+            public static class CreateSolutionFolder
+            {
+                public const string Short = "csf";
+                public const string Long = "create-solution-folder";
             }
         }
     }
