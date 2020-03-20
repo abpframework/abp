@@ -23,6 +23,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
         protected virtual void SetDisabled(TagHelperContext context, TagHelperOutput output)
         {
             var triggerAsHtml = TagHelper.Dismissible ?? false ? "datatrigger=\"focus\" " : "";
+            // If not dismissable for hoverable condition
+            if (string.IsNullOrEmpty(triggerAsHtml))
+            {
+                triggerAsHtml = TagHelper.Hoverable ?? false ? "data-trigger=\"hover\" " : string.Empty;
+            }
             var dataPlacementAsHtml = "data-placement=\"" + GetDirectory().ToString().ToLowerInvariant() + "\" ";
             var titleAttribute = output.Attributes.FirstOrDefault(at => at.Name == "title");
             var titleAsHtml = titleAttribute == null ? "" : "title=\"" + titleAttribute.Value + "\" ";
@@ -40,6 +45,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
             if (TagHelper.Dismissible ?? false)
             {
                 output.Attributes.Add("data-trigger", "focus");
+            }
+            // Dismissible has priority over hoverable
+            else if (TagHelper.Hoverable ?? false)
+            {
+                output.Attributes.Add("data-trigger", "hover");
             }
         }
 
