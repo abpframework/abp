@@ -19,10 +19,15 @@ export class RestService {
     return throwError(err);
   }
 
-  request<T, R>(request: HttpRequest<T> | Rest.Request<T>, config?: Rest.Config, api?: string): Observable<R> {
+  request<T, R>(
+    request: HttpRequest<T> | Rest.Request<T>,
+    config?: Rest.Config,
+    api?: string,
+  ): Observable<R> {
     config = config || ({} as Rest.Config);
     const { observe = Rest.Observe.Body, skipHandleError } = config;
-    const url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
+    const url =
+      (api || this.store.selectSnapshot(ConfigState.getApiUrl(config.apiName))) + request.url;
     const { method, params, ...options } = request;
 
     return this.http
@@ -32,7 +37,8 @@ export class RestService {
           params: Object.keys(params).reduce(
             (acc, key) => ({
               ...acc,
-              ...(typeof params[key] !== 'undefined' && params[key] !== '' && { [key]: params[key] }),
+              ...(typeof params[key] !== 'undefined' &&
+                params[key] !== '' && { [key]: params[key] }),
             }),
             {},
           ),
