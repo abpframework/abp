@@ -23,6 +23,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
                 pipeline.Steps.Add(new LicenseCodeReplaceStep());
             }
 
+            if (context.BuildArgs.UiFramework == UiFramework.Mvc && context.BuildArgs.MobileApp == MobileApp.None)
+            {
+                pipeline.Steps.Add(new RemoveRootFolderStep());
+            }
+
             pipeline.Steps.Add(new CreateProjectResultZipStep());
 
             return pipeline;

@@ -96,6 +96,7 @@ namespace Volo.Docs.Documents
                 {
                     leaf.CreationTime = documentUpdateInfo.CreationTime;
                     leaf.LastUpdatedTime = documentUpdateInfo.LastUpdatedTime;
+                    leaf.LastSignificantUpdateTime = documentUpdateInfo.LastSignificantUpdateTime;
                 }
             }
 
@@ -189,12 +190,12 @@ namespace Volo.Docs.Documents
         {
             version = string.IsNullOrWhiteSpace(version) ? project.LatestVersionBranchName : version;
 
-            async Task<DocumentWithDetailsDto> GetDocumentAsync()
+            async Task<DocumentWithDetailsDto> GetDocumentAsync(Document oldDocument = null)
             {
                 Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
 
                 var source = _documentStoreFactory.Create(project.DocumentStoreType);
-                var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version);
+                var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version, oldDocument?.LastSignificantUpdateTime);
 
                 await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version);
                 await _documentRepository.InsertAsync(sourceDocument, true);
@@ -206,7 +207,8 @@ namespace Volo.Docs.Documents
                 {
                     Name = sourceDocument.Name,
                     CreationTime = sourceDocument.CreationTime,
-                    LastUpdatedTime = sourceDocument.LastUpdatedTime
+                    LastUpdatedTime = sourceDocument.LastUpdatedTime,
+                    LastSignificantUpdateTime = sourceDocument.LastSignificantUpdateTime
                 });
 
                 return CreateDocumentWithDetailsDto(project, sourceDocument);
@@ -229,7 +231,7 @@ namespace Volo.Docs.Documents
                 //TODO: Configurable cache time?
                 document.LastCachedTime + TimeSpan.FromHours(2) < DateTime.Now)
             {
-                return await GetDocumentAsync();
+                return await GetDocumentAsync(document);
             }
 
             var cacheKey = $"DocumentUpdateInfo{document.ProjectId}#{document.Name}#{document.LanguageCode}#{document.Version}";
@@ -238,6 +240,7 @@ namespace Volo.Docs.Documents
                 Name = document.Name,
                 CreationTime = document.CreationTime,
                 LastUpdatedTime = document.LastUpdatedTime,
+                LastSignificantUpdateTime = document.LastSignificantUpdateTime
             });
 
             return CreateDocumentWithDetailsDto(project, document);

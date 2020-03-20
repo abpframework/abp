@@ -99,26 +99,21 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual async Task<bool> TryUpdatePackage(string file, JProperty package,
             bool includePreviews = false, bool switchToStable = false)
         {
-            var updated = false;
             var currentVersion = (string)package.Value;
 
             var version = await GetLatestVersion(package, currentVersion, includePreviews, switchToStable);
 
-            var versionWithPrefix = $"^{version}";
+            var versionWithPrefix = $"~{version}";
 
             if (versionWithPrefix == currentVersion)
             {
                 return false;
             }
-            else
-            {
-                updated = true;
-            }
 
             package.Value.Replace(versionWithPrefix);
 
             Logger.LogInformation($"Updated {package.Name} to {version} in {file.Replace(Directory.GetCurrentDirectory(), "")}.");
-            return updated;
+            return true;
         }
 
         protected virtual async Task<string> GetLatestVersion(JProperty package, string currentVersion,

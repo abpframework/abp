@@ -14,7 +14,7 @@
     "lint": "ng lint",
     "scripts:build": "cd scripts && yarn && yarn build",
     "prepare:workspace": "yarn scripts:build",
-    "ci": "yarn prepare:workspace && yarn ci:test && yarn ng lint && yarn ci:build",
+    "ci": "yarn ng lint && yarn prepare:workspace && yarn ci:test && yarn ci:build",
     "ci:test": "ng test --coverage=false",
     "ci:build": "cd scripts && yarn build:prod",
     "lerna": "lerna",

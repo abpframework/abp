@@ -34,6 +34,8 @@ namespace Volo.Docs.Documents
         public virtual DateTime CreationTime { get; set; }
         
         public virtual DateTime LastUpdatedTime { get; set; }
+        
+        public virtual DateTime? LastSignificantUpdateTime { get; set; }
 
         public virtual DateTime LastCachedTime { get; set; }
 
@@ -60,7 +62,8 @@ namespace Volo.Docs.Documents
             [NotNull] string localDirectory,
             DateTime creationTime,
             DateTime lastUpdatedTime,
-            DateTime lastCachedTime
+            DateTime lastCachedTime,
+            DateTime? lastSignificantUpdateTime = null
         )
         {
             Id = id;
@@ -80,6 +83,7 @@ namespace Volo.Docs.Documents
             CreationTime = creationTime;
             LastUpdatedTime = lastUpdatedTime;
             LastCachedTime = lastCachedTime;
+            LastSignificantUpdateTime = lastSignificantUpdateTime;
 
             Contributors = new List<DocumentContributor>();
             ExtraProperties = new Dictionary<string, object>();

@@ -21,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago
                 ? "en"
                 : CultureInfo.CurrentUICulture.Name;
 
-            if (TryAddCultureFile(context, cultureName))
+            if (TryAddCultureFile(context, MapCultureName(cultureName)))
             {
                 return;
             }
@@ -38,6 +38,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago
 
             context.Files.AddIfNotContains(filePath);
             return true;
+        }
+        
+        protected virtual string MapCultureName(string cultureName)
+        {
+            return cultureName;
         }
     }
 }

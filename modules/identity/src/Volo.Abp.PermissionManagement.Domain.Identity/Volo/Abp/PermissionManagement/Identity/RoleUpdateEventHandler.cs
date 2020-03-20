@@ -25,7 +25,7 @@ namespace Volo.Abp.PermissionManagement.Identity
             PermissionGrantRepository = permissionGrantRepository;
         }
 
-        public async Task HandleEventAsync(IdentityRoleNameChangedEvent eventData)
+        public virtual async Task HandleEventAsync(IdentityRoleNameChangedEvent eventData)
         {
             var role = await RoleRepository.FindAsync(eventData.IdentityRole.Id, false);
             if (role == null)

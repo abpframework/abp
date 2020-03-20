@@ -55,6 +55,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Version: " + version);
             }
 
+            var isTiered = commandLineArgs.Options.ContainsKey(Options.Tiered.Long);
+            if (isTiered)
+            {
+                Logger.LogInformation("Tiered: yes");
+            }
+
             var databaseProvider = GetDatabaseProvider(commandLineArgs);
             if (databaseProvider != DatabaseProvider.NotSpecified)
             {
@@ -85,10 +91,20 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Template Source: " + templateSource);
             }
 
+            var createSolutionFolder = (commandLineArgs.Options.GetOrNull(Options.CreateSolutionFolder.Short, Options.CreateSolutionFolder.Long) ?? "true").ToLowerInvariant() != "false";
+            if (!createSolutionFolder)
+            {
+                Logger.LogInformation("Create Solution Folder: false");
+            }
+
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
 
-            outputFolder = Path.Combine(outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory(),
-                    SolutionName.Parse(projectName).FullName);
+            var outputFolderRoot =
+                outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory();
+
+            outputFolder = createSolutionFolder ?
+                Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
+                outputFolderRoot;
 
             if (!Directory.Exists(outputFolder))
             {
@@ -120,6 +136,12 @@ namespace Volo.Abp.Cli.Commands
                     var zipEntry = zipInputStream.GetNextEntry();
                     while (zipEntry != null)
                     {
+                        if (string.IsNullOrWhiteSpace(zipEntry.Name))
+                        {
+                            zipEntry = zipInputStream.GetNextEntry();
+                            continue;
+                        }
+
                         var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
                         var directoryName = Path.GetDirectoryName(fullZipToPath);
 
@@ -162,6 +184,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("-t|--template <template-name>               (default: app)");
             sb.AppendLine("-u|--ui <ui-framework>                      (if supported by the template)");
+            sb.AppendLine("-m|--mobile <mobile-framework>              (if supported by the template)");
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
@@ -177,6 +200,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore --tiered");
             sb.AppendLine("  abp new Acme.BookStore -u angular");
             sb.AppendLine("  abp new Acme.BookStore -u angular -d mongodb");
+            sb.AppendLine("  abp new Acme.BookStore -m none");
+            sb.AppendLine("  abp new Acme.BookStore -m react-native");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");
@@ -208,7 +233,7 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
+        protected virtual UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
             switch (optionValue)
@@ -224,7 +249,7 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
+        protected virtual MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
             switch (optionValue)
@@ -285,6 +310,17 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "ts";
                 public const string Long = "template-source";
+            }
+
+            public static class CreateSolutionFolder
+            {
+                public const string Short = "csf";
+                public const string Long = "create-solution-folder";
+            }
+
+            public static class Tiered
+            {
+                public const string Long = "tiered";
             }
         }
     }

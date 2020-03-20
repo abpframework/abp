@@ -10,7 +10,7 @@ namespace Volo.Abp.TenantManagement.Web
             CreateRoleMappings();
         }
 
-        private void CreateRoleMappings()
+        protected virtual void CreateRoleMappings()
         {
             //List
             CreateMap<TenantDto, EditModalModel.TenantInfoModel>();
