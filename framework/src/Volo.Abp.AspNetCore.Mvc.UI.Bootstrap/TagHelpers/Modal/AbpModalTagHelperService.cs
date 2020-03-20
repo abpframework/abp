@@ -58,7 +58,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 
         protected virtual string GetDataAttributes()
         {
-
             if (TagHelper.Static == true)
             {
                 return "data-backdrop=\"static\" ";
