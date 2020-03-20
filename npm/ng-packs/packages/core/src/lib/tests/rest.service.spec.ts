@@ -1,38 +1,69 @@
+import { ConfigState } from '@abp/ng.core';
 import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
-import { Subscription, timer, interval, throwError, of } from 'rxjs';
-import { mapTo, catchError } from 'rxjs/operators';
-import { RestService } from '../services/rest.service';
-import { Rest } from '../models';
+import { NgxsModule, Store } from '@ngxs/store';
+import { interval, of, Subscription, throwError, timer } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { RestOccurError } from '../actions';
+import { Rest } from '../models';
+import { RestService } from '../services/rest.service';
 
 describe('HttpClient testing', () => {
   let spectator: SpectatorHttp<RestService>;
   let store: SpyObject<Store>;
   const api = 'https://abp.io';
 
-  const createHttp = createHttpFactory({ dataService: RestService, mocks: [Store] });
+  const createHttp = createHttpFactory({
+    dataService: RestService,
+    imports: [NgxsModule.forRoot([ConfigState])],
+  });
 
   beforeEach(() => {
     spectator = createHttp();
     store = spectator.get(Store);
-    store.selectSnapshot.andReturn(api);
+    store.reset({
+      ConfigState: {
+        environment: {
+          apis: {
+            default: {
+              url: api,
+            },
+            foo: {
+              url: 'bar',
+            },
+          },
+        },
+      },
+    });
   });
 
   test('should send a GET request with params', () => {
-    spectator.service.request({ method: HttpMethod.GET, url: '/test', params: { id: 1 } }).subscribe();
+    spectator.service
+      .request({ method: HttpMethod.GET, url: '/test', params: { id: 1 } })
+      .subscribe();
     spectator.expectOne(api + '/test?id=1', HttpMethod.GET);
   });
 
   test('should send a POST request with body', () => {
-    spectator.service.request({ method: HttpMethod.POST, url: '/test', body: { id: 1 } }).subscribe();
+    spectator.service
+      .request({ method: HttpMethod.POST, url: '/test', body: { id: 1 } })
+      .subscribe();
     const req = spectator.expectOne(api + '/test', HttpMethod.POST);
     expect(req.request.body['id']).toEqual(1);
   });
 
   test('should use the specific api', () => {
-    spectator.service.request({ method: HttpMethod.GET, url: '/test' }, null, 'http://test.api').subscribe();
+    spectator.service
+      .request({ method: HttpMethod.GET, url: '/test' }, null, 'http://test.api')
+      .subscribe();
     spectator.expectOne('http://test.api' + '/test', HttpMethod.GET);
+  });
+
+  test('should use the url of a specific API when apiName is given', () => {
+    spectator.service
+      .request({ method: HttpMethod.GET, url: '/test' }, { apiName: 'foo' })
+      .subscribe();
+
+    spectator.expectOne('bar' + '/test', HttpMethod.GET);
   });
 
   test('should close the subscriber when observe equal to body', done => {
@@ -82,7 +113,10 @@ describe('HttpClient testing', () => {
     const spy = jest.spyOn(store, 'dispatch');
 
     spectator.service
-      .request({ method: HttpMethod.GET, url: '/test' }, { observe: Rest.Observe.Events, skipHandleError: true })
+      .request(
+        { method: HttpMethod.GET, url: '/test' },
+        { observe: Rest.Observe.Events, skipHandleError: true },
+      )
       .pipe(
         catchError(err => {
           expect(err).toBeTruthy();

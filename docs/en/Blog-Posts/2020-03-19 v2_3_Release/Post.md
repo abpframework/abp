@@ -1,12 +1,12 @@
-# ABP Framework v2.3.0 Has Been Released
+# ABP Framework v2.3.0 Has Been Released!
 
-In the days of **coronavirus**, we have a good news: We've released **ABP Framework v2.3** and this post will explain **what's new** with this release and **what we've done** in the last two weeks.
+In the days of **coronavirus**, we have released **ABP Framework v2.3** and this post will explain **what's new** with this release and **what we've done** in the last two weeks.
 
 ## About the Coronavirus & Our Team
 
 **We are very sad** about the coronavirus case. As [Volosoft](https://volosoft.com/) team, we have **remote workers** working in their home in different countries. Beginning from the last week, we've **completely started to work remotely** from home including our main office employees.
 
-We believe in and pray for that the World will overcome this issue in a short time.
+We believe in and pray for that the humanity will overcome this issue in a short time.
 
 ## About the Release Cycle
 
@@ -26,9 +26,9 @@ We have finally completed the **react native mobile application**. It currently 
 
 A few screenshots from the application:
 
-![mobile-ui](mobile-ui.png)
+![mobile-ui](react-native-ui.png)
 
-It doesn't have much functionality but it is a **perfect starting point** for your own mobile application since it is completely integrated to the backend.
+It doesn't have much functionality but it is a **perfect starting point** for your own mobile application since it is completely integrated to the backend and supports multi-tenancy.
 
 ### Angular TypeScript Proxy Generator
 
@@ -133,10 +133,10 @@ See [the release notes](https://github.com/abpframework/abp/releases/tag/2.3.0) 
 
 We have the following goals for the next few months:
 
-* Complete the documentation and samples, write more tutorials.
-* Make the framework and existing modules more customizable and extensible.
-* Integrate to gRPC & implement gRPC endpoint for pre-built modules ([#2882](https://github.com/abpframework/abp/issues/2882)).
-* Create a Blazor UI for the ABP Framework & implement it for all the modules and startup templates ([#394](https://github.com/abpframework/abp/issues/394)).
-* Add new features to pre-built modules and create new modules for the [ABP Commercial](https://commercial.abp.io/).
+* Complete the **documentation and samples**, write more tutorials.
+* Make the framework and existing modules more **customizable and extensible**.
+* Integrate to **gRPC** & implement gRPC endpoint for pre-built modules ([#2882](https://github.com/abpframework/abp/issues/2882)).
+* Create a **Blazor UI** for the ABP Framework & implement it for all the modules and startup templates ([#394](https://github.com/abpframework/abp/issues/394)).
+* Add **new features** to pre-built modules and create new modules for the [ABP Commercial](https://commercial.abp.io/).
 
 See [the GitHub milestones](https://github.com/abpframework/abp/milestones) for details.

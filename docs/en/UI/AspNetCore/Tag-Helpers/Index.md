@@ -13,6 +13,8 @@ ABP Framework also adds some **useful features** to the standard bootstrap compo
 Here, the list of components those are wrapped by the ABP Framework:
 
 * [Buttons](Buttons.md)
+* [Cards](Cards.md)
+* [Alerts](Alerts.md)
 * ...
 
 > Until all the tag helpers are documented, you can visit https://bootstrap-taghelpers.abp.io/ to see them with live samples.
