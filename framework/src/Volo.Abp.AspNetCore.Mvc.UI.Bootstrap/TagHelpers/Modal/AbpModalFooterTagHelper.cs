@@ -2,7 +2,6 @@
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
-    [HtmlTargetElement("abp-modal")]
     [HtmlTargetElement("abp-modal-footer")]
     public class AbpModalFooterTagHelper : AbpTagHelper<AbpModalFooterTagHelper, AbpModalFooterTagHelperService>
     {
