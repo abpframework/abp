@@ -20,24 +20,26 @@ namespace Volo.Docs
 {
     [DependsOn(
         typeof(DocsDomainSharedModule),
-        typeof(AbpDddDomainModule)
+        typeof(AbpDddDomainModule),
+        typeof(AbpAutoMapperModule)
         )]
     public class DocsDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpDistributedEventBusOptions>(options =>
-            {
-                options.EtoMappings.Add<Document, DocumentEto>();
-                options.EtoMappings.Add<Project, ProjectEto>();
-            });
-
+            context.Services.AddAutoMapperObjectMapper<DocsDomainModule>();
 
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsDomainMappingProfile>(validate: true);
             });
 
+            Configure<AbpDistributedEventBusOptions>(options =>
+            {
+                options.EtoMappings.Add<Document, DocumentEto>(typeof(DocsDomainModule));
+                options.EtoMappings.Add<Project, ProjectEto>(typeof(DocsDomainModule));
+            });
+            
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets

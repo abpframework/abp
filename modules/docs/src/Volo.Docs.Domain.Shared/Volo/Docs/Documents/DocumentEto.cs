@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.Docs.Documents
 {
+    [Serializable]
     public class DocumentEto
     {
         public Guid Id { get; set; }

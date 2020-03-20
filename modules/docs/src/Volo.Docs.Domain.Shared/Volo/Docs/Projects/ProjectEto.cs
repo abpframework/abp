@@ -2,6 +2,7 @@
 
 namespace Volo.Docs.Projects
 {
+    [Serializable]
     public class ProjectEto
     {
         public Guid Id { get; set; }
