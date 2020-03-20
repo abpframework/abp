@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
@@ -6,6 +7,7 @@ namespace Volo.Abp.Identity
     {
         public IdentityDomainMappingProfile()
         {
+            CreateMap<IdentityUser, UserEto>();
             CreateMap<IdentityClaimType, IdentityClaimTypeEto>();
             CreateMap<IdentityRole, IdentityRoleEto>();
         }

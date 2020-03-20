@@ -29,7 +29,7 @@ namespace Volo.Abp.Identity
 
             Configure<AbpDistributedEventBusOptions>(options =>
             {
-                options.EtoMappings.Add<IdentityUser, UserEto>();
+                options.EtoMappings.Add<IdentityUser, UserEto>(typeof(AbpIdentityDomainModule));
                 options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
                 options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
             });
