@@ -13,22 +13,25 @@ namespace Volo.Abp.Identity
     [DependsOn(
         typeof(AbpDddDomainModule),
         typeof(AbpIdentityDomainSharedModule),
-        typeof(AbpUsersDomainModule)
+        typeof(AbpUsersDomainModule),
+        typeof(AbpAutoMapperModule)
         )]
     public class AbpIdentityDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<IdentityDomainMappingProfile>();
+                options.AddProfile<IdentityDomainMappingProfile>(validate: true);
             });
 
             Configure<AbpDistributedEventBusOptions>(options =>
             {
                 options.EtoMappings.Add<IdentityUser, UserEto>();
-                options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>();
-                options.EtoMappings.Add<IdentityRole, IdentityRoleEto>();
+                options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
+                options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
             });
             
             var identityBuilder = context.Services.AddAbpIdentity(options =>

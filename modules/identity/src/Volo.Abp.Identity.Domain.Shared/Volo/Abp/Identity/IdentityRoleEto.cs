@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
@@ -11,8 +10,6 @@ namespace Volo.Abp.Identity
         public Guid? TenantId { get; set; }
 
         public string Name { get; set; }
-
-        public string NormalizedName { get; set; }
         
         public bool IsDefault { get; set; }
 
