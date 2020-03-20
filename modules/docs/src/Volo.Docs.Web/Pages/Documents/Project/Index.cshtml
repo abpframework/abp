@@ -90,7 +90,10 @@
                                             </label>
                                         </div>
 
-                                        <select asp-items="Model.ProjectSelectItems" class="form-control" onchange="window.location.pathname = this.value"></select>
+                                        <select asp-items="Model.ProjectSelectItems"
+                                                class="form-control"
+                                                onchange="window.location.pathname = this.value">
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +112,10 @@
                                                     </label>
                                                 </div>
 
-                                                <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
+                                                <select asp-items="Model.VersionSelectItems"
+                                                        class="form-control"
+                                                        onchange="if (this.value) { window.location.replace(this.value) }">
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -127,7 +133,10 @@
                                                         <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
                                                     </label>
                                                 </div>
-                                                <select asp-items="Model.LanguageSelectListItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                                <select asp-items="Model.LanguageSelectListItems"
+                                                        class="form-control"
+                                                        onchange="window.location.replace(this.value)">
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +151,12 @@
                                         <label class="input-group-text"><i class="fa fa-filter"></i></label>
                                     </div>
 
-                                    <input class="form-control" id="filter" type="search" data-search-url="@Model." placeholder="@L["FilterTopics"].Value" aria-label="Filter">
+                                    <input class="form-control" 
+                                           id="filter" 
+                                           type="search" 
+                                           data-search-url="@Model." 
+                                           placeholder="@L["FilterTopics"].Value" 
+                                           aria-label="Filter">
                                 </div>
                             </div>
                         </div>
@@ -156,7 +170,12 @@
                                             <label class="input-group-text"><i class="fa fa-filter"></i></label>
                                         </div>
 
-                                        <input class="form-control" id="fullsearch" type="search" data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" placeholder="@L["FullSearch"].Value" aria-label="Filter">
+                                        <input class="form-control" 
+                                               id="fullsearch" 
+                                               type="search" 
+                                               data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" 
+                                               placeholder="@L["FullSearch"].Value" 
+                                               aria-label="Filter">
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +223,9 @@
                         <div class="float-right">
                             @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                             {
-                                <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @(L["Edit"]) (@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())</a>
+                                <a href="@Model.Document.EditLink" target="_blank">
+                                    <i class="fa fa-edit"></i> @(L["Edit"]) (@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())
+                                </a>
                             }
                         </div>
 
@@ -216,7 +237,11 @@
                                 {
                                     <a href="@contributor.UserProfileUrl" target="_blank">
                                         <img src="@contributor.AvatarUrl"
-                                             class="rounded-circle" height="21" width="21" title="@contributor.Username" />
+                                             class="rounded-circle" 
+                                             alt="Avatar"
+                                             height="21" 
+                                             width="21" 
+                                             title="@contributor.Username" />
                                     </a>
                                 }
                             }
@@ -290,9 +315,7 @@
                 </div>
 
                 <div class="col-md-2 docs-page-index position-relative bg-light">
-
                     <div id="scroll-index" class="docs-inner-anchors mt-2">
-
                         <h5>@L["InThisDocument"]</h5>
                         <nav id="docs-sticky-index" class="navbar index-scroll">
                         </nav>
@@ -302,10 +325,8 @@
                                 <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             }
             else
             {
@@ -318,7 +339,6 @@
                     </a>
                 </div>
             }
-
         </div>
     </div>
 }

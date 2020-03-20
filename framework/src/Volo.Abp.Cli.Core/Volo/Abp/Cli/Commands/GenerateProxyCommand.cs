@@ -67,7 +67,8 @@ namespace Volo.Abp.Cli.Commands
             var data = JObject.Parse(json);
 
             Logger.LogInformation("Modules are combining");
-            var moduleList = GetCombinedModules(data, module);
+            var apiNameList = new Dictionary<string, string>();
+            var moduleList = GetCombinedModules(data, module, out apiNameList);
 
             if (moduleList.Count < 1)
             {
@@ -85,6 +86,7 @@ namespace Volo.Abp.Cli.Commands
                 var moduleValue = JObject.Parse(moduleItem.Value);
 
                 var rootPath = moduleItem.Key;
+                var apiName = apiNameList.Where(p => p.Key == rootPath).Select(p => p.Value).FirstOrDefault();
 
                 Logger.LogInformation($"{rootPath} directory is creating");
 
@@ -105,6 +107,8 @@ namespace Volo.Abp.Cli.Commands
                     serviceFileText.AppendLine("");
                     serviceFileText.AppendLine("@Injectable({providedIn: 'root'})");
                     serviceFileText.AppendLine("export class [controllerName]Service {");
+                    serviceFileText.AppendLine("  apiName = '"+ apiName + "';");
+                    serviceFileText.AppendLine("");
                     serviceFileText.AppendLine("  constructor(private restService: RestService) {}");
                     serviceFileText.AppendLine("");
 
@@ -309,8 +313,8 @@ namespace Volo.Abp.Cli.Commands
 
                         serviceFileText.AppendLine(
                             url.Contains("${")
-                                ? $"   return this.restService.request({{ url: `/{url}`, method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }});"
-                                : $"   return this.restService.request({{ url: '/{url}', method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }});");
+                                ? $"   return this.restService.request({{ url: `/{url}`, method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }},{{ apiName: this.apiName }});"
+                                : $"   return this.restService.request({{ url: '/{url}', method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }},{{ apiName: this.apiName }});");
 
 
                         serviceFileText.AppendLine(" }");
@@ -369,13 +373,15 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation("Completed!");
         }
 
-        private Dictionary<string, string> GetCombinedModules(JToken data, string module)
+        private Dictionary<string, string> GetCombinedModules(JToken data, string module, out Dictionary<string, string> apiNameList)
         {
             var moduleList = new Dictionary<string, string>();
+            apiNameList = new Dictionary<string, string>();
 
             foreach (var moduleItem in data["modules"])
             {
                 var rootPath = ((string)moduleItem.First["rootPath"]).ToLower();
+                var apiName = (string)moduleItem.First["remoteServiceName"];
 
                 if (moduleList.Any(p => p.Key == rootPath))
                 {
@@ -385,6 +391,7 @@ namespace Volo.Abp.Cli.Commands
                 }
                 else
                 {
+                    apiNameList.Add(rootPath, apiName);
                     moduleList.Add(rootPath, moduleItem.First["controllers"].ToString());
                 }
             }

@@ -8,12 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IMapTo<UserEto>
+    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -280,37 +279,6 @@ namespace Volo.Abp.Identity
         public override string ToString()
         {
             return $"{base.ToString()}, UserName = {UserName}";
-        }
-
-        UserEto IMapTo<UserEto>.MapTo()
-        {
-            //TODO: Instead, consider to use automapper (but it makes dependency just for a small code part)??
-
-            return new UserEto
-            {
-                Name = Name,
-                Email = Email,
-                EmailConfirmed = EmailConfirmed,
-                Id = Id,
-                PhoneNumber = PhoneNumber,
-                PhoneNumberConfirmed = PhoneNumberConfirmed,
-                Surname = Surname,
-                TenantId = TenantId,
-                UserName = UserName
-            };
-        }
-
-        void IMapTo<UserEto>.MapTo(UserEto destination)
-        {
-            destination.Name = Name;
-            destination.Email = Email;
-            destination.EmailConfirmed = EmailConfirmed;
-            destination.Id = Id;
-            destination.PhoneNumber = PhoneNumber;
-            destination.PhoneNumberConfirmed = PhoneNumberConfirmed;
-            destination.Surname = Surname;
-            destination.TenantId = TenantId;
-            destination.UserName = UserName;
         }
     }
 }

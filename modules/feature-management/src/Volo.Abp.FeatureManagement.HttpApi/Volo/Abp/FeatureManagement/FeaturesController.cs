@@ -4,7 +4,7 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.FeatureManagement
 {
-    [RemoteService]
+    [RemoteService(Name = FeatureManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("abp")]
     public class FeaturesController : AbpController, IFeatureAppService
     {
