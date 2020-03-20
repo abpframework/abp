@@ -9,13 +9,11 @@ namespace Volo.Abp.Identity
         typeof(AbpHttpClientModule))]
     public class AbpIdentityHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "AbpIdentity";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
                 typeof(AbpIdentityApplicationContractsModule).Assembly,
-                RemoteServiceName
+                IdentityRemoteServiceConsts.RemoteServiceName
             );
         }
     }
