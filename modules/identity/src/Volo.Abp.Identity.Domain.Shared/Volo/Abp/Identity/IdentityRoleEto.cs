@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Volo.Abp.Identity
 {
@@ -12,11 +13,11 @@ namespace Volo.Abp.Identity
         public string Name { get; set; }
 
         public string NormalizedName { get; set; }
-
+        
         public bool IsDefault { get; set; }
 
         public bool IsStatic { get; set; }
-
+        
         public bool IsPublic { get; set; }
     }
 }

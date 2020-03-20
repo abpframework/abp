@@ -19,18 +19,18 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<IdentityDomainMappingProfile>();
+            });
+
             Configure<AbpDistributedEventBusOptions>(options =>
             {
                 options.EtoMappings.Add<IdentityUser, UserEto>();
                 options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>();
                 options.EtoMappings.Add<IdentityRole, IdentityRoleEto>();
             });
-
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<IdentityDomainMappingProfile>(validate: true);
-            });
-
+            
             var identityBuilder = context.Services.AddAbpIdentity(options =>
             {
                 options.User.RequireUniqueEmail = true;
