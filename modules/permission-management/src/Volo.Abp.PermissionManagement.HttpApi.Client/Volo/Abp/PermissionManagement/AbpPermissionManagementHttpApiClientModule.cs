@@ -9,13 +9,11 @@ namespace Volo.Abp.PermissionManagement
         typeof(AbpHttpClientModule))]
     public class AbpPermissionManagementHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "AbpPermissionManagement";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
                 typeof(AbpPermissionManagementApplicationContractsModule).Assembly,
-                RemoteServiceName
+                PermissionManagementRemoteServiceConsts.RemoteServiceName
             );
         }
     }
