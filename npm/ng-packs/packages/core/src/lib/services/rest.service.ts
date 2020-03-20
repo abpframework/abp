@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
 import { Rest } from '../models/rest';
 import { ConfigState } from '../states/config.state';
-import { isUndefinedOrEmptyString } from '../utils';
+import { isUndefinedOrEmptyString } from '../utils/common-utils';
 
 @Injectable({
   providedIn: 'root',
