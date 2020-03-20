@@ -9,13 +9,11 @@ namespace Volo.Abp.TenantManagement
         typeof(AbpHttpClientModule))]
     public class AbpTenantManagementHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "AbpTenantManagement";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
                 typeof(AbpTenantManagementApplicationContractsModule).Assembly,
-                RemoteServiceName
+                TenantManagementRemoteServiceConsts.RemoteServiceName
             );
         }
     }
