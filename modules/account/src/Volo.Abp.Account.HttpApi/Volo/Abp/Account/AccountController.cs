@@ -5,7 +5,7 @@ using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account
 {
-    [RemoteService]
+    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
     [Area("account")]
     [Route("api/account")]
     public class AccountController : AbpController, IAccountAppService
