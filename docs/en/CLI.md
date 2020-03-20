@@ -180,7 +180,7 @@ abp logout
 
 ### generate-proxy
 
-Generates client proxies for your HTTP APIs to make easy to consume your services from the client side.
+Generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
 
 Usage:
 
@@ -190,7 +190,7 @@ abp generate-proxy [options]
 
 #### Options
 
-* `--apiUrl` or `-a`: Specifies the root URL of the HTTP API. The default value is retrieved from the `environment.ts` file for an Angular application.
+* `--apiUrl` or `-a`: Specifies the root URL of the HTTP API. The default value is being retrieved from the `environment.ts` file for the Angular application. Make sure your host is up and running before running `abp generate-proxy`.
 * `--ui` or `-u`: Specifies the UI framework. Default value is `angular` and it is the only UI framework supported for now. Creates TypeScript code.
 * `--module` or `-m`: Specifies the module name. Default module name is `app`, which indicates your own application (you typically want this since every module is responsible to maintain its own client proxies). Set `all` for to generate proxies for all the modules.
 
