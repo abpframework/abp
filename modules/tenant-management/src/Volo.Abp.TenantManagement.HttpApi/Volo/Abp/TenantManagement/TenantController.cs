@@ -7,7 +7,7 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Volo.Abp.TenantManagement
 {
     [Controller]
-    [RemoteService]
+    [RemoteService(Name = TenantManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("multi-tenancy")]
     [Route("api/multi-tenancy/tenants")]
     public class TenantController : AbpController, ITenantAppService //TODO: Throws exception on validation if we inherit from Controller

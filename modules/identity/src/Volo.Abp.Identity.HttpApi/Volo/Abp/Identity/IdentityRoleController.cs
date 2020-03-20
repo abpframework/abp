@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
@@ -7,7 +6,7 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity
 {
-    [RemoteService]
+    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
     [Area("identity")]
     [ControllerName("Role")]
     [Route("api/identity/roles")]

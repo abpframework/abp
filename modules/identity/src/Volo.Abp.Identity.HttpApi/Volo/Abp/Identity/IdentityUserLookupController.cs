@@ -6,7 +6,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    [RemoteService]
+    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
     [Area("identity")]
     [ControllerName("UserLookup")]
     [Route("api/identity/users/lookup")]

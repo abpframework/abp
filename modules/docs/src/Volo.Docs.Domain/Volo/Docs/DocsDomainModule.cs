@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -12,17 +14,32 @@ using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.FileSystem.Documents;
 using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Localization;
+using Volo.Docs.Projects;
 
 namespace Volo.Docs
 {
     [DependsOn(
         typeof(DocsDomainSharedModule),
-        typeof(AbpDddDomainModule)
+        typeof(AbpDddDomainModule),
+        typeof(AbpAutoMapperModule)
         )]
     public class DocsDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<DocsDomainModule>();
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<DocsDomainMappingProfile>(validate: true);
+            });
+
+            Configure<AbpDistributedEventBusOptions>(options =>
+            {
+                options.EtoMappings.Add<Document, DocumentEto>(typeof(DocsDomainModule));
+                options.EtoMappings.Add<Project, ProjectEto>(typeof(DocsDomainModule));
+            });
+            
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets

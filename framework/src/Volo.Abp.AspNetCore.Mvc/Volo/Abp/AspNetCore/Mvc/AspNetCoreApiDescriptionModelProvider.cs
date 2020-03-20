@@ -73,7 +73,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
             var setting = FindSetting(controllerType);
 
-            var moduleModel = applicationModel.GetOrAddModule(GetRootPath(controllerType, setting));
+            var moduleModel = applicationModel.GetOrAddModule(GetRootPath(controllerType, setting), GetRemoteServiceName(controllerType, setting));
 
             var controllerModel = moduleModel.GetOrAddController(controllerType.FullName, CalculateControllerName(controllerType, setting), controllerType, _modelOptions.IgnoredInterfaces);
 
@@ -287,6 +287,22 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             return ModuleApiDescriptionModel.DefaultRootPath;
+        }
+
+        private string GetRemoteServiceName(Type controllerType, [CanBeNull] ConventionalControllerSetting setting)
+        {
+            if (setting != null)
+            {
+                return setting.RemoteServiceName;
+            }
+
+            var remoteServiceAttr = controllerType.GetCustomAttributes().OfType<RemoteServiceAttribute>().FirstOrDefault();
+            if (remoteServiceAttr?.Name != null)
+            {
+                return remoteServiceAttr.Name;
+            }
+
+            return ModuleApiDescriptionModel.DefaultRemoteServiceName;
         }
 
         [CanBeNull]
