@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Blogging.Blogs
 {
+    [Serializable]
     public class BlogEto
     {
         public Guid Id { get; set; }

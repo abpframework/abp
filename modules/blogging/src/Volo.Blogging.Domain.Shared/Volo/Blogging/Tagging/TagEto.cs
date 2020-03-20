@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Blogging.Tagging
 {
+    [Serializable]
     public class TagEto
     {
         public Guid Id { get; set; }

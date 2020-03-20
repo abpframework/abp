@@ -5,6 +5,7 @@ using Volo.Blogging.Tagging;
 
 namespace Volo.Blogging.Posts
 {
+    [Serializable]
     public class PostEto
     {
         public Guid Id { get; set; }
@@ -24,7 +25,5 @@ namespace Volo.Blogging.Posts
         public string Content { get; set; }
 
         public int ReadCount { get; set; }
-
-        public ICollection<TagEto> Tags { get; set; }
     }
 }

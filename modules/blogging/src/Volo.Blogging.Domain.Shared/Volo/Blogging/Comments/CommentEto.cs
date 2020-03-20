@@ -2,6 +2,7 @@
 
 namespace Volo.Blogging.Comments
 {
+    [Serializable]
     public class CommentEto
     {
         public Guid Id { get; set; }
