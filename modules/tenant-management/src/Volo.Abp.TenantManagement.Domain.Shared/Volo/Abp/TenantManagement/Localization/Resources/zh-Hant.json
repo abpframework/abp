@@ -16,7 +16,7 @@
     "Permission:Delete": "刪除",
     "Permission:ManageConnectionStrings": "管理資料庫連線字串",
     "Permission:ManageFeatures": "管理功能",
-	"DisplayName:AdminEmailAddress": "管理者信箱", 
+    "DisplayName:AdminEmailAddress": "管理者信箱", 
     "DisplayName:AdminPassword": "管理者密碼"
   }
 }
