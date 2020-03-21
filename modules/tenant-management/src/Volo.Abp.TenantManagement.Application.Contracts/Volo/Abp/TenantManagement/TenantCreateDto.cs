@@ -12,11 +12,11 @@ namespace Volo.Abp.TenantManagement
         [Required]
         [EmailAddress]
         [MaxLength(256)]
-        public string AdminEmailAddress { get; set; }
+        public virtual string AdminEmailAddress { get; set; }
 
 
         [Required]
         [MaxLength(128)]
-        public string AdminPassword { get; set; }
+        public virtual string AdminPassword { get; set; }
     }
 }
