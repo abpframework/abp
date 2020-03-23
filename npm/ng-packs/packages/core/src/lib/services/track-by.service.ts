@@ -1,18 +1,19 @@
 import { Injectable, TrackByFunction } from '@angular/core';
+import { O } from 'ts-toolbelt';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TrackByService<ItemType = any> {
   by<T = ItemType>(key: keyof T): TrackByFunction<T> {
-    return ({}, item) => item[key];
+    return (_, item) => item[key];
   }
 
-  byDeep<T = ItemType>(...keys: (string | number)[]): TrackByFunction<T> {
-    return ({}, item) => keys.reduce((acc, key) => acc[key], item);
+  byDeep<T = ItemType>(...keys: T extends object ? O.Paths<T> : never): TrackByFunction<T> {
+    return (_, item) => keys.reduce((acc, key) => acc[key], item);
   }
 
   bySelf<T = ItemType>(): TrackByFunction<T> {
-    return ({}, item) => item;
+    return (_, item) => item;
   }
 }

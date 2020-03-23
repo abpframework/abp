@@ -11,17 +11,11 @@ describe('TrackByService', () => {
 
   describe('#byDeep', () => {
     it('should return a function which tracks a deeply-nested property', () => {
-      expect(
-        service.byDeep(
-          'a',
-          'b',
-          'c',
-          1,
-          'x',
-        )(284, {
-          a: { b: { c: [{ x: 1035 }, { x: 1036 }, { x: 1037 }] } },
-        }),
-      ).toBe(1036);
+      const obj = {
+        a: { b: { c: { x: 1036 } } },
+      };
+
+      expect(service.byDeep<typeof obj>('a', 'b', 'c', 'x')(284, obj)).toBe(1036);
     });
   });
 
