@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -38,15 +39,14 @@ namespace MyCompanyName.MyProjectName.Data
 
             await MigrateHostDatabaseAsync();
 
-            var i = 0;
-            var tenants = await _tenantRepository.GetListAsync();
-            foreach (var tenant in tenants)
-            {
-                i++;
+            var tenants = await _tenantRepository.GetListAsync(includeDetails: true);
 
+            var i = 0;
+            foreach (var tenant in tenants.Where(t => t.ConnectionStrings.Any()))
+            {
                 using (_currentTenant.Change(tenant.Id))
                 {
-                    Logger.LogInformation($"Migrating {tenant.Name} database schema... ({i} of {tenants.Count})");
+                    Logger.LogInformation($"Migrating {tenant.Name} database schema... ({++i} of {tenants.Count})");
                     await MigrateTenantDatabasesAsync(tenant);
                     Logger.LogInformation($"Successfully completed {tenant.Name} database migrations.");
                 }
