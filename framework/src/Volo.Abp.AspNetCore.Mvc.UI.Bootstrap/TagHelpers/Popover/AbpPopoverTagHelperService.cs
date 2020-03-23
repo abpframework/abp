@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 
         protected virtual void SetDisabled(TagHelperContext context, TagHelperOutput output)
         {
-            var triggerAsHtml = TagHelper.Dismissible ?? false ? "datatrigger=\"focus\" " : "";
+            var triggerAsHtml = TagHelper.Dismissible ?? false ? "data-trigger=\"focus\" " : "";
             // If not dismissable for hoverable condition
             if (string.IsNullOrEmpty(triggerAsHtml))
             {
