@@ -12,8 +12,4 @@ export class TrackByService<ItemType = any> {
   byDeep<T = ItemType>(...keys: T extends object ? O.Paths<T> : never): TrackByFunction<T> {
     return (_, item) => keys.reduce((acc, key) => acc[key], item);
   }
-
-  bySelf<T = ItemType>(): TrackByFunction<T> {
-    return (_, item) => item;
-  }
 }

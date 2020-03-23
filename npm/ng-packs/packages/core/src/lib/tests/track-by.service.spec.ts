@@ -18,10 +18,4 @@ describe('TrackByService', () => {
       expect(service.byDeep<typeof obj>('a', 'b', 'c', 'x')(284, obj)).toBe(1036);
     });
   });
-
-  describe('#bySelf', () => {
-    it('should return a function which tracks the item', () => {
-      expect(service.bySelf()(284, 'X')).toBe('X');
-    });
-  });
 });
