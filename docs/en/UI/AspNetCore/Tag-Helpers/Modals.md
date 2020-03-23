@@ -33,14 +33,6 @@ A value indicates the positioning of the modal. Should be one of the following v
 * `false` (default value)
 * `true`
 
-Example:
-
-````xml
-<abp-alert alert-type="Warning">
-    A simple warning  alert—check it out!
-</abp-alert>
-````
-
 ### size
 
 A value indicates the size of the modal. Should be one of the following values:
