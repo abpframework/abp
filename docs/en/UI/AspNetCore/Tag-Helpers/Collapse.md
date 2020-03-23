@@ -32,7 +32,7 @@ A value indicates if the collapse body will be initialized visible or hidden. Sh
 
 ### multi
 
-A value indicates if an `abp-button` or `a` can show and hide multiple collapse body element. Should be one of the following values:
+A value indicates if an `abp-collapse-body` can be shown or hidden by an element that can show/hide multiple collapse bodies. Basically, this attribute adds "multi-collapse" class to `abp-collapse-body`. Should be one of the following values:
 
 * `false` (default value)
 * `true`
