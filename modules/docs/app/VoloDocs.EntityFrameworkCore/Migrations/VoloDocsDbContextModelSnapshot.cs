@@ -490,6 +490,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     b.Property<DateTime>("LastCachedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("LastSignificantUpdateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("LastUpdatedTime")
                         .HasColumnType("datetime2");
 

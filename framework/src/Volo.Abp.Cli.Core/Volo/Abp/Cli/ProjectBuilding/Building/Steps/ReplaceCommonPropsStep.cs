@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -41,7 +42,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 var doc = new XmlDocument() { PreserveWhitespace = true };
 
-                doc.Load(GenerateStreamFromString(content));
+                doc.Load(StreamHelper.GenerateStreamFromString(content));
 
                 return ProcessReferenceNodes(doc, content);
             }
@@ -80,16 +81,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 firstPropertyGroupNode?.PrependChild(langNode);
 
                 return doc.OuterXml;
-            }
-
-            private static Stream GenerateStreamFromString(string s)
-            {
-                var stream = new MemoryStream();
-                var writer = new StreamWriter(stream);
-                writer.Write(s);
-                writer.Flush();
-                stream.Position = 0;
-                return stream;
             }
         }
     }

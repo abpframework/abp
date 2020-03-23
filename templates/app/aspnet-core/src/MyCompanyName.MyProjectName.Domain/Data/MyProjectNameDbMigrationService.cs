@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -15,18 +15,18 @@ namespace MyCompanyName.MyProjectName.Data
         public ILogger<MyProjectNameDbMigrationService> Logger { get; set; }
 
         private readonly IDataSeeder _dataSeeder;
-        private readonly IMyProjectNameDbSchemaMigrator _dbSchemaMigrator;
+        private readonly IEnumerable<IMyProjectNameDbSchemaMigrator> _dbSchemaMigrators;
         private readonly ITenantRepository _tenantRepository;
         private readonly ICurrentTenant _currentTenant;
 
         public MyProjectNameDbMigrationService(
             IDataSeeder dataSeeder,
-            IMyProjectNameDbSchemaMigrator dbSchemaMigrator,
+            IEnumerable<IMyProjectNameDbSchemaMigrator> dbSchemaMigrators,
             ITenantRepository tenantRepository,
             ICurrentTenant currentTenant)
         {
             _dataSeeder = dataSeeder;
-            _dbSchemaMigrator = dbSchemaMigrator;
+            _dbSchemaMigrators = dbSchemaMigrators;
             _tenantRepository = tenantRepository;
             _currentTenant = currentTenant;
 
@@ -39,15 +39,14 @@ namespace MyCompanyName.MyProjectName.Data
 
             await MigrateHostDatabaseAsync();
 
-            var i = 0;
-            var tenants = await _tenantRepository.GetListAsync();
-            foreach (var tenant in tenants)
-            {
-                i++;
+            var tenants = await _tenantRepository.GetListAsync(includeDetails: true);
 
+            var i = 0;
+            foreach (var tenant in tenants.Where(t => t.ConnectionStrings.Any()))
+            {
                 using (_currentTenant.Change(tenant.Id))
                 {
-                    Logger.LogInformation($"Migrating {tenant.Name} database schema... ({i} of {tenants.Count})");
+                    Logger.LogInformation($"Migrating {tenant.Name} database schema... ({++i} of {tenants.Count})");
                     await MigrateTenantDatabasesAsync(tenant);
                     Logger.LogInformation($"Successfully completed {tenant.Name} database migrations.");
                 }
@@ -59,7 +58,11 @@ namespace MyCompanyName.MyProjectName.Data
         private async Task MigrateHostDatabaseAsync()
         {
             Logger.LogInformation("Migrating host database schema...");
-            await _dbSchemaMigrator.MigrateAsync();
+
+            foreach (var migrator in _dbSchemaMigrators)
+            {
+                await migrator.MigrateAsync();
+            }
 
             Logger.LogInformation("Executing host database seed...");
             await _dataSeeder.SeedAsync();
@@ -70,9 +73,14 @@ namespace MyCompanyName.MyProjectName.Data
         private async Task MigrateTenantDatabasesAsync(Tenant tenant)
         {
             Logger.LogInformation($"Migrating schema for {tenant.Name} database...");
-            await _dbSchemaMigrator.MigrateAsync();
+
+            foreach (var migrator in _dbSchemaMigrators)
+            {
+                await migrator.MigrateAsync();
+            }
 
             Logger.LogInformation($"Executing {tenant.Name} tenant database seed...");
+            
             await _dataSeeder.SeedAsync(tenant.Id);
         }
     }

@@ -168,7 +168,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ConfigurationTenantStoreOptions>(options =>
+            Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
@@ -214,7 +214,7 @@ namespace MyCompany.MyProject
         {
             var configuration = BuildConfiguration();
 
-            Configure<ConfigurationTenantStoreOptions>(configuration);
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
@@ -303,6 +303,7 @@ TODO:...
 
 Volo.Abp.AspNetCore.MultiTenancy 添加了下面这些租户解析器,从当前Web请求(按优先级排序)中确定当前租户.
 
+* **CurrentUserTenantResolveContributor**: 如果当前用户已登录,从当前用户的声明中获取租户Id. **出于安全考虑,应该始终将其做为第一个Contributor**.
 * **QueryStringTenantResolver**: 尝试从query string参数中获取当前租户,默认参数名为"__tenant".
 * **RouteTenantResolver**:尝试从当前路由中获取(URL路径),默认是变量名是"__tenant".所以,如果你的路由中定义了这个变量,就可以从路由中确定当前租户.
 * **HeaderTenantResolver**: 尝试从HTTP header中获取当前租户,默认的header名称是"__tenant".
@@ -342,8 +343,8 @@ namespace MyCompany.MyProject
         {
             Configure<AbpTenantResolveOptions>(options =>
             {
-                //子域名格式: {0}.mydomain.com (作为最高优先级解析器添加)
-                options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));
+                //子域名格式: {0}.mydomain.com (作为第二优先级解析器添加, 位于CurrentUserTenantResolveContributor之后)
+                options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));
             });
 
             //...
@@ -354,7 +355,7 @@ namespace MyCompany.MyProject
 
 {0}是用来确定当前租户唯一名称的占位符.
 
-你可以使用下面的方法,代替``options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));``:
+你可以使用下面的方法,代替``options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));``:
 
 ````C#
 options.AddDomainTenantResolver("{0}.mydomain.com");

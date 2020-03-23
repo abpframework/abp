@@ -44,6 +44,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                 )
                 .ToList();
 
+            var reactNativeEnvironments = context.Files.Where(x =>
+                    !x.IsDirectory &&
+                    x.Name.EndsWith($"{MobileApp.ReactNative.GetFolderName()}/Environment.js", StringComparison.InvariantCultureIgnoreCase)
+                )
+                .ToList();
+
             if (AppTemplateBase.IsAppTemplate(context.Template.Name))
             {
                 // no tiered
@@ -127,6 +133,23 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                         environment.SetLines(environmentLines);
                     }
 
+                    foreach (var environment in reactNativeEnvironments)
+                    {
+                        environment.NormalizeLineEndings();
+
+                        var buildInUrlHttp = buildInUrl.Replace("https://", "http://");
+                        var buildInUrlWithoutPortHttp = buildInUrlWithoutPort.Replace("https://", "http://");
+
+                        var environmentLines = environment.GetLines();
+                        for (var i = 0; i < environmentLines.Length; i++)
+                        {
+                            if (environmentLines[i].Contains(buildInUrlHttp))
+                            {
+                                environmentLines[i] = environmentLines[i].Replace(buildInUrlHttp, $"{buildInUrlWithoutPortHttp}:{newPort}");
+                            }
+                        }
+                        environment.SetLines(environmentLines);
+                    }
                 }
             }
         }

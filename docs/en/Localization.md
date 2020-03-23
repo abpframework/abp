@@ -46,7 +46,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<VirtualFileSystemOptions>(options =>
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
             // "YourRootNameSpace" is the root namespace of your project. It can be empty if your root namespace is empty.
             options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
@@ -67,7 +67,7 @@ In this example;
 
 * Added a new localization resource with "en" (English) as the default culture.
 * Used JSON files to store the localization strings.
-* JSON files are embedded into the assembly using `VirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
+* JSON files are embedded into the assembly using `AbpVirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
 
 JSON files are located under "/Localization/Resources/Test" project folder as shown below:
 
@@ -191,3 +191,7 @@ Localize a string:
 ````js
 var str = testResource('HelloWorld');
 ````
+
+## See Also
+
+* [Localization in Angular UI](UI/Angular/Localization.md)

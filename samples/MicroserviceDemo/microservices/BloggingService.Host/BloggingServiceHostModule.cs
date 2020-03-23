@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
@@ -19,10 +21,11 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Guids;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -44,8 +47,9 @@ namespace BloggingService.Host
         typeof(BloggingHttpApiModule),
         typeof(BloggingMongoDbModule),
         typeof(BloggingApplicationModule),
-        typeof(AbpHttpClientIdentityModelModule),
-        typeof(AbpIdentityHttpApiClientModule)
+        typeof(AbpHttpClientIdentityModelWebModule),
+        typeof(AbpIdentityHttpApiClientModule),
+        typeof(AbpAspNetCoreMultiTenancyModule)
         )]
     public class BloggingServiceHostModule : AbpModule
     {
@@ -53,6 +57,11 @@ namespace BloggingService.Host
         {
             var configuration = context.Services.GetConfiguration();
             var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -123,7 +132,10 @@ namespace BloggingService.Host
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
-
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseSwagger();
             app.UseSwaggerUI(options =>

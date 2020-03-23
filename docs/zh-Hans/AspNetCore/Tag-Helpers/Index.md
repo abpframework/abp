@@ -1,3 +1,3 @@
-## ABP Tag Helpers
+文档已经移动到其他位置.
 
-"ABP tag helpers" 目前还没有文档. 你现在可以看到[组件演示](http://bootstrap-taghelpers.abp.io/).
+[点击链接跳转到ABP Tag Helpers文档](../../UI/AspNetCore/Tag-Helpers/Index.md)

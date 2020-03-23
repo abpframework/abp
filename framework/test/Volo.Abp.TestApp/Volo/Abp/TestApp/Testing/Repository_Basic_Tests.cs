@@ -29,9 +29,25 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task GetAsync_With_Predicate()
+        {
+            var person = await PersonRepository.GetAsync(p => p.Name == "Douglas");
+            person.Name.ShouldBe("Douglas");
+            person.Phones.Count.ShouldBe(2);
+        }
+
+        [Fact]
         public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity()
         {
             var person = await PersonRepository.FindAsync(Guid.NewGuid());
+            person.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity_With_Predicate()
+        {
+            var randomName = Guid.NewGuid().ToString();
+            var person = await PersonRepository.FindAsync(p => p.Name == randomName);
             person.ShouldBeNull();
         }
 

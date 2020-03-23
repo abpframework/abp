@@ -6,16 +6,16 @@ namespace Volo.Abp.Identity
 {
     public class UserRoleFinder : IUserRoleFinder, ITransientDependency
     {
-        private readonly IIdentityUserRepository _identityUserRepository;
+        protected IIdentityUserRepository IdentityUserRepository { get; }
 
         public UserRoleFinder(IIdentityUserRepository identityUserRepository)
         {
-            _identityUserRepository = identityUserRepository;
+            IdentityUserRepository = identityUserRepository;
         }
 
         public virtual async Task<string[]> GetRolesAsync(Guid userId)
         {
-            return (await _identityUserRepository.GetRoleNamesAsync(userId)).ToArray();
+            return (await IdentityUserRepository.GetRoleNamesAsync(userId)).ToArray();
         }
     }
 }

@@ -1,6 +1,6 @@
 ## Getting Started With the Angular Application Template
 
-This tutorial explain how to create a new Angular application using the startup template, configure and run it.
+This tutorial explains how to create a new Angular application using the startup template, configure and run it.
 
 ### Creating a New Project
 
@@ -26,10 +26,10 @@ abp new Acme.BookStore -u angular
 
 The created solution requires;
 
-* [Visual Studio 2019 (v16.3+)](https://visualstudio.microsoft.com/vs/)
+* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/)
 * [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
 * [Node v12+](https://nodejs.org)
-* [Yarn v1.19+](https://yarnpkg.com/)
+* [Yarn v1.19+](https://classic.yarnpkg.com/)
 
 ### The Solution Structure
 
@@ -103,7 +103,7 @@ Most of the application APIs require authentication & authorization. If you want
 
 #### Run the Angular Application (Client Side)
 
-Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest to the [yarn](https://yarnpkg.com) package manager while npm install will also work in most cases):
+Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest the [yarn](https://yarnpkg.com) package manager while `npm install` will also work in most cases)
 
 ````bash
 yarn
@@ -123,4 +123,4 @@ The startup template includes the **identity management** and **tenant managemen
 
 ### What's Next?
 
-* [Application development tutorial](Tutorials/Angular/Part-I.md)
+* [Application development tutorial](Tutorials/Part-1)

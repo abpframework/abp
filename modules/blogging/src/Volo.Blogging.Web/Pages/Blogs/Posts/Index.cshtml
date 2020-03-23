@@ -7,7 +7,7 @@
 @inject IAuthorizationService Authorization
 @model Volo.Blogging.Pages.Blog.Posts.IndexModel
 @{
-    ViewBag.PageTitle = "Blog";
+    ViewBag.Title = "Blog";
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
@@ -43,6 +43,7 @@
                                     </h2>
                                     <p class="article-sum">
                                         @Html.Raw(GetShortContent(post.Content))
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">Continue Reading</a>
                                     </p>
                                 </div>
                                 @if (post.Writer != null)
@@ -142,20 +143,21 @@
                                 var oddPost = index % 2 == 1;
 
                                 <div class="list-group-item">
-                                    <div class="row @(oddPost ? "align-middle" : "")">
-                                        <div class="col-md-4 order-md-@(oddPost ? "last" : "first")">
+                                    <div class="row">
+                                        <div class="col-md-4">
                                             <div class="img-container">
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
                                                     <img src="@post.CoverImage" class="box-article-img">
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="col order-md-@(oddPost ? "first" : "last")">
+                                        <div class="col">
                                             <h3>
                                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                             </h3>
                                             <p>
                                                 @Html.Raw(GetShortContent(post.Content))
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url"  asp-route-blogShortName="@Model.BlogShortName">Continue Reading</a>
                                             </p>
                                             <div class="article-owner">
                                                 <div class="article-infos">

@@ -29,7 +29,7 @@ namespace Volo.Abp.Cli
         [Fact]
         public void GetAssemblyName_Tests()
         {
-            var assemblyName = ProjectFinder.GetAssemblyName(
+            var assemblyName = ProjectFileNameHelper.GetAssemblyNameFromProjectPath(
                 GetNormalizedPath(
                     @"c:\temp\project\folder\src\Acme.PhoneBook.Host.csproj"
                 )

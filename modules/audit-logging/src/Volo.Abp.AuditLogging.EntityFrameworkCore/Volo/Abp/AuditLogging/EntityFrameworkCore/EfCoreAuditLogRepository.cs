@@ -19,7 +19,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         }
 
-        public async Task<List<AuditLog>> GetListAsync(
+        public virtual async Task<List<AuditLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
@@ -59,7 +59,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return auditLogs;
         }
 
-        public async Task<long> GetCountAsync(
+        public virtual async Task<long> GetCountAsync(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string httpMethod = null,
@@ -92,7 +92,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return totalCount;
         }
 
-        private IQueryable<AuditLog> GetListQuery(
+        protected virtual IQueryable<AuditLog> GetListQuery(
             DateTime? startTime = null,
             DateTime? endTime = null,
             string httpMethod = null,
@@ -106,6 +106,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             HttpStatusCode? httpStatusCode = null,
             bool includeDetails = false)
         {
+            var nHttpStatusCode = (int?) httpStatusCode;
             return DbSet.AsNoTracking()
                 .IncludeDetails(includeDetails)
                 .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
@@ -117,12 +118,12 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
                 .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
                 .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
-                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
+                .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == nHttpStatusCode)
                 .WhereIf(maxExecutionDuration != null && maxExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
                 .WhereIf(minExecutionDuration != null && minExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
         }
 
-        public async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(DateTime startDate, DateTime endDate)
+        public virtual async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(DateTime startDate, DateTime endDate)
         {
             var result = await DbSet.AsNoTracking()
                 .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
