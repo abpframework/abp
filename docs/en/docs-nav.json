@@ -313,6 +313,10 @@
           "text": "Angular",
           "items": [
             {
+              "text": "Service Proxies",
+              "path": "UI/Angular/Service-Proxies.md"
+            },
+            {
               "text": "Localization",
               "path": "UI/Angular/Localization.md"
             },
