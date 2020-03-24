@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>

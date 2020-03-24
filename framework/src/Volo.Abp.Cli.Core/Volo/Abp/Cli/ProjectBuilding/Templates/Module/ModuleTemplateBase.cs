@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
@@ -60,6 +61,26 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
 
         private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
+            if (context.BuildArgs.SolutionName.CompanyName == null)
+            {
+                var projectNames = new[]
+                {
+                    "MyCompanyName.MyProjectName.Application",
+                    "MyCompanyName.MyProjectName.Application.Contracts",
+                    "MyCompanyName.MyProjectName.Domain",
+                    "MyCompanyName.MyProjectName.Domain.Shared",
+                    "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                    "MyCompanyName.MyProjectName.HttpApi",
+                    "MyCompanyName.MyProjectName.HttpApi.Client",
+                    "MyCompanyName.MyProjectName.MongoDB"
+                };
+
+                steps.AddRange(projectNames.Select(projectName => new MoveFolderStep(
+                    $"/aspnet-core/src/{projectName}/MyCompanyName/",
+                    $"/aspnet-core/src/{projectName}/")
+                ));
+            }
+
             steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
         }
     }
