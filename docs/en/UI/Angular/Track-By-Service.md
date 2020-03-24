@@ -47,7 +47,7 @@ You can use `by` to get a `TrackByFunction` that tracks the iterated object base
 ```html
 <!-- template of DemoComponent -->
 
-<div *ngFor="let item of list; trackBy: track.by('id')">{{ item.name }}</div>
+<div *ngFor="let item of list; trackBy: track.by('id')">{%{{{ item.name }}}%}</div>
 ```
 
 
@@ -62,7 +62,7 @@ import { trackBy } from "@abp/ng.core";
     <div
       *ngFor="let item of list; trackBy: trackById"
     >
-      {{ item.name }}
+      {%{{{ item.name }}}%}
     </div>
   `,
 })
@@ -85,7 +85,7 @@ You can use `byDeep` to get a `TrackByFunction` that tracks the iterated object 
 <div
   *ngFor="let item of list; trackBy: track.byDeep('tenant', 'account', 'id')"
 >
-  {{ item.tenant.name }}
+  {%{{{ item.tenant.name }}}%}
 </div>
 ```
 
@@ -101,7 +101,7 @@ import { trackByDeep } from "@abp/ng.core";
     <div
       *ngFor="let item of list; trackBy: trackByTenantAccountId"
     >
-      {{ item.name }}
+      {%{{{ item.name }}}%}
     </div>
   `,
 })
