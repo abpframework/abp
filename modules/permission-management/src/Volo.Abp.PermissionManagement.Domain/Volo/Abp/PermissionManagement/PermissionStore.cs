@@ -24,7 +24,7 @@ namespace Volo.Abp.PermissionManagement
             Logger = NullLogger<PermissionStore>.Instance;
         }
 
-        public async Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
+        public virtual async Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
         {
             return (await GetCacheItemAsync(name, providerName, providerKey)).IsGranted;
         }

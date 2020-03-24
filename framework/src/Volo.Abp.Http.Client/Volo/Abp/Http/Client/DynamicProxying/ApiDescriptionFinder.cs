@@ -56,8 +56,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                             var found = true;
 
                             for (int i = 0; i < methodParameters.Length; i++)
-                            {
-                                if (!TypeMatches(action.ParametersOnMethod[i], methodParameters[i]))
+                            { 
+                                if (!TypeMatches(action.ParametersOnMethod[i], methodParameters[i])) 
                                 {
                                     found = false;
                                     break;

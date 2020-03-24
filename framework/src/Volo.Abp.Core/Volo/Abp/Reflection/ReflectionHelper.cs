@@ -53,14 +53,14 @@ namespace Volo.Abp.Reflection
 
             if (givenTypeInfo.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
             {
-                result.Add(givenType);
+                result.AddIfNotContains(givenType);
             }
 
             foreach (var interfaceType in givenTypeInfo.GetInterfaces())
             {
                 if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == genericType)
                 {
-                    result.Add(interfaceType);
+                    result.AddIfNotContains(interfaceType);
                 }
             }
 

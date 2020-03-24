@@ -201,7 +201,7 @@ See the [authorization document](Authorization.md) for more.
 
 ## CRUD Application Services
 
-If you need to create a simple **CRUD application service** which has Create, Update, Delete and Get methods, you can use ABP's **base classes** to easily build your services. You can inherit from `CrudAppService`.
+If you need to create a simple **CRUD application service** which has Create, Update, Delete and Get methods, you can use ABP's **base classes** to easily build your services. You can inherit from the `CrudAppService`.
 
 ### Example
 
@@ -219,7 +219,9 @@ public interface IBookAppService :
 }
 ````
 
-* `ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
+`ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
+
+> Creating interface for an application service is a good practice, but not required by the ABP Framework. You can skip the interface part.
 
 `ICrudAppService` declares the following methods:
 
@@ -291,6 +293,52 @@ public class BookAppService :
 ````
 
 `CrudAppService` implements all methods declared in the `ICrudAppService` interface. You can then add your own custom methods or override and customize base methods.
+
+> `CrudAppService` has different versions gets different number of generic arguments. Use the one suitable for you.
+
+### AbstractKeyCrudAppService
+
+`CrudAppService` requires to have an Id property as the primary key of your entity. If you are using composite keys then you can not utilize it.
+
+`AbstractKeyCrudAppService` implements the same `ICrudAppService` interface, but this time without making assumption about your primary key.
+
+#### Example
+
+Assume that you have a `District` entity with `CityId` and `Name` as a composite primary key. Using `AbstractKeyCrudAppService` requires to implement `DeleteByIdAsync` and `GetEntityByIdAsync` methods yourself:
+
+````csharp
+public class DistrictAppService
+    : AbstractKeyCrudAppService<District, DistrictDto, DistrictKey>
+{
+    public DistrictAppService(IRepository<District> repository) 
+        : base(repository)
+    {
+    }
+
+    protected override async Task DeleteByIdAsync(DistrictKey id)
+    {
+        await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
+    }
+
+    protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
+    {
+        return await AsyncQueryableExecuter.FirstOrDefaultAsync(
+            Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
+        );
+    }
+}
+````
+
+This implementation requires you to create a class represents your composite key:
+
+````csharp
+public class DistrictKey
+{
+    public Guid CityId { get; set; }
+
+    public string Name { get; set; }
+}
+````
 
 ## Lifetime
 

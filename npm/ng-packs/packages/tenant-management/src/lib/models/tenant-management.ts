@@ -14,11 +14,14 @@ export namespace TenantManagement {
   }
 
   export interface AddRequest {
+    adminEmailAddress: string;
+    adminPassword: string;
     name: string;
   }
 
-  export interface UpdateRequest extends AddRequest {
+  export interface UpdateRequest {
     id: string;
+    name: string;
   }
 
   export interface DefaultConnectionStringRequest {

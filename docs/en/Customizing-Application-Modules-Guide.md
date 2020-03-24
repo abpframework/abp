@@ -21,7 +21,7 @@ This approach has the following benefits:
 
 However, there is a drawback:
 
-* You may not able to **customize** the module source code as it is in your own solution.
+* You may not able to **customize** the module because the module source is not in your solution.
 
 This document explains **how to customize or extend** a depended module without need to change its source code. While it is limited compared to a full source code change opportunity, there are still some good ways to make some customizations.
 
@@ -53,3 +53,10 @@ This section suggests some approaches if you decided to use pre-built applicatio
 * [Overriding Services](Customizing-Application-Modules-Overriding-Services.md)
 * [Overriding the User Interface](Customizing-Application-Modules-Overriding-User-Interface.md)
 
+### See Also
+
+Also, see the following documents:
+
+* See [the localization document](Localization.md) to learn how to extend existing localization resources.
+* See [the settings document](Settings.md) to learn how to change setting definitions of a depended module.
+* See [the authorization document](Authorization.md) to learn how to change permission definitions of a depended module.

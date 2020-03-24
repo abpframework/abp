@@ -2,10 +2,10 @@
 
 ABP为创建**可重用的部件**提供了模型和基础设施. 部件系统是[ASP.NET Core ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components)的扩展. 在你有以下需求时,小部件会非常有用;
 
-* 在可复用的 **[模块](../Module-Development-Basics.md)** 中定义部件.
+* 在可复用的 **[模块](../../Module-Development-Basics.md)** 中定义部件.
 * 在部件中引用 **scripts & styles** 脚本.
-* 使用部件创建 **[仪表盘](Dashboards.md)**.
-* 支持 **[授权](../Authorization.md)** 与 **[捆绑`bundling`](Bundling-Minification.md)** 的部件
+* 使用部件创建 **仪表盘**.
+* 支持 **[授权](../../Authorization.md)** 与 **[捆绑`bundling`](Bundling-Minification.md)** 的部件
 
 ## 基本部件定义
 
@@ -13,7 +13,7 @@ ABP为创建**可重用的部件**提供了模型和基础设施. 部件系统�
 
 第一部,创建一个新的ASP.NET Core View Component:
 
-![widget-basic-files](../images/widget-basic-files.png)
+![widget-basic-files](../../images/widget-basic-files.png)
 
 **MySimpleWidgetViewComponent.cs**:
 
@@ -132,7 +132,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-参阅 [本地化文档](../Localization.md) 学习关于本地化资源的更多内容.
+参阅 [本地化文档](../../Localization.md) 学习关于本地化资源的更多内容.
 
 ## 引用 Style & Script
 
@@ -168,7 +168,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-ABP会考虑到这些依赖关系, 在view/page中使用正确的方法添加部件 . 样式和script可以是物理文件也可以是虚拟文件. 它于[虚拟文件系统](../Virtual-File-System.md)完全集成].
+ABP会考虑到这些依赖关系, 在view/page中使用正确的方法添加部件 . 样式和script可以是物理文件也可以是虚拟文件. 它于[虚拟文件系统](../../Virtual-File-System.md)完全集成].
 
 ### 定义 Bundle
 
@@ -227,7 +227,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 某些组件可能只对通过身份验证或授权的用户可用,这时可以使用 `Widget` attribute 的以下属性:
 
 * `RequiresAuthentication` (`bool`): 设置为true,只有通过身份验证的用户(登录用户)可用.
-* `RequiredPolicies` (`List<string>`): 授权用户的策略名称列表. 有关策略的详细信息请参阅[授权文档](../Authorization.md).
+* `RequiredPolicies` (`List<string>`): 授权用户的策略名称列表. 有关策略的详细信息请参阅[授权文档](../../Authorization.md).
 
 示例:
 
@@ -260,7 +260,7 @@ Configure<AbpWidgetOptions>(options =>
 });
 ```
 
-将上面的代码写到[模块](../Module-Development-Basics.md)的 `ConfigureServices` 方法中. `AbpWidgetOptions` 可以完成 `Widget` attribute 的所有功能. 比如为组件添加样式:
+将上面的代码写到[模块](../../Module-Development-Basics.md)的 `ConfigureServices` 方法中. `AbpWidgetOptions` 可以完成 `Widget` attribute 的所有功能. 比如为组件添加样式:
 
 ````csharp
 Configure<AbpWidgetOptions>(options =>

@@ -23,9 +23,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
             };
         }
 
-        public AbpConventionalControllerOptions Create(Assembly assembly, [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
+        public AbpConventionalControllerOptions Create(
+            Assembly assembly, 
+            [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
         {
-            var setting = new ConventionalControllerSetting(assembly, ModuleApiDescriptionModel.DefaultRootPath);
+            var setting = new ConventionalControllerSetting(
+                assembly,
+                ModuleApiDescriptionModel.DefaultRootPath,
+                ModuleApiDescriptionModel.DefaultRemoteServiceName
+            );
+
             optionsAction?.Invoke(setting);
             setting.Initialize();
             ConventionalControllerSettings.Add(setting);

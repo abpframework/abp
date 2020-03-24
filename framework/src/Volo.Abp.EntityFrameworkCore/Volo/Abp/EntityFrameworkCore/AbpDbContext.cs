@@ -28,7 +28,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext, ITransientDependency
+    public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
         where TDbContext : DbContext
     {
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
@@ -142,6 +142,19 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 ChangeTracker.AutoDetectChangesEnabled = true;
             }
+        }
+
+        public virtual void Initialize(AbpEfCoreDbContextInitializationContext initializationContext)
+        {
+            if (initializationContext.UnitOfWork.Options.Timeout.HasValue &&
+                Database.IsRelational() &&
+                !Database.GetCommandTimeout().HasValue)
+            {
+                Database.SetCommandTimeout(initializationContext.UnitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
+            }
+
+            ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
+            ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
         }
 
         protected virtual EntityChangeReport ApplyAbpConcepts()

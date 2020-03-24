@@ -92,3 +92,17 @@ builder.ConfigureIdentityServer(options =>
 ## 运行应用程序
 
 它已准备就绪, 只需要运行该应用程序与享受编码.
+
+## DBMS限制
+
+不同的DBMS可能存在一些限制, 如字段名称的最大长度, 索引长度等等. 
+模块可能提供了一些内置的解决方案. 你可以通过`ModelBuilder`来配置它 如: Identity Server模块
+
+```csharp
+builder.ConfigureIdentityServer(options =>
+{
+    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
+});
+```
+
+相关讨论: https://github.com/abpframework/abp/issues/1920
