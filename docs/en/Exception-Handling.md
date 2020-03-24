@@ -291,6 +291,26 @@ services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 });
 ````
 
+## Subscribing to the Exceptions
+
+It is possible to be informed when the ABP Framework **handles an exception**. It automatically **logs** all the exceptions to the standard [logger](Logging.md), but you may want to do more.
+
+In this case, create a class derived from the `ExceptionSubscriber` class in your application:
+
+````csharp
+public class MyExceptionSubscriber : ExceptionSubscriber
+{
+    public override async Task HandleAsync(ExceptionNotificationContext context)
+    {
+        //TODO...
+    }
+}
+````
+
+The `context` object contains necessary information about the exception occurred.
+
+> You can have multiple subscribers, each gets a copy of the exception. Exceptions thrown by your subscriber is ignored (but still logged).
+
 ## Built-In Exceptions
 
 Some exception types are automatically thrown by the framework:
