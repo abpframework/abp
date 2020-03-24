@@ -46,7 +46,7 @@ class DemoService {
 }
 ```
 
-You do not have to provide the RestService` at module or component/directive level, because it is already **provided in root**.
+You do not have to provide the `RestService` at module or component/directive level, because it is already **provided in root**.
 
 
 
@@ -146,7 +146,7 @@ Another nice config option that `request` method receives is `apiName` (availabl
 
 
 ```js
-putFoo(body: Foo) {
+putFoo(body: Foo, id: string) {
   const request: Rest.Request<Foo> = {
     method: 'PUT',
     url: '/' + id,
@@ -204,3 +204,6 @@ getSomeCustomHeaderValue() {
 
 You may find `Rest.Observe` enum [here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L10).
 
+## What's Next?
+
+* [Localization](./Localization.md)
