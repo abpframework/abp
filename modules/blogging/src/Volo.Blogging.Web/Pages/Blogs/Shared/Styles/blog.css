@@ -56,7 +56,7 @@
       background: none; }
     div.vs-blog .list-group .list-group-item + .list-group-item {
       border-top: 1px solid #f5f5f5;
-      padding: 45px 0 30px; }
+      padding: 35px 0 30px; }
     div.vs-blog .list-group .list-group-item h3 {
       margin-top: 0; }
   div.vs-blog .list-group.small-list .list-group-item {
@@ -73,6 +73,10 @@
     font-size: 1em; }
   div.vs-blog .font-125 {
     font-size: 1.125em; }
+  div.vs-blog pre {
+    background: #eee;
+    padding: 25px 30px;
+    margin: 1em 0 2em 0; }
   div.vs-blog .vs-blog-title {
     padding-bottom: 15px;
     margin-bottom: 25px;
@@ -236,6 +240,14 @@
     font-size: .95em; }
     div.vs-blog .media .media {
       font-size: .95em; }
+  div.vs-blog .read-more-btn {
+    display: inline-block;
+    font-size: .9em;
+    margin: 0 0 1em 0;
+    background: #eee;
+    color: blue;
+    padding: .25em 1em;
+    border-radius: 20px; }
   div.vs-blog .comment-area {
     background: #f5f5f5;
     margin: 1.5rem 0;

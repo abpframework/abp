@@ -302,12 +302,20 @@
             {
               "text": "Theming",
               "path": "UI/AspNetCore/Theming.md"
+            },
+            {
+              "text": "Customize/Extend the UI",
+              "path": "UI/AspNetCore/Customization-User-Interface.md"
             }
           ]
         },
         {
           "text": "Angular",
           "items": [
+            {
+              "text": "HTTP Requests",
+              "path": "UI/Angular/HTTP-Requests.md"
+            },
             {
               "text": "Localization",
               "path": "UI/Angular/Localization.md"
@@ -327,6 +335,10 @@
             {
               "text": "Custom Setting Page",
               "path": "UI/Angular/Custom-Setting-Page.md"
+            },
+            {
+              "text": "TrackByService",
+              "path": "UI/Angular/Track-By-Service.md"
             }
           ]
         }

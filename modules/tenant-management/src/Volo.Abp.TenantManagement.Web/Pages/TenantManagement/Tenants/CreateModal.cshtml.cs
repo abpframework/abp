@@ -44,6 +44,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             public string AdminEmailAddress { get; set; }
 
             [Required]
+            [DataType(DataType.Password)]
             [MaxLength(128)]
             public string AdminPassword { get; set; }
         }

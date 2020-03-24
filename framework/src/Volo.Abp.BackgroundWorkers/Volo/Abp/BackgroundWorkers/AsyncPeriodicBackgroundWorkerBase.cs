@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers
@@ -35,18 +36,24 @@ namespace Volo.Abp.BackgroundWorkers
 
         private void Timer_Elapsed(object sender, System.EventArgs e)
         {
-            try
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                using (var scope = ServiceScopeFactory.CreateScope())
+                try
                 {
                     AsyncHelper.RunSync(
                         () => DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider))
                     );
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
+                catch (Exception ex)
+                {
+                    AsyncHelper.RunSync(
+                        () => scope.ServiceProvider
+                            .GetRequiredService<IExceptionNotifier>()
+                            .NotifyAsync(new ExceptionNotificationContext(ex))
+                    );
+
+                    Logger.LogException(ex);
+                }
             }
         }
 
