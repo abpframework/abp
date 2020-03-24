@@ -146,7 +146,6 @@ public interface IBookAppService : IApplicationService
 `BookDto` is a simple [DTO](Data-Transfer-Objects.md) class defined as below:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))] //Defines the mapping
 public class BookDto
 {
     public Guid Id { get; set; }
@@ -159,7 +158,36 @@ public class BookDto
 }
 ````
 
-* `BookDto` defines `[AbpAutoMapFrom(typeof(Book))]` attribute to create the object mapping from `Book` to `BookDto`.
+we creating a [Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class. Example:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+    }
+}
+````
+
+You should then register profiles using the `AbpAutoMapperOptions`:
+
+````csharp
+[DependsOn(typeof(AbpAutoMapperModule))]
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            //Add all mappings defined in the assembly of the MyModule class
+            options.AddMaps<MyModule>();
+        });
+    }
+}
+````
+
+`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html). For more information, please refer to the [object to object mapping](Object-To-Object-Mapping.md) document.
 
 Then you can implement the `GetAsync` method as shown below:
 
@@ -250,7 +278,6 @@ public interface ICrudAppService<
 DTO classes used in this example are `BookDto` and `CreateUpdateBookDto`:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))]
 public class BookDto : AuditedEntityDto<Guid>
 {
     public string Name { get; set; }
@@ -260,7 +287,6 @@ public class BookDto : AuditedEntityDto<Guid>
     public float Price { get; set; }
 }
 
-[AbpAutoMapTo(typeof(Book))]
 public class CreateUpdateBookDto
 {
     [Required]
@@ -274,6 +300,19 @@ public class CreateUpdateBookDto
     public float Price { get; set; }
 }
 ````
+
+[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class of DTO class.
+
+```csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+        CreateMap<CreateUpdateBookDto, Book>();
+    }
+}
+```
 
 * `CreateUpdateBookDto` is shared by create and update operations, but you could use separated DTO classes as well.
 
