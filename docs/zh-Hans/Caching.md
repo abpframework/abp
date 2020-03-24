@@ -2,7 +2,9 @@
 
 ABP框架扩展了ASP.NET Core的分布式缓存系统.
 
-## Volo.Abp.Caching Package
+```
+Volo.Abp.Caching Package
+```
 
 > 默认情况下启动模板已经安装了这个包,所以大部分情况下你不需要手动安装.
 
