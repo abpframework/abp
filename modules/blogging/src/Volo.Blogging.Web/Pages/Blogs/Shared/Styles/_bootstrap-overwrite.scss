@@ -71,7 +71,7 @@ input, select, textarea, .form-control, .btn {
 
         & + .list-group-item {
             border-top: 1px solid #f5f5f5;
-            padding: 45px 0 30px;
+            padding: 35px 0 30px;
         }
 
         h3 {
@@ -104,5 +104,9 @@ input, select, textarea, .form-control, .btn {
 }
 .font-125 {
     font-size: 1.125em;
-} 
- 
+}
+pre { 
+    background: #eee;
+    padding: 25px 30px;
+    margin: 1em 0 2em 0;
+}
