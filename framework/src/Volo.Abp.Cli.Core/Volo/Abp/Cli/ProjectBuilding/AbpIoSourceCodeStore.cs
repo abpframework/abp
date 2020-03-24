@@ -51,7 +51,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
             if (version == null)
             {
-                version = latestVersion;
+                version = latestVersion ?? throw new CliUsageException(
+                              "The remote service is currently unavailable, please specify the version (like abp new Acme.BookStore -v 2.3.0(Make sure you have a template cache locally))!");
             }
 
             var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
@@ -122,7 +123,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             catch (Exception ex)
             {
                 Console.WriteLine("Error occured while getting the latest version from {0} : {1}", url, ex.Message);
-                throw;
+                return null;
             }
         }
 
