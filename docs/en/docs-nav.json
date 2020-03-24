@@ -317,6 +317,10 @@
               "path": "UI/Angular/Service-Proxies.md"
             },
             {
+              "text": "HTTP Requests",
+              "path": "UI/Angular/HTTP-Requests.md"
+            },
+            {
               "text": "Localization",
               "path": "UI/Angular/Localization.md"
             },
