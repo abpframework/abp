@@ -40,3 +40,7 @@ ngOnInit() {
 Navigate to `/setting-management` route to see the changes:
 
 ![Custom Settings Tab](./images/custom-settings.png)
+
+## What's Next?
+
+- [TrackByService](./Track-By-Service.md)
