@@ -46,5 +46,4 @@ testem.log
 Thumbs.db
 
 !**/[Pp]ackages/*
-
-apps/dev-app/src/environments/environment.internal.ts
+*.internal.*
