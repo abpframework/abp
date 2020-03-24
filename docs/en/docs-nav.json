@@ -335,6 +335,10 @@
             {
               "text": "Custom Setting Page",
               "path": "UI/Angular/Custom-Setting-Page.md"
+            },
+            {
+              "text": "TrackByService",
+              "path": "UI/Angular/Track-By-Service.md"
             }
           ]
         }
