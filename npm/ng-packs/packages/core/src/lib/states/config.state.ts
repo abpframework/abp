@@ -262,7 +262,8 @@ export class ConfigState {
         route.url = `/${route.path}`;
       }
 
-      route.order = route.order || route.order === 0 ? route.order : parent.children.length;
+      route.children = route.children || [];
+      route.order = route.order || route.order === 0 ? route.order : (parent.children || []).length;
       parent.children = [...(parent.children || []), route].sort((a, b) => a.order - b.order);
 
       flattedRoutes[index] = parent;
