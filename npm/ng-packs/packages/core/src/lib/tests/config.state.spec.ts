@@ -375,6 +375,7 @@ describe('ConfigState', () => {
   describe('#AddRoute', () => {
     const newRoute = {
       name: 'My new page',
+      children: [],
       iconClass: 'fa fa-dashboard',
       path: 'page',
       invisible: false,
