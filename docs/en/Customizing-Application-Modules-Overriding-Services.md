@@ -10,7 +10,7 @@ You have different options can be used based on your requirement those will be e
 
 ## Replacing an Interface
 
-If given service defines an interface, like the `IdentityUserAppService` class implements the `IIdentityAppService`, you can re-implement the same interface and replace the current implementation by your class. Example:
+If given service defines an interface, like the `IdentityUserAppService` class implements the `IIdentityUserAppService`, you can re-implement the same interface and replace the current implementation by your class. Example:
 
 ````csharp
 public class MyIdentityUserAppService : IIdentityUserAppService, ITransientDependency

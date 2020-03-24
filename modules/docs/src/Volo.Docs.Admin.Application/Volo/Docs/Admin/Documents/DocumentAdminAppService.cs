@@ -23,8 +23,8 @@ namespace Volo.Docs.Admin.Documents
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
-            IDocumentSourceFactory documentStoreFactory, 
-            IDistributedCache<DocumentUpdateInfo> documentUpdateCache, 
+            IDocumentSourceFactory documentStoreFactory,
+            IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IDocumentFullSearch documentFullSearch)
         {
             _projectRepository = projectRepository;
@@ -91,11 +91,21 @@ namespace Volo.Docs.Admin.Documents
             foreach (var doc in docs)
             {
                 var project = projects.FirstOrDefault(x => x.Id == doc.ProjectId);
-                if (project != null && (doc.FileName == project.NavigationDocumentName || doc.FileName == project.ParametersDocumentName))
+                if (project == null)
                 {
                     continue;
                 }
-                
+
+                if (doc.FileName == project.NavigationDocumentName)
+                {
+                    continue;
+                }
+
+                if (doc.FileName == project.ParametersDocumentName)
+                {
+                    continue;
+                }
+
                 await _documentFullSearch.AddOrUpdateAsync(doc);
             }
         }

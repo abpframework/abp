@@ -81,6 +81,7 @@
     "LastSeenDate": "Last seen date",
     "{0}Computer{1}WillBeRemovedFromRecords": "Computer of {0} ({1}) will be removed from records",
     "OrganizationDeletionWarningMessage": "Organization will be deleted",
+    "DeletingLastOwnerWarningMessage": "An organization must have at least one owner! Therefore you cannot remove this owner",
     "This{0}AlreadyExistInThisOrganization": "This {0} already exist in this organization",
     "AreYouSureYouWantToDeleteAllComputers": "Are you sure you want to delete all computers?",
     "DeleteAll": "Delete all",

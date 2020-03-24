@@ -1,9 +1,8 @@
 import { ConfigState } from '@abp/ng.core';
 import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
 import { NgxsModule, Store } from '@ngxs/store';
-import { interval, of, Subscription, throwError, timer } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { RestOccurError } from '../actions';
 import { Rest } from '../models';
 import { RestService } from '../services/rest.service';
 
@@ -36,6 +35,10 @@ describe('HttpClient testing', () => {
     });
   });
 
+  afterEach(() => {
+    spectator.controller.verify();
+  });
+
   test('should send a GET request with params', () => {
     spectator.service
       .request({ method: HttpMethod.GET, url: '/test', params: { id: 1 } })
@@ -66,34 +69,16 @@ describe('HttpClient testing', () => {
     spectator.expectOne('bar' + '/test', HttpMethod.GET);
   });
 
-  test('should close the subscriber when observe equal to body', done => {
-    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(interval(50));
+  test('should complete upon successful request', done => {
+    const complete = jest.fn(done);
 
-    const subscriber: Subscription = spectator.service
-      .request({ method: HttpMethod.GET, url: '/test' }, { observe: Rest.Observe.Body })
-      .subscribe();
+    spectator.service.request({ method: HttpMethod.GET, url: '/test' }).subscribe({ complete });
 
-    timer(51).subscribe(() => {
-      expect(subscriber.closed).toBe(true);
-      done();
-    });
-  });
-
-  test('should open the subscriber when observe not equal to body', done => {
-    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(interval(50));
-
-    const subscriber: Subscription = spectator.service
-      .request({ method: HttpMethod.GET, url: '/test' }, { observe: Rest.Observe.Events })
-      .subscribe();
-
-    timer(51).subscribe(() => {
-      expect(subscriber.closed).toBe(false);
-      done();
-    });
+    const req = spectator.expectOne(api + '/test', HttpMethod.GET);
+    spectator.flushAll([req], [{}]);
   });
 
   test('should handle the error', () => {
-    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(throwError('Testing error'));
     const spy = jest.spyOn(store, 'dispatch');
 
     spectator.service
@@ -101,15 +86,17 @@ describe('HttpClient testing', () => {
       .pipe(
         catchError(err => {
           expect(err).toBeTruthy();
-          expect(spy.mock.calls[0][0] instanceof RestOccurError).toBe(true);
+          expect(spy).toHaveBeenCalled();
           return of(null);
         }),
       )
       .subscribe();
+
+    const req = spectator.expectOne(api + '/test', HttpMethod.GET);
+    spectator.flushAll([req], [throwError('Testing error')]);
   });
 
   test('should not handle the error when skipHandleError is true', () => {
-    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(throwError('Testing error'));
     const spy = jest.spyOn(store, 'dispatch');
 
     spectator.service
@@ -120,10 +107,13 @@ describe('HttpClient testing', () => {
       .pipe(
         catchError(err => {
           expect(err).toBeTruthy();
-          expect(spy.mock.calls).toHaveLength(0);
+          expect(spy).toHaveBeenCalledTimes(0);
           return of(null);
         }),
       )
       .subscribe();
+
+    const req = spectator.expectOne(api + '/test', HttpMethod.GET);
+    spectator.flushAll([req], [throwError('Testing error')]);
   });
 });

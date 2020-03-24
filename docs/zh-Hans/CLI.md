@@ -22,7 +22,7 @@ dotnet tool update -g Volo.Abp.Cli
 
 生成基于ABP[启动模板](Startup-Templates/Index.md)的新解决方案.
 
-基本用法:
+用法:
 
 ````bash
 abp new <解决方案名称> [options]
@@ -70,7 +70,7 @@ abp new Acme.BookStore
 
 > 需要注意的是添加的模块可能需要额外的配置,通常会在包的文档中指出.
 
-基本用法:
+用法:
 
 ````bash
 abp add-package <包名> [options]
@@ -94,7 +94,7 @@ abp add-package Volo.Abp.MongoDB
 
 > 由于分层,不同的数据库提供程序选项或其他原因,业务模块通常由多个包组成. 使用`add-module`命令可以大大简化向模块添加模块的过程. 但是每个模块可能需要一些其他配置,这些配置通常在相关模块的文档中指出.
 
-基本用法:
+用法:
 
 ````bash
 abp add-module <模块名称> [options]
@@ -174,25 +174,25 @@ abp logout
 
 ### generate-proxy
 
-生成typescript服务和DTO代理
+为你的HTTP API生成客户端代码,简化客户端使用服务的成本. 在运行 `generate-proxy` 命令之前,你的host必须启动正在运行.
 
-基本用法:
+用法:
 
 ````bash
-abp generate-proxy [options] 
+abp generate-proxy [options]
 ````
+
+#### Options
+
+* `--apiUrl` 或者 `-a`：指定HTTP API的根URL. 如果未指定这个选项,默认使用你Angular应用程序的`environment.ts`文件API URL. 在运行 `generate-proxy` 命令之前,你的host必须启动正在运行.
+* `--ui` 或者 `-u`: 指定UI框架,默认框架是angular.当前只有angular一个选项, 但我们会通过更改CLI增加新的选项. 尽请关注!
+* `--module` 或者 `-m`：指定模块名. 默认模块名称为app. 如果你想所有模块,你可以指定 `--module all` 命令.
 
 示例:
 
 ````bash
 abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
 ````
-
-#### Options
-
-* `--apiUrl` 或者 `-a`：如果未指定这个选项,默认使用你的environment.ts文件的API URL, 你可以随时使用这个选项指定API源.
-* `--ui` 或者 `-u`: 指定UI框架,默认框架是angular.当前只有angular一个选项, 但我们会通过更改CLI增加新的选项. 尽请关注!
-* `--module` 或者 `-m`：指定模块名. 默认模块名称为app. 如果你想所有模块,你可以指定 `--module all` 命令.
 
 ### help
 
