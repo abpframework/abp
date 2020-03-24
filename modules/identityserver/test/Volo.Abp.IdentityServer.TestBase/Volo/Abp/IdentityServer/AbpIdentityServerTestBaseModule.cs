@@ -21,7 +21,7 @@ namespace Volo.Abp.IdentityServer
 
             PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
             {
-                identityServerBuilder.AddDeveloperSigningCredential(false);
+                identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
             });
         }
         public override void ConfigureServices(ServiceConfigurationContext context)
