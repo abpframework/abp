@@ -174,4 +174,5 @@ public class MyDistributedIdentityUserCreatedEventHandler :
 
 ## See Also
 
+* [Migration System for the EF Core](Entity-Framework-Core-Migrations.md)
 * [Customizing the Existing Modules](Customizing-Application-Modules-Guide.md)
