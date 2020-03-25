@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,17 +49,30 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string templateSource = null)
         {
 
+            DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+            
             var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
             if (version == null)
             {
-                version = latestVersion ?? throw new CliUsageException(
-                              "The remote service is currently unavailable, please specify the version (like abp new Acme.BookStore -v 2.3.0(Make sure you have a template cache locally))!");
+                if (latestVersion == null)
+                {
+                    Logger.LogWarning("The remote service is currently unavailable, please specify the version.");
+                    Logger.LogWarning(string.Empty);
+                    Logger.LogWarning("Find the following template in your cache directory: ");
+                    
+                    foreach (var cacheFile in Directory.GetFiles(CliPaths.TemplateCache))
+                    {
+                        Logger.LogWarning($"    {cacheFile}");
+                    }
+
+                    Logger.LogWarning(string.Empty);
+                    throw new CliUsageException("Use command: abp new Acme.BookStore -v version");
+                }
+                version = latestVersion;
             }
 
             var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
-
-            DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
-
+            
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
                 Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);

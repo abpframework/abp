@@ -61,9 +61,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error occured while cli analytics from {0} : {1}", url, ex.Message);
+                // ignored
             }
-            
         }
     }
 }
