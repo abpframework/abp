@@ -183,7 +183,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            var propertyNames = EntityExtensions.GetPropertyNames(entityType);
+            var propertyNames = EntityExtensionManager.GetPropertyNames(entityType);
 
             foreach (var propertyName in propertyNames)
             {
@@ -241,7 +241,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
             
-            var propertyNames = EntityExtensions.GetPropertyNames(entityType);
+            var propertyNames = EntityExtensionManager.GetPropertyNames(entityType);
 
             foreach (var propertyName in propertyNames)
             {

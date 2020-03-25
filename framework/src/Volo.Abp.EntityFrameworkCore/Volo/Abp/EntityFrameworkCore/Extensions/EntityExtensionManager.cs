@@ -28,27 +28,26 @@ namespace Volo.Abp.EntityFrameworkCore.Extensions
         }
     }
 
-    public static class EntityExtensions
+    public static class EntityExtensionManager
     {
         private static readonly Dictionary<Type, EntityExtensionInfo> ExtensionInfos;
 
         //TODO: Use PropertyBuilder<TProperty> instead
 
-        static EntityExtensions()
+        static EntityExtensionManager()
         {
             ExtensionInfos = new Dictionary<Type, EntityExtensionInfo>();
         }
 
-        public static void AddProperty<TEntity>(
+        public static void AddProperty<TEntity, TProperty>(
             string name,
-            Type propertyType,
             Action<PropertyBuilder> propertyBuildAction)
         {
             var extensionInfo = ExtensionInfos
                 .GetOrAdd(typeof(TEntity), () => new EntityExtensionInfo());
 
             var propertyExtensionInfo = extensionInfo.Properties
-                .GetOrAdd(name, () => new PropertyExtensionInfo(propertyType));
+                .GetOrAdd(name, () => new PropertyExtensionInfo(typeof(TProperty)));
 
             propertyExtensionInfo.Actions.Add(propertyBuildAction);
         }

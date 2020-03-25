@@ -22,7 +22,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 
             if (entityType != null)
             {
-                var propertyNames = EntityExtensions.GetPropertyNames(entityType);
+                var propertyNames = EntityExtensionManager.GetPropertyNames(entityType);
 
                 foreach (var propertyName in propertyNames)
                 {
