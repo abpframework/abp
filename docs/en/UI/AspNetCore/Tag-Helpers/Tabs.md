@@ -30,7 +30,7 @@ Basic usage:
 
 ## Demo
 
-See the [cards demo page](https://bootstrap-taghelpers.abp.io/Components/Cards) to see it in action.
+See the [tabs demo page](https://bootstrap-taghelpers.abp.io/Components/Tabs) to see it in action.
 
 ## abp-tab Attributes
 
