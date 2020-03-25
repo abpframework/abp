@@ -61,11 +61,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Logger.LogWarning("The remote service is currently unavailable, please specify the version.");
                     Logger.LogWarning(string.Empty);
                     Logger.LogWarning("Find the following template in your cache directory: ");
+                    Logger.LogWarning("\t Template Name\tVersion");
                     
                     var templateList = GetLocalTemplates();
                     foreach (var cacheFile in templateList)
                     {
-                        Logger.LogWarning($"   {cacheFile.TemplateName}: {cacheFile.Version}");
+                        Logger.LogWarning($"\t {cacheFile.TemplateName}\t\t{cacheFile.Version}");
                     }
 
                     Logger.LogWarning(string.Empty);
