@@ -38,6 +38,8 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Settings", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.Property(x => x.Name).HasMaxLength(SettingConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLength).IsRequired();
                 b.Property(x => x.ProviderName).HasMaxLength(SettingConsts.MaxProviderNameLength);

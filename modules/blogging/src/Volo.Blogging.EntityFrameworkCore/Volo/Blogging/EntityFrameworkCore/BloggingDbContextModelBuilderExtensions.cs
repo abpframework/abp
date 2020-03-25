@@ -31,15 +31,15 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Users", options.Schema);
 
+                b.ConfigureByConvention();
                 b.ConfigureAbpUser();
-                b.ConfigureExtraProperties();
             });
 
             builder.Entity<Blog>(b =>
             {
                 b.ToTable(options.TablePrefix + "Blogs", options.Schema);
 
-                b.ConfigureFullAuditedAggregateRoot();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength).HasColumnName(nameof(Blog.Name));
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(BlogConsts.MaxShortNameLength).HasColumnName(nameof(Blog.ShortName));
@@ -50,7 +50,7 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Posts", options.Schema);
 
-                b.ConfigureFullAuditedAggregateRoot();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.BlogId).HasColumnName(nameof(Post.BlogId));
                 b.Property(x => x.Title).IsRequired().HasMaxLength(PostConsts.MaxTitleLength).HasColumnName(nameof(Post.Title));
@@ -67,7 +67,7 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Comments", options.Schema);
 
-                b.ConfigureFullAuditedAggregateRoot();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength).HasColumnName(nameof(Comment.Text));
                 b.Property(x => x.RepliedCommentId).HasColumnName(nameof(Comment.RepliedCommentId));
@@ -81,7 +81,7 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Tags", options.Schema);
 
-                b.ConfigureFullAuditedAggregateRoot();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength).HasColumnName(nameof(Tag.Name));
                 b.Property(x => x.Description).HasMaxLength(TagConsts.MaxDescriptionLength).HasColumnName(nameof(Tag.Description));
@@ -93,6 +93,8 @@ namespace Volo.Blogging.EntityFrameworkCore
             builder.Entity<PostTag>(b =>
             {
                 b.ToTable(options.TablePrefix + "PostTags", options.Schema);
+
+                b.ConfigureByConvention();
 
                 b.Property(x => x.PostId).HasColumnName(nameof(PostTag.PostId));
                 b.Property(x => x.TagId).HasColumnName(nameof(PostTag.TagId));

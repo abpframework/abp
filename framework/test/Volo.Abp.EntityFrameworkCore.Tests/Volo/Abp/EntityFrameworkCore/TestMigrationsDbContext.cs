@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Extensions;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.TestApp.Domain;
@@ -36,6 +37,8 @@ namespace Volo.Abp.EntityFrameworkCore
 
             modelBuilder.Entity<City>(b =>
             {
+                //b.ConfigureExtensions();
+
                 b.OwnsMany(c => c.Districts, d =>
                 {
                     d.WithOwner().HasForeignKey(x => x.CityId);
