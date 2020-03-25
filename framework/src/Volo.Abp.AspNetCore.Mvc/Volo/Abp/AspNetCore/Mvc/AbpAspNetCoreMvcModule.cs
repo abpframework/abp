@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
@@ -20,6 +21,7 @@ using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -38,6 +40,10 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            DynamicProxyIgnoreTypes.IgnoreTypes.AddIfNotContains(typeof(ControllerBase));
+            DynamicProxyIgnoreTypes.IgnoreTypes.AddIfNotContains(typeof(PageModel));
+            DynamicProxyIgnoreTypes.IgnoreTypes.AddIfNotContains(typeof(ViewComponent));
+            
             context.Services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
         }
 

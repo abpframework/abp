@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.Features
 {
@@ -9,7 +10,7 @@ namespace Volo.Abp.Features
     {
         public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            if (ShouldIntercept(context.ImplementationType))
+            if (ShouldIntercept(context.ImplementationType) && !DynamicProxyIgnoreTypes.Contains(context.ImplementationType))
             {
                 context.Interceptors.TryAdd<FeatureInterceptor>();
             }
