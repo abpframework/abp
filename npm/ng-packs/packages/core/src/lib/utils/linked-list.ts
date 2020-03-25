@@ -1,3 +1,5 @@
+/* tslint:disable:no-non-null-assertion */
+
 import compare from 'just-compare';
 
 export class ListNode<T = any> {
@@ -25,7 +27,11 @@ export class LinkedList<T = any> {
     return this.size;
   }
 
-  private linkWith(value: T, previousNode: ListNode<T>, nextNode: ListNode<T>): ListNode<T> {
+  private linkWith(
+    value: T,
+    previousNode: ListNode<T> | undefined,
+    nextNode: ListNode<T> | undefined,
+  ): ListNode<T> {
     const node = new ListNode(value);
 
     if (!previousNode) return this.addHead(value);
@@ -154,7 +160,7 @@ export class LinkedList<T = any> {
 
     for (let current = this.first, position = 0; current; position += 1, current = current.next) {
       if (compareFn(current.value, value)) {
-        dropped.push(this.dropByIndex(position - dropped.length));
+        dropped.push(this.dropByIndex(position - dropped.length)!);
       }
     }
 

@@ -796,7 +796,7 @@ describe('Linked List (Doubly)', () => {
 
     const arr = [];
 
-    for (let value of list) {
+    for (const value of list) {
       arr.push(value);
     }
 
