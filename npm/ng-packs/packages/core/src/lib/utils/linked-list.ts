@@ -68,13 +68,13 @@ export class LinkedList<T = any> {
   }
 
   addAfter(value: T, previousValue: T, compareFn = compare): ListNode<T> {
-    const previous = this.find(currentValue => compareFn(currentValue, previousValue));
+    const previous = this.find(node => compareFn(node.value, previousValue));
 
     return previous ? this.linkWith(value, previous, previous.next) : this.addTail(value);
   }
 
   addBefore(value: T, nextValue: T, compareFn = compare): ListNode<T> {
-    const next = this.find(currentValue => compareFn(currentValue, nextValue));
+    const next = this.find(node => compareFn(node.value, nextValue));
 
     return next ? this.linkWith(value, next.previous, next) : this.addHead(value);
   }
@@ -148,7 +148,7 @@ export class LinkedList<T = any> {
   }
 
   dropByValue(value: T, compareFn = compare): ListNode<T> | undefined {
-    const position = this.findIndex(currentValue => compareFn(currentValue, value));
+    const position = this.findIndex(node => compareFn(node.value, value));
 
     if (position < 0) return undefined;
 
@@ -203,7 +203,7 @@ export class LinkedList<T = any> {
 
   find(predicate: ListIteratorFunction<T>): ListNode<T> | undefined {
     for (let current = this.first, position = 0; current; position += 1, current = current.next) {
-      if (predicate(current.value, position, this)) return current;
+      if (predicate(current, position, this)) return current;
     }
 
     return undefined;
@@ -211,7 +211,7 @@ export class LinkedList<T = any> {
 
   findIndex(predicate: ListIteratorFunction<T>): number {
     for (let current = this.first, position = 0; current; position += 1, current = current.next) {
-      if (predicate(current.value, position, this)) return position;
+      if (predicate(current, position, this)) return position;
     }
 
     return -1;
@@ -219,7 +219,7 @@ export class LinkedList<T = any> {
 
   forEach<R = boolean>(callback: ListIteratorFunction<T, R>) {
     for (let node = this.first, position = 0; node; position += 1, node = node.next) {
-      callback(node.value, position, this);
+      callback(node, position, this);
     }
   }
 
@@ -228,13 +228,13 @@ export class LinkedList<T = any> {
   }
 
   indexOf(value: T, compareFn = compare): number {
-    return this.findIndex(currentValue => compareFn(currentValue, value));
+    return this.findIndex(node => compareFn(node.value, value));
   }
 
   toArray(): T[] {
     const array = new Array(this.size);
 
-    this.forEach((value, index) => (array[index!] = value));
+    this.forEach((node, index) => (array[index!] = node.value));
 
     return array;
   }
@@ -253,7 +253,7 @@ export class LinkedList<T = any> {
 }
 
 export type ListIteratorFunction<T = any, R = boolean> = (
-  value: T,
+  node: ListNode<T>,
   index?: number,
   list?: LinkedList,
 ) => R;

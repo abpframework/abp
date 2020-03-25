@@ -212,7 +212,7 @@ describe('Linked List (Doubly)', () => {
 
       // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
-      const node1 = list.find(value => value === 'x');
+      const node1 = list.find(node => node.previous && node.previous.value === 'a');
 
       expect(node1.value).toBe('x');
       expect(node1.previous.value).toBe('a');
@@ -220,7 +220,7 @@ describe('Linked List (Doubly)', () => {
 
       // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
-      const node2 = list.find((_, index) => index === 3);
+      const node2 = list.find(node => node.next && node.next.value === 'c');
 
       expect(node2.value).toBe('x');
       expect(node2.previous.value).toBe('b');
@@ -228,9 +228,9 @@ describe('Linked List (Doubly)', () => {
     });
 
     it('should return undefined when list is empty', () => {
-      const node = list.find(value => value === 'x');
+      const found = list.find(node => node.value === 'x');
 
-      expect(node).toBeUndefined();
+      expect(found).toBeUndefined();
     });
 
     it('should return undefined when predicate finds no match', () => {
@@ -240,9 +240,9 @@ describe('Linked List (Doubly)', () => {
 
       // "a" <-> "b" <-> "c"
 
-      const node = list.find(value => value === 'x');
+      const found = list.find(node => node.value === 'x');
 
-      expect(node).toBeUndefined();
+      expect(found).toBeUndefined();
       expect(list.length).toBe(3);
       expect(list.head.value).toBe('a');
       expect(list.head.next.value).toBe('b');
@@ -263,26 +263,19 @@ describe('Linked List (Doubly)', () => {
 
       // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
-      const index1 = list.findIndex(value => value === 'x');
+      const index1 = list.findIndex(node => node.previous && node.previous.value === 'a');
 
       expect(index1).toBe(1);
 
       // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
-      let timesFound = 0;
-      const index2 = list.findIndex(value => {
-        if (timesFound > 1) return false;
-
-        timesFound += Number(value === 'x');
-
-        return timesFound > 1;
-      });
+      const index2 = list.findIndex(node => node.next && node.next.value === 'c');
 
       expect(index2).toBe(3);
     });
 
     it('should return -1 when list is empty', () => {
-      const index = list.findIndex(value => value === 'x');
+      const index = list.findIndex(node => node.value === 'x');
 
       expect(index).toBe(-1);
     });
@@ -294,7 +287,7 @@ describe('Linked List (Doubly)', () => {
 
       // "a" <-> "b" <-> "c"
 
-      const index = list.findIndex(value => value === 'x');
+      const index = list.findIndex(node => node.value === 'x');
 
       expect(index).toBe(-1);
       expect(list.length).toBe(3);
@@ -309,9 +302,9 @@ describe('Linked List (Doubly)', () => {
 
   describe('#forEach', () => {
     it('should call given function for each node of the list', () => {
-      list.add('a').tail();
-      list.add('b').tail();
-      list.add('c').tail();
+      const a = list.add('a').tail();
+      const b = list.add('b').tail();
+      const c = list.add('c').tail();
 
       // "a" <-> "b" <-> "c"
 
@@ -319,9 +312,9 @@ describe('Linked List (Doubly)', () => {
       list.forEach(spy);
 
       expect(spy.mock.calls).toEqual([
-        ['a', 0, list],
-        ['b', 1, list],
-        ['c', 2, list],
+        [a, 0, list],
+        [b, 1, list],
+        [c, 2, list],
       ]);
     });
 
