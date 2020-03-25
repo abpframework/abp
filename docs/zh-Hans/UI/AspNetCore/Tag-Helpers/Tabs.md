@@ -28,7 +28,7 @@
 
 ## Demo
 
-参阅[卡面demo页面](https://bootstrap-taghelpers.abp.io/Components/Cards)查看示例.
+参阅[卡面demo页面](https://bootstrap-taghelpers.abp.io/Components/Tabs)查看示例.
 
 ## abp-tab Attributes
 
