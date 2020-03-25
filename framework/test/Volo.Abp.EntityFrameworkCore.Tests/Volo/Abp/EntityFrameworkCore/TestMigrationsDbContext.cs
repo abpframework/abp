@@ -37,7 +37,7 @@ namespace Volo.Abp.EntityFrameworkCore
 
             modelBuilder.Entity<City>(b =>
             {
-                EntityExtensionManager.ConfigureProperties<City>(b);
+                b.ConfigureExtensions();
 
                 b.OwnsMany(c => c.Districts, d =>
                 {

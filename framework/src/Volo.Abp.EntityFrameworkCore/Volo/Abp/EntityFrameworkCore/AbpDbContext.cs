@@ -165,7 +165,7 @@ namespace Volo.Abp.EntityFrameworkCore
             FillExtraPropertiesForTrackedEntities(e);
         }
 
-        private static void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
+        protected virtual void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
         {
             var entityType = e.Entry.Metadata.ClrType;
             if (entityType == null)
@@ -187,7 +187,18 @@ namespace Volo.Abp.EntityFrameworkCore
 
             foreach (var propertyName in propertyNames)
             {
-                entity.SetProperty(propertyName, e.Entry.CurrentValues[propertyName]);
+                /* Checking "currentValue != null" has a good advantage:
+                 * Assume that you we already using a named extra property,
+                 * then decided to create a field (entity extension) for it.
+                 * In this way, it prevents to delete old value in the JSON and
+                 * updates the field on the next save!
+                 */
+
+                var currentValue = e.Entry.CurrentValues[propertyName];
+                if (currentValue != null)
+                {
+                    entity.SetProperty(propertyName, currentValue);
+                }
             }
         }
 
@@ -223,9 +234,9 @@ namespace Volo.Abp.EntityFrameworkCore
             AddDomainEvents(changeReport, entry.Entity);
         }
 
-        private void HandleExtraPropertiesOnSave(EntityEntry entry)
+        protected virtual void HandleExtraPropertiesOnSave(EntityEntry entry)
         {
-            if (entry.State == EntityState.Deleted)
+            if (entry.State.IsIn(EntityState.Deleted, EntityState.Unchanged))
             {
                 return;
             }
