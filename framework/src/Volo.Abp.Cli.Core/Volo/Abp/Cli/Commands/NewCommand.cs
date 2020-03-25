@@ -94,7 +94,7 @@ namespace Volo.Abp.Cli.Commands
             var createSolutionFolder = (commandLineArgs.Options.GetOrNull(Options.CreateSolutionFolder.Short, Options.CreateSolutionFolder.Long) ?? "true").ToLowerInvariant() != "false";
             if (!createSolutionFolder)
             {
-                Logger.LogInformation("Create Solution Folder: false");
+                Logger.LogInformation("Create Solution Folder: no");
             }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
@@ -106,10 +106,7 @@ namespace Volo.Abp.Cli.Commands
                 Path.Combine(outputFolderRoot, SolutionName.Parse(projectName).FullName) :
                 outputFolderRoot;
 
-            if (!Directory.Exists(outputFolder))
-            {
-                Directory.CreateDirectory(outputFolder);
-            }
+            Volo.Abp.IO.DirectoryHelper.CreateIfNotExists(outputFolder);
 
             Logger.LogInformation("Output folder: " + outputFolder);
 
