@@ -2,10 +2,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
@@ -60,14 +62,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Logger.LogWarning(string.Empty);
                     Logger.LogWarning("Find the following template in your cache directory: ");
                     
-                    foreach (var cacheFile in Directory.GetFiles(CliPaths.TemplateCache))
+                    var templateList = GetLocalTemplates();
+                    foreach (var cacheFile in templateList)
                     {
-                        Logger.LogWarning($"    {cacheFile}");
+                        Logger.LogWarning($"   {cacheFile.TemplateName}: {cacheFile.Version}");
                     }
 
                     Logger.LogWarning(string.Empty);
                     throw new CliUsageException("Use command: abp new Acme.BookStore -v version");
                 }
+                
                 version = latestVersion;
             }
 
@@ -210,9 +214,28 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
         }
 
-        private static bool IsNetworkSource(string source)
+        private bool IsNetworkSource(string source)
         {
             return source.ToLower().StartsWith("http");
+        }
+
+        private List<(string TemplateName, string Version)> GetLocalTemplates()
+        {
+            var templateList = new List<(string TemplateName, string Version)>(); 
+            
+            var stringBuilder = new StringBuilder();
+            foreach (var cacheFile in Directory.GetFiles(CliPaths.TemplateCache))
+            {
+                stringBuilder.AppendLine(cacheFile);
+            }
+
+            var matches = Regex.Matches(stringBuilder.ToString(),"(app|app-pro|module|module-pro)-(.+).zip");
+            foreach (Match match in matches)
+            {
+                templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
+            }
+
+            return templateList;
         }
 
         public class SourceCodeDownloadInputDto
