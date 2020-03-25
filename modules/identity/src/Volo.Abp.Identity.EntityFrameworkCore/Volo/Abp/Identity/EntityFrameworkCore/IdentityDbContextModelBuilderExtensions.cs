@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Extensions;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Users.EntityFrameworkCore;
 
@@ -36,11 +37,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(u => u.LockoutEnabled).HasDefaultValue(false).HasColumnName(nameof(IdentityUser.LockoutEnabled));
                 b.Property(u => u.AccessFailedCount).HasDefaultValue(0).HasColumnName(nameof(IdentityUser.AccessFailedCount));
 
+                EntityExtensions.ConfigureProperties<IdentityUser>(b);
+
                 b.HasMany(u => u.Claims).WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
                 b.HasMany(u => u.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
                 b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
                 b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-
+                
                 b.HasIndex(u => u.NormalizedUserName);
                 b.HasIndex(u => u.NormalizedEmail);
                 b.HasIndex(u => u.UserName);

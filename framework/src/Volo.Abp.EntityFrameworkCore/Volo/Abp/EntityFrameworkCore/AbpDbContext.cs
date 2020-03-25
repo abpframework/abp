@@ -18,6 +18,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
+using Volo.Abp.EntityFrameworkCore.Extensions;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
@@ -155,6 +156,39 @@ namespace Volo.Abp.EntityFrameworkCore
 
             ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
             ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
+
+            ChangeTracker.Tracked += ChangeTracker_Tracked;
+        }
+
+        protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
+        {
+            FillExtraPropertiesForTrackedEntities(e);
+        }
+
+        private static void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
+        {
+            var entityType = e.Entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(e.Entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+
+            if (!e.FromQuery)
+            {
+                return;
+            }
+
+            var propertyNames = EntityExtensions.GetPropertyNames(entityType);
+
+            foreach (var propertyName in propertyNames)
+            {
+                entity.SetProperty(propertyName, e.Entry.CurrentValues[propertyName]);
+            }
         }
 
         protected virtual EntityChangeReport ApplyAbpConcepts()
@@ -184,7 +218,35 @@ namespace Volo.Abp.EntityFrameworkCore
                     break;
             }
 
+            HandleExtraPropertiesOnSave(entry);
+
             AddDomainEvents(changeReport, entry.Entity);
+        }
+
+        private void HandleExtraPropertiesOnSave(EntityEntry entry)
+        {
+            if (entry.State == EntityState.Deleted)
+            {
+                return;
+            }
+
+            var entityType = entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+            
+            var propertyNames = EntityExtensions.GetPropertyNames(entityType);
+
+            foreach (var propertyName in propertyNames)
+            {
+                entry.Property(propertyName).CurrentValue = entity.GetProperty(propertyName);
+            }
         }
 
         protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)
