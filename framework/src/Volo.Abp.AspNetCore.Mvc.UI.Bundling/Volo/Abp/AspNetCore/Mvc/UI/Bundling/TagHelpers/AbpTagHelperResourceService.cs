@@ -63,7 +63,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             foreach (var bundleFile in bundleFiles)
             {
                 var file = WebContentFileProvider.GetFileInfo(bundleFile);
-                if (file == null)
+                if (!file.Exists)
                 {
                     throw new AbpException($"Could not find the bundle file from {nameof(IWebContentFileProvider)}");
                 }
