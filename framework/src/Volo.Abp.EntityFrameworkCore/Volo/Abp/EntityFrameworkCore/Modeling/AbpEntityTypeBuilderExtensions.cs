@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.EntityFrameworkCore.Extensions;
 using Volo.Abp.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.MultiTenancy;
@@ -25,7 +26,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.TryConfigureCreationTime();
             b.TryConfigureLastModificationTime();
             b.TryConfigureModificationAudited();
-            b.TryConfigureMultiTenant(); 
+            b.TryConfigureMultiTenant();
         }
 
         public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
@@ -60,6 +61,8 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
                     .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
                     .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
                     .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, object>());
+
+                EntityExtensionManager.ConfigureExtensions(b.Metadata.ClrType, b);
             }
         }
 
@@ -276,7 +279,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureFullAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
-            where T : class 
+            where T : class
         {
             b.As<EntityTypeBuilder>().TryConfigureFullAudited();
             b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
