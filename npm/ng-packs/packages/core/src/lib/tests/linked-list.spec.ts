@@ -538,6 +538,95 @@ describe('Linked List (Doubly)', () => {
         expect(list.tail.previous.previous.value).toBe('a');
       });
     });
+
+    describe('#byValueAll', () => {
+      it('should remove all nodes with given value', () => {
+        list.add('a').tail();
+        list.add('x').tail();
+        list.add('b').tail();
+        list.add('x').tail();
+        list.add('c').tail();
+
+        // "a" <-> "x" <-> "b" <-> "x" <-> "c"
+
+        const dropped = list.drop().byValueAll('x');
+
+        // "a" <-> "b" <-> "c"
+
+        expect(dropped.length).toBe(2);
+        expect(dropped[0].value).toEqual('x');
+        expect(dropped[0].previous.value).toEqual('a');
+        expect(dropped[0].next.value).toEqual('b');
+        expect(dropped[1].value).toEqual('x');
+        expect(dropped[1].previous.value).toEqual('b');
+        expect(dropped[1].next.value).toEqual('c');
+
+        expect(list.length).toBe(3);
+        expect(list.head.value).toBe('a');
+        expect(list.head.next.value).toBe('b');
+        expect(list.head.next.next.value).toBe('c');
+        expect(list.tail.value).toBe('c');
+        expect(list.tail.previous.value).toBe('b');
+        expect(list.tail.previous.previous.value).toBe('a');
+      });
+
+      it('should be able to receive a custom compareFn', () => {
+        list.add({ x: 1 }).tail();
+        list.add({ x: 0 }).tail();
+        list.add({ x: 2 }).tail();
+        list.add({ x: 0 }).tail();
+        list.add({ x: 3 }).tail();
+
+        // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
+
+        const dropped = list.drop().byValueAll({ x: 0 }, (v1: X, v2: X) => v1.x === v2.x);
+
+        // {"x":1} <-> {"x":2} <-> {"x":3}
+
+        expect(dropped.length).toBe(2);
+        expect(dropped[0].value.x).toEqual(0);
+        expect(dropped[0].previous.value.x).toEqual(1);
+        expect(dropped[0].next.value.x).toEqual(2);
+        expect(dropped[1].value.x).toEqual(0);
+        expect(dropped[1].previous.value.x).toEqual(2);
+        expect(dropped[1].next.value.x).toEqual(3);
+
+        expect(list.length).toBe(3);
+        expect(list.head.value.x).toBe(1);
+        expect(list.head.next.value.x).toBe(2);
+        expect(list.head.next.next.value.x).toBe(3);
+        expect(list.tail.value.x).toBe(3);
+        expect(list.tail.previous.value.x).toBe(2);
+        expect(list.tail.previous.previous.value.x).toBe(1);
+      });
+
+      it('should return empty array when list is empty', () => {
+        const dropped = list.drop().byValueAll('x');
+        expect(dropped).toEqual([]);
+      });
+
+      it('should return empty array when given value is not found', () => {
+        list.add('a').tail();
+        list.add('b').tail();
+        list.add('c').tail();
+
+        // "a" <-> "b" <-> "c"
+
+        const dropped = list.drop().byValueAll('x');
+
+        // "a" <-> "b" <-> "c"
+
+        expect(dropped).toEqual([]);
+
+        expect(list.length).toBe(3);
+        expect(list.head.value).toBe('a');
+        expect(list.head.next.value).toBe('b');
+        expect(list.head.next.next.value).toBe('c');
+        expect(list.tail.value).toBe('c');
+        expect(list.tail.previous.value).toBe('b');
+        expect(list.tail.previous.previous.value).toBe('a');
+      });
+    });
   });
 
   describe('#get', () => {

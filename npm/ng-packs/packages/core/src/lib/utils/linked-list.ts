@@ -117,6 +117,7 @@ export class LinkedList<T = any> {
     return {
       byIndex: (position: number) => this.dropByIndex(position),
       byValue: (value: T, compareFn = compare) => this.dropByValue(value, compareFn),
+      byValueAll: (value: T, compareFn = compare) => this.dropByValueAll(value, compareFn),
       head: () => this.dropHead(),
       tail: () => this.dropTail(),
     };
@@ -146,6 +147,18 @@ export class LinkedList<T = any> {
     if (position < 0) return undefined;
 
     return this.dropByIndex(position);
+  }
+
+  dropByValueAll(value: T, compareFn = compare): ListNode<T>[] {
+    const dropped: ListNode<T>[] = [];
+
+    for (let current = this.first, position = 0; current; position += 1, current = current.next) {
+      if (compareFn(current.value, value)) {
+        dropped.push(this.dropByIndex(position - dropped.length));
+      }
+    }
+
+    return dropped;
   }
 
   dropHead(): ListNode<T> | undefined {
