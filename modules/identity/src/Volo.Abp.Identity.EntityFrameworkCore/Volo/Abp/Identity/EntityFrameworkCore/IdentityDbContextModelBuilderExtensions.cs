@@ -26,9 +26,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Users", options.Schema);
 
-                b.ConfigureFullAuditedAggregateRoot();
+                b.ConfigureByConvention();
                 b.ConfigureAbpUser();
-                b.ConfigureExtensions();
 
                 b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength).HasColumnName(nameof(IdentityUser.NormalizedUserName));
                 b.Property(u => u.NormalizedEmail).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength).HasColumnName(nameof(IdentityUser.NormalizedEmail));
@@ -53,6 +52,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.Property(x => x.Id).ValueGeneratedNever();
                 
                 b.Property(uc => uc.ClaimType).HasMaxLength(IdentityUserClaimConsts.MaxClaimTypeLength).IsRequired();
@@ -65,6 +66,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "UserRoles", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.HasKey(ur => new { ur.UserId, ur.RoleId });
 
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
@@ -76,6 +79,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             builder.Entity<IdentityUserLogin>(b =>
             {
                 b.ToTable(options.TablePrefix + "UserLogins", options.Schema);
+
+                b.ConfigureByConvention();
 
                 b.HasKey(x => new { x.UserId, x.LoginProvider });
 
@@ -90,6 +95,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "UserTokens", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.HasKey(l => new { l.UserId, l.LoginProvider, l.Name });
 
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength).IsRequired();
@@ -100,8 +107,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Roles", options.Schema);
 
-                b.ConfigureConcurrencyStamp();
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
                 b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
@@ -119,6 +125,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "RoleClaims", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.Property(x => x.Id).ValueGeneratedNever();
 
                 b.Property(uc => uc.ClaimType).HasMaxLength(IdentityRoleClaimConsts.MaxClaimTypeLength).IsRequired();
@@ -131,7 +139,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "ClaimTypes", options.Schema);
 
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(uc => uc.Name).HasMaxLength(IdentityClaimTypeConsts.MaxNameLength).IsRequired(); // make unique
                 b.Property(uc => uc.Regex).HasMaxLength(IdentityClaimTypeConsts.MaxRegexLength);
