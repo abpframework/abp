@@ -5,6 +5,7 @@
       "items": [
         {
           "text": "From Startup Templates",
+          "path": "Getting-Started-With-Startup-Templates.md"
           "items": [
             {
               "text": "Application with MVC (Razor Pages) UI",
