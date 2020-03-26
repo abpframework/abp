@@ -339,6 +339,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "Linked List (Doubly)",
+              "path": "UI/Angular/Linked-List.md"
             }
           ]
         }
