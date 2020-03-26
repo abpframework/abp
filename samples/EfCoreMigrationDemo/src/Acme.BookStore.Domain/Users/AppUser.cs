@@ -41,19 +41,9 @@ namespace Acme.BookStore.Users
         #endregion
 
         /* Add your own properties here. Example:
-        *
-        * public string MyProperty { get; set; }
-        *
-        * If you add a property and using the EF Core, remember these;
-        *
-        * 1. update BookStoreDbContext.OnModelCreating
-        * to configure the mapping for your new property
-        * 2. Update BookStoreEntityExtensions to extend the IdentityUser entity
-        * and add your new property to the migration.
-        * 3. Use the Add-Migration to add a new database migration.
-        * 4. Run the .DbMigrator project (or use the Update-Database command) to apply
-        * schema change to the database.
-        */
+         *
+         * public virtual string MyProperty { get; set; }
+         */
 
         private AppUser()
         {

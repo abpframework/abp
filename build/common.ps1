@@ -28,6 +28,7 @@ $solutionPaths = (
     "../samples/BookStore-Modular/modules/book-management",
     "../samples/BookStore-Modular/application",
     "../samples/DashboardDemo",
+    "../samples/EfCoreMigrationDemo",
     "../samples/MicroserviceDemo",
     "../samples/RabbitMqEventBus",
     "../abp_io/AbpIoLocalization"

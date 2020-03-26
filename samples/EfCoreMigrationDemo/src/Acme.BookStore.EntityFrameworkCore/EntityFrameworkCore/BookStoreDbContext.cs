@@ -4,7 +4,6 @@ using Acme.BookStore.Users;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Volo.Abp.Identity;
 using Volo.Abp.Users.EntityFrameworkCore;
 
 namespace Acme.BookStore.EntityFrameworkCore
@@ -52,13 +51,12 @@ namespace Acme.BookStore.EntityFrameworkCore
 
             builder.Entity<AppUser>(b =>
             {
-                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); //Sharing the same table "AbpUsers" with the IdentityUser
+                b.ToTable("AbpUsers"); //Sharing the same table "AbpUsers" with the IdentityUser
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
 
-                /* Configure mappings for your additional properties
-                 * Also see the BookStoreEntityExtensions class
-                 */
+                //Moved customization to a method so we can share it with the BookStoreMigrationsDbContext class
+                b.ConfigureCustomUserProperties();
             });
 
             /* Configure your own tables/entities inside the ConfigureBookStore method */
