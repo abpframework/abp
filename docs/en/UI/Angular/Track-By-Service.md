@@ -112,3 +112,6 @@ class DemoComponent {
 }
 ```
 
+## What's Next?
+
+* [Linked List (Doubly)](./Linked-List.md)

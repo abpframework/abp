@@ -21,7 +21,7 @@ namespace Volo.Abp.TestApp
         private readonly IRepository<EntityWithIntPk, int> _entityWithIntPksRepository;
 
         public TestDataBuilder(
-            IBasicRepository<Person, Guid> personRepository, 
+            IBasicRepository<Person, Guid> personRepository,
             ICityRepository cityRepository,
             IRepository<EntityWithIntPk, int> entityWithIntPksRepository)
         {
@@ -46,7 +46,7 @@ namespace Volo.Abp.TestApp
 
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Tokyo"));
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Madrid"));
-            await _cityRepository.InsertAsync(new City(LondonCityId, "London") { ExtraProperties = { { "Population", 10_470_000 } } });
+            await _cityRepository.InsertAsync(new City(LondonCityId, "London") { ExtraProperties = { { "Population", 10_470_000 }, { "PhoneCode", "42" } } });
             await _cityRepository.InsertAsync(istanbul);
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Paris"));
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Washington"));
