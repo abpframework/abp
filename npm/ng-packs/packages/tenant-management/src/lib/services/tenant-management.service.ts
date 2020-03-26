@@ -7,6 +7,8 @@ import { TenantManagement } from '../models/tenant-management';
   providedIn: 'root',
 })
 export class TenantManagementService {
+  apiName = 'AbpTenantManagement';
+
   constructor(private rest: RestService) {}
 
   getTenant(params = {} as ABP.PageQueryParams): Observable<TenantManagement.Response> {
@@ -16,7 +18,7 @@ export class TenantManagementService {
       params,
     };
 
-    return this.rest.request<null, TenantManagement.Response>(request);
+    return this.rest.request<null, TenantManagement.Response>(request, { apiName: this.apiName });
   }
 
   getTenantById(id: string): Observable<ABP.BasicItem> {
@@ -25,7 +27,7 @@ export class TenantManagementService {
       url: `/api/multi-tenancy/tenants/${id}`,
     };
 
-    return this.rest.request<null, ABP.BasicItem>(request);
+    return this.rest.request<null, ABP.BasicItem>(request, { apiName: this.apiName });
   }
 
   deleteTenant(id: string): Observable<null> {
@@ -34,7 +36,7 @@ export class TenantManagementService {
       url: `/api/multi-tenancy/tenants/${id}`,
     };
 
-    return this.rest.request<null, null>(request);
+    return this.rest.request<null, null>(request, { apiName: this.apiName });
   }
 
   createTenant(body: TenantManagement.AddRequest): Observable<ABP.BasicItem> {
@@ -44,7 +46,9 @@ export class TenantManagementService {
       body,
     };
 
-    return this.rest.request<TenantManagement.AddRequest, ABP.BasicItem>(request);
+    return this.rest.request<TenantManagement.AddRequest, ABP.BasicItem>(request, {
+      apiName: this.apiName,
+    });
   }
 
   updateTenant(body: TenantManagement.UpdateRequest): Observable<ABP.BasicItem> {
@@ -57,7 +61,9 @@ export class TenantManagementService {
       body,
     };
 
-    return this.rest.request<TenantManagement.UpdateRequest, ABP.BasicItem>(request);
+    return this.rest.request<TenantManagement.UpdateRequest, ABP.BasicItem>(request, {
+      apiName: this.apiName,
+    });
   }
 
   getDefaultConnectionString(id: string): Observable<string> {
@@ -68,7 +74,9 @@ export class TenantManagementService {
       responseType: Rest.ResponseType.Text,
       url,
     };
-    return this.rest.request<TenantManagement.DefaultConnectionStringRequest, string>(request);
+    return this.rest.request<TenantManagement.DefaultConnectionStringRequest, string>(request, {
+      apiName: this.apiName,
+    });
   }
 
   updateDefaultConnectionString(
@@ -81,7 +89,9 @@ export class TenantManagementService {
       url,
       params: { defaultConnectionString: payload.defaultConnectionString },
     };
-    return this.rest.request<TenantManagement.DefaultConnectionStringRequest, any>(request);
+    return this.rest.request<TenantManagement.DefaultConnectionStringRequest, any>(request, {
+      apiName: this.apiName,
+    });
   }
 
   deleteDefaultConnectionString(id: string): Observable<string> {
@@ -91,6 +101,8 @@ export class TenantManagementService {
       method: 'DELETE',
       url,
     };
-    return this.rest.request<TenantManagement.DefaultConnectionStringRequest, any>(request);
+    return this.rest.request<TenantManagement.DefaultConnectionStringRequest, any>(request, {
+      apiName: this.apiName,
+    });
   }
 }
