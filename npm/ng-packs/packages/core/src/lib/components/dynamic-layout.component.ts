@@ -45,7 +45,7 @@ export class DynamicLayoutComponent implements OnDestroy {
     });
   }
 
-  getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
+  private getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
     return this.store.selectSnapshot(ReplaceableComponentsState.getComponent(key));
   }
 
