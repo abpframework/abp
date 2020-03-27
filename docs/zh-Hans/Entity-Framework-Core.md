@@ -315,7 +315,7 @@ public class BookService
 
 `EntityExtensionManager` 的 `AddProperty` 方法允许你实体定义附加的属性.
 
-**示例**: 浅咖 `Title` 属性 (数据库字段)到 `IdentityRole` 实体:
+**示例**: 添加 `Title` 属性 (数据库字段)到 `IdentityRole` 实体:
 
 ````csharp
 EntityExtensionManager.AddProperty<IdentityRole, string>(
