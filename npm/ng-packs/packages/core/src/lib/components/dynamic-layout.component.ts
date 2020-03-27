@@ -1,15 +1,13 @@
-import { Component, Input, OnDestroy, Type, Injector } from '@angular/core';
+import { Component, OnDestroy, Type } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { Observable, combineLatest } from 'rxjs';
+import { Store } from '@ngxs/store';
 import snq from 'snq';
 import { eLayoutType } from '../enums/common';
-import { Config } from '../models/config';
 import { ABP } from '../models/common';
-import { ConfigState } from '../states/config.state';
-import { takeUntilDestroy } from '../utils/rxjs-utils';
-import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 import { ReplaceableComponents } from '../models/replaceable-components';
+import { ConfigState } from '../states/config.state';
+import { ReplaceableComponentsState } from '../states/replaceable-components.state';
+import { takeUntilDestroy } from '../utils/rxjs-utils';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -22,23 +20,9 @@ import { ReplaceableComponents } from '../models/replaceable-components';
   `,
 })
 export class DynamicLayoutComponent implements OnDestroy {
-  @Select(ReplaceableComponentsState.getComponent('Theme.ApplicationLayoutComponent'))
-  applicationLayout$: Observable<ReplaceableComponents.ReplaceableComponent>;
-
-  @Select(ReplaceableComponentsState.getComponent('Theme.AccountLayoutComponent'))
-  accountLayout$: Observable<ReplaceableComponents.ReplaceableComponent>;
-
-  @Select(ReplaceableComponentsState.getComponent('Theme.EmptyLayoutComponent'))
-  emptyLayout$: Observable<ReplaceableComponents.ReplaceableComponent>;
-
   layout: Type<any>;
 
-  layouts = {} as { [key in eLayoutType]: Type<any> };
-
-  expectedLayout: eLayoutType = eLayoutType.empty;
-
   constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
-    this.listenToLayouts();
     const { routes } = this.store.selectSnapshot(ConfigState.getAll);
 
     router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
@@ -47,25 +31,25 @@ export class DynamicLayoutComponent implements OnDestroy {
           { path: router.url.replace('/', '') },
         ] as any);
 
-        this.expectedLayout =
+        const layouts = {
+          application: this.getComponent('Theme.ApplicationLayoutComponent'),
+          account: this.getComponent('Theme.AccountLayoutComponent'),
+          empty: this.getComponent('Theme.EmptyApplicationLayoutComponent'),
+        };
+
+        const expectedLayout =
           (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
 
-        this.layout = this.layouts[this.expectedLayout];
+        this.layout = layouts[expectedLayout].component;
       }
     });
   }
 
-  ngOnDestroy() {}
-
-  listenToLayouts() {
-    combineLatest(this.applicationLayout$, this.accountLayout$, this.emptyLayout$)
-      .pipe(takeUntilDestroy(this))
-      .subscribe(([application, account, empty]) => {
-        this.layouts.application = application.component;
-        this.layouts.account = account.component;
-        this.layouts.empty = empty.component;
-      });
+  getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
+    return this.store.selectSnapshot(ReplaceableComponentsState.getComponent(key));
   }
+
+  ngOnDestroy() {}
 }
 
 function findLayout(segments: UrlSegment[], routes: ABP.FullRoute[]): eLayoutType {
