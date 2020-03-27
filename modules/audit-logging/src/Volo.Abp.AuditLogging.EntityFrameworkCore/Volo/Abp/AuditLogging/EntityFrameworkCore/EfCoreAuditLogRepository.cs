@@ -186,7 +186,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string entityTypeFullName = null,
             bool includeDetails = false)
         {
-            return DbContext.EntityChanges.AsNoTracking().IncludeDetails(includeDetails)
+            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails(includeDetails)
                         .WhereIf(auditLogId.HasValue, e => e.AuditLogId == auditLogId)
                         .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
                         .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
