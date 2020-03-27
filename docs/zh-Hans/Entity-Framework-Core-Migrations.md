@@ -400,7 +400,7 @@ builder.Entity<AppRole>(b =>
 * `ConfigureByConvention()` 配置了标准/基本属性(像`TenantId`),建议总是调用它.
 
 你已经为你的 `DbContext` 配置自定义属性,该属性在应用程序运行时使用.
-与其直接更改 `MigrationsDbContext`,我们应该使用ABP框架的实体扩展系统,找到 在解决方案的 `.EntityFrameworkCore` 项目中找到 `YourProjectNameEntityExtensions` 类(本示例中是 `BookStoreEntityExtensions`)并且进行以下更改:
+与其直接更改 `MigrationsDbContext`,我们应该使用ABP框架的实体扩展系统,在解决方案的 `.EntityFrameworkCore` 项目中找到 `YourProjectNameEntityExtensions` 类(本示例中是 `BookStoreEntityExtensions`)并且进行以下更改:
 
 ````csharp
 public static class MyProjectNameEntityExtensions
