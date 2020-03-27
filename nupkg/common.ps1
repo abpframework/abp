@@ -91,6 +91,7 @@ $projects = (
     "framework/src/Volo.Abp.MongoDB",
     "framework/src/Volo.Abp.MultiTenancy",
     "framework/src/Volo.Abp.Minify",
+    "framework/src/Volo.Abp.ObjectExtending",
     "framework/src/Volo.Abp.ObjectMapping",
     "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.RabbitMQ",
