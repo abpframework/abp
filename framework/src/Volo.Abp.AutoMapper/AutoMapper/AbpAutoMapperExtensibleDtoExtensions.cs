@@ -24,7 +24,10 @@ namespace AutoMapper
 
                             foreach (var property in properties)
                             {
-                                result[property.Name] = source.ExtraProperties[property.Name];
+                                if (source.ExtraProperties.ContainsKey(property.Name))
+                                {
+                                    result[property.Name] = source.ExtraProperties[property.Name];
+                                }
                             }
 
                             return result;
