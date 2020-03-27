@@ -7,9 +7,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Projects;
+using Volo.Extensions;
 
 namespace Volo.Docs.Documents
 {
@@ -32,8 +34,8 @@ namespace Volo.Docs.Documents
             IDistributedCache<LanguageConfig> languageCache,
             IDistributedCache<DocumentResourceDto> resourceCache,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
-            IHostEnvironment hostEnvironment, 
-            IDocumentFullSearch documentFullSearch, 
+            IHostEnvironment hostEnvironment,
+            IDocumentFullSearch documentFullSearch,
             IOptions<DocsElasticSearchOptions> docsElasticSearchOptions)
         {
             _projectRepository = projectRepository;
@@ -82,7 +84,10 @@ namespace Volo.Docs.Documents
                 input.Version
             );
 
-            var navigationNode = JsonConvert.DeserializeObject<NavigationNode>(navigationDocument.Content);
+            if (!JsonConvertExtensions.TryDeserializeObject<NavigationNode>(navigationDocument.Content, out var navigationNode))
+            {
+                throw new UserFriendlyException($"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
+            }
 
             var leafs = navigationNode.Items.GetAllNodes(x => x.Items)
                 .Where(x => !x.Path.IsNullOrWhiteSpace())
@@ -173,11 +178,16 @@ namespace Volo.Docs.Documents
                     input.Version
                 );
 
-                return JsonConvert.DeserializeObject<DocumentParametersDto>(document.Content);
+                if (!JsonConvertExtensions.TryDeserializeObject<DocumentParametersDto>(document.Content, out var documentParameters))
+                {
+                    throw new UserFriendlyException($"Cannot validate document parameters file '{project.ParametersDocumentName}' for the project {project.Name}.");
+                }
+
+                return documentParameters;
             }
             catch (DocumentNotFoundException)
             {
-                Logger.LogWarning($"Parameter file ({project.ParametersDocumentName}) not found.");
+                Logger.LogWarning($"Parameter file ({project.ParametersDocumentName}) not found!");
                 return new DocumentParametersDto();
             }
         }

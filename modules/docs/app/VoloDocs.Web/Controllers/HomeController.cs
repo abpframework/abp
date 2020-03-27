@@ -6,7 +6,14 @@ namespace VoloDocs.Web.Controllers
     {
         public void Index()
         {
+            //if (!_urlUiOptions.RoutePrefix.IsNullOrWhiteSpace())
+            //{
+            //    return Redirect("." + _urlUiOptions.RoutePrefix);
+            //}
 
+            //return Page();
+
+            //return Redirect("/en/abp/latest");
         }
     }
 }
