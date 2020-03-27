@@ -81,7 +81,7 @@ export class ConfigState {
 
   static getApiUrl(key?: string) {
     const selector = createSelector([ConfigState], (state: Config.State): string => {
-      return state.environment.apis[key || 'default'].url;
+      return (state.environment.apis[key || 'default'] || state.environment.apis.default).url;
     });
 
     return selector;
@@ -301,7 +301,7 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment({ patchState }: StateContext<Config.State>, environment: Config.Environment) {
+  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
     return patchState({
       environment,
     });

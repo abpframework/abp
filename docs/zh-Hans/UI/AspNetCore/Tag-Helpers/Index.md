@@ -13,6 +13,18 @@ ABP框架还向标准bootstrap组件添加了一些**实用的功能**.
 这里是ABP框架包装的组件列表:
 
 * [Buttons](Buttons.md)
+* [Cards](Cards.md)
+* [Alerts](Alerts.md)
+* [Tabs](Tabs.md)
+* [Grids](Grids.md)
+* [Modals](Modals.md)
+* [Collapse](Collapse.md)
+* [Dropdowns](Dropdowns.md)
+* [List Groups](List-Groups.md)
+* [Paginator](Paginator.md)
+* [Popovers](Popovers.md)
+* [Progress Bars](Progress-Bars.md)
+* [Tooltips](Tooltips.md)
 * ...
 
 > 在为所有的标签助手完成文档之前,你可以访问 https://bootstrap-taghelpers.abp.io/ 查看在线示例.
