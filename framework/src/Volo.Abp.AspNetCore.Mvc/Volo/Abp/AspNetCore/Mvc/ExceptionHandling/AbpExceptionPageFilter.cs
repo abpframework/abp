@@ -63,7 +63,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             //TODO: Create DontWrap attribute to control wrapping..?
 
             if (context.ActionDescriptor.IsPageAction() &&
-                context.ActionDescriptor.HasObjectResult())
+                ActionResultHelper.IsObjectResult(context.HandlerMethod.MethodInfo.ReturnType))
             {
                 return true;
             }

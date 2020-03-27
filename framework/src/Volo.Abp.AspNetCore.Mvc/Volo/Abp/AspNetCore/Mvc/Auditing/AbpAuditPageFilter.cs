@@ -84,7 +84,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
                 return false;
             }
 
-            if (!_auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
+            if (!_auditingHelper.ShouldSaveAudit(context.HandlerMethod.MethodInfo, true))
             {
                 return false;
             }
@@ -92,8 +92,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             auditLog = auditLogScope.Log;
             auditLogAction = _auditingHelper.CreateAuditLogAction(
                 auditLog,
-                context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
-                context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
+                context.HandlerMethod.GetType(),
+                context.HandlerMethod.MethodInfo,
                 context.HandlerArguments
             );
 

@@ -33,12 +33,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
                 return;
             }
 
-            var methodInfo = context.ActionDescriptor.GetMethodInfo();
+            var methodInfo = context.HandlerMethod.MethodInfo;
             var unitOfWorkAttr = UnitOfWorkHelper.GetUnitOfWorkAttributeOrNull(methodInfo);
 
             context.HttpContext.Items["_AbpActionInfo"] = new AbpActionInfoInHttpContext
             {
-                IsObjectResult = context.ActionDescriptor.HasObjectResult()
+                IsObjectResult = ActionResultHelper.IsObjectResult(context.HandlerMethod.MethodInfo.ReturnType)
             };
 
             if (unitOfWorkAttr?.IsDisabled == true)

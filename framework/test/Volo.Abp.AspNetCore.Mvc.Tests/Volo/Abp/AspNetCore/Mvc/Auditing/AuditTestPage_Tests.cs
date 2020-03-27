@@ -1,21 +1,20 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Auditing
 {
-    public class AuditTestController_Tests : AspNetCoreMvcTestBase
+    public class AuditTestPage_Tests : AspNetCoreMvcTestBase
     {
         private readonly AbpAuditingOptions _options;
         private IAuditingStore _auditingStore;
 
-        public AuditTestController_Tests()
+        public AuditTestPage_Tests()
         {
             _options = ServiceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
             _auditingStore = ServiceProvider.GetRequiredService<IAuditingStore>();
@@ -33,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         {
             _options.IsEnabledForGetRequests = true;
             _options.AlwaysLogOnException = false;
-            await GetResponseAsync("api/audit-test/audit-success");
+            await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditSuccessForGetRequests");
             await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
 
@@ -45,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
             try
             {
-                await GetResponseAsync("api/audit-test/audit-fail", System.Net.HttpStatusCode.Forbidden);
+                await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditFailForGetRequests", System.Net.HttpStatusCode.Forbidden);
             }
             catch { }
 
@@ -58,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             _options.IsEnabled = true;
             _options.AlwaysLogOnException = true;
 
-            await GetResponseAsync("api/audit-test/audit-fail-object", System.Net.HttpStatusCode.Forbidden);
+            await GetResponseAsync("/Auditing/AuditTestPage?handler=AuditFailForGetRequestsReturningObject", System.Net.HttpStatusCode.Forbidden);
 
             await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }

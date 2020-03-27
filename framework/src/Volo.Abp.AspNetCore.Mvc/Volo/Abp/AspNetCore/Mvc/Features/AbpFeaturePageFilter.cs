@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
                 return;
             }
 
-            var methodInfo = context.ActionDescriptor.GetMethodInfo();
+            var methodInfo = context.HandlerMethod.MethodInfo;
 
             using (AbpCrossCuttingConcerns.Applying(context.HandlerInstance, AbpCrossCuttingConcerns.FeatureChecking))
             {

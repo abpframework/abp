@@ -39,10 +39,10 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static void AddPageFilters(MvcOptions options)
         {
+            options.Filters.AddService(typeof(AbpExceptionPageFilter));
             options.Filters.AddService(typeof(AbpAuditPageFilter));
             options.Filters.AddService(typeof(AbpFeaturePageFilter));
             options.Filters.AddService(typeof(AbpUowPageFilter));
-            options.Filters.AddService(typeof(AbpExceptionPageFilter));
         }
 
         private static void AddModelBinders(MvcOptions options)
