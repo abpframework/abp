@@ -27,65 +27,107 @@ export class LinkedList<T = any> {
     return this.size;
   }
 
-  private linkWith(
+  private attach(
     value: T,
     previousNode: ListNode<T> | undefined,
     nextNode: ListNode<T> | undefined,
   ): ListNode<T> {
-    const node = new ListNode(value);
-
     if (!previousNode) return this.addHead(value);
+
     if (!nextNode) return this.addTail(value);
 
+    const node = new ListNode(value);
     node.previous = previousNode;
     previousNode.next = node;
     node.next = nextNode;
     nextNode.previous = node;
 
-    this.size += 1;
+    this.size++;
+
+    return node;
+  }
+
+  private attachMany(
+    values: T[],
+    previousNode: ListNode<T> | undefined,
+    nextNode: ListNode<T> | undefined,
+  ): ListNode<T>[] {
+    if (!values.length) return [];
+
+    if (!previousNode) return this.addManyHead(values);
+
+    if (!nextNode) return this.addManyTail(values);
+
+    const list = new LinkedList<T>();
+    list.addManyTail(values);
+    list.first!.previous = previousNode;
+    previousNode.next = list.first;
+    list.last!.next = nextNode;
+    nextNode.previous = list.last;
+
+    this.size += values.length;
+
+    return list.toNodeArray();
+  }
+
+  private detach(node: ListNode<T>) {
+    if (!node.previous) return this.dropHead();
+
+    if (!node.next) return this.dropTail();
+
+    node.previous.next = node.next;
+    node.next.previous = node.previous;
+
+    this.size--;
 
     return node;
   }
 
   add(value: T) {
     return {
-      after: (previousValue: T, compareFn = compare) => {
-        return this.addAfter(value, previousValue, compareFn);
-      },
-      before: (nextValue: T, compareFn = compare) => {
-        return this.addBefore(value, nextValue, compareFn);
-      },
-      byIndex: (position: number): ListNode<T> => {
-        return this.addByIndex(value, position);
-      },
-      head: (): ListNode<T> => {
-        return this.addHead(value);
-      },
-      tail: (): ListNode<T> => {
-        return this.addTail(value);
-      },
+      after: (previousValue: T, compareFn: ListComparisonFn<T> = compare) =>
+        this.addAfter(value, previousValue, compareFn),
+      before: (nextValue: T, compareFn: ListComparisonFn<T> = compare) =>
+        this.addBefore(value, nextValue, compareFn),
+      byIndex: (position: number) => this.addByIndex(value, position),
+      head: () => this.addHead(value),
+      tail: () => this.addTail(value),
     };
   }
 
-  addAfter(value: T, previousValue: T, compareFn = compare): ListNode<T> {
-    const previous = this.find(node => compareFn(node.value, previousValue));
-
-    return previous ? this.linkWith(value, previous, previous.next) : this.addTail(value);
+  addMany(values: T[]) {
+    return {
+      after: (previousValue: T, compareFn: ListComparisonFn<T> = compare) =>
+        this.addManyAfter(values, previousValue, compareFn),
+      before: (nextValue: T, compareFn: ListComparisonFn<T> = compare) =>
+        this.addManyBefore(values, nextValue, compareFn),
+      byIndex: (position: number) => this.addManyByIndex(values, position),
+      head: () => this.addManyHead(values),
+      tail: () => this.addManyTail(values),
+    };
   }
 
-  addBefore(value: T, nextValue: T, compareFn = compare): ListNode<T> {
+  addAfter(value: T, previousValue: T, compareFn: ListComparisonFn<T> = compare): ListNode<T> {
+    const previous = this.find(node => compareFn(node.value, previousValue));
+
+    return previous ? this.attach(value, previous, previous.next) : this.addTail(value);
+  }
+
+  addBefore(value: T, nextValue: T, compareFn: ListComparisonFn<T> = compare): ListNode<T> {
     const next = this.find(node => compareFn(node.value, nextValue));
 
-    return next ? this.linkWith(value, next.previous, next) : this.addHead(value);
+    return next ? this.attach(value, next.previous, next) : this.addHead(value);
   }
 
   addByIndex(value: T, position: number): ListNode<T> {
+    if (position < 0) position += this.size;
+    else if (position >= this.size) return this.addTail(value);
+
     if (position <= 0) return this.addHead(value);
-    if (position >= this.size) return this.addTail(value);
 
     const next = this.get(position)!;
 
-    return this.linkWith(value, next.previous, next);
+    return this.attach(value, next.previous, next);
   }
 
   addHead(value: T): ListNode<T> {
@@ -97,7 +139,7 @@ export class LinkedList<T = any> {
     else this.last = node;
 
     this.first = node;
-    this.size += 1;
+    this.size++;
 
     return node;
   }
@@ -114,51 +156,92 @@ export class LinkedList<T = any> {
       this.last = node;
     }
 
-    this.size += 1;
+    this.size++;
 
     return node;
+  }
+
+  addManyAfter(
+    values: T[],
+    previousValue: T,
+    compareFn: ListComparisonFn<T> = compare,
+  ): ListNode<T>[] {
+    const previous = this.find(node => compareFn(node.value, previousValue));
+
+    return previous ? this.attachMany(values, previous, previous.next) : this.addManyTail(values);
+  }
+
+  addManyBefore(
+    values: T[],
+    nextValue: T,
+    compareFn: ListComparisonFn<T> = compare,
+  ): ListNode<T>[] {
+    const next = this.find(node => compareFn(node.value, nextValue));
+
+    return next ? this.attachMany(values, next.previous, next) : this.addManyHead(values);
+  }
+
+  addManyByIndex(values: T[], position: number): ListNode<T>[] {
+    if (position < 0) position += this.size;
+
+    if (position <= 0) return this.addManyHead(values);
+
+    if (position >= this.size) return this.addManyTail(values);
+
+    const next = this.get(position)!;
+
+    return this.attachMany(values, next.previous, next);
+  }
+
+  addManyHead(values: T[]): ListNode<T>[] {
+    return values.reduceRight<ListNode<T>[]>((nodes, value) => {
+      nodes.unshift(this.addHead(value));
+      return nodes;
+    }, []);
+  }
+
+  addManyTail(values: T[]): ListNode<T>[] {
+    return values.map(value => this.addTail(value));
   }
 
   drop() {
     return {
       byIndex: (position: number) => this.dropByIndex(position),
-      byValue: (value: T, compareFn = compare) => this.dropByValue(value, compareFn),
-      byValueAll: (value: T, compareFn = compare) => this.dropByValueAll(value, compareFn),
+      byValue: (value: T, compareFn: ListComparisonFn<T> = compare) =>
+        this.dropByValue(value, compareFn),
+      byValueAll: (value: T, compareFn: ListComparisonFn<T> = compare) =>
+        this.dropByValueAll(value, compareFn),
       head: () => this.dropHead(),
       tail: () => this.dropTail(),
     };
   }
 
+  dropMany(count: number) {
+    return {
+      byIndex: (position: number) => this.dropManyByIndex(count, position),
+      head: () => this.dropManyHead(count),
+      tail: () => this.dropManyTail(count),
+    };
+  }
+
   dropByIndex(position: number): ListNode<T> | undefined {
-    if (position === 0) return this.dropHead();
-    else if (position === this.size - 1) return this.dropTail();
+    if (position < 0) position += this.size;
 
     const current = this.get(position);
 
-    if (current) {
-      current.previous!.next = current.next;
-      current.next!.previous = current.previous;
-
-      this.size -= 1;
-
-      return current;
-    }
-
-    return undefined;
+    return current ? this.detach(current) : undefined;
   }
 
-  dropByValue(value: T, compareFn = compare): ListNode<T> | undefined {
+  dropByValue(value: T, compareFn: ListComparisonFn<T> = compare): ListNode<T> | undefined {
     const position = this.findIndex(node => compareFn(node.value, value));
 
-    if (position < 0) return undefined;
-
-    return this.dropByIndex(position);
+    return position < 0 ? undefined : this.dropByIndex(position);
   }
 
-  dropByValueAll(value: T, compareFn = compare): ListNode<T>[] {
+  dropByValueAll(value: T, compareFn: ListComparisonFn<T> = compare): ListNode<T>[] {
     const dropped: ListNode<T>[] = [];
 
-    for (let current = this.first, position = 0; current; position += 1, current = current.next) {
+    for (let current = this.first, position = 0; current; position++, current = current.next) {
       if (compareFn(current.value, value)) {
         dropped.push(this.dropByIndex(position - dropped.length)!);
       }
@@ -176,7 +259,7 @@ export class LinkedList<T = any> {
       if (this.first) this.first.previous = undefined;
       else this.last = undefined;
 
-      this.size -= 1;
+      this.size--;
 
       return head;
     }
@@ -193,7 +276,7 @@ export class LinkedList<T = any> {
       if (this.last) this.last.next = undefined;
       else this.first = undefined;
 
-      this.size -= 1;
+      this.size--;
 
       return tail;
     }
@@ -201,24 +284,66 @@ export class LinkedList<T = any> {
     return undefined;
   }
 
-  find(predicate: ListIteratorFunction<T>): ListNode<T> | undefined {
-    for (let current = this.first, position = 0; current; position += 1, current = current.next) {
+  dropManyByIndex(count: number, position: number): ListNode<T>[] {
+    if (count <= 0) return [];
+
+    if (position < 0) position = Math.max(position + this.size, 0);
+    else if (position >= this.size) return [];
+
+    count = Math.min(count, this.size - position);
+
+    const dropped: ListNode<T>[] = [];
+
+    while (count--) {
+      const current = this.get(position);
+      dropped.push(this.detach(current!)!);
+    }
+
+    return dropped;
+  }
+
+  dropManyHead(count: Exclude<number, 0>): ListNode<T>[] {
+    if (count <= 0) return [];
+
+    count = Math.min(count, this.size);
+
+    const dropped: ListNode<T>[] = [];
+
+    while (count--) dropped.unshift(this.dropHead()!);
+
+    return dropped;
+  }
+
+  dropManyTail(count: Exclude<number, 0>): ListNode<T>[] {
+    if (count <= 0) return [];
+
+    count = Math.min(count, this.size);
+
+    const dropped: ListNode<T>[] = [];
+
+    while (count--) dropped.push(this.dropTail()!);
+
+    return dropped;
+  }
+
+  find(predicate: ListIteratorFn<T>): ListNode<T> | undefined {
+    for (let current = this.first, position = 0; current; position++, current = current.next) {
       if (predicate(current, position, this)) return current;
     }
 
     return undefined;
   }
 
-  findIndex(predicate: ListIteratorFunction<T>): number {
-    for (let current = this.first, position = 0; current; position += 1, current = current.next) {
+  findIndex(predicate: ListIteratorFn<T>): number {
+    for (let current = this.first, position = 0; current; position++, current = current.next) {
       if (predicate(current, position, this)) return position;
     }
 
     return -1;
   }
 
-  forEach<R = boolean>(callback: ListIteratorFunction<T, R>) {
-    for (let node = this.first, position = 0; node; position += 1, node = node.next) {
+  forEach<R = boolean>(callback: ListIteratorFn<T, R>) {
+    for (let node = this.first, position = 0; node; position++, node = node.next) {
       callback(node, position, this);
     }
   }
@@ -227,7 +352,7 @@ export class LinkedList<T = any> {
     return this.find((_, index) => position === index);
   }
 
-  indexOf(value: T, compareFn = compare): number {
+  indexOf(value: T, compareFn: ListComparisonFn<T> = compare): number {
     return this.findIndex(node => compareFn(node.value, value));
   }
 
@@ -239,20 +364,32 @@ export class LinkedList<T = any> {
     return array;
   }
 
-  toString(): string {
+  toNodeArray(): ListNode<T>[] {
+    const array = new Array(this.size);
+
+    this.forEach((node, index) => (array[index!] = node));
+
+    return array;
+  }
+
+  toString(mapperFn: ListMapperFn<T> = JSON.stringify): string {
     return this.toArray()
-      .map(value => JSON.stringify(value))
+      .map(value => mapperFn(value))
       .join(' <-> ');
   }
 
   *[Symbol.iterator]() {
-    for (let node = this.first, position = 0; node; position += 1, node = node.next) {
+    for (let node = this.first, position = 0; node; position++, node = node.next) {
       yield node.value;
     }
   }
 }
 
-export type ListIteratorFunction<T = any, R = boolean> = (
+export type ListMapperFn<T = any> = (value: T) => any;
+
+export type ListComparisonFn<T = any> = (value1: T, value2: T) => boolean;
+
+export type ListIteratorFn<T = any, R = boolean> = (
   node: ListNode<T>,
   index?: number,
   list?: LinkedList,

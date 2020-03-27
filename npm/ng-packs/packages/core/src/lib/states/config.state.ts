@@ -81,7 +81,7 @@ export class ConfigState {
 
   static getApiUrl(key?: string) {
     const selector = createSelector([ConfigState], (state: Config.State): string => {
-      return state.environment.apis[key || 'default'].url;
+      return (state.environment.apis[key || 'default'] || state.environment.apis.default).url;
     });
 
     return selector;
