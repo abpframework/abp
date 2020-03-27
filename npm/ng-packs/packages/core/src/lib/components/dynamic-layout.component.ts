@@ -34,7 +34,7 @@ export class DynamicLayoutComponent implements OnDestroy {
         const layouts = {
           application: this.getComponent('Theme.ApplicationLayoutComponent'),
           account: this.getComponent('Theme.AccountLayoutComponent'),
-          empty: this.getComponent('Theme.EmptyApplicationLayoutComponent'),
+          empty: this.getComponent('Theme.EmptyLayoutComponent'),
         };
 
         const expectedLayout =
