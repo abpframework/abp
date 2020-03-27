@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -36,6 +37,36 @@ namespace Microsoft.AspNetCore.Mvc.Abstractions
         public static bool IsControllerAction(this ActionDescriptor actionDescriptor)
         {
             return actionDescriptor is ControllerActionDescriptor;
+        }
+        
+        public static PageActionDescriptor AsPageActionDescriptor(this ActionDescriptor actionDescriptor)
+        {
+            if (!actionDescriptor.IsPageAction())
+            {
+                throw new AbpException($"{nameof(actionDescriptor)} should be type of {typeof(PageActionDescriptor).AssemblyQualifiedName}");
+            }
+
+            return actionDescriptor as PageActionDescriptor;
+        }
+
+        public static MethodInfo GetPageActionMethodInfo(this ActionDescriptor actionDescriptor)
+        {
+            return actionDescriptor.AsPageActionDescriptor().GetMethodInfo();
+        }
+
+        public static Type GetPageActionReturnType(this PageActionDescriptor actionDescriptor)
+        {
+            return actionDescriptor.GetPageActionMethodInfo().ReturnType;
+        }
+
+        public static bool HasObjectResult(this PageActionDescriptor actionDescriptor)
+        {
+            return ActionResultHelper.IsObjectResult(actionDescriptor.GetReturnType());
+        }
+
+        public static bool IsPageAction(this ActionDescriptor actionDescriptor)
+        {
+            return actionDescriptor is PageActionDescriptor;
         }
     }
 }
