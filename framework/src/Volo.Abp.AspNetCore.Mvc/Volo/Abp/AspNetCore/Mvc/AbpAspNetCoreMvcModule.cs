@@ -40,10 +40,10 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            DynamicProxyIgnoreTypes.IgnoreTypes.AddIfNotContains(typeof(ControllerBase));
-            DynamicProxyIgnoreTypes.IgnoreTypes.AddIfNotContains(typeof(PageModel));
-            DynamicProxyIgnoreTypes.IgnoreTypes.AddIfNotContains(typeof(ViewComponent));
-            
+            DynamicProxyIgnoreTypes.Add<ControllerBase>();
+            DynamicProxyIgnoreTypes.Add<PageModel>();
+            DynamicProxyIgnoreTypes.Add<ViewComponent>();
+
             context.Services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
         }
 

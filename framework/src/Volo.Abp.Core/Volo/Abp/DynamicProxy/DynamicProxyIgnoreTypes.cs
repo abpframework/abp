@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.DynamicProxy
 {
@@ -14,11 +15,16 @@ namespace Volo.Abp.DynamicProxy
     /// </summary>
     public static class DynamicProxyIgnoreTypes
     {
-        public static List<Type> IgnoreTypes { get; } = new List<Type>();
-
+        private static HashSet<Type> IgnoredTypes { get; } = new HashSet<Type>();
+        
+        public static void Add<T>()
+        {
+            IgnoredTypes.Locking(() => IgnoredTypes.AddIfNotContains(typeof(T)));
+        }
+        
         public static bool Contains(Type type, bool includeDerivedTypes = true)
         {
-            return includeDerivedTypes ? IgnoreTypes.Any(t => t.IsAssignableFrom(type)) : IgnoreTypes.Contains(type);
+            return includeDerivedTypes ? IgnoredTypes.Any(t => t.IsAssignableFrom(type)) : IgnoredTypes.Contains(type);
         }
     }
 }

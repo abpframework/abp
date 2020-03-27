@@ -9,7 +9,7 @@ namespace Volo.Abp.Auditing
     {
         public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            if (ShouldIntercept(context.ImplementationType) && !DynamicProxyIgnoreTypes.Contains(context.ImplementationType))
+            if (ShouldIntercept(context.ImplementationType))
             {
                 context.Interceptors.TryAdd<AuditingInterceptor>();
             }
@@ -17,6 +17,11 @@ namespace Volo.Abp.Auditing
 
         private static bool ShouldIntercept(Type type)
         {
+            if (DynamicProxyIgnoreTypes.Contains(type))
+            {
+                return false;
+            }
+            
             if (ShouldAuditTypeByDefault(type))
             {
                 return true;

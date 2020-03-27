@@ -10,7 +10,7 @@ namespace Volo.Abp.Features
     {
         public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            if (ShouldIntercept(context.ImplementationType) && !DynamicProxyIgnoreTypes.Contains(context.ImplementationType))
+            if (ShouldIntercept(context.ImplementationType))
             {
                 context.Interceptors.TryAdd<FeatureInterceptor>();
             }
@@ -18,8 +18,9 @@ namespace Volo.Abp.Features
 
         private static bool ShouldIntercept(Type type)
         {
-            return type.IsDefined(typeof(RequiresFeatureAttribute), true) ||
-                   AnyMethodHasRequiresFeatureAttribute(type);
+            return !DynamicProxyIgnoreTypes.Contains(type) &&
+                   (type.IsDefined(typeof(RequiresFeatureAttribute), true) ||
+                    AnyMethodHasRequiresFeatureAttribute(type));
         }
 
         private static bool AnyMethodHasRequiresFeatureAttribute(Type implementationType)

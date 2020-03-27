@@ -11,7 +11,7 @@ namespace Volo.Abp.Authorization
     {
         public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            if (ShouldIntercept(context.ImplementationType) && !DynamicProxyIgnoreTypes.Contains(context.ImplementationType))
+            if (ShouldIntercept(context.ImplementationType))
             {
                 context.Interceptors.TryAdd<AuthorizationInterceptor>();
             }
@@ -19,8 +19,8 @@ namespace Volo.Abp.Authorization
 
         private static bool ShouldIntercept(Type type)
         {
-            return type.IsDefined(typeof(AuthorizeAttribute), true) ||
-                   AnyMethodHasAuthorizeAttribute(type);
+            return !DynamicProxyIgnoreTypes.Contains(type) &&
+                   (type.IsDefined(typeof(AuthorizeAttribute), true) || AnyMethodHasAuthorizeAttribute(type));
         }
 
         private static bool AnyMethodHasAuthorizeAttribute(Type implementationType)
