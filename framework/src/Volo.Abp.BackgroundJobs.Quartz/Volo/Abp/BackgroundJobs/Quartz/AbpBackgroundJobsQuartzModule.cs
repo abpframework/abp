@@ -12,7 +12,15 @@ namespace Volo.Abp.BackgroundJobs.Quartz
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
+            var options = context.Services.ExecutePreConfiguredActions<AbpBackgroundJobOptions>();
+            if (!options.IsJobExecutionEnabled)
+            {
+                context.Services.AddSingleton<IBackgroundJobManager>(x => new NullBackgroundJobManager());
+            }
+            else
+            {
+                context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
+            }
         }
     }
 }
