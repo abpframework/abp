@@ -11,7 +11,7 @@ namespace AutoMapper
             where TDestination : IHasExtraProperties
             where TSource : IHasExtraProperties
         {
-            var properties = ObjectExtensionManager.GetProperties<TDestination>();
+            var properties = ObjectExtensionManager.Instance.GetProperties<TDestination>();
             return mappingExpression
                 .ForMember(
                     x => x.ExtraProperties,

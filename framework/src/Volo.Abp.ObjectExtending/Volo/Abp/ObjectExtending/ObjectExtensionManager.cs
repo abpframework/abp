@@ -5,17 +5,18 @@ using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending
 {
-    public static class ObjectExtensionManager
+    public class ObjectExtensionManager
     {
-        //TODO: Concurrent, to allow extend on runtime!
-        private static Dictionary<Type, ObjectExtensionInfo> Extensions { get; }
+        public static ObjectExtensionManager Instance { get; } = new ObjectExtensionManager();
 
-        static ObjectExtensionManager()
+        private Dictionary<Type, ObjectExtensionInfo> Extensions { get; }
+
+        private ObjectExtensionManager()
         {
             Extensions = new Dictionary<Type, ObjectExtensionInfo>();
         }
 
-        public static ObjectExtensionPropertyInfo AddProperty<TDto>(
+        public ObjectExtensionPropertyInfo AddProperty<TDto>(
             string propertyName, 
             Action<ObjectExtensionPropertyInfo> configureAction = null)
         {
@@ -25,7 +26,7 @@ namespace Volo.Abp.ObjectExtending
             return propertyInfo;
         }
 
-        public static ImmutableList<ObjectExtensionPropertyInfo> GetProperties<TDto>()
+        public ImmutableList<ObjectExtensionPropertyInfo> GetProperties<TDto>()
             where TDto : IHasExtraProperties
         {
             var extensionInfo = Extensions.GetOrDefault(typeof(TDto));
