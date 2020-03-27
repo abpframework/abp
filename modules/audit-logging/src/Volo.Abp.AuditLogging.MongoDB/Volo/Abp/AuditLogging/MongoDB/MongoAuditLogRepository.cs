@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 
@@ -137,6 +138,63 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 .ToListAsync();
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
+        }
+
+        public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(
+            string sorting = null,
+            int maxResultCount = 50,
+            int skipCount = 0,
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, includeDetails);
+
+            return await query.OrderBy(sorting ?? "changeTime desc").As<IMongoQueryable<EntityChange>>()
+                .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<long> GetEntityChangeCountAsync(
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            CancellationToken cancellationToken = default)
+        {
+            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
+            var count = await query.As<IMongoQueryable<EntityChange>>()
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+
+            return count;
+        }
+
+        protected virtual IQueryable<EntityChange> GetEntityChangeListQuery(
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            bool includeDetails = false)
+        {
+            return null;
+            // TODO: Learn How to?
+            return GetMongoQueryable()
+                .WhereIf(auditLogId.HasValue, e => e.AuditLogId == auditLogId)
+                .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
+                .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
+                .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
+                .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
+                .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
+                    e => e.EntityTypeFullName == entityTypeFullName);
         }
     }
 }
