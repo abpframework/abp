@@ -24,24 +24,19 @@ namespace Volo.Docs.GitHub.Documents
         public async Task<string> GetFileRawStringContentAsync(string rawUrl, string token, string userAgent)
         {
             using var httpClient = CreateHttpClient(token, userAgent);
-
             return await httpClient.GetStringAsync(new Uri(rawUrl));
         }
 
         public async Task<byte[]> GetFileRawByteArrayContentAsync(string rawUrl, string token, string userAgent)
         {
             using var httpClient = CreateHttpClient(token, userAgent);
-
             return await httpClient.GetByteArrayAsync(new Uri(rawUrl));
         }
          
         public async Task<IReadOnlyList<Release>> GetReleasesAsync(string name, string repositoryName, string token)
         {
             var client = GetGitHubClient(name, token);
-
-            var releases = await client.Repository.Release.GetAll(name, repositoryName);
-
-            return releases.ToList();
+            return await client.Repository.Release.GetAll(name, repositoryName);
         }
 
         public async Task<IReadOnlyList<GitHubCommit>> GetFileCommitsAsync(string name, string repositoryName, string version, string filename, string token)
