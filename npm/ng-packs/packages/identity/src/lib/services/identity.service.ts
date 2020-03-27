@@ -7,6 +7,8 @@ import { Identity } from '../models/identity';
   providedIn: 'root',
 })
 export class IdentityService {
+  apiName = 'AbpIdentity';
+
   constructor(private rest: RestService) {}
 
   getRoles(params = {} as ABP.PageQueryParams): Observable<Identity.RoleResponse> {
@@ -16,7 +18,7 @@ export class IdentityService {
       params,
     };
 
-    return this.rest.request<null, Identity.RoleResponse>(request);
+    return this.rest.request<null, Identity.RoleResponse>(request, { apiName: this.apiName });
   }
 
   getAllRoles(): Observable<Identity.RoleResponse> {
@@ -25,7 +27,7 @@ export class IdentityService {
       url: '/api/identity/roles/all',
     };
 
-    return this.rest.request<null, Identity.RoleResponse>(request);
+    return this.rest.request<null, Identity.RoleResponse>(request, { apiName: this.apiName });
   }
 
   getRoleById(id: string): Observable<Identity.RoleItem> {
@@ -34,7 +36,7 @@ export class IdentityService {
       url: `/api/identity/roles/${id}`,
     };
 
-    return this.rest.request<null, Identity.RoleItem>(request);
+    return this.rest.request<null, Identity.RoleItem>(request, { apiName: this.apiName });
   }
 
   deleteRole(id: string): Observable<Identity.RoleItem> {
@@ -43,7 +45,7 @@ export class IdentityService {
       url: `/api/identity/roles/${id}`,
     };
 
-    return this.rest.request<null, Identity.RoleItem>(request);
+    return this.rest.request<null, Identity.RoleItem>(request, { apiName: this.apiName });
   }
 
   createRole(body: Identity.RoleSaveRequest): Observable<Identity.RoleItem> {
@@ -53,7 +55,9 @@ export class IdentityService {
       body,
     };
 
-    return this.rest.request<Identity.RoleSaveRequest, Identity.RoleItem>(request);
+    return this.rest.request<Identity.RoleSaveRequest, Identity.RoleItem>(request, {
+      apiName: this.apiName,
+    });
   }
 
   updateRole(body: Identity.RoleItem): Observable<Identity.RoleItem> {
@@ -66,7 +70,9 @@ export class IdentityService {
       body,
     };
 
-    return this.rest.request<Identity.RoleItem, Identity.RoleItem>(request);
+    return this.rest.request<Identity.RoleItem, Identity.RoleItem>(request, {
+      apiName: this.apiName,
+    });
   }
 
   getUsers(params = {} as ABP.PageQueryParams): Observable<Identity.UserResponse> {
@@ -76,7 +82,7 @@ export class IdentityService {
       params,
     };
 
-    return this.rest.request<null, Identity.UserResponse>(request);
+    return this.rest.request<null, Identity.UserResponse>(request, { apiName: this.apiName });
   }
 
   getUserById(id: string): Observable<Identity.UserItem> {
@@ -85,7 +91,7 @@ export class IdentityService {
       url: `/api/identity/users/${id}`,
     };
 
-    return this.rest.request<null, Identity.UserItem>(request);
+    return this.rest.request<null, Identity.UserItem>(request, { apiName: this.apiName });
   }
 
   getUserRoles(id: string): Observable<Identity.RoleResponse> {
@@ -94,7 +100,7 @@ export class IdentityService {
       url: `/api/identity/users/${id}/roles`,
     };
 
-    return this.rest.request<null, Identity.RoleResponse>(request);
+    return this.rest.request<null, Identity.RoleResponse>(request, { apiName: this.apiName });
   }
 
   deleteUser(id: string): Observable<null> {
@@ -103,7 +109,7 @@ export class IdentityService {
       url: `/api/identity/users/${id}`,
     };
 
-    return this.rest.request<null, null>(request);
+    return this.rest.request<null, null>(request, { apiName: this.apiName });
   }
 
   createUser(body: Identity.UserSaveRequest): Observable<Identity.UserItem> {
@@ -113,7 +119,9 @@ export class IdentityService {
       body,
     };
 
-    return this.rest.request<Identity.UserSaveRequest, Identity.UserItem>(request);
+    return this.rest.request<Identity.UserSaveRequest, Identity.UserItem>(request, {
+      apiName: this.apiName,
+    });
   }
 
   updateUser(body: Identity.UserItem): Observable<Identity.UserItem> {
@@ -126,6 +134,8 @@ export class IdentityService {
       body,
     };
 
-    return this.rest.request<Identity.UserItem, Identity.UserItem>(request);
+    return this.rest.request<Identity.UserItem, Identity.UserItem>(request, {
+      apiName: this.apiName,
+    });
   }
 }
