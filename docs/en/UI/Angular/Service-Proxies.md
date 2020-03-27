@@ -25,9 +25,9 @@ The files generated with the `--module all` option like below:
 
 ### Services
 
-Each generated service matches a back-end controller. The services methods call back-end APIs via [RestService](./HTTP-Requests.md#restservice).
+Each generated service matches a back-end controller. The services methods call back-end APIs via [RestService](./Http-Requests#restservice).
 
-A variable named `apiName` (available as of v2.4) is defined in each service. `apiName` matches the module's RemoteServiceName. This variable passes to the `RestService` as a parameter at each request. If there is no microservice API defined in the environment, `RestService` uses the default. See [getting a specific API endpoint from application config](HTTP-Requests#how-to-get-a-specific-api-endpoint-from-application-config)
+A variable named `apiName` (available as of v2.4) is defined in each service. `apiName` matches the module's RemoteServiceName. This variable passes to the `RestService` as a parameter at each request. If there is no microservice API defined in the environment, `RestService` uses the default. See [getting a specific API endpoint from application config](./Http-Requests#how-to-get-a-specific-api-endpoint-from-application-config)
 
 The `providedIn` property of the services is defined as `'root'`. Therefore no need to add a service as a provider to a module. You can use a service by injecting it into a constructor as shown below:
 
@@ -64,4 +64,4 @@ Initial values ​​can optionally be passed to each class constructor.
 
 ## What's Next?
 
-* [Http Requests](./Http-Requests.md)
+* [HTTP Requests](./Http-Requests)
