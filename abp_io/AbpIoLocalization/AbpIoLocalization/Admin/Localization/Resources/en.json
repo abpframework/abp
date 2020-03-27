@@ -86,6 +86,11 @@
     "AreYouSureYouWantToDeleteAllComputers": "Are you sure you want to delete all computers?",
     "DeleteAll": "Delete all",
     "DoYouWantToCreateNewUser": "Do you want to create new user?",
-    "MasterModules": "Master Modules"
+    "MasterModules": "Master Modules",
+    "OrganizationName": "Organization name",
+    "OrganizationNamePlaceholder": "Organization name...",
+    "UsernameOrEmail": "Username or email",
+    "UsernameOrEmailPlaceholder": "Username or email...",
+    "Member": "Member"
   }
 }

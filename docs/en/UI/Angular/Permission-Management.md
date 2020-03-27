@@ -76,4 +76,4 @@ Granted Policies are stored in the `auth` property of `ConfigState`.
 
 ## What's Next?
 
-* [Component Replacement](./Component-Replacement.md)
+* [Config State](./Config-State.md)

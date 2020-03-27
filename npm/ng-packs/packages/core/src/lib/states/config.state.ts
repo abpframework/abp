@@ -301,7 +301,7 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment({ patchState }: StateContext<Config.State>, environment: Config.Environment) {
+  setEnvironment({ patchState }: StateContext<Config.State>, { environment }:SetEnvironment) {
     return patchState({
       environment,
     });

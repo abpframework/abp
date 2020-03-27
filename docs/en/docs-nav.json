@@ -5,6 +5,7 @@
       "items": [
         {
           "text": "From Startup Templates",
+          "path": "Getting-Started-With-Startup-Templates.md"
           "items": [
             {
               "text": "Application with MVC (Razor Pages) UI",
@@ -313,6 +314,10 @@
           "text": "Angular",
           "items": [
             {
+              "text": "Service Proxies",
+              "path": "UI/Angular/Service-Proxies.md"
+            },
+            {
               "text": "HTTP Requests",
               "path": "UI/Angular/HTTP-Requests.md"
             },
@@ -339,6 +344,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "Linked List (Doubly)",
+              "path": "UI/Angular/Linked-List.md"
             }
           ]
         }

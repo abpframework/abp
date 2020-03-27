@@ -89,13 +89,15 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUser>(b =>
         {
-            b.ToTable(options.TablePrefix + "Users", options.Schema);            
+            b.ToTable(options.TablePrefix + "Users", options.Schema);
+            b.ConfigureByConvention();
             //code omitted for brevity
         });
 
         builder.Entity<IdentityUserClaim>(b =>
         {
             b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
+            b.ConfigureByConvention();
             //code omitted for brevity
         });
         
@@ -104,6 +106,7 @@ public static class IdentityDbContextModelBuilderExtensions
 }
 ````
 
+* **Do** call `b.ConfigureByConvention();` for each entity mapping (as shown above).
 * **Do** create a **configuration options** class by inheriting from the `ModelBuilderConfigurationOptions`. Example:
 
 ````C#
