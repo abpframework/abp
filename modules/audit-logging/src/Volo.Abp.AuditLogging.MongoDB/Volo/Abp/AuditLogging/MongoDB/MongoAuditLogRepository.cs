@@ -155,9 +155,11 @@ namespace Volo.Abp.AuditLogging.MongoDB
         {
             var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, includeDetails);
 
-            return await query.OrderBy(sorting ?? "changeTime desc").As<IMongoQueryable<EntityChange>>()
-                .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
+            var auditLogs = await query.OrderBy(sorting ?? "changeTime desc").As<IMongoQueryable<AuditLog>>()
+                .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+
+            return auditLogs.SelectMany(x => x.EntityChanges).ToList();
         }
 
         public virtual async Task<long> GetEntityChangeCountAsync(
@@ -170,13 +172,13 @@ namespace Volo.Abp.AuditLogging.MongoDB
             CancellationToken cancellationToken = default)
         {
             var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
-            var count = await query.As<IMongoQueryable<EntityChange>>()
+            var count = await query.As<IMongoQueryable<AuditLog>>()
                 .LongCountAsync(GetCancellationToken(cancellationToken));
 
             return count;
         }
 
-        protected virtual IQueryable<EntityChange> GetEntityChangeListQuery(
+        protected virtual IQueryable<AuditLog> GetEntityChangeListQuery(
             Guid? auditLogId = null,
             DateTime? startTime = null,
             DateTime? endTime = null,
@@ -185,16 +187,14 @@ namespace Volo.Abp.AuditLogging.MongoDB
             string entityTypeFullName = null,
             bool includeDetails = false)
         {
-            return null;
-            // TODO: Learn How to?
             return GetMongoQueryable()
-                .WhereIf(auditLogId.HasValue, e => e.AuditLogId == auditLogId)
-                .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
-                .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
-                .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
-                .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
-                .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
-                    e => e.EntityTypeFullName == entityTypeFullName);
+                    .WhereIf(auditLogId.HasValue, e => e.Id == auditLogId)
+                    .WhereIf(startTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= startTime))
+                    .WhereIf(endTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= endTime))
+                    .WhereIf(changeType.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeType >= changeType))
+                    .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityChanges.Any(ec => ec.EntityId == entityId))
+                    .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
+                        e => e.EntityChanges.Any(ec => ec.EntityTypeFullName == entityTypeFullName));
         }
     }
 }
