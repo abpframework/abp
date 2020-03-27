@@ -44,7 +44,6 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             DynamicProxyIgnoreTypes.Add<ControllerBase>();
             DynamicProxyIgnoreTypes.Add<PageModel>();
-            DynamicProxyIgnoreTypes.Add<ViewComponent>();
 
             context.Services.AddConventionalRegistrar(new AbpAspNetCoreMvcConventionalRegistrar());
         }
