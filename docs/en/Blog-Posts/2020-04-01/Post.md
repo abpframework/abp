@@ -13,8 +13,6 @@ There will be two samples of connections for better covarage;
 
 
 
-## AddOpenIdConnect 
-
 #### **Update your `appsettings.json`**
 
 In your **.Web** application, add the following section filled with your AzureAD application settings.
@@ -29,6 +27,10 @@ In your **.Web** application, add the following section filled with your AzureAD
     "CallbackPath": "/signin-azuread-oidc"	
   }
 ````
+
+
+
+## AddOpenIdConnect 
 
 Modify `ConfigureAuthentication` method of your **BookStoreWebModule** with the following:
 
@@ -51,7 +53,6 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
                      options.ClientId = configuration["AzureAd:ClientId"];
                      options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
                      options.CallbackPath = configuration["AzureAd:CallbackPath"];
-                     options.ClientSecret = configuration["AzureAd:ClientSecret"];
                      options.RequireHttpsMetadata = false;
                      options.SaveTokens = true;
                      options.GetClaimsFromUserInfoEndpoint = true;
@@ -67,21 +68,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
 Install `Microsoft.AspNetCore.Authentication.AzureAD.UI` package to your **.Web** application.
 
-In your **.Web** application, add the following section filled with your AzureAD application settings. 
-
-Notice that <u>you don't need</u> to add `ClientSecret` when you are using `Microsoft.AspNetCore.Authentication.AzureAD.UI` package.
-
-````xml
-  "AzureAd": {
-    "Instance": "https://login.microsoftonline.com/",
-    "TenantId": "<your-tenant-id",
-    "ClientId": "<your-client-id>",
-    "Domain": "domain.onmicrosoft.com",
-    "CallbackPath": "/signin-azuread-oidc"	
-  }
-````
-
-Modify `ConfigureAuthentication` method of your **BookStoreWebModule** with the following:
+In your **.Web** application, add the following section filled with your AzureAD application settings. Modify `ConfigureAuthentication` method of your **BookStoreWebModule** with the following:
 
 ````xml
 private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
