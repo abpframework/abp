@@ -4,17 +4,24 @@
 
 This post demonstrates how to  integrate AzureAD to an ABP application that enables users to sign in using OAuth 2.0 with credentials from Azure Active Directory. 
 
-Adding Azure Active Directory is pretty straightforward in Abp framework. Couple of configurations needs to be done correctly. 
+Adding Azure Active Directory is pretty straightforward in ABP framework. Couple of configurations needs to be done correctly. 
 
-There will be two samples of connections for better covarage;
+There will be two samples of connections for better coverage;
 
 - **AddAzureAD** (Microsoft.AspNetCore.Authentication.AzureAD.UI package)
 - **AddOpenIdConnect** (Default Microsoft.AspNetCore.Authentication.OpenIdConnect package)
-- 
 
-#### **Update your `appsettings.json`**
 
-In your **.Web** application, add the following section filled with your AzureAD application settings.
+
+## Sample Code
+
+https://github.com/abpframework/abp-samples/tree/master/aspnet-core/BookStore-AzureAD
+
+
+
+## Setup
+
+Update your `appsettings.json` in your **.Web** application and add the following section filled with your AzureAD application settings.
 
 ````xml
   "AzureAd": {
