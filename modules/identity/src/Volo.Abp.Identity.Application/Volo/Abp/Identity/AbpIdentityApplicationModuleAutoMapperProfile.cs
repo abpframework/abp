@@ -7,7 +7,10 @@ namespace Volo.Abp.Identity
         public AbpIdentityApplicationModuleAutoMapperProfile()
         {
             CreateMap<IdentityUser, IdentityUserDto>();
-            CreateMap<IdentityRole, IdentityRoleDto>();
+            
+            CreateMap<IdentityRole, IdentityRoleDto>()
+                .MapExtraProperties();
+            
             CreateMap<IdentityUser, ProfileDto>();
         }
     }
