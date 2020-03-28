@@ -22,6 +22,7 @@ namespace AutoMapper
                                 : new Dictionary<string, object>(extraProps);
 
                             var objectExtension = ObjectExtensionManager.Instance.GetOrNull<TDestination>();
+
                             if (objectExtension != null)
                             {
                                 foreach (var property in objectExtension.GetProperties())

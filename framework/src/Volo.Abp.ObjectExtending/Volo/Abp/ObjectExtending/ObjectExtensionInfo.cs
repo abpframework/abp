@@ -8,7 +8,7 @@ namespace Volo.Abp.ObjectExtending
     {
         public Type Type { get; }
 
-        public Dictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
+        protected Dictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
 
         public Dictionary<object, object> Configuration { get; }
 
@@ -19,7 +19,12 @@ namespace Volo.Abp.ObjectExtending
             Configuration = new Dictionary<object, object>();
         }
 
-        public ObjectExtensionPropertyInfo AddOrUpdateProperty(
+        public virtual bool HasProperty(string propertyName)
+        {
+            return Properties.ContainsKey(propertyName);
+        }
+
+        public virtual ObjectExtensionPropertyInfo AddOrUpdateProperty(
             string propertyName,
             Action<ObjectExtensionPropertyInfo> configureAction = null)
         {
@@ -33,7 +38,7 @@ namespace Volo.Abp.ObjectExtending
             return propertyInfo;
         }
 
-        public ImmutableList<ObjectExtensionPropertyInfo> GetProperties()
+        public virtual ImmutableList<ObjectExtensionPropertyInfo> GetProperties()
         {
             return Properties.Values.ToImmutableList();
         }
