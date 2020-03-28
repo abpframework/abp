@@ -192,6 +192,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             string entityTypeFullName = null)
         {
             return GetMongoQueryable()
+                    .Where(x => x.EntityChanges != null)
                     .WhereIf(auditLogId.HasValue, e => e.Id == auditLogId)
                     .WhereIf(startTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= startTime))
                     .WhereIf(endTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= endTime))
