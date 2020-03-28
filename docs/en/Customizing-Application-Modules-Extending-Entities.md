@@ -40,10 +40,11 @@ To overcome the difficulties described above, ABP Framework entity extension sys
 Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md). You can use the `ObjectExtensionManager`:
 
 ````csharp
-ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, string>(
-    "SocialSecurityNumber",
-    b => { b.HasMaxLength(32); }
-);
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        b => { b.HasMaxLength(32); }
+    );
 ````
 
 * You provide the `IdentityUser` as the entity name, `string` as the type of the new property, `SocialSecurityNumber` as the property name (also, the field name in the database table).
