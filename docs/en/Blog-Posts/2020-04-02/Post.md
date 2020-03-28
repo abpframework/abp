@@ -1,8 +1,18 @@
 # Custom SignIn Manager
 
+## Introduction
+
 ABP Framework uses Microsoft Identity underneath hence supports customization as much as Microsoft Identity does.
 
-### Creating CustomSignInManager
+
+
+## Sample Code
+
+https://github.com/abpframework/abp-samples/blob/master/aspnet-core/BookStore-AzureAD/src/Acme.BookStore.Web/CustomSignInManager.cs
+
+
+
+## Creating CustomSignInManager
 
 To create your own custom SignIn Manager, you need to inherit `SignInManager<Volo.Abp.Identity.IdentityUser>`.
 
@@ -23,7 +33,9 @@ public class CustomSignInManager : SignInManager<Volo.Abp.Identity.IdentityUser>
 }
 ````
 
-### Overriding Methods
+
+
+## Overriding Methods
 
 Afterwards you can override a method like `GetExternalLoginInfoAsync`:
 
@@ -63,9 +75,11 @@ public override async Task<ExternalLoginInfo> GetExternalLoginInfoAsync(string e
 }
 ````
 
-### Registering to DI
 
-You need to register your Custom SignIn Manager to DI to activate it. Inside the `.Web` project, locate the `ApplicationNameWebModule` add the following under `ConfigureServices` method:
+
+## Registering to DI
+
+You need to register your Custom SignIn Manager to DI to activate it. Inside the `.Web` project, locate the `ApplicationNameWebModule` and add the following under `ConfigureServices` method:
 
 ````xml
 context.Services
