@@ -8,10 +8,9 @@ Adding Azure Active Directory is pretty straightforward in Abp framework. Couple
 
 There will be two samples of connections for better covarage;
 
-- **AddOpenIdConnect** (Default Microsoft.AspNetCore.Authentication.OpenIdConnect package)
 - **AddAzureAD** (Microsoft.AspNetCore.Authentication.AzureAD.UI package)
-
-
+- **AddOpenIdConnect** (Default Microsoft.AspNetCore.Authentication.OpenIdConnect package)
+- 
 
 #### **Update your `appsettings.json`**
 
@@ -25,38 +24,6 @@ In your **.Web** application, add the following section filled with your AzureAD
     "Domain": "domain.onmicrosoft.com",
     "CallbackPath": "/signin-azuread-oidc"	
   }
-````
-
-
-
-## AddOpenIdConnect 
-
-Modify `ConfigureAuthentication` method of your **BookStoreWebModule** with the following:
-
-````xml
-private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
-        {
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
-
-            context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "BookStore";
-                })
-                .AddOpenIdConnect("AzureOpenId", "AzureAD", options =>
-                 {
-                     options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"];
-                     options.ClientId = configuration["AzureAd:ClientId"];
-                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-                     options.CallbackPath = configuration["AzureAd:CallbackPath"];
-                     options.RequireHttpsMetadata = false;
-                     options.SaveTokens = true;
-                     options.GetClaimsFromUserInfoEndpoint = true;
-                 });
-        }
 ````
 
 
@@ -103,11 +70,43 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
 
 
+## AddOpenIdConnect 
+
+Modify `ConfigureAuthentication` method of your **BookStoreWebModule** with the following:
+
+````xml
+private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
+        {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
+
+            context.Services.AddAuthentication()
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "BookStore";
+                })
+                .AddOpenIdConnect("AzureOpenId", "AzureAD", options =>
+                 {
+                     options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"];
+                     options.ClientId = configuration["AzureAd:ClientId"];
+                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
+                     options.CallbackPath = configuration["AzureAd:CallbackPath"];
+                     options.RequireHttpsMetadata = false;
+                     options.SaveTokens = true;
+                     options.GetClaimsFromUserInfoEndpoint = true;
+                 });
+        }
+````
+
+
+
 # FAQ
 
 * Help! `GetExternalLoginInfoAsync` returns `null`!
 
-  * **There** can be 2 reasons for this;
+  * There can be 2 reasons for this;
 
     1. You are trying to authenticate against wrong scheme. Check if you set **SignInScheme** to `IdentityConstants.ExternalScheme`:
 
@@ -115,7 +114,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
        options.SignInScheme = IdentityConstants.ExternalScheme;
        ````
 
-    2. Your `ClaimTypes.NameIdentifier` is null. Check if you added claim mapping: 
+    2. Your `ClaimTypes.NameIdentifier` is `null`. Check if you added claim mapping: 
 
        ````xml
        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -169,5 +168,4 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
 * Why can't I see **External Register Page** after I sign in from external provider for the first time?
 
-  * ABP framework automatically registers your user with supported email claim from your external authentication provider. You can change this behaviour by [Customizing Login Page in Abp Framework](will be link here).
-
+  * ABP framework automatically registers your user with supported email claim from your external authentication provider. You can change this behavior by [Customizing Login Page in Abp Framework](will be link here).
