@@ -22,7 +22,6 @@ In your **.Web** application, add the following section filled with your AzureAD
     "Instance": "https://login.microsoftonline.com/",
     "TenantId": "<your-tenant-id",
     "ClientId": "<your-client-id>",
-	"ClientSecret": "<your-client-secret>",
     "Domain": "domain.onmicrosoft.com",
     "CallbackPath": "/signin-azuread-oidc"	
   }
@@ -108,7 +107,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
 * Help! `GetExternalLoginInfoAsync` returns `null`!
 
-  * There can be 2 reasons for this;
+  * **There** can be 2 reasons for this;
 
     1. You are trying to authenticate against wrong scheme. Check if you set **SignInScheme** to `IdentityConstants.ExternalScheme`:
 
@@ -136,6 +135,17 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
     ````
 
     your **Redirect URI** of your application in azure portal must be with <u>domain</u> like `https://localhost:44320/signin-azuread-oidc`, not only `/signin-azuread-oidc`. 
+
+* Help! I am getting ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** error!
+
+
+  * This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
+
+    ````xml
+    options.Scope.Add("email");
+    ````
+
+    to your openid configuration.
 
 * How can I **debug/watch** which claims I get before they get mapped?
 
