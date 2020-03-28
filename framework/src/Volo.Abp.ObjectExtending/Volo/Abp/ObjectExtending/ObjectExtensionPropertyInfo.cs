@@ -12,8 +12,8 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public string Name { get; }
 
-        [NotNull]
-        public List<ValidationAttribute> ValidationAttributes { get; }
+        //[NotNull] //TODO: Will be implemented, probably in the v2.5
+        //public List<ValidationAttribute> ValidationAttributes { get; }
 
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
@@ -23,7 +23,7 @@ namespace Volo.Abp.ObjectExtending
             ObjectExtension = Check.NotNull(objectExtension, nameof(objectExtension));
             Name = Check.NotNull(name, nameof(name));
 
-            ValidationAttributes = new List<ValidationAttribute>();
+            //ValidationAttributes = new List<ValidationAttribute>();
             Configuration = new Dictionary<object, object>();
         }
     }
