@@ -6,9 +6,12 @@ namespace Volo.Abp.ObjectExtending
     {
         public Dictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
 
+        public Dictionary<object, object> Configuration { get; }
+
         public ObjectExtensionInfo()
         {
             Properties = new Dictionary<string, ObjectExtensionPropertyInfo>();
+            Configuration = new Dictionary<object, object>();
         }
     }
 }
