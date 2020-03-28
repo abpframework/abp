@@ -298,55 +298,56 @@ public class BookService
 
 > Important: You must reference to the `Volo.Abp.EntityFrameworkCore` package from the project you want to access to the DbContext. This breaks encapsulation, but this is what you want in that case.
 
-## Extra Properties & Entity Extension Manager
+## Extra Properties & Object Extension Manager
 
 Extra Properties system allows you to set/get dynamic properties to entities those implement the `IHasExtraProperties` interface. It is especially useful when you want to add custom properties to the entities defined in an [application module](Modules/Index.md), when you use the module as package reference.
 
-By default, all the extra properties of an entity are stored as a single `JSON` object in the database. Entity extension system allows you to to store desired extra properties in separate fields in the related database table.
+By default, all the extra properties of an entity are stored as a single `JSON` object in the database.
 
-For more information about the extra properties & the entity extension system, see the following documents:
+Entity extension system allows you to to store desired extra properties in separate fields in the related database table. For more information about the extra properties & the entity extension system, see the following documents:
 
 * [Customizing the Application Modules: Extending Entities](Customizing-Application-Modules-Extending-Entities.md)
 * [Entities](Entities.md)
 
-This section only explains the `EntityExtensionManager` and its usage.
+This section only explains the EF Core related usage of the `ObjectExtensionManager`.
 
-### AddProperty Method
+### ObjectExtensionManager.Instance
 
-`AddProperty` method of the `EntityExtensionManager` allows you to define additional properties for an entity type.
+`ObjectExtensionManager` implements the singleton pattern, so you need to use the static `ObjectExtensionManager.Instance` to perform all the operations.
+
+### MapEfCoreProperty
+
+`MapEfCoreProperty` is a shortcut extension method to define an extension property for an entity and map to the database.
 
 **Example**: Add `Title` property (database field) to the `IdentityRole` entity:
 
 ````csharp
-EntityExtensionManager.AddProperty<IdentityRole, string>(
-    "Title",
-    b => { b.HasMaxLength(128); }
-);
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityRole, string>(
+        "Title",
+        builder => { builder.HasMaxLength(64); }
+    );
 ````
 
-If the related module has implemented this feature (by using the `ConfigureExtensions` explained below), then the new property is added to the model. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+If the related module has implemented this feature (by using the `ConfigureEfCoreEntity` explained below), then the new property is added to the model. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
 
->`AddProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEntityExtensions` class that is safe to use this method inside.
+>`MapEfCoreProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEntityExtensions` class that is safe to use this method inside.
 
-### ConfigureExtensions
+### ConfigureEfCoreEntity
 
-If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureExtensions` extension method in your entity mapping:
+If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity` extension method in your entity mapping. However, there is a shortcut extension method `ConfigureObjectExtensions` that can be used while configuring the entity mapping:
 
 ````csharp
 builder.Entity<YourEntity>(b =>
 {
-    b.ConfigureExtensions();
+    b.ConfigureObjectExtensions();
     //...
 });
 ````
 
-If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` in this example), ABP Framework internally calls the `ConfigureExtensions` method. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
+> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` method. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
 
 See the "*ConfigureByConvention Method*" section above for more information.
-
-### GetPropertyNames
-
-`EntityExtensionManager.GetPropertyNames` static method can be used the names of the extension properties defined for this entity. It is normally not needed by an application code, but used by the ABP Framework internally.
 
 ## Advanced Topics
 

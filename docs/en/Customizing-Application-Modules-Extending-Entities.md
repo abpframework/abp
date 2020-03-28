@@ -37,10 +37,10 @@ As mentioned above, all extra properties of an entity are stored as a single JSO
 
 To overcome the difficulties described above, ABP Framework entity extension system for the Entity Framework Core that allows you to use the same extra properties API defined above, but store a desired property as a separate field in the database table.
 
-Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md). You can use the `EntityExtensionManager` static class:
+Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md). You can use the `ObjectExtensionManager`:
 
 ````csharp
-EntityExtensionManager.AddProperty<IdentityUser, string>(
+ObjectExtensionManager.Instance.MapEfCoreProperty<IdentityUser, string>(
     "SocialSecurityNumber",
     b => { b.HasMaxLength(32); }
 );

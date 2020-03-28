@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.EntityFrameworkCore.Extensions;
 using Volo.Abp.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
@@ -18,6 +18,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         {
             b.TryConfigureConcurrencyStamp();
             b.TryConfigureExtraProperties();
+            b.TryConfigureObjectExtensions();
             b.TryConfigureMayHaveCreator();
             b.TryConfigureMustHaveCreator();
             b.TryConfigureSoftDelete();
@@ -54,16 +55,28 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
 
         public static void TryConfigureExtraProperties(this EntityTypeBuilder b)
         {
-            //TODO: Max length?
-            if (b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
+            if (!b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
             {
-                b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
-                    .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
-                    .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
-                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, object>());
-
-                EntityExtensionManager.ConfigureExtensions(b.Metadata.ClrType, b);
+                return;
             }
+
+            b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
+                .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
+                .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
+                .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, object>());
+
+            b.TryConfigureObjectExtensions();
+        }
+
+        public static void ConfigureObjectExtensions<T>(this EntityTypeBuilder<T> b)
+            where T : class
+        {
+            b.As<EntityTypeBuilder>().TryConfigureObjectExtensions();
+        }
+
+        public static void TryConfigureObjectExtensions(this EntityTypeBuilder b)
+        {
+            ObjectExtensionManager.Instance.ConfigureEfCoreEntity(b);
         }
 
         public static void ConfigureSoftDelete<T>(this EntityTypeBuilder<T> b)
@@ -285,7 +298,6 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
             b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
         }
-
 
         //TODO: Add other interfaces (IAuditedObject<TUser>...)
     }

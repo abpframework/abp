@@ -11,7 +11,6 @@ namespace AutoMapper
             where TDestination : IHasExtraProperties
             where TSource : IHasExtraProperties
         {
-            var properties = ObjectExtensionManager.Instance.For<TDestination>().GetProperties();
             return mappingExpression
                 .ForMember(
                     x => x.ExtraProperties,
@@ -22,11 +21,15 @@ namespace AutoMapper
                                 ? new Dictionary<string, object>()
                                 : new Dictionary<string, object>(extraProps);
 
-                            foreach (var property in properties)
+                            var objectExtension = ObjectExtensionManager.Instance.GetOrNull<TDestination>();
+                            if (objectExtension != null)
                             {
-                                if (source.ExtraProperties.ContainsKey(property.Name))
+                                foreach (var property in objectExtension.GetProperties())
                                 {
-                                    result[property.Name] = source.ExtraProperties[property.Name];
+                                    if (source.ExtraProperties.ContainsKey(property.Name))
+                                    {
+                                        result[property.Name] = source.ExtraProperties[property.Name];
+                                    }
                                 }
                             }
 

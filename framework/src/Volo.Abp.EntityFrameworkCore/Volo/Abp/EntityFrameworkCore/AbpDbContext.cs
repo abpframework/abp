@@ -18,11 +18,11 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
-using Volo.Abp.EntityFrameworkCore.Extensions;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -183,10 +183,18 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            var propertyNames = EntityExtensionManager.GetPropertyNames(entityType);
-
-            foreach (var propertyName in propertyNames)
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
             {
+                return;
+            }
+
+            foreach (var property in objectExtension.GetProperties())
+            {
+                if (!property.IsMappedToFieldForEfCore())
+                {
+                    continue;
+                }
                 /* Checking "currentValue != null" has a good advantage:
                  * Assume that you we already using a named extra property,
                  * then decided to create a field (entity extension) for it.
@@ -194,10 +202,10 @@ namespace Volo.Abp.EntityFrameworkCore
                  * updates the field on the next save!
                  */
 
-                var currentValue = e.Entry.CurrentValues[propertyName];
+                var currentValue = e.Entry.CurrentValues[property.Name];
                 if (currentValue != null)
                 {
-                    entity.SetProperty(propertyName, currentValue);
+                    entity.SetProperty(property.Name, currentValue);
                 }
             }
         }
@@ -251,12 +259,21 @@ namespace Volo.Abp.EntityFrameworkCore
             {
                 return;
             }
-            
-            var propertyNames = EntityExtensionManager.GetPropertyNames(entityType);
 
-            foreach (var propertyName in propertyNames)
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
             {
-                entry.Property(propertyName).CurrentValue = entity.GetProperty(propertyName);
+                return;
+            }
+
+            foreach (var property in objectExtension.GetProperties())
+            {
+                if (!entity.HasProperty(property.Name))
+                {
+                    continue;
+                }
+
+                entry.Property(property.Name).CurrentValue = entity.GetProperty(property.Name);
             }
         }
 

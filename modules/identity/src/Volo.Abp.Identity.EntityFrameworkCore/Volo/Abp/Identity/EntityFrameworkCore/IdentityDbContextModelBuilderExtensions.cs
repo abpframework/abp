@@ -1,7 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.Extensions;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Users.EntityFrameworkCore;
 

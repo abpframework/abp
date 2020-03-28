@@ -8,7 +8,7 @@ namespace Volo.Abp.ObjectExtending
             where TSource : IHasExtraProperties
             where TDestination : IHasExtraProperties
         {
-            var extensionPropertyInfos = ObjectExtensionManager.Instance.For<TSource>().GetProperties();
+            var extensionPropertyInfos = ObjectExtensionManager.Instance.AddOrUpdate<TSource>().GetProperties();
 
             foreach (var extensionPropertyInfo in extensionPropertyInfos)
             {

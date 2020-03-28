@@ -5,26 +5,43 @@ namespace Volo.Abp.ObjectExtending
 {
     public class ObjectExtensionManager
     {
-        public static ObjectExtensionManager Instance { get; } = new ObjectExtensionManager();
+        public static ObjectExtensionManager Instance { get; set; } = new ObjectExtensionManager();
 
-        private Dictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
+        protected Dictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
 
-        private ObjectExtensionManager()
+        protected ObjectExtensionManager()
         {
             ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
         }
 
-        public ObjectExtensionInfo For<TObject>(
+        public virtual ObjectExtensionInfo AddOrUpdate<TObject>(
+            Action<ObjectExtensionInfo> configureAction = null)
+        {
+            return AddOrUpdate(typeof(TObject), configureAction);
+        }
+
+        public virtual ObjectExtensionInfo AddOrUpdate(
+            Type type,
             Action<ObjectExtensionInfo> configureAction = null)
         {
             var extensionInfo = ObjectsExtensions.GetOrAdd(
-                typeof(TObject),
-                () => new ObjectExtensionInfo(typeof(TObject))
+                type,
+                () => new ObjectExtensionInfo(type)
             );
 
             configureAction?.Invoke(extensionInfo);
 
             return extensionInfo;
+        }
+
+        public virtual ObjectExtensionInfo GetOrNull<TObject>()
+        {
+            return GetOrNull(typeof(TObject));
+        }
+
+        public virtual ObjectExtensionInfo GetOrNull(Type type)
+        {
+            return ObjectsExtensions.GetOrDefault(type);
         }
     }
 }

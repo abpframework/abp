@@ -19,13 +19,13 @@ namespace Volo.Abp.ObjectExtending
             Configuration = new Dictionary<object, object>();
         }
 
-        public ObjectExtensionPropertyInfo AddProperty(
+        public ObjectExtensionPropertyInfo AddOrUpdateProperty(
             string propertyName,
             Action<ObjectExtensionPropertyInfo> configureAction = null)
         {
             var propertyInfo = Properties.GetOrAdd(
                 propertyName,
-                () => new ObjectExtensionPropertyInfo(propertyName)
+                () => new ObjectExtensionPropertyInfo(this, propertyName)
             );
 
             configureAction?.Invoke(propertyInfo);
