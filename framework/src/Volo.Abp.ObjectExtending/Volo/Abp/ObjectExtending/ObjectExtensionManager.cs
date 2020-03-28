@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending
 {
@@ -14,16 +16,19 @@ namespace Volo.Abp.ObjectExtending
             ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
         }
 
-        public virtual ObjectExtensionInfo AddOrUpdate<TObject>(
-            Action<ObjectExtensionInfo> configureAction = null)
+        public virtual ObjectExtensionManager AddOrUpdate<TObject>(
+            [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+            where TObject : IHasExtraProperties
         {
             return AddOrUpdate(typeof(TObject), configureAction);
         }
 
-        public virtual ObjectExtensionInfo AddOrUpdate(
-            Type type,
-            Action<ObjectExtensionInfo> configureAction = null)
+        public virtual ObjectExtensionManager AddOrUpdate(
+            [NotNull] Type type,
+            [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
         {
+            Check.NotNull(type, nameof(type));
+
             var extensionInfo = ObjectsExtensions.GetOrAdd(
                 type,
                 () => new ObjectExtensionInfo(type)
@@ -31,7 +36,7 @@ namespace Volo.Abp.ObjectExtending
 
             configureAction?.Invoke(extensionInfo);
 
-            return extensionInfo;
+            return this;
         }
 
         public virtual ObjectExtensionInfo GetOrNull<TObject>()
@@ -39,8 +44,10 @@ namespace Volo.Abp.ObjectExtending
             return GetOrNull(typeof(TObject));
         }
 
-        public virtual ObjectExtensionInfo GetOrNull(Type type)
+        public virtual ObjectExtensionInfo GetOrNull([NotNull] Type type)
         {
+            Check.NotNull(type, nameof(type));
+
             return ObjectsExtensions.GetOrDefault(type);
         }
     }

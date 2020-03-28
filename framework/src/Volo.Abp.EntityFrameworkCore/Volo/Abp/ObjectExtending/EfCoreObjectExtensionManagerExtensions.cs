@@ -1,75 +1,73 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending
 {
     public static class EfCoreObjectExtensionManagerExtensions
     {
-        public static ObjectExtensionInfo MapEfCoreProperty<TObject, TDbField>(
+        public static ObjectExtensionManager MapEfCoreProperty<TObject, TProperty>(
             this ObjectExtensionManager objectExtensionManager,
             string propertyName,
             Action<PropertyBuilder> propertyBuildAction)
+            where TObject : IHasExtraProperties
         {
             return objectExtensionManager.MapEfCoreProperty(
                 typeof(TObject),
-                typeof(TDbField),
+                typeof(TProperty),
                 propertyName,
                 propertyBuildAction
             );
         }
 
-        public static ObjectExtensionInfo MapEfCoreProperty(
+        public static ObjectExtensionManager MapEfCoreProperty(
             this ObjectExtensionManager objectExtensionManager,
             Type objectType,
-            Type dbFieldType,
+            Type propertyType,
             string propertyName,
             Action<PropertyBuilder> propertyBuildAction)
         {
-            return objectExtensionManager.AddOrUpdate(
+            return objectExtensionManager.AddOrUpdateProperty(
                 objectType,
-                objectOptions =>
+                propertyType,
+                propertyName,
+                options =>
                 {
-                    objectOptions.AddOrUpdateProperty(
-                        propertyName,
-                        propertyOptions =>
-                        {
-                            propertyOptions.MapEfCore(
-                                dbFieldType,
-                                propertyBuildAction
-                            );
-                        }
+                    options.MapEfCore(
+                        propertyBuildAction
                     );
-                });
+                }
+            );
         }
 
-        public static void ConfigureEfCoreEntity(
-            this ObjectExtensionManager objectExtensionManager,
-            EntityTypeBuilder b)
+    public static void ConfigureEfCoreEntity(
+        this ObjectExtensionManager objectExtensionManager,
+        EntityTypeBuilder b)
+    {
+        var objectExtension = objectExtensionManager.GetOrNull(b.Metadata.ClrType);
+        if (objectExtension == null)
         {
-            var objectExtension = objectExtensionManager.GetOrNull(b.Metadata.ClrType);
-            if (objectExtension == null)
+            return;
+        }
+
+        foreach (var property in objectExtension.GetProperties())
+        {
+            var efCoreMapping = property.GetEfCoreMappingOrNull();
+            if (efCoreMapping == null)
             {
-                return;
+                continue;
             }
 
-            foreach (var property in objectExtension.GetProperties())
+            /* Prevent multiple calls to the entityTypeBuilder.Property(...) method */
+            if (b.Metadata.FindProperty(property.Name) != null)
             {
-                var efCoreMapping = property.GetEfCoreMappingOrNull();
-                if (efCoreMapping == null)
-                {
-                    continue;
-                }
-
-                /* Prevent multiple calls to the entityTypeBuilder.Property(...) method */
-                if (b.Metadata.FindProperty(property.Name) != null)
-                {
-                    continue;
-                }
-
-                var propertyBuilder = b.Property(efCoreMapping.FieldType, property.Name);
-
-                efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
+                continue;
             }
+
+            var propertyBuilder = b.Property(property.Type, property.Name);
+
+            efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
         }
     }
+}
 }

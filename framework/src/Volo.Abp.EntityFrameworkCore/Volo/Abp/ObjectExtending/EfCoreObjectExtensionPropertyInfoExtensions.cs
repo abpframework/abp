@@ -10,17 +10,16 @@ namespace Volo.Abp.ObjectExtending
         public const string EfCorePropertyConfigurationName = "EfCoreMapping";
 
         public static ObjectExtensionPropertyInfo MapEfCore(
-            this ObjectExtensionPropertyInfo propertyExtension,
-            Type dbFieldType,
-            Action<PropertyBuilder> propertyBuildAction)
+            [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
         {
-            var options = new ObjectExtensionPropertyInfoEfCoreMappingOptions(
-                dbFieldType,
-                propertyExtension,
-                propertyBuildAction
-            );
+            Check.NotNull(propertyExtension, nameof(propertyExtension));
 
-            propertyExtension.Configuration[EfCorePropertyConfigurationName] = options;
+            propertyExtension.Configuration[EfCorePropertyConfigurationName] =
+                new ObjectExtensionPropertyInfoEfCoreMappingOptions(
+                    propertyExtension,
+                    propertyBuildAction
+                );
 
             return propertyExtension;
         }
