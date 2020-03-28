@@ -8,7 +8,7 @@ ABP Framework uses Microsoft Identity underneath hence supports customization as
 
 ## Sample Code
 
-https://github.com/abpframework/abp-samples/tree/master/aspnet-core/BookStore-AzureAD
+https://github.com/abpframework/abp-samples/blob/master/aspnet-core/BookStore-AzureAD/src/Acme.BookStore.Web/Pages/CustomLoginModel.cs
 
 
 
