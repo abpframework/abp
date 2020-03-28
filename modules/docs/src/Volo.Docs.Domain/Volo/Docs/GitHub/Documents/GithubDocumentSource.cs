@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Volo.Abp.Domain.Services;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
-using Newtonsoft.Json.Linq;
 using Octokit;
 using Volo.Abp;
 using Volo.Extensions;
@@ -206,8 +204,14 @@ namespace Volo.Docs.GitHub.Documents
             var url = project.GetGitHubUrl();
             var ownerName = GetOwnerNameFromUrl(url);
             var repositoryName = GetRepositoryNameFromUrl(url);
-            return await _githubRepositoryManager.GetFileCommitsAsync(ownerName, repositoryName,
-                version, filename, project.GetGitHubAccessTokenOrNull());
+
+            return await _githubRepositoryManager.GetFileCommitsAsync(
+                ownerName,
+                repositoryName,
+                version,
+                filename,
+                project.GetGitHubAccessTokenOrNull()
+            );
         }
 
         protected virtual string GetOwnerNameFromUrl(string url)
@@ -219,7 +223,7 @@ namespace Volo.Docs.GitHub.Documents
             }
             catch (Exception)
             {
-                throw new Exception($"Github url is not valid: {url}");
+                throw new Exception($"GitHub url is not valid: {url}");
             }
         }
 
