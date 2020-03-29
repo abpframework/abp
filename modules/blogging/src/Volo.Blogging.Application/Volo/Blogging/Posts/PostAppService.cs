@@ -202,7 +202,7 @@ namespace Volo.Blogging.Posts
 
         private async Task RemoveOldTags(ICollection<string> newTags, Post post)
         {
-            foreach (var oldTag in post.Tags)
+            foreach (var oldTag in post.Tags.ToList())
             {
                 var tag = await _tagRepository.GetAsync(oldTag.TagId);
 

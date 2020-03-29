@@ -283,6 +283,10 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "自定义/扩展UI",
+              "path": "UI/AspNetCore/Customization-User-Interface.md"
+            },
+            {
               "text": "主题化",
               "path": "UI/AspNetCore/Theming.md"
             }
