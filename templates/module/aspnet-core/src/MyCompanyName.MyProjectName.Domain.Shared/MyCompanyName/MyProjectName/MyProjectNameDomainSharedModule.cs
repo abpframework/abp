@@ -25,7 +25,7 @@ namespace MyCompanyName.MyProjectName
                 options.Resources
                     .Add<MyProjectNameResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/MyProjectName");
+                    .AddVirtualJson("/MyCompanyName/MyProjectName/Localization/MyProjectName");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>
