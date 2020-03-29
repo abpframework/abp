@@ -20,6 +20,7 @@ namespace Volo.Abp.ObjectExtending
             [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
         {
             ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
+            
             PropertyBuildAction = propertyBuildAction;
         }
     }

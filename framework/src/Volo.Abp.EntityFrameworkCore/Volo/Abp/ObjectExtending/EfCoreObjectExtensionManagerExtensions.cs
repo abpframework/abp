@@ -1,19 +1,21 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.ObjectExtending
 {
     public static class EfCoreObjectExtensionManagerExtensions
     {
-        public static ObjectExtensionManager MapEfCoreProperty<TObject, TProperty>(
-            this ObjectExtensionManager objectExtensionManager,
-            string propertyName,
-            Action<PropertyBuilder> propertyBuildAction)
-            where TObject : IHasExtraProperties
+        public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] string propertyName,
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
+            where TEntity : IHasExtraProperties, IEntity
         {
             return objectExtensionManager.MapEfCoreProperty(
-                typeof(TObject),
+                typeof(TEntity),
                 typeof(TProperty),
                 propertyName,
                 propertyBuildAction
@@ -21,14 +23,16 @@ namespace Volo.Abp.ObjectExtending
         }
 
         public static ObjectExtensionManager MapEfCoreProperty(
-            this ObjectExtensionManager objectExtensionManager,
-            Type objectType,
-            Type propertyType,
-            string propertyName,
-            Action<PropertyBuilder> propertyBuildAction)
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] Type entityType,
+            [NotNull] Type propertyType,
+            [NotNull] string propertyName,
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
         {
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+
             return objectExtensionManager.AddOrUpdateProperty(
-                objectType,
+                entityType,
                 propertyType,
                 propertyName,
                 options =>
@@ -40,34 +44,37 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
-    public static void ConfigureEfCoreEntity(
-        this ObjectExtensionManager objectExtensionManager,
-        EntityTypeBuilder b)
-    {
-        var objectExtension = objectExtensionManager.GetOrNull(b.Metadata.ClrType);
-        if (objectExtension == null)
+        public static void ConfigureEfCoreEntity(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] EntityTypeBuilder typeBuilder)
         {
-            return;
-        }
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+            Check.NotNull(typeBuilder, nameof(typeBuilder));
 
-        foreach (var property in objectExtension.GetProperties())
-        {
-            var efCoreMapping = property.GetEfCoreMappingOrNull();
-            if (efCoreMapping == null)
+            var objectExtension = objectExtensionManager.GetOrNull(typeBuilder.Metadata.ClrType);
+            if (objectExtension == null)
             {
-                continue;
+                return;
             }
 
-            /* Prevent multiple calls to the entityTypeBuilder.Property(...) method */
-            if (b.Metadata.FindProperty(property.Name) != null)
+            foreach (var property in objectExtension.GetProperties())
             {
-                continue;
+                var efCoreMapping = property.GetEfCoreMappingOrNull();
+                if (efCoreMapping == null)
+                {
+                    continue;
+                }
+
+                /* Prevent multiple calls to the entityTypeBuilder.Property(...) method */
+                if (typeBuilder.Metadata.FindProperty(property.Name) != null)
+                {
+                    continue;
+                }
+
+                var propertyBuilder = typeBuilder.Property(property.Type, property.Name);
+
+                efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
             }
-
-            var propertyBuilder = b.Property(property.Type, property.Name);
-
-            efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
         }
     }
-}
 }

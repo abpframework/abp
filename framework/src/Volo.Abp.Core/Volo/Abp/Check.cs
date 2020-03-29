@@ -130,7 +130,7 @@ namespace Volo.Abp
 
             if (!type.IsAssignableTo<TBaseType>())
             {
-                throw new ArgumentException($"{parameterName} should be assignable to the {typeof(TBaseType).GetFullNameWithAssemblyName()}!");
+                throw new ArgumentException($"{parameterName} (type of {type.AssemblyQualifiedName}) should be assignable to the {typeof(TBaseType).GetFullNameWithAssemblyName()}!");
             }
 
             return type;
