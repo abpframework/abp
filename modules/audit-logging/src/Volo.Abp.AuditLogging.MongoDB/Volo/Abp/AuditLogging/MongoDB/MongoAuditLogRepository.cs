@@ -163,7 +163,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
 
             return auditLogs
                 .SelectMany(x => x.EntityChanges.Where(y =>
-                    IsSatisfiedBySpecification(y, auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName)))
+                    IsSatisfiedEntityChange(y, auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName)))
                 .AsQueryable().OrderBy(sorting ?? "changeTime desc").ToList();
         }
 
@@ -202,7 +202,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
                         e => e.EntityChanges.Any(ec => ec.EntityTypeFullName == entityTypeFullName));
         }
 
-        protected virtual bool IsSatisfiedBySpecification(
+        protected virtual bool IsSatisfiedEntityChange(
             EntityChange entityChange, 
             Guid? auditLogId = null,
             DateTime? startTime = null,
