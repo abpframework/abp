@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -72,6 +73,12 @@ namespace Volo.Abp.IdentityModel
             var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
             if (tokenResponse.IsError)
             {
+                if (tokenResponse.HttpStatusCode == HttpStatusCode.Forbidden ||
+                    tokenResponse.HttpStatusCode == HttpStatusCode.InternalServerError)
+                {
+                    throw new AbpException($"This user were registered to multiple organizations. You need to pick an organization!  ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
+                }
+
                 throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
             }
 
