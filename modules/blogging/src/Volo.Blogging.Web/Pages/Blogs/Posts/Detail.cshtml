@@ -1,5 +1,6 @@
 ﻿@page
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
+@using System.Web
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Http.Extensions
 @using Volo.Abp.Users
@@ -9,7 +10,9 @@
 @inject IAuthorizationService Authorization
 @model DetailModel
 @{
-    ViewBag.PageTitle = Model.Post.Title;
+    ViewBag.Title = Model.Post.Title;
+    ViewBag.Description = Model.Post.Content.Substring(0, 150);
+
     var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
 }
 @section scripts {
@@ -84,7 +87,7 @@
                 </section>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-10 col-md-8 col-lg-7 mx-auto">
                 <section class="post-content">
@@ -94,7 +97,7 @@
                 </section>
             </div>
         </div>
-    
+
         <div class="row">
             <div class="col-10 col-md-8 col-lg-7 mx-auto">
                 <hr />
