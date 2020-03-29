@@ -8,6 +8,7 @@ namespace Volo.Abp.ObjectExtending
     public class HasExtraPropertiesObjectExtendingExtensions_Tests : AbpObjectExtendingTestBase
     {
         private readonly ExtensibleTestPerson _person;
+        private readonly ExtensibleTestPersonDto _personDto;
 
         public HasExtraPropertiesObjectExtendingExtensions_Tests()
         {
@@ -16,58 +17,57 @@ namespace Volo.Abp.ObjectExtending
                 .SetProperty("Age", 42)
                 .SetProperty("ChildCount", 2)
                 .SetProperty("Sex", "male");
+
+            _personDto = new ExtensibleTestPersonDto()
+                .SetProperty("ExistingDtoProperty", "existing-value");
         }
         
         [Fact]
         public void MapExtraPropertiesTo_Should_Only_Map_Defined_Properties_By_Default()
         {
-            var personDto = new ExtensibleTestPersonDto();
-            
-            _person.MapExtraPropertiesTo(personDto);
+            _person.MapExtraPropertiesTo(_personDto);
 
-            personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
-            personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
-            personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
-            personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+            _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
+            _personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
+            _personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
+            _personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+            _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         }
 
         [Fact]
         public void MapExtraPropertiesTo_Should_Only_Map_Source_Defined_Properties_If_Requested()
         {
-            var personDto = new ExtensibleTestPersonDto();
+            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionCheck.Source);
 
-            _person.MapExtraPropertiesTo(personDto, MappingPropertyDefinitionCheck.Source);
-
-            personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
-            personDto.GetProperty<int>("Age").ShouldBe(42); //Defined in source
-            personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
-            personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+            _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
+            _personDto.GetProperty<int>("Age").ShouldBe(42); //Defined in source
+            _personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
+            _personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+            _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         }
 
         [Fact]
         public void MapExtraPropertiesTo_Should_Only_Map_Destination_Defined_Properties_If_Requested()
         {
-            var personDto = new ExtensibleTestPersonDto();
+            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionCheck.Destination);
 
-            _person.MapExtraPropertiesTo(personDto, MappingPropertyDefinitionCheck.Destination);
-
-            personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
-            personDto.GetProperty<int>("ChildCount").ShouldBe(2); //Defined in destination
-            personDto.HasProperty("Age").ShouldBeFalse(); //Not defined in destination
-            personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+            _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
+            _personDto.GetProperty<int>("ChildCount").ShouldBe(2); //Defined in destination
+            _personDto.HasProperty("Age").ShouldBeFalse(); //Not defined in destination
+            _personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+            _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         }
 
         [Fact]
         public void MapExtraPropertiesTo_Should_Copy_all_With_No_Property_Definition_Check()
         {
-            var personDto = new ExtensibleTestPersonDto();
+            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionCheck.None);
 
-            _person.MapExtraPropertiesTo(personDto, MappingPropertyDefinitionCheck.None);
-
-            personDto.GetProperty<string>("Name").ShouldBe("John");
-            personDto.GetProperty<int>("Age").ShouldBe(42);
-            personDto.GetProperty<int>("ChildCount").ShouldBe(2);
-            personDto.GetProperty<string>("Sex").ShouldBe("male");
+            _personDto.GetProperty<string>("Name").ShouldBe("John");
+            _personDto.GetProperty<int>("Age").ShouldBe(42);
+            _personDto.GetProperty<int>("ChildCount").ShouldBe(2);
+            _personDto.GetProperty<string>("Sex").ShouldBe("male");
+            _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         }
     }
 }

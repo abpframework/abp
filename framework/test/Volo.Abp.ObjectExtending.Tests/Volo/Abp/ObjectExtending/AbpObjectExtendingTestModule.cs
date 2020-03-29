@@ -4,7 +4,10 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.ObjectExtending
 {
-    [DependsOn(typeof(AbpObjectExtendingModule))]
+    [DependsOn(
+        typeof(AbpObjectExtendingModule),
+        typeof(AbpTestBaseModule)
+        )]
     public class AbpObjectExtendingTestModule : AbpModule
     {
         private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();

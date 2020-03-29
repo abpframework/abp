@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending
@@ -12,8 +13,8 @@ namespace Volo.Abp.ObjectExtending
         /// Checks property definitions (over the <see cref="ObjectExtensionManager"/>)
         /// based on the <paramref name="definitionCheck"/> preference.
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TDestination"></typeparam>
+        /// <typeparam name="TSource">Source class type</typeparam>
+        /// <typeparam name="TDestination">Destination class type</typeparam>
         /// <param name="source">The source object</param>
         /// <param name="destination">The destination object</param>
         /// <param name="definitionCheck">
@@ -22,6 +23,34 @@ namespace Volo.Abp.ObjectExtending
         public static void MapExtraPropertiesTo<TSource, TDestination>(
             this TSource source,
             TDestination destination,
+            MappingPropertyDefinitionCheck definitionCheck = MappingPropertyDefinitionCheck.Both)
+            where TSource : IHasExtraProperties
+            where TDestination : IHasExtraProperties
+        {
+            MapExtraPropertiesTo<TSource, TDestination>(
+                source.ExtraProperties,
+                destination.ExtraProperties,
+                definitionCheck
+            );
+        }
+
+        /// <summary>
+        /// Copies extra properties from the <paramref name="sourceDictionary"/> object
+        /// to the <paramref name="destinationDictionary"/> object.
+        ///
+        /// Checks property definitions (over the <see cref="ObjectExtensionManager"/>)
+        /// based on the <paramref name="definitionCheck"/> preference.
+        /// </summary>
+        /// <typeparam name="TSource">Source class type (for definition check)</typeparam>
+        /// <typeparam name="TDestination">Destination class type (for definition check)</typeparam>
+        /// <param name="sourceDictionary">The source dictionary object</param>
+        /// <param name="destinationDictionary">The destination dictionary object</param>
+        /// <param name="definitionCheck">
+        /// Controls which properties to map.
+        /// </param>
+        public static void MapExtraPropertiesTo<TSource, TDestination>(
+            Dictionary<string, object> sourceDictionary,
+            Dictionary<string, object> destinationDictionary,
             MappingPropertyDefinitionCheck definitionCheck = MappingPropertyDefinitionCheck.Both)
             where TSource : IHasExtraProperties
             where TDestination : IHasExtraProperties
@@ -42,40 +71,40 @@ namespace Volo.Abp.ObjectExtending
 
             if (definitionCheck == MappingPropertyDefinitionCheck.None)
             {
-                foreach (var keyValue in source.ExtraProperties)
+                foreach (var keyValue in sourceDictionary)
                 {
-                    destination.ExtraProperties[keyValue.Key] = keyValue.Value;
+                    destinationDictionary[keyValue.Key] = keyValue.Value;
                 }
             }
             else if (definitionCheck == MappingPropertyDefinitionCheck.Source)
             {
                 foreach (var property in sourceObjectExtension.GetProperties())
                 {
-                    if (!source.ExtraProperties.ContainsKey(property.Name))
+                    if (!sourceDictionary.ContainsKey(property.Name))
                     {
                         continue;
                     }
 
-                    destination.ExtraProperties[property.Name] = source.ExtraProperties[property.Name];
+                    destinationDictionary[property.Name] = sourceDictionary[property.Name];
                 }
             }
             else if (definitionCheck == MappingPropertyDefinitionCheck.Destination)
             {
-                foreach (var keyValue in source.ExtraProperties)
+                foreach (var keyValue in sourceDictionary)
                 {
                     if (!destinationObjectExtension.HasProperty(keyValue.Key))
                     {
                         continue;
                     }
 
-                    destination.ExtraProperties[keyValue.Key] = keyValue.Value;
+                    destinationDictionary[keyValue.Key] = keyValue.Value;
                 }
             }
-            else if(definitionCheck == MappingPropertyDefinitionCheck.Both)
+            else if (definitionCheck == MappingPropertyDefinitionCheck.Both)
             {
                 foreach (var property in sourceObjectExtension.GetProperties())
                 {
-                    if (!source.ExtraProperties.ContainsKey(property.Name))
+                    if (!sourceDictionary.ContainsKey(property.Name))
                     {
                         continue;
                     }
@@ -85,7 +114,7 @@ namespace Volo.Abp.ObjectExtending
                         continue;
                     }
 
-                    destination.ExtraProperties[property.Name] = source.ExtraProperties[property.Name];
+                    destinationDictionary[property.Name] = sourceDictionary[property.Name];
                 }
             }
             else
