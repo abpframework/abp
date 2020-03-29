@@ -170,7 +170,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string entityTypeFullName = null,
             CancellationToken cancellationToken = default)
         {
-            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, false);
+            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
 
             var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
