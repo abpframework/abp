@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 
@@ -11,7 +12,7 @@ namespace Volo.Abp.ObjectExtending
 
         protected Dictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
 
-        protected ObjectExtensionManager()
+        protected internal ObjectExtensionManager()
         {
             ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
         }
@@ -54,6 +55,12 @@ namespace Volo.Abp.ObjectExtending
             Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
 
             return ObjectsExtensions.GetOrDefault(type);
+        }
+
+        [NotNull]
+        public virtual ImmutableList<ObjectExtensionInfo> GetExtendedObjects()
+        {
+            return ObjectsExtensions.Values.ToImmutableList();
         }
     }
 }

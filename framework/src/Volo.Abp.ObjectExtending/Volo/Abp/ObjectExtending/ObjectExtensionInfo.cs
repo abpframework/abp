@@ -65,5 +65,14 @@ namespace Volo.Abp.ObjectExtending
         {
             return Properties.Values.ToImmutableList();
         }
+
+        [CanBeNull]
+        public virtual ObjectExtensionPropertyInfo GetPropertyOrNull(
+            [NotNull] string propertyName)
+        {
+            Check.NotNullOrEmpty(propertyName, nameof(propertyName));
+
+            return Properties.GetOrDefault(propertyName);
+        }
     }
 }
