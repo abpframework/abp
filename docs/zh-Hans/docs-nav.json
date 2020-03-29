@@ -5,6 +5,7 @@
       "items": [
         {
           "text": "从启动模板开始",
+          "path": "Getting-Started-With-Startup-Templates.md",
           "items": [
             {
               "text": "ASP.NET Core MVC 模板",
@@ -281,6 +282,10 @@
             {
               "text": "仪表板和小部件(Widget)系统",
               "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "自定义/扩展UI",
+              "path": "UI/AspNetCore/Customization-User-Interface.md"
             },
             {
               "text": "主题化",

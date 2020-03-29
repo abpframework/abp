@@ -37,13 +37,14 @@ return user.GetProperty<string>("Title");
 
 为了解决上面的问题,用于EF Core的ABP框架实体扩展系统允许你使用上面定义相同的额外属性API,但将所需的属性存储在单独的数据库表字段中.
 
-假设你想要添加 `SocialSecurityNumber` 到[身份模块](Modules/Identity.md)的 `IdentityUser` 实体. 你可以使用 `EntityExtensionManager` 静态类:
+假设你想要添加 `SocialSecurityNumber` 到[身份模块](Modules/Identity.md)的 `IdentityUser` 实体. 你可以使用 `ObjectExtensionManager` 类:
 
 ````csharp
-EntityExtensionManager.AddProperty<IdentityUser, string>(
-    "SocialSecurityNumber",
-    b => { b.HasMaxLength(32); }
-);
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        b => { b.HasMaxLength(32); }
+    );
 ````
 
 * 你提供了 `IdentityUser` 作为实体名(泛型参数), `string` 做为新属性的类型, `SocialSecurityNumber` 做为属性名(也是数据库表的字段名).
