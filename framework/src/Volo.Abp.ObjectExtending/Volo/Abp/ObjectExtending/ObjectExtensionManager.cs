@@ -16,6 +16,7 @@ namespace Volo.Abp.ObjectExtending
             ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
         }
 
+        [NotNull]
         public virtual ObjectExtensionManager AddOrUpdate<TObject>(
             [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
             where TObject : IHasExtraProperties
@@ -23,12 +24,13 @@ namespace Volo.Abp.ObjectExtending
             return AddOrUpdate(typeof(TObject), configureAction);
         }
 
+        [NotNull]
         public virtual ObjectExtensionManager AddOrUpdate(
             [NotNull] Type type,
             [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
         {
-            Check.NotNull(type, nameof(type));
-
+            Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
+            
             var extensionInfo = ObjectsExtensions.GetOrAdd(
                 type,
                 () => new ObjectExtensionInfo(type)
@@ -39,14 +41,17 @@ namespace Volo.Abp.ObjectExtending
             return this;
         }
 
+        [CanBeNull]
         public virtual ObjectExtensionInfo GetOrNull<TObject>()
+            where TObject : IHasExtraProperties
         {
             return GetOrNull(typeof(TObject));
         }
 
+        [CanBeNull]
         public virtual ObjectExtensionInfo GetOrNull([NotNull] Type type)
         {
-            Check.NotNull(type, nameof(type));
+            Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
 
             return ObjectsExtensions.GetOrDefault(type);
         }

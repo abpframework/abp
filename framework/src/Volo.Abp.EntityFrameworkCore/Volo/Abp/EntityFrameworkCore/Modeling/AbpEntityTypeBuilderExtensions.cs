@@ -69,14 +69,17 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureObjectExtensions<T>(this EntityTypeBuilder<T> b)
-            where T : class
+            where T : class, IHasExtraProperties
         {
             b.As<EntityTypeBuilder>().TryConfigureObjectExtensions();
         }
 
         public static void TryConfigureObjectExtensions(this EntityTypeBuilder b)
         {
-            ObjectExtensionManager.Instance.ConfigureEfCoreEntity(b);
+            if (b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
+            {
+                ObjectExtensionManager.Instance.ConfigureEfCoreEntity(b);
+            }
         }
 
         public static void ConfigureSoftDelete<T>(this EntityTypeBuilder<T> b)

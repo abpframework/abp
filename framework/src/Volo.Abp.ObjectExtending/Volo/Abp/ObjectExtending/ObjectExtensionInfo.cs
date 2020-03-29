@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using JetBrains.Annotations;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending
 {
     public class ObjectExtensionInfo
     {
+        [NotNull]
         public Type Type { get; }
 
+        [NotNull]
         protected Dictionary<string, ObjectExtensionPropertyInfo> Properties { get; }
 
+        [NotNull]
         public Dictionary<object, object> Configuration { get; }
 
-        public ObjectExtensionInfo(Type type)
+        public ObjectExtensionInfo([NotNull] Type type)
         {
-            Type = type;
+            Type = Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
             Properties = new Dictionary<string, ObjectExtensionPropertyInfo>();
             Configuration = new Dictionary<object, object>();
         }
@@ -25,6 +29,7 @@ namespace Volo.Abp.ObjectExtending
             return Properties.ContainsKey(propertyName);
         }
 
+        [NotNull]
         public virtual ObjectExtensionInfo AddOrUpdateProperty<TProperty>(
             [NotNull] string propertyName,
             [CanBeNull] Action<ObjectExtensionPropertyInfo> configureAction = null)
@@ -36,6 +41,7 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
+        [NotNull]
         public virtual ObjectExtensionInfo AddOrUpdateProperty(
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
@@ -54,6 +60,7 @@ namespace Volo.Abp.ObjectExtending
             return this;
         }
 
+        [NotNull]
         public virtual ImmutableList<ObjectExtensionPropertyInfo> GetProperties()
         {
             return Properties.Values.ToImmutableList();

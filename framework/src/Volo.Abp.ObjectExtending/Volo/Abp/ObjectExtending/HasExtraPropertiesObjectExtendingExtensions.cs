@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using JetBrains.Annotations;
 using Volo.Abp.Data;
 
 namespace Volo.Abp.ObjectExtending
@@ -11,26 +13,31 @@ namespace Volo.Abp.ObjectExtending
         /// to the <paramref name="destination"/> object.
         ///
         /// Checks property definitions (over the <see cref="ObjectExtensionManager"/>)
-        /// based on the <paramref name="definitionCheck"/> preference.
+        /// based on the <paramref name="definitionChecks"/> preference.
         /// </summary>
         /// <typeparam name="TSource">Source class type</typeparam>
         /// <typeparam name="TDestination">Destination class type</typeparam>
         /// <param name="source">The source object</param>
         /// <param name="destination">The destination object</param>
-        /// <param name="definitionCheck">
+        /// <param name="definitionChecks">
         /// Controls which properties to map.
         /// </param>
         public static void MapExtraPropertiesTo<TSource, TDestination>(
-            this TSource source,
-            TDestination destination,
-            MappingPropertyDefinitionCheck definitionCheck = MappingPropertyDefinitionCheck.Both)
+            [NotNull] this TSource source,
+            [NotNull] TDestination destination,
+            MappingPropertyDefinitionChecks definitionChecks = MappingPropertyDefinitionChecks.Both)
             where TSource : IHasExtraProperties
             where TDestination : IHasExtraProperties
         {
-            MapExtraPropertiesTo<TSource, TDestination>(
+            Check.NotNull(source, nameof(source));
+            Check.NotNull(destination, nameof(destination));
+
+            MapExtraPropertiesTo(
+                typeof(TSource),
+                typeof(TDestination),
                 source.ExtraProperties,
                 destination.ExtraProperties,
-                definitionCheck
+                definitionChecks
             );
         }
 
@@ -39,45 +46,82 @@ namespace Volo.Abp.ObjectExtending
         /// to the <paramref name="destinationDictionary"/> object.
         ///
         /// Checks property definitions (over the <see cref="ObjectExtensionManager"/>)
-        /// based on the <paramref name="definitionCheck"/> preference.
+        /// based on the <paramref name="definitionChecks"/> preference.
         /// </summary>
         /// <typeparam name="TSource">Source class type (for definition check)</typeparam>
         /// <typeparam name="TDestination">Destination class type (for definition check)</typeparam>
         /// <param name="sourceDictionary">The source dictionary object</param>
         /// <param name="destinationDictionary">The destination dictionary object</param>
-        /// <param name="definitionCheck">
+        /// <param name="definitionChecks">
         /// Controls which properties to map.
         /// </param>
         public static void MapExtraPropertiesTo<TSource, TDestination>(
-            Dictionary<string, object> sourceDictionary,
-            Dictionary<string, object> destinationDictionary,
-            MappingPropertyDefinitionCheck definitionCheck = MappingPropertyDefinitionCheck.Both)
+            [NotNull] Dictionary<string, object> sourceDictionary,
+            [NotNull] Dictionary<string, object> destinationDictionary,
+            MappingPropertyDefinitionChecks definitionChecks = MappingPropertyDefinitionChecks.Both)
             where TSource : IHasExtraProperties
             where TDestination : IHasExtraProperties
         {
-            var sourceObjectExtension = ObjectExtensionManager.Instance.GetOrNull<TSource>();
-            if (definitionCheck.HasFlag(MappingPropertyDefinitionCheck.Source) &&
+            MapExtraPropertiesTo(
+                typeof(TSource),
+                typeof(TDestination),
+                sourceDictionary,
+                destinationDictionary,
+                definitionChecks
+            );
+        }
+
+        /// <summary>
+        /// Copies extra properties from the <paramref name="sourceDictionary"/> object
+        /// to the <paramref name="destinationDictionary"/> object.
+        /// 
+        /// Checks property definitions (over the <see cref="ObjectExtensionManager"/>)
+        /// based on the <paramref name="definitionChecks"/> preference.
+        /// </summary>
+        /// <param name="sourceType">Source type (for definition check)</param>
+        /// <param name="destinationType">Destination class type (for definition check)</param>
+        /// <param name="sourceDictionary">The source dictionary object</param>
+        /// <param name="destinationDictionary">The destination dictionary object</param>
+        /// <param name="definitionChecks">
+        /// Controls which properties to map.
+        /// </param>
+        public static void MapExtraPropertiesTo(
+            [NotNull] Type sourceType,
+            [NotNull] Type destinationType,
+            [NotNull] Dictionary<string, object> sourceDictionary,
+            [NotNull] Dictionary<string, object> destinationDictionary,
+            MappingPropertyDefinitionChecks definitionChecks = MappingPropertyDefinitionChecks.Both)
+        {
+            Check.AssignableTo<IHasExtraProperties>(sourceType, nameof(sourceType));
+            Check.AssignableTo<IHasExtraProperties>(destinationType, nameof(destinationType));
+            Check.NotNull(sourceDictionary, nameof(sourceDictionary));
+            Check.NotNull(destinationDictionary, nameof(destinationDictionary));
+
+            var sourceObjectExtension = ObjectExtensionManager.Instance.GetOrNull(sourceType);
+            if (definitionChecks.HasFlag(MappingPropertyDefinitionChecks.Source) &&
                 sourceObjectExtension == null)
             {
                 return;
             }
 
-            var destinationObjectExtension = ObjectExtensionManager.Instance.GetOrNull<TDestination>();
-            if (definitionCheck.HasFlag(MappingPropertyDefinitionCheck.Destination) &&
+            var destinationObjectExtension = ObjectExtensionManager.Instance.GetOrNull(destinationType);
+            if (definitionChecks.HasFlag(MappingPropertyDefinitionChecks.Destination) &&
                 destinationObjectExtension == null)
             {
                 return;
             }
 
-            if (definitionCheck == MappingPropertyDefinitionCheck.None)
+            if (definitionChecks == MappingPropertyDefinitionChecks.None)
             {
                 foreach (var keyValue in sourceDictionary)
                 {
                     destinationDictionary[keyValue.Key] = keyValue.Value;
                 }
             }
-            else if (definitionCheck == MappingPropertyDefinitionCheck.Source)
+            else if (definitionChecks == MappingPropertyDefinitionChecks.Source)
             {
+                Debug.Assert(sourceObjectExtension != null, nameof(sourceObjectExtension) + " != null");
+
                 foreach (var property in sourceObjectExtension.GetProperties())
                 {
                     if (!sourceDictionary.ContainsKey(property.Name))
@@ -88,8 +132,10 @@ namespace Volo.Abp.ObjectExtending
                     destinationDictionary[property.Name] = sourceDictionary[property.Name];
                 }
             }
-            else if (definitionCheck == MappingPropertyDefinitionCheck.Destination)
+            else if (definitionChecks == MappingPropertyDefinitionChecks.Destination)
             {
+                Debug.Assert(destinationObjectExtension != null, nameof(destinationObjectExtension) + " != null");
+
                 foreach (var keyValue in sourceDictionary)
                 {
                     if (!destinationObjectExtension.HasProperty(keyValue.Key))
@@ -100,8 +146,11 @@ namespace Volo.Abp.ObjectExtending
                     destinationDictionary[keyValue.Key] = keyValue.Value;
                 }
             }
-            else if (definitionCheck == MappingPropertyDefinitionCheck.Both)
+            else if (definitionChecks == MappingPropertyDefinitionChecks.Both)
             {
+                Debug.Assert(sourceObjectExtension != null, nameof(sourceObjectExtension) + " != null");
+                Debug.Assert(destinationObjectExtension != null, nameof(destinationObjectExtension) + " != null");
+
                 foreach (var property in sourceObjectExtension.GetProperties())
                 {
                     if (!sourceDictionary.ContainsKey(property.Name))
@@ -119,7 +168,7 @@ namespace Volo.Abp.ObjectExtending
             }
             else
             {
-                throw new NotImplementedException(definitionCheck + " was not implemented!");
+                throw new NotImplementedException(definitionChecks + " was not implemented!");
             }
         }
     }

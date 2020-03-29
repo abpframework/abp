@@ -37,7 +37,7 @@ namespace Volo.Abp.ObjectExtending
         [Fact]
         public void MapExtraPropertiesTo_Should_Only_Map_Source_Defined_Properties_If_Requested()
         {
-            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionCheck.Source);
+            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionChecks.Source);
 
             _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
             _personDto.GetProperty<int>("Age").ShouldBe(42); //Defined in source
@@ -49,7 +49,7 @@ namespace Volo.Abp.ObjectExtending
         [Fact]
         public void MapExtraPropertiesTo_Should_Only_Map_Destination_Defined_Properties_If_Requested()
         {
-            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionCheck.Destination);
+            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionChecks.Destination);
 
             _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
             _personDto.GetProperty<int>("ChildCount").ShouldBe(2); //Defined in destination
@@ -61,7 +61,7 @@ namespace Volo.Abp.ObjectExtending
         [Fact]
         public void MapExtraPropertiesTo_Should_Copy_all_With_No_Property_Definition_Check()
         {
-            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionCheck.None);
+            _person.MapExtraPropertiesTo(_personDto, MappingPropertyDefinitionChecks.None);
 
             _personDto.GetProperty<string>("Name").ShouldBe("John");
             _personDto.GetProperty<int>("Age").ShouldBe(42);

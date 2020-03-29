@@ -3,7 +3,7 @@
 namespace Volo.Abp.ObjectExtending
 {
     [Flags]
-    public enum MappingPropertyDefinitionCheck : byte
+    public enum MappingPropertyDefinitionChecks : byte
     {
         /// <summary>
         /// No check. Copy all extra properties from the source to the destination.
