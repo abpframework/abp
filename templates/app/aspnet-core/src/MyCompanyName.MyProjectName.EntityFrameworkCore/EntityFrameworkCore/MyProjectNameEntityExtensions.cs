@@ -1,5 +1,5 @@
-﻿using Volo.Abp.EntityFrameworkCore.Extensions;
-using Volo.Abp.Identity;
+﻿using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
@@ -17,12 +17,11 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                  *
                  * Example:
                  *
-                 * EntityExtensionManager.AddProperty<IdentityUser, string>(
-                 *     "MyProperty",
-                 *     b =>
-                 *     {
-                 *         b.HasMaxLength(128);
-                 *     });
+                 * ObjectExtensionManager.Instance
+                 *    .MapEfCoreProperty<IdentityUser, string>(
+                 *        "MyProperty",
+                 *        b => b.HasMaxLength(128)
+                 *    );
                  *
                  * See the documentation for more:
                  * https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities

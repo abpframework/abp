@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
-using Volo.Abp.EntityFrameworkCore.Extensions;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 {
@@ -22,11 +22,16 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 
             if (entityType != null)
             {
-                var propertyNames = EntityExtensionManager.GetPropertyNames(entityType);
-
-                foreach (var propertyName in propertyNames)
+                var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+                if (objectExtension != null)
                 {
-                    copyDictionary.Remove(propertyName);
+                    foreach (var property in objectExtension.GetProperties())
+                    {
+                        if (property.IsMappedToFieldForEfCore())
+                        {
+                            copyDictionary.Remove(property.Name);
+                        }
+                    }
                 }
             }
 
