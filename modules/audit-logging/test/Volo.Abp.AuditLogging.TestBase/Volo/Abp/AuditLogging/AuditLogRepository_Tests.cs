@@ -431,13 +431,13 @@ namespace Volo.Abp.AuditLogging
             await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
-            var logs = await AuditLogRepository.GetEntityChangeListAsync();
-            logs.ShouldNotBeNull();
-            logs.Count.ShouldBe(3);
+            var entityChanges = await AuditLogRepository.GetEntityChangeListAsync();
+            entityChanges.ShouldNotBeNull();
+            entityChanges.Count.ShouldBe(3);
 
-            logs.Single(x => x.ChangeType == EntityChangeType.Created).ShouldNotBeNull();
-            logs.Single(x => x.ChangeType == EntityChangeType.Deleted).ShouldNotBeNull();
-            logs.Single(x => x.ChangeType == EntityChangeType.Updated).ShouldNotBeNull();
+            entityChanges.Single(x => x.ChangeType == EntityChangeType.Created).ShouldNotBeNull();
+            entityChanges.Single(x => x.ChangeType == EntityChangeType.Deleted).ShouldNotBeNull();
+            entityChanges.Single(x => x.ChangeType == EntityChangeType.Updated).ShouldNotBeNull();
         }
 
         [Fact]
@@ -541,17 +541,17 @@ namespace Volo.Abp.AuditLogging
             await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
-            var logs = await AuditLogRepository.GetEntityChangeListAsync();
-            logs.ShouldNotBeNull();
-            logs.Count.ShouldBe(3);
+            var entityChangesDesc = await AuditLogRepository.GetEntityChangeListAsync();
+            entityChangesDesc.ShouldNotBeNull();
+            entityChangesDesc.Count.ShouldBe(3);
 
-            logs.First().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Updated");
-            logs.Last().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Deleted");
+            entityChangesDesc.First().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Updated");
+            entityChangesDesc.Last().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Deleted");
 
-            var logsReversed = await AuditLogRepository.GetEntityChangeListAsync("changeTime asc");
+            var entityChangesAsc = await AuditLogRepository.GetEntityChangeListAsync("changeTime asc");
 
-            logsReversed.First().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Deleted");
-            logsReversed.Last().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Updated");
+            entityChangesAsc.First().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Deleted");
+            entityChangesAsc.Last().EntityTypeFullName.ShouldBe("Volo.Abp.AuditLogging.TestEntity_Updated");
         }
 
         [Fact]
@@ -654,9 +654,9 @@ namespace Volo.Abp.AuditLogging
             await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
-            var logs = await AuditLogRepository.GetEntityChangeListAsync(changeType: EntityChangeType.Created);
-            logs.ShouldNotBeNull();
-            logs.Count.ShouldBe(1);
+            var entityChanges = await AuditLogRepository.GetEntityChangeListAsync(changeType: EntityChangeType.Created);
+            entityChanges.ShouldNotBeNull();
+            entityChanges.Count.ShouldBe(1);
         }
     }
 }
