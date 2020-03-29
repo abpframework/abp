@@ -4,7 +4,7 @@ using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public static class MyProjectNameEntityExtensions
+    public static class MyProjectNameEfCoreEntityExtensionMappings
     {
         private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -14,6 +14,11 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             {
                 /* You can configure entity extension properties for the
                  * entities defined in the used modules.
+                 *
+                 * The properties defined here becomes table fields.
+                 * If you want to use the ExtraProperties dictionary of the entity
+                 * instead of creating a new field, then define the property in the
+                 * MyProjectNameDomainObjectExtensions class.
                  *
                  * Example:
                  *
