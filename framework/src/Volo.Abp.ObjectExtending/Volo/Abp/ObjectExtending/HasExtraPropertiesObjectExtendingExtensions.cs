@@ -33,7 +33,7 @@ namespace Volo.Abp.ObjectExtending
                 return;
             }
 
-            var destinationObjectExtension = ObjectExtensionManager.Instance.GetOrNull<TSource>();
+            var destinationObjectExtension = ObjectExtensionManager.Instance.GetOrNull<TDestination>();
             if (definitionCheck.HasFlag(MappingPropertyDefinitionCheck.Destination) &&
                 destinationObjectExtension == null)
             {
