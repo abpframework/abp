@@ -26,7 +26,7 @@ The constructor does not get any parameters.
 
 ### How to Add New Nodes
 
-There are a few methods to create new nodes in a linked list and all of them are separately available as well as revealed from an `add` method.
+There are several methods to create new nodes in a linked list and all of them are separately available as well as revealed by `add` and `addMany` methods.
 
 
 
@@ -50,6 +50,22 @@ list.addHead('c');
 
 
 
+#### addManyHead(values: T\[\]): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values as the first nodes in list:
+
+```js
+list.addManyHead(['a', 'b', 'c']);
+
+// "a" <-> "b" <-> "c"
+
+list.addManyHead(['x', 'y', 'z']);
+
+// "x" <-> "y" <-> "z" <-> "a" <-> "b" <-> "c"
+```
+
+
+
 #### addTail(value: T): ListNode\<T\>
 
 Adds a node with given value as the last node in list:
@@ -66,6 +82,22 @@ list.addTail('b');
 list.addTail('c');
 
 // "a" <-> "b" <-> "c"
+```
+
+
+
+#### addManyTail(values: T\[\]): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values as the last nodes in list:
+
+```js
+list.addManyTail(['a', 'b', 'c']);
+
+// "a" <-> "b" <-> "c"
+
+list.addManyTail(['x', 'y', 'z']);
+
+// "a" <-> "b" <-> "c" <-> "x" <-> "y" <-> "z"
 ```
 
 
@@ -101,6 +133,40 @@ list.addTail({ x: 3 });
 list.addAfter({ x: 0 }, { x: 2 }, (v1, v2) => v1.x === v2.x);
 
 // {"x":1} <-> {"x":2} <-> {"x":0} <-> {"x":3}
+```
+
+
+
+> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+
+
+
+#### addManyAfter(values: T\[\], previousValue: T, compareFn = compare): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values after the first node that has the previous value:
+
+```js
+list.addManyTail(['a', 'b', 'b', 'c']);
+
+// "a" <-> "b" <-> "b" <-> "c"
+
+list.addManyAfter(['x', 'y'], 'b');
+
+// "a" <-> "b" <-> "x" <-> "y" <-> "b" <-> "c"
+```
+
+
+
+You may pass a custom compare function to detect the searched value:
+
+```js
+list.addManyTail([{ x: 1 },{ x: 2 },{ x: 3 }]);
+
+// {"x":1} <-> {"x":2} <-> {"x":3}
+
+list.addManyAfter([{ x: 4 }, { x: 5 }], { x: 2 }, (v1, v2) => v1.x === v2.x);
+
+// {"x":1} <-> {"x":2} <-> {"x":4} <-> {"x":5} <-> {"x":3}
 ```
 
 
@@ -148,6 +214,40 @@ list.addBefore({ x: 0 }, { x: 2 }, (v1, v2) => v1.x === v2.x);
 
 
 
+#### addManyBefore(values: T\[\], nextValue: T, compareFn = compare): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values before the first node that has the next value:
+
+```js
+list.addManyTail(['a', 'b', 'b', 'c']);
+
+// "a" <-> "b" <-> "b" <-> "c"
+
+list.addManyBefore(['x', 'y'], 'b');
+
+// "a" <-> "x" <-> "y" <-> "b" <-> "b" <-> "c"
+```
+
+
+
+You may pass a custom compare function to detect the searched value:
+
+```js
+list.addManyTail([{ x: 1 },{ x: 2 },{ x: 3 }]);
+
+// {"x":1} <-> {"x":2} <-> {"x":3}
+
+list.addManyBefore([{ x: 4 }, { x: 5 }], { x: 2 }, (v1, v2) => v1.x === v2.x);
+
+// {"x":1} <-> {"x":4} <-> {"x":5} <-> {"x":2} <-> {"x":3}
+```
+
+
+
+> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+
+
+
 #### addByIndex(value: T, position: number): ListNode\<T\>
 
 Adds a node with given value at the specified position in the list:
@@ -162,6 +262,52 @@ list.addTail('c');
 list.addByIndex('x', 2);
 
 // "a" <-> "b" <-> "x" <-> "c"
+```
+
+
+
+It works with negative index too:
+
+```js
+list.addTail('a');
+list.addTail('b');
+list.addTail('c');
+
+// "a" <-> "b" <-> "c"
+
+list.addByIndex('x', -1);
+
+// "a" <-> "b" <-> "x" <-> "c"
+```
+
+
+
+#### addManyByIndex(values: T\[\], position: number): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values at the specified position in the list:
+
+```js
+list.addManyTail(['a', 'b', 'c']);
+
+// "a" <-> "b" <-> "c"
+
+list.addManyByIndex(['x', 'y'], 2);
+
+// "a" <-> "b" <-> "x" <-> "y" <-> "c"
+```
+
+
+
+It works with negative index too:
+
+```js
+list.addManyTail(['a', 'b', 'c']);
+
+// "a" <-> "b" <-> "c"
+
+list.addManyByIndex(['x', 'y'], -1);
+
+// "a" <-> "b" <-> "x" <-> "y" <-> "c"
 ```
 
 
@@ -314,7 +460,169 @@ list.add('x').byIndex(2);
 
 
 
+It works with negative index too:
+
+```js
+list.add('a').tail();
+list.add('b').tail();
+list.add('c').tail();
+
+// "a" <-> "b" <-> "c"
+
+list.add('x').byIndex(-1);
+
+// "a" <-> "b" <-> "x" <-> "c"
+```
+
+
+
 > This is an alternative API for `addByIndex`. 
+
+
+
+#### addMany(values: T\[\]).head(): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values as the first nodes in list:
+
+```js
+list.addMany(['a', 'b', 'c']).head();
+
+// "a" <-> "b" <-> "c"
+
+list.addMany(['x', 'y', 'z']).head();
+
+// "x" <-> "y" <-> "z" <-> "a" <-> "b" <-> "c"
+```
+
+
+
+> This is an alternative API for `addManyHead`. 
+
+
+
+#### addMany(values: T\[\]).tail(): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values as the last nodes in list:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.addMany(['x', 'y', 'z']).tail();
+
+// "a" <-> "b" <-> "c" <-> "x" <-> "y" <-> "z"
+```
+
+
+
+> This is an alternative API for `addManyTail`. 
+
+
+
+#### addMany(values: T\[\]).after(previousValue: T, compareFn = compare): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values after the first node that has the previous value:
+
+```js
+list.addMany(['a', 'b', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "b" <-> "c"
+
+list.addMany(['x', 'y']).after('b');
+
+// "a" <-> "b" <-> "x" <-> "y" <-> "b" <-> "c"
+```
+
+
+
+You may pass a custom compare function to detect the searched value:
+
+```js
+list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }]).tail();
+
+// {"x":1} <-> {"x":2} <-> {"x":3}
+
+list.addMany([{ x: 4 }, { x: 5 }]).after({ x: 2 }, (v1, v2) => v1.x === v2.x);
+
+// {"x":1} <-> {"x":2} <-> {"x":4} <-> {"x":5} <-> {"x":3}
+```
+
+
+
+> This is an alternative API for `addManyAfter`.
+>
+> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+
+
+
+#### addMany(values: T\[\]).before(nextValue: T, compareFn = compare): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values before the first node that has the next value:
+
+```js
+list.addMany(['a', 'b', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "b" <-> "c"
+
+list.addMany(['x', 'y']).before('b');
+
+// "a" <-> "x" <-> "y" <-> "b" <-> "b" <-> "c"
+```
+
+
+
+You may pass a custom compare function to detect the searched value:
+
+```js
+list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }]).tail();
+
+// {"x":1} <-> {"x":2} <-> {"x":3}
+
+list.addMany([{ x: 4 }, { x: 5 }]).before({ x: 2 }, (v1, v2) => v1.x === v2.x);
+
+// {"x":1} <-> {"x":4} <-> {"x":5} <-> {"x":2} <-> {"x":3}
+```
+
+
+
+> This is an alternative API for `addManyBefore`. 
+>
+> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+
+
+
+#### addMany(values: T\[\]).byIndex(position: number): ListNode\<T\>\[\]
+
+Adds multiple nodes with given values at the specified position in the list:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.addMany(['x', 'y']).byIndex(2);
+
+// "a" <-> "b" <-> "x" <-> "y" <-> "c"
+```
+
+
+
+It works with negative index too:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.addMany(['x', 'y']).byIndex(-1);
+
+// "a" <-> "b" <-> "x" <-> "y" <-> "c"
+```
+
+
+
+> This is an alternative API for `addManyByIndex`. 
 
 
 
@@ -329,9 +637,7 @@ There are a few methods to remove nodes from a linked list and all of them are s
 Removes the first node from the list:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('c');
+list.addMany(['a', 'b', 'c']).tail();
 
 // "a" <-> "b" <-> "c"
 
@@ -342,14 +648,28 @@ list.dropHead();
 
 
 
+#### dropManyHead(count: number): ListNode\<T\>\[\]
+
+Removes the first nodes from the list based on given count:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.dropManyHead(2);
+
+// "c"
+```
+
+
+
 #### dropTail(): ListNode\<T\> | undefined
 
 Removes the last node from the list:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('c');
+list.addMany(['a', 'b', 'c']).tail();
 
 // "a" <-> "b" <-> "c"
 
@@ -360,14 +680,28 @@ list.dropTail();
 
 
 
+#### dropManyTail(count: number): ListNode\<T\>\[\]
+
+Removes the last nodes from the list based on given count:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.dropManyTail(2);
+
+// "a"
+```
+
+
+
 #### dropByIndex(position: number): ListNode\<T\> | undefined
 
 Removes the node with the specified position from the list:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('c');
+list.addMany(['a', 'b', 'c']).tail();
 
 // "a" <-> "b" <-> "c"
 
@@ -378,16 +712,56 @@ list.dropByIndex(1);
 
 
 
+It works with negative index too:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.dropByIndex(-2);
+
+// "a" <-> "c"
+```
+
+
+
+#### dropManyByIndex(count: number, position: number): ListNode\<T\>\[\]
+
+Removes the nodes starting from the specified position from the list based on given count:
+
+```js
+list.addMany(['a', 'b', 'c', 'd']).tail();
+
+// "a" <-> "b" <-> "c" <-> "d
+
+list.dropManyByIndex(2, 1);
+
+// "a" <-> "d"
+```
+
+
+
+It works with negative index too:
+
+```js
+list.addMany(['a', 'b', 'c', 'd']).tail();
+
+// "a" <-> "b" <-> "c" <-> "d
+
+list.dropManyByIndex(2, -2);
+
+// "a" <-> "d"
+```
+
+
+
 #### dropByValue(value: T, compareFn = compare): ListNode\<T\> | undefined
 
 Removes the first node with given value from the list:
 
 ```js
-list.addTail('a');
-list.addTail('x');
-list.addTail('b');
-list.addTail('x');
-list.addTail('c');
+list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
 
 // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
@@ -401,11 +775,7 @@ list.dropByValue('x');
 You may pass a custom compare function to detect the searched value:
 
 ```js
-list.addTail({ x: 1 });
-list.addTail({ x: 0 });
-list.addTail({ x: 2 });
-list.addTail({ x: 0 });
-list.addTail({ x: 3 });
+list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
@@ -425,11 +795,7 @@ list.dropByValue({ x: 0 }, (v1, v2) => v1.x === v2.x);
 Removes all nodes with given value from the list:
 
 ```js
-list.addTail('a');
-list.addTail('x');
-list.addTail('b');
-list.addTail('x');
-list.addTail('c');
+list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
 
 // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
@@ -443,11 +809,7 @@ list.dropByValueAll('x');
 You may pass a custom compare function to detect the searched value:
 
 ```js
-list.addTail({ x: 1 });
-list.addTail({ x: 0 });
-list.addTail({ x: 2 });
-list.addTail({ x: 0 });
-list.addTail({ x: 3 });
+list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
@@ -467,9 +829,7 @@ list.dropByValue({ x: 0 }, (v1, v2) => v1.x === v2.x);
 Removes the first node in list:
 
 ```js
-list.add('a').tail();
-list.add('b').tail();
-list.add('c').tail();
+list.addMany(['a', 'b', 'c']).tail();
 
 // "a" <-> "b" <-> "c"
 
@@ -489,9 +849,7 @@ list.drop().head();
 Removes the last node in list:
 
 ```js
-list.add('a').tail();
-list.add('b').tail();
-list.add('c').tail();
+list.addMany(['a', 'b', 'c']).tail();
 
 // "a" <-> "b" <-> "c"
 
@@ -511,13 +869,25 @@ list.drop().tail();
 Removes the node with the specified position from the list:
 
 ```js
-list.add('a').tail();
-list.add('b').tail();
-list.add('c').tail();
+list.addMany(['a', 'b', 'c']).tail();
 
 // "a" <-> "b" <-> "c"
 
 list.drop().byIndex(1);
+
+// "a" <-> "c"
+```
+
+
+
+It works with negative index too:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.drop().byIndex(-2);
 
 // "a" <-> "c"
 ```
@@ -533,11 +903,7 @@ list.drop().byIndex(1);
 Removes the first node with given value from the list:
 
 ```js
-list.add('a').tail();
-list.add('x').tail();
-list.add('b').tail();
-list.add('x').tail();
-list.add('c').tail();
+list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
 
 // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
@@ -551,11 +917,7 @@ list.drop().byValue('x');
 You may pass a custom compare function to detect the searched value:
 
 ```js
-list.add({ x: 1 }).tail();
-list.add({ x: 0 }).tail();
-list.add({ x: 2 }).tail();
-list.add({ x: 0 }).tail();
-list.add({ x: 3 }).tail();
+list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
@@ -577,11 +939,7 @@ list.drop().byValue({ x: 0 }, (v1, v2) => v1.x === v2.x);
 Removes all nodes with given value from the list:
 
 ```js
-list.add('a').tail();
-list.add('x').tail();
-list.add('b').tail();
-list.add('x').tail();
-list.add('c').tail();
+list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
 
 // "a" <-> "x" <-> "b" <-> "x" <-> "c"
 
@@ -595,11 +953,7 @@ list.drop().byValueAll('x');
 You may pass a custom compare function to detect the searched value:
 
 ```js
-list.add({ x: 1 }).tail();
-list.add({ x: 0 }).tail();
-list.add({ x: 2 }).tail();
-list.add({ x: 0 }).tail();
-list.add({ x: 3 }).tail();
+list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
@@ -616,6 +970,80 @@ list.drop().byValueAll({ x: 0 }, (v1, v2) => v1.x === v2.x);
 
 
 
+#### dropMany(count: number).head(): ListNode\<T\>\[\]
+
+Removes the first nodes from the list based on given count:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.dropMany(2).head();
+
+// "c"
+```
+
+
+
+> This is an alternative API for `dropManyHead`. 
+
+
+
+#### dropMany(count: number).tail(): ListNode\<T\>\[\]
+
+Removes the last nodes from the list based on given count:
+
+```js
+list.addMany(['a', 'b', 'c']).tail();
+
+// "a" <-> "b" <-> "c"
+
+list.dropMany(2).tail();
+
+// "a"
+```
+
+
+
+> This is an alternative API for `dropManyTail`.
+
+
+
+#### dropMany(count: number).byIndex(position: number): ListNode\<T\>\[\]
+
+Removes the nodes starting from the specified position from the list based on given count:
+
+```js
+list.addMany(['a', 'b', 'c', 'd']).tail();
+
+// "a" <-> "b" <-> "c" <-> "d
+
+list.dropMany(2).byIndex(1);
+
+// "a" <-> "d"
+```
+
+
+
+It works with negative index too:
+
+```js
+list.addMany(['a', 'b', 'c', 'd']).tail();
+
+// "a" <-> "b" <-> "c" <-> "d
+
+list.dropMany(2).byIndex(-2);
+
+// "a" <-> "d"
+```
+
+
+
+> This is an alternative API for `dropManyByIndex`.
+
+
+
 ### How to Find Nodes
 
 There are a few methods to find specific nodes in a linked list.
@@ -627,10 +1055,7 @@ There are a few methods to find specific nodes in a linked list.
 Finds the first node from the list that matches the given predicate:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('b');
-list.addTail('c');
+list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -650,10 +1075,7 @@ found.next.value === "b"
 Finds the position of the first node from the list that matches the given predicate:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('b');
-list.addTail('c');
+list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -677,9 +1099,7 @@ i3 === -1
 Finds and returns the node with specific position in the list:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('c');
+list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -699,10 +1119,7 @@ found.next.value === "c"
 Finds the position of the first node from the list that has the given value:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('b');
-list.addTail('c');
+list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -724,11 +1141,7 @@ i3 === -1
 You may pass a custom compare function to detect the searched value:
 
 ```js
-list.addTail({ x: 1 });
-list.addTail({ x: 0 });
-list.addTail({ x: 2 });
-list.addTail({ x: 0 });
-list.addTail({ x: 3 });
+list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
@@ -764,9 +1177,7 @@ There are a few ways to iterate over or display a linked list.
 Runs a callback function on all nodes in a linked list from head to tail:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('c');
+list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -784,9 +1195,7 @@ list.forEach((node, index) => console.log(node.value + index));
 A linked list is iterable. In other words, you may use methods like `for...of` on it.
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('c');
+list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -801,14 +1210,12 @@ for(const node of list) {
 
 
 
-#### toArray(): T[]
+#### toArray(): T\[\]
 
-Converts a linked list to an array:
+Converts a linked list to an array of values:
 
 ```js
-list.addTail('a');
-list.addTail('b');
-list.addTail('c');
+list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -821,15 +1228,32 @@ arr === ['a', 'b', 'c']
 
 
 
+#### toNodeArray(): T\[\]
+
+Converts a linked list to an array of nodes:
+
+```js
+list.addTailMany(['a', 'b', 'c']);
+
+// "a" <-> "b" <-> "c"
+
+const arr = list.toNodeArray();
+
+/*
+arr[0].value === 'a'
+arr[1].value === 'a'
+arr[2].value === 'a'
+*/
+```
+
+
+
 #### toString(): string
 
 Converts a linked list to a string representation of nodes and their relations:
 
 ```js
-list.addTail('a');
-list.addTail(2);
-list.addTail('c');
-list.addTail({ k: 4, v: 'd' });
+list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
 
 // "a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}
 
@@ -837,6 +1261,22 @@ const str = list.toString();
 
 /*
 str === '"a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}'
+*/
+```
+
+
+
+You may pass a custom mapper function to map values before stringifying them:
+
+```js
+list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }]).tail();
+
+// {"x":1} <-> {"x":2} <-> {"x":3} <-> {"x":4} <-> {"x":5}
+
+const str = list.toString(value => value.x);
+
+/*
+str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
 */
 ```
 
