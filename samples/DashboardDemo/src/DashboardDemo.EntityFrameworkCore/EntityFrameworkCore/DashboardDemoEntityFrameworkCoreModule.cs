@@ -29,7 +29,7 @@ namespace DashboardDemo.EntityFrameworkCore
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            DashboardDemoEntityExtensions.Configure();
+            DashboardDemoEfCoreEntityExtensionMappings.Configure();
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

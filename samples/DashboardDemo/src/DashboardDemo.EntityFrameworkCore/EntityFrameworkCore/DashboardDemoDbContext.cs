@@ -48,7 +48,7 @@ namespace DashboardDemo.EntityFrameworkCore
                 b.ConfigureAbpUser();
 
                 /* Configure mappings for your additional properties
-                 * Also see the DashboardDemoEntityExtensions class
+                 * Also see the DashboardDemoEfCoreEntityExtensionMappings class
                  */
             });
 

@@ -50,7 +50,7 @@ namespace Acme.BookStore.EntityFrameworkCore
                 b.ConfigureAbpUser();
 
                 /* Configure mappings for your additional properties
-                 * Also see the BookStoreEntityExtensions class
+                 * Also see the BookStoreEfCoreEntityExtensionMappings class
                  */
             });
 

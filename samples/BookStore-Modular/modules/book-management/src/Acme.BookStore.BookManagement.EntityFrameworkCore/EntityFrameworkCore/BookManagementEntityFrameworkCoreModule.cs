@@ -12,7 +12,7 @@ namespace Acme.BookStore.BookManagement.EntityFrameworkCore
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            BookManagementEntityExtensions.Configure();
+            BookManagementEfCoreEntityExtensionMappings.Configure();
         }
         
         public override void ConfigureServices(ServiceConfigurationContext context)
