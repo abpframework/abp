@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 return;
             }
 
-            var newConnectionString = $"\"{DefaultConnectionStringKey}: \"{context.BuildArgs.ConnectionString}\"";
+            var newConnectionString = $"\"{DefaultConnectionStringKey}\": \"{context.BuildArgs.ConnectionString}\"";
 
             foreach (var appSettingsJson in appSettingsJsonFiles)
             {
