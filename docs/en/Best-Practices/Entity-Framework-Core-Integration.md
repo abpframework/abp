@@ -110,7 +110,7 @@ public static class IdentityDbContextModelBuilderExtensions
 * **Do** create a **configuration options** class by inheriting from the `AbpModelBuilderConfigurationOptions`. Example:
 
 ````C#
-public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+public class IdentityModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
 {
     public IdentityModelBuilderConfigurationOptions()
         : base(AbpIdentityConsts.DefaultDbTablePrefix, AbpIdentityConsts.DefaultDbSchema)

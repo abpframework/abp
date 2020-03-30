@@ -94,7 +94,7 @@ public static class AbpIdentityMongoDbContextExtensions
 
 ```c#
 public class IdentityMongoModelBuilderConfigurationOptions
-    : MongoModelBuilderConfigurationOptions
+    : AbpMongoModelBuilderConfigurationOptions
 {
     public IdentityMongoModelBuilderConfigurationOptions()
         : base(AbpIdentityConsts.DefaultDbTablePrefix)
