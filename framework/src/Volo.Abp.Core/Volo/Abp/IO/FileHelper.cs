@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Volo.Abp.Text;
 
 namespace Volo.Abp.IO
 {
@@ -119,6 +120,18 @@ namespace Volo.Abp.IO
             }
 
             return lines.ToArray();
+        }
+
+        /// <summary>
+        /// Opens a text file, reads content without BOM
+        /// </summary>
+        /// <param name="path">The file to open for reading.</param>
+        /// <returns>A string containing all lines of the file.</returns>
+        public static async Task<string> ReadFileWithoutBomAsync(string path)
+        {
+            var content = await ReadAllBytesAsync(path);
+
+            return StringHelper.ConvertFromBytesWithoutBom(content);
         }
     }
 }
