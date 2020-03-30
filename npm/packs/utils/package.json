@@ -1,0 +1,59 @@
+{
+  "name": "@abp/utils",
+  "version": "0.0.2",
+  "scripts": {
+    "prepublish": "node prepublish.js",
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "main": "lib/bundles/abp-utils.umd.js",
+  "module": "lib/fesm5/abp-utils.js",
+  "es2015": "lib/fesm2015/abp-utils.js",
+  "esm5": "lib/esm5/abp-utils.js",
+  "esm2015": "lib/esm2015/abp-utils.js",
+  "fesm5": "lib/fesm5/abp-utils.js",
+  "fesm2015": "lib/fesm2015/abp-utils.js",
+  "typings": "lib/abp-utils.d.ts",
+  "metadata": "lib/abp-utils.metadata.json",
+  "sideEffects": false,
+  "devDependencies": {
+    "@angular-devkit/build-ng-packagr": "~0.901.0",
+    "@angular/cli": "~9.1.0",
+    "@angular/compiler": "~9.1.0",
+    "@angular/compiler-cli": "~9.1.0",
+    "@angular/core": "~9.1.0",
+    "@types/execa": "^2.0.0",
+    "@types/fs-extra": "^8.1.0",
+    "@types/jasmine": "~3.5.0",
+    "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
+    "codelyzer": "^5.1.2",
+    "execa": "^4.0.0",
+    "fs-extra": "^9.0.0",
+    "jasmine-core": "~3.5.0",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "~4.4.1",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage-istanbul-reporter": "~2.1.0",
+    "karma-jasmine": "~3.0.1",
+    "karma-jasmine-html-reporter": "^1.4.2",
+    "ng-packagr": "^9.0.0",
+    "protractor": "~5.4.3",
+    "ts-node": "~8.3.0",
+    "tslib": "^1.10.0",
+    "tslint": "~6.1.0",
+    "typescript": "~3.8.3"
+  },
+  "peerDependencies": {
+    "tslib": "^1.10.0"
+  }
+}
