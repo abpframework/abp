@@ -342,7 +342,7 @@ A permission value provider should return one of the following values from the `
 Once a provider is defined, it should be added to the `PermissionOptions` as shown below:
 
 ```csharp
-Configure<PermissionOptions>(options =>
+Configure<AbpPermissionOptions>(options =>
 {
     options.ValueProviders.Add<SystemAdminPermissionValueProvider>();
 });

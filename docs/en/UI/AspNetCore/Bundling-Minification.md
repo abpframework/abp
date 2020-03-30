@@ -249,7 +249,7 @@ public class MyPrismjsStyleExtension : BundleContributor
 Then you can configure `BundleContributorOptions` to extend existing `PrismjsStyleBundleContributor`.
 
 ````csharp
-Configure<BundleContributorOptions>(options =>
+Configure<AbpBundleContributorOptions>(options =>
 {
     options
         .Extensions<PrismjsStyleBundleContributor>()

@@ -343,7 +343,7 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 定义`Provider`后将其添加到 `PermissionOptions`,如下所示:
 
 ````csharp
-Configure<PermissionOptions>(options =>
+Configure<AbpPermissionOptions>(options =>
 {
     options.ValueProviders.Add<SystemAdminPermissionValueProvider>();
 });
