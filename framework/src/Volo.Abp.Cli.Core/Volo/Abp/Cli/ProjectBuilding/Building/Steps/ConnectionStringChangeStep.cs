@@ -22,7 +22,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 try
                 {
                     var jsonObject = JObject.Parse(appSettingsJson.Content);
-                    var defaultConnectionString = ((Newtonsoft.Json.Linq.JContainer)jsonObject["ConnectionStrings"]).First.ToString();
+                    var connectionStringContainer = (JContainer)jsonObject["ConnectionStrings"];
+                    var firstConnectionString = connectionStringContainer.First;
+                    var defaultConnectionString = firstConnectionString.ToString();
 
                     appSettingsJson.ReplaceText(defaultConnectionString, newConnectionString);
                 }
