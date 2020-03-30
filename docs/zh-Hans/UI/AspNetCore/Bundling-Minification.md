@@ -248,7 +248,7 @@ public class MyPrismjsStyleExtension : BundleContributor
 }
 ````
 
-然后你可以配置 `BundleContributorOptions` 去扩展已存在的 `PrismjsStyleBundleContributor`.
+然后你可以配置 `AbpBundleContributorOptions` 去扩展已存在的 `PrismjsStyleBundleContributor`.
 
 ````csharp
 Configure<AbpBundleContributorOptions>(options =>

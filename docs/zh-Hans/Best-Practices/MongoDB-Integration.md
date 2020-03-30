@@ -90,7 +90,7 @@ public static class AbpIdentityMongoDbContextExtensions
 }
 ```
 
-- **推荐** 通过继承 `MongoModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 示例:
+- **推荐** 通过继承 `AbpMongoModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 示例:
 
 ```c#
 public class IdentityMongoModelBuilderConfigurationOptions

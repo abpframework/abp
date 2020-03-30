@@ -90,7 +90,7 @@ public static class AbpIdentityMongoDbContextExtensions
 }
 ```
 
-- **Do** create a **configuration options** class by inheriting from the `MongoModelBuilderConfigurationOptions`. Example:
+- **Do** create a **configuration options** class by inheriting from the `AbpMongoModelBuilderConfigurationOptions`. Example:
 
 ```c#
 public class IdentityMongoModelBuilderConfigurationOptions
