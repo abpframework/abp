@@ -4,5 +4,6 @@
   "deleteDestPath": true,
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": ["just-compare"]
 }
