@@ -339,10 +339,10 @@ A permission value provider should return one of the following values from the `
 - `PermissionGrantResult.Prohibited` is returned to prohibit the user for the permission. If any of the providers return `Prohibited`, the result will always be `Prohibited`. Doesn't matter what other providers return.
 - `PermissionGrantResult.Undefined` is returned if this value provider could not decide about the permission value. Return this to let other providers check the permission.
 
-Once a provider is defined, it should be added to the `PermissionOptions` as shown below:
+Once a provider is defined, it should be added to the `AbpPermissionOptions` as shown below:
 
 ```csharp
-Configure<PermissionOptions>(options =>
+Configure<AbpPermissionOptions>(options =>
 {
     options.ValueProviders.Add<SystemAdminPermissionValueProvider>();
 });
