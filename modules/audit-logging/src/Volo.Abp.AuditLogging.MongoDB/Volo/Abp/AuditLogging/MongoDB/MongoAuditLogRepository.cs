@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 
@@ -137,6 +138,110 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 .ToListAsync();
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
+        }
+
+        public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(
+            string sorting = null,
+            int maxResultCount = 50,
+            int skipCount = 0,
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
+
+            var auditLogs = await query.As<IMongoQueryable<AuditLog>>()
+                .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+            
+            // TODO: Improve this specification
+
+            return auditLogs
+                .SelectMany(x => x.EntityChanges.Where(y =>
+                    IsSatisfiedEntityChange(y, auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName)))
+                .AsQueryable().OrderBy(sorting ?? "changeTime desc").ToList();
+        }
+
+        public virtual async Task<long> GetEntityChangeCountAsync(
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            CancellationToken cancellationToken = default)
+        {
+            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
+            var count = await query.As<IMongoQueryable<AuditLog>>()
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+
+            return count;
+        }
+
+        protected virtual IQueryable<AuditLog> GetEntityChangeListQuery(
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null)
+        {
+            return GetMongoQueryable()
+                    .Where(x => x.EntityChanges != null)
+                    .WhereIf(auditLogId.HasValue, e => e.Id == auditLogId)
+                    .WhereIf(startTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= startTime))
+                    .WhereIf(endTime.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeTime >= endTime))
+                    .WhereIf(changeType.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeType == changeType))
+                    .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityChanges.Any(ec => ec.EntityId == entityId))
+                    .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
+                        e => e.EntityChanges.Any(ec => ec.EntityTypeFullName == entityTypeFullName));
+        }
+
+        protected virtual bool IsSatisfiedEntityChange(
+            EntityChange entityChange, 
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null)
+        {
+            if (auditLogId != null && auditLogId != entityChange.AuditLogId)
+            {
+                return false;
+            }
+
+            if (startTime != null && startTime.Value >= entityChange.ChangeTime)
+            {
+                return false;
+            }
+
+            if (endTime != null && endTime.Value <= entityChange.ChangeTime)
+            {
+                return false;
+            }
+
+            if (changeType != null && changeType != entityChange.ChangeType)
+            {
+                return false;
+            }
+
+            if (entityId != null && entityId != entityChange.EntityId)
+            {
+                return false;
+            }
+
+            if (entityTypeFullName != null && entityTypeFullName != entityChange.EntityTypeFullName)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
