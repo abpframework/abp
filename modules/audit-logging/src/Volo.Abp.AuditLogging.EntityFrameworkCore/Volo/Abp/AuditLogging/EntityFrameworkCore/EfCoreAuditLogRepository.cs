@@ -135,10 +135,16 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
-
+        
         public override IQueryable<AuditLog> WithDetails()
         {
             return GetQueryable().IncludeDetails();
+        }
+
+        public Task<EntityChange> GetEntityChange(Guid auditLogId, Guid entityChangeId, bool includeDetails = true)
+        {
+            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails(includeDetails)
+                .Where(x => x.Id == entityChangeId && x.AuditLogId == auditLogId).FirstAsync();
         }
 
         public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(

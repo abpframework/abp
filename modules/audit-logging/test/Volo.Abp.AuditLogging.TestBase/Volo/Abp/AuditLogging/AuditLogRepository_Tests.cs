@@ -441,6 +441,109 @@ namespace Volo.Abp.AuditLogging
         }
 
         [Fact]
+        public async Task GetEntityChangeAsync()
+        {
+            // Arrange
+            var userId = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var userId2 = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var ipAddress = "153.1.7.61";
+            var firstComment = "first Comment";
+
+            var log1 = new AuditLogInfo
+            {
+                UserId = userId,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Today,
+                ExecutionDuration = 42,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                UserName = "Douglas",
+                EntityChanges = {
+                    new EntityChangeInfo
+                {
+                    EntityId = Guid.NewGuid().ToString(),
+                    EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity_Deleted",
+                    ChangeType = EntityChangeType.Deleted,
+                    ChangeTime = new DateTime(1995, 3, 27),
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                },
+                    new EntityChangeInfo
+                {
+                    EntityId = Guid.NewGuid().ToString(),
+                    EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity_Created",
+                    ChangeType = EntityChangeType.Created,
+                    ChangeTime = DateTime.Now,
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                }
+
+                }
+            };
+
+            var log2 = new AuditLogInfo
+            {
+                UserId = userId2,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Today,
+                ExecutionDuration = 42,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                HttpStatusCode = (int?)HttpStatusCode.BadGateway,
+                EntityChanges = {
+                    new EntityChangeInfo
+                    {
+                        EntityId = Guid.NewGuid().ToString(),
+                        EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity_Updated",
+                        ChangeType = EntityChangeType.Updated,
+                        ChangeTime = DateTime.Now,
+                        PropertyChanges = new List<EntityPropertyChangeInfo>
+                        {
+                            new EntityPropertyChangeInfo
+                            {
+                                PropertyTypeFullName = typeof(string).FullName,
+                                PropertyName = "Name",
+                                NewValue = "New value",
+                                OriginalValue = null
+                            }
+                        }
+                    }
+                }
+            };
+
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+
+            var entityChanges = await AuditLogRepository.GetEntityChangeListAsync();
+            var entityChange =
+                await AuditLogRepository.GetEntityChange(entityChanges.First().AuditLogId, entityChanges.First().Id);
+
+            entityChange.ChangeTime.ShouldBe(entityChanges.First().ChangeTime);
+        }
+
+        [Fact]
         public async Task GetOrderedEntityChangeListAsync()
         {
             // Arrange
