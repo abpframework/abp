@@ -25,7 +25,8 @@ namespace AutoMapper
                             HasExtraPropertiesObjectExtendingExtensions
                                 .MapExtraPropertiesTo<TSource, TDestination>(
                                     source.ExtraProperties,
-                                    result
+                                    result,
+                                    definitionChecks
                                 );
 
                             return result;

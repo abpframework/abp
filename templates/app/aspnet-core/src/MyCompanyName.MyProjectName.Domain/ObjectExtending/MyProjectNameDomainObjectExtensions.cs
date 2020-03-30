@@ -2,9 +2,9 @@
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Threading;
 
-namespace MyCompanyName.MyProjectName.MongoDB
+namespace MyCompanyName.MyProjectName.ObjectExtending
 {
-    public static class MyProjectNameEntityExtensions
+    public static class MyProjectNameDomainObjectExtensions
     {
         private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -12,8 +12,11 @@ namespace MyCompanyName.MyProjectName.MongoDB
         {
             OneTimeRunner.Run(() =>
             {
-                /* You can extension properties to entities
+                /* You can configure extension properties to entities or other object types
                  * defined in the depended modules.
+                 * 
+                 * If you are using EF Core and want to map the entity extension properties to new
+                 * table fields in the database, then configure them in the MyProjectNameEfCoreEntityExtensionMappings
                  *
                  * Example:
                  *
@@ -21,7 +24,7 @@ namespace MyCompanyName.MyProjectName.MongoDB
                  *    .AddOrUpdateProperty<IdentityRole, string>("Title");
                  *
                  * See the documentation for more:
-                 * https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities
+                 * https://docs.abp.io/en/abp/latest/Object-Extensions
                  */
             });
         }

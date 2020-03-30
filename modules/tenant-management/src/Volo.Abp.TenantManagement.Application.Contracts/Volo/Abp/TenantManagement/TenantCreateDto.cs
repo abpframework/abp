@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using Volo.Abp.TenantManagement.Localization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Volo.Abp.TenantManagement
 {
@@ -13,7 +8,6 @@ namespace Volo.Abp.TenantManagement
         [EmailAddress]
         [MaxLength(256)]
         public string AdminEmailAddress { get; set; }
-
 
         [Required]
         [MaxLength(128)]

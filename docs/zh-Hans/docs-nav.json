@@ -5,6 +5,7 @@
       "items": [
         {
           "text": "从启动模板开始",
+          "path": "Getting-Started-With-Startup-Templates.md",
           "items": [
             {
               "text": "ASP.NET Core MVC 模板",

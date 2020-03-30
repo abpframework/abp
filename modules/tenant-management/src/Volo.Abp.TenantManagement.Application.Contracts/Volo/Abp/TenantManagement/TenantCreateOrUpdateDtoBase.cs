@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.TenantManagement
 {
-    public abstract class TenantCreateOrUpdateDtoBase
+    public abstract class TenantCreateOrUpdateDtoBase : ExtensibleObject
     {
         [Required]
         [StringLength(TenantConsts.MaxNameLength)]
