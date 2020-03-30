@@ -6,6 +6,7 @@ fse.copyFileSync('./README.md', './projects/utils/README.md');
 
 try {
   execa.sync('yarn', ['build'], { stdout: 'inherit' });
+  process.exit(0);
 } catch (error) {
   console.error(error);
   process.exit(1);
