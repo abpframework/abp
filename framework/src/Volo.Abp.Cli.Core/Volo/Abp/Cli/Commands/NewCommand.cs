@@ -73,9 +73,7 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
-            var connectionString = commandLineArgs
-                .Options
-                .GetOrNull(Options.ConnectionString.Short, Options.ConnectionString.Long);
+            var connectionString = GetConnectionString(commandLineArgs);
             if (connectionString != null)
             {
                 Logger.LogInformation("Connection string: " + connectionString);
@@ -175,6 +173,12 @@ namespace Volo.Abp.Cli.Commands
             }
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
+        }
+
+        private static string GetConnectionString(CommandLineArgs commandLineArgs)
+        {
+            var connectionString = commandLineArgs.Options.GetOrNull(Options.ConnectionString.Short, Options.ConnectionString.Long);
+            return string.IsNullOrWhiteSpace(connectionString) ? null : connectionString;
         }
 
         public string GetUsageInfo()
