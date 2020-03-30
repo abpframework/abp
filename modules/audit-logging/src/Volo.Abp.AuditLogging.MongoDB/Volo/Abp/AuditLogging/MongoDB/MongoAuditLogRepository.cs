@@ -206,7 +206,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
                     .WhereIf(changeType.HasValue, e => e.EntityChanges.Any(ec => ec.ChangeType == changeType))
                     .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityChanges.Any(ec => ec.EntityId == entityId))
                     .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
-                        e => e.EntityChanges.Any(ec => ec.EntityTypeFullName == entityTypeFullName));
+                        e => e.EntityChanges.Any(ec => ec.EntityTypeFullName.Contains(entityTypeFullName)));
         }
 
         protected virtual bool IsSatisfiedEntityChange(
@@ -243,7 +243,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 return false;
             }
 
-            if (entityTypeFullName != null && entityTypeFullName != entityChange.EntityTypeFullName)
+            if (entityTypeFullName != null && entityChange.EntityTypeFullName.Contains(entityTypeFullName))
             {
                 return false;
             }

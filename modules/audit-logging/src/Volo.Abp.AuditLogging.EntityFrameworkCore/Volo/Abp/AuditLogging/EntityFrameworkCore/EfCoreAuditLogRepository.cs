@@ -199,7 +199,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                         .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
                         .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
                         .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
-                            e => e.EntityTypeFullName == entityTypeFullName);
+                            e => e.EntityTypeFullName.Contains(entityTypeFullName));
         }
     }
 }
