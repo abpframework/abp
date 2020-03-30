@@ -137,7 +137,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             var schemes = await SchemeProvider.GetAllSchemesAsync();
 
-            var providers = schemes
+            return schemes
                 .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
                 .Select(x => new ExternalProviderModel
                 {
@@ -145,8 +145,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     AuthenticationScheme = x.Name
                 })
                 .ToList();
-
-            return providers.ToList();
         }
 
         [UnitOfWork]
