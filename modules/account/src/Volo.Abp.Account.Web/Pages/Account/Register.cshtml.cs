@@ -36,7 +36,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
             await CheckSelfRegistrationAsync();
         }
 
-        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
