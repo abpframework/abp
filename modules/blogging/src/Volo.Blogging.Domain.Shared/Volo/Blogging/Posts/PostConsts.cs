@@ -7,5 +7,8 @@
         public const int MaxUrlLength = 64;
 
         public const int MaxContentLength = 1024 * 1024; //1MB
+
+        public const int MaxDescriptionLength = 200;
+
     }
 }

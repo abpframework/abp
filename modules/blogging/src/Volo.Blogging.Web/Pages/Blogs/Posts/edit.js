@@ -27,6 +27,22 @@
         });
     };
 
+    var checkTitleLength = function () {
+        var title = $('#Post_Title').val();
+
+        if (title.length > 60) {
+            $("#WarningMessage-title").css("display", "block");
+        } else {
+            $("#WarningMessage-title").css("display", "none");
+        }
+    };
+
+    checkTitleLength();
+
+    $('#Post_Title').on("change paste keyup", function () {
+        checkTitleLength();
+    });
+
     $('#CoverImageFile').change(function () {
         if (!$('#CoverImageFile').prop('files').length) {
             return;

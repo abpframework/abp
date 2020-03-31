@@ -54,6 +54,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public async Task<ActionResult> OnPost()
         {
             var blog = await _blogAppService.GetAsync(Post.BlogId);
+
+            if (Post.Description == null)
+            {
+                Post.Description = Post.Content.Substring(0, 200);
+            }
+
             var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel,CreatePostDto>(Post));
 
             //TODO: Try Url.Page(...)
@@ -84,6 +90,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
             public string Content { get; set; }
 
             public string Tags { get; set; }
+
+            [StringLength(PostConsts.MaxDescriptionLength)]
+            public string Description { get; set; }
+
         }
     }
 }

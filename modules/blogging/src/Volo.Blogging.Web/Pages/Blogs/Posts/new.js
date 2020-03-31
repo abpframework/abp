@@ -104,8 +104,10 @@
 
         var title = $('#Post_Title').val();
 
-        if (title.length > 64) {
-            title = title.substring(0, 64);
+        if (title.length > 60) {
+            $("#WarningMessage-title").css("display", "block");
+        } else {
+            $("#WarningMessage-title").css("display", "none");
         }
 
         title = title.replace(' ', '-');

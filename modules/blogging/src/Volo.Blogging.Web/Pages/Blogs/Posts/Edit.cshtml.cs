@@ -56,7 +56,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 Url = Post.Url,
                 CoverImage = Post.CoverImage,
                 Content = Post.Content,
-                Tags = Post.Tags
+                Tags = Post.Tags,
+                Description = !Post.Description.IsNullOrWhiteSpace() ? Post.Description : Post.Content.Substring(0,200)
             };
 
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
@@ -91,6 +92,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [HiddenInput]
         [StringLength(PostConsts.MaxContentLength)]
         public string Content { get; set; }
+
+        [StringLength(PostConsts.MaxDescriptionLength)]
+        public string Description { get; set; }
 
         public string Tags { get; set; }
     }

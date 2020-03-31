@@ -27,6 +27,10 @@
                         <form method="post" id="new-post-form">
                             <abp-input asp-for="Post.BlogId" />
                             <abp-input asp-for="Post.Title" auto-focus="true" />
+                            <div class="alert alert-warning" id="WarningMessage-title"  style="display: none"  role="alert">
+                                Keep your title size under 60 characters to be SEO friendly!
+                            </div>
+                            
                             <abp-input asp-for="Post.Url" />
                             <abp-input asp-for="Post.CoverImage" />
 
@@ -44,6 +48,7 @@
 
                             <abp-input asp-for="Post.Content" />
                             <abp-input asp-for="Post.Tags" />
+                            <abp-input asp-for="Post.Description" />
 
 
                             <div class="form-group">
@@ -69,7 +74,7 @@
 
                                     <a asp-page="./Index" class="btn btn-default mr-2"><span>@L["Cancel"]</span></a>
                                 </div>
-                            </div> 
+                            </div>
                         </form>
                     </div>
                 </div> 
