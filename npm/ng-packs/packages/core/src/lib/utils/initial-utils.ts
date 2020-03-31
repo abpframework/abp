@@ -23,7 +23,6 @@ export function getInitialData(injector: Injector) {
 
 function checkAccessToken(store: Store, injector: Injector) {
   const oAuth = injector.get(OAuthService);
-  console.warn(oAuth.hasValidAccessToken());
   if (oAuth.hasValidAccessToken() && !store.selectSnapshot(ConfigState.getDeep('currentUser.id'))) {
     oAuth.logOut();
   }
