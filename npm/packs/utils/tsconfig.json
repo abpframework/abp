@@ -11,15 +11,10 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "strictBindCallApply": true,
+    "lib": ["es2018", "dom"],
     "paths": {
-      "utils": [
-        "dist/utils/utils",
-        "dist/utils"
-      ]
+      "utils": ["dist/utils/utils", "dist/utils"]
     }
   },
   "angularCompilerOptions": {
