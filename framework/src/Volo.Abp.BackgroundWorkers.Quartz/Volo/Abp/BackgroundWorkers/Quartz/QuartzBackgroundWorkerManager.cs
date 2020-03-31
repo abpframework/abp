@@ -34,10 +34,10 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
 
         public void Add(IBackgroundWorker worker)
         {
-            AsyncHelper.RunSync(() => AddAsync(worker));
+            AsyncHelper.RunSync(() => ReScheduleAsync(worker));
         }
 
-        private async Task AddAsync(IBackgroundWorker worker)
+        private async Task ReScheduleAsync(IBackgroundWorker worker)
         {
             if (_options.IsEnabled && worker is IQuartzBackgroundWorker quartzWork)
             {
