@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 
@@ -25,7 +24,7 @@ namespace Volo.Abp.ObjectExtending
         public static void MapExtraPropertiesTo<TSource, TDestination>(
             [NotNull] this TSource source,
             [NotNull] TDestination destination,
-            MappingPropertyDefinitionChecks definitionChecks = MappingPropertyDefinitionChecks.Both)
+            MappingPropertyDefinitionChecks? definitionChecks = null)
             where TSource : IHasExtraProperties
             where TDestination : IHasExtraProperties
         {
@@ -58,7 +57,7 @@ namespace Volo.Abp.ObjectExtending
         public static void MapExtraPropertiesTo<TSource, TDestination>(
             [NotNull] Dictionary<string, object> sourceDictionary,
             [NotNull] Dictionary<string, object> destinationDictionary,
-            MappingPropertyDefinitionChecks definitionChecks = MappingPropertyDefinitionChecks.Both)
+            MappingPropertyDefinitionChecks? definitionChecks = null)
             where TSource : IHasExtraProperties
             where TDestination : IHasExtraProperties
         {
@@ -90,7 +89,7 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] Type destinationType,
             [NotNull] Dictionary<string, object> sourceDictionary,
             [NotNull] Dictionary<string, object> destinationDictionary,
-            MappingPropertyDefinitionChecks definitionChecks = MappingPropertyDefinitionChecks.Both)
+            MappingPropertyDefinitionChecks? definitionChecks = null)
         {
             Check.AssignableTo<IHasExtraProperties>(sourceType, nameof(sourceType));
             Check.AssignableTo<IHasExtraProperties>(destinationType, nameof(destinationType));
@@ -98,77 +97,119 @@ namespace Volo.Abp.ObjectExtending
             Check.NotNull(destinationDictionary, nameof(destinationDictionary));
 
             var sourceObjectExtension = ObjectExtensionManager.Instance.GetOrNull(sourceType);
-            if (definitionChecks.HasFlag(MappingPropertyDefinitionChecks.Source) &&
-                sourceObjectExtension == null)
-            {
-                return;
-            }
-
             var destinationObjectExtension = ObjectExtensionManager.Instance.GetOrNull(destinationType);
-            if (definitionChecks.HasFlag(MappingPropertyDefinitionChecks.Destination) &&
-                destinationObjectExtension == null)
-            {
-                return;
-            }
 
-            if (definitionChecks == MappingPropertyDefinitionChecks.None)
+            foreach (var keyValue in sourceDictionary)
             {
-                foreach (var keyValue in sourceDictionary)
+                if (CanMapProperty(
+                    keyValue.Key,
+                    sourceObjectExtension,
+                    destinationObjectExtension,
+                    definitionChecks))
                 {
                     destinationDictionary[keyValue.Key] = keyValue.Value;
                 }
             }
-            else if (definitionChecks == MappingPropertyDefinitionChecks.Source)
+        }
+
+        //TODO: Move these methods to a class like ObjectExtensionHelper
+
+        public static bool CanMapProperty<TSource, TDestination>(
+            [NotNull] string propertyName,
+            MappingPropertyDefinitionChecks? definitionChecks = null)
+        {
+            return CanMapProperty(
+                typeof(TSource),
+                typeof(TDestination),
+                propertyName,
+                definitionChecks
+            );
+        }
+
+        public static bool CanMapProperty(
+            [NotNull] Type sourceType,
+            [NotNull] Type destinationType,
+            [NotNull] string propertyName,
+            MappingPropertyDefinitionChecks? definitionChecks = null)
+        {
+            Check.AssignableTo<IHasExtraProperties>(sourceType, nameof(sourceType));
+            Check.AssignableTo<IHasExtraProperties>(destinationType, nameof(destinationType));
+            Check.NotNull(propertyName, nameof(propertyName));
+
+            var sourceObjectExtension = ObjectExtensionManager.Instance.GetOrNull(sourceType);
+            var destinationObjectExtension = ObjectExtensionManager.Instance.GetOrNull(destinationType);
+
+            return CanMapProperty(
+                propertyName,
+                sourceObjectExtension,
+                destinationObjectExtension,
+                definitionChecks);
+        }
+
+        private static bool CanMapProperty(
+            [NotNull] string propertyName,
+            [CanBeNull] ObjectExtensionInfo sourceObjectExtension,
+            [CanBeNull] ObjectExtensionInfo destinationObjectExtension,
+            MappingPropertyDefinitionChecks? definitionChecks = null)
+        {
+            Check.NotNull(propertyName, nameof(propertyName));
+
+            if (definitionChecks != null)
             {
-                Debug.Assert(sourceObjectExtension != null, nameof(sourceObjectExtension) + " != null");
-
-                foreach (var property in sourceObjectExtension.GetProperties())
+                if (definitionChecks.Value.HasFlag(MappingPropertyDefinitionChecks.Source))
                 {
-                    if (!sourceDictionary.ContainsKey(property.Name))
+                    if (sourceObjectExtension == null)
                     {
-                        continue;
+                        return false;
                     }
 
-                    destinationDictionary[property.Name] = sourceDictionary[property.Name];
+                    if (!sourceObjectExtension.HasProperty(propertyName))
+                    {
+                        return false;
+                    }
                 }
-            }
-            else if (definitionChecks == MappingPropertyDefinitionChecks.Destination)
-            {
-                Debug.Assert(destinationObjectExtension != null, nameof(destinationObjectExtension) + " != null");
 
-                foreach (var keyValue in sourceDictionary)
+                if (definitionChecks.Value.HasFlag(MappingPropertyDefinitionChecks.Destination))
                 {
-                    if (!destinationObjectExtension.HasProperty(keyValue.Key))
+                    if (destinationObjectExtension == null)
                     {
-                        continue;
+                        return false;
                     }
 
-                    destinationDictionary[keyValue.Key] = keyValue.Value;
+                    if (!destinationObjectExtension.HasProperty(propertyName))
+                    {
+                        return false;
+                    }
                 }
-            }
-            else if (definitionChecks == MappingPropertyDefinitionChecks.Both)
-            {
-                Debug.Assert(sourceObjectExtension != null, nameof(sourceObjectExtension) + " != null");
-                Debug.Assert(destinationObjectExtension != null, nameof(destinationObjectExtension) + " != null");
 
-                foreach (var property in sourceObjectExtension.GetProperties())
-                {
-                    if (!sourceDictionary.ContainsKey(property.Name))
-                    {
-                        continue;
-                    }
-
-                    if (!destinationObjectExtension.HasProperty(property.Name))
-                    {
-                        continue;
-                    }
-
-                    destinationDictionary[property.Name] = sourceDictionary[property.Name];
-                }
+                return true;
             }
             else
             {
-                throw new NotImplementedException(definitionChecks + " was not implemented!");
+                var sourcePropertyDefinition = sourceObjectExtension?.GetPropertyOrNull(propertyName);
+                var destinationPropertyDefinition = destinationObjectExtension?.GetPropertyOrNull(propertyName);
+
+                if (sourcePropertyDefinition != null)
+                {
+                    if (destinationPropertyDefinition != null)
+                    {
+                        return true;
+                    }
+
+                    if (sourcePropertyDefinition.CheckPairDefinitionOnMapping == false)
+                    {
+                        return true;
+                    }
+                }
+                else if (destinationPropertyDefinition != null)
+                {
+                    if (destinationPropertyDefinition.CheckPairDefinitionOnMapping == false)
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
             }
         }
     }
