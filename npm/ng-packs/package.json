@@ -77,7 +77,6 @@
     "ngxs-reset-plugin": "^1.2.0",
     "ngxs-schematic": "^1.1.9",
     "prettier": "^1.18.2",
-    "primeicons": "^2.0.0",
     "protractor": "~5.4.0",
     "rxjs": "~6.4.0",
     "snq": "^1.0.3",
