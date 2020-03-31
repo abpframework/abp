@@ -8,19 +8,11 @@ namespace Volo.Abp.BackgroundJobs.Quartz
         typeof(AbpBackgroundJobsAbstractionsModule),
         typeof(AbpQuartzModule)
     )]
-    public class AbpBackgroundJobsQuartzModule :AbpModule
+    public class AbpBackgroundJobsQuartzModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var options = context.Services.ExecutePreConfiguredActions<AbpBackgroundJobOptions>();
-            if (!options.IsJobExecutionEnabled)
-            {
-                context.Services.AddSingleton<IBackgroundJobManager>(x => new NullBackgroundJobManager());
-            }
-            else
-            {
-                context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
-            }
+            context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
         }
     }
 }
