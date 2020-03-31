@@ -73,6 +73,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var connectionString = GetConnectionString(commandLineArgs);
+            if (connectionString != null)
+            {
+                Logger.LogInformation("Connection string: " + connectionString);
+            }
+
             var mobileApp = GetMobilePreference(commandLineArgs);
             if (mobileApp != MobileApp.None)
             {
@@ -122,7 +128,8 @@ namespace Volo.Abp.Cli.Commands
                     mobileApp,
                     gitHubLocalRepositoryPath,
                     templateSource,
-                    commandLineArgs.Options
+                    commandLineArgs.Options,
+                    connectionString
                 )
             );
 
@@ -166,6 +173,12 @@ namespace Volo.Abp.Cli.Commands
             }
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
+        }
+
+        private static string GetConnectionString(CommandLineArgs commandLineArgs)
+        {
+            var connectionString = commandLineArgs.Options.GetOrNull(Options.ConnectionString.Short, Options.ConnectionString.Long);
+            return string.IsNullOrWhiteSpace(connectionString) ? null : connectionString;
         }
 
         public string GetUsageInfo()
@@ -307,6 +320,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "ts";
                 public const string Long = "template-source";
+            }
+
+            public static class ConnectionString
+            {
+                public const string Short = "cs";
+                public const string Long = "connection-string";
             }
 
             public static class CreateSolutionFolder
