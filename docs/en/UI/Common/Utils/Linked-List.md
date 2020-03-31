@@ -130,7 +130,11 @@ list.addTail({ x: 3 });
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.addAfter({ x: 0 }, { x: 2 }, (v1, v2) => v1.x === v2.x);
+list.addAfter(
+  { x: 0 },
+  2,
+  (value, searchedValue) => value.x === searchedValue
+);
 
 // {"x":1} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 ```
@@ -164,7 +168,11 @@ list.addManyTail([{ x: 1 },{ x: 2 },{ x: 3 }]);
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.addManyAfter([{ x: 4 }, { x: 5 }], { x: 2 }, (v1, v2) => v1.x === v2.x);
+list.addManyAfter(
+  [{ x: 4 }, { x: 5 }],
+  2,
+  (value, searchedValue) => value.x === searchedValue
+);
 
 // {"x":1} <-> {"x":2} <-> {"x":4} <-> {"x":5} <-> {"x":3}
 ```
@@ -203,7 +211,11 @@ list.addTail({ x: 3 });
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.addBefore({ x: 0 }, { x: 2 }, (v1, v2) => v1.x === v2.x);
+list.addBefore(
+  { x: 0 },
+  2,
+  (value, searchedValue) => value.x === searchedValue
+);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":3}
 ```
@@ -237,7 +249,11 @@ list.addManyTail([{ x: 1 },{ x: 2 },{ x: 3 }]);
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.addManyBefore([{ x: 4 }, { x: 5 }], { x: 2 }, (v1, v2) => v1.x === v2.x);
+list.addManyBefore(
+  [{ x: 4 }, { x: 5 }],
+  2,
+  (value, searchedValue) => value.x === searchedValue
+);
 
 // {"x":1} <-> {"x":4} <-> {"x":5} <-> {"x":2} <-> {"x":3}
 ```
@@ -388,7 +404,9 @@ list.add({ x: 3 }).tail();
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.add({ x: 0 }).after({ x: 2 }, (v1, v2) => v1.x === v2.x);
+list
+  .add({ x: 0 })
+  .after(2, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 ```
@@ -429,7 +447,9 @@ list.add({ x: 3 }).tail();
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.add({ x: 0 }).before({ x: 2 }, (v1, v2) => v1.x === v2.x);
+list
+  .add({ x: 0 })
+  .before(2, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":3}
 ```
@@ -543,7 +563,9 @@ list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.addMany([{ x: 4 }, { x: 5 }]).after({ x: 2 }, (v1, v2) => v1.x === v2.x);
+list
+  .addMany([{ x: 4 }, { x: 5 }])
+  .after(2, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":2} <-> {"x":4} <-> {"x":5} <-> {"x":3}
 ```
@@ -579,7 +601,9 @@ list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 
-list.addMany([{ x: 4 }, { x: 5 }]).before({ x: 2 }, (v1, v2) => v1.x === v2.x);
+list
+  .addMany([{ x: 4 }, { x: 5 }])
+  .before(2, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":4} <-> {"x":5} <-> {"x":2} <-> {"x":3}
 ```
@@ -779,7 +803,7 @@ list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-list.dropByValue({ x: 0 }, (v1, v2) => v1.x === v2.x);
+list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 ```
@@ -813,7 +837,7 @@ list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-list.dropByValue({ x: 0 }, (v1, v2) => v1.x === v2.x);
+list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 ```
@@ -921,7 +945,9 @@ list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-list.drop().byValue({ x: 0 }, (v1, v2) => v1.x === v2.x);
+list
+  .drop()
+  .byValue(0, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 ```
@@ -957,7 +983,9 @@ list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-list.drop().byValueAll({ x: 0 }, (v1, v2) => v1.x === v2.x);
+list
+  .drop()
+  .byValueAll(0, (value, searchedValue) => value.x === searchedValue);
 
 // {"x":1} <-> {"x":2} <-> {"x":3}
 ```
@@ -1114,7 +1142,7 @@ found.next.value === "c"
 
 
 
-#### indexOf(value: T, compareFn = compare): number
+#### indexOf(value: any, compareFn = compare): number
 
 Finds the position of the first node from the list that has the given value:
 
@@ -1145,11 +1173,11 @@ list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-const i0 = indexOf({ x: 1 }, (v1, v2) => v1.x === v2.x);
-const i1 = indexOf({ x: 2 }, (v1, v2) => v1.x === v2.x);
-const i2 = indexOf({ x: 3 }, (v1, v2) => v1.x === v2.x);
-const i3 = indexOf({ x: 0 }, (v1, v2) => v1.x === v2.x);
-const i4 = indexOf({ x: 4 }, (v1, v2) => v1.x === v2.x);
+const i0 = indexOf(1, (value, searchedValue) => value.x === searchedValue);
+const i1 = indexOf(2, (value, searchedValue) => value.x === searchedValue);
+const i2 = indexOf(3, (value, searchedValue) => value.x === searchedValue);
+const i3 = indexOf(0, (value, searchedValue) => value.x === searchedValue);
+const i4 = indexOf(4, (value, searchedValue) => value.x === searchedValue);
 
 /*
 i0 === 0
