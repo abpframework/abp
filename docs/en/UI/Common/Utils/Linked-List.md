@@ -1142,7 +1142,7 @@ found.next.value === "c"
 
 
 
-#### indexOf(value: any, compareFn = compare): number
+#### indexOf(value: T, compareFn = compare): number
 
 Finds the position of the first node from the list that has the given value:
 
