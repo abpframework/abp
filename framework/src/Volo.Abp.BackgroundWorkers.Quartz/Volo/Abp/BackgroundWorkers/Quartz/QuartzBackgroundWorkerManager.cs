@@ -34,17 +34,22 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
 
         public void Add(IBackgroundWorker worker)
         {
+            AsyncHelper.RunSync(() => AddAsync(worker));
+        }
+
+        private async Task AddAsync(IBackgroundWorker worker)
+        {
             if (_options.IsEnabled && worker is IQuartzBackgroundWorker quartzWork)
             {
                 Check.NotNull(quartzWork.Trigger, nameof(quartzWork.Trigger));
                 Check.NotNull(quartzWork.JobDetail, nameof(quartzWork.JobDetail));
 
-                if (AsyncHelper.RunSync(() => _scheduler.CheckExists(quartzWork.JobDetail.Key)))
+                if (await _scheduler.CheckExists(quartzWork.JobDetail.Key))
                 {
-                    AsyncHelper.RunSync(() => _scheduler.DeleteJob(quartzWork.JobDetail.Key));
+                    await _scheduler.DeleteJob(quartzWork.JobDetail.Key);
                 }
 
-                AsyncHelper.RunSync(() => _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger));
+                await _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger);
             }
         }
     }
