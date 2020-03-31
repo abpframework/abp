@@ -68,7 +68,7 @@
                             }
 
                             <div class="for-mobile">
-                                <div class="navbar-light">
+                                <div class="navbar-dark">
                                     <button type="button" class="open-dmenu navbar-toggler" aria-label="Close">
                                         <span class="navbar-toggler-icon"></span>
                                     </button>
@@ -108,7 +108,7 @@
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
                                                     <label class="input-group-text">
-                                                        <i class="fa fa-check-square-o" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
+                                                        <i class="fas fa-code-branch" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
                                                     </label>
                                                 </div>
 
@@ -124,15 +124,15 @@
 
                             @if (Model.LanguageSelectListItems.Count > 1)
                             {
-                                <div class="col  @(Model.VersionSelectItems.Any()?"pl-0":"")">
+                                <div class="col-5  @(Model.VersionSelectItems.Any()?"pl-0":"")">
                                     <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
+                                                @*<div class="input-group-prepend">
                                                     <label class="input-group-text">
                                                         <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
                                                     </label>
-                                                </div>
+                                                </div>*@
                                                 <select asp-items="Model.LanguageSelectListItems"
                                                         class="form-control"
                                                         onchange="window.location.replace(this.value)">
@@ -163,11 +163,11 @@
 
                         @if (Model.FullSearchEnabled)
                         {
-                            <div class="docs-version mb-4">
+                            <div class="docs-version mt-2 mb-4">
                                 <div class="version-select">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <label class="input-group-text"><i class="fa fa-filter"></i></label>
+                                            <label class="input-group-text"><i class="fa fa-search"></i></label>
                                         </div>
 
                                         <input class="form-control" 
@@ -224,7 +224,9 @@
                             @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                             {
                                 <a href="@Model.Document.EditLink" target="_blank">
-                                    <i class="fa fa-edit"></i> @(L["Edit"]) (@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())
+                                    <i class="fa fa-edit"></i> 
+                                    @(L["Edit"]) 
+                                    <span class="for-desktop">(@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())</span>
                                 </a>
                             }
                         </div>
@@ -232,20 +234,21 @@
                         <div class="float-right mr-3">
                             @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
                             {
-                                @(L["Contributors"].Value + " :")
+                            <span class="for-desktop">
+                                @(L["Contributors"].Value + " :") </span>
                                 @foreach (var contributor in Model.Document.Contributors)
                                 {
                                     <a href="@contributor.UserProfileUrl" target="_blank">
                                         <img src="@contributor.AvatarUrl"
-                                             class="rounded-circle" 
+                                             class="rounded-circle"
                                              alt="Avatar"
-                                             height="21" 
-                                             width="21" 
+                                             height="21"
+                                             width="21"
                                              title="@contributor.Username" />
                                     </a>
                                 }
-                            }
-                        </div>
+                                }
+</div>
 
                     </div>
 

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Projects;
+using Volo.Extensions;
 
 namespace Volo.Docs.Admin.Documents
 {
@@ -38,15 +40,19 @@ namespace Volo.Docs.Admin.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            var navigationFile = await GetDocumentAsync(
+            var navigationDocument = await GetDocumentAsync(
                 project,
                 project.NavigationDocumentName,
                 input.LanguageCode,
                 input.Version
             );
 
-            var nav = JsonConvert.DeserializeObject<NavigationNode>(navigationFile.Content);
-            var leafs = nav.Items.GetAllNodes(x => x.Items)
+            if (!JsonConvertExtensions.TryDeserializeObject<NavigationNode>(navigationDocument.Content, out var navigation))
+            {
+                throw new UserFriendlyException($"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
+            }
+
+            var leafs = navigation.Items.GetAllNodes(x => x.Items)
                 .Where(x => x.IsLeaf && !x.Path.IsNullOrWhiteSpace())
                 .ToList();
 

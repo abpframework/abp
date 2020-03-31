@@ -1,4 +1,4 @@
-﻿using Volo.Abp.EntityFrameworkCore.Extensions;
+﻿using Volo.Abp.ObjectExtending;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Threading;
 
@@ -12,10 +12,11 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
         {
             OneTimeRunner.Run(() =>
             {
-                EntityExtensionManager.AddProperty<City, string>(
-                    "PhoneCode",
-                    p => p.HasMaxLength(8)
-                );
+                ObjectExtensionManager.Instance
+                    .MapEfCoreProperty<City, string>(
+                        "PhoneCode",
+                        p => p.HasMaxLength(8)
+                    );
             });
         }
     }

@@ -378,7 +378,7 @@ export class LinkedList<T = any> {
       .join(' <-> ');
   }
 
-  *[Symbol.iterator]() {
+  *[Symbol.iterator](): any {
     for (let node = this.first, position = 0; node; position++, node = node.next) {
       yield node.value;
     }

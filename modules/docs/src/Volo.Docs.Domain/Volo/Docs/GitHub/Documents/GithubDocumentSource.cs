@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Volo.Abp.Domain.Services;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
-using Newtonsoft.Json.Linq;
 using Octokit;
+using Volo.Abp;
+using Volo.Extensions;
 using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents
@@ -55,11 +55,11 @@ namespace Volo.Docs.GitHub.Documents
             var lastSignificantUpdateTime = !isNavigationDocument && !isParameterDocument && version == project.LatestVersionBranchName ?
                 await GetLastSignificantUpdateTime(
                     fileCommits,
-                    project, 
+                    project,
                     project.GetGitHubInnerUrl(languageCode, documentName),
                     lastKnownSignificantUpdateTime,
                     documentCreationTime
-                    ) ?? lastKnownSignificantUpdateTime 
+                    ) ?? lastKnownSignificantUpdateTime
                 : null;
 
             var document = new Document(GuidGenerator.Create(),
@@ -179,11 +179,16 @@ namespace Volo.Docs.GitHub.Documents
             var rootUrl = project.GetGitHubUrl(version);
             var userAgent = project.GetGithubUserAgentOrNull();
 
-            var url = CalculateRawRootUrl(rootUrl) + "docs-langs.json";
+            var url = CalculateRawRootUrl(rootUrl) + DocsDomainConsts.LanguageConfigFileName;
 
             var configAsJson = await DownloadWebContentAsStringAsync(url, token, userAgent);
 
-            return JsonConvert.DeserializeObject<LanguageConfig>(configAsJson);
+            if (!JsonConvertExtensions.TryDeserializeObject<LanguageConfig>(configAsJson, out var languageConfig))
+            {
+                throw new UserFriendlyException($"Cannot validate language config file '{DocsDomainConsts.LanguageConfigFileName}' for the project {project.Name} - v{version}.");
+            }
+
+            return languageConfig;
         }
 
         private async Task<IReadOnlyList<Release>> GetReleasesAsync(Project project)
@@ -199,8 +204,14 @@ namespace Volo.Docs.GitHub.Documents
             var url = project.GetGitHubUrl();
             var ownerName = GetOwnerNameFromUrl(url);
             var repositoryName = GetRepositoryNameFromUrl(url);
-            return await _githubRepositoryManager.GetFileCommitsAsync(ownerName, repositoryName,
-                version, filename, project.GetGitHubAccessTokenOrNull());
+
+            return await _githubRepositoryManager.GetFileCommitsAsync(
+                ownerName,
+                repositoryName,
+                version,
+                filename,
+                project.GetGitHubAccessTokenOrNull()
+            );
         }
 
         protected virtual string GetOwnerNameFromUrl(string url)
@@ -212,7 +223,7 @@ namespace Volo.Docs.GitHub.Documents
             }
             catch (Exception)
             {
-                throw new Exception($"Github url is not valid: {url}");
+                throw new Exception($"GitHub url is not valid: {url}");
             }
         }
 
