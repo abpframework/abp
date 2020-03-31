@@ -1,10 +1,10 @@
-import { getInitialData, localeInitializer } from '../utils';
-import { Injector } from '@angular/core';
-import { Spectator, createComponentFactory } from '@ngneat/spectator/jest';
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
+import { getInitialData, localeInitializer } from '../utils';
 
 @Component({
   selector: 'abp-dummy',
@@ -14,7 +14,10 @@ export class DummyComponent {}
 
 describe('InitialUtils', () => {
   let spectator: Spectator<DummyComponent>;
-  const createComponent = createComponentFactory({ component: DummyComponent, mocks: [Store] });
+  const createComponent = createComponentFactory({
+    component: DummyComponent,
+    mocks: [Store],
+  });
 
   beforeEach(() => (spectator = createComponent()));
 
@@ -25,12 +28,30 @@ describe('InitialUtils', () => {
       const store = spectator.get(Store);
       const dispatchSpy = jest.spyOn(store, 'dispatch');
 
-      injectorSpy.mockReturnValue(store);
+      injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => false });
       dispatchSpy.mockReturnValue(of('test'));
 
       expect(typeof getInitialData(injector)).toBe('function');
       expect(await getInitialData(injector)()).toBe('test');
       expect(dispatchSpy.mock.calls[0][0] instanceof GetAppConfiguration).toBeTruthy();
+    });
+  });
+
+  describe('#checkAccessToken', () => {
+    test('should call logOut fn of OAuthService when token is valid and current user not found', async () => {
+      const injector = spectator.get(Injector);
+      const injectorSpy = jest.spyOn(injector, 'get');
+      const store = spectator.get(Store);
+      const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const logOutFn = jest.fn();
+
+      injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => true, logOut: logOutFn });
+      dispatchSpy.mockReturnValue(of({ currentUser: { id: null } }));
+
+      getInitialData(injector)();
+      expect(logOutFn).toHaveBeenCalled();
     });
   });
 
