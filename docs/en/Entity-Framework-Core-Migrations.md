@@ -93,7 +93,7 @@ From the database point of view, there are three important projects those will b
 
 This project has the `DbContext` class (`BookStoreDbContext` for this sample) of your application.
 
-**Every module uses its own `DbContext` class** to access to the database. Likewise, your application has its own `DbContext`. You typically use this `DbContext` in your application code (in your custom [repositories](Repositories.md) if you follow the best practices). It is almost an empty `DbContext` since your application don't have any entities at the beginning, except the pre-defined `AppUser` entity:
+**Every module uses its own `DbContext` class** to access to the database. Likewise, your application has its own `DbContext`. You typically use this `DbContext` in your application code (in your [repositories](Repositories.md) if you follow the best practices). It is almost an empty `DbContext` since your application don't have any entities at the beginning, except the pre-defined `AppUser` entity:
 
 ````csharp
 [ConnectionStringName("Default")]
@@ -117,15 +117,15 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
         builder.Entity<AppUser>(b =>
         {
-            //Sharing the same table "AbpUsers" with the IdentityUser
-            b.ToTable("AbpUsers"); 
-            
-            //Configure base properties
+            //Sharing the same Users table with the IdentityUser
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); 
+
             b.ConfigureByConvention();
             b.ConfigureAbpUser();
 
-            //Moved customization of the "AbpUsers" table to an extension method
-            b.ConfigureCustomUserProperties();
+            /* Configure mappings for your additional properties
+             * Also see the MyProjectNameEntityExtensions class
+             */
         });
 
         /* Configure your own tables/entities inside the ConfigureBookStore method */
@@ -187,12 +187,6 @@ public class BookStoreMigrationsDbContext : AbpDbContext<BookStoreMigrationsDbCo
         builder.ConfigureIdentityServer();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
-
-        /* Configure customizations for entities from the modules included  */
-        builder.Entity<IdentityUser>(b =>
-        {
-            b.ConfigureCustomUserProperties();
-        });
 
         /* Configure your own tables/entities inside the ConfigureBookStore method */
         builder.ConfigureBookStore();
@@ -274,7 +268,7 @@ In this way, the mapping configuration of a module can be shared between `DbCont
 
 You may want to **reuse a table** of a depended module in your application. In this case, you have two options:
 
-1. You can **directly use the entity** defined by the module.
+1. You can **directly use the entity** defined by the module (you can still [extend the entity](Customizing-Application-Modules-Extending-Entities.md) in some level).
 2. You can **create a new entity** mapping to the same database table.
 
 ###### Use the Entity Defined by a Module
@@ -376,10 +370,8 @@ protected override void OnModelCreating(ModelBuilder builder)
     builder.Entity<AppRole>(b =>
     {
         b.ToTable("AbpRoles");
-        
         b.ConfigureByConvention();
-
-        b.ConfigureCustomRoleProperties();
+        b.Property(x => x.Title).HasMaxLength(128);
     });
 
     ...
@@ -395,69 +387,45 @@ We added the following lines:
 ````csharp
 builder.Entity<AppRole>(b =>
 {
-    b.ToTable("AbpRoles");
-    
+    b.ToTable("AbpRoles");    
     b.ConfigureByConvention();
-
-    b.ConfigureCustomRoleProperties();
+    b.Property(x => x.Title).HasMaxLength(128);
 });
 ````
 
 * It maps to the same `AbpRoles` table shared with the `IdentityRole` entity.
 * `ConfigureByConvention()` configures the standard/base properties (like `TenantId`) and recommended to always call it.
 
-`ConfigureCustomRoleProperties()` has not exists yet. Define it inside the `BookStoreDbContextModelCreatingExtensions` class (near to your `DbContext` in the `.EntityFrameworkCore` project):
+You've configured the custom property for your `DbContext` that is used by your application on the runtime. We also need to configure the `MigrationsDbContext`.
+
+Instead of directly changing the `MigrationsDbContext`, we should use the entity extension system of the ABP Framework. Find the `YourProjectNameEntityExtensions` class in the `.EntityFrameworkCore` project of your solution (`BookStoreEntityExtensions` for this example) and change it as shown below:
 
 ````csharp
-public static void ConfigureCustomRoleProperties<TRole>(this EntityTypeBuilder<TRole> b)
-    where TRole : class, IEntity<Guid>
+public static class MyProjectNameEntityExtensions
 {
-    b.Property<string>(nameof(AppRole.Title)).HasMaxLength(128);
-}
-````
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-* This method only defines the **custom properties** of your entity.
-* Unfortunately, we can not utilize the fully **type safety** here (by referencing the `AppRole` entity). The best we can do is to use the `Title` name as type safe. This is because of EF Core migration system can not map two unrelated entity classes to the same database table.
-
-You've configured the custom property for your `DbContext` used by your application on the runtime. We also need to configure the `MigrationsDbContext`.
-
-Open the `MigrationsDbContext` (`BookStoreMigrationsDbContext` for this example) and change as shown below:
-
-````csharp
-protected override void OnModelCreating(ModelBuilder builder)
-{
-    base.OnModelCreating(builder);
-
-    /* Include modules to your migration db context */
-
-    ...
-
-    /* Configure customizations for entities from the modules included  */
-
-    //CONFIGURE THE CUSTOM ROLE PROPERTIES
-    builder.Entity<IdentityRole>(b =>
+    public static void Configure()
     {
-        b.ConfigureCustomRoleProperties();
-    });
-
-    ...
-
-    /* Configure your own tables/entities inside the ConfigureBookStore method */
-
-    builder.ConfigureBookStore();
+        OneTimeRunner.Run(() =>
+        {
+            ObjectExtensionManager.Instance
+                .MapEfCoreProperty<IdentityRole, string>(
+                    "Title",
+                    builder => { builder.HasMaxLength(64); }
+                );
+        });
+    }
 }
 ````
 
-Only added the following lines:
+> Instead of hard-coded "Title" string, we suggest to use `nameof(AppRole.Title)` or use a constant string.
 
-````csharp
-builder.Entity<IdentityRole>(b =>
-{
-    b.ConfigureCustomRoleProperties();
-});
-````
+`ObjectExtensionManager` is used to add properties to existing entities. Since `ObjectExtensionManager.Instance` is a static instance (singleton), we should call it once. `OneTimeRunner` is a simple utility class defined by the ABP Framework.
 
-In this way, we re-used the extension method that is used to configure custom property mappings for the role. But, this time, did the same customization for the `IdentityRole` entity.
+See the [EF Core integration documentation](Entity-Framework-Core.md) for more about the entity extension system.
+
+> We've repeated a similar database mapping code, like `HasMaxLength(128)`, in both classes.
 
 Now, you can add a new EF Core database migration using the standard `Add-Migration` command in the Package Manager Console (remember to select `.EntityFrameworkCore.DbMigrations` as the Default Project in the PMC and make sure that the `.Web` project is still the startup project):
 
@@ -536,7 +504,7 @@ Instead of creating a new entity class to add a custom property, you can use the
 
 ###### Using the ExtraProperties
 
-All entities derived from the `AggregateRoot ` class can store name-value pairs in their `ExtraProperties` property, which is a `Dictionary<string, object>` serialized to JSON in the database table. So, you can add values to this dictionary and query again without changing the entity.
+All entities derived from the `AggregateRoot ` class can store name-value pairs in their `ExtraProperties` property (because they implement the `IHasExtraProperties` interface), which is a `Dictionary<string, object>` serialized to JSON in the database table. So, you can add values to this dictionary and query again without changing the entity.
 
 For example, you can store query the title Property inside an `IdentityRole` instead of creating a new entity. Example:
 
@@ -553,16 +521,13 @@ public class IdentityRoleExtendingService : ITransientDependency
     public async Task<string> GetTitleAsync(Guid id)
     {
         var role = await _identityRoleRepository.GetAsync(id);
-
         return role.GetProperty<string>("Title");
     }
 
     public async Task SetTitleAsync(Guid id, string newTitle)
     {
         var role = await _identityRoleRepository.GetAsync(id);
-        
         role.SetProperty("Title", newTitle);
-        
         await _identityRoleRepository.UpdateAsync(role);
     }
 }
@@ -575,11 +540,19 @@ In this way, you can easily attach any type of value to an entity of a depended 
 * All the extra properties are stored as **a single JSON object** in the database. They are not stored as new table fields, as you may expect. Creating database table indexes and using SQL queries against these properties will be harder compared to simple table fields.
 * Property names are strings, so they are **not type safe**. It is recommended to define constants for these kind of properties to prevent typo errors.
 
+###### Using the Entity Extensions System
+
+Entity extension system solves the main problem of the extra properties: It can store an extra property in a **standard table field** in the database.
+
+All you need to do is to use the `ObjectExtensionManager` to define the extra property as explained above, in the `AppRole` example. Then you can continue to use the same `GetProperty` and `SetProperty` methods  defined above to get/set the related property on the entity, but this time stored as a separate field in the database.
+
 ###### Creating a New Table
 
 Instead of creating a new entity and mapping to the same table, you can also create **your own table** to store your properties. You typically duplicate some values of the original entity. For example, you can add `Name` field to your own table which is a duplication of the `Name` field in the original table.
 
 In this case, you don't deal with migration problems, however you need to deal with the problems of data duplication. When the duplicated value changes, you should reflect the same change in your table. You can use local or distributed [event bus](Event-Bus.md) to subscribe to the change events for the original entity. This is the recommended way of depending on a microservice's data from another microservice, especially if they have separate physical databases (you can search on the web on data sharing on a microservice design, it is a wide topic to cover here).
+
+> See the "[extending entities](Customizing-Application-Modules-Extending-Entities.md)" guide for more details on extending entities, including data duplication and synchronization tips.
 
 #### Discussion of an Alternative Scenario: Every Module Manages Its Own Migration Path
 

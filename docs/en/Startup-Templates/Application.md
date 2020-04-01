@@ -2,11 +2,12 @@
 
 ## Introduction
 
-This template provides a layered application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. This document explains the solution structure and projects in details. If you want to start quickly, follow the guides below:
+This template provides a layered application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. 
 
-* See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template (uses MVC as the UI framework and Entity Framework Core as the database provider).
-* See the [ASP.NET Core MVC Application Development Tutorial](../Tutorials/Part-1.md?UI=MVC) to learn how to develop applications using this template (uses MVC as the UI framework and Entity Framework Core as the database provider).
-* See the [Angular Application Development Tutorial](../Tutorials/Part-1.md?UI=NG) to learn how to develop applications using this template (uses Angular as the UI framework and MongoDB as the database provider).
+This document explains **the solution structure** and projects in details. If you want to start quickly, follow the guides below:
+
+* [The getting started document](../Getting-Started-With-Startup-Templates.md) explains how to create a new application in a few minutes.
+* [The application development tutorial](../Tutorials/Part-1) explains step by step application development.
 
 ## How to Start With?
 
@@ -123,6 +124,8 @@ Notice that the migration `DbContext` is only used for database migrations and *
 * Depends on the `.EntityFrameworkCore` project since it re-uses the configuration defined for the `DbContext` of the application.
 
 > This project is available only if you are using EF Core as the database provider.
+>
+> See the [Entity Framework Core Migrations Guide](../Entity-Framework-Core-Migrations.md) to understand this project in details.
 
 #### .DbMigrator Project
 
@@ -269,5 +272,5 @@ The files under the `angular/src/environments` folder has the essential configur
 
 ## What's Next?
 
-- See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.
-- See the [ASP.NET Core MVC Tutorial](../Tutorials/Part-1.md) to learn how to develop applications using this template.
+- [The getting started document](../Getting-Started-With-Startup-Templates.md) explains how to create a new application in a few minutes.
+- [The application development tutorial](../Tutorials/Part-1) explains step by step application development.

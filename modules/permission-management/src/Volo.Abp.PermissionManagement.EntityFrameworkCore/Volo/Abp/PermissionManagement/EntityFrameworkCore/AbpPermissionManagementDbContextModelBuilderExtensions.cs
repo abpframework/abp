@@ -1,6 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 {
@@ -22,6 +23,8 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
             builder.Entity<PermissionGrant>(b =>
             {
                 b.ToTable(options.TablePrefix + "PermissionGrants", options.Schema);
+
+                b.ConfigureByConvention();
 
                 b.Property(x => x.Name).HasMaxLength(PermissionGrantConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();

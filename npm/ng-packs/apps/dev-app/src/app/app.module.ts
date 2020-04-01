@@ -21,9 +21,6 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
   imports: [
     CoreModule.forRoot({
       environment,
-      requirements: {
-        layouts: LAYOUTS,
-      },
     }),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),

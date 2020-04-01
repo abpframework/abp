@@ -25,7 +25,36 @@ return user.GetProperty<string>("Title");
 
 参阅[实体文档](Entities.md)了解更多关于额外系统.
 
-> 可以基于额外的属性执行**业务逻辑**. 你可以**override**服务方法获取或设置值. 重写服务在下面进行讨论.
+> 可以基于额外的属性执行**业务逻辑**. 你可以[重写服务方法](Customizing-Application-Modules-Overriding-Services.md). 然后获取或设置如上所示的值.
+
+## 实体扩展 (EF Core)
+
+如上所述,实体所有的额外属性都作为单个JSON对象存储在数据库表中. 它不适用复杂的场景,特别是在你需要的时候.
+
+* 使用额外属性创建**索引**和**外键**.
+* 使用额外属性编写**SQL**或**LINQ**(例如根据属性值搜索).
+* 创建你**自己的实体**映射到相同的表,但在实体中定义一个额外属性做为 **常规属性**(参阅 [EF Core迁移文档](Entity-Framework-Core-Migrations.md)了解更多).
+
+为了解决上面的问题,用于EF Core的ABP框架实体扩展系统允许你使用上面定义相同的额外属性API,但将所需的属性存储在单独的数据库表字段中.
+
+假设你想要添加 `SocialSecurityNumber` 到[身份模块](Modules/Identity.md)的 `IdentityUser` 实体. 你可以使用 `ObjectExtensionManager` 类:
+
+````csharp
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        b => { b.HasMaxLength(32); }
+    );
+````
+
+* 你提供了 `IdentityUser` 作为实体名(泛型参数), `string` 做为新属性的类型, `SocialSecurityNumber` 做为属性名(也是数据库表的字段名).
+* 你还需要提供一个使用[EF Core Fluent API](https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties)定义数据库映射属性的操作.
+
+> 必须在使用相关的 `DbContext` 之前执行此代码. 应用程序启动模板定义了一个名为 `YourProjectNameEntityExtensions` 的静态类. 你可以在此类中定义扩展确保在正确的时间执行它. 否则你需要自己处理.
+
+定义实体扩展后你需要使用EF Core的[Add-Migration](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#add-migration)和[Update-Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#update-database)命令来创建code first迁移类并更新数据库.
+
+然后你可以使用上一部分中定义的相同额外属性系统来操纵实体上的属性.
 
 ## 创建新实体映射到同一个数据库表/Collection
 

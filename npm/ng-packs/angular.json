@@ -485,6 +485,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "internal": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/dev-app/src/environments/environment.ts",
+                  "with": "apps/dev-app/src/environments/environment.internal.ts"
+                }
+              ]
             }
           }
         },
@@ -496,6 +504,9 @@
           "configurations": {
             "production": {
               "browserTarget": "dev-app:build:production"
+            },
+            "internal": {
+              "browserTarget": "dev-app:build:internal"
             }
           }
         },
@@ -515,5 +526,5 @@
       }
     }
   },
-  "defaultProject": "core"
+  "defaultProject": "dev-app"
 }

@@ -41,6 +41,7 @@ namespace Volo.Abp.TestApp.Testing
         public async Task Should_Update_An_Existing_Extra_Property()
         {
             var london = await CityRepository.FindByNameAsync("London");
+            london.GetProperty<int>("Population").ShouldBe(10_470_000);
 
             london.ExtraProperties["Population"] = 11_000_042;
             await CityRepository.UpdateAsync(london);

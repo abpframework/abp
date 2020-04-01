@@ -119,15 +119,16 @@
             };
 
             var setQueryString = function () {
-                clearQueryString();
-
-                var uri = window.location.href.toString();
-
                 var comboboxes = $(".doc-section-combobox");
-
                 if (comboboxes.length < 1) {
                     return;
                 }
+
+                var hash = document.location.hash;
+
+                clearQueryString();
+
+                var uri = window.location.href.toString();
 
                 var new_uri = uri + "?";
 
@@ -142,7 +143,7 @@
                     }
                 }
 
-                window.history.replaceState({}, document.title, new_uri);
+                window.history.replaceState({}, document.title, new_uri + hash);
             };
 
             var getTenYearsLater = function () {

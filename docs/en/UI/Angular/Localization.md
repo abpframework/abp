@@ -134,3 +134,7 @@ Localization resources are stored in the `localization` property of `ConfigState
 ## See Also
 
 * [Localization in ASP.NET Core](../../Localization.md)
+
+## What's Next?
+
+* [Permission Management](./Permission-Management.md)

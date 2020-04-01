@@ -81,7 +81,7 @@ export class ConfigState {
 
   static getApiUrl(key?: string) {
     const selector = createSelector([ConfigState], (state: Config.State): string => {
-      return state.environment.apis[key || 'default'].url;
+      return (state.environment.apis[key || 'default'] || state.environment.apis.default).url;
     });
 
     return selector;
@@ -262,7 +262,8 @@ export class ConfigState {
         route.url = `/${route.path}`;
       }
 
-      route.order = route.order || route.order === 0 ? route.order : parent.children.length;
+      route.children = route.children || [];
+      route.order = route.order || route.order === 0 ? route.order : (parent.children || []).length;
       parent.children = [...(parent.children || []), route].sort((a, b) => a.order - b.order);
 
       flattedRoutes[index] = parent;
@@ -300,7 +301,7 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment({ patchState }: StateContext<Config.State>, environment: Config.Environment) {
+  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
     return patchState({
       environment,
     });

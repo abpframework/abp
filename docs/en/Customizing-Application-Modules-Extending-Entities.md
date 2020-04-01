@@ -4,7 +4,7 @@ In some cases, you may want to add some additional properties (and database fiel
 
 ## Extra Properties
 
-[Extra properties](Entities.md) is a way of storing some additional data on an entity without changing it. The entity should implement the `IHasExtraProperties` interface to allow it. All the aggregate root entities defined in the pre-built modules implement the `IHasExtraProperties` interface, so you can store extra properties on these entities.
+[Extra properties](Entities.md) is a way of storing some additional data on an entity without changing it. The entity should implement the `IHasExtraProperties` interface to allow it. All the aggregate root entities defined in the pre-built modules implement the `IHasExtraProperties` interface, so you can store extra properties on these objects.
 
 Example:
 
@@ -25,7 +25,36 @@ Extra properties are stored as a single `JSON` formatted string value in the dat
 
 See the [entities document](Entities.md) for more about the extra properties system.
 
-> It is possible to perform a **business logic** based on the value of an extra property. You can **override** a service method and get or set the value as shown above. Overriding services will be discussed below.
+> It is possible to perform a **business logic** based on the value of an extra property. You can [override a service method](Customizing-Application-Modules-Overriding-Services.md), then get or set the value as shown above.
+
+## Entity Extensions (EF Core)
+
+As mentioned above, all extra properties of an entity are stored as a single JSON object in the database table. This is not so natural especially when you want to;
+
+* Create **indexes** and **foreign keys** for an extra property.
+* Write **SQL** or **LINQ** using the extra property (search table by the property value, for example).
+* Creating your **own entity** maps to the same table, but defines an extra property as a **regular property** in the entity (see the [EF Core migration document](Entity-Framework-Core-Migrations.md) for more).
+
+To overcome the difficulties described above, ABP Framework entity extension system for the Entity Framework Core that allows you to use the same extra properties API defined above, but store a desired property as a separate field in the database table.
+
+Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md). You can use the `ObjectExtensionManager`:
+
+````csharp
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        b => { b.HasMaxLength(32); }
+    );
+````
+
+* You provide the `IdentityUser` as the entity name, `string` as the type of the new property, `SocialSecurityNumber` as the property name (also, the field name in the database table).
+* You also need to provide an action that defines the database mapping properties using the [EF Core Fluent API](https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties).
+
+> This code part must be executed before the related `DbContext` used. The [application startup template](Startup-Templates/Application.md) defines a static class named `YourProjectNameEntityExtensions`. You can define your extensions in this class to ensure that it is executed in the proper time. Otherwise, you should handle it yourself.
+
+Once you define an entity extension, you then need to use the standard [Add-Migration](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#add-migration) and [Update-Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#update-database) commands of the EF Core to create a code first migration class and update your database.
+
+You can then use the same extra properties system defined in the previous section to manipulate the property over the entity.
 
 ## Creating a New Entity Maps to the Same Database Table/Collection
 
@@ -146,4 +175,5 @@ public class MyDistributedIdentityUserCreatedEventHandler :
 
 ## See Also
 
+* [Migration System for the EF Core](Entity-Framework-Core-Migrations.md)
 * [Customizing the Existing Modules](Customizing-Application-Modules-Guide.md)

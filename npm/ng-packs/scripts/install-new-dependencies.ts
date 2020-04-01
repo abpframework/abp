@@ -13,11 +13,15 @@ const updateAndInstall = async () => {
       `../packages/${project}/package.json`,
     );
 
+    const isPackageExistOnNPM = !(
+      execa.sync('npm', ['search', name]).stdout.indexOf('No matches found for') > -1
+    );
+
     packageJson.devDependencies = {
       ...packageJson.devDependencies,
       ...dependencies,
       ...peerDependencies,
-      ...{ [name]: `~${version}` },
+      ...(isPackageExistOnNPM && { [name]: `~${version}` }),
     };
 
     packageJson.devDependencies = Object.keys(packageJson.devDependencies)

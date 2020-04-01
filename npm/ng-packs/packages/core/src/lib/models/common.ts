@@ -6,7 +6,11 @@ import { Subject } from 'rxjs';
 export namespace ABP {
   export interface Root {
     environment: Partial<Config.Environment>;
-    requirements: Config.Requirements;
+    /**
+     *
+     * @deprecated To be deleted in v3.0
+     */
+    requirements?: Config.Requirements;
   }
 
   export type PagedResponse<T> = {

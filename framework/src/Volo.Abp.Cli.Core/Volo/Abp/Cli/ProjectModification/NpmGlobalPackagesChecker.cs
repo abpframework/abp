@@ -9,7 +9,7 @@ namespace Volo.Abp.Cli.ProjectModification
     {
         public ILogger<NpmGlobalPackagesChecker> Logger { get; set; }
 
-        public NpmGlobalPackagesChecker(PackageJsonFileFinder packageJsonFileFinder)
+        public NpmGlobalPackagesChecker()
         {
             Logger = NullLogger<NpmGlobalPackagesChecker>.Instance;
         }
