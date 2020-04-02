@@ -154,15 +154,12 @@ namespace AbpConsoleDemo
     {
         static void Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<AppModule>(options =>
-            {
-                options.UseAutofac(); //Autofac integration
-            }))
+            using (var application = AbpApplicationFactory.Create<AppModule>(options => options.UseAutofac()))
             {
                 application.Initialize();
 
                 //Resolve a service and use it
-                var helloWorldService = 
+                var helloWorldService =
                     application.ServiceProvider.GetService<HelloWorldService>();
                 helloWorldService.SayHello();
 
