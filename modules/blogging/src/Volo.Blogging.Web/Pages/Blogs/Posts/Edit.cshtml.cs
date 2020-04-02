@@ -42,7 +42,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
             var postDto = await _postAppService.GetAsync(new Guid(PostId));
             Post = ObjectMapper.Map<PostWithDetailsDto, EditPostViewModel>(postDto);
-            Post.Tags = String.Join(", ", postDto.Tags.Select(p=>p.Name).ToArray());
+            Post.Tags = String.Join(", ", postDto.Tags.Select(p => p.Name).ToArray());
 
             return Page();
         }
@@ -57,7 +57,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 CoverImage = Post.CoverImage,
                 Content = Post.Content,
                 Tags = Post.Tags,
-                Description = !Post.Description.IsNullOrWhiteSpace() ? Post.Description : Post.Content.Substring(0,200)
+                Description = Post.Description.IsNullOrEmpty() ?
+                    Post.Content.Truncate(PostConsts.MaxSeoFriendlyDescriptionLength) :
+                    Post.Description
             };
 
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);

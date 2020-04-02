@@ -55,12 +55,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
         {
             var blog = await _blogAppService.GetAsync(Post.BlogId);
 
-            if (Post.Description == null)
+            if (string.IsNullOrEmpty(Post.Description))
             {
-                Post.Description = Post.Content.Substring(0, 200);
+                Post.Description = Post.Content.Truncate(PostConsts.MaxSeoFriendlyDescriptionLength);
             }
 
-            var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel,CreatePostDto>(Post));
+            var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel, CreatePostDto>(Post));
 
             //TODO: Try Url.Page(...)
             var urlPrefix = _blogOptions.RoutePrefix;

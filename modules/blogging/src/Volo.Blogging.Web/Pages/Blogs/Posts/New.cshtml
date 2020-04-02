@@ -1,6 +1,7 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Blogging.Pages.Blog.Posts
+@using Volo.Blogging.Posts
 @model NewModel
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 @{
@@ -27,8 +28,11 @@
                         <form method="post" id="new-post-form">
                             <abp-input asp-for="Post.BlogId" />
                             <abp-input asp-for="Post.Title" auto-focus="true" />
-                            
-                            <abp-alert dismissible="true" style="display: none" id="title-length-warning">
+
+                            <abp-alert dismissible="true"
+                                       style="display: none"
+                                       id="title-length-warning"
+                                       data-max-length="@PostConsts.MaxTitleLengthToBeSeoFriendly">
                                 @L["TitleLengthWarning"]
                             </abp-alert>
 
@@ -78,7 +82,7 @@
                             </div>
                         </form>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     </div>

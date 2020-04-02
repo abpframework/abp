@@ -5,11 +5,18 @@
     var $submitButton = $container.find("button[type=submit]");
     var $form = $container.find("form#edit-post-form");
     var editorDataKey = "tuiEditor";
-    var maxTitleLength = 60;
+    var $titleLengthWarning = $("#title-length-warning");
+    var maxTitleLength = parseInt($titleLengthWarning.data("max-length"));
+
+    var $title = $('#Post_Title');
+    var $coverImage = $("#CoverImage");
+    var $postCoverImage = $('#Post_CoverImage');
+    var $coverImageFile = $('#CoverImageFile');
+
 
     var setCoverImage = function (file) {
-        $('#Post_CoverImage').val(file.fileUrl);
-        $("#CoverImage").attr("src", file.fileUrl);
+        $postCoverImage.val(file.fileUrl);
+        $coverImage.attr("src", file.fileUrl);
     };
 
     var uploadCoverImage = function (file) {
@@ -29,26 +36,27 @@
     };
 
     var checkTitleLength = function () {
-        var title = $('#Post_Title').val();
+        var title = $title.val();
 
         if (title.length > maxTitleLength) {
-            $("#title-length-warning").css("display", "block");
+            $titleLengthWarning.show();
         } else {
-            $("#title-length-warning").css("display", "none");
+            $titleLengthWarning.hide();
         }
     };
 
     checkTitleLength();
 
-    $('#Post_Title').on("change paste keyup", function () {
+    $title.on("change paste keyup", function () {
         checkTitleLength();
     });
 
-    $('#CoverImageFile').change(function () {
-        if (!$('#CoverImageFile').prop('files').length) {
+    $coverImageFile.change(function () {
+        if (!$coverImageFile.prop('files').length) {
             return;
         }
-        var file = $('#CoverImageFile').prop('files')[0];
+
+        var file = $coverImageFile.prop('files')[0];
         uploadCoverImage(file);
     });
 
@@ -110,6 +118,7 @@
 
         $submitButton.buttonBusy();
         $(this).off('submit').submit();
+        return true;
     });
 
 });

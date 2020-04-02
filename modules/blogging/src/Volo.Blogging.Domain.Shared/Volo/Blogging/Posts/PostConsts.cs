@@ -10,5 +10,8 @@
 
         public const int MaxDescriptionLength = 1000;
 
+        public const int MaxTitleLengthToBeSeoFriendly = 60;
+
+        public const int MaxSeoFriendlyDescriptionLength = 200;
     }
 }
