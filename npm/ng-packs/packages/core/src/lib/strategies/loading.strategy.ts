@@ -1,6 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { fromLazyLoad } from '../utils';
+import { ContentSecurityStrategy, CONTENT_SECURITY_STRATEGY } from './content-security.strategy';
 import { CrossOriginStrategy, CROSS_ORIGIN_STRATEGY } from './cross-origin.strategy';
 import { DomStrategy, DOM_STRATEGY } from './dom.strategy';
 
@@ -9,6 +10,7 @@ export abstract class LoadingStrategy<T extends HTMLScriptElement | HTMLLinkElem
     public path: string,
     protected domStrategy: DomStrategy = DOM_STRATEGY.AppendToHead(),
     protected crossOriginStrategy: CrossOriginStrategy = CROSS_ORIGIN_STRATEGY.Anonymous(),
+    protected contentSecurityStrategy: ContentSecurityStrategy = CONTENT_SECURITY_STRATEGY.Loose(),
   ) {}
 
   abstract createElement(): T;
@@ -16,15 +18,25 @@ export abstract class LoadingStrategy<T extends HTMLScriptElement | HTMLLinkElem
   createStream<T extends Event>(): Observable<T> {
     return of(null).pipe(
       switchMap(() =>
-        fromLazyLoad<T>(this.createElement(), this.domStrategy, this.crossOriginStrategy),
+        fromLazyLoad<T>(
+          this.createElement(),
+          this.domStrategy,
+          this.crossOriginStrategy,
+          this.contentSecurityStrategy,
+        ),
       ),
     );
   }
 }
 
 export class ScriptLoadingStrategy extends LoadingStrategy<HTMLScriptElement> {
-  constructor(src: string, domStrategy?: DomStrategy, crossOriginStrategy?: CrossOriginStrategy) {
-    super(src, domStrategy, crossOriginStrategy);
+  constructor(
+    src: string,
+    domStrategy?: DomStrategy,
+    crossOriginStrategy?: CrossOriginStrategy,
+    contentSecurityStrategy?: ContentSecurityStrategy,
+  ) {
+    super(src, domStrategy, crossOriginStrategy, contentSecurityStrategy);
   }
 
   createElement(): HTMLScriptElement {
@@ -36,8 +48,13 @@ export class ScriptLoadingStrategy extends LoadingStrategy<HTMLScriptElement> {
 }
 
 export class StyleLoadingStrategy extends LoadingStrategy<HTMLLinkElement> {
-  constructor(href: string, domStrategy?: DomStrategy, crossOriginStrategy?: CrossOriginStrategy) {
-    super(href, domStrategy, crossOriginStrategy);
+  constructor(
+    href: string,
+    domStrategy?: DomStrategy,
+    crossOriginStrategy?: CrossOriginStrategy,
+    contentSecurityStrategy?: ContentSecurityStrategy,
+  ) {
+    super(href, domStrategy, crossOriginStrategy, contentSecurityStrategy);
   }
 
   createElement(): HTMLLinkElement {

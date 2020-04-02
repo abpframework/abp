@@ -1,12 +1,15 @@
 import {
+  CONTENT_SECURITY_STRATEGY,
   CROSS_ORIGIN_STRATEGY,
   DOM_STRATEGY,
   LOADING_STRATEGY,
   ScriptLoadingStrategy,
   StyleLoadingStrategy,
 } from '../strategies';
+import { uuid } from '../utils';
 
 const path = 'http://example.com/';
+const nonce = uuid();
 
 describe('ScriptLoadingStrategy', () => {
   describe('#createElement', () => {
@@ -23,17 +26,31 @@ describe('ScriptLoadingStrategy', () => {
     it('should use given dom and cross-origin strategies', done => {
       const domStrategy = DOM_STRATEGY.PrependToHead();
       const crossOriginStrategy = CROSS_ORIGIN_STRATEGY.UseCredentials();
+      const contentSecurityStrategy = CONTENT_SECURITY_STRATEGY.Strict(nonce);
 
       domStrategy.insertElement = jest.fn((el: HTMLScriptElement) => {
         setTimeout(() => {
-          el.onload(new CustomEvent('success', { detail: el.crossOrigin }));
+          el.onload(
+            new CustomEvent('success', {
+              detail: {
+                crossOrigin: el.crossOrigin,
+                nonce: el.getAttribute('nonce'),
+              },
+            }),
+          );
         }, 0);
       }) as any;
 
-      const strategy = new ScriptLoadingStrategy(path, domStrategy, crossOriginStrategy);
+      const strategy = new ScriptLoadingStrategy(
+        path,
+        domStrategy,
+        crossOriginStrategy,
+        contentSecurityStrategy,
+      );
 
       strategy.createStream<CustomEvent>().subscribe(event => {
-        expect(event.detail).toBe('use-credentials');
+        expect(event.detail.crossOrigin).toBe('use-credentials');
+        expect(event.detail.nonce).toBe(nonce);
         done();
       });
     });
@@ -56,17 +73,31 @@ describe('StyleLoadingStrategy', () => {
     it('should use given dom and cross-origin strategies', done => {
       const domStrategy = DOM_STRATEGY.PrependToHead();
       const crossOriginStrategy = CROSS_ORIGIN_STRATEGY.UseCredentials();
+      const contentSecurityStrategy = CONTENT_SECURITY_STRATEGY.Strict(nonce);
 
       domStrategy.insertElement = jest.fn((el: HTMLLinkElement) => {
         setTimeout(() => {
-          el.onload(new CustomEvent('success', { detail: el.crossOrigin }));
+          el.onload(
+            new CustomEvent('success', {
+              detail: {
+                crossOrigin: el.crossOrigin,
+                nonce: el.getAttribute('nonce'),
+              },
+            }),
+          );
         }, 0);
       }) as any;
 
-      const strategy = new StyleLoadingStrategy(path, domStrategy, crossOriginStrategy);
+      const strategy = new StyleLoadingStrategy(
+        path,
+        domStrategy,
+        crossOriginStrategy,
+        contentSecurityStrategy,
+      );
 
       strategy.createStream<CustomEvent>().subscribe(event => {
-        expect(event.detail).toBe('use-credentials');
+        expect(event.detail.crossOrigin).toBe('use-credentials');
+        expect(event.detail.nonce).toBe(nonce);
         done();
       });
     });

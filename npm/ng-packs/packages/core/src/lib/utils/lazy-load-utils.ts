@@ -1,5 +1,7 @@
 import { Observable, Observer } from 'rxjs';
 import {
+  ContentSecurityStrategy,
+  CONTENT_SECURITY_STRATEGY,
   CrossOriginStrategy,
   CROSS_ORIGIN_STRATEGY,
   DomStrategy,
@@ -10,8 +12,10 @@ export function fromLazyLoad<T extends Event>(
   element: HTMLScriptElement | HTMLLinkElement,
   domStrategy: DomStrategy = DOM_STRATEGY.AppendToHead(),
   crossOriginStrategy: CrossOriginStrategy = CROSS_ORIGIN_STRATEGY.Anonymous(),
+  contentSecurityStrategy: ContentSecurityStrategy = CONTENT_SECURITY_STRATEGY.Loose(),
 ): Observable<T> {
   crossOriginStrategy.setCrossOrigin(element);
+  contentSecurityStrategy.applyCSP(element);
   domStrategy.insertElement(element);
 
   return Observable.create((observer: Observer<Event>) => {
