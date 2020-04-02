@@ -16,6 +16,7 @@ ABP是一个 **模块化的应用程序框架** 由十多个 **nuget packages** 
 * **Background Jobs**: 用于在使用默认后台作业管理器时保存后台作业.
 * **Blogging**: 用于创建精美的博客. ABP的[博客](https://blog.abp.io/) 就使用了此模块.
 * [**Docs**](Docs.md): 用于创建技术文档页面. ABP的[文档](https://abp.io/documents/) 就使用了此模块.
+* **Feature Management**: 用于保存和管理功能.
 * **Identity**: 基于Microsoft Identity管理角色,用户和他们的权限.
 * **Identity Server**: 集成了IdentityServer4.
 * **Permission Management**: 用于保存权限.
