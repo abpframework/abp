@@ -57,6 +57,7 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.CoverImage).IsRequired().HasColumnName(nameof(Post.CoverImage));
                 b.Property(x => x.Url).IsRequired().HasMaxLength(PostConsts.MaxUrlLength).HasColumnName(nameof(Post.Url));
                 b.Property(x => x.Content).IsRequired(false).HasMaxLength(PostConsts.MaxContentLength).HasColumnName(nameof(Post.Content));
+                b.Property(x => x.Description).IsRequired(false).HasMaxLength(PostConsts.MaxDescriptionLength).HasColumnName(nameof(Post.Description));
 
                 b.HasMany(p => p.Tags).WithOne().HasForeignKey(qt => qt.PostId);
 
