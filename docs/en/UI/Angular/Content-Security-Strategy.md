@@ -1,6 +1,6 @@
 # ContentSecurityStrategy
 
-`ContentSecurityStrategy` is an abstract class exposed by @abp/ng.core package. Its instances help you mark inline script or styles as safe in terms of [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy).
+`ContentSecurityStrategy` is an abstract class exposed by @abp/ng.core package. It helps you mark inline scripts or styles as safe in terms of [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy).
 
 
 
@@ -19,15 +19,18 @@ This method maps the aforementioned properties to the given `element`.
 
 
 
+
 ## LooseContentSecurityPolicy
 
 `LooseContentSecurityPolicy` is a class that extends `ContentSecurityStrategy`. It required `nonce` and marks given `<script>` or `<style>` tag with it.
 
 
 
+
 ## StrictContentSecurityPolicy
 
 `StrictContentSecurityPolicy` is a class that extends `ContentSecurityStrategy`. It does not mark inline scripts and styles as safe. You can consider it as a noop alternative.
+
 
 
 
