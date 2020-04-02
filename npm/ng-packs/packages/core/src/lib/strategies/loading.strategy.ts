@@ -67,19 +67,39 @@ export class StyleLoadingStrategy extends LoadingStrategy<HTMLLinkElement> {
 }
 
 export const LOADING_STRATEGY = {
-  AppendAnonymousScriptToBody(src: string) {
-    return new ScriptLoadingStrategy(src, DOM_STRATEGY.AppendToBody());
+  AppendAnonymousScriptToBody(src: string, integrity?: string) {
+    return new ScriptLoadingStrategy(
+      src,
+      DOM_STRATEGY.AppendToBody(),
+      CROSS_ORIGIN_STRATEGY.Anonymous(integrity),
+    );
   },
-  AppendAnonymousScriptToHead(src: string) {
-    return new ScriptLoadingStrategy(src);
+  AppendAnonymousScriptToHead(src: string, integrity?: string) {
+    return new ScriptLoadingStrategy(
+      src,
+      DOM_STRATEGY.AppendToHead(),
+      CROSS_ORIGIN_STRATEGY.Anonymous(integrity),
+    );
   },
-  AppendAnonymousStyleToHead(src: string) {
-    return new StyleLoadingStrategy(src);
+  AppendAnonymousStyleToHead(src: string, integrity?: string) {
+    return new StyleLoadingStrategy(
+      src,
+      DOM_STRATEGY.AppendToHead(),
+      CROSS_ORIGIN_STRATEGY.Anonymous(integrity),
+    );
   },
-  PrependAnonymousScriptToHead(src: string) {
-    return new ScriptLoadingStrategy(src, DOM_STRATEGY.PrependToHead());
+  PrependAnonymousScriptToHead(src: string, integrity?: string) {
+    return new ScriptLoadingStrategy(
+      src,
+      DOM_STRATEGY.PrependToHead(),
+      CROSS_ORIGIN_STRATEGY.Anonymous(integrity),
+    );
   },
-  PrependAnonymousStyleToHead(src: string) {
-    return new StyleLoadingStrategy(src, DOM_STRATEGY.PrependToHead());
+  PrependAnonymousStyleToHead(src: string, integrity?: string) {
+    return new StyleLoadingStrategy(
+      src,
+      DOM_STRATEGY.PrependToHead(),
+      CROSS_ORIGIN_STRATEGY.Anonymous(integrity),
+    );
   },
 };
