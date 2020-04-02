@@ -8,7 +8,7 @@
 
         public const int MaxContentLength = 1024 * 1024; //1MB
 
-        public const int MaxDescriptionLength = 200;
+        public const int MaxDescriptionLength = 1000;
 
     }
 }
