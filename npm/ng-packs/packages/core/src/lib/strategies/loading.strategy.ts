@@ -15,10 +15,10 @@ export abstract class LoadingStrategy<T extends HTMLScriptElement | HTMLLinkElem
 
   abstract createElement(): T;
 
-  createStream<T extends Event>(): Observable<T> {
+  createStream<E extends Event>(): Observable<E> {
     return of(null).pipe(
       switchMap(() =>
-        fromLazyLoad<T>(
+        fromLazyLoad<E>(
           this.createElement(),
           this.domStrategy,
           this.crossOriginStrategy,

@@ -29,7 +29,7 @@ describe('DomStrategy', () => {
 });
 
 describe('DOM_STRATEGY', () => {
-  let div = document.createElement('DIV');
+  const div = document.createElement('DIV');
 
   beforeEach(() => {
     document.body.innerHTML = '';

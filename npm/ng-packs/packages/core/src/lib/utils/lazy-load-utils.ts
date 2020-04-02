@@ -16,8 +16,8 @@ export function fromLazyLoad<T extends Event>(
   contentSecurityStrategy.applyCSP(element);
   domStrategy.insertElement(element);
 
-  return Observable.create((observer: Observer<Event>) => {
-    element.onload = event => {
+  return new Observable((observer: Observer<T>) => {
+    element.onload = (event: T) => {
       clearCallbacks(element);
       observer.next(event);
       observer.complete();
@@ -39,6 +39,7 @@ export function fromLazyLoad<T extends Event>(
 }
 
 function createErrorHandler(observer: Observer<Event>, element: HTMLElement) {
+  /* tslint:disable-next-line:only-arrow-functions */
   return function(event: Event | string) {
     clearCallbacks(element);
     element.parentNode.removeChild(element);
