@@ -4,7 +4,7 @@ export abstract class ContentSecurityStrategy {
   abstract applyCSP(element: HTMLScriptElement | HTMLStyleElement): void;
 }
 
-export class StrictContentSecurityStrategy extends ContentSecurityStrategy {
+export class LooseContentSecurityStrategy extends ContentSecurityStrategy {
   constructor(nonce: string) {
     super(nonce);
   }
@@ -14,7 +14,7 @@ export class StrictContentSecurityStrategy extends ContentSecurityStrategy {
   }
 }
 
-export class LooseContentSecurityStrategy extends ContentSecurityStrategy {
+export class StrictContentSecurityStrategy extends ContentSecurityStrategy {
   constructor() {
     super();
   }
@@ -23,10 +23,10 @@ export class LooseContentSecurityStrategy extends ContentSecurityStrategy {
 }
 
 export const CONTENT_SECURITY_STRATEGY = {
-  Loose() {
-    return new LooseContentSecurityStrategy();
+  Loose(nonce: string) {
+    return new LooseContentSecurityStrategy(nonce);
   },
-  Strict(nonce: string) {
-    return new StrictContentSecurityStrategy(nonce);
+  Strict() {
+    return new StrictContentSecurityStrategy();
   },
 };
