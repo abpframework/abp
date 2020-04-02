@@ -5,6 +5,7 @@
     var $submitButton = $container.find("button[type=submit]");
     var $form = $container.find("form#new-post-form");
     var editorDataKey = "tuiEditor";
+    var maxTitleLength = 60;
 
     var setCoverImage = function (file) {
         $('#Post_CoverImage').val(file.fileUrl);
@@ -104,10 +105,10 @@
 
         var title = $('#Post_Title').val();
 
-        if (title.length > 60) {
-            $("#WarningMessage-title").css("display", "block");
+        if (title.length > maxTitleLength) {
+            $("#title-length-warning").css("display", "block");
         } else {
-            $("#WarningMessage-title").css("display", "none");
+            $("#title-length-warning").css("display", "none");
         }
 
         title = title.replace(' ', '-');

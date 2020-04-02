@@ -26,9 +26,11 @@
                     <div class="card-body"> 
                         <form method="post" id="edit-post-form">
                             <abp-input asp-for="Post.Title" auto-focus="true" />
-                            <div class="alert alert-warning" id="WarningMessage-title" role="alert">
-                                Keep your title size under 60 characters to be SEO friendly!
-                            </div>
+                            
+                            <abp-alert dismissible="true" style="display: none" id="title-length-warning">
+                                @L["TitleLengthWarning"]
+                            </abp-alert>
+
                             <abp-input asp-for="Post.Url" />
                             <abp-input asp-for="Post.CoverImage" />
                             
