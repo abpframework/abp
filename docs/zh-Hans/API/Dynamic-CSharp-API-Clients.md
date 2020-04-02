@@ -69,7 +69,7 @@ public class MyClientAppModule : AbpModule
 }
 ````
 
-查看下面的"RemoteServiceOptions"章节获取更多详细配置.
+查看下面的"AbpRemoteServiceOptions"章节获取更多详细配置.
 
 ## 使用
 
@@ -104,7 +104,7 @@ public class MyService : ITransientDependency
 
 ## 配置
 
-### RemoteServiceOptions
+### AbpRemoteServiceOptions
 
 默认情况下`AbpRemoteServiceOptions`从`appsettings.json`获取.或者,你可以使用`Configure`方法来设置或重写它.如:
 

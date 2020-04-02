@@ -106,10 +106,10 @@ public static class IdentityDbContextModelBuilderExtensions
 ````
 
 * **推荐** 为每个Enttiy映射调用 `b.ConfigureByConvention();`(如上所示).
-* **推荐** 通过继承 `ModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 例如:
+* **推荐** 通过继承 `AbpModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 例如:
 
 ````C#
-public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+public class IdentityModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
 {
     public IdentityModelBuilderConfigurationOptions()
         : base(AbpIdentityConsts.DefaultDbTablePrefix, AbpIdentityConsts.DefaultDbSchema)
