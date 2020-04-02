@@ -1,9 +1,65 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { of, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { LazyLoadService } from '../services/lazy-load.service';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { ScriptLoadingStrategy } from '../strategies';
 
 describe('LazyLoadService', () => {
+  describe('#load', () => {
+    const service = new LazyLoadService();
+    const strategy = new ScriptLoadingStrategy('http://example.com/');
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should emit an error event if not loaded', done => {
+      const counter = jest.fn();
+      jest.spyOn(strategy, 'createStream').mockReturnValueOnce(
+        of(null).pipe(
+          switchMap(() => {
+            counter();
+            return throwError('THIS WILL NOT BE THE FINAL ERROR');
+          }),
+        ),
+      );
+
+      service.load(strategy, 5, 0).subscribe({
+        error: errorEvent => {
+          expect(errorEvent).toEqual(new CustomEvent('error'));
+          expect(counter).toHaveBeenCalledTimes(6);
+          expect(service.loaded.has(strategy.path)).toBe(false);
+          done();
+        },
+      });
+    });
+
+    it('should emit a load event if loaded', done => {
+      const loadEvent = new CustomEvent('load');
+      jest.spyOn(strategy, 'createStream').mockReturnValue(of(loadEvent));
+
+      service.load(strategy).subscribe({
+        next: event => {
+          expect(event).toBe(loadEvent);
+          expect(service.loaded.has(strategy.path)).toBe(true);
+          done();
+        },
+      });
+    });
+
+    it('should emit a custom load event if loaded if resource is loaded before', done => {
+      const loadEvent = new CustomEvent('load');
+      service.loaded.add(strategy.path);
+
+      service.load(strategy).subscribe(event => {
+        expect(event).toEqual(loadEvent);
+        done();
+      });
+    });
+  });
+});
+
+describe('LazyLoadService (Deprecated)', () => {
   let spectator: SpectatorService<LazyLoadService>;
   let service: LazyLoadService;
   const scriptElement = document.createElement('script');
@@ -25,15 +81,17 @@ describe('LazyLoadService', () => {
     spy.mockReturnValue(scriptElement);
 
     service.load('https://abp.io', 'script', 'test').subscribe(res => {
-      expect(document.querySelector('script[src="https://abp.io"][type="text/javascript"]').textContent).toMatch(
-        'test',
-      );
+      expect(
+        document.querySelector('script[src="https://abp.io"][type="text/javascript"]').textContent,
+      ).toMatch('test');
     });
 
     scriptElement.onload(null);
 
     service.load('https://abp.io', 'script', 'test').subscribe(res => {
-      expect(document.querySelectorAll('script[src="https://abp.io"][type="text/javascript"]')).toHaveLength(1);
+      expect(
+        document.querySelectorAll('script[src="https://abp.io"][type="text/javascript"]'),
+      ).toHaveLength(1);
       done();
     });
   });
@@ -59,7 +117,9 @@ describe('LazyLoadService', () => {
 
     test('should load an link element', done => {
       service.load('https://abp.io', 'style').subscribe(res => {
-        expect(document.querySelector('link[type="text/css"][rel="stylesheet"][href="https://abp.io"]')).toBeTruthy();
+        expect(
+          document.querySelector('link[type="text/css"][rel="stylesheet"][href="https://abp.io"]'),
+        ).toBeTruthy();
         done();
       });
 
