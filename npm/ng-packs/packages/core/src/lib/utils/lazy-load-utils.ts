@@ -2,11 +2,9 @@ import { Observable, Observer } from 'rxjs';
 import {
   ContentSecurityStrategy,
   CONTENT_SECURITY_STRATEGY,
-  CrossOriginStrategy,
-  CROSS_ORIGIN_STRATEGY,
-  DomStrategy,
-  DOM_STRATEGY,
-} from '../strategies';
+} from '../strategies/content-security.strategy';
+import { CrossOriginStrategy, CROSS_ORIGIN_STRATEGY } from '../strategies/cross-origin.strategy';
+import { DomStrategy, DOM_STRATEGY } from '../strategies/dom.strategy';
 
 export function fromLazyLoad<T extends Event>(
   element: HTMLScriptElement | HTMLLinkElement,
