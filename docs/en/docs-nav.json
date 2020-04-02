@@ -344,10 +344,15 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
-            },
+            }
+          ]
+        },
+        {
+          "text": "Common",
+          "items": [
             {
               "text": "Linked List (Doubly)",
-              "path": "UI/Angular/Linked-List.md"
+              "path": "UI/Common/Utils/Linked-List.md"
             }
           ]
         }

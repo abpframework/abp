@@ -8,7 +8,7 @@ namespace AutoMapper
     {
         public static IMappingExpression<TSource, TDestination> MapExtraProperties<TSource, TDestination>(
             this IMappingExpression<TSource, TDestination> mappingExpression,
-            MappingPropertyDefinitionChecks definitionChecks = MappingPropertyDefinitionChecks.Both)
+            MappingPropertyDefinitionChecks? definitionChecks = null)
             where TDestination : IHasExtraProperties
             where TSource : IHasExtraProperties
         {

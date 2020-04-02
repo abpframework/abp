@@ -3,7 +3,8 @@
   "dest": "../../dist",
   "deleteDestPath": true,
   "lib": {
-    "entryFile": "src/public-api.ts"
+    "entryFile": "src/public-api.ts",
+    "umdId": "abp.utils.common"
   },
   "whitelistedNonPeerDependencies": ["just-compare"]
 }

@@ -16,7 +16,8 @@ namespace Volo.Abp.ObjectExtending
                 .SetProperty("Name", "John")
                 .SetProperty("Age", 42)
                 .SetProperty("ChildCount", 2)
-                .SetProperty("Sex", "male");
+                .SetProperty("Sex", "male")
+                .SetProperty("NoPairCheck", "test-value");
 
             _personDto = new ExtensibleTestPersonDto()
                 .SetProperty("ExistingDtoProperty", "existing-value");
@@ -31,6 +32,7 @@ namespace Volo.Abp.ObjectExtending
             _personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
             _personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
             _personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+            _personDto.GetProperty<string>("NoPairCheck").ShouldBe("test-value"); //CheckPairDefinitionOnMapping = false
             _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
         }
 

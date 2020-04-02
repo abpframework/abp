@@ -3,15 +3,29 @@ import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { GetAppConfiguration } from '../actions/config.actions';
 import differentLocales from '../constants/different-locales';
+import { ApplicationConfiguration } from '../models/application-configuration';
+import { tap } from 'rxjs/operators';
+import { ConfigState } from '../states/config.state';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 export function getInitialData(injector: Injector) {
   const fn = () => {
     const store: Store = injector.get(Store);
 
-    return store.dispatch(new GetAppConfiguration()).toPromise();
+    return store
+      .dispatch(new GetAppConfiguration())
+      .pipe(tap(res => checkAccessToken(store, injector)))
+      .toPromise();
   };
 
   return fn;
+}
+
+function checkAccessToken(store: Store, injector: Injector) {
+  const oAuth = injector.get(OAuthService);
+  if (oAuth.hasValidAccessToken() && !store.selectSnapshot(ConfigState.getDeep('currentUser.id'))) {
+    oAuth.logOut();
+  }
 }
 
 export function localeInitializer(injector: Injector) {
