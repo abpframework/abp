@@ -29,8 +29,8 @@ export class LazyLoadService {
   ): Observable<Event | void> {
     if (strategyOrUrl instanceof LoadingStrategy) {
       const strategy = strategyOrUrl;
-      const retryTimes = (retryTimesOrType as number) || 2;
-      const retryDelay = (retryDelayOrContent as number) || 1000;
+      const retryTimes = typeof retryTimesOrType === 'number' ? retryTimesOrType : 2;
+      const retryDelay = typeof retryDelayOrContent === 'number' ? retryDelayOrContent : 1000;
 
       if (this.loaded.has(strategy.path)) return of(new CustomEvent('load'));
 
