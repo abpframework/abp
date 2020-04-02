@@ -1,9 +1,4 @@
-import {
-  ContentSecurityStrategy,
-  CONTENT_SECURITY_STRATEGY,
-  DomStrategy,
-  DOM_STRATEGY,
-} from '../strategies';
+import { DomStrategy, DOM_STRATEGY } from '../strategies';
 import { CrossOriginStrategy, CROSS_ORIGIN_STRATEGY } from '../strategies/cross-origin.strategy';
 import { uuid } from '../utils';
 import { fromLazyLoad } from '../utils/lazy-load-utils';
@@ -57,24 +52,6 @@ describe('Lazy Load Utils', () => {
       expect(element.getAttribute('integrity')).toBe(integrity);
     });
 
-    it('should not set nonce by default', () => {
-      const element = document.createElement('link');
-
-      fromLazyLoad(element);
-
-      expect(element.getAttribute('nonce')).toBeNull();
-    });
-
-    it('should allow setting a content security strategy', () => {
-      const element = document.createElement('link');
-
-      const nonce = uuid();
-
-      fromLazyLoad(element, undefined, undefined, CONTENT_SECURITY_STRATEGY.Strict(nonce));
-
-      expect(element.getAttribute('nonce')).toBe(nonce);
-    });
-
     it('should emit error event on fail and clear callbacks', done => {
       const error = new CustomEvent('error');
       const parentNode = { removeChild: jest.fn() };
@@ -94,9 +71,6 @@ describe('Lazy Load Utils', () => {
         {
           setCrossOrigin(_: HTMLLinkElement) {},
         } as CrossOriginStrategy,
-        {
-          applyCSP(_: HTMLLinkElement) {},
-        } as ContentSecurityStrategy,
       ).subscribe({
         error: value => {
           expect(value).toBe(error);
@@ -126,9 +100,6 @@ describe('Lazy Load Utils', () => {
         {
           setCrossOrigin(_: HTMLLinkElement) {},
         } as CrossOriginStrategy,
-        {
-          applyCSP(_: HTMLLinkElement) {},
-        } as ContentSecurityStrategy,
       ).subscribe({
         next: value => {
           expect(value).toBe(success);

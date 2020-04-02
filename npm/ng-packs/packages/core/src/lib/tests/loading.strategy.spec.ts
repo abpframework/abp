@@ -1,15 +1,12 @@
 import {
-  CONTENT_SECURITY_STRATEGY,
   CROSS_ORIGIN_STRATEGY,
   DOM_STRATEGY,
   LOADING_STRATEGY,
   ScriptLoadingStrategy,
   StyleLoadingStrategy,
 } from '../strategies';
-import { uuid } from '../utils';
 
 const path = 'http://example.com/';
-const nonce = uuid();
 
 describe('ScriptLoadingStrategy', () => {
   describe('#createElement', () => {
@@ -26,7 +23,6 @@ describe('ScriptLoadingStrategy', () => {
     it('should use given dom and cross-origin strategies', done => {
       const domStrategy = DOM_STRATEGY.PrependToHead();
       const crossOriginStrategy = CROSS_ORIGIN_STRATEGY.UseCredentials();
-      const contentSecurityStrategy = CONTENT_SECURITY_STRATEGY.Strict(nonce);
 
       domStrategy.insertElement = jest.fn((el: HTMLScriptElement) => {
         setTimeout(() => {
@@ -34,23 +30,16 @@ describe('ScriptLoadingStrategy', () => {
             new CustomEvent('success', {
               detail: {
                 crossOrigin: el.crossOrigin,
-                nonce: el.getAttribute('nonce'),
               },
             }),
           );
         }, 0);
       }) as any;
 
-      const strategy = new ScriptLoadingStrategy(
-        path,
-        domStrategy,
-        crossOriginStrategy,
-        contentSecurityStrategy,
-      );
+      const strategy = new ScriptLoadingStrategy(path, domStrategy, crossOriginStrategy);
 
       strategy.createStream<CustomEvent>().subscribe(event => {
         expect(event.detail.crossOrigin).toBe('use-credentials');
-        expect(event.detail.nonce).toBe(nonce);
         done();
       });
     });
@@ -73,7 +62,6 @@ describe('StyleLoadingStrategy', () => {
     it('should use given dom and cross-origin strategies', done => {
       const domStrategy = DOM_STRATEGY.PrependToHead();
       const crossOriginStrategy = CROSS_ORIGIN_STRATEGY.UseCredentials();
-      const contentSecurityStrategy = CONTENT_SECURITY_STRATEGY.Strict(nonce);
 
       domStrategy.insertElement = jest.fn((el: HTMLLinkElement) => {
         setTimeout(() => {
@@ -81,23 +69,16 @@ describe('StyleLoadingStrategy', () => {
             new CustomEvent('success', {
               detail: {
                 crossOrigin: el.crossOrigin,
-                nonce: el.getAttribute('nonce'),
               },
             }),
           );
         }, 0);
       }) as any;
 
-      const strategy = new StyleLoadingStrategy(
-        path,
-        domStrategy,
-        crossOriginStrategy,
-        contentSecurityStrategy,
-      );
+      const strategy = new StyleLoadingStrategy(path, domStrategy, crossOriginStrategy);
 
       strategy.createStream<CustomEvent>().subscribe(event => {
         expect(event.detail.crossOrigin).toBe('use-credentials');
-        expect(event.detail.nonce).toBe(nonce);
         done();
       });
     });
