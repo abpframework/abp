@@ -1,7 +1,7 @@
 import {
   CONTENT_SECURITY_STRATEGY,
   LooseContentSecurityStrategy,
-  StrictContentSecurityStrategy,
+  NoContentSecurityStrategy,
 } from '../strategies';
 import { uuid } from '../utils';
 
@@ -21,7 +21,7 @@ describe('LooseContentSecurityStrategy', () => {
 describe('StrictContentSecurityStrategy', () => {
   describe('#applyCSP', () => {
     it('should not set nonce attribute', () => {
-      const strategy = new StrictContentSecurityStrategy();
+      const strategy = new NoContentSecurityStrategy();
       const element = document.createElement('link');
       strategy.applyCSP(element);
 
@@ -32,9 +32,9 @@ describe('StrictContentSecurityStrategy', () => {
 
 describe('CONTENT_SECURITY_STRATEGY', () => {
   test.each`
-    name        | Strategy                         | nonce
-    ${'Loose'}  | ${LooseContentSecurityStrategy}  | ${uuid()}
-    ${'Strict'} | ${StrictContentSecurityStrategy} | ${undefined}
+    name        | Strategy                        | nonce
+    ${'Loose'}  | ${LooseContentSecurityStrategy} | ${uuid()}
+    ${'Strict'} | ${NoContentSecurityStrategy}    | ${undefined}
   `('should successfully map $name to $Strategy.name', ({ name, Strategy, nonce }) => {
     expect(CONTENT_SECURITY_STRATEGY[name](nonce)).toEqual(new Strategy(nonce));
   });
