@@ -3,7 +3,9 @@ using Microsoft.Extensions.Options;
 using Novell.Directory.Ldap;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Ldap.Exceptions;
 using Volo.Abp.Ldap.Modeling;
 
@@ -13,6 +15,7 @@ namespace Volo.Abp.Ldap
     {
         private readonly string _searchBase;
         private readonly AbpLdapOptions _ldapOptions;
+        private readonly IHybridServiceScopeFactory _hybridServiceScopeFactory;
 
         private readonly string[] _attributes =
         {
@@ -21,8 +24,9 @@ namespace Volo.Abp.Ldap
             "sAMAccountName", "userPrincipalName", "telephoneNumber", "mail"
         };
 
-        public LdapManager(IOptions<AbpLdapOptions> ldapSettingsOptions)
+        public LdapManager(IOptions<AbpLdapOptions> ldapSettingsOptions, IHybridServiceScopeFactory hybridServiceScopeFactory)
         {
+            _hybridServiceScopeFactory = hybridServiceScopeFactory;
             _ldapOptions = ldapSettingsOptions.Value;
             _searchBase = _ldapOptions.SearchBase;
         }
@@ -231,8 +235,15 @@ namespace Volo.Abp.Ldap
                     return true;
                 }
             }
-            catch (Exception )
+            catch (Exception ex)
             {
+                using (var scope = _hybridServiceScopeFactory.CreateScope())
+                {
+                    scope.ServiceProvider
+                        .GetRequiredService<IExceptionNotifier>()
+                        .NotifyAsync(ex);
+                }
+
                 return false;
             }
         }

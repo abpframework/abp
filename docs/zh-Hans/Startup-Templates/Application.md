@@ -2,10 +2,15 @@
 
 ## 介绍
 
-应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design.md)(DDD)分层的应用程序结构. 在这篇文档中详细介绍了解决方案结构和项目,如果你想快速入门,请遵循以下指南:
+应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design.md)(DDD)分层的应用程序结构.
 
-* 参阅[ASP.NET Core MVC 模板入门](../Getting-Started-AspNetCore-MVC-Template.md)创建此模板的新解决方案并运行它.
+在这篇文档中详细介绍了**解决方案结构**和项目,如果你想快速入门,请遵循以下指南:
+
+* 参阅[ASP.NET Core MVC 模板入门](../Getting-Started-With-Startup-Templates.md)创建此模板的新解决方案并运行它.
 * 参阅[ASP.NET Core MVC 教程](../Tutorials/AspNetCore-Mvc/Part-I.md)学习使用此模板开发应用程序.
+
+* [入门文档](../Getting-Started-AspNetCore-MVC-Template.md) 介绍了如何在几分钟内创建一个新的应用程序.
+* [应用程序开发教程](../Tutorials/AspNetCore-Mvc/Part-I.md) 学习使用此模板开发应用程序.
 
 ## 如何开始
 
@@ -120,6 +125,7 @@ ABP是一个模块化的框架,理想的设计是让每个模块都有自己的 
 * 它依赖 `.EntityFrameworkCore` 项目,因为它重用了应用程序的 `DbContext` 配置 .
 
 > 只有在你使用了EF Core做为数据库提供程序时,此项目才会可用.
+> 参阅[Entity Framework Core迁移指南](../Entity-Framework-Core-Migrations.md)了解这个项目的详细信息.
 
 #### .DbMigrator 项目
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
 
@@ -42,6 +43,8 @@ namespace Volo.Abp.Identity
 
             user.Name = input.Name;
             user.Surname = input.Surname;
+
+            input.MapExtraPropertiesTo(user);
 
             (await UserManager.UpdateAsync(user)).CheckErrors();
 

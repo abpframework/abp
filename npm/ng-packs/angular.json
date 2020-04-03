@@ -32,7 +32,6 @@
         }
       }
     },
-
     "theme-shared": {
       "projectType": "library",
       "root": "packages/theme-shared",
@@ -436,7 +435,7 @@
             "index": "apps/dev-app/src/index.html",
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
-            "tsConfig": "apps/dev-app/tsconfig.app.json",
+            "tsConfig": "apps/dev-app/tsconfig.prod.json",
             "aot": false,
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "extractCss": true,
@@ -485,6 +484,15 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "internal": {
+              "tsConfig": "apps/dev-app/tsconfig.dev.json",
+              "fileReplacements": [
+                {
+                  "replace": "apps/dev-app/src/environments/environment.ts",
+                  "with": "apps/dev-app/src/environments/environment.internal.ts"
+                }
+              ]
             }
           }
         },
@@ -496,6 +504,9 @@
           "configurations": {
             "production": {
               "browserTarget": "dev-app:build:production"
+            },
+            "internal": {
+              "browserTarget": "dev-app:build:internal"
             }
           }
         },
@@ -508,12 +519,16 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/dev-app/tsconfig.app.json", "apps/dev-app/tsconfig.spec.json"],
+            "tsConfig": [
+              "apps/dev-app/tsconfig.dev.json",
+              "apps/dev-app/tsconfig.prod.json",
+              "apps/dev-app/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
       }
     }
   },
-  "defaultProject": "core"
+  "defaultProject": "dev-app"
 }

@@ -22,6 +22,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -155,6 +156,58 @@ namespace Volo.Abp.EntityFrameworkCore
 
             ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
             ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
+
+            ChangeTracker.Tracked += ChangeTracker_Tracked;
+        }
+
+        protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
+        {
+            FillExtraPropertiesForTrackedEntities(e);
+        }
+
+        protected virtual void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
+        {
+            var entityType = e.Entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(e.Entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+
+            if (!e.FromQuery)
+            {
+                return;
+            }
+
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            foreach (var property in objectExtension.GetProperties())
+            {
+                if (!property.IsMappedToFieldForEfCore())
+                {
+                    continue;
+                }
+                /* Checking "currentValue != null" has a good advantage:
+                 * Assume that you we already using a named extra property,
+                 * then decided to create a field (entity extension) for it.
+                 * In this way, it prevents to delete old value in the JSON and
+                 * updates the field on the next save!
+                 */
+
+                var currentValue = e.Entry.CurrentValues[property.Name];
+                if (currentValue != null)
+                {
+                    entity.SetProperty(property.Name, currentValue);
+                }
+            }
         }
 
         protected virtual EntityChangeReport ApplyAbpConcepts()
@@ -184,7 +237,44 @@ namespace Volo.Abp.EntityFrameworkCore
                     break;
             }
 
+            HandleExtraPropertiesOnSave(entry);
+
             AddDomainEvents(changeReport, entry.Entity);
+        }
+
+        protected virtual void HandleExtraPropertiesOnSave(EntityEntry entry)
+        {
+            if (entry.State.IsIn(EntityState.Deleted, EntityState.Unchanged))
+            {
+                return;
+            }
+
+            var entityType = entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            foreach (var property in objectExtension.GetProperties())
+            {
+                if (!entity.HasProperty(property.Name))
+                {
+                    continue;
+                }
+
+                entry.Property(property.Name).CurrentValue = entity.GetProperty(property.Name);
+            }
         }
 
         protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)

@@ -288,3 +288,7 @@ Note that **you do not have to call this method at application initiation**, bec
 #### Environment Properties
 
 Please refer to `Config.Environment` type for all the properties you can pass to `dispatchSetEnvironment` as parameter. It can be found in the [config.ts file](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/config.ts#L13).
+
+## What's Next?
+
+* [Component Replacement](./Component-Replacement.md)

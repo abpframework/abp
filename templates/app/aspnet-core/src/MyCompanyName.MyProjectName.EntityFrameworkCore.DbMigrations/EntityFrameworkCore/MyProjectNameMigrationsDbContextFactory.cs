@@ -11,6 +11,8 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
     {
         public MyProjectNameMigrationsDbContext CreateDbContext(string[] args)
         {
+            MyProjectNameEfCoreEntityExtensionMappings.Configure();
+
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()

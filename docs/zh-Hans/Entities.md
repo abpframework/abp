@@ -365,14 +365,17 @@ public static class IdentityUserExtensions
 
 存储字典的方式取决于你使用的数据库提供程序.
 
-* 对于 [Entity Framework Core](Entity-Framework-Core.md), 它以 `JSON` 字符串形式存储在 `ExtraProperties` 字段中. 序列化到 `JSON` 和反序列化到 `JSON` 由ABP使用EF Core的[值转换](https://docs.microsoft.com/zh-cn/ef/core/modeling/value-conversions)系统自动完成.
+* 对于 [Entity Framework Core](Entity-Framework-Core.md),这是两种类型的配置;
+    * 默认它以 `JSON` 字符串形式存储在 `ExtraProperties` 字段中. 序列化到 `JSON` 和反序列化到 `JSON` 由ABP使用EF Core的[值转换](https://docs.microsoft.com/zh-cn/ef/core/modeling/value-conversions)系统自动完成.
+    * 如果需要,你可以使用 `ObjectExtensionManager` 为所需的额外属性定义一个单独的数据库字段. 那些使用 `ObjectExtensionManager` 配置的属性继续使用单个 `JSON` 字段. 当你使用预构建的[应用模块](Modules/Index.md)并且想要[扩展模块的实体](Customizing-Application-Modules-Extending-Entities.md). 参阅[EF Core迁移文档](Entity-Framework-Core.md)了解如何使用 `ObjectExtensionManager`.
 * 对于 [MongoDB](MongoDB.md), 它以 **常规字段** 存储, 因为 MongoDB 天生支持这种 [额外](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) 系统.
 
 ### 讨论额外的属性
 
-如果你使用**可重复使用的模块**,其中定义了一个实体,你想使用简单的方式get/set此实体相关的一些数据,那么额外的属性系统是非常有用的. 通常 **不需要** 为自己的实体使用这个系统,是因为它有以下缺点:
+如果你使用**可重复使用的模块**,其中定义了一个实体,你想使用简单的方式get/set此实体相关的一些数据,那么额外的属性系统是非常有用的. 
+你通常 **不需要** 为自己的实体使用这个系统,是因为它有以下缺点:
 
-* 它不是**完全类型安全的**.
+* 它不是**完全类型安全的**,因为它使用字符串用作属性名称.
 * 这些属性**不容易[自动映射](Object-To-Object-Mapping.md)到其他对象**.
 * 它**不会**为EF Core在数据库表中**创建字段**,因此在数据库中针对这个字段创建索引或搜索/排序并不容易.
 

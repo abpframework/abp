@@ -121,6 +121,21 @@ namespace Volo.Abp
             return value;
         }
 
+        [ContractAnnotation("type:null => halt")]
+        public static Type AssignableTo<TBaseType>(
+            Type type,
+            [InvokerParameterName] [NotNull] string parameterName)
+        {
+            NotNull(type, parameterName);
+
+            if (!type.IsAssignableTo<TBaseType>())
+            {
+                throw new ArgumentException($"{parameterName} (type of {type.AssemblyQualifiedName}) should be assignable to the {typeof(TBaseType).GetFullNameWithAssemblyName()}!");
+            }
+
+            return type;
+        }
+
         public static string Length(
             [CanBeNull] string value,
             [InvokerParameterName] [NotNull] string parameterName, 

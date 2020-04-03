@@ -111,4 +111,3 @@ class DemoComponent {
   trackByTenantAccountId = trackByDeep<Item>('tenant', 'account', 'id');
 }
 ```
-
