@@ -298,55 +298,56 @@ public class BookService
 
 > 要点: 你必须在使用`DbContext`的项目里引用`Volo.Abp.EntityFrameworkCore`包. 这会破坏封装,但在这种情况下,这就是你需要的.
 
-## Extra Properties & Entity Extension Manager
+## Extra Properties & Object Extension Manager
 
 额外属性系统允许你为实现了 `IHasExtraProperties` 的实体set/get动态属性. 当你想将自定义属性添加到[应用程序模块](Modules/Index.md)中定义的实体时,它特别有用.
 
-默认,实体的所有额外属性存储在数据库的一个 `JSON` 对象中. 实体扩展系统允许你存储额外属性在数据库的单独字段中.
+默认,实体的所有额外属性存储在数据库的一个 `JSON` 对象中.
 
-有关额外属性和实体扩展系统的更多信息,请参阅下列文档：
+实体扩展系统允许你存储额外属性在数据库的单独字段中. 有关额外属性和实体扩展系统的更多信息,请参阅下列文档：
 
 * [自定义应用模块: 扩展实体](Customizing-Application-Modules-Extending-Entities.md)
 * [实体](Entities.md)
 
-本节只解释了 `EntityExtensionManager` 及其用法.
+本节只解释了 EF Core相关的 `ObjectExtensionManager` 及其用法.
 
-### AddProperty 方法
+### ObjectExtensionManager.Instance
 
-`EntityExtensionManager` 的 `AddProperty` 方法允许你实体定义附加的属性.
+`ObjectExtensionManager` 实现单例模式，因此你需要使用静态的 `ObjectExtensionManager.Instance` 来执行所有操作。
+
+### MapEfCoreProperty
+
+`MapEfCoreProperty` 是一种快捷扩展方法,用于定义实体的扩展属性并映射到数据库.
 
 **示例**: 添加 `Title` 属性 (数据库字段)到 `IdentityRole` 实体:
 
 ````csharp
-EntityExtensionManager.AddProperty<IdentityRole, string>(
-    "Title",
-    b => { b.HasMaxLength(128); }
-);
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityRole, string>(
+        "Title",
+        builder => { builder.HasMaxLength(64); }
+    );
 ````
 
-如果相关模块已实现此功能(通过使用下面说明的 `ConfigureExtensions`)则将新属性添加到模型中. 然后你需要运行标准的 `Add-Migration` 和 `Update-Database` 命令更新数据库以添加新字段.
+如果相关模块已实现此功能(通过使用下面说明的 `ConfigureEfCoreEntity`)则将新属性添加到模型中. 然后你需要运行标准的 `Add-Migration` 和 `Update-Database` 命令更新数据库以添加新字段.
 
->`AddProperty` 方法必须在使用相关的 `DbContext` 之前调用,它是一个静态方法. 最好的方法是尽早的应用程序中使用它. 应用程序启动模板含有 `YourProjectNameEntityExtensions` 类,可以在放心的在此类中使用此方法.
+>`MapEfCoreProperty` 方法必须在使用相关的 `DbContext` 之前调用,它是一个静态方法. 最好的方法是尽早的应用程序中使用它. 应用程序启动模板含有 `YourProjectNameEntityExtensions` 类,可以在放心的在此类中使用此方法.
 
-### ConfigureExtensions
+### ConfigureEfCoreEntity
 
-如果你正在开发一个可重用使用的模块,并允许应用程序开发人员将属性添加到你的实体,你可以在实体映射使用 `ConfigureExtensions` 扩展方法:
+如果你正在开发一个可重用使用的模块,并允许应用程序开发人员将属性添加到你的实体,你可以在实体映射使用 `ConfigureEfCoreEntity` 扩展方法,但是在配置实体映射时可以使用快捷的扩展方法 `ConfigureObjectExtensions`:
 
 ````csharp
 builder.Entity<YourEntity>(b =>
 {
-    b.ConfigureExtensions();
+    b.ConfigureObjectExtensions();
     //...
 });
 ````
 
-如果你调用 `ConfigureByConvention()` 扩展方法(在此示例中 `b.ConfigureByConvention`),ABP框架内部会调用 `ConfigureExtensions` 方法. 使用 `ConfigureByConvention` 方法是**最佳实践**,因为它还按照约定配置基本属性的数据库映射.
+如果你调用 `ConfigureByConvention()` 扩展方法(在此示例中 `b.ConfigureByConvention`),ABP框架内部会调用 `ConfigureObjectExtensions` 方法. 使用 `ConfigureByConvention` 方法是**最佳实践**,因为它还按照约定配置基本属性的数据库映射.
 
 参阅上面提到的 "*ConfigureByConvention 方法*" 了解更多信息.
-
-### GetPropertyNames
-
-`EntityExtensionManager.GetPropertyNames` 静态方法可以用作为此实体定义的扩展属性的名称. 应用程序代码通常不需要,但是ABP框架在内部使用它.
 
 ## 高级主题
 

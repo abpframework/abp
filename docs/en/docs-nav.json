@@ -5,7 +5,7 @@
       "items": [
         {
           "text": "From Startup Templates",
-          "path": "Getting-Started-With-Startup-Templates.md"
+          "path": "Getting-Started-With-Startup-Templates.md",
           "items": [
             {
               "text": "Application with MVC (Razor Pages) UI",
@@ -342,12 +342,21 @@
               "path": "UI/Angular/Custom-Setting-Page.md"
             },
             {
-              "text": "TrackByService",
-              "path": "UI/Angular/Track-By-Service.md"
+              "text": "Lazy Loading Scripts & Styles",
+              "path": "UI/Angular/Lazy-Load-Service.md"
             },
             {
+              "text": "TrackByService",
+              "path": "UI/Angular/Track-By-Service.md"
+            }
+          ]
+        },
+        {
+          "text": "Common",
+          "items": [
+            {
               "text": "Linked List (Doubly)",
-              "path": "UI/Angular/Linked-List.md"
+              "path": "UI/Common/Utils/Linked-List.md"
             }
           ]
         }

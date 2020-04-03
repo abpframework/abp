@@ -56,7 +56,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             IJsonSerializer jsonSerializer,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICorrelationIdProvider correlationIdProvider, 
+            ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
             ICurrentTenant currentTenant)
         {
@@ -110,7 +110,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             //TODO: Think on that
             if (TypeHelper.IsPrimitiveExtended(typeof(T), true))
             {
-                return (T)Convert.ChangeType(responseAsString, typeof(T));
+                if (typeof(DateTime).IsAssignableFrom(typeof(T)))
+                {
+                    return (T)(object)DateTime.Parse(responseAsString.Trim('\"'), CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    return (T)Convert.ChangeType(responseAsString, typeof(T));
+                }
             }
 
             return JsonSerializer.Deserialize<T>(responseAsString);
@@ -151,8 +158,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
 
             return await response.Content.ReadAsStringAsync();
-        } 
-        
+        }
+
         private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
         {
             var apiVersion = FindBestApiVersion(action);

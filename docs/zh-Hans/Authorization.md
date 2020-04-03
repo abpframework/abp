@@ -340,10 +340,10 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 * `PermissionGrantResult.Prohibited` 禁止授权用户,任何一个授权值提供程序返回了 `Prohibited`, 那么其他的提供程序返回的值都不再重要.
 * `PermissionGrantResult.Undefined` 代表当前无法确定是否授予或禁止权限, 返回`UnDefined`由其他权限值提供程序检查权限.
 
-定义`Provider`后将其添加到 `PermissionOptions`,如下所示:
+定义`Provider`后将其添加到 `AbpPermissionOptions`,如下所示:
 
 ````csharp
-Configure<PermissionOptions>(options =>
+Configure<AbpPermissionOptions>(options =>
 {
     options.ValueProviders.Add<SystemAdminPermissionValueProvider>();
 });

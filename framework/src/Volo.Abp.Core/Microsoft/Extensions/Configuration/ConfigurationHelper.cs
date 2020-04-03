@@ -6,7 +6,8 @@ namespace Microsoft.Extensions.Configuration
     public static class ConfigurationHelper
     {
         public static IConfigurationRoot BuildConfiguration(
-            AbpConfigurationBuilderOptions options = null)
+            AbpConfigurationBuilderOptions options = null, 
+            Action<IConfigurationBuilder> builderAction = null)
         {
             options = options ?? new AbpConfigurationBuilderOptions();
 
@@ -43,6 +44,8 @@ namespace Microsoft.Extensions.Configuration
                 builder = builder.AddCommandLine(options.CommandLineArgs);
             }
 
+            builderAction?.Invoke(builder);
+            
             return builder.Build();
         }
     }

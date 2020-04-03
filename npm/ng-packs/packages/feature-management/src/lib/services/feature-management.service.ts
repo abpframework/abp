@@ -8,6 +8,8 @@ import { FeatureManagement } from '../models';
   providedIn: 'root',
 })
 export class FeatureManagementService {
+  apiName = 'FeatureManagement';
+
   constructor(private rest: RestService, private store: Store) {}
 
   getFeatures(params: FeatureManagement.Provider): Observable<FeatureManagement.Features> {
@@ -16,7 +18,9 @@ export class FeatureManagementService {
       url: '/api/abp/features',
       params,
     };
-    return this.rest.request<FeatureManagement.Provider, FeatureManagement.Features>(request);
+    return this.rest.request<FeatureManagement.Provider, FeatureManagement.Features>(request, {
+      apiName: this.apiName,
+    });
   }
 
   updateFeatures({
@@ -30,6 +34,6 @@ export class FeatureManagementService {
       body: { features },
       params: { providerKey, providerName },
     };
-    return this.rest.request<FeatureManagement.Features, null>(request);
+    return this.rest.request<FeatureManagement.Features, null>(request, { apiName: this.apiName });
   }
 }

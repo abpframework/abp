@@ -46,7 +46,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                 b.ConfigureAbpUser();
 
                 /* Configure mappings for your additional properties
-                 * Also see the MyProjectNameEntityExtensions class
+                 * Also see the MyProjectNameEfCoreEntityExtensionMappings class
                  */
             });
 

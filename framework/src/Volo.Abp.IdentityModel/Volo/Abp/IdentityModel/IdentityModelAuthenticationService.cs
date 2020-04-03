@@ -70,9 +70,17 @@ namespace Volo.Abp.IdentityModel
             }
 
             var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
+           
             if (tokenResponse.IsError)
             {
-                throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
+                if (tokenResponse.ErrorDescription != null)
+                {
+                    throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
+                }
+
+                var rawError = tokenResponse.Raw;
+                var withoutInnerException = rawError.Split(new string[] { "<eof/>" }, StringSplitOptions.RemoveEmptyEntries);
+                throw new AbpException(withoutInnerException[0]);
             }
 
             return tokenResponse.AccessToken;

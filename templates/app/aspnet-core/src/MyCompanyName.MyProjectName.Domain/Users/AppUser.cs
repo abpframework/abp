@@ -46,9 +46,9 @@ namespace MyCompanyName.MyProjectName.Users
          *
          * If you add a property and using the EF Core, remember these;
          *
-         * 1. update MyProjectNameDbContext.OnModelCreating
+         * 1. Update MyProjectNameDbContext.OnModelCreating
          * to configure the mapping for your new property
-         * 2. Update MyProjectNameEntityExtensions to extend the IdentityUser entity
+         * 2. Update MyProjectNameEfCoreEntityExtensionMappings to extend the IdentityUser entity
          * and add your new property to the migration.
          * 3. Use the Add-Migration to add a new database migration.
          * 4. Run the .DbMigrator project (or use the Update-Database command) to apply

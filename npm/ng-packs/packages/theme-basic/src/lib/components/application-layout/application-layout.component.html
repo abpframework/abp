@@ -195,8 +195,19 @@
 </ng-template>
 
 <ng-template #currentUser>
-  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item">
-    <div ngbDropdown class="dropdown" #currentUserDropdown="ngbDropdown" display="static">
+  <li class="nav-item">
+    <ng-template #loginBtn>
+      <a role="button" class="nav-link" routerLink="/account/login">{{
+        'AbpAccount::Login' | abpLocalization
+      }}</a>
+    </ng-template>
+    <div
+      *ngIf="(currentUser$ | async)?.isAuthenticated; else loginBtn"
+      ngbDropdown
+      class="dropdown"
+      #currentUserDropdown="ngbDropdown"
+      display="static"
+    >
       <a
         ngbDropdownToggle
         class="nav-link"

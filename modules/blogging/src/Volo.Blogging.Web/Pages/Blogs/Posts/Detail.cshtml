@@ -9,7 +9,8 @@
 @inject IAuthorizationService Authorization
 @model DetailModel
 @{
-    ViewBag.PageTitle = Model.Post.Title;
+    ViewBag.Title = Model.Post.Title;
+    ViewBag.Description = Model.Post.Description;
     var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
 }
 @section scripts {
