@@ -1,6 +1,6 @@
 # LoadingStrategy
 
-`LoadingStrategy` is an abstract class exposed by @abp/ng.core package. Its instances help you mark inline script or styles as safe in terms of [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy).
+`LoadingStrategy` is an abstract class exposed by @abp/ng.core package. There are two loading strategies extending it: `ScriptLoadingStrategy` and `StyleLoadingStrategy`. Implementing the same methods and properties, both of these strategies help you define how your lazy loading will work.
 
 
 
@@ -10,9 +10,11 @@
 
 ### constructor(public path: string, protected domStrategy?: DomStrategy, protected crossOriginStrategy?: CrossOriginStrategy)
 
-`path` is set to `<script>` elements as `src` and `<link>` elements as `href` attribute.
-`domStrategy` is the `DomStrategy` that will be used when inserting the created element. (_default: AppendToHead_)
-`crossOriginStrategy` is the `CrossOriginStrategy` that will be used on the created element before inserting it. (_default: Anonymous_)
+- `path` is set to `<script>` elements as `src` and `<link>` elements as `href` attribute.
+- `domStrategy` is the `DomStrategy` that will be used when inserting the created element. (_default: AppendToHead_)
+- `crossOriginStrategy` is the `CrossOriginStrategy` that will be used on the created element before inserting it. (_default: Anonymous_)
+
+Please refer to [DomStrategy](./Dom-Strategy.md) and [CrossOriginStrategy](./Cross-Origin-Strategy.md) documentation for their usage.
 
 
 ### createElement(): HTMLScriptElement | HTMLLinkElement
@@ -28,13 +30,13 @@ This method creates and returns an observable stream that emits on success and t
 
 ## ScriptLoadingStrategy
 
-`ScriptLoadingStrategy` is a class that extends `LoadingStrategy`. It lets you lazy load a script.
+`ScriptLoadingStrategy` is a class that extends `LoadingStrategy`. It lets you **lazy load a script**.
 
 
 
 ## StyleLoadingStrategy
 
-`StyleLoadingStrategy` is a class that extends `LoadingStrategy`. It lets you lazy load a style.
+`StyleLoadingStrategy` is a class that extends `LoadingStrategy`. It lets you **lazy load a style**.
 
 
 
