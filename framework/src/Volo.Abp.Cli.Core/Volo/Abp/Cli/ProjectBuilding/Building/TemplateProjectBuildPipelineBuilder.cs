@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
@@ -18,7 +19,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
             pipeline.Steps.Add(new SolutionRenameStep());
 
-            if (context.Template.Name == AppProTemplate.TemplateName)
+            if (context.Template.Name == AppProTemplate.TemplateName || 
+                context.Template.Name == ModuleProTemplate.TemplateName)
             {
                 pipeline.Steps.Add(new LicenseCodeReplaceStep());
             }
