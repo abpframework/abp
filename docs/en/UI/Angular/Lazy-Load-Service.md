@@ -89,7 +89,7 @@ Please refer to [LoadingStrategy](./Loading-Strategy.md) to see all available lo
 
 ### Advanced Usage
 
-You have quite a bit of freedom to define how your lazy load will be implemented. Here is an example:
+You have quite a bit of **freedom to define how your lazy load will work**. Here is an example:
 
 ```js
 const domStrategy = DOM_STRATEGY.PrependToHead();
@@ -108,6 +108,69 @@ this.lazyLoad.load(loadingStrategy, 1, 2000);
 ```
 
 This code will create a `<link>` element with given url and integrity hash, insert it to to top of the `<head>` element, and retry once after 2 seconds if first try fails.
+
+
+A common usecase is **loading multiple scripts and/or styles before using a feature**:
+
+```js
+import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
+import { frokJoin } from 'rxjs';
+
+@Component({
+  template: `
+    <some-component *ngIf="scriptsAndStylesLoaded$ | async"></some-component>
+  `
+})
+class DemoComponent {
+  private stylesLoaded$ = forkJoin(
+    this.lazyLoad.load(
+      LOADING_STRATEGY.PrependAnonymousStyleToHead('/assets/library-dark-theme.css'),
+      LOADING_STRATEGY.PrependAnonymousStyleToHead('/assets/library.css'),
+    ),
+  );
+
+  private scriptsLoaded$ = forkJoin(
+    this.lazyLoad.load(
+      LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/library.js'),
+      LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/other-library.css'),
+    ),
+  );
+
+  scriptsAndStylesLoaded$ = forkJoin(this.scriptsLoaded$, this.stylesLoaded$);
+
+  constructor(private lazyLoadService: LazyLoadService) {}
+}
+```
+
+RxJS `forkJoin` will load all scripts and styles in parallel and emit only when all of them are loaded. So, when `<some-component>` is placed, all required dependencies will be available.
+
+> Noticed we have prepended styles to the document head? This is sometimes necessary, because your application styles may be overriding some of the library styles. In such a case, you must be careful about the order of prepended styles. They will be placed one-by-one and, **when prepending, the last one placed will be on top**.
+
+
+Another frequent usecase is **loading dependent scripts in order**:
+
+```js
+import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
+import { concat } from 'rxjs';
+
+@Component({
+  template: `
+    <some-component *ngIf="scriptsLoaded$ | async"></some-component>
+  `
+})
+class DemoComponent {
+  scriptsLoaded$ = concat(
+    this.lazyLoad.load(
+      LOADING_STRATEGY.PrependAnonymousScriptToHead('/assets/library.js'),
+      LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/script-that-requires-library.js'),
+    ),
+  );
+
+  constructor(private lazyLoadService: LazyLoadService) {}
+}
+```
+
+In this example, the second file needs the first one to be loaded beforehand. RxJS `concat` function will let you load all scripts one-by-one in the given order and emit only when all of them are loaded.
 
 
 
