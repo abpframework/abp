@@ -132,6 +132,8 @@ The `CreateAsync` method above manually creates a `Book` entity from given `Crea
 
 However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](Object-To-Object-Mapping.md) infrastructure to make this even easier.
 
+Object to object mapping provides abstractions and it is implemented by the [AutoMapper](https://automapper.org/) library by default.
+
 Let's create another method to get a book. First, define the method in the `IBookAppService` interface:
 
 ````csharp
@@ -158,7 +160,7 @@ public class BookDto
 }
 ````
 
-we creating a [Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class. Example:
+AutoMapper requires to create a mapping [profile class](https://docs.automapper.org/en/stable/Configuration.html#profile-instances). Example:
 
 ````csharp
 public class MyProfile : Profile
@@ -187,21 +189,9 @@ public class MyModule : AbpModule
 }
 ````
 
-`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html). For more information, please refer to the [object to object mapping](Object-To-Object-Mapping.md) document.
+`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html).
 
 Then you can implement the `GetAsync` method as shown below:
-
-````csharp
-public async Task<BookDto> GetAsync(Guid id)
-{
-    var book = await _bookRepository.GetAsync(id);
-    return book.MapTo<BookDto>();
-}
-````
-
-`MapTo` extension method converts `Book` object to `BookDto` object by copying all properties with the same naming.
-
-An alternative to the `MapTo` is using the `IObjectMapper` service:
 
 ````csharp
 public async Task<BookDto> GetAsync(Guid id)
@@ -210,8 +200,6 @@ public async Task<BookDto> GetAsync(Guid id)
     return ObjectMapper.Map<Book, BookDto>(book);
 }
 ````
-
-While the second syntax is a bit harder to write, it better works if you write unit tests.
 
 See the [object to object mapping document](Object-To-Object-Mapping.md) for more.
 
