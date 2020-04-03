@@ -140,11 +140,12 @@ namespace Volo.Abp.AuditLogging.MongoDB
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
 
-        public virtual async Task<EntityChange> GetEntityChange(Guid auditLogId, Guid entityChangeId, bool includeDetails = true)
+        public virtual async Task<EntityChange> GetEntityChange(Guid entityChangeId)
         {
             return (await GetMongoQueryable()
-                    .Where(x => x.Id == auditLogId && x.EntityChanges.Any(y => y.Id == entityChangeId)).FirstAsync())
-                .EntityChanges.First(x => x.Id == entityChangeId);
+                            .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
+                            .FirstAsync()
+                    ).EntityChanges.First(x => x.Id == entityChangeId);
         }
 
         public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(

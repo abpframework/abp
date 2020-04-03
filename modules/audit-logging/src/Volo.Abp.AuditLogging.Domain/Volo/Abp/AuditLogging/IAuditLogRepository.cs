@@ -46,7 +46,7 @@ namespace Volo.Abp.AuditLogging
             DateTime startDate,
             DateTime endDate);
 
-        Task<EntityChange> GetEntityChange(Guid auditLogId, Guid entityChangeId, bool includeDetails = true);
+        Task<EntityChange> GetEntityChange(Guid entityChangeId);
 
         Task<List<EntityChange>> GetEntityChangeListAsync(
             string sorting = null,
