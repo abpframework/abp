@@ -26,10 +26,14 @@ namespace Volo.Abp.Quartz
             _scheduler = context.ServiceProvider.GetService<IScheduler>();
             _scheduler.JobFactory = context.ServiceProvider.GetService<IJobFactory>();
 
-            if (options.StartDelay != null && options.StartDelay.Ticks > 0)
+            if (options.StartDelay.Ticks > 0)
+            {
                 _scheduler.StartDelayed(options.StartDelay);
+            }
             else
+            {
                 _scheduler.Start();
+            }
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
