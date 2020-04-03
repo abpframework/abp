@@ -29,7 +29,7 @@ A value indicates if the element should be disabled for interaction. If this val
 
 ### dismissable
 
-A value indicates to dismiss the popovers on the user's next click of a different element than the toggle element. If this value is set to `true`, `hoverable` attribute will be ignored. Should be one of the following values:
+A value indicates to dismiss the popovers on the user's next click of a different element than the toggle element. Should be one of the following values:
 
 * `false` (default value)
 * `true`
