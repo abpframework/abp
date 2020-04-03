@@ -8,8 +8,8 @@
 
 ### constructor(public crossorigin: 'anonymous' | 'use-credentials', public integrity?: string)
 
-`crossorigin` is mapped to [the HTML attribute with the same name](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin).
-`integrity` is a hash for validating a remote resource. Its use is explained [here](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
+- `crossorigin` is mapped to [the HTML attribute with the same name](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin).
+- `integrity` is a hash for validating a remote resource. Its use is explained [here](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity).
 
 
 ### setCrossOrigin(element: HTMLElement): void

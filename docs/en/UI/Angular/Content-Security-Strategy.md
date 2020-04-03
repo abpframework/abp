@@ -10,7 +10,7 @@
 
 ### constructor(public nonce?: string)
 
-`nonce` enables whitelisting inline script or styles in order to avoid using `unsafe-inline` in [script-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script) and [style-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src#Unsafe_inline_styles) directives.
+- `nonce` enables whitelisting inline script or styles in order to avoid using `unsafe-inline` in [script-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script) and [style-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src#Unsafe_inline_styles) directives.
 
 
 ### applyCSP(element: HTMLScriptElement | HTMLStyleElement): void
@@ -22,7 +22,7 @@ This method maps the aforementioned properties to the given `element`.
 
 ## LooseContentSecurityPolicy
 
-`LooseContentSecurityPolicy` is a class that extends `ContentSecurityStrategy`. It required `nonce` and marks given `<script>` or `<style>` tag with it.
+`LooseContentSecurityPolicy` is a class that extends `ContentSecurityStrategy`. It requires `nonce` and marks given `<script>` or `<style>` tag with it.
 
 
 
