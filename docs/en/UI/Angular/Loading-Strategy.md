@@ -14,6 +14,8 @@
 `domStrategy` is the `DomStrategy` that will be used when inserting the created element. (_default: AppendToHead_)
 `crossOriginStrategy` is the `CrossOriginStrategy` that will be used on the created element before inserting it. (_default: Anonymous_)
 
+Please refer to [DomStrategy](./Dom-Strategy.md) and [CrossOriginStratey](./Cross-Origin-Strategy.md) documentation for their usage.
+
 
 ### createElement(): HTMLScriptElement | HTMLLinkElement
 
