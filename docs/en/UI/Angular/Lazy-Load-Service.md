@@ -1,6 +1,6 @@
 # How to Lazy Load Scripts and Styles
 
-You can use the `LazyLoadService` in @abp/ng.core package in order to lazy loading scripts and styles in an easy and explicit way.
+You can use the `LazyLoadService` in @abp/ng.core package in order to lazy load scripts and styles in an easy and explicit way.
 
 
 
@@ -25,7 +25,7 @@ class DemoComponent {
 
 ## Usage
 
-You can use the `load` method of `LazyLoadService` to create a `<script>` or `<style>` element in the DOM at the desired position and force the browser to download the target resource.
+You can use the `load` method of `LazyLoadService` to create a `<script>` or `<link>` element in the DOM at the desired position and force the browser to download the target resource.
 
 
 
@@ -124,9 +124,9 @@ All previously loaded paths are available via this property. It is a simple [Jav
 
 ### load(strategy: LoadingStrategy, retryTimes?: number, retryDelay?: number): Observable<Event>
 
-`strategy` parameter is the primary focus here and is explained above.
-`retryTimes` defines how many times the loading will be tried again before fail (_default: 2_).
-`retryDelay` defines how much delay there will be between retries (_default: 1000_).
+- `strategy` parameter is the primary focus here and is explained above.
+- `retryTimes` defines how many times the loading will be tried again before fail (_default: 2_).
+- `retryDelay` defines how much delay there will be between retries (_default: 1000_).
 
 
 
