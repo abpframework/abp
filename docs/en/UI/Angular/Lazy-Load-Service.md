@@ -125,6 +125,8 @@ class DemoComponent {
   private stylesLoaded$ = forkJoin(
     this.lazyLoad.load(
       LOADING_STRATEGY.PrependAnonymousStyleToHead('/assets/library-dark-theme.css'),
+    ),
+    this.lazyLoad.load(
       LOADING_STRATEGY.PrependAnonymousStyleToHead('/assets/library.css'),
     ),
   );
@@ -132,6 +134,8 @@ class DemoComponent {
   private scriptsLoaded$ = forkJoin(
     this.lazyLoad.load(
       LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/library.js'),
+    ),
+    this.lazyLoad.load(
       LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/other-library.css'),
     ),
   );
@@ -162,6 +166,8 @@ class DemoComponent {
   scriptsLoaded$ = concat(
     this.lazyLoad.load(
       LOADING_STRATEGY.PrependAnonymousScriptToHead('/assets/library.js'),
+    ),
+    this.lazyLoad.load(
       LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/script-that-requires-library.js'),
     ),
   );
