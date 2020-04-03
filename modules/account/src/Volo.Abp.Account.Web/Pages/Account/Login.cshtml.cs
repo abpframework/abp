@@ -63,20 +63,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             LoginInput = new LoginInputModel();
 
-            var schemes = await SchemeProvider.GetAllSchemesAsync();
-
-            var providers = schemes
-                .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ExternalProviderModel
-                {
-                    DisplayName = x.DisplayName,
-                    AuthenticationScheme = x.Name
-                })
-                .ToList();
+            ExternalProviders = await GetExternalProviders();
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-            ExternalProviders = providers.ToArray();
 
             if (IsExternalLoginOnly)
             {
@@ -93,6 +82,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
             await CheckLocalLoginAsync();
 
             ValidateModel();
+
+            ExternalProviders = await GetExternalProviders();
+            
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
 
@@ -138,6 +131,20 @@ namespace Volo.Abp.Account.Web.Pages.Account
             Debug.Assert(user != null, nameof(user) + " != null");
 
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
+        }
+
+        protected virtual async Task<List<ExternalProviderModel>> GetExternalProviders()
+        {
+            var schemes = await SchemeProvider.GetAllSchemesAsync();
+
+            return schemes
+                .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                .Select(x => new ExternalProviderModel
+                {
+                    DisplayName = x.DisplayName,
+                    AuthenticationScheme = x.Name
+                })
+                .ToList();
         }
 
         [UnitOfWork]
