@@ -1,22 +1,14 @@
 # How to Customize the Login Page for MVC / Razor Page Applications
 
-## Introduction
+When you create a new application using the [application startup template](../Startup-Templates/Application.md), source code of the login page will not be inside your solution, so you can not directly change it. The login page comes from the [Account Module](../Modules/Account) that is used a [NuGet package](https://www.nuget.org/packages/Volo.Abp.Account.Web) reference.
 
-ABP Framework uses Microsoft Identity underneath hence supports customization as much as Microsoft Identity does.
+This document explains how to customize the login page for your own application.
 
+## Create a Login PageModel
 
+Create a new class inheriting from the [LoginModel](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs) of the Account module.
 
-## Sample Code
-
-https://github.com/abpframework/abp-samples/blob/master/aspnet-core/BookStore-AzureAD/src/Acme.BookStore.Web/Pages/CustomLoginModel.cs
-
-
-
-## Creating Login PageModel
-
-To create your own custom Login PageModel, you need to inherit [Abp LoginModel](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs).
-
-````xml
+````csharp
 public class CustomLoginModel : LoginModel
 {
     public CustomLoginModel(
@@ -28,46 +20,23 @@ public class CustomLoginModel : LoginModel
 }
 ````
 
+> Naming convention is important here. If your class name doesn't end with `LoginModel`, you need to manually replace the `LoginModel` using the [dependency injection](../Dependency-Injection.md) system.
 
+Then you can override any method you need and add new methods and properties needed by the UI.
 
-## Overriding Methods
+## Overriding the Login Page UI
 
-Afterwards you can override a method like `CreateExternalUserAsync`:
+Create folder named **Account** under **Pages** directory and create a **Login.cshtml** under this folder. It will automatically override the `Login.cshtml` file defined in the Account Module thanks to the [Virtual File System](../Virtual-File-System.md).
 
-````xml
-protected override async Task<Volo.Abp.Identity.IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
-{
-    var emailAddress = info.Principal.FindFirstValue(AbpClaimTypes.Email);
-
-    var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
-
-    CheckIdentityErrors(await UserManager.CreateAsync(user));
-    CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
-    CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
-
-    return user;
-}
-````
-
-
-
-## Overriding Login Page UI
-
-Overriding `.cshtml` files can be easily done via [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System). Create folder named **Account** under **Pages** directory. Create **Login.cshtml** under Pages/Account directory. 
-
-Set the model with your newly created Login Page Model and customize to your preferences like:
+A good way to customize a page is to copy its source code. [Click here](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml) for the source code of the login page. At the time this document has been written, the source code was like below:
 
 ````xml
 @page
 @using Volo.Abp.Account.Settings
 @using Volo.Abp.Settings
-@model Acme.BookStore.Web.CustomLoginModel
+@model Acme.BookStore.Web.Pages.Account.CustomLoginModel
 @inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
-
-<div class="jumbotron">
-    <p>My Customized Login Page! </p>
-</div>
 @if (Model.EnableLocalLogin)
 {
     <div class="card mt-3 shadow-sm rounded">
@@ -133,4 +102,12 @@ Set the model with your newly created Login Page Model and customize to your pre
 }
 ````
 
-Further readings, [ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Customization-User-Interface#asp-net-core-mvc-razor-pages-user-interface-customization-guide).
+Just changed the `@model` to `Acme.BookStore.Web.Pages.Account.CustomLoginModel`  to use the customized `PageModel` class. You can change it however your application needs.
+
+## The Source Code
+
+You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/BookStore-AzureAD).
+
+## See Also
+
+* [ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide](../UI/AspNetCore/Customization-User-Interface).
