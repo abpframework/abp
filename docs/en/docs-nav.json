@@ -76,6 +76,10 @@
           ]
         },
         {
+          "text": "\"How to\" Guides",
+          "path": "How-To/Index.md"
+        },
+        {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
         }

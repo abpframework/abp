@@ -1,4 +1,4 @@
-# Using Azure Active Directory Authentication in ABP ASP.NET Core MVC application
+# How to Use the Azure Active Directory Authentication for MVC / Razor Page Applications
 
 ## Introduction
 

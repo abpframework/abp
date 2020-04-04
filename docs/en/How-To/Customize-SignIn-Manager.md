@@ -1,16 +1,12 @@
-# Custom SignIn Manager
+# Customize the SignInManager
 
 ## Introduction
 
 ABP Framework uses Microsoft Identity underneath hence supports customization as much as Microsoft Identity does.
 
-
-
 ## Sample Code
 
 https://github.com/abpframework/abp-samples/blob/master/aspnet-core/BookStore-AzureAD/src/Acme.BookStore.Web/CustomSignInManager.cs
-
-
 
 ## Creating CustomSignInManager
 
