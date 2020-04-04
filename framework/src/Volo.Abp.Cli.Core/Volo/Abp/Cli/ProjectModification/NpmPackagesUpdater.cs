@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -51,15 +52,35 @@ namespace Volo.Abp.Cli.ProjectModification
                 {
                     var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
 
+                    if (IsAngularProject(fileDirectory))
+                    {
+                        CreateNpmrcFile(Path.GetDirectoryName(file));
+                    }
+
                     RunYarn(fileDirectory);
 
-                    if (IsAngularProject(fileDirectory) == false)
+                    if (!IsAngularProject(fileDirectory))
                     {
                         Thread.Sleep(500);
                         RunGulp(fileDirectory);
                     }
                 }
             }
+        }
+
+        private void CreateNpmrcFile(string directoryName)
+        {
+            var fileName = Path.Combine(directoryName, ".npmrc");
+
+            if (File.Exists(fileName))
+            {
+                return;
+            }
+
+            using var fs = File.Create(fileName);
+
+            var content = new UTF8Encoding(true).GetBytes("@abp:registry:https://www.myget.org/F/abp-nightly/npm");
+            fs.Write(content, 0, content.Length);
         }
 
         private bool IsAngularProject(string fileDirectory)
