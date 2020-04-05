@@ -27,6 +27,21 @@ namespace Volo.Abp.ObjectExtending
 
         [NotNull]
         public virtual ObjectExtensionManager AddOrUpdate(
+            [NotNull] Type[] types,
+            [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
+        {
+            Check.NotNull(types, nameof(types));
+
+            foreach (var type in types)
+            {
+                AddOrUpdate(type, configureAction);
+            }
+
+            return this;
+        }
+
+        [NotNull]
+        public virtual ObjectExtensionManager AddOrUpdate(
             [NotNull] Type type,
             [CanBeNull] Action<ObjectExtensionInfo> configureAction = null)
         {
