@@ -1,84 +1,97 @@
-# Customize the SignInManager
+# How to Customize the SignIn Manager for ABP Applications
 
-## Introduction
+After creating a new application using the [application startup template](../Startup-Templates/Application.md), you may want extend or change the default behavior of the SignIn Manager for your authentication and registration flow needs. ABP [Account Module](../Modules/Account) uses default [Microsoft Identity SignIn Manager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs). To write your Custom SignIn Manager, you need to extend this class and register to the DI container.
 
-ABP Framework uses Microsoft Identity underneath hence supports customization as much as Microsoft Identity does.
+This document explains how to customize the SignIn Manager for your own application.
 
-## Sample Code
+## Create a CustomSignInManager
 
-https://github.com/abpframework/abp-samples/blob/master/aspnet-core/BookStore-AzureAD/src/Acme.BookStore.Web/CustomSignInManager.cs
+Create a new class inheriting the [SignInMager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) of Microsoft Identity package.
 
-## Creating CustomSignInManager
-
-To create your own custom SignIn Manager, you need to inherit `SignInManager<Volo.Abp.Identity.IdentityUser>`.
-
-````xml
-public class CustomSignInManager : SignInManager<Volo.Abp.Identity.IdentityUser>
+````csharp
+public class CustomSignInManager : Microsoft.AspNetCore.Identity.SignInManager<Volo.Abp.Identity.IdentityUser>
 {
-    public CustomSigninManager(
-    UserManager<Volo.Abp.Identity.IdentityUser> userManager,
-    IHttpContextAccessor contextAccessor,
-    IUserClaimsPrincipalFactory<Volo.Abp.Identity.IdentityUser> claimsFactory,
-    IOptions<IdentityOptions> optionsAccessor,
-    ILogger<SignInManager<Volo.Abp.Identity.IdentityUser>> logger,
-    IAuthenticationSchemeProvider schemes,
-    IUserConfirmation<Volo.Abp.Identity.IdentityUser> confirmation) 
-    : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
-    {
-    }
+        public CustomSignInManager(
+            Microsoft.AspNetCore.Identity.UserManager<Volo.Abp.Identity.IdentityUser> userManager,
+            Microsoft.AspNetCore.Http.IHttpContextAccessor contextAccessor,
+            Microsoft.AspNetCore.Identity.IUserClaimsPrincipalFactory<Volo.Abp.Identity.IdentityUser> claimsFactory,
+            Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Identity.IdentityOptions> optionsAccessor,
+            Microsoft.Extensions.Logging.ILogger<Microsoft.AspNetCore.Identity.SignInManager<Volo.Abp.Identity.IdentityUser>> logger,
+            Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider schemes,
+            Microsoft.AspNetCore.Identity.IUserConfirmation<Volo.Abp.Identity.IdentityUser> confirmation)
+            : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
+        {
+        }
 }
 ````
 
+> It is important to use **Volo.Abp.Identity.IdentityUser** type for SignInManager to inherit, not the AppUser of your application. 
 
+Afterwards you can override any of the SignIn Manager methods you need and add new methods and properties needed for your authentication or registration flow.
 
-## Overriding Methods
+## Overriding the GetExternalLoginInfoAsync Method
 
-Afterwards you can override a method like `GetExternalLoginInfoAsync`:
+In this case we'll be overriding the `GetExternalLoginInfoAsync` method which is invoked when a third party authentication is implemented.
 
-````xml
-public override async Task<ExternalLoginInfo> GetExternalLoginInfoAsync(string expectedXsrf = null)
+A good way to override a method is  copying its [source code](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Identity/Core/src/SignInManager.cs#L638-L674). In this case, we will be using a minorly modified version of the source code which explicitly shows the namespaces of the methods and properties to help better understanding of the concept.
+
+````csharp
+public override async Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetExternalLoginInfoAsync(string expectedXsrf = null)
 {
-    var auth = await Context.AuthenticateAsync(IdentityConstants.ExternalScheme);
+    var auth = await Context.AuthenticateAsync(Microsoft.AspNetCore.Identity.IdentityConstants.ExternalScheme);
     var items = auth?.Properties?.Items;
-    if (auth?.Principal == null || items == null || !items.ContainsKey("LoginProvider"))
+    if (auth?.Principal == null || items == null || !items.ContainsKey("LoginProviderKey"))
     {
-    	return null;
+        return null;
     }
 
     if (expectedXsrf != null)
     {
-        if (!items.ContainsKey("XsrfId"))
+        if (!items.ContainsKey("XsrfKey"))
         {
-        	return null;
+            return null;
         }
         var userId = items[XsrfKey] as string;
         if (userId != expectedXsrf)
         {
-        return null;
+            return null;
+        }
     }
+
     var providerKey = auth.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
     var provider = items[LoginProviderKey] as string;
     if (providerKey == null || provider == null)
     {
-    	return null;
+        return null;
     }
 
-    var providerDisplayName = (await GetExternalAuthenticationSchemesAsync()).FirstOrDefault(p => p.Name == provider)?.DisplayName ?? provider;
-    return new ExternalLoginInfo(auth.Principal, provider, providerKey, providerDisplayName)
+    var providerDisplayName = (await GetExternalAuthenticationSchemesAsync()).FirstOrDefault(p => p.Name == provider)?.DisplayName
+        ?? provider;
+    return new Microsoft.AspNetCore.Identity.ExternalLoginInfo(auth.Principal, provider, providerKey, providerDisplayName)
     {
-    	AuthenticationTokens = auth.Properties.GetTokens()
+        AuthenticationTokens = auth.Properties.GetTokens()
     };
 }
 ````
 
+To get your overridden method invoked and your customized SignIn Manager class to work, you need to register your class to the [Dependency Injection System](../Dependency-Injection.md).
 
+## Register to Dependency Injection
 
-## Registering to DI
+Registering `CustomSignInManager` should be done with adding **AddSignInManager** extension method of the [IdentityBuilderExtensions](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/IdentityBuilderExtensions.cs) of the [IdentityBuilder](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Extensions.Core/src/IdentityBuilder.cs).
 
-You need to register your Custom SignIn Manager to DI to activate it. Inside the `.Web` project, locate the `ApplicationNameWebModule` and add the following under `ConfigureServices` method:
+Inside your `.Web` project, locate the `ApplicationNameWebModule` and add the following under `ConfigureServices` method to replace the old SignInManager with your customized one.
 
-````xml
+````csharp
 context.Services
 .GetObject<IdentityBuilder>()
     .AddSignInManager<CustomSigninManager>();
 ````
+
+## The Source Code
+
+You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization).
+
+## See Also
+
+* [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC).
