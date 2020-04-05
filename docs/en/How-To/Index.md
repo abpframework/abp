@@ -6,4 +6,4 @@ This section contains "how to" guides for some specific questions frequently ask
 
 * [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC.md)
 * [How to Use the Azure Active Directory Authentication for MVC / Razor Page Applications](Azure-Active-Directory-Authentication-MVC.md)
-* [Customize the SignInManager](Customize-SignIn-Manager.md) (as an example of customization)
+* [How to Customize the SignIn Manager for ABP Applications](Customize-SignIn-Manager.md)
