@@ -4,7 +4,7 @@ import { THEME_SHARED_APPEND_CONTENT } from '../tokens/append-content.token';
 import { DomInsertionService } from '@abp/ng.core';
 import { chartJsLoaded$ } from '../utils';
 
-@Component({ selector: 'app-dummy', template: '' })
+@Component({ selector: 'abp-dummy', template: '' })
 class DummyComponent {}
 
 describe('AppendContentToken', () => {
