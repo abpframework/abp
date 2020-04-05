@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Acme.BookStore.DbMigrationsForSecondDb.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -47,6 +48,15 @@ namespace Acme.BookStore.EntityFrameworkCore
                 .Options;
 
             using (var context = new BookStoreMigrationsDbContext(options))
+            {
+                context.GetService<IRelationalDatabaseCreator>().CreateTables();
+            }
+
+            var secondOptions = new DbContextOptionsBuilder<BookStoreSecondMigrationsDbContext>()
+                .UseSqlite(connection)
+                .Options;
+            
+            using (var context = new BookStoreSecondMigrationsDbContext(secondOptions))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
             }

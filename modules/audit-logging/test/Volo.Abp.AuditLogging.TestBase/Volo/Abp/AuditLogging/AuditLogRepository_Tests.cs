@@ -538,7 +538,7 @@ namespace Volo.Abp.AuditLogging
 
             var entityChanges = await AuditLogRepository.GetEntityChangeListAsync();
             var entityChange =
-                await AuditLogRepository.GetEntityChange(entityChanges.First().AuditLogId, entityChanges.First().Id);
+                await AuditLogRepository.GetEntityChange(entityChanges.First().Id);
 
             entityChange.ChangeTime.ShouldBe(entityChanges.First().ChangeTime);
         }

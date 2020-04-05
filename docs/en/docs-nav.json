@@ -76,6 +76,10 @@
           ]
         },
         {
+          "text": "\"How to\" Guides",
+          "path": "How-To/Index.md"
+        },
+        {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
         }
@@ -340,6 +344,10 @@
             {
               "text": "Custom Setting Page",
               "path": "UI/Angular/Custom-Setting-Page.md"
+            },
+            {
+              "text": "Lazy Loading Scripts & Styles",
+              "path": "UI/Angular/Lazy-Load-Service.md"
             },
             {
               "text": "TrackByService",

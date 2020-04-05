@@ -141,10 +141,9 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return GetQueryable().IncludeDetails();
         }
 
-        public Task<EntityChange> GetEntityChange(Guid auditLogId, Guid entityChangeId, bool includeDetails = true)
+        public Task<EntityChange> GetEntityChange(Guid entityChangeId)
         {
-            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails(includeDetails)
-                .Where(x => x.Id == entityChangeId && x.AuditLogId == auditLogId).FirstAsync();
+            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().Where(x => x.Id == entityChangeId).FirstAsync();
         }
 
         public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(

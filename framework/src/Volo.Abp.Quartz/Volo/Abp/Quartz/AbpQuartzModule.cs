@@ -25,21 +25,21 @@ namespace Volo.Abp.Quartz
             
             _scheduler = context.ServiceProvider.GetService<IScheduler>();
             _scheduler.JobFactory = context.ServiceProvider.GetService<IJobFactory>();
-
+            
             if (options.StartDelay.Ticks > 0)
             {
-                _scheduler.StartDelayed(options.StartDelay);
+                AsyncHelper.RunSync(() => _scheduler.StartDelayed(options.StartDelay));
             }
             else
             {
-                _scheduler.Start();
+                AsyncHelper.RunSync(() => _scheduler.Start());
             }
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             //TODO: ABP may provide two methods for application shutdown: OnPreApplicationShutdown & OnApplicationShutdown
-            _scheduler.Shutdown();
+            AsyncHelper.RunSync(() => _scheduler.Shutdown());
         }
     }
 }

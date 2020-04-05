@@ -11,6 +11,7 @@ namespace Acme.BookStore.EntityFrameworkCore
     {
         public BookStoreMigrationsDbContext CreateDbContext(string[] args)
         {
+
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<BookStoreMigrationsDbContext>()

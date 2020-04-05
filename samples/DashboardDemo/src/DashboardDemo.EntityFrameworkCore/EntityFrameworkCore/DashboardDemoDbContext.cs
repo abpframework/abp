@@ -3,6 +3,7 @@ using DashboardDemo.Users;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.Identity;
 using Volo.Abp.Users.EntityFrameworkCore;
 
 namespace DashboardDemo.EntityFrameworkCore
@@ -39,15 +40,16 @@ namespace DashboardDemo.EntityFrameworkCore
 
             builder.Entity<AppUser>(b =>
             {
-                b.ToTable("AbpUsers"); //Sharing the same table "AbpUsers" with the IdentityUser
+                b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); //Sharing the same table "AbpUsers" with the IdentityUser
 
                 b.ConfigureFullAudited();
                 b.ConfigureExtraProperties();
                 b.ConfigureConcurrencyStamp();
                 b.ConfigureAbpUser();
 
-                //Moved customization to a method so we can share it with the DashboardDemoMigrationsDbContext class
-                b.ConfigureCustomUserProperties();
+                /* Configure mappings for your additional properties
+                 * Also see the DashboardDemoEfCoreEntityExtensionMappings class
+                 */
             });
 
             /* Configure your own tables/entities inside the ConfigureDashboardDemo method */
