@@ -8,7 +8,8 @@ namespace AutoMapper
     {
         public static IMappingExpression<TSource, TDestination> MapExtraProperties<TSource, TDestination>(
             this IMappingExpression<TSource, TDestination> mappingExpression,
-            MappingPropertyDefinitionChecks? definitionChecks = null)
+            MappingPropertyDefinitionChecks? definitionChecks = null,
+            string[] ignoredProperties = null)
             where TDestination : IHasExtraProperties
             where TSource : IHasExtraProperties
         {
@@ -22,11 +23,12 @@ namespace AutoMapper
                                 ? new Dictionary<string, object>()
                                 : new Dictionary<string, object>(extraProps);
 
-                            HasExtraPropertiesObjectExtendingExtensions
+                            ExtensibleObjectMapper
                                 .MapExtraPropertiesTo<TSource, TDestination>(
                                     source.ExtraProperties,
                                     result,
-                                    definitionChecks
+                                    definitionChecks,
+                                    ignoredProperties
                                 );
 
                             return result;
