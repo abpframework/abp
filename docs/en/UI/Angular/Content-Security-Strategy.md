@@ -27,9 +27,9 @@ This method maps the aforementioned properties to the given `element`.
 
 
 
-## StrictContentSecurityPolicy
+## NoContentSecurityPolicy
 
-`StrictContentSecurityPolicy` is a class that extends `ContentSecurityStrategy`. It does not mark inline scripts and styles as safe. You can consider it as a noop alternative.
+`NoContentSecurityPolicy` is a class that extends `ContentSecurityStrategy`. It does not mark inline scripts and styles as safe. You can consider it as a noop alternative.
 
 
 
@@ -44,7 +44,7 @@ Predefined content security strategies are accessible via `CONTENT_SECURITY_STRA
 `nonce` will be set.
 
 
-### Strict()
+### None()
 
 Nothing will be done.
 
@@ -53,4 +53,4 @@ Nothing will be done.
 
 ## What's Next?
 
-TODO: Place new InsertionStrategy link here.
+TODO: Place new ContentStrategy link here.
