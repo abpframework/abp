@@ -6,7 +6,7 @@ import { generateHash } from '../utils';
 export class DomInsertionService {
   readonly inserted = new Set();
 
-  insertElement(contentStrategy: ContentStrategy) {
+  insertContent(contentStrategy: ContentStrategy) {
     const hash = generateHash(contentStrategy.content);
 
     if (this.inserted.has(hash)) return;

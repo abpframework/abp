@@ -8,7 +8,7 @@ export const THEME_SHARED_APPEND_CONTENT = new InjectionToken<void>('THEME_SHARE
   factory: () => {
     const domInsertion: DomInsertionService = inject(DomInsertionService);
 
-    domInsertion.insertElement(CONTENT_STRATEGY.AppendStyleToHead(styles));
+    domInsertion.insertContent(CONTENT_STRATEGY.AppendStyleToHead(styles));
 
     import('chart.js').then(() => chartJsLoaded$.next(true));
   },

@@ -28,6 +28,6 @@ export class InitialService {
   }
 
   appendStyle() {
-    this.domInsertion.insertElement(CONTENT_STRATEGY.AppendStyleToHead(styles));
+    this.domInsertion.insertContent(CONTENT_STRATEGY.AppendStyleToHead(styles));
   }
 }

@@ -66,16 +66,6 @@ describe('ScriptContentStrategy', () => {
   });
 });
 
-// describe('CONTENT_SECURITY_STRATEGY', () => {
-//   test.each`
-//     name       | Strategy                        | nonce
-//     ${'Loose'} | ${LooseContentSecurityStrategy} | ${uuid()}
-//     ${'None'}  | ${NoContentSecurityStrategy}    | ${undefined}
-//   `('should successfully map $name to $Strategy.name', ({ name, Strategy, nonce }) => {
-//     expect(CONTENT_SECURITY_STRATEGY[name](nonce)).toEqual(new Strategy(nonce));
-//   });
-// });
-
 describe('CONTENT_STRATEGY', () => {
   test.each`
     name                    | Strategy                 | domStrategy

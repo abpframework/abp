@@ -9,7 +9,7 @@ describe('DomInsertionService', () => {
   beforeEach(() => (spectator = createService()));
 
   it('should be insert an element', () => {
-    spectator.service.insertElement(CONTENT_STRATEGY.AppendStyleToHead('.test {}'));
+    spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead('.test {}'));
     expect(spectator.service.inserted.has(1437348290)).toBe(true);
   });
 });
