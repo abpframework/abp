@@ -14,7 +14,7 @@ export class LooseContentSecurityStrategy extends ContentSecurityStrategy {
   }
 }
 
-export class StrictContentSecurityStrategy extends ContentSecurityStrategy {
+export class NoContentSecurityStrategy extends ContentSecurityStrategy {
   constructor() {
     super();
   }
@@ -26,7 +26,7 @@ export const CONTENT_SECURITY_STRATEGY = {
   Loose(nonce: string) {
     return new LooseContentSecurityStrategy(nonce);
   },
-  Strict() {
-    return new StrictContentSecurityStrategy();
+  None() {
+    return new NoContentSecurityStrategy();
   },
 };
