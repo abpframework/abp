@@ -1,6 +1,8 @@
 # How to Customize the SignIn Manager for ABP Applications
 
-After creating a new application using the [application startup template](../Startup-Templates/Application.md), you may want extend or change the default behavior of the SignIn Manager for your authentication and registration flow needs. ABP [Account Module](../Modules/Account) uses default [Microsoft Identity SignIn Manager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs). To write your Custom SignIn Manager, you need to extend this class and register to the DI container.
+After creating a new application using the [application startup template](../Startup-Templates/Application.md), you may want extend or change the default behavior of the SignIn Manager for your authentication and registration flow needs. ABP [Account Module](../Modules/Account) uses the [Identity Management Module](../Modules/Identity) for SignIn Manager and the [Identity Management Module](../Modules/Identity) uses default [Microsoft Identity SignIn Manager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) ([see here](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/identity/src/Volo.Abp.Identity.AspNetCore/Volo/Abp/Identity/AspNetCore/AbpIdentityAspNetCoreModule.cs#L17)). 
+
+To write your Custom SignIn Manager, you need to extend [Microsoft Identity SignIn Manager](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/SignInManager.cs) class and register it to the DI container.
 
 This document explains how to customize the SignIn Manager for your own application.
 
@@ -85,7 +87,7 @@ Inside your `.Web` project, locate the `ApplicationNameWebModule` and add the fo
 ````csharp
 context.Services
 .GetObject<IdentityBuilder>()
-    .AddSignInManager<CustomSigninManager>();
+    .AddSignInManager<CustomSignInManager>();
 ````
 
 ## The Source Code
@@ -95,3 +97,4 @@ You can find the source code of the completed example [here](https://github.com/
 ## See Also
 
 * [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC).
+* [Identity Management Module](../Modules/Identity).

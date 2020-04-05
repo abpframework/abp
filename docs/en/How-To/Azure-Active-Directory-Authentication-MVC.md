@@ -1,29 +1,30 @@
 # How to Use the Azure Active Directory Authentication for MVC / Razor Page Applications
 
-## Introduction
-
-This post demonstrates how to  integrate AzureAD to an ABP application that enables users to sign in using OAuth 2.0 with credentials from Azure Active Directory. 
+This guide demonstrates how to  integrate AzureAD to an ABP application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
 
 Adding Azure Active Directory is pretty straightforward in ABP framework. Couple of configurations needs to be done correctly. 
 
-There will be two samples of connections for better coverage;
+Two different **alternative approaches** for AzureAD integration will be demonstrated for better coverage.
 
-- **AddAzureAD** (Microsoft.AspNetCore.Authentication.AzureAD.UI package)
-- **AddOpenIdConnect** (Default Microsoft.AspNetCore.Authentication.OpenIdConnect package)
+1. **AddAzureAD**: This approach uses Microsoft [AzureAD UI nuget package](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.AzureAD.UI/) which is very popular when users search the web about how to integrate AzureAD to their web application.
 
+2. **AddOpenIdConnect**: This approach uses default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for not only AzureAD but for all OpenId connections.
 
+> There is **no difference** in functionality between these approaches. AddAzureAD is an abstracted way of OpenIdConnection ([source](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADAuthenticationBuilderExtensions.cs#L122)).
+>
+> However there are key differences in integration to ABP applications because of defaultly configurated signin schemes which will be explained below.
 
-## Sample Code
+## 1. AddAzureAD
 
-https://github.com/abpframework/abp-samples/tree/master/aspnet-core/BookStore-AzureAD
+This approach uses the most common way to integrate AzureAD by using the [Microsoft AzureAD UI nuget package](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.AzureAD.UI/). 
 
+If you choose this approach, you will need to install `Microsoft.AspNetCore.Authentication.AzureAD.UI` package to your **.Web** project. Also, since AddAzureAD extension uses [configuration binding](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-3.1#default-configuration), you need to update your appsettings.json file located in your **.Web** project.
 
+#### **Updating `appsettings.json`**
 
-## Setup
+You need to add a new section to your appsettings which will be binded to configuration when configuring the OpenIdConnectOptions:
 
-Update your `appsettings.json` in your **.Web** application and add the following section filled with your AzureAD application settings.
-
-````xml
+````json
   "AzureAd": {
     "Instance": "https://login.microsoftonline.com/",
     "TenantId": "<your-tenant-id",
@@ -33,17 +34,15 @@ Update your `appsettings.json` in your **.Web** application and add the followin
   }
 ````
 
+> Important configuration here is the CallbackPath. This value must be the same with one of your Azure AD-> app registrations-> Authentication -> RedirectUri.
 
+Then, you need to configure the OpenIdConnectOptions to complete the integration.
 
-## AddAzureAD
+#### Configuring OpenIdConnectOptions
 
-#### **Update your `appsettings.json`**
+In your **.Web** project, locate your **ApplicationWebModule** and modify `ConfigureAuthentication` method with the following:
 
-Install `Microsoft.AspNetCore.Authentication.AzureAD.UI` package to your **.Web** application.
-
-In your **.Web** application, add the following section filled with your AzureAD application settings. Modify `ConfigureAuthentication` method of your **BookStoreWebModule** with the following:
-
-````xml
+````csharp
 private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -75,13 +74,37 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 		}
 ````
 
+> **Don't forget to:**
+>
+> * Add `.AddAzureAD(options => configuration.Bind("AzureAd", options))` after `.AddAuthentication()`. This binds your AzureAD appsettings and easy to miss out.
+> * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()`. This will disable the default Microsoft claim type mapping.
+> * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier)`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information. You can also use `oid` claim instead of `sub` claim since AzureAD objectID is also unique.
+> * Add `options.SignInScheme = IdentityConstants.ExternalScheme` since [default signin scheme is `AzureADOpenID`](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADDefaults.cs#L16).
+> * Add `options.Scope.Add("email")` if you are using **v2.0** endpoint of AzureAD since v2.0 endpoint doesn't return the `email` claim as default. The [Account Module](../Modules/Account) uses `email` claim to [register external users](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L215). 
 
+You are done and integration is completed.
 
-## AddOpenIdConnect 
+## 2. Alternative Approach: AddOpenIdConnect 
 
-Modify `ConfigureAuthentication` method of your **BookStoreWebModule** with the following:
+If you don't want to use an extra nuget package in your application, you can use the straight default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for all OpenId connections including AzureAD external authentication.
 
-````xml
+You don't have to use appsettings configuration but it is a good practice to set AzureAD information in the appsettings. 
+
+To get the AzureAD information from appsettings, which will be used in OpenIdConnectOptions configuration, simple add a new section appsettings.json located in your **.Web** project:
+
+````json
+  "AzureAd": {
+    "Instance": "https://login.microsoftonline.com/",
+    "TenantId": "<your-tenant-id",
+    "ClientId": "<your-client-id>",
+    "Domain": "domain.onmicrosoft.com",
+    "CallbackPath": "/signin-azuread-oidc"	
+  }
+````
+
+Then, In your **.Web** project; you can modify the  `ConfigureAuthentication` method located in your **ApplicationWebModule** with the following:
+
+````csharp
 private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -96,18 +119,26 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
                 })
                 .AddOpenIdConnect("AzureOpenId", "AzureAD", options =>
                  {
-                     options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"];
+                     options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"] + "/v2.0/";
                      options.ClientId = configuration["AzureAd:ClientId"];
                      options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
                      options.CallbackPath = configuration["AzureAd:CallbackPath"];
                      options.RequireHttpsMetadata = false;
                      options.SaveTokens = true;
                      options.GetClaimsFromUserInfoEndpoint = true;
+                     
+                     options.Scope.Add("email");
                  });
         }
 ````
 
+> You can change the display name of your external authentication under your login screen by changing the second parameter of the .AddOpenIdConnect ("*AzureAD*" used in this sample).
 
+And thats it.
+
+## The Source Code
+
+You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization).
 
 # FAQ
 
@@ -117,13 +148,13 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
     1. You are trying to authenticate against wrong scheme. Check if you set **SignInScheme** to `IdentityConstants.ExternalScheme`:
 
-       ````xml
+       ````csharp
        options.SignInScheme = IdentityConstants.ExternalScheme;
        ````
 
     2. Your `ClaimTypes.NameIdentifier` is `null`. Check if you added claim mapping: 
 
-       ````xml
+       ````csharp
        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier);
        ````
@@ -133,7 +164,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 
   * If you set your **CallbackPath** in appsettings as:
 
-    ````xml
+    ````csharp
       "AzureAd": {
         ...
         "CallbackPath": "/signin-azuread-oidc"	
@@ -145,19 +176,19 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 * Help! I am getting ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** error!
 
 
-  * This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
+    * This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
 
-    ````xml
-    options.Scope.Add("email");
-    ````
+      ````csharp
+      options.Scope.Add("email");
+      ````
 
-    to your openid configuration.
+      to your openid configuration.
 
 * How can I **debug/watch** which claims I get before they get mapped?
 
   * You can add a simple event under openid configuration to debug before mapping like: 
 
-    ````xml
+    ````csharp
     options.Events.OnTokenValidated = (async context =>
     {
     	var claimsFromOidcProvider = context.Principal.Claims.ToList();
@@ -165,14 +196,8 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
     });
     ````
 
-* I want to debug further, how can I implement my custom **SignInManager**?
 
-  * You can check [Customizing SignInManager in Abp Framework](link here) post.
+## See Also
 
-* I want to add extra properties to user while they are being created. How can I do that?
-
-  * You can check [Customizing Login Page in Abp Framework]() post.
-
-* Why can't I see **External Register Page** after I sign in from external provider for the first time?
-
-  * ABP framework automatically registers your user with supported email claim from your external authentication provider. You can change this behavior by [Customizing Login Page in Abp Framework](will be link here).
+* [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC).
+* [How to Customize the SignIn Manager for ABP Applications](Customize-SignIn-Manager).
