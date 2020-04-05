@@ -3,7 +3,7 @@ import { ContentStrategy } from '../strategies/content.strategy';
 import { generateHash } from '../utils';
 
 @Injectable({ providedIn: 'root' })
-export class DOMInsertionService {
+export class DomInsertionService {
   readonly inserted = new Set();
 
   insertElement(contentStrategy: ContentStrategy) {
