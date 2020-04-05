@@ -23,5 +23,7 @@ describe('AppendContentToken', () => {
       expect(loaded).toBe(true);
       done();
     });
+
+    spectator.get(THEME_SHARED_APPEND_CONTENT);
   });
 });
