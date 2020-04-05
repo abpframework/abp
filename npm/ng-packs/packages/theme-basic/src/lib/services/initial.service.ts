@@ -1,4 +1,4 @@
-import { LazyLoadService, AddReplaceableComponent } from '@abp/ng.core';
+import { DomInsertionService, AddReplaceableComponent, CONTENT_STRATEGY } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import styles from '../constants/styles';
@@ -8,8 +8,9 @@ import { EmptyLayoutComponent } from '../components/empty-layout/empty-layout.co
 
 @Injectable({ providedIn: 'root' })
 export class InitialService {
-  constructor(private lazyLoadService: LazyLoadService, private store: Store) {
-    this.appendStyle().subscribe();
+  constructor(private domInsertion: DomInsertionService, private store: Store) {
+    this.appendStyle();
+
     this.store.dispatch([
       new AddReplaceableComponent({
         key: 'Theme.ApplicationLayoutComponent',
@@ -27,6 +28,6 @@ export class InitialService {
   }
 
   appendStyle() {
-    return this.lazyLoadService.load(null, 'style', styles, 'head', 'beforeend');
+    this.domInsertion.insertElement(CONTENT_STRATEGY.AppendStyleToHead(styles));
   }
 }
