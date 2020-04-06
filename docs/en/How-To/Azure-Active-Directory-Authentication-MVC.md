@@ -80,7 +80,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 > * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()`. This will disable the default Microsoft claim type mapping.
 > * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier)`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information. You can also use `oid` claim instead of `sub` claim since AzureAD objectID is also unique.
 > * Add `options.SignInScheme = IdentityConstants.ExternalScheme` since [default signin scheme is `AzureADOpenID`](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADDefaults.cs#L16).
-> * Add `options.Scope.Add("email")` if you are using **v2.0** endpoint of AzureAD since v2.0 endpoint doesn't return the `email` claim as default. The [Account Module](../Modules/Account) uses `email` claim to [register external users](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L215). 
+> * Add `options.Scope.Add("email")` if you are using **v2.0** endpoint of AzureAD since v2.0 endpoint doesn't return the `email` claim as default. The [Account Module](../Modules/Account.md) uses `email` claim to [register external users](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L215). 
 
 You are done and integration is completed.
 
@@ -199,5 +199,5 @@ You can find the source code of the completed example [here](https://github.com/
 
 ## See Also
 
-* [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC).
-* [How to Customize the SignIn Manager for ABP Applications](Customize-SignIn-Manager).
+* [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC.md).
+* [How to Customize the SignIn Manager for ABP Applications](Customize-SignIn-Manager.md).

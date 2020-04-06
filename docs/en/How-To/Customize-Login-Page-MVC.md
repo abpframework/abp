@@ -1,6 +1,6 @@
 # How to Customize the Login Page for MVC / Razor Page Applications
 
-When you create a new application using the [application startup template](../Startup-Templates/Application.md), source code of the login page will not be inside your solution, so you can not directly change it. The login page comes from the [Account Module](../Modules/Account) that is used a [NuGet package](https://www.nuget.org/packages/Volo.Abp.Account.Web) reference.
+When you create a new application using the [application startup template](../Startup-Templates/Application.md), source code of the login page will not be inside your solution, so you can not directly change it. The login page comes from the [Account Module.md](../Modules/Account) that is used a [NuGet package](https://www.nuget.org/packages/Volo.Abp.Account.Web) reference.
 
 This document explains how to customize the login page for your own application.
 
@@ -110,4 +110,4 @@ You can find the source code of the completed example [here](https://github.com/
 
 ## See Also
 
-* [ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide](../UI/AspNetCore/Customization-User-Interface).
+* [ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide](../UI/AspNetCore/Customization-User-Interface.md).
