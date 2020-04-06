@@ -117,7 +117,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 null
             );
 
-            await DeleteAppFolderAsync(targetModuleFolder);
+            await DeleteAppAndDemoFolderAsync(targetModuleFolder);
 
             if (module.MasterModuleInfos == null)
             {
@@ -130,12 +130,18 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private async Task DeleteAppFolderAsync(string targetModuleFolder)
+        private async Task DeleteAppAndDemoFolderAsync(string targetModuleFolder)
         {
             var appFolder = Path.Combine(targetModuleFolder, "app");
             if (Directory.Exists(appFolder))
             {
                 Directory.Delete(appFolder, true);
+            }
+
+            var demoFolder = Path.Combine(targetModuleFolder, "demo");
+            if (Directory.Exists(demoFolder))
+            {
+                Directory.Delete(demoFolder, true);
             }
         }
 
