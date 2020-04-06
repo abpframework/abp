@@ -82,7 +82,7 @@ To get your overridden method invoked and your customized SignIn Manager class t
 
 Registering `CustomSignInManager` should be done with adding **AddSignInManager** extension method of the [IdentityBuilderExtensions](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Core/src/IdentityBuilderExtensions.cs) of the [IdentityBuilder](https://github.com/dotnet/aspnetcore/blob/master/src/Identity/Extensions.Core/src/IdentityBuilder.cs).
 
-Inside your `.Web` project, locate the `ApplicationNameWebModule` and add the following under `ConfigureServices` method to replace the old SignInManager with your customized one.
+Inside your `.Web` project, locate the `ApplicationNameWebModule` and add the following under `ConfigureServices` method to replace the old `SignInManager` with your customized one.
 
 ````csharp
 context.Services

@@ -12,7 +12,7 @@ Two different **alternative approaches** for AzureAD integration will be demonst
 
 > There is **no difference** in functionality between these approaches. AddAzureAD is an abstracted way of OpenIdConnection ([source](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADAuthenticationBuilderExtensions.cs#L122)) with predefined cookie settings.
 >
-> However there are key differences in integration to ABP applications because of defaultly configurated signin schemes which will be explained below.
+> However there are key differences in integration to ABP applications because of default configurated signin schemes which will be explained below.
 
 ## 1. AddAzureAD
 
@@ -22,7 +22,7 @@ If you choose this approach, you will need to install `Microsoft.AspNetCore.Auth
 
 #### **Updating `appsettings.json`**
 
-You need to add a new section to your appsettings which will be binded to configuration when configuring the OpenIdConnectOptions:
+You need to add a new section to your `appsettings.json` which will be binded to configuration when configuring the `OpenIdConnectOptions`:
 
 ````json
   "AzureAd": {
@@ -36,7 +36,7 @@ You need to add a new section to your appsettings which will be binded to config
 
 > Important configuration here is the CallbackPath. This value must be the same with one of your Azure AD-> app registrations-> Authentication -> RedirectUri.
 
-Then, you need to configure the OpenIdConnectOptions to complete the integration.
+Then, you need to configure the `OpenIdConnectOptions` to complete the integration.
 
 #### Configuring OpenIdConnectOptions
 
@@ -88,9 +88,9 @@ You are done and integration is completed.
 
 If you don't want to use an extra nuget package in your application, you can use the straight default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for all OpenId connections including AzureAD external authentication.
 
-You don't have to use appsettings configuration but it is a good practice to set AzureAD information in the appsettings. 
+You don't have to use `appsettings.json` configuration but it is a good practice to set AzureAD information in the `appsettings.json`. 
 
-To get the AzureAD information from appsettings, which will be used in OpenIdConnectOptions configuration, simply add a new section to appsettings.json located in your **.Web** project:
+To get the AzureAD information from `appsettings.json`, which will be used in `OpenIdConnectOptions` configuration, simply add a new section to `appsettings.json` located in your **.Web** project:
 
 ````json
   "AzureAd": {
@@ -132,7 +132,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
         }
 ````
 
-And thats it, integration is completed. Keep on mind that you can connect any other external authentication providers. 
+And that's it, integration is completed. Keep on mind that you can connect any other external authentication providers. 
 
 ## The Source Code
 
@@ -175,11 +175,11 @@ You can find the source code of the completed example [here](https://github.com/
 
 
     * This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
-
+    
       ````csharp
       options.Scope.Add("email");
       ````
-
+    
       to your openid configuration.
 
 * How can I **debug/watch** which claims I get before they get mapped?
