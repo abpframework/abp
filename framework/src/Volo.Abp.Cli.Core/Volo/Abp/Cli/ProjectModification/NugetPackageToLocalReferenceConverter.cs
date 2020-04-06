@@ -43,7 +43,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private string ProcessReferenceNodes(string folder, XmlDocument doc, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
         {
-            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.Abp')]");
+            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]");
 
             if (nodes == null)
             {
