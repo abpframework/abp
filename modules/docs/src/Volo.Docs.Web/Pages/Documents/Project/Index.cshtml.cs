@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -64,7 +66,7 @@ namespace Volo.Docs.Pages.Documents.Project
         public DocumentParametersDto DocumentPreferences { get; set; }
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
-        
+
         public bool FullSearchEnabled { get; set; }
 
         private readonly IDocumentAppService _documentAppService;
@@ -590,6 +592,18 @@ namespace Volo.Docs.Pages.Documents.Project
                     DocumentPreferences.Parameters.Add(newParameter);
                 }
             }
+        }
+
+        public string GetDescription()
+        {
+            var startIndex = Document.Content.IndexOf("<p>", StringComparison.Ordinal);
+            var lastIndex = Document.Content.IndexOf("</p>", StringComparison.Ordinal);
+            var description = Document.Content.Substring(startIndex,lastIndex);
+
+            Regex rx = new Regex("<[^>]*>");
+            description = rx.Replace(description, "");
+
+            return description.Truncate(200);
         }
     }
 }

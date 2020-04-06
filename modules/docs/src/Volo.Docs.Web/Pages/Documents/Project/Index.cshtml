@@ -19,6 +19,7 @@
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
     PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
+    ViewBag.Description = Model.GetDescription();
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">

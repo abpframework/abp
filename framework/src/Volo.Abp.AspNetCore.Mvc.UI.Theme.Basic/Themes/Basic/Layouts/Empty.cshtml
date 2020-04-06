@@ -39,7 +39,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>@pageTitle</title>
-
+    @if (ViewBag.Description!=null)
+    {
+        <meta name="description" content="@ViewBag.Description" />
+    }
     <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
     @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
