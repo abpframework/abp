@@ -66,7 +66,8 @@ namespace Volo.Abp.Cli.ProjectModification
                         moduleName = Directory.GetParent(Directory.GetParent(Path.GetDirectoryName(localProject)).FullName).Name;
 
                         if (oldNodeIncludeValue.EndsWith(".test", StringComparison.InvariantCultureIgnoreCase) ||
-                            oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase))
+                            oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase) ||
+                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase))
                         {
                             tempSourceFile = "test";
                         }
