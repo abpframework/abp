@@ -7,7 +7,7 @@ import { forkJoin } from 'rxjs';
   template: `
     <abp-loader-bar></abp-loader-bar>
     <router-outlet></router-outlet>
-  `
+  `,
 })
 export class AppComponent implements OnInit {
   constructor(private lazyLoadService: LazyLoadService) {}
@@ -16,10 +16,10 @@ export class AppComponent implements OnInit {
     forkJoin(
       this.lazyLoadService.load(
         LOADING_STRATEGY.PrependAnonymousStyleToHead('fontawesome-v4-shims.min.css')
-      )
+      ),
       this.lazyLoadService.load(
         LOADING_STRATEGY.PrependAnonymousStyleToHead('fontawesome-all.min.css')
-      ),
+      )
     ).subscribe();
   }
 }
