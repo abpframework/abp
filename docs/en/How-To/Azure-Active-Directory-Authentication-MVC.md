@@ -10,7 +10,7 @@ Two different **alternative approaches** for AzureAD integration will be demonst
 
 2. **AddOpenIdConnect**: This approach uses default [OpenIdConnect](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.OpenIdConnect/) which can be used for not only AzureAD but for all OpenId connections.
 
-> There is **no difference** in functionality between these approaches. AddAzureAD is an abstracted way of OpenIdConnection ([source](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADAuthenticationBuilderExtensions.cs#L122)).
+> There is **no difference** in functionality between these approaches. AddAzureAD is an abstracted way of OpenIdConnection ([source](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADAuthenticationBuilderExtensions.cs#L122)) with predefined cookie settings.
 >
 > However there are key differences in integration to ABP applications because of defaultly configurated signin schemes which will be explained below.
 
@@ -27,7 +27,7 @@ You need to add a new section to your appsettings which will be binded to config
 ````json
   "AzureAd": {
     "Instance": "https://login.microsoftonline.com/",
-    "TenantId": "<your-tenant-id",
+    "TenantId": "<your-tenant-id>",
     "ClientId": "<your-client-id>",
     "Domain": "domain.onmicrosoft.com",
     "CallbackPath": "/signin-azuread-oidc"	
@@ -61,7 +61,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
                 options.Authority = options.Authority + "/v2.0/";         
                 options.ClientId = configuration["AzureAd:ClientId"];
                 options.CallbackPath = configuration["AzureAd:CallbackPath"];
-                options.ResponseType = OpenIdConnectResponseType.IdToken;
+                options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
                 options.RequireHttpsMetadata = false;
 
                 options.TokenValidationParameters.ValidateIssuer = false; 
@@ -78,8 +78,8 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
 >
 > * Add `.AddAzureAD(options => configuration.Bind("AzureAd", options))` after `.AddAuthentication()`. This binds your AzureAD appsettings and easy to miss out.
 > * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear()`. This will disable the default Microsoft claim type mapping.
-> * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier)`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information. You can also use `oid` claim instead of `sub` claim since AzureAD objectID is also unique.
-> * Add `options.SignInScheme = IdentityConstants.ExternalScheme` since [default signin scheme is `AzureADOpenID`](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADDefaults.cs#L16).
+> * Add `JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Add("sub", ClaimTypes.NameIdentifier)`. Mapping this to [ClaimTypes.NameIdentifier](https://github.com/dotnet/runtime/blob/6d395de48ac718a913e567ae80961050f2a9a4fa/src/libraries/System.Security.Claims/src/System/Security/Claims/ClaimTypes.cs#L59) is important since default SignIn Manager behavior uses this claim type for external login information.
+> * Add `options.SignInScheme = IdentityConstants.ExternalScheme` since [default signin scheme is `AzureADOpenID`](https://github.com/dotnet/aspnetcore/blob/c56aa320c32ee5429d60647782c91d53ac765865/src/Azure/AzureAD/Authentication.AzureAD.UI/src/AzureADOpenIdConnectOptionsConfiguration.cs#L35).
 > * Add `options.Scope.Add("email")` if you are using **v2.0** endpoint of AzureAD since v2.0 endpoint doesn't return the `email` claim as default. The [Account Module](../Modules/Account.md) uses `email` claim to [register external users](https://github.com/abpframework/abp/blob/be32a55449e270d2d456df3dabdc91f3ffdd4fa9/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L215). 
 
 You are done and integration is completed.
@@ -90,12 +90,12 @@ If you don't want to use an extra nuget package in your application, you can use
 
 You don't have to use appsettings configuration but it is a good practice to set AzureAD information in the appsettings. 
 
-To get the AzureAD information from appsettings, which will be used in OpenIdConnectOptions configuration, simple add a new section appsettings.json located in your **.Web** project:
+To get the AzureAD information from appsettings, which will be used in OpenIdConnectOptions configuration, simply add a new section to appsettings.json located in your **.Web** project:
 
 ````json
   "AzureAd": {
     "Instance": "https://login.microsoftonline.com/",
-    "TenantId": "<your-tenant-id",
+    "TenantId": "<your-tenant-id>",
     "ClientId": "<your-client-id>",
     "Domain": "domain.onmicrosoft.com",
     "CallbackPath": "/signin-azuread-oidc"	
@@ -117,7 +117,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
                     options.RequireHttpsMetadata = false;
                     options.ApiName = "BookStore";
                 })
-                .AddOpenIdConnect("AzureOpenId", "AzureAD", options =>
+                .AddOpenIdConnect("AzureOpenId", "Azure Active Directory OpenId", options =>
                  {
                      options.Authority = "https://login.microsoftonline.com/" + configuration["AzureAd:TenantId"] + "/v2.0/";
                      options.ClientId = configuration["AzureAd:ClientId"];
@@ -132,9 +132,7 @@ private void ConfigureAuthentication(ServiceConfigurationContext context, IConfi
         }
 ````
 
-> You can change the display name of your external authentication under your login screen by changing the second parameter of the .AddOpenIdConnect ("*AzureAD*" used in this sample).
-
-And thats it.
+And thats it, integration is completed. Keep on mind that you can connect any other external authentication providers. 
 
 ## The Source Code
 
