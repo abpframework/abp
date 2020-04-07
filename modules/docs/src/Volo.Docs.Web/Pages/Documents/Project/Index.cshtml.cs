@@ -597,7 +597,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string GetDescription()
         {
-            var firstParagraph = new Regex(@"<p>(.*?)</p>");
+            var firstParagraph = new Regex(@"<p>(.*?)</p>", RegexOptions.IgnoreCase);
             var match = firstParagraph.Match(Document.Content);
             if (!match.Success)
             {
