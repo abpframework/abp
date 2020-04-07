@@ -185,13 +185,21 @@ In this example, the second file needs the first one to be loaded beforehand. Rx
 
 
 
-### loaded: Set<string>
+### loaded
+
+```js
+loaded: Set<string>
+```
 
 All previously loaded paths are available via this property. It is a simple [JavaScript Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set).
 
 
 
-### load(strategy: LoadingStrategy, retryTimes?: number, retryDelay?: number): Observable<Event>
+### load
+
+```js
+load(strategy: LoadingStrategy, retryTimes?: number, retryDelay?: number): Observable<Event>
+```
 
 - `strategy` parameter is the primary focus here and is explained above.
 - `retryTimes` defines how many times the loading will be tried again before fail (_default: 2_).
@@ -202,4 +210,4 @@ All previously loaded paths are available via this property. It is a simple [Jav
 
 ## What's Next?
 
-- [TrackByService](./Track-By-Service.md)
+- [DomInsertionService](./Dom-Insertion-Service.md)
