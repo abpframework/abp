@@ -69,6 +69,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool FullSearchEnabled { get; set; }
 
+        private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
@@ -596,14 +597,19 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string GetDescription()
         {
-            var startIndex = Document.Content.IndexOf("<p>", StringComparison.Ordinal);
-            var lastIndex = Document.Content.IndexOf("</p>", StringComparison.Ordinal);
-            var description = Document.Content.Substring(startIndex,lastIndex);
+            var firstParagraph = new Regex(@"<p>(.*?)</p>");
+            var match = firstParagraph.Match(Document.Content);
+            if (!match.Success)
+            {
+                return null;
+            }
 
-            Regex rx = new Regex("<[^>]*>");
-            description = rx.Replace(description, "");
+            var description = HttpUtility.HtmlDecode(match.Value);
 
-            return description.Truncate(200);
+            var htmlTagReplacer = new Regex(@"<[^>]*>", RegexOptions.IgnoreCase);
+            description = htmlTagReplacer.Replace(description, m => string.Empty);
+
+            return description.Truncate(MaxDescriptionMetaTagLength);
         }
     }
 }
