@@ -34,27 +34,47 @@ This method inserts given `element` to `target` based on the `position`.
 Predefined dom strategies are accessible via `DOM_STRATEGY` constant.
 
 
-### AppendToBody()
+### AppendToBody
+
+```js
+DOM_STRATEGY.AppendToBody()
+```
 
 `insertElement` will place the given `element` at the end of `<body>`.
 
 
-### AppendToHead()
+### AppendToHead
+
+```js
+DOM_STRATEGY.AppendToHead()
+```
 
 `insertElement` will place the given `element` at the end of `<head>`.
 
 
-### PrependToHead()
+### PrependToHead
+
+```js
+DOM_STRATEGY.PrependToHead()
+```
 
 `insertElement` will place the given `element` at the beginning of `<head>`.
 
 
-### AfterElement(target: HTMLElement)
+### AfterElement
+
+```js
+DOM_STRATEGY.AfterElement(target: HTMLElement)
+```
 
 `insertElement` will place the given `element` after (as a sibling to) the `target`.
 
 
-### BeforeElement(target: HTMLElement)
+### BeforeElement
+
+```js
+DOM_STRATEGY.BeforeElement(target: HTMLElement)
+```
 
 `insertElement` will place the given `element` before (as a sibling to) the `target`.
 
@@ -64,4 +84,6 @@ Predefined dom strategies are accessible via `DOM_STRATEGY` constant.
 ## See Also
 
 - [DomInsertionService](./Dom-Insertion-Service.md)
+- [LazyLoadService](./Lazy-Load-Service.md)
 - [LoadingStrategy](./Loading-Strategy.md)
+- [ContentStrategy](./Content-Strategy.md)

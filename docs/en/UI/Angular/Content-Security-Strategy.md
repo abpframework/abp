@@ -50,7 +50,7 @@ Predefined content security strategies are accessible via `CONTENT_SECURITY_STRA
 ### Loose
 
 ```js
-Loose(nonce: string)
+CONTENT_SECURITY_STRATEGY.Loose(nonce: string)
 ```
 
 `nonce` will be set.
@@ -59,7 +59,7 @@ Loose(nonce: string)
 ### None
 
 ```js
-None()
+CONTENT_SECURITY_STRATEGY.None()
 ```
 
 Nothing will be done.

@@ -57,7 +57,7 @@ Predefined content strategies are accessible via `CONTENT_STRATEGY` constant.
 ### AppendScriptToBody
 
 ```js
-AppendScriptToBody(content: string)
+CONTENT_STRATEGY.AppendScriptToBody(content: string)
 ```
 
 Creates a `<script>` element with the given content and places it at the **end** of `<body>` tag in the document.
@@ -66,7 +66,7 @@ Creates a `<script>` element with the given content and places it at the **end**
 ### AppendScriptToHead
 
 ```js
-AppendScriptToHead(content: string)
+CONTENT_STRATEGY.AppendScriptToHead(content: string)
 ```
 
 Creates a `<script>` element with the given content and places it at the **end** of `<head>` tag in the document.
@@ -75,7 +75,7 @@ Creates a `<script>` element with the given content and places it at the **end**
 ### AppendStyleToHead
 
 ```js
-AppendStyleToHead(content: string)
+CONTENT_STRATEGY.AppendStyleToHead(content: string)
 ```
 
 Creates a `<style>` element with the given content and places it at the **end** of `<head>` tag in the document.
@@ -84,7 +84,7 @@ Creates a `<style>` element with the given content and places it at the **end** 
 ### PrependStyleToHead
 
 ```js
-PrependStyleToHead(content: string)
+CONTENT_STRATEGY.PrependStyleToHead(content: string)
 ```
 
 Creates a `<style>` element with the given content and places it at the **beginning** of `<head>` tag in the document.
@@ -92,4 +92,4 @@ Creates a `<style>` element with the given content and places it at the **beginn
 
 ## See Also
 
-TODO: Place DomInsertionService documentation link here.
+- [DomInsertionService](./Dom-Insertion-Service.md)
