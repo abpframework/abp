@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 
@@ -7,6 +8,8 @@ namespace Volo.Abp.Authorization.Permissions
     public interface IPermissionDefinitionContext
     {
         //TODO: Add Get methods to find and modify a permission or group.
+
+        IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// Gets a pre-defined permission group.
