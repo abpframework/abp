@@ -65,6 +65,10 @@
           ]
         },
         {
+          "text": "\"如何\" 指南",
+          "path": "How-To/Index.md"
+        },
+        {
           "text": "从ASP.NET Boilerplate迁移",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
         }
