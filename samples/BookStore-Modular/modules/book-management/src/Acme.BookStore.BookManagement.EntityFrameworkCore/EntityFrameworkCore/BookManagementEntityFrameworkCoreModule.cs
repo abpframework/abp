@@ -10,6 +10,11 @@ namespace Acme.BookStore.BookManagement.EntityFrameworkCore
     )]
     public class BookManagementEntityFrameworkCoreModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            BookManagementEfCoreEntityExtensionMappings.Configure();
+        }
+        
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAbpDbContext<BookManagementDbContext>(options =>

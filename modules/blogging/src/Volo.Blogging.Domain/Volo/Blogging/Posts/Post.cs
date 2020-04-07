@@ -23,13 +23,16 @@ namespace Volo.Blogging.Posts
         [CanBeNull]
         public virtual string Content { get; set; }
 
+        [CanBeNull]
+        public virtual string Description { get; set; }
+
         public virtual int ReadCount { get; protected set; }
 
         public virtual Collection<PostTag> Tags { get; protected set; }
 
         protected Post()
         {
-            
+
         }
 
         public Post(Guid id, Guid blogId, [NotNull] string title, [NotNull] string coverImage, [NotNull] string url)
@@ -63,7 +66,7 @@ namespace Volo.Blogging.Posts
 
         public virtual void AddTag(Guid tagId)
         {
-            Tags.Add(new PostTag(Id,tagId));
+            Tags.Add(new PostTag(Id, tagId));
         }
 
         public virtual void RemoveTag(Guid tagId)

@@ -86,6 +86,44 @@ namespace Volo.Abp.Auditing
             return defaultValue;
         }
 
+        public virtual bool IsEntityHistoryEnabled(Type entityType, bool defaultValue = false)
+        {
+            if (!entityType.IsPublic)
+            {
+                return false;
+            }
+
+            if (Options.IgnoredTypes.Any(t => t.IsAssignableFrom(entityType)))
+            {
+                return false;
+            }
+
+            if (entityType.IsDefined(typeof(AuditedAttribute), true))
+            {
+                return true;
+            }
+
+            foreach (var propertyInfo in entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                if(propertyInfo.IsDefined(typeof(AuditedAttribute)))
+                {
+                    return true;
+                }
+            }
+
+            if (entityType.IsDefined(typeof(DisableAuditingAttribute), true))
+            {
+                return false;
+            }
+
+            if (Options.EntityHistorySelectors.Any(selector => selector.Predicate(entityType)))
+            {
+                return true;
+            }
+
+            return defaultValue;
+        }
+        
         public virtual AuditLogInfo CreateAuditLogInfo()
         {
             var auditInfo = new AuditLogInfo

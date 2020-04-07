@@ -71,6 +71,12 @@ namespace Volo.Abp.PermissionManagement
         {
             var permission = PermissionDefinitionManager.Get(permissionName);
 
+            if (!permission.IsEnabled)
+            {
+                //TODO: BusinessException
+                throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
+            }
+
             if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
             {
                 //TODO: BusinessException
@@ -108,6 +114,11 @@ namespace Volo.Abp.PermissionManagement
         protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
         {
             var result = new PermissionWithGrantedProviders(permission.Name, false);
+
+            if (!permission.IsEnabled)
+            {
+                return result;
+            }
 
             if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
             {

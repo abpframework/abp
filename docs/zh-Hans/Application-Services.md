@@ -146,7 +146,6 @@ public interface IBookAppService : IApplicationService
 `BookDto`是一个简单的[DTO](Data-Transfer-Objects.md)类, 定义如下:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))] //Defines the mapping
 public class BookDto
 {
     public Guid Id { get; set; }
@@ -159,7 +158,36 @@ public class BookDto
 }
 ````
 
-* `BookDto`定义了`[AbpAutoMapFrom(typeof(Book))]`属性来从创建对象映射Book到BookDto.
+我们创建一个Automapper的[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances)类. 例如:
+
+```csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+    }
+}
+```
+
+然后使用`AbpAutoMapperOptions`注册配置文件:
+
+````csharp
+[DependsOn(typeof(AbpAutoMapperModule))]
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            //Add all mappings defined in the assembly of the MyModule class
+            options.AddMaps<MyModule>();
+        });
+    }
+}
+````
+
+`AddMaps` 注册给定类的程序集中所有的配置类,通常使用模块类. 它还会注册 [attribute 映射](https://docs.automapper.org/en/stable/Attribute-mapping.html). 更多信息请参考[对象到对象映射](Object-To-Object-Mapping.md)文档
 
 然后你可以实现`GetAsync`方法. 如下所示:
 
@@ -249,7 +277,6 @@ public interface ICrudAppService<
 示例中使用的DTO类是`BookDto`和`CreateUpdateBookDto`:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))]
 public class BookDto : AuditedEntityDto<Guid>
 {
     public string Name { get; set; }
@@ -259,7 +286,6 @@ public class BookDto : AuditedEntityDto<Guid>
     public float Price { get; set; }
 }
 
-[AbpAutoMapTo(typeof(Book))]
 public class CreateUpdateBookDto
 {
     [Required]
@@ -273,6 +299,19 @@ public class CreateUpdateBookDto
     public float Price { get; set; }
 }
 ````
+
+DTO类的[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances)类.
+
+```csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+        CreateMap<CreateUpdateBookDto, Book>();
+    }
+}
+```
 
 * `CreateUpdateBookDto`由创建和更新操作共享,但你也可以使用单独的DTO类.
 

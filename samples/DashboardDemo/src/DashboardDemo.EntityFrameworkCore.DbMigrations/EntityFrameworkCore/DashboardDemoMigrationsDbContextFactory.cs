@@ -11,6 +11,8 @@ namespace DashboardDemo.EntityFrameworkCore
     {
         public DashboardDemoMigrationsDbContext CreateDbContext(string[] args)
         {
+            DashboardDemoEfCoreEntityExtensionMappings.Configure();
+            
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<DashboardDemoMigrationsDbContext>()

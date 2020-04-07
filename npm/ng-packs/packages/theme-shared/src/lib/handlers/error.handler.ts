@@ -17,7 +17,7 @@ import { Observable, Subject } from 'rxjs';
 import snq from 'snq';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { HttpErrorConfig, ErrorScreenErrorCodes } from '../models/common';
-import { Toaster } from '../models/toaster';
+import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
 
 export const DEFAULT_ERROR_MESSAGES = {
@@ -185,7 +185,7 @@ export class ErrorHandler {
     message?: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     body?: any,
-  ): Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status> {
     if (body) {
       if (body.details) {
         message = body.details;

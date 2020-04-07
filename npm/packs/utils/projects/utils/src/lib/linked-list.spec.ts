@@ -1,4 +1,4 @@
-import { LinkedList, ListNode } from '../utils/linked-list';
+import { LinkedList, ListNode } from './linked-list';
 
 describe('Linked List (Doubly)', () => {
   let list: LinkedList;

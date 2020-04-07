@@ -35,6 +35,17 @@ namespace Volo.Abp.PermissionManagement
             )).ShouldBeFalse();
         }
 
+
+        [Fact]
+        public async Task Should_Return_False_For_Granted_Current_User_If_The_Permission_Is_Disabled()
+        {
+            //Disabled permissions always returns false!
+            (await _permissionChecker.IsGrantedAsync(
+                CreatePrincipal(PermissionTestDataBuilder.User1Id),
+                "MyDisabledPermission1"
+            )).ShouldBeFalse();
+        }
+
         [Fact]
         public async Task Should_Return_False_For_Current_User_If_Anonymous()
         {

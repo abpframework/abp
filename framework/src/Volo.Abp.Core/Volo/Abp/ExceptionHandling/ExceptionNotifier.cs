@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -12,11 +12,11 @@ namespace Volo.Abp.ExceptionHandling
     {
         public ILogger<ExceptionNotifier> Logger { get; set; }
 
-        protected IEnumerable<IExceptionSubscriber> ExceptionSubscribers { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
-        public ExceptionNotifier(IEnumerable<IExceptionSubscriber> exceptionSubscribers)
+        public ExceptionNotifier(IHybridServiceScopeFactory serviceScopeFactory)
         {
-            ExceptionSubscribers = exceptionSubscribers;
+            ServiceScopeFactory = serviceScopeFactory;
             Logger = NullLogger<ExceptionNotifier>.Instance;
         }
 
@@ -24,16 +24,22 @@ namespace Volo.Abp.ExceptionHandling
         {
             Check.NotNull(context, nameof(context));
 
-            foreach (var exceptionSubscriber in ExceptionSubscribers)
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                try
+                var exceptionSubscribers = scope.ServiceProvider
+                    .GetServices<IExceptionSubscriber>();
+
+                foreach (var exceptionSubscriber in exceptionSubscribers)
                 {
-                    await exceptionSubscriber.HandleAsync(context);
-                }
-                catch (Exception e)
-                {
-                    Logger.LogWarning($"Exception subscriber of type {exceptionSubscriber.GetType().AssemblyQualifiedName} has thrown an exception!");
-                    Logger.LogException(e, LogLevel.Warning);
+                    try
+                    {
+                        await exceptionSubscriber.HandleAsync(context);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogWarning($"Exception subscriber of type {exceptionSubscriber.GetType().AssemblyQualifiedName} has thrown an exception!");
+                        Logger.LogException(e, LogLevel.Warning);
+                    }
                 }
             }
         }

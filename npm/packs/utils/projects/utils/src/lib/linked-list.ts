@@ -85,10 +85,10 @@ export class LinkedList<T = any> {
 
   add(value: T) {
     return {
-      after: (previousValue: T, compareFn: ListComparisonFn<T> = compare) =>
-        this.addAfter(value, previousValue, compareFn),
-      before: (nextValue: T, compareFn: ListComparisonFn<T> = compare) =>
-        this.addBefore(value, nextValue, compareFn),
+      after: (...params: [T] | [any, ListComparisonFn<T>]) =>
+        this.addAfter.call(this, value, ...params),
+      before: (...params: [T] | [any, ListComparisonFn<T>]) =>
+        this.addBefore.call(this, value, ...params),
       byIndex: (position: number) => this.addByIndex(value, position),
       head: () => this.addHead(value),
       tail: () => this.addTail(value),
@@ -97,23 +97,27 @@ export class LinkedList<T = any> {
 
   addMany(values: T[]) {
     return {
-      after: (previousValue: T, compareFn: ListComparisonFn<T> = compare) =>
-        this.addManyAfter(values, previousValue, compareFn),
-      before: (nextValue: T, compareFn: ListComparisonFn<T> = compare) =>
-        this.addManyBefore(values, nextValue, compareFn),
+      after: (...params: [T] | [any, ListComparisonFn<T>]) =>
+        this.addManyAfter.call(this, values, ...params),
+      before: (...params: [T] | [any, ListComparisonFn<T>]) =>
+        this.addManyBefore.call(this, values, ...params),
       byIndex: (position: number) => this.addManyByIndex(values, position),
       head: () => this.addManyHead(values),
       tail: () => this.addManyTail(values),
     };
   }
 
-  addAfter(value: T, previousValue: T, compareFn: ListComparisonFn<T> = compare): ListNode<T> {
+  addAfter(value: T, nextValue: T): ListNode<T>;
+  addAfter(value: T, previousValue: any, compareFn: ListComparisonFn<T>): ListNode<T>;
+  addAfter(value: T, previousValue: any, compareFn: ListComparisonFn<T> = compare): ListNode<T> {
     const previous = this.find(node => compareFn(node.value, previousValue));
 
     return previous ? this.attach(value, previous, previous.next) : this.addTail(value);
   }
 
-  addBefore(value: T, nextValue: T, compareFn: ListComparisonFn<T> = compare): ListNode<T> {
+  addBefore(value: T, nextValue: T): ListNode<T>;
+  addBefore(value: T, nextValue: any, compareFn: ListComparisonFn<T>): ListNode<T>;
+  addBefore(value: T, nextValue: any, compareFn: ListComparisonFn<T> = compare): ListNode<T> {
     const next = this.find(node => compareFn(node.value, nextValue));
 
     return next ? this.attach(value, next.previous, next) : this.addHead(value);
@@ -161,9 +165,11 @@ export class LinkedList<T = any> {
     return node;
   }
 
+  addManyAfter(values: T[], previousValue: T): ListNode<T>[];
+  addManyAfter(values: T[], previousValue: any, compareFn: ListComparisonFn<T>): ListNode<T>[];
   addManyAfter(
     values: T[],
-    previousValue: T,
+    previousValue: any,
     compareFn: ListComparisonFn<T> = compare,
   ): ListNode<T>[] {
     const previous = this.find(node => compareFn(node.value, previousValue));
@@ -171,9 +177,11 @@ export class LinkedList<T = any> {
     return previous ? this.attachMany(values, previous, previous.next) : this.addManyTail(values);
   }
 
+  addManyBefore(values: T[], previousValue: T): ListNode<T>[];
+  addManyBefore(values: T[], nextValue: any, compareFn: ListComparisonFn<T>): ListNode<T>[];
   addManyBefore(
     values: T[],
-    nextValue: T,
+    nextValue: any,
     compareFn: ListComparisonFn<T> = compare,
   ): ListNode<T>[] {
     const next = this.find(node => compareFn(node.value, nextValue));
@@ -207,10 +215,10 @@ export class LinkedList<T = any> {
   drop() {
     return {
       byIndex: (position: number) => this.dropByIndex(position),
-      byValue: (value: T, compareFn: ListComparisonFn<T> = compare) =>
-        this.dropByValue(value, compareFn),
-      byValueAll: (value: T, compareFn: ListComparisonFn<T> = compare) =>
-        this.dropByValueAll(value, compareFn),
+      byValue: (...params: [T] | [any, ListComparisonFn<T>]) =>
+        this.dropByValue.apply(this, params),
+      byValueAll: (...params: [T] | [any, ListComparisonFn<T>]) =>
+        this.dropByValueAll.apply(this, params),
       head: () => this.dropHead(),
       tail: () => this.dropTail(),
     };
@@ -232,13 +240,17 @@ export class LinkedList<T = any> {
     return current ? this.detach(current) : undefined;
   }
 
-  dropByValue(value: T, compareFn: ListComparisonFn<T> = compare): ListNode<T> | undefined {
+  dropByValue(value: T): ListNode<T> | undefined;
+  dropByValue(value: any, compareFn: ListComparisonFn<T>): ListNode<T> | undefined;
+  dropByValue(value: any, compareFn: ListComparisonFn<T> = compare): ListNode<T> | undefined {
     const position = this.findIndex(node => compareFn(node.value, value));
 
     return position < 0 ? undefined : this.dropByIndex(position);
   }
 
-  dropByValueAll(value: T, compareFn: ListComparisonFn<T> = compare): ListNode<T>[] {
+  dropByValueAll(value: T): ListNode<T>[];
+  dropByValueAll(value: any, compareFn: ListComparisonFn<T>): ListNode<T>[];
+  dropByValueAll(value: any, compareFn: ListComparisonFn<T> = compare): ListNode<T>[] {
     const dropped: ListNode<T>[] = [];
 
     for (let current = this.first, position = 0; current; position++, current = current.next) {
@@ -352,7 +364,9 @@ export class LinkedList<T = any> {
     return this.find((_, index) => position === index);
   }
 
-  indexOf(value: T, compareFn: ListComparisonFn<T> = compare): number {
+  indexOf(value: T): number;
+  indexOf(value: any, compareFn: ListComparisonFn<T>): number;
+  indexOf(value: any, compareFn: ListComparisonFn<T> = compare): number {
     return this.findIndex(node => compareFn(node.value, value));
   }
 
@@ -378,7 +392,8 @@ export class LinkedList<T = any> {
       .join(' <-> ');
   }
 
-  *[Symbol.iterator]() {
+  // Cannot use Generator type because of ng-packagr
+  *[Symbol.iterator](): any {
     for (let node = this.first, position = 0; node; position++, node = node.next) {
       yield node.value;
     }
@@ -387,7 +402,7 @@ export class LinkedList<T = any> {
 
 export type ListMapperFn<T = any> = (value: T) => any;
 
-export type ListComparisonFn<T = any> = (value1: T, value2: T) => boolean;
+export type ListComparisonFn<T = any> = (value1: T, value2: any) => boolean;
 
 export type ListIteratorFn<T = any, R = boolean> = (
   node: ListNode<T>,

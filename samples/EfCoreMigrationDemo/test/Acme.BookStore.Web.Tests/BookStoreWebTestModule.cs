@@ -12,6 +12,7 @@ using Acme.BookStore.Web;
 using Acme.BookStore.Web.Menus;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.TestBase;
+using Volo.Abp.Data;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -38,6 +39,13 @@ namespace Acme.BookStore
         {
             ConfigureLocalizationServices(context.Services);
             ConfigureNavigationServices(context.Services);
+            
+            Configure<AbpDbConnectionOptions>(options =>
+            {
+                //SqliteConnection does not support nested transactions. 
+                //So Dbcontext and connectionString need be same.
+                options.ConnectionStrings.Clear();
+            });
         }
 
         private static void ConfigureLocalizationServices(IServiceCollection services)

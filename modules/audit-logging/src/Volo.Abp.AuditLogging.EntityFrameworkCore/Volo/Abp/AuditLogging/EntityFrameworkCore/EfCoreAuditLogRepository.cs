@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -134,10 +135,70 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
-
+        
         public override IQueryable<AuditLog> WithDetails()
         {
             return GetQueryable().IncludeDetails();
+        }
+
+        public Task<EntityChange> GetEntityChange(Guid entityChangeId)
+        {
+            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().Where(x => x.Id == entityChangeId).FirstAsync();
+        }
+
+        public virtual async Task<List<EntityChange>> GetEntityChangeListAsync(
+            string sorting = null,
+            int maxResultCount = 50,
+            int skipCount = 0,
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, includeDetails);
+
+            return await query.OrderBy(sorting ?? "changeTime desc")
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<long> GetEntityChangeCountAsync(
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            CancellationToken cancellationToken = default)
+        {
+            var query = GetEntityChangeListQuery(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName);
+
+            var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken));
+
+            return totalCount;
+        }
+
+        protected virtual IQueryable<EntityChange> GetEntityChangeListQuery(
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            bool includeDetails = false)
+        {
+            return DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails(includeDetails)
+                        .WhereIf(auditLogId.HasValue, e => e.AuditLogId == auditLogId)
+                        .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)
+                        .WhereIf(endTime.HasValue, e => e.ChangeTime <= endTime)
+                        .WhereIf(changeType.HasValue, e => e.ChangeType == changeType)
+                        .WhereIf(!string.IsNullOrWhiteSpace(entityId), e => e.EntityId == entityId)
+                        .WhereIf(!string.IsNullOrWhiteSpace(entityTypeFullName),
+                            e => e.EntityTypeFullName.Contains(entityTypeFullName));
         }
     }
 }

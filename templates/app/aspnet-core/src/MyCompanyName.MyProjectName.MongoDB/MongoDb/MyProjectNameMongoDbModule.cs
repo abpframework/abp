@@ -24,11 +24,6 @@ namespace MyCompanyName.MyProjectName.MongoDB
         )]
     public class MyProjectNameMongoDbModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            MyProjectNameEntityExtensions.Configure();
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddMongoDbContext<MyProjectNameMongoDbContext>(options =>

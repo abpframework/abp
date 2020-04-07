@@ -15,6 +15,20 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public Type Type { get; }
 
+        /// <summary>
+        /// Indicates whether to check the other side of the object mapping
+        /// if it explicitly defines the property. This property is used in;
+        ///
+        /// * .MapExtraPropertiesTo() extension method.
+        /// * .MapExtraProperties() configuration for the AutoMapper.
+        ///
+        /// It this is true, these methods check if the mapping object
+        /// has defined the property using the <see cref="ObjectExtensionManager"/>.
+        ///
+        /// Default: null (unspecified, uses the default logic).
+        /// </summary>
+        public bool? CheckPairDefinitionOnMapping { get; set; }
+
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
 
