@@ -77,17 +77,6 @@ Please refer to [ContentStrategy](./Content-Strategy.md) to see all available co
 
 ## API
 
-
-### inserted
-
-```js
-inserted: Set<string>
-```
-
-All previously inserted contents are stored via this property as hashes. It is a simple [JavaScript Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set).
-
-
-
 ### insertContent
 
 ```js
