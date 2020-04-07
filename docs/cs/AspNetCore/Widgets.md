@@ -502,4 +502,4 @@ Configure<AbpWidgetOptions>(options =>
 
 ## Podívejte se také na
 
-* [Příklad projektu (zdrojový kód)](https://github.com/abpframework/abp/tree/dev/samples/DashboardDemo).
+* [Příklad projektu (zdrojový kód)](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo).
