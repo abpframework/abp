@@ -8,7 +8,9 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public static bool IsRelational(this DatabaseFacade database)
         {
-            return database.GetInfrastructure().GetService<IRelationalConnection>() != null;
+#pragma warning disable EF1001 // Internal EF Core API usage.
+            return ((IDatabaseFacadeDependenciesAccessor)database).Dependencies is IRelationalDatabaseFacadeDependencies;
+#pragma warning restore EF1001 // Internal EF Core API usage.
         }
     }
 }
