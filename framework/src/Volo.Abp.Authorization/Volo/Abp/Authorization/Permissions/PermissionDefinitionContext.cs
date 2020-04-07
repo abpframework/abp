@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -7,10 +8,13 @@ namespace Volo.Abp.Authorization.Permissions
 {
     public class PermissionDefinitionContext : IPermissionDefinitionContext
     {
+        public IServiceProvider ServiceProvider { get; }
+
         internal Dictionary<string, PermissionGroupDefinition> Groups { get; }
 
-        internal PermissionDefinitionContext()
+        internal PermissionDefinitionContext(IServiceProvider serviceProvider)
         {
+            ServiceProvider = serviceProvider;
             Groups = new Dictionary<string, PermissionGroupDefinition>();
         }
 
