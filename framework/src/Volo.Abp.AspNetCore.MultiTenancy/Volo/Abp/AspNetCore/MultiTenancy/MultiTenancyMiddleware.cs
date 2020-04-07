@@ -14,9 +14,9 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
 
         public MultiTenancyMiddleware(
-            ITenantResolver tenantResolver, 
-            ITenantStore tenantStore, 
-            ICurrentTenant currentTenant, 
+            ITenantResolver tenantResolver,
+            ITenantStore tenantStore,
+            ICurrentTenant currentTenant,
             ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
             _tenantResolver = tenantResolver;
@@ -34,11 +34,13 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             if (resolveResult.TenantIdOrName != null)
             {
                 tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
+
                 if (tenant == null)
                 {
-                    //TODO: A better exception?
-                    throw new AbpException(
-                        "There is no tenant with given tenant id or name: " + resolveResult.TenantIdOrName
+                    throw new BusinessException(
+                        code: "Volo.AbpIo.MultiTenancy:010001",
+                        message: "Tenant not found!",
+                        details: "There is no tenant with the tenant id or name: " + resolveResult.TenantIdOrName
                     );
                 }
             }
