@@ -6,16 +6,26 @@
 ## API
 
 
-### constructor(public target?: HTMLElement, public position?: InsertPosition)
+### constructor
+
+```js
+constructor(
+  public target?: HTMLElement,
+  public position?: InsertPosition
+)
+```
 
 - `target` is an HTMLElement (_default: document.head_).
 - `position` defines where the created element will be placed. All possible values of `position` can be found [here](https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement) (_default: 'beforeend'_).
 
 
-### insertElement(element: HTMLElement): void
+### insertElement
+
+```js
+insertElement(element: HTMLElement): void
+```
 
 This method inserts given `element` to `target` based on the `position`.
-
 
 
 
@@ -51,8 +61,7 @@ Predefined dom strategies are accessible via `DOM_STRATEGY` constant.
 
 
 
-## What's Next?
+## See Also
 
+- [DomInsertionService](./Dom-Insertion-Service.md)
 - [LoadingStrategy](./Loading-Strategy.md)
-
-TODO: Place new InsertionStrategy link here.
