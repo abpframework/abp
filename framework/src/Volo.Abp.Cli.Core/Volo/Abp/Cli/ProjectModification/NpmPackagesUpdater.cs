@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -54,7 +55,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                     if (IsAngularProject(fileDirectory))
                     {
-                        CreateNpmrcFile(Path.GetDirectoryName(file));
+                        await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
                     }
 
                     RunYarn(fileDirectory);
@@ -68,19 +69,68 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private void CreateNpmrcFile(string directoryName)
+        private async Task CreateNpmrcFileAsync(string directoryName)
         {
             var fileName = Path.Combine(directoryName, ".npmrc");
 
+            var abpRegistry = "@abp:registry:https://www.myget.org/F/abp-nightly/npm";
+            var voloRegistry = await GetVoloRegistryAsync();
+
             if (File.Exists(fileName))
             {
+                var fileContent = File.ReadAllText(fileName);
+
+                if (!fileContent.Contains(abpRegistry))
+                {
+                    fileContent += Environment.NewLine + abpRegistry;
+                }
+
+                if (!fileContent.Contains(voloRegistry))
+                {
+                    fileContent += Environment.NewLine + voloRegistry;
+                }
+
+                File.WriteAllText(fileName, fileContent);
+
                 return;
             }
 
             using var fs = File.Create(fileName);
 
-            var content = new UTF8Encoding(true).GetBytes("@abp:registry:https://www.myget.org/F/abp-nightly/npm");
+            var content = new UTF8Encoding(true)
+                .GetBytes(abpRegistry + Environment.NewLine + voloRegistry);
             fs.Write(content, 0, content.Length);
+        }
+
+        private async Task<string> GetVoloRegistryAsync()
+        {
+            var apikey = await GetApiKeyAsync();
+
+            if (string.IsNullOrWhiteSpace(apikey))
+            {
+                return "";
+            }
+
+            return "@volo:registry=https://www.myget.org/F/abp-commercial/auth/" + apikey + "/npm/";
+        }
+
+        public async Task<string> GetApiKeyAsync()
+        {
+            try
+            {
+                using (var client = new CliHttpClient(TimeSpan.FromMinutes(1)))
+                {
+                    var responseMessage = await client.GetAsync(
+                        $"{CliUrls.WwwAbpIo}api/myget/apikey/"
+                    );
+
+                    return Encoding.Default.GetString(await responseMessage.Content.ReadAsByteArrayAsync());
+                }
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
 
         private bool IsAngularProject(string fileDirectory)
