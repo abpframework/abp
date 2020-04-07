@@ -40,4 +40,45 @@ public class YourModule : AbpModule
 
 ## 配置
 
-TODO...
+你可以安装任何Hangfire存储. 最常用的是SQL Server(参阅[Hangfire.SqlServer](https://www.nuget.org/packages/Hangfire.SqlServer)NuGet包).
+
+当你安装NuGet包后,你需要为你的项目配置Hangfire.
+
+1.首先, 我们需要更改 `Module` 类 (例如: `<YourProjectName>HttpApiHostModule`) 的 `ConfigureServices` 方法去配置Hangfire存储和连接字符串:
+
+````csharp
+  public override void ConfigureServices(ServiceConfigurationContext context)
+  {
+      var configuration = context.Services.GetConfiguration();
+      var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+      //... other configarations.
+
+      ConfigureHangfire(context, configuration);
+  }
+
+  private void ConfigureHangfire(ServiceConfigurationContext context, IConfiguration configuration)
+  {
+      context.Services.AddHangfire(config =>
+      {
+          config.UseSqlServerStorage(configuration.GetConnectionString("Default"));
+      });
+  }
+````
+
+1. 我们需要在 `Module` 类的 `OnApplicationInitialization` 方法添加 `UseHangfireServer` 方法调用.
+
+如果你想要使用Hangfire的面板,你可以使用: `UseHangfireDashboard`
+
+````csharp
+ public override void OnApplicationInitialization(ApplicationInitializationContext context)
+ {
+    var app = context.GetApplicationBuilder();
+
+    // ... others
+
+    app.UseHangfireServer();
+    app.UseHangfireDashboard();
+
+ }
+````
