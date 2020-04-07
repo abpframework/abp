@@ -38,7 +38,7 @@ Predefined cross-origin strategies are accessible via `CROSS_ORIGIN_STRATEGY` co
 ### Anonymous
 
 ```js
-Anonymous(integrity?: string)
+CROSS_ORIGIN_STRATEGY.Anonymous(integrity?: string)
 ```
 
 `crossorigin` will be set as `"anonymous"` and `integrity` is optional.
@@ -47,7 +47,7 @@ Anonymous(integrity?: string)
 ### UseCredentials
 
 ```js
-UseCredentials(integrity?: string)
+CROSS_ORIGIN_STRATEGY.UseCredentials(integrity?: string)
 ```
 
 `crossorigin` will be set as `"use-credentials"` and `integrity` is optional.

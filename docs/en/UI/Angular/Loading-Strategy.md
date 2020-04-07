@@ -63,7 +63,7 @@ Predefined content security strategies are accessible via `LOADING_STRATEGY` con
 ### AppendAnonymousScriptToHead
 
 ```js
-AppendAnonymousScriptToHead(src: string, integrity?: string)
+LOADING_STRATEGY.AppendAnonymousScriptToHead(src: string, integrity?: string)
 ```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<script>` element and places it at the **end** of `<head>` tag in the document.
@@ -72,7 +72,7 @@ Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<s
 ### PrependAnonymousScriptToHead
 
 ```js
-PrependAnonymousScriptToHead(src: string, integrity?: string)
+LOADING_STRATEGY.PrependAnonymousScriptToHead(src: string, integrity?: string)
 ```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<script>` element and places it at the **beginning** of `<head>` tag in the document.
@@ -81,7 +81,7 @@ Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<s
 ### AppendAnonymousScriptToBody
 
 ```js
-AppendAnonymousScriptToBody(src: string, integrity?: string)
+LOADING_STRATEGY.AppendAnonymousScriptToBody(src: string, integrity?: string)
 ```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<script>` element and places it at the **end** of `<body>` tag in the document.
@@ -90,7 +90,7 @@ Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<s
 ### AppendAnonymousStyleToHead
 
 ```js
-AppendAnonymousStyleToHead(href: string, integrity?: string)
+LOADING_STRATEGY.AppendAnonymousStyleToHead(href: string, integrity?: string)
 ```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<style>` element and places it at the **end** of `<head>` tag in the document.
@@ -99,7 +99,7 @@ Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<s
 ### PrependAnonymousStyleToHead
 
 ```js
-PrependAnonymousStyleToHead(href: string, integrity?: string)
+LOADING_STRATEGY.PrependAnonymousStyleToHead(href: string, integrity?: string)
 ```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<style>` element and places it at the **beginning** of `<head>` tag in the document.
