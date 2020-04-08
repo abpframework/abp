@@ -32,12 +32,7 @@ namespace Volo.Abp.Identity.Organizations
         /// Display name of this role.
         /// </summary>
         public virtual string DisplayName { get; set; }
-
-        /// <summary>
-        /// Children of this OU.
-        /// </summary>
-        public virtual ICollection<OrganizationUnit> Children { get; set; }
-
+        
         /// <summary>
         /// Roles of this OU.
         /// </summary>
