@@ -1,5 +1,6 @@
 ﻿using System;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
@@ -21,7 +22,7 @@ namespace Volo.Abp.Identity
         public virtual Guid UserId { get; set; }
 
         /// <summary>
-        /// Id of the <see cref="OrganizationUnit"/>.
+        /// Id of the related <see cref="OrganizationUnit"/>.
         /// </summary>
         public virtual Guid OrganizationUnitId { get; set; }
 
@@ -30,20 +31,11 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual bool IsDeleted { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserOrganizationUnit"/> class.
-        /// </summary>
-        public IdentityUserOrganizationUnit()
+        protected IdentityUserOrganizationUnit()
         {
 
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserOrganizationUnit"/> class.
-        /// </summary>
-        /// <param name="tenantId">TenantId</param>
-        /// <param name="userId">Id of the User.</param>
-        /// <param name="organizationUnitId">Id of the <see cref="OrganizationUnit"/>.</param>
         public IdentityUserOrganizationUnit(Guid? tenantId, Guid userId, Guid organizationUnitId)
         {
             TenantId = tenantId;

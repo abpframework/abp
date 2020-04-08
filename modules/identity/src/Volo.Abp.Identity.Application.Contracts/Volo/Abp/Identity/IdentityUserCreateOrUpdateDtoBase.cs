@@ -32,6 +32,7 @@ namespace Volo.Abp.Identity
         [CanBeNull]
         public string[] RoleNames { get; set; }
 
+        [CanBeNull]
         public Guid[] OrganizationUnits { get; set; }
     }
 }

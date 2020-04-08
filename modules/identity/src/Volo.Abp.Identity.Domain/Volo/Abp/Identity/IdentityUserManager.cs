@@ -22,13 +22,12 @@ namespace Volo.Abp.Identity
     {
         protected IIdentityRoleRepository RoleRepository { get; }
         protected IIdentityUserRepository UserRepository { get; }
-
-        protected IOrganizationUnitRepository _organizationUnitRepository { get; private set; }
-        protected IIdentityUserRepository _identityUserRepository { get; private set; }
-        private readonly ISettingProvider _settingProvider;
-        protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
-
+        protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+        protected IIdentityUserRepository IdentityUserRepository { get; }
+        protected ISettingProvider SettingProvider { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
+        protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
         public IdentityUserManager(
             IdentityUserStore store,
@@ -57,9 +56,9 @@ namespace Volo.Abp.Identity
                   services,
                   logger)
         {
-            _organizationUnitRepository = organizationUnitRepository;
-            _identityUserRepository = identityUserRepository;
-            _settingProvider = settingProvider;
+            OrganizationUnitRepository = organizationUnitRepository;
+            IdentityUserRepository = identityUserRepository;
+            SettingProvider = settingProvider;
             RoleRepository = roleRepository;
             UserRepository = userRepository;
             CancellationTokenProvider = cancellationTokenProvider;
@@ -81,7 +80,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(roleNames, nameof(roleNames));
 
-            var currentRoleNames = await GetRolesAsync(user).ConfigureAwait(false);
+            var currentRoleNames = await GetRolesAsync(user);
 
             var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct());
             if (!result.Succeeded)
@@ -103,7 +102,7 @@ namespace Volo.Abp.Identity
         {
             return await IsInOrganizationUnitAsync(
                 await GetByIdAsync(userId).ConfigureAwait(false),
-                await _organizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
+                await OrganizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
                 );
         }
 
@@ -115,14 +114,14 @@ namespace Volo.Abp.Identity
         public virtual async Task AddToOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await AddToOrganizationUnitAsync(
-                await _identityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
-                await _organizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
+                await IdentityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
+                await OrganizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
                 );
         }
 
         public virtual async Task AddToOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
+            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
             
             var currentOus = user.OrganizationUnits;
 
@@ -139,14 +138,14 @@ namespace Volo.Abp.Identity
         public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await RemoveFromOrganizationUnitAsync(
-                await _identityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
-                await _organizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
+                await IdentityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
+                await OrganizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
                 );
         }
 
         public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
+            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
 
             user.RemoveOrganizationUnit(ou.Id);
         }
@@ -154,7 +153,7 @@ namespace Volo.Abp.Identity
         public virtual async Task SetOrganizationUnitsAsync(Guid userId, params Guid[] organizationUnitIds)
         {
             await SetOrganizationUnitsAsync(
-                await _identityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
+                await IdentityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
                 organizationUnitIds
                 );
         }
@@ -166,7 +165,7 @@ namespace Volo.Abp.Identity
 
             await CheckMaxUserOrganizationUnitMembershipCountAsync(user.TenantId, organizationUnitIds.Length);
 
-            var currentOus = await _identityUserRepository.GetOrganizationUnitsAsync(user.Id).ConfigureAwait(false);
+            var currentOus = await IdentityUserRepository.GetOrganizationUnitsAsync(user.Id).ConfigureAwait(false);
 
             //Remove from removed OUs
             foreach (var currentOu in currentOus)
@@ -184,7 +183,7 @@ namespace Volo.Abp.Identity
                 {
                     await AddToOrganizationUnitAsync(
                         user,
-                        await _organizationUnitRepository.GetAsync(organizationUnitId).ConfigureAwait(false)
+                        await OrganizationUnitRepository.GetAsync(organizationUnitId).ConfigureAwait(false)
                         );
                 }
             }
@@ -192,7 +191,7 @@ namespace Volo.Abp.Identity
 
         private async Task CheckMaxUserOrganizationUnitMembershipCountAsync(Guid? tenantId, int requestedCount)
         {
-            var maxCount = await _settingProvider.GetAsync<int>(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount).ConfigureAwait(false);
+            var maxCount = await SettingProvider.GetAsync<int>(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount).ConfigureAwait(false);
             if (requestedCount > maxCount)
             {
                 throw new AbpException(string.Format("Can not set more than {0} organization unit for a user!", maxCount));
@@ -202,11 +201,11 @@ namespace Volo.Abp.Identity
         [UnitOfWork]
         public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user)
         {
-            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
+            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
 
             var ouOfUser = user.OrganizationUnits;
 
-            return await _organizationUnitRepository.GetListAsync(ouOfUser.Select(t => t.OrganizationUnitId)).ConfigureAwait(false);
+            return await OrganizationUnitRepository.GetListAsync(ouOfUser.Select(t => t.OrganizationUnitId)).ConfigureAwait(false);
         }
 
         [UnitOfWork]
@@ -215,13 +214,13 @@ namespace Volo.Abp.Identity
         {
             if (includeChildren)
             {
-                return await _identityUserRepository
+                return await IdentityUserRepository
                     .GetUsersInOrganizationUnitWithChildrenAsync(organizationUnit.Code)
                     .ConfigureAwait(false);
             }
             else
             {
-                return await _identityUserRepository
+                return await IdentityUserRepository
                     .GetUsersInOrganizationUnitAsync(organizationUnit.Id)
                     .ConfigureAwait(false);
             }

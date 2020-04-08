@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
-using Volo.Abp.Identity.Organizations;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
@@ -133,7 +131,6 @@ namespace Volo.Abp.Identity
 
         protected IdentityUser()
         {
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
@@ -286,33 +283,37 @@ namespace Volo.Abp.Identity
 
         public virtual void AddOrganizationUnit(Guid organizationUnitId)
         {
-            Check.NotNull(organizationUnitId, nameof(organizationUnitId));
-
             if (IsInOrganizationUnit(organizationUnitId))
             {
                 return;
             }
 
-            OrganizationUnits.Add(new IdentityUserOrganizationUnit(TenantId, Id, organizationUnitId));
+            OrganizationUnits.Add(
+                new IdentityUserOrganizationUnit(
+                    TenantId,
+                    Id,
+                    organizationUnitId
+                )
+            );
         }
 
         public virtual void RemoveOrganizationUnit(Guid organizationUnitId)
         {
-            Check.NotNull(organizationUnitId, nameof(organizationUnitId));
-
             if (!IsInOrganizationUnit(organizationUnitId))
             {
                 return;
             }
 
-            OrganizationUnits.RemoveAll(ou => ou.OrganizationUnitId == organizationUnitId);
+            OrganizationUnits.RemoveAll(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
         }
 
         public virtual bool IsInOrganizationUnit(Guid organizationUnitId)
         {
-            Check.NotNull(organizationUnitId, nameof(organizationUnitId));
-
-            return OrganizationUnits.Any(ou => ou.OrganizationUnitId == organizationUnitId);
+            return OrganizationUnits.Any(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
         }
 
         public override string ToString()
