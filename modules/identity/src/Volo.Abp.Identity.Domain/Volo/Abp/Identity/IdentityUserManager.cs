@@ -198,7 +198,7 @@ namespace Volo.Abp.Identity
 
             return await OrganizationUnitRepository.GetListAsync(
                 user.OrganizationUnits.Select(t => t.OrganizationUnitId),
-                CancellationToken
+                cancellationToken: CancellationToken
             );
         }
 

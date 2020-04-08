@@ -8,12 +8,29 @@ namespace Volo.Abp.Identity.Organizations
 {
     public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit, Guid>
     {
-        Task<List<OrganizationUnit>> GetChildrenAsync(Guid? parentId, CancellationToken cancellationToken = default);
+        Task<List<OrganizationUnit>> GetChildrenAsync(
+            Guid? parentId,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
 
-        Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(string code, Guid? parentId, CancellationToken cancellationToken = default);
+        Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
+            string code,
+            Guid? parentId,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
 
-        Task<List<OrganizationUnit>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
+        Task<List<OrganizationUnit>> GetListAsync(
+            IEnumerable<Guid> ids,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
 
-        Task<OrganizationUnit> GetOrganizationUnitAsync(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default);
+        Task<OrganizationUnit> GetOrganizationUnitAsync(
+            string displayName,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
     }
 }

@@ -22,9 +22,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public async Task<List<OrganizationUnit>> GetChildrenAsync(
             Guid? parentId,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
+                .IncludeDetails(includeDetails)
                 .Where(x => x.ParentId == parentId)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
@@ -32,18 +34,22 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
             string code,
             Guid? parentId,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
+                .IncludeDetails(includeDetails)
                 .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<OrganizationUnit>> GetListAsync(
             IEnumerable<Guid> ids,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
+                .IncludeDetails(includeDetails)
                 .Where(t => ids.Contains(t.Id))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

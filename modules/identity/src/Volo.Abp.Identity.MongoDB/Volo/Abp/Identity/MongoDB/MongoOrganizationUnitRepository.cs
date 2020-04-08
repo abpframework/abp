@@ -21,6 +21,7 @@ namespace Volo.Abp.Identity.MongoDB
 
         public async Task<List<OrganizationUnit>> GetChildrenAsync(
             Guid? parentId, 
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
@@ -31,6 +32,7 @@ namespace Volo.Abp.Identity.MongoDB
         public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
             string code, 
             Guid? parentId, 
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
@@ -38,7 +40,10 @@ namespace Volo.Abp.Identity.MongoDB
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<OrganizationUnit>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+        public async Task<List<OrganizationUnit>> GetListAsync(
+            IEnumerable<Guid> ids, 
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
                     .Where(t => ids.Contains(t.Id))
