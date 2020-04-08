@@ -1,11 +1,11 @@
 import { Store } from '@ngxs/store';
 import { ABP, ConfigState } from '@abp/ng.core';
 import { PasswordRules, validatePassword } from '@ngx-validate/core';
-import { Validators } from '@angular/forms';
+import { Validators, ValidatorFn } from '@angular/forms';
 
 const { minLength, maxLength } = Validators;
 
-export function getPasswordValidators(store: Store) {
+export function getPasswordValidators(store: Store): ValidatorFn[] {
   const getRule = getRuleFn(store);
 
   const passwordRulesArr = [] as PasswordRules;
