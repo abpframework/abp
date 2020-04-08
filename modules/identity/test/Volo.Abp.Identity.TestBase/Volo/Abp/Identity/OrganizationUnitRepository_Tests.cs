@@ -44,7 +44,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetListAsync()
         {
-            var ouIds = (await OrganizationUnitRepository.GetListAsync())
+            var ouIds = (await OrganizationUnitRepository.GetListAsync(includeDetails: true))
                         .Select(ou => ou.Id).Take(2);
             var ous = await OrganizationUnitRepository.GetListAsync(ouIds);
             ous.Count.ShouldBe(2);
@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task Should_Eager_Load_OrganizationUnit_Collections()
         {
-            var ou = (await OrganizationUnitRepository.GetListAsync(true))
+            var ou = (await OrganizationUnitRepository.GetListAsync(includeDetails: true))
                 .FirstOrDefault(ou => ou.DisplayName == "OU111");
             ou.Roles.ShouldNotBeNull();
             ou.Roles.Any().ShouldBeTrue();

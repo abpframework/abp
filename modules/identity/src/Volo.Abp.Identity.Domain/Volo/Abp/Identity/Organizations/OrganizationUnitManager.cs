@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Threading;
@@ -17,11 +15,10 @@ namespace Volo.Abp.Identity.Organizations
     /// </summary>
     public class OrganizationUnitManager : DomainService
     {
-        protected IOrganizationUnitRepository _organizationUnitRepository { get; private set; }
-
-        private readonly IStringLocalizer<IdentityResource> _localizer;
-        private readonly IIdentityRoleRepository _identityRoleRepository;
-        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+        protected IStringLocalizer<IdentityResource> Localizer { get; }
+        protected IIdentityRoleRepository IdentityRoleRepository { get; }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public OrganizationUnitManager(
             IOrganizationUnitRepository organizationUnitRepository,
@@ -29,10 +26,10 @@ namespace Volo.Abp.Identity.Organizations
             IIdentityRoleRepository identityRoleRepository,
             ICancellationTokenProvider cancellationTokenProvider)
         {
-            _organizationUnitRepository = organizationUnitRepository;
-            _localizer = localizer;
-            _identityRoleRepository = identityRoleRepository;
-            _cancellationTokenProvider = cancellationTokenProvider;
+            OrganizationUnitRepository = organizationUnitRepository;
+            Localizer = localizer;
+            IdentityRoleRepository = identityRoleRepository;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
         [UnitOfWork]
@@ -40,30 +37,36 @@ namespace Volo.Abp.Identity.Organizations
         {
             organizationUnit.Code = await GetNextChildCodeAsync(organizationUnit.ParentId);
             await ValidateOrganizationUnitAsync(organizationUnit);
-            await _organizationUnitRepository.InsertAsync(organizationUnit);
+            await OrganizationUnitRepository.InsertAsync(organizationUnit);
         }
 
         public virtual async Task UpdateAsync(OrganizationUnit organizationUnit)
         {
             await ValidateOrganizationUnitAsync(organizationUnit);
-            await _organizationUnitRepository.UpdateAsync(organizationUnit);
+            await OrganizationUnitRepository.UpdateAsync(organizationUnit);
         }
 
         public virtual async Task<string> GetNextChildCodeAsync(Guid? parentId)
         {
             var lastChild = await GetLastChildOrNullAsync(parentId);
-            if (lastChild == null)
+            if (lastChild != null)
             {
-                var parentCode = parentId != null ? await GetCodeOrDefaultAsync(parentId.Value) : null;
-                return OrganizationUnit.AppendCode(parentCode, OrganizationUnit.CreateCode(1));
+                return OrganizationUnit.CalculateNextCode(lastChild.Code);
             }
 
-            return OrganizationUnit.CalculateNextCode(lastChild.Code);
+            var parentCode = parentId != null 
+                ? await GetCodeOrDefaultAsync(parentId.Value) 
+                : null;
+
+            return OrganizationUnit.AppendCode(
+                parentCode,
+                OrganizationUnit.CreateCode(1)
+            );
         }
 
         public virtual async Task<OrganizationUnit> GetLastChildOrNullAsync(Guid? parentId)
         {
-            var children = await _organizationUnitRepository.GetChildrenAsync(parentId);
+            var children = await OrganizationUnitRepository.GetChildrenAsync(parentId);
             return children.OrderBy(c => c.Code).LastOrDefault();
         }
 
@@ -74,16 +77,16 @@ namespace Volo.Abp.Identity.Organizations
 
             foreach (var child in children)
             {
-                await _organizationUnitRepository.DeleteAsync(child);
+                await OrganizationUnitRepository.DeleteAsync(child);
             }
 
-            await _organizationUnitRepository.DeleteAsync(id);
+            await OrganizationUnitRepository.DeleteAsync(id);
         }
 
         [UnitOfWork]
         public virtual async Task MoveAsync(Guid id, Guid? parentId)
         {
-            var organizationUnit = await _organizationUnitRepository.GetAsync(id);
+            var organizationUnit = await OrganizationUnitRepository.GetAsync(id);
             if (organizationUnit.ParentId == parentId)
             {
                 return;
@@ -110,7 +113,7 @@ namespace Volo.Abp.Identity.Organizations
 
         public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
         {
-            var ou = await _organizationUnitRepository.GetAsync(id);
+            var ou = await OrganizationUnitRepository.GetAsync(id);
             return ou?.Code;
         }
 
@@ -122,7 +125,7 @@ namespace Volo.Abp.Identity.Organizations
 
             if (siblings.Any(ou => ou.DisplayName == organizationUnit.DisplayName))
             {
-                throw new UserFriendlyException(_localizer["OrganizationUnitDuplicateDisplayNameWarning", organizationUnit.DisplayName]);
+                throw new UserFriendlyException(Localizer["OrganizationUnitDuplicateDisplayNameWarning", organizationUnit.DisplayName]);
             }
         }
 
@@ -130,17 +133,17 @@ namespace Volo.Abp.Identity.Organizations
         {
             if (!recursive)
             {
-                return await _organizationUnitRepository.GetChildrenAsync(parentId);
+                return await OrganizationUnitRepository.GetChildrenAsync(parentId);
             }
 
             if (!parentId.HasValue)
             {
-                return await _organizationUnitRepository.GetListAsync();
+                return await OrganizationUnitRepository.GetListAsync(includeDetails: true);
             }
 
             var code = await GetCodeOrDefaultAsync(parentId.Value);
 
-            return await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId);
+            return await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId);
         }
 
         public virtual Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
@@ -151,8 +154,8 @@ namespace Volo.Abp.Identity.Organizations
         public virtual async Task AddRoleToOrganizationUnitAsync(Guid roleId, Guid ouId)
         {
             await AddRoleToOrganizationUnitAsync(
-                await _identityRoleRepository.GetAsync(roleId),
-                await _organizationUnitRepository.GetAsync(ouId, true)
+                await IdentityRoleRepository.GetAsync(roleId),
+                await OrganizationUnitRepository.GetAsync(ouId, true)
                 );
         }
 
@@ -171,8 +174,8 @@ namespace Volo.Abp.Identity.Organizations
         public virtual async Task RemoveRoleFromOrganizationUnitAsync(Guid roleId, Guid ouId)
         {
             await RemoveRoleFromOrganizationUnitAsync(
-                await _identityRoleRepository.GetAsync(roleId),
-                await _organizationUnitRepository.GetAsync(ouId, true)
+                await IdentityRoleRepository.GetAsync(roleId),
+                await OrganizationUnitRepository.GetAsync(ouId, true)
                 );
         }
 
