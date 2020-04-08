@@ -1,14 +1,14 @@
-import { ChangePassword, ConfigState, ABP } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
+import { ChangePassword } from '@abp/ng.core';
+import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { comparePasswords, Validation, PasswordRules, validatePassword } from '@ngx-validate/core';
+import { comparePasswords, Validation } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
-import snq from 'snq';
 import { finalize } from 'rxjs/operators';
+import snq from 'snq';
 import { Account } from '../../models/account';
 
-const { minLength, required, maxLength } = Validators;
+const { required } = Validators;
 
 const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 
@@ -36,33 +36,7 @@ export class ChangePasswordComponent
   ) {}
 
   ngOnInit(): void {
-    const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
-      ConfigState.getSettings('Identity.Password'),
-    );
-    const passwordRulesArr = [] as PasswordRules;
-    let requiredLength = 1;
-
-    if ((passwordRules['Abp.Identity.Password.RequireDigit'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('number');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireLowercase'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('small');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireUppercase'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('capital');
-    }
-
-    if (
-      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
-    ) {
-      passwordRulesArr.push('special');
-    }
-
-    if (Number.isInteger(+passwordRules['Abp.Identity.Password.RequiredLength'])) {
-      requiredLength = +passwordRules['Abp.Identity.Password.RequiredLength'];
-    }
+    const passwordValidations = getPasswordValidators(this.store);
 
     this.form = this.fb.group(
       {
@@ -70,23 +44,13 @@ export class ChangePasswordComponent
         newPassword: [
           '',
           {
-            validators: [
-              required,
-              validatePassword(passwordRulesArr),
-              minLength(requiredLength),
-              maxLength(128),
-            ],
+            validators: [required, ...passwordValidations],
           },
         ],
         repeatNewPassword: [
           '',
           {
-            validators: [
-              required,
-              validatePassword(passwordRulesArr),
-              minLength(requiredLength),
-              maxLength(128),
-            ],
+            validators: [required, ...passwordValidations],
           },
         ],
       },
