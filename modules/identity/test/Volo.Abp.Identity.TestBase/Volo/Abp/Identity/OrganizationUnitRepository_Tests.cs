@@ -32,21 +32,21 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetChildrenAsync()
         {
-            (await OrganizationUnitRepository.GetChildrenAsync(_testData.RoleModeratorId).ConfigureAwait(false)).ShouldNotBeNull();
+            (await OrganizationUnitRepository.GetChildrenAsync(_testData.RoleModeratorId)).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task GetAllChildrenWithParentCodeAsync()
         {
-            (await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0), _guidGenerator.Create()).ConfigureAwait(false)).ShouldNotBeNull();
+            (await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(OrganizationUnit.CreateCode(0), _guidGenerator.Create())).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task GetListAsync()
         {
-            var ouIds = (await OrganizationUnitRepository.GetListAsync().ConfigureAwait(false))
+            var ouIds = (await OrganizationUnitRepository.GetListAsync())
                         .Select(ou => ou.Id).Take(2);
-            var ous = await OrganizationUnitRepository.GetListAsync(ouIds).ConfigureAwait(false);
+            var ous = await OrganizationUnitRepository.GetListAsync(ouIds);
             ous.Count.ShouldBe(2);
             ous.ShouldContain(ou => ou.Id == ouIds.First());
         }
@@ -54,20 +54,20 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetOrganizationUnitAsync()
         {
-            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnitAsync("OU111").ConfigureAwait(false);
+            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnitAsync("OU111");
             organizationUnit.ShouldNotBeNull();
         }
 
         [Fact]
         public async Task GetCountAsync()
         {
-            (await OrganizationUnitRepository.GetCountAsync().ConfigureAwait(false)).ShouldBeGreaterThan(0);
+            (await OrganizationUnitRepository.GetCountAsync()).ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task Should_Eager_Load_OrganizationUnit_Collections()
         {
-            var ou = (await OrganizationUnitRepository.GetListAsync(true).ConfigureAwait(false))
+            var ou = (await OrganizationUnitRepository.GetListAsync(true))
                 .FirstOrDefault(ou => ou.DisplayName == "OU111");
             ou.Roles.ShouldNotBeNull();
             ou.Roles.Any().ShouldBeTrue();

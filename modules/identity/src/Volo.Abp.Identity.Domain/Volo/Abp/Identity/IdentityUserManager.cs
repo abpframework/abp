@@ -101,8 +101,8 @@ namespace Volo.Abp.Identity
         public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             return await IsInOrganizationUnitAsync(
-                await GetByIdAsync(userId).ConfigureAwait(false),
-                await OrganizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
+                await GetByIdAsync(userId),
+                await OrganizationUnitRepository.GetAsync(ouId)
                 );
         }
 
@@ -114,14 +114,14 @@ namespace Volo.Abp.Identity
         public virtual async Task AddToOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await AddToOrganizationUnitAsync(
-                await IdentityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
-                await OrganizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
+                await IdentityUserRepository.GetAsync(userId, true),
+                await OrganizationUnitRepository.GetAsync(ouId)
                 );
         }
 
         public virtual async Task AddToOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
+            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
             
             var currentOus = user.OrganizationUnits;
 
@@ -138,14 +138,14 @@ namespace Volo.Abp.Identity
         public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await RemoveFromOrganizationUnitAsync(
-                await IdentityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
-                await OrganizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
+                await IdentityUserRepository.GetAsync(userId, true),
+                await OrganizationUnitRepository.GetAsync(ouId)
                 );
         }
 
         public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
+            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
 
             user.RemoveOrganizationUnit(ou.Id);
         }
@@ -153,7 +153,7 @@ namespace Volo.Abp.Identity
         public virtual async Task SetOrganizationUnitsAsync(Guid userId, params Guid[] organizationUnitIds)
         {
             await SetOrganizationUnitsAsync(
-                await IdentityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
+                await IdentityUserRepository.GetAsync(userId, true),
                 organizationUnitIds
                 );
         }
@@ -165,14 +165,14 @@ namespace Volo.Abp.Identity
 
             await CheckMaxUserOrganizationUnitMembershipCountAsync(user.TenantId, organizationUnitIds.Length);
 
-            var currentOus = await IdentityUserRepository.GetOrganizationUnitsAsync(user.Id).ConfigureAwait(false);
+            var currentOus = await IdentityUserRepository.GetOrganizationUnitsAsync(user.Id);
 
             //Remove from removed OUs
             foreach (var currentOu in currentOus)
             {
                 if (!organizationUnitIds.Contains(currentOu.Id))
                 {
-                    await RemoveFromOrganizationUnitAsync(user.Id, currentOu.Id).ConfigureAwait(false);
+                    await RemoveFromOrganizationUnitAsync(user.Id, currentOu.Id);
                 }
             }
 
@@ -183,7 +183,7 @@ namespace Volo.Abp.Identity
                 {
                     await AddToOrganizationUnitAsync(
                         user,
-                        await OrganizationUnitRepository.GetAsync(organizationUnitId).ConfigureAwait(false)
+                        await OrganizationUnitRepository.GetAsync(organizationUnitId)
                         );
                 }
             }
@@ -191,7 +191,7 @@ namespace Volo.Abp.Identity
 
         private async Task CheckMaxUserOrganizationUnitMembershipCountAsync(Guid? tenantId, int requestedCount)
         {
-            var maxCount = await SettingProvider.GetAsync<int>(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount).ConfigureAwait(false);
+            var maxCount = await SettingProvider.GetAsync<int>(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount);
             if (requestedCount > maxCount)
             {
                 throw new AbpException(string.Format("Can not set more than {0} organization unit for a user!", maxCount));
@@ -201,11 +201,11 @@ namespace Volo.Abp.Identity
         [UnitOfWork]
         public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user)
         {
-            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
+            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
 
             var ouOfUser = user.OrganizationUnits;
 
-            return await OrganizationUnitRepository.GetListAsync(ouOfUser.Select(t => t.OrganizationUnitId)).ConfigureAwait(false);
+            return await OrganizationUnitRepository.GetListAsync(ouOfUser.Select(t => t.OrganizationUnitId));
         }
 
         [UnitOfWork]
@@ -216,13 +216,13 @@ namespace Volo.Abp.Identity
             {
                 return await IdentityUserRepository
                     .GetUsersInOrganizationUnitWithChildrenAsync(organizationUnit.Code)
-                    .ConfigureAwait(false);
+                    ;
             }
             else
             {
                 return await IdentityUserRepository
                     .GetUsersInOrganizationUnitAsync(organizationUnit.Id)
-                    .ConfigureAwait(false);
+                    ;
             }
         }
 

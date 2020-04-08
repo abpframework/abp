@@ -98,24 +98,24 @@ namespace Volo.Abp.Identity
             using (var uow = _unitOfWorkManager.Begin())
             {
                 var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.NormalizeName("david")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("david"));
                 user.ShouldNotBeNull();
 
                 var ou = await _organizationUnitRepository.GetOrganizationUnitAsync(
-                    _lookupNormalizer.NormalizeName("OU11")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("OU11"));
                 ou.ShouldNotBeNull();
 
                 await _identityUserManager.SetOrganizationUnitsAsync(user, new Guid[]
                 {
                     ou.Id
-                }).ConfigureAwait(false);
+                });
 
                 user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.NormalizeName("david")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("david"));
                 user.OrganizationUnits.Count.ShouldBeGreaterThan(0);
                 user.OrganizationUnits.FirstOrDefault(uou => uou.OrganizationUnitId == ou.Id).ShouldNotBeNull();
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
 
 
             }
@@ -155,25 +155,25 @@ namespace Volo.Abp.Identity
             using (var uow = _unitOfWorkManager.Begin())
             {
                 var ou = await _organizationUnitRepository.GetOrganizationUnitAsync(
-                    _lookupNormalizer.NormalizeName("OU111")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("OU111"));
                 ou.ShouldNotBeNull();
 
                 var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.NormalizeName("john.nash")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 var ouNew = await _organizationUnitRepository.GetOrganizationUnitAsync(
-                    _lookupNormalizer.NormalizeName("OU2")).ConfigureAwait(false);
+                    _lookupNormalizer.NormalizeName("OU2"));
                 ouNew.ShouldNotBeNull();
 
                 await _identityUserManager.SetOrganizationUnitsAsync(user, new Guid[]
                 {
                     ouNew.Id
-                }).ConfigureAwait(false);
+                });
 
                 user.OrganizationUnits.ShouldNotContain(x => x.OrganizationUnitId == ou.Id);
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
         }
 

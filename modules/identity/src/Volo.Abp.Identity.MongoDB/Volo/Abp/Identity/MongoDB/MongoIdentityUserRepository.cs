@@ -48,11 +48,11 @@ namespace Volo.Abp.Identity.MongoDB
             Guid id,
             CancellationToken cancellationToken = default)
         {
-            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
             var organizationUnitIds = user.OrganizationUnits.Select(r => r.OrganizationUnitId);
             var organizationUnits = DbContext.OrganizationUnits.AsQueryable().Where(ou => organizationUnitIds.Contains(ou.Id));
             var roleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId));
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<IdentityUser> FindByLoginAsync(
@@ -137,12 +137,12 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
             var organizationUnitIds = user.OrganizationUnits.Select(r => r.OrganizationUnitId);
             return await DbContext.OrganizationUnits.AsQueryable()
                             .Where(ou => organizationUnitIds.Contains(ou.Id))
                             .ToListAsync(GetCancellationToken(cancellationToken))
-                            .ConfigureAwait(false);
+                            ;
         }
 
         public virtual async Task<long> GetCountAsync(
@@ -166,7 +166,7 @@ namespace Volo.Abp.Identity.MongoDB
             var result = await GetMongoQueryable()
                     .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnitId))
                     .ToListAsync(GetCancellationToken(cancellationToken))
-                    .ConfigureAwait(false);
+                    ;
             return result;
         }
 
@@ -178,12 +178,12 @@ namespace Volo.Abp.Identity.MongoDB
                 .Where(ou => ou.Code.StartsWith(code))
                 .Select(ou => ou.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                ;
 
             return await GetMongoQueryable()
                      .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
                      .ToListAsync(GetCancellationToken(cancellationToken))
-                     .ConfigureAwait(false);
+                     ;
         }
     }
 }

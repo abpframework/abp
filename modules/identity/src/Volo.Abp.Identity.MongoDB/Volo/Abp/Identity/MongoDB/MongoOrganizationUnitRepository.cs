@@ -28,20 +28,20 @@ namespace Volo.Abp.Identity.MongoDB
         public async Task<List<OrganizationUnit>> GetChildrenAsync(Guid? parentId, CancellationToken cancellationToken = default)
         {
             return await DbContext.OrganizationUnits.AsQueryable().Where(ou => ou.ParentId == parentId)
-                    .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                    .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(string code, Guid? parentId, CancellationToken cancellationToken = default)
         {
             return await DbContext.OrganizationUnits.AsQueryable()
                     .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
-                    .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                    .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<OrganizationUnit>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
             return await DbContext.OrganizationUnits.AsQueryable()
-                    .Where(t => ids.Contains(t.Id)).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                    .Where(t => ids.Contains(t.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<OrganizationUnit> GetOrganizationUnitAsync(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default)
@@ -50,7 +50,7 @@ namespace Volo.Abp.Identity.MongoDB
                     .FirstOrDefaultAsync(
                         ou => ou.DisplayName == displayName,
                         GetCancellationToken(cancellationToken)
-                    ).ConfigureAwait(false);
+                    );
         }
     }
 }

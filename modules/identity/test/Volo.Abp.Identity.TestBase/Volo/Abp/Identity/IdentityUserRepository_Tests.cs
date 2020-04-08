@@ -134,7 +134,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetUsersInOrganizationUnitAsync()
         {
-            var users = await UserRepository.GetUsersInOrganizationUnitAsync((await GetOU("OU111").ConfigureAwait(false)).Id).ConfigureAwait(false);
+            var users = await UserRepository.GetUsersInOrganizationUnitAsync((await GetOU("OU111")).Id);
             users.ShouldNotBeNull();
             users.Count.ShouldBeGreaterThan(0);
         }
@@ -142,7 +142,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetUsersInOrganizationUnitWithChildrenAsync()
         {
-            var users = await UserRepository.GetUsersInOrganizationUnitWithChildrenAsync((await GetOU("OU111").ConfigureAwait(false)).Code).ConfigureAwait(false);
+            var users = await UserRepository.GetUsersInOrganizationUnitWithChildrenAsync((await GetOU("OU111")).Code);
             users.ShouldNotBeNull();
             users.Count.ShouldBeGreaterThan(0);
         }
@@ -170,7 +170,7 @@ namespace Volo.Abp.Identity
 
         private async Task<OrganizationUnit> GetOU(string diplayName)
         {
-            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnitAsync(diplayName).ConfigureAwait(false);
+            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnitAsync(diplayName);
             organizationUnit.ShouldNotBeNull();
             return organizationUnit;
         }

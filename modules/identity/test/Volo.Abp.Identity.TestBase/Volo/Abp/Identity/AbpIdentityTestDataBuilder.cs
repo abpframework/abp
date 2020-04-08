@@ -47,10 +47,10 @@ namespace Volo.Abp.Identity
 
         public async Task Build()
         {
-            await AddRoles().ConfigureAwait(false);
-            await AddOrganizationUnits().ConfigureAwait(false);
-            await AddUsers().ConfigureAwait(false);
-            await AddClaimTypes().ConfigureAwait(false);
+            await AddRoles();
+            await AddOrganizationUnits();
+            await AddUsers();
+            await AddClaimTypes();
         }
 
         private async Task AddRoles()
@@ -77,17 +77,17 @@ namespace Volo.Abp.Identity
          */
         private async Task AddOrganizationUnits()
         {
-            var ou1 = await CreateOU("OU1", OrganizationUnit.CreateCode(1)).ConfigureAwait(false);
-            var ou11 = await CreateOU("OU11", OrganizationUnit.CreateCode(1, 1), ou1.Id).ConfigureAwait(false);
-            _ou112 = await CreateOU("OU112", OrganizationUnit.CreateCode(1, 1, 2), ou11.Id).ConfigureAwait(false);
-            var ou12 = await CreateOU("OU12", OrganizationUnit.CreateCode(1, 2), ou1.Id).ConfigureAwait(false);
-            var ou2 = await CreateOU("OU2", OrganizationUnit.CreateCode(2)).ConfigureAwait(false);
-            var ou21 = await CreateOU("OU21", OrganizationUnit.CreateCode(2, 1), ou2.Id).ConfigureAwait(false);
+            var ou1 = await CreateOU("OU1", OrganizationUnit.CreateCode(1));
+            var ou11 = await CreateOU("OU11", OrganizationUnit.CreateCode(1, 1), ou1.Id);
+            _ou112 = await CreateOU("OU112", OrganizationUnit.CreateCode(1, 1, 2), ou11.Id);
+            var ou12 = await CreateOU("OU12", OrganizationUnit.CreateCode(1, 2), ou1.Id);
+            var ou2 = await CreateOU("OU2", OrganizationUnit.CreateCode(2));
+            var ou21 = await CreateOU("OU21", OrganizationUnit.CreateCode(2, 1), ou2.Id);
 
             _ou111 = new OrganizationUnit(null, "OU111", ou11.Id);
             _ou111.Code = OrganizationUnit.CreateCode(1, 1, 1);
             _ou111.AddRole(_moderator.Id);
-            await _organizationUnitRepository.InsertAsync(_ou111).ConfigureAwait(false);
+            await _organizationUnitRepository.InsertAsync(_ou111);
         }
 
         private async Task AddUsers()
@@ -121,7 +121,7 @@ namespace Volo.Abp.Identity
         private async Task AddClaimTypes()
         {
             var ageClaim = new IdentityClaimType(_testData.AgeClaimId, "Age", false, false, null, null, null, IdentityClaimValueType.Int);
-            await _identityClaimTypeRepository.InsertAsync(ageClaim).ConfigureAwait(false);
+            await _identityClaimTypeRepository.InsertAsync(ageClaim);
 
             var educationClaim = new IdentityClaimType(_testData.EducationClaimId, "Education", true, false, null, null, null);
             await _identityClaimTypeRepository.InsertAsync(educationClaim);
@@ -129,7 +129,7 @@ namespace Volo.Abp.Identity
 
         private async Task<OrganizationUnit> CreateOU(string displayName, string code, Guid? parentId = null)
         {
-            var ou = await _organizationUnitRepository.InsertAsync(new OrganizationUnit(null, displayName, parentId) { Code = code }).ConfigureAwait(false);
+            var ou = await _organizationUnitRepository.InsertAsync(new OrganizationUnit(null, displayName, parentId) { Code = code });
             return ou;
         }
     }

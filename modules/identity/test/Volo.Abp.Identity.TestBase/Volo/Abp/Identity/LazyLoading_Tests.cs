@@ -61,7 +61,7 @@ namespace Volo.Abp.Identity
                 john.OrganizationUnits.ShouldNotBeNull();
                 john.OrganizationUnits.Any().ShouldBeTrue();
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
         }
 
@@ -70,11 +70,11 @@ namespace Volo.Abp.Identity
         {
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
-                var ou = await OrganizationUnitRepository.GetOrganizationUnitAsync(LookupNormalizer.NormalizeName("OU111"), includeDetails: false).ConfigureAwait(false);
+                var ou = await OrganizationUnitRepository.GetOrganizationUnitAsync(LookupNormalizer.NormalizeName("OU111"), includeDetails: false);
                 ou.Roles.ShouldNotBeNull(); //?
                 ou.Roles.Any().ShouldBeTrue();
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
         }
     }

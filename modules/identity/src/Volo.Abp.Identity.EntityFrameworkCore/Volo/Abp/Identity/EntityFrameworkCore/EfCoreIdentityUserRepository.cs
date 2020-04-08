@@ -54,7 +54,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         where userOu.UserId == id
                         select userOuRoles.Name;
 
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<IdentityUser> FindByLoginAsync(
@@ -167,7 +167,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         where userOU.UserId == id
                         select ou;
 
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
@@ -179,7 +179,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         join user in DbSet on userOu.UserId equals user.Id
                         where userOu.OrganizationUnitId == organizationUnitId
                         select user;
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
 
@@ -193,7 +193,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         join ou in DbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(code)
                         select user;
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<IdentityUser> WithDetails()
