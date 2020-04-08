@@ -182,13 +182,25 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             return totalCount;
         }
 
-        public virtual async Task<List<EntityHistory>> GetEntityHistoriesAsync(string entityId, string entityTypeFullName)
+        public virtual async Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId)
+        {
+            var auditLog = await DbSet.AsNoTracking().IncludeDetails()
+                .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId)).FirstAsync();
+
+            return new EntityChangeWithUsername()
+            {
+                EntityChange = auditLog.EntityChanges.First(x => x.Id == entityChangeId),
+                UserName = auditLog.UserName
+            };
+        }
+
+        public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName)
         {
             var query = DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().Where(x => x.EntityId == entityId && x.EntityTypeFullName == entityTypeFullName);
 
             return await (from e in query
                         join auditLog in DbSet on e.AuditLogId equals auditLog.Id
-                        select new EntityHistory() {EntityChange = e, UserName = auditLog.UserName}).ToListAsync();
+                        select new EntityChangeWithUsername() {EntityChange = e, UserName = auditLog.UserName}).ToListAsync();
         }
 
         protected virtual IQueryable<EntityChange> GetEntityChangeListQuery(

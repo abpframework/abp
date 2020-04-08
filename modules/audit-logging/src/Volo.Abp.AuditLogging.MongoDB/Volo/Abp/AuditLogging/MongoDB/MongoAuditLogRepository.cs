@@ -191,7 +191,20 @@ namespace Volo.Abp.AuditLogging.MongoDB
             return count;
         }
 
-        public virtual async Task<List<EntityHistory>> GetEntityHistoriesAsync(string entityId, string entityTypeFullName)
+        public virtual async Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId)
+        {
+            var auditLog = (await GetMongoQueryable()
+                            .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
+                            .FirstAsync());
+
+            return new EntityChangeWithUsername()
+            {
+                EntityChange = auditLog.EntityChanges.First(x => x.Id == entityChangeId),
+                UserName = auditLog.UserName
+            };
+        }
+
+        public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName)
         {
             var auditLogs = await GetMongoQueryable().Where(x =>
                 x.EntityChanges.Any(y => y.EntityId == entityId && y.EntityTypeFullName == entityTypeFullName)).As<IMongoQueryable<AuditLog>>().ToListAsync();
@@ -200,7 +213,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
             
             entityChanges.RemoveAll(x => x.EntityId != entityId || x.EntityTypeFullName != entityTypeFullName);
 
-            return entityChanges.Select(x => new EntityHistory()
+            return entityChanges.Select(x => new EntityChangeWithUsername()
                 {EntityChange = x, UserName = auditLogs.First(y => y.Id == x.AuditLogId).UserName}).ToList();
         }
 

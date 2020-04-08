@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.AuditLogging
 {
-    public class EntityHistory
+    public class EntityChangeWithUsername
     {
         public EntityChange EntityChange { get; set; }
         
