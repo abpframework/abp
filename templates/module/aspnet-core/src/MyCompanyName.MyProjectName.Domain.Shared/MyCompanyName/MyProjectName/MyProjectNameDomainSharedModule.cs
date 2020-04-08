@@ -17,7 +17,7 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>("MyCompanyName.MyProjectName");
+                options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -30,7 +30,7 @@ namespace MyCompanyName.MyProjectName
 
             Configure<AbpExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
+                options.MapCodeNamespace("MyCompanyName.MyProjectName", typeof(MyProjectNameResource));
             });
         }
     }
