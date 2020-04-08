@@ -191,6 +191,19 @@ namespace Volo.Abp.AuditLogging.MongoDB
             return count;
         }
 
+        public virtual async Task<List<EntityHistory>> GetEntityHistoriesAsync(string entityId, string entityTypeFullName)
+        {
+            var auditLogs = await GetMongoQueryable().Where(x =>
+                x.EntityChanges.Any(y => y.EntityId == entityId && y.EntityTypeFullName == entityTypeFullName)).As<IMongoQueryable<AuditLog>>().ToListAsync();
+
+            var entityChanges = auditLogs.SelectMany(x => x.EntityChanges).ToList();
+            
+            entityChanges.RemoveAll(x => x.EntityId != entityId || x.EntityTypeFullName != entityTypeFullName);
+
+            return entityChanges.Select(x => new EntityHistory()
+                {EntityChange = x, UserName = auditLogs.First(y => y.Id == x.AuditLogId).UserName}).ToList();
+        }
+
         protected virtual IQueryable<AuditLog> GetEntityChangeListQuery(
             Guid? auditLogId = null,
             DateTime? startTime = null,
