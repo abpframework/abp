@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Identity.Organizations;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.Identity
@@ -17,6 +18,7 @@ namespace Volo.Abp.Identity
         private readonly IdentityTestData _testData;
         private readonly IIdentityRoleRepository _identityRoleRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
         public OrganizationUnitManager_Tests()
         {
             _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
@@ -24,6 +26,7 @@ namespace Volo.Abp.Identity
             _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
             _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
             _testData = GetRequiredService<IdentityTestData>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
@@ -87,13 +90,21 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task AddRoleToOrganizationUnitAsync()
         {
-            var ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", true);
-            var adminRole = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin"));
-            await _organizationUnitManager.AddRoleToOrganizationUnitAsync(adminRole, ou);
-            
-            //TODO: This method has a bug: add role not work
+            OrganizationUnit ou = null;
+            IdentityRole adminRole = null;
+
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", true);
+                adminRole = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin"));
+                await _organizationUnitManager.AddRoleToOrganizationUnitAsync(adminRole, ou);
+                await _organizationUnitRepository.UpdateAsync(ou);
+
+                await uow.CompleteAsync();
+            }
+
             ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", includeDetails: true);
-            ou.Roles.FirstOrDefault().RoleId.ShouldBe(adminRole.Id);
+            ou.Roles.First().RoleId.ShouldBe(adminRole.Id);
         }
 
         [Fact]

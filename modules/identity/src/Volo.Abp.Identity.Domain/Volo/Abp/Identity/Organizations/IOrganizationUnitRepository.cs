@@ -17,6 +17,5 @@ namespace Volo.Abp.Identity.Organizations
         Task<List<OrganizationUnit>> GetListAsync(bool includeDetails = true, CancellationToken cancellationToken = default);
 
         Task<OrganizationUnit> GetOrganizationUnitAsync(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default);
-
     }
 }

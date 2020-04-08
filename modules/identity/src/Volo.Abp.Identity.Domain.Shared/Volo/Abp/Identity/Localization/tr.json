@@ -72,6 +72,7 @@
     "Permission:Delete": "Silme",
     "Permission:ChangePermissions": "İzinleri değiştirme",
     "Permission:UserManagement": "Kullanıcı yönetimi",
-    "Permission:UserLookup": "Kullanıcı sorgulama"
+    "Permission:UserLookup": "Kullanıcı sorgulama",
+    "Volo.Abp.Identity:010002": "Bir kullanıcı en fazla {MaxUserMembershipCount} organizasyon birimine üye olabilir!"
   }
 }
