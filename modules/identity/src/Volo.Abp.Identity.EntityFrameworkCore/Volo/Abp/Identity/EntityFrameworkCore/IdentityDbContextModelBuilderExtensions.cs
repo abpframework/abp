@@ -153,7 +153,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "OrganizationUnits", options.Schema);
 
-                b.ConfigureFullAuditedAggregateRoot();
+                b.ConfigureByConvention();
 
                 b.Property(ou => ou.Code).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxCodeLength).HasColumnName(nameof(OrganizationUnit.Code));
                 b.Property(ou => ou.DisplayName).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxDisplayNameLength).HasColumnName(nameof(OrganizationUnit.DisplayName));
@@ -168,6 +168,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "OrganizationUnitRoles", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.HasKey(ou => new { ou.OrganizationUnitId, ou.RoleId });
 
                 b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
@@ -180,6 +182,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "UserOrganizationUnits", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.HasKey(ou => new { ou.OrganizationUnitId, ou.UserId });
 
                 b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
@@ -187,7 +191,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.HasIndex(ou => new { ou.UserId, ou.OrganizationUnitId });
             });
-
         }
     }
 }
