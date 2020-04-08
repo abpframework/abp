@@ -189,9 +189,10 @@ namespace Volo.Abp.Identity
 
             //Assert
 
-            result.Items.Count.ShouldBe(2);
+            result.Items.Count.ShouldBe(3);
             result.Items.ShouldContain(r => r.Name == "moderator");
             result.Items.ShouldContain(r => r.Name == "supporter");
+            result.Items.ShouldContain(r => r.Name == "manager");
         }
 
         [Fact]

@@ -20,8 +20,9 @@ namespace Volo.Abp.Identity
         private readonly OrganizationUnitManager _organizationUnitManager;
 
         private IdentityRole _adminRole;
-        private IdentityRole _moderator;
+        private IdentityRole _moderatorRole;
         private IdentityRole _supporterRole;
+        private IdentityRole _managerRole;
         private OrganizationUnit _ou111;
         private OrganizationUnit _ou112;
 
@@ -57,12 +58,15 @@ namespace Volo.Abp.Identity
         {
             _adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin"));
 
-            _moderator = new IdentityRole(_testData.RoleModeratorId, "moderator");
-            _moderator.AddClaim(_guidGenerator, new Claim("test-claim", "test-value"));
-            await _roleRepository.InsertAsync(_moderator);
+            _moderatorRole = new IdentityRole(_testData.RoleModeratorId, "moderator");
+            _moderatorRole.AddClaim(_guidGenerator, new Claim("test-claim", "test-value"));
+            await _roleRepository.InsertAsync(_moderatorRole);
 
             _supporterRole = new IdentityRole(_guidGenerator.Create(), "supporter");
             await _roleRepository.InsertAsync(_supporterRole);
+
+            _managerRole = new IdentityRole(_guidGenerator.Create(), "manager");
+            await _roleRepository.InsertAsync(_managerRole);
         }
 
         /* Creates OU tree as shown below:
@@ -86,7 +90,8 @@ namespace Volo.Abp.Identity
 
             _ou111 = new OrganizationUnit(null, "OU111", ou11.Id);
             _ou111.Code = OrganizationUnit.CreateCode(1, 1, 1);
-            _ou111.AddRole(_moderator.Id);
+            _ou111.AddRole(_moderatorRole.Id);
+            _ou111.AddRole(_managerRole.Id);
             await _organizationUnitRepository.InsertAsync(_ou111);
         }
 
@@ -98,7 +103,7 @@ namespace Volo.Abp.Identity
             await _userRepository.InsertAsync(adminUser);
 
             var john = new IdentityUser(_testData.UserJohnId, "john.nash", "john.nash@abp.io");
-            john.AddRole(_moderator.Id);
+            john.AddRole(_moderatorRole.Id);
             john.AddRole(_supporterRole.Id);
             john.AddOrganizationUnit(_ou111.Id);
             john.AddOrganizationUnit(_ou112.Id);
