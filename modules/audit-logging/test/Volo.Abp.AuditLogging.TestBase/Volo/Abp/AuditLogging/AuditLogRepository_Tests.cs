@@ -984,7 +984,7 @@ namespace Volo.Abp.AuditLogging
                 await AuditLogRepository.GetEntityChangeWithUsernameAsync(entityChanges.First().Id);
 
             entityHistory.EntityChange.ChangeTime.ShouldBe(entityChanges.First().ChangeTime);
-            entityHistory.UserName.ShouldNotBeNull();;
+            entityHistory.UserName.ShouldNotBeNull();
         }
     }
 }
