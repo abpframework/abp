@@ -367,7 +367,6 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
 
             var userRoles = await UserRepository.GetRoleNamesAsync(user.Id, cancellationToken: cancellationToken);
-
             var userOrganizationUnitRoles = await UserRepository.GetRoleNamesInOrganizationUnitAsync(user.Id, cancellationToken: cancellationToken);
 
             return userRoles.Union(userOrganizationUnitRoles).ToList();

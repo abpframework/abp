@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity.Organizations
     /// <summary>
     /// Represents membership of a User to an OU.
     /// </summary>
-    public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant, ISoftDelete
+    public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant
     {
         /// <summary>
         /// TenantId of this entity.
@@ -17,22 +17,17 @@ namespace Volo.Abp.Identity.Organizations
         /// <summary>
         /// Id of the Role.
         /// </summary>
-        public virtual Guid RoleId { get; set; }
+        public virtual Guid RoleId { get; protected set; }
 
         /// <summary>
         /// Id of the <see cref="OrganizationUnit"/>.
         /// </summary>
-        public virtual Guid OrganizationUnitId { get; set; }
-
-        /// <summary>
-        /// Specifies if the organization is soft deleted or not.
-        /// </summary>
-        public virtual bool IsDeleted { get; set; }
+        public virtual Guid OrganizationUnitId { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrganizationUnitRole"/> class.
         /// </summary>
-        public OrganizationUnitRole()
+        protected OrganizationUnitRole()
         {
 
         }
@@ -43,11 +38,11 @@ namespace Volo.Abp.Identity.Organizations
         /// <param name="tenantId">TenantId</param>
         /// <param name="roleId">Id of the User.</param>
         /// <param name="organizationUnitId">Id of the <see cref="OrganizationUnit"/>.</param>
-        public OrganizationUnitRole(Guid? tenantId, Guid roleId, Guid organizationUnitId)
+        public OrganizationUnitRole(Guid roleId, Guid organizationUnitId, Guid? tenantId = null)
         {
-            TenantId = tenantId;
             RoleId = roleId;
             OrganizationUnitId = organizationUnitId;
+            TenantId = tenantId;
         }
 
         public override object[] GetKeys()

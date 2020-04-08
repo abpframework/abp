@@ -8,39 +8,33 @@ namespace Volo.Abp.Identity
     /// <summary>
     /// Represents membership of a User to an OU.
     /// </summary>
-    public class IdentityUserOrganizationUnit : CreationAuditedEntity, IMultiTenant, ISoftDelete
+    public class IdentityUserOrganizationUnit : CreationAuditedEntity, IMultiTenant
     {
-
         /// <summary>
         /// TenantId of this entity.
         /// </summary>
-        public virtual Guid? TenantId { get; set; }
+        public virtual Guid? TenantId { get; protected set; }
 
         /// <summary>
         /// Id of the User.
         /// </summary>
-        public virtual Guid UserId { get; set; }
+        public virtual Guid UserId { get; protected set; }
 
         /// <summary>
         /// Id of the related <see cref="OrganizationUnit"/>.
         /// </summary>
-        public virtual Guid OrganizationUnitId { get; set; }
-
-        /// <summary>
-        /// Specifies if the organization is soft deleted or not.
-        /// </summary>
-        public virtual bool IsDeleted { get; set; }
+        public virtual Guid OrganizationUnitId { get; protected set; }
 
         protected IdentityUserOrganizationUnit()
         {
 
         }
 
-        public IdentityUserOrganizationUnit(Guid? tenantId, Guid userId, Guid organizationUnitId)
+        public IdentityUserOrganizationUnit(Guid userId, Guid organizationUnitId, Guid? tenantId = null)
         {
-            TenantId = tenantId;
             UserId = userId;
             OrganizationUnitId = organizationUnitId;
+            TenantId = tenantId;
         }
 
         public override object[] GetKeys()

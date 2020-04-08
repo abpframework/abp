@@ -290,9 +290,9 @@ namespace Volo.Abp.Identity
 
             OrganizationUnits.Add(
                 new IdentityUserOrganizationUnit(
-                    TenantId,
                     Id,
-                    organizationUnitId
+                    organizationUnitId,
+                    TenantId
                 )
             );
         }
