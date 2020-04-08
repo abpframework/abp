@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using JetBrains.Annotations;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 
@@ -60,9 +61,15 @@ namespace Volo.Abp.Authorization.Permissions
         public virtual PermissionDefinition AddPermission(
             string name, 
             ILocalizableString displayName = null,
-            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+            bool isEnabled = true)
         {
-            var permission = new PermissionDefinition(name, displayName, multiTenancySide);
+            var permission = new PermissionDefinition(
+                name,
+                displayName,
+                multiTenancySide,
+                isEnabled
+            );
 
             _permissions.Add(permission);
 
@@ -94,6 +101,34 @@ namespace Volo.Abp.Authorization.Permissions
         public override string ToString()
         {
             return $"[{nameof(PermissionGroupDefinition)} {Name}]";
+        }
+
+        [CanBeNull]
+        public PermissionDefinition GetPermissionOrNull([NotNull] string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            return GetPermissionOrNullRecursively(Permissions, name);
+        }
+
+        private PermissionDefinition GetPermissionOrNullRecursively(
+            IReadOnlyList<PermissionDefinition> permissions, string name)
+        {
+            foreach (var permission in permissions)
+            {
+                if (permission.Name == name)
+                {
+                    return permission;
+                }
+
+                var childPermission = GetPermissionOrNullRecursively(permission.Children, name);
+                if (childPermission != null)
+                {
+                    return childPermission;
+                }
+            }
+
+            return null;
         }
     }
 }

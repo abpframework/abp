@@ -350,6 +350,10 @@
               "path": "UI/Angular/Lazy-Load-Service.md"
             },
             {
+              "text": "DomInsertionService",
+              "path": "UI/Angular/Dom-Insertion-Service.md"
+            },
+            {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
             }

@@ -7,8 +7,15 @@
 
 ## API
 
+### constructor
 
-### constructor(public path: string, protected domStrategy?: DomStrategy, protected crossOriginStrategy?: CrossOriginStrategy)
+```js
+constructor(
+  public path: string,
+  protected domStrategy?: DomStrategy,
+  protected crossOriginStrategy?: CrossOriginStrategy
+)
+```
 
 - `path` is set to `<script>` elements as `src` and `<link>` elements as `href` attribute.
 - `domStrategy` is the `DomStrategy` that will be used when inserting the created element. (_default: AppendToHead_)
@@ -17,12 +24,20 @@
 Please refer to [DomStrategy](./Dom-Strategy.md) and [CrossOriginStrategy](./Cross-Origin-Strategy.md) documentation for their usage.
 
 
-### createElement(): HTMLScriptElement | HTMLLinkElement
+### createElement
+
+```js
+createElement(): HTMLScriptElement | HTMLLinkElement
+```
 
 This method creates and returns a `<script>` or `<link>` element with `path` set as `src` or `href`.
 
 
-### createStream(): Observable<Event>
+### createStream
+
+```js
+createStream(): Observable<Event>
+```
 
 This method creates and returns an observable stream that emits on success and throws on error.
 
@@ -45,33 +60,51 @@ This method creates and returns an observable stream that emits on success and t
 Predefined content security strategies are accessible via `LOADING_STRATEGY` constant.
 
 
-### AppendAnonymousScriptToHead(src: string, integrity?: string)
+### AppendAnonymousScriptToHead
+
+```js
+LOADING_STRATEGY.AppendAnonymousScriptToHead(src: string, integrity?: string)
+```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<script>` element and places it at the **end** of `<head>` tag in the document.
 
 
-### PrependAnonymousScriptToHead(src: string, integrity?: string)
+### PrependAnonymousScriptToHead
+
+```js
+LOADING_STRATEGY.PrependAnonymousScriptToHead(src: string, integrity?: string)
+```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<script>` element and places it at the **beginning** of `<head>` tag in the document.
 
 
-### AppendAnonymousScriptToBody(src: string, integrity?: string)
+### AppendAnonymousScriptToBody
+
+```js
+LOADING_STRATEGY.AppendAnonymousScriptToBody(src: string, integrity?: string)
+```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<script>` element and places it at the **end** of `<body>` tag in the document.
 
 
-### AppendAnonymousStyleToHead(href: string, integrity?: string)
+### AppendAnonymousStyleToHead
+
+```js
+LOADING_STRATEGY.AppendAnonymousStyleToHead(href: string, integrity?: string)
+```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<style>` element and places it at the **end** of `<head>` tag in the document.
 
 
-### PrependAnonymousStyleToHead(href: string, integrity?: string)
+### PrependAnonymousStyleToHead
+
+```js
+LOADING_STRATEGY.PrependAnonymousStyleToHead(href: string, integrity?: string)
+```
 
 Sets given paremeters and `crossorigin="anonymous"` as attributes of created `<style>` element and places it at the **beginning** of `<head>` tag in the document.
 
 
-
-
-## What's Next?
+## See Also
 
 - [LazyLoadService](./Lazy-Load-Service.md)

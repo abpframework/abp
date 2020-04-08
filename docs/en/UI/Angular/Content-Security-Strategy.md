@@ -8,12 +8,20 @@
 ## API
 
 
-### constructor(public nonce?: string)
+### constructor
+
+```js
+constructor(public nonce?: string)
+```
 
 - `nonce` enables whitelisting inline script or styles in order to avoid using `unsafe-inline` in [script-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src#Unsafe_inline_script) and [style-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src#Unsafe_inline_styles) directives.
 
 
-### applyCSP(element: HTMLScriptElement | HTMLStyleElement): void
+### applyCSP
+
+```js
+applyCSP(element: HTMLScriptElement | HTMLStyleElement): void
+```
 
 This method maps the aforementioned properties to the given `element`.
 
@@ -39,18 +47,28 @@ This method maps the aforementioned properties to the given `element`.
 Predefined content security strategies are accessible via `CONTENT_SECURITY_STRATEGY` constant.
 
 
-### Loose(nonce: string)
+### Loose
+
+```js
+CONTENT_SECURITY_STRATEGY.Loose(nonce: string)
+```
 
 `nonce` will be set.
 
 
-### None()
+### None
+
+```js
+CONTENT_SECURITY_STRATEGY.None()
+```
 
 Nothing will be done.
 
 
 
 
-## What's Next?
+## See Also
 
-TODO: Place new ContentStrategy link here.
+- [DomInsertionService](./Dom-Insertion-Service.md)
+- [ContentStrategy](./Content-Strategy.md)
+
