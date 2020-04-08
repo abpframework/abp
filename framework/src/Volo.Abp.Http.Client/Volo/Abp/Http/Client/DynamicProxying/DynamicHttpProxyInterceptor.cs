@@ -109,7 +109,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             
             if (typeof(T) == typeof(string))
             {
-                responseAsString = responseAsString.EnsureStartsWith('"').EnsureEndsWith('"');
+                return (T)Convert.ChangeType(responseAsString, typeof(T));
             }
             
             return JsonSerializer.Deserialize<T>(responseAsString);
