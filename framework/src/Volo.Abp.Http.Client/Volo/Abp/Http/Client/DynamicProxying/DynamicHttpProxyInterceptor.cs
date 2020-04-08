@@ -111,7 +111,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             {
                 return (T)Convert.ChangeType(responseAsString, typeof(T));
             }
-            
+
             return JsonSerializer.Deserialize<T>(responseAsString);
         }
 
