@@ -207,7 +207,7 @@ namespace Volo.Abp.AuditLogging.MongoDB
         public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName)
         {
             var auditLogs = await GetMongoQueryable().Where(x =>
-                x.EntityChanges.Any(y => y.EntityId == entityId && y.EntityTypeFullName == entityTypeFullName)).As<IMongoQueryable<AuditLog>>().ToListAsync();
+                x.EntityChanges.Any(y => y.EntityId == entityId && y.EntityTypeFullName == entityTypeFullName)).As<IMongoQueryable<AuditLog>>().OrderBy(x => x.ExecutionTime).ToListAsync();
 
             var entityChanges = auditLogs.SelectMany(x => x.EntityChanges).ToList();
             

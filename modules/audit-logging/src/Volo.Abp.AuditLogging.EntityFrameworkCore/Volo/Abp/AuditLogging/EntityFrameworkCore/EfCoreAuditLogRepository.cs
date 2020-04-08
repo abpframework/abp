@@ -196,7 +196,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
         public virtual async Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName)
         {
-            var query = DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().Where(x => x.EntityId == entityId && x.EntityTypeFullName == entityTypeFullName);
+            var query = DbContext.Set<EntityChange>().AsNoTracking().IncludeDetails().Where(x => x.EntityId == entityId && x.EntityTypeFullName == entityTypeFullName).OrderBy(x => x.ChangeTime);
 
             return await (from e in query
                         join auditLog in DbSet on e.AuditLogId equals auditLog.Id
