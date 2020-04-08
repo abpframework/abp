@@ -11,7 +11,6 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Organizations;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp.Settings;
@@ -123,7 +122,7 @@ namespace Volo.Abp.Identity
 
         public virtual async Task AddToOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, _cancellationTokenProvider.Token).ConfigureAwait(false);
+            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
             
             var currentOus = user.OrganizationUnits;
 
@@ -147,7 +146,7 @@ namespace Volo.Abp.Identity
 
         public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, _cancellationTokenProvider.Token).ConfigureAwait(false);
+            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
 
             user.RemoveOrganizationUnit(ou.Id);
         }
@@ -203,7 +202,7 @@ namespace Volo.Abp.Identity
         [UnitOfWork]
         public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user)
         {
-            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, _cancellationTokenProvider.Token).ConfigureAwait(false);
+            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token).ConfigureAwait(false);
 
             var ouOfUser = user.OrganizationUnits;
 
@@ -211,7 +210,8 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(OrganizationUnit organizationUnit, bool includeChildren = false)
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(OrganizationUnit organizationUnit,
+            bool includeChildren = false)
         {
             if (includeChildren)
             {
@@ -225,6 +225,7 @@ namespace Volo.Abp.Identity
                     .GetUsersInOrganizationUnitAsync(organizationUnit.Id)
                     .ConfigureAwait(false);
             }
+        }
 
         public virtual async Task<IdentityResult> AddDefaultRolesAsync([NotNull] IdentityUser user)
         {

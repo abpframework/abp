@@ -118,10 +118,11 @@ namespace Volo.Abp.Identity
                 await uow.CompleteAsync().ConfigureAwait(false);
 
 
+            }
         }
-        
-           [Fact]
-                public async Task AddDefaultRolesAsync_In_Same_Uow()
+
+        [Fact]
+        public async Task AddDefaultRolesAsync_In_Same_Uow()
         {
             await CreateRandomDefaultRoleAsync();
 
@@ -146,6 +147,7 @@ namespace Volo.Abp.Identity
                 await uow.CompleteAsync();
 
             }
+        }
 
         [Fact]
         public async Task SetOrganizationUnits_Should_Remove()
@@ -175,8 +177,8 @@ namespace Volo.Abp.Identity
             }
         }
 
-   [Fact]
-public async Task AddDefaultRolesAsync_In_Different_Uow()
+        [Fact]
+        public async Task AddDefaultRolesAsync_In_Different_Uow()
         {
             await CreateRandomDefaultRoleAsync();
 
