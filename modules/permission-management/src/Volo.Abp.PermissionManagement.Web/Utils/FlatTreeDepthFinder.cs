@@ -5,7 +5,7 @@ namespace Volo.Abp.PermissionManagement.Web.Utils
     public class FlatTreeDepthFinder<T>
         where T : class, IFlatTreeItem
     {
-        public void SetDepths(List<T> items)
+        public virtual void SetDepths(List<T> items)
         {
             SetDepths(items, null, 0);
         }

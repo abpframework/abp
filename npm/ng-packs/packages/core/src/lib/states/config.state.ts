@@ -1,11 +1,12 @@
+import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
 import {
+  AddRoute,
   GetAppConfiguration,
   PatchRouteByName,
-  AddRoute,
   SetEnvironment,
 } from '../actions/config.actions';
 import { SetLanguage } from '../actions/session.actions';
@@ -19,6 +20,7 @@ import { SessionState } from './session.state';
   name: 'ConfigState',
   defaults: {} as Config.State,
 })
+@Injectable()
 export class ConfigState {
   @Selector()
   static getAll(state: Config.State) {
@@ -79,7 +81,7 @@ export class ConfigState {
 
   static getApiUrl(key?: string) {
     const selector = createSelector([ConfigState], (state: Config.State): string => {
-      return state.environment.apis[key || 'default'].url;
+      return (state.environment.apis[key || 'default'] || state.environment.apis.default).url;
     });
 
     return selector;
@@ -89,24 +91,24 @@ export class ConfigState {
     const selector = createSelector([ConfigState], (state: Config.State) => {
       return snq(() => state.setting.values[key]);
     });
+
     return selector;
   }
 
   static getSettings(keyword?: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      if (keyword) {
-        const keys = snq(
-          () => Object.keys(state.setting.values).filter(key => key.indexOf(keyword) > -1),
-          [],
-        );
+      const settings = snq(() => state.setting.values, {});
 
-        if (keys.length) {
-          return keys.reduce((acc, key) => ({ ...acc, [key]: state.setting.values[key] }), {});
-        }
-      }
+      if (!keyword) return settings;
 
-      return snq(() => state.setting.values, {});
+      const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
+
+      return keysFound.reduce((acc, key) => {
+        acc[key] = settings[key];
+        return acc;
+      }, {});
     });
+
     return selector;
   }
 
@@ -154,7 +156,7 @@ export class ConfigState {
     const selector = createSelector([ConfigState], (state: Config.State) => {
       if (!state.localization) return defaultValue || key;
 
-      const { defaultResourceName } = state.environment.localization;
+      const defaultResourceName = snq(() => state.environment.localization.defaultResourceName);
       if (keys[0] === '') {
         if (!defaultResourceName) {
           throw new Error(
@@ -168,7 +170,7 @@ export class ConfigState {
           );
         }
 
-        keys[0] = snq(() => defaultResourceName);
+        keys[0] = defaultResourceName;
       }
 
       let localization = (keys as any).reduce((acc, val) => {
@@ -260,7 +262,8 @@ export class ConfigState {
         route.url = `/${route.path}`;
       }
 
-      route.order = route.order || route.order === 0 ? route.order : parent.children.length;
+      route.children = route.children || [];
+      route.order = route.order || route.order === 0 ? route.order : (parent.children || []).length;
       parent.children = [...(parent.children || []), route].sort((a, b) => a.order - b.order);
 
       flattedRoutes[index] = parent;
@@ -298,7 +301,7 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment({ patchState }: StateContext<Config.State>, environment: Config.Environment) {
+  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
     return patchState({
       environment,
     });

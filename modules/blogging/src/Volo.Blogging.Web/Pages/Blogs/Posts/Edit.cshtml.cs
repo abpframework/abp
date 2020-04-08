@@ -42,7 +42,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
             var postDto = await _postAppService.GetAsync(new Guid(PostId));
             Post = ObjectMapper.Map<PostWithDetailsDto, EditPostViewModel>(postDto);
-            Post.Tags = String.Join(", ", postDto.Tags.Select(p=>p.Name).ToArray());
+            Post.Tags = String.Join(", ", postDto.Tags.Select(p => p.Name).ToArray());
 
             return Page();
         }
@@ -56,14 +56,16 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 Url = Post.Url,
                 CoverImage = Post.CoverImage,
                 Content = Post.Content,
-                Tags = Post.Tags
+                Tags = Post.Tags,
+                Description = Post.Description.IsNullOrEmpty() ?
+                    Post.Content.Truncate(PostConsts.MaxSeoFriendlyDescriptionLength) :
+                    Post.Description
             };
 
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
             var blog = await _blogAppService.GetAsync(editedPost.BlogId);
 
-           // return Redirect(Url.Content($"~/blog/{WebUtility.UrlEncode(blog.ShortName)}/{WebUtility.UrlEncode(editedPost.Url)}"));
-            return RedirectToPage("/Blog/Posts/Detail", new { blogShortName = blog.ShortName, postUrl = editedPost.Url });
+            return RedirectToPage("/Blogs/Posts/Detail", new { blogShortName = blog.ShortName, postUrl = editedPost.Url });
         }
     }
 
@@ -92,6 +94,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [HiddenInput]
         [StringLength(PostConsts.MaxContentLength)]
         public string Content { get; set; }
+
+        [StringLength(PostConsts.MaxDescriptionLength)]
+        public string Description { get; set; }
 
         public string Tags { get; set; }
     }

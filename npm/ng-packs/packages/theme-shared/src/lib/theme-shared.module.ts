@@ -1,7 +1,7 @@
-import { CoreModule, LazyLoadService } from '@abp/ng.core';
+import { CoreModule, noop, LazyLoadService } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
-import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
@@ -25,7 +25,13 @@ import { chartJsLoaded$ } from './utils/widget-utils';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { LoadingDirective } from './directives/loading.directive';
+import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 
+/**
+ *
+ * @deprecated To be deleted in v2.6
+ *
+ */
 export function appendScript(injector: Injector) {
   const fn = () => {
     import('chart.js').then(() => chartJsLoaded$.next(true));
@@ -38,7 +44,7 @@ export function appendScript(injector: Injector) {
 }
 
 @NgModule({
-  imports: [CoreModule, NgxValidateCoreModule],
+  imports: [CoreModule, NgxValidateCoreModule, NgbPaginationModule],
   declarations: [
     BreadcrumbComponent,
     ButtonComponent,
@@ -87,8 +93,8 @@ export class ThemeSharedModule {
         {
           provide: APP_INITIALIZER,
           multi: true,
-          deps: [Injector],
-          useFactory: appendScript,
+          deps: [THEME_SHARED_APPEND_CONTENT],
+          useFactory: noop,
         },
         { provide: HTTP_ERROR_CONFIG, useValue: options.httpErrorConfig },
         {

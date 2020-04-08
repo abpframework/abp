@@ -27,6 +27,11 @@ namespace DashboardDemo.EntityFrameworkCore
         )]
     public class DashboardDemoEntityFrameworkCoreModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            DashboardDemoEfCoreEntityExtensionMappings.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAbpDbContext<DashboardDemoDbContext>(options =>

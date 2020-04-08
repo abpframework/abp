@@ -1,12 +1,12 @@
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { ReplaySubject, timer, Subject, of } from 'rxjs';
+import clone from 'just-clone';
+import { of, ReplaySubject, timer } from 'rxjs';
+import { AddRoute, PatchRouteByName, SetLanguage } from '../actions';
+import { ABP } from '../models';
 import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
-import { SetLanguage, PatchRouteByName, AddRoute } from '../actions';
-import clone from 'just-clone';
-import { ABP } from '../models';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -116,6 +116,7 @@ export const CONFIG_STATE_DATA = {
   },
   setting: {
     values: {
+      'Abp.Custom.SomeSetting': 'X',
       'Abp.Localization.DefaultLanguage': 'en',
     },
   },
@@ -218,14 +219,14 @@ describe('ConfigState', () => {
   });
 
   describe('#getSettings', () => {
-    it('should return settings', () => {
-      expect(ConfigState.getSettings('Localization')(CONFIG_STATE_DATA)).toEqual({
-        'Abp.Localization.DefaultLanguage': 'en',
-      });
-
-      expect(ConfigState.getSettings('AllSettings')(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.setting.values,
-      );
+    test.each`
+      keyword           | expected
+      ${undefined}      | ${CONFIG_STATE_DATA.setting.values}
+      ${'Localization'} | ${{ 'Abp.Localization.DefaultLanguage': 'en' }}
+      ${'X'}            | ${{}}
+      ${'localization'} | ${{}}
+    `('should return $expected when keyword is given as $keyword', ({ keyword, expected }) => {
+      expect(ConfigState.getSettings(keyword)(CONFIG_STATE_DATA)).toEqual(expected);
     });
   });
 
@@ -374,6 +375,7 @@ describe('ConfigState', () => {
   describe('#AddRoute', () => {
     const newRoute = {
       name: 'My new page',
+      children: [],
       iconClass: 'fa fa-dashboard',
       path: 'page',
       invisible: false,

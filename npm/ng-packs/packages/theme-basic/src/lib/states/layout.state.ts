@@ -2,11 +2,13 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import snq from 'snq';
 import { AddNavigationElement, RemoveNavigationElementByName } from '../actions/layout.actions';
 import { Layout } from '../models/layout';
+import { Injectable } from '@angular/core';
 
 @State<Layout.State>({
   name: 'LayoutState',
   defaults: { navigationElements: [] } as Layout.State,
 })
+@Injectable()
 export class LayoutState {
   @Selector()
   static getNavigationElements({ navigationElements }: Layout.State): Layout.NavigationElement[] {

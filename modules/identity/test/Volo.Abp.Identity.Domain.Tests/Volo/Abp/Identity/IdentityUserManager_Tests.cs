@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
 using Volo.Abp.Identity.Organizations;
+using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Uow;
 using Xunit;
 using System.Linq;
@@ -47,7 +49,9 @@ namespace Volo.Abp.Identity
             using (var uow = _unitOfWorkManager.Begin())
             {
                 var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.NormalizeName("david"));
+                    _lookupNormalizer.NormalizeName("david")
+                );
+
                 user.ShouldNotBeNull();
 
                 var identityResult = await _identityUserManager.SetRolesAsync(user, new List<string>()
@@ -112,8 +116,36 @@ namespace Volo.Abp.Identity
                 user.OrganizationUnits.FirstOrDefault(uou => uou.OrganizationUnitId == ou.Id).ShouldNotBeNull();
 
                 await uow.CompleteAsync().ConfigureAwait(false);
-            }
+
+
         }
+        
+           [Fact]
+                public async Task AddDefaultRolesAsync_In_Same_Uow()
+        {
+            await CreateRandomDefaultRoleAsync();
+
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var user = CreateRandomUser();
+
+                (await _identityUserManager.CreateAsync(user)).CheckErrors();
+
+                user.Roles.Count.ShouldBe(0);
+
+                await _identityUserManager.AddDefaultRolesAsync(user);
+
+                user.Roles.Count.ShouldBeGreaterThan(0);
+
+                foreach (var roleId in user.Roles.Select(r => r.RoleId))
+                {
+                    var role = await _identityRoleRepository.GetAsync(roleId);
+                    role.IsDefault.ShouldBe(true);
+                }
+
+                await uow.CompleteAsync();
+
+            }
 
         [Fact]
         public async Task SetOrganizationUnits_Should_Remove()
@@ -141,6 +173,62 @@ namespace Volo.Abp.Identity
 
                 await uow.CompleteAsync().ConfigureAwait(false);
             }
+        }
+
+   [Fact]
+public async Task AddDefaultRolesAsync_In_Different_Uow()
+        {
+            await CreateRandomDefaultRoleAsync();
+
+            Guid userId;
+
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var user = CreateRandomUser();
+                userId = user.Id;
+
+                (await _identityUserManager.CreateAsync(user)).CheckErrors();
+                user.Roles.Count.ShouldBe(0);
+                await uow.CompleteAsync();
+            }
+
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var user = await _identityUserManager.GetByIdAsync(userId);
+
+                await _identityUserManager.AddDefaultRolesAsync(user);
+                user.Roles.Count.ShouldBeGreaterThan(0);
+
+                foreach (var roleId in user.Roles.Select(r => r.RoleId))
+                {
+                    var role = await _identityRoleRepository.GetAsync(roleId);
+                    role.IsDefault.ShouldBe(true);
+                }
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        private async Task CreateRandomDefaultRoleAsync()
+        {
+            await _identityRoleRepository.InsertAsync(
+                new IdentityRole(
+                    Guid.NewGuid(),
+                    Guid.NewGuid().ToString()
+                )
+                {
+                    IsDefault = true
+                }
+            );
+        }
+
+        private static IdentityUser CreateRandomUser()
+        {
+            return new IdentityUser(
+                Guid.NewGuid(),
+                Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToString() + "@abp.io"
+            );
         }
     }
 }

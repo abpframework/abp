@@ -106,7 +106,7 @@ namespace Volo.Abp.Account.Web.Pages
             }
             else
             {
-                if (ConsentInput.IdentityScopes.Any() || ConsentInput.ApiScopes.Any())
+                if (!ConsentInput.IdentityScopes.IsNullOrEmpty() || !ConsentInput.ApiScopes.IsNullOrEmpty())
                 {
                     grantedConsent = new ConsentResponse
                     {
@@ -187,7 +187,9 @@ namespace Volo.Abp.Account.Web.Pages
 
             public List<string> GetAllowedScopeNames()
             {
-                return IdentityScopes.Union(ApiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
+                var identityScopes = IdentityScopes ?? new List<ConsentModel.ScopeViewModel>();
+                var apiScopes = IdentityScopes ?? new List<ConsentModel.ScopeViewModel>();
+                return identityScopes.Union(apiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
             }
         }
 

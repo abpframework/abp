@@ -8,10 +8,10 @@ import {
   setValue,
   UpdateState,
 } from '@ngxs/store';
+import clone from 'just-clone';
 import snq from 'snq';
 import { ABP } from '../models';
-import { organizeRoutes, getAbpRoutes } from '../utils/route-utils';
-import clone from 'just-clone';
+import { getAbpRoutes, organizeRoutes } from '../utils/route-utils';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
 
@@ -28,7 +28,7 @@ export class ConfigPlugin implements NgxsPlugin {
     const matches = actionMatcher(event);
     const isInitAction = matches(InitState) || matches(UpdateState);
 
-    if (isInitAction && !this.initialized) {
+    if (isInitAction && !this.initialized && getAbpRoutes().length) {
       const transformedRoutes = transformRoutes(this.router.config);
       let { routes } = transformedRoutes;
       const { wrappers } = transformedRoutes;

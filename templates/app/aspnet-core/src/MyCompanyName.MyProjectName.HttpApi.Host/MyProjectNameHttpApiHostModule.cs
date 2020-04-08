@@ -167,11 +167,11 @@ namespace MyCompanyName.MyProjectName
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
-            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();

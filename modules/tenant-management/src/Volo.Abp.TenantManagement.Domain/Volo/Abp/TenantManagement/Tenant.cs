@@ -14,16 +14,15 @@ namespace Volo.Abp.TenantManagement
 
         protected Tenant()
         {
-            ExtraProperties = new Dictionary<string, object>();
+
         }
 
         protected internal Tenant(Guid id, [NotNull] string name)
+            : base(id)
         {
-            Id = id;
             SetName(name);
 
             ConnectionStrings = new List<TenantConnectionString>();
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         [CanBeNull]
@@ -72,7 +71,7 @@ namespace Volo.Abp.TenantManagement
             }
         }
 
-        internal void SetName([NotNull] string name)
+        protected internal virtual void SetName([NotNull] string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
         }

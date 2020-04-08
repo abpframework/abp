@@ -6,78 +6,78 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity
 {
-    [RemoteService]
+    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
     [Area("identity")]
     [ControllerName("User")]
     [Route("api/identity/users")]
     public class IdentityUserController : AbpController, IIdentityUserAppService
     {
-        private readonly IIdentityUserAppService _userAppService;
+        protected IIdentityUserAppService UserAppService { get; }
 
         public IdentityUserController(IIdentityUserAppService userAppService)
         {
-            _userAppService = userAppService;
+            UserAppService = userAppService;
         }
 
         [HttpGet]
         [Route("{id}")]
         public virtual Task<IdentityUserDto> GetAsync(Guid id)
         {
-            return _userAppService.GetAsync(id);
+            return UserAppService.GetAsync(id);
         }
 
         [HttpGet]
         public virtual Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
-            return _userAppService.GetListAsync(input);
+            return UserAppService.GetListAsync(input);
         }
 
         [HttpPost]
         public virtual Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
-            return _userAppService.CreateAsync(input);
+            return UserAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
         public virtual Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
-            return _userAppService.UpdateAsync(id, input);
+            return UserAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id}")]
         public virtual Task DeleteAsync(Guid id)
         {
-            return _userAppService.DeleteAsync(id);
+            return UserAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("{id}/roles")]
         public virtual Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
         {
-            return _userAppService.GetRolesAsync(id);
+            return UserAppService.GetRolesAsync(id);
         }
 
         [HttpPut]
         [Route("{id}/roles")]
         public virtual Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
         {
-            return _userAppService.UpdateRolesAsync(id, input);
+            return UserAppService.UpdateRolesAsync(id, input);
         }
 
         [HttpGet]
         [Route("by-username/{userName}")]
         public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
-            return _userAppService.FindByUsernameAsync(username);
+            return UserAppService.FindByUsernameAsync(username);
         }
 
         [HttpGet]
         [Route("by-email/{email}")]
         public virtual Task<IdentityUserDto> FindByEmailAsync(string email)
         {
-            return _userAppService.FindByEmailAsync(email);
+            return UserAppService.FindByEmailAsync(email);
         }
     }
 }

@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "GetStarted": "Get Started",
+    "GetStarted": "Get Started - Startup Templates",
     "Create": "Create",
     "NewProject": "New Project",
     "DirectDownload": "Direct Download",
@@ -86,7 +86,7 @@
     "BasedOnFamiliarToolsExplanation": "Built on and integrated to popular tools you already know. Low learning curve, easy adaptation, comfortable development.",
     "ORMIndependent": "ORM Independent",
     "ORMIndependentExplanation": "The core framework is ORM/database independent and can work with any data source. Entity Framework Core and MongoDB providers are already available.",
-    "Features": "Features",
+    "Features": "Explore the ABP Framework Features",
     "ABPCLI": "ABP CLI",
     "Modularity": "Modularity",
     "BootstrapTagHelpers": "Bootstrap Tag Helpers",
@@ -154,6 +154,8 @@
     "SeeTheDocumentForMoreInformation": "See the <a href=\"{1}\">{0} document</a> for more information",
     "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>open source</strong></span><span class=\"second-line text-uppercase\">Web Application<br />Framework </span><span class=\"third-line shine2\"><strong>for asp.net core</strong></span>",
     "UiFramework": "UI Framework",
-    "EmailAddress": "Email address"
+    "EmailAddress": "Email address",
+    "Mobile": "Mobile",
+    "ReactNative": "React Native"
   }
 }

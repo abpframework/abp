@@ -1,9 +1,8 @@
 export const environment = {
   production: false,
-  hmr: false,
   application: {
     name: 'MyProjectName',
-    logoUrl: '',
+    logoUrl: ''
   },
   oAuthConfig: {
     issuer: 'https://localhost:44305',
@@ -12,14 +11,14 @@ export const environment = {
     scope: 'MyProjectName',
     showDebugInformation: true,
     oidc: false,
-    requireHttps: true,
+    requireHttps: true
   },
   apis: {
     default: {
-      url: 'https://localhost:44305',
-    },
+      url: 'https://localhost:44305'
+    }
   },
   localization: {
-    defaultResourceName: 'MyProjectName',
-  },
+    defaultResourceName: 'MyProjectName'
+  }
 };

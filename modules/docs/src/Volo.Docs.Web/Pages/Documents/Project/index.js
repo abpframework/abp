@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
 
     $(function () {
         var initNavigationFilter = function (navigationContainerId) {
@@ -56,11 +56,17 @@
                 });
             };
 
-            $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
+            $("#filter").keyup(function (e) {
                 filterDocumentItems(e.target.value);
 
                 if (e.key === "Enter") {
                     gotoFilteredDocumentIfThereIsOnlyOne();
+                }
+            });
+
+            $("#fullsearch").keyup(function (e) {
+                if (e.key === "Enter") {
+                    window.open($(this).data("fullsearch-url") + this.value);
                 }
             });
         };
@@ -113,15 +119,16 @@
             };
 
             var setQueryString = function () {
-                clearQueryString();
-
-                var uri = window.location.href.toString();
-
                 var comboboxes = $(".doc-section-combobox");
-
                 if (comboboxes.length < 1) {
                     return;
                 }
+
+                var hash = document.location.hash;
+
+                clearQueryString();
+
+                var uri = window.location.href.toString();
 
                 var new_uri = uri + "?";
 
@@ -136,7 +143,7 @@
                     }
                 }
 
-                window.history.replaceState({}, document.title, new_uri);
+                window.history.replaceState({}, document.title, new_uri + hash);
             };
 
             var getTenYearsLater = function () {

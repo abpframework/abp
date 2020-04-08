@@ -2,9 +2,13 @@
 
 **[应用程序启动模板](Startup-Templates/Application.md)** 为EF Core预配置了Sql Server提供程序,EF Core支持许多其它DBMS,你可以在基于ABP的应用程序使用它们.
 
-ABP框架为一些常见的DMBS提供了简化配置的集成包(有关可用集成包的列表,请参阅[EF Core文档](Entity-Framework-Core.md)),你也可以不使用集成包配置DBMS提供程序.
+ABP框架为一些常见的DMBS提供了简化配置的**集成包**,你可以通过以下文档来学习如何**切换到你喜欢的DBMS**:
 
-虽然总是建议使用集成包(它也使不同模块之间的依赖版本成为标准版本),但是如果没有用于DBMS提供程序的集成包,也可以手动集成.
+* [MySQL](Entity-Framework-Core-MySQL.md)
+* [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
+* [SQLite](Entity-Framework-Core-SQLite.md)
+
+你也可以不使用集成包配置DBMS提供程序,虽然总是建议使用集成包(它也使不同模块之间的依赖版本成为标准版本),但是如果没有用于DBMS提供程序的集成包,也可以手动集成.
 
 本文介绍了如何在不使用[MySQL集成包](Entity-Framework-Core-MySQL.md)的情况下切换到MySQL.
 
@@ -88,3 +92,17 @@ builder.ConfigureIdentityServer(options =>
 ## 运行应用程序
 
 它已准备就绪, 只需要运行该应用程序与享受编码.
+
+## DBMS限制
+
+不同的DBMS可能存在一些限制, 如字段名称的最大长度, 索引长度等等. 
+模块可能提供了一些内置的解决方案. 你可以通过`ModelBuilder`来配置它 如: Identity Server模块
+
+```csharp
+builder.ConfigureIdentityServer(options =>
+{
+    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
+});
+```
+
+相关讨论: https://github.com/abpframework/abp/issues/1920

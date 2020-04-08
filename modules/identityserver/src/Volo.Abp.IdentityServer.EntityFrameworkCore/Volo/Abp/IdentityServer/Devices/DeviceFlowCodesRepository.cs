@@ -19,7 +19,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
         }
 
-        public async Task<DeviceFlowCodes> FindByUserCodeAsync(
+        public virtual async Task<DeviceFlowCodes> FindByUserCodeAsync(
             string userCode,
             CancellationToken cancellationToken = default)
         {
@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer.Devices
                 ;
         }
 
-        public async Task<DeviceFlowCodes> FindByDeviceCodeAsync(
+        public virtual async Task<DeviceFlowCodes> FindByDeviceCodeAsync(
             string deviceCode, 
             CancellationToken cancellationToken = default)
         {
@@ -36,7 +36,7 @@ namespace Volo.Abp.IdentityServer.Devices
                 .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
+        public virtual async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
             CancellationToken cancellationToken = default)
         {
             return await DbSet

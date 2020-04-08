@@ -37,7 +37,7 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
         {
             return await DbContext.ClientCorsOrigins
                 .Select(x => x.Origin)
@@ -45,7 +45,7 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
             return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
         }

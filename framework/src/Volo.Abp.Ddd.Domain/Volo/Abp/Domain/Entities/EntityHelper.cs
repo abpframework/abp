@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Domain.Entities
 {
@@ -13,10 +11,22 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
-
         public static bool IsEntity([NotNull] Type type)
         {
             return typeof(IEntity).IsAssignableFrom(type);
+        }
+
+        public static bool IsEntityWithId([NotNull] Type type)
+        {
+            foreach (var interfaceType in type.GetInterfaces())
+            {
+                if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEntity<>))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static bool HasDefaultId<TKey>(IEntity<TKey> entity)

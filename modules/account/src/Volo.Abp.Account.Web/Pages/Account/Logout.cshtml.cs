@@ -23,5 +23,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             return RedirectToPage("/Account/Login");
         }
+
+        public virtual Task OnPostAsync()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

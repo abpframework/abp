@@ -9,7 +9,8 @@
 @inject IAuthorizationService Authorization
 @model DetailModel
 @{
-    ViewBag.PageTitle = Model.Post.Title;
+    ViewBag.Title = Model.Post.Title;
+    ViewBag.Description = Model.Post.Description;
     var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
 }
 @section scripts {
@@ -27,12 +28,12 @@
     <abp-input asp-for="FocusCommentId" class="m-0" />
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-lg-8 mx-auto">
+            <div class="col-10 col-md-8 col-lg-7 mx-auto">
                 <section class="hero-section">
                     <div class="hero-articles">
                         <div class="hero-content">
                             <h1 class="mb-3">
-                                <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName">@Model.Post.Title</a>
+                                <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName" id="PostTitle">@Model.Post.Title</a>
                             </h1>
 
                             <div class="article-owner">
@@ -84,9 +85,9 @@
                 </section>
             </div>
         </div>
-
+        
         <div class="row">
-            <div class="col-md-8 col-lg-8 mx-auto">
+            <div class="col-10 col-md-8 col-lg-7 mx-auto">
                 <section class="post-content">
                     <p>
                         @Html.Raw(RenderMarkdownToHtml(Model.Post.Content))
@@ -94,9 +95,22 @@
                 </section>
             </div>
         </div>
-
+    
         <div class="row">
-            <div class="col-md-8 col-lg-8 mx-auto">
+            <div class="col-10 col-md-8 col-lg-7 mx-auto">
+                <hr />
+                <div class="mb-2 mt-1">
+                    @(L["ShareOn"].Value + " :")
+                    <a href="#" target="_blank" class="mr-2" id="TwitterShareLink" title="Twitter">
+                        Twitter <i class="fa fa-twitter"></i>
+                    </a>
+                    <a href="#" target="_blank" class="mr-2" id="LinkedinShareLink" title="LinkedIn">
+                        Linkedin <i class="fa fa-linkedin"></i>
+                    </a>
+                    <a href="#" target="_blank" class="mr-2" id="EmailShareLink" title="E-mail">
+                        E-mail <i class="fa fa-envelope-square"></i>
+                    </a>
+                </div>
                 @if (Model.Post.Tags.Count > 0)
                 {
                     <div class="tags">
@@ -107,7 +121,6 @@
                         }
                     </div>
                 }
-
 
                 @if (Model.CommentsWithReplies.Count > 0)
                 {
@@ -147,7 +160,7 @@
                                             </a>
                                         }
 
-                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
+                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                         {
                                             <span class="seperator">|</span>
                                             <a href="#" class="tag deleteLink" data-deleteid="@commentWithRepliesDto.Comment.Id">
@@ -178,7 +191,7 @@
                                                         <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
 
                                                         <div class="form-group">
-                                                            <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                                            <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                         </div>
                                                         <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
                                                         <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
@@ -195,7 +208,7 @@
                                                     <form class="editFormClass">
                                                         <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden />
                                                         <div class="form-group">
-                                                            <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
+                                                            <textarea class="form-control" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
                                                         </div>
                                                         <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
                                                         <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
@@ -245,7 +258,7 @@
                                                 @if (hasCommentingPermission)
                                                 {
                                                     <div class="comment-form mt-4 replyForm">
-                                                        <div class="clearfix bg-light p-4">
+                                                        <div class="clearfix bg-light py-4">
                                                             <h3 class="mt-0">
                                                                 @L["ReplyTo", commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
                                                             </h3>
@@ -254,7 +267,7 @@
                                                                     <input name="postId" value="@Model.Post.Id" hidden />
                                                                     <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
                                                                     <div class="form-group">
-                                                                        <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                                                        <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                                                     </div>
                                                                     <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
                                                                     <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
@@ -266,12 +279,12 @@
                                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                                 {
                                                     <div class="comment-form mt-4 editForm">
-                                                        <div class="clearfix bg-light p-4">
+                                                        <div class="clearfix bg-light py-4">
                                                             <div>
                                                                 <form class="editFormClass">
                                                                     <input name="commentId" value="@reply.Id" hidden />
                                                                     <div class="form-group">
-                                                                        <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
+                                                                        <textarea class="form-control" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
                                                                     </div>
                                                                     <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
                                                                     <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
@@ -295,13 +308,13 @@
                         <div class="vs-blog-title mb-0">
                             <h3>@L["LeaveComment"]</h3>
                         </div>
-                        <div class="clearfix bg-light p-4">
+                        <div class="clearfix bg-light py-4">
                             <div>
                                 <form method="post">
                                     <input name="postId" value="@Model.Post.Id" hidden />
                                     <input name="repliedCommentId" id="repliedCommentId" hidden />
                                     <div class="form-group">
-                                        <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                        <textarea class="form-control" name="text" id="textBoxId" rows="4"></textarea>
                                     </div>
                                     <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
                                 </form>
@@ -317,3 +330,4 @@
         </div>
     </div>
 </div>
+<p id="BlogFullName" name="@Model.Blog.Name" hidden></p>

@@ -1,0 +1,10 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Permissions": "Dovoljenja",
+    "OnlyProviderPermissons": "Samo ta ponudnik",
+    "All": "Vse",
+    "SelectAllInAllTabs": "Dodeli vsa dovoljenja",
+    "SelectAllInThisTab": "Izberi vse"
+  }
+}

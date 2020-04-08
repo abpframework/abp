@@ -1,5 +1,5 @@
 import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -60,6 +60,10 @@ export class TenantsComponent implements OnInit {
 
   sortKey = '';
 
+  get hasSelectedTenant(): boolean {
+    return Boolean(this.selected.id);
+  }
+
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
   }
@@ -115,9 +119,18 @@ export class TenantsComponent implements OnInit {
   }
 
   private createTenantForm() {
-    this.tenantForm = this.fb.group({
+    const tenantForm = this.fb.group({
       name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
+      adminEmailAddress: [null, [Validators.required, Validators.maxLength(256), Validators.email]],
+      adminPassword: [null, [Validators.required]],
     });
+
+    if (this.hasSelectedTenant) {
+      tenantForm.removeControl('adminEmailAddress');
+      tenantForm.removeControl('adminPassword');
+    }
+
+    this.tenantForm = tenantForm;
   }
 
   private createDefaultConnectionStringForm() {
@@ -239,8 +252,8 @@ export class TenantsComponent implements OnInit {
           messageLocalizationParams: [name],
         },
       )
-      .subscribe((status: Toaster.Status) => {
-        if (status === Toaster.Status.confirm) {
+      .subscribe((status: Confirmation.Status) => {
+        if (status === Confirmation.Status.confirm) {
           this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.get());
         }
       });
@@ -271,5 +284,12 @@ export class TenantsComponent implements OnInit {
         }
       }, 0);
     }
+  }
+
+  openFeaturesModal(providerKey: string) {
+    this.providerKey = providerKey;
+    setTimeout(() => {
+      this.visibleFeatures = true;
+    }, 0);
   }
 }

@@ -1,12 +1,12 @@
-import { Component, Input, OnDestroy, Type } from '@angular/core';
+import { Component, OnDestroy, Type } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
 import snq from 'snq';
 import { eLayoutType } from '../enums/common';
-import { Config } from '../models/config';
 import { ABP } from '../models/common';
+import { ReplaceableComponents } from '../models/replaceable-components';
 import { ConfigState } from '../states/config.state';
+import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
 
 @Component({
@@ -14,37 +14,39 @@ import { takeUntilDestroy } from '../utils/rxjs-utils';
   template: `
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
-    <ng-template #componentOutlet><ng-container *ngComponentOutlet="layout"></ng-container></ng-template>
-  `
+    <ng-template #componentOutlet
+      ><ng-container *ngComponentOutlet="layout"></ng-container
+    ></ng-template>
+  `,
 })
 export class DynamicLayoutComponent implements OnDestroy {
-  @Select(ConfigState.getOne('requirements')) requirements$: Observable<Config.Requirements>;
-
   layout: Type<any>;
 
   constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
-    const {
-      requirements: { layouts },
-      routes
-    } = this.store.selectSnapshot(ConfigState.getAll);
+    const { routes } = this.store.selectSnapshot(ConfigState.getAll);
 
-    if ((this.route.snapshot.data || {}).layout) {
-      this.layout = layouts
-        .filter(l => !!l)
-        .find((l: any) => snq(() => l.type.toLowerCase().indexOf(this.route.snapshot.data.layout), -1) > -1);
-    }
-
-    this.router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
+    router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
       if (event instanceof NavigationEnd) {
-        const { segments } = this.router.parseUrl(event.url).root.children.primary;
+        const segments = snq(() => router.parseUrl(event.url).root.children.primary.segments, [
+          { path: router.url.replace('/', '') },
+        ] as any);
 
-        const layout = (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
+        const layouts = {
+          application: this.getComponent('Theme.ApplicationLayoutComponent'),
+          account: this.getComponent('Theme.AccountLayoutComponent'),
+          empty: this.getComponent('Theme.EmptyLayoutComponent'),
+        };
 
-        this.layout = layouts
-          .filter(l => !!l)
-          .find((l: any) => snq(() => l.type.toLowerCase().indexOf(layout), -1) > -1);
+        const expectedLayout =
+          (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
+
+        this.layout = layouts[expectedLayout].component;
       }
     });
+  }
+
+  private getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
+    return this.store.selectSnapshot(ReplaceableComponentsState.getComponent(key));
   }
 
   ngOnDestroy() {}

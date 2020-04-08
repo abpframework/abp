@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Domain.Repositories;
@@ -20,15 +21,20 @@ namespace Volo.Abp.Identity
 {
     public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     {
-        protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
+        protected IIdentityRoleRepository RoleRepository { get; }
+        protected IIdentityUserRepository UserRepository { get; }
 
-        private readonly ICancellationTokenProvider _cancellationTokenProvider;
         protected IOrganizationUnitRepository _organizationUnitRepository { get; private set; }
         protected IIdentityUserRepository _identityUserRepository { get; private set; }
         private readonly ISettingProvider _settingProvider;
+        protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
+
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public IdentityUserManager(
             IdentityUserStore store,
+            IIdentityRoleRepository roleRepository,
+            IIdentityUserRepository userRepository,
             IOptions<IdentityOptions> optionsAccessor,
             IPasswordHasher<IdentityUser> passwordHasher,
             IEnumerable<IUserValidator<IdentityUser>> userValidators,
@@ -52,10 +58,12 @@ namespace Volo.Abp.Identity
                   services,
                   logger)
         {
-            _cancellationTokenProvider = cancellationTokenProvider;
             _organizationUnitRepository = organizationUnitRepository;
             _identityUserRepository = identityUserRepository;
             _settingProvider = settingProvider;
+            RoleRepository = roleRepository;
+            UserRepository = userRepository;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
         public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
@@ -90,6 +98,7 @@ namespace Volo.Abp.Identity
 
             return IdentityResult.Success;
         }
+
 
         public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
         {
@@ -216,6 +225,21 @@ namespace Volo.Abp.Identity
                     .GetUsersInOrganizationUnitAsync(organizationUnit.Id)
                     .ConfigureAwait(false);
             }
+
+        public virtual async Task<IdentityResult> AddDefaultRolesAsync([NotNull] IdentityUser user)
+        {
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, CancellationToken);
+            
+            foreach (var role in await RoleRepository.GetDefaultOnesAsync(cancellationToken: CancellationToken))
+            {
+                if (!user.IsInRole(role.Id))
+                {
+                    user.AddRole(role.Id);
+                }
+            }
+            
+            return await UpdateUserAsync(user);
+
         }
     }
 }

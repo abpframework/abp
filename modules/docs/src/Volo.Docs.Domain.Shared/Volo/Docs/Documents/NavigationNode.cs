@@ -26,6 +26,8 @@ namespace Volo.Docs.Documents
 
         public virtual DateTime? LastUpdatedTime { get; set; }
 
+        public DateTime? LastSignificantUpdateTime { get; set; }
+
         public bool IsSelected(string documentName)
         {
             if (documentName == null)

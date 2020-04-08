@@ -143,6 +143,20 @@ myGroup.AddPermission(
 );
 ````
 
+#### 启用/禁用权限
+
+权限默认为启用. 它也可以被禁用,禁用权限所有的用户将无法使用它. 你仍然可以检查这个权限,但它总是会返回被禁止.
+
+定义示例:
+
+````csharp
+myGroup.AddPermission("Author_Management", isEnabled: false);
+````
+
+通常你不需要定义禁用权限(除非您暂时想要禁用应用程序的功能). 无论怎样,你可能想要禁用依赖模块中定义的权限,这样你可以禁用相关的功能. 参阅下面的 "*更改依赖模块的权限定义*" 节,查看示例用法.
+
+> 注意:检查一个未定义的权限会抛出异常,而被禁用的权限的返回禁止(false).
+
 #### 子权限
 
 权限可以具有子权限,当你想要创建一个层次结构的权限树时它特别有用. 在这个树中一个权限可能含有子权限,并且子权限只有在授权父权限时才可用.
@@ -204,6 +218,22 @@ public class AuthorAppService : ApplicationService, IAuthorAppService
 有时我们需要扩展扩展应用程序中预构建模块的权限,可以定义并注册一个与权限名称相同的策略到ASP.Net Core授权系统,策略会覆盖已有权限.
 
 参阅 [基于策略的授权](https://docs.microsoft.com/zh-cn/aspnet/core/security/authorization/policies) 文档了解如何自定义策略.
+
+### 更改依赖模块的权限定义
+
+从 `PermissionDefinitionProvider` 派生的类(就像上面的示例一样) 可以获取现有的权限定义(由依赖[模块](Module-Development-Basics.md)定义)并更改其定义.
+
+示例:
+
+````csharp
+context
+    .GetPermissionOrNull(IdentityPermissions.Roles.Delete)
+    .IsEnabled = false;
+````
+
+当你在权限提供程序编写了这行代码,它会找到[身份模块](Modules/Identity.md)的 "role deletion" 权限并且禁用它,因此没有人可以在应用程序中删除角色.
+
+> 提供: 更好的方式应该检查 `GetPermissionOrNull` 返回值,如果权限未定义,它会返回null值.
 
 ## IAuthorizationService
 
@@ -336,10 +366,10 @@ public class SystemAdminPermissionValueProvider : PermissionValueProvider
 * `PermissionGrantResult.Prohibited` 禁止授权用户,任何一个授权值提供程序返回了 `Prohibited`, 那么其他的提供程序返回的值都不再重要.
 * `PermissionGrantResult.Undefined` 代表当前无法确定是否授予或禁止权限, 返回`UnDefined`由其他权限值提供程序检查权限.
 
-定义`Provider`后将其添加到 `PermissionOptions`,如下所示:
+定义`Provider`后将其添加到 `AbpPermissionOptions`,如下所示:
 
 ````csharp
-Configure<PermissionOptions>(options =>
+Configure<AbpPermissionOptions>(options =>
 {
     options.ValueProviders.Add<SystemAdminPermissionValueProvider>();
 });
@@ -367,4 +397,5 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 ## 接下来
 
 * [权限管理模块](Modules/Permission-Management.md)
-* [ASP.NET Core MVC / Razor 页面 JavaScript Auth API](AspNetCore/JavaScript-API/Auth.md)
+* [ASP.NET Core MVC / Razor 页面 JavaScript Auth API](API/JavaScript-API/Auth.md)
+* [Angular界面中的权限管理](UI/Angular/Permission-Management.md)

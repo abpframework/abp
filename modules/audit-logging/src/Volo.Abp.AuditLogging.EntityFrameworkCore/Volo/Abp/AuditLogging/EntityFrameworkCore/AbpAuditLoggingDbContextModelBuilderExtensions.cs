@@ -25,7 +25,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "AuditLogs", options.Schema);
 
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.ApplicationName).HasMaxLength(AuditLogConsts.MaxApplicationNameLength).HasColumnName(nameof(AuditLog.ApplicationName));
                 b.Property(x => x.ClientIpAddress).HasMaxLength(AuditLogConsts.MaxClientIpAddressLength).HasColumnName(nameof(AuditLog.ClientIpAddress));
@@ -56,7 +56,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "AuditLogActions", options.Schema);
 
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.AuditLogId).HasColumnName(nameof(AuditLogAction.AuditLogId));
                 b.Property(x => x.ServiceName).HasMaxLength(AuditLogActionConsts.MaxServiceNameLength).HasColumnName(nameof(AuditLogAction.ServiceName));
@@ -73,7 +73,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "EntityChanges", options.Schema);
 
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.EntityTypeFullName).HasMaxLength(EntityChangeConsts.MaxEntityTypeFullNameLength).IsRequired().HasColumnName(nameof(EntityChange.EntityTypeFullName));
                 b.Property(x => x.EntityId).HasMaxLength(EntityChangeConsts.MaxEntityIdLength).IsRequired().HasColumnName(nameof(EntityChange.EntityId));
@@ -91,6 +91,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             builder.Entity<EntityPropertyChange>(b =>
             {
                 b.ToTable(options.TablePrefix + "EntityPropertyChanges", options.Schema);
+
+                b.ConfigureByConvention();
 
                 b.Property(x => x.NewValue).HasMaxLength(EntityPropertyChangeConsts.MaxNewValueLength).HasColumnName(nameof(EntityPropertyChange.NewValue));
                 b.Property(x => x.PropertyName).HasMaxLength(EntityPropertyChangeConsts.MaxPropertyNameLength).IsRequired().HasColumnName(nameof(EntityPropertyChange.PropertyName));

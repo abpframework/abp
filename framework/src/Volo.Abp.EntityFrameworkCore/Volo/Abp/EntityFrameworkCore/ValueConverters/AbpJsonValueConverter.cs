@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
+using Volo.Abp.Data;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueConverters
 {
@@ -7,9 +8,20 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
     {
         public AbpJsonValueConverter()
             : base(
-                d => JsonConvert.SerializeObject(d, Formatting.None),
-                s => JsonConvert.DeserializeObject<TPropertyType>(s))
+                d => SerializeObject(d),
+                s => DeserializeObject(s))
         {
+
+        }
+
+        private static string SerializeObject(TPropertyType d)
+        {
+            return JsonConvert.SerializeObject(d, Formatting.None);
+        }
+
+        private static TPropertyType DeserializeObject(string s)
+        {
+            return JsonConvert.DeserializeObject<TPropertyType>(s);
         }
     }
 }
