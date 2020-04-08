@@ -172,7 +172,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.HasKey(ou => new { ou.OrganizationUnitId, ou.RoleId });
 
-                b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
                 b.HasOne<IdentityRole>().WithMany().HasForeignKey(ou => ou.RoleId).IsRequired();
 
                 b.HasIndex(ou => new { ou.RoleId, ou.OrganizationUnitId });
