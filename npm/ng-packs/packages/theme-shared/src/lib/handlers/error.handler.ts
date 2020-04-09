@@ -138,6 +138,8 @@ export class ErrorHandler {
                       key: 'AbpAccount::DefaultErrorMessage',
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
                     },
+                    details: err.message,
+                    isHomeShow: false,
                   });
                 }
                 break;

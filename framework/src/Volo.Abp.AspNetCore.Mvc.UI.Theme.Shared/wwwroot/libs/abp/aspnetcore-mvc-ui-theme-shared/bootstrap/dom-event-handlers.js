@@ -60,6 +60,8 @@
             container: 'body'
         });
 
+        args.$el.findWithSelf('.timeago').timeago();
+
         enableFormFeatures(args.$el.findWithSelf('form'), true);
 
         initializeScript(args.$el);
@@ -81,6 +83,8 @@
         $('[data-toggle="popover"]').popover({
             container: 'body'
         });
+
+        $('.timeago').timeago();
 
         $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
     });

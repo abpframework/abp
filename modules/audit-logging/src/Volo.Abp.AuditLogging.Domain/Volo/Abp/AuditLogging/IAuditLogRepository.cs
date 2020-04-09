@@ -69,5 +69,9 @@ namespace Volo.Abp.AuditLogging
             string entityId = null,
             string entityTypeFullName = null,
             CancellationToken cancellationToken = default);
+
+        Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId);
+
+        Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName);
     }
 }

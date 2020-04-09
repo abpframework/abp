@@ -502,4 +502,4 @@ Configure<AbpWidgetOptions>(options =>
 
 ## See Also
 
-* [Example project (source code)](https://github.com/abpframework/abp/tree/dev/samples/DashboardDemo).
+* [Example project (source code)](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo).
