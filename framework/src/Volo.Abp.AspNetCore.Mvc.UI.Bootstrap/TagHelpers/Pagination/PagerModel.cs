@@ -53,8 +53,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 CurrentPage = currentPage;
             }
 
-            ShowingFrom = totalCount == 0 ? 0 : CurrentPage * PageSize;
-            ShowingTo = totalCount == 0 ? 0 : ShowingFrom + PageSize;
+            ShowingTo = totalCount == 0 ? 0 : CurrentPage * PageSize;
+            ShowingFrom = totalCount == 0 ? 0 : ShowingTo - PageSize;
             PreviousPage = CurrentPage <= 1 ? 1 : CurrentPage - 1;
             NextPage = CurrentPage >= TotalPageCount ? CurrentPage : CurrentPage + 1;
             Pages = CalculatePageNumbers();
