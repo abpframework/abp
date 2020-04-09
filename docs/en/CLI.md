@@ -61,6 +61,7 @@ abp new Acme.BookStore
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D\localTemplate` or `https://<your url>.zip`).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true`. You can set your own connection string if you don't want to use the default. Be aware that the default database provider is `SQL Server`, therefore you can only enter connection string for SQL Server!
+* `--local-framework-ref --abp-path`: keeps local references to projects instead of replacing with NuGet package references.
 
 ### add-package
 
