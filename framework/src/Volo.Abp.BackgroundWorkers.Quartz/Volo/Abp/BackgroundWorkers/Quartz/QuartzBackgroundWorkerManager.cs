@@ -49,6 +49,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
 
                 if (await _scheduler.CheckExists(quartzWork.JobDetail.Key))
                 {
+                    await _scheduler.AddJob(quartzWork.JobDetail, true);
                     await _scheduler.ResumeJob(quartzWork.JobDetail.Key);
                     await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger);
                 }
