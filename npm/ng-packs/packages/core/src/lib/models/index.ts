@@ -6,3 +6,4 @@ export * from './profile';
 export * from './replaceable-components';
 export * from './rest';
 export * from './session';
+export * from './utility';
