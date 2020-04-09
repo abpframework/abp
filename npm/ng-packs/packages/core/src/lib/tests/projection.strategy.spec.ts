@@ -178,7 +178,7 @@ describe('TemplateProjectionStrategy', () => {
     it('should should insert content into container and return an EmbeddedViewRef', () => {
       const templateRef = spectator.component.templateRef;
       const strategy = new TemplateProjectionStrategy(templateRef, containerStrategy);
-      embeddedViewRef = strategy.injectContent(spectator);
+      embeddedViewRef = strategy.injectContent();
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -200,7 +200,7 @@ describe('TemplateProjectionStrategy', () => {
         containerStrategy,
         contextStrategy,
       );
-      embeddedViewRef = strategy.injectContent(spectator);
+      embeddedViewRef = strategy.injectContent();
       spectator.detectChanges();
 
       const div = spectator.query('div.foo');
@@ -213,6 +213,8 @@ describe('TemplateProjectionStrategy', () => {
 describe('PROJECTION_STRATEGY', () => {
   const content = undefined;
   const containerRef = ({ length: 0 } as any) as ViewContainerRef;
+  let context = undefined;
+
   test.each`
     name                             | Strategy                       | containerStrategy
     ${'AppendComponentToContainer'}  | ${ComponentProjectionStrategy} | ${CONTAINER_STRATEGY.Append}
@@ -222,23 +224,52 @@ describe('PROJECTION_STRATEGY', () => {
     ${'ProjectComponentToContainer'} | ${ComponentProjectionStrategy} | ${CONTAINER_STRATEGY.Clear}
     ${'ProjectTemplateToContainer'}  | ${TemplateProjectionStrategy}  | ${CONTAINER_STRATEGY.Clear}
   `(
-    'should successfully map $name to $Strategy.name with $containerStrategy.name container strategy',
+    'should successfully map $name to $Strategy.name with $containerStrategy.name container strategy and $contextStrategy.name context strategy',
     ({ name, Strategy, containerStrategy }) => {
-      expect(PROJECTION_STRATEGY[name](content, containerRef)).toEqual(
-        new Strategy(content, containerStrategy(containerRef)),
+      expect(PROJECTION_STRATEGY[name](content, containerRef, context)).toEqual(
+        new Strategy(content, containerStrategy(containerRef), CONTEXT_STRATEGY.None()),
       );
     },
   );
-
-  const contextStrategy = undefined;
   test.each`
     name                       | Strategy                           | domStrategy
     ${'AppendComponentToBody'} | ${RootComponentProjectionStrategy} | ${DOM_STRATEGY.AppendToBody}
   `(
     'should successfully map $name to $Strategy.name with $domStrategy.name dom strategy',
     ({ name, Strategy, domStrategy }) => {
-      expect(PROJECTION_STRATEGY[name](content, contextStrategy)).toEqual(
-        new Strategy(content, contextStrategy, domStrategy()),
+      expect(PROJECTION_STRATEGY[name](content, context)).toEqual(
+        new Strategy(content, CONTEXT_STRATEGY.None(), domStrategy()),
+      );
+    },
+  );
+
+  test.each`
+    name                             | Strategy                       | containerStrategy             | contextStrategy
+    ${'AppendComponentToContainer'}  | ${ComponentProjectionStrategy} | ${CONTAINER_STRATEGY.Append}  | ${CONTEXT_STRATEGY.Component}
+    ${'AppendTemplateToContainer'}   | ${TemplateProjectionStrategy}  | ${CONTAINER_STRATEGY.Append}  | ${CONTEXT_STRATEGY.Template}
+    ${'PrependComponentToContainer'} | ${ComponentProjectionStrategy} | ${CONTAINER_STRATEGY.Prepend} | ${CONTEXT_STRATEGY.Component}
+    ${'PrependTemplateToContainer'}  | ${TemplateProjectionStrategy}  | ${CONTAINER_STRATEGY.Prepend} | ${CONTEXT_STRATEGY.Template}
+    ${'ProjectComponentToContainer'} | ${ComponentProjectionStrategy} | ${CONTAINER_STRATEGY.Clear}   | ${CONTEXT_STRATEGY.Component}
+    ${'ProjectTemplateToContainer'}  | ${TemplateProjectionStrategy}  | ${CONTAINER_STRATEGY.Clear}   | ${CONTEXT_STRATEGY.Template}
+  `(
+    'should successfully map $name to $Strategy.name with $containerStrategy.name container strategy and $contextStrategy.name context strategy',
+    ({ name, Strategy, containerStrategy, contextStrategy }) => {
+      context = { x: true };
+      expect(PROJECTION_STRATEGY[name](content, containerRef, context)).toEqual(
+        new Strategy(content, containerStrategy(containerRef), contextStrategy(context)),
+      );
+    },
+  );
+
+  test.each`
+    name                       | Strategy                           | contextStrategy               | domStrategy
+    ${'AppendComponentToBody'} | ${RootComponentProjectionStrategy} | ${CONTEXT_STRATEGY.Component} | ${DOM_STRATEGY.AppendToBody}
+  `(
+    'should successfully map $name to $Strategy.name with $contextStrategy.name context strategy and $domStrategy.name dom strategy',
+    ({ name, Strategy, domStrategy, contextStrategy }) => {
+      context = { x: true };
+      expect(PROJECTION_STRATEGY[name](content, context)).toEqual(
+        new Strategy(content, contextStrategy(context), domStrategy()),
       );
     },
   );

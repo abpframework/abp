@@ -8,14 +8,9 @@ import {
   Type,
   ViewContainerRef,
 } from '@angular/core';
-import { InferedInstanceOf } from '../models/utility';
+import { InferedContextOf, InferedInstanceOf } from '../models/utility';
 import { ContainerStrategy, CONTAINER_STRATEGY } from './container.strategy';
-import {
-  ComponentContextStrategy,
-  ContextStrategy,
-  CONTEXT_STRATEGY,
-  TemplateContextStrategy,
-} from './context.strategy';
+import { ContextStrategy, CONTEXT_STRATEGY } from './context.strategy';
 import { DomStrategy, DOM_STRATEGY } from './dom.strategy';
 
 export abstract class ProjectionStrategy<T = any> {
@@ -78,14 +73,14 @@ export class RootComponentProjectionStrategy<T extends Type<any>> extends Projec
 
 export class TemplateProjectionStrategy<T extends TemplateRef<any>> extends ProjectionStrategy<T> {
   constructor(
-    template: T,
+    templateRef: T,
     private containerStrategy: ContainerStrategy,
     private contextStrategy = CONTEXT_STRATEGY.None(),
   ) {
-    super(template);
+    super(templateRef);
   }
 
-  injectContent(injector: Injector) {
+  injectContent() {
     this.containerStrategy.prepare();
 
     const embeddedViewRef = this.containerStrategy.containerRef.createEmbeddedView(
@@ -100,76 +95,76 @@ export class TemplateProjectionStrategy<T extends TemplateRef<any>> extends Proj
 }
 
 export const PROJECTION_STRATEGY = {
-  AppendComponentToBody<T extends Type<unknown>>(
-    component: T,
-    contextStrategy?: ComponentContextStrategy<T>,
-  ) {
-    return new RootComponentProjectionStrategy<T>(component, contextStrategy);
+  AppendComponentToBody<T extends Type<unknown>>(component: T, context?: InferedInstanceOf<T>) {
+    return new RootComponentProjectionStrategy<T>(
+      component,
+      context && CONTEXT_STRATEGY.Component(context),
+    );
   },
   AppendComponentToContainer<T extends Type<unknown>>(
     component: T,
     containerRef: ViewContainerRef,
-    contextStrategy?: ComponentContextStrategy<T>,
+    context?: InferedInstanceOf<T>,
   ) {
     return new ComponentProjectionStrategy<T>(
       component,
       CONTAINER_STRATEGY.Append(containerRef),
-      contextStrategy,
+      context && CONTEXT_STRATEGY.Component(context),
     );
   },
   AppendTemplateToContainer<T extends TemplateRef<unknown>>(
-    template: T,
+    templateRef: T,
     containerRef: ViewContainerRef,
-    contextStrategy?: TemplateContextStrategy<T>,
+    context?: InferedContextOf<T>,
   ) {
     return new TemplateProjectionStrategy<T>(
-      template,
+      templateRef,
       CONTAINER_STRATEGY.Append(containerRef),
-      contextStrategy,
+      context && CONTEXT_STRATEGY.Template(context),
     );
   },
   PrependComponentToContainer<T extends Type<unknown>>(
     component: T,
     containerRef: ViewContainerRef,
-    contextStrategy?: ComponentContextStrategy<T>,
+    context?: InferedInstanceOf<T>,
   ) {
     return new ComponentProjectionStrategy<T>(
       component,
       CONTAINER_STRATEGY.Prepend(containerRef),
-      contextStrategy,
+      context && CONTEXT_STRATEGY.Component(context),
     );
   },
   PrependTemplateToContainer<T extends TemplateRef<unknown>>(
-    template: T,
+    templateRef: T,
     containerRef: ViewContainerRef,
-    contextStrategy?: TemplateContextStrategy<T>,
+    context?: InferedContextOf<T>,
   ) {
     return new TemplateProjectionStrategy<T>(
-      template,
+      templateRef,
       CONTAINER_STRATEGY.Prepend(containerRef),
-      contextStrategy,
+      context && CONTEXT_STRATEGY.Template(context),
     );
   },
   ProjectComponentToContainer<T extends Type<unknown>>(
     component: T,
     containerRef: ViewContainerRef,
-    contextStrategy?: ComponentContextStrategy<T>,
+    context?: InferedInstanceOf<T>,
   ) {
     return new ComponentProjectionStrategy<T>(
       component,
       CONTAINER_STRATEGY.Clear(containerRef),
-      contextStrategy,
+      context && CONTEXT_STRATEGY.Component(context),
     );
   },
   ProjectTemplateToContainer<T extends TemplateRef<unknown>>(
-    template: T,
+    templateRef: T,
     containerRef: ViewContainerRef,
-    contextStrategy?: TemplateContextStrategy<T>,
+    context?: InferedContextOf<T>,
   ) {
     return new TemplateProjectionStrategy<T>(
-      template,
+      templateRef,
       CONTAINER_STRATEGY.Clear(containerRef),
-      contextStrategy,
+      context && CONTEXT_STRATEGY.Template(context),
     );
   },
 };
