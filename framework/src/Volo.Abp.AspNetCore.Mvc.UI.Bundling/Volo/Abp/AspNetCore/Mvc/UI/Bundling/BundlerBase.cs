@@ -46,9 +46,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         private void AddFileToBundle(IBundlerContext context, StringBuilder bundleContentBuilder, string fileName)
         {
-            string fileContent = null;
+            var fileContent = GetFileContent(context, fileName);
 
-            if (context.IsMinificationEnabled && !IsMinFile(fileName))
+            if (IsMinFile(fileName))
+            {
+                Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes) - already minified");
+            }
+            else
             {
                 var minFileInfo = GetMinFileInfoOrNull(fileName);
                 if (minFileInfo != null)
@@ -56,18 +60,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     Logger.LogDebug($"- {fileName} ({minFileInfo.Length} bytes) - already minified");
                     fileContent = minFileInfo.ReadAsString();
                 }
-            }
-
-            if (fileContent == null)
-            {
-                fileContent = GetFileContent(context, fileName);
-                Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes) - non minified");
-
-                if (context.IsMinificationEnabled)
+                else
                 {
-                    var nonMinifiedSize = fileContent.Length;
-                    fileContent = Minifier.Minify(fileContent, context.BundleRelativePath);
-                    Logger.LogInformation($"  > Minified {fileName} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
+                    Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes) - non minified");
+                    if (context.IsMinificationEnabled)
+                    {
+                        var nonMinifiedSize = fileContent.Length;
+                        fileContent = Minifier.Minify(fileContent, context.BundleRelativePath);
+                        Logger.LogInformation($"  > Minified {fileName} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
+                    }
                 }
             }
 
