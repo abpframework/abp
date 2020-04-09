@@ -1,12 +1,12 @@
 {
-  "version": "2.4.0",
+  "version": "2.4.1",
   "name": "@abp/datatables.net-bs4",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/datatables.net": "^2.4.0",
+    "@abp/datatables.net": "^2.4.1",
     "datatables.net-bs4": "^1.10.20"
   },
-  "gitHead": "aadffb76ee4ac7aef2842074e4f9c9f425b3ebe7"
+  "gitHead": "0c72682d406026760da2f832a493145beae3a5c0"
 }
