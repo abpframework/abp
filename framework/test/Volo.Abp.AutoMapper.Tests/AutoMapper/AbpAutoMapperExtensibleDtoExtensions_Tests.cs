@@ -24,7 +24,8 @@ namespace AutoMapper
                 .SetProperty("Name", "John")
                 .SetProperty("Age", 42)
                 .SetProperty("ChildCount", 2)
-                .SetProperty("Sex", "male");
+                .SetProperty("Sex", "male")
+                .SetProperty("CityName", "Adana");
 
             var personDto = new ExtensibleTestPersonDto()
                 .SetProperty("ExistingDtoProperty", "existing-value");
@@ -32,10 +33,11 @@ namespace AutoMapper
             _objectMapper.Map(person, personDto);
 
             personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
+            personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
             personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
             personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
             personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
-            personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
+            personDto.HasProperty("CityName").ShouldBeFalse(); //Ignored
         }
     }
 }

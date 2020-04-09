@@ -10,7 +10,7 @@ namespace Volo.Abp.AutoMapper.SampleClasses
             CreateMap<MyEntity, MyEntityDto>().ReverseMap();
 
             CreateMap<ExtensibleTestPerson, ExtensibleTestPersonDto>()
-                .MapExtraProperties();
+                .MapExtraProperties(ignoredProperties: new[] { "CityName" });
         }
     }
 }

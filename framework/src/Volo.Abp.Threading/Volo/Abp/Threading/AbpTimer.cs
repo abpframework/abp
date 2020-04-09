@@ -30,15 +30,15 @@ namespace Volo.Abp.Threading
 
         public ILogger<AbpTimer> Logger { get; set; }
 
-        protected IExceptionNotifier ExceptionNotifier { get; }
+        public IExceptionNotifier ExceptionNotifier { get; set; }
 
         private readonly Timer _taskTimer;
         private volatile bool _performingTasks;
         private volatile bool _isRunning;
 
-        public AbpTimer(IExceptionNotifier exceptionNotifier)
+        public AbpTimer()
         {
-            ExceptionNotifier = exceptionNotifier;
+            ExceptionNotifier = NullExceptionNotifier.Instance;
             Logger = NullLogger<AbpTimer>.Instance;
 
             _taskTimer = new Timer(

@@ -19,8 +19,11 @@ namespace Volo.Abp.ObjectExtending
                 ObjectExtensionManager.Instance
                     .AddOrUpdateProperty<ExtensibleTestPerson, string>("Name")
                     .AddOrUpdateProperty<ExtensibleTestPerson, int>("Age")
+                    .AddOrUpdateProperty<ExtensibleTestPerson, string>("NoPairCheck", options => options.CheckPairDefinitionOnMapping = false)
+                    .AddOrUpdateProperty<ExtensibleTestPerson, string>("CityName")
                     .AddOrUpdateProperty<ExtensibleTestPersonDto, string>("Name")
-                    .AddOrUpdateProperty<ExtensibleTestPersonDto, int>("ChildCount");
+                    .AddOrUpdateProperty<ExtensibleTestPersonDto, int>("ChildCount")
+                    .AddOrUpdateProperty<ExtensibleTestPersonDto, int>("CityName");
             });
         }
     }

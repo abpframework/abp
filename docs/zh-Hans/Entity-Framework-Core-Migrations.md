@@ -7,7 +7,7 @@
 
 ### 源码
 
-你可以在[这里](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo)找到本文引用的示例项目的源代码; 但是为了理解示例项目的源代码,你需要阅读和理解这个文档.
+你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo)找到本文引用的示例项目的源代码; 但是为了理解示例项目的源代码,你需要阅读和理解这个文档.
 
 ## 关于EF Core 代码优先迁移
 

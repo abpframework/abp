@@ -8,7 +8,7 @@ Esta é a segunda parte da série de tutoriais angulares. Veja todas as peças:
 - **Parte II: Criar, atualizar e excluir livros (este tutorial)**
 - [Parte III: Testes de Integração](Part-III.md)
 
-Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb) .
+Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb) .
 
 ### Criando um novo livro
 

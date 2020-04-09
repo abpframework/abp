@@ -62,22 +62,20 @@
 </ng-template>
 
 <ng-template #body>
-  <tbody class="ui-table-tbody">
-    <ng-container *ngIf="value && value.length; else emptyTemplate">
-      <ng-template
-        #bodyTemplateWrapper
-        *ngFor="let val of slicedValue; let index = index; trackBy: trackByFn"
-        [ngTemplateOutlet]="bodyTemplate"
-        [ngTemplateOutletContext]="{ $implicit: val, rowIndex: index }"
-      ></ng-template>
-    </ng-container>
+  <tbody class="ui-table-tbody" *ngIf="value && value.length; else emptyTemplate">
+    <ng-template
+      #bodyTemplateWrapper
+      *ngFor="let val of slicedValue; let index = index; trackBy: trackByFn"
+      [ngTemplateOutlet]="bodyTemplate"
+      [ngTemplateOutletContext]="{ $implicit: val, rowIndex: index }"
+    ></ng-template>
   </tbody>
 </ng-template>
 
 <ng-template #emptyTemplate>
-  <tr class="empty-row" #emptyRow>
-    <div class="empty-row-content" [style.width.px]="emptyRow.offsetWidth">
-      {{ emptyMessage | abpLocalization }}
-    </div>
-  </tr>
+  <caption class="ui-table-empty">
+    {{
+      emptyMessage | abpLocalization
+    }}
+  </caption>
 </ng-template>

@@ -54,7 +54,13 @@ namespace Volo.Blogging.Pages.Blog.Posts
         public async Task<ActionResult> OnPost()
         {
             var blog = await _blogAppService.GetAsync(Post.BlogId);
-            var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel,CreatePostDto>(Post));
+
+            if (string.IsNullOrEmpty(Post.Description))
+            {
+                Post.Description = Post.Content.Truncate(PostConsts.MaxSeoFriendlyDescriptionLength);
+            }
+
+            var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel, CreatePostDto>(Post));
 
             //TODO: Try Url.Page(...)
             var urlPrefix = _blogOptions.RoutePrefix;
@@ -84,6 +90,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
             public string Content { get; set; }
 
             public string Tags { get; set; }
+
+            [StringLength(PostConsts.MaxDescriptionLength)]
+            public string Description { get; set; }
+
         }
     }
 }

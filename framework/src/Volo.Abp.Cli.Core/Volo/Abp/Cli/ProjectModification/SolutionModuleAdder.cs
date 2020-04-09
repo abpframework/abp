@@ -87,22 +87,37 @@ namespace Volo.Abp.Cli.ProjectModification
                 await SolutionFileModifier.AddModuleToSolutionFileAsync(module, solutionFile);
                 await NugetPackageToLocalReferenceConverter.Convert(module, solutionFile);
 
-                await HandleAngularProject(module, solutionFile);
+                await HandleAngularProject(modulesFolderInSolution, solutionFile);
             }
 
             ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
         }
 
-        private async Task HandleAngularProject(ModuleWithMastersInfo module, string solutionFilePath)
+        private async Task HandleAngularProject(string modulesFolderInSolution, string solutionFilePath)
         {
             var angularPath = Path.Combine(Path.GetDirectoryName(Path.GetDirectoryName(solutionFilePath)), "angular");
 
             if (!Directory.Exists(angularPath))
             {
+                DeleteAngularDirectoriesInModulesFolder(modulesFolderInSolution);
                 return;
             }
 
             await AngularModuleSourceCodeAdder.AddAsync(solutionFilePath, angularPath);
+        }
+
+        private static void DeleteAngularDirectoriesInModulesFolder(string modulesFolderInSolution)
+        {
+            var moduleFolders = Directory.GetDirectories(modulesFolderInSolution);
+
+            foreach (var moduleFolder in moduleFolders)
+            {
+                var angDir = Path.Combine(moduleFolder, "angular");
+                if (Directory.Exists(angDir))
+                {
+                    Directory.Delete(angDir, true);
+                }
+            }
         }
 
         private async Task DownloadSourceCodesToSolutionFolder(ModuleWithMastersInfo module, string modulesFolderInSolution, string version = null)
@@ -117,7 +132,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 null
             );
 
-            await DeleteAppFolderAsync(targetModuleFolder);
+            await DeleteAppAndDemoFolderAsync(targetModuleFolder);
 
             if (module.MasterModuleInfos == null)
             {
@@ -130,12 +145,18 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private async Task DeleteAppFolderAsync(string targetModuleFolder)
+        private async Task DeleteAppAndDemoFolderAsync(string targetModuleFolder)
         {
             var appFolder = Path.Combine(targetModuleFolder, "app");
             if (Directory.Exists(appFolder))
             {
                 Directory.Delete(appFolder, true);
+            }
+
+            var demoFolder = Path.Combine(targetModuleFolder, "demo");
+            if (Directory.Exists(demoFolder))
+            {
+                Directory.Delete(demoFolder, true);
             }
         }
 

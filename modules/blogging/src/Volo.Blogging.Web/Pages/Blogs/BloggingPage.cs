@@ -18,7 +18,7 @@ namespace Volo.Blogging.Pages.Blog
 
         public const string DefaultTitle = "Blog";
 
-        public const int MaxShortContentLength = 128;
+        public const int MaxShortContentLength = 200;
 
         public string GetTitle(string title = null)
         {
@@ -30,7 +30,7 @@ namespace Volo.Blogging.Pages.Blog
             return title;
         }
 
-        public string GetShortContent(string content) //TODO: This should be moved to its own place!
+        public string GetShortContent(string content) 
         {
             var html = RenderMarkdownToString(content);
             var plainText = Regex.Replace(html, "<[^>]*>", "");
@@ -40,19 +40,23 @@ namespace Volo.Blogging.Pages.Blog
                 return "";
             }
 
-            var firsParag = plainText.Split(Environment.NewLine).FirstOrDefault(s => !string.IsNullOrWhiteSpace(s));
+            var shortContent = new StringBuilder();
+            var lines = plainText.Split(Environment.NewLine).Where(s => !string.IsNullOrWhiteSpace(s));
 
-            if (firsParag == null)
+            foreach (var line in lines)
             {
-                return plainText;
+                if (shortContent.Length < MaxShortContentLength)
+                {
+                    shortContent.Append($" {line}");
+                }
+                
+                if(shortContent.Length >= MaxShortContentLength)
+                {
+                    return shortContent.ToString().Substring(0, MaxShortContentLength) + "...";
+                }
             }
 
-            if (firsParag.Length <= MaxShortContentLength)
-            {
-                return firsParag;
-            }
-
-            return firsParag.Substring(0, MaxShortContentLength) + "...";
+            return shortContent.ToString();
         }
 
         public IHtmlContent RenderMarkdownToHtml(string content)
