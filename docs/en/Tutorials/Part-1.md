@@ -877,10 +877,29 @@ Run the following command in the terminal to create a new state, named `BooksSta
 ![Initial book list page](./images/bookstore-generate-state-books.png)
 
 ```bash
-yarn ng generate ngxs-schematic:state books
+npx @ngxs/cli --name books --directory src/app/books
 ```
 
-* This command creates several new files and updates `app.modules.ts` file to import the `NgxsModule` with the new state.
+* This command creates books.state.ts and books.actions.ts files in the `src/app/books/state` folder. See the [NGXS CLI documentation](https://www.ngxs.io/plugins/cli).
+
+Import the `BooksState` to the `app.module.ts` in the `src/app` folder and then add the `BooksState` to `forRoot` static method of `NgxsModule` as an array element of the first parameter of the method.
+
+```js
+// ...
+import { BooksState } from './books/state/books.state'; //<== imported BooksState ==>
+
+@NgModule({
+  imports: [
+    // other imports
+
+    NgxsModule.forRoot([BooksState]), //<== added BooksState ==>
+
+    //other imports
+  ],
+  // ...
+})
+export class AppModule {}
+```
 
 #### Get books data from backend
 
