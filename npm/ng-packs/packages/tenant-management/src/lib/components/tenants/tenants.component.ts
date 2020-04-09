@@ -1,5 +1,5 @@
 import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import { ConfirmationService, Confirmation, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -122,7 +122,7 @@ export class TenantsComponent implements OnInit {
     const tenantForm = this.fb.group({
       name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
       adminEmailAddress: [null, [Validators.required, Validators.maxLength(256), Validators.email]],
-      adminPassword: [null, [Validators.required]],
+      adminPassword: [null, [Validators.required, ...getPasswordValidators(this.store)]],
     });
 
     if (this.hasSelectedTenant) {

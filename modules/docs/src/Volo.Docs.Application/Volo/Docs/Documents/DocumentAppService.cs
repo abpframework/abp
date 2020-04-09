@@ -70,7 +70,7 @@ namespace Volo.Docs.Documents
                 input.LanguageCode,
                 input.Version
             );
-        }
+        }   
 
         public virtual async Task<DocumentWithDetailsDto> GetDefaultAsync(GetDefaultDocumentInput input)
         {
