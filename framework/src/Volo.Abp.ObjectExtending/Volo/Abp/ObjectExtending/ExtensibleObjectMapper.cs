@@ -122,8 +122,6 @@ namespace Volo.Abp.ObjectExtending
             }
         }
 
-        //TODO: Move these methods to a class like ObjectExtensionHelper
-
         public static bool CanMapProperty<TSource, TDestination>(
             [NotNull] string propertyName,
             MappingPropertyDefinitionChecks? definitionChecks = null,
