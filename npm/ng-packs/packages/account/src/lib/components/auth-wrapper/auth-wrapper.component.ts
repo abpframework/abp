@@ -3,6 +3,7 @@ import { Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core'
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Account } from '../../models/account';
+import { eAccountComponents } from '../../enums/components';
 
 @Component({
   selector: 'abp-auth-wrapper',
@@ -25,6 +26,8 @@ export class AuthWrapperComponent
   isMultiTenancyEnabled$: Observable<boolean>;
 
   enableLocalLogin = true;
+
+  tenantBoxKey = eAccountComponents.TenantBox;
 
   constructor(private store: Store) {}
 

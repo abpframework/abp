@@ -4,7 +4,7 @@ import { generateHash } from '../utils';
 
 @Injectable({ providedIn: 'root' })
 export class DomInsertionService {
-  readonly inserted = new Set();
+  readonly inserted = new Set<number>();
 
   insertContent(contentStrategy: ContentStrategy) {
     const hash = generateHash(contentStrategy.content);

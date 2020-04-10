@@ -1,7 +1,6 @@
-# How to Insert Scripts and Styles
+# Dom Insertion (of Scripts and Styles)
 
 You can use the `DomInsertionService` in @abp/ng.core package in order to insert scripts and styles in an easy and explicit way.
-
 
 ## Getting Started
 
@@ -20,8 +19,7 @@ class DemoComponent {
 
 ## Usage
 
-You can use the `insertContent` method of `DomInsertionService` to create a `<script>` or `<style>` element with given content in the DOM at the desired position.
-
+You can use the `insertContent` method of `DomInsertionService` to create a `<script>` or `<style>` element with given content in the DOM at the desired position. There is also the `projectContent` method for dynamically rendering components and templates.
 
 ### How to Insert Scripts
 
@@ -48,7 +46,6 @@ In the example above, `<script>alert()</script>` element will place at the **end
 
 Please refer to [ContentStrategy](./Content-Strategy.md) to see all available content strategies and how you can build your own content strategy.
 
-
 ### How to Insert Styles
 
 If you pass a `StyleContentStrategy` instance as the first parameter of `insertContent` method, the `DomInsertionService` will create a `<style>` element with given `content` and place it in the designated DOM position.
@@ -74,18 +71,17 @@ In the example above, `<style>body {margin: 0;}</style>` element will place at t
 
 Please refer to [ContentStrategy](./Content-Strategy.md) to see all available content strategies and how you can build your own content strategy.
 
-
 ## API
 
 ### insertContent
 
 ```js
-insertContent(strategy: ContentStrategy): void
+insertContent(contentStrategy: ContentStrategy): void
 ```
 
-`strategy` parameter is the primary focus here and is explained above.
+- `contentStrategy` parameter is the primary focus here and is explained above.
 
 
 ## What's Next?
 
-- [TrackByService](./Track-By-Service.md)
+- [ContentProjectionService](./Content-Projection-Service.md)
