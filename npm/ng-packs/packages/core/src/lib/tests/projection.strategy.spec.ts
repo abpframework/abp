@@ -213,7 +213,7 @@ describe('TemplateProjectionStrategy', () => {
 describe('PROJECTION_STRATEGY', () => {
   const content = undefined;
   const containerRef = ({ length: 0 } as any) as ViewContainerRef;
-  let context = undefined;
+  let context: any;
 
   test.each`
     name                             | Strategy                       | containerStrategy
