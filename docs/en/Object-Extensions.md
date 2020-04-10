@@ -114,6 +114,154 @@ Explicitly defining an extra property has some use cases:
 * Allows to control how the extra property is handled on object to object mapping (see the section below).
 * Allows to define metadata for the property. For example, you can map an extra property to a table field in the database while using the [EF Core](Entity-Framework-Core.md).
 
+> `ObjectExtensionManager` implements the singleton pattern (`ObjectExtensionManager.Instance`) and you should define object extensions before your application startup. The [application startup template](Startup-Templates/Application.md) has some pre-defined static classes to safely define object extensions inside.
+
 ### AddOrUpdate
 
-`AddOrUpdate` is the main method to define a new extra property or update an extra property definition.
+`AddOrUpdate` is the main method to define a extra properties or update extra properties for an object.
+
+Example: Define extra properties for the `IdentityUser` entity:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdate<IdentityUser>(options =>
+        {
+            options.AddOrUpdateProperty<string>("SocialSecurityNumber");
+            options.AddOrUpdateProperty<bool>("IsSuperUser");
+        }
+    );
+````
+
+### AddOrUpdateProperty
+
+While `AddOrUpdateProperty` can be used on the `options` as shown before, if you want to define a single extra property, you can use the shortcut extension method too:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, string>("SocialSecurityNumber");
+````
+
+Sometimes it would be practical to define a single extra property to multiple types. Instead of defining one by one, you can use the following code:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<string>(
+        new[]
+        {
+            typeof(IdentityUserDto),
+            typeof(IdentityUserCreateDto),
+            typeof(IdentityUserUpdateDto)
+        },
+        "SocialSecurityNumber"
+    );
+````
+
+#### Property Configuration
+
+`AddOrUpdateProperty` can also get an action that can perform additional configuration on the property definition.
+
+Example:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.CheckPairDefinitionOnMapping = false;
+        });
+````
+
+> See the "Object to Object Mapping" section to understand the `CheckPairDefinitionOnMapping` option.
+
+`options` has a dictionary, named `Configuration` which makes the object extension definitions even extensible. It is used by the EF Core to map extra properties to table fields in the database. See the [extending entities](Customizing-Application-Modules-Extending-Entities.md) document.
+
+## Object to Object Mapping
+
+Assume that you've added an extra property to an extensible entity object and used auto [object to object mapping](Object-To-Object-Mapping.md) to map this entity to an extensible DTO class. You need to be careful in such a case, because the extra property may contain a **sensitive data** that should not be available to clients.
+
+This section offers some **good practices** to control your extra properties on object mapping.
+
+### MapExtraPropertiesTo
+
+`MapExtraPropertiesTo` is an extension method provided by the ABP Framework to copy extra properties from an object to another in a controlled manner. Example usage:
+
+````csharp
+identityUser.MapExtraPropertiesTo(identityUserDto);
+````
+
+`MapExtraPropertiesTo` **requires to define properties** (as described above) in **both sides** (`IdentityUser` and `IdentityUserDto` in this case) in order to copy the value to the target object. Otherwise, it doesn't copy the value even if it does exists in the source object (`identityUser` in this example). There are some ways to overload this restriction.
+
+#### MappingPropertyDefinitionChecks
+
+`MapExtraPropertiesTo` gets an additional parameter to control the definition check for a single mapping operation:
+
+````csharp
+identityUser.MapExtraPropertiesTo(
+    identityUserDto,
+    MappingPropertyDefinitionChecks.None
+);
+````
+
+> Be careful since `MappingPropertyDefinitionChecks.None` copies all extra properties without any check. `MappingPropertyDefinitionChecks` enum has other members too.
+
+If you want to completely disable definition check for a property, you can do it while defining the extra property (or update an existing definition) as shown below:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.CheckPairDefinitionOnMapping = false;
+        });
+````
+
+#### Ignored Properties
+
+You may want to ignore some properties on a specific mapping operation:
+
+````csharp
+identityUser.MapExtraPropertiesTo(
+    identityUserDto,
+    ignoredProperties: new[] {"MySensitiveProp"}
+);
+````
+
+Ignored properties are not copied to the target object.
+
+#### AutoMapper Integration
+
+If you're using the [AutoMapper](https://automapper.org/) library, the ABP Framework also provides an extension method to utilize the `MapExtraPropertiesTo` method defined above.
+
+You can use the `MapExtraProperties()` method inside your mapping profile.
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<IdentityUser, IdentityUserDto>()
+            .MapExtraProperties();
+    }
+}
+````
+
+It has the same parameters with the `MapExtraPropertiesTo` method.
+
+## Entity Framework Core Database Mapping
+
+If you're using the EF Core, you can map an extra property to a table field in the database. Example:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.MapEfCore(b => b.HasMaxLength(32));
+        }
+    );
+````
+
+See the [Entity Framework Core Integration document](Entity-Framework-Core.md) for more.

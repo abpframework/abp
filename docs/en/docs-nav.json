@@ -155,6 +155,10 @@
         {
           "text": "Data Filtering",
           "path": "Data-Filtering.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         }
       ]
     },
