@@ -105,3 +105,15 @@ user.SetTitle("My Title");
 var title = user.GetTitle();
 ````
 
+## Object Extension Manager
+
+While you can set arbitrary properties to an extensible object (which implements the `IHasExtraProperties` interface), `ObjectExtensionManager` is used to explicitly define extra properties for extensible classes.
+
+Explicitly defining an extra property has some use cases:
+
+* Allows to control how the extra property is handled on object to object mapping (see the section below).
+* Allows to define metadata for the property. For example, you can map an extra property to a table field in the database while using the [EF Core](Entity-Framework-Core.md).
+
+### AddOrUpdate
+
+`AddOrUpdate` is the main method to define a new extra property or update an extra property definition.
