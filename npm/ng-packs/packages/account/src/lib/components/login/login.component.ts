@@ -7,6 +7,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import snq from 'snq';
+import { eAccountComponents } from '../../enums/components';
 
 const { maxLength, minLength, required } = Validators;
 
@@ -20,6 +21,8 @@ export class LoginComponent implements OnInit {
   inProgress: boolean;
 
   isSelfRegistrationEnabled = true;
+
+  authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
     private fb: FormBuilder,
