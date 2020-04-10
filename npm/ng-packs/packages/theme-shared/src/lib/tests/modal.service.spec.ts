@@ -15,7 +15,7 @@ describe('ModalContainerComponent', () => {
     @ViewChild('ref', { static: true })
     template: TemplateRef<any>;
 
-    constructor(public service: ModalService) {}
+    constructor(public modalService: ModalService) {}
   }
 
   let spectator: Spectator<TestComponent>;
@@ -28,7 +28,7 @@ describe('ModalContainerComponent', () => {
 
   beforeEach(() => {
     spectator = createComponent();
-    service = spectator.component.service;
+    service = spectator.component.modalService;
   });
 
   afterEach(() => {
