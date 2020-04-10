@@ -8,6 +8,7 @@ import {
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TenantsComponent } from './components/tenants/tenants.component';
+import { eTenantManagementComponents } from './enums/components';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tenants', pathMatch: 'full' },
@@ -22,7 +23,7 @@ const routes: Routes = [
         data: {
           requiredPolicy: 'AbpTenantManagement.Tenants',
           replaceableComponent: {
-            key: 'TenantManagement.TenantsComponent',
+            key: eTenantManagementComponents.Tenants,
             defaultComponent: TenantsComponent,
           } as ReplaceableComponents.RouteData<TenantsComponent>,
         },

@@ -9,6 +9,7 @@ import { catchError, finalize, switchMap } from 'rxjs/operators';
 import snq from 'snq';
 import { RegisterRequest } from '../../models';
 import { AccountService } from '../../services/account.service';
+import { eAccountComponents } from '../../enums/components';
 const { maxLength, required, email } = Validators;
 
 @Component({
@@ -21,6 +22,8 @@ export class RegisterComponent implements OnInit {
   inProgress: boolean;
 
   isSelfRegistrationEnabled = true;
+
+  authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
     private fb: FormBuilder,

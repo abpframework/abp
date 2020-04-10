@@ -6,6 +6,7 @@ import {
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SettingManagementComponent } from './components/setting-management.component';
+import { eSettingManagementComponents } from './enums/components';
 
 const routes: Routes = [
   {
@@ -18,7 +19,7 @@ const routes: Routes = [
         data: {
           requiredPolicy: 'AbpAccount.SettingManagement',
           replaceableComponent: {
-            key: 'SettingManagement.SettingManagementComponent',
+            key: eSettingManagementComponents.SettingManagement,
             defaultComponent: SettingManagementComponent,
           } as ReplaceableComponents.RouteData,
         },
