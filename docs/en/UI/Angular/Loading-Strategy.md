@@ -57,7 +57,7 @@ This method creates and returns an observable stream that emits on success and t
 
 ## Predefined Loading Strategies
 
-Predefined content security strategies are accessible via `LOADING_STRATEGY` constant.
+Predefined loading strategies are accessible via `LOADING_STRATEGY` constant.
 
 
 ### AppendAnonymousScriptToHead

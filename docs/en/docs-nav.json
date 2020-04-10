@@ -354,6 +354,10 @@
               "path": "UI/Angular/Dom-Insertion-Service.md"
             },
             {
+              "text": "ContentProjectionService",
+              "path": "UI/Angular/Content-Projection-Service.md"
+            },
+            {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
             }
