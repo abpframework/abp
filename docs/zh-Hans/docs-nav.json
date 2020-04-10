@@ -142,6 +142,10 @@
           "path": "Settings.md"
         },
         {
+          "text": "数据过滤",
+          "path": "Data-Filtering.md"
+        },
+        {
           "text": "对象扩展",
           "path": "Object-Extensions.md"
         }
