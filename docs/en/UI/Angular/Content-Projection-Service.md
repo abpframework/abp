@@ -31,7 +31,7 @@ const strategy = PROJECTION_STRATEGY.AppendComponentToBody(
   { someOverlayProp: "SOME_VALUE" }
 );
 
-const componentRef = this.ContentProjectionService.projectContent(strategy);
+const componentRef = this.contentProjectionService.projectContent(strategy);
 ```
 
 In the example above, `SomeOverlayComponent` component will placed at the **end** of `<body>` and a `ComponentRef` will be returned. Additionally, the given context will be applied, so `someOverlayProp` of the component will be set to `SOME_VALUE`.
