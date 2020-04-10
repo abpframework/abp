@@ -17,6 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago
         public override void ConfigureDynamicResources(BundleConfigurationContext context)
         {
             var cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            if (cultureName.StartsWith("en"))
+            {
+                return;
+            }
+
             var cultureFileName = $"/libs/timeago/locales/jquery.timeago.{cultureName}.js";
 
             if (context.FileProvider.GetFileInfo(cultureFileName).Exists)
