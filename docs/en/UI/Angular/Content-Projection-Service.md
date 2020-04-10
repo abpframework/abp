@@ -49,10 +49,10 @@ const strategy = PROJECTION_STRATEGY.ProjectComponentToContainer(
   { someProp: "SOME_VALUE" }
 );
 
-const componentRef = this.ContentProjectionService.projectContent(strategy);
+const componentRef = this.contentProjectionService.projectContent(strategy);
 ```
 
-In this example, the `viewContainerRefOfTarget`, which is a `ViewContainerRef` instance, will be cleared and `SomeComponent` component will placed inside it. Moreover, the given context will be applied, so `someProp` of the component will be set to `SOME_VALUE`.
+In this example, the `viewContainerRefOfTarget`, which is a `ViewContainerRef` instance, will be cleared and `SomeComponent` component will be placed inside it. In addition, the given context will be applied and `someProp` of the component will be set to `SOME_VALUE`.
 
 > You should keep the returned `ComponentRef` or `EmbeddedViewRef`, as they are a reference to the projected content and you will need them to destroy it when necessary.
 
