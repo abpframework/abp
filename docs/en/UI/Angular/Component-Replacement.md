@@ -71,7 +71,7 @@ export class AppComponent {
     this.store.dispatch(
       new AddReplaceableComponent({
         component: MyApplicationLayoutComponent,
-        key: eThemeBasicComponents.AccountLayout,
+        key: eThemeBasicComponents.ApplicationLayout,
       }),
     );
 
