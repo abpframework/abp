@@ -1,6 +1,5 @@
-import { Injectable, Injector, TemplateRef, Type } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { ContentStrategy } from '../strategies/content.strategy';
-import { ProjectionStrategy } from '../strategies/projection.strategy';
 import { generateHash } from '../utils';
 
 @Injectable({ providedIn: 'root' })
@@ -16,12 +15,5 @@ export class DomInsertionService {
 
     contentStrategy.insertElement();
     this.inserted.add(hash);
-  }
-
-  projectContent<T extends Type<any> | TemplateRef<any>>(
-    projectionStrategy: ProjectionStrategy<T>,
-    injector = this.injector,
-  ) {
-    return projectionStrategy.injectContent(injector);
   }
 }
