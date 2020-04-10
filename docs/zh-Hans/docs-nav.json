@@ -140,6 +140,10 @@
         {
           "text": "设置管理",
           "path": "Settings.md"
+        },
+        {
+          "text": "对象扩展",
+          "path": "Object-Extensions.md"
         }
       ]
     },
