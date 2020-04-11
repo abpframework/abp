@@ -67,7 +67,7 @@ namespace Volo.Docs
             //Assert
             projectDto.ShouldNotBeNull();
             projectDto.Name.ShouldBe(createProjectDto.Name);
-            projectDto.ShortName.ShouldBe(createProjectDto.ShortName);
+            projectDto.ShortName.ShouldBe(createProjectDto.ShortName.ToLower());
             projectDto.Format.ShouldBe(createProjectDto.Format);
             projectDto.DefaultDocumentName.ShouldBe(createProjectDto.DefaultDocumentName);
             projectDto.NavigationDocumentName.ShouldBe(createProjectDto.NavigationDocumentName);

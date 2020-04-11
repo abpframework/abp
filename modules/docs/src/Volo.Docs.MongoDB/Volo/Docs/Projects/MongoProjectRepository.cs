@@ -30,7 +30,9 @@ namespace Volo.Docs.Projects
 
         public async Task<Project> GetByShortNameAsync(string shortName)
         {
-            var project = await GetMongoQueryable().FirstOrDefaultAsync(p => p.ShortName == shortName);
+            var normalizeShortName = NormalizeShortName(shortName);
+            
+            var project = await GetMongoQueryable().FirstOrDefaultAsync(p => p.ShortName == normalizeShortName);
 
             if (project == null)
             {
@@ -42,7 +44,14 @@ namespace Volo.Docs.Projects
 
         public async Task<bool> ShortNameExistsAsync(string shortName)
         {
-            return await GetMongoQueryable().AnyAsync(x => x.ShortName == shortName);
+            var normalizeShortName = NormalizeShortName(shortName);
+            
+            return await GetMongoQueryable().AnyAsync(x => x.ShortName == normalizeShortName);
+        }
+        
+        private string NormalizeShortName(string shortName)
+        {
+            return shortName.ToLower();
         }
     }
 }
