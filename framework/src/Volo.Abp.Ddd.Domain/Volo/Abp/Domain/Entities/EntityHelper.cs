@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -95,32 +97,40 @@ namespace Volo.Abp.Domain.Entities
             var lambdaBody = Expression.Equal(leftExpression, rightExpression);
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
-        
+
+        private static readonly ConcurrentDictionary<string, PropertyInfo> CachedPropertyInfo =
+            new ConcurrentDictionary<string, PropertyInfo>();
+
         public static void TrySetId<TKey>(
             IEntity<TKey> entity,
             Func<TKey> idFactory,
             bool checkForDisableGuidGenerationAttribute = false)
         {
-            //TODO: Can be optimized (by caching per entity type)?
-            var entityType = entity.GetType();
-            var idProperty = entityType.GetProperty(
-                nameof(entity.Id)
-            );
-
-            if (idProperty == null || idProperty.GetSetMethod(true) == null)
-            {
-                return;
-            }
-
-            if (checkForDisableGuidGenerationAttribute)
-            {
-                if (idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
+            var property = CachedPropertyInfo.GetOrAdd(
+                entity.GetType().FullName + checkForDisableGuidGenerationAttribute, () =>
                 {
-                    return;
-                }
-            }
+                    var entityType = entity.GetType();
+                    var idProperty = entityType.GetProperties()
+                        .Where(x => x.GetSetMethod(true) != null)
+                        .FirstOrDefault(x => x.Name == nameof(entity.Id));
 
-            idProperty.SetValue(entity, idFactory());
+                    if (idProperty == null)
+                    {
+                        return null;
+                    }
+
+                    if (checkForDisableGuidGenerationAttribute)
+                    {
+                        if (idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
+                        {
+                            return null;
+                        }
+                    }
+
+                    return idProperty;
+                });
+
+            property?.SetValue(entity, idFactory());
         }
     }
 }
