@@ -18,14 +18,20 @@ namespace Volo.Abp.DynamicProxy
         
         public static void Add<T>()
         {
-            IgnoredTypes.AddIfNotContains(typeof(T));
+            lock (IgnoredTypes)
+            {
+                IgnoredTypes.AddIfNotContains(typeof(T));
+            }
         }
         
         public static bool Contains(Type type, bool includeDerivedTypes = true)
         {
-            return includeDerivedTypes
-                ? IgnoredTypes.Any(t => t.IsAssignableFrom(type))
-                : IgnoredTypes.Contains(type);
+            lock (IgnoredTypes)
+            {
+                return includeDerivedTypes
+                    ? IgnoredTypes.Any(t => t.IsAssignableFrom(type))
+                    : IgnoredTypes.Contains(type);
+            }
         }
     }
 }
