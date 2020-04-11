@@ -13,6 +13,9 @@ namespace Volo.Abp.Domain.Entities
     /// </summary>
     public static class EntityHelper
     {
+        private static readonly ConcurrentDictionary<string, PropertyInfo> CachedIdProperties =
+            new ConcurrentDictionary<string, PropertyInfo>();
+
         public static bool IsEntity([NotNull] Type type)
         {
             return typeof(IEntity).IsAssignableFrom(type);
@@ -98,33 +101,29 @@ namespace Volo.Abp.Domain.Entities
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
 
-        private static readonly ConcurrentDictionary<string, PropertyInfo> CachedPropertyInfo =
-            new ConcurrentDictionary<string, PropertyInfo>();
-
         public static void TrySetId<TKey>(
             IEntity<TKey> entity,
             Func<TKey> idFactory,
-            bool checkForDisableGuidGenerationAttribute = false)
+            bool checkForDisableIdGenerationAttribute = false)
         {
-            var property = CachedPropertyInfo.GetOrAdd(
-                entity.GetType().FullName + checkForDisableGuidGenerationAttribute, () =>
+            var property = CachedIdProperties.GetOrAdd(
+                $"{entity.GetType().FullName}-{checkForDisableIdGenerationAttribute}", () =>
                 {
-                    var entityType = entity.GetType();
-                    var idProperty = entityType.GetProperties()
-                        .Where(x => x.GetSetMethod(true) != null)
-                        .FirstOrDefault(x => x.Name == nameof(entity.Id));
+                    var idProperty = entity
+                        .GetType()
+                        .GetProperties()
+                        .FirstOrDefault(x => x.Name == nameof(entity.Id) &&
+                                             x.GetSetMethod(true) != null);
 
                     if (idProperty == null)
                     {
                         return null;
                     }
 
-                    if (checkForDisableGuidGenerationAttribute)
+                    if (checkForDisableIdGenerationAttribute &&
+                        idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
                     {
-                        if (idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
-                        {
-                            return null;
-                        }
+                        return null;
                     }
 
                     return idProperty;
