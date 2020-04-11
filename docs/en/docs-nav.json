@@ -155,6 +155,10 @@
         {
           "text": "Data Filtering",
           "path": "Data-Filtering.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         }
       ]
     },
@@ -352,6 +356,10 @@
             {
               "text": "DomInsertionService",
               "path": "UI/Angular/Dom-Insertion-Service.md"
+            },
+            {
+              "text": "ContentProjectionService",
+              "path": "UI/Angular/Content-Projection-Service.md"
             },
             {
               "text": "TrackByService",

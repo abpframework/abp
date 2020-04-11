@@ -102,17 +102,7 @@ export class ModalComponent implements OnDestroy {
   destroy$ = new Subject<void>();
 
   get isFormDirty(): boolean {
-    let node: HTMLDivElement;
-    if (!this.modalContent) {
-      node = document.getElementById('modal-container') as HTMLDivElement;
-    }
-
-    const nodes = getFlatNodes(
-      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement)
-        .childNodes,
-    );
-
-    return hasNgDirty(nodes);
+    return Boolean(document.querySelector('.modal-dialog .ng-dirty'));
   }
 
   constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
@@ -177,18 +167,4 @@ export class ModalComponent implements OnDestroy {
 
     this.init.emit();
   }
-}
-
-function getFlatNodes(nodes: NodeList): HTMLElement[] {
-  return Array.from(nodes).reduce(
-    (acc, val) => [
-      ...acc,
-      ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val]),
-    ],
-    [],
-  );
-}
-
-function hasNgDirty(nodes: HTMLElement[]) {
-  return nodes.findIndex(node => (node.className || '').indexOf('ng-dirty') > -1) > -1;
 }

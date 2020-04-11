@@ -14,6 +14,7 @@ import {
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
+import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 
 interface SelectedModalContent {
   type: 'saveConnStr' | 'saveTenant';
@@ -59,6 +60,8 @@ export class TenantsComponent implements OnInit {
   sortOrder = '';
 
   sortKey = '';
+
+  featureManagementKey = eFeatureManagementComponents.FeatureManagement;
 
   get hasSelectedTenant(): boolean {
     return Boolean(this.selected.id);

@@ -882,4 +882,4 @@ This document explains how to split your databases and manage your database migr
 
 ## Source Code
 
-You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.
+You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.

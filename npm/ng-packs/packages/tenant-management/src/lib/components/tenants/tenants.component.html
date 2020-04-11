@@ -141,7 +141,9 @@
         <input type="text" id="name" class="form-control" formControlName="name" autofocus />
       </div>
       <div class="form-group" *ngIf="tenantForm.controls.adminEmailAddress">
-        <label for="name">{{ 'AbpTenantManagement::DisplayName:AdminEmailAddress' | abpLocalization }}</label>
+        <label for="name">{{
+          'AbpTenantManagement::DisplayName:AdminEmailAddress' | abpLocalization
+        }}</label>
         <input
           autocomplete="email"
           type="email"
@@ -151,7 +153,9 @@
         />
       </div>
       <div class="form-group" *ngIf="tenantForm.controls.adminPassword">
-        <label for="name">{{ 'AbpTenantManagement::DisplayName:AdminPassword' | abpLocalization }}</label>
+        <label for="name">{{
+          'AbpTenantManagement::DisplayName:AdminPassword' | abpLocalization
+        }}</label>
         <input
           autocomplete="new-password"
           type="password"
@@ -203,7 +207,7 @@
       visible: { value: visibleFeatures, twoWay: true }
     },
     outputs: { visibleChange: onVisibleFeaturesChange },
-    componentKey: 'FeatureManagement.FeatureManagementComponent'
+    componentKey: featureManagementKey
   }"
   [(visible)]="visibleFeatures"
   providerName="T"

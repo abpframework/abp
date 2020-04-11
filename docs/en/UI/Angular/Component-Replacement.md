@@ -11,15 +11,18 @@ Create a new component that you want to use instead of an ABP component. Add tha
 Then, open the `app.component.ts` and dispatch the `AddReplaceableComponent` action to replace your component with an ABP component as shown below:
 
 ```js
-import { ..., AddReplaceableComponent } from '@abp/ng.core';
+import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent action
+import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
+import { Store } from '@ngxs/store'; // imported Store
+//...
 export class AppComponent {
-  constructor(..., private store: Store) {}
+  constructor(..., private store: Store) {} // injected Store
 
   ngOnInit() {
     this.store.dispatch(
       new AddReplaceableComponent({
         component: YourNewRoleComponent,
-        key: 'Identity.RolesComponent',
+        key: eIdentityComponents.Roles,
       }),
     );
     //...
@@ -56,6 +59,7 @@ Open the `app.component.ts` and add the below content:
 
 ```js
 import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
+import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents enum for component keys
 import { MyApplicationLayoutComponent } from './shared/my-application-layout/my-application-layout.component'; // imported MyApplicationLayoutComponent
 import { Store } from '@ngxs/store'; // imported Store
 //...
@@ -67,7 +71,7 @@ export class AppComponent {
     this.store.dispatch(
       new AddReplaceableComponent({
         component: MyApplicationLayoutComponent,
-        key: 'Theme.ApplicationLayoutComponent',
+        key: eThemeBasicComponents.ApplicationLayout,
       }),
     );
 
@@ -75,24 +79,6 @@ export class AppComponent {
   }
 }
 ```
-
-### Available Replaceable Components
-
-| Component key                                      | Description                                   |
-| -------------------------------------------------- | --------------------------------------------- |
-| Account.LoginComponent                             | Login page                                    |
-| Account.RegisterComponent                          | Register page                                 |
-| Account.ManageProfileComponent                     | Manage Profile page                           |
-| Account.AuthWrapperComponent                       | This component wraps register and login pages |
-| Account.ChangePasswordComponent                    | Change password form                          |
-| Account.PersonalSettingsComponent                  | Personal settings form                        |
-| Account.TenantBoxComponentInputs                   | Tenant changing box                           |
-| FeatureManagement.FeatureManagementComponent       | Features modal                                |
-| Identity.UsersComponent                            | Users page                                    |
-| Identity.RolesComponent                            | Roles page                                    |
-| PermissionManagement.PermissionManagementComponent | Permissions modal                             |
-| SettingManagement.SettingManagementComponent       | Setting Management page                       |
-| TenantManagement.TenantsComponent                  | Tenants page                                  |
 
 ## What's Next?
 
