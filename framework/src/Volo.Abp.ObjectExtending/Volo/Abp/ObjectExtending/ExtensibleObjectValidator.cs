@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 using Volo.Abp.DynamicProxy;
@@ -12,18 +12,14 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public static List<ValidationResult> GetValidationErrors(
             [NotNull] IHasExtraProperties extensibleObject,
-            [CanBeNull] IServiceProvider serviceProvider = null)
+            [CanBeNull] ValidationContext objectValidationContext = null)
         {
             var validationErrors = new List<ValidationResult>();
             
             AddValidationErrors(
                 extensibleObject,
-                new ValidationContext(
-                    extensibleObject,
-                    serviceProvider,
-                    new Dictionary<object, object>()
-                ),
-                validationErrors
+                validationErrors,
+                objectValidationContext
             );
 
             return validationErrors;
@@ -31,12 +27,20 @@ namespace Volo.Abp.ObjectExtending
 
         public static void AddValidationErrors(
             [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] ValidationContext validationContext,
-            [NotNull] List<ValidationResult> validationErrors)
+            [NotNull] List<ValidationResult> validationErrors,
+            [CanBeNull] ValidationContext objectValidationContext = null)
         {
             Check.NotNull(extensibleObject, nameof(extensibleObject));
-            Check.NotNull(validationContext, nameof(validationContext));
             Check.NotNull(validationErrors, nameof(validationErrors));
+
+            if (objectValidationContext == null)
+            {
+                objectValidationContext = new ValidationContext(
+                    extensibleObject,
+                    null,
+                    new Dictionary<object, object>()
+                );
+            }
 
             var objectType = ProxyHelper.UnProxy(extensibleObject).GetType();
 
@@ -50,23 +54,24 @@ namespace Volo.Abp.ObjectExtending
 
             foreach (var propertyInfo in objectExtensionInfo.GetProperties())
             {
-                if (propertyInfo.ValidationAttributes.IsNullOrEmpty())
+                if (propertyInfo.ValidationAttributes.Any())
                 {
-                    continue;
-                }
-
-                var validationContext2 = new ValidationContext(extensibleObject, validationContext, null)
-                {
-                    DisplayName = propertyInfo.Name,
-                    MemberName = propertyInfo.Name
-                };
-
-                foreach (var attribute in propertyInfo.ValidationAttributes)
-                {
-                    var result = attribute.GetValidationResult(extensibleObject.GetProperty(propertyInfo.Name), validationContext2);
-                    if (result != null)
+                    var propertyValidationContext = new ValidationContext(extensibleObject, objectValidationContext, null)
                     {
-                        validationErrors.Add(result);
+                        DisplayName = propertyInfo.Name,
+                        MemberName = propertyInfo.Name
+                    };
+
+                    foreach (var attribute in propertyInfo.ValidationAttributes)
+                    {
+                        var result = attribute.GetValidationResult(
+                            extensibleObject.GetProperty(propertyInfo.Name),
+                            propertyValidationContext
+                        );
+                        if (result != null)
+                        {
+                            validationErrors.Add(result);
+                        }
                     }
                 }
             }
