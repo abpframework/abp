@@ -3,6 +3,7 @@ using Shouldly;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Caching

@@ -8,12 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IMapTo<UserEto>
+    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -130,16 +129,17 @@ namespace Volo.Abp.Identity
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public IdentityUser(Guid id, [NotNull] string userName, string email = null, Guid? tenantId = null)
+        public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
         {
             Check.NotNull(userName, nameof(userName));
+            Check.NotNull(email, nameof(email));
 
             Id = id;
             TenantId = tenantId;
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
             Email = email;
-            NormalizedEmail = email?.ToUpperInvariant();
+            NormalizedEmail = email.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
             SecurityStamp = Guid.NewGuid().ToString();
 
@@ -279,37 +279,6 @@ namespace Volo.Abp.Identity
         public override string ToString()
         {
             return $"{base.ToString()}, UserName = {UserName}";
-        }
-
-        UserEto IMapTo<UserEto>.MapTo()
-        {
-            //TODO: Instead, consider to use automapper (but it makes dependency just for a small code part)??
-
-            return new UserEto
-            {
-                Name = Name,
-                Email = Email,
-                EmailConfirmed = EmailConfirmed,
-                Id = Id,
-                PhoneNumber = PhoneNumber,
-                PhoneNumberConfirmed = PhoneNumberConfirmed,
-                Surname = Surname,
-                TenantId = TenantId,
-                UserName = UserName
-            };
-        }
-
-        void IMapTo<UserEto>.MapTo(UserEto destination)
-        {
-            destination.Name = Name;
-            destination.Email = Email;
-            destination.EmailConfirmed = EmailConfirmed;
-            destination.Id = Id;
-            destination.PhoneNumber = PhoneNumber;
-            destination.PhoneNumberConfirmed = PhoneNumberConfirmed;
-            destination.Surname = Surname;
-            destination.TenantId = TenantId;
-            destination.UserName = UserName;
         }
     }
 }

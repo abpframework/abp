@@ -249,7 +249,7 @@
           "items": [
             {
               "text": "Integração do PostgreSQL",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "path": "Entity-Framework-Core-PostgreSQL.md"
             }
           ]
         },

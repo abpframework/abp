@@ -17,7 +17,7 @@ import { Observable, Subject } from 'rxjs';
 import snq from 'snq';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { HttpErrorConfig, ErrorScreenErrorCodes } from '../models/common';
-import { Toaster } from '../models/toaster';
+import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
 
 export const DEFAULT_ERROR_MESSAGES = {
@@ -57,97 +57,110 @@ export class ErrorHandler {
     private injector: Injector,
     @Inject('HTTP_ERROR_CONFIG') private httpErrorConfig: HttpErrorConfig,
   ) {
-    this.actions.pipe(ofActionSuccessful(RestOccurError, RouterError, RouterDataResolved)).subscribe(res => {
-      if (res instanceof RestOccurError) {
-        const { payload: err = {} as HttpErrorResponse | any } = res;
-        const body = snq(() => (err as HttpErrorResponse).error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
+    this.actions
+      .pipe(ofActionSuccessful(RestOccurError, RouterError, RouterDataResolved))
+      .subscribe(res => {
+        if (res instanceof RestOccurError) {
+          const { payload: err = {} as HttpErrorResponse | any } = res;
+          const body = snq(
+            () => (err as HttpErrorResponse).error.error,
+            DEFAULT_ERROR_MESSAGES.defaultError.title,
+          );
 
-        if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
-          const confirmation$ = this.showError(null, null, body);
+          if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
+            const confirmation$ = this.showError(null, null, body);
 
-          if (err.status === 401) {
-            confirmation$.subscribe(() => {
-              this.navigateToLogin();
-            });
-          }
-        } else {
-          switch ((err as HttpErrorResponse).status) {
-            case 401:
-              this.canCreateCustomError(401)
-                ? this.show401Page()
-                : this.showError(
-                    {
-                      key: 'AbpAccount::DefaultErrorMessage401',
-                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
-                    },
-                    {
-                      key: 'AbpAccount::DefaultErrorMessage401Detail',
-                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
-                    },
-                  ).subscribe(() => this.navigateToLogin());
-              break;
-            case 403:
-              this.createErrorComponent({
-                title: {
-                  key: 'AbpAccount::DefaultErrorMessage403',
-                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
-                },
-                details: {
-                  key: 'AbpAccount::DefaultErrorMessage403Detail',
-                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
-                },
-                status: 403,
+            if (err.status === 401) {
+              confirmation$.subscribe(() => {
+                this.navigateToLogin();
               });
-              break;
-            case 404:
-              this.canCreateCustomError(404)
-                ? this.show404Page()
-                : this.showError(
-                    {
-                      key: 'AbpAccount::DefaultErrorMessage404',
-                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
-                    },
-                    {
-                      key: 'AbpAccount::DefaultErrorMessage404Detail',
-                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
-                    },
-                  );
-              break;
-            case 500:
-              this.createErrorComponent({
-                title: {
-                  key: 'AbpAccount::500Message',
-                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
-                },
-                details: {
-                  key: 'AbpAccount::InternalServerErrorMessage',
-                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
-                },
-                status: 500,
-              });
-              break;
-            case 0:
-              if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
+            }
+          } else {
+            switch ((err as HttpErrorResponse).status) {
+              case 401:
+                this.canCreateCustomError(401)
+                  ? this.show401Page()
+                  : this.showError(
+                      {
+                        key: 'AbpAccount::DefaultErrorMessage401',
+                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
+                      },
+                      {
+                        key: 'AbpAccount::DefaultErrorMessage401Detail',
+                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
+                      },
+                    ).subscribe(() => this.navigateToLogin());
+                break;
+              case 403:
                 this.createErrorComponent({
                   title: {
-                    key: 'AbpAccount::DefaultErrorMessage',
-                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+                    key: 'AbpAccount::DefaultErrorMessage403',
+                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
                   },
+                  details: {
+                    key: 'AbpAccount::DefaultErrorMessage403Detail',
+                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
+                  },
+                  status: 403,
                 });
-              }
-              break;
-            default:
-              this.showError(DEFAULT_ERROR_MESSAGES.defaultError.details, DEFAULT_ERROR_MESSAGES.defaultError.title);
-              break;
+                break;
+              case 404:
+                this.canCreateCustomError(404)
+                  ? this.show404Page()
+                  : this.showError(
+                      {
+                        key: 'AbpAccount::DefaultErrorMessage404',
+                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
+                      },
+                      {
+                        key: 'AbpAccount::DefaultErrorMessage404Detail',
+                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
+                      },
+                    );
+                break;
+              case 500:
+                this.createErrorComponent({
+                  title: {
+                    key: 'AbpAccount::500Message',
+                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
+                  },
+                  details: {
+                    key: 'AbpAccount::InternalServerErrorMessage',
+                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
+                  },
+                  status: 500,
+                });
+                break;
+              case 0:
+                if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
+                  this.createErrorComponent({
+                    title: {
+                      key: 'AbpAccount::DefaultErrorMessage',
+                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+                    },
+                    details: err.message,
+                    isHomeShow: false,
+                  });
+                }
+                break;
+              default:
+                this.showError(
+                  DEFAULT_ERROR_MESSAGES.defaultError.details,
+                  DEFAULT_ERROR_MESSAGES.defaultError.title,
+                );
+                break;
+            }
           }
+        } else if (
+          res instanceof RouterError &&
+          snq(() => res.event.error.indexOf('Cannot match') > -1, false)
+        ) {
+          this.show404Page();
+        } else if (res instanceof RouterDataResolved && this.componentRef) {
+          this.componentRef.destroy();
+          this.componentRef = null;
         }
-      } else if (res instanceof RouterError && snq(() => res.event.error.indexOf('Cannot match') > -1, false)) {
-        this.show404Page();
-      } else if (res instanceof RouterDataResolved && this.componentRef) {
-        this.componentRef.destroy();
-        this.componentRef = null;
-      }
-    });
+      });
   }
 
   private show401Page() {
@@ -174,11 +187,14 @@ export class ErrorHandler {
     message?: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     body?: any,
-  ): Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status> {
     if (body) {
       if (body.details) {
         message = body.details;
         title = body.message;
+      } else if (body.message) {
+        title = DEFAULT_ERROR_MESSAGES.defaultError.title;
+        message = body.message;
       } else {
         message = body.message || DEFAULT_ERROR_MESSAGES.defaultError.title;
       }
@@ -192,7 +208,9 @@ export class ErrorHandler {
 
   private navigateToLogin() {
     this.store.dispatch(
-      new Navigate(['/account/login'], null, { state: { redirectUrl: this.store.selectSnapshot(RouterState.url) } }),
+      new Navigate(['/account/login'], null, {
+        state: { redirectUrl: this.store.selectSnapshot(RouterState.url) },
+      }),
     );
   }
 
@@ -200,13 +218,16 @@ export class ErrorHandler {
     const renderer = this.rendererFactory.createRenderer(null, null);
     const host = renderer.selectRootElement(document.body, true);
 
-    this.componentRef = this.cfRes.resolveComponentFactory(HttpErrorWrapperComponent).create(this.injector);
+    this.componentRef = this.cfRes
+      .resolveComponentFactory(HttpErrorWrapperComponent)
+      .create(this.injector);
 
-    for (const key in this.componentRef.instance) {
+    for (const key in instance) {
       if (this.componentRef.instance.hasOwnProperty(key)) {
         this.componentRef.instance[key] = instance[key];
       }
     }
+
     this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;

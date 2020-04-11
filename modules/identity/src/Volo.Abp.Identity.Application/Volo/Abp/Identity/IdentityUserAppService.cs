@@ -4,20 +4,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
     public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
     {
-        private readonly IdentityUserManager _userManager;
-        private readonly IIdentityUserRepository _userRepository;
+        protected IdentityUserManager UserManager { get; }
+        protected IIdentityUserRepository UserRepository { get; }
 
         public IdentityUserAppService(
             IdentityUserManager userManager,
             IIdentityUserRepository userRepository)
         {
-            _userManager = userManager;
-            _userRepository = userRepository;
+            UserManager = userManager;
+            UserRepository = userRepository;
         }
 
         //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
@@ -25,15 +26,15 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityUserDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-                await _userManager.GetByIdAsync(id)
+                await UserManager.GetByIdAsync(id)
             );
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
         public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
-            var count = await _userRepository.GetCountAsync(input.Filter);
-            var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+            var count = await UserRepository.GetCountAsync(input.Filter);
+            var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityUserDto>(
                 count,
@@ -44,7 +45,8 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Default)]
         public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
         {
-            var roles = await _userRepository.GetRolesAsync(id);
+            var roles = await UserRepository.GetRolesAsync(id);
+
             return new ListResultDto<IdentityRoleDto>(
                 ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
             );
@@ -53,9 +55,16 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Create)]
         public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
-            var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.Email, CurrentTenant.Id);
+            var user = new IdentityUser(
+                GuidGenerator.Create(),
+                input.UserName,
+                input.Email,
+                CurrentTenant.Id
+            );
 
-            (await _userManager.CreateAsync(user, input.Password)).CheckErrors();
+            input.MapExtraPropertiesTo(user);
+
+            (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
             await UpdateUserByInput(user, input);
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -66,19 +75,22 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Update)]
         public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
-            var user = await _userManager.GetByIdAsync(id);
+            var user = await UserManager.GetByIdAsync(id);
             user.ConcurrencyStamp = input.ConcurrencyStamp;
 
-            (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+            (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+
             await UpdateUserByInput(user, input);
-            (await _userManager.UpdateAsync(user)).CheckErrors();
+            input.MapExtraPropertiesTo(user);
+
+            (await UserManager.UpdateAsync(user)).CheckErrors();
 
             if (!input.Password.IsNullOrEmpty())
             {
-                (await _userManager.RemovePasswordAsync(user)).CheckErrors();
-                (await _userManager.AddPasswordAsync(user, input.Password)).CheckErrors();
+                (await UserManager.RemovePasswordAsync(user)).CheckErrors();
+                (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
             }
-
+            
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
@@ -92,28 +104,28 @@ namespace Volo.Abp.Identity
                 throw new BusinessException(code: IdentityErrorCodes.UserSelfDeletion);
             }
 
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await UserManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return;
             }
 
-            (await _userManager.DeleteAsync(user)).CheckErrors();
+            (await UserManager.DeleteAsync(user)).CheckErrors();
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
         public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
         {
-            var user = await _userManager.GetByIdAsync(id);
-            (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
-            await _userRepository.UpdateAsync(user);
+            var user = await UserManager.GetByIdAsync(id);
+            (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
+            await UserRepository.UpdateAsync(user);
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
         public virtual async Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-                await _userManager.FindByNameAsync(username)
+                await UserManager.FindByNameAsync(username)
             );
         }
 
@@ -121,31 +133,31 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityUserDto> FindByEmailAsync(string email)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-                await _userManager.FindByEmailAsync(email)
+                await UserManager.FindByEmailAsync(email)
             );
         }
 
-        private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
+        protected virtual async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
             {
-                (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
+                (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
             }
 
             if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
             {
-                (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+                (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
             }
 
-            (await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
-            (await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+            (await UserManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
+            (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 
             user.Name = input.Name;
             user.Surname = input.Surname;
 
             if (input.RoleNames != null)
             {
-                (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
+                (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
             }
         }
     }

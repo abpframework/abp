@@ -144,7 +144,7 @@ UI组合是主要目标之一.为此,主题系统将提供菜单,工具栏和其
 
 这段代码通过包含bootstrap（及其依赖项,如果有）和另外两个css文件来动态创建一个新的样式包.这些文件在生产环境中捆绑和压缩,但将在开发环境中单独添加.
 
-有关更多信息,请参阅[文档](https://github.com/abpframework/abp/blob/master/docs/AspNetCore/Bundling-Minification.md)
+有关更多信息,请参阅[文档](https://github.com/abpframework/abp/blob/master/docs/UI/AspNetCore/Bundling-Minification.md)
 
 ### 分布式事件总线(Distributed Event Bus)
 

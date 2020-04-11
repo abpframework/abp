@@ -4,10 +4,12 @@ using System.Reflection;
 
 namespace Volo.Abp.Auditing
 {
-    //TODO: Move ShouldSaveAudit and rename to IAuditingFactory
+    //TODO: Move ShouldSaveAudit & IsEntityHistoryEnabled and rename to IAuditingFactory
     public interface IAuditingHelper
     {
         bool ShouldSaveAudit(MethodInfo methodInfo, bool defaultValue = false);
+
+        bool IsEntityHistoryEnabled(Type entityType, bool defaultValue = false);
 
         AuditLogInfo CreateAuditLogInfo();
 

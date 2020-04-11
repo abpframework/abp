@@ -1,5 +1,5 @@
 import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { ConfirmationService, Confirmation, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -14,6 +14,7 @@ import {
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
+import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 
 interface SelectedModalContent {
   type: 'saveConnStr' | 'saveTenant';
@@ -50,7 +51,7 @@ export class TenantsComponent implements OnInit {
 
   _useSharedDatabase: boolean;
 
-  pageQuery: ABP.PageQueryParams = {};
+  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
 
   loading = false;
 
@@ -59,6 +60,12 @@ export class TenantsComponent implements OnInit {
   sortOrder = '';
 
   sortKey = '';
+
+  featureManagementKey = eFeatureManagementComponents.FeatureManagement;
+
+  get hasSelectedTenant(): boolean {
+    return Boolean(this.selected.id);
+  }
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -94,6 +101,10 @@ export class TenantsComponent implements OnInit {
     }
   }
 
+  onVisibleFeaturesChange = (value: boolean) => {
+    this.visibleFeatures = value;
+  };
+
   constructor(
     private confirmationService: ConfirmationService,
     private tenantService: TenantManagementService,
@@ -105,15 +116,24 @@ export class TenantsComponent implements OnInit {
     this.get();
   }
 
-  onSearch(value) {
+  onSearch(value: string) {
     this.pageQuery.filter = value;
     this.get();
   }
 
   private createTenantForm() {
-    this.tenantForm = this.fb.group({
+    const tenantForm = this.fb.group({
       name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
+      adminEmailAddress: [null, [Validators.required, Validators.maxLength(256), Validators.email]],
+      adminPassword: [null, [Validators.required, ...getPasswordValidators(this.store)]],
     });
+
+    if (this.hasSelectedTenant) {
+      tenantForm.removeControl('adminEmailAddress');
+      tenantForm.removeControl('adminPassword');
+    }
+
+    this.tenantForm = tenantForm;
   }
 
   private createDefaultConnectionStringForm() {
@@ -235,16 +255,15 @@ export class TenantsComponent implements OnInit {
           messageLocalizationParams: [name],
         },
       )
-      .subscribe((status: Toaster.Status) => {
-        if (status === Toaster.Status.confirm) {
+      .subscribe((status: Confirmation.Status) => {
+        if (status === Confirmation.Status.confirm) {
           this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.get());
         }
       });
   }
 
-  onPageChange(data) {
-    this.pageQuery.skipCount = data.first;
-    this.pageQuery.maxResultCount = data.rows;
+  onPageChange(page: number) {
+    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
 
     this.get();
   }
@@ -268,5 +287,12 @@ export class TenantsComponent implements OnInit {
         }
       }, 0);
     }
+  }
+
+  openFeaturesModal(providerKey: string) {
+    this.providerKey = providerKey;
+    setTimeout(() => {
+      this.visibleFeatures = true;
+    }, 0);
   }
 }

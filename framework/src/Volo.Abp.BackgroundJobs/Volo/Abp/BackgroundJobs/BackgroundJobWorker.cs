@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,92 +10,88 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker
+    public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroundJobWorker
     {
         protected AbpBackgroundJobOptions JobOptions { get; }
 
         protected AbpBackgroundJobWorkerOptions WorkerOptions { get; }
-
-        protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         public BackgroundJobWorker(
             AbpTimer timer,
             IOptions<AbpBackgroundJobOptions> jobOptions,
             IOptions<AbpBackgroundJobWorkerOptions> workerOptions,
             IServiceScopeFactory serviceScopeFactory)
-            : base(timer)
+            : base(
+                timer,
+                serviceScopeFactory)
         {
-            ServiceScopeFactory = serviceScopeFactory;
             WorkerOptions = workerOptions.Value;
             JobOptions = jobOptions.Value;
             Timer.Period = WorkerOptions.JobPollPeriod;
         }
 
-        protected override void DoWork()
+        protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            using (var scope = ServiceScopeFactory.CreateScope())
+            var store = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
+
+            var waitingJobs = await store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount);
+
+            if (!waitingJobs.Any())
             {
-                var store = scope.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
+                return;
+            }
 
-                var waitingJobs = store.GetWaitingJobs(WorkerOptions.MaxJobFetchCount);
+            var jobExecuter = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobExecuter>();
+            var clock = workerContext.ServiceProvider.GetRequiredService<IClock>();
+            var serializer = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobSerializer>();
 
-                if (!waitingJobs.Any())
+            foreach (var jobInfo in waitingJobs)
+            {
+                jobInfo.TryCount++;
+                jobInfo.LastTryTime = clock.Now;
+
+                try
                 {
-                    return;
-                }
-
-                var jobExecuter = scope.ServiceProvider.GetRequiredService<IBackgroundJobExecuter>();
-                var clock = scope.ServiceProvider.GetRequiredService<IClock>();
-                var serializer = scope.ServiceProvider.GetRequiredService<IBackgroundJobSerializer>();
-
-                foreach (var jobInfo in waitingJobs)
-                {
-                    jobInfo.TryCount++;
-                    jobInfo.LastTryTime = clock.Now;
+                    var jobConfiguration = JobOptions.GetJob(jobInfo.JobName);
+                    var jobArgs = serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
+                    var context = new JobExecutionContext(workerContext.ServiceProvider, jobConfiguration.JobType, jobArgs);
 
                     try
                     {
-                        var jobConfiguration = JobOptions.GetJob(jobInfo.JobName);
-                        var jobArgs = serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
-                        var context = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType, jobArgs);
+                        await jobExecuter.ExecuteAsync(context);
 
-                        try
-                        {
-                            jobExecuter.Execute(context);
-
-                            store.Delete(jobInfo.Id);
-                        }
-                        catch (BackgroundJobExecutionException)
-                        {
-                            var nextTryTime = CalculateNextTryTime(jobInfo, clock);
-
-                            if (nextTryTime.HasValue)
-                            {
-                                jobInfo.NextTryTime = nextTryTime.Value;
-                            }
-                            else
-                            {
-                                jobInfo.IsAbandoned = true;
-                            }
-
-                            TryUpdate(store, jobInfo);
-                        }
+                        await store.DeleteAsync(jobInfo.Id);
                     }
-                    catch (Exception ex)
+                    catch (BackgroundJobExecutionException)
                     {
-                        Logger.LogException(ex);
-                        jobInfo.IsAbandoned = true;
-                        TryUpdate(store, jobInfo);
+                        var nextTryTime = CalculateNextTryTime(jobInfo, clock);
+
+                        if (nextTryTime.HasValue)
+                        {
+                            jobInfo.NextTryTime = nextTryTime.Value;
+                        }
+                        else
+                        {
+                            jobInfo.IsAbandoned = true;
+                        }
+
+                        await TryUpdateAsync(store, jobInfo);
                     }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogException(ex);
+                    jobInfo.IsAbandoned = true;
+                    await TryUpdateAsync(store, jobInfo);
                 }
             }
         }
 
-        protected virtual void TryUpdate(IBackgroundJobStore store, BackgroundJobInfo jobInfo)
+        protected virtual async Task TryUpdateAsync(IBackgroundJobStore store, BackgroundJobInfo jobInfo)
         {
             try
             {
-                store.Update(jobInfo);
+                await store.UpdateAsync(jobInfo);
             }
             catch (Exception updateEx)
             {

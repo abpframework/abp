@@ -478,19 +478,19 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 ## WidgetOptions
 
-Jako alternativu k atributu `Widget` můžete ke konfiguraci widgetů použít `WidgetOptions`:
+Jako alternativu k atributu `Widget` můžete ke konfiguraci widgetů použít `AbpWidgetOptions`:
 
 ```csharp
-Configure<WidgetOptions>(options =>
+Configure<AbpWidgetOptions>(options =>
 {
     options.Widgets.Add<MySimpleWidgetViewComponent>();
 });
 ```
 
-Toto vepište do metody `ConfigureServices` vašeho [modulu](../Module-Development-Basics.md). Veškerá konfigurace udělaná přes atribut `Widget` je dostupná i za pomoci `WidgetOptions`. Příklad konfigurace, která přidává styl pro widget:
+Toto vepište do metody `ConfigureServices` vašeho [modulu](../Module-Development-Basics.md). Veškerá konfigurace udělaná přes atribut `Widget` je dostupná i za pomoci `AbpWidgetOptions`. Příklad konfigurace, která přidává styl pro widget:
 
 ````csharp
-Configure<WidgetOptions>(options =>
+Configure<AbpWidgetOptions>(options =>
 {
     options.Widgets
         .Add<MySimpleWidgetViewComponent>()
@@ -498,8 +498,9 @@ Configure<WidgetOptions>(options =>
 });
 ````
 
-> Tip: `WidgetOptions` lze také použít k získání existujícího widgetu a ke změně jeho konfigurace. To je obzvláště užitečné, pokud chcete změnit konfiguraci widgetu uvnitř modulu používaného vaší aplikací. Použíjte `options.Widgets.Find` k získání existujícího `WidgetDefinition`.
+> Tip: `AbpWidgetOptions` lze také použít k získání existujícího widgetu a ke změně jeho konfigurace. To je obzvláště užitečné, pokud chcete změnit konfiguraci widgetu uvnitř modulu používaného vaší aplikací. Použíjte `options.Widgets.Find` k získání existujícího `WidgetDefinition`.
 
 ## Podívejte se také na
 
-* [Příklad projektu (zdrojový kód)](https://github.com/abpframework/abp/tree/dev/samples/DashboardDemo).
+* [Příklad projektu (zdrojový kód)](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo).
+

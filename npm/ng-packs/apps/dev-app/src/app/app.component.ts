@@ -1,5 +1,6 @@
-import { LazyLoadService } from '@abp/ng.core';
+import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,20 +13,13 @@ export class AppComponent implements OnInit {
   constructor(private lazyLoadService: LazyLoadService) {}
 
   ngOnInit() {
-    this.lazyLoadService
-      .load(
-        [
-          'primeng.min.css',
-          'primeicons.css',
-          'primeng-nova-light-theme.css',
-          'fontawesome-all.min.css',
-          'fontawesome-v4-shims.min.css',
-        ],
-        'style',
-        null,
-        'head',
-        'afterbegin',
-      )
-      .subscribe();
+    forkJoin(
+      this.lazyLoadService.load(
+        LOADING_STRATEGY.PrependAnonymousStyleToHead('fontawesome-v4-shims.min.css'),
+      ),
+      this.lazyLoadService.load(
+        LOADING_STRATEGY.PrependAnonymousStyleToHead('fontawesome-all.min.css'),
+      ),
+    ).subscribe();
   }
 }

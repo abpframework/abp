@@ -24,7 +24,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         };
 
         public ApiDescriptionFinder(
-            IApiDescriptionCache cache, 
+            IApiDescriptionCache cache,
             IDynamicProxyHttpClientFactory httpClientFactory)
         {
             Cache = cache;
@@ -56,8 +56,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                             var found = true;
 
                             for (int i = 0; i < methodParameters.Length; i++)
-                            {
-                                if (action.ParametersOnMethod[i].TypeAsString != methodParameters[i].ParameterType.GetFullNameWithAssemblyName())
+                            { 
+                                if (!TypeMatches(action.ParametersOnMethod[i], methodParameters[i])) 
                                 {
                                     found = false;
                                     break;
@@ -103,6 +103,21 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 return (ApplicationApiDescriptionModel)result;
             }
+        }
+
+        protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
+        {
+            return NormalizeTypeName(actionParameter.TypeAsString) ==
+                   NormalizeTypeName(methodParameter.ParameterType.GetFullNameWithAssemblyName());
+        }
+
+        protected virtual string NormalizeTypeName(string typeName)
+        {
+            const string placeholder = "%COREFX%";
+            const string netCoreLib = "System.Private.CoreLib";
+            const string netFxLib = "mscorlib";
+
+            return typeName.Replace(netCoreLib, placeholder).Replace(netFxLib, placeholder);
         }
     }
 }

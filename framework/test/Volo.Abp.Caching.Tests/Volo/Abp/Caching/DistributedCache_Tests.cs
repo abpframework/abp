@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Caching
@@ -37,7 +38,7 @@ namespace Volo.Abp.Caching
         }
 
         [Fact]
-        public async Task GetOrAddAsync()
+        public void GetOrAdd()
         {
             var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
 
@@ -48,8 +49,8 @@ namespace Volo.Abp.Caching
 
             bool factoryExecuted = false;
 
-            var cacheItem = await personCache.GetOrAddAsync(cacheKey,
-                async () =>
+            var cacheItem = personCache.GetOrAdd(cacheKey,
+                () =>
                 {
                     factoryExecuted = true;
                     return new PersonCacheItem(personName);
@@ -62,8 +63,8 @@ namespace Volo.Abp.Caching
 
             factoryExecuted = false;
 
-            cacheItem = await personCache.GetOrAddAsync(cacheKey,
-                async () =>
+            cacheItem = personCache.GetOrAdd(cacheKey,
+                () =>
                 {
                     factoryExecuted = true;
                     return new PersonCacheItem(personName);
@@ -164,8 +165,8 @@ namespace Volo.Abp.Caching
 
             bool factoryExecuted = false;
 
-            var cacheItem = await personCache.GetOrAddAsync(cacheKey,
-                async () =>
+            var cacheItem = personCache.GetOrAdd(cacheKey,
+                () =>
                 {
                     factoryExecuted = true;
                     return new PersonCacheItem(personName);

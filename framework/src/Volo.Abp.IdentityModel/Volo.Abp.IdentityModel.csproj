@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -14,7 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" Version="4.0.0" />
+    <PackageReference Include="IdentityModel" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.2" />
     <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
   </ItemGroup>
 

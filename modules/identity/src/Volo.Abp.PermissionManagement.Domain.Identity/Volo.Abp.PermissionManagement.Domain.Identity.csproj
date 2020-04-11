@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -16,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Domain\Volo.Abp.PermissionManagement.Domain.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
   </ItemGroup>
 
 </Project>

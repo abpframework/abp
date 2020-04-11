@@ -16,17 +16,17 @@ namespace Volo.Abp.SettingManagement
             Configuration = configuration;
         }
 
-        public Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
+        public virtual Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
         {
             return Task.FromResult(Configuration[ConfigurationSettingValueProvider.ConfigurationNamePrefix + setting.Name]);
         }
 
-        public Task SetAsync(SettingDefinition setting, string value, string providerKey)
+        public virtual Task SetAsync(SettingDefinition setting, string value, string providerKey)
         {
             throw new AbpException($"Can not set a setting value to the application configuration.");
         }
 
-        public Task ClearAsync(SettingDefinition setting, string providerKey)
+        public virtual Task ClearAsync(SettingDefinition setting, string providerKey)
         {
             throw new AbpException($"Can not set a setting value to the application configuration.");
         }

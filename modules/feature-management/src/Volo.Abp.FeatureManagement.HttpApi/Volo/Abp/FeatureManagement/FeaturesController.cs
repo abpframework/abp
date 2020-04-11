@@ -4,25 +4,25 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.FeatureManagement
 {
-    [RemoteService]
+    [RemoteService(Name = FeatureManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("abp")]
     public class FeaturesController : AbpController, IFeatureAppService
     {
-        private readonly IFeatureAppService _featureAppService;
+        protected IFeatureAppService FeatureAppService { get; }
 
         public FeaturesController(IFeatureAppService featureAppService)
         {
-            _featureAppService = featureAppService;
+            FeatureAppService = featureAppService;
         }
 
-        public Task<FeatureListDto> GetAsync(string providerName, string providerKey)
+        public virtual Task<FeatureListDto> GetAsync(string providerName, string providerKey)
         {
-            return _featureAppService.GetAsync(providerName, providerKey);
+            return FeatureAppService.GetAsync(providerName, providerKey);
         }
 
-        public Task UpdateAsync(string providerName, string providerKey, UpdateFeaturesDto input)
+        public virtual Task UpdateAsync(string providerName, string providerKey, UpdateFeaturesDto input)
         {
-            return _featureAppService.UpdateAsync(providerName, providerKey, input);
+            return FeatureAppService.UpdateAsync(providerName, providerKey, input);
         }
     }
 }

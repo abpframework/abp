@@ -10,7 +10,10 @@ namespace Volo.Abp.Uow
     /// </summary>
     public class AbpUnitOfWorkDefaultOptions
     {
-        public UnitOfWorkTransactionBehavior TransactionBehavior { get; set; }
+        /// <summary>
+        /// Default value: <see cref="UnitOfWorkTransactionBehavior.Auto"/>.
+        /// </summary>
+        public UnitOfWorkTransactionBehavior TransactionBehavior { get; set; } = UnitOfWorkTransactionBehavior.Auto;
 
         public IsolationLevel? IsolationLevel { get; set; }
 

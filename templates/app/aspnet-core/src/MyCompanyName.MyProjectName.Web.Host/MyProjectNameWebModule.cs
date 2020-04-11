@@ -22,11 +22,12 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -47,9 +48,10 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
         typeof(AbpFeatureManagementWebModule),
-        typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityWebModule),
-        typeof(AbpTenantManagementWebModule)
+        typeof(AbpTenantManagementWebModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -225,12 +227,14 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseAuthorization();
+
 
             app.UseAbpRequestLocalization();
 
@@ -241,7 +245,7 @@ namespace MyCompanyName.MyProjectName.Web
             });
 
             app.UseAuditing();
-
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

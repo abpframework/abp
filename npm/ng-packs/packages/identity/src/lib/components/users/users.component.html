@@ -12,7 +12,8 @@
           type="button"
           (click)="add()"
         >
-          <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
+          <i class="fa fa-plus mr-1"></i>
+          <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
         </button>
       </div>
     </div>
@@ -27,53 +28,58 @@
           (input.debounce)="onSearch($event.target.value)"
       /></label>
     </div>
-    <p-table
+    <abp-table
       *ngIf="[150, 250, 250, 250] as columnWidths"
-      [value]="data$ | async"
+      [abpLoading]="loading"
+      [abpLoadingDelay]="500"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
-      [lazy]="true"
-      [lazyLoadOnInit]="false"
-      [paginator]="true"
-      [rows]="10"
+      [colgroupTemplate]="tableColGroup"
+      [headerTemplate]="tableHeader"
+      [bodyTemplate]="tableBody"
+      [value]="data$ | async"
+      [rows]="pageQuery.maxResultCount"
       [totalRecords]="totalCount$ | async"
-      [loading]="loading"
-      [resizableColumns]="true"
       [scrollable]="true"
-      (onLazyLoad)="onPageChange($event)"
+      (pageChange)="onPageChange($event)"
     >
-      <ng-template pTemplate="colgroup">
+      <ng-template #tableColGroup>
         <colgroup>
           <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr
-          abp-table-empty-message
-          [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentity"
-          localizationProp="NoDataAvailableInDatatable"
-        ></tr>
-      </ng-template>
-      <ng-template pTemplate="header">
+      <ng-template #tableHeader>
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('userName')">
+          <th (click)="sortOrderIcon.sort('userName')">
             {{ 'AbpIdentity::UserName' | abpLocalization }}
-            <abp-sort-order-icon #sortOrderIcon key="userName" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            <abp-sort-order-icon
+              #sortOrderIcon
+              sortKey="userName"
+              [(selectedSortKey)]="sortKey"
+              [(order)]="sortOrder"
+            >
             </abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('email')">
+          <th (click)="sortOrderIcon.sort('email')">
             {{ 'AbpIdentity::EmailAddress' | abpLocalization }}
-            <abp-sort-order-icon key="email" [(selectedKey)]="sortKey" [(order)]="sortOrder"></abp-sort-order-icon>
+            <abp-sort-order-icon
+              sortKey="email"
+              [(selectedSortKey)]="sortKey"
+              [(order)]="sortOrder"
+            ></abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('phoneNumber')">
+          <th (click)="sortOrderIcon.sort('phoneNumber')">
             {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}
-            <abp-sort-order-icon key="phoneNumber" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            <abp-sort-order-icon
+              sortKey="phoneNumber"
+              [(selectedSortKey)]="sortKey"
+              [(order)]="sortOrder"
+            >
             </abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-data>
+      <ng-template #tableBody let-data>
         <tr>
           <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
@@ -86,13 +92,17 @@
                 <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
               </button>
               <div ngbDropdownMenu>
-                <button *abpPermission="'AbpIdentity.Users.Update'" ngbDropdownItem (click)="edit(data.id)">
+                <button
+                  *abpPermission="'AbpIdentity.Users.Update'"
+                  ngbDropdownItem
+                  (click)="edit(data.id)"
+                >
                   {{ 'AbpIdentity::Edit' | abpLocalization }}
                 </button>
                 <button
                   *abpPermission="'AbpIdentity.Users.ManagePermissions'"
                   ngbDropdownItem
-                  (click)="providerKey = data.id; visiblePermissions = true"
+                  (click)="openPermissionsModal(data.id)"
                 >
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>
@@ -111,7 +121,7 @@
           <td>{{ data.phoneNumber }}</td>
         </tr>
       </ng-template>
-    </p-table>
+    </abp-table>
   </div>
 </div>
 
@@ -133,7 +143,13 @@
               <div class="form-group">
                 <label for="user-name">{{ 'AbpIdentity::UserName' | abpLocalization }}</label
                 ><span> * </span>
-                <input type="text" id="user-name" class="form-control" formControlName="userName" autofocus />
+                <input
+                  type="text"
+                  id="user-name"
+                  class="form-control"
+                  formControlName="userName"
+                  autofocus
+                />
               </div>
 
               <div class="form-group">
@@ -142,7 +158,9 @@
               </div>
 
               <div class="form-group">
-                <label for="surname">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label>
+                <label for="surname">{{
+                  'AbpIdentity::DisplayName:Surname' | abpLocalization
+                }}</label>
                 <input type="text" id="surname" class="form-control" formControlName="surname" />
               </div>
 
@@ -166,7 +184,12 @@
 
               <div class="form-group">
                 <label for="phone-number">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>
-                <input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />
+                <input
+                  type="text"
+                  id="phone-number"
+                  class="form-control"
+                  formControlName="phoneNumber"
+                />
               </div>
 
               <div class="custom-checkbox custom-control mb-2">
@@ -204,13 +227,13 @@
               >
                 <input
                   type="checkbox"
-                  name="Roles[0].IsAssigned"
-                  value="true"
                   class="custom-control-input"
                   [attr.id]="'roles-' + i"
                   [formControl]="roleGroup.controls[roles[i].name]"
                 />
-                <label class="custom-control-label" [attr.for]="'roles-' + i">{{ roles[i].name }}</label>
+                <label class="custom-control-label" [attr.for]="'roles-' + i">{{
+                  roles[i].name
+                }}</label>
               </div>
             </div>
           </ng-template>
@@ -229,5 +252,20 @@
   </ng-template>
 </abp-modal>
 
-<abp-permission-management [(visible)]="visiblePermissions" providerName="U" [providerKey]="providerKey">
+<abp-permission-management
+  #abpPermissionManagement="abpPermissionManagement"
+  *abpReplaceableTemplate="
+    {
+      inputs: {
+        providerName: { value: 'U' },
+        providerKey: { value: providerKey },
+        visible: { value: visiblePermissions, twoWay: true }
+      },
+      outputs: { visibleChange: onVisiblePermissionChange },
+      componentKey: permissionManagementKey
+    };
+    let init = initTemplate
+  "
+  (abpInit)="init(abpPermissionManagement)"
+>
 </abp-permission-management>

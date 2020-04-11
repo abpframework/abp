@@ -14,7 +14,7 @@ import {
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { fadeAnimation } from '../../animations/modal.animations';
-import { Toaster } from '../../models/toaster';
+import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
 
@@ -24,6 +24,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
   animations: [fadeAnimation],
+  styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -100,6 +101,10 @@ export class ModalComponent implements OnDestroy {
 
   destroy$ = new Subject<void>();
 
+  get isFormDirty(): boolean {
+    return Boolean(document.querySelector('.modal-dialog .ng-dirty'));
+  }
+
   constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
 
   ngOnDestroy(): void {
@@ -109,24 +114,18 @@ export class ModalComponent implements OnDestroy {
   close() {
     if (this.busy) return;
 
-    let node: HTMLDivElement;
-    if (!this.modalContent) {
-      node = document.getElementById('modal-container') as HTMLDivElement;
-    }
-
-    const nodes = getFlatNodes(
-      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement).childNodes,
-    );
-
-    if (hasNgDirty(nodes)) {
+    if (this.isFormDirty) {
       if (this.isConfirmationOpen) return;
 
       this.isConfirmationOpen = true;
       this.confirmationService
-        .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
-        .subscribe((status: Toaster.Status) => {
+        .warn(
+          'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
+          'AbpAccount::AreYouSure',
+        )
+        .subscribe((status: Confirmation.Status) => {
           this.isConfirmationOpen = false;
-          if (status === Toaster.Status.confirm) {
+          if (status === Confirmation.Status.confirm) {
             this.visible = false;
           }
         });
@@ -146,6 +145,16 @@ export class ModalComponent implements OnDestroy {
         this.close();
       });
 
+    fromEvent(window, 'beforeunload')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (this.isFormDirty) {
+          event.returnValue = true;
+        } else {
+          delete event.returnValue;
+        }
+      });
+
     setTimeout(() => {
       if (!this.abpClose) return;
       fromEvent(this.abpClose.nativeElement, 'click')
@@ -158,15 +167,4 @@ export class ModalComponent implements OnDestroy {
 
     this.init.emit();
   }
-}
-
-function getFlatNodes(nodes: NodeList): HTMLElement[] {
-  return Array.from(nodes).reduce(
-    (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])],
-    [],
-  );
-}
-
-function hasNgDirty(nodes: HTMLElement[]) {
-  return nodes.findIndex(node => (node.className || '').indexOf('ng-dirty') > -1) > -1;
 }

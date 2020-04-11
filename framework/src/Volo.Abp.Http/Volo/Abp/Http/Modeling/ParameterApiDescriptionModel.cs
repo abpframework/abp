@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -9,7 +9,9 @@ namespace Volo.Abp.Http.Modeling
 
         public string Name { get; set; }
 
-        public string TypeAsString { get; set; }
+        public string Type { get; set; }
+
+        public string TypeSimple { get; set; }
 
         public bool IsOptional { get; set; }
 
@@ -19,22 +21,26 @@ namespace Volo.Abp.Http.Modeling
 
         public string BindingSourceId { get; set; }
 
+        public string DescriptorName { get; set; }
+
         private ParameterApiDescriptionModel()
         {
             
         }
 
-        public static ParameterApiDescriptionModel Create(string name, string nameOnMethod, Type type, bool isOptional = false, object defaultValue = null, string[] constraintTypes = null, string bindingSourceId = null)
+        public static ParameterApiDescriptionModel Create(string name, string nameOnMethod, Type type, bool isOptional = false, object defaultValue = null, string[] constraintTypes = null, string bindingSourceId = null, string descriptorName = null)
         {
             return new ParameterApiDescriptionModel
             {
                 Name = name,
                 NameOnMethod = nameOnMethod,
-                TypeAsString = type?.GetFullNameWithAssemblyName(),
+                Type = type != null ? ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(type) : null,
+                TypeSimple = type != null ? ModelingTypeHelper.GetSimplifiedName(type) : null,
                 IsOptional = isOptional,
                 DefaultValue = defaultValue,
                 ConstraintTypes = constraintTypes,
-                BindingSourceId = bindingSourceId
+                BindingSourceId = bindingSourceId,
+                DescriptorName = descriptorName
             };
         }
     }

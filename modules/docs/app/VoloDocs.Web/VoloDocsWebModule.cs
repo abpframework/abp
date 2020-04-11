@@ -18,7 +18,6 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Identity;
@@ -32,6 +31,9 @@ using VoloDocs.EntityFrameworkCore;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.Account;
+using Volo.Abp.Validation.Localization;
+using Volo.Docs.Documents.FullSearch.Elastic;
 
 namespace VoloDocs.Web
 {
@@ -43,6 +45,7 @@ namespace VoloDocs.Web
         typeof(VoloDocsEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
+        typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
@@ -67,6 +70,11 @@ namespace VoloDocs.Web
             Configure<DocsUiOptions>(options =>
             {
                 options.RoutePrefix = null;
+            });
+
+            Configure<DocsElasticSearchOptions>(options =>
+            {
+                options.Enable = true;
             });
 
             Configure<AbpDbConnectionOptions>(options =>
@@ -142,6 +150,12 @@ namespace VoloDocs.Web
             var env = context.GetEnvironment();
 
             app.UseVirtualFiles();
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseAbpRequestLocalization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
@@ -149,24 +163,11 @@ namespace VoloDocs.Web
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });
 
-            app.UseAuthentication();
-
-            app.UseAbpRequestLocalization();
-
             app.UseStatusCodePagesWithReExecute("/error/{0}");
            
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "defaultWithArea",
-                    template: "{area}/{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRouteAndArea();
 
             using (var scope = context.ServiceProvider.CreateScope())
             {

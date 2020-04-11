@@ -1,17 +1,19 @@
-import { ABP, SetTenant, SessionState } from '@abp/ng.core';
+import { ABP, SetTenant, SessionState, GetAppConfiguration } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { throwError } from 'rxjs';
-import { catchError, take, finalize } from 'rxjs/operators';
+import { catchError, take, finalize, switchMap } from 'rxjs/operators';
 import snq from 'snq';
 import { AccountService } from '../../services/account.service';
+import { Account } from '../../models/account';
 
 @Component({
   selector: 'abp-tenant-box',
   templateUrl: './tenant-box.component.html',
 })
-export class TenantBoxComponent implements OnInit {
+export class TenantBoxComponent
+  implements OnInit, Account.TenantBoxComponentInputs, Account.TenantBoxComponentOutputs {
   tenant = {} as ABP.BasicItem;
 
   tenantName: string;
@@ -20,7 +22,11 @@ export class TenantBoxComponent implements OnInit {
 
   inProgress: boolean;
 
-  constructor(private store: Store, private toasterService: ToasterService, private accountService: AccountService) {}
+  constructor(
+    private store: Store,
+    private toasterService: ToasterService,
+    private accountService: AccountService,
+  ) {}
 
   ngOnInit() {
     this.tenant = this.store.selectSnapshot(SessionState.getTenant) || ({} as ABP.BasicItem);
@@ -46,25 +52,32 @@ export class TenantBoxComponent implements OnInit {
             );
             return throwError(err);
           }),
+          switchMap(({ success, tenantId }) => {
+            if (success) {
+              this.tenant = {
+                id: tenantId,
+                name: this.tenant.name,
+              };
+              this.tenantName = this.tenant.name;
+              this.isModalVisible = false;
+            } else {
+              this.toasterService.error(
+                'AbpUiMultiTenancy::GivenTenantIsNotAvailable',
+                'AbpUi::Error',
+                {
+                  messageLocalizationParams: [this.tenant.name],
+                },
+              );
+              this.tenant = {} as ABP.BasicItem;
+              this.tenantName = '';
+            }
+            this.store.dispatch(new SetTenant(success ? this.tenant : null));
+            return this.store.dispatch(new GetAppConfiguration());
+          }),
         )
-        .subscribe(({ success, tenantId }) => {
-          if (success) {
-            this.tenant = {
-              id: tenantId,
-              name: this.tenant.name,
-            };
-            this.tenantName = this.tenant.name;
-            this.isModalVisible = false;
-          } else {
-            this.toasterService.error('AbpUiMultiTenancy::GivenTenantIsNotAvailable', 'AbpUi::Error', {
-              messageLocalizationParams: [this.tenant.name],
-            });
-            this.tenant = {} as ABP.BasicItem;
-          }
-          this.store.dispatch(new SetTenant(success ? this.tenant : null));
-        });
+        .subscribe();
     } else {
-      this.store.dispatch(new SetTenant(null));
+      this.store.dispatch([new SetTenant(null), new GetAppConfiguration()]);
       this.tenantName = null;
       this.isModalVisible = false;
     }

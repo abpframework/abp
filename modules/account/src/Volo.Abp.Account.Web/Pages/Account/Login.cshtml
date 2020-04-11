@@ -1,5 +1,6 @@
 ﻿@page
-@using Volo.Abp.Account.Web.Settings
+@using Volo.Abp.Account.Settings
+@using Volo.Abp.Settings
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
@@ -7,8 +8,8 @@
 {
     <div class="card mt-3 shadow-sm rounded">
         <div class="card-body p-5">
-            <h4>@L["Login"]</h4> 
-            @if (string.Equals(await SettingProvider.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
+            <h4>@L["Login"]</h4>
+            @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
             {
                 <strong>
                     @L["AreYouANewUser"]

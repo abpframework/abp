@@ -32,7 +32,6 @@
         }
       }
     },
-
     "theme-shared": {
       "projectType": "library",
       "root": "packages/theme-shared",
@@ -56,7 +55,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["packages/theme-shared/tsconfig.lib.json", "packages/theme-shared/tsconfig.spec.json"],
+            "tsConfig": [
+              "packages/theme-shared/tsconfig.lib.json",
+              "packages/theme-shared/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -86,7 +88,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["packages/theme-basic/tsconfig.lib.json", "packages/theme-basic/tsconfig.spec.json"],
+            "tsConfig": [
+              "packages/theme-basic/tsconfig.lib.json",
+              "packages/theme-basic/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -115,7 +120,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["packages/account/tsconfig.lib.json", "packages/account/tsconfig.spec.json"],
+            "tsConfig": [
+              "packages/account/tsconfig.lib.json",
+              "packages/account/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -176,7 +184,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["packages/identity/tsconfig.lib.json", "packages/identity/tsconfig.spec.json"],
+            "tsConfig": [
+              "packages/identity/tsconfig.lib.json",
+              "packages/identity/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -333,7 +344,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["packages/identity-config/tsconfig.lib.json", "packages/identity-config/tsconfig.spec.json"],
+            "tsConfig": [
+              "packages/identity-config/tsconfig.lib.json",
+              "packages/identity-config/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -362,7 +376,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["packages/account-config/tsconfig.lib.json", "packages/account-config/tsconfig.spec.json"],
+            "tsConfig": [
+              "packages/account-config/tsconfig.lib.json",
+              "packages/account-config/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -418,7 +435,7 @@
             "index": "apps/dev-app/src/index.html",
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
-            "tsConfig": "apps/dev-app/tsconfig.app.json",
+            "tsConfig": "apps/dev-app/tsconfig.prod.json",
             "aot": false,
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "extractCss": true,
@@ -434,21 +451,6 @@
                 "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
                 "lazy": true,
                 "bundleName": "fontawesome-v4-shims.min"
-              },
-              {
-                "input": "node_modules/primeng/resources/themes/nova-light/theme.css",
-                "lazy": true,
-                "bundleName": "primeng-nova-light-theme"
-              },
-              {
-                "input": "node_modules/primeicons/primeicons.css",
-                "lazy": true,
-                "bundleName": "primeicons"
-              },
-              {
-                "input": "node_modules/primeng/resources/primeng.min.css",
-                "lazy": true,
-                "bundleName": "primeng.min"
               }
             ],
             "scripts": []
@@ -482,6 +484,15 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "internal": {
+              "tsConfig": "apps/dev-app/tsconfig.dev.json",
+              "fileReplacements": [
+                {
+                  "replace": "apps/dev-app/src/environments/environment.ts",
+                  "with": "apps/dev-app/src/environments/environment.internal.ts"
+                }
+              ]
             }
           }
         },
@@ -493,6 +504,9 @@
           "configurations": {
             "production": {
               "browserTarget": "dev-app:build:production"
+            },
+            "internal": {
+              "browserTarget": "dev-app:build:internal"
             }
           }
         },
@@ -505,12 +519,16 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/dev-app/tsconfig.app.json", "apps/dev-app/tsconfig.spec.json"],
+            "tsConfig": [
+              "apps/dev-app/tsconfig.dev.json",
+              "apps/dev-app/tsconfig.prod.json",
+              "apps/dev-app/tsconfig.spec.json"
+            ],
             "exclude": ["**/node_modules/**"]
           }
         }
       }
     }
   },
-  "defaultProject": "core"
+  "defaultProject": "dev-app"
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -28,7 +30,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             }
             else
             {
-                var nugetPackageVersion = context.TemplateFile.Version;
+                var nugetPackageVersion = context.TemplateFile.RepositoryNugetVersion;
 
                 if (IsBranchName(nugetPackageVersion))
                 {
@@ -92,7 +94,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 var doc = new XmlDocument() { PreserveWhitespace = true };
 
-                doc.Load(GenerateStreamFromString(content));
+                doc.Load(StreamHelper.GenerateStreamFromString(content));
 
                 return ProcessReferenceNodes(doc, content);
             }
@@ -108,7 +110,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains(_projectName))
+                    if (oldNodeIncludeValue.Contains(_projectName) && _entries.Any(e=>e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
                     {
                         continue;
                     }
@@ -123,17 +125,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 return doc.OuterXml;
             }
 
-            protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
-
-            private static Stream GenerateStreamFromString(string s)
+            private string GetProjectNameWithExtensionFromProjectReference(string oldNodeIncludeValue)
             {
-                var stream = new MemoryStream();
-                var writer = new StreamWriter(stream);
-                writer.Write(s);
-                writer.Flush();
-                stream.Position = 0;
-                return stream;
+                if (string.IsNullOrWhiteSpace(oldNodeIncludeValue))
+                {
+                    return oldNodeIncludeValue;
+                }
+
+                return oldNodeIncludeValue.Split('\\', '/').Last();
             }
+
+            protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
 
 
             public class NugetReferenceReplacer : ProjectReferenceReplacer

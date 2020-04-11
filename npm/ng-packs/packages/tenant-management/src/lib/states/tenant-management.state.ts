@@ -1,20 +1,22 @@
+import { ABP } from '@abp/ng.core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { switchMap, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import {
   CreateTenant,
   DeleteTenant,
-  GetTenants,
   GetTenantById,
+  GetTenants,
   UpdateTenant,
 } from '../actions/tenant-management.actions';
 import { TenantManagement } from '../models/tenant-management';
 import { TenantManagementService } from '../services/tenant-management.service';
-import { ABP } from '@abp/ng.core';
+import { Injectable } from '@angular/core';
 
 @State<TenantManagement.State>({
   name: 'TenantManagementState',
   defaults: { result: {}, selectedItem: {} } as TenantManagement.State,
 })
+@Injectable()
 export class TenantManagementState {
   @Selector()
   static get({ result }: TenantManagement.State): ABP.BasicItem[] {

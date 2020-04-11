@@ -11,7 +11,7 @@ namespace System
 
         public StringExtensions_Tests()
         {
-            _cultureScope = AbpCultureHelper.Use("en-US");
+            _cultureScope = CultureHelper.Use("en-US");
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace System
         [Fact]
         public void EnsureEndsWith_CultureSpecific_Test()
         {
-            using (AbpCultureHelper.Use("tr-TR"))
+            using (CultureHelper.Use("tr-TR"))
             {
                 "Kırmızı".EnsureEndsWith('I', StringComparison.CurrentCultureIgnoreCase).ShouldBe("Kırmızı");
             }
@@ -59,7 +59,7 @@ namespace System
         [Fact]
         public void ToPascalCase_CurrentCulture_Test()
         {
-            using (AbpCultureHelper.Use("tr-TR"))
+            using (CultureHelper.Use("tr-TR"))
             {
                 "istanbul".ToPascalCase(true).ShouldBe("İstanbul");
             }

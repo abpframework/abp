@@ -1,10 +1,15 @@
 {
   "name": "@abp/ng.tenant-management",
-  "version": "1.1.1",
+  "version": "2.5.0",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
   "dependencies": {
-    "@abp/ng.feature-management": "^1.1.1",
-    "@abp/ng.tenant-management.config": "^1.1.1",
-    "@abp/ng.theme.shared": "^1.1.1"
+    "@abp/ng.feature-management": "~2.5.0",
+    "@abp/ng.tenant-management.config": "~2.5.0",
+    "@abp/ng.theme.shared": "~2.5.0"
   },
   "publishConfig": {
     "access": "public"

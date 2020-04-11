@@ -35,6 +35,10 @@
     "PasswordChanged": "Heslo změněno",
     "NewPasswordConfirmFailed": "Potvrďte nové heslo.",
     "Manage": "Spravovat",
-    "ManageYourProfile": "Spravujte svůj profil"
+    "ManageYourProfile": "Spravujte svůj profil",
+    "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "Je povolena automatická registrace",
+    "Description:Abp.Account.IsSelfRegistrationEnabled": "Zda si uživatel může účet zaregistrovat sám.",
+    "DisplayName:Abp.Account.EnableLocalLogin": "Ověření pomocí místního účtu",
+    "Description:Abp.Account.EnableLocalLogin": "Označuje, zda server umožní uživatelům ověřovat se pomocí místního účtu."
   }
 }

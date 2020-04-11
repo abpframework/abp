@@ -1,17 +1,10 @@
 using System;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.Licensing;
-using Volo.Abp.Cli.ProjectBuilding;
-using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -19,13 +12,13 @@ namespace Volo.Abp.Cli.Commands
 {
     public class SuiteCommand : IConsoleCommand, ITransientDependency
     {
+        private readonly AbpNuGetIndexUrlService _nuGetIndexUrlService;
         private const string SuitePackageName = "Volo.Abp.Suite";
         public ILogger<SuiteCommand> Logger { get; set; }
-        private readonly IApiKeyService _apiKeyService;
 
-        public SuiteCommand(IApiKeyService apiKeyService)
+        public SuiteCommand(AbpNuGetIndexUrlService nuGetIndexUrlService)
         {
-            _apiKeyService = apiKeyService;
+            _nuGetIndexUrlService = nuGetIndexUrlService;
             Logger = NullLogger<SuiteCommand>.Instance;
         }
 
@@ -59,7 +52,13 @@ namespace Volo.Abp.Cli.Commands
 
         private async Task InstallSuiteAsync()
         {
-            var nugetIndexUrl = await GetNuGetIndexUrlAsync();
+            var nugetIndexUrl = await _nuGetIndexUrlService.GetAsync();
+
+            if (nugetIndexUrl == null)
+            {
+                return;
+            }
+
             var result = CmdHelper.RunCmd("dotnet tool install " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
 
             if (result == 0)
@@ -71,7 +70,13 @@ namespace Volo.Abp.Cli.Commands
 
         private async Task UpdateSuiteAsync()
         {
-            var nugetIndexUrl = await GetNuGetIndexUrlAsync();
+            var nugetIndexUrl = await _nuGetIndexUrlService.GetAsync();
+
+            if (nugetIndexUrl == null)
+            {
+                return;
+            }
+
             CmdHelper.RunCmd("dotnet tool update " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
         }
 
@@ -96,23 +101,6 @@ namespace Volo.Abp.Cli.Commands
             }
 
             CmdHelper.RunCmd("abp-suite");
-        }
-
-        private async Task<string> GetNuGetIndexUrlAsync()
-        {
-            var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
-            if (apiKeyResult == null ||
-                string.IsNullOrEmpty(apiKeyResult.ApiKey))
-            {
-                Logger.LogError("Couldn't retrieve your NuGet API key!");
-                Logger.LogWarning(File.Exists(CliPaths.AccessToken)
-                    ? "Make sure you have an active session and license on commercial.abp.io. To re-sign in you can use the CLI command \"abp login <username>\"."
-                    : "You are not signed in to commercial.abp.io. Use the CLI command \"abp login <username>\" to sign in.");
-
-                return null;
-            }
-
-            return CliUrls.GetNuGetServiceIndexUrl(apiKeyResult.ApiKey);
         }
 
         public string GetUsageInfo()

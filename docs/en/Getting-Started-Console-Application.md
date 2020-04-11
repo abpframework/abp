@@ -178,4 +178,4 @@ Just called `options.UseAutofac()` method in the `AbpApplicationFactory.Create` 
 
 ## Source Code
 
-Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicConsoleApplication).
+Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp-samples/tree/master/BasicConsoleApplication).

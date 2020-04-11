@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.Auditing
 {
@@ -16,6 +17,11 @@ namespace Volo.Abp.Auditing
 
         private static bool ShouldIntercept(Type type)
         {
+            if (DynamicProxyIgnoreTypes.Contains(type))
+            {
+                return false;
+            }
+            
             if (ShouldAuditTypeByDefault(type))
             {
                 return true;
@@ -32,6 +38,8 @@ namespace Volo.Abp.Auditing
         //TODO: Move to a better place
         public static bool ShouldAuditTypeByDefault(Type type)
         {
+            //TODO: In an inheritance chain, it would be better to check the attributes on the top class first.
+
             if (type.IsDefined(typeof(AuditedAttribute), true))
             {
                 return true;

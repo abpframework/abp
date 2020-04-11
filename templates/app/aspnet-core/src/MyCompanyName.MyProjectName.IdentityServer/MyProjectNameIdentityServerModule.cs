@@ -18,6 +18,7 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
@@ -35,7 +36,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
+        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
     {
@@ -59,6 +61,7 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             });
 
             Configure<AbpAuditingOptions>(options =>
@@ -149,6 +152,7 @@ namespace MyCompanyName.MyProjectName
             app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

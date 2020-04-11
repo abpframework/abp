@@ -1,6 +1,9 @@
-﻿using System;
+using System;
+using System.Linq;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -8,10 +11,10 @@ using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc
@@ -72,6 +75,11 @@ namespace Volo.Abp.AspNetCore.Mvc
 
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+            });
+            
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.RootDirectory = "/Volo/Abp/AspNetCore/Mvc";
             });
         }
 

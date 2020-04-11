@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
@@ -21,6 +22,8 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
             builder.Entity<FeatureValue>(b =>
             {
                 b.ToTable(options.TablePrefix + "FeatureValues", options.Schema);
+
+                b.ConfigureByConvention();
 
                 b.Property(x => x.Name).HasMaxLength(FeatureValueConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.Value).HasMaxLength(FeatureValueConsts.MaxValueLength).IsRequired();

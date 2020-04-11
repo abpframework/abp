@@ -16,6 +16,19 @@ namespace Volo.Abp.Domain.Entities
             return typeof(IEntity).IsAssignableFrom(type);
         }
 
+        public static bool IsEntityWithId([NotNull] Type type)
+        {
+            foreach (var interfaceType in type.GetInterfaces())
+            {
+                if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEntity<>))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static bool HasDefaultId<TKey>(IEntity<TKey> entity)
         {
             if (EqualityComparer<TKey>.Default.Equals(entity.Id, default))
@@ -82,10 +95,10 @@ namespace Volo.Abp.Domain.Entities
             var lambdaBody = Expression.Equal(leftExpression, rightExpression);
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
-
+        
         public static void TrySetId<TKey>(
-            IEntity<TKey> entity, 
-            Func<TKey> idFactory, 
+            IEntity<TKey> entity,
+            Func<TKey> idFactory,
             bool checkForDisableGuidGenerationAttribute = false)
         {
             //TODO: Can be optimized (by caching per entity type)?
@@ -94,7 +107,7 @@ namespace Volo.Abp.Domain.Entities
                 nameof(entity.Id)
             );
 
-            if (idProperty == null)
+            if (idProperty == null || idProperty.GetSetMethod(true) == null)
             {
                 return;
             }

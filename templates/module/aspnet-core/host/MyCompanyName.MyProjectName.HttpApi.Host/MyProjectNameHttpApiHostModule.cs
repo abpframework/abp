@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using IdentityModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
@@ -14,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
@@ -23,6 +25,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.VirtualFileSystem;
 
@@ -37,7 +40,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule)
+        typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
@@ -84,7 +88,14 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             });
+
+            //Updates AbpClaimTypes to be compatible with identity server claims.
+            AbpClaimTypes.UserId = JwtClaimTypes.Subject;
+            AbpClaimTypes.UserName = JwtClaimTypes.Name;
+            AbpClaimTypes.Role = JwtClaimTypes.Role;
+            AbpClaimTypes.Email = JwtClaimTypes.Email;
 
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -146,11 +157,11 @@ namespace MyCompanyName.MyProjectName
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
-            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
@@ -158,6 +169,7 @@ namespace MyCompanyName.MyProjectName
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });
             app.UseAuditing();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

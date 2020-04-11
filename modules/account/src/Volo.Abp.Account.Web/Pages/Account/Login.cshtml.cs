@@ -10,7 +10,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Web.Settings;
+using Volo.Abp.Account.Settings;
+using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -47,35 +48,24 @@ namespace Volo.Abp.Account.Web.Pages.Account
         //public IClientStore ClientStore { get; set; }
         //public IEventService IdentityServerEvents { get; set; }
 
-        protected IAuthenticationSchemeProvider _schemeProvider;
-        protected AbpAccountOptions _accountOptions;
+        protected IAuthenticationSchemeProvider SchemeProvider { get; }
+        protected AbpAccountOptions AccountOptions { get; }
 
         public LoginModel(
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions)
         {
-            _schemeProvider = schemeProvider;
-            _accountOptions = accountOptions.Value;
+            SchemeProvider = schemeProvider;
+            AccountOptions = accountOptions.Value;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
-            var schemes = await _schemeProvider.GetAllSchemesAsync();
-
-            var providers = schemes
-                .Where(x => x.DisplayName != null || x.Name.Equals(_accountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ExternalProviderModel
-                {
-                    DisplayName = x.DisplayName,
-                    AuthenticationScheme = x.Name
-                })
-                .ToList();
+            ExternalProviders = await GetExternalProviders();
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-            ExternalProviders = providers.ToArray();
 
             if (IsExternalLoginOnly)
             {
@@ -86,12 +76,15 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+            await CheckLocalLoginAsync();
 
             ValidateModel();
+
+            ExternalProviders = await GetExternalProviders();
+            
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
 
@@ -139,17 +132,29 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
 
-        [UnitOfWork]
+        protected virtual async Task<List<ExternalProviderModel>> GetExternalProviders()
+        {
+            var schemes = await SchemeProvider.GetAllSchemesAsync();
+
+            return schemes
+                .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                .Select(x => new ExternalProviderModel
+                {
+                    DisplayName = x.DisplayName,
+                    AuthenticationScheme = x.Name
+                })
+                .ToList();
+        }
+
         public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
         {
             var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
             var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             properties.Items["scheme"] = provider;
 
-            return Challenge(properties, provider);
+            return await Task.FromResult(Challenge(properties, provider));
         }
 
-        [UnitOfWork]
         public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string remoteError = null)
         {
             //TODO: Did not implemented Identity Server 4 sample for this method (see ExternalLoginCallback in Quickstart of IDS4 sample)
@@ -211,13 +216,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             CheckIdentityErrors(await UserManager.CreateAsync(user));
             CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
             CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
+            CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
 
             return user;
         }
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()
         {
-            if (!ValidationHandler.IsValidEmailAddress(LoginInput.UserNameOrEmailAddress))
+            if (!ValidationHelper.IsValidEmailAddress(LoginInput.UserNameOrEmailAddress))
             {
                 return;
             }
@@ -237,6 +243,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             LoginInput.UserNameOrEmailAddress = userByEmail.UserName;
         }
 
+        protected virtual async Task CheckLocalLoginAsync()
+        {
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
+            {
+                throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+            }
+        }
+
         public class LoginInputModel
         {
             [Required]
@@ -246,6 +260,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             [Required]
             [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
 
             public bool RememberMe { get; set; }

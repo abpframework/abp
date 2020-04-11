@@ -13,7 +13,7 @@ namespace Volo.Abp.DynamicProxy
 
 		public virtual async Task<int> GetValueAsync(int v)
 		{
-			await Task.Delay(5);
+            await Task.Delay(5);
 			return v;
 		}
 	}

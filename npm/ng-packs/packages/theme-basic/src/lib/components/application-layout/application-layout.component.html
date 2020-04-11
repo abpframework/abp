@@ -1,5 +1,5 @@
 <nav
-  class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"
+  class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"
   id="main-navbar"
   style="min-height: 4rem;"
 >
@@ -34,7 +34,8 @@
           <ng-template #defaultLink let-route>
             <li class="nav-item" *abpPermission="route.requiredPolicy">
               <a class="nav-link" [routerLink]="[route.url]"
-                ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}</a
+                ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+                {{ route.name | abpLocalization }}</a
               >
             </li>
           </ng-template>
@@ -47,7 +48,9 @@
               class="nav-item dropdown"
               display="static"
               (click)="
-                navbarRootDropdown.expand ? (navbarRootDropdown.expand = false) : (navbarRootDropdown.expand = true)
+                navbarRootDropdown.expand
+                  ? (navbarRootDropdown.expand = false)
+                  : (navbarRootDropdown.expand = true)
               "
             >
               <a
@@ -57,15 +60,14 @@
                 aria-expanded="false"
                 href="javascript:void(0)"
               >
-                <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}
+                <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+                {{ route.name | abpLocalization }}
               </a>
               <div
                 #routeContainer
                 class="dropdown-menu border-0 shadow-sm"
                 (click)="$event.preventDefault(); $event.stopPropagation()"
-                [class.abp-collapsed-height]="smallScreen"
-                [class.d-block]="smallScreen"
-                [class.abp-mh-25]="smallScreen && navbarRootDropdown.expand"
+                [class.d-block]="smallScreen && navbarRootDropdown.expand"
               >
                 <ng-template
                   #forTemplate
@@ -120,9 +122,7 @@
               <div
                 #childrenContainer
                 class="dropdown-menu border-0 shadow-sm"
-                [class.abp-collapsed-height]="smallScreen"
-                [class.d-block]="smallScreen"
-                [class.abp-mh-25]="smallScreen && dropdownSubmenu.isOpen()"
+                [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
               >
                 <ng-template
                   ngFor
@@ -146,12 +146,17 @@
   </div>
 </nav>
 
-<div [@slideFromBottom]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path" class="container">
+<div
+  [@slideFromBottom]="
+    outlet && outlet.isActivated && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path
+  "
+  class="container"
+>
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
 
 <abp-confirmation></abp-confirmation>
-<abp-toast></abp-toast>
+<abp-toast-container right="30px" bottom="30px"></abp-toast-container>
 
 <ng-template #appName>
   {{ appInfo.name }}
@@ -175,9 +180,7 @@
       <div
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
-        [class.abp-collapsed-height]="smallScreen"
-        [class.d-block]="smallScreen"
-        [class.abp-mh-25]="smallScreen && languageDropdown.isOpen()"
+        [class.d-block]="smallScreen && languageDropdown.isOpen()"
       >
         <a
           *ngFor="let lang of dropdownLanguages$ | async"
@@ -192,8 +195,19 @@
 </ng-template>
 
 <ng-template #currentUser>
-  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item">
-    <div ngbDropdown class="dropdown" #currentUserDropdown="ngbDropdown" display="static">
+  <li class="nav-item">
+    <ng-template #loginBtn>
+      <a role="button" class="nav-link" routerLink="/account/login">{{
+        'AbpAccount::Login' | abpLocalization
+      }}</a>
+    </ng-template>
+    <div
+      *ngIf="(currentUser$ | async)?.isAuthenticated; else loginBtn"
+      ngbDropdown
+      class="dropdown"
+      #currentUserDropdown="ngbDropdown"
+      display="static"
+    >
       <a
         ngbDropdownToggle
         class="nav-link"
@@ -209,16 +223,14 @@
       <div
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
-        [class.abp-collapsed-height]="smallScreen"
-        [class.d-block]="smallScreen"
-        [class.abp-mh-25]="smallScreen && currentUserDropdown.isOpen()"
+        [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile"><i class="fa fa-cog mr-1"></i>{{
-          'AbpAccount::ManageYourProfile' | abpLocalization
-        }}</a>
-        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"><i class="fa fa-power-off mr-1"></i>{{
-          'AbpUi::Logout' | abpLocalization
-        }}</a>
+        <a class="dropdown-item" routerLink="/account/manage-profile"
+          ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a
+        >
+        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
+          ><i class="fa fa-power-off mr-1"></i>{{ 'AbpUi::Logout' | abpLocalization }}</a
+        >
       </div>
     </div>
   </li>

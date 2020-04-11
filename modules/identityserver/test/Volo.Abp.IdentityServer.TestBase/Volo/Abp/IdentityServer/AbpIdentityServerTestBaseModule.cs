@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -11,6 +12,18 @@ namespace Volo.Abp.IdentityServer
     )]
     public class AbpIdentityServerTestBaseModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<AbpIdentityServerBuilderOptions>(options =>
+            {
+                options.AddDeveloperSigningCredential = false;
+            });
+
+            PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
+            {
+                identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
+            });
+        }
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAlwaysAllowAuthorization();
@@ -25,9 +38,9 @@ namespace Volo.Abp.IdentityServer
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<AbpIdentityServerTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

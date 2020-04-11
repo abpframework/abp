@@ -14,12 +14,9 @@ namespace Volo.Abp.Identity.MongoDB
 {
     public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentityRole, Guid>, IIdentityRoleRepository
     {
-        private readonly IGuidGenerator _guidGenerator;
-
-        public MongoIdentityRoleRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IGuidGenerator guidGenerator) 
+        public MongoIdentityRoleRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider) 
             : base(dbContextProvider)
         {
-            _guidGenerator = guidGenerator;
         }
 
         public async Task<IdentityRole> FindByNormalizedNameAsync(
@@ -44,10 +41,10 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
+            bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable()
-                .LongCountAsync(GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().Where(r => r.IsDefault).ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }

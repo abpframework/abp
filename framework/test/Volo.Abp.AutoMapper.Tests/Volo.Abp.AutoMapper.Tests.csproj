@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.test.props" />
   
@@ -11,8 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <ProjectReference Include="..\Volo.Abp.ObjectExtending.Tests\Volo.Abp.ObjectExtending.Tests.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
   </ItemGroup>
 
 </Project>

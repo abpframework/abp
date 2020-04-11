@@ -19,7 +19,7 @@ namespace Volo.Abp.PermissionManagement
             GuidGenerator = guidGenerator;
         }
 
-        public async Task SeedAsync(
+        public virtual async Task SeedAsync(
             string providerName, 
             string providerKey,
             IEnumerable<string> grantedPermissions,

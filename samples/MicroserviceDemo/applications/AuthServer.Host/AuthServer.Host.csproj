@@ -12,12 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Serilog.Extensions.Hosting" Version="3.0.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="6.5.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,9 +29,14 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identityserver\src\Volo.Abp.IdentityServer.EntityFrameworkCore\Volo.Abp.IdentityServer.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Application\Volo.Abp.Account.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.EntityFrameworkCore\Volo.Abp.AuditLogging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.EntityFrameworkCore\Volo.Abp.FeatureManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.EntityFrameworkCore\Volo.Abp.SettingManagement.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Application.Contracts\Volo.Abp.TenantManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.EntityFrameworkCore\Volo.Abp.TenantManagement.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\shared\MsDemo.Shared\MsDemo.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

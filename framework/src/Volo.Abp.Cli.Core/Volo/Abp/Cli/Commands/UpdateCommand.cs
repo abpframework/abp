@@ -5,12 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -20,21 +17,12 @@ namespace Volo.Abp.Cli.Commands
 
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
-        private readonly ICliAnalyticsCollect _cliAnalyticsCollect;
-        private readonly AbpCliOptions _options;
-        private readonly IJsonSerializer _jsonSerializer;
 
         public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
-            NpmPackagesUpdater npmPackagesUpdater,
-            ICliAnalyticsCollect cliAnalyticsCollect, 
-            IJsonSerializer jsonSerializer, 
-            IOptions<AbpCliOptions> options)
+            NpmPackagesUpdater npmPackagesUpdater)
         {
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             _npmPackagesUpdater = npmPackagesUpdater;
-            _cliAnalyticsCollect = cliAnalyticsCollect;
-            _jsonSerializer = jsonSerializer;
-            _options = options.Value;
 
             Logger = NullLogger<UpdateCommand>.Instance;
         }
@@ -44,29 +32,23 @@ namespace Volo.Abp.Cli.Commands
             var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
             var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 
-            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long);
-            if (directory == null)
-            {
-                directory = Directory.GetCurrentDirectory();
-            }
+            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long) ??
+                            Directory.GetCurrentDirectory();
 
-            var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
-
-            if (updateNuget || both)
+            if (updateNuget || !updateNpm)
             {
                 await UpdateNugetPackages(commandLineArgs, directory);
             }
 
-            if (updateNpm || both)
+            if (updateNpm || !updateNuget)
             {
-                UpdateNpmPackages(directory);
+                await UpdateNpmPackages(directory);
             }
-
         }
 
-        private void UpdateNpmPackages(string directory)
+        private async Task UpdateNpmPackages(string directory)
         {
-            _npmPackagesUpdater.Update(directory);
+            await _npmPackagesUpdater.Update(directory);
         }
 
         private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)
@@ -112,7 +94,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Usage:");
             sb.AppendLine("");
-            sb.AppendLine("  abp update  [options]");
+            sb.AppendLine("  abp update [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("-p|--include-previews                       (if supported by the template)");

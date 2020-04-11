@@ -14,10 +14,10 @@ namespace Volo.Abp.AuditLogging
     {
         public ILogger<AuditingStore> Logger { get; set; }
 
-        private readonly IAuditLogRepository _auditLogRepository;
-        private readonly IGuidGenerator _guidGenerator;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly AbpAuditingOptions Options;
+        protected IAuditLogRepository AuditLogRepository { get; }
+        protected IGuidGenerator GuidGenerator { get; }
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
+        protected AbpAuditingOptions Options { get; }
 
         public AuditingStore(
             IAuditLogRepository auditLogRepository,
@@ -25,42 +25,15 @@ namespace Volo.Abp.AuditLogging
             IUnitOfWorkManager unitOfWorkManager,
             IOptions<AbpAuditingOptions> options)
         {
-            _auditLogRepository = auditLogRepository;
-            _guidGenerator = guidGenerator;
-            _unitOfWorkManager = unitOfWorkManager;
+            AuditLogRepository = auditLogRepository;
+            GuidGenerator = guidGenerator;
+            UnitOfWorkManager = unitOfWorkManager;
             Options = options.Value;
 
             Logger = NullLogger<AuditingStore>.Instance;
         }
 
-        public void Save(AuditLogInfo auditInfo)
-        {
-            if (!Options.HideErrors)
-            {
-                SaveLog(auditInfo);
-                return;
-            }
-
-            try
-            {
-                SaveLog(auditInfo);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex, LogLevel.Error);
-            }
-        }
-
-        protected virtual void SaveLog(AuditLogInfo auditInfo)
-        {
-            using (var uow = _unitOfWorkManager.Begin(true))
-            {
-                _auditLogRepository.Insert(new AuditLog(_guidGenerator, auditInfo));
-                uow.SaveChanges();
-            }
-        }
-
-        public async Task SaveAsync(AuditLogInfo auditInfo)
+        public virtual async Task SaveAsync(AuditLogInfo auditInfo)
         {
             if (!Options.HideErrors)
             {
@@ -74,15 +47,16 @@ namespace Volo.Abp.AuditLogging
             }
             catch (Exception ex)
             {
+                Logger.LogWarning("Could not save the audit log object: " + Environment.NewLine + auditInfo.ToString());
                 Logger.LogException(ex, LogLevel.Error);
             }
         }
 
         protected virtual async Task SaveLogAsync(AuditLogInfo auditInfo)
         {
-            using (var uow = _unitOfWorkManager.Begin(true))
+            using (var uow = UnitOfWorkManager.Begin(true))
             {
-                await _auditLogRepository.InsertAsync(new AuditLog(_guidGenerator, auditInfo));
+                await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, auditInfo));
                 await uow.SaveChangesAsync();
             }
         }

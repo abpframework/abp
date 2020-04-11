@@ -5,6 +5,7 @@
       "items": [
         {
           "text": "From Startup Templates",
+          "path": "Getting-Started-With-Startup-Templates.md",
           "items": [
             {
               "text": "Application with MVC (Razor Pages) UI",
@@ -38,14 +39,49 @@
           "text": "Application Development",
           "items": [
             {
-              "text": "With ASP.NET Core MVC UI",
-              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+              "text": "Part-1: Creating a new solution and listing items",
+              "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "With Angular UI",
-              "path": "Tutorials/Angular/Part-I.md"
+              "text": "Part-2: CRUD operations",
+              "path": "Tutorials/Part-2.md"
+            },
+            {
+              "text": "Part-3: Integration tests",
+              "path": "Tutorials/Part-3.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "Guides",
+      "items": [
+        {
+          "text": "Customizing the Application Modules",
+          "path": "Customizing-Application-Modules-Guide.md",
+          "items": [
+            {
+              "text": "Extending Entities",
+              "path": "Customizing-Application-Modules-Extending-Entities.md"
+            },
+            {
+              "text": "Overriding Services",
+              "path": "Customizing-Application-Modules-Overriding-Services.md"
+            },
+            {
+              "text": "Overriding the User Interface",
+              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+            }
+          ]
+        },
+        {
+          "text": "\"How to\" Guides",
+          "path": "How-To/Index.md"
+        },
+        {
+          "text": "Migrating from the ASP.NET Boilerplate",
+          "path": "AspNet-Boilerplate-Migration-Guide.md"
         }
       ]
     },
@@ -59,6 +95,10 @@
         {
           "text": "Configuration",
           "path": "Configuration.md"
+        },
+        {
+          "text": "Options",
+          "path": "Options.md"
         },
         {
           "text": "Dependency Injection",
@@ -83,7 +123,14 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "Validation"
+          "text": "Validation",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation Integration",
+              "path": "FluentValidation.md"
+            }
+          ]
         },
         {
           "text": "Authorization",
@@ -94,11 +141,24 @@
           "path": "Caching.md"
         },
         {
-          "text": "Auditing"
+          "text": "Logging",
+          "path": "Logging.md"
+        },
+        {
+          "text": "Audit Logging",
+          "path": "Audit-Logging.md"
         },
         {
           "text": "Settings",
           "path": "Settings.md"
+        },
+        {
+          "text": "Data Filtering",
+          "path": "Data-Filtering.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         }
       ]
     },
@@ -191,7 +251,8 @@
               "text": "Domain Services"
             },
             {
-              "text": "Specifications"
+              "text": "Specifications",
+              "path": "Specifications.md"
             }
           ]
         },
@@ -213,43 +274,105 @@
       ]
     },
     {
-      "text": "ASP.NET Core",
+      "text": "API",
       "items": [
         {
-          "text": "API",
-          "items": [            
+          "text": "Auto API Controllers",
+          "path": "API/Auto-API-Controllers.md"
+        },
+        {
+          "text": "Dynamic C# API Clients",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
+        }
+      ]
+    },
+    {
+      "text": "User Interface",
+      "items": [
+        {
+          "text": "ASP.NET Core",
+          "items": [
             {
-              "text": "Auto API Controllers",
-              "path": "AspNetCore/Auto-API-Controllers.md"
+              "text": "Client Side Package Management",
+              "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
-              "text": "Dynamic C# API Clients",
-              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+              "text": "Bundling & Minification",
+              "path": "UI/AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "Widgets",
+              "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "Theming",
+              "path": "UI/AspNetCore/Theming.md"
+            },
+            {
+              "text": "Customize/Extend the UI",
+              "path": "UI/AspNetCore/Customization-User-Interface.md"
             }
           ]
         },
         {
-          "text": "User Interface",
+          "text": "Angular",
           "items": [
             {
-              "text": "Client Side Package Management",
-              "path": "AspNetCore/Client-Side-Package-Management.md"
+              "text": "Service Proxies",
+              "path": "UI/Angular/Service-Proxies.md"
             },
             {
-              "text": "Bundling & Minification",
-              "path": "AspNetCore/Bundling-Minification.md"
+              "text": "HTTP Requests",
+              "path": "UI/Angular/HTTP-Requests.md"
             },
             {
-              "text": "Tag Helpers",
-              "path": "AspNetCore/Tag-Helpers/Index.md"
+              "text": "Localization",
+              "path": "UI/Angular/Localization.md"
             },
             {
-              "text": "Widgets",
-              "path": "AspNetCore/Widgets.md"
+              "text": "Permission Management",
+              "path": "UI/Angular/Permission-Management.md"
             },
             {
-              "text": "Theming",
-              "path": "AspNetCore/Theming.md"
+              "text": "Config State",
+              "path": "UI/Angular/Config-State.md"
+            },
+            {
+              "text": "Component Replacement",
+              "path": "UI/Angular/Component-Replacement.md"
+            },
+            {
+              "text": "Custom Setting Page",
+              "path": "UI/Angular/Custom-Setting-Page.md"
+            },
+            {
+              "text": "Lazy Loading Scripts & Styles",
+              "path": "UI/Angular/Lazy-Load-Service.md"
+            },
+            {
+              "text": "DomInsertionService",
+              "path": "UI/Angular/Dom-Insertion-Service.md"
+            },
+            {
+              "text": "ContentProjectionService",
+              "path": "UI/Angular/Content-Projection-Service.md"
+            },
+            {
+              "text": "TrackByService",
+              "path": "UI/Angular/Track-By-Service.md"
+            }
+          ]
+        },
+        {
+          "text": "Common",
+          "items": [
+            {
+              "text": "Linked List (Doubly)",
+              "path": "UI/Common/Utils/Linked-List.md"
             }
           ]
         }
@@ -257,25 +380,52 @@
     },
     {
       "text": "Data Access",
-	    "path": "Data-Access.md",
+      "path": "Data-Access.md",
       "items": [
         {
-          "text": "Entity Framework Core Integration",
-          "path": "Entity-Framework-Core.md",
-          "items": [            
+          "text": "Connection Strings",
+          "path": "Connection-Strings.md"
+        },
+        {
+          "text": "Database Providers",
+          "items": [
             {
-              "text": "PostgreSQL Integration",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "text": "Entity Framework Core",
+              "path": "Entity-Framework-Core.md",
+              "items": [
+                {
+                  "text": "Database Migrations",
+                  "path": "Entity-Framework-Core-Migrations.md"
+                },
+                {
+                  "text": "Switch DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md",
+                  "items": [
+                    {
+                      "text": "To MySQL",
+                      "path": "Entity-Framework-Core-MySQL.md"
+                    },
+                    {
+                      "text": "To PostgreSQL",
+                      "path": "Entity-Framework-Core-PostgreSQL.md"
+                    },
+                    {
+                      "text": "To SQLite",
+                      "path": "Entity-Framework-Core-SQLite.md"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "MongoDB",
+              "path": "MongoDB.md"
+            },
+            {
+              "text": "Dapper",
+              "path": "Dapper.md"
             }
           ]
-        },
-        {
-          "text": "MongoDB Integration",
-          "path": "MongoDB.md"
-        },
-        {
-          "text": "Dapper Integration",
-          "path": "Dapper.md"
         }
       ]
     },
@@ -293,6 +443,20 @@
             {
               "text": "RabbitMQ Integration",
               "path": "Background-Jobs-RabbitMq.md"
+            },
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Jobs-Quartz.md"
+            }
+          ]
+        },
+        {
+          "text": "Background Workers",
+          "path": "Background-Workers.md",
+          "items": [
+            {
+              "text": "Quartz Integration",
+              "path": "Background-Workers-Quartz.md"
             }
           ]
         }

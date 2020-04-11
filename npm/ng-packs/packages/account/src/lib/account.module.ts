@@ -3,7 +3,6 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule, Provider } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { TableModule } from 'primeng/table';
 import { AccountRoutingModule } from './account-routing.module';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { LoginComponent } from './components/login/login.component';
@@ -25,22 +24,13 @@ import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.com
     ManageProfileComponent,
     PersonalSettingsComponent,
   ],
-  imports: [CoreModule, AccountRoutingModule, ThemeSharedModule, TableModule, NgbDropdownModule, NgxValidateCoreModule],
+  imports: [
+    CoreModule,
+    AccountRoutingModule,
+    ThemeSharedModule,
+    NgbDropdownModule,
+    NgxValidateCoreModule,
+  ],
   exports: [],
 })
 export class AccountModule {}
-
-/**
- *
- * @deprecated since version 0.9
- */
-export function AccountProviders(options = {} as Options): Provider[] {
-  return [
-    { provide: ACCOUNT_OPTIONS, useValue: options },
-    {
-      provide: 'ACCOUNT_OPTIONS',
-      useFactory: optionsFactory,
-      deps: [ACCOUNT_OPTIONS],
-    },
-  ];
-}

@@ -2,10 +2,15 @@
 
 ## 介绍
 
-应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design.md)(DDD)分层的应用程序结构. 在这篇文档中详细介绍了解决方案结构和项目,如果你想快速入门,请遵循以下指南:
+应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design.md)(DDD)分层的应用程序结构.
 
-* 参阅[ASP.NET Core MVC 模板入门](../Getting-Started-AspNetCore-MVC-Template.md)创建此模板的新解决方案并运行它.
+在这篇文档中详细介绍了**解决方案结构**和项目,如果你想快速入门,请遵循以下指南:
+
+* 参阅[ASP.NET Core MVC 模板入门](../Getting-Started-With-Startup-Templates.md)创建此模板的新解决方案并运行它.
 * 参阅[ASP.NET Core MVC 教程](../Tutorials/AspNetCore-Mvc/Part-I.md)学习使用此模板开发应用程序.
+
+* [入门文档](../Getting-Started-AspNetCore-MVC-Template.md) 介绍了如何在几分钟内创建一个新的应用程序.
+* [应用程序开发教程](../Tutorials/AspNetCore-Mvc/Part-I.md) 学习使用此模板开发应用程序.
 
 ## 如何开始
 
@@ -120,6 +125,7 @@ ABP是一个模块化的框架,理想的设计是让每个模块都有自己的 
 * 它依赖 `.EntityFrameworkCore` 项目,因为它重用了应用程序的 `DbContext` 配置 .
 
 > 只有在你使用了EF Core做为数据库提供程序时,此项目才会可用.
+> 参阅[Entity Framework Core迁移指南](../Entity-Framework-Core-Migrations.md)了解这个项目的详细信息.
 
 #### .DbMigrator 项目
 
@@ -142,7 +148,7 @@ ABP是一个模块化的框架,理想的设计是让每个模块都有自己的 
 
 用于定义API控制器.
 
-大多数情况下,你不需要手动定义API控制器,因为ABP的[动态API](../AspNetCore/Auto-API-Controllers.md)功能会根据你的应用层自动创建API控制器. 但是,如果你需要编写API控制器,那么它是最合适的地方.
+大多数情况下,你不需要手动定义API控制器,因为ABP的[动态API](../API/Auto-API-Controllers.md)功能会根据你的应用层自动创建API控制器. 但是,如果你需要编写API控制器,那么它是最合适的地方.
 
 * 它依赖 `.Application.Contracts` 项目,因为它需要注入应用服务接口.
 
@@ -150,7 +156,7 @@ ABP是一个模块化的框架,理想的设计是让每个模块都有自己的 
 
 定义C#客户端代理使用解决方案的HTTP API项目. 可以将上编辑共享给第三方客户端,使其轻松的在DotNet应用程序中使用你的HTTP API(其他类型的应用程序可以手动或使用其平台的工具来使用你的API).
 
-ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功能,所以大多数情况下你不需要手动的创建C#客户端代理.
+ABP有[动态 C# API 客户端](../API/Dynamic-CSharp-API-Clients.md)功能,所以大多数情况下你不需要手动的创建C#客户端代理.
 
 `.HttpApi.Client.ConsoleTestApp` 项目是一个用于演示客户端代理用法的控制台应用程序.
 

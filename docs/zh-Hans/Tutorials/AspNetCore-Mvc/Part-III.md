@@ -56,33 +56,19 @@ namespace Acme.BookStore
         public async Task SeedAsync(DataSeedContext context)
         {
             await _bookRepository.InsertAsync(
-                new Book
-                {
-                    Id = _guidGenerator.Create(),
-                    Name = "Test book 1",
-                    Type = BookType.Fantastic,
-                    PublishDate = new DateTime(2015, 05, 24),
-                    Price = 21
-                }
-            );
+                new Book(_guidGenerator.Create(), "Test book 1",
+            BookType.Fantastic, new DateTime(2015, 05, 24), 21));
 
             await _bookRepository.InsertAsync(
-                new Book
-                {
-                    Id = _guidGenerator.Create(),
-                    Name = "Test book 2",
-                    Type = BookType.Science,
-                    PublishDate = new DateTime(2014, 02, 11),
-                    Price = 15
-                }
-            );
+                new Book(_guidGenerator.Create(), "Test book 2",
+            BookType.Science, new DateTime(2014, 02, 11), 15));
         }
     }
 }
 ````
 
 * 注入`IRepository<Book,Guid>`并在`SeedAsync`中使用它来创建两个书实体作为测试数据.
-* 使用`IGuidGenerator`服务创建GUID. 虽然`Guid.NewGuid()`非常适合测试，但`IGuidGenerator`在使用真实数据库时还有其他特别重要的功能(参见[Guid生成文档](../../Guid-Generation.md)了解更多信息).
+* 使用`IGuidGenerator`服务创建GUID. 虽然`Guid.NewGuid()`非常适合测试，但`IGuidGenerator`在使用真实数据库时还有其他特别重要的功能(参见[Guid生成文档](../../../Guid-Generation.md)了解更多信息).
 
 ### 测试 BookAppService
 

@@ -18,6 +18,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 
         public bool? Dismissible { get; set; }
 
+        public bool? Hoverable { get; set; }
+
         public string AbpPopover { get; set; }
 
         public string AbpPopoverRight { get; set; }

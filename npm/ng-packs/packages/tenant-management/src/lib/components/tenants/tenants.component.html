@@ -28,49 +28,42 @@
           (input.debounce)="onSearch($event.target.value)"
       /></label>
     </div>
-    <p-table
+    <abp-table
       *ngIf="[150, 0] as columnWidths"
+      [abpLoading]="loading"
+      [abpLoadingDelay]="500"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
+      [colgroupTemplate]="tableColGroup"
+      [headerTemplate]="tableHeader"
+      [bodyTemplate]="tableBody"
       [value]="data$ | async"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
-      [lazy]="true"
-      [lazyLoadOnInit]="false"
-      [paginator]="true"
-      [rows]="10"
+      [rows]="pageQuery.maxResultCount"
       [totalRecords]="totalCount$ | async"
-      [loading]="loading"
-      [resizableColumns]="true"
       [scrollable]="true"
-      (onLazyLoad)="onPageChange($event)"
+      (pageChange)="onPageChange($event)"
     >
-      <ng-template pTemplate="colgroup">
+      <ng-template #tableColGroup>
         <colgroup>
           <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr
-          abp-table-empty-message
-          [attr.colspan]="columnWidths.length"
-          localizationResource="AbpTenantManagement"
-          localizationProp="NoDataAvailableInDatatable"
-        ></tr>
-      </ng-template>
-      <ng-template pTemplate="header" let-columns>
+      <ng-template #tableHeader let-columns>
         <tr>
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
+          <th (click)="sortOrderIcon.sort('name')">
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
             <abp-sort-order-icon
               #sortOrderIcon
-              key="name"
-              [(selectedKey)]="sortKey"
+              sortKey="name"
+              [(selectedSortKey)]="sortKey"
               [(order)]="sortOrder"
             >
             </abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-data>
+      <ng-template #tableBody let-data>
         <tr>
           <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
@@ -100,7 +93,7 @@
                 <button
                   *abpPermission="'AbpTenantManagement.Tenants.ManageFeatures'"
                   ngbDropdownItem
-                  (click)="providerKey = data.id; visibleFeatures = true"
+                  (click)="openFeaturesModal(data.id)"
                 >
                   {{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}
                 </button>
@@ -117,7 +110,7 @@
           <td>{{ data.name }}</td>
         </tr>
       </ng-template>
-    </p-table>
+    </abp-table>
   </div>
 </div>
 
@@ -146,6 +139,30 @@
       <div class="form-group">
         <label for="name">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>
         <input type="text" id="name" class="form-control" formControlName="name" autofocus />
+      </div>
+      <div class="form-group" *ngIf="tenantForm.controls.adminEmailAddress">
+        <label for="name">{{
+          'AbpTenantManagement::DisplayName:AdminEmailAddress' | abpLocalization
+        }}</label>
+        <input
+          autocomplete="email"
+          type="email"
+          id="admin-email-address"
+          class="form-control"
+          formControlName="adminEmailAddress"
+        />
+      </div>
+      <div class="form-group" *ngIf="tenantForm.controls.adminPassword">
+        <label for="name">{{
+          'AbpTenantManagement::DisplayName:AdminPassword' | abpLocalization
+        }}</label>
+        <input
+          autocomplete="new-password"
+          type="password"
+          id="admin-password"
+          class="form-control"
+          formControlName="adminPassword"
+        />
       </div>
     </div>
   </form>
@@ -182,5 +199,18 @@
   </form>
 </ng-template>
 
-<abp-feature-management [(visible)]="visibleFeatures" providerName="T" [providerKey]="providerKey">
+<abp-feature-management
+  *abpReplaceableTemplate="{
+    inputs: {
+      providerName: { value: 'T' },
+      providerKey: { value: providerKey },
+      visible: { value: visibleFeatures, twoWay: true }
+    },
+    outputs: { visibleChange: onVisibleFeaturesChange },
+    componentKey: featureManagementKey
+  }"
+  [(visible)]="visibleFeatures"
+  providerName="T"
+  [providerKey]="providerKey"
+>
 </abp-feature-management>

@@ -1,6 +1,8 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Permission:Organizations": "组织",
+    "Permission:Manage": "管理组织",
     "Permission:NpmPackages": "NPM包",
     "Permission:NugetPackages": "Nuget包",
     "Permission:Maintenance": "维护",
@@ -11,6 +13,7 @@
     "Permission:Edit": "编辑",
     "Permission:Delete": "删除",
     "Permission:Create": "创建",
+    "Menu:Organizations": "组织",
     "Menu:Packages": "包",
     "NpmPackageDeletionWarningMessage": "该NPM包将会被删除. 你确定吗?",
     "NugetPackageDeletionWarningMessage": "该Nuget包将会被删除. 你确定吗?",
@@ -55,6 +58,30 @@
     "Menu:NpmPackages": "NPM包",
     "Menu:Modules": "模块",
     "Menu:Maintenance": "维护",
-    "Menu:NugetPackages": "Nuget包"
+    "Menu:NugetPackages": "Nuget包",
+    "CreateAnOrganization": "创建新组织",
+    "Organizations": "组织",
+    "LongName": "完整名称",
+    "LicenseType": "授权类型",
+    "LicenseStartTime": "授权开始时间",
+    "LicenseEndTime": "授权结束时间",
+    "AllowedDeveloperCount": "允许的开发人员数量",
+    "UserNameOrEmailAddress": "用户名或电子邮件地址",
+    "AddOwner": "添加所有者",
+    "UserName": "用户名",
+    "Email": "电子邮件地址",
+    "Developers": "开发者",
+    "AddDeveloper": "添加开发者",
+    "Create": "创建",
+    "UserNotFound": "用户不存在",
+    "{0}WillBeRemovedFromMembers": "{0} 将从成员中删除",
+    "Computers": "计算机",
+    "UniqueComputerId": "计算机唯一ID",
+    "LastSeenDate": "上次查看日期",
+    "{0}Computer{1}WillBeRemovedFromRecords": "计算机 {0} ({1}) 将从记录中删除",
+    "OrganizationDeletionWarningMessage": "组织将被删除",
+    "This{0}AlreadyExistInThisOrganization": "该组织中已经存在此 {0}",
+    "AreYouSureYouWantToDeleteAllComputers": "您确定要删除所有计算机吗？",
+    "DeleteAll": "删除所有"
   }
 }

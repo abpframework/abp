@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow
 {
@@ -32,6 +32,9 @@ namespace Volo.Abp.Uow
 
         public IServiceProvider ServiceProvider { get; }
 
+        [NotNull]
+        public Dictionary<string, object> Items { get; }
+
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
         private readonly Dictionary<string, ITransactionApi> _transactionApis;
         private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
@@ -47,6 +50,8 @@ namespace Volo.Abp.Uow
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
             _transactionApis = new Dictionary<string, ITransactionApi>();
+
+            Items = new Dictionary<string, object>();
         }
 
         public virtual void Initialize(AbpUnitOfWorkOptions options)
@@ -75,14 +80,6 @@ namespace Volo.Abp.Uow
             Outer = outer;
         }
 
-        public virtual void SaveChanges()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                (databaseApi as ISupportsSavingChanges)?.SaveChanges();
-            }
-        }
-
         public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var databaseApi in GetAllActiveDatabaseApis())
@@ -102,30 +99,6 @@ namespace Volo.Abp.Uow
         public IReadOnlyList<ITransactionApi> GetAllActiveTransactionApis()
         {
             return _transactionApis.Values.ToImmutableList();
-        }
-
-        public virtual void Complete()
-        {
-            if (_isRolledback)
-            {
-                return;
-            }
-
-            PreventMultipleComplete();
-
-            try
-            {
-                _isCompleting = true;
-                SaveChanges();
-                CommitTransactions();
-                IsCompleted = true;
-                OnCompleted();
-            }
-            catch (Exception ex)
-            {
-                _exception = ex;
-                throw;
-            }
         }
 
         public virtual async Task CompleteAsync(CancellationToken cancellationToken = default)
@@ -150,18 +123,6 @@ namespace Volo.Abp.Uow
                 _exception = ex;
                 throw;
             }
-        }
-
-        public virtual void Rollback()
-        {
-            if (_isRolledback)
-            {
-                return;
-            }
-
-            _isRolledback = true;
-
-            RollbackAll();
         }
 
         public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
@@ -233,19 +194,6 @@ namespace Volo.Abp.Uow
         public void OnCompleted(Func<Task> handler)
         {
             CompletedHandlers.Add(handler);
-        }
-
-        public void OnFailed(Func<Task> handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual void OnCompleted()
-        {
-            foreach (var handler in CompletedHandlers)
-            {
-                AsyncHelper.RunSync(handler);
-            }
         }
 
         protected virtual async Task OnCompletedAsync()

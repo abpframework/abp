@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Auditing;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging
 {
-    [RemoteService]
+    [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
     [Area("blogging")]
     [Route("api/blogging/posts")]
     public class PostsController : AbpController, IPostAppService
@@ -26,6 +25,13 @@ namespace Volo.Blogging
         public Task<ListResultDto<PostWithDetailsDto>> GetListByBlogIdAndTagName(Guid blogId, string tagName)
         {
             return _postAppService.GetListByBlogIdAndTagName(blogId, tagName);
+        }
+
+        [HttpGet]
+        [Route("{blogId}/all/by-time")]
+        public Task<ListResultDto<PostWithDetailsDto>> GetTimeOrderedListAsync(Guid blogId)
+        {
+            return _postAppService.GetTimeOrderedListAsync(blogId);
         }
 
         [HttpGet]
@@ -61,5 +67,6 @@ namespace Volo.Blogging
         {
             return _postAppService.DeleteAsync(id);
         }
+
     }
 }

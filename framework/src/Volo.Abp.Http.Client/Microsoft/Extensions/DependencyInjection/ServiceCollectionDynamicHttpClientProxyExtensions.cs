@@ -8,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -53,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
             foreach (var serviceType in serviceTypes)
             {
                 services.AddHttpClientProxy(
-                    serviceType, 
+                    serviceType,
                     remoteServiceConfigurationName,
                     asDefaultServices
                 );
@@ -153,7 +154,10 @@ namespace Microsoft.Extensions.DependencyInjection
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);
             services.AddTransient(interceptorType);
 
-            var interceptorAdapterType = typeof(CastleAbpInterceptorAdapter<>).MakeGenericType(interceptorType);
+            var interceptorAdapterType = typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(interceptorType);
+            
+            var validationInterceptorAdapterType =
+                typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(typeof(ValidationInterceptor));
 
             if (asDefaultService)
             {
@@ -162,6 +166,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     serviceProvider => ProxyGeneratorInstance
                         .CreateInterfaceProxyWithoutTarget(
                             type,
+                            (IInterceptor)serviceProvider.GetRequiredService(validationInterceptorAdapterType),
                             (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                         )
                 );
@@ -174,7 +179,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     var service = ProxyGeneratorInstance
                         .CreateInterfaceProxyWithoutTarget(
                             type,
-                            (IInterceptor) serviceProvider.GetRequiredService(interceptorAdapterType)
+                            (IInterceptor)serviceProvider.GetRequiredService(validationInterceptorAdapterType),
+                            (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                         );
 
                     return Activator.CreateInstance(

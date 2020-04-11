@@ -1,0 +1,63 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.TabsDemo
+
+<abp-component-demo-section title="Example" view-path="@TabsDemoViewComponent.ViewPath">
+    <abp-tabs>
+        <abp-tab title="Home">
+            Content_Home
+        </abp-tab>
+        <abp-tab-link title="Link" href="#" />
+        <abp-tab title="profile">
+            Content_Profile
+        </abp-tab>
+        <abp-tab-dropdown title="Contact" name="ContactDropdown">
+            <abp-tab title="Contact 1" parent-dropdown-name="ContactDropdown">
+                Content_1_Content
+            </abp-tab>
+            <abp-tab title="Contact 2" parent-dropdown-name="ContactDropdown">
+                Content_2_Content
+            </abp-tab>
+        </abp-tab-dropdown>
+    </abp-tabs>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Tab attributes" view-path="@TabsDemoViewComponent.ViewPath">
+    <abp-tabs>
+        <abp-tab name="nav-home" title="Home">
+            Content_Home
+        </abp-tab>
+        <abp-tab name="nav-profile" active="true" title="profile">
+            Content_Profile
+        </abp-tab>
+        <abp-tab name="nav-contact" title="Contact">
+            Content_Contact
+        </abp-tab>
+    </abp-tabs>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Pill Example" view-path="@TabsDemoViewComponent.ViewPath">
+    <abp-tabs tab-style="Pill">
+        <abp-tab title="Home">
+            Content_Home
+        </abp-tab>
+        <abp-tab title="profile">
+            Content_Profile
+        </abp-tab>
+        <abp-tab title="Contact">
+            Content_Contact
+        </abp-tab>
+    </abp-tabs>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Vertical Example" view-path="@TabsDemoViewComponent.ViewPath">
+    <abp-tabs tab-style="PillVertical" vertical-header-size="_2">
+        <abp-tab active="true" title="Home">
+            Content_Home
+        </abp-tab>
+        <abp-tab title="profile">
+            Content_Profile
+        </abp-tab>
+        <abp-tab title="Contact">
+            Content_Contact
+        </abp-tab>
+    </abp-tabs>
+</abp-component-demo-section>

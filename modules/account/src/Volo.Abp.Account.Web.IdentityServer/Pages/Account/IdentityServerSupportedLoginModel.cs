@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Web.Settings;
+using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
@@ -68,18 +68,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return Page();
             }
 
-            var schemes = await _schemeProvider.GetAllSchemesAsync();
-
-            var providers = schemes
-                .Where(x => x.DisplayName != null || x.Name.Equals(_accountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ExternalProviderModel
-                {
-                    DisplayName = x.DisplayName,
-                    AuthenticationScheme = x.Name
-                })
-                .ToList();
+            var providers = await GetExternalProviders();
+            ExternalProviders = providers.ToList();
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
             if (context?.ClientId != null)
             {
                 var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
@@ -94,8 +87,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 }
             }
 
-            ExternalProviders = providers.ToArray();
-
             if (IsExternalLoginOnly)
             {
                 return await base.OnPostExternalLogin(providers.First().AuthenticationScheme);
@@ -107,8 +98,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public override async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
             if (action == "Cancel")
             {
                 var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
@@ -122,7 +111,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return Redirect(ReturnUrl);
             }
 
+            await CheckLocalLoginAsync();
+
             ValidateModel();
+
+            ExternalProviders = await GetExternalProviders();
+            
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
 
@@ -174,7 +169,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork]
         public override async Task<IActionResult> OnPostExternalLogin(string provider)
         {
-            if (_accountOptions.WindowsAuthenticationSchemeName == provider)
+            if (AccountOptions.WindowsAuthenticationSchemeName == provider)
             {
                 return await ProcessWindowsLoginAsync();
             }
@@ -184,10 +179,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         private async Task<IActionResult> ProcessWindowsLoginAsync()
         {
-            var result = await HttpContext.AuthenticateAsync(_accountOptions.WindowsAuthenticationSchemeName);
+            var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
             if (!(result?.Principal is WindowsPrincipal windowsPrincipal))
             {
-                return Challenge(_accountOptions.WindowsAuthenticationSchemeName);
+                return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
             }
 
             var props = new AuthenticationProperties
@@ -195,11 +190,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash }),
                 Items =
                 {
-                    {"scheme", _accountOptions.WindowsAuthenticationSchemeName},
+                    {"scheme", AccountOptions.WindowsAuthenticationSchemeName},
                 }
             };
 
-            var identity = new ClaimsIdentity(_accountOptions.WindowsAuthenticationSchemeName);
+            var identity = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
             identity.AddClaim(new Claim(JwtClaimTypes.Subject, windowsPrincipal.Identity.Name));
             identity.AddClaim(new Claim(JwtClaimTypes.Name, windowsPrincipal.Identity.Name));
 

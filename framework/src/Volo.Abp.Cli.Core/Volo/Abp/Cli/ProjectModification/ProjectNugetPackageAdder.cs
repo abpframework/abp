@@ -48,8 +48,13 @@ namespace Volo.Abp.Cli.ProjectModification
             );
         }
 
-        public async Task AddAsync(string projectFile, NugetPackageInfo package)
+        public Task AddAsync(string projectFile, NugetPackageInfo package)
         {
+            if (File.ReadAllText(projectFile).Contains($"\"{package.Name}\""))
+            {
+                return Task.CompletedTask;
+            }
+
             using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
             {
                 Logger.LogInformation($"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
@@ -71,6 +76,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 Logger.LogInformation("Successfully installed.");
             }
+
+            return Task.CompletedTask;
         }
 
         protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string moduleName)

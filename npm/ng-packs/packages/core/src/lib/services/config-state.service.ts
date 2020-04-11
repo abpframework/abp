@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
+import {
+  AddRoute,
+  GetAppConfiguration,
+  PatchRouteByName,
+  SetEnvironment,
+} from '../actions/config.actions';
 import { ConfigState } from '../states';
 
 @Injectable({
@@ -46,5 +52,21 @@ export class ConfigStateService {
 
   getLocalization(...args: Parameters<typeof ConfigState.getLocalization>) {
     return this.store.selectSnapshot(ConfigState.getLocalization(...args));
+  }
+
+  dispatchGetAppConfiguration() {
+    return this.store.dispatch(new GetAppConfiguration());
+  }
+
+  dispatchPatchRouteByName(...args: ConstructorParameters<typeof PatchRouteByName>) {
+    return this.store.dispatch(new PatchRouteByName(...args));
+  }
+
+  dispatchAddRoute(...args: ConstructorParameters<typeof AddRoute>) {
+    return this.store.dispatch(new AddRoute(...args));
+  }
+
+  dispatchSetEnvironment(...args: ConstructorParameters<typeof SetEnvironment>) {
+    return this.store.dispatch(new SetEnvironment(...args));
   }
 }

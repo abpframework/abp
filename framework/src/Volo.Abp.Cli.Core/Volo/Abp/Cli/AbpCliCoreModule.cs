@@ -28,8 +28,11 @@ namespace Volo.Abp.Cli
                 options.Commands["add-package"] = typeof(AddPackageCommand);
                 options.Commands["add-module"] = typeof(AddModuleCommand);
                 options.Commands["login"] = typeof(LoginCommand);
-                options.Commands["logout"] = typeof(LogoutCommand);
+                options.Commands["logout"] = typeof(LogoutCommand); 
+                options.Commands["generate-proxy"] = typeof(GenerateProxyCommand); 
                 options.Commands["suite"] = typeof(SuiteCommand);
+                options.Commands["switch-to-preview"] = typeof(SwitchNightlyPreviewCommand);
+                options.Commands["switch-to-stable"] = typeof(SwitchStableCommand); 
             });
         }
     }

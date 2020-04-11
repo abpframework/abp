@@ -10,7 +10,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         protected AppTemplateBase(string templateName)
             : base(templateName, DatabaseProvider.EntityFrameworkCore, UiFramework.Mvc)
         {
-            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Application";
         }
 
         public static bool IsAppTemplate(string templateName)
@@ -74,6 +73,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             if (context.BuildArgs.UiFramework != UiFramework.Angular)
             {
                 steps.Add(new RemoveFolderStep("/angular"));
+            }
+
+            if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
+            {
+                steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
             }
         }
 
@@ -157,7 +161,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
         private static void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            if (context.BuildArgs.UiFramework == UiFramework.Mvc)
+            if (context.BuildArgs.UiFramework == UiFramework.Mvc && context.BuildArgs.MobileApp == MobileApp.None)
             {
                 steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
             }

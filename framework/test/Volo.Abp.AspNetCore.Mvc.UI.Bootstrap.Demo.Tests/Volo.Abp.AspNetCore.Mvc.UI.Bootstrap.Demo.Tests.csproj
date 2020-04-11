@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.test.props" />
 
@@ -19,7 +19,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Tests\Volo.Abp.AspNetCore.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
   </ItemGroup>
 
   <!-- Below ItemGroup and Target tags are added according to https://github.com/aspnet/Hosting/issues/959#issuecomment-286351703 -->

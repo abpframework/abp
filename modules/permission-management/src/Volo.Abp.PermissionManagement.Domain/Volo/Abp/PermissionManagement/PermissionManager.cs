@@ -50,12 +50,12 @@ namespace Volo.Abp.PermissionManagement
             );
         }
 
-        public async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
+        public virtual async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
         {
             return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey);
         }
 
-        public async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
+        public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
         {
             var results = new List<PermissionWithGrantedProviders>();
 
@@ -67,9 +67,15 @@ namespace Volo.Abp.PermissionManagement
             return results;
         }
 
-        public async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
+        public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
         {
             var permission = PermissionDefinitionManager.Get(permissionName);
+
+            if (!permission.IsEnabled)
+            {
+                //TODO: BusinessException
+                throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
+            }
 
             if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
             {
@@ -99,9 +105,20 @@ namespace Volo.Abp.PermissionManagement
             await provider.SetAsync(permissionName, providerKey, isGranted);
         }
 
+        public virtual async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
+        {
+            permissionGrant.ProviderKey = providerKey;
+            return await PermissionGrantRepository.UpdateAsync(permissionGrant);
+        }
+
         protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
         {
             var result = new PermissionWithGrantedProviders(permission.Name, false);
+
+            if (!permission.IsEnabled)
+            {
+                return result;
+            }
 
             if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
             {

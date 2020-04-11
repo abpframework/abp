@@ -23,7 +23,7 @@ namespace Volo.Abp.Dapper.Repositories
 
         public virtual async Task<int> UpdatePersonNames(string name)
         {
-            return await DbConnection.ExecuteAsync("update People set Name = @NewName", new {NewName = name},
+            return await DbConnection.ExecuteAsync("update People set Name = @NewName", new { NewName = name },
                 DbTransaction);
         }
     }

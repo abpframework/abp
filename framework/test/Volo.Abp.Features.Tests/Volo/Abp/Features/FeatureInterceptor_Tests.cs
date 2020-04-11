@@ -27,14 +27,14 @@ namespace Volo.Abp.Features
         {
             using (_currentTenant.Change(ParseNullableGuid(tenantIdValue)))
             {
-                Assert.Throws<AbpAuthorizationException>(() =>
+                await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    _classFeatureTestService.NoAdditionalFeature();
+                    await _classFeatureTestService.NoAdditionalFeatureAsync();
                 });
 
-                Assert.Throws<AbpAuthorizationException>(() =>
+                await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    _classFeatureTestService.Feature2();
+                    await _classFeatureTestService.Feature2Async();
                 });
 
                 await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
@@ -50,8 +50,8 @@ namespace Volo.Abp.Features
             //Features were enabled for Tenant 1
             using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
             {
-                _classFeatureTestService.NoAdditionalFeature();
-                _classFeatureTestService.Feature2().ShouldBe(42);
+                await _classFeatureTestService.NoAdditionalFeatureAsync();
+                (await _classFeatureTestService.Feature2Async()).ShouldBe(42);
                 (await _methodFeatureTestService.Feature1Async()).ShouldBe(42);
             }
         }
