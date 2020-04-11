@@ -17,11 +17,15 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
 
+        [NotNull]
+        public List<Action<ObjectExtensionValidationContext>> Validators { get; }
+
         public ObjectExtensionInfo([NotNull] Type type)
         {
             Type = Check.AssignableTo<IHasExtraProperties>(type, nameof(type));
             Properties = new Dictionary<string, ObjectExtensionPropertyInfo>();
             Configuration = new Dictionary<object, object>();
+            Validators = new List<Action<ObjectExtensionValidationContext>>();
         }
 
         public virtual bool HasProperty(string propertyName)
