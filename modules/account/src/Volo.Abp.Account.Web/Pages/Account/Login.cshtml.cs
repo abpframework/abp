@@ -76,7 +76,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync(string action)
         {
             await CheckLocalLoginAsync();
@@ -147,7 +146,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 .ToList();
         }
 
-        [UnitOfWork]
         public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
         {
             var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
@@ -157,7 +155,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return await Task.FromResult(Challenge(properties, provider));
         }
 
-        [UnitOfWork]
         public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string remoteError = null)
         {
             //TODO: Did not implemented Identity Server 4 sample for this method (see ExternalLoginCallback in Quickstart of IDS4 sample)

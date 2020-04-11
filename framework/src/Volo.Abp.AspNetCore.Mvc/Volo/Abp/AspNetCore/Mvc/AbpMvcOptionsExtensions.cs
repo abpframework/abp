@@ -16,7 +16,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         public static void AddAbp(this MvcOptions options, IServiceCollection services)
         {
             AddConventions(options, services);
-            AddFilters(options);
+            AddActionFilters(options);
+            AddPageFilters(options);
             AddModelBinders(options);
             AddMetadataProviders(options, services);
         }
@@ -26,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             options.Conventions.Add(new AbpServiceConventionWrapper(services));
         }
 
-        private static void AddFilters(MvcOptions options)
+        private static void AddActionFilters(MvcOptions options)
         {
             options.Filters.AddService(typeof(AbpAuditActionFilter));
             options.Filters.AddService(typeof(AbpNoContentActionFilter));
@@ -34,6 +35,14 @@ namespace Volo.Abp.AspNetCore.Mvc
             options.Filters.AddService(typeof(AbpValidationActionFilter));
             options.Filters.AddService(typeof(AbpUowActionFilter));
             options.Filters.AddService(typeof(AbpExceptionFilter));
+        }
+
+        private static void AddPageFilters(MvcOptions options)
+        {
+            options.Filters.AddService(typeof(AbpExceptionPageFilter));
+            options.Filters.AddService(typeof(AbpAuditPageFilter));
+            options.Filters.AddService(typeof(AbpFeaturePageFilter));
+            options.Filters.AddService(typeof(AbpUowPageFilter));
         }
 
         private static void AddModelBinders(MvcOptions options)
