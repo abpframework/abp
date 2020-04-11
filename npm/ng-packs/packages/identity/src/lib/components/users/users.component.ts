@@ -24,6 +24,7 @@ import {
 import { Identity } from '../../models/identity';
 import { IdentityService } from '../../services/identity.service';
 import { IdentityState } from '../../states/identity.state';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
@@ -61,6 +62,8 @@ export class UsersComponent implements OnInit {
   sortOrder = '';
 
   sortKey = '';
+
+  permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
