@@ -19,6 +19,9 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public List<ValidationAttribute> ValidationAttributes { get; }
 
+        [NotNull]
+        public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
+
         /// <summary>
         /// Indicates whether to check the other side of the object mapping
         /// if it explicitly defines the property. This property is used in;
@@ -47,6 +50,7 @@ namespace Volo.Abp.ObjectExtending
 
             Configuration = new Dictionary<object, object>();
             ValidationAttributes = new List<ValidationAttribute>();
+            Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
         }
     }
 }

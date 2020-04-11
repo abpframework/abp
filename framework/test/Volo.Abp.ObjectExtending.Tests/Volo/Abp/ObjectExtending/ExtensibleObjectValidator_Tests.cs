@@ -38,6 +38,43 @@ namespace Volo.Abp.ObjectExtending
                         {
 
                         });
+
+                        options.AddOrUpdateProperty<string>("Password", propertyInfo =>
+                        {
+                        });
+
+                        options.AddOrUpdateProperty<string>("PasswordRepeat", propertyInfo =>
+                        {
+                            propertyInfo.Validators.Add(context =>
+                            {
+                                if (context.ValidatingObject.HasProperty("Password"))
+                                {
+                                    if (context.ValidatingObject.GetProperty<string>("Password") !=
+                                        context.Value as string)
+                                    {
+                                        context.ValidationErrors.Add(
+                                            new ValidationResult(
+                                                "If you specify a password, then please correctly repeat it!",
+                                                new[] {"Password", "PasswordRepeat"}
+                                            )
+                                        );
+                                    }
+                                }
+                            });
+                        });
+
+                        options.Validators.Add(context =>
+                        {
+                            if (context.ValidatingObject.GetProperty<string>("Name") == "BadValue")
+                            {
+                                context.ValidationErrors.Add(
+                                    new ValidationResult(
+                                        "Name can not be 'BadValue', sorry :(",
+                                        new[] { "Name" }
+                                    )
+                                );
+                            }
+                        });
                     });
             });
         }
@@ -64,7 +101,7 @@ namespace Volo.Abp.ObjectExtending
             ExtensibleObjectValidator
                 .GetValidationErrors(
                     new ExtensiblePersonObject()
-                ).Count.ShouldBe(2); //Name & Age
+                ).Count.ShouldBe(2); // Name & Age
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
@@ -75,7 +112,7 @@ namespace Volo.Abp.ObjectExtending
                             {"Address", new string('x', 256) }
                         }
                     }
-                ).Count.ShouldBe(3); //Name, Age & Address
+                ).Count.ShouldBe(3); // Name, Age & Address
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
@@ -86,7 +123,7 @@ namespace Volo.Abp.ObjectExtending
                             {"Age", "42" }
                         }
                     }
-                ).Count.ShouldBe(1); //Name
+                ).Count.ShouldBe(1); // Name
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
@@ -97,8 +134,34 @@ namespace Volo.Abp.ObjectExtending
                             {"Address", new string('x', 256) },
                             {"Age", "100" }
                         }
-            }
-                ).Count.ShouldBe(3); //Name, Age & Address
+                    }
+                ).Count.ShouldBe(3); // Name, Age & Address
+
+            ExtensibleObjectValidator
+                .GetValidationErrors(
+                    new ExtensiblePersonObject
+                    {
+                        ExtraProperties =
+                        {
+                            {"Name", "John"},
+                            {"Age", "42"},
+                            {"Password", "123"},
+                            {"PasswordRepeat", "1256"}
+                        }
+                    }
+                ).Count.ShouldBe(1); // PasswordRepeat != Password
+
+            ExtensibleObjectValidator
+                .GetValidationErrors(
+                    new ExtensiblePersonObject
+                    {
+                        ExtraProperties =
+                        {
+                            {"Name", "BadValue"},
+                            {"Age", "42"},
+                        }
+                    }
+                ).Count.ShouldBe(1); //Name is 'BadValue'!
         }
 
         private class ExtensiblePersonObject : ExtensibleObject

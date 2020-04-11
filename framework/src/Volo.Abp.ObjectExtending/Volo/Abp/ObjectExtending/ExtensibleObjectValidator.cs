@@ -52,20 +52,47 @@ namespace Volo.Abp.ObjectExtending
                 return;
             }
 
-            foreach (var propertyInfo in objectExtensionInfo.GetProperties())
+            AddPropertyValidationErrors(
+                extensibleObject,
+                validationErrors,
+                objectValidationContext,
+                objectExtensionInfo
+            );
+
+            ExecuteCustomObjectValidationActions(
+                extensibleObject,
+                validationErrors,
+                objectValidationContext,
+                objectExtensionInfo
+            );
+        }
+
+        private static void AddPropertyValidationErrors(
+            IHasExtraProperties extensibleObject, 
+            List<ValidationResult> validationErrors,
+            ValidationContext objectValidationContext, 
+            ObjectExtensionInfo objectExtensionInfo)
+        {
+            var properties = objectExtensionInfo.GetProperties();
+            if (!properties.Any())
             {
-                if (propertyInfo.ValidationAttributes.Any())
+                return;
+            }
+
+            foreach (var property in properties)
+            {
+                if (property.ValidationAttributes.Any())
                 {
                     var propertyValidationContext = new ValidationContext(extensibleObject, objectValidationContext, null)
                     {
-                        DisplayName = propertyInfo.Name,
-                        MemberName = propertyInfo.Name
+                        DisplayName = property.Name,
+                        MemberName = property.Name
                     };
 
-                    foreach (var attribute in propertyInfo.ValidationAttributes)
+                    foreach (var attribute in property.ValidationAttributes)
                     {
                         var result = attribute.GetValidationResult(
-                            extensibleObject.GetProperty(propertyInfo.Name),
+                            extensibleObject.GetProperty(property.Name),
                             propertyValidationContext
                         );
                         if (result != null)
@@ -74,6 +101,46 @@ namespace Volo.Abp.ObjectExtending
                         }
                     }
                 }
+
+                if (property.Validators.Any())
+                {
+                    var context = new ObjectExtensionPropertyValidationContext(
+                        property,
+                        extensibleObject,
+                        validationErrors,
+                        objectValidationContext,
+                        extensibleObject.GetProperty(property.Name)
+                    );
+
+                    foreach (var validator in property.Validators)
+                    {
+                        validator(context);
+                    }
+                }
+            }
+        }
+
+        private static void ExecuteCustomObjectValidationActions(
+            IHasExtraProperties extensibleObject, 
+            List<ValidationResult> validationErrors,
+            ValidationContext objectValidationContext, 
+            ObjectExtensionInfo objectExtensionInfo)
+        {
+            if (!objectExtensionInfo.Validators.Any())
+            {
+                return;
+            }
+
+            var context = new ObjectExtensionValidationContext(
+                objectExtensionInfo,
+                extensibleObject,
+                validationErrors,
+                objectValidationContext
+            );
+
+            foreach (var validator in objectExtensionInfo.Validators)
+            {
+                validator(context);
             }
         }
     }
