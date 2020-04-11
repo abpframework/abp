@@ -13,10 +13,9 @@ namespace Volo.Docs.Projects
 {
     public class EfCoreProjectRepository : EfCoreRepository<IDocsDbContext, Project, Guid>, IProjectRepository
     {
-        public EfCoreProjectRepository(IDbContextProvider<IDocsDbContext> dbContextProvider) 
+        public EfCoreProjectRepository(IDbContextProvider<IDocsDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
-
         }
 
         public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount)
@@ -38,6 +37,11 @@ namespace Volo.Docs.Projects
             }
 
             return project;
+        }
+
+        public async Task<bool> ShortNameExistsAsync(string shortName)
+        {
+            return await DbSet.AnyAsync(x => x.ShortName == shortName);
         }
     }
 }

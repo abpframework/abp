@@ -14,7 +14,8 @@ namespace Volo.Docs.Projects
 {
     public class MongoProjectRepository : MongoDbRepository<IDocsMongoDbContext, Project, Guid>, IProjectRepository
     {
-        public MongoProjectRepository(IMongoDbContextProvider<IDocsMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoProjectRepository(IMongoDbContextProvider<IDocsMongoDbContext> dbContextProvider) : base(
+            dbContextProvider)
         {
         }
 
@@ -37,6 +38,11 @@ namespace Volo.Docs.Projects
             }
 
             return project;
+        }
+
+        public async Task<bool> ShortNameExistsAsync(string shortName)
+        {
+            return await GetMongoQueryable().AnyAsync(x => x.ShortName == shortName);
         }
     }
 }
