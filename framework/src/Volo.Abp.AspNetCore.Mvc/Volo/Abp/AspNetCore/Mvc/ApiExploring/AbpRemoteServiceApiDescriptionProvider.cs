@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
@@ -42,9 +41,18 @@ namespace Volo.Abp.AspNetCore.Mvc.ApiExploring
         {
             foreach (var apiResponseType in GetApiResponseTypes())
             {
-                foreach (var result in context.Results.Where(x => ShouldAddResponseTypes(x.ActionDescriptor)))
+                foreach (var result in context.Results.Where(x => IsRemoteService(x.ActionDescriptor)))
                 {
-                    result.SupportedResponseTypes.AddIfNotContains(x => x.StatusCode == apiResponseType.StatusCode, () => apiResponseType);
+                    var actionProducesResponseTypeAttributes =
+                        ReflectionHelper.GetAttributesOfMemberOrDeclaringType<ProducesResponseTypeAttribute>(
+                            result.ActionDescriptor.GetMethodInfo());
+                    if (actionProducesResponseTypeAttributes.Any(x => x.StatusCode == apiResponseType.StatusCode))
+                    {
+                        continue;
+                    }
+
+                    result.SupportedResponseTypes.AddIfNotContains(x => x.StatusCode == apiResponseType.StatusCode,
+                        () => apiResponseType);
                 }
             }
         }
@@ -77,14 +85,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApiExploring
             return _options.SupportedResponseTypes;
         }
 
-        protected virtual bool ShouldAddResponseTypes(ActionDescriptor actionDescriptor)
+        protected virtual bool IsRemoteService(ActionDescriptor actionDescriptor)
         {
-            if (ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<ProducesResponseTypeAttribute>(actionDescriptor.GetMethodInfo()) != null ||
-                ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<ProducesErrorResponseTypeAttribute>(actionDescriptor.GetMethodInfo()) != null)
-            {
-                return false;
-            }
-            
             var remoteServiceAttr = ReflectionHelper.GetSingleAttributeOfMemberOrDeclaringTypeOrDefault<RemoteServiceAttribute>(actionDescriptor.GetMethodInfo());
             return remoteServiceAttr != null && remoteServiceAttr.IsEnabled;
         }
