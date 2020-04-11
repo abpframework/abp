@@ -31,7 +31,7 @@ namespace Volo.Abp.TestApp.Testing
             city.RemoveProperty("IsHot");
             city.HasProperty("IsHot").ShouldBeFalse();
             city.GetProperty<bool>("IsHot").ShouldBeFalse();
-            city.GetProperty<bool>("IsHot", true).ShouldBeFalse();
+            city.GetProperty<bool>("IsHot", true).ShouldBeTrue();
         }
     }
 }
