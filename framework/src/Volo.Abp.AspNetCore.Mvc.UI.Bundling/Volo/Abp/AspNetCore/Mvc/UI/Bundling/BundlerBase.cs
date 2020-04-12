@@ -85,7 +85,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             
             Logger.LogDebug($"- {fileName} ({nonMinifiedSize} bytes) - non minified, minifying...");
 
-            fileContent = Minifier.Minify(fileContent, context.BundleRelativePath);
+            fileContent = Minifier.Minify(
+                fileContent,
+                context.BundleRelativePath,
+                fileName
+            );
 
             Logger.LogInformation($"  > Minified {fileName} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
 

@@ -8,21 +8,31 @@ namespace Volo.Abp.Minify.NUglify
 {
     public abstract class NUglifyMinifierBase : IMinifier, ITransientDependency
     {
-        private static void CheckErrors(UglifyResult result)
+        private static void CheckErrors(UglifyResult result, string originalFileName)
         {
             if (result.HasErrors)
             {
+                var errorMessage = "There are some errors on uglifying the given source code!";
+
+                if (originalFileName != null)
+                {
+                    errorMessage += " Original file: " + originalFileName;
+                }
+
                 throw new NUglifyException(
-                    $"There are some errors on uglifying the given source code!{Environment.NewLine}{result.Errors.Select(err => err.ToString()).JoinAsString(Environment.NewLine)}",
+                    $"{errorMessage}{Environment.NewLine}{result.Errors.Select(err => err.ToString()).JoinAsString(Environment.NewLine)}",
                     result.Errors
                 );
             }
         }
 
-        public string Minify(string source, string fileName = null)
+        public string Minify(
+            string source,
+            string fileName = null,
+            string originalFileName = null)
         {
             var result = UglifySource(source, fileName);
-            CheckErrors(result);
+            CheckErrors(result, originalFileName);
             return result.Code;
         }
 
