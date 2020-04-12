@@ -5,6 +5,7 @@
       "items": [
         {
           "text": "从启动模板开始",
+          "path": "Getting-Started-With-Startup-Templates.md",
           "items": [
             {
               "text": "ASP.NET Core MVC 模板",
@@ -62,6 +63,10 @@
               "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
             }
           ]
+        },
+        {
+          "text": "\"如何\" 指南",
+          "path": "How-To/Index.md"
         },
         {
           "text": "从ASP.NET Boilerplate迁移",
@@ -135,6 +140,14 @@
         {
           "text": "设置管理",
           "path": "Settings.md"
+        },
+        {
+          "text": "数据过滤",
+          "path": "Data-Filtering.md"
+        },
+        {
+          "text": "对象扩展",
+          "path": "Object-Extensions.md"
         }
       ]
     },
@@ -283,6 +296,10 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "自定义/扩展UI",
+              "path": "UI/AspNetCore/Customization-User-Interface.md"
+            },
+            {
               "text": "主题化",
               "path": "UI/AspNetCore/Theming.md"
             }
@@ -302,6 +319,15 @@
             {
               "text": "替换组件",
               "path": "UI/Angular/Component-Replacement.md"
+            }
+          ]
+        },
+        {
+          "text": "通用",
+          "items": [
+            {
+              "text": "链表 (双向)",
+              "path": "UI/Common/Utils/Linked-List.md"
             }
           ]
         } 

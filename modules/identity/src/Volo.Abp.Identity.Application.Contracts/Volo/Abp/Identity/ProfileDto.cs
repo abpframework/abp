@@ -1,6 +1,8 @@
-﻿namespace Volo.Abp.Identity
+﻿using Volo.Abp.ObjectExtending;
+
+namespace Volo.Abp.Identity
 {
-    public class ProfileDto
+    public class ProfileDto : ExtensibleObject
     {
         public string UserName { get; set; }
 

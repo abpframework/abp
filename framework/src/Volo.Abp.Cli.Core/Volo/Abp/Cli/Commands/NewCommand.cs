@@ -73,6 +73,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var connectionString = GetConnectionString(commandLineArgs);
+            if (connectionString != null)
+            {
+                Logger.LogInformation("Connection string: " + connectionString);
+            }
+
             var mobileApp = GetMobilePreference(commandLineArgs);
             if (mobileApp != MobileApp.None)
             {
@@ -122,7 +128,8 @@ namespace Volo.Abp.Cli.Commands
                     mobileApp,
                     gitHubLocalRepositoryPath,
                     templateSource,
-                    commandLineArgs.Options
+                    commandLineArgs.Options,
+                    connectionString
                 )
             );
 
@@ -168,6 +175,12 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
         }
 
+        private static string GetConnectionString(CommandLineArgs commandLineArgs)
+        {
+            var connectionString = commandLineArgs.Options.GetOrNull(Options.ConnectionString.Short, Options.ConnectionString.Long);
+            return string.IsNullOrWhiteSpace(connectionString) ? null : connectionString;
+        }
+
         public string GetUsageInfo()
         {
             var sb = new StringBuilder();
@@ -186,6 +199,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
             sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
+            sb.AppendLine("-csf|--create-solution-folder               (default: true)");
+            sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
@@ -204,7 +219,9 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -t module");
             sb.AppendLine("  abp new Acme.BookStore -t module --no-ui");
             sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
+            sb.AppendLine("  abp new Acme.BookStore -csf false");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
+            sb.AppendLine("  abp new Acme.BookStore --connection-string \"Server=myServerName\\myInstanceName;Database=myDatabase;User Id=myUsername;Password=myPassword\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -307,6 +324,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "ts";
                 public const string Long = "template-source";
+            }
+
+            public static class ConnectionString
+            {
+                public const string Short = "cs";
+                public const string Long = "connection-string";
             }
 
             public static class CreateSolutionFolder

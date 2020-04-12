@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.TenantManagement
 {
@@ -27,13 +28,19 @@ namespace Volo.Abp.TenantManagement
         public virtual async Task<TenantDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<Tenant, TenantDto>(
-                await TenantRepository.GetAsync(id));
+                await TenantRepository.GetAsync(id)
+            );
         }
 
         public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
         {
             var count = await TenantRepository.GetCountAsync(input.Filter);
-            var list = await TenantRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+            var list = await TenantRepository.GetListAsync(
+                input.Sorting,
+                input.MaxResultCount,
+                input.SkipCount,
+                input.Filter
+            );
 
             return new PagedResultDto<TenantDto>(
                 count,
@@ -45,6 +52,8 @@ namespace Volo.Abp.TenantManagement
         public virtual async Task<TenantDto> CreateAsync(TenantCreateDto input)
         {
             var tenant = await TenantManager.CreateAsync(input.Name);
+            input.MapExtraPropertiesTo(tenant);
+
             await TenantRepository.InsertAsync(tenant);
 
             using (CurrentTenant.Change(tenant.Id, tenant.Name))
@@ -66,6 +75,7 @@ namespace Volo.Abp.TenantManagement
         {
             var tenant = await TenantRepository.GetAsync(id);
             await TenantManager.ChangeNameAsync(tenant, input.Name);
+            input.MapExtraPropertiesTo(tenant);
             await TenantRepository.UpdateAsync(tenant);
             return ObjectMapper.Map<Tenant, TenantDto>(tenant);
         }

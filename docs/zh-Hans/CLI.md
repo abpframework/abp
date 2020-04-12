@@ -60,6 +60,8 @@ abp new Acme.BookStore
 * `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,您会希望使用最新的版本.
 * `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D\localTemplate` 或 `https://<your url>.zip`).
 * `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
+* `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true`. 如果你不想使用默认,你可以设置自己的连接字符串. 默认的数据库提供程序是 `SQL Server`, 所以你只能输入SQL Server连接字符串!
+* `--local-framework-ref --abp-path`: 使用对项目的本地引用,而不是替换为NuGet包引用.
 
 ### add-package
 

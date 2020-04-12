@@ -43,7 +43,8 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   stopDelay = 820;
 
   @Input()
-  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
+  filter = (action: StartLoader | StopLoader) =>
+    action.payload.url.indexOf('openid-configuration') < 0;
 
   get boxShadow(): string {
     return `0 0 10px rgba(${this.color}, 0.5)`;
@@ -67,7 +68,9 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
       .pipe(
         filter(
           event =>
-            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError,
+            event instanceof NavigationStart ||
+            event instanceof NavigationEnd ||
+            event instanceof NavigationError,
         ),
         takeUntilDestroy(this),
       )
@@ -78,7 +81,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.interval.unsubscribe();
+    if (this.interval) this.interval.unsubscribe();
   }
 
   startLoading() {
@@ -100,7 +103,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   }
 
   stopLoading() {
-    this.interval.unsubscribe();
+    if (this.interval) this.interval.unsubscribe();
     this.progressLevel = 100;
     this.isLoading = false;
     if (this.timer && !this.timer.closed) return;

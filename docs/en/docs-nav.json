@@ -76,6 +76,10 @@
           ]
         },
         {
+          "text": "\"How to\" Guides",
+          "path": "How-To/Index.md"
+        },
+        {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
         }
@@ -151,6 +155,10 @@
         {
           "text": "Data Filtering",
           "path": "Data-Filtering.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         }
       ]
     },
@@ -342,12 +350,29 @@
               "path": "UI/Angular/Custom-Setting-Page.md"
             },
             {
-              "text": "TrackByService",
-              "path": "UI/Angular/Track-By-Service.md"
+              "text": "Lazy Loading Scripts & Styles",
+              "path": "UI/Angular/Lazy-Load-Service.md"
             },
             {
+              "text": "DomInsertionService",
+              "path": "UI/Angular/Dom-Insertion-Service.md"
+            },
+            {
+              "text": "ContentProjectionService",
+              "path": "UI/Angular/Content-Projection-Service.md"
+            },
+            {
+              "text": "TrackByService",
+              "path": "UI/Angular/Track-By-Service.md"
+            }
+          ]
+        },
+        {
+          "text": "Common",
+          "items": [
+            {
               "text": "Linked List (Doubly)",
-              "path": "UI/Angular/Linked-List.md"
+              "path": "UI/Common/Utils/Linked-List.md"
             }
           ]
         }

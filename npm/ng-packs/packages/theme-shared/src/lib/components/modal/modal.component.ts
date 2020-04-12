@@ -14,7 +14,7 @@ import {
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { fadeAnimation } from '../../animations/modal.animations';
-import { Toaster } from '../../models/toaster';
+import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
 
@@ -102,17 +102,7 @@ export class ModalComponent implements OnDestroy {
   destroy$ = new Subject<void>();
 
   get isFormDirty(): boolean {
-    let node: HTMLDivElement;
-    if (!this.modalContent) {
-      node = document.getElementById('modal-container') as HTMLDivElement;
-    }
-
-    const nodes = getFlatNodes(
-      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement)
-        .childNodes,
-    );
-
-    return hasNgDirty(nodes);
+    return Boolean(document.querySelector('.modal-dialog .ng-dirty'));
   }
 
   constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
@@ -133,9 +123,9 @@ export class ModalComponent implements OnDestroy {
           'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
           'AbpAccount::AreYouSure',
         )
-        .subscribe((status: Toaster.Status) => {
+        .subscribe((status: Confirmation.Status) => {
           this.isConfirmationOpen = false;
-          if (status === Toaster.Status.confirm) {
+          if (status === Confirmation.Status.confirm) {
             this.visible = false;
           }
         });
@@ -177,18 +167,4 @@ export class ModalComponent implements OnDestroy {
 
     this.init.emit();
   }
-}
-
-function getFlatNodes(nodes: NodeList): HTMLElement[] {
-  return Array.from(nodes).reduce(
-    (acc, val) => [
-      ...acc,
-      ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val]),
-    ],
-    [],
-  );
-}
-
-function hasNgDirty(nodes: HTMLElement[]) {
-  return nodes.findIndex(node => (node.className || '').indexOf('ng-dirty') > -1) > -1;
 }

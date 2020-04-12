@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.Features
 {
@@ -17,8 +18,9 @@ namespace Volo.Abp.Features
 
         private static bool ShouldIntercept(Type type)
         {
-            return type.IsDefined(typeof(RequiresFeatureAttribute), true) ||
-                   AnyMethodHasRequiresFeatureAttribute(type);
+            return !DynamicProxyIgnoreTypes.Contains(type) &&
+                   (type.IsDefined(typeof(RequiresFeatureAttribute), true) ||
+                    AnyMethodHasRequiresFeatureAttribute(type));
         }
 
         private static bool AnyMethodHasRequiresFeatureAttribute(Type implementationType)

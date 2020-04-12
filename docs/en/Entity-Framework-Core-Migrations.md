@@ -6,7 +6,7 @@ This document begins by **introducing the default structure** provided by [the a
 
 ### Source Code
 
-You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.
+You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.
 
 ## About the EF Core Code First Migrations
 
@@ -409,18 +409,19 @@ public static class MyProjectNameEntityExtensions
     {
         OneTimeRunner.Run(() =>
         {
-            EntityExtensionManager.AddProperty<IdentityRole, string>(
-                "Title",
-                b => { b.HasMaxLength(128); }
-            );
+            ObjectExtensionManager.Instance
+                .MapEfCoreProperty<IdentityRole, string>(
+                    "Title",
+                    builder => { builder.HasMaxLength(64); }
+                );
         });
     }
 }
 ````
 
-> Instead of hard-coded "Title" string, we suggest to use `nameof(AppRole.Title)`.
+> Instead of hard-coded "Title" string, we suggest to use `nameof(AppRole.Title)` or use a constant string.
 
-`EntityExtensionManager` is used to add properties to existing entities. Since `EntityExtensionManager` is static, we should call it once. `OneTimeRunner` is a simple utility class defined by the ABP Framework.
+`ObjectExtensionManager` is used to add properties to existing entities. Since `ObjectExtensionManager.Instance` is a static instance (singleton), we should call it once. `OneTimeRunner` is a simple utility class defined by the ABP Framework.
 
 See the [EF Core integration documentation](Entity-Framework-Core.md) for more about the entity extension system.
 
@@ -543,7 +544,7 @@ In this way, you can easily attach any type of value to an entity of a depended 
 
 Entity extension system solves the main problem of the extra properties: It can store an extra property in a **standard table field** in the database.
 
-All you need to do is to use the `EntityExtensionManager` to define the extra property as explained above, in the `AppRole` example. Then you can continue to use the same `GetProperty` and `SetProperty` methods  defined above to get/set the related property on the entity, but this time stored as a separate field in the database.
+All you need to do is to use the `ObjectExtensionManager` to define the extra property as explained above, in the `AppRole` example. Then you can continue to use the same `GetProperty` and `SetProperty` methods  defined above to get/set the related property on the entity, but this time stored as a separate field in the database.
 
 ###### Creating a New Table
 
@@ -881,4 +882,4 @@ This document explains how to split your databases and manage your database migr
 
 ## Source Code
 
-You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.
+You can find the source code of the example project referenced by this document [here](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo). However, you need to read and understand this document in order to understand the example project's source code.

@@ -15,53 +15,73 @@
     <style>
         highlight {
             font-weight: bold;
-            color: red;
-            font-style: italic;
+            color: #212529;
+            background: #f9efa6;
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.03);
         }
     </style>
 }
 
-<div class="container">
+<div class="container mb-5">
+
     <form method="get" action="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" class="mt-4">
-        <input type="text" asp-for="@Model.KeyWord" class="form-control" />
-        <button type="submit" class="btn-block btn-primary btn-lg mt-3">Search</button>
-    </form>
-
-    <div class="my-3 p-3 bg-white rounded">
-        <h6 class="border-bottom pb-4 mb-0">Search results</h6>
-
-        @foreach (var docs in Model.SearchOutputs)
-        {
-            <div class="media text-muted pt-3">
-                <div class="media-body pb-3 mb-0 small border-bottom">
-                    <div class="list-group">
-
-                        @functions
-                        {
-                            string RemoveFileExtensionFromPath(string path)
-                            {
-                                if (path == null)
-                                {
-                                    return null;
-                                }
-
-                                return path.EndsWith("." + @Model.Project.Format)
-                                    ? path.Left(path.Length - Model.Project.Format.Length - 1)
-                                    : path;
-                            }
-                        }
-
-                        <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
-                            <h3>@RemoveFileExtensionFromPath(docs.Name)</h3></a>
-
-                        @foreach (var highlight in docs.Highlight)
-                        {
-                            <p class="list-group-item list-group-item-action">@Html.Raw(highlight)</p>
-                        }
-
-                    </div>
+        <h4 class="text-center my-3">Search in Documents</h4>
+        <div class="card rounded">
+            <div class="p-3 bg-white">
+                <div class="form-row">
+                    <div class="col"><input type="text" asp-for="@Model.KeyWord" class="form-control" /></div>
+                    <div class="col-auto"><button type="submit" class="btn btn-primary px-md-5">Search</button></div>
                 </div>
             </div>
-        }
+        </div>
+    </form>
+
+    <div class="card mt-4 rounded">
+        <div class="card-header">
+            <h5 class="text-center ">Search Results</h5>
+        </div>
+        <div class="p-5 card-body">
+            @foreach (var docs in Model.SearchOutputs)
+            {
+                <div class="media text-muted">
+                    <div class="media-body pb-3 small">
+                        <div class="list-group">
+
+                            @functions
+                                {
+                                string RemoveFileExtensionFromPath(string path)
+                                {
+                                    if (path == null)
+                                    {
+                                        return null;
+                                    }
+
+                                    return path.EndsWith("." + @Model.Project.Format)
+                                        ? path.Left(path.Length - Model.Project.Format.Length - 1)
+                                        : path;
+                                }
+                            }
+
+                            <h5 class="mb-3">
+                                <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
+                                    @RemoveFileExtensionFromPath(docs.Name)
+                                </a>
+                            </h5>
+                            <div class="mb-4">
+                                @foreach (var highlight in docs.Highlight)
+                                {
+                                    <p class=" ">@Html.Raw(highlight)</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>

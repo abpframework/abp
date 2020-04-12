@@ -7,7 +7,7 @@
 
 ### 源码
 
-你可以在[这里](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo)找到本文引用的示例项目的源代码; 但是为了理解示例项目的源代码,你需要阅读和理解这个文档.
+你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo)找到本文引用的示例项目的源代码; 但是为了理解示例项目的源代码,你需要阅读和理解这个文档.
 
 ## 关于EF Core 代码优先迁移
 
@@ -411,10 +411,11 @@ public static class MyProjectNameEntityExtensions
     {
         OneTimeRunner.Run(() =>
         {
-            EntityExtensionManager.AddProperty<IdentityRole, string>(
-                "Title",
-                b => { b.HasMaxLength(128); }
-            );
+            ObjectExtensionManager.Instance
+                .MapEfCoreProperty<IdentityRole, string>(
+                    "Title",
+                    builder => { builder.HasMaxLength(64); }
+                );
         });
     }
 }
@@ -422,7 +423,7 @@ public static class MyProjectNameEntityExtensions
 
 > 我们建议使用 `nameof(AppRole.Title)` 而不是硬编码 "Title" 字符串
 
-`EntityExtensionManager` 用于添加属性到现有的实体. 由于 `EntityExtensionManager` 是静态的,因此应调用一次. `OneTimeRunner` 是ABP框架定义简单的工具类.
+`ObjectExtensionManager` 用于添加属性到现有的实体. 由于 `ObjectExtensionManager.Instance` 是静态实例(单例),因此应调用一次. `OneTimeRunner` 是ABP框架定义简单的工具类.
 
 参阅[EF Core集成文档](Entity-Framework-Core.md)了解更多关于实体扩展系统.
 
@@ -547,7 +548,7 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 实体扩展系统解决了额外属性主要的问题: 它可以将额外属性做为**标准表字段**存储到数据库.
 
-你需要做的就是如上所诉使用 `EntityExtensionManager` 定义额外属性, 然后你就可以使得 `GetProperty` 和 `SetProperty` 方法对实体的属性进行get/set,但是这时它存储在数据库表的单独字段中.
+你需要做的就是如上所诉使用 `ObjectExtensionManager` 定义额外属性, 然后你就可以使得 `GetProperty` 和 `SetProperty` 方法对实体的属性进行get/set,但是这时它存储在数据库表的单独字段中.
 
 ###### 创建新表
 

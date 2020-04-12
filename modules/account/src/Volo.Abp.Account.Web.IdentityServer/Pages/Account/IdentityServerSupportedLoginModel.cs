@@ -68,18 +68,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return Page();
             }
 
-            var schemes = await SchemeProvider.GetAllSchemesAsync();
-
-            var providers = schemes
-                .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ExternalProviderModel
-                {
-                    DisplayName = x.DisplayName,
-                    AuthenticationScheme = x.Name
-                })
-                .ToList();
+            var providers = await GetExternalProviders();
+            ExternalProviders = providers.ToList();
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
             if (context?.ClientId != null)
             {
                 var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
@@ -93,8 +86,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     }
                 }
             }
-
-            ExternalProviders = providers.ToArray();
 
             if (IsExternalLoginOnly)
             {
@@ -123,6 +114,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
             await CheckLocalLoginAsync();
 
             ValidateModel();
+
+            ExternalProviders = await GetExternalProviders();
+            
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
 

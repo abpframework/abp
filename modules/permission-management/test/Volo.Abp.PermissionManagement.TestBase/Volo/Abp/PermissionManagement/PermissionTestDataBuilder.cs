@@ -34,6 +34,15 @@ namespace Volo.Abp.PermissionManagement
             await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
                     _guidGenerator.Create(),
+                    "MyDisabledPermission1",
+                    UserPermissionValueProvider.ProviderName,
+                    User1Id.ToString()
+                )
+            );
+
+            await _permissionGrantRepository.InsertAsync(
+                new PermissionGrant(
+                    _guidGenerator.Create(),
                     "MyPermission3",
                     UserPermissionValueProvider.ProviderName,
                     User1Id.ToString()

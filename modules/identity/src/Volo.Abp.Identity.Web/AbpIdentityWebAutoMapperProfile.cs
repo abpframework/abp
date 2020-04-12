@@ -22,6 +22,7 @@ namespace Volo.Abp.Identity.Web
 
             //CreateModal
             CreateMap<CreateUserModalModel.UserInfoViewModel, IdentityUserCreateDto>()
+                .Ignore(x => x.ExtraProperties)
                 .ForMember(dest => dest.RoleNames, opt => opt.Ignore());
 
             CreateMap<IdentityRoleDto, CreateUserModalModel.AssignedRoleViewModel>()
@@ -29,6 +30,7 @@ namespace Volo.Abp.Identity.Web
 
             //EditModal
             CreateMap<EditUserModalModel.UserInfoViewModel, IdentityUserUpdateDto>()
+                .Ignore(x => x.ExtraProperties)
                 .ForMember(dest => dest.RoleNames, opt => opt.Ignore());
 
             CreateMap<IdentityRoleDto, EditUserModalModel.AssignedRoleViewModel>()
@@ -41,10 +43,12 @@ namespace Volo.Abp.Identity.Web
             CreateMap<IdentityRoleDto, EditModalModel.RoleInfoModel>();
 
             //CreateModal
-            CreateMap<CreateModalModel.RoleInfoModel, IdentityRoleCreateDto>();
+            CreateMap<CreateModalModel.RoleInfoModel, IdentityRoleCreateDto>()
+                .Ignore(x => x.ExtraProperties);
 
             //EditModal
-            CreateMap<EditModalModel.RoleInfoModel, IdentityRoleUpdateDto>();
+            CreateMap<EditModalModel.RoleInfoModel, IdentityRoleUpdateDto>()
+                .Ignore(x => x.ExtraProperties);
         }
     }
 }

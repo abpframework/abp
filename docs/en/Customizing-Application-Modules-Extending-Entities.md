@@ -37,13 +37,14 @@ As mentioned above, all extra properties of an entity are stored as a single JSO
 
 To overcome the difficulties described above, ABP Framework entity extension system for the Entity Framework Core that allows you to use the same extra properties API defined above, but store a desired property as a separate field in the database table.
 
-Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md). You can use the `EntityExtensionManager` static class:
+Assume that you want to add a `SocialSecurityNumber` to the `IdentityUser` entity of the [Identity Module](Modules/Identity.md). You can use the `ObjectExtensionManager`:
 
 ````csharp
-EntityExtensionManager.AddProperty<IdentityUser, string>(
-    "SocialSecurityNumber",
-    b => { b.HasMaxLength(32); }
-);
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        b => { b.HasMaxLength(32); }
+    );
 ````
 
 * You provide the `IdentityUser` as the entity name, `string` as the type of the new property, `SocialSecurityNumber` as the property name (also, the field name in the database table).
@@ -56,8 +57,6 @@ Once you define an entity extension, you then need to use the standard [Add-Migr
 You can then use the same extra properties system defined in the previous section to manipulate the property over the entity.
 
 ## Creating a New Entity Maps to the Same Database Table/Collection
-
-While using the extra properties approach is **easy to use** and suitable for some scenarios, it has some drawbacks described in the [entities document](Entities.md).
 
 Another approach can be **creating your own entity** mapped to **the same database table** (or collection for a MongoDB database).
 

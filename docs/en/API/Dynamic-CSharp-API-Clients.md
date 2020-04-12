@@ -69,7 +69,7 @@ public class MyClientAppModule : AbpModule
 }
 ````
 
-See the "RemoteServiceOptions" section below for more detailed configuration.
+See the "AbpRemoteServiceOptions" section below for more detailed configuration.
 
 ## Usage
 
@@ -104,7 +104,7 @@ While you can inject `IBookAppService` like above to use the client proxy, you c
 
 ## Configuration
 
-### RemoteServiceOptions
+### AbpRemoteServiceOptions
 
 `AbpRemoteServiceOptions` is automatically set from the `appsettings.json` by default. Alternatively, you can use `Configure` method to set or override it. Example:
 

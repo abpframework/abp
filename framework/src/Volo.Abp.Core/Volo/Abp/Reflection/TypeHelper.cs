@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 
@@ -15,7 +14,7 @@ namespace Volo.Abp.Reflection
             {
                 return false;
             }
-
+            
             var type = obj.GetType();
             if (!type.GetTypeInfo().IsGenericType)
             {
@@ -37,14 +36,17 @@ namespace Volo.Abp.Reflection
                 return true;
             }
 
-            if (includeNullables &&
-                type.IsGenericType &&
-                type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            if (includeNullables && IsNullable(type))
             {
                 return IsPrimitiveExtendedInternal(type.GenericTypeArguments[0], includeEnums);
             }
 
             return false;
+        }
+
+        public static bool IsNullable(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         public static Type GetFirstGenericArgumentIfNullable(this Type t)

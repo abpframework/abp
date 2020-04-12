@@ -111,7 +111,3 @@ class DemoComponent {
   trackByTenantAccountId = trackByDeep<Item>('tenant', 'account', 'id');
 }
 ```
-
-## What's Next?
-
-* [Linked List (Doubly)](./Linked-List.md)

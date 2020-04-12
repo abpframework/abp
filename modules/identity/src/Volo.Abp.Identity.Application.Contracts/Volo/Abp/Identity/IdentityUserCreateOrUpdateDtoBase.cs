@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
-    public abstract class IdentityUserCreateOrUpdateDtoBase
+    public abstract class IdentityUserCreateOrUpdateDtoBase : ExtensibleObject
     {
         [Required]
         [StringLength(IdentityUserConsts.MaxUserNameLength)]

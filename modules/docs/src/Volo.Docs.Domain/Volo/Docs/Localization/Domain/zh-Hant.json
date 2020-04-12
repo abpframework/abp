@@ -18,9 +18,11 @@
     "DocumentNotFoundInSelectedLanguage": "本文件不適用於所選語系，將以預設語系顯示.",
     "FilterTopics": "過濾主題",
     "FullSearch": "搜索文件",
+    "Volo.Docs.Domain:010001": "Elastic search未啟用.",
     "New": "新文檔",
     "Upd": "更新",
     "NewExplanation": "在最近兩周內創建.",
-    "UpdatedExplanation": "在最近兩周內更新."
+    "UpdatedExplanation": "在最近兩周內更新.",
+    "Volo.Docs.Domain:010002": "簡稱 {ShortName} 已經存在."
   }
 }
