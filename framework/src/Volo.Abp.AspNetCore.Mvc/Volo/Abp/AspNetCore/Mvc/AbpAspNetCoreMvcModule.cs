@@ -11,18 +11,22 @@ using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.Extensions.Hosting;
 using Volo.Abp.ApiVersioning;
+using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
@@ -57,6 +61,25 @@ namespace Volo.Abp.AspNetCore.Mvc
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
             });
 
+            Configure<AbpRemoteServiceApiDescriptionProviderOptions>(options =>
+            {
+                var statusCodes = new List<int>
+                {
+                    (int) HttpStatusCode.Forbidden,
+                    (int) HttpStatusCode.Unauthorized,
+                    (int) HttpStatusCode.BadRequest,
+                    (int) HttpStatusCode.NotFound,
+                    (int) HttpStatusCode.NotImplemented,
+                    (int) HttpStatusCode.InternalServerError
+                };
+                
+                options.SupportedResponseTypes.AddIfNotContains(statusCodes.Select(statusCode => new ApiResponseType
+                {
+                    Type = typeof(RemoteServiceErrorResponse),
+                    StatusCode = statusCode
+                }));
+            });
+            
             context.Services.PostConfigure<AbpAspNetCoreMvcOptions>(options =>
             {
                 if (options.MinifyGeneratedScript == null)
