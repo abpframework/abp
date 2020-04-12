@@ -1381,7 +1381,6 @@ list.forEach((node, index) => console.log(node.value + index));
 ```
 
 
-
 #### \*\[Symbol.iterator\]\(\)
 
 A linked list is iterable. In other words, you may use methods like `for...of` on it.
@@ -1483,6 +1482,3 @@ const str = list.toString(value => value.x);
 str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
 */
 ```
-
-
-
