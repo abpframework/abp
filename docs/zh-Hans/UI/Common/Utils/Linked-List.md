@@ -1,14 +1,10 @@
-# Linked List (Doubly)
+# 链表 (双向)
 
+Core模块提供了称为[双链表](https://en.wikipedia.org/wiki/Doubly_linked_list)的实用数据结构. 简而言之双向链表是一系列记录(又称节点),这些记录具有上一个节点,下一个节点及其自身值(或数据)的信息.
 
+## 入门
 
-The core module provides a useful data structure known as a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list). Briefly, a doubly linked list is a series of records (a.k.a. nodes) which has information on the previous node, the next node, and its own value (or data).
-
-
-
-## Getting Started
-
-To create a doubly linked list, all you have to do is to import and create a new instance of it:
+要创建一个双向链表,你需要做的就是导入和创建它的一个新的实例:
 
 ```js
 import { LinkedList } from '@abp/ng.core';
@@ -16,18 +12,13 @@ import { LinkedList } from '@abp/ng.core';
 const list = new LinkedList();
 ```
 
+构造函数没有任何参数.
 
+## 用法
 
-The constructor does not get any parameters.
+### 如何添加新节点
 
-
-
-## Usage
-
-### How to Add New Nodes
-
-There are several methods to create new nodes in a linked list and all of them are separately available as well as revealed by `add` and `addMany` methods.
-
+有几种方法可以在链表中创建新节点,这些方法都可以单独使用,也可以通过 `add` 和 `addMany` 方法.
 
 
 #### addHead(value)
@@ -36,7 +27,7 @@ There are several methods to create new nodes in a linked list and all of them a
 addHead(value: T): ListNode\<T\>
 ```
 
-Adds a node with given value as the first node in list:
+将给定值添加到链表的第一个节点:
 
 ```js
 list.addHead('a');
@@ -60,7 +51,7 @@ list.addHead('c');
 addManyHead(values: T\[\]): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values as the first nodes in list:
+将给定的多个值添加到链表的第一个节点:
 
 ```js
 list.addManyHead(['a', 'b', 'c']);
@@ -80,7 +71,7 @@ list.addManyHead(['x', 'y', 'z']);
 addTail(value: T): ListNode\<T\>
 ```
 
-Adds a node with given value as the last node in list:
+将给定值添加到链表的最后一个节点:
 
 ```js
 list.addTail('a');
@@ -104,7 +95,7 @@ list.addTail('c');
 addManyTail(values: T\[\]): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values as the last nodes in list:
+将给定多个值添加到链表的最后一个节点:
 
 ```js
 list.addManyTail(['a', 'b', 'c']);
@@ -116,15 +107,13 @@ list.addManyTail(['x', 'y', 'z']);
 // "a" <-> "b" <-> "c" <-> "x" <-> "y" <-> "z"
 ```
 
-
-
 #### addAfter(value, previousValue, compareFn)
 
 ```js
 addAfter(value: T, previousValue: T, compareFn = compare): ListNode\<T\>
 ```
 
-Adds a node with given value after the first node that has the previous value:
+添加给定值到previousValue节点后:
 
 ```js
 list.addTail('a');
@@ -140,8 +129,7 @@ list.addAfter('x', 'b');
 ```
 
 
-
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器:
 
 ```js
 list.addTail({ x: 1 });
@@ -160,9 +148,7 @@ list.addAfter(
 ```
 
 
-
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
-
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 #### addManyAfter(values, previousValue, compareFn)
@@ -171,7 +157,7 @@ list.addAfter(
 addManyAfter(values: T\[\], previousValue: T, compareFn = compare): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values after the first node that has the previous value:
+添加给定的多个值到previousValue节点后:
 
 ```js
 list.addManyTail(['a', 'b', 'b', 'c']);
@@ -183,9 +169,7 @@ list.addManyAfter(['x', 'y'], 'b');
 // "a" <-> "b" <-> "x" <-> "y" <-> "b" <-> "c"
 ```
 
-
-
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器:
 
 ```js
 list.addManyTail([{ x: 1 },{ x: 2 },{ x: 3 }]);
@@ -201,10 +185,7 @@ list.addManyAfter(
 // {"x":1} <-> {"x":2} <-> {"x":4} <-> {"x":5} <-> {"x":3}
 ```
 
-
-
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
-
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 #### addBefore(value, nextValue, compareFn)
@@ -213,7 +194,7 @@ list.addManyAfter(
 addBefore(value: T, nextValue: T, compareFn = compare): ListNode\<T\>
 ```
 
-Adds a node with given value before the first node that has the next value:
+添加给值到previousValue节点前:
 
 ```js
 list.addTail('a');
@@ -228,9 +209,7 @@ list.addBefore('x', 'b');
 // "a" <-> "x" <-> "b" <-> "b" <-> "c"
 ```
 
-
-
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器:
 
 ```js
 list.addTail({ x: 1 });
@@ -248,9 +227,7 @@ list.addBefore(
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":3}
 ```
 
-
-
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -260,7 +237,8 @@ list.addBefore(
 addManyBefore(values: T\[\], nextValue: T, compareFn = compare): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values before the first node that has the next value:
+
+添加给定的多个值到previousValue节点前:
 
 ```js
 list.addManyTail(['a', 'b', 'b', 'c']);
@@ -274,7 +252,7 @@ list.addManyBefore(['x', 'y'], 'b');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addManyTail([{ x: 1 },{ x: 2 },{ x: 3 }]);
@@ -292,7 +270,7 @@ list.addManyBefore(
 
 
 
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -302,7 +280,7 @@ list.addManyBefore(
 addByIndex(value: T, position: number): ListNode\<T\>
 ```
 
-Adds a node with given value at the specified position in the list:
+在链表的指定位置添加节点:
 
 ```js
 list.addTail('a');
@@ -316,9 +294,7 @@ list.addByIndex('x', 2);
 // "a" <-> "b" <-> "x" <-> "c"
 ```
 
-
-
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.addTail('a');
@@ -340,7 +316,7 @@ list.addByIndex('x', -1);
 addManyByIndex(values: T\[\], position: number): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values at the specified position in the list:
+添加多个节点到链表的指定位置:
 
 ```js
 list.addManyTail(['a', 'b', 'c']);
@@ -352,9 +328,7 @@ list.addManyByIndex(['x', 'y'], 2);
 // "a" <-> "b" <-> "x" <-> "y" <-> "c"
 ```
 
-
-
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.addManyTail(['a', 'b', 'c']);
@@ -374,7 +348,7 @@ list.addManyByIndex(['x', 'y'], -1);
 add(value: T).head(): ListNode\<T\>
 ```
 
-Adds a node with given value as the first node in list:
+将添加的节点移动到链表头:
 
 ```js
 list.add('a').head();
@@ -392,7 +366,7 @@ list.add('c').head();
 
 
 
-> This is an alternative API for `addHead`. 
+> 它是 `addHead` 的替代API. 
 
 
 
@@ -402,7 +376,7 @@ list.add('c').head();
 add(value: T).tail(): ListNode\<T\>
 ```
 
-Adds a node with given value as the last node in list:
+将添加的节点移动到链表尾:
 
 ```js
 list.add('a').tail();
@@ -420,7 +394,7 @@ list.add('c').tail();
 
 
 
-> This is an alternative API for `addTail`. 
+> 它是 `addTail` 的替代API. 
 
 
 
@@ -430,7 +404,7 @@ list.add('c').tail();
 add(value: T).after(previousValue: T, compareFn = compare): ListNode\<T\>
 ```
 
-Adds a node with given value after the first node that has the previous value:
+将添加的节点移动到指定节点后:
 
 ```js
 list.add('a').tail();
@@ -447,7 +421,7 @@ list.add('x').after('b');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.add({ x: 1 }).tail();
@@ -465,9 +439,9 @@ list
 
 
 
-> This is an alternative API for `addAfter`.
+> 它是 `addAfter` 的替代API.
 >
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -477,7 +451,7 @@ list
 add(value: T).before(nextValue: T, compareFn = compare): ListNode\<T\>
 ```
 
-Adds a node with given value before the first node that has the next value:
+将添加的节点移动到指定节点前:
 
 ```js
 list.add('a').tail();
@@ -494,7 +468,7 @@ list.add('x').before('b');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.add({ x: 1 }).tail();
@@ -512,9 +486,9 @@ list
 
 
 
-> This is an alternative API for `addBefore`. 
+> 它是 `addBefore` 的替代API.
 >
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -524,7 +498,7 @@ list
 add(value: T).byIndex(position: number): ListNode\<T\>
 ```
 
-Adds a node with given value at the specified position in the list:
+将添加的节点移动到链表指定位置:
 
 ```js
 list.add('a').tail();
@@ -540,7 +514,7 @@ list.add('x').byIndex(2);
 
 
 
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.add('a').tail();
@@ -556,7 +530,7 @@ list.add('x').byIndex(-1);
 
 
 
-> This is an alternative API for `addByIndex`. 
+> 它是 `addByIndex` 的替代API. 
 
 
 
@@ -566,7 +540,7 @@ list.add('x').byIndex(-1);
 addMany(values: T\[\]).head(): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values as the first nodes in list:
+将添加的多个节点移动到链表头:
 
 ```js
 list.addMany(['a', 'b', 'c']).head();
@@ -580,7 +554,7 @@ list.addMany(['x', 'y', 'z']).head();
 
 
 
-> This is an alternative API for `addManyHead`. 
+> 它是 `addManyHead` 的替代API. 
 
 
 
@@ -590,7 +564,7 @@ list.addMany(['x', 'y', 'z']).head();
 addMany(values: T\[\]).tail(): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values as the last nodes in list:
+将添加的多个节点移动到链表尾:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -604,7 +578,7 @@ list.addMany(['x', 'y', 'z']).tail();
 
 
 
-> This is an alternative API for `addManyTail`. 
+> 它是 `addManyTail` 的替代API. 
 
 
 
@@ -614,7 +588,7 @@ list.addMany(['x', 'y', 'z']).tail();
 addMany(values: T\[\]).after(previousValue: T, compareFn = compare): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values after the first node that has the previous value:
+将添加的多个节点移动到指定节点后:
 
 ```js
 list.addMany(['a', 'b', 'b', 'c']).tail();
@@ -628,7 +602,7 @@ list.addMany(['x', 'y']).after('b');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }]).tail();
@@ -644,9 +618,9 @@ list
 
 
 
-> This is an alternative API for `addManyAfter`.
+> 它是 `addManyAfter` 的替代API.
 >
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -656,7 +630,7 @@ list
 addMany(values: T\[\]).before(nextValue: T, compareFn = compare): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values before the first node that has the next value:
+将添加的多个节点移动到指定节点前:
 
 ```js
 list.addMany(['a', 'b', 'b', 'c']).tail();
@@ -670,7 +644,7 @@ list.addMany(['x', 'y']).before('b');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }]).tail();
@@ -686,9 +660,9 @@ list
 
 
 
-> This is an alternative API for `addManyBefore`. 
+> 它是 `addManyBefore` 的替代API. 
 >
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -698,7 +672,7 @@ list
 addMany(values: T\[\]).byIndex(position: number): ListNode\<T\>\[\]
 ```
 
-Adds multiple nodes with given values at the specified position in the list:
+将添加的多个节点移动到链表的指定位置:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -711,8 +685,7 @@ list.addMany(['x', 'y']).byIndex(2);
 ```
 
 
-
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -726,13 +699,13 @@ list.addMany(['x', 'y']).byIndex(-1);
 
 
 
-> This is an alternative API for `addManyByIndex`. 
+> 它是 `addManyByIndex` 的替代API.
 
 
 
-### How to Remove Nodes
+### 如何删除节点
 
-There are a few methods to remove nodes from a linked list and all of them are separately available as well as revealed from a `drop` method.
+有几种方法可以在链表中删除节点,这些方法都可以单独使用,也可以通过 `drop` 方法.
 
 
 
@@ -742,7 +715,7 @@ There are a few methods to remove nodes from a linked list and all of them are s
 dropHead(): ListNode\<T\> | undefined
 ```
 
-Removes the first node from the list:
+删除链表的第一个节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -762,7 +735,7 @@ list.dropHead();
 dropManyHead(count: number): ListNode\<T\>\[\]
 ```
 
-Removes the first nodes from the list based on given count:
+删除指定数量的链表的头节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -782,7 +755,7 @@ list.dropManyHead(2);
 dropTail(): ListNode\<T\> | undefined
 ```
 
-Removes the last node from the list:
+删除链表的最后一个节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -802,7 +775,7 @@ list.dropTail();
 dropManyTail(count: number): ListNode\<T\>\[\]
 ```
 
-Removes the last nodes from the list based on given count:
+删除指定数量的链表的尾节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -822,7 +795,7 @@ list.dropManyTail(2);
 dropByIndex(position: number): ListNode\<T\> | undefined
 ```
 
-Removes the node with the specified position from the list:
+删除链表中给定位置的节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -835,8 +808,7 @@ list.dropByIndex(1);
 ```
 
 
-
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -856,7 +828,7 @@ list.dropByIndex(-2);
 dropManyByIndex(count: number, position: number): ListNode\<T\>\[\]
 ```
 
-Removes the nodes starting from the specified position from the list based on given count:
+删除链表中给定位置与数量的多个节点:
 
 ```js
 list.addMany(['a', 'b', 'c', 'd']).tail();
@@ -870,7 +842,7 @@ list.dropManyByIndex(2, 1);
 
 
 
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.addMany(['a', 'b', 'c', 'd']).tail();
@@ -890,7 +862,7 @@ list.dropManyByIndex(2, -2);
 dropByValue(value: T, compareFn = compare): ListNode\<T\> | undefined
 ```
 
-Removes the first node with given value from the list:
+删除链表中含有给定值的第一个节点:
 
 ```js
 list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
@@ -904,7 +876,7 @@ list.dropByValue('x');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
@@ -918,7 +890,7 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 
 
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -928,7 +900,7 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 dropByValueAll(value: T, compareFn = compare): ListNode\<T\>\[\]
 ```
 
-Removes all nodes with given value from the list:
+删除链表中含有给定值的所有节点:
 
 ```js
 list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
@@ -940,9 +912,7 @@ list.dropByValueAll('x');
 // "a" <-> "b" <-> "c"
 ```
 
-
-
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
@@ -956,7 +926,7 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 
 
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -966,7 +936,7 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 drop().head(): ListNode\<T\> | undefined
 ```
 
-Removes the first node in list:
+删除链表的头节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -980,7 +950,7 @@ list.drop().head();
 
 
 
-> This is an alternative API for `dropHead`. 
+> 它是 `dropHead` 的替代API. 
 
 
 
@@ -990,7 +960,7 @@ list.drop().head();
 drop().tail(): ListNode\<T\> | undefined
 ```
 
-Removes the last node in list:
+删除链表的尾节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -1004,7 +974,7 @@ list.drop().tail();
 
 
 
-> This is an alternative API for `dropTail`. 
+> 它是 `dropTail` 的替代API.
 
 
 
@@ -1014,7 +984,7 @@ list.drop().tail();
 drop().byIndex(position: number): ListNode\<T\> | undefined
 ```
 
-Removes the node with the specified position from the list:
+删除链表指定位置的节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -1028,7 +998,7 @@ list.drop().byIndex(1);
 
 
 
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -1042,7 +1012,7 @@ list.drop().byIndex(-2);
 
 
 
-> This is an alternative API for `dropByIndex`. 
+> 它是 `dropByIndex` 的替代API. 
 
 
 
@@ -1052,7 +1022,7 @@ list.drop().byIndex(-2);
 drop().byValue(value: T, compareFn = compare): ListNode\<T\> | undefined
 ```
 
-Removes the first node with given value from the list:
+删除链表中含有给定值的第一个节点:
 
 ```js
 list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
@@ -1066,7 +1036,7 @@ list.drop().byValue('x');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
@@ -1082,9 +1052,9 @@ list
 
 
 
-> This is an alternative API for `dropByValue`. 
+> 它是 `dropByValue` 的替代API. 
 >
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -1094,7 +1064,7 @@ list
 drop().byValueAll(value: T, compareFn = compare): ListNode\<T\>\[\]
 ```
 
-Removes all nodes with given value from the list:
+删除链表中含有给定值的所有节点:
 
 ```js
 list.addMany(['a', 'x', 'b', 'x', 'c']).tail();
@@ -1108,7 +1078,7 @@ list.drop().byValueAll('x');
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]).tail();
@@ -1124,9 +1094,9 @@ list
 
 
 
-> This is an alternative API for `dropByValueAll`. 
+> 它是 `dropByValueAll` 的替代API. 
 >
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
@@ -1136,7 +1106,7 @@ list
 dropMany(count: number).head(): ListNode\<T\>\[\]
 ```
 
-Removes the first nodes from the list based on given count:
+删除链表中指定数量的头节点:
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -1150,7 +1120,7 @@ list.dropMany(2).head();
 
 
 
-> This is an alternative API for `dropManyHead`. 
+> 它是 `dropManyHead` 的替代API. 
 
 
 
@@ -1160,7 +1130,7 @@ list.dropMany(2).head();
 dropMany(count: number).tail(): ListNode\<T\>\[\]
 ```
 
-Removes the last nodes from the list based on given count:
+删除链表中指定数量的尾节点::
 
 ```js
 list.addMany(['a', 'b', 'c']).tail();
@@ -1174,7 +1144,7 @@ list.dropMany(2).tail();
 
 
 
-> This is an alternative API for `dropManyTail`.
+> 它是 `dropManyTail` 的替代API.
 
 
 
@@ -1184,7 +1154,7 @@ list.dropMany(2).tail();
 dropMany(count: number).byIndex(position: number): ListNode\<T\>\[\]
 ```
 
-Removes the nodes starting from the specified position from the list based on given count:
+删除链表中指定位置和数量的节点:
 
 ```js
 list.addMany(['a', 'b', 'c', 'd']).tail();
@@ -1198,7 +1168,7 @@ list.dropMany(2).byIndex(1);
 
 
 
-It works with negative index too:
+它也适用于负索引:
 
 ```js
 list.addMany(['a', 'b', 'c', 'd']).tail();
@@ -1212,13 +1182,13 @@ list.dropMany(2).byIndex(-2);
 
 
 
-> This is an alternative API for `dropManyByIndex`.
+> 它是 `dropManyByIndex` 的替代API.
 
 
 
-### How to Find Nodes
+### 如何查找节点
 
-There are a few methods to find specific nodes in a linked list.
+有几个方法找到链表特定节点.
 
 
 
@@ -1228,7 +1198,7 @@ There are a few methods to find specific nodes in a linked list.
 find(predicate: ListIteratorFunction\<T\>): ListNode\<T\> | undefined
 ```
 
-Finds the first node from the list that matches the given predicate:
+从链表中找到与给定谓词匹配的第一个节点:
 
 ```js
 list.addTailMany(['a', 'b', 'b', 'c']);
@@ -1252,7 +1222,7 @@ found.next.value === "b"
 findIndex(predicate: ListIteratorFunction\<T\>): number
 ```
 
-Finds the position of the first node from the list that matches the given predicate:
+从链表中找到与给定谓词匹配的第一个节点的位置:
 
 ```js
 list.addTailMany(['a', 'b', 'b', 'c']);
@@ -1280,7 +1250,7 @@ i3 === -1
 get(position: number): ListNode\<T\> | undefined
 ```
 
-Finds and returns the node with specific position in the list:
+查找并返回链表中特定位置的节点:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1304,7 +1274,7 @@ found.next.value === "c"
 indexOf(value: T, compareFn = compare): number
 ```
 
-Finds the position of the first node from the list that has the given value:
+在链表中找到匹配给定值的第一个节点位置:
 
 ```js
 list.addTailMany(['a', 'b', 'b', 'c']);
@@ -1326,7 +1296,7 @@ i3 === -1
 
 
 
-You may pass a custom compare function to detect the searched value:
+你可以自定义比较器
 
 ```js
 list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
@@ -1350,13 +1320,13 @@ i4 === -1
 
 
 
-> The default compare function checks deep equality, so you will rarely need to pass that parameter.
+> 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
 
-### How to Check All Nodes
+### 如何检查所有节点
 
-There are a few ways to iterate over or display a linked list.
+有几种方法来遍历或显示一个链表.
 
 
 
@@ -1366,7 +1336,7 @@ There are a few ways to iterate over or display a linked list.
 forEach(callback: ListIteratorFunction\<T\>): void
 ```
 
-Runs a callback function on all nodes in a linked list from head to tail:
+从头到尾在链表中的所有节点上运行回调函数:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1380,10 +1350,9 @@ list.forEach((node, index) => console.log(node.value + index));
 // 'c2'
 ```
 
-
 #### \*\[Symbol.iterator\]\(\)
 
-A linked list is iterable. In other words, you may use methods like `for...of` on it.
+链表是可迭代的. 换句话说你可以使用诸如`for ... of`之类的方法.
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1407,7 +1376,7 @@ for(const node of list) {
 toArray(): T\[\]
 ```
 
-Converts a linked list to an array of values:
+转换链表值为数组:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1429,7 +1398,7 @@ arr === ['a', 'b', 'c']
 toNodeArray(): T\[\]
 ```
 
-Converts a linked list to an array of nodes:
+转换链表节点为数组:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1453,7 +1422,7 @@ arr[2].value === 'a'
 toString(): string
 ```
 
-Converts a linked list to a string representation of nodes and their relations:
+将链表转换为节点及其关系的字符串表示形式:
 
 ```js
 list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
@@ -1467,9 +1436,7 @@ str === '"a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}'
 */
 ```
 
-
-
-You may pass a custom mapper function to map values before stringifying them:
+你可以在对值进行字符串化之前通过自定义映射器函数来映射值:
 
 ```js
 list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }]).tail();
@@ -1482,3 +1449,6 @@ const str = list.toString(value => value.x);
 str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
 */
 ```
+
+
+
