@@ -1,4 +1,4 @@
-# 链表 (双向))
+# 链表 (双向)
 
 Core模块提供了称为[双链表](https://en.wikipedia.org/wiki/Doubly_linked_list)的实用数据结构. 简而言之双向链表是一系列记录(又称节点),这些记录具有上一个节点,下一个节点及其自身值(或数据)的信息.
 
@@ -1352,7 +1352,7 @@ list.forEach((node, index) => console.log(node.value + index));
 
 #### \*\[Symbol.iterator\]\(\)
 
-A linked list is iterable. In other words, you may use methods like `for...of` on it.
+链表是可迭代的. 换句话说你可以使用诸如`for ... of`之类的方法.
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1376,7 +1376,7 @@ for(const node of list) {
 toArray(): T\[\]
 ```
 
-Converts a linked list to an array of values:
+转换链表值为数组:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1398,7 +1398,7 @@ arr === ['a', 'b', 'c']
 toNodeArray(): T\[\]
 ```
 
-Converts a linked list to an array of nodes:
+转换链表节点为数组:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1422,7 +1422,7 @@ arr[2].value === 'a'
 toString(): string
 ```
 
-Converts a linked list to a string representation of nodes and their relations:
+将链表转换为节点及其关系的字符串表示形式:
 
 ```js
 list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
@@ -1436,9 +1436,7 @@ str === '"a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}'
 */
 ```
 
-
-
-You may pass a custom mapper function to map values before stringifying them:
+你可以在对值进行字符串化之前通过自定义映射器函数来映射值:
 
 ```js
 list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }]).tail();

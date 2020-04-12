@@ -1381,10 +1381,9 @@ list.forEach((node, index) => console.log(node.value + index));
 ```
 
 
-
 #### \*\[Symbol.iterator\]\(\)
 
-链表是可迭代的. 换句话说你可以使用诸如`for ... of`之类的方法.
+A linked list is iterable. In other words, you may use methods like `for...of` on it.
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1408,7 +1407,7 @@ for(const node of list) {
 toArray(): T\[\]
 ```
 
-转换链表值为数组:
+Converts a linked list to an array of values:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1430,7 +1429,7 @@ arr === ['a', 'b', 'c']
 toNodeArray(): T\[\]
 ```
 
-转换链表节点为数组:
+Converts a linked list to an array of nodes:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1454,7 +1453,7 @@ arr[2].value === 'a'
 toString(): string
 ```
 
-将链表转换为节点及其关系的字符串表示形式:
+Converts a linked list to a string representation of nodes and their relations:
 
 ```js
 list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
@@ -1468,7 +1467,9 @@ str === '"a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}'
 */
 ```
 
-你可以在对值进行字符串化之前通过自定义映射器函数来映射值:
+
+
+You may pass a custom mapper function to map values before stringifying them:
 
 ```js
 list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }]).tail();
