@@ -9,7 +9,7 @@ describe('DomInsertionService', () => {
 
   beforeEach(() => (spectator = createService()));
 
-  afterEach(() => styleElements.forEach(element => element.remove()));
+  afterEach(() => (document.head.innerHTML = ''));
 
   describe('#insertContent', () => {
     it('should be able to insert given content', () => {
@@ -17,6 +17,11 @@ describe('DomInsertionService', () => {
       styleElements = document.head.querySelectorAll('style');
       expect(styleElements.length).toBe(1);
       expect(styleElements[0].textContent).toBe('.test {}');
+    });
+
+    it('should set a hash for the inserted content', () => {
+      spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead('.test {}'));
+      expect(spectator.service.inserted.has(1437348290)).toBe(true);
     });
 
     it('should insert only once', () => {
@@ -37,9 +42,11 @@ describe('DomInsertionService', () => {
       expect(spectator.service.inserted.has(1437348290)).toBe(true);
     });
 
-    it('should be able to insert given content', () => {
-      spectator.service.insertContent(CONTENT_STRATEGY.AppendStyleToHead('.test {}'));
-      expect(spectator.service.inserted.has(1437348290)).toBe(true);
+    it('should return inserted element', () => {
+      const element = spectator.service.insertContent(
+        CONTENT_STRATEGY.AppendStyleToHead('.test {}'),
+      );
+      expect(element.tagName).toBe('STYLE');
     });
   });
 });

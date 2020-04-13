@@ -6,12 +6,16 @@ import { generateHash } from '../utils';
 export class DomInsertionService {
   readonly inserted = new Set<number>();
 
-  insertContent(contentStrategy: ContentStrategy) {
+  insertContent<T extends HTMLScriptElement | HTMLStyleElement>(
+    contentStrategy: ContentStrategy<T>,
+  ): T {
     const hash = generateHash(contentStrategy.content);
 
     if (this.inserted.has(hash)) return;
 
-    contentStrategy.insertElement();
+    const element = contentStrategy.insertElement();
     this.inserted.add(hash);
+
+    return element;
   }
 }
