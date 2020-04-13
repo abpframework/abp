@@ -130,7 +130,7 @@ list.addManyTail(['x', 'y', 'z']);
 #### addAfter(value, previousValue [, compareFn])
 
 ```js
-addAfter(value: T, previousValue: T, compareFn = compare): ListNode<T>
+addAfter(value: T, previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 Adds a node with given value after the first node that has the previous value:
@@ -177,7 +177,7 @@ list.addAfter(
 #### addManyAfter(values, previousValue [, compareFn])
 
 ```js
-addManyAfter(values: T[], previousValue: T, compareFn = compare): ListNode<T>[]
+addManyAfter(values: T[], previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 Adds multiple nodes with given values after the first node that has the previous value:
@@ -219,7 +219,7 @@ list.addManyAfter(
 #### addBefore(value, nextValue [, compareFn])
 
 ```js
-addBefore(value: T, nextValue: T, compareFn = compare): ListNode<T>
+addBefore(value: T, nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 Adds a node with given value before the first node that has the next value:
@@ -266,7 +266,7 @@ list.addBefore(
 #### addManyBefore(values, nextValue [, compareFn])
 
 ```js
-addManyBefore(values: T[], nextValue: T, compareFn = compare): ListNode<T>[]
+addManyBefore(values: T[], nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 Adds multiple nodes with given values before the first node that has the next value:
@@ -436,7 +436,7 @@ list.add('c').tail();
 #### add(value).after(previousValue [, compareFn])
 
 ```js
-add(value: T).after(previousValue: T, compareFn = compare): ListNode<T>
+add(value: T).after(previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 Adds a node with given value after the first node that has the previous value:
@@ -483,7 +483,7 @@ list
 #### add(value).before(nextValue [, compareFn])
 
 ```js
-add(value: T).before(nextValue: T, compareFn = compare): ListNode<T>
+add(value: T).before(nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 Adds a node with given value before the first node that has the next value:
@@ -620,7 +620,7 @@ list.addMany(['x', 'y', 'z']).tail();
 #### addMany(values).after(previousValue [, compareFn])
 
 ```js
-addMany(values: T[]).after(previousValue: T, compareFn = compare): ListNode<T>[]
+addMany(values: T[]).after(previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 Adds multiple nodes with given values after the first node that has the previous value:
@@ -662,7 +662,7 @@ list
 #### addMany(values).before(nextValue [, compareFn])
 
 ```js
-addMany(values: T[]).before(nextValue: T, compareFn = compare): ListNode<T>[]
+addMany(values: T[]).before(nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 Adds multiple nodes with given values before the first node that has the next value:
@@ -896,7 +896,7 @@ list.dropManyByIndex(2, -2);
 #### dropByValue(value [, compareFn])
 
 ```js
-dropByValue(value: T, compareFn = compare): ListNode<T> | undefined
+dropByValue(value: T, compareFn?: ListComparisonFn<T>): ListNode<T> | undefined
 ```
 
 Removes the first node with given value from the list:
@@ -934,7 +934,7 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 #### dropByValueAll(value [, compareFn])
 
 ```js
-dropByValueAll(value: T, compareFn = compare): ListNode<T>[]
+dropByValueAll(value: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 Removes all nodes with given value from the list:
@@ -1058,7 +1058,7 @@ list.drop().byIndex(-2);
 #### drop().byValue(value [, compareFn])
 
 ```js
-drop().byValue(value: T, compareFn = compare): ListNode<T> | undefined
+drop().byValue(value: T, compareFn?: ListComparisonFn<T>): ListNode<T> | undefined
 ```
 
 Removes the first node with given value from the list:
@@ -1100,7 +1100,7 @@ list
 #### drop().byValueAll(value [, compareFn])
 
 ```js
-drop().byValueAll(value: T, compareFn = compare): ListNode<T>[]
+drop().byValueAll(value: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 Removes all nodes with given value from the list:
@@ -1231,10 +1231,40 @@ There are a few methods to find specific nodes in a linked list.
 
 
 
+#### head
+
+```js
+head: ListNode<T> | undefined;
+```
+
+Refers to the first node in the list.
+
+
+
+#### tail
+
+```js
+tail: ListNode<T> | undefined;
+```
+
+Refers to the last node in the list.
+
+
+
+#### length
+
+```js
+length: number;
+```
+
+Is the total number of nodes in the list.
+
+
+
 #### find(predicate)
 
 ```js
-find(predicate: ListIteratorFunction<T>): ListNode<T> | undefined
+find(predicate: ListIteratorFn<T>): ListNode<T> | undefined
 ```
 
 Finds the first node from the list that matches the given predicate:
@@ -1244,7 +1274,7 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const found = list.find(node => node.value === 'b');
+var found = list.find(node => node.value === 'b');
 
 /*
 found.value === "b"
@@ -1258,7 +1288,7 @@ found.next.value === "b"
 #### findIndex(predicate)
 
 ```js
-findIndex(predicate: ListIteratorFunction<T>): number
+findIndex(predicate: ListIteratorFn<T>): number
 ```
 
 Finds the position of the first node from the list that matches the given predicate:
@@ -1268,10 +1298,10 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const i0 = list.findIndex(node => node.next && node.next.value === 'b');
-const i1 = list.findIndex(node => node.value === 'b');
-const i2 = list.findIndex(node => node.previous && node.previous.value === 'b');
-const i3 = list.findIndex(node => node.value === 'x');
+var i0 = list.findIndex(node => node.next && node.next.value === 'b');
+var i1 = list.findIndex(node => node.value === 'b');
+var i2 = list.findIndex(node => node.previous && node.previous.value === 'b');
+var i3 = list.findIndex(node => node.value === 'x');
 
 /*
 i0 === 0
@@ -1296,7 +1326,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const found = list.get(1);
+var found = list.get(1);
 
 /*
 found.value === "b"
@@ -1310,7 +1340,7 @@ found.next.value === "c"
 #### indexOf(value [, compareFn])
 
 ```js
-indexOf(value: T, compareFn = compare): number
+indexOf(value: T, compareFn?: ListComparisonFn<T>): number
 ```
 
 Finds the position of the first node from the list that has the given value:
@@ -1320,10 +1350,10 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const i0 = list.indexOf('a');
-const i1 = list.indexOf('b');
-const i2 = list.indexOf('c');
-const i3 = list.indexOf('x');
+var i0 = list.indexOf('a');
+var i1 = list.indexOf('b');
+var i2 = list.indexOf('c');
+var i3 = list.indexOf('x');
 
 /*
 i0 === 0
@@ -1342,11 +1372,11 @@ list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-const i0 = indexOf(1, (value, searchedValue) => value.x === searchedValue);
-const i1 = indexOf(2, (value, searchedValue) => value.x === searchedValue);
-const i2 = indexOf(3, (value, searchedValue) => value.x === searchedValue);
-const i3 = indexOf(0, (value, searchedValue) => value.x === searchedValue);
-const i4 = indexOf(4, (value, searchedValue) => value.x === searchedValue);
+var i0 = indexOf(1, (value, searchedValue) => value.x === searchedValue);
+var i1 = indexOf(2, (value, searchedValue) => value.x === searchedValue);
+var i2 = indexOf(3, (value, searchedValue) => value.x === searchedValue);
+var i3 = indexOf(0, (value, searchedValue) => value.x === searchedValue);
+var i4 = indexOf(4, (value, searchedValue) => value.x === searchedValue);
 
 /*
 i0 === 0
@@ -1372,7 +1402,7 @@ There are a few ways to iterate over or display a linked list.
 #### forEach(iteratorFn)
 
 ```js
-forEach(iteratorFn: ListIteratorFunction<T>): void
+forEach(iteratorFn: ListIteratorFn<T>): void
 ```
 
 Runs a function on all nodes in a linked list from head to tail:
@@ -1399,7 +1429,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-for(const node of list) {
+for(const node of list) { /* ES6 for...of statement */
   console.log(node.value);
 }
 
@@ -1423,7 +1453,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const arr = list.toArray();
+var arr = list.toArray();
 
 /*
 arr === ['a', 'b', 'c']
@@ -1445,7 +1475,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const arr = list.toNodeArray();
+var arr = list.toNodeArray();
 
 /*
 arr[0].value === 'a'
@@ -1469,7 +1499,7 @@ list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
 
 // "a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}
 
-const str = list.toString();
+var str = list.toString();
 
 /*
 str === '"a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}'
@@ -1485,7 +1515,7 @@ list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }]).tail();
 
 // {"x":1} <-> {"x":2} <-> {"x":3} <-> {"x":4} <-> {"x":5}
 
-const str = list.toString(value => value.x);
+var str = list.toString(value => value.x);
 
 /*
 str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
