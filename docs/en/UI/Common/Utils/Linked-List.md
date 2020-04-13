@@ -127,7 +127,7 @@ list.addManyTail(['x', 'y', 'z']);
 
 
 
-#### addAfter(value, previousValue, compareFn)
+#### addAfter(value, previousValue [, compareFn])
 
 ```js
 addAfter(value: T, previousValue: T, compareFn = compare): ListNode<T>
@@ -174,7 +174,7 @@ list.addAfter(
 
 
 
-#### addManyAfter(values, previousValue, compareFn)
+#### addManyAfter(values, previousValue [, compareFn])
 
 ```js
 addManyAfter(values: T[], previousValue: T, compareFn = compare): ListNode<T>[]
@@ -216,7 +216,7 @@ list.addManyAfter(
 
 
 
-#### addBefore(value, nextValue, compareFn)
+#### addBefore(value, nextValue [, compareFn])
 
 ```js
 addBefore(value: T, nextValue: T, compareFn = compare): ListNode<T>
@@ -263,7 +263,7 @@ list.addBefore(
 
 
 
-#### addManyBefore(values, nextValue, compareFn)
+#### addManyBefore(values, nextValue [, compareFn])
 
 ```js
 addManyBefore(values: T[], nextValue: T, compareFn = compare): ListNode<T>[]
@@ -433,7 +433,7 @@ list.add('c').tail();
 
 
 
-#### add(value).after(previousValue, compareFn)
+#### add(value).after(previousValue [, compareFn])
 
 ```js
 add(value: T).after(previousValue: T, compareFn = compare): ListNode<T>
@@ -480,7 +480,7 @@ list
 
 
 
-#### add(value).before(nextValue, compareFn)
+#### add(value).before(nextValue [, compareFn])
 
 ```js
 add(value: T).before(nextValue: T, compareFn = compare): ListNode<T>
@@ -617,7 +617,7 @@ list.addMany(['x', 'y', 'z']).tail();
 
 
 
-#### addMany(values).after(previousValue, compareFn)
+#### addMany(values).after(previousValue [, compareFn])
 
 ```js
 addMany(values: T[]).after(previousValue: T, compareFn = compare): ListNode<T>[]
@@ -659,7 +659,7 @@ list
 
 
 
-#### addMany(values).before(nextValue, compareFn)
+#### addMany(values).before(nextValue [, compareFn])
 
 ```js
 addMany(values: T[]).before(nextValue: T, compareFn = compare): ListNode<T>[]
@@ -893,7 +893,7 @@ list.dropManyByIndex(2, -2);
 
 
 
-#### dropByValue(value, compareFn)
+#### dropByValue(value [, compareFn])
 
 ```js
 dropByValue(value: T, compareFn = compare): ListNode<T> | undefined
@@ -931,7 +931,7 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 
 
-#### dropByValueAll(value, compareFn)
+#### dropByValueAll(value [, compareFn])
 
 ```js
 dropByValueAll(value: T, compareFn = compare): ListNode<T>[]
@@ -1055,7 +1055,7 @@ list.drop().byIndex(-2);
 
 
 
-#### drop().byValue(value, compareFn)
+#### drop().byValue(value [, compareFn])
 
 ```js
 drop().byValue(value: T, compareFn = compare): ListNode<T> | undefined
@@ -1097,7 +1097,7 @@ list
 
 
 
-#### drop().byValueAll(value, compareFn)
+#### drop().byValueAll(value [, compareFn])
 
 ```js
 drop().byValueAll(value: T, compareFn = compare): ListNode<T>[]
@@ -1307,7 +1307,7 @@ found.next.value === "c"
 
 
 
-#### indexOf(value, compareFn)
+#### indexOf(value [, compareFn])
 
 ```js
 indexOf(value: T, compareFn = compare): number
@@ -1369,13 +1369,13 @@ There are a few ways to iterate over or display a linked list.
 
 
 
-#### forEach(callback)
+#### forEach(iteratorFn)
 
 ```js
-forEach(callback: ListIteratorFunction<T>): void
+forEach(iteratorFn: ListIteratorFunction<T>): void
 ```
 
-Runs a callback function on all nodes in a linked list from head to tail:
+Runs a function on all nodes in a linked list from head to tail:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1456,10 +1456,10 @@ arr[2].value === 'a'
 
 
 
-#### toString()
+#### toString([mapperFn])
 
 ```js
-toString(): string
+toString(mapperFn: ListMapperFn<T> = JSON.stringify): string
 ```
 
 Converts a linked list to a string representation of nodes and their relations:
