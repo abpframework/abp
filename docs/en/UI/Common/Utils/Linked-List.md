@@ -2,20 +2,29 @@
 
 
 
-The core module provides a useful data structure known as a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list). Briefly, a doubly linked list is a series of records (a.k.a. nodes) which has information on the previous node, the next node, and its own value (or data).
+The @abp/utils package provides a useful data structure known as a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list). It is availabe in both Angular (via an import) and MVC (via `abp.utils.common` global object).
+
+Briefly, a doubly linked list is a series of records (a.k.a. nodes) which has information on the previous node, the next node, and its own value (or data).
 
 
 
 ## Getting Started
 
-To create a doubly linked list, all you have to do is to import and create a new instance of it:
+To create a doubly linked list, all you have to do is to create a new instance of it:
+
+In Angular:
 
 ```js
-import { LinkedList } from '@abp/ng.core';
+import { LinkedList } from '@abp/utils';
 
 const list = new LinkedList();
 ```
 
+In MVC:
+
+```js
+var list = new abp.utils.common.LinkedList();
+```
 
 
 The constructor does not get any parameters.
