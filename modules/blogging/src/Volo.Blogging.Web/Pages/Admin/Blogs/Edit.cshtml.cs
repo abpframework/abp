@@ -29,7 +29,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
             _authorization = authorization;
         }
 
-        public async Task<ActionResult> OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Update))
             {
@@ -43,7 +43,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             await _blogAppService.Update(Blog.Id, new UpdateBlogDto()
             {

@@ -6,7 +6,7 @@ namespace Volo.ClientSimulation.Pages.ClientSimulation
 {
     public class IndexModel : PageModel
     {
-        public Task<IActionResult> OnGetAsync()
+        public virtual Task<IActionResult> OnGetAsync()
         {
             return Task.FromResult<IActionResult>(Page());
         }

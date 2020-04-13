@@ -46,14 +46,14 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _commentAppService = commentAppService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             await GetData();
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             var comment = await _commentAppService.CreateAsync(new CreateCommentDto()
             {

@@ -19,7 +19,7 @@ namespace Volo.Blogging.Pages.Blog
             _blogAppService = blogAppService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             var result = await _blogAppService.GetListAsync();
 

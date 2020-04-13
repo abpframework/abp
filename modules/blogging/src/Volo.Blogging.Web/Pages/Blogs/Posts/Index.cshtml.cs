@@ -35,7 +35,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _tagAppService = tagAppService;
         }
 
-        public async Task<ActionResult> OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Posts = (await _postAppService.GetListByBlogIdAndTagName(Blog.Id, TagName)).Items;
