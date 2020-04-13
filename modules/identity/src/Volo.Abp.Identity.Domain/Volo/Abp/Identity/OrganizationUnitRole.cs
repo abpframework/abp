@@ -2,7 +2,7 @@
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Identity.Organizations
+namespace Volo.Abp.Identity
 {
     /// <summary>
     /// Represents membership of a User to an OU.

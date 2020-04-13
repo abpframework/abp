@@ -1,6 +1,5 @@
 ﻿using MongoDB.Driver;
 using Volo.Abp.Data;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB

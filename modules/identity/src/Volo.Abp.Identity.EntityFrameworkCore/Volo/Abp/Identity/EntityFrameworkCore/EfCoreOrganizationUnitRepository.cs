@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {

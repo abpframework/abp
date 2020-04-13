@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity
 {

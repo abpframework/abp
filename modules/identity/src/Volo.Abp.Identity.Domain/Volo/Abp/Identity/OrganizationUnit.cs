@@ -5,7 +5,7 @@ using System.Linq;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Identity.Organizations
+namespace Volo.Abp.Identity
 {
     /// <summary>
     /// Represents an organization unit (OU).
@@ -52,8 +52,9 @@ namespace Volo.Abp.Identity.Organizations
         /// <param name="tenantId">Tenant's Id or null for host.</param>
         /// <param name="displayName">Display name.</param>
         /// <param name="parentId">Parent's Id or null if OU is a root.</param>
-        public OrganizationUnit(Guid? tenantId, string displayName, Guid? parentId = null)
+        public OrganizationUnit(Guid id, string displayName, Guid? parentId = null, Guid? tenantId = null)
         {
+            Id = id;
             TenantId = tenantId;
             DisplayName = displayName;
             ParentId = parentId;

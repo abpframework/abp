@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
-using Volo.Abp.Identity.Organizations;
-using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Uow;
 using Xunit;
-using System.Linq;
 
 namespace Volo.Abp.Identity
 {

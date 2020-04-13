@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.Identity.Organizations
+﻿namespace Volo.Abp.Identity
 {
-    public class OrganizationUnitConsts
+    public static class OrganizationUnitConsts
     {
         /// <summary>
         /// Maximum length of the <see cref="DisplayName"/> property.

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users.MongoDB;
 

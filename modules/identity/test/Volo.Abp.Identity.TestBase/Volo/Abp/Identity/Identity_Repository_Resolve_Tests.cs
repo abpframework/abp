@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Modularity;
 using Xunit;
 

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace Volo.Abp.Identity.Organizations
+namespace Volo.Abp.Identity
 {
     public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit, Guid>
     {

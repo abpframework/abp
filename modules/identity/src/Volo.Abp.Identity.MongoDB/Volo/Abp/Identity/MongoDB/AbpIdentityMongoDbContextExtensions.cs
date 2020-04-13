@@ -1,5 +1,4 @@
 ﻿using System;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB

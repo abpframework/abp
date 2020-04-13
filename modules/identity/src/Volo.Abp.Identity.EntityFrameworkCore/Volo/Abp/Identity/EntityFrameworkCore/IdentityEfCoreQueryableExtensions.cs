@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
@@ -140,6 +139,15 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         join role in DbContext.Roles.IncludeDetails(includeDetails) on userRole.RoleId equals role.Id
                         where userRole.UserId == id
                         select role;
+            //TODO
+            //var q2 = from userOrganization in DbContext.Set<IdentityUserOrganizationUnit>()
+            //         join userOrg in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOrganization.UserId equals id
+            //         select userOrg.Roles;
+            //var q3 = from ouRole in DbContext.Set<OrganizationUnitRole>()
+            //         join role in DbContext.Roles.IncludeDetails(includeDetails) on ouRole.RoleId equals role.Id
+            //         where ouRole.RoleId == id
+            //         select role;
+            //query = q2.Union(query);
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity
 {
@@ -88,7 +87,7 @@ namespace Volo.Abp.Identity
             var ou2 = await CreateOU("OU2", OrganizationUnit.CreateCode(2));
             var ou21 = await CreateOU("OU21", OrganizationUnit.CreateCode(2, 1), ou2.Id);
 
-            _ou111 = new OrganizationUnit(null, "OU111", ou11.Id);
+            _ou111 = new OrganizationUnit(_guidGenerator.Create(), "OU111", ou11.Id);
             _ou111.Code = OrganizationUnit.CreateCode(1, 1, 1);
             _ou111.AddRole(_moderatorRole.Id);
             _ou111.AddRole(_managerRole.Id);
@@ -134,7 +133,7 @@ namespace Volo.Abp.Identity
 
         private async Task<OrganizationUnit> CreateOU(string displayName, string code, Guid? parentId = null)
         {
-            var ou = await _organizationUnitRepository.InsertAsync(new OrganizationUnit(null, displayName, parentId) { Code = code });
+            var ou = await _organizationUnitRepository.InsertAsync(new OrganizationUnit(_guidGenerator.Create(), displayName, parentId) { Code = code });
             return ou;
         }
     }

@@ -8,7 +8,7 @@ using Volo.Abp.Identity.Localization;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Identity.Organizations
+namespace Volo.Abp.Identity
 {
     /// <summary>
     /// Performs domain logic for Organization Units.

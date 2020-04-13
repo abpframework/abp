@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Volo.Abp.Settings;

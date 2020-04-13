@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Users.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore

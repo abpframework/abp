@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Shouldly;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Volo.Abp.Identity.Organizations;
+using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -19,6 +16,7 @@ namespace Volo.Abp.Identity
         private readonly IIdentityRoleRepository _identityRoleRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IGuidGenerator _guidGenerator;
         public OrganizationUnitManager_Tests()
         {
             _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
@@ -27,12 +25,13 @@ namespace Volo.Abp.Identity
             _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
             _testData = GetRequiredService<IdentityTestData>();
             _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+            _guidGenerator = GetService<IGuidGenerator>();
         }
 
         [Fact]
         public async Task CreateAsnyc()
         {
-            await _organizationUnitManager.CreateAsync(new OrganizationUnit(null, "Root 1"));
+            await _organizationUnitManager.CreateAsync(new OrganizationUnit(_guidGenerator.Create(), "Root 1"));
 
             var root1 = await _organizationUnitRepository.GetOrganizationUnitAsync("Root 1");
             root1.ShouldNotBeNull();

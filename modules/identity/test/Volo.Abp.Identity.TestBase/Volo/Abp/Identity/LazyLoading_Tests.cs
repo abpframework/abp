@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 using Xunit;

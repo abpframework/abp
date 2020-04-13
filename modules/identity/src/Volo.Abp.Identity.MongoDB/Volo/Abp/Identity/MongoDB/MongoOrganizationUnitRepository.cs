@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
-using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
@@ -20,7 +19,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public async Task<List<OrganizationUnit>> GetChildrenAsync(
-            Guid? parentId, 
+            Guid? parentId,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -30,8 +29,8 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
-            string code, 
-            Guid? parentId, 
+            string code,
+            Guid? parentId,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -41,7 +40,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public async Task<List<OrganizationUnit>> GetListAsync(
-            IEnumerable<Guid> ids, 
+            IEnumerable<Guid> ids,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -51,8 +50,8 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public async Task<OrganizationUnit> GetOrganizationUnitAsync(
-            string displayName, 
-            bool includeDetails = false, 
+            string displayName,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
