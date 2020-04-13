@@ -1521,3 +1521,96 @@ var str = list.toString(value => value.x);
 str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
 */
 ```
+
+
+
+
+
+
+## API
+
+### Classes
+
+#### LinkedList
+
+```js
+export class LinkedList<T = any> {
+
+  // properties and methods are explained above
+
+}
+```
+
+
+
+#### ListNode
+
+```js
+export class ListNode<T = any> {
+  next: ListNode | undefined;
+
+  previous: ListNode | undefined;
+  
+  constructor(public readonly value: T) {}
+}
+```
+
+`ListNode` is the node that is being stored in the `LinkedList` for every record.
+
+- `value` is the value stored in the node and is passed through the constructor.
+- `next` refers to the next node in the list.
+- `previous` refers to the previous node in the list.
+
+```js
+list.addTailMany([ 0, 1, 2 ]);
+
+console.log(
+  list.head.value,                              // 0
+  list.head.next.value,                         // 1
+  list.head.next.next.value,                    // 2
+  list.head.next.next.previous.value,           // 1
+  list.head.next.next.previous.previous.value,  // 0
+  list.tail.value,                              // 2
+  list.tail.previous.value,                     // 1
+  list.tail.previous.previous.value,            // 0
+  list.tail.previous.previous.next.value,       // 1
+  list.tail.previous.previous.next.next.value,  // 2
+);
+```
+
+
+
+
+### Types
+
+#### ListMapperFn
+
+```js
+type ListMapperFn<T = any> = (value: T) => any;
+```
+
+This function is used in `toString` method to map the node values before generating a string representation of the list.
+
+
+
+#### ListComparisonFn
+
+```js
+type ListComparisonFn<T = any> = (nodeValue: T, comparedValue: any) => boolean;
+```
+
+This function is used while adding, dropping, ang finding nodes based on a comparison value.
+
+
+
+#### ListIteratorFn
+
+```js
+type ListIteratorFn<T = any, R = boolean> = (
+  node: ListNode<T>,
+  index?: number,
+  list?: LinkedList,
+) => R;
+```
+
+This function is used while iterating over the list either to do something with each node or to find a node.
