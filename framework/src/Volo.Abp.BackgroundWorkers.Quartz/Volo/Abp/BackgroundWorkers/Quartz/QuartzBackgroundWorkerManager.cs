@@ -31,12 +31,26 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
 
         public void Add(IBackgroundWorker worker)
         {
+            AsyncHelper.RunSync(() => ReScheduleJobAsync(worker));
+        }
+
+        private async Task ReScheduleJobAsync(IBackgroundWorker worker)
+        {
             if (worker is IQuartzBackgroundWorker quartzWork)
             {
                 Check.NotNull(quartzWork.Trigger, nameof(quartzWork.Trigger));
                 Check.NotNull(quartzWork.JobDetail, nameof(quartzWork.JobDetail));
-
-                AsyncHelper.RunSync(() => _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger));
+                
+                if (await _scheduler.CheckExists(quartzWork.JobDetail.Key))
+                {
+                    await _scheduler.AddJob(quartzWork.JobDetail, true);
+                    await _scheduler.ResumeJob(quartzWork.JobDetail.Key);
+                    await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger);
+                }
+                else
+                {
+                    await _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger);
+                }
             }
         }
     }
