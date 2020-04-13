@@ -8,7 +8,7 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
     [Dependency(ReplaceServices = true)]
     public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDependency
     {
-        public Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+        public virtual Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
             if (!delay.HasValue)

@@ -15,7 +15,7 @@ namespace Volo.Abp.BackgroundJobs.Quartz
             _scheduler = scheduler;
         }
 
-        public async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
+        public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
             var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().SetJobData(new JobDataMap { { nameof(TArgs), args } }).Build();

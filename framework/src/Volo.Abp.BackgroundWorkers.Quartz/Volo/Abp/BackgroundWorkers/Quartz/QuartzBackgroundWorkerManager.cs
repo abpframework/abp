@@ -16,12 +16,12 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             _scheduler = scheduler;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken = default)
+        public virtual async Task StartAsync(CancellationToken cancellationToken = default)
         {
             await _scheduler.ResumeAll(cancellationToken);
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken = default)
+        public virtual async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!_scheduler.IsShutdown)
             {
@@ -29,12 +29,12 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             }
         }
 
-        public void Add(IBackgroundWorker worker)
+        public virtual void Add(IBackgroundWorker worker)
         {
             AsyncHelper.RunSync(() => ReScheduleJobAsync(worker));
         }
 
-        private async Task ReScheduleJobAsync(IBackgroundWorker worker)
+        protected virtual async Task ReScheduleJobAsync(IBackgroundWorker worker)
         {
             if (worker is IQuartzBackgroundWorker quartzWork)
             {
