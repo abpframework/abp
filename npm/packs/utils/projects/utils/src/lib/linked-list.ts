@@ -354,9 +354,9 @@ export class LinkedList<T = any> {
     return -1;
   }
 
-  forEach<R = boolean>(callback: ListIteratorFn<T, R>) {
+  forEach<R = boolean>(iteratorFn: ListIteratorFn<T, R>) {
     for (let node = this.first, position = 0; node; position++, node = node.next) {
-      callback(node, position, this);
+      iteratorFn(node, position, this);
     }
   }
 
