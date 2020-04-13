@@ -31,9 +31,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
             AccountAppService = accountAppService;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             await CheckSelfRegistrationAsync();
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPostAsync()

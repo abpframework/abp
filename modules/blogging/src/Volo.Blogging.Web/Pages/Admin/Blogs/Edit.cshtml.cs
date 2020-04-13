@@ -43,7 +43,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
             return Page();
         }
 
-        public async Task OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             await _blogAppService.Update(Blog.Id, new UpdateBlogDto()
             {
@@ -51,6 +51,8 @@ namespace Volo.Blogging.Pages.Admin.Blogs
                 ShortName = Blog.ShortName,
                 Description = Blog.Description
             });
+
+            return Page();
         }
 
         public class BlogEditViewModel

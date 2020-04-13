@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Volo.Abp.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -17,16 +18,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ProfileAppService = profileAppService;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             var user = await ProfileAppService.GetAsync();
 
             PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
+
+            return Page();
         }
 
-        public virtual Task OnPostAsync()
+        public virtual Task<IActionResult> OnPostAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
     }
 

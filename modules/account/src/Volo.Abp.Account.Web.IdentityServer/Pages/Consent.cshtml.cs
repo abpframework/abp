@@ -42,7 +42,7 @@ namespace Volo.Abp.Account.Web.Pages
             _resourceStore = resourceStore;
         }
 
-        public virtual async Task OnGet()
+        public virtual async Task<IActionResult> OnGet()
         {
             var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
             if (request == null)
@@ -74,6 +74,8 @@ namespace Volo.Abp.Account.Web.Pages
             {
                 ConsentInput.ApiScopes.Add(GetOfflineAccessScope(true));
             }
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPost(string userDecision)

@@ -16,9 +16,9 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
             IdentityRoleAppService = identityRoleAppService;
         }
 
-        public virtual Task OnGetAsync()
+        public virtual Task<IActionResult> OnGetAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
 
         public virtual async Task<IActionResult> OnPostAsync()

@@ -16,10 +16,10 @@ namespace Volo.ClientSimulation.Pages.ClientSimulation
             Simulation = simulation;
         }
 
-        public Task OnGetAsync()
+        public Task<IActionResult> OnGetAsync()
         {
             Snapshot = Simulation.CreateSnapshot();
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
 
         public async Task<IActionResult> OnPostStartAsync()
