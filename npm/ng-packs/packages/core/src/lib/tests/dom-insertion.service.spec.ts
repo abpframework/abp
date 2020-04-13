@@ -49,4 +49,18 @@ describe('DomInsertionService', () => {
       expect(element.tagName).toBe('STYLE');
     });
   });
+
+  describe('#removeContent', () => {
+    it('should remove inserted element and the hash for the content', () => {
+      expect(document.head.querySelector('style')).toBeNull();
+      const element = spectator.service.insertContent(
+        CONTENT_STRATEGY.AppendStyleToHead('.test {}'),
+      );
+      expect(spectator.service.inserted.has(1437348290)).toBe(true);
+
+      spectator.service.removeContent(element);
+      expect(spectator.service.inserted.has(1437348290)).toBe(false);
+      expect(document.head.querySelector('style')).toBeNull();
+    });
+  });
 });

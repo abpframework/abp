@@ -18,4 +18,11 @@ export class DomInsertionService {
 
     return element;
   }
+
+  removeContent(element: HTMLScriptElement | HTMLStyleElement) {
+    const hash = generateHash(element.textContent);
+    this.inserted.delete(hash);
+
+    element.parentNode.removeChild(element);
+  }
 }
