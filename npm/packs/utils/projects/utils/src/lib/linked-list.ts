@@ -3,13 +3,9 @@
 import compare from 'just-compare';
 
 export class ListNode<T = any> {
-  readonly value: T;
   next: ListNode | undefined;
   previous: ListNode | undefined;
-
-  constructor(value: T) {
-    this.value = value;
-  }
+  constructor(public readonly value: T) {}
 }
 
 export class LinkedList<T = any> {
