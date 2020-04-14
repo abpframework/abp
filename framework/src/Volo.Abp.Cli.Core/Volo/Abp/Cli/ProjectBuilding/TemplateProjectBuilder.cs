@@ -60,10 +60,22 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 args.TemplateSource
             );
 
-            DeveloperApiKeyResult apiKeyResult;
+            DeveloperApiKeyResult apiKeyResult = null;
 
 #if DEBUG
-            apiKeyResult = _configuration.GetSection("apiKeyResult").Get<DeveloperApiKeyResult>(); //you can use user secrets
+            try
+            {
+                var apiKeyResultSection = _configuration.GetSection("apiKeyResult");
+                if (apiKeyResultSection.Exists())
+                {
+                    apiKeyResult = apiKeyResultSection.Get<DeveloperApiKeyResult>(); //you can use user secrets
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             if (apiKeyResult == null)
             {
                 apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
