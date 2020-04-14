@@ -58,7 +58,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string latestVersion;
 
 #if DEBUG
-            latestVersion = GetCurrentVersionFromAssembly();
+            latestVersion = await GetLatestSourceCodeVersionAsync(name, type, $"{CliUrls.WwwAbpIoProduction}api/download/{type}/get-version/");
 #else
             latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
 #endif
@@ -133,16 +133,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
         }
 
-        private static string GetCurrentVersionFromAssembly()
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var fullVersion = assembly.GetName().Version.ToString(); //eg: 2.6.0.0
-            return fullVersion.Substring(0, fullVersion.LastIndexOf('.')); //eg: 2.6.0
-        }
-
-        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
-        {
-            var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/";
+            if (url == null)
+            {
+                url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/";
+            }
 
             try
             {
