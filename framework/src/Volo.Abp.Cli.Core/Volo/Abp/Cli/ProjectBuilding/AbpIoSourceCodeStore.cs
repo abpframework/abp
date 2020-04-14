@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -52,10 +53,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string version = null,
             string templateSource = null)
         {
-
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
-            
-            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
+
+            string latestVersion;
+
+#if DEBUG
+            latestVersion = GetCurrentVersionFromAssembly();
+#else
+            latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
+#endif
             if (version == null)
             {
                 if (latestVersion == null)
@@ -64,7 +70,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Logger.LogWarning(string.Empty);
                     Logger.LogWarning("Find the following template in your cache directory: ");
                     Logger.LogWarning("\t Template Name\tVersion");
-                    
+
                     var templateList = GetLocalTemplates();
                     foreach (var cacheFile in templateList)
                     {
@@ -74,12 +80,18 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Logger.LogWarning(string.Empty);
                     throw new CliUsageException("Use command: abp new Acme.BookStore -v version");
                 }
-                
+
                 version = latestVersion;
             }
 
-            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
-            
+            string nugetVersion;
+
+#if DEBUG
+            nugetVersion = version;
+#else
+            nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
+#endif
+
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
                 Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
@@ -87,6 +99,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
 
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
+
+#if DEBUG
+            if (File.Exists(localCacheFile))
+            {
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
+            }
+#endif
+
             if (Options.CacheTemplates && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
             {
                 Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
@@ -111,7 +131,13 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
 
             return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
+        }
 
+        private static string GetCurrentVersionFromAssembly()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var fullVersion = assembly.GetName().Version.ToString(); //eg: 2.6.0.0
+            return fullVersion.Substring(0, fullVersion.LastIndexOf('.')); //eg: 2.6.0
         }
 
         private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
@@ -224,15 +250,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         private List<(string TemplateName, string Version)> GetLocalTemplates()
         {
-            var templateList = new List<(string TemplateName, string Version)>(); 
-            
+            var templateList = new List<(string TemplateName, string Version)>();
+
             var stringBuilder = new StringBuilder();
             foreach (var cacheFile in Directory.GetFiles(CliPaths.TemplateCache))
             {
                 stringBuilder.AppendLine(cacheFile);
             }
 
-            var matches = Regex.Matches(stringBuilder.ToString(),$"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName})-(.+).zip");
+            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName})-(.+).zip");
             foreach (Match match in matches)
             {
                 templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
