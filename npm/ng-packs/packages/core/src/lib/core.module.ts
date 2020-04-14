@@ -9,13 +9,16 @@ import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
+import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
 import { RouterOutletComponent } from './components/router-outlet.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { InputEventDebounceDirective } from './directives/debounce.directive';
 import { EllipsisDirective } from './directives/ellipsis.directive';
 import { ForDirective } from './directives/for.directive';
 import { FormSubmitDirective } from './directives/form-submit.directive';
+import { InitDirective } from './directives/init.directive';
 import { PermissionDirective } from './directives/permission.directive';
+import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
 import { ApiInterceptor } from './interceptors/api.interceptor';
@@ -26,13 +29,11 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugi
 import { LocaleProvider } from './providers/locale.provider';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
+import { ReplaceableComponentsState } from './states/replaceable-components.state';
 import { SessionState } from './states/session.state';
+import { CORE_OPTIONS } from './tokens/options.token';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import './utils/date-extensions';
-import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
-import { ReplaceableComponentsState } from './states/replaceable-components.state';
-import { InitDirective } from './directives/init.directive';
-import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 
 export function storageFactory(): OAuthStorage {
   return localStorage;
@@ -111,6 +112,10 @@ export class CoreModule {
         },
         {
           provide: NGXS_CONFIG_PLUGIN_OPTIONS,
+          useValue: { environment: options.environment },
+        },
+        {
+          provide: CORE_OPTIONS,
           useValue: options,
         },
         {
