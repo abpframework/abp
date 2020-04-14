@@ -379,7 +379,7 @@ public static class IdentityUserExtensions
 * 这些属性**不容易[自动映射](Object-To-Object-Mapping.md)到其他对象**.
 * 它**不会**为EF Core在数据库表中**创建字段**,因此在数据库中针对这个字段创建索引或搜索/排序并不容易.
 
-###　额外属性背后的实体
+### 额外属性背后的实体
 
 `IHasExtraProperties` 不限于与实体一起使用. 你可以为任何类型的类实现这个接口,使用 `GetProperty`,`SetProperty` 和其他相关方法.
 
