@@ -27,6 +27,9 @@ namespace Volo.Abp.Cli.ProjectBuilding
         [CanBeNull]
         public string TemplateSource { get; set; }
 
+        [CanBeNull]
+        public string ConnectionString { get; set; }
+
         [NotNull]
         public Dictionary<string, string> ExtraProperties { get; set; }
 
@@ -39,7 +42,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             MobileApp? mobileApp = null,
             [CanBeNull] string abpGitHubLocalRepositoryPath = null,
             [CanBeNull] string templateSource = null,
-            Dictionary<string, string> extraProperties = null)
+            Dictionary<string, string> extraProperties = null,
+            [CanBeNull] string connectionString = null)
         {
             SolutionName = Check.NotNull(solutionName, nameof(solutionName));
             TemplateName = templateName;
@@ -50,6 +54,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             AbpGitHubLocalRepositoryPath = abpGitHubLocalRepositoryPath;
             TemplateSource = templateSource;
             ExtraProperties = extraProperties ?? new Dictionary<string, string>();
+            ConnectionString = connectionString;
         }
     }
 }

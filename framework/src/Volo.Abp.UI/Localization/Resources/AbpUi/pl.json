@@ -39,6 +39,7 @@
     "PagerFirst": "Pierwsza",
     "PagerLast": "Ostatnia",
     "PagerInfo": "Pokaż od _START_ do _END_ z _TOTAL_ rekordów",
+    "PagerInfo{0}{1}{2}": "Pokaż od {0} do {1} z {2} rekordów",
     "PagerInfoEmpty": "Pokaż od 0 do 0 z 0 rekordów",
     "PagerInfoFiltered": "(filtruj od _MAX_ wszystkich rekordów)",
     "NoDataAvailableInDatatable": "Nie znaleziono danych w tabeli",

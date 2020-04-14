@@ -153,5 +153,5 @@ namespace BasicAspNetCoreApplication
 
 ## Zdrojový kód
 
-Získejte zdrojový kód vzorového projektu vytvořeného v tomto tutoriálů [z tohoto odkazu](https://github.com/abpframework/abp/tree/master/samples/BasicAspNetCoreApplication).
+Získejte zdrojový kód vzorového projektu vytvořeného v tomto tutoriálů [z tohoto odkazu](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication).
 

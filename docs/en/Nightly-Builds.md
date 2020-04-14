@@ -24,3 +24,18 @@ Now, you can install preview / nightly packages to your project from Nuget Brows
 3. Search a package. You will see prereleases of the package formatted as `(VERSION)-preview(DATE)` (like *v0.16.0-preview20190401* in this sample).
 4. You can click to the `Install` button to add package to your project.
 
+## Install & Uninstall Preview NPM Packages
+
+The latest version of preview NPM packages can be installed by the running below command in the root folder of application:
+
+```bash
+abp switch-to-preview
+```
+
+If you're using the ABP Framework preview packages, you can switch back to stable version using this command:
+
+```bash
+abp switch-to-stable
+```
+
+See the [ABP CLI documentation](./CLI.md) for more information.

@@ -8,6 +8,7 @@ using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Xunit;
@@ -198,7 +199,8 @@ namespace Volo.Abp.Validation
             {
                 context.Services.OnRegistred(onServiceRegistredContext =>
                 {
-                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType))
+                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
+                        !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
                     {
                         onServiceRegistredContext.Interceptors.TryAdd<ValidationInterceptor>();
                     }

@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.AutoMapper
 {
-    [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(
+        typeof(AbpAutoMapperModule),
+        typeof(AbpObjectExtendingTestModule)
+        )]
     public class AutoMapperTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

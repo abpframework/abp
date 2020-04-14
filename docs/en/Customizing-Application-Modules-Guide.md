@@ -21,7 +21,7 @@ This approach has the following benefits:
 
 However, there is a drawback:
 
-* You may not able to **customize** the module source code as it is in your own solution.
+* You may not able to **customize** the module because the module source is not in your solution.
 
 This document explains **how to customize or extend** a depended module without need to change its source code. While it is limited compared to a full source code change opportunity, there are still some good ways to make some customizations.
 
@@ -47,44 +47,16 @@ One alternative scenario could be re-packaging the module source code (as NuGet/
 
 ## Module Customization / Extending Approaches
 
-This section suggests some approaches if you decided to use pre-built application modules as NuGet/NPM package references.
+This section suggests some approaches if you decided to use pre-built application modules as NuGet/NPM package references. The following documents explain how to customize/extend existing modules in different ways:
 
-### Extending Entities
+* [Extending Entities](Customizing-Application-Modules-Extending-Entities.md)
+* [Overriding Services](Customizing-Application-Modules-Overriding-Services.md)
+* [Overriding the User Interface](Customizing-Application-Modules-Overriding-User-Interface.md)
 
-In some cases, you may want to add some additional properties (and database fields) for an entity defined in a depended module. This section will cover some different approaches to make this possible.
+### See Also
 
-#### Extra Properties
+Also, see the following documents:
 
-[Extra properties](Entities.md) is a way of storing some additional data on an entity without changing it. The entity should implement the `IHasExtraProperties` interface to allow it. All the aggregate root entities defined in the pre-built modules implement the `IHasExtraProperties` interface, so you can store extra properties on these entities.
-
-Example:
-
-````csharp
-//SET AN EXTRA PROPERTY
-var user = await _identityUserRepository.GetAsync(userId);
-user.SetProperty("Title", "My custom title value!");
-await _identityUserRepository.UpdateAsync(user);
-
-//GET AN EXTRA PROPERTY
-var user = await _identityUserRepository.GetAsync(userId);
-return user.GetProperty<string>("Title");
-````
-
-This approach is very easy to use and available out of the box. No extra code needed. You can store more than one property at the same time by using different property names (like `Title` here).
-
-Extra properties are stored as a single `JSON` formatted string value in the database for the EF Core. For MongoDB, they are stored as separate fields of the document.
-
-See the [entities document](Entities.md) for more about the extra properties system.
-
-> It is possible to perform a **business logic** based on the value of an extra property. You can **override** a service method and get or set the value as shown above. Overriding services will be discussed below.
-
-#### Creating a New Entity Maps to the Same Database Table/Collection
-
-While using the extra properties approach is easy to use and suitable for some scenarios, it has some drawbacks described in the [entities document](Entities.md).
-
-Another approach can be creating your own entity mapped to the same database table (or collection for a MongoDB database).
-
-`AppUser` entity in the [application startup template](Startup-Templates/Application.md) already implements this approach. [EF Core Migrations document](Entity-Framework-Core-Migrations.md) describes how to implement it and manage database migrations in such a case. It is also possible for MongoDB, while this time you won't deal with the database migration problems.
-
-#### Creating a New Entity with Its Own Database Table/Collection
-
+* See [the localization document](Localization.md) to learn how to extend existing localization resources.
+* See [the settings document](Settings.md) to learn how to change setting definitions of a depended module.
+* See [the authorization document](Authorization.md) to learn how to change permission definitions of a depended module.

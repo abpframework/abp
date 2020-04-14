@@ -5,11 +5,18 @@
     var $submitButton = $container.find("button[type=submit]");
     var $form = $container.find("form#new-post-form");
     var editorDataKey = "tuiEditor";
+    var $titleLengthWarning = $("#title-length-warning");
+    var maxTitleLength = parseInt($titleLengthWarning.data("max-length"));
+    var $title = $('#Post_Title');
+    var $url = $('#Post_Url');
+    var $coverImage = $("#CoverImage");
+    var $postCoverImage = $('#Post_CoverImage');
+    var $coverImageFile = $('#CoverImageFile');
 
     var setCoverImage = function (file) {
-        $('#Post_CoverImage').val(file.fileUrl);
-        $("#CoverImage").attr("src", file.fileUrl);
-        $("#CoverImage").show();
+        $postCoverImage.val(file.fileUrl);
+        $coverImage.attr("src", file.fileUrl);
+        $coverImage.show();
     };
 
     var uploadCoverImage = function (file) {
@@ -28,11 +35,11 @@
         });
     };
 
-    $('#CoverImageFile').change(function () {
-        if (!$('#CoverImageFile').prop('files').length) {
+    $coverImageFile.change(function () {
+        if (!$coverImageFile.prop('files').length) {
             return;
         }
-        var file = $('#CoverImageFile').prop('files')[0];
+        var file = $coverImageFile.prop('files')[0];
         uploadCoverImage(file);
     });
 
@@ -40,7 +47,7 @@
         var formData = new FormData();
         formData.append('file', file);
 
-        $.ajax({ 
+        $.ajax({
             type: "POST",
             url: "/api/blogging/files/images/upload",
             data: formData,
@@ -92,30 +99,33 @@
 
         $submitButton.buttonBusy();
         $(this).off('submit').submit();
+        return true;
     });
 
     var urlEdited = false;
     var reflectedChange = false;
 
-    $('#Post_Title').on("change paste keyup", function () {
+    $title.on("change paste keyup", function () {
         if (urlEdited) {
             return;
         }
 
-        var title = $('#Post_Title').val();
+        var title = $title.val();
 
-        if (title.length > 64) {
-            title = title.substring(0, 64);
+        if (title.length > maxTitleLength) {
+            $titleLengthWarning.show();
+        } else {
+            $titleLengthWarning.hide();
         }
 
         title = title.replace(' ', '-');
         title = title.replace(new RegExp(' ', 'g'), '-');
         reflectedChange = true;
-        $('#Post_Url').val(title);
+        $url.val(title);
         reflectedChange = false;
     });
 
-    $('#Post_Url').change(function () {
+    $url.change(function () {
         if (!reflectedChange) {
             urlEdited = true;
         }

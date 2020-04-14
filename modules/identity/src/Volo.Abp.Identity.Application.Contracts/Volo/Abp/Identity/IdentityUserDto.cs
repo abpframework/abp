@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserDto : FullAuditedEntityDto<Guid>, IMultiTenant, IHasConcurrencyStamp
+    public class IdentityUserDto : ExtensibleFullAuditedEntityDto<Guid>, IMultiTenant, IHasConcurrencyStamp
     {
         public Guid? TenantId { get; set; }
 

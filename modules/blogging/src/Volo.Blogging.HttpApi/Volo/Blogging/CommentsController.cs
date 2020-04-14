@@ -9,7 +9,7 @@ using Volo.Blogging.Comments.Dtos;
 
 namespace Volo.Blogging
 {
-    [RemoteService]
+    [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
     [Area("blogging")]
     [Route("api/blogging/comments")]
     public class CommentsController : AbpController, ICommentAppService

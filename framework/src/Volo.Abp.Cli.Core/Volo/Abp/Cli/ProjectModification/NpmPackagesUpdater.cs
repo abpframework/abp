@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -51,14 +53,100 @@ namespace Volo.Abp.Cli.ProjectModification
                 {
                     var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
 
+                    if (IsAngularProject(fileDirectory))
+                    {
+                        if (includePreviews)
+                        {
+                            await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
+                        }
+                        else if (switchToStable)
+                        {
+                            await DeleteNpmrcFileAsync(Path.GetDirectoryName(file));
+                        }
+                    }
+
                     RunYarn(fileDirectory);
 
-                    if (IsAngularProject(fileDirectory) == false)
+                    if (!IsAngularProject(fileDirectory))
                     {
                         Thread.Sleep(500);
                         RunGulp(fileDirectory);
                     }
                 }
+            }
+        }
+
+        private async Task DeleteNpmrcFileAsync(string directoryName)
+        {
+            var fileName = Path.Combine(directoryName, ".npmrc");
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+        }
+
+        private async Task CreateNpmrcFileAsync(string directoryName)
+        {
+            var fileName = Path.Combine(directoryName, ".npmrc");
+
+            var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
+            var voloRegistry = await GetVoloRegistryAsync();
+
+            if (File.Exists(fileName))
+            {
+                var fileContent = File.ReadAllText(fileName);
+
+                if (!fileContent.Contains(abpRegistry))
+                {
+                    fileContent += Environment.NewLine + abpRegistry;
+                }
+
+                if (!fileContent.Contains(voloRegistry))
+                {
+                    fileContent += Environment.NewLine + voloRegistry;
+                }
+
+                File.WriteAllText(fileName, fileContent);
+
+                return;
+            }
+
+            using var fs = File.Create(fileName);
+
+            var content = new UTF8Encoding(true)
+                .GetBytes(abpRegistry + Environment.NewLine + voloRegistry);
+            fs.Write(content, 0, content.Length);
+        }
+
+        private async Task<string> GetVoloRegistryAsync()
+        {
+            var apikey = await GetApiKeyAsync();
+
+            if (string.IsNullOrWhiteSpace(apikey))
+            {
+                return "";
+            }
+
+            return "@volo:registry=https://www.myget.org/F/abp-commercial/auth/" + apikey + "/npm/";
+        }
+
+        public async Task<string> GetApiKeyAsync()
+        {
+            try
+            {
+                using (var client = new CliHttpClient(TimeSpan.FromMinutes(1)))
+                {
+                    var responseMessage = await client.GetAsync(
+                        $"{CliUrls.WwwAbpIo}api/myget/apikey/"
+                    );
+
+                    return Encoding.Default.GetString(await responseMessage.Content.ReadAsByteArrayAsync());
+                }
+            }
+            catch (Exception)
+            {
+                return "";
             }
         }
 
@@ -99,26 +187,21 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual async Task<bool> TryUpdatePackage(string file, JProperty package,
             bool includePreviews = false, bool switchToStable = false)
         {
-            var updated = false;
             var currentVersion = (string)package.Value;
 
             var version = await GetLatestVersion(package, currentVersion, includePreviews, switchToStable);
 
-            var versionWithPrefix = $"^{version}";
+            var versionWithPrefix = $"~{version}";
 
             if (versionWithPrefix == currentVersion)
             {
                 return false;
             }
-            else
-            {
-                updated = true;
-            }
 
             package.Value.Replace(versionWithPrefix);
 
             Logger.LogInformation($"Updated {package.Name} to {version} in {file.Replace(Directory.GetCurrentDirectory(), "")}.");
-            return updated;
+            return true;
         }
 
         protected virtual async Task<string> GetLatestVersion(JProperty package, string currentVersion,

@@ -54,7 +54,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
           if (newValue && !this.rootNode) {
             this.rootNode = (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0];
             this.targetElement.appendChild(this.rootNode);
-          } else {
+          } else if (this.rootNode) {
             this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
             this.rootNode = null;
           }

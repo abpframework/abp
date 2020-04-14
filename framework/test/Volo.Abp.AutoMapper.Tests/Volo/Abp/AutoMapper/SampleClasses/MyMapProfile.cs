@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Volo.Abp.ObjectExtending.TestObjects;
 
 namespace Volo.Abp.AutoMapper.SampleClasses
 {
@@ -7,6 +8,9 @@ namespace Volo.Abp.AutoMapper.SampleClasses
         public MyMapProfile()
         {
             CreateMap<MyEntity, MyEntityDto>().ReverseMap();
+
+            CreateMap<ExtensibleTestPerson, ExtensibleTestPersonDto>()
+                .MapExtraProperties(ignoredProperties: new[] { "CityName" });
         }
     }
 }

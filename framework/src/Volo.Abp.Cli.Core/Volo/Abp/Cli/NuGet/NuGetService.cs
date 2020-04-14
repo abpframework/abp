@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Polly;
 using Polly.Extensions.Http;
+using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -32,7 +33,8 @@ namespace Volo.Abp.Cli.NuGet
         public NuGetService(
             IJsonSerializer jsonSerializer,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
-            ICancellationTokenProvider cancellationTokenProvider, IApiKeyService apiKeyService)
+            ICancellationTokenProvider cancellationTokenProvider,
+            IApiKeyService apiKeyService)
         {
             JsonSerializer = jsonSerializer;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
@@ -43,20 +45,32 @@ namespace Volo.Abp.Cli.NuGet
 
         public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includePreviews = false, bool includeNightly = false)
         {
-            var url = includeNightly ?
-                $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json" :
-                $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+            List<string> proPackageList = null;
+
+            if (AuthService.IsLoggedIn())
+            {
+                proPackageList = await GetProPackageListAsync();
+            }
+
+            string url;
+            if (includeNightly)
+            {
+                url =
+                    $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+            }
+            else if (proPackageList?.Contains(packageId) ?? false)
+            {
+                url = await GetNuGetUrlForCommercialPackage(packageId);
+            }
+            else
+            {
+                url = $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
+            }
 
 
             using (var client = new CliHttpClient(setBearerToken: false))
             {
                 var responseMessage = await GetHttpResponseMessageWithRetryAsync(client, url);
-
-                if (responseMessage.StatusCode == HttpStatusCode.NotFound)
-                {
-                    var commercialNuGetUrl = await GetNuGetUrlForCommercialPackage(packageId);
-                    responseMessage = await GetHttpResponseMessageWithRetryAsync(client, commercialNuGetUrl);
-                }
 
                 if (!responseMessage.IsSuccessStatusCode)
                 {
@@ -95,8 +109,8 @@ namespace Volo.Abp.Cli.NuGet
                 .OrResult(msg => !msg.IsSuccessStatusCode)
                 .WaitAndRetryAsync(new[]
                     {
-                        TimeSpan.FromSeconds(1),
-                        TimeSpan.FromSeconds(3),
+                        TimeSpan.FromSeconds(2),
+                        TimeSpan.FromSeconds(4),
                         TimeSpan.FromSeconds(7)
                     },
                     (responseMessage, timeSpan, retryCount, context) =>
@@ -117,6 +131,30 @@ namespace Volo.Abp.Cli.NuGet
                 .ExecuteAsync(async () => await client.GetAsync(url, CancellationTokenProvider.Token));
         }
 
+        private async Task<List<string>> GetProPackageListAsync()
+        {
+            using var client = new CliHttpClient();
+
+            var responseMessage = await client.GetAsync(
+                $"{CliUrls.WwwAbpIo}api/app/nugetPackage/proPackageNames",
+                CancellationTokenProvider.Token
+            );
+
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+                var remoteServiceErrorMessage = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+
+                if (remoteServiceErrorMessage != null)
+                {
+                    exceptionMessage += remoteServiceErrorMessage;
+                }
+                Logger.LogInformation(exceptionMessage);
+                return null;
+            }
+
+            return JsonSerializer.Deserialize<List<string>>(await responseMessage.Content.ReadAsStringAsync());
+        }
 
         public class NuGetVersionResultDto
         {

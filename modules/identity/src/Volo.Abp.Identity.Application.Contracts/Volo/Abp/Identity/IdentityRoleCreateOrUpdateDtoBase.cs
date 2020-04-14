@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityRoleCreateOrUpdateDtoBase
+    public class IdentityRoleCreateOrUpdateDtoBase : ExtensibleObject
     {
         [Required]
         [StringLength(IdentityRoleConsts.MaxNameLength)]

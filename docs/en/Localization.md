@@ -191,3 +191,7 @@ Localize a string:
 ````js
 var str = testResource('HelloWorld');
 ````
+
+## See Also
+
+* [Localization in Angular UI](UI/Angular/Localization.md)

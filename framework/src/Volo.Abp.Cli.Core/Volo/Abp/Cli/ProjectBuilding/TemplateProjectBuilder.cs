@@ -4,10 +4,12 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -24,12 +26,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected IJsonSerializer JsonSerializer { get; }
         protected IApiKeyService ApiKeyService { get; }
 
+        private readonly IConfiguration _configuration;
+
         public TemplateProjectBuilder(ISourceCodeStore sourceCodeStore,
             ITemplateInfoProvider templateInfoProvider,
             ICliAnalyticsCollect cliAnalyticsCollect,
             IOptions<AbpCliOptions> options,
             IJsonSerializer jsonSerializer,
-            IApiKeyService apiKeyService)
+            IApiKeyService apiKeyService,
+            IConfiguration configuration)
         {
             SourceCodeStore = sourceCodeStore;
             TemplateInfoProvider = templateInfoProvider;
@@ -37,6 +42,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             Options = options.Value;
             JsonSerializer = jsonSerializer;
             ApiKeyService = apiKeyService;
+            _configuration = configuration;
 
             Logger = NullLogger<TemplateProjectBuilder>.Instance;
         }
@@ -54,10 +60,40 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 args.TemplateSource
             );
 
-            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
-            if (apiKeyResult?.ApiKey != null)
+            DeveloperApiKeyResult apiKeyResult = null;
+
+#if DEBUG
+            try
             {
-                args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
+                var apiKeyResultSection = _configuration.GetSection("apiKeyResult");
+                if (apiKeyResultSection.Exists())
+                {
+                    apiKeyResult = apiKeyResultSection.Get<DeveloperApiKeyResult>(); //you can use user secrets
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            if (apiKeyResult == null)
+            {
+                apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
+            }
+#else
+            apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
+#endif
+
+            if (apiKeyResult != null)
+            {
+                if (apiKeyResult.ApiKey != null)
+                {
+                    args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
+                }
+                else if (templateInfo.Name == AppProTemplate.TemplateName)
+                {
+                    throw new UserFriendlyException(apiKeyResult.ErrorMessage);
+                }
             }
 
             if (apiKeyResult?.LicenseCode != null)
@@ -82,7 +118,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             // Exclude unwanted or known options.
             var options = args.ExtraProperties
                 .Where(x => !x.Key.Equals(CliConsts.Command, StringComparison.InvariantCultureIgnoreCase))
-                .Where(x => !x.Key.Equals("tiered", StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.Tiered.Long, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.DatabaseProvider.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.DatabaseProvider.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.OutputFolder.Long, StringComparison.InvariantCultureIgnoreCase) &&
@@ -102,7 +138,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 Tool = Options.ToolName,
                 Command = args.ExtraProperties.ContainsKey(CliConsts.Command) ? args.ExtraProperties[CliConsts.Command] : "",
                 DatabaseProvider = args.DatabaseProvider.ToProviderName(),
-                IsTiered = args.ExtraProperties.ContainsKey("tiered"),
+                IsTiered = args.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long),
                 UiFramework = args.UiFramework.ToFrameworkName(),
                 Options = JsonSerializer.Serialize(options),
                 ProjectName = args.SolutionName.FullName,

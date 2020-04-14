@@ -6,19 +6,19 @@ namespace Volo.Abp.IdentityServer.Clients
 {
     public class ClientStore : IClientStore
     {
-        private readonly IClientRepository _clientRepository;
-        private readonly IObjectMapper<AbpIdentityServerDomainModule> _objectMapper;
+        protected IClientRepository ClientRepository { get; }
+        protected IObjectMapper<AbpIdentityServerDomainModule> ObjectMapper { get; }
 
         public ClientStore(IClientRepository clientRepository, IObjectMapper<AbpIdentityServerDomainModule> objectMapper)
         {
-            _clientRepository = clientRepository;
-            _objectMapper = objectMapper;
+            ClientRepository = clientRepository;
+            ObjectMapper = objectMapper;
         }
 
         public virtual async Task<IdentityServer4.Models.Client> FindClientByIdAsync(string clientId)
         {
-            var client = await _clientRepository.FindByCliendIdAsync(clientId);
-            return _objectMapper.Map<Client, IdentityServer4.Models.Client>(client);
+            var client = await ClientRepository.FindByCliendIdAsync(clientId);
+            return ObjectMapper.Map<Client, IdentityServer4.Models.Client>(client);
         }
     }
 }

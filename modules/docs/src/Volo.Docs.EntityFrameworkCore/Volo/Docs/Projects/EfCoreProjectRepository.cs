@@ -13,10 +13,9 @@ namespace Volo.Docs.Projects
 {
     public class EfCoreProjectRepository : EfCoreRepository<IDocsDbContext, Project, Guid>, IProjectRepository
     {
-        public EfCoreProjectRepository(IDbContextProvider<IDocsDbContext> dbContextProvider) 
+        public EfCoreProjectRepository(IDbContextProvider<IDocsDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
-
         }
 
         public async Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount)
@@ -30,7 +29,9 @@ namespace Volo.Docs.Projects
 
         public async Task<Project> GetByShortNameAsync(string shortName)
         {
-            var project = await DbSet.FirstOrDefaultAsync(p => p.ShortName == shortName);
+            var normalizeShortName = NormalizeShortName(shortName);
+            
+            var project = await DbSet.FirstOrDefaultAsync(p => p.ShortName == normalizeShortName);
 
             if (project == null)
             {
@@ -38,6 +39,18 @@ namespace Volo.Docs.Projects
             }
 
             return project;
+        }
+
+        public async Task<bool> ShortNameExistsAsync(string shortName)
+        {
+            var normalizeShortName = NormalizeShortName(shortName);
+            
+            return await DbSet.AnyAsync(x => x.ShortName == normalizeShortName);
+        }
+        
+        private string NormalizeShortName(string shortName)
+        {
+            return shortName.ToLower();
         }
     }
 }

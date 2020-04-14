@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -64,9 +66,10 @@ namespace Volo.Docs.Pages.Documents.Project
         public DocumentParametersDto DocumentPreferences { get; set; }
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
-        
+
         public bool FullSearchEnabled { get; set; }
 
+        private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
@@ -590,6 +593,23 @@ namespace Volo.Docs.Pages.Documents.Project
                     DocumentPreferences.Parameters.Add(newParameter);
                 }
             }
+        }
+
+        public string GetDescription()
+        {
+            var firstParagraph = new Regex(@"<p>(.*?)</p>", RegexOptions.IgnoreCase);
+            var match = firstParagraph.Match(Document.Content);
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            var description = HttpUtility.HtmlDecode(match.Value);
+
+            var htmlTagReplacer = new Regex(@"<[^>]*>", RegexOptions.IgnoreCase);
+            description = htmlTagReplacer.Replace(description, m => string.Empty);
+
+            return description.Truncate(MaxDescriptionMetaTagLength);
         }
     }
 }

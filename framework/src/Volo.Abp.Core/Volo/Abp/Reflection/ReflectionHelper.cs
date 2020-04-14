@@ -53,14 +53,14 @@ namespace Volo.Abp.Reflection
 
             if (givenTypeInfo.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
             {
-                result.Add(givenType);
+                result.AddIfNotContains(givenType);
             }
 
             foreach (var interfaceType in givenTypeInfo.GetInterfaces())
             {
                 if (interfaceType.GetTypeInfo().IsGenericType && interfaceType.GetGenericTypeDefinition() == genericType)
                 {
-                    result.Add(interfaceType);
+                    result.AddIfNotContains(interfaceType);
                 }
             }
 
@@ -108,6 +108,23 @@ namespace Volo.Abp.Reflection
                    ?? defaultValue;
         }
 
+        /// <summary>
+        /// Tries to gets attributes defined for a class member and it's declaring type including inherited attributes.
+        /// </summary>
+        /// <typeparam name="TAttribute">Type of the attribute</typeparam>
+        /// <param name="memberInfo">MemberInfo</param>
+        /// <param name="inherit">Inherit attribute from base classes</param>
+        public static IEnumerable<TAttribute> GetAttributesOfMemberOrDeclaringType<TAttribute>(MemberInfo memberInfo, bool inherit = true)
+            where TAttribute : class
+        {
+            var customAttributes = memberInfo.GetCustomAttributes(true).OfType<TAttribute>();
+            var declaringTypeCustomAttributes =
+                memberInfo.DeclaringType?.GetTypeInfo().GetCustomAttributes(true).OfType<TAttribute>();
+            return declaringTypeCustomAttributes != null
+                ? customAttributes.Concat(declaringTypeCustomAttributes).Distinct()
+                : customAttributes;
+        }
+        
         /// <summary>
         /// Gets value of a property by it's full path from given object
         /// </summary>

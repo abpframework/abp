@@ -23,8 +23,8 @@ Here, a list of localization text files for anyone wants to contribute to locali
 * https://github.com/abpframework/abp/tree/master/modules/permission-management/src/Volo.Abp.PermissionManagement.Domain.Shared/Volo/Abp/PermissionManagement/Localization/Domain/en.json
 * https://github.com/abpframework/abp/tree/master/modules/setting-management/src/Volo.Abp.SettingManagement.Domain.Shared/Volo/Abp/SettingManagement/Localization/Resources/AbpSettingManagement/en.json
 * https://github.com/abpframework/abp/tree/master/modules/tenant-management/src/Volo.Abp.TenantManagement.Domain.Shared/Volo/Abp/TenantManagement/Localization/Resources/en.json
-* https://github.com/abpframework/abp/tree/master/samples/BookStore/src/Acme.BookStore.Domain.Shared/Localization/BookStore/en.json
-* https://github.com/abpframework/abp/tree/master/samples/DashboardDemo/src/DashboardDemo.Domain.Shared/Localization/DashboardDemo/en.json
+* https://github.com/abpframework/abp-samples/tree/master/BookStore/src/Acme.BookStore.Domain.Shared/Localization/BookStore/en.json
+* https://github.com/abpframework/abp-samples/tree/master/DashboardDemo/src/DashboardDemo.Domain.Shared/Localization/DashboardDemo/en.json
 * https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo/modules/product/src/ProductManagement.Application.Contracts/ProductManagement/Localization/ApplicationContracts/en.json
 * https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo/modules/product/src/ProductManagement.Domain/ProductManagement/Localization/Domain/en.json
 * https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo/modules/product/src/ProductManagement.Web/Localization/Resources/ProductManagement/en.json

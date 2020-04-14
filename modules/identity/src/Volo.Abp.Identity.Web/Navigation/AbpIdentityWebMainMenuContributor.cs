@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity.Web.Navigation
 {
     public class AbpIdentityWebMainMenuContributor : IMenuContributor
     {
-        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public virtual async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name != StandardMenus.Main)
             {

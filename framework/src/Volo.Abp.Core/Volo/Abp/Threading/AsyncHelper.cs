@@ -27,6 +27,11 @@ namespace Volo.Abp.Threading
             return type == typeof(Task) || (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>));
         }
 
+        public static bool IsTaskOfT([NotNull] this Type type)
+        {
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>);
+        }
+
         /// <summary>
         /// Returns void if given type is Task.
         /// Return T, if given type is Task{T}.
@@ -41,7 +46,7 @@ namespace Volo.Abp.Threading
                 return typeof(void);
             }
 
-            if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+            if (type.IsTaskOfT())
             {
                 return type.GenericTypeArguments[0];
             }

@@ -5,6 +5,7 @@
       "items": [
         {
           "text": "From Startup Templates",
+          "path": "Getting-Started-With-Startup-Templates.md",
           "items": [
             {
               "text": "Application with MVC (Razor Pages) UI",
@@ -58,7 +59,25 @@
       "items": [
         {
           "text": "Customizing the Application Modules",
-          "path": "Customizing-Application-Modules-Guide.md"
+          "path": "Customizing-Application-Modules-Guide.md",
+          "items": [
+            {
+              "text": "Extending Entities",
+              "path": "Customizing-Application-Modules-Extending-Entities.md"
+            },
+            {
+              "text": "Overriding Services",
+              "path": "Customizing-Application-Modules-Overriding-Services.md"
+            },
+            {
+              "text": "Overriding the User Interface",
+              "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
+            }
+          ]
+        },
+        {
+          "text": "\"How to\" Guides",
+          "path": "How-To/Index.md"
         },
         {
           "text": "Migrating from the ASP.NET Boilerplate",
@@ -136,6 +155,10 @@
         {
           "text": "Data Filtering",
           "path": "Data-Filtering.md"
+        },
+        {
+          "text": "Object Extensions",
+          "path": "Object-Extensions.md"
         }
       ]
     },
@@ -251,52 +274,105 @@
       ]
     },
     {
-      "text": "ASP.NET Core",
+      "text": "API",
       "items": [
         {
-          "text": "API",
+          "text": "Auto API Controllers",
+          "path": "API/Auto-API-Controllers.md"
+        },
+        {
+          "text": "Dynamic C# API Clients",
+          "path": "API/Dynamic-CSharp-API-Clients.md"
+        }
+      ]
+    },
+    {
+      "text": "User Interface",
+      "items": [
+        {
+          "text": "ASP.NET Core",
           "items": [
             {
-              "text": "Auto API Controllers",
-              "path": "AspNetCore/Auto-API-Controllers.md"
+              "text": "Client Side Package Management",
+              "path": "UI/AspNetCore/Client-Side-Package-Management.md"
             },
             {
-              "text": "Dynamic C# API Clients",
-              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+              "text": "Bundling & Minification",
+              "path": "UI/AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "Widgets",
+              "path": "UI/AspNetCore/Widgets.md"
+            },
+            {
+              "text": "Theming",
+              "path": "UI/AspNetCore/Theming.md"
+            },
+            {
+              "text": "Customize/Extend the UI",
+              "path": "UI/AspNetCore/Customization-User-Interface.md"
             }
           ]
         },
         {
-          "text": "User Interface",
+          "text": "Angular",
           "items": [
             {
-              "text": "Client Side Package Management",
-              "path": "AspNetCore/Client-Side-Package-Management.md"
+              "text": "Service Proxies",
+              "path": "UI/Angular/Service-Proxies.md"
             },
             {
-              "text": "Bundling & Minification",
-              "path": "AspNetCore/Bundling-Minification.md"
+              "text": "HTTP Requests",
+              "path": "UI/Angular/HTTP-Requests.md"
             },
             {
-              "text": "Tag Helpers",
-              "items":[
-                {
-                  "text": "Live Demo",
-                  "path": "AspNetCore/Tag-Helpers/Index.md"
-                },
-                {
-                  "text": "Buttons",
-                  "path": "AspNetCore/Tag-Helpers/Buttons.md"
-                }
-              ]
+              "text": "Localization",
+              "path": "UI/Angular/Localization.md"
             },
             {
-              "text": "Widgets",
-              "path": "AspNetCore/Widgets.md"
+              "text": "Permission Management",
+              "path": "UI/Angular/Permission-Management.md"
             },
             {
-              "text": "Theming",
-              "path": "AspNetCore/Theming.md"
+              "text": "Config State",
+              "path": "UI/Angular/Config-State.md"
+            },
+            {
+              "text": "Component Replacement",
+              "path": "UI/Angular/Component-Replacement.md"
+            },
+            {
+              "text": "Custom Setting Page",
+              "path": "UI/Angular/Custom-Setting-Page.md"
+            },
+            {
+              "text": "Lazy Loading Scripts & Styles",
+              "path": "UI/Angular/Lazy-Load-Service.md"
+            },
+            {
+              "text": "DomInsertionService",
+              "path": "UI/Angular/Dom-Insertion-Service.md"
+            },
+            {
+              "text": "ContentProjectionService",
+              "path": "UI/Angular/Content-Projection-Service.md"
+            },
+            {
+              "text": "TrackByService",
+              "path": "UI/Angular/Track-By-Service.md"
+            }
+          ]
+        },
+        {
+          "text": "Common",
+          "items": [
+            {
+              "text": "Linked List (Doubly)",
+              "path": "UI/Common/Utils/Linked-List.md"
             }
           ]
         }
