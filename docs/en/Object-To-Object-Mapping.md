@@ -145,6 +145,23 @@ options.AddProfile<MyProfile>(validate: true);
 
 > If you have multiple profiles and need to enable validation only for a few of them, first use `AddMaps` without validation, then use `AddProfile` for each profile you want to validate.
 
+### Mapping the Object Extensions
+
+[Object extension system](Object-Extensions.md) allows to define extra properties for existing classes. ABP Framework provides a mapping definition extension to properly map extra properties of two objects.
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<User, UserDto>()
+            .MapExtraProperties();
+    }
+}
+````
+
+It is suggested to use the `MapExtraProperties()` method if both classes are extensible objects (implement the `IHasExtraProperties` interface). See the [object extension document](Object-Extensions.md) for more.
+
 ## Advanced Topics
 
 ### IObjectMapper<TContext> Interface

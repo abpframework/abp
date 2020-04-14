@@ -30,9 +30,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             result.Error.ShouldNotBeNull();
             result.Error.Message.ShouldBe("This is a sample exception!");
 
+#pragma warning disable 4014
             _fakeExceptionSubscriber
                 .Received()
                 .HandleAsync(Arg.Any<ExceptionNotificationContext>());
+#pragma warning restore 4014
         }
 
         [Fact]
@@ -44,9 +46,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 )
             );
 
+#pragma warning disable 4014
             _fakeExceptionSubscriber
                 .DidNotReceive()
                 .HandleAsync(Arg.Any<ExceptionNotificationContext>());
+#pragma warning restore 4014
         }
     }
 }

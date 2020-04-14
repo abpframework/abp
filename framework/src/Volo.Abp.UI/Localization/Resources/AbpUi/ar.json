@@ -43,6 +43,7 @@
     "PagerFirst": "الأول",
     "PagerLast": "الاخير",
     "PagerInfo": "عرض _START_ الي _END_ من _TOTAL_ إدخالات",
+    "PagerInfo{0}{1}{2}": "عرض {0} الي {1} من {2} إدخالات",
     "PagerInfoEmpty": "عرض 0 الي 0 من 0 إدخالات",
     "PagerInfoFiltered": "(تمت تصفيته من _MAX_ مجموع الإدخالات)",
     "NoDataAvailableInDatatable": "لا توجد بيانات متاحة في الجدول",

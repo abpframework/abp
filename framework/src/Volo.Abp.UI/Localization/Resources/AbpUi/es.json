@@ -39,6 +39,7 @@
     "PagerFirst": "Primero",
     "PagerLast": "Último",
     "PagerInfo": "Mostrando desde _START_ hasta _END_ total _TOTAL_",
+    "PagerInfo{0}{1}{2}": "Mostrando desde {0} hasta {1} total {2}",
     "PagerInfoEmpty": "Mostrando desde 0 hasta 0 de 0 registros",
     "PagerInfoFiltered": "(filtrado de un total de _MAX_ registros)",
     "NoDataAvailableInDatatable": "No hay datos",

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.Authorization
 {
@@ -18,8 +19,8 @@ namespace Volo.Abp.Authorization
 
         private static bool ShouldIntercept(Type type)
         {
-            return type.IsDefined(typeof(AuthorizeAttribute), true) ||
-                   AnyMethodHasAuthorizeAttribute(type);
+            return !DynamicProxyIgnoreTypes.Contains(type) &&
+                   (type.IsDefined(typeof(AuthorizeAttribute), true) || AnyMethodHasAuthorizeAttribute(type));
         }
 
         private static bool AnyMethodHasAuthorizeAttribute(Type implementationType)

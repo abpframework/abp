@@ -110,7 +110,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains(_projectName) && _entries.Any(e=>e.Name.EndsWith(Path.GetFileName(oldNodeIncludeValue))))
+                    if (oldNodeIncludeValue.Contains(_projectName) && _entries.Any(e=>e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
                     {
                         continue;
                     }
@@ -123,6 +123,16 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 }
 
                 return doc.OuterXml;
+            }
+
+            private string GetProjectNameWithExtensionFromProjectReference(string oldNodeIncludeValue)
+            {
+                if (string.IsNullOrWhiteSpace(oldNodeIncludeValue))
+                {
+                    return oldNodeIncludeValue;
+                }
+
+                return oldNodeIncludeValue.Split('\\', '/').Last();
             }
 
             protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
