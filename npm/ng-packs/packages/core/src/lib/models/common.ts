@@ -11,6 +11,7 @@ export namespace ABP {
      * @deprecated To be deleted in v3.0
      */
     requirements?: Config.Requirements;
+    skipGetAppConfiguration?: boolean;
   }
 
   export type PagedResponse<T> = {
