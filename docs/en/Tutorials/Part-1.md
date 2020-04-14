@@ -22,7 +22,7 @@ end
 
 ### About this tutorial:
 
-In this tutorial series, you will build an ABP Commercial application named `Acme.BookStore`. In this sample project, we will manage a list of books and authors. **{{DB_Text}}** will be used as the ORM provider. And on the front-end side {{UI_Value}} and JavaScript will be used.
+In this tutorial series, you will build an ABP application named `Acme.BookStore`. In this sample project, we will manage a list of books and authors. **{{DB_Text}}** will be used as the ORM provider. And on the front-end side {{UI_Value}} and JavaScript will be used.
 
 The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
 
@@ -34,11 +34,11 @@ The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
 
 ### Creating the project
 
-Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI. But first of all, we need to login to the ABP Platform to create a commercial project.
+Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI. But first of all, we need to login to the ABP Platform.
 
 #### Create the project
 
-By running the below command, it creates a new ABP Commercial project with the database provider `{{DB_Text}}` and UI option `MVC`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
+By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `MVC`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
 
 ```bash
 abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}}
