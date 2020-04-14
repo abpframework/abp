@@ -10,11 +10,13 @@ export abstract class ContentStrategy<T extends HTMLScriptElement | HTMLStyleEle
 
   abstract createElement(): T;
 
-  insertElement() {
+  insertElement(): T {
     const element = this.createElement();
 
     this.contentSecurityStrategy.applyCSP(element);
     this.domStrategy.insertElement(element);
+
+    return element;
   }
 }
 
