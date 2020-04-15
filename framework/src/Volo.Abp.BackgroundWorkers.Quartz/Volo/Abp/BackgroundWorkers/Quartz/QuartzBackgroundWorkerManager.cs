@@ -40,10 +40,10 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             {
                 Check.NotNull(quartzWork.Trigger, nameof(quartzWork.Trigger));
                 Check.NotNull(quartzWork.JobDetail, nameof(quartzWork.JobDetail));
-                
+
                 if (await _scheduler.CheckExists(quartzWork.JobDetail.Key))
                 {
-                    await _scheduler.AddJob(quartzWork.JobDetail, true);
+                    await _scheduler.AddJob(quartzWork.JobDetail, true, true);
                     await _scheduler.ResumeJob(quartzWork.JobDetail.Key);
                     await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger);
                 }

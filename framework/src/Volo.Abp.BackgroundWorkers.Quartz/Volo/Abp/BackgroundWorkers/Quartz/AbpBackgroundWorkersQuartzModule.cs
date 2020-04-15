@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
@@ -33,7 +34,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             if (options.IsEnabled)
             {
                 var backgroundWorkerManager = context.ServiceProvider.GetService<IBackgroundWorkerManager>();
-                var works = context.ServiceProvider.GetServices<IQuartzBackgroundWorker>();
+                var works = context.ServiceProvider.GetServices<IQuartzBackgroundWorker>().Where(x=>x.AutoRegister);
 
                 foreach (var work in works)
                 {

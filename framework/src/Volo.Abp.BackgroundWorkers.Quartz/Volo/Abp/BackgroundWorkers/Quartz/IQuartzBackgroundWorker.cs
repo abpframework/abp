@@ -7,5 +7,7 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
         ITrigger Trigger { get; set; }
 
         IJobDetail JobDetail { get; set; }
+        
+        bool AutoRegister { get; set; }
     }
 }
