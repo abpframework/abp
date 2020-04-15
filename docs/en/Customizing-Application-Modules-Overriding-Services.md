@@ -60,6 +60,7 @@ In most cases, you will want to change one or a few methods of the current imple
 
 ````csharp
 [Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...
