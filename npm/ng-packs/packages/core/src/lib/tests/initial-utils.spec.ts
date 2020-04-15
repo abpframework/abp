@@ -1,7 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
 import { getInitialData, localeInitializer } from '../utils';
@@ -29,6 +28,7 @@ describe('InitialUtils', () => {
       const dispatchSpy = jest.spyOn(store, 'dispatch');
 
       injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
       injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => false });
       dispatchSpy.mockReturnValue(of('test'));
 
@@ -47,6 +47,7 @@ describe('InitialUtils', () => {
       const logOutFn = jest.fn();
 
       injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
       injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => true, logOut: logOutFn });
       dispatchSpy.mockReturnValue(of({ currentUser: { id: null } }));
 

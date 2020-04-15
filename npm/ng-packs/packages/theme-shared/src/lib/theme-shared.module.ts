@@ -83,7 +83,13 @@ export function appendScript(injector: Injector) {
     TableSortDirective,
   ],
   providers: [DatePipe],
-  entryComponents: [HttpErrorWrapperComponent, LoadingComponent, ModalContainerComponent],
+  entryComponents: [
+    HttpErrorWrapperComponent,
+    LoadingComponent,
+    ModalContainerComponent,
+    ToastContainerComponent,
+    ConfirmationComponent,
+  ],
 })
 export class ThemeSharedModule {
   constructor(private errorHandler: ErrorHandler) {}

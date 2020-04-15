@@ -188,7 +188,7 @@ namespace Volo.Abp.Account.Web.Pages
             public List<string> GetAllowedScopeNames()
             {
                 var identityScopes = IdentityScopes ?? new List<ConsentModel.ScopeViewModel>();
-                var apiScopes = IdentityScopes ?? new List<ConsentModel.ScopeViewModel>();
+                var apiScopes = ApiScopes ?? new List<ConsentModel.ScopeViewModel>();
                 return identityScopes.Union(apiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
             }
         }
