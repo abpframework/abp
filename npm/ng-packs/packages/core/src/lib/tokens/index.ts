@@ -1,1 +1,1 @@
-export * from './common.token';
+export * from './options.token';
