@@ -58,8 +58,9 @@ export class TableExpandedRowDirective implements OnInit, OnChanges {
   };
 
   createView() {
-    const colspan = (this.template.elementRef
-      .nativeElement as HTMLElement).nextElementSibling.querySelectorAll('td').length;
+    const colspan = (this.template.elementRef.nativeElement as HTMLElement).parentElement
+      .querySelector('tr')
+      .querySelectorAll('td').length;
 
     const includedKeys = this.includedKeys || this.getIncludedKeys();
 
