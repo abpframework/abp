@@ -1,6 +1,6 @@
-import { CoreModule, LazyLoadService, noop } from '@abp/ng.core';
+import { CoreModule, noop } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
-import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
@@ -18,31 +18,14 @@ import { TableEmptyMessageComponent } from './components/table-empty-message/tab
 import { TableComponent } from './components/table/table.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
-import styles from './constants/styles';
 import { LoadingDirective } from './directives/loading.directive';
+import { TableExpandedRowDirective } from './directives/table-expanded-row.directive';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { RootParams } from './models/common';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
-import { chartJsLoaded$ } from './utils/widget-utils';
-
-/**
- *
- * @deprecated To be deleted in v2.6
- *
- */
-export function appendScript(injector: Injector) {
-  const fn = () => {
-    import('chart.js').then(() => chartJsLoaded$.next(true));
-
-    const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
-    return lazyLoadService.load(null, 'style', styles, 'head', 'beforeend').toPromise();
-  };
-
-  return fn;
-}
 
 @NgModule({
   imports: [CoreModule, NgxValidateCoreModule, NgbPaginationModule],
@@ -64,6 +47,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
+    TableExpandedRowDirective,
   ],
   exports: [
     BreadcrumbComponent,
@@ -81,6 +65,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
+    TableExpandedRowDirective,
   ],
   providers: [DatePipe],
   entryComponents: [HttpErrorWrapperComponent, LoadingComponent, ModalContainerComponent],
