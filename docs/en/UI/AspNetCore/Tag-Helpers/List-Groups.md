@@ -19,7 +19,7 @@ Basic usage:
 
 ## Demo
 
-See the [list groups demo page](https://bootstrap-taghelpers.abp.io/Components/ListGroups) to see it in action.
+See the [list groups demo page](https://bootstrap-taghelpers.abp.io/Components/ListGroup) to see it in action.
 
 ## Attributes
 
