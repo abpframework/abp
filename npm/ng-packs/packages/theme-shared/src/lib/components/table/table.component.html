@@ -79,3 +79,15 @@
     }}
   </caption>
 </ng-template>
+
+<ng-template #expandedRow let-data let-colspan="colspan" let-includedKeys="includedKeys">
+  <tr>
+    <td [attr.colspan]="colspan">
+      <div *ngFor="let key of includedKeys">
+        <b>{{ key }}</b
+        >:
+        <code>{{ data[key] | json }}</code>
+      </div>
+    </td>
+  </tr>
+</ng-template>

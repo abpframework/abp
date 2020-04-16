@@ -57,6 +57,9 @@ export class TableComponent {
   @ViewChild('wrapper', { read: ElementRef, static: false })
   wrapperRef: ElementRef<HTMLDivElement>;
 
+  @ViewChild('expandedRow', { read: TemplateRef, static: false })
+  expandedRowRef: TemplateRef<any>;
+
   @Input()
   get totalRecords(): number {
     return this._totalRecords || this.value.length;
