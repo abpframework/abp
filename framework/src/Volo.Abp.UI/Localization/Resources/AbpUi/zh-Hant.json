@@ -39,6 +39,7 @@
     "PagerFirst": "首頁",
     "PagerLast": "末頁",
     "PagerInfo": "顯示 _TOTAL_ 個紀錄的 _START_ 到 _END_ 個.",
+    "PagerInfo{0}{1}{2}": "顯示 {2} 個紀錄的 {0} 到 {1} 個.",
     "PagerInfoEmpty": "顯示0個紀錄中的0到0",
     "PagerInfoFiltered": "(從 _MAX_ 所有紀錄中過濾掉)",
     "NoDataAvailableInDatatable": "資料表中沒有資料",

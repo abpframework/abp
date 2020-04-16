@@ -43,6 +43,7 @@
     "PagerFirst": "Prva",
     "PagerLast": "Zadnja",
     "PagerInfo": "Prikazanih _START_ do _END_ od _TOTAL_ zapisov",
+    "PagerInfo{0}{1}{2}": "Prikazanih {0} do {1} od {2} zapisov",
     "PagerInfoEmpty": "Prikazanih 0 do 0 od 0 zapisov",
     "PagerInfoFiltered": "(filtrirano od vseh _MAX_ zapisov)",
     "NoDataAvailableInDatatable": "V tabeli ni na voljo podatkov",
