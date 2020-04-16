@@ -9,11 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Volo.Abp;
-using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -103,7 +100,9 @@ namespace Volo.Docs.Pages.Documents.Project
                 Logger.LogWarning(exception.Message);
 
                 DocumentFound = false;
-                return Page();
+                var url = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/"
+                          + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version);
+                return Redirect(url);
             }
         }
 
@@ -120,7 +119,7 @@ namespace Volo.Docs.Pages.Documents.Project
             catch (EntityNotFoundException e)
             {
                 Logger.LogWarning(e.Message);
-                return NotFound();
+                return Redirect(DocumentsUrlPrefix);
             }
 
             if (ShowProjectsCombobox)
