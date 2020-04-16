@@ -5,7 +5,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^2.5.0",
+    "@abp/jquery": "^2.5.0",
     "datatables.net": "^1.10.20"
   },
   "gitHead": "a9a36b8a4681df04377497addf94b15e6c521664"
