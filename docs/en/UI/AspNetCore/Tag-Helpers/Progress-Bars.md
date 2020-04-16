@@ -26,7 +26,7 @@ Basic usage:
 
 ## Demo
 
-See the [progress bars demo page](https://bootstrap-taghelpers.abp.io/Components/Progress-Bars) to see it in action.
+See the [progress bars demo page](https://bootstrap-taghelpers.abp.io/Components/Progressbars) to see it in action.
 
 ## Attributes
 
