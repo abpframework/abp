@@ -30,11 +30,3 @@ Here, the list of components those are wrapped by the ABP Framework:
 * ...
 
 > Until all the tag helpers are documented, you can visit https://bootstrap-taghelpers.abp.io/ to see them with live samples.
-
-## Form Elements
-
-See [demo](https://bootstrap-taghelpers.abp.io/Components/FormElements).
-
-## Dynamic Inputs
-
-See [demo](https://bootstrap-taghelpers.abp.io/Components/DynamicForms).
