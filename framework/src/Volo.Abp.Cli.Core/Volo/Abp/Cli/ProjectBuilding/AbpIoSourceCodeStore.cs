@@ -133,7 +133,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
         }
 
-        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url)
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null)
         {
             if (url == null)
             {
