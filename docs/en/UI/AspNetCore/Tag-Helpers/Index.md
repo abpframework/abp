@@ -12,8 +12,6 @@ ABP Framework also adds some **useful features** to the standard bootstrap compo
 
 Here, the list of components those are wrapped by the ABP Framework:
 
-* [Form Elements](Form-elements.md)
-* [Dynamic-Forms](Dynamic-Forms.md)
 * [Buttons](Buttons.md)
 * [Cards](Cards.md)
 * [Alerts](Alerts.md)
@@ -30,3 +28,11 @@ Here, the list of components those are wrapped by the ABP Framework:
 * ...
 
 > Until all the tag helpers are documented, you can visit https://bootstrap-taghelpers.abp.io/ to see them with live samples.
+
+## Form Elements
+
+**Abp Tag Helpers** add new features to standard **Asp.Net Core MVC input & select Tag Helpers** and wrap them with **Bootstrap** form controls. See [Form Elements documentation](Form-elements.md) .
+
+## Dynamic Forms
+
+**Abp Tag helpers** offer an easy way to build complete **Bootstrap forms**. See [Dynamic Forms documentation](Dynamic-Forms.md).
