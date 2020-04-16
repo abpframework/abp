@@ -60,6 +60,8 @@ export class TableComponent {
   @ViewChild('expandedRow', { read: TemplateRef, static: false })
   expandedRowRef: TemplateRef<any>;
 
+  Date = Date;
+
   @Input()
   get totalRecords(): number {
     return this._totalRecords || this.value.length;

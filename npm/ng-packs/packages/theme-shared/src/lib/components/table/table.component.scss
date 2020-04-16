@@ -6,6 +6,10 @@
     filter: brightness(90%);
   }
 
+  .expanded-row:hover {
+    filter: none !important;
+  }
+
   .ui-table-empty {
     padding: 20px 0;
     text-align: center;

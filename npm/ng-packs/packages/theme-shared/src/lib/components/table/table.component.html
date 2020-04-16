@@ -80,13 +80,29 @@
   </caption>
 </ng-template>
 
-<ng-template #expandedRow let-data let-colspan="colspan" let-includedKeys="includedKeys">
-  <tr>
+<ng-template #expandedRow let-data let-colspan="colspan">
+  <tr class="expanded-row">
     <td [attr.colspan]="colspan">
-      <div *ngFor="let key of includedKeys">
-        <b>{{ key }}</b
-        >:
-        <code>{{ data[key] | json }}</code>
+      <div class="row">
+        <div class="col-6" *ngFor="let item of data">
+          <b>{{ item.key }}:</b>
+          <span class="ml-1" [ngSwitch]="item.type">
+            <ng-template [ngSwitchCase]="'object'">
+              <code *ngIf="item.value">{{ item.value | json }}</code>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'boolean'"
+              ><i
+                class="fas fa-{{ item.value ? 'check' : 'times' }} text-{{
+                  item.value ? 'success' : 'danger'
+                }}"
+              ></i>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'string'">{{
+              Date.parse(item.value) ? (Date.parse(item.value) | date) : item.value
+            }}</ng-template>
+            <span *ngSwitchDefault>{{ item.value }}</span>
+          </span>
+        </div>
       </div>
     </td>
   </tr>
