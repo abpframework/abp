@@ -19,6 +19,7 @@ namespace Volo.Abp.Cli.Commands
     public class GenerateProxyCommand : IConsoleCommand, ITransientDependency
     {
         public static Dictionary<string, Dictionary<string, string>> propertyList = new Dictionary<string, Dictionary<string, string>>();
+        public static string output = "";
         public ILogger<GenerateProxyCommand> Logger { get; set; }
 
         protected TemplateProjectBuilder TemplateProjectBuilder { get; }
@@ -55,6 +56,12 @@ namespace Volo.Abp.Cli.Commands
             apiUrl += "/api/abp/api-definition?IncludeTypes=true";
 
             var uiFramework = GetUiFramework(commandLineArgs);
+
+            output = commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long);
+            if (!string.IsNullOrWhiteSpace(output) && (!output.EndsWith("/") || !output.EndsWith("\\")))
+            {
+                output += "/";
+            }
 
             WebClient client = new WebClient();
             string json = "";
@@ -100,8 +107,8 @@ namespace Volo.Abp.Cli.Commands
 
                 Logger.LogInformation($"{rootPath} directory is creating");
 
-                Directory.CreateDirectory($"src/app/{rootPath}/shared/models");
-                Directory.CreateDirectory($"src/app/{rootPath}/shared/services");
+                Directory.CreateDirectory(output + $"src/app/{rootPath}/shared/models");
+                Directory.CreateDirectory(output + $"src/app/{rootPath}/shared/services");
 
                 var serviceIndexList = new List<string>();
                 var modelIndexList = new List<string>();
@@ -225,7 +232,7 @@ namespace Volo.Abp.Cli.Commands
                             foreach (var parameterItem in parameterModel.OrderBy(p => p.DisplayOrder))
                             {
                                 var parameterItemModelName = parameterItem.Type.PascalToKebabCase() + ".ts";
-                                var parameterItemModelPath = $"src/app/{rootPath}/shared/models/{parameterItemModelName}";
+                                var parameterItemModelPath = output + $"src/app/{rootPath}/shared/models/{parameterItemModelName}";
                                 if (parameterItem.BindingSourceId == "body" && !File.Exists(parameterItemModelPath))
                                 {
                                     parameterItem.Type = "any";
@@ -262,7 +269,7 @@ namespace Volo.Abp.Cli.Commands
                                 var secondType = secondTypeArray[secondTypeArray.Length - 1].TrimEnd('>');
 
                                 var secondTypeModelName = secondType.PascalToKebabCase() + ".ts";
-                                var secondTypeModelPath = $"src/app/{rootPath}/shared/models/{secondTypeModelName}";
+                                var secondTypeModelPath = output + $"src/app/{rootPath}/shared/models/{secondTypeModelName}";
                                 if (firstType == "List" && !File.Exists(secondTypeModelPath))
                                 {
                                     secondType = "any";
@@ -359,7 +366,7 @@ namespace Volo.Abp.Cli.Commands
                     serviceFileText.AppendLine("}");
 
                     serviceFileText.Replace("[controllerName]", controllerName);
-                    File.WriteAllText($"src/app/{rootPath}/shared/services/{controllerServiceName}", serviceFileText.ToString());
+                    File.WriteAllText(output + $"src/app/{rootPath}/shared/services/{controllerServiceName}", serviceFileText.ToString());
                 }
 
                 var serviceIndexFileText = new StringBuilder();
@@ -369,7 +376,7 @@ namespace Volo.Abp.Cli.Commands
                     serviceIndexFileText.AppendLine($"export * from './{serviceIndexItem}';");
                 }
 
-                File.WriteAllText($"src/app/{rootPath}/shared/services/index.ts", serviceIndexFileText.ToString());
+                File.WriteAllText(output + $"src/app/{rootPath}/shared/services/index.ts", serviceIndexFileText.ToString());
 
                 var modelIndexFileText = new StringBuilder();
 
@@ -378,7 +385,7 @@ namespace Volo.Abp.Cli.Commands
                     modelIndexFileText.AppendLine($"export * from './{modelIndexItem}';");
                 }
 
-                File.WriteAllText($"src/app/{rootPath}/shared/models/index.ts", modelIndexFileText.ToString());
+                File.WriteAllText(output + $"src/app/{rootPath}/shared/models/index.ts", modelIndexFileText.ToString());
             }
 
             Logger.LogInformation("Completed!");
@@ -448,7 +455,7 @@ namespace Volo.Abp.Cli.Commands
 
             var typeModelName = typeName.Replace("<", "").Replace(">", "").Replace("?", "").PascalToKebabCase() + ".ts";
 
-            var path = $"src/app/{rootPath}/shared/models/{typeModelName}";
+            var path = output + $"src/app/{rootPath}/shared/models/{typeModelName}";
 
             var modelFileText = new StringBuilder();
 
@@ -547,7 +554,7 @@ namespace Volo.Abp.Cli.Commands
                       )
                     {
                         var typeSimpleModelName = typeSimple.PascalToKebabCase() + ".ts";
-                        var modelPath = $"src/app/{rootPath}/shared/models/{typeSimpleModelName}";
+                        var modelPath = output + $"src/app/{rootPath}/shared/models/{typeSimpleModelName}";
                         if (!File.Exists(modelPath))
                         {
                             typeSimple = "any" + (typeSimple.Contains("[]") ? "[]" : "");
@@ -608,7 +615,7 @@ namespace Volo.Abp.Cli.Commands
                 modelFileText.AppendLine("}");
             }
 
-            File.WriteAllText($"src/app/{rootPath}/shared/models/{typeModelName}", modelFileText.ToString());
+            File.WriteAllText(output + $"src/app/{rootPath}/shared/models/{typeModelName}", modelFileText.ToString());
 
             return typeModelName.Replace(".ts", "");
         }
@@ -714,6 +721,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "u";
                 public const string Long = "ui";
+            }
+
+            public static class Output
+            {
+                public const string Short = "o";
+                public const string Long = "out";
             }
         }
     }
