@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Quartz;
 using Volo.Abp.DependencyInjection;
 
@@ -7,20 +8,38 @@ namespace Volo.Abp.BackgroundJobs.Quartz
 {
     [Dependency(ReplaceServices = true)]
     public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDependency
-    {
-        private readonly IScheduler _scheduler;
+    { 
+        protected IScheduler Scheduler { get; }
+        
+        protected AbpBackgroundJobQuartzOptions Options { get; }
 
-        public QuartzBackgroundJobManager(IScheduler scheduler)
+        
+        public QuartzBackgroundJobManager(IScheduler scheduler,IOptions<AbpBackgroundJobQuartzOptions> options)
         {
-            _scheduler = scheduler;
+            Scheduler = scheduler;
+            Options = options.Value;
         }
 
         public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().SetJobData(new JobDataMap { { nameof(TArgs), args } }).Build();
+            return await ReEnqueueAsync(args, Options.RetryCount, Options.RetryIntervalMillisecond, priority, delay);
+        }
+
+        public virtual async Task<string> ReEnqueueAsync<TArgs>(TArgs args, int retryCount, int retryIntervalMillisecond,
+            BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
+        {
+            var jobDataMap = new JobDataMap
+            {
+                {nameof(TArgs), args},
+                {nameof(Options.RetryCount), retryCount},
+                {nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond},
+                {nameof(AbpBackgroundJobQuartzOptions.RetryIndex), 0}
+            };
+            
+            var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().RequestRecovery().SetJobData(jobDataMap).Build();
             var trigger = !delay.HasValue ? TriggerBuilder.Create().StartNow().Build() : TriggerBuilder.Create().StartAt(new DateTimeOffset(DateTime.Now.Add(delay.Value))).Build();
-            await _scheduler.ScheduleJob(jobDetail, trigger);
+            await Scheduler.ScheduleJob(jobDetail, trigger);
             return jobDetail.Key.ToString();
         }
     }
