@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
-            string normalizedUserName, 
+            string normalizedUserName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -32,7 +33,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<string>> GetRoleNamesAsync(
-            Guid id, 
+            Guid id,
             CancellationToken cancellationToken = default)
         {
             var query = from userRole in DbContext.Set<IdentityUserRole>()
@@ -57,8 +58,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<IdentityUser> FindByLoginAsync(
-            string loginProvider, 
-            string providerKey, 
+            string loginProvider,
+            string providerKey,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -90,7 +91,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -110,10 +111,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<IdentityUser>> GetListAsync(
-            string sorting = null, 
+            string sorting = null,
             int maxResultCount = int.MaxValue,
-            int skipCount = 0, 
-            string filter = null, 
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -139,21 +140,26 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         join role in DbContext.Roles.IncludeDetails(includeDetails) on userRole.RoleId equals role.Id
                         where userRole.UserId == id
                         select role;
-            //TODO
-            //var q2 = from userOrganization in DbContext.Set<IdentityUserOrganizationUnit>()
-            //         join userOrg in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOrganization.UserId equals id
-            //         select userOrg.Roles;
-            //var q3 = from ouRole in DbContext.Set<OrganizationUnitRole>()
-            //         join role in DbContext.Roles.IncludeDetails(includeDetails) on ouRole.RoleId equals role.Id
-            //         where ouRole.RoleId == id
-            //         select role;
-            //query = q2.Union(query);
 
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            //TODO: Needs improvement
+            var userOrganizationsQuery = from userOrg in DbContext.Set<IdentityUserOrganizationUnit>()
+                                         join ou in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOrg.OrganizationUnitId equals ou.Id
+                                         where userOrg.UserId == id
+                                         select ou;
+
+            var orgUserRoleQuery = DbContext.Set<OrganizationUnitRole>().Where(q => userOrganizationsQuery.Select(t => t.Id).Contains(q.OrganizationUnitId))
+                .Select(t => t.RoleId);
+
+            var orgRoles = DbContext.Roles.Where(q => orgUserRoleQuery.Contains(q.Id));
+            var resultQuery = query.Union(orgRoles);
+
+            return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
+
+            //return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetCountAsync(
-            string filter = null, 
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
             return await this.WhereIf(
