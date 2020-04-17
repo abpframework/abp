@@ -5,12 +5,12 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
-@using Volo.Docs.Pages.Documents.Shared.DocumentNotFoundComponent
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
+@using Volo.Docs.Pages.Documents.Shared.ErrorComponent
 @inject IThemeManager ThemeManager
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<DocsResource> L
@@ -41,7 +41,7 @@
         <abp-script src="/Pages/Documents/Project/index.js" />
     </abp-script-bundle>
 }
-@if (Model.DocumentFound)
+@if (Model.LoadSuccess)
 {
     <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
         <div class="row justify-content-end">
@@ -348,14 +348,30 @@
 }
 else
 {
-    @(await Component.InvokeAsync<DocumentNotFoundViewComponent>(new
-      {
-          model = new DocumentNotFoundPageModel
+    if (!Model.DocumentFound)
+    {
+        @(await Component.InvokeAsync<ErrorViewComponent>(new
           {
-              ProjectName = Model.ProjectName,
-              DocumentName = Model.DocumentName,
-              LanguageCode = Model.LanguageCode,
-              Version = Model.Version,
-          }
-      }))
+              model = new ErrorPageModel
+              {
+                  RedirectUrl = Model.DocumentsUrlPrefix + Model.LanguageCode + "/" + Model.ProjectName + "/"
+                                + (Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
+                  ErrorCode =  "404",
+                  ErrorMessage = L.GetString("DocumentNotFound")
+              }
+          }))
+    }
+    if (!Model.EntityFound)
+    {
+         @(await Component.InvokeAsync<ErrorViewComponent>(new
+          {
+              model = new ErrorPageModel
+              {
+                  RedirectUrl = Model.DocumentsUrlPrefix,
+                  ErrorCode =  "404",
+                  ErrorMessage = L.GetString("ProjectNotFound")
+              }
+          }))
+    }
+    
 }

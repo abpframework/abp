@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -33,6 +34,10 @@ namespace Volo.Docs.Pages.Documents.Project
         public string LanguageCode { get; set; }
 
         public bool DocumentFound { get; set; } = true;
+        
+        public bool EntityFound { get; set; } = true;
+
+        public bool LoadSuccess => DocumentFound && EntityFound;
 
         public string DefaultLanguageCode { get; set; }
 
@@ -100,9 +105,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 Logger.LogWarning(exception.Message);
 
                 DocumentFound = false;
-                var url = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/"
-                          + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version);
-                return Redirect(url);
+                return Page();
             }
         }
 
@@ -119,7 +122,8 @@ namespace Volo.Docs.Pages.Documents.Project
             catch (EntityNotFoundException e)
             {
                 Logger.LogWarning(e.Message);
-                return Redirect(DocumentsUrlPrefix);
+                EntityFound = false;
+                return Page();
             }
 
             if (ShowProjectsCombobox)
@@ -596,6 +600,11 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string GetDescription()
         {
+            if (Document == null || Document.Content.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+            
             var firstParagraph = new Regex(@"<p>(.*?)</p>", RegexOptions.IgnoreCase);
             var match = firstParagraph.Match(Document.Content);
             if (!match.Success)

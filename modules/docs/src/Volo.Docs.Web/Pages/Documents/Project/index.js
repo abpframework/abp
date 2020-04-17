@@ -297,17 +297,32 @@
             $("#crawler_link").html(html);
         };
 
-        initNavigationFilter("sidebar-scroll");
+        var errorPageRedirect = function(){
+            var second = 3;
+            var close = setInterval(()=>{
+                second--;
+                $(".seconds").text(`(${second})`)
+                if(second===0){
+                    clearInterval(close);
+                    $(".redirect")[0].click();
+                }
+            },1000)
+        }
+        
+        var loadSuccess = $(".docs-page").length!==0;
+        if(loadSuccess === true){
+            initNavigationFilter("sidebar-scroll");
 
-        initAnchorTags(".docs-page .docs-body");
+            initAnchorTags(".docs-page .docs-body");
 
-        initSocialShareLinks();
+            initSocialShareLinks();
 
-        initSections();
+            initSections();
 
-        initCrawlerLinks();
-
+            initCrawlerLinks();
+        }else{
+            errorPageRedirect();
+        }
     });
 
 })(jQuery);
-
