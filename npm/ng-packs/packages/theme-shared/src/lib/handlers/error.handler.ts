@@ -19,6 +19,7 @@ import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http
 import { HttpErrorConfig, ErrorScreenErrorCodes } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
+import { filter } from 'rxjs/operators';
 
 export const DEFAULT_ERROR_MESSAGES = {
   defaultError: {
@@ -58,7 +59,10 @@ export class ErrorHandler {
     @Inject('HTTP_ERROR_CONFIG') private httpErrorConfig: HttpErrorConfig,
   ) {
     this.actions
-      .pipe(ofActionSuccessful(RestOccurError, RouterError, RouterDataResolved))
+      .pipe(
+        ofActionSuccessful(RestOccurError, RouterError, RouterDataResolved),
+        filter(this.filterErrors),
+      )
       .subscribe(res => {
         if (res instanceof RestOccurError) {
           const { payload: err = {} as HttpErrorResponse | any } = res;
@@ -254,4 +258,27 @@ export class ErrorHandler {
         this.httpErrorConfig.errorScreen.forWhichErrors.indexOf(status) > -1,
     );
   }
+
+  private filterErrors = (
+    instance: RestOccurError | RouterError<any, any> | RouterDataResolved,
+  ): boolean => {
+    if (instance instanceof RouterDataResolved) return true;
+
+    if (instance instanceof RestOccurError) {
+      const { payload: err = {} as HttpErrorResponse | any } = instance;
+
+      if (!err.status) return true;
+
+      this.httpErrorConfig.skipHandledErrorCodes = this.httpErrorConfig.skipHandledErrorCodes || [];
+
+      return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === err.status) < 0;
+    }
+
+    if (instance instanceof RouterError) {
+      return (
+        !snq(() => instance.event.error.indexOf('Cannot match') > -1) ||
+        this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
+      );
+    }
+  };
 }
