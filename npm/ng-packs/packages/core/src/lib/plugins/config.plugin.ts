@@ -28,7 +28,7 @@ export class ConfigPlugin implements NgxsPlugin {
     const matches = actionMatcher(event);
     const isInitAction = matches(InitState) || matches(UpdateState);
 
-    if (isInitAction && !this.initialized && getAbpRoutes().length) {
+    if (isInitAction && !this.initialized) {
       const transformedRoutes = transformRoutes(this.router.config);
       let { routes } = transformedRoutes;
       const { wrappers } = transformedRoutes;
