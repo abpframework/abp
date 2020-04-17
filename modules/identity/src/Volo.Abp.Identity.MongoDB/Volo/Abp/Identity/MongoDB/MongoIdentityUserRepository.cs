@@ -39,8 +39,17 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            var organizationUnitIds = user.OrganizationUnits
+                .Select(r => r.OrganizationUnitId)
+                .ToArray();
+            var organizationUnits = DbContext.OrganizationUnits
+                .AsQueryable()
+                .Where(ou => organizationUnitIds.Contains(ou.Id))
+                .ToArray();
+            var orgUnitRoleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToArray();
             var roleIds = user.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken));
+            var allRoleIds = orgUnitRoleIds.Union(roleIds);
+            return await DbContext.Roles.AsQueryable().Where(r => allRoleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
@@ -140,8 +149,17 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            var organizationUnitIds = user.OrganizationUnits
+                .Select(r => r.OrganizationUnitId)
+                .ToArray();
+            var organizationUnits = DbContext.OrganizationUnits
+                .AsQueryable()
+                .Where(ou => organizationUnitIds.Contains(ou.Id))
+                .ToArray();
+            var orgUnitRoleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToArray();
             var roleIds = user.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).ToListAsync(GetCancellationToken(cancellationToken));
+            var allRoleIds = orgUnitRoleIds.Union(roleIds);
+            return await DbContext.Roles.AsQueryable().Where(r => allRoleIds.Contains(r.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(

@@ -44,9 +44,10 @@ namespace Volo.Abp.Identity
         {
             var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
             var roles = await UserRepository.GetRoleNamesAsync(john.Id);
-            roles.Count.ShouldBe(2);
+            roles.Count.ShouldBe(3);
             roles.ShouldContain("moderator");
             roles.ShouldContain("supporter");
+            roles.ShouldContain("manager");
         }
 
         [Fact]
@@ -118,9 +119,10 @@ namespace Volo.Abp.Identity
         {
             var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
             var roles = await UserRepository.GetRolesAsync(john.Id);
-            roles.Count.ShouldBe(2);
+            roles.Count.ShouldBe(3);
             roles.ShouldContain(r => r.Name == "moderator");
             roles.ShouldContain(r => r.Name == "supporter");
+            roles.ShouldContain(r => r.Name == "manager");
         }
 
         [Fact]

@@ -40,8 +40,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         join role in DbContext.Roles on userRole.RoleId equals role.Id
                         where userRole.UserId == id
                         select role.Name;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+            var organizationUnitIds = DbContext.Set<IdentityUserOrganizationUnit>().Where(q => q.UserId == id).Select(q => q.OrganizationUnitId).ToArray();
+            var organizationRoleIds = DbContext.Set<OrganizationUnitRole>().Where(our => organizationUnitIds.Contains(our.OrganizationUnitId)).Select(r => r.RoleId).ToArray();
+            var orgUnitRoleNameQuery = DbContext.Roles.Where(r => organizationRoleIds.Contains(r.Id)).Select(n => n.Name);
+            var resultQuery = query.Union(orgUnitRoleNameQuery);
+            return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(

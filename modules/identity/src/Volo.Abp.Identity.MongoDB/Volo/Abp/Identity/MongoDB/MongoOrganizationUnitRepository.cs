@@ -60,5 +60,15 @@ namespace Volo.Abp.Identity.MongoDB
                     GetCancellationToken(cancellationToken)
                 );
         }
+
+        public async Task<List<IdentityRole>> GetOrganizationUnitRoles(
+            Guid organizationUnitId,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var organizationUnit = await GetAsync(organizationUnitId, includeDetails, cancellationToken);
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).ToListAsync(cancellationToken);
+        }
     }
 }

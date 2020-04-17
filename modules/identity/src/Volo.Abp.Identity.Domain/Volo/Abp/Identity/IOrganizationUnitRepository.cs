@@ -32,5 +32,10 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+        Task<List<IdentityRole>> GetOrganizationUnitRoles(
+            Guid organizationUnitId,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
     }
 }

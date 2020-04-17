@@ -54,8 +54,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public async Task<OrganizationUnit> GetOrganizationUnitAsync(
-            string displayName, 
-            bool includeDetails = false, 
+            string displayName,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
@@ -64,6 +64,17 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     ou => ou.DisplayName == displayName,
                     GetCancellationToken(cancellationToken)
                 );
+        }
+        public async Task<List<IdentityRole>> GetOrganizationUnitRoles(
+            Guid organizationUnitId, bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var query = from organizationRole in DbContext.Set<OrganizationUnitRole>()
+                        join role in DbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
+                        where organizationRole.OrganizationUnitId == organizationUnitId
+                        select role;
+
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<OrganizationUnit> WithDetails()
