@@ -47,7 +47,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
 
             steps.Add(new RemoveFolderStep("/angular"));
         }
-        
+
         private void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             steps.Add(new TemplateRandomSslPortStep(new List<string>
