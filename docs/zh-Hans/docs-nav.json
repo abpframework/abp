@@ -358,8 +358,13 @@
           "text": "通用",
           "items": [
             {
-              "text": "链表 (双向)",
-              "path": "UI/Common/Utils/Linked-List.md"
+              "text": "Utilities",
+              "items": [
+                {
+                  "text": "链表 (双向)",
+                  "path": "UI/Common/Utils/Linked-List.md"
+                }
+              ]
             }
           ]
         } 
