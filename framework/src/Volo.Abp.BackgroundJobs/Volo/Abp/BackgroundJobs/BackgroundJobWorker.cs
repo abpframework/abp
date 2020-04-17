@@ -1,67 +1,71 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker, ISingletonDependency
+    public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroundJobWorker
     {
-        protected IBackgroundJobExecuter JobExecuter { get; }
-        protected IBackgroundJobStore Store { get; }
-        protected BackgroundJobOptions JobOptions { get; }
-        protected BackgroundJobWorkerOptions WorkerOptions { get; }
-        protected IClock Clock { get; }
-        protected IBackgroundJobSerializer Serializer { get; }
+        protected AbpBackgroundJobOptions JobOptions { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultBackgroundJobManager"/> class.
-        /// </summary>
+        protected AbpBackgroundJobWorkerOptions WorkerOptions { get; }
+
         public BackgroundJobWorker(
-            IBackgroundJobStore store,
             AbpTimer timer,
-            IBackgroundJobExecuter jobExecuter,
-            IBackgroundJobSerializer serializer,
-            IOptions<BackgroundJobOptions> jobOptions,
-            IOptions<BackgroundJobWorkerOptions> workerOptions,
-            IClock clock)
-            : base(timer)
+            IOptions<AbpBackgroundJobOptions> jobOptions,
+            IOptions<AbpBackgroundJobWorkerOptions> workerOptions,
+            IServiceScopeFactory serviceScopeFactory)
+            : base(
+                timer,
+                serviceScopeFactory)
         {
-            JobExecuter = jobExecuter;
-            Serializer = serializer;
-            Clock = clock;
-            Store = store;
             WorkerOptions = workerOptions.Value;
             JobOptions = jobOptions.Value;
             Timer.Period = WorkerOptions.JobPollPeriod;
         }
 
-        protected override void DoWork()
+        protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
-            var waitingJobs = AsyncHelper.RunSync(() => Store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount));
+            var store = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
+
+            var waitingJobs = await store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount);
+
+            if (!waitingJobs.Any())
+            {
+                return;
+            }
+
+            var jobExecuter = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobExecuter>();
+            var clock = workerContext.ServiceProvider.GetRequiredService<IClock>();
+            var serializer = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobSerializer>();
 
             foreach (var jobInfo in waitingJobs)
             {
                 jobInfo.TryCount++;
-                jobInfo.LastTryTime = Clock.Now;
+                jobInfo.LastTryTime = clock.Now;
 
                 try
                 {
                     var jobConfiguration = JobOptions.GetJob(jobInfo.JobName);
-                    var jobArgs = Serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
-                    var context = new JobExecutionContext(jobConfiguration.JobType, jobArgs);
+                    var jobArgs = serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
+                    var context = new JobExecutionContext(workerContext.ServiceProvider, jobConfiguration.JobType, jobArgs);
 
                     try
                     {
-                        JobExecuter.Execute(context);
-                        AsyncHelper.RunSync(() => Store.DeleteAsync(jobInfo.Id));
+                        await jobExecuter.ExecuteAsync(context);
+
+                        await store.DeleteAsync(jobInfo.Id);
                     }
                     catch (BackgroundJobExecutionException)
                     {
-                        var nextTryTime = CalculateNextTryTime(jobInfo);
+                        var nextTryTime = CalculateNextTryTime(jobInfo, clock);
+
                         if (nextTryTime.HasValue)
                         {
                             jobInfo.NextTryTime = nextTryTime.Value;
@@ -71,23 +75,23 @@ namespace Volo.Abp.BackgroundJobs
                             jobInfo.IsAbandoned = true;
                         }
 
-                        TryUpdate(jobInfo);
+                        await TryUpdateAsync(store, jobInfo);
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.LogException(ex);
                     jobInfo.IsAbandoned = true;
-                    TryUpdate(jobInfo);
+                    await TryUpdateAsync(store, jobInfo);
                 }
             }
         }
 
-        protected virtual void TryUpdate(BackgroundJobInfo jobInfo)
+        protected virtual async Task TryUpdateAsync(IBackgroundJobStore store, BackgroundJobInfo jobInfo)
         {
             try
             {
-                Store.UpdateAsync(jobInfo);
+                await store.UpdateAsync(jobInfo);
             }
             catch (Exception updateEx)
             {
@@ -95,12 +99,11 @@ namespace Volo.Abp.BackgroundJobs
             }
         }
 
-        protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo) //TODO: Move to another place to override easier
+        protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo, IClock clock)
         {
             var nextWaitDuration = WorkerOptions.DefaultFirstWaitDuration * (Math.Pow(WorkerOptions.DefaultWaitFactor, jobInfo.TryCount - 1));
-            var nextTryDate = jobInfo.LastTryTime.HasValue
-                ? jobInfo.LastTryTime.Value.AddSeconds(nextWaitDuration)
-                : Clock.Now.AddSeconds(nextWaitDuration);
+            var nextTryDate = jobInfo.LastTryTime?.AddSeconds(nextWaitDuration) ??
+                              clock.Now.AddSeconds(nextWaitDuration);
 
             if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > WorkerOptions.DefaultTimeout)
             {

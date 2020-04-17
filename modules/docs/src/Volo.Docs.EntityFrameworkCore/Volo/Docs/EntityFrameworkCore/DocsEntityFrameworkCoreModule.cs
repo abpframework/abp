@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Docs.Documents;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.EntityFrameworkCore
@@ -15,9 +16,8 @@ namespace Volo.Docs.EntityFrameworkCore
             context.Services.AddAbpDbContext<DocsDbContext>(options =>
             {
                 options.AddRepository<Project, EfCoreProjectRepository>();
+                options.AddRepository<Document, EFCoreDocumentRepository>();
             });
-
-            context.Services.AddAssemblyOf<DocsEntityFrameworkCoreModule>();
         }
     }
 }

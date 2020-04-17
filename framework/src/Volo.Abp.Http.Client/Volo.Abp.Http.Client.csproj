@@ -1,5 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -14,12 +15,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Castle.Core\Volo.Abp.Castle.Core.csproj" />
     <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 
 </Project>

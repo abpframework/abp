@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -20,6 +22,12 @@ namespace Volo.Abp.Authorization.Permissions
         }
         private ILocalizableString _displayName;
 
+        /// <summary>
+        /// MultiTenancy side.
+        /// Default: <see cref="MultiTenancySides.Both"/>
+        /// </summary>
+        public MultiTenancySides MultiTenancySide { get; set; }
+
         public IReadOnlyList<PermissionDefinition> Permissions => _permissions.ToImmutableList();
         private readonly List<PermissionDefinition> _permissions;
 
@@ -37,18 +45,31 @@ namespace Volo.Abp.Authorization.Permissions
             set => Properties[name] = value;
         }
 
-        protected internal PermissionGroupDefinition(string name, ILocalizableString displayName = null)
+        protected internal PermissionGroupDefinition(
+            string name, 
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
         {
             Name = name;
             DisplayName = displayName ?? new FixedLocalizableString(Name);
+            MultiTenancySide = multiTenancySide;
 
             Properties = new Dictionary<string, object>();
             _permissions = new List<PermissionDefinition>();
         }
 
-        public virtual PermissionDefinition AddPermission(string name, ILocalizableString displayName = null)
+        public virtual PermissionDefinition AddPermission(
+            string name, 
+            ILocalizableString displayName = null,
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+            bool isEnabled = true)
         {
-            var permission = new PermissionDefinition(name, displayName);
+            var permission = new PermissionDefinition(
+                name,
+                displayName,
+                multiTenancySide,
+                isEnabled
+            );
 
             _permissions.Add(permission);
 
@@ -80,6 +101,34 @@ namespace Volo.Abp.Authorization.Permissions
         public override string ToString()
         {
             return $"[{nameof(PermissionGroupDefinition)} {Name}]";
+        }
+
+        [CanBeNull]
+        public PermissionDefinition GetPermissionOrNull([NotNull] string name)
+        {
+            Check.NotNull(name, nameof(name));
+
+            return GetPermissionOrNullRecursively(Permissions, name);
+        }
+
+        private PermissionDefinition GetPermissionOrNullRecursively(
+            IReadOnlyList<PermissionDefinition> permissions, string name)
+        {
+            foreach (var permission in permissions)
+            {
+                if (permission.Name == name)
+                {
+                    return permission;
+                }
+
+                var childPermission = GetPermissionOrNullRecursively(permission.Children, name);
+                if (childPermission != null)
+                {
+                    return childPermission;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
@@ -27,19 +30,19 @@ namespace Volo.Abp.AspNetCore
         typeof(AbpUiModule), //TODO: Can we remove this?
         typeof(AbpValidationModule)
         )]
-    public class AbpAspNetCoreModule : IAbpModule
+    public class AbpAspNetCoreModule : AbpModule
     {
-        public void ConfigureServices(ServiceConfigurationContext context)
+        public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpAuditingOptions>(options =>
+            Configure<AbpAuditingOptions>(options =>
             {
                 options.Contributors.Add(new AspNetCoreAuditLogContributor());
             });
 
             AddAspNetServices(context.Services);
             context.Services.AddObjectAccessor<IApplicationBuilder>();
-            context.Services.AddConfiguration();
-            context.Services.AddAssemblyOf<AbpAspNetCoreModule>();
+
+            context.Services.Replace(ServiceDescriptor.Transient<IOptionsFactory<RequestLocalizationOptions>, AbpRequestLocalizationOptionsFactory>());
         }
 
         private static void AddAspNetServices(IServiceCollection services)

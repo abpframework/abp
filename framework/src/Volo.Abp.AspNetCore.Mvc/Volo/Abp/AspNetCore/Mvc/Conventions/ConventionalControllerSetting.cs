@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using Volo.Abp.Application.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions
@@ -17,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         public Assembly Assembly { get; }
 
         [NotNull]
-        public HashSet<Type> ControllerTypes { get; }
+        public HashSet<Type> ControllerTypes { get; } //TODO: Internal?
 
         [NotNull]
         public string RootPath
@@ -30,6 +29,18 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
             }
         }
         private string _rootPath;
+
+        [NotNull]
+        public string RemoteServiceName
+        {
+            get => _remoteServiceName;
+            set
+            {
+                Check.NotNull(value, nameof(value));
+                _remoteServiceName = value;
+            }
+        }
+        private string _remoteServiceName;
 
         [CanBeNull]
         public Func<Type, bool> TypePredicate { get; set; }
@@ -47,15 +58,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         public Action<ApiVersioningOptions> ApiVersionConfigurer { get; set; }
         
-        public ConventionalControllerSetting([NotNull] Assembly assembly, [NotNull] string rootPath)
+        public ConventionalControllerSetting(
+            [NotNull] Assembly assembly, 
+            [NotNull] string rootPath,
+            [NotNull] string remoteServiceName)
         {
-            Check.NotNull(assembly, rootPath);
-
-            Assembly = assembly;
-            RootPath = rootPath;
+            Assembly = Check.NotNull(assembly, nameof(assembly));
+            RootPath = Check.NotNull(rootPath, nameof(rootPath));
+            RemoteServiceName = Check.NotNull(remoteServiceName, nameof(remoteServiceName));
 
             ControllerTypes = new HashSet<Type>();
-
             ApiVersions = new List<ApiVersion>();
         }
 

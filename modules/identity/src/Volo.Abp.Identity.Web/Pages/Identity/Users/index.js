@@ -13,6 +13,10 @@
         var _$table = _$wrapper.find('table');
         var _dataTable = _$table.DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
+			processing: true,
+			serverSide: true,
+            scrollX: true,
+			paging: true,
             ajax: abp.libs.datatables.createAjax(_identityUserAppService.getList),
             columnDefs: [
                 {
@@ -21,9 +25,7 @@
                             [
                                 {
                                     text: l('Edit'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpIdentity.Users.Update'),
                                     action: function (data) {
                                         _editModal.open({
                                             id: data.record.id
@@ -32,21 +34,17 @@
                                 },
                                 {
                                     text: l('Permissions'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpIdentity.Users.ManagePermissions'),
                                     action: function (data) {
                                         _permissionsModal.open({
-                                            providerName: 'User',
+                                            providerName: 'U',
                                             providerKey: data.record.id
                                         });
                                     }
                                 },
                                 {
                                     text: l('Delete'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpIdentity.Users.Delete'),
                                     confirmMessage: function (data) { return l('UserDeletionConfirmationMessage', data.record.userName); },
                                     action: function (data) {
                                         _identityUserAppService

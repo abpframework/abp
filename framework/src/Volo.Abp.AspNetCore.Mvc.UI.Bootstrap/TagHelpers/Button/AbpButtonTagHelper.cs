@@ -15,6 +15,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
 
         public string Icon { get; set; }
 
+        public bool? Disabled { get; set; }
+
         public FontIconType IconType { get; set; } = FontIconType.FontAwesome;
 
         public AbpButtonTagHelper(AbpButtonTagHelperService service) 
@@ -24,3 +26,4 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
         }
     }
 }
+

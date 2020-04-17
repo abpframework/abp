@@ -1,27 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity.Localization;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity
 {
     public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     {
-        protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
+        protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
-        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        protected IStringLocalizer<IdentityResource> Localizer { get; }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public IdentityRoleManager(
             IdentityRoleStore store,
             IEnumerable<IRoleValidator<IdentityRole>> roleValidators,
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
-            ILogger<IdentityRoleManager> logger, 
+            ILogger<IdentityRoleManager> logger,
+            IStringLocalizer<IdentityResource> localizer,
             ICancellationTokenProvider cancellationTokenProvider)
             : base(
                   store, 
@@ -30,10 +35,11 @@ namespace Volo.Abp.Identity
                   errors, 
                   logger)
         {
-            _cancellationTokenProvider = cancellationTokenProvider;
+            Localizer = localizer;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public async Task<IdentityRole> GetByIdAsync(Guid id)
+        public virtual async Task<IdentityRole> GetByIdAsync(Guid id)
         {
             var role = await Store.FindByIdAsync(id.ToString(), CancellationToken);
             if (role == null)
@@ -42,6 +48,26 @@ namespace Volo.Abp.Identity
             }
 
             return role;
+        }
+
+        public override async Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string name)
+        {
+            if (role.IsStatic && role.Name != name)
+            {
+                throw new BusinessException(Localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
+            }
+
+            return await base.SetRoleNameAsync(role, name);
+        }
+
+        public override async Task<IdentityResult> DeleteAsync(IdentityRole role)
+        {
+            if (role.IsStatic)
+            {
+                throw new BusinessException(Localizer["Identity.StaticRoleDeletionErrorMessage"]); // TODO: localize & change exception type
+            }
+
+            return await base.DeleteAsync(role);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Validation
@@ -26,11 +25,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
                 return;
             }
 
-            using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Validation))
-            {
-                _validator.Validate(context.ModelState);
-                await next();
-            }
+            _validator.Validate(context.ModelState);
+            await next();
         }
     }
 }

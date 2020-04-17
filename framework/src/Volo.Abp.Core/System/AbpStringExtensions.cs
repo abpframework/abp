@@ -84,11 +84,11 @@ namespace System
         }
 
         /// <summary>
-        /// Gets index of nth occurence of a char in a string.
+        /// Gets index of nth occurrence of a char in a string.
         /// </summary>
         /// <param name="str">source string to be searched</param>
         /// <param name="c">Char to search in <see cref="str"/></param>
-        /// <param name="n">Count of the occurence</param>
+        /// <param name="n">Count of the occurrence</param>
         public static int NthIndexOf(this string str, char c, int n)
         {
             Check.NotNull(str, nameof(str));
@@ -192,6 +192,19 @@ namespace System
             return str;
         }
 
+        public static string ReplaceFirst(this string str, string search, string replace, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            Check.NotNull(str, nameof(str));
+
+            var pos = str.IndexOf(search, comparisonType);
+            if (pos < 0)
+            {
+                return str;
+            }
+
+            return str.Substring(0, pos) + replace + str.Substring(pos + search.Length);
+        }
+
         /// <summary>
         /// Gets a substring of a string from end of the string.
         /// </summary>
@@ -278,6 +291,25 @@ namespace System
             return useCurrentCulture
                 ? Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + " " + char.ToLower(m.Value[1]))
                 : Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + " " + char.ToLowerInvariant(m.Value[1]));
+        }
+
+        /// <summary>
+        /// Converts given PascalCase/camelCase string to kebab-case.
+        /// </summary>
+        /// <param name="str">String to convert.</param>
+        /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
+        public static string ToKebabCase(this string str, bool useCurrentCulture = false)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return str;
+            }
+
+            str = str.ToCamelCase();
+
+            return useCurrentCulture
+                ? Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + "-" + char.ToLower(m.Value[1]))
+                : Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + "-" + char.ToLowerInvariant(m.Value[1]));
         }
 
         /// <summary>

@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "new.css",
+	"sources": [
+		"new.scss"
+	],
+	"mappings": "AAAA,AACI,sBADkB,CAClB,gBAAgB,AAAC,CACb,gBAAgB,CAAE,OAAQ,CAC1B,UAAU,CAAE,MAAO,CAKtB,AARL,AAKQ,sBALc,CAClB,gBAAgB,CAIZ,kBAAkB,AAAC,CACf,UAAU,CAAE,IAAK,CACpB,AAPT,AAUI,sBAVkB,CAUlB,KAAK,AAAC,CACF,gBAAgB,CAAE,OAAQ,CAC7B,AAZL,AAcI,sBAdkB,CAclB,cAAc,AAAC,CACX,UAAU,CAAE,MAAO,CACtB",
+	"names": []
+}

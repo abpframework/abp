@@ -19,7 +19,7 @@ namespace Volo.Abp.MemoryDb
         {
             var connStr = Guid.NewGuid().ToString();
 
-            context.Services.Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = connStr;
             });
@@ -29,8 +29,6 @@ namespace Volo.Abp.MemoryDb
                 options.AddDefaultRepositories();
                 options.AddRepository<City, CityRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpMemoryDbTestModule>();
         }
     }
 }

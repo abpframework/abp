@@ -11,7 +11,9 @@ namespace Volo.Abp.Authorization.Permissions
         [CanBeNull]
         public ClaimsPrincipal Principal { get; }
 
-        public PermissionValueCheckContext([NotNull] PermissionDefinition permission, [CanBeNull] ClaimsPrincipal principal)
+        public PermissionValueCheckContext(
+            [NotNull] PermissionDefinition permission, 
+            [CanBeNull] ClaimsPrincipal principal)
         {
             Check.NotNull(permission, nameof(permission));
 

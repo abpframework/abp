@@ -37,7 +37,7 @@ namespace Volo.Abp.UI.Navigation
         /// Default value: 1000.
         /// </summary>
         public int Order { get; set; }
-        
+
         /// <summary>
         /// The URL to navigate when this menu item is selected.
         /// </summary>
@@ -65,24 +65,36 @@ namespace Volo.Abp.UI.Navigation
         /// Can be used to disable this menu item.
         /// </summary>
         public bool IsDisabled { get; set; }
-        
+
         /// <inheritdoc cref="IHasMenuItems.Items"/>
         [NotNull]
-        public IList<ApplicationMenuItem> Items { get; }
+        public ApplicationMenuItemList Items { get; }
 
         /// <summary>
         /// Can be used to store a custom object related to this menu item. Optional.
         /// </summary>
         public object CustomData { get; set; }
 
+        /// <summary>
+        /// Can be used to render the element with a specific Id for DOM selections.
+        /// </summary>
+        public string ElementId { get; set; }
+
+        /// <summary>
+        /// Can be used to render the element with extra CSS classes.
+        /// </summary>
+        public string CssClass { get; set; }
+
         public ApplicationMenuItem(
-            [NotNull] string name, 
+            [NotNull] string name,
             [NotNull] string displayName,
             string url = null,
             string icon = null,
             int order = DefaultOrder,
             object customData = null,
-            string target = null)
+            string target = null,
+            string elementId = null,
+            string cssClass = null)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNullOrWhiteSpace(displayName, nameof(displayName));
@@ -94,8 +106,10 @@ namespace Volo.Abp.UI.Navigation
             Order = order;
             CustomData = customData;
             Target = target;
+            ElementId = elementId ?? GetDefaultElementId();
+            CssClass = cssClass;
 
-            Items = new List<ApplicationMenuItem>();
+            Items = new ApplicationMenuItemList();
         }
 
         /// <summary>
@@ -107,6 +121,16 @@ namespace Volo.Abp.UI.Navigation
         {
             Items.Add(menuItem);
             return this;
+        }
+
+        private string GetDefaultElementId()
+        {
+            return "MenuItem_" + Name;
+        }
+
+        public override string ToString()
+        {
+            return $"[ApplicationMenuItem] Name = {Name}";
         }
     }
 }

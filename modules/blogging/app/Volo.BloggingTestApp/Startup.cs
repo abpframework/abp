@@ -3,34 +3,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Volo.Abp;
 
 namespace Volo.BloggingTestApp
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<BloggingTestAppModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<BloggingTestAppModule>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory
-                .AddConsole()
-                .AddDebug()
-                .AddSerilog(new LoggerConfiguration()
-                    .Enrich.FromLogContext()
-                    .WriteTo.File("Logs/logs.txt")
-                    .CreateLogger()
-                );
-
             app.InitializeApplication();
         }
     }

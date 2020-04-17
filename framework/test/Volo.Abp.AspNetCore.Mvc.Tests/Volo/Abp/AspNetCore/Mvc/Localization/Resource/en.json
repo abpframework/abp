@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "BirthDate": "Birth date" 
+    "BirthDate": "Birth date",
+    "Value1": "Value One" 
   }
 }

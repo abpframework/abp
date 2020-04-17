@@ -18,7 +18,6 @@ namespace Volo.Abp.Auditing
         public Task SaveAsync(AuditLogInfo auditInfo)
         {
             Logger.LogInformation(auditInfo.ToString());
-
             return Task.FromResult(0);
         }
     }

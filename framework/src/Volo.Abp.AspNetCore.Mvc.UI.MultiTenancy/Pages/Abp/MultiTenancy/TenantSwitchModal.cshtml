@@ -1,0 +1,21 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Pages.Abp.MultiTenancy
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization
+@model TenantSwitchModalModel
+@inject IHtmlLocalizer<AbpUiMultiTenancyResource> L
+@{
+    Layout = null;
+}
+<abp-dynamic-form abp-model="@Model.Input" asp-page="/Abp/MultiTenancy/TenantSwitchModal">
+    <abp-modal>
+        <abp-modal-header title="@L["SwitchTenant"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-form-content />
+            <p>@L["SwitchTenantHint"]</p>
+        </abp-modal-body>
+        @* TODO: A "Submit" would be better than "Save"! *@
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>

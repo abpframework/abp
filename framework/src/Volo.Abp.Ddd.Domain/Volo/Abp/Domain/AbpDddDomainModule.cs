@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Auditing;
+﻿using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus;
 using Volo.Abp.Guids;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
@@ -16,15 +16,14 @@ namespace Volo.Abp.Domain
         typeof(AbpDataModule),
         typeof(AbpEventBusModule),
         typeof(AbpGuidsModule),
-        typeof(AbpMultiTenancyAbstractionsModule),
+        typeof(AbpMultiTenancyModule),
         typeof(AbpThreadingModule),
         typeof(AbpTimingModule),
-        typeof(AbpUnitOfWorkModule))]
+        typeof(AbpUnitOfWorkModule),
+        typeof(AbpObjectMappingModule)
+        )]
     public class AbpDddDomainModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpDddDomainModule>();
-        }
+
     }
 }

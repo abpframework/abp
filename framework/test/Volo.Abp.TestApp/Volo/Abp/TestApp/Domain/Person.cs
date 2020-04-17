@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.TestApp.Domain
 {
@@ -15,6 +16,11 @@ namespace Volo.Abp.TestApp.Domain
 
         public virtual int Age { get; set; }
 
+        public virtual DateTime? Birthday { get; set; }
+
+        [DisableDateTimeNormalization]
+        public virtual DateTime? LastActive { get; set; }
+
         public virtual Collection<Phone> Phones { get; set; }
 
         private Person()
@@ -23,8 +29,8 @@ namespace Volo.Abp.TestApp.Domain
         }
 
         public Person(Guid id, string name, int age, Guid? tenantId = null, Guid? cityId = null)
+            : base(id)
         {
-            Id = id;
             Name = name;
             Age = age;
             TenantId = tenantId;
@@ -39,7 +45,24 @@ namespace Volo.Abp.TestApp.Domain
 
             var oldName = Name;
             Name = name;
-            AddDomainEvent(new PersonNameChangedEvent{Person = this, OldName =  oldName});
+
+            AddLocalEvent(
+                new PersonNameChangedEvent
+                {
+                    Person = this,
+                    OldName = oldName
+                }
+            );
+
+            AddDistributedEvent(
+                new PersonNameChangedEto
+                {
+                    Id = Id,
+                    OldName = oldName,
+                    NewName = Name,
+                    TenantId = TenantId
+                }
+            );
         }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Volo.Abp.Localization
 {
-    public class AbpDictionaryBasedStringLocalizer : IStringLocalizer
+    public class AbpDictionaryBasedStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
     {
         public LocalizationResource Resource { get; }
 
@@ -26,9 +26,22 @@ namespace Volo.Abp.Localization
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
-            return GetAllStrings(CultureInfo.CurrentUICulture.Name, includeParentCultures);
+            return GetAllStrings(
+                CultureInfo.CurrentUICulture.Name,
+                includeParentCultures
+            );
+        }
+        
+        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
+        {
+            return GetAllStrings(
+                CultureInfo.CurrentUICulture.Name,
+                includeParentCultures,
+                includeBaseLocalizers
+            );
         }
 
+        [Obsolete("This method is obsolete. Use `CurrentCulture` and `CurrentUICulture` instead.")]
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             return new CultureWrapperStringLocalizer(culture.Name, this);
@@ -58,10 +71,13 @@ namespace Volo.Abp.Localization
             {
                 foreach (var baseLocalizer in BaseLocalizers)
                 {
-                    var baseLocalizedString = baseLocalizer.WithCulture(CultureInfo.GetCultureInfo(cultureName))[name];
-                    if (baseLocalizedString != null && !baseLocalizedString.ResourceNotFound)
+                    using (CultureHelper.Use(CultureInfo.GetCultureInfo(cultureName)))
                     {
-                        return baseLocalizedString;
+                        var baseLocalizedString = baseLocalizer[name];
+                        if (baseLocalizedString != null && !baseLocalizedString.ResourceNotFound)
+                        {
+                            return baseLocalizedString;
+                        }
                     }
                 }
 
@@ -109,26 +125,35 @@ namespace Volo.Abp.Localization
             return null;
         }
 
-        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(string cultureName, bool includeParentCultures = true)
+        protected virtual IReadOnlyList<LocalizedString> GetAllStrings(
+            string cultureName, 
+            bool includeParentCultures = true,
+            bool includeBaseLocalizers = true)
         {
             //TODO: Can be optimized (example: if it's already default dictionary, skip overriding)
 
             var allStrings = new Dictionary<string, LocalizedString>();
 
-            foreach (var baseLocalizer in BaseLocalizers.Select(l => l.WithCulture(CultureInfo.GetCultureInfo(cultureName))))
+            if (includeBaseLocalizers)
             {
-                //TODO: Try/catch is a workaround here!
-                try
+                foreach (var baseLocalizer in BaseLocalizers.Select(l => l))
                 {
-                    var baseLocalizedString = baseLocalizer.GetAllStrings(includeParentCultures);
-                    foreach (var localizedString in baseLocalizedString)
+                    using (CultureHelper.Use(CultureInfo.GetCultureInfo(cultureName)))
                     {
-                        allStrings[localizedString.Name] = localizedString;
-                    }
-                }
-                catch (MissingManifestResourceException)
-                {
+                        //TODO: Try/catch is a workaround here!
+                        try
+                        {
+                            var baseLocalizedString = baseLocalizer.GetAllStrings(includeParentCultures);
+                            foreach (var localizedString in baseLocalizedString)
+                            {
+                                allStrings[localizedString.Name] = localizedString;
+                            }
+                        }
+                        catch (MissingManifestResourceException)
+                        {
 
+                        }
+                    }
                 }
             }
 
@@ -160,7 +185,7 @@ namespace Volo.Abp.Localization
                 : cultureName;
         }
 
-        public class CultureWrapperStringLocalizer : IStringLocalizer
+        public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
         {
             private readonly string _cultureName;
             private readonly AbpDictionaryBasedStringLocalizer _innerLocalizer;
@@ -180,9 +205,15 @@ namespace Volo.Abp.Localization
                 return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures);
             }
 
+            [Obsolete("This method is obsolete. Use `CurrentCulture` and `CurrentUICulture` instead.")]
             public IStringLocalizer WithCulture(CultureInfo culture)
             {
                 return new CultureWrapperStringLocalizer(culture.Name, _innerLocalizer);
+            }
+
+            public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
+            {
+                return _innerLocalizer.GetAllStrings(_cultureName, includeParentCultures, includeBaseLocalizers);
             }
         }
     }

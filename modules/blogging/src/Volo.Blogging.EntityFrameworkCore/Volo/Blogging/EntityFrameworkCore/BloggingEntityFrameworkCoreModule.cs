@@ -12,8 +12,6 @@ namespace Volo.Blogging.EntityFrameworkCore
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAbpDbContext<BloggingDbContext>();
-
-            context.Services.AddAssemblyOf<BloggingEntityFrameworkCoreModule>();
         }
     }
 }

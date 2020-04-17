@@ -4,20 +4,20 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    [DependsOn(typeof(AbpSettingManagementDomainModule))]
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    [DependsOn(
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpEntityFrameworkCoreModule)
+        )]
     public class AbpSettingManagementEntityFrameworkCoreModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAbpDbContext<AbpSettingManagementDbContext>(options =>
+            context.Services.AddAbpDbContext<SettingManagementDbContext>(options =>
             {
                 options.AddDefaultRepositories<ISettingManagementDbContext>();
 
                 options.AddRepository<Setting, EfCoreSettingRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpSettingManagementEntityFrameworkCoreModule>();
         }
     }
 }

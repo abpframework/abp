@@ -52,7 +52,7 @@ namespace Microsoft.Extensions.Logging
                     logger.LogTrace(exception, message);
                     break;
                 default: // LogLevel.Debug || LogLevel.None
-                    logger.LogDebug(message);
+                    logger.LogDebug(exception, message);
                     break;
             }
         }

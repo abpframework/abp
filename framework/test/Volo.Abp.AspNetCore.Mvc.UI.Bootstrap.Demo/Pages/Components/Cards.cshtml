@@ -10,135 +10,597 @@
     </abp-style-bundle>
 }
 
+@section scripts {
+    <abp-script-bundle>
+        @*<abp-script src="/libs/highlight.js/lib/highlight.js" />
+            <abp-script src="/Pages/Components/highlightCode.js" />*@
+    </abp-script-bundle>
+}
+
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
 <h2>Cards</h2>
 
 
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/card/" target="_blank"> Bootstrap card</a>.</p>
 
-<h4># Example</h4>
+<h4>Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-card>
-            <abp-card-header>Card header</abp-card-header>
-            <abp-card-body>Card body</abp-card-body>
+
+        <abp-card style="width: 18rem;">
+            <img abp-card-image="Top" src="~/imgs/demo/300x200.png" />
+            <abp-card-body>
+                <abp-card-title>Card Title</abp-card-title>
+                <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+                <a abp-button="Primary" href="#"> Go somewhere</a>
+            </abp-card-body>
         </abp-card>
+
     </div>
     <div class="code-area">
-        <pre>&lt;abp-card&gt;
-    &lt;abp-card-header&gt;Card header&lt;/abp-card-header&gt;
-    &lt;abp-card-body&gt;Card body&lt;/abp-card-body&gt;
-&lt;/abp-card&gt;</pre>
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card style=&quot;width: 18rem;&quot;&gt;
+  &lt;img abp-card-image=&quot;Top&quot; src=&quot;~/imgs/demo/300x200.png&quot;/&gt;
+  &lt;abp-card-body&gt;
+    &lt;abp-card-title&gt;Card Title&lt;/abp-card-title&gt;
+    &lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card&apos;s content.&lt;/abp-card-text&gt;
+    &lt;a abp-button=&quot;Primary&quot; href=&quot;#&quot;&gt; Go somewhere&lt;/a&gt;
+  &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+  &lt;img class=&quot;card-img-top&quot; src=&quot;.../100px180/&quot; alt=&quot;Card image cap&quot;&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt;Card title&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;Some quick example text to build on the card title and make up the bulk of the card&apos;s content.&lt;/p&gt;
+    &lt;a href=&quot;#&quot; class=&quot;btn btn-primary&quot;&gt;Go somewhere&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
     </div>
 </div>
 
-<h4># Example</h4>
+<h4>Titles, text, and links</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
+
         <abp-card style="width: 18rem;">
-            <abp-card-body title="Card title" subtitle="Card subtitle">
-                <abp-card-text>
-                    This is a sample card component built by
-                    ABP bootstrap card tag helper.
-                </abp-card-text>
+            <abp-card-body>
+                <abp-card-title>Card title</abp-card-title>
+                <abp-card-subtitle class="mb-2 text-muted">Card subtitle</abp-card-subtitle>
+                <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
                 <a abp-card-link href="#">Card link</a>
                 <a abp-card-link href="#">Another link</a>
             </abp-card-body>
         </abp-card>
+
     </div>
     <div class="code-area">
-        <pre>
-&lt;abp-card style="width: 18rem;"&gt;
-    &lt;abp-card-body title="Card title" subtitle="Card subtitle"&gt;
-        &lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card's content.&lt;/abp-card-text&gt;
-        &lt;a abp-card-link href="#"&gt;Card link&lt;/a&gt;
-        &lt;a abp-card-link href="#"&gt;Another link&lt;/a&gt;
-    &lt;/abp-card-body&gt;
-&lt;/abp-card&gt;
-</pre>
-    </div>
-</div>
-
-<h4># Example</h4>
-
-<div class="demo-with-code">
-    <div class="demo-area">
-        <abp-card style="width: 18rem;">
-            <img abp-card-image="Top" src="~/imgs/demo/300x200.png">
-            <abp-card-body>
-                <abp-card-title>Card title</abp-card-title>
-                <abp-card-text>
-                    This is a sample card component built by
-                    ABP bootstrap card tag helper.
-                </abp-card-text>
-                <a abp-button="Primary" href="#">Go somewhere &rarr;</a>
-            </abp-card-body>
-        </abp-card>
-    </div>
-    <div class="code-area">
-        <pre>
-&lt;abp-card style="width: 18rem;"&gt;
-    &lt;img abp-card-image="Top" src="~/imgs/demo/300x200.png" alt="Card image cap"&gt;
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card style=&quot;width: 18rem;&quot;&gt;
     &lt;abp-card-body&gt;
-        &lt;abp-card-title&gt;Card title&lt;/abp-card-title&gt;
-        &lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card's content.&lt;/abp-card-text&gt;
-        &lt;a href="#" class="btn btn-primary"&gt;Go somewhere&lt;/a&gt;
+&lt;abp-card-title&gt;Card title&lt;/abp-card-title&gt;
+&lt;abp-card-subtitle class=&quot;mb-2 text-muted&quot;&gt;Card subtitle&lt;/abp-card-subtitle&gt;
+&lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card&apos;s content.&lt;/abp-card-text&gt;
+&lt;a abp-card-link href=&quot;#&quot;&gt;Card link&lt;/a&gt;
+&lt;a abp-card-link href=&quot;#&quot;&gt;Another link&lt;/a&gt;
     &lt;/abp-card-body&gt;
 &lt;/abp-card&gt;
-</pre>
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt;Card title&lt;/h5&gt;
+    &lt;h6 class=&quot;card-subtitle mb-2 text-muted&quot;&gt;Card subtitle&lt;/h6&gt;
+    &lt;p class=&quot;card-text&quot;&gt;Some quick example text to build on the card title and make up the bulk of the card&apos;s content.&lt;/p&gt;
+    &lt;a href=&quot;#&quot; class=&quot;card-link&quot;&gt;Card link&lt;/a&gt;
+    &lt;a href=&quot;#&quot; class=&quot;card-link&quot;&gt;Another link&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
     </div>
 </div>
 
-<h4># Example</h4>
+<h4>List groups</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
-        <abp-card class="text-center">
-            <abp-card-header>
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Active</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#link">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#disabledlink">Disabled</a>
-                    </li>
-                </ul>
-            </abp-card-header>
-            <abp-card-body title="Special title treatment">
-                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </abp-card-body>
+
+        <abp-card style="width: 18rem;">
+            <abp-list-group flush="true">
+                <abp-list-group-item>Cras justo odio</abp-list-group-item>
+                <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+                <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+            </abp-list-group>
         </abp-card>
+
     </div>
     <div class="code-area">
-        <pre>
-&lt;abp-card class="text-center"&gt;
-    &lt;abp-card-header&gt;
-        &lt;ul class="nav nav-tabs card-header-tabs"&gt;
-            &lt;li class="nav-item"&gt;
-                &lt;a class="nav-link active" href="#"&gt;Active&lt;/a&gt;
-            &lt;/li&gt;
-            &lt;li class="nav-item"&gt;
-                &lt;a class="nav-link" href="#link"&gt;Link&lt;/a&gt;
-            &lt;/li&gt;
-            &lt;li class="nav-item"&gt;
-                &lt;a class="nav-link disabled" href="#disabledlink"&gt;Disabled&lt;/a&gt;
-            &lt;/li&gt;
-        &lt;/ul&gt;
-    &lt;/abp-card-header&gt;
-    &lt;abp-card-body title="Special title treatment"&gt;
-        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
-        &lt;a href="#" class="btn btn-primary"&gt;Go somewhere&lt;/a&gt;
-    &lt;/abp-card-body&gt;
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card style=&quot;width: 18rem;&quot;&gt;
+    &lt;abp-list-group flush=&quot;true&quot;&gt;
+&lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+&lt;abp-list-group-item&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+&lt;abp-list-group-item&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+    &lt;/abp-list-group&gt;
 &lt;/abp-card&gt;
-</pre>
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+  &lt;ul class=&quot;list-group list-group-flush&quot;&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Cras justo odio&lt;/li&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Vestibulum at eros&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
     </div>
 </div>
 
-<hr />
+<div class="demo-with-code">
+    <div class="demo-area">
 
-<a asp-page="../">&lt; back</a>
+        <abp-card style="width: 18rem;">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-list-group flush="true">
+                <abp-list-group-item>Cras justo odio</abp-list-group-item>
+                <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+                <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+            </abp-list-group>
+        </abp-card>
+
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card style=&quot;width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-list-group flush=&quot;true&quot;&gt;
+&lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+&lt;abp-list-group-item&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+&lt;abp-list-group-item&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+    &lt;/abp-list-group&gt;
+&lt;/abp-card&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;
+    Featured
+  &lt;/div&gt;
+  &lt;ul class=&quot;list-group list-group-flush&quot;&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Cras justo odio&lt;/li&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Vestibulum at eros&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Kitchen sink</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-card style="width: 18rem;">
+            <img abp-card-image="Top" src="~/imgs/demo/300x200.png" />
+            <abp-card-body>
+                <abp-card-title>Card Title</abp-card-title>
+                <abp-card-text>Some quick example text to build on the card title and make up the bulk of the card's content.</abp-card-text>
+            </abp-card-body>
+            <abp-list-group flush="true">
+                <abp-list-group-item>Cras justo odio</abp-list-group-item>
+                <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+                <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+            </abp-list-group>
+            <abp-card-body>
+                <a abp-card-link href="#">Card link</a>
+                <a abp-card-link href="#">Another link</a>
+            </abp-card-body>
+        </abp-card>
+
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card style=&quot;width: 18rem;&quot;&gt;
+    &lt;img abp-card-image=&quot;Top&quot; src=&quot;~/imgs/demo/300x200.png&quot; /&gt;
+    &lt;abp-card-body&gt;
+&lt;abp-card-title&gt;Card Title&lt;/abp-card-title&gt;
+&lt;abp-card-text&gt;Some quick example text to build on the card title and make up the bulk of the card&apos;s content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+    &lt;abp-list-group flush=&quot;true&quot;&gt;
+&lt;abp-list-group-item&gt;Cras justo odio&lt;/abp-list-group-item&gt;
+&lt;abp-list-group-item&gt;Dapibus ac facilisis in&lt;/abp-list-group-item&gt;
+&lt;abp-list-group-item&gt;Vestibulum at eros&lt;/abp-list-group-item&gt;
+    &lt;/abp-list-group&gt;
+    &lt;abp-card-body&gt;
+&lt;a abp-card-link href=&quot;#&quot;&gt;Card link&lt;/a&gt;
+&lt;a abp-card-link href=&quot;#&quot;&gt;Another link&lt;/a&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card&quot; style=&quot;width: 18rem;&quot;&gt;
+  &lt;img class=&quot;card-img-top&quot; src=&quot;.../100px180/?text=Image cap&quot; alt=&quot;Card image cap&quot;&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt;Card title&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;Some quick example text to build on the card title and make up the bulk of the card&apos;s content.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;ul class=&quot;list-group list-group-flush&quot;&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Cras justo odio&lt;/li&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Dapibus ac facilisis in&lt;/li&gt;
+    &lt;li class=&quot;list-group-item&quot;&gt;Vestibulum at eros&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;a href=&quot;#&quot; class=&quot;card-link&quot;&gt;Card link&lt;/a&gt;
+    &lt;a href=&quot;#&quot; class=&quot;card-link&quot;&gt;Another link&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Header and footer</h4>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-card>
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+                <a abp-button="Primary" href="#"> Go somewhere</a>
+            </abp-card-body>
+        </abp-card>
+
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card style=&quot;width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+&lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+&lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+&lt;a abp-button=&quot;Primary&quot; href=&quot;#&quot;&gt; Go somewhere&lt;/a&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;
+    Featured
+  &lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt;Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+    &lt;a href=&quot;#&quot; class=&quot;btn btn-primary&quot;&gt;Go somewhere&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-card>
+            <abp-card-header>Quote</abp-card-header>
+            <abp-card-body>
+                <abp-blockquote>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                    <footer>Someone famous in Source Title</footer>
+                </abp-blockquote>
+            </abp-card-body>
+        </abp-card>
+
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card&gt;
+    &lt;abp-card-header&gt;Quote&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+&lt;abp-blockquote&gt;
+    &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.&lt;/p&gt;
+    &lt;footer&gt;Someone famous in Source Title&lt;/footer&gt;
+&lt;/abp-blockquote&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;
+    Quote
+  &lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;blockquote class=&quot;blockquote mb-0&quot;&gt;
+      &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.&lt;/p&gt;
+      &lt;footer class=&quot;blockquote-footer&quot;&gt;Someone famous in Source Titl&lt;/footer&gt;
+    &lt;/blockquote&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-card class="text-center">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+                <a abp-button="Primary" href="#"> Go somewhere</a>
+            </abp-card-body>
+            <abp-card-footer class="text-muted"> 2 days ago</abp-card-footer>
+        </abp-card>
+
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card class=&quot;text-center&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+&lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+&lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+&lt;a abp-button=&quot;Primary&quot; href=&quot;#&quot;&gt; Go somewhere&lt;/a&gt;
+    &lt;/abp-card-body&gt;
+    &lt;abp-card-footer class=&quot;text-muted&quot;&gt; 2 days ago&lt;/abp-card-footer&gt;
+&lt;/abp-card&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card text-center&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;
+    Featured
+  &lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt;Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+    &lt;a href=&quot;#&quot; class=&quot;btn btn-primary&quot;&gt;Go somewhere&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;card-footer text-muted&quot;&gt;
+    2 days ago
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>
+
+<h4>Card styles</h4>
+
+<h5>Background and color</h5>
+
+<div class="demo-with-code">
+    <div class="demo-area">
+
+        <abp-card background="Primary" class="mb-3" style="max-width: 18rem;">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            </abp-card-body>
+        </abp-card>
+        <abp-card background="Success" text-color="Danger" border="Dark" class="mb-3" style="max-width: 18rem;">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            </abp-card-body>
+        </abp-card>
+        <abp-card background="Warning" text-color="Secondary" class="mb-3" style="max-width: 18rem;">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            </abp-card-body>
+        </abp-card>
+        <abp-card background="Light" text-color="Dark" border="Success" class="mb-3"  style="max-width: 18rem;">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            </abp-card-body>
+        </abp-card>
+        <abp-card background="Dark" text-color="White" border="Danger" class="mb-3" style="max-width: 18rem;">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            </abp-card-body>
+        </abp-card>
+
+        <abp-card background="Danger" class="mb-3" style="max-width: 18rem;">
+            <abp-card-header text-color="Primary">Featured</abp-card-header>
+            <abp-card-body>
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            </abp-card-body>
+        </abp-card>
+
+        <abp-card background="Info" border="Danger" class="mb-3" style="max-width: 18rem;">
+            <abp-card-header>Featured</abp-card-header>
+            <abp-card-body text-color="Danger">
+                <abp-card-title> Special title treatment</abp-card-title>
+                <abp-card-text>With supporting text below as a natural lead-in to additional content.</abp-card-text>
+            </abp-card-body>
+        </abp-card>
+
+    </div>
+    <div class="code-area">
+        <abp-tabs>
+            <abp-tab title="Tag Helper">
+                <pre><code>
+&lt;abp-card background=&quot;Primary&quot; class=&quot;mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+
+&lt;abp-card background=&quot;Success&quot; text-color=&quot;Danger&quot; border=&quot;Dark&quot; class=&quot;mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+
+&lt;abp-card background=&quot;Warning&quot; text-color=&quot;Secondary&quot; class=&quot;mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+
+&lt;abp-card background=&quot;Light&quot; text-color=&quot;Dark&quot; border=&quot;Success&quot; class=&quot;mb-3&quot;  style=&quot;max-width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+
+&lt;abp-card background=&quot;Dark&quot; text-color=&quot;White&quot; border=&quot;Danger&quot; class=&quot;mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+
+&lt;abp-card background=&quot;Danger&quot; class=&quot;mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+    &lt;abp-card-header text-color=&quot;Primary&quot;&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body&gt;
+        &lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+
+&lt;abp-card background=&quot;Info&quot; border=&quot;Danger&quot; class=&quot;mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+    &lt;abp-card-header&gt;Featured&lt;/abp-card-header&gt;
+    &lt;abp-card-body text-color=&quot;Danger&quot;&gt;
+        &lt;abp-card-title&gt; Special title treatment&lt;/abp-card-title&gt;
+        &lt;abp-card-text&gt;With supporting text below as a natural lead-in to additional content.&lt;/abp-card-text&gt;
+    &lt;/abp-card-body&gt;
+&lt;/abp-card&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;card bg-primary mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;Featured&lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt; Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card text-danger bg-success border-dark mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;Featured&lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt; Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card text-secondary bg-warning mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;Featured&lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt; Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card text-dark bg-light border-success mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;Featured&lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt; Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card text-white bg-dark border-danger mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;Featured&lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt; Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card bg-danger mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header text-primary&quot;&gt;Featured&lt;/div&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt; Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;card bg-info border-danger mb-3&quot; style=&quot;max-width: 18rem;&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;Featured&lt;/div&gt;
+  &lt;div class=&quot;card-body text-danger&quot;&gt;
+    &lt;h5 class=&quot;card-title&quot;&gt; Special title treatment&lt;/h5&gt;
+    &lt;p class=&quot;card-text&quot;&gt;With supporting text below as a natural lead-in to additional content.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
+    </div>
+</div>

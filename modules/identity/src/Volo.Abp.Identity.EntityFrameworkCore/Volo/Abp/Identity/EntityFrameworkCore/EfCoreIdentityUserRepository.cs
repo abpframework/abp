@@ -16,7 +16,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         public EfCoreIdentityUserRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
-
         }
 
         public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(

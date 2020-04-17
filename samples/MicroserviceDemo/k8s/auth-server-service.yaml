@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: auth-server
+spec:
+  selector:
+    app: auth-server
+  ports:
+  - protocol: TCP
+    port: 51511
+    targetPort: http

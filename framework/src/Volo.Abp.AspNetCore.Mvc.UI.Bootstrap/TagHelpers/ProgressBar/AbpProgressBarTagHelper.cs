@@ -1,5 +1,9 @@
-﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ProgressBar
 {
+    [HtmlTargetElement("abp-progress-bar")]
+    [HtmlTargetElement("abp-progress-part")]
     public class AbpProgressBarTagHelper : AbpTagHelper<AbpProgressBarTagHelper, AbpProgressBarTagHelperService>
     {
         public double Value { get; set; }

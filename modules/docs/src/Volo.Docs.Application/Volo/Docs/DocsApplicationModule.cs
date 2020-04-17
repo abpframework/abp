@@ -14,12 +14,11 @@ namespace Volo.Docs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.AddAutoMapperObjectMapper<DocsApplicationModule>();
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsApplicationAutoMapperProfile>(validate: true);
             });
-
-            context.Services.AddAssemblyOf<DocsApplicationModule>();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
@@ -12,7 +11,7 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.PreConfigure(abpDbContextConfigurationContext =>
                 {
@@ -25,7 +24,6 @@ namespace Volo.Abp.EntityFrameworkCore
             });
 
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
-            context.Services.AddAssemblyOf<AbpEntityFrameworkCoreModule>();
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
         public bool? Active { get; set; }
 
+        public string ParentDropdownName { get; set; }
+
         public AbpTabTagHelper(AbpTabTagHelperService tagHelperService)
             : base(tagHelperService)
         {

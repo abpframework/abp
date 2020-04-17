@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -8,6 +9,11 @@
     <PackageId>Volo.Blogging.Application.Contracts</PackageId>
     <RootNamespace />
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\*.json" />
+    <None Remove="Volo\Blogging\Localization\Resources\Blogging\ApplicationContracts\*.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Blogging.Domain.Shared\Volo.Blogging.Domain.Shared.csproj" />

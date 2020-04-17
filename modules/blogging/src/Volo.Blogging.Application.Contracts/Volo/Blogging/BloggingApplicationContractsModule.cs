@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Authorization.Permissions;
+﻿using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
+using Volo.Blogging.Localization;
 
 namespace Volo.Blogging
 {
@@ -9,12 +10,16 @@ namespace Volo.Blogging
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.DefinitionProviders.Add<BloggingPermissionDefinitionProvider>();
+                options.FileSets.AddEmbedded<BloggingApplicationContractsModule>();
             });
-
-            context.Services.AddAssemblyOf<BloggingApplicationContractsModule>();
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<BloggingResource>()
+                    .AddVirtualJson("Volo/Blogging/Localization/Resources/Blogging/ApplicationContracts");
+            });
         }
     }
 }

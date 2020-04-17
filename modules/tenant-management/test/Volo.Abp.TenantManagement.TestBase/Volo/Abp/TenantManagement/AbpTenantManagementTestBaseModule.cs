@@ -11,11 +11,6 @@ namespace Volo.Abp.TenantManagement
         )]
     public class AbpTenantManagementTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpTenantManagementTestBaseModule>();
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);

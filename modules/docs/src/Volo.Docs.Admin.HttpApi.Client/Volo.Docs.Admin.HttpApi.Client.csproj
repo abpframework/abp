@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\configureawait.props" />
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Volo.Docs.Admin.HttpApi.Client</AssemblyName>
+    <PackageId>Volo.Docs.Admin.HttpApi.Client</PackageId>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Docs.Admin.Application.Contracts\Volo.Docs.Admin.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

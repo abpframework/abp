@@ -1,12 +1,17 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+﻿using System.Threading.Tasks;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
-    public class IndexModel : AbpPageModel
+    public class IndexModel : IdentityPageModel
     {
-        public void OnGet()
+        public virtual Task OnGetAsync()
         {
+            return Task.CompletedTask;
+        }
 
+        public virtual Task OnPostAsync()
+        {
+            return Task.CompletedTask;
         }
     }
 }

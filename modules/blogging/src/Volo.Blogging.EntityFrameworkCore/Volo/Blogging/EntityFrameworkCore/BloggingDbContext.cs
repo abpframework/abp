@@ -5,14 +5,14 @@ using Volo.Blogging.Blogs;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging;
+using Volo.Blogging.Users;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
-    [ConnectionStringName("Blogging")]
+    [ConnectionStringName(BloggingDbProperties.ConnectionStringName)]
     public class BloggingDbContext : AbpDbContext<BloggingDbContext>, IBloggingDbContext
     {
-        public static string TablePrefix { get; set; } = BloggingConsts.DefaultDbTablePrefix;
-        public static string Schema { get; set; } = BloggingConsts.DefaultDbSchema;
+        public DbSet<BlogUser> Users { get; set; }
 
         public DbSet<Blog> Blogs { get; set; }
 
@@ -34,11 +34,7 @@ namespace Volo.Blogging.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureBlogging(options =>
-            {
-                options.TablePrefix = TablePrefix;
-                options.Schema = Schema;
-            });
+            builder.ConfigureBlogging();
         }
     }
 }

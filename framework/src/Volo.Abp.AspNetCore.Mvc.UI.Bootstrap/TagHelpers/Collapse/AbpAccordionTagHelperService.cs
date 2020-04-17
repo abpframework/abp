@@ -55,7 +55,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Id))
             {
-                TagHelper.Id = Guid.NewGuid().ToString("N");
+                TagHelper.Id = "A" + Guid.NewGuid().ToString("N");
             }
         }
     }

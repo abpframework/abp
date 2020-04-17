@@ -2,14 +2,14 @@
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.Web.Localization.Resources.AbpPermissionManagement;
+using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.PermissionManagement.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.PermissionManagement.Web
 {
-    [DependsOn(typeof(AbpPermissionManagementApplicationContractsModule))]
+    [DependsOn(typeof(AbpPermissionManagementHttpApiModule))]
     [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
     [DependsOn(typeof(AbpAutoMapperModule))]
     public class AbpPermissionManagementWebModule : AbpModule
@@ -20,25 +20,22 @@ namespace Volo.Abp.PermissionManagement.Web
             {
                 options.AddAssemblyResource(typeof(AbpPermissionManagementResource));
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<AbpPermissionManagementWebModule>();
-
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<AbpPermissionManagementResource>("en")
-                    .AddVirtualJson("/Localization/Resources/AbpPermissionManagement");
-            });
-
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.AddAutoMapperObjectMapper<AbpPermissionManagementWebModule>();
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);
             });

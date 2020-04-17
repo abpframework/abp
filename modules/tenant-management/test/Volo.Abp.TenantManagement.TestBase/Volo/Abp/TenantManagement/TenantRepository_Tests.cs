@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.TenantManagement
@@ -46,12 +45,6 @@ namespace Volo.Abp.TenantManagement
             tenant = await TenantRepository.FindAsync(tenantId, includeDetails: true);
             tenant.ShouldNotBeNull();
             tenant.ConnectionStrings.Count.ShouldBeGreaterThanOrEqualTo(2);
-        }
-
-        [Fact]
-        public async Task GetCountAsync()
-        {
-            (await TenantRepository.GetCountAsync()).ShouldBeGreaterThan(0);
         }
 
         [Fact]

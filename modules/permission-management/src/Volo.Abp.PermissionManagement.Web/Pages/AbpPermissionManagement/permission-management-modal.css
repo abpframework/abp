@@ -1,0 +1,12 @@
+﻿.custom-scroll-container > .col-4 {
+    overflow: hidden;
+    overflow-y: auto;
+    max-height: 499px;
+    display: block;
+    position: relative;
+    z-index: 123;
+}
+
+.custom-scroll-content {
+    max-height: 440px;
+}

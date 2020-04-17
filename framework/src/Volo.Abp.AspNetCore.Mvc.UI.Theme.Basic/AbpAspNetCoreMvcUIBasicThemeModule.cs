@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
@@ -12,13 +13,22 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAspNetCoreMvcUiMultiTenancyModule)
         )]
     public class AbpAspNetCoreMvcUiBasicThemeModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiBasicThemeModule).Assembly);
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<ThemingOptions>(options =>
+            Configure<AbpThemingOptions>(options =>
             {
                 options.Themes.Add<BasicTheme>();
 
@@ -28,17 +38,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                 }
             });
 
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBasicThemeModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic");
             });
 
-            context.Services.Configure<ToolbarOptions>(options =>
+            Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
             });
 
-            context.Services.Configure<BundlingOptions>(options =>
+            Configure<AbpBundlingOptions>(options =>
             {
                 options
                     .StyleBundles
@@ -46,18 +56,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                     {
                         bundle
                             .AddBaseBundles(StandardBundles.Styles.Global)
-                            .AddContributors(new BasicThemeGlobalStyleContributor());
+                            .AddContributors(typeof(BasicThemeGlobalStyleContributor));
                     });
 
                 options
                     .ScriptBundles
                     .Add(BasicThemeBundles.Scripts.Global, bundle =>
                     {
-                        bundle.AddBaseBundles(StandardBundles.Scripts.Global);
+                        bundle
+                            .AddBaseBundles(StandardBundles.Scripts.Global)
+                            .AddContributors(typeof(BasicThemeGlobalScriptContributor));
                     });
             });
-
-            context.Services.AddAssemblyOf<AbpAspNetCoreMvcUiBasicThemeModule>();
         }
     }
 }

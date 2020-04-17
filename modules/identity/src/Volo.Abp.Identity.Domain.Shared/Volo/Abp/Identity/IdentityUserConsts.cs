@@ -6,6 +6,10 @@ namespace Volo.Abp.Identity
     {
         public const int MaxUserNameLength = AbpUserConsts.MaxUserNameLength;
 
+        public const int MaxNameLength = AbpUserConsts.MaxNameLength;
+
+        public const int MaxSurnameLength = AbpUserConsts.MaxSurnameLength;
+
         public const int MaxNormalizedUserNameLength = MaxUserNameLength;
 
         public const int MaxEmailLength = AbpUserConsts.MaxEmailLength;
@@ -14,7 +18,7 @@ namespace Volo.Abp.Identity
 
         public const int MaxPhoneNumberLength = AbpUserConsts.MaxPhoneNumberLength;
 
-        public const int MaxPasswordLength = 32;
+        public const int MaxPasswordLength = 128;
 
         public const int MaxPasswordHashLength = 256;
 

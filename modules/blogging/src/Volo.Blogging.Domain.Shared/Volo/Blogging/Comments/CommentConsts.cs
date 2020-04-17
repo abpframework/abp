@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Blogging.Comments
+﻿namespace Volo.Blogging.Comments
 {
     public class CommentConsts
     {

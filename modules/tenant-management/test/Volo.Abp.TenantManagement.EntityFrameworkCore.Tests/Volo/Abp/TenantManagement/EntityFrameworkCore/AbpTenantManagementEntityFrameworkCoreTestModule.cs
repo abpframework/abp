@@ -1,6 +1,8 @@
 ﻿using System;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
@@ -15,24 +17,32 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddEntityFrameworkInMemoryDatabase();
+            var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            var databaseName = Guid.NewGuid().ToString();
-
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
-                    abpDbContextConfigurationContext.DbContextOptions.UseInMemoryDatabase(databaseName);
+                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
 
-            context.Services.Configure<UnitOfWorkDefaultOptions>(options =>
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
+        }
 
-            context.Services.AddAssemblyOf<AbpTenantManagementEntityFrameworkCoreTestModule>();
+        private static SqliteConnection CreateDatabaseAndGetConnection()
+        {
+            var connection = new SqliteConnection("Data Source=:memory:");
+            connection.Open();
+
+            new TenantManagementDbContext(
+                new DbContextOptionsBuilder<TenantManagementDbContext>().UseSqlite(connection).Options
+            ).GetService<IRelationalDatabaseCreator>().CreateTables();
+
+            return connection;
         }
     }
 }

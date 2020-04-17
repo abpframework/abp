@@ -2,33 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.TenantManagement
 {
-    public class Tenant : AggregateRoot<Guid>, IHasExtraProperties
+    public class Tenant : FullAuditedAggregateRoot<Guid>
     {
         public virtual string Name { get; protected set; }
 
         public virtual List<TenantConnectionString> ConnectionStrings { get; protected set; }
 
-        public Dictionary<string, object> ExtraProperties { get; }
-
         protected Tenant()
         {
-            ExtraProperties = new Dictionary<string, object>();
+
         }
 
         protected internal Tenant(Guid id, [NotNull] string name)
+            : base(id)
         {
-            Check.NotNull(name, nameof(name));
-
-            Id = id;
-            Name = name;
+            SetName(name);
 
             ConnectionStrings = new List<TenantConnectionString>();
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         [CanBeNull]
@@ -43,11 +37,43 @@ namespace Volo.Abp.TenantManagement
             return ConnectionStrings.FirstOrDefault(c => c.Name == name)?.Value;
         }
 
-        internal void SetName([NotNull] string name)
+        public virtual void SetDefaultConnectionString(string connectionString)
         {
-            Check.NotNull(name, nameof(name));
+            SetConnectionString(Data.ConnectionStrings.DefaultConnectionStringName, connectionString);
+        }
 
-            Name = name;
+        public virtual void SetConnectionString(string name, string connectionString)
+        {
+            var tenantConnectionString = ConnectionStrings.FirstOrDefault(x => x.Name == name);
+
+            if (tenantConnectionString != null)
+            {
+                tenantConnectionString.SetValue(connectionString);
+            }
+            else
+            {
+                ConnectionStrings.Add(new TenantConnectionString(Id, name, connectionString));
+            }
+        }
+
+        public virtual void RemoveDefaultConnectionString()
+        {
+            RemoveConnectionString(Data.ConnectionStrings.DefaultConnectionStringName);
+        }
+
+        public virtual void RemoveConnectionString(string name)
+        {
+            var tenantConnectionString = ConnectionStrings.FirstOrDefault(x => x.Name == name);
+
+            if (tenantConnectionString != null)
+            {
+                ConnectionStrings.Remove(tenantConnectionString);
+            }
+        }
+
+        protected internal virtual void SetName([NotNull] string name)
+        {
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
         }
     }
 }

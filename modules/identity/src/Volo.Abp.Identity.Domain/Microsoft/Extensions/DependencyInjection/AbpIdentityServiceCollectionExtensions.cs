@@ -22,11 +22,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IdentityUserManager>();
             services.TryAddScoped(typeof(UserManager<IdentityUser>), provider => provider.GetService(typeof(IdentityUserManager)));
 
-            //AbpSecurityStampValidator
-            services.TryAddScoped<AbpSecurityStampValidator>();
-            services.TryAddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetService(typeof(AbpSecurityStampValidator)));
-            services.TryAddScoped(typeof(ISecurityStampValidator), provider => provider.GetService(typeof(AbpSecurityStampValidator)));
-
             //AbpUserStore
             services.TryAddScoped<IdentityUserStore>();
             services.TryAddScoped(typeof(IUserStore<IdentityUser>), provider => provider.GetService(typeof(IdentityUserStore)));
@@ -35,10 +30,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<IdentityRoleStore>();
             services.TryAddScoped(typeof(IRoleStore<IdentityRole>), provider => provider.GetService(typeof(IdentityRoleStore)));
             
-            return services.AddIdentity<IdentityUser, IdentityRole>(setupAction)
-                .AddDefaultTokenProviders()
+            return services
+                .AddIdentityCore<IdentityUser>(setupAction)
+                .AddRoles<IdentityRole>()
                 .AddClaimsPrincipalFactory<AbpUserClaimsPrincipalFactory>();
-            //return services.AddIdentityCore<IdentityUser>(setupAction);
         }
     }
 }

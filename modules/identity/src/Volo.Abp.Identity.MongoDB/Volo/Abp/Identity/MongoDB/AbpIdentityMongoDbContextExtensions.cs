@@ -11,7 +11,9 @@ namespace Volo.Abp.Identity.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new IdentityMongoModelBuilderConfigurationOptions();
+            var options = new IdentityMongoModelBuilderConfigurationOptions(
+                AbpIdentityDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 
@@ -23,6 +25,11 @@ namespace Volo.Abp.Identity.MongoDB
             builder.Entity<IdentityRole>(b =>
             {
                 b.CollectionName = options.CollectionPrefix + "Roles";
+            });
+
+            builder.Entity<IdentityClaimType>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "ClaimTypes";
             });
         }
     }

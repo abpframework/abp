@@ -9,6 +9,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Card
         {
             output.TagName = "div";
             output.Attributes.AddClass("card");
+
+            SetBorder(context, output);
+        }
+        protected virtual void SetBorder(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.Border == AbpCardBorderColorType.Default)
+            {
+                return;
+            }
+
+            output.Attributes.AddClass("border-" + TagHelper.Border.ToString().ToLowerInvariant());
         }
     }
 }

@@ -19,10 +19,5 @@ namespace Volo.Abp.Serialization
                 );
             });
         }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpSerializationModule>();
-        }
     }
 }

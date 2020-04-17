@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Authorization.Permissions
 {
-    public interface IPermissionValueProvider : ISingletonDependency
+    public interface IPermissionValueProvider
     {
         string Name { get; }
 
-        Task<PermissionValueProviderGrantInfo> CheckAsync(PermissionValueCheckContext context);
+        //TODO: Rename to GetResult? (CheckAsync throws exception by naming convention)
+        Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context);
     }
 }

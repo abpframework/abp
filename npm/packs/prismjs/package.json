@@ -1,0 +1,12 @@
+{
+  "version": "2.5.0",
+  "name": "@abp/prismjs",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/core": "^2.5.0",
+    "prismjs": "^1.17.1"
+  },
+  "gitHead": "a9a36b8a4681df04377497addf94b15e6c521664"
+}

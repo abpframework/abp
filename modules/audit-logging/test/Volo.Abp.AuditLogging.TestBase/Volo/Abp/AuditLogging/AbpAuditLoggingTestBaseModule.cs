@@ -10,11 +10,6 @@ namespace Volo.Abp.AuditLogging
         typeof(AbpAuditLoggingDomainModule))]
     public class AbpAuditLoggingTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpAuditLoggingTestBaseModule>();
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);

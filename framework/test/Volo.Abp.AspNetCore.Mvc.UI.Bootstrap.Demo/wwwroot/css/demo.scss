@@ -7,6 +7,17 @@
         margin-bottom: 1em;
     }
 
+    .grid .col {
+        background: #ffc9c9;
+        border: 1.5px solid #000000;
+    }
+
+    .large-row .row {
+        min-height: 10rem;
+        background: #fcdede;
+        margin-top: 1rem;
+    }
+
     .code-area {
         border: 1px solid #ddd;
         padding: 10px;

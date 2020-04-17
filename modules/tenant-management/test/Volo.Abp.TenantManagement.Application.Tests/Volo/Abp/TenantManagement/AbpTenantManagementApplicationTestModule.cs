@@ -11,9 +11,7 @@ namespace Volo.Abp.TenantManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAlwaysAllowPermissionChecker();
-
-            context.Services.AddAssemblyOf<AbpTenantManagementApplicationTestModule>();
+            context.Services.AddAlwaysAllowAuthorization();
         }
     }
 }

@@ -10,8 +10,11 @@ namespace Volo.Docs
         public DocsApplicationAutoMapperProfile()
         {
             CreateMap<Project, ProjectDto>();
+            CreateMap<VersionInfo, VersionInfoDto>();
             CreateMap<Document, DocumentWithDetailsDto>()
-                .Ignore(x => x.Project); 
+                .Ignore(x => x.Project).Ignore(x => x.Contributors);
+            CreateMap<DocumentContributor, DocumentContributorDto>();
+            CreateMap<DocumentResource, DocumentResourceDto>();
         }
     }
 }

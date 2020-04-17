@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
@@ -88,10 +91,25 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private static void AddQueryStringParameter(StringBuilder urlBuilder, bool isFirstParam, string name, object value)
+        private static void AddQueryStringParameter(
+            StringBuilder urlBuilder,
+            bool isFirstParam,
+            string name,
+            [NotNull] object value)
         {
             urlBuilder.Append(isFirstParam ? "?" : "&");
-            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(value.ToString()));
+
+            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+        }
+
+        private static string ConvertValueToString([NotNull] object value)
+        {
+            if (value is DateTime dateTimeValue)
+            {
+                return dateTimeValue.ToUniversalTime().ToString("u");
+            }
+
+            return value.ToString();
         }
     }
 }

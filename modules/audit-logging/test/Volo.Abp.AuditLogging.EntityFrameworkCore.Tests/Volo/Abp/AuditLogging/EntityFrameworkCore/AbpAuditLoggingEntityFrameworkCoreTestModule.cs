@@ -18,15 +18,13 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<AbpAuditLoggingEntityFrameworkCoreTestModule>();
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()

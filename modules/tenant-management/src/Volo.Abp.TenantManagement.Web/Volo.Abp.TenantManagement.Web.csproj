@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Volo.Abp.TenantManagement.Web</AssemblyName>
     <PackageId>Volo.Abp.TenantManagement.Web</PackageId>
     <IsPackable>true</IsPackable>
@@ -12,15 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
-    <EmbeddedResource Include="Localization\Resources\AbpTenantManagement\Web\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="wwwroot\**\*.*" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Pages\**\*.css" />
     <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Localization\Resources\**\*.json" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Pages\**\*.css" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <Content Remove="Properties\launchSettings.json" />
@@ -29,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\feature-management\src\Volo.Abp.FeatureManagement.Web\Volo.Abp.FeatureManagement.Web.csproj" />
     <ProjectReference Include="..\Volo.Abp.TenantManagement.HttpApi\Volo.Abp.TenantManagement.HttpApi.csproj" />
-
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
   </ItemGroup>

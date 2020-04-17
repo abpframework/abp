@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Modularity;
 using Xunit;
@@ -16,9 +17,10 @@ namespace Volo.Blogging.Blogs
         }
 
         [Fact]
-        public async Task FindByShortNameAsync()
+        public async Task Should_Find_By_ShortName()
         {
-            var blog = await BlogRepository.FindByShortNameAsync("blog-1");
+            var blogFromRepository = (await BlogRepository.GetListAsync()).First();
+            var blog = await BlogRepository.FindByShortNameAsync(blogFromRepository.ShortName);
             blog.ShouldNotBeNull();
         }
     }

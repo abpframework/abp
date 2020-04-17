@@ -20,7 +20,7 @@ namespace Volo.Abp.Validation
         /// <summary>
         /// Detailed list of validation errors for this exception.
         /// </summary>
-        public IList<ValidationResult> ValidationErrors { get; set; }
+        public IList<ValidationResult> ValidationErrors { get; }
 
         /// <summary>
         /// Exception severity.
@@ -55,6 +55,16 @@ namespace Volo.Abp.Validation
             : base(message)
         {
             ValidationErrors = new List<ValidationResult>();
+            LogLevel = LogLevel.Warning;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="validationErrors">Validation errors</param>
+        public AbpValidationException(IList<ValidationResult> validationErrors)
+        {
+            ValidationErrors = validationErrors;
             LogLevel = LogLevel.Warning;
         }
 

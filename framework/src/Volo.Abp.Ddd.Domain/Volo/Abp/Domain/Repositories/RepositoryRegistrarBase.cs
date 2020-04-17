@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.Abp.Domain.Repositories
 {
     public abstract class RepositoryRegistrarBase<TOptions>
-        where TOptions: CommonDbContextRegistrationOptions
+        where TOptions: AbpCommonDbContextRegistrationOptions
     {
         public TOptions Options { get; }
 
@@ -57,7 +57,7 @@ namespace Volo.Abp.Domain.Repositories
             if (primaryKeyType == null)
             {
                 return Options.SpecifiedDefaultRepositoryTypes
-                    ? Options.DefaultRepositoryImplementationTypeWithouTKey.MakeGenericType(entityType)
+                    ? Options.DefaultRepositoryImplementationTypeWithoutKey.MakeGenericType(entityType)
                     : GetRepositoryType(Options.DefaultRepositoryDbContextType, entityType);
             }
 

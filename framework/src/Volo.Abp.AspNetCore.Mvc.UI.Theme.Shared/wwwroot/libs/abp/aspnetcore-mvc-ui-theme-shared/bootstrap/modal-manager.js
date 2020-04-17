@@ -26,7 +26,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     }
                 }
 
-            }
+            };
         };
 
         return function (options) {
@@ -54,7 +54,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             function _removeContainer() {
                 _$modalContainer && _$modalContainer.remove();
-            };
+            }
 
             function _createContainer() {
                 _removeContainer();
@@ -66,8 +66,13 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal = _$modalContainer.find('.modal');
                 _$form = _$modalContainer.find('form');
                 if (_$form.length) {
+                    //TODO: data-ajaxForm comparison seems wrong!
                     if (_$form.attr('data-ajaxForm') === undefined || _$form.attr('data-ajaxForm') === false) {
                         _$form.abpAjaxForm();
+                    }
+
+                    if (_$form.attr('data-check-form-on-close') === undefined || _$form.attr('data-check-form-on-close') != 'false') {
+                        _$form.needConfirmationOnUnsavedClose(_$modal);
                     }
 
                     _$form.on('abp-ajax-success',
@@ -89,7 +94,18 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 });
 
                 _$modal.on('shown.bs.modal', function () {
-                    _$modal.find('input:not([type=hidden]):first').focus();
+                    //focuses first element if it's a typeable input. 
+                    var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
+                    if ($firstVisibleInput.hasClass("datepicker")) {
+                        return; //don't pop-up date pickers...
+                    }
+
+                    var focusableInputs = ["text", "password", "email", "number", "search", "tel", "url"];
+                    if (!focusableInputs.includes($firstVisibleInput.prop("type"))) {
+                        return;
+                    }
+
+                    $firstVisibleInput.focus();
                 });
 
                 var modalClass = abp.modals[options.modalClass];
@@ -133,14 +149,13 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             var _onClose = function (onCloseCallback) {
                 _onCloseCallbacks.add(onCloseCallback);
-            }
+            };
 
             var _onResult = function (callback) {
                 _onResultCallbacks.add(callback);
-            }
+            };
 
             _publicApi = {
-
                 open: _open,
 
                 reopen: function () {
@@ -176,7 +191,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 onClose: _onClose,
 
                 onResult: _onResult
-            }
+            };
 
             return _publicApi;
 

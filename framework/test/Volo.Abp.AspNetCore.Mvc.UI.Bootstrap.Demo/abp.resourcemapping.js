@@ -7,6 +7,6 @@
         "@libs"
     ],
     mappings: {
-        
+        "@node_modules/highlight.js/**/*.*": "@libs/highlight.js/"
     }
 }

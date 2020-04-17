@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Domain.Repositories;
@@ -10,9 +11,9 @@ using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp.Application
 {
-    public class PeopleAppService : AsyncCrudAppService<Person, PersonDto, Guid>, IPeopleAppService
+    public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeopleAppService
     {
-        public PeopleAppService(IRepository<Person, Guid> repository) 
+        public PeopleAppService(IRepository<Person, Guid> repository)
             : base(repository)
         {
 
@@ -35,7 +36,7 @@ namespace Volo.Abp.TestApp.Application
             var phone = new Phone(person.Id, phoneDto.Number, phoneDto.Type);
 
             person.Phones.Add(phone);
-
+            await Repository.UpdateAsync(person);
             return ObjectMapper.Map<Phone, PhoneDto>(phone);
         }
 
@@ -43,6 +44,13 @@ namespace Volo.Abp.TestApp.Application
         {
             var person = await GetEntityByIdAsync(id);
             person.Phones.RemoveAll(p => p.Number == number);
+            await Repository.UpdateAsync(person);
+        }
+
+        [Authorize]
+        public Task GetWithAuthorized()
+        {
+            return Task.CompletedTask;
         }
 
         public Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input)

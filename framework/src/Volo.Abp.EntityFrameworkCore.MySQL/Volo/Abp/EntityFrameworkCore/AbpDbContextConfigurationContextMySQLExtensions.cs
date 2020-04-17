@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.EntityFrameworkCore.Infraestructure;
 using System;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore
@@ -10,15 +10,15 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public static DbContextOptionsBuilder UseMySQL(
            [NotNull] this AbpDbContextConfigurationContext context,
-           [CanBeNull] Action<MySQLDbContextOptionsBuilder> mySQLOptionsAction = null)
+           [CanBeNull] Action<MySqlDbContextOptionsBuilder> mySQLOptionsAction = null)
         {
             if (context.ExistingConnection != null)
             {
-                return context.DbContextOptions.UseMySQL(context.ExistingConnection, mySQLOptionsAction);
+                return context.DbContextOptions.UseMySql(context.ExistingConnection, mySQLOptionsAction);
             }
             else
             {
-                return context.DbContextOptions.UseMySQL(context.ConnectionString, mySQLOptionsAction);
+                return context.DbContextOptions.UseMySql(context.ConnectionString, mySQLOptionsAction);
             }
         }
     }

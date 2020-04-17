@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -14,7 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EventBus\Volo.Abp.EventBus.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
   </ItemGroup>
 
 </Project>

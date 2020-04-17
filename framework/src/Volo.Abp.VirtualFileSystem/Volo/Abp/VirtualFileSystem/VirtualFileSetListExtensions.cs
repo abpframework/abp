@@ -21,7 +21,7 @@ namespace Volo.Abp.VirtualFileSystem
             );
         }
 
-        public static void ReplaceEmbeddedByPyhsical<T>([NotNull] this VirtualFileSetList list, [NotNull] string pyhsicalPath)
+        public static void ReplaceEmbeddedByPhysical<T>([NotNull] this VirtualFileSetList list, [NotNull] string pyhsicalPath)
         {
             Check.NotNull(list, nameof(list));
             Check.NotNull(pyhsicalPath, nameof(pyhsicalPath));

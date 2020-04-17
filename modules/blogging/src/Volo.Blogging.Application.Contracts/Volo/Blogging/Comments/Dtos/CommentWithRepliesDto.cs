@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Application.Dtos;
+﻿using System.Collections.Generic;
 
 namespace Volo.Blogging.Comments.Dtos
 {
     public class CommentWithRepliesDto
     {
-        public CommentDto Comment { get; set; }
+        public CommentWithDetailsDto Comment { get; set; }
 
-        public List<CommentDto> Replies { get; set; } = new List<CommentDto>();
+        public List<CommentWithDetailsDto> Replies { get; set; } = new List<CommentWithDetailsDto>();
     }
 }

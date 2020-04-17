@@ -71,7 +71,10 @@
         options.complete = function (jqXhr, status, $form) {
             if ($.contains(document, $form[0])) {
                 $form.find("button[type='submit']").buttonBusy(false);
-                //TODO: Re-enable other buttons..?
+                if (!userOptions.formSubmitting.disableOtherButtonsBusy) {
+                    var otherButtons = $form.find("button[type!=submit]").not(userOptions.formSubmitting.$excludedBusyButtons);
+                    otherButtons.prop('disabled', false);
+                }
             }
 
             $form.trigger('abp-ajax-complete',

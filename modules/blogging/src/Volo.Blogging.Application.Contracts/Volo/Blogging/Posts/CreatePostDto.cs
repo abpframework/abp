@@ -11,6 +11,8 @@ namespace Volo.Blogging.Posts
         [StringLength(PostConsts.MaxTitleLength)]
         public string Title { get; set; }
 
+        [Required]
+        public string CoverImage { get; set; }
 
         [Required]
         [StringLength(PostConsts.MaxUrlLength)]
@@ -20,5 +22,9 @@ namespace Volo.Blogging.Posts
         public string Content { get; set; }
 
         public string Tags { get; set; }
+
+        [StringLength(PostConsts.MaxDescriptionLength)]
+        public string Description { get; set; }
+
     }
 }

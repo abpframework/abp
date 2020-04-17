@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 using Xunit;
 
@@ -12,13 +13,13 @@ namespace Volo.Abp.Identity
 {
     public class IdentityOptions_Tests : AbpIdentityDomainTestBase
     {
-        private ISettingManager _settingManager;
+        private ISettingProvider _settingProvider;
 
         protected override void AfterAddApplication(IServiceCollection services)
         {
-            _settingManager = Substitute.For<ISettingManager>();
-            _settingManager.GetOrNullAsync(Arg.Any<string>()).Returns((string) null);
-            services.Replace(ServiceDescriptor.Singleton(_settingManager));
+            _settingProvider = Substitute.For<ISettingProvider>();
+            _settingProvider.GetOrNullAsync(Arg.Any<string>()).Returns((string) null);
+            services.Replace(ServiceDescriptor.Singleton(_settingProvider));
         }
 
         [Fact]
@@ -37,7 +38,7 @@ namespace Volo.Abp.Identity
                 options.Password.RequiredUniqueChars.ShouldBe(1); //Default value
             }
 
-            _settingManager.GetOrNullAsync(IdentitySettingNames.Password.RequiredLength).Returns(Task.FromResult("42"));
+            _settingProvider.GetOrNullAsync(IdentitySettingNames.Password.RequiredLength).Returns(Task.FromResult("42"));
 
             using (var scope2 = ServiceProvider.CreateScope())
             {

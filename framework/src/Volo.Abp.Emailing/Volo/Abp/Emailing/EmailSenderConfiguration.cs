@@ -1,26 +1,33 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Emailing
 {
     /// <summary>
-    /// Implementation of <see cref="IEmailSenderConfiguration"/> that reads settings
-    /// from <see cref="ISettingManager"/>.
+    /// Base implementation of <see cref="IEmailSenderConfiguration"/> that reads settings
+    /// from <see cref="ISettingProvider"/>.
     /// </summary>
     public abstract class EmailSenderConfiguration : IEmailSenderConfiguration
     {
-        public virtual string DefaultFromAddress => GetNotEmptySettingValue(EmailSettingNames.DefaultFromAddress);
-
-        public virtual string DefaultFromDisplayName => SettingManager.GetOrNull(EmailSettingNames.DefaultFromDisplayName);
-
-        protected readonly ISettingManager SettingManager;
+        protected ISettingProvider SettingProvider { get; }
 
         /// <summary>
         /// Creates a new <see cref="EmailSenderConfiguration"/>.
         /// </summary>
-        protected EmailSenderConfiguration(ISettingManager settingManager)
+        protected EmailSenderConfiguration(ISettingProvider settingProvider)
         {
-            SettingManager = settingManager;
+            SettingProvider = settingProvider;
+        }
+
+        public Task<string> GetDefaultFromAddressAsync()
+        {
+            return GetNotEmptySettingValueAsync(EmailSettingNames.DefaultFromAddress);
+        }
+
+        public Task<string> GetDefaultFromDisplayNameAsync()
+        {
+            return GetNotEmptySettingValueAsync(EmailSettingNames.DefaultFromDisplayName);
         }
 
         /// <summary>
@@ -28,9 +35,9 @@ namespace Volo.Abp.Emailing
         /// </summary>
         /// <param name="name">Name of the setting</param>
         /// <returns>Value of the setting</returns>
-        protected string GetNotEmptySettingValue(string name)
+        protected async Task<string> GetNotEmptySettingValueAsync(string name)
         {
-            var value = SettingManager.GetOrNull(name);
+            var value = await SettingProvider.GetOrNullAsync(name);
 
             if (value.IsNullOrEmpty())
             {

@@ -1,6 +1,10 @@
 ﻿[
   {
-    "outputFile": "wwwroot/pages/documents/project/index.css",
-    "inputFile": "wwwroot/pages/documents/project/index.less"
+    "outputFile": "Pages/Documents/Shared/Styles/vs.css",
+    "inputFile": "Pages/Documents/Shared/Styles/vs.scss"
+  },
+  {
+    "outputFile": "Pages/Documents/Project/index.css",
+    "inputFile": "Pages/Documents/Project/index.less"
   }
 ]

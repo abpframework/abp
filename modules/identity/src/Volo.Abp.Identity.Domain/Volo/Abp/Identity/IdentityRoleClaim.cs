@@ -32,7 +32,7 @@ namespace Volo.Abp.Identity
             RoleId = roleId;
         }
 
-        protected internal IdentityRoleClaim(
+        public IdentityRoleClaim(
             Guid id, 
             Guid roleId, 
             [NotNull] string claimType, 

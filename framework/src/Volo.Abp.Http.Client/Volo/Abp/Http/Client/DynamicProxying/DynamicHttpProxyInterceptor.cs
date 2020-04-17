@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -12,23 +16,30 @@ using Volo.Abp.Http.Client.Authentication;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
+using Volo.Abp.Tracing;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    //TODO: Somehow capture cancellationtoken and pass to other methods...?
-
     public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
-        private static MethodInfo GenericInterceptAsyncMethod { get; }
+        // ReSharper disable once StaticMemberInGenericType
+        protected static MethodInfo GenericInterceptAsyncMethod { get; }
 
-        private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
-        private readonly IApiDescriptionFinder _apiDescriptionFinder;
-        private readonly RemoteServiceOptions _remoteServiceOptions;
-        private readonly AbpHttpClientOptions _clientOptions;
-        private readonly IJsonSerializer _jsonSerializer;
-        private readonly IAccessTokenProvider _accessTokenProvider;
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        protected ICorrelationIdProvider CorrelationIdProvider { get; }
+        protected ICurrentTenant CurrentTenant { get; }
+        protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
+        protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
+        protected IApiDescriptionFinder ApiDescriptionFinder { get; }
+        protected AbpRemoteServiceOptions AbpRemoteServiceOptions { get; }
+        protected AbpHttpClientOptions ClientOptions { get; }
+        protected IJsonSerializer JsonSerializer { get; }
+        protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
+
+        public ILogger<DynamicHttpProxyInterceptor<TService>> Logger { get; set; }
 
         static DynamicHttpProxyInterceptor()
         {
@@ -40,105 +51,113 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         public DynamicHttpProxyInterceptor(
             IDynamicProxyHttpClientFactory httpClientFactory,
             IOptions<AbpHttpClientOptions> clientOptions,
-            IOptionsSnapshot<RemoteServiceOptions> remoteServiceOptions,
+            IOptionsSnapshot<AbpRemoteServiceOptions> remoteServiceOptions,
             IApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer,
-            IAccessTokenProvider accessTokenProvider)
+            IRemoteServiceHttpClientAuthenticator clientAuthenticator,
+            ICancellationTokenProvider cancellationTokenProvider,
+            ICorrelationIdProvider correlationIdProvider,
+            IOptions<AbpCorrelationIdOptions> correlationIdOptions,
+            ICurrentTenant currentTenant)
         {
-            _httpClientFactory = httpClientFactory;
-            _apiDescriptionFinder = apiDescriptionFinder;
-            _jsonSerializer = jsonSerializer;
-            _accessTokenProvider = accessTokenProvider;
-            _clientOptions = clientOptions.Value;
-            _remoteServiceOptions = remoteServiceOptions.Value;
+            CancellationTokenProvider = cancellationTokenProvider;
+            CorrelationIdProvider = correlationIdProvider;
+            CurrentTenant = currentTenant;
+            AbpCorrelationIdOptions = correlationIdOptions.Value;
+            HttpClientFactory = httpClientFactory;
+            ApiDescriptionFinder = apiDescriptionFinder;
+            JsonSerializer = jsonSerializer;
+            ClientAuthenticator = clientAuthenticator;
+            ClientOptions = clientOptions.Value;
+            AbpRemoteServiceOptions = remoteServiceOptions.Value;
+
+            Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
 
-        public override void Intercept(IAbpMethodInvocation invocation)
-        {
-            if (invocation.Method.ReturnType == typeof(void))
-            {
-                AsyncHelper.RunSync(() => MakeRequest(invocation));
-            }
-            else
-            {
-                var responseAsString = AsyncHelper.RunSync(() => MakeRequest(invocation));
-
-                //TODO: Think on that
-                if (TypeHelper.IsPrimitiveExtended(invocation.Method.ReturnType, true))
-                {
-                    invocation.ReturnValue = Convert.ChangeType(responseAsString, invocation.Method.ReturnType);
-                }
-                else
-                {
-                    invocation.ReturnValue = _jsonSerializer.Deserialize(
-                        invocation.Method.ReturnType,
-                        responseAsString
-                    );
-                }
-            }
-        }
-
-        public override Task InterceptAsync(IAbpMethodInvocation invocation)
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
             {
-                return MakeRequest(invocation);
+                await MakeRequestAsync(invocation);
+            }
+            else
+            {
+                var result = (Task)GenericInterceptAsyncMethod
+                    .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
+                    .Invoke(this, new object[] { invocation });
+
+                invocation.ReturnValue = await GetResultAsync(
+                    result,
+                    invocation.Method.ReturnType.GetGenericArguments()[0]
+                );
             }
 
-            invocation.ReturnValue = GenericInterceptAsyncMethod
-                .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
-                .Invoke(this, new object[] { invocation });
+        }
 
-            return Task.CompletedTask;
+        private async Task<object> GetResultAsync(Task task, Type resultType)
+        {
+            await task;
+            return typeof(Task<>)
+                .MakeGenericType(resultType)
+                .GetProperty(nameof(Task<object>.Result), BindingFlags.Instance | BindingFlags.Public)
+                .GetValue(task);
         }
 
         private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
-            var responseAsString = await MakeRequest(invocation);
+            var responseAsString = await MakeRequestAsync(invocation);
 
             //TODO: Think on that
             if (TypeHelper.IsPrimitiveExtended(typeof(T), true))
             {
-                return (T)Convert.ChangeType(responseAsString, typeof(T));
+                if (typeof(DateTime).IsAssignableFrom(typeof(T)))
+                {
+                    return (T)(object)DateTime.Parse(responseAsString.Trim('\"'), CultureInfo.InvariantCulture);
+                }
+                else
+                {
+                    return (T)Convert.ChangeType(responseAsString, typeof(T));
+                }
             }
 
-            return _jsonSerializer.Deserialize<T>(responseAsString);
+            return JsonSerializer.Deserialize<T>(responseAsString);
         }
 
-        private async Task<string> MakeRequest(IAbpMethodInvocation invocation)
+        private async Task<string> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
-            using (var client = _httpClientFactory.Create())
+            var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+            var remoteServiceConfig = AbpRemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+
+            var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
+
+            var action = await ApiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
+            var apiVersion = GetApiVersionInfo(action);
+            var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+
+            var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
             {
-                var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+                Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, JsonSerializer, apiVersion)
+            };
 
-                var baseUrl = GetBaseUrl(clientConfig);
-                var action = await _apiDescriptionFinder.FindActionAsync(baseUrl, typeof(TService), invocation.Method);
-                var apiVersion = GetApiVersionInfo(action);
-                var url = baseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+            AddHeaders(invocation, action, requestMessage, apiVersion);
 
-                var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
-                {
-                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, _jsonSerializer, apiVersion)
-                };
+            await ClientAuthenticator.Authenticate(
+                new RemoteServiceHttpClientAuthenticateContext(
+                    client,
+                    requestMessage,
+                    remoteServiceConfig,
+                    clientConfig.RemoteServiceName
+                )
+            );
 
-                AddHeaders(invocation, action, requestMessage, apiVersion);
+            var response = await client.SendAsync(requestMessage, GetCancellationToken());
 
-                var accessToken = await _accessTokenProvider.GetOrNullAsync();
-                if (accessToken != null)
-                {
-                    //TODO: "Bearer" should not by static.
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                }
-
-                var response = await client.SendAsync(requestMessage);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    await ThrowExceptionForResponseAsync(response);
-                }
-
-                return await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                await ThrowExceptionForResponseAsync(response);
             }
+
+            return await response.Content.ReadAsStringAsync();
         }
 
         private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
@@ -169,18 +188,19 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             return action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!
         }
 
-        private static void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage, ApiVersionInfo apiVersion)
+        protected virtual void AddHeaders(IAbpMethodInvocation invocation, ActionApiDescriptionModel action, HttpRequestMessage requestMessage, ApiVersionInfo apiVersion)
         {
+            //API Version
             if (!apiVersion.Version.IsNullOrEmpty())
             {
                 //TODO: What about other media types?
-                requestMessage.Headers.Add("accept", $"text/plain; v={apiVersion.Version}");
-                requestMessage.Headers.Add("accept", $"application/json; v={apiVersion.Version}");
+                requestMessage.Headers.Add("accept", $"{MimeTypes.Text.Plain}; v={apiVersion.Version}");
+                requestMessage.Headers.Add("accept", $"{MimeTypes.Application.Json}; v={apiVersion.Version}");
                 requestMessage.Headers.Add("api-version", apiVersion.Version);
             }
 
+            //Header parameters
             var headers = action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header).ToArray();
-
             foreach (var headerParameter in headers)
             {
                 var value = HttpActionParameterHelper.FindParameterValue(invocation.ArgumentsDictionary, headerParameter);
@@ -189,29 +209,43 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     requestMessage.Headers.Add(headerParameter.Name, value.ToString());
                 }
             }
-        }
 
-        private string GetBaseUrl(DynamicHttpClientProxyConfig config)
-        {
-            return _remoteServiceOptions.RemoteServices.GetOrDefault(config.RemoteServiceName)?.BaseUrl
-                   ?? _remoteServiceOptions.RemoteServices.Default?.BaseUrl
-                   ?? throw new AbpException($"Could not find Base URL for {typeof(TService).FullName}.");
+            //CorrelationId
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+
+            //TenantId
+            if (CurrentTenant.Id.HasValue)
+            {
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+                requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
+
+            //Culture
+            //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
+            var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
+            if (!currentCulture.IsNullOrEmpty())
+            {
+                requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
+            }
+
+            //X-Requested-With
+            requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
         }
 
         private string GetConfiguredApiVersion()
         {
-            var clientConfig = _clientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
+            var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
                                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return _remoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
-                   ?? _remoteServiceOptions.RemoteServices.Default?.Version;
+            return AbpRemoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
+                   ?? AbpRemoteServiceOptions.RemoteServices.Default?.Version;
         }
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
         {
             if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
             {
-                var errorResponse = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>(
+                var errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
                     await response.Content.ReadAsStringAsync()
                 );
 
@@ -219,6 +253,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
 
             throw new AbpException($"Remote service returns error! HttpStatusCode: {response.StatusCode}, ReasonPhrase: {response.ReasonPhrase}");
+        }
+
+        protected virtual CancellationToken GetCancellationToken()
+        {
+            return CancellationTokenProvider.Token;
         }
     }
 }

@@ -52,7 +52,7 @@
     *************************************************************************/
     var localize = function (key) {
         return abp.localization.getResource('AbpUi')(key);
-    }
+    };
 
     var recordActions = function () {
         if (!$.fn.dataTableExt) {
@@ -69,7 +69,7 @@
             } else {
                 return visibilityField;
             }
-        }
+        };
 
         var _createDropdownItem = function (record, fieldItem) {
             var $li = $('<li/>');
@@ -83,7 +83,7 @@
                     $a.append($("<i>").addClass("fa fa-" + fieldItem.icon + " mr-1"));
                 } else if (fieldItem.iconClass) {
                     $a.append($("<i>").addClass(fieldItem.iconClass + " mr-1"));
-                } 
+                }
 
                 $a.append(fieldItem.text);
             }
@@ -109,7 +109,7 @@
 
             $a.appendTo($li);
             return $li;
-        }
+        };
 
         var _createButtonDropdown = function (record, field) {
             var $container = $('<div/>')
@@ -200,11 +200,11 @@
             }
 
             throw "DTE#1: Cannot create row action. Either set element or items fields!";
-        }
+        };
 
         var hideColumnWithoutRedraw = function (tableInstance, colIndex) {
             tableInstance.fnSetColumnVis(colIndex, false, false);
-        }
+        };
 
         var hideEmptyColumn = function (cellContent, tableInstance, colIndex) {
             if (cellContent == "") {
@@ -287,9 +287,18 @@
 
                 //Sorting
                 if (requestData.order && requestData.order.length > 0) {
-                    var orderingField = requestData.order[0];
-                    if (requestData.columns[orderingField.column].data) {
-                        input.sorting = requestData.columns[orderingField.column].data + " " + orderingField.dir;
+                    input.sorting = "";
+
+                    for (var i = 0; i < requestData.order.length; i++) {
+                        var orderingField = requestData.order[i];
+
+                        if (requestData.columns[orderingField.column].data) {
+                            input.sorting += requestData.columns[orderingField.column].data + " " + orderingField.dir;
+
+                            if (i < requestData.order.length - 1) {
+                                input.sorting += ",";
+                            }
+                        }
                     }
                 }
 
@@ -307,8 +316,8 @@
                         });
                     });
                 }
-            }
-        }
+            };
+        };
     }();
 
     /************************************************************************
@@ -338,9 +347,27 @@
                 }
             }
 
+            configuration.language = {
+                info: localize("PagerInfo"),
+                infoFiltered: localize("PagerInfoFiltered"),
+                infoEmpty: localize("PagerInfoEmpty"),
+                search: localize("PagerSearch"),
+                processing: localize("ProcessingWithThreeDot"),
+                loadingRecords: localize("LoadingWithThreeDot"),
+                lengthMenu: localize("PagerShowMenuEntries"),
+                emptyTable: localize("NoDataAvailableInDatatable"),
+                paginate: {
+                    first: localize("PagerFirst"),
+                    last: localize("PagerLast"),
+                    previous: localize("PagerPrevious"),
+                    next: localize("PagerNext")
+                }
+            };
+
+            configuration.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>';
 
             return configuration;
-        }
+        };
 
     }();
 

@@ -9,41 +9,41 @@ namespace Volo.Abp.Identity
 {
     public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
     {
-        private readonly IIdentityUserRepository _userRepository;
-        private readonly ILookupNormalizer _lookupNormalizer;
+        protected IIdentityUserRepository UserRepository { get; }
+        protected ILookupNormalizer LookupNormalizer { get; }
 
         public IdentityUserRepositoryExternalUserLookupServiceProvider(
             IIdentityUserRepository userRepository, 
             ILookupNormalizer lookupNormalizer)
         {
-            _userRepository = userRepository;
-            _lookupNormalizer = lookupNormalizer;
+            UserRepository = userRepository;
+            LookupNormalizer = lookupNormalizer;
         }
 
-        public async Task<IUserData> FindByIdAsync(
+        public virtual async Task<IUserData> FindByIdAsync(
             Guid id, 
             CancellationToken cancellationToken = default)
         {
             return (
-                await _userRepository.FindAsync(
-                    id,
-                    includeDetails: false,
-                    cancellationToken: cancellationToken
-                )
-            ).ToAbpUserData();
+                    await UserRepository.FindAsync(
+                        id,
+                        includeDetails: false,
+                        cancellationToken: cancellationToken
+                    )
+                )?.ToAbpUserData();
         }
 
-        public async Task<IUserData> FindByUserNameAsync(
+        public virtual async Task<IUserData> FindByUserNameAsync(
             string userName, 
             CancellationToken cancellationToken = default)
         {
             return (
-                await _userRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.Normalize(userName),
-                    includeDetails: false,
-                    cancellationToken: cancellationToken
-                )
-            ).ToAbpUserData();
+                    await UserRepository.FindByNormalizedUserNameAsync(
+                        LookupNormalizer.NormalizeName(userName),
+                        includeDetails: false,
+                        cancellationToken: cancellationToken
+                    )
+                )?.ToAbpUserData();
         }
     }
 }

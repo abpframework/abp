@@ -5,6 +5,6 @@ namespace Volo.Abp.Validation
 {
     public interface IHasValidationErrors
     {
-        IList<ValidationResult> ValidationErrors { get; set; }
+        IList<ValidationResult> ValidationErrors { get; }
     }
 }

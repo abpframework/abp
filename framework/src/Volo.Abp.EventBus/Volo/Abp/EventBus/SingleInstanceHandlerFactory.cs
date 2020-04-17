@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Volo.Abp.EventBus
 {
     /// <summary>
@@ -7,7 +10,7 @@ namespace Volo.Abp.EventBus
     /// <remarks>
     /// This class always gets the same single instance of handler.
     /// </remarks>
-    internal class SingleInstanceHandlerFactory : IEventHandlerFactory
+    public class SingleInstanceHandlerFactory : IEventHandlerFactory
     {
         /// <summary>
         /// The event handler instance.
@@ -26,6 +29,13 @@ namespace Volo.Abp.EventBus
         public IEventHandlerDisposeWrapper GetHandler()
         {
             return new EventHandlerDisposeWrapper(HandlerInstance);
+        }
+
+        public bool IsInFactories(List<IEventHandlerFactory> handlerFactories)
+        {
+            return handlerFactories
+                .OfType<SingleInstanceHandlerFactory>()
+                .Any(f => f.HandlerInstance == HandlerInstance);
         }
     }
 }

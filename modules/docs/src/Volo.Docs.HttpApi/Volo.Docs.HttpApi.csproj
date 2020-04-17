@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Volo.Docs.HttpApi</AssemblyName>
     <PackageId>Volo.Docs.HttpApi</PackageId>
     <RootNamespace />
@@ -11,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Docs.Application.Contracts\Volo.Docs.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
   </ItemGroup>
 
 </Project>

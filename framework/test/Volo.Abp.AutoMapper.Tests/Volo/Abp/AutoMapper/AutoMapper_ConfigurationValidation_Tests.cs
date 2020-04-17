@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 using IObjectMapper = Volo.Abp.ObjectMapping.IObjectMapper;
 
@@ -28,12 +29,10 @@ namespace Volo.Abp.AutoMapper
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                context.Services.Configure<AbpAutoMapperOptions>(options =>
+                Configure<AbpAutoMapperOptions>(options =>
                 {
-                    options.UseStaticMapper = false;
-
-                    options.AddProfile<ValidatedProfile>(true);
-                    options.AddProfile<NonValidatedProfile>();
+                    options.AddMaps<TestModule>(validate: true); //Adds all profiles in the TestModule assembly by validating configurations
+                    options.ValidateProfile<NonValidatedProfile>(validate: false); //Exclude a profile from the configuration validation
                 });
             }
         }

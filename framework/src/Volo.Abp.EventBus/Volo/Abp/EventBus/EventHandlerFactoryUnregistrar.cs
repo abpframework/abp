@@ -5,7 +5,7 @@ namespace Volo.Abp.EventBus
     /// <summary>
     /// Used to unregister a <see cref="IEventHandlerFactory"/> on <see cref="Dispose"/> method.
     /// </summary>
-    internal class EventHandlerFactoryUnregistrar : IDisposable
+    public class EventHandlerFactoryUnregistrar : IDisposable
     {
         private readonly IEventBus _eventBus;
         private readonly Type _eventType;
@@ -20,7 +20,7 @@ namespace Volo.Abp.EventBus
 
         public void Dispose()
         {
-            _eventBus.Unregister(_eventType, _factory);
+            _eventBus.Unsubscribe(_eventType, _factory);
         }
     }
 }

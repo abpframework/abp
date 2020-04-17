@@ -1,6 +1,8 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
@@ -18,8 +20,8 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TEntityDto, TEntityDto>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto, TEntityDto>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
@@ -30,11 +32,10 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TCreateInput>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
-        where TCreateInput : IEntityDto<TKey>
     {
         protected CrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
@@ -43,11 +44,10 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
-       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>,
-        ICrudAppService<TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
-           where TEntity : class, IEntity<TKey>
-           where TEntityDto : IEntityDto<TKey>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : CrudAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
     {
         protected CrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
@@ -55,92 +55,56 @@ namespace Volo.Abp.Application.Services
 
         }
 
-        public virtual TEntityDto Get(TKey id)
+        protected override TEntityDto MapToGetListOutputDto(TEntity entity)
         {
-            CheckGetPolicy();
+            return MapToGetOutputDto(entity);
+        }
+    }
 
-            var entity = GetEntityById(id);
-            return MapToEntityDto(entity);
+    public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : AbstractKeyCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        where TEntity : class, IEntity<TKey>
+        where TGetOutputDto : IEntityDto<TKey>
+        where TGetListOutputDto : IEntityDto<TKey>
+    {
+        protected new IRepository<TEntity, TKey> Repository { get; }
+
+        protected CrudAppService(IRepository<TEntity, TKey> repository)
+        : base(repository)
+        {
+            Repository = repository;
         }
 
-        public virtual PagedResultDto<TEntityDto> GetAll(TGetAllInput input)
+        protected override async Task DeleteByIdAsync(TKey id)
         {
-            CheckGetAllPolicy();
-
-            var query = CreateFilteredQuery(input);
-
-            var totalCount = query.Count();
-
-            query = ApplySorting(query, input);
-            query = ApplyPaging(query, input);
-
-            var entities = query.ToList();
-
-            return new PagedResultDto<TEntityDto>(
-                totalCount,
-                entities.Select(MapToEntityDto).ToList()
-            );
+            await Repository.DeleteAsync(id);
         }
 
-        public virtual TEntityDto Create(TCreateInput input)
+        protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
         {
-            CheckCreatePolicy();
-
-            var entity = MapToEntity(input);
-
-            Repository.Insert(entity);
-            CurrentUnitOfWork.SaveChanges();
-
-            return MapToEntityDto(entity);
+            return await Repository.GetAsync(id);
         }
 
-        public virtual TEntityDto Update(TKey id, TUpdateInput input)
+        protected override void MapToEntity(TUpdateInput updateInput, TEntity entity)
         {
-            CheckUpdatePolicy();
+            if (updateInput is IEntityDto<TKey> entityDto)
+            {
+                entityDto.Id = entity.Id;
+            }
 
-            var entity = GetEntityById(id);
-
-            MapToEntity(input, entity);
-            CurrentUnitOfWork.SaveChanges();
-
-            return MapToEntityDto(entity);
+            base.MapToEntity(updateInput, entity);
         }
 
-        public virtual void Delete(TKey id)
+        protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
         {
-            CheckDeletePolicy();
-
-            Repository.Delete(id);
-        }
-
-        protected virtual TEntity GetEntityById(TKey id)
-        {
-            return Repository.Get(id);
-        }
-
-        protected virtual void CheckGetPolicy()
-        {
-            CheckPolicy(GetPolicyName);
-        }
-
-        protected virtual void CheckGetAllPolicy()
-        {
-            CheckPolicy(GetAllPolicyName);
-        }
-
-        protected virtual void CheckCreatePolicy()
-        {
-            CheckPolicy(CreatePolicyName);
-        }
-
-        protected virtual void CheckUpdatePolicy()
-        {
-            CheckPolicy(UpdatePolicyName);
-        }
-
-        protected virtual void CheckDeletePolicy()
-        {
-            CheckPolicy(DeletePolicyName);
+            if (typeof(TEntity).IsAssignableTo<ICreationAuditedObject>())
+            {
+                return query.OrderByDescending(e => ((ICreationAuditedObject)e).CreationTime);
+            }
+            else
+            {
+                return query.OrderByDescending(e => e.Id);
+            }
         }
     }
 }

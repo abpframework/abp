@@ -1,21 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
-using Volo.Abp.Security;
-using Volo.Abp.Settings;
 
 namespace Volo.Abp.Users
 {
     [DependsOn(
         typeof(AbpUsersDomainSharedModule),
         typeof(AbpUsersAbstractionModule),
-        typeof(AbpSecurityModule),
-        typeof(AbpSettingsModule)
+        typeof(AbpDddDomainModule)
         )]
     public class AbpUsersDomainModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpUsersDomainModule>();
-        }
+        
     }
 }

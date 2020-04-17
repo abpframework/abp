@@ -23,5 +23,13 @@ namespace Volo.Abp.BackgroundJobs
             jobIdAsString.ShouldNotBe(default);
             (await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString))).ShouldNotBeNull();
         }
+
+        [Fact]
+        public async Task Should_Store_Async_Jobs()
+        {
+            var jobIdAsString = await _backgroundJobManager.EnqueueAsync(new MyAsyncJobArgs("42"));
+            jobIdAsString.ShouldNotBe(default);
+            (await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString))).ShouldNotBeNull();
+        }
     }
 }

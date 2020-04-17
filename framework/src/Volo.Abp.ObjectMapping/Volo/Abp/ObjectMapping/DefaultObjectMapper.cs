@@ -1,19 +1,36 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ObjectMapping
 {
-    //TODO: It can be slow to always check if service is available. Test it and optimize if necessary.
-
-    public class DefaultObjectMapper : IObjectMapper, ISingletonDependency
+    public class DefaultObjectMapper<TContext> : DefaultObjectMapper, IObjectMapper<TContext>
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public DefaultObjectMapper(IServiceProvider serviceProvider)
+        public DefaultObjectMapper(
+            IServiceProvider serviceProvider, 
+            IAutoObjectMappingProvider<TContext> autoObjectMappingProvider
+            ) : base(
+                serviceProvider, 
+                autoObjectMappingProvider)
         {
-            _serviceProvider = serviceProvider;
+
         }
+    }
+
+    public class DefaultObjectMapper : IObjectMapper, ITransientDependency
+    {
+        public IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
+        protected IServiceProvider ServiceProvider { get; }
+
+        public DefaultObjectMapper(
+            IServiceProvider serviceProvider,
+            IAutoObjectMappingProvider autoObjectMappingProvider)
+        {
+            AutoObjectMappingProvider = autoObjectMappingProvider;
+            ServiceProvider = serviceProvider;
+        }
+        
+        //TODO: It can be slow to always check if service is available. Test it and optimize if necessary.
 
         public virtual TDestination Map<TSource, TDestination>(TSource source)
         {
@@ -22,13 +39,32 @@ namespace Volo.Abp.ObjectMapping
                 return default;
             }
 
-            //Check if a specific mapper is registered
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = ServiceProvider.CreateScope())
             {
                 var specificMapper = scope.ServiceProvider.GetService<IObjectMapper<TSource, TDestination>>();
                 if (specificMapper != null)
                 {
                     return specificMapper.Map(source);
+                }
+            }
+
+            if (source is IMapTo<TDestination> mapperSource)
+            {
+                return mapperSource.MapTo();
+            }
+
+            if (typeof(IMapFrom<TSource>).IsAssignableFrom(typeof(TDestination)))
+            {
+                try
+                {
+                    //TODO: Check if TDestination has a proper constructor which takes TSource
+                    //TODO: Check if TDestination has an empty constructor (in this case, use MapFrom)
+
+                    return (TDestination) Activator.CreateInstance(typeof(TDestination), source);
+                }
+                catch
+                {
+                    //TODO: Remove catch when TODOs are implemented above
                 }
             }
 
@@ -42,8 +78,7 @@ namespace Volo.Abp.ObjectMapping
                 return default;
             }
 
-            //Check if a specific mapper is registered
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = ServiceProvider.CreateScope())
             {
                 var specificMapper = scope.ServiceProvider.GetService<IObjectMapper<TSource, TDestination>>();
                 if (specificMapper != null)
@@ -52,17 +87,29 @@ namespace Volo.Abp.ObjectMapping
                 }
             }
 
+            if (source is IMapTo<TDestination> mapperSource)
+            {
+                mapperSource.MapTo(destination);
+                return destination;
+            }
+
+            if (destination is IMapFrom<TSource> mapperDestination)
+            {
+                mapperDestination.MapFrom(source);
+                return destination;
+            }
+
             return AutoMap(source, destination);
         }
 
         protected virtual TDestination AutoMap<TSource, TDestination>(object source)
         {
-            throw new NotImplementedException($"Can not map from given object ({source}) to {typeof(TDestination).AssemblyQualifiedName}.");
+            return AutoObjectMappingProvider.Map<TSource, TDestination>(source);
         }
 
         protected virtual TDestination AutoMap<TSource, TDestination>(TSource source, TDestination destination)
         {
-            throw new NotImplementedException($"Can no map from {typeof(TSource).AssemblyQualifiedName} to {typeof(TDestination).AssemblyQualifiedName}.");
+            return AutoObjectMappingProvider.Map<TSource, TDestination>(source, destination);
         }
     }
 }

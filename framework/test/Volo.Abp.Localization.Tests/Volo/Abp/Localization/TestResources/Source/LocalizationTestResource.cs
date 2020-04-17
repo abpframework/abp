@@ -3,8 +3,10 @@ using Volo.Abp.Localization.TestResources.Base.Validation;
 
 namespace Volo.Abp.Localization.TestResources.Source
 {
-    [InheritResource(typeof(LocalizationTestValidationResource))]
-    [InheritResource(typeof(LocalizationTestCountryNamesResource))]
+    [InheritResource(
+        typeof(LocalizationTestValidationResource),
+        typeof(LocalizationTestCountryNamesResource)
+        )]
     public sealed class LocalizationTestResource
     {
         

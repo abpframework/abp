@@ -14,8 +14,6 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
             {
                 options.AddDefaultRepositories<ITenantManagementDbContext>();
             });
-
-            context.Services.AddAssemblyOf<AbpTenantManagementEntityFrameworkCoreModule>();
         }
     }
 }

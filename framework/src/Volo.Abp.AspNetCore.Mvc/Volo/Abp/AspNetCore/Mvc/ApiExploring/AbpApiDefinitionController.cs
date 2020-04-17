@@ -14,9 +14,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApiExploring
         }
 
         [HttpGet]
-        public ApplicationApiDescriptionModel Get()
+        public ApplicationApiDescriptionModel Get(ApplicationApiDescriptionModelRequestDto model)
         {
-            return _modelProvider.CreateApiModel();
+            return _modelProvider.CreateApiModel(model);
         }
     }
 }

@@ -17,24 +17,20 @@ namespace Volo.Abp.BackgroundJobs
             RegisterJobs(context.Services);
         }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<AbpBackgroundJobsAbstractionsModule>();
-        }
-
         private static void RegisterJobs(IServiceCollection services)
         {
             var jobTypes = new List<Type>();
 
             services.OnRegistred(context =>
             {
-                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)))
+                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)) ||
+                    ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IAsyncBackgroundJob<>)))
                 {
                     jobTypes.Add(context.ImplementationType);
                 }
             });
 
-            services.Configure<BackgroundJobOptions>(options =>
+            services.Configure<AbpBackgroundJobOptions>(options =>
             {
                 foreach (var jobType in jobTypes)
                 {

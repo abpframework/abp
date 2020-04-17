@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -14,8 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
   </ItemGroup>
 
 </Project>

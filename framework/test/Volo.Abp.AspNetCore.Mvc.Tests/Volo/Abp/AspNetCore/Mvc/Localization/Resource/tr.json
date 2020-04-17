@@ -1,6 +1,7 @@
 ﻿{
   "culture": "tr",
   "texts": {
-    "BirthDate": "Dogum gunu"
+    "BirthDate": "Dogum gunu",
+    "Value1":  "Değer Bir" 
   }
 }

@@ -1,15 +1,21 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Docs
 {
     [DependsOn(
-        typeof(DocsApplicationContractsModule))]
+        typeof(DocsApplicationContractsModule),
+        typeof(AbpAspNetCoreMvcModule)
+        )]
     public class DocsHttpApiModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<DocsHttpApiModule>();
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(DocsHttpApiModule).Assembly);
+            });
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -23,6 +22,24 @@ namespace Volo.Blogging.Comments
                 .Where(a => a.PostId == postId)
                 .OrderBy(a => a.CreationTime)
                 .ToListAsync();
+        }
+
+        public async Task<int> GetCommentCountOfPostAsync(Guid postId)
+        {
+            return await DbSet
+                .CountAsync(a => a.PostId == postId);
+        }
+
+        public async Task<List<Comment>> GetRepliesOfComment(Guid id)
+        {
+            return await DbSet
+                .Where(a => a.RepliedCommentId == id).ToListAsync();
+        }
+
+        public async Task DeleteOfPost(Guid id)
+        {
+            var recordsToDelete = DbSet.Where(pt => pt.PostId == id);
+            DbSet.RemoveRange(recordsToDelete);
         }
     }
 }

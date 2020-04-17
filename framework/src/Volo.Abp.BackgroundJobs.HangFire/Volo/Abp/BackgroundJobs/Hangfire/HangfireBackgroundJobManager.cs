@@ -13,11 +13,20 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
         {
             if (!delay.HasValue)
             {
-                return Task.FromResult(BackgroundJob.Enqueue<HangfireJobExecutionAdapter<TArgs>>(adapter => adapter.Execute(args)));
+                return Task.FromResult(
+                    BackgroundJob.Enqueue<HangfireJobExecutionAdapter<TArgs>>(
+                        adapter => adapter.Execute(args)
+                    )
+                );
             }
             else
             {
-                return Task.FromResult(BackgroundJob.Schedule<HangfireJobExecutionAdapter<TArgs>>(adapter => adapter.Execute(args), delay.Value));
+                return Task.FromResult(
+                    BackgroundJob.Schedule<HangfireJobExecutionAdapter<TArgs>>(
+                        adapter => adapter.Execute(args),
+                        delay.Value
+                    )
+                );
             }
         }
     }

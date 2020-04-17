@@ -1,0 +1,7 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "ThisFieldIsRequired": "Este campo é obrigatório",
+    "MaxLenghtErrorMessage": "Este campo pode ter no máximo '{0}' caracteres"
+  }
+}

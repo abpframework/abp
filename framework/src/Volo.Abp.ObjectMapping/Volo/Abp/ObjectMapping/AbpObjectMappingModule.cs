@@ -22,7 +22,10 @@ namespace Volo.Abp.ObjectMapping
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<AbpObjectMappingModule>();
+            context.Services.AddTransient(
+                typeof(IObjectMapper<>),
+                typeof(DefaultObjectMapper<>)
+            );
         }
     }
 }

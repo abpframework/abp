@@ -1,33 +1,43 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Pages.Documents
 {
     public class IndexModel : PageModel
     {
+        public string DocumentsUrlPrefix { get; set; }
+
         public IReadOnlyList<ProjectDto> Projects { get; set; }
 
         private readonly IProjectAppService _projectAppService;
+        private readonly DocsUiOptions _uiOptions;
 
-        public IndexModel(IProjectAppService projectAppService)
+        public IndexModel(
+            IProjectAppService projectAppService,
+            IOptions<DocsUiOptions> urlOptions)
         {
             _projectAppService = projectAppService;
+            _uiOptions = urlOptions.Value;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            var result = await _projectAppService.GetListAsync();
+            DocumentsUrlPrefix = _uiOptions.RoutePrefix;
 
-            if (result.Items.Count == 1)
+            var listResult = await _projectAppService.GetListAsync();
+
+            if (listResult.Items.Count == 1)
             {
-                var project = result.Items[0];
-                return RedirectToPage("./Project/Index", new { projectName = project.ShortName, version = "latest", documentName = project.DefaultDocumentName });
+                return Redirect(DocumentsUrlPrefix + listResult.Items[0].ShortName);
             }
 
-            Projects = result.Items;
+            Projects = listResult.Items;
+
             return Page();
         }
     }

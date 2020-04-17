@@ -18,7 +18,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 
             var databaseName = Guid.NewGuid().ToString();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
@@ -26,12 +26,10 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                 });
             });
 
-            context.Services.Configure<UnitOfWorkDefaultOptions>(options =>
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });
-
-            context.Services.AddAssemblyOf<AbpPermissionManagementEntityFrameworkCoreTestModule>();
         }
     }
 }

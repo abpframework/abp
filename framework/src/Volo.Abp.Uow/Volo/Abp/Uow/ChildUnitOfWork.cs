@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -9,11 +10,15 @@ namespace Volo.Abp.Uow
     {
         public Guid Id => _parent.Id;
 
-        public IUnitOfWorkOptions Options => _parent.Options;
+        public IAbpUnitOfWorkOptions Options => _parent.Options;
 
         public IUnitOfWork Outer => _parent.Outer;
 
         public bool IsReserved => _parent.IsReserved;
+
+        public bool IsDisposed => _parent.IsDisposed;
+
+        public bool IsCompleted => _parent.IsCompleted;
 
         public string ReservationName => _parent.ReservationName;
 
@@ -21,6 +26,8 @@ namespace Volo.Abp.Uow
         public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
         public IServiceProvider ServiceProvider => _parent.ServiceProvider;
+
+        public Dictionary<string, object> Items => _parent.Items;
 
         private readonly IUnitOfWork _parent;
 
@@ -39,7 +46,7 @@ namespace Volo.Abp.Uow
             _parent.SetOuter(outer);
         }
 
-        public void Initialize(UnitOfWorkOptions options)
+        public void Initialize(AbpUnitOfWorkOptions options)
         {
             _parent.Initialize(options);
         }
@@ -49,29 +56,14 @@ namespace Volo.Abp.Uow
             _parent.Reserve(reservationName);
         }
 
-        public void SaveChanges()
-        {
-            _parent.SaveChanges();
-        }
-
         public Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return _parent.SaveChangesAsync(cancellationToken);
         }
 
-        public void Complete()
-        {
-
-        }
-
         public Task CompleteAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
-        }
-
-        public void Rollback()
-        {
-            _parent.Rollback();
         }
 
         public Task RollbackAsync(CancellationToken cancellationToken = default)

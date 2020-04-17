@@ -24,6 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             {
                 output.PostContent.SetHtmlContent(CreateContent());
             }
+            ProcessButtonsAlignment(output);
         }
 
         protected virtual string CreateContent()
@@ -50,8 +51,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
                     sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
                     break;
             }
-            
+
             return sb.ToString();
+        }
+
+        protected virtual void ProcessButtonsAlignment(TagHelperOutput output)
+        {
+            if (TagHelper.ButtonAlignment == ButtonsAlign.Default)
+            {
+                return;
+            }
+            output.Attributes.AddClass("justify-content-" + TagHelper.ButtonAlignment.ToString().ToLowerInvariant());
         }
     }
 }

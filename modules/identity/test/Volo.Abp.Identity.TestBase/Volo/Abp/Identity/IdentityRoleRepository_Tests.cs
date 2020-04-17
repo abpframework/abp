@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.Identity
@@ -24,8 +23,8 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByNormalizedNameAsync()
         {
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.Normalize("admin"))).ShouldNotBeNull();
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.Normalize("undefined-role"))).ShouldBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("admin"))).ShouldNotBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("undefined-role"))).ShouldBeNull();
         }
 
         [Fact]
@@ -38,6 +37,17 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetDefaultOnesAsync()
+        {
+            var roles = await RoleRepository.GetDefaultOnesAsync();
+
+            foreach (var role in roles)
+            {
+                role.IsDefault.ShouldBe(true);
+            }
+        }
+
+        [Fact]
         public async Task GetCountAsync()
         {
             (await RoleRepository.GetCountAsync()).ShouldBeGreaterThan(0);
@@ -46,7 +56,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task Should_Eager_Load_Role_Collections()
         {
-            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.Normalize("moderator"));
+            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"));
             role.Claims.ShouldNotBeNull();
             role.Claims.Any().ShouldBeTrue();
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Blogging.Comments.Dtos;
@@ -9,13 +8,11 @@ namespace Volo.Blogging.Comments
 {
     public interface ICommentAppService : IApplicationService
     {
-        Task<List<CommentDto>> GetListOfPostAsync(GetCommentListOfPostAsync input);
+        Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(Guid postId);
 
-        Task<List<CommentWithRepliesDto>> GetHierarchicalListOfPostAsync(GetCommentListOfPostAsync input);
+        Task<CommentWithDetailsDto> CreateAsync(CreateCommentDto input);
 
-        Task<CommentDto> CreateAsync(CreateCommentDto input);
-
-        Task<CommentDto> UpdateAsync(Guid id, UpdateCommentDto input);
+        Task<CommentWithDetailsDto> UpdateAsync(Guid id, UpdateCommentDto input);
 
         Task DeleteAsync(Guid id);
     }

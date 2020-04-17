@@ -1,0 +1,8 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+}
+<div class="abp-account-container">
+    @RenderBody()
+</div>

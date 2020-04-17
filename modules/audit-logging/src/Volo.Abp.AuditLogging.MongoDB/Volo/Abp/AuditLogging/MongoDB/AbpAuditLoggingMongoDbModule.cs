@@ -10,14 +10,10 @@ namespace Volo.Abp.AuditLogging.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            AbpAuditLoggingBsonClassMap.Configure();
-
             context.Services.AddMongoDbContext<AuditLoggingMongoDbContext>(options =>
             {
                 options.AddRepository<AuditLog, MongoAuditLogRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpAuditLoggingMongoDbModule>();
         }
     }
 }

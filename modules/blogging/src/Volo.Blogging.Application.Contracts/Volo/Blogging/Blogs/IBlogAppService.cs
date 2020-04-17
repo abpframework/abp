@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Blogs
 {
@@ -14,5 +13,11 @@ namespace Volo.Blogging.Blogs
         Task<BlogDto> GetByShortNameAsync(string shortName);
 
         Task<BlogDto> GetAsync(Guid id);
+        
+        Task<BlogDto> Create(CreateBlogDto input);
+
+        Task<BlogDto> Update(Guid id, UpdateBlogDto input);
+
+        Task Delete(Guid id);
     }
 }

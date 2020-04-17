@@ -1,16 +1,16 @@
 {
-  "version": "0.4.3",
+  "version": "2.5.0",
   "name": "@abp/aspnetcore.mvc.ui",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "ansi-colors": "^1.1.0",
+    "ansi-colors": "^4.1.1",
     "extend-object": "^1.0.0",
-    "gulp": "^3.9.1",
-    "merge-stream": "^1.0.1",
+    "gulp": "^4.0.2",
+    "merge-stream": "^2.0.0",
     "path": "^0.12.7",
-    "rimraf": "^2.6.2"
+    "rimraf": "^3.0.0"
   },
-  "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
+  "gitHead": "a9a36b8a4681df04377497addf94b15e6c521664"
 }

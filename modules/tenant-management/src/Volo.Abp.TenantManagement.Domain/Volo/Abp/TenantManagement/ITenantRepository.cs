@@ -13,6 +13,16 @@ namespace Volo.Abp.TenantManagement
             bool includeDetails = true, 
             CancellationToken cancellationToken = default);
 
+        Tenant FindByName(
+            string name,
+            bool includeDetails = true
+        );
+
+        Tenant FindById(
+            Guid id,
+            bool includeDetails = true
+        );
+
         Task<List<Tenant>> GetListAsync(
             string sorting = null, 
             int maxResultCount = int.MaxValue, 
@@ -21,6 +31,8 @@ namespace Volo.Abp.TenantManagement
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
 
-        Task<long> GetCountAsync(CancellationToken cancellationToken = default);
+        Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = default);
     }
 }

@@ -1,15 +1,18 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
+using Volo.Abp.EntityFrameworkCore.Domain;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.EntityFrameworkCore;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
@@ -19,10 +22,13 @@ namespace Volo.Abp.EntityFrameworkCore
     [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
     public class AbpEntityFrameworkCoreTestModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            TestEntityExtensionConfigurator.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAssemblyOf<AbpEntityFrameworkCoreTestModule>();
-
             context.Services.AddAbpDbContext<TestAppDbContext>(options =>
             {
                 options.AddDefaultRepositories(true);
@@ -36,13 +42,15 @@ namespace Volo.Abp.EntityFrameworkCore
 
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
+
+            Configure<AbpClockOptions>(options => options.Kind = DateTimeKind.Utc);
         }
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
@@ -58,6 +66,9 @@ namespace Volo.Abp.EntityFrameworkCore
             using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
+                context.Database.ExecuteSqlRaw(
+                    @"CREATE VIEW View_PersonView AS 
+                      SELECT Name, CreationTime, Birthday, LastActive FROM People");
             }
             
             return connection;

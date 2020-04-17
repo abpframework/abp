@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Blogging.Tagging
+﻿namespace Volo.Blogging.Tagging
 {
     public class TagConsts
     {

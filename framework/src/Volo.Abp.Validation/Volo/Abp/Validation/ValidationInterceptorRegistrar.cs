@@ -1,4 +1,6 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.Validation
 {
@@ -6,10 +8,15 @@ namespace Volo.Abp.Validation
     {
         public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            if (typeof(IValidationEnabled).IsAssignableFrom(context.ImplementationType))
+            if (ShouldIntercept(context.ImplementationType))
             {
                 context.Interceptors.TryAdd<ValidationInterceptor>();
             }
         }
+        
+         private static bool ShouldIntercept(Type type)
+         {
+             return !DynamicProxyIgnoreTypes.Contains(type) && typeof(IValidationEnabled).IsAssignableFrom(type);
+         }
     }
 }

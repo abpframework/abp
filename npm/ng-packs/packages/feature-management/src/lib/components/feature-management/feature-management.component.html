@@ -1,0 +1,37 @@
+<abp-modal size="md" [(visible)]="visible" [busy]="modalBusy">
+  <ng-template #abpHeader>
+    <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form *ngIf="form" (ngSubmit)="save()" [formGroup]="form" validateOnSubmit>
+      <div
+        class="row my-3"
+        *ngFor="let feature of features$ | async; let i = index"
+        [ngSwitch]="feature.valueType.name"
+      >
+        <div class="col-4">{{ feature.name }}</div>
+        <div class="col-8" *ngSwitchCase="'ToggleStringValueType'">
+          <input type="checkbox" name="feature.name" [formControlName]="i" />
+        </div>
+        <div class="col-8" *ngSwitchCase="'FreeTextStringValueType'">
+          <input type="text" name="feature.name" [formControlName]="i" />
+        </div>
+      </div>
+      <div *ngIf="!(features$ | async)?.length">
+        {{ 'AbpFeatureManagement::NoFeatureFoundMessage' | abpLocalization }}
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <ng-container *ngIf="(features$ | async)?.length">
+      <button #abpClose type="button" class="btn btn-secondary">
+        {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
+      </button>
+      <abp-button iconClass="fa fa-check" [disabled]="form?.invalid || modalBusy" (click)="save()">
+        {{ 'AbpFeatureManagement::Save' | abpLocalization }}
+      </abp-button>
+    </ng-container>
+  </ng-template>
+</abp-modal>

@@ -10,6 +10,8 @@ namespace Volo.Abp.Identity
                 user.Id,
                 user.UserName,
                 user.Email,
+                user.Name,
+                user.Surname,
                 user.EmailConfirmed,
                 user.PhoneNumber,
                 user.PhoneNumberConfirmed,

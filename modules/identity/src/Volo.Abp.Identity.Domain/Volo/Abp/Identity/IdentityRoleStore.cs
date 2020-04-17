@@ -22,9 +22,9 @@ namespace Volo.Abp.Identity
         IRoleClaimStore<IdentityRole>,
         ITransientDependency
     {
-        private readonly IIdentityRoleRepository _roleRepository;
-        private readonly ILogger<IdentityRoleStore> _logger;
-        private readonly IGuidGenerator _guidGenerator;
+        protected IIdentityRoleRepository RoleRepository { get; }
+        protected ILogger<IdentityRoleStore> Logger { get; }
+        protected IGuidGenerator GuidGenerator { get; }
 
         /// <summary>
         /// Constructs a new instance of <see cref="IdentityRoleStore"/>.
@@ -35,9 +35,9 @@ namespace Volo.Abp.Identity
             IGuidGenerator guidGenerator,
             IdentityErrorDescriber describer = null)
         {
-            _roleRepository = roleRepository;
-            _logger = logger;
-            _guidGenerator = guidGenerator;
+            RoleRepository = roleRepository;
+            Logger = logger;
+            GuidGenerator = guidGenerator;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.InsertAsync(role, AutoSaveChanges, cancellationToken);
+            await RoleRepository.InsertAsync(role, AutoSaveChanges, cancellationToken);
 
             return IdentityResult.Success;
         }
@@ -86,11 +86,11 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _roleRepository.UpdateAsync(role, AutoSaveChanges, cancellationToken);
+                await RoleRepository.UpdateAsync(role, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
-                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
+                Logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
@@ -111,11 +111,11 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _roleRepository.DeleteAsync(role, AutoSaveChanges, cancellationToken);
+                await RoleRepository.DeleteAsync(role, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
-                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
+                Logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
@@ -128,7 +128,7 @@ namespace Volo.Abp.Identity
         /// <param name="role">The role whose ID should be returned.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the ID of the role.</returns>
-        public Task<string> GetRoleIdAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
+        public virtual Task<string> GetRoleIdAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -143,7 +143,7 @@ namespace Volo.Abp.Identity
         /// <param name="role">The role whose name should be returned.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the name of the role.</returns>
-        public Task<string> GetRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
+        public virtual Task<string> GetRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -159,13 +159,13 @@ namespace Volo.Abp.Identity
         /// <param name="roleName">The name of the role.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public Task SetRoleNameAsync([NotNull] IdentityRole role, string roleName, CancellationToken cancellationToken = default)
+        public virtual Task SetRoleNameAsync([NotNull] IdentityRole role, string roleName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(role, nameof(role));
 
-            role.Name = roleName;
+            role.ChangeName(roleName);
             return Task.CompletedTask;
         }
 
@@ -179,7 +179,7 @@ namespace Volo.Abp.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return _roleRepository.FindAsync(Guid.Parse(id), cancellationToken: cancellationToken);
+            return RoleRepository.FindAsync(Guid.Parse(id), cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(normalizedName, nameof(normalizedName));
 
-            return _roleRepository.FindByNormalizedNameAsync(normalizedName, cancellationToken: cancellationToken);
+            return RoleRepository.FindByNormalizedNameAsync(normalizedName, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Dispose the stores
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
         }
 
@@ -243,13 +243,13 @@ namespace Volo.Abp.Identity
         /// <param name="role">The role whose claims should be retrieved.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> that contains the claims granted to a role.</returns>
-        public async Task<IList<Claim>> GetClaimsAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
+        public virtual async Task<IList<Claim>> GetClaimsAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
+            await RoleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
 
             return role.Claims.Select(c => c.ToClaim()).ToList();
         }
@@ -261,16 +261,16 @@ namespace Volo.Abp.Identity
         /// <param name="claim">The claim to add to the role.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public async Task AddClaimAsync([NotNull] IdentityRole role, [NotNull] Claim claim, CancellationToken cancellationToken = default)
+        public virtual async Task AddClaimAsync([NotNull] IdentityRole role, [NotNull] Claim claim, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
 
-            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
+            await RoleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
 
-            role.AddClaim(_guidGenerator, claim);
+            role.AddClaim(GuidGenerator, claim);
         }
 
         /// <summary>
@@ -280,12 +280,12 @@ namespace Volo.Abp.Identity
         /// <param name="claim">The claim to remove from the role.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public async Task RemoveClaimAsync([NotNull] IdentityRole role, [NotNull] Claim claim, CancellationToken cancellationToken = default)
+        public virtual async Task RemoveClaimAsync([NotNull] IdentityRole role, [NotNull] Claim claim, CancellationToken cancellationToken = default)
         {
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
 
-            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
+            await RoleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
 
             role.RemoveClaim(claim);
         }

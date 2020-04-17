@@ -1,9 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -23,6 +25,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
+    <Content Remove="Themes\**\*.cshtml" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Views\**\*.cshtml" />
     <Content Remove="Properties\launchSettings.json" />
@@ -30,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
   </ItemGroup>
   

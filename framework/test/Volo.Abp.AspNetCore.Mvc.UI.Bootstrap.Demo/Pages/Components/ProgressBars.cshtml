@@ -14,66 +14,70 @@
 
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/progress/" target="_blank"> Bootstrap Progress Bars</a>.</p>
 
-<h4># Progress Bar Examples</h4>
+
+<h4>Example</h4>
 
 <div class="demo-with-code">
     <div class="demo-area">
 
-        <abp-progress>
-            <abp-progress-bar value="70" />
-
-        </abp-progress>
+        <abp-progress-bar value="70" />
         <br />
-        <abp-progress>
-            <abp-progress-bar type="Warning" value="25">
-                %25
-            </abp-progress-bar>
-        </abp-progress>
+        <abp-progress-bar type="Warning" value="25"> %25 </abp-progress-bar>
         <br />
-        <abp-progress>
-            <abp-progress-bar type="Success" value="40" strip="true">
-            </abp-progress-bar>
-        </abp-progress>
+        <abp-progress-bar type="Success" value="40" strip="true"/>
         <br />
-        <abp-progress>
-            <abp-progress-bar type="Dark" value="10" min-value="5" max-value="15" strip="true">
-                %50
-            </abp-progress-bar>
-        </abp-progress>
+        <abp-progress-bar type="Dark" value="10" min-value="5" max-value="15" strip="true"> %50 </abp-progress-bar>
         <br />
-        <abp-progress>
-            <abp-progress-bar type="Success" value="25">
-            </abp-progress-bar>
-            <abp-progress-bar type="Danger" value="10" strip="true">
-                %10
-            </abp-progress-bar>
-            <abp-progress-bar type="Primary" value="50" animation="true" strip="true">
-            </abp-progress-bar>
-        </abp-progress>
+        <abp-progress-group>
+            <abp-progress-part type="Success" value="25"/>
+            <abp-progress-part type="Danger" value="10" strip="true"> %10 </abp-progress-part>
+            <abp-progress-part type="Primary" value="50" animation="true" strip="true" />
+        </abp-progress-group>
     </div>
     <div class="code-area">
-        <pre>
-&lt;abp-progress&gt;
-  &lt;abp-progress-bar value=&quot;70&quot;/&gt;
-&lt;/abp-progress&gt;
+        <abp-tabs>
+            <abp-tab title="Tag Helper" active="true">
+                <pre><code>
+&lt;abp-progress-bar value=&quot;70&quot; /&gt;
 
-&lt;abp-progress&gt;
-  &lt;abp-progress-bar type=&quot;Warning&quot; value=&quot;25&quot;&gt;%25&lt;/abp-progress-bar&gt;
-&lt;/abp-progress&gt;
+&lt;abp-progress-bar type=&quot;Warning&quot; value=&quot;25&quot;&gt; %25 &lt;/abp-progress-bar&gt;
 
-&lt;abp-progress&gt;
-  &lt;abp-progress-bar type=&quot;Success&quot; value=&quot;40&quot; strip=&quot;true&quot;/&gt;
-&lt;/abp-progress&gt;
+&lt;abp-progress-bar type=&quot;Success&quot; value=&quot;40&quot; strip=&quot;true&quot;/&gt;
 
-&lt;abp-progress&gt;
-  &lt;abp-progress-bar type=&quot;Dark&quot; value=&quot;10&quot; min-value=&quot;5&quot; max-value=&quot;15&quot;  strip=&quot;true&quot;&gt;%50&lt;/abp-progress-bar&gt;
-&lt;/abp-progress&gt;
+&lt;abp-progress-bar type=&quot;Dark&quot; value=&quot;10&quot; min-value=&quot;5&quot; max-value=&quot;15&quot; strip=&quot;true&quot;&gt; %50 &lt;/abp-progress-bar&gt;
 
-&lt;abp-progress&gt;
-  &lt;abp-progress-bar type=&quot;Success&quot; value=&quot;25&quot;/&gt;
-  &lt;abp-progress-bar type=&quot;Danger&quot; value=&quot;10&quot; strip=&quot;true&quot;&gt;%10&lt;/abp-progress-bar&gt;
-  &lt;abp-progress-bar type=&quot;Primary&quot; value=&quot;50&quot; animation=&quot;true&quot; strip=&quot;true&quot;/&gt;
-&lt;/abp-progress&gt;
-</pre>
+&lt;abp-progress-group&gt;
+    &lt;abp-progress-part type=&quot;Success&quot; value=&quot;25&quot;/&gt;
+    &lt;abp-progress-part type=&quot;Danger&quot; value=&quot;10&quot; strip=&quot;true&quot;&gt; %10 &lt;/abp-progress-part&gt;
+    &lt;abp-progress-part type=&quot;Primary&quot; value=&quot;50&quot; animation=&quot;true&quot; strip=&quot;true&quot; /&gt;
+&lt;/abp-progress-group&gt;
+</code></pre>
+            </abp-tab>
+            <abp-tab title="Rendered">
+                <pre><code>
+&lt;div class=&quot;progress&quot;&gt;
+    &lt;div class=&quot;progress-bar&quot; role=&quot;progressbar&quot; style=&quot;width: 70%&quot; aria-valuenow=&quot;70&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;progress&quot;&gt;
+    &lt;div class=&quot;progress-bar bg-warning&quot; role=&quot;progressbar&quot; style=&quot;width: 25%&quot; aria-valuenow=&quot;25&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt; %25 &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;progress&quot;&gt;
+    &lt;div class=&quot;progress-bar progress-bar-striped bg-success&quot; role=&quot;progressbar&quot; style=&quot;width: 40%&quot; aria-valuenow=&quot;40&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;progress&quot;&gt;
+    &lt;div class=&quot;progress-bar progress-bar-striped bg-dark&quot; role=&quot;progressbar&quot; style=&quot;width: 50%&quot; aria-valuenow=&quot;10&quot; aria-valuemin=&quot;5&quot; aria-valuemax=&quot;15&quot;&gt; %50 &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;progress&quot;&gt;
+    &lt;div class=&quot;progress-bar bg-success&quot; role=&quot;progressbar&quot; style=&quot;width: 25%&quot; aria-valuenow=&quot;25&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;progress-bar progress-bar-striped bg-danger&quot; role=&quot;progressbar&quot; style=&quot;width: 10%&quot; aria-valuenow=&quot;10&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt; %10 &lt;/div&gt;
+    &lt;div class=&quot;progress-bar progress-bar-animated progress-bar-striped bg-primary&quot; role=&quot;progressbar&quot; style=&quot;width: 50%&quot; aria-valuenow=&quot;50&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </abp-tab>
+        </abp-tabs>
     </div>
 </div>

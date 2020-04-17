@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityRoleAppService : IAsyncCrudAppService<IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
+    public interface IIdentityRoleAppService : IApplicationService
     {
-        //TODO: remove after a better design
-        Task<List<IdentityRoleDto>> GetAllListAsync();
+        Task<ListResultDto<IdentityRoleDto>> GetAllListAsync();
+        
+        Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input);
 
-        Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id);
+        Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input);
 
-        Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input);
+        Task<IdentityRoleDto> GetAsync(Guid id);
+
+        Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input);
+
+        Task DeleteAsync(Guid id);
     }
 }

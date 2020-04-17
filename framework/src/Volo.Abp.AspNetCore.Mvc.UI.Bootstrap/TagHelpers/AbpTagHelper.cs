@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            AsyncHelper.RunSync(() => ProcessAsync(context, output));
+            Service.Process(context, output);
         }
 
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)

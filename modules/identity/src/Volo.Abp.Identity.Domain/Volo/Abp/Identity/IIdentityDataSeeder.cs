@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.Identity
 {
     public interface IIdentityDataSeeder
     {
-        Task SeedAsync(
-            string adminUserPassword,
-            IEnumerable<string> adminRolePermissions = null,
+        Task<IdentityDataSeedResult> SeedAsync(
+            [NotNull] string adminEmail,
+            [NotNull] string adminPassword,
             Guid? tenantId = null);
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Blogging.Blogs;
 using Volo.Blogging.EntityFrameworkCore;
 
 namespace Volo.Blogging.Posts
@@ -20,9 +18,9 @@ namespace Volo.Blogging.Posts
 
         }
 
-        public List<Post> GetPostsByBlogId(Guid id)
+        public async Task<List<Post>> GetPostsByBlogId(Guid id)
         {
-            return DbSet.Where(p => p.BlogId == id).ToList();
+            return await DbSet.Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToListAsync();
         }
 
         public async Task<Post> GetPostByUrl(Guid blogId, string url)
@@ -35,6 +33,24 @@ namespace Volo.Blogging.Posts
             }
 
             return post;
+        }
+
+        public async Task<List<Post>> GetOrderedList(Guid blogId,bool descending = false)
+        {
+            if (!descending)
+            {
+                return await DbSet.Where(x=>x.BlogId==blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
+            }
+            else
+            {
+                return await DbSet.Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync();
+            }
+
+        }
+
+        public override IQueryable<Post> WithDetails()
+        {
+            return GetQueryable().IncludeDetails();
         }
     }
 }

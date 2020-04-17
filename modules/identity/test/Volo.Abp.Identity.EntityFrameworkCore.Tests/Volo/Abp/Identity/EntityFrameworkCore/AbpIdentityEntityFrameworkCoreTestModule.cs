@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -20,15 +19,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<AbpIdentityEntityFrameworkCoreTestModule>();
         }
         
         private static SqliteConnection CreateDatabaseAndGetConnection()

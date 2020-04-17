@@ -2,6 +2,7 @@
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -14,12 +15,10 @@ namespace Volo.Abp.PermissionManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionManagementOptions>(options =>
             {
-                options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
+                options.ManagementProviders.Add<TestPermissionManagementProvider>();
             });
-
-            context.Services.AddAssemblyOf<AbpPermissionManagementTestBaseModule>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -31,9 +30,9 @@ namespace Volo.Abp.PermissionManagement
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<PermissionTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

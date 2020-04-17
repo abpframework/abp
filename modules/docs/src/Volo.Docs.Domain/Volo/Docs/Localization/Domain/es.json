@@ -1,0 +1,19 @@
+{
+  "culture": "es",
+  "texts": {
+    "Documents": "Documentos",
+    "BackToWebsite": "Regresar al sitio",
+    "Contributors": "Contribuidores",
+    "ShareOn": "Compartilhar no",
+    "Version": "Versão",
+    "Edit": "Editar",
+    "Delete": "Excluir",
+    "InThisDocument": "En este documento",
+    "GoToTop": "Subir",
+    "Projects": "Proyecto(s)",
+    "NoProjectWarning": "Não há projetos ainda!",
+    "DocumentNotFound": "Ups! O documento solicitado não foi encontrado!",
+    "NavigationDocumentNotFound": "Esta versão não possui um documento de navegação!",
+    "DocumentNotFoundInSelectedLanguage": "Documento no idioma desejado não foi encontrado. Documento no idioma padrão é mostrado."
+  }
+}

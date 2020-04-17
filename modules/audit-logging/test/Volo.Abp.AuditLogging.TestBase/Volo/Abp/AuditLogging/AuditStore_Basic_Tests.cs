@@ -68,7 +68,7 @@ namespace Volo.Abp.AuditLogging
 
             //Assert
 
-            var insertedLog = _auditLogRepository.GetList(true)
+            var insertedLog = (await _auditLogRepository.GetListAsync(true))
                 .FirstOrDefault(al => al.UserId == userId);
 
             insertedLog.ShouldNotBeNull();
@@ -77,7 +77,6 @@ namespace Volo.Abp.AuditLogging
             insertedLog.EntityChanges.Count.ShouldBeGreaterThan(0);
             insertedLog.EntityChanges.First().PropertyChanges.Count.ShouldBeGreaterThan(0);
         }
-
 
         [Fact]
         public async Task Should_Get_List_Of_Audit_Logs()

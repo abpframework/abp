@@ -14,8 +14,6 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
             });
-
-            context.Services.AddAssemblyOf<AbpAuditLoggingEntityFrameworkCoreModule>();
         }
     }
 }

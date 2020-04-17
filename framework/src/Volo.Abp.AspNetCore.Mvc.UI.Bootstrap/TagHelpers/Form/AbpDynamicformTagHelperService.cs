@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -40,13 +41,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             await ConvertToMvcForm(context, output);
 
-            ProcessFields(context, output);
+            await ProcessFieldsAsync(context, output);
 
             SetContent(context, output, list, childContent);
 
             SetFormAttributes(context, output);
 
-            SetSubmitButton(context, output);
+            await SetSubmitButton(context, output);
         }
 
         protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
@@ -66,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var formTagOutput = GetInnerTagHelper(output.Attributes, context, formTagHelper, "form", TagMode.StartTagAndEndTag);
+            var formTagOutput = await formTagHelper.ProcessAndGetOutputAsync(output.Attributes, context, "form", TagMode.StartTagAndEndTag);
 
             await formTagOutput.GetChildContentAsync();
 
@@ -106,14 +107,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Content.SetHtmlContent(childContent);
         }
 
-        protected virtual void SetSubmitButton(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task SetSubmitButton(TagHelperContext context, TagHelperOutput output)
         {
             if (!TagHelper.SubmitButton ?? true)
             {
                 return;
             }
 
-            var buttonHtml = ProcessSubmitButtonAndGetContent(context, output);
+            var buttonHtml = await ProcessSubmitButtonAndGetContentAsync(context, output);
 
             output.PostContent.SetHtmlContent(output.PostContent.GetContent() + buttonHtml);
         }
@@ -125,7 +126,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return items;
         }
 
-        protected virtual void ProcessFields(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task ProcessFieldsAsync(TagHelperContext context, TagHelperOutput output)
         {
             var models = GetModels(context, output);
 
@@ -133,19 +134,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 if (IsSelectGroup(context, model))
                 {
-                    ProcessSelectGroup(context, output, model);
-                    continue;
+                    await ProcessSelectGroupAsync(context, output, model);
                 }
-
-                ProcessInputGroup(context, output, model);
+                else
+                {
+                    await ProcessInputGroupAsync(context, output, model);
+                }
             }
         }
 
-        protected virtual void ProcessSelectGroup(TagHelperContext context, TagHelperOutput output, ModelExpression model)
+        protected virtual async Task ProcessSelectGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
             var abpSelectTagHelper = GetSelectGroupTagHelper(context, output, model);
 
-            RenderTagHelper(new TagHelperAttributeList(), context, abpSelectTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+            await abpSelectTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual AbpTagHelper GetSelectGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
@@ -155,7 +157,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 GetSelectTagHelper(model);
         }
 
-        private AbpTagHelper GetSelectTagHelper(ModelExpression model)
+        protected virtual AbpTagHelper GetSelectTagHelper(ModelExpression model)
         {
             var abpSelectTagHelper = _serviceProvider.GetRequiredService<AbpSelectTagHelper>();
             abpSelectTagHelper.AspFor = model;
@@ -164,9 +166,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return abpSelectTagHelper;
         }
 
-        private AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
+        protected virtual AbpTagHelper GetAbpRadioInputTagHelper(ModelExpression model)
         {
-            var radioButtonAttribute = GetAttribute<AbpRadioButton>(model.ModelExplorer);
+            var radioButtonAttribute = model.ModelExplorer.GetAttribute<AbpRadioButton>();
             var abpRadioInputTagHelper = _serviceProvider.GetRequiredService<AbpRadioInputTagHelper>();
             abpRadioInputTagHelper.AspFor = model;
             abpRadioInputTagHelper.AspItems = null;
@@ -176,23 +178,24 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return abpRadioInputTagHelper;
         }
 
-        protected virtual string ProcessSubmitButtonAndGetContent(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> ProcessSubmitButtonAndGetContentAsync(TagHelperContext context, TagHelperOutput output)
         {
             var abpButtonTagHelper = _serviceProvider.GetRequiredService<AbpButtonTagHelper>();
             var attributes = new TagHelperAttributeList { new TagHelperAttribute("type", "submit") };
             abpButtonTagHelper.Text = "Submit";
             abpButtonTagHelper.ButtonType = AbpButtonType.Primary;
 
-            return RenderTagHelper(attributes, context, abpButtonTagHelper, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
+            return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
         }
 
-        protected virtual void ProcessInputGroup(TagHelperContext context, TagHelperOutput output, ModelExpression model)
+        protected virtual async Task ProcessInputGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
             var abpInputTagHelper = _serviceProvider.GetRequiredService<AbpInputTagHelper>();
             abpInputTagHelper.AspFor = model;
             abpInputTagHelper.ViewContext = TagHelper.ViewContext;
+            abpInputTagHelper.DisplayRequiredSymbol = TagHelper.RequiredSymbols ?? true;
 
-            RenderTagHelper(new TagHelperAttributeList(), context, abpInputTagHelper, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
+            await abpInputTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual List<ModelExpression> GetModels(TagHelperContext context, TagHelperOutput output)
@@ -202,6 +205,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<ModelExpression> ExploreModelsRecursively(List<ModelExpression> list, ModelExplorer model)
         {
+            if (model.GetAttribute<DynamicFormIgnore>() != null)
+            {
+                return list;
+            }
+
             if (IsCsharpClassOrPrimitive(model.ModelType) || IsListOfCsharpClassOrPrimitive(model.ModelType))
             {
                 list.Add(ModelExplorerToModelExpressionConverter(model));
@@ -278,12 +286,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual bool AreSelectItemsProvided(ModelExplorer explorer)
         {
-            return GetAttribute<SelectItems>(explorer) != null;
+            return explorer.GetAttribute<SelectItems>() != null;
         }
 
         protected virtual bool IsRadioGroup(ModelExplorer explorer)
         {
-            return GetAttribute<AbpRadioButton>(explorer) != null;
+            return explorer.GetAttribute<AbpRadioButton>() != null;
         }
     }
 }

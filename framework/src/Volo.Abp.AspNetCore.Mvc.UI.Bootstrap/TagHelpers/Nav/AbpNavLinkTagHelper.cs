@@ -8,8 +8,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Nav
         public bool? Active { get; set; } 
 
         public bool? Disabled { get; set; }
-
-        public string Href { get; set; }
         
         public AbpNavLinkTagHelper(AbpNavLinkTagHelperService tagHelperService)
             : base(tagHelperService)

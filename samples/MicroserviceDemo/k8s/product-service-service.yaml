@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: product-service
+spec:
+  selector:
+    app: product-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http

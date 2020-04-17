@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Authorization.Permissions
 {
@@ -16,7 +17,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         public Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
         {
-            return Task.FromResult(false);
+            return TaskCache.FalseResult;
         }
     }
 }

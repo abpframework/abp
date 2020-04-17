@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Guids
 {
@@ -10,15 +9,15 @@ namespace Volo.Abp.Guids
 
     /// <summary>
     /// Implements <see cref="IGuidGenerator"/> by creating sequential Guids.
-    /// Use <see cref="SequentialGuidGeneratorOptions"/> to configure.
+    /// Use <see cref="AbpSequentialGuidGeneratorOptions"/> to configure.
     /// </summary>
     public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
     {
-        public SequentialGuidGeneratorOptions Options { get; }
+        public AbpSequentialGuidGeneratorOptions Options { get; }
 
         private static readonly RandomNumberGenerator RandomNumberGenerator = RandomNumberGenerator.Create();
 
-        public SequentialGuidGenerator(IOptions<SequentialGuidGeneratorOptions> options)
+        public SequentialGuidGenerator(IOptions<AbpSequentialGuidGeneratorOptions> options)
         {
             Options = options.Value;
         }
@@ -32,7 +31,7 @@ namespace Volo.Abp.Guids
         {
             // We start with 16 bytes of cryptographically strong random data.
             var randomBytes = new byte[10];
-            RandomNumberGenerator.Locking(r => r.GetBytes(randomBytes));
+            RandomNumberGenerator.GetBytes(randomBytes);
 
             // An alternate method: use a normally-created GUID to get our initial
             // random data:

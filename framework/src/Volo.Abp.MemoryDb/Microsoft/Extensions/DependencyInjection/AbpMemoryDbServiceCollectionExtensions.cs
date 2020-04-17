@@ -7,10 +7,10 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AbpMemoryDbServiceCollectionExtensions
     {
-        public static IServiceCollection AddMemoryDbContext<TMemoryDbContext>(this IServiceCollection services, Action<IMemoryDbContextRegistrationOptionsBuilder> optionsBuilder = null)
+        public static IServiceCollection AddMemoryDbContext<TMemoryDbContext>(this IServiceCollection services, Action<IAbpMemoryDbContextRegistrationOptionsBuilder> optionsBuilder = null)
             where TMemoryDbContext : MemoryDbContext
         {
-            var options = new MemoryDbContextRegistrationOptions(typeof(TMemoryDbContext), services);
+            var options = new AbpMemoryDbContextRegistrationOptions(typeof(TMemoryDbContext), services);
             optionsBuilder?.Invoke(options);
 
             if (options.DefaultRepositoryDbContextType != typeof(TMemoryDbContext))

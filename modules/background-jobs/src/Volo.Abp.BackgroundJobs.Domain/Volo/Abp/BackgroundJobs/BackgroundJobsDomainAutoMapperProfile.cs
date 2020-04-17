@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Volo.Abp.AutoMapper;
 
 namespace Volo.Abp.BackgroundJobs
 {
@@ -7,7 +8,11 @@ namespace Volo.Abp.BackgroundJobs
         public BackgroundJobsDomainAutoMapperProfile()
         {
             CreateMap<BackgroundJobInfo, BackgroundJobRecord>()
-                .ReverseMap();
+                .ConstructUsing(x => new BackgroundJobRecord(x.Id))
+                .Ignore(record => record.ConcurrencyStamp)
+                .Ignore(record => record.ExtraProperties);
+
+            CreateMap<BackgroundJobRecord, BackgroundJobInfo>();
         }
     }
 }

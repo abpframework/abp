@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 {
@@ -32,9 +33,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         private void AddToContext(TagHelperContext context, TagHelperOutput output)
         {
-            var getOutputAsHtml = RenderTagHelperOutput(output, _encoder);
+            var getOutputAsHtml = output.Render(_encoder);
 
-            var itemList = GetValueFromContext<List<CarouselItem>>(context, CarouselItemsContent);
+            var itemList = context.GetValue<List<CarouselItem>>(CarouselItemsContent);
 
             itemList.Add(new CarouselItem(getOutputAsHtml, TagHelper.Active ?? false));
         }

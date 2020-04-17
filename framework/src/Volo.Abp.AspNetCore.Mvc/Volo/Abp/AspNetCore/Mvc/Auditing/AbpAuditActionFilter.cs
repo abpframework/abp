@@ -84,14 +84,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
                 return false;
             }
 
-            //TODO: This is partially duplication of AuditHelper.ShouldSaveAudit method. Check why it does not work for controllers
-            if (!AuditingInterceptorRegistrar.ShouldAuditTypeByDefault(context.Controller.GetType()))
-            {
-                return false;
-            }
-
             auditLog = auditLogScope.Log;
             auditLogAction = _auditingHelper.CreateAuditLogAction(
+                auditLog,
                 context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
                 context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
                 context.ActionArguments

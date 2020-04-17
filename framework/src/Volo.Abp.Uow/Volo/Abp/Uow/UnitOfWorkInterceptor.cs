@@ -10,28 +10,13 @@ namespace Volo.Abp.Uow
     public class UnitOfWorkInterceptor : AbpInterceptor, ITransientDependency
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly UnitOfWorkDefaultOptions _defaultOptions;
+        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
 
-        public UnitOfWorkInterceptor(IUnitOfWorkManager unitOfWorkManager, IOptions<UnitOfWorkDefaultOptions> options)
+        public UnitOfWorkInterceptor(IUnitOfWorkManager unitOfWorkManager, IOptions<AbpUnitOfWorkDefaultOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _defaultOptions = options.Value;
         }
-
-	    public override void Intercept(IAbpMethodInvocation invocation)
-	    {
-	        if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
-	        {
-				invocation.Proceed();
-	            return;
-            }
-
-	        using (var uow = _unitOfWorkManager.Begin(CreateOptions(invocation, unitOfWorkAttribute)))
-			{
-				invocation.Proceed();
-				uow.Complete();
-			}
-		}
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
@@ -48,9 +33,9 @@ namespace Volo.Abp.Uow
             }
         }
 
-        private UnitOfWorkOptions CreateOptions(IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
+        private AbpUnitOfWorkOptions CreateOptions(IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
         {
-            var options = new UnitOfWorkOptions();
+            var options = new AbpUnitOfWorkOptions();
 
             unitOfWorkAttribute?.SetOptions(options);
 

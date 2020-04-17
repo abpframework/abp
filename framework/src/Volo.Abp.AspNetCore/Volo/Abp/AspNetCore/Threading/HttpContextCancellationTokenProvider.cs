@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Threading
     [Dependency(ReplaceServices = true)]
     public class HttpContextCancellationTokenProvider : ICancellationTokenProvider, ITransientDependency
     {
-        public CancellationToken Token => _httpContextAccessor.HttpContext?.RequestAborted ?? default;
+        public CancellationToken Token => _httpContextAccessor.HttpContext?.RequestAborted ?? CancellationToken.None;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 

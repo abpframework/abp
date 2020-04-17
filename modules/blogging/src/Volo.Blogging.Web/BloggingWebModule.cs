@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging.Localization;
 
@@ -15,8 +14,9 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingHttpApiModule),
-        typeof(AbpAutoMapperModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule)
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpAspNetCoreMvcUiBundlingModule),
+        typeof(AbpAutoMapperModule)
     )]
     public class BloggingWebModule : AbpModule
     {
@@ -26,39 +26,44 @@ namespace Volo.Blogging
             {
                 options.AddAssemblyResource(typeof(BloggingResource), typeof(BloggingWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(BloggingWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new BloggingMenuContributor());
+            });
+
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<BloggingResource>()
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiModule))
-                    .AddVirtualJson("/Localization/Resources/Blogging/Web");
-            });
-
-            context.Services.Configure<AbpAutoMapperOptions>(options =>
+            context.Services.AddAutoMapperObjectMapper<BloggingWebModule>();
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpBloggingWebAutoMapperProfile>(validate: true);
             });
 
-            context.Services.Configure<RazorPagesOptions>(options =>
+            Configure<RazorPagesOptions>(options =>
             {
-                //TODO: Make configurable!
-                options.Conventions.AddPageRoute("/Blog/Posts/Index", "blog/{blogShortName}");
-                options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postUrl}");
-                options.Conventions.AddPageRoute("/Blog/Posts/Edit", "blog/{blogShortName}/posts/edit/{postId}");
-                options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/posts/new");
-            });
+                var urlOptions = context.Services
+                    .GetRequiredServiceLazy<IOptions<BloggingUrlOptions>>()
+                    .Value.Value;
 
-            context.Services.AddAssemblyOf<BloggingWebModule>();
+                var routePrefix = urlOptions.RoutePrefix;
+
+                options.Conventions.AddPageRoute("/Blogs/Posts/Index", routePrefix + "{blogShortName}");
+                options.Conventions.AddPageRoute("/Blogs/Posts/Detail", routePrefix + "{blogShortName}/{postUrl}");
+                options.Conventions.AddPageRoute("/Blogs/Posts/Edit", routePrefix + "{blogShortName}/posts/{postId}/edit");
+                options.Conventions.AddPageRoute("/Blogs/Posts/New", routePrefix + "{blogShortName}/posts/new");
+            });
         }
     }
 }

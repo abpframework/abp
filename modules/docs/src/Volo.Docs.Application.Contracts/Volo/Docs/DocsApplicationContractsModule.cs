@@ -1,14 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Volo.Abp.Application;
 using Volo.Abp.Modularity;
 
 namespace Volo.Docs
 {
-    [DependsOn(typeof(DocsDomainSharedModule))]
+    [DependsOn(
+        typeof(DocsDomainSharedModule),
+        typeof(AbpDddApplicationModule)
+        )]
     public class DocsApplicationContractsModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAssemblyOf<DocsApplicationContractsModule>();
-        }
+        
     }
 }

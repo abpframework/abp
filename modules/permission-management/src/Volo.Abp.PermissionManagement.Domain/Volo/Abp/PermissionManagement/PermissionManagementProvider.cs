@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
@@ -24,8 +23,7 @@ namespace Volo.Abp.PermissionManagement
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
         }
-
-
+        
         public virtual async Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
         {
             if (providerName != Name)

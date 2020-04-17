@@ -1,17 +1,27 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.AspNetCore.Hosting
 {
     public static class AbpHostingEnvironmentExtensions
     {
-        public static IConfigurationRoot BuildConfiguration(this IHostingEnvironment env, string fileName = "appsettings")
+        public static IConfigurationRoot BuildConfiguration(
+            this IWebHostEnvironment env,
+            AbpConfigurationBuilderOptions options = null)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile(fileName + ".json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"{fileName}.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+            options = options ?? new AbpConfigurationBuilderOptions();
 
-            return builder.Build();
+            if (options.BasePath.IsNullOrEmpty())
+            {
+                options.BasePath = env.ContentRootPath;
+            }
+
+            if (options.EnvironmentName.IsNullOrEmpty())
+            {
+                options.EnvironmentName = env.EnvironmentName;
+            }
+
+            return ConfigurationHelper.BuildConfiguration(options);
         }
     }
 }

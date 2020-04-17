@@ -18,15 +18,13 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
         {
             var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
                     abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-
-            context.Services.AddAssemblyOf<AbpSettingManagementEntityFrameworkCoreTestModule>();
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()
@@ -34,8 +32,8 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            new AbpSettingManagementDbContext(
-                new DbContextOptionsBuilder<AbpSettingManagementDbContext>().UseSqlite(connection).Options
+            new SettingManagementDbContext(
+                new DbContextOptionsBuilder<SettingManagementDbContext>().UseSqlite(connection).Options
             ).GetService<IRelationalDatabaseCreator>().CreateTables();
 
             return connection;
