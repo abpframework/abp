@@ -19,7 +19,7 @@ import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http
 import { HttpErrorConfig, ErrorScreenErrorCodes } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 export const DEFAULT_ERROR_MESSAGES = {
   defaultError: {
@@ -58,111 +58,122 @@ export class ErrorHandler {
     private injector: Injector,
     @Inject('HTTP_ERROR_CONFIG') private httpErrorConfig: HttpErrorConfig,
   ) {
+    this.httpErrorConfig.skipHandledErrorCodes = this.httpErrorConfig.skipHandledErrorCodes || [];
+    this.listenToRestError();
+    this.listenToRouterError();
+    this.listenToRouterDataResolved();
+  }
+
+  private listenToRouterError() {
+    this.actions
+      .pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors), tap(console.warn))
+      .subscribe(() => this.show404Page());
+  }
+
+  private listenToRouterDataResolved() {
     this.actions
       .pipe(
-        ofActionSuccessful(RestOccurError, RouterError, RouterDataResolved),
-        filter(this.filterErrors),
+        ofActionSuccessful(RouterDataResolved),
+        filter(() => !!this.componentRef),
       )
-      .subscribe(res => {
-        if (res instanceof RestOccurError) {
-          const { payload: err = {} as HttpErrorResponse | any } = res;
-          const body = snq(
-            () => (err as HttpErrorResponse).error.error,
-            DEFAULT_ERROR_MESSAGES.defaultError.title,
-          );
+      .subscribe(() => {
+        this.componentRef.destroy();
+        this.componentRef = null;
+      });
+  }
 
-          if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
-            const confirmation$ = this.showError(null, null, body);
+  private listenToRestError() {
+    this.actions
+      .pipe(ofActionSuccessful(RestOccurError), filter(this.filterRestErrors))
+      .subscribe(({ payload: { err = {} as HttpErrorResponse } }) => {
+        const body = snq(
+          () => (err as HttpErrorResponse).error.error,
+          DEFAULT_ERROR_MESSAGES.defaultError.title,
+        );
 
-            if (err.status === 401) {
-              confirmation$.subscribe(() => {
-                this.navigateToLogin();
-              });
-            }
-          } else {
-            switch ((err as HttpErrorResponse).status) {
-              case 401:
-                this.canCreateCustomError(401)
-                  ? this.show401Page()
-                  : this.showError(
-                      {
-                        key: 'AbpAccount::DefaultErrorMessage401',
-                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
-                      },
-                      {
-                        key: 'AbpAccount::DefaultErrorMessage401Detail',
-                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
-                      },
-                    ).subscribe(() => this.navigateToLogin());
-                break;
-              case 403:
-                this.createErrorComponent({
-                  title: {
-                    key: 'AbpAccount::DefaultErrorMessage403',
-                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
-                  },
-                  details: {
-                    key: 'AbpAccount::DefaultErrorMessage403Detail',
-                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
-                  },
-                  status: 403,
-                });
-                break;
-              case 404:
-                this.canCreateCustomError(404)
-                  ? this.show404Page()
-                  : this.showError(
-                      {
-                        key: 'AbpAccount::DefaultErrorMessage404',
-                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
-                      },
-                      {
-                        key: 'AbpAccount::DefaultErrorMessage404Detail',
-                        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
-                      },
-                    );
-                break;
-              case 500:
-                this.createErrorComponent({
-                  title: {
-                    key: 'AbpAccount::500Message',
-                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
-                  },
-                  details: {
-                    key: 'AbpAccount::InternalServerErrorMessage',
-                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
-                  },
-                  status: 500,
-                });
-                break;
-              case 0:
-                if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
-                  this.createErrorComponent({
-                    title: {
-                      key: 'AbpAccount::DefaultErrorMessage',
-                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
-                    },
-                    details: err.message,
-                    isHomeShow: false,
-                  });
-                }
-                break;
-              default:
-                this.showError(
-                  DEFAULT_ERROR_MESSAGES.defaultError.details,
-                  DEFAULT_ERROR_MESSAGES.defaultError.title,
-                );
-                break;
-            }
+        if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
+          const confirmation$ = this.showError(null, null, body);
+
+          if (err.status === 401) {
+            confirmation$.subscribe(() => {
+              this.navigateToLogin();
+            });
           }
-        } else if (
-          res instanceof RouterError &&
-          snq(() => res.event.error.indexOf('Cannot match') > -1, false)
-        ) {
-          this.show404Page();
-        } else if (res instanceof RouterDataResolved && this.componentRef) {
-          this.componentRef.destroy();
-          this.componentRef = null;
+        } else {
+          switch ((err as HttpErrorResponse).status) {
+            case 401:
+              this.canCreateCustomError(401)
+                ? this.show401Page()
+                : this.showError(
+                    {
+                      key: 'AbpAccount::DefaultErrorMessage401',
+                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
+                    },
+                    {
+                      key: 'AbpAccount::DefaultErrorMessage401Detail',
+                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
+                    },
+                  ).subscribe(() => this.navigateToLogin());
+              break;
+            case 403:
+              this.createErrorComponent({
+                title: {
+                  key: 'AbpAccount::DefaultErrorMessage403',
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
+                },
+                details: {
+                  key: 'AbpAccount::DefaultErrorMessage403Detail',
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
+                },
+                status: 403,
+              });
+              break;
+            case 404:
+              this.canCreateCustomError(404)
+                ? this.show404Page()
+                : this.showError(
+                    {
+                      key: 'AbpAccount::DefaultErrorMessage404',
+                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
+                    },
+                    {
+                      key: 'AbpAccount::DefaultErrorMessage404Detail',
+                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
+                    },
+                  );
+              break;
+            case 500:
+              this.createErrorComponent({
+                title: {
+                  key: 'AbpAccount::500Message',
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
+                },
+                details: {
+                  key: 'AbpAccount::InternalServerErrorMessage',
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
+                },
+                status: 500,
+              });
+              break;
+            case 0:
+              if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
+                this.createErrorComponent({
+                  title: {
+                    key: 'AbpAccount::DefaultErrorMessage',
+                    defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+                  },
+                  details: err.message,
+                  isHomeShow: false,
+                });
+              }
+              break;
+            default:
+              this.showError(
+                DEFAULT_ERROR_MESSAGES.defaultError.details,
+                DEFAULT_ERROR_MESSAGES.defaultError.title,
+              );
+              break;
+          }
         }
       });
   }
@@ -259,26 +270,19 @@ export class ErrorHandler {
     );
   }
 
-  private filterErrors = (
-    instance: RestOccurError | RouterError<any, any> | RouterDataResolved,
-  ): boolean => {
-    if (instance instanceof RouterDataResolved) return true;
+  private filterRestErrors = (instance: RestOccurError): boolean => {
+    const {
+      payload: { err: { status } = {} as HttpErrorResponse },
+    } = instance;
+    if (!status) return false;
 
-    if (instance instanceof RestOccurError) {
-      const { payload: err = {} as HttpErrorResponse | any } = instance;
+    return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0;
+  };
 
-      if (!err.status) return true;
-
-      this.httpErrorConfig.skipHandledErrorCodes = this.httpErrorConfig.skipHandledErrorCodes || [];
-
-      return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === err.status) < 0;
-    }
-
-    if (instance instanceof RouterError) {
-      return (
-        !snq(() => instance.event.error.indexOf('Cannot match') > -1) ||
-        this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
-      );
-    }
+  private filterRouteErrors = (instance: RouterError<any>): boolean => {
+    return (
+      snq(() => instance.event.error.indexOf('Cannot match') > -1) &&
+      this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
+    );
   };
 }
