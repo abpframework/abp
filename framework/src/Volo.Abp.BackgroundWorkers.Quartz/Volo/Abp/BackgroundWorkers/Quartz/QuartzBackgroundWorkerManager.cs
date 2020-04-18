@@ -41,16 +41,28 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                 Check.NotNull(quartzWork.Trigger, nameof(quartzWork.Trigger));
                 Check.NotNull(quartzWork.JobDetail, nameof(quartzWork.JobDetail));
 
-                if (await _scheduler.CheckExists(quartzWork.JobDetail.Key))
+                if (quartzWork.ScheduleJob != null)
                 {
-                    await _scheduler.AddJob(quartzWork.JobDetail, true, true);
-                    await _scheduler.ResumeJob(quartzWork.JobDetail.Key);
-                    await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger);
+                    await quartzWork.ScheduleJob.Invoke(_scheduler);
                 }
                 else
                 {
-                    await _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger);
+                    await DefaultScheduleJobAsync(quartzWork);
                 }
+            }
+        }
+
+        protected virtual async Task DefaultScheduleJobAsync(IQuartzBackgroundWorker quartzWork)
+        {
+            if (await _scheduler.CheckExists(quartzWork.JobDetail.Key))
+            {
+                await _scheduler.AddJob(quartzWork.JobDetail, true, true);
+                await _scheduler.ResumeJob(quartzWork.JobDetail.Key);
+                await _scheduler.RescheduleJob(quartzWork.Trigger.Key, quartzWork.Trigger);
+            }
+            else
+            {
+                await _scheduler.ScheduleJob(quartzWork.JobDetail, quartzWork.Trigger);
             }
         }
     }

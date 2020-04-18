@@ -32,12 +32,6 @@ namespace Volo.Abp.BackgroundJobs.Quartz
 
         public async Task Execute(IJobExecutionContext context)
         {
-            if (!Options.IsJobExecutionEnabled)
-            {
-                Logger.LogWarning("Background jobs system is disabled");
-                return;
-            }
-
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var args = (TArgs) context.JobDetail.JobDataMap.Get(nameof(TArgs));
