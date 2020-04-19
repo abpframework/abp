@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
@@ -16,7 +17,7 @@ namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
             Options = options.Value;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             SettingPageCreationContext = new SettingPageCreationContext(ServiceProvider);
 
@@ -24,11 +25,13 @@ namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
             {
                 await contributor.ConfigureAsync(SettingPageCreationContext);
             }
+            
+            return Page();
         }
 
-        public virtual Task OnPostAsync()
+        public virtual Task<IActionResult> OnPostAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
     }
 }
