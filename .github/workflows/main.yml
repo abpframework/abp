@@ -20,9 +20,9 @@ jobs:
           dotnet-version: "3.1.100"
 
       - name: Build All
-        run: .\build-all.ps1
+        run: .\build\build-all.ps1
         shell: pwsh
 
       - name: Test All
-        run: .\test-all.ps1
+        run: .\build\test-all.ps1
         shell: pwsh
