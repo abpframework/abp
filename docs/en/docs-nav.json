@@ -5,17 +5,7 @@
       "items": [
         {
           "text": "From Startup Templates",
-          "path": "Getting-Started-With-Startup-Templates.md",
-          "items": [
-            {
-              "text": "Application with MVC (Razor Pages) UI",
-              "path": "Getting-Started-AspNetCore-MVC-Template.md"
-            },
-            {
-              "text": "Application with Angular UI",
-              "path": "Getting-Started-Angular-Template.md"
-            }
-          ]
+          "path": "Getting-Started.md"
         },
         {
           "text": "From Empty Projects",
@@ -302,7 +292,17 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md",
+              "items": [
+                {
+                  "text": "Form Elements",
+                  "path": "UI/AspNetCore/Tag-Helpers/Form-elements.md"
+                },
+                {
+                  "text": "Dynamic Forms",
+                  "path": "UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md"
+                }
+              ]
             },
             {
               "text": "Widgets",

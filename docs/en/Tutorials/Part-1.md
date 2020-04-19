@@ -34,14 +34,14 @@ The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
 
 ### Creating the project
 
-Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI. But first of all, we need to login to the ABP Platform.
+Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI.
 
 #### Create the project
 
 By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `MVC`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
 
 ```bash
-abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}}
+abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}} --mobile none
 ```
 ![Creating project](./images/bookstore-create-project-{{UI_Text}}.png)
 

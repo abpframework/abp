@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
     public class IndexModel : IdentityPageModel
     {
-        public virtual Task OnGetAsync()
+        public virtual Task<IActionResult> OnGetAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
 
-        public virtual Task OnPostAsync()
+        public virtual Task<IActionResult> OnPostAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
     }
 }

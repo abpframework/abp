@@ -38,7 +38,7 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
             PermissionAppService = permissionAppService;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             ValidateModel();
 
@@ -62,6 +62,8 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
             }
 
             SelectAllInAllTabs = Groups.All(g => g.IsAllPermissionsGranted);
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPostAsync()

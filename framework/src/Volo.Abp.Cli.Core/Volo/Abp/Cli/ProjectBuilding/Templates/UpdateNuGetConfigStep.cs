@@ -4,7 +4,7 @@ using System.Linq;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
+namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
     public class UpdateNuGetConfigStep : ProjectBuildPipelineStep
     {

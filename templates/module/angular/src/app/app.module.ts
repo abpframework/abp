@@ -21,6 +21,9 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
     ThemeSharedModule.forRoot(),
     CoreModule.forRoot({
       environment,
@@ -32,9 +35,6 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     TenantManagementConfigModule,
     SettingManagementConfigModule,
     MyProjectNameConfigModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
     SharedModule,
 
     ...(environment.production ? [] : LOGGERS),
