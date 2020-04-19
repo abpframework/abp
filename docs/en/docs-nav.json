@@ -292,7 +292,17 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "UI/AspNetCore/Tag-Helpers/Index.md"
+              "path": "UI/AspNetCore/Tag-Helpers/Index.md",
+              "items": [
+                {
+                  "text": "Form Elements",
+                  "path": "UI/AspNetCore/Tag-Helpers/Form-elements.md"
+                },
+                {
+                  "text": "Dynamic Forms",
+                  "path": "UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md"
+                }
+              ]
             },
             {
               "text": "Widgets",
