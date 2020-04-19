@@ -31,7 +31,8 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var options = context.ServiceProvider.GetService<IOptions<AbpBackgroundWorkerOptions>>().Value;
-            if (options.IsEnabled)
+            var quartzBackgroundWorkerOptions = context.ServiceProvider.GetService<IOptions<AbpBackgroundWorkerQuartzOptions>>().Value;
+            if (options.IsEnabled && quartzBackgroundWorkerOptions.IsAutoRegisterEnable)
             {
                 var backgroundWorkerManager = context.ServiceProvider.GetService<IBackgroundWorkerManager>();
                 var works = context.ServiceProvider.GetServices<IQuartzBackgroundWorker>().Where(x=>x.AutoRegister);
