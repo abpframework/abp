@@ -30,7 +30,7 @@ namespace Volo.Docs
             var project = await ProjectRepository.GetByShortNameAsync("ABP");
 
             project.ShouldNotBeNull();
-            project.ShortName.ShouldBe("ABP");
+            project.ShortName.ShouldBe("abp");
         }
     }
 }
