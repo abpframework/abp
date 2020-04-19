@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -37,6 +37,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 options.Entity<Person>(opt =>
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
+                });
+                
+                options.Entity<Author>(opt =>
+                {
+                    opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
                 });
             });
 
