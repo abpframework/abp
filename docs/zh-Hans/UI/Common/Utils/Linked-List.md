@@ -1,15 +1,21 @@
 # 链表 (双向)
 
-Core模块提供了称为[双链表](https://en.wikipedia.org/wiki/Doubly_linked_list)的实用数据结构. 简而言之双向链表是一系列记录(又称节点),这些记录具有上一个节点,下一个节点及其自身值(或数据)的信息.
+@abp/utils包提供了称为[双链表](https://en.wikipedia.org/wiki/Doubly_linked_list)的实用数据结构. 简而言之双向链表是一系列记录(又称节点),这些记录具有上一个节点,下一个节点及其自身值(或数据)的信息.
 
 ## 入门
 
 要创建一个双向链表,你需要做的就是导入和创建它的一个新的实例:
 
 ```js
-import { LinkedList } from '@abp/ng.core';
+import { LinkedList } from '@abp/utils';
 
-const list = new LinkedList();
+var list = new LinkedList();
+```
+
+MVC:
+
+```js
+var list = new abp.utils.common.LinkedList();
 ```
 
 构造函数没有任何参数.
@@ -24,7 +30,7 @@ const list = new LinkedList();
 #### addHead(value)
 
 ```js
-addHead(value: T): ListNode\<T\>
+addHead(value: T): ListNode<T>
 ```
 
 将给定值添加到链表的第一个节点:
@@ -48,7 +54,7 @@ list.addHead('c');
 #### addManyHead(values)
 
 ```js
-addManyHead(values: T\[\]): ListNode\<T\>\[\]
+addManyHead(values: T[]): ListNode<T>[]
 ```
 
 将给定的多个值添加到链表的第一个节点:
@@ -68,7 +74,7 @@ list.addManyHead(['x', 'y', 'z']);
 #### addTail(value)
 
 ```js
-addTail(value: T): ListNode\<T\>
+addTail(value: T): ListNode<T>
 ```
 
 将给定值添加到链表的最后一个节点:
@@ -92,7 +98,7 @@ list.addTail('c');
 #### addManyTail(values)
 
 ```js
-addManyTail(values: T\[\]): ListNode\<T\>\[\]
+addManyTail(values: T[]): ListNode<T>[]
 ```
 
 将给定多个值添加到链表的最后一个节点:
@@ -107,10 +113,10 @@ list.addManyTail(['x', 'y', 'z']);
 // "a" <-> "b" <-> "c" <-> "x" <-> "y" <-> "z"
 ```
 
-#### addAfter(value, previousValue, compareFn)
+#### addAfter(value, previousValue [, compareFn])
 
 ```js
-addAfter(value: T, previousValue: T, compareFn = compare): ListNode\<T\>
+addAfter(value: T, previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 添加给定值到previousValue节点后:
@@ -151,10 +157,10 @@ list.addAfter(
 > 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
-#### addManyAfter(values, previousValue, compareFn)
+#### addManyAfter(values, previousValue [, compareFn])
 
 ```js
-addManyAfter(values: T\[\], previousValue: T, compareFn = compare): ListNode\<T\>\[\]
+addManyAfter(values: T[], previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 添加给定的多个值到previousValue节点后:
@@ -188,10 +194,10 @@ list.addManyAfter(
 > 默认的比较函数检查深度相等性,因此你几乎不需要传递该参数.
 
 
-#### addBefore(value, nextValue, compareFn)
+#### addBefore(value, nextValue [, compareFn])
 
 ```js
-addBefore(value: T, nextValue: T, compareFn = compare): ListNode\<T\>
+addBefore(value: T, nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 添加给值到previousValue节点前:
@@ -231,10 +237,10 @@ list.addBefore(
 
 
 
-#### addManyBefore(values, nextValue, compareFn)
+#### addManyBefore(values, nextValue [, compareFn])
 
 ```js
-addManyBefore(values: T\[\], nextValue: T, compareFn = compare): ListNode\<T\>\[\]
+addManyBefore(values: T[], nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 
@@ -277,7 +283,7 @@ list.addManyBefore(
 #### addByIndex(value, position)
 
 ```js
-addByIndex(value: T, position: number): ListNode\<T\>
+addByIndex(value: T, position: number): ListNode<T>
 ```
 
 在链表的指定位置添加节点:
@@ -313,7 +319,7 @@ list.addByIndex('x', -1);
 #### addManyByIndex(values, position)
 
 ```js
-addManyByIndex(values: T\[\], position: number): ListNode\<T\>\[\]
+addManyByIndex(values: T[], position: number): ListNode<T>[]
 ```
 
 添加多个节点到链表的指定位置:
@@ -345,7 +351,7 @@ list.addManyByIndex(['x', 'y'], -1);
 #### add(value).head()
 
 ```js
-add(value: T).head(): ListNode\<T\>
+add(value: T).head(): ListNode<T>
 ```
 
 将添加的节点移动到链表头:
@@ -373,7 +379,7 @@ list.add('c').head();
 #### add(value).tail()
 
 ```js
-add(value: T).tail(): ListNode\<T\>
+add(value: T).tail(): ListNode<T>
 ```
 
 将添加的节点移动到链表尾:
@@ -398,10 +404,10 @@ list.add('c').tail();
 
 
 
-#### add(value).after(previousValue, compareFn)
+#### add(value).after(previousValue [, compareFn])
 
 ```js
-add(value: T).after(previousValue: T, compareFn = compare): ListNode\<T\>
+add(value: T).after(previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 将添加的节点移动到指定节点后:
@@ -445,10 +451,10 @@ list
 
 
 
-#### add(value).before(nextValue, compareFn)
+#### add(value).before(nextValue [, compareFn])
 
 ```js
-add(value: T).before(nextValue: T, compareFn = compare): ListNode\<T\>
+add(value: T).before(nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
 ```
 
 将添加的节点移动到指定节点前:
@@ -495,7 +501,7 @@ list
 #### add(value).byIndex(position)
 
 ```js
-add(value: T).byIndex(position: number): ListNode\<T\>
+add(value: T).byIndex(position: number): ListNode<T>
 ```
 
 将添加的节点移动到链表指定位置:
@@ -537,7 +543,7 @@ list.add('x').byIndex(-1);
 #### addMany(values).head()
 
 ```js
-addMany(values: T\[\]).head(): ListNode\<T\>\[\]
+addMany(values: T[]).head(): ListNode<T>[]
 ```
 
 将添加的多个节点移动到链表头:
@@ -561,7 +567,7 @@ list.addMany(['x', 'y', 'z']).head();
 #### addMany(values).tail()
 
 ```js
-addMany(values: T\[\]).tail(): ListNode\<T\>\[\]
+addMany(values: T[]).tail(): ListNode<T>[]
 ```
 
 将添加的多个节点移动到链表尾:
@@ -582,10 +588,10 @@ list.addMany(['x', 'y', 'z']).tail();
 
 
 
-#### addMany(values).after(previousValue, compareFn)
+#### addMany(values).after(previousValue [, compareFn])
 
 ```js
-addMany(values: T\[\]).after(previousValue: T, compareFn = compare): ListNode\<T\>\[\]
+addMany(values: T[]).after(previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 将添加的多个节点移动到指定节点后:
@@ -624,10 +630,10 @@ list
 
 
 
-#### addMany(values).before(nextValue, compareFn)
+#### addMany(values).before(nextValue [, compareFn])
 
 ```js
-addMany(values: T\[\]).before(nextValue: T, compareFn = compare): ListNode\<T\>\[\]
+addMany(values: T[]).before(nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 将添加的多个节点移动到指定节点前:
@@ -669,7 +675,7 @@ list
 #### addMany(values).byIndex(position)
 
 ```js
-addMany(values: T\[\]).byIndex(position: number): ListNode\<T\>\[\]
+addMany(values: T[]).byIndex(position: number): ListNode<T>[]
 ```
 
 将添加的多个节点移动到链表的指定位置:
@@ -712,7 +718,7 @@ list.addMany(['x', 'y']).byIndex(-1);
 #### dropHead()
 
 ```js
-dropHead(): ListNode\<T\> | undefined
+dropHead(): ListNode<T> | undefined
 ```
 
 删除链表的第一个节点:
@@ -732,7 +738,7 @@ list.dropHead();
 #### dropManyHead(count)
 
 ```js
-dropManyHead(count: number): ListNode\<T\>\[\]
+dropManyHead(count: number): ListNode<T>[]
 ```
 
 删除指定数量的链表的头节点:
@@ -752,7 +758,7 @@ list.dropManyHead(2);
 #### dropTail()
 
 ```js
-dropTail(): ListNode\<T\> | undefined
+dropTail(): ListNode<T> | undefined
 ```
 
 删除链表的最后一个节点:
@@ -772,7 +778,7 @@ list.dropTail();
 #### dropManyTail(count)
 
 ```js
-dropManyTail(count: number): ListNode\<T\>\[\]
+dropManyTail(count: number): ListNode<T>[]
 ```
 
 删除指定数量的链表的尾节点:
@@ -792,7 +798,7 @@ list.dropManyTail(2);
 #### dropByIndex(position)
 
 ```js
-dropByIndex(position: number): ListNode\<T\> | undefined
+dropByIndex(position: number): ListNode<T> | undefined
 ```
 
 删除链表中给定位置的节点:
@@ -825,7 +831,7 @@ list.dropByIndex(-2);
 #### dropManyByIndex(count, position)
 
 ```js
-dropManyByIndex(count: number, position: number): ListNode\<T\>\[\]
+dropManyByIndex(count: number, position: number): ListNode<T>[]
 ```
 
 删除链表中给定位置与数量的多个节点:
@@ -856,10 +862,10 @@ list.dropManyByIndex(2, -2);
 
 
 
-#### dropByValue(value, compareFn)
+#### dropByValue(value [, compareFn])
 
 ```js
-dropByValue(value: T, compareFn = compare): ListNode\<T\> | undefined
+dropByValue(value: T, compareFn?: ListComparisonFn<T>): ListNode<T> | undefined
 ```
 
 删除链表中含有给定值的第一个节点:
@@ -894,10 +900,10 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 
 
-#### dropByValueAll(value, compareFn)
+#### dropByValueAll(value [, compareFn])
 
 ```js
-dropByValueAll(value: T, compareFn = compare): ListNode\<T\>\[\]
+dropByValueAll(value: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 删除链表中含有给定值的所有节点:
@@ -933,7 +939,7 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 #### drop().head()
 
 ```js
-drop().head(): ListNode\<T\> | undefined
+drop().head(): ListNode<T> | undefined
 ```
 
 删除链表的头节点:
@@ -957,7 +963,7 @@ list.drop().head();
 #### drop().tail()
 
 ```js
-drop().tail(): ListNode\<T\> | undefined
+drop().tail(): ListNode<T> | undefined
 ```
 
 删除链表的尾节点:
@@ -981,7 +987,7 @@ list.drop().tail();
 #### drop().byIndex(position)
 
 ```js
-drop().byIndex(position: number): ListNode\<T\> | undefined
+drop().byIndex(position: number): ListNode<T> | undefined
 ```
 
 删除链表指定位置的节点:
@@ -1016,10 +1022,10 @@ list.drop().byIndex(-2);
 
 
 
-#### drop().byValue(value, compareFn)
+#### drop().byValue(value [, compareFn])
 
 ```js
-drop().byValue(value: T, compareFn = compare): ListNode\<T\> | undefined
+drop().byValue(value: T, compareFn?: ListComparisonFn<T>): ListNode<T> | undefined
 ```
 
 删除链表中含有给定值的第一个节点:
@@ -1058,10 +1064,10 @@ list
 
 
 
-#### drop().byValueAll(value, compareFn)
+#### drop().byValueAll(value [, compareFn])
 
 ```js
-drop().byValueAll(value: T, compareFn = compare): ListNode\<T\>\[\]
+drop().byValueAll(value: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
 ```
 
 删除链表中含有给定值的所有节点:
@@ -1103,7 +1109,7 @@ list
 #### dropMany(count).head()
 
 ```js
-dropMany(count: number).head(): ListNode\<T\>\[\]
+dropMany(count: number).head(): ListNode<T>[]
 ```
 
 删除链表中指定数量的头节点:
@@ -1127,7 +1133,7 @@ list.dropMany(2).head();
 #### dropMany(count).tail()
 
 ```js
-dropMany(count: number).tail(): ListNode\<T\>\[\]
+dropMany(count: number).tail(): ListNode<T>[]
 ```
 
 删除链表中指定数量的尾节点::
@@ -1151,7 +1157,7 @@ list.dropMany(2).tail();
 #### dropMany(count).byIndex(position)
 
 ```js
-dropMany(count: number).byIndex(position: number): ListNode\<T\>\[\]
+dropMany(count: number).byIndex(position: number): ListNode<T>[]
 ```
 
 删除链表中指定位置和数量的节点:
@@ -1190,12 +1196,34 @@ list.dropMany(2).byIndex(-2);
 
 有几个方法找到链表特定节点.
 
+#### head
 
+```js
+head: ListNode<T> | undefined;
+```
+
+链表中的第一个节点.
+
+#### tail
+
+```js
+tail: ListNode<T> | undefined;
+```
+
+链表中的最后一个节点.
+
+#### length
+
+```js
+length: number;
+```
+
+链表的节点总数.
 
 #### find(predicate)
 
 ```js
-find(predicate: ListIteratorFunction\<T\>): ListNode\<T\> | undefined
+find(predicate: ListIteratorFunction<T>): ListNode<T> | undefined
 ```
 
 从链表中找到与给定谓词匹配的第一个节点:
@@ -1205,7 +1233,7 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const found = list.find(node => node.value === 'b');
+var found = list.find(node => node.value === 'b');
 
 /*
 found.value === "b"
@@ -1214,12 +1242,10 @@ found.next.value === "b"
 */
 ```
 
-
-
 #### findIndex(predicate)
 
 ```js
-findIndex(predicate: ListIteratorFunction\<T\>): number
+findIndex(predicate: ListIteratorFunction<T>): number
 ```
 
 从链表中找到与给定谓词匹配的第一个节点的位置:
@@ -1229,10 +1255,10 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const i0 = list.findIndex(node => node.next && node.next.value === 'b');
-const i1 = list.findIndex(node => node.value === 'b');
-const i2 = list.findIndex(node => node.previous && node.previous.value === 'b');
-const i3 = list.findIndex(node => node.value === 'x');
+var i0 = list.findIndex(node => node.next && node.next.value === 'b');
+var i1 = list.findIndex(node => node.value === 'b');
+var i2 = list.findIndex(node => node.previous && node.previous.value === 'b');
+var i3 = list.findIndex(node => node.value === 'x');
 
 /*
 i0 === 0
@@ -1247,7 +1273,7 @@ i3 === -1
 #### get(position)
 
 ```js
-get(position: number): ListNode\<T\> | undefined
+get(position: number): ListNode<T> | undefined
 ```
 
 查找并返回链表中特定位置的节点:
@@ -1257,7 +1283,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const found = list.get(1);
+var found = list.get(1);
 
 /*
 found.value === "b"
@@ -1268,10 +1294,10 @@ found.next.value === "c"
 
 
 
-#### indexOf(value, compareFn)
+#### indexOf(value [, compareFn])
 
 ```js
-indexOf(value: T, compareFn = compare): number
+indexOf(value: T, compareFn?: ListComparisonFn<T>): number
 ```
 
 在链表中找到匹配给定值的第一个节点位置:
@@ -1281,10 +1307,10 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const i0 = list.indexOf('a');
-const i1 = list.indexOf('b');
-const i2 = list.indexOf('c');
-const i3 = list.indexOf('x');
+var i0 = list.indexOf('a');
+var i1 = list.indexOf('b');
+var i2 = list.indexOf('c');
+var i3 = list.indexOf('x');
 
 /*
 i0 === 0
@@ -1303,11 +1329,11 @@ list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-const i0 = indexOf(1, (value, searchedValue) => value.x === searchedValue);
-const i1 = indexOf(2, (value, searchedValue) => value.x === searchedValue);
-const i2 = indexOf(3, (value, searchedValue) => value.x === searchedValue);
-const i3 = indexOf(0, (value, searchedValue) => value.x === searchedValue);
-const i4 = indexOf(4, (value, searchedValue) => value.x === searchedValue);
+var i0 = indexOf(1, (value, searchedValue) => value.x === searchedValue);
+var i1 = indexOf(2, (value, searchedValue) => value.x === searchedValue);
+var i2 = indexOf(3, (value, searchedValue) => value.x === searchedValue);
+var i3 = indexOf(0, (value, searchedValue) => value.x === searchedValue);
+var i4 = indexOf(4, (value, searchedValue) => value.x === searchedValue);
 
 /*
 i0 === 0
@@ -1330,10 +1356,10 @@ i4 === -1
 
 
 
-#### forEach(callback)
+#### forEach(iteratorFn)
 
 ```js
-forEach(callback: ListIteratorFunction\<T\>): void
+forEach(iteratorFn: ListIteratorFn<T>): void
 ```
 
 从头到尾在链表中的所有节点上运行回调函数:
@@ -1359,7 +1385,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-for(const node of list) {
+for(var node of list) { /* ES6 for...of statement */
   console.log(node.value);
 }
 
@@ -1373,7 +1399,7 @@ for(const node of list) {
 #### toArray()
 
 ```js
-toArray(): T\[\]
+toArray(): T[]
 ```
 
 转换链表值为数组:
@@ -1383,7 +1409,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const arr = list.toArray();
+var arr = list.toArray();
 
 /*
 arr === ['a', 'b', 'c']
@@ -1395,7 +1421,7 @@ arr === ['a', 'b', 'c']
 #### toNodeArray()
 
 ```js
-toNodeArray(): T\[\]
+toNodeArray(): T[]
 ```
 
 转换链表节点为数组:
@@ -1405,7 +1431,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const arr = list.toNodeArray();
+var arr = list.toNodeArray();
 
 /*
 arr[0].value === 'a'
@@ -1414,12 +1440,10 @@ arr[2].value === 'a'
 */
 ```
 
-
-
-#### toString()
+#### toString(mapperFn)
 
 ```js
-toString(): string
+toString(mapperFn: ListMapperFn<T> = JSON.stringify): string
 ```
 
 将链表转换为节点及其关系的字符串表示形式:
@@ -1429,7 +1453,7 @@ list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
 
 // "a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}
 
-const str = list.toString();
+var str = list.toString();
 
 /*
 str === '"a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}'
@@ -1443,12 +1467,89 @@ list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }]).tail();
 
 // {"x":1} <-> {"x":2} <-> {"x":3} <-> {"x":4} <-> {"x":5}
 
-const str = list.toString(value => value.x);
+var str = list.toString(value => value.x);
 
 /*
 str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
 */
 ```
 
+## API
+
+### Classes
+
+#### LinkedList
+
+```js
+export class LinkedList<T = any> {
+
+  // properties and methods are explained above
+
+}
+```
+
+#### ListNode
+
+```js
+export class ListNode<T = any> {
+  next: ListNode | undefined;
+
+  previous: ListNode | undefined;
+  
+  constructor(public readonly value: T) {}
+}
+```
+
+`ListNode` 是存储在 `LinkedList` 中的每个记录的节点.
+
+- `value` value是存储在节点中的值,通过构造函数传递.
+- `next` 引用列表中的下一个节点.
+- `previous`引用列表中的上一个节点.
+
+```js
+list.addTailMany([ 0, 1, 2 ]);
+
+console.log(
+  list.head.value,                              // 0
+  list.head.next.value,                         // 1
+  list.head.next.next.value,                    // 2
+  list.head.next.next.previous.value,           // 1
+  list.head.next.next.previous.previous.value,  // 0
+  list.tail.value,                              // 2
+  list.tail.previous.value,                     // 1
+  list.tail.previous.previous.value,            // 0
+  list.tail.previous.previous.next.value,       // 1
+  list.tail.previous.previous.next.next.value,  // 2
+);
+```
 
 
+### Types
+
+#### ListMapperFn
+
+```js
+type ListMapperFn<T = any> = (value: T) => any;
+```
+
+该函数在 `toString` 方法中用于在生成列表的字符串形式之前映射节点值.
+
+#### ListComparisonFn
+
+```js
+type ListComparisonFn<T = any> = (nodeValue: T, comparedValue: any) => boolean;
+```
+
+该函数用于根据比较值添加,删除和查找节点.
+
+#### ListIteratorFn
+
+```js
+type ListIteratorFn<T = any, R = boolean> = (
+  node: ListNode<T>,
+  index?: number,
+  list?: LinkedList,
+) => R;
+```
+
+该函数在遍历列表时使用,可以对每个节点执行某些操作,也可以查找某个节点.

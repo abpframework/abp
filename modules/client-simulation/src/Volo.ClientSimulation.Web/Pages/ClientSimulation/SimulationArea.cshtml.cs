@@ -16,19 +16,19 @@ namespace Volo.ClientSimulation.Pages.ClientSimulation
             Simulation = simulation;
         }
 
-        public Task OnGetAsync()
+        public virtual Task<IActionResult> OnGetAsync()
         {
             Snapshot = Simulation.CreateSnapshot();
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
 
-        public async Task<IActionResult> OnPostStartAsync()
+        public virtual async Task<IActionResult> OnPostStartAsync()
         {
             Simulation.Start();
             return new NoContentResult();
         }
 
-        public async Task<IActionResult> OnPostStopAsync()
+        public virtual async Task<IActionResult> OnPostStopAsync()
         {
             Simulation.Stop();
             return new NoContentResult();

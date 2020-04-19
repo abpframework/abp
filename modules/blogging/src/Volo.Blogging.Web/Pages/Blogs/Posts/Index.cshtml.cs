@@ -35,11 +35,13 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _tagAppService = tagAppService;
         }
 
-        public async Task OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Posts = (await _postAppService.GetListByBlogIdAndTagName(Blog.Id, TagName)).Items;
             PopularTags = (await _tagAppService.GetPopularTags(Blog.Id, new GetPopularTagsInput {ResultCount = 10, MinimumPostCount = 2}));
+
+            return Page();
         }
     }
 }

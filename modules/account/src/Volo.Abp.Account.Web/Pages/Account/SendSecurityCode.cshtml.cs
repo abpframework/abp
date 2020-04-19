@@ -41,9 +41,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //);
         }
 
-        public virtual Task OnPostAsync()
+        public virtual Task<IActionResult> OnPostAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
     }
 }
