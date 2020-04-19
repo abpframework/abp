@@ -34,7 +34,7 @@ The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
 
 ### Creating the project
 
-Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI. But first of all, we need to login to the ABP Platform.
+Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI.
 
 #### Create the project
 
