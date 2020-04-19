@@ -33,7 +33,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _authorization = authorization;
         }
 
-        public async Task<ActionResult> OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
             {
@@ -47,7 +47,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             return Page();
         }
 
-        public async Task<ActionResult> OnPostAsync()
+        public virtual async Task<ActionResult> OnPostAsync()
         {
             var post = new UpdatePostDto
             {

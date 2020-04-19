@@ -94,7 +94,7 @@ namespace Volo.Docs.Pages.Documents.Project
             _uiOptions = options.Value;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             try
             {

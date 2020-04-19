@@ -6,6 +6,7 @@ using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
+using Volo.Abp.Localization;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
@@ -104,12 +105,15 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private static string ConvertValueToString([NotNull] object value)
         {
-            if (value is DateTime dateTimeValue)
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
             {
-                return dateTimeValue.ToUniversalTime().ToString("u");
-            }
+                if (value is DateTime dateTimeValue)
+                {
+                    return dateTimeValue.ToUniversalTime().ToString("u");
+                }
 
-            return value.ToString();
+                return value.ToString();
+            }
         }
     }
 }
