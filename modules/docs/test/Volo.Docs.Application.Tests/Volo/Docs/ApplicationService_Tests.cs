@@ -28,9 +28,9 @@ namespace Volo.Docs
         [Fact]
         public async Task GetAsync()
         {
-            var project = await _projectAppService.GetAsync("ABP");
+            var project = await _projectAppService.GetAsync("abp");
             project.ShouldNotBeNull();
-            project.ShortName.ShouldBe("ABP");
+            project.ShortName.ShouldBe("abp");
         }
 
         [Fact]
