@@ -26,9 +26,9 @@ namespace Volo.Docs
         }
 
         [Fact]
-        public async Task GetAsync()
+        public async Task Should_Normalize_ShortName_Async()
         {
-            var project = await _projectAppService.GetAsync("ABP");
+            var project = await _projectAppService.GetAsync("aBP");
             project.ShouldNotBeNull();
             project.ShortName.ShouldBe("abp");
         }
