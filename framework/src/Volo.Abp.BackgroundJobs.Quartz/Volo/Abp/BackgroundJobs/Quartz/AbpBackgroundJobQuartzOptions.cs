@@ -10,10 +10,8 @@ namespace Volo.Abp.BackgroundJobs.Quartz
         public int RetryCount { get; set; }
 
         public int RetryIntervalMillisecond { get; set; }
+        
 
-        
-        public const string RetryIndex = "RetryIndex";
-        
         [NotNull]
         public Func<int, IJobExecutionContext, JobExecutionException,Task> RetryStrategy
         {
@@ -33,7 +31,7 @@ namespace Volo.Abp.BackgroundJobs.Quartz
         {
             exception.RefireImmediately = true;
             
-            var retryCount = executionContext.JobDetail.JobDataMap.GetIntValue(nameof(RetryCount));
+            var retryCount = executionContext.JobDetail.JobDataMap.GetIntValue(QuartzBackgroundJobManager.JobDataPrefix+ nameof(RetryCount));
             if (retryIndex > retryCount)
             {
                 exception.RefireImmediately = false;
@@ -41,7 +39,7 @@ namespace Volo.Abp.BackgroundJobs.Quartz
                 return;
             }
             
-            var retryInterval = executionContext.JobDetail.JobDataMap.GetIntValue(nameof(RetryIntervalMillisecond));
+            var retryInterval = executionContext.JobDetail.JobDataMap.GetIntValue(QuartzBackgroundJobManager.JobDataPrefix+ nameof(RetryIntervalMillisecond));
             await Task.Delay(retryInterval);
         }
     }

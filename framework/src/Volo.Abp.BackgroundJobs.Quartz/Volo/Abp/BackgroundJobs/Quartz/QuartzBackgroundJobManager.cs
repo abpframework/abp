@@ -9,10 +9,12 @@ namespace Volo.Abp.BackgroundJobs.Quartz
     [Dependency(ReplaceServices = true)]
     public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDependency
     { 
-        protected IScheduler Scheduler { get; }
+        public const string JobDataPrefix = "Abp";
+        public const string RetryIndex = "RetryIndex";
         
+        protected IScheduler Scheduler { get; }
         protected AbpBackgroundJobQuartzOptions Options { get; }
-
+        
         
         public QuartzBackgroundJobManager(IScheduler scheduler,IOptions<AbpBackgroundJobQuartzOptions> options)
         {
@@ -32,9 +34,9 @@ namespace Volo.Abp.BackgroundJobs.Quartz
             var jobDataMap = new JobDataMap
             {
                 {nameof(TArgs), args},
-                {nameof(Options.RetryCount), retryCount},
-                {nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond},
-                {nameof(AbpBackgroundJobQuartzOptions.RetryIndex), 0}
+                {JobDataPrefix+ nameof(Options.RetryCount), retryCount},
+                {JobDataPrefix+ nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond},
+                {JobDataPrefix+ RetryIndex, 0}
             };
             
             var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().RequestRecovery().SetJobData(jobDataMap).Build();

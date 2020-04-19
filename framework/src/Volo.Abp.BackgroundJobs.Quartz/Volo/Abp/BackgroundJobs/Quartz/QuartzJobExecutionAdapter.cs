@@ -45,9 +45,9 @@ namespace Volo.Abp.BackgroundJobs.Quartz
                 {
                     var jobExecutionException = new JobExecutionException(exception);
                     
-                    var retryIndex = context.JobDetail.JobDataMap.GetIntValue(nameof(AbpBackgroundJobQuartzOptions.RetryIndex));
+                    var retryIndex = context.JobDetail.JobDataMap.GetIntValue(QuartzBackgroundJobManager.JobDataPrefix+ QuartzBackgroundJobManager.RetryIndex);
                     retryIndex++;
-                    context.JobDetail.JobDataMap.Put(AbpBackgroundJobQuartzOptions.RetryIndex, retryIndex);
+                    context.JobDetail.JobDataMap.Put(QuartzBackgroundJobManager.JobDataPrefix+ QuartzBackgroundJobManager.RetryIndex, retryIndex);
                     
                     await BackgroundJobQuartzOptions.RetryStrategy.Invoke(retryIndex, context, jobExecutionException);
                     
