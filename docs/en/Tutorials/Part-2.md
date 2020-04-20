@@ -574,11 +574,13 @@ import { GetBooks, CreateUpdateBook } from '../actions/books.actions'; //<== add
 import { Books } from '../models/books';
 import { BooksService } from '../../books/shared/books.service';
 import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @State<Books.State>({
   name: 'BooksState',
   defaults: { books: {} } as Books.State,
 })
+@Injectable()
 export class BooksState {
   @Selector()
   static getBooks(state: Books.State) {
@@ -1330,11 +1332,13 @@ import { GetBooks, CreateUpdateBook, DeleteBook } from '../actions/books.actions
 import { Books } from '../models/books';
 import { BooksService } from '../../books/shared/books.service';
 import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @State<Books.State>({
   name: 'BooksState',
   defaults: { books: {} } as Books.State,
 })
+@Injectable()
 export class BooksState {
   @Selector()
   static getBooks(state: Books.State) {
