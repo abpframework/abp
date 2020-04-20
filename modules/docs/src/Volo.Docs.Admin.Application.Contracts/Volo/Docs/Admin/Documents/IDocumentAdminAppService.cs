@@ -5,6 +5,8 @@ namespace Volo.Docs.Admin.Documents
 {
     public interface IDocumentAdminAppService : IApplicationService
     {
+        Task ClearCacheAsync(ClearCacheInput input);
+
         Task PullAllAsync(PullAllDocumentInput input);
 
         Task PullAsync(PullDocumentInput input);

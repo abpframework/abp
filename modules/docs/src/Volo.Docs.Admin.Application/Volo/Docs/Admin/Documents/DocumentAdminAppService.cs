@@ -7,8 +7,10 @@ using Newtonsoft.Json;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
+using Volo.Docs.Caching;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
+using Volo.Docs.Localization;
 using Volo.Docs.Projects;
 using Volo.Extensions;
 
@@ -21,19 +23,63 @@ namespace Volo.Docs.Admin.Documents
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentSourceFactory _documentStoreFactory;
         private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
+        private readonly IDistributedCache<List<VersionInfo>> _versionCache;
+        private readonly IDistributedCache<LanguageConfig> _languageCache;
+        private readonly IDistributedCache<DocumentResource> _resourceCache;
         private readonly IDocumentFullSearch _documentFullSearch;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
+            IDistributedCache<List<VersionInfo>> versionCache,
+            IDistributedCache<LanguageConfig> languageCache,
+            IDistributedCache<DocumentResource> resourceCache,
             IDocumentFullSearch documentFullSearch)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
             _documentStoreFactory = documentStoreFactory;
             _documentUpdateCache = documentUpdateCache;
+            _versionCache = versionCache;
+            _languageCache = languageCache;
+            _resourceCache = resourceCache;
             _documentFullSearch = documentFullSearch;
+
+            LocalizationResource = typeof(DocsResource);
+        }
+
+        public async Task ClearCacheAsync(ClearCacheInput input)
+        {
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            var languageCacheKey = CacheKeyGenerator.GenerateProjectLanguageCacheKey(project);
+            var languageConfig = await _languageCache.GetAsync(languageCacheKey, true);
+            CheckNotNullCacheValue(languageConfig);
+
+            var versionCacheKey = CacheKeyGenerator.GenerateProjectVersionsCacheKey(project);
+            var versions = await _versionCache.GetAsync(versionCacheKey, true);
+            CheckNotNullCacheValue(versions);
+
+            await _languageCache.RemoveAsync(languageCacheKey, true);
+            await _versionCache.RemoveAsync(versionCacheKey, true);
+
+            var documents = await _documentRepository.GetListAsync();
+
+            foreach (var languageCode in languageConfig.Languages)
+            {
+                foreach (var version in versions)
+                {
+                    foreach (var document in documents)
+                    {
+                        var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, document.Name, languageCode.Code, version.Name);
+                        await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
+
+                        document.LastCachedTime = DateTime.MinValue;
+                        await _documentRepository.UpdateAsync(document);
+                    }
+                }
+            }
         }
 
         public async Task PullAllAsync(PullAllDocumentInput input)
@@ -113,6 +159,14 @@ namespace Volo.Docs.Admin.Documents
                 }
 
                 await _documentFullSearch.AddOrUpdateAsync(doc);
+            }
+        }
+
+        private void CheckNotNullCacheValue(object cacheValue)
+        {
+            if (cacheValue == null)
+            {
+                throw new UserFriendlyException(L["CacheNullExceptionMessage"]);
             }
         }
 

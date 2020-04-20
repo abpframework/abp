@@ -62,6 +62,18 @@
                                         Id: data.record.id
                                     });
                                 }
+                            },
+                            {
+                                text: l('ClearCache'),
+                                visible: abp.auth.isGranted('Docs.Admin.Documents'),
+                                confirmMessage: function (data) { return l('ClearCacheConfirmationMessage', data.record.name); },
+                                action: function (data) {
+                                    volo.docs.admin.documentsAdmin
+                                        .clearCache({ projectId: data.record.id})
+                                        .then(function () {
+                                            _dataTable.ajax.reload();
+                                        });
+                                }
                             }
                         ]
                 }
