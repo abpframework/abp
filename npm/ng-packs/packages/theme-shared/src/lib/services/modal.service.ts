@@ -1,11 +1,11 @@
 import { ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
-import { ComponentRef, Injectable, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ComponentRef, Injectable, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
 import { ModalContainerComponent } from '../components/modal/modal-container.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ModalService {
+export class ModalService implements OnDestroy {
   private containerComponentRef: ComponentRef<ModalContainerComponent>;
 
   constructor(private contentProjectionService: ContentProjectionService) {
@@ -43,5 +43,9 @@ export class ModalService {
     );
 
     this.contentProjectionService.projectContent(strategy);
+  }
+
+  ngOnDestroy() {
+    this.containerComponentRef.destroy();
   }
 }
