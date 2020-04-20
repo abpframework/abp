@@ -17,3 +17,31 @@ export function generateHash(value: string): number {
   }
   return hashed;
 }
+
+export function generatePassword(length = 8) {
+  length = length < 4 ? 4 : length;
+
+  const lowers = 'abcdefghijklmnopqrstuvwxyz';
+  const uppers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const numbers = '0123456789';
+  const specials = '!@#$%&*()_+{}<>?[]./';
+  const all = lowers + uppers + numbers + specials;
+
+  const getRandom = (chrSet: string) => chrSet[Math.floor(Math.random() * chrSet.length)];
+
+  let password = '';
+
+  password += getRandom(lowers);
+  password += getRandom(uppers);
+  password += getRandom(numbers);
+  password += getRandom(specials);
+
+  for (let i = 1; i <= length - 4; i++) {
+    password = password.concat(getRandom(all));
+  }
+
+  return password
+    .split('')
+    .sort(() => 0.5 - Math.random())
+    .join('');
+}
