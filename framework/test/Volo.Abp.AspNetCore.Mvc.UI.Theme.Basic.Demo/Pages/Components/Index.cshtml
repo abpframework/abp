@@ -1,10 +1,13 @@
 ﻿@page
 
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus
 @using Volo.Abp.UI.Navigation
 @model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.IndexModel
+
+@inject IPageLayout PageLayout
 @{
-    ViewData["Title"] = "Components";
+    PageLayout.Content.Title = "Components";
 }
 
 <h1>Components</h1>
