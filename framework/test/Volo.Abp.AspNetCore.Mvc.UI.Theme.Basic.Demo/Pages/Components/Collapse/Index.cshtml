@@ -1,6 +1,11 @@
 @page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.CollapseDemo
 @model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Collapse.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Collapse";
+}
 <h2>Collapse</h2>
 <p>Based on <a href="https://getbootstrap.com/docs/4.1/components/collapse/" target="_blank"> Bootstrap Collapse</a>.</p>
 

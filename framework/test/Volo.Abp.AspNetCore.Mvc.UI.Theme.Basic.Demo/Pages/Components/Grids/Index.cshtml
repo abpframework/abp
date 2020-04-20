@@ -1,6 +1,11 @@
 @page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.GridsDemo
 @model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Grids.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Grids";
+}
 <h2>Grids</h2>
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/layout/grid/" target="_blank"> Bootstrap grid</a>.</p>
 

@@ -1,6 +1,11 @@
 @page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.CardsDemo
 @model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Cards.IndexModel
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Cards";
+}
 <h2>Cards</h2>
 <p>Based on <a href="http://getbootstrap.com/docs/4.1/components/card/" target="_blank"> Bootstrap card</a>.</p>
 

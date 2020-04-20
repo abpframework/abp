@@ -1,8 +1,12 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.PaginatorDemo
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.Paginator
 @model IndexModel
-
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Paginator";
+}
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/Pages/Components/Paginator/index.js" />
