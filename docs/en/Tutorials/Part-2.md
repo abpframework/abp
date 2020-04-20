@@ -574,11 +574,13 @@ import { GetBooks, CreateUpdateBook } from '../actions/books.actions'; //<== add
 import { Books } from '../models/books';
 import { BooksService } from '../../books/shared/books.service';
 import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @State<Books.State>({
   name: 'BooksState',
   defaults: { books: {} } as Books.State,
 })
+@Injectable()
 export class BooksState {
   @Selector()
   static getBooks(state: Books.State) {
@@ -688,7 +690,7 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
 * `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
 * We added `New book` button to the `AbpContentToolbar`.
 
-Open `book-list.component.` file in `books\book-list` folder and replace the content as below:
+Open `book-list.component.ts` file in `books\book-list` folder and replace the content as below:
 
 ```js
 import { Component, OnInit } from '@angular/core';
@@ -1330,11 +1332,13 @@ import { GetBooks, CreateUpdateBook, DeleteBook } from '../actions/books.actions
 import { Books } from '../models/books';
 import { BooksService } from '../../books/shared/books.service';
 import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @State<Books.State>({
   name: 'BooksState',
   defaults: { books: {} } as Books.State,
 })
+@Injectable()
 export class BooksState {
   @Selector()
   static getBooks(state: Books.State) {

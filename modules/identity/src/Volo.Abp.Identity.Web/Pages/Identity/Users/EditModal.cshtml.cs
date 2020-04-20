@@ -27,7 +27,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             IdentityRoleAppService = identityRoleAppService;
         }
 
-        public virtual async Task OnGetAsync(Guid id)
+        public virtual async Task<IActionResult> OnGetAsync(Guid id)
         {
             UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await IdentityUserAppService.GetAsync(id));
 
@@ -41,6 +41,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
                     role.IsAssigned = true;
                 }
             }
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPostAsync()

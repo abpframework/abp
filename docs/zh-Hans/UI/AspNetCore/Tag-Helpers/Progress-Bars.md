@@ -24,7 +24,7 @@
 
 ## Demo
 
-参阅[进度条demo页面](https://bootstrap-taghelpers.abp.io/Components/Progress-Bars)查看示例.
+参阅[进度条demo页面](https://bootstrap-taghelpers.abp.io/Components/Progressbars)查看示例.
 
 ## Attributes
 

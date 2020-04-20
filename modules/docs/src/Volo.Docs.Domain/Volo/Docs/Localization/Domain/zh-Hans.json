@@ -22,6 +22,7 @@
     "New": "新文档",
     "Upd": "更新",
     "NewExplanation": "在最近两周内创建.",
-    "UpdatedExplanation": "在最近两周内更新."
+    "UpdatedExplanation": "在最近两周内更新.",
+    "Volo.Docs.Domain:010002": "简称 {ShortName} 已经存在."
   }
 }

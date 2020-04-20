@@ -27,10 +27,10 @@ namespace Volo.Docs
         [Fact]
         public async Task GetByShortNameAsync()
         {
-            var project = await ProjectRepository.GetByShortNameAsync("ABP");
+            var project = await ProjectRepository.GetByShortNameAsync("abp");
 
             project.ShouldNotBeNull();
-            project.ShortName.ShouldBe("ABP");
+            project.ShortName.ShouldBe("abp");
         }
     }
 }

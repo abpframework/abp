@@ -1,3 +1,4 @@
+import { takeUntilDestroy } from '@abp/ng.core';
 import {
   Component,
   ContentChild,
@@ -12,10 +13,11 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { fadeAnimation } from '../../animations/modal.animations';
 import { Confirmation } from '../../models/confirmation';
 import { ConfirmationService } from '../../services/confirmation.service';
+import { ModalService } from '../../services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -25,6 +27,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   templateUrl: './modal.component.html',
   animations: [fadeAnimation],
   styleUrls: ['./modal.component.scss'],
+  providers: [ModalService],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -33,20 +36,7 @@ export class ModalComponent implements OnDestroy {
   }
   set visible(value: boolean) {
     if (typeof value !== 'boolean') return;
-
-    this.isModalOpen = value;
-    this._visible = value;
-    this.visibleChange.emit(value);
-
-    if (value) {
-      setTimeout(() => this.listen(), 0);
-      this.renderer.addClass(document.body, 'modal-open');
-      this.appear.emit();
-    } else {
-      this.renderer.removeClass(document.body, 'modal-open');
-      this.disappear.emit();
-      this.destroy$.next();
-    }
+    this.toggle$.next(value);
   }
 
   @Input()
@@ -79,6 +69,8 @@ export class ModalComponent implements OnDestroy {
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;
 
+  @ViewChild('template', { static: false }) template: TemplateRef<any>;
+
   @ViewChild('abpModalContent', { static: false }) modalContent: ElementRef;
 
   @ViewChildren('abp-button') abpButtons;
@@ -101,11 +93,43 @@ export class ModalComponent implements OnDestroy {
 
   destroy$ = new Subject<void>();
 
+  private toggle$ = new Subject<boolean>();
+
   get isFormDirty(): boolean {
     return Boolean(document.querySelector('.modal-dialog .ng-dirty'));
   }
 
-  constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
+  constructor(
+    private renderer: Renderer2,
+    private confirmationService: ConfirmationService,
+    private modalService: ModalService,
+  ) {
+    this.initToggleStream();
+  }
+
+  private initToggleStream() {
+    this.toggle$
+      .pipe(takeUntilDestroy(this), debounceTime(0), distinctUntilChanged())
+      .subscribe(value => this.toggle(value));
+  }
+
+  private toggle(value: boolean) {
+    this.isModalOpen = value;
+    this._visible = value;
+    this.visibleChange.emit(value);
+
+    if (value) {
+      this.modalService.renderTemplate(this.template);
+      setTimeout(() => this.listen(), 0);
+      this.renderer.addClass(document.body, 'modal-open');
+      this.appear.emit();
+    } else {
+      this.modalService.clearModal();
+      this.renderer.removeClass(document.body, 'modal-open');
+      this.disappear.emit();
+      this.destroy$.next();
+    }
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -141,9 +165,7 @@ export class ModalComponent implements OnDestroy {
         debounceTime(150),
         filter((key: KeyboardEvent) => key && key.key === 'Escape'),
       )
-      .subscribe(() => {
-        this.close();
-      });
+      .subscribe(() => this.close());
 
     fromEvent(window, 'beforeunload')
       .pipe(takeUntil(this.destroy$))
@@ -151,6 +173,7 @@ export class ModalComponent implements OnDestroy {
         if (this.isFormDirty) {
           event.returnValue = true;
         } else {
+          event.returnValue = false;
           delete event.returnValue;
         }
       });

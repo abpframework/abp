@@ -155,7 +155,6 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
-            ChangeTracker.DeleteOrphansTiming = CascadeTiming.OnSaveChanges;
 
             ChangeTracker.Tracked += ChangeTracker_Tracked;
         }

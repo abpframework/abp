@@ -31,12 +31,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
             AccountAppService = accountAppService;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             await CheckSelfRegistrationAsync();
+
+            return Page();
         }
 
-        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();

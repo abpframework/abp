@@ -156,11 +156,9 @@ ObjectExtensionManager.Instance
     );
 ````
 
-#### Property Configuration
+### Property Configuration
 
-`AddOrUpdateProperty` can also get an action that can perform additional configuration on the property definition.
-
-Example:
+`AddOrUpdateProperty` can also get an action that can perform additional configuration on the property definition:
 
 ````csharp
 ObjectExtensionManager.Instance
@@ -168,13 +166,113 @@ ObjectExtensionManager.Instance
         "SocialSecurityNumber",
         options =>
         {
-            options.CheckPairDefinitionOnMapping = false;
+            //Configure options...
         });
 ````
 
-> See the "Object to Object Mapping" section to understand the `CheckPairDefinitionOnMapping` option.
+> `options` has a dictionary, named `Configuration` which makes the object extension definitions even extensible. It is used by the EF Core to map extra properties to table fields in the database. See the [extending entities](Customizing-Application-Modules-Extending-Entities.md) document.
 
-`options` has a dictionary, named `Configuration` which makes the object extension definitions even extensible. It is used by the EF Core to map extra properties to table fields in the database. See the [extending entities](Customizing-Application-Modules-Extending-Entities.md) document.
+The following sections explain the fundamental property configuration options.
+
+#### CheckPairDefinitionOnMapping
+
+Controls how to check property definitions while mapping two extensible objects. See the "Object to Object Mapping" section to understand the `CheckPairDefinitionOnMapping` option better.
+
+## Validation
+
+You may want to add some **validation rules** for the extra properties you've defined. `AddOrUpdateProperty` method options allows two ways of performing validation:
+
+1. You can add **data annotation attributes** for a property.
+2. You can write an action (code block) to perform a **custom validation**.
+
+Validation works when you use the object in a method that is **automatically validated** (e.g. controller actions, page handler methods, application service methods...). So, all extra properties are validated whenever the extended object is being validated.
+
+### Data Annotation Attributes
+
+All of the standard data annotation attributes are valid for extra properties. Example:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUserCreateDto, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.ValidationAttributes.Add(new RequiredAttribute());
+            options.ValidationAttributes.Add(
+                new StringLengthAttribute(32) {
+                    MinimumLength = 6 
+                }
+            );
+        });
+````
+
+With this configuration, `IdentityUserCreateDto` objects will be invalid without a valid `SocialSecurityNumber` value provided.
+
+### Custom Validation
+
+If you need, you can add a custom action that is executed to validate the extra properties. Example:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUserCreateDto, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.Validators.Add(context =>
+            {
+                var socialSecurityNumber = context.Value as string;
+
+                if (socialSecurityNumber == null ||
+                    socialSecurityNumber.StartsWith("X"))
+                {
+                    context.ValidationErrors.Add(
+                        new ValidationResult(
+                            "Invalid social security number: " + socialSecurityNumber,
+                            new[] { "SocialSecurityNumber" }
+                        )
+                    );
+                }
+            });
+        });
+````
+
+`context.ServiceProvider` can be used to resolve a service dependency for advanced scenarios.
+
+In addition to add custom validation logic for a single property, you can add a custom validation logic that is executed in object level. Example:
+
+````csharp
+ObjectExtensionManager.Instance
+.AddOrUpdate<IdentityUserCreateDto>(objConfig =>
+{
+    //Define two properties with their own validation rules
+    
+    objConfig.AddOrUpdateProperty<string>("Password", propertyConfig =>
+    {
+        propertyConfig.ValidationAttributes.Add(new RequiredAttribute());
+    });
+
+    objConfig.AddOrUpdateProperty<string>("PasswordRepeat", propertyConfig =>
+    {
+        propertyConfig.ValidationAttributes.Add(new RequiredAttribute());
+    });
+
+    //Write a common validation logic works on multiple properties
+    
+    objConfig.Validators.Add(context =>
+    {
+        if (context.ValidatingObject.GetProperty<string>("Password") !=
+            context.ValidatingObject.GetProperty<string>("PasswordRepeat"))
+        {
+            context.ValidationErrors.Add(
+                new ValidationResult(
+                    "Please repeat the same password!",
+                    new[] { "Password", "PasswordRepeat" }
+                )
+            );
+        }
+    });
+});
+````
 
 ## Object to Object Mapping
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -106,18 +106,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
             var responseAsString = await MakeRequestAsync(invocation);
-
-            //TODO: Think on that
-            if (TypeHelper.IsPrimitiveExtended(typeof(T), true))
+            
+            if (typeof(T) == typeof(string))
             {
-                if (typeof(DateTime).IsAssignableFrom(typeof(T)))
-                {
-                    return (T)(object)DateTime.Parse(responseAsString.Trim('\"'), CultureInfo.InvariantCulture);
-                }
-                else
-                {
-                    return (T)Convert.ChangeType(responseAsString, typeof(T));
-                }
+                return (T)Convert.ChangeType(responseAsString, typeof(T));
             }
 
             return JsonSerializer.Deserialize<T>(responseAsString);
