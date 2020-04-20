@@ -30,14 +30,13 @@ export function generatePassword(length = 8) {
   const getRandom = (chrSet: string) => chrSet[Math.floor(Math.random() * chrSet.length)];
 
   let password = '';
-
   password += getRandom(lowers);
   password += getRandom(uppers);
   password += getRandom(numbers);
   password += getRandom(specials);
 
   for (let i = 1; i <= length - 4; i++) {
-    password = password.concat(getRandom(all));
+    password += getRandom(all);
   }
 
   return password
