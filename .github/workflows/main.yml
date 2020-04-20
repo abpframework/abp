@@ -18,12 +18,12 @@ on:
       - uses: actions/setup-dotnet@master
         with:
           dotnet-version: 3.1.100
-  
+
       - name: Build All
         run: .\build-all.ps1
         working-directory: .\build
         shell: powershell
-  
+
       - name: Test All
         run: .\test-all.ps1
         working-directory: .\build
