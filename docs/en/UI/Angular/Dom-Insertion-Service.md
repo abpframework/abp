@@ -125,6 +125,16 @@ removeContent(element: HTMLScriptElement | HTMLStyleElement): void
 
 - `element` parameter is the inserted `HTMLScriptElement` or `HTMLStyleElement` element, which was returned by `insertContent` method.
 
+### has
+
+```js
+has(content: string): boolean
+```
+
+The `has` method returns a boolean value that indicates the given content has already been added to the DOM or not.
+
+- `content` parameter is the content of the inserted `HTMLScriptElement` or `HTMLStyleElement` element.
+
 ## What's Next?
 
 - [ContentProjectionService](./Content-Projection-Service.md)
