@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -56,7 +56,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             IJsonSerializer jsonSerializer,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICancellationTokenProvider cancellationTokenProvider,
-            ICorrelationIdProvider correlationIdProvider, 
+            ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
             ICurrentTenant currentTenant)
         {
@@ -106,9 +106,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private async Task<T> MakeRequestAndGetResultAsync<T>(IAbpMethodInvocation invocation)
         {
             var responseAsString = await MakeRequestAsync(invocation);
-
-            //TODO: Think on that
-            if (TypeHelper.IsPrimitiveExtended(typeof(T), true))
+            
+            if (typeof(T) == typeof(string))
             {
                 return (T)Convert.ChangeType(responseAsString, typeof(T));
             }
@@ -151,8 +150,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
 
             return await response.Content.ReadAsStringAsync();
-        } 
-        
+        }
+
         private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
         {
             var apiVersion = FindBestApiVersion(action);

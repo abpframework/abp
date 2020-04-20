@@ -17,7 +17,7 @@
 
 ## Demo
 
-参阅[列表组demo页面](https://bootstrap-taghelpers.abp.io/Components/ListGroups)查看示例.
+参阅[列表组demo页面](https://bootstrap-taghelpers.abp.io/Components/ListGroup)查看示例.
 
 ## Attributes
 

@@ -52,6 +52,11 @@ namespace Volo.Abp.PermissionManagement
 
                 foreach (var permission in group.GetPermissionsWithChildren())
                 {
+                    if (!permission.IsEnabled)
+                    {
+                        continue;
+                    }
+
                     if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
                     {
                         continue;

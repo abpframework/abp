@@ -51,6 +51,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
             await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
+        
         [Fact]
         public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Returns_Object()
         {

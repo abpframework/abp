@@ -134,7 +134,7 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
       {
           public override void ConfigureServices(ServiceConfigurationContext context)
           {
-              Configure<PermissionOptions>(options =>
+              Configure<AbpPermissionOptions>(options =>
               {
                   options.DefinitionProviders.Add<MyProjectPermissionDefinitionProvider>();
               });

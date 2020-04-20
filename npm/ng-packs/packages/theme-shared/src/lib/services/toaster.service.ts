@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ComponentRef } from '@angular/core';
 import { Toaster } from '../models';
 import { ReplaySubject } from 'rxjs';
-import { Config } from '@abp/ng.core';
+import { Config, PROJECTION_STRATEGY, ContentProjectionService } from '@abp/ng.core';
 import snq from 'snq';
+import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,18 @@ export class ToasterService {
   private lastId = -1;
 
   private toasts = [] as Toaster.Toast[];
+
+  private containerComponentRef: ComponentRef<ToastContainerComponent>;
+
+  constructor(private contentProjectionService: ContentProjectionService) {}
+
+  private setContainer() {
+    this.containerComponentRef = this.contentProjectionService.projectContent(
+      PROJECTION_STRATEGY.AppendComponentToBody(ToastContainerComponent),
+    );
+
+    this.containerComponentRef.changeDetectorRef.detectChanges();
+  }
 
   /**
    * Creates an info toast with given parameters.
@@ -84,6 +97,8 @@ export class ToasterService {
     severity: Toaster.Severity = 'neutral',
     options = {} as Partial<Toaster.ToastOptions>,
   ) {
+    if (!this.containerComponentRef) this.setContainer();
+
     const id = ++this.lastId;
     this.toasts.push({
       message,

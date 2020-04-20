@@ -369,10 +369,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
-            return Collection.DeleteOneAsync(
-                CreateEntityFilter(id),
-                GetCancellationToken(cancellationToken)
-            );
+            return DeleteAsync(x => x.Id.Equals(id), autoSave, cancellationToken);
         }
 
         protected override FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)

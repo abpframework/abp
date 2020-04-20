@@ -1,5 +1,4 @@
 import { CoreModule } from '@abp/ng.core';
-import { LAYOUTS } from '@abp/ng.theme.basic';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +18,9 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
 @NgModule({
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
     CoreModule.forRoot({
       environment,
     }),
@@ -28,9 +30,6 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     TenantManagementConfigModule,
     SettingManagementConfigModule,
     NgxsModule.forRoot(),
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
     SharedModule,
     ...(environment.production ? [] : LOGGERS),
   ],

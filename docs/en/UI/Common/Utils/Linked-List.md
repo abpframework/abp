@@ -2,20 +2,29 @@
 
 
 
-The core module provides a useful data structure known as a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list). Briefly, a doubly linked list is a series of records (a.k.a. nodes) which has information on the previous node, the next node, and its own value (or data).
+The @abp/utils package provides a useful data structure known as a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list). It is availabe in both Angular (via an import) and MVC (via `abp.utils.common` global object).
+
+Briefly, a doubly linked list is a series of records (a.k.a. nodes) which has information on the previous node, the next node, and its own value (or data).
 
 
 
 ## Getting Started
 
-To create a doubly linked list, all you have to do is to import and create a new instance of it:
+To create a doubly linked list, all you have to do is to create a new instance of it:
+
+In Angular:
 
 ```js
-import { LinkedList } from '@abp/ng.core';
+import { LinkedList } from '@abp/utils';
 
 const list = new LinkedList();
 ```
 
+In MVC:
+
+```js
+var list = new abp.utils.common.LinkedList();
+```
 
 
 The constructor does not get any parameters.
@@ -30,7 +39,11 @@ There are several methods to create new nodes in a linked list and all of them a
 
 
 
-#### addHead(value: T): ListNode\<T\>
+#### addHead(value)
+
+```js
+addHead(value: T): ListNode<T>
+```
 
 Adds a node with given value as the first node in list:
 
@@ -50,7 +63,11 @@ list.addHead('c');
 
 
 
-#### addManyHead(values: T\[\]): ListNode\<T\>\[\]
+#### addManyHead(values)
+
+```js
+addManyHead(values: T[]): ListNode<T>[]
+```
 
 Adds multiple nodes with given values as the first nodes in list:
 
@@ -66,7 +83,11 @@ list.addManyHead(['x', 'y', 'z']);
 
 
 
-#### addTail(value: T): ListNode\<T\>
+#### addTail(value)
+
+```js
+addTail(value: T): ListNode<T>
+```
 
 Adds a node with given value as the last node in list:
 
@@ -86,7 +107,11 @@ list.addTail('c');
 
 
 
-#### addManyTail(values: T\[\]): ListNode\<T\>\[\]
+#### addManyTail(values)
+
+```js
+addManyTail(values: T[]): ListNode<T>[]
+```
 
 Adds multiple nodes with given values as the last nodes in list:
 
@@ -102,7 +127,11 @@ list.addManyTail(['x', 'y', 'z']);
 
 
 
-#### addAfter(value: T, previousValue: T, compareFn = compare): ListNode\<T\>
+#### addAfter(value, previousValue [, compareFn])
+
+```js
+addAfter(value: T, previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
+```
 
 Adds a node with given value after the first node that has the previous value:
 
@@ -145,7 +174,11 @@ list.addAfter(
 
 
 
-#### addManyAfter(values: T\[\], previousValue: T, compareFn = compare): ListNode\<T\>\[\]
+#### addManyAfter(values, previousValue [, compareFn])
+
+```js
+addManyAfter(values: T[], previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
+```
 
 Adds multiple nodes with given values after the first node that has the previous value:
 
@@ -183,7 +216,11 @@ list.addManyAfter(
 
 
 
-#### addBefore(value: T, nextValue: T, compareFn = compare): ListNode\<T\>
+#### addBefore(value, nextValue [, compareFn])
+
+```js
+addBefore(value: T, nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
+```
 
 Adds a node with given value before the first node that has the next value:
 
@@ -226,7 +263,11 @@ list.addBefore(
 
 
 
-#### addManyBefore(values: T\[\], nextValue: T, compareFn = compare): ListNode\<T\>\[\]
+#### addManyBefore(values, nextValue [, compareFn])
+
+```js
+addManyBefore(values: T[], nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
+```
 
 Adds multiple nodes with given values before the first node that has the next value:
 
@@ -264,7 +305,11 @@ list.addManyBefore(
 
 
 
-#### addByIndex(value: T, position: number): ListNode\<T\>
+#### addByIndex(value, position)
+
+```js
+addByIndex(value: T, position: number): ListNode<T>
+```
 
 Adds a node with given value at the specified position in the list:
 
@@ -298,7 +343,11 @@ list.addByIndex('x', -1);
 
 
 
-#### addManyByIndex(values: T\[\], position: number): ListNode\<T\>\[\]
+#### addManyByIndex(values, position)
+
+```js
+addManyByIndex(values: T[], position: number): ListNode<T>[]
+```
 
 Adds multiple nodes with given values at the specified position in the list:
 
@@ -328,7 +377,11 @@ list.addManyByIndex(['x', 'y'], -1);
 
 
 
-#### add(value: T).head(): ListNode\<T\>
+#### add(value).head()
+
+```js
+add(value: T).head(): ListNode<T>
+```
 
 Adds a node with given value as the first node in list:
 
@@ -352,7 +405,11 @@ list.add('c').head();
 
 
 
-#### add(value: T).tail(): ListNode\<T\>
+#### add(value).tail()
+
+```js
+add(value: T).tail(): ListNode<T>
+```
 
 Adds a node with given value as the last node in list:
 
@@ -376,7 +433,11 @@ list.add('c').tail();
 
 
 
-#### add(value: T).after(previousValue: T, compareFn = compare): ListNode\<T\>
+#### add(value).after(previousValue [, compareFn])
+
+```js
+add(value: T).after(previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
+```
 
 Adds a node with given value after the first node that has the previous value:
 
@@ -419,7 +480,11 @@ list
 
 
 
-#### add(value: T).before(nextValue: T, compareFn = compare): ListNode\<T\>
+#### add(value).before(nextValue [, compareFn])
+
+```js
+add(value: T).before(nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>
+```
 
 Adds a node with given value before the first node that has the next value:
 
@@ -462,7 +527,11 @@ list
 
 
 
-#### add(value: T).byIndex(position: number): ListNode\<T\>
+#### add(value).byIndex(position)
+
+```js
+add(value: T).byIndex(position: number): ListNode<T>
+```
 
 Adds a node with given value at the specified position in the list:
 
@@ -500,7 +569,11 @@ list.add('x').byIndex(-1);
 
 
 
-#### addMany(values: T\[\]).head(): ListNode\<T\>\[\]
+#### addMany(values).head()
+
+```js
+addMany(values: T[]).head(): ListNode<T>[]
+```
 
 Adds multiple nodes with given values as the first nodes in list:
 
@@ -520,7 +593,11 @@ list.addMany(['x', 'y', 'z']).head();
 
 
 
-#### addMany(values: T\[\]).tail(): ListNode\<T\>\[\]
+#### addMany(values).tail()
+
+```js
+addMany(values: T[]).tail(): ListNode<T>[]
+```
 
 Adds multiple nodes with given values as the last nodes in list:
 
@@ -540,7 +617,11 @@ list.addMany(['x', 'y', 'z']).tail();
 
 
 
-#### addMany(values: T\[\]).after(previousValue: T, compareFn = compare): ListNode\<T\>\[\]
+#### addMany(values).after(previousValue [, compareFn])
+
+```js
+addMany(values: T[]).after(previousValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
+```
 
 Adds multiple nodes with given values after the first node that has the previous value:
 
@@ -578,7 +659,11 @@ list
 
 
 
-#### addMany(values: T\[\]).before(nextValue: T, compareFn = compare): ListNode\<T\>\[\]
+#### addMany(values).before(nextValue [, compareFn])
+
+```js
+addMany(values: T[]).before(nextValue: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
+```
 
 Adds multiple nodes with given values before the first node that has the next value:
 
@@ -616,7 +701,11 @@ list
 
 
 
-#### addMany(values: T\[\]).byIndex(position: number): ListNode\<T\>\[\]
+#### addMany(values).byIndex(position)
+
+```js
+addMany(values: T[]).byIndex(position: number): ListNode<T>[]
+```
 
 Adds multiple nodes with given values at the specified position in the list:
 
@@ -656,7 +745,11 @@ There are a few methods to remove nodes from a linked list and all of them are s
 
 
 
-#### dropHead(): ListNode\<T\> | undefined
+#### dropHead()
+
+```js
+dropHead(): ListNode<T> | undefined
+```
 
 Removes the first node from the list:
 
@@ -672,7 +765,11 @@ list.dropHead();
 
 
 
-#### dropManyHead(count: number): ListNode\<T\>\[\]
+#### dropManyHead(count)
+
+```js
+dropManyHead(count: number): ListNode<T>[]
+```
 
 Removes the first nodes from the list based on given count:
 
@@ -688,7 +785,11 @@ list.dropManyHead(2);
 
 
 
-#### dropTail(): ListNode\<T\> | undefined
+#### dropTail()
+
+```js
+dropTail(): ListNode<T> | undefined
+```
 
 Removes the last node from the list:
 
@@ -704,7 +805,11 @@ list.dropTail();
 
 
 
-#### dropManyTail(count: number): ListNode\<T\>\[\]
+#### dropManyTail(count)
+
+```js
+dropManyTail(count: number): ListNode<T>[]
+```
 
 Removes the last nodes from the list based on given count:
 
@@ -720,7 +825,11 @@ list.dropManyTail(2);
 
 
 
-#### dropByIndex(position: number): ListNode\<T\> | undefined
+#### dropByIndex(position)
+
+```js
+dropByIndex(position: number): ListNode<T> | undefined
+```
 
 Removes the node with the specified position from the list:
 
@@ -750,7 +859,11 @@ list.dropByIndex(-2);
 
 
 
-#### dropManyByIndex(count: number, position: number): ListNode\<T\>\[\]
+#### dropManyByIndex(count, position)
+
+```js
+dropManyByIndex(count: number, position: number): ListNode<T>[]
+```
 
 Removes the nodes starting from the specified position from the list based on given count:
 
@@ -780,7 +893,11 @@ list.dropManyByIndex(2, -2);
 
 
 
-#### dropByValue(value: T, compareFn = compare): ListNode\<T\> | undefined
+#### dropByValue(value [, compareFn])
+
+```js
+dropByValue(value: T, compareFn?: ListComparisonFn<T>): ListNode<T> | undefined
+```
 
 Removes the first node with given value from the list:
 
@@ -814,7 +931,11 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 
 
-#### dropByValueAll(value: T, compareFn = compare): ListNode\<T\>\[\]
+#### dropByValueAll(value [, compareFn])
+
+```js
+dropByValueAll(value: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
+```
 
 Removes all nodes with given value from the list:
 
@@ -848,7 +969,11 @@ list.dropByValue(0, (value, searchedValue) => value.x === searchedValue);
 
 
 
-#### drop().head(): ListNode\<T\> | undefined
+#### drop().head()
+
+```js
+drop().head(): ListNode<T> | undefined
+```
 
 Removes the first node in list:
 
@@ -868,7 +993,11 @@ list.drop().head();
 
 
 
-#### drop().tail(): ListNode\<T\> | undefined
+#### drop().tail()
+
+```js
+drop().tail(): ListNode<T> | undefined
+```
 
 Removes the last node in list:
 
@@ -888,7 +1017,11 @@ list.drop().tail();
 
 
 
-#### drop().byIndex(position: number): ListNode\<T\> | undefined
+#### drop().byIndex(position)
+
+```js
+drop().byIndex(position: number): ListNode<T> | undefined
+```
 
 Removes the node with the specified position from the list:
 
@@ -922,7 +1055,11 @@ list.drop().byIndex(-2);
 
 
 
-#### drop().byValue(value: T, compareFn = compare): ListNode\<T\> | undefined
+#### drop().byValue(value [, compareFn])
+
+```js
+drop().byValue(value: T, compareFn?: ListComparisonFn<T>): ListNode<T> | undefined
+```
 
 Removes the first node with given value from the list:
 
@@ -960,7 +1097,11 @@ list
 
 
 
-#### drop().byValueAll(value: T, compareFn = compare): ListNode\<T\>\[\]
+#### drop().byValueAll(value [, compareFn])
+
+```js
+drop().byValueAll(value: T, compareFn?: ListComparisonFn<T>): ListNode<T>[]
+```
 
 Removes all nodes with given value from the list:
 
@@ -998,7 +1139,11 @@ list
 
 
 
-#### dropMany(count: number).head(): ListNode\<T\>\[\]
+#### dropMany(count).head()
+
+```js
+dropMany(count: number).head(): ListNode<T>[]
+```
 
 Removes the first nodes from the list based on given count:
 
@@ -1018,7 +1163,11 @@ list.dropMany(2).head();
 
 
 
-#### dropMany(count: number).tail(): ListNode\<T\>\[\]
+#### dropMany(count).tail()
+
+```js
+dropMany(count: number).tail(): ListNode<T>[]
+```
 
 Removes the last nodes from the list based on given count:
 
@@ -1038,7 +1187,11 @@ list.dropMany(2).tail();
 
 
 
-#### dropMany(count: number).byIndex(position: number): ListNode\<T\>\[\]
+#### dropMany(count).byIndex(position)
+
+```js
+dropMany(count: number).byIndex(position: number): ListNode<T>[]
+```
 
 Removes the nodes starting from the specified position from the list based on given count:
 
@@ -1078,7 +1231,41 @@ There are a few methods to find specific nodes in a linked list.
 
 
 
-#### find(predicate: ListIteratorFunction\<T\>): ListNode\<T\> | undefined
+#### head
+
+```js
+head: ListNode<T> | undefined;
+```
+
+Refers to the first node in the list.
+
+
+
+#### tail
+
+```js
+tail: ListNode<T> | undefined;
+```
+
+Refers to the last node in the list.
+
+
+
+#### length
+
+```js
+length: number;
+```
+
+Is the total number of nodes in the list.
+
+
+
+#### find(predicate)
+
+```js
+find(predicate: ListIteratorFn<T>): ListNode<T> | undefined
+```
 
 Finds the first node from the list that matches the given predicate:
 
@@ -1087,7 +1274,7 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const found = list.find(node => node.value === 'b');
+var found = list.find(node => node.value === 'b');
 
 /*
 found.value === "b"
@@ -1098,7 +1285,11 @@ found.next.value === "b"
 
 
 
-#### findIndex(predicate: ListIteratorFunction\<T\>): number
+#### findIndex(predicate)
+
+```js
+findIndex(predicate: ListIteratorFn<T>): number
+```
 
 Finds the position of the first node from the list that matches the given predicate:
 
@@ -1107,10 +1298,10 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const i0 = list.findIndex(node => node.next && node.next.value === 'b');
-const i1 = list.findIndex(node => node.value === 'b');
-const i2 = list.findIndex(node => node.previous && node.previous.value === 'b');
-const i3 = list.findIndex(node => node.value === 'x');
+var i0 = list.findIndex(node => node.next && node.next.value === 'b');
+var i1 = list.findIndex(node => node.value === 'b');
+var i2 = list.findIndex(node => node.previous && node.previous.value === 'b');
+var i3 = list.findIndex(node => node.value === 'x');
 
 /*
 i0 === 0
@@ -1122,7 +1313,11 @@ i3 === -1
 
 
 
-#### get(position: number): ListNode\<T\> | undefined
+#### get(position)
+
+```js
+get(position: number): ListNode<T> | undefined
+```
 
 Finds and returns the node with specific position in the list:
 
@@ -1131,7 +1326,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const found = list.get(1);
+var found = list.get(1);
 
 /*
 found.value === "b"
@@ -1142,7 +1337,11 @@ found.next.value === "c"
 
 
 
-#### indexOf(value: T, compareFn = compare): number
+#### indexOf(value [, compareFn])
+
+```js
+indexOf(value: T, compareFn?: ListComparisonFn<T>): number
+```
 
 Finds the position of the first node from the list that has the given value:
 
@@ -1151,10 +1350,10 @@ list.addTailMany(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
-const i0 = list.indexOf('a');
-const i1 = list.indexOf('b');
-const i2 = list.indexOf('c');
-const i3 = list.indexOf('x');
+var i0 = list.indexOf('a');
+var i1 = list.indexOf('b');
+var i2 = list.indexOf('c');
+var i3 = list.indexOf('x');
 
 /*
 i0 === 0
@@ -1173,11 +1372,11 @@ list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
-const i0 = indexOf(1, (value, searchedValue) => value.x === searchedValue);
-const i1 = indexOf(2, (value, searchedValue) => value.x === searchedValue);
-const i2 = indexOf(3, (value, searchedValue) => value.x === searchedValue);
-const i3 = indexOf(0, (value, searchedValue) => value.x === searchedValue);
-const i4 = indexOf(4, (value, searchedValue) => value.x === searchedValue);
+var i0 = indexOf(1, (value, searchedValue) => value.x === searchedValue);
+var i1 = indexOf(2, (value, searchedValue) => value.x === searchedValue);
+var i2 = indexOf(3, (value, searchedValue) => value.x === searchedValue);
+var i3 = indexOf(0, (value, searchedValue) => value.x === searchedValue);
+var i4 = indexOf(4, (value, searchedValue) => value.x === searchedValue);
 
 /*
 i0 === 0
@@ -1200,9 +1399,13 @@ There are a few ways to iterate over or display a linked list.
 
 
 
-#### forEach(callback: ListIteratorFunction\<T\>): void
+#### forEach(iteratorFn)
 
-Runs a callback function on all nodes in a linked list from head to tail:
+```js
+forEach(iteratorFn: ListIteratorFn<T>): void
+```
+
+Runs a function on all nodes in a linked list from head to tail:
 
 ```js
 list.addTailMany(['a', 'b', 'c']);
@@ -1217,7 +1420,6 @@ list.forEach((node, index) => console.log(node.value + index));
 ```
 
 
-
 #### \*\[Symbol.iterator\]\(\)
 
 A linked list is iterable. In other words, you may use methods like `for...of` on it.
@@ -1227,7 +1429,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-for(const node of list) {
+for(const node of list) { /* ES6 for...of statement */
   console.log(node.value);
 }
 
@@ -1238,7 +1440,11 @@ for(const node of list) {
 
 
 
-#### toArray(): T\[\]
+#### toArray()
+
+```js
+toArray(): T[]
+```
 
 Converts a linked list to an array of values:
 
@@ -1247,7 +1453,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const arr = list.toArray();
+var arr = list.toArray();
 
 /*
 arr === ['a', 'b', 'c']
@@ -1256,7 +1462,11 @@ arr === ['a', 'b', 'c']
 
 
 
-#### toNodeArray(): T\[\]
+#### toNodeArray()
+
+```js
+toNodeArray(): ListNode<T>[]
+```
 
 Converts a linked list to an array of nodes:
 
@@ -1265,7 +1475,7 @@ list.addTailMany(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
-const arr = list.toNodeArray();
+var arr = list.toNodeArray();
 
 /*
 arr[0].value === 'a'
@@ -1276,7 +1486,11 @@ arr[2].value === 'a'
 
 
 
-#### toString(): string
+#### toString([mapperFn])
+
+```js
+toString(mapperFn: ListMapperFn<T> = JSON.stringify): string
+```
 
 Converts a linked list to a string representation of nodes and their relations:
 
@@ -1285,7 +1499,7 @@ list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
 
 // "a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}
 
-const str = list.toString();
+var str = list.toString();
 
 /*
 str === '"a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}'
@@ -1301,7 +1515,7 @@ list.addMany([{ x: 1 }, { x: 2 }, { x: 3 }, { x: 4 }, { x: 5 }]).tail();
 
 // {"x":1} <-> {"x":2} <-> {"x":3} <-> {"x":4} <-> {"x":5}
 
-const str = list.toString(value => value.x);
+var str = list.toString(value => value.x);
 
 /*
 str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
@@ -1310,3 +1524,93 @@ str === '1 <-> 2 <-> 3 <-> 4 <-> 5'
 
 
 
+
+
+
+## API
+
+### Classes
+
+#### LinkedList
+
+```js
+export class LinkedList<T = any> {
+
+  // properties and methods are explained above
+
+}
+```
+
+
+
+#### ListNode
+
+```js
+export class ListNode<T = any> {
+  next: ListNode | undefined;
+
+  previous: ListNode | undefined;
+  
+  constructor(public readonly value: T) {}
+}
+```
+
+`ListNode` is the node that is being stored in the `LinkedList` for every record.
+
+- `value` is the value stored in the node and is passed through the constructor.
+- `next` refers to the next node in the list.
+- `previous` refers to the previous node in the list.
+
+```js
+list.addTailMany([ 0, 1, 2 ]);
+
+console.log(
+  list.head.value,                              // 0
+  list.head.next.value,                         // 1
+  list.head.next.next.value,                    // 2
+  list.head.next.next.previous.value,           // 1
+  list.head.next.next.previous.previous.value,  // 0
+  list.tail.value,                              // 2
+  list.tail.previous.value,                     // 1
+  list.tail.previous.previous.value,            // 0
+  list.tail.previous.previous.next.value,       // 1
+  list.tail.previous.previous.next.next.value,  // 2
+);
+```
+
+
+
+
+### Types
+
+#### ListMapperFn
+
+```js
+type ListMapperFn<T = any> = (value: T) => any;
+```
+
+This function is used in `toString` method to map the node values before generating a string representation of the list.
+
+
+
+#### ListComparisonFn
+
+```js
+type ListComparisonFn<T = any> = (nodeValue: T, comparedValue: any) => boolean;
+```
+
+This function is used while adding, dropping, ang finding nodes based on a comparison value.
+
+
+
+#### ListIteratorFn
+
+```js
+type ListIteratorFn<T = any, R = boolean> = (
+  node: ListNode<T>,
+  index?: number,
+  list?: LinkedList,
+) => R;
+```
+
+This function is used while iterating over the list either to do something with each node or to find a node.

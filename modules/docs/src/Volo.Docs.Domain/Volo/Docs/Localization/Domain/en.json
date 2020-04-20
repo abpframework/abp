@@ -23,6 +23,7 @@
     "New": "New",
     "Upd": "Upd",
     "NewExplanation": "Created in the last two weeks.",
-    "UpdatedExplanation": "Updated in the last two weeks."
+    "UpdatedExplanation": "Updated in the last two weeks.",
+    "Volo.Docs.Domain:010002": "ShortName {ShortName} already exists."
   }
 }
