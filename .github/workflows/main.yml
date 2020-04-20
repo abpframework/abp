@@ -14,15 +14,17 @@ jobs:
   build-test:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-dotnet@master
-        with:
-          dotnet-version: "3.1.100"
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@master
+      with:
+        dotnet-version: 3.1.100
 
-      - name: Build All
-        run: .\build\build-all.ps1
-        shell: pwsh
+    - name: Build All
+      run: .\build-all.ps1
+      working-directory: .\build
+      shell: powershell
 
-      - name: Test All
-        run: .\build\test-all.ps1
-        shell: pwsh
+    - name: Test All
+      run: .\test-all.ps1
+      working-directory: .\build
+      shell: powershell
