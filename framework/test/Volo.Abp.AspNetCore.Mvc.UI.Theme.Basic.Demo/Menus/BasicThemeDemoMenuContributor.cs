@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus
 
         private void AddMainMenuItems(MenuConfigurationContext context)
         {
-            var menuItem = new ApplicationMenuItem("BasicThemeDemo.Components", "Components");
+            var menuItem = new ApplicationMenuItem(BasicThemeDemoMenus.Components.Root, "Components");
 
             var items = new List<ApplicationMenuItem>()
             {
@@ -28,13 +28,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Borders, "Borders", url: "/Components/Borders"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Breadcrumbs, "Breadcrumbs", url: "/Components/Breadcrumbs"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Buttons, "Buttons", url: "/Components/Buttons"),
-                new ApplicationMenuItem(BasicThemeDemoMenus.Components.ButtonGroups, "ButtonGroups", url: "/Components/ButtonGroups"),
+                new ApplicationMenuItem(BasicThemeDemoMenus.Components.ButtonGroups, "Button Groups", url: "/Components/ButtonGroups"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Cards, "Cards", url: "/Components/Cards"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Carousel, "Carousel", url: "/Components/Carousel"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Collapse, "Collapse", url: "/Components/Collapse"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Dropdowns, "Dropdowns", url: "/Components/Dropdowns"),
-                new ApplicationMenuItem(BasicThemeDemoMenus.Components.DynamicForms, "DynamicForms", url: "/Components/DynamicForms"),
-                new ApplicationMenuItem(BasicThemeDemoMenus.Components.FormElements, "FormElements", url: "/Components/FormElements"),
+                new ApplicationMenuItem(BasicThemeDemoMenus.Components.DynamicForms, "Dynamic Forms", url: "/Components/DynamicForms"),
+                new ApplicationMenuItem(BasicThemeDemoMenus.Components.FormElements, "Form Elements", url: "/Components/FormElements"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Grids, "Grids", url: "/Components/Grids"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.ListGroups, "List Groups", url: "/Components/ListGroups"),
                 new ApplicationMenuItem(BasicThemeDemoMenus.Components.Modals, "Modals", url: "/Components/Modals"),

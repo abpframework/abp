@@ -12,9 +12,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
-                .WriteTo.File("Logs/logs.txt")
+                .WriteTo.File("Logs/logs-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
                 .CreateLogger();
 
             try
