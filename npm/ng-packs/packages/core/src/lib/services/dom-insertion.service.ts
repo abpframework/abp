@@ -4,7 +4,7 @@ import { generateHash } from '../utils';
 
 @Injectable({ providedIn: 'root' })
 export class DomInsertionService {
-  readonly inserted = new Set<number>();
+  private readonly inserted = new Set<number>();
 
   insertContent<T extends HTMLScriptElement | HTMLStyleElement>(
     contentStrategy: ContentStrategy<T>,
@@ -24,5 +24,11 @@ export class DomInsertionService {
     this.inserted.delete(hash);
 
     element.parentNode.removeChild(element);
+  }
+
+  has(content: string): boolean {
+    const hash = generateHash(content);
+
+    return this.inserted.has(hash);
   }
 }
