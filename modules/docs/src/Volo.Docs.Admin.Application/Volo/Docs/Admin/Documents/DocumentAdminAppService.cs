@@ -64,7 +64,7 @@ namespace Volo.Docs.Admin.Documents
             await _languageCache.RemoveAsync(languageCacheKey, true);
             await _versionCache.RemoveAsync(versionCacheKey, true);
 
-            var documents = await _documentRepository.GetListAsync();
+            var documents = await _documentRepository.GetListByProjectId(project.Id);
 
             foreach (var languageCode in languageConfig.Languages)
             {
