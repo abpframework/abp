@@ -54,31 +54,20 @@ namespace Volo.Docs.Admin.Documents
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
             var languageCacheKey = CacheKeyGenerator.GenerateProjectLanguageCacheKey(project);
-            var languageConfig = await _languageCache.GetAsync(languageCacheKey, true);
-            CheckNotNullCacheValue(languageConfig);
+            await _languageCache.RemoveAsync(languageCacheKey, true);
 
             var versionCacheKey = CacheKeyGenerator.GenerateProjectVersionsCacheKey(project);
-            var versions = await _versionCache.GetAsync(versionCacheKey, true);
-            CheckNotNullCacheValue(versions);
-
-            await _languageCache.RemoveAsync(languageCacheKey, true);
             await _versionCache.RemoveAsync(versionCacheKey, true);
 
             var documents = await _documentRepository.GetListByProjectId(project.Id);
 
-            foreach (var languageCode in languageConfig.Languages)
+            foreach (var document in documents)
             {
-                foreach (var version in versions)
-                {
-                    foreach (var document in documents)
-                    {
-                        var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, document.Name, languageCode.Code, version.Name);
-                        await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
+                var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, document.Name, document.LanguageCode, document.LanguageCode);
+                await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
 
-                        document.LastCachedTime = DateTime.MinValue;
-                        await _documentRepository.UpdateAsync(document);
-                    }
-                }
+                document.LastCachedTime = DateTime.MinValue;
+                await _documentRepository.UpdateAsync(document);
             }
         }
 
@@ -159,14 +148,6 @@ namespace Volo.Docs.Admin.Documents
                 }
 
                 await _documentFullSearch.AddOrUpdateAsync(doc);
-            }
-        }
-
-        private void CheckNotNullCacheValue(object cacheValue)
-        {
-            if (cacheValue == null)
-            {
-                throw new UserFriendlyException(L["CacheNullExceptionMessage"]);
             }
         }
 
