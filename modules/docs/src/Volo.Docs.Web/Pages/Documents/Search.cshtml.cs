@@ -39,7 +39,7 @@ namespace Volo.Docs.Pages.Documents
 
         public List<DocumentSearchOutput> SearchOutputs { get; set; } = new List<DocumentSearchOutput>();
 
-        public async Task<IActionResult> OnGetAsync(string keyword)
+        public virtual async Task<IActionResult> OnGetAsync(string keyword)
         {
             if (!await _documentAppService.FullSearchEnabledAsync())
             {

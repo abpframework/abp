@@ -60,6 +60,7 @@ context.Services.Replace(
 
 ````csharp
 [Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...

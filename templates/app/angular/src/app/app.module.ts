@@ -18,8 +18,11 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
 @NgModule({
   imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
     CoreModule.forRoot({
-      environment
+      environment,
     }),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
@@ -27,13 +30,10 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     TenantManagementConfigModule,
     SettingManagementConfigModule,
     NgxsModule.forRoot(),
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
     SharedModule,
-    ...(environment.production ? [] : LOGGERS)
+    ...(environment.production ? [] : LOGGERS),
   ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

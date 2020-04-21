@@ -35,7 +35,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _blogOptions = blogOptions.Value;
         }
 
-        public async Task<ActionResult> OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
             {
@@ -51,7 +51,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             return Page();
         }
 
-        public async Task<ActionResult> OnPost()
+        public virtual async Task<ActionResult> OnPost()
         {
             var blog = await _blogAppService.GetAsync(Post.BlogId);
 

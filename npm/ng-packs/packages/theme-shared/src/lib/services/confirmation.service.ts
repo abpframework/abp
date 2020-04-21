@@ -1,13 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ComponentRef } from '@angular/core';
 import { Confirmation } from '../models/confirmation';
 import { fromEvent, Observable, Subject, ReplaySubject } from 'rxjs';
 import { takeUntil, debounceTime, filter } from 'rxjs/operators';
-import { Config } from '@abp/ng.core';
+import { Config, ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
+import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
   status$: Subject<Confirmation.Status>;
   confirmation$ = new ReplaySubject<Confirmation.DialogData>(1);
+
+  private containerComponentRef: ComponentRef<ConfirmationComponent>;
+
+  constructor(private contentProjectionService: ContentProjectionService) {}
+
+  private setContainer() {
+    setTimeout(() => {
+      this.containerComponentRef = this.contentProjectionService.projectContent(
+        PROJECTION_STRATEGY.AppendComponentToBody(ConfirmationComponent),
+      );
+
+      this.containerComponentRef.changeDetectorRef.detectChanges();
+    }, 0);
+  }
 
   info(
     message: Config.LocalizationParam,
@@ -47,6 +62,8 @@ export class ConfirmationService {
     severity?: Confirmation.Severity,
     options?: Partial<Confirmation.Options>,
   ): Observable<Confirmation.Status> {
+    if (!this.containerComponentRef) this.setContainer();
+
     this.confirmation$.next({
       message,
       title,
@@ -58,12 +75,12 @@ export class ConfirmationService {
     return this.status$;
   }
 
-  clear(status?: Confirmation.Status) {
+  clear(status: Confirmation.Status = Confirmation.Status.dismiss) {
     this.confirmation$.next();
-    this.status$.next(status || Confirmation.Status.dismiss);
+    this.status$.next(status);
   }
 
-  listenToEscape() {
+  private listenToEscape() {
     fromEvent(document, 'keyup')
       .pipe(
         takeUntil(this.status$),

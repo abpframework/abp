@@ -14,6 +14,7 @@
     "Permission:Delete": "Delete",
     "Permission:Create": "Create",
     "Menu:Organizations": "Organizations",
+    "Menu:Accounting": "Accounting",  
     "Menu:Packages": "Packages",
     "NpmPackageDeletionWarningMessage": "This NPM Package will be deleted. Do you confirm that?",
     "NugetPackageDeletionWarningMessage": "This Nuget Package will be deleted. Do you confirm that?",
@@ -75,7 +76,8 @@
     "AddDeveloper": "Add developer",
     "Create": "Create",
     "UserNotFound": "User not found",
-    "{0}WillBeRemovedFromMembers": "{0} Will be removed from members",
+    "{0}WillBeRemovedFromDevelopers": "{0} Will be removed from developers, do you confirm?",
+    "{0}WillBeRemovedFromOwners": "{0} Will be removed from owners, do you confirm?",
     "Computers": "Computers",
     "UniqueComputerId": "Unique computer id",
     "LastSeenDate": "Last seen date",
@@ -91,6 +93,14 @@
     "OrganizationNamePlaceholder": "Organization name...",
     "UsernameOrEmail": "Username or email",
     "UsernameOrEmailPlaceholder": "Username or email...",
-    "Member": "Member"
+    "Member": "Member",
+    "QuotationPurchasedOrderNo": "Quotation Purchased Order No",
+    "QuotationTime": "Quotation Time",
+    "CompanyName": "Company Name",
+    "CompanyAddress": "Company Address",
+    "Price": "Price",
+    "ExtraText": "Extra Text",
+    "ExtraAmount": "Extra Amount",
+    "DownloadQuotation": "Download Quotation"
   }
 }

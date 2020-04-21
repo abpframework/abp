@@ -25,7 +25,7 @@ namespace Volo.Docs.Pages.Documents
             _uiOptions = urlOptions.Value;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
 
