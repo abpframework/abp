@@ -26,12 +26,22 @@
             "extractCss": true,
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap.min"
+              },
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-v4-shims.min"
+              }
             ],
             "scripts": []
           },
@@ -59,14 +69,6 @@
                   "maximumError": "5mb"
                 }
               ]
-            },
-            "hmr": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hmr.ts"
-                }
-              ]
             }
           }
         },
@@ -78,10 +80,6 @@
           "configurations": {
             "production": {
               "browserTarget": "myProjectName:build:production"
-            },
-            "hmr": {
-              "hmr": true,
-              "browserTarget": "myProjectName:build:hmr"
             }
           }
         },
@@ -100,12 +98,22 @@
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap.min"
+              },
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-v4-shims.min"
+              }
             ],
             "scripts": []
           }
@@ -159,9 +167,7 @@
               "projects/my-project-name/tsconfig.lib.json",
               "projects/my-project-name/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -194,9 +200,7 @@
               "projects/my-project-name-config/tsconfig.lib.json",
               "projects/my-project-name-config/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
