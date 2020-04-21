@@ -75,12 +75,12 @@ export class ConfirmationService {
     return this.status$;
   }
 
-  clear(status?: Confirmation.Status) {
+  clear(status: Confirmation.Status = Confirmation.Status.dismiss) {
     this.confirmation$.next();
-    this.status$.next(status || Confirmation.Status.dismiss);
+    this.status$.next(status);
   }
 
-  listenToEscape() {
+  private listenToEscape() {
     fromEvent(document, 'keyup')
       .pipe(
         takeUntil(this.status$),
