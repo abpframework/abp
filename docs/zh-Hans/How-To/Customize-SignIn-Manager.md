@@ -42,14 +42,14 @@ public override async Task<Microsoft.AspNetCore.Identity.ExternalLoginInfo> GetE
 {
     var auth = await Context.AuthenticateAsync(Microsoft.AspNetCore.Identity.IdentityConstants.ExternalScheme);
     var items = auth?.Properties?.Items;
-    if (auth?.Principal == null || items == null || !items.ContainsKey("LoginProviderKey"))
+    if (auth?.Principal == null || items == null || !items.ContainsKey(LoginProviderKey))
     {
         return null;
     }
 
     if (expectedXsrf != null)
     {
-        if (!items.ContainsKey("XsrfKey"))
+        if (!items.ContainsKey(XsrfKey))
         {
             return null;
         }

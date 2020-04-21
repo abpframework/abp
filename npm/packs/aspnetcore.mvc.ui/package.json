@@ -1,5 +1,5 @@
 {
-  "version": "2.5.0",
+  "version": "2.6.0",
   "name": "@abp/aspnetcore.mvc.ui",
   "publishConfig": {
     "access": "public"
@@ -12,5 +12,5 @@
     "path": "^0.12.7",
     "rimraf": "^3.0.0"
   },
-  "gitHead": "a9a36b8a4681df04377497addf94b15e6c521664"
+  "gitHead": "03238c9aa7d4090b7c6ae9cc8c790bc0545501eb"
 }

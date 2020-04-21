@@ -18,7 +18,7 @@
     "@abp/ng.theme.shared" "^2.5.0"
     tslib "^1.9.0"
 
-"@abp/ng.core@^2.5.0":
+"@abp/ng.core@^2.5.0", "@abp/ng.core@~2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.core/-/ng.core-2.5.0.tgz#e7168615b4078e3fa494c4efcc69842acbd2c627"
   integrity sha512-opYkOFCKeU17YvNJhfcG1dOwZZ4F2QGspTNTagNZ9fepmeNl0yqFamFdRM6irfEEL3cOBQhUpI2NQZP+ugLOEg==
@@ -35,7 +35,7 @@
     ts-toolbelt "^6.3.6"
     tslib "^1.9.0"
 
-"@abp/ng.feature-management@^2.5.0":
+"@abp/ng.feature-management@^2.5.0", "@abp/ng.feature-management@~2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.feature-management/-/ng.feature-management-2.5.0.tgz#3bc4501a2abbe6b6447e5b4a2b2d86fb07ce8a59"
   integrity sha512-keZ3gCDMvU/e17tsBBrZpLmpIpDm/2TTSAmCoRRy3GH4BQICXr/XJmssStNx7V7sdo6vAPiW9pcM9zI/C8IrBw==
@@ -60,7 +60,7 @@
     "@abp/ng.theme.shared" "^2.5.0"
     tslib "^1.9.0"
 
-"@abp/ng.permission-management@^2.5.0":
+"@abp/ng.permission-management@^2.5.0", "@abp/ng.permission-management@~2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@abp/ng.permission-management/-/ng.permission-management-2.5.0.tgz#c769a97aee8517ec724dc5b7756e1dfc8fe7fcf1"
   integrity sha512-grmJ46Qf26cwGfDt5acL6eXXWBDgjvL/04/ZLtxsP4Hf+tSlnL/1rWz5fxMF8548sQ6vZlVIdrSa4Tz/Dh0WLw==

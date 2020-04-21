@@ -362,7 +362,7 @@ React Native 应用文件夹结构, 如下图所示：
 
 #### Components（组件）
 
-可以在所有屏幕上使用的组件是在 `src/components` 文件夹中创建的. 所有组件都是作为一个能够使用 [hooks](https://reactjs.org/docs/hooks-intro.html) 的函数创建的. 
+可以在所有屏幕上使用的组件是在 `src/components` 文件夹中创建的. 所有组件都是作为一个能够使用 [hooks](https://reactjs.org/docs/hooks-intro.html) 的函数创建的.
 
 #### Screens（屏幕）
 
@@ -378,7 +378,7 @@ Screens 是通过在 `src/screens` 文件夹中创建将名称分开的文件夹
 
 #### State Management（状态管理）
 
-[Redux](https://redux.js.org/) 被用作状态管理库. [Redux Toolkit](https://redux-toolkit.js.org/) 库被用作高效Redux开发的工具集. 
+[Redux](https://redux.js.org/) 被用作状态管理库. [Redux Toolkit](https://redux-toolkit.js.org/) 库被用作高效Redux开发的工具集.
 
 在 `src/store` 文件夹中创建 Actions, reducers, sagas, selectors. 存储文件夹如下：
 
@@ -387,41 +387,41 @@ Screens 是通过在 `src/screens` 文件夹中创建将名称分开的文件夹
 * [**Store**](https://redux.js.org/basics/store) 在 `src/store/index.js` 文件中定义. 
 * [**Actions**](https://redux.js.org/basics/actions/) 是将数据从应用程序发送到存储的有效信息负载. 
 * [**Reducers**](https://redux.js.org/basics/reducers) 指定应用程序的状态如何更改以响应发送到存储的操作. 
-* [**Redux-Saga**](https://redux-saga.js.org/) 是一个库, 旨在使应用程序的副作用(即异步的事情, 如数据获取和不纯的事情, 如访问浏览器缓存)更容易管理. Sagas 是在 `src/store/sagas` 文件夹中创建的. 
+* [**Redux-Saga**](https://redux-saga.js.org/) 是一个库, 旨在使应用程序的副作用(即异步的事情, 如数据获取和不纯的事情, 如访问浏览器缓存)更容易管理. Sagas 是在 `src/store/sagas` 文件夹中创建的.
 * [**Reselect**](https://github.com/reduxjs/reselect) 库用于创建缓存的选择器. 选择器是在 `src/store/selectors` 文件夹中创建的. 
 
 #### APIs
 
-[Axios](https://github.com/axios/axios) 用作HTTP客户端库. Axios 实例从 `src/api/API.js` 导出 . 使用相同的配置进行HTTP调用. `src/api` 文件夹中还有为 API 调用创建的 API 文件. 
+[Axios](https://github.com/axios/axios) 用作HTTP客户端库. Axios 实例从 `src/api/API.js` 导出 . 使用相同的配置进行HTTP调用. `src/api` 文件夹中还有为 API 调用创建的 API 文件.
 
 #### Theming（主题）
 
-[Native Base](https://nativebase.io/) 被用作UI组件库. 本地基本组件可以很容易地进行自定义。参见 [Native Base customize](https://docs.nativebase.io/Customize.html#Customize) 文档。我们沿着同样的路走。
+[Native Base](https://nativebase.io/) 被用作UI组件库. 本地基本组件可以很容易地进行自定义.参见[Native Base customize](https://docs.nativebase.io/Customize.html#Customize) 文档.我们沿着同样的路走.
 
-* Native Base 主题变量在 `src/theme/variables` 文件夹中。
-* Native Base 组件样式在 `src/theme/components` 文件夹中。这些文件是用 Native Base's `ejectTheme` 脚本生成的。
-* 组件样式用 `src/theme/overrides` 文件夹下的文件覆盖。
+* Native Base 主题变量在 `src/theme/variables` 文件夹中.
+* Native Base 组件样式在 `src/theme/components` 文件夹中.这些文件是用 Native Base's `ejectTheme` 脚本生成的.
+* 组件样式用 `src/theme/overrides` 文件夹下的文件覆盖.
 
 #### Testing（单元测试）
 
-将创建单元测试。
+将创建单元测试.
 
-参见[测试概述](https://reactjs.org/docs/testing.html)文档。
+参见[测试概述](https://reactjs.org/docs/testing.html)文档.
 
 #### Depended Libraries（依赖库）
 
-* [Native Base](https://nativebase.io/) 用作UI组件库。
-* [React Navigation](https://reactnavigation.org/) 用作导航库。
-* [Axios](https://github.com/axios/axios) 用作HTTP客户端库。
-* [Redux](https://redux.js.org/) 用作状态管理库。
-* [Redux Toolkit](https://redux-toolkit.js.org/) 库被用作高效Redux开发的工具集。
-* [Redux-Saga](https://redux-saga.js.org/) 用于管理异步进程。
-* [Redux Persist](https://github.com/rt2zz/redux-persist) 被用作状态持久化。
-* [Reselect](https://github.com/reduxjs/reselect) 用于创建缓存的选择器。
-* [i18n-js](https://github.com/fnando/i18n-js) 作为国际化库使用。
-* [expo-font](https://docs.expo.io/versions/latest/sdk/font/) 库可以轻松加载字体。
-* [Formik](https://github.com/jaredpalmer/formik) 用于构建表单。
-* [Yup](https://github.com/jquense/yup) 用于表单验证。
+* [Native Base](https://nativebase.io/) 用作UI组件库.
+* [React Navigation](https://reactnavigation.org/) 用作导航库.
+* [Axios](https://github.com/axios/axios) 用作HTTP客户端库.
+* [Redux](https://redux.js.org/) 用作状态管理库.
+* [Redux Toolkit](https://redux-toolkit.js.org/) 库被用作高效Redux开发的工具集.
+* [Redux-Saga](https://redux-saga.js.org/) 用于管理异步进程.
+* [Redux Persist](https://github.com/rt2zz/redux-persist) 被用作状态持久化.
+* [Reselect](https://github.com/reduxjs/reselect) 用于创建缓存的选择器.
+* [i18n-js](https://github.com/fnando/i18n-js) 作为国际化库使用.
+* [expo-font](https://docs.expo.io/versions/latest/sdk/font/) 库可以轻松加载字体.
+* [Formik](https://github.com/jaredpalmer/formik) 用于构建表单.
+* [Yup](https://github.com/jquense/yup) 用于表单验证.
 
 ## 下一步是什么?
 

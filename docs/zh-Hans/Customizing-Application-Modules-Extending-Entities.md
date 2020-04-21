@@ -50,7 +50,7 @@ ObjectExtensionManager.Instance
 * 你提供了 `IdentityUser` 作为实体名(泛型参数), `string` 做为新属性的类型, `SocialSecurityNumber` 做为属性名(也是数据库表的字段名).
 * 你还需要提供一个使用[EF Core Fluent API](https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties)定义数据库映射属性的操作.
 
-> 必须在使用相关的 `DbContext` 之前执行此代码. 应用程序启动模板定义了一个名为 `YourProjectNameEntityExtensions` 的静态类. 你可以在此类中定义扩展确保在正确的时间执行它. 否则你需要自己处理.
+> 必须在使用相关的 `DbContext` 之前执行此代码. 应用程序启动模板定义了一个名为 `YourProjectNameEfCoreEntityExtensionMappings` 的静态类. 你可以在此类中定义扩展确保在正确的时间执行它. 否则你需要自己处理.
 
 定义实体扩展后你需要使用EF Core的[Add-Migration](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#add-migration)和[Update-Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#update-database)命令来创建code first迁移类并更新数据库.
 
