@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,6 +44,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public async Task<List<OrganizationUnit>> GetListAsync(
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .IncludeDetails(includeDetails)
+                .OrderBy(sorting ?? nameof(OrganizationUnit.DisplayName))
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+        public async Task<List<OrganizationUnit>> GetListAsync(
             IEnumerable<Guid> ids,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -81,6 +95,11 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return GetQueryable().IncludeDetails();
         }
+    }
 
+    public class OrganizationUnitRoleWithIdentityRole
+    {
+        public IdentityRole IdentityRole { get; set; }
+        public OrganizationUnitRole OrganizationUnitRole { get; set; }
     }
 }
