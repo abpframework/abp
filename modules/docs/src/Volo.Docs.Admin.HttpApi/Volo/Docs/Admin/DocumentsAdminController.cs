@@ -20,6 +20,13 @@ namespace Volo.Docs.Admin
         }
 
         [HttpPost]
+        [Route("ClearCache")]
+        public Task ClearCacheAsync(ClearCacheInput input)
+        {
+            return _documentAdminAppService.ClearCacheAsync(input);
+        }
+
+        [HttpPost]
         [Route("PullAll")]
         public Task PullAllAsync(PullAllDocumentInput input)
         {
