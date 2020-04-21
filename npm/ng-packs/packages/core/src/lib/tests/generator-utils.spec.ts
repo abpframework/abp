@@ -16,14 +16,18 @@ describe('GeneratorUtils', () => {
 
     test.each`
       name         | charSet     | passwordLength
+      ${'lower'}   | ${lowers}   | ${10}
       ${'lower'}   | ${lowers}   | ${7}
       ${'upper'}   | ${uppers}   | ${6}
       ${'number'}  | ${numbers}  | ${5}
       ${'special'} | ${specials} | ${4}
+      ${'special'} | ${specials} | ${2}
+      ${'special'} | ${specials} | ${0}
     `(
       'should have a $name in the password that length is $passwordLength',
       ({ _, charSet, passwordLength }) => {
         const password = generatePassword(passwordLength);
+        expect(password).toHaveLength(passwordLength < 4 ? 4 : passwordLength);
         expect(hasChar(charSet, password)).toBe(true);
       },
     );
@@ -31,13 +35,5 @@ describe('GeneratorUtils', () => {
 });
 
 function hasChar(charSet: string, password: string): boolean {
-  let matched = false;
-  charSet.split('').forEach(char => {
-    if (password.indexOf(char) > -1) {
-      matched = true;
-      return;
-    }
-  });
-
-  return matched;
+  return charSet.split('').some(char => password.indexOf(char) > -1);
 }
