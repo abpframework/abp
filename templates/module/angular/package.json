@@ -13,10 +13,10 @@
   "private": true,
   "dependencies": {
     "@abp/ng.account": "~2.6.0",
-    "@abp/ng.theme.basic": "~2.6.0",
     "@abp/ng.identity": "~2.6.0",
-    "@abp/ng.tenant-management": "~2.6.0",
     "@abp/ng.setting-management": "~2.6.0",
+    "@abp/ng.tenant-management": "~2.6.0",
+    "@abp/ng.theme.basic": "~2.6.0",
     "@angular/animations": "~8.2.14",
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
@@ -55,6 +55,6 @@
     "ts-node": "~7.0.0",
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.5.3"
+    "typescript": "~3.8.3"
   }
 }
