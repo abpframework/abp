@@ -2,14 +2,14 @@
 @{
 }
 <div class="row position-relative vh-100" style="background: #e8e8e8;">
-    <div class="center">
-        <span class="notfound-404">@Model.ErrorCode</span> 
+    <div class="center" id="DocumentErrorContainer">
+        <span class="notfound-@Model.ErrorCode">@Model.ErrorCode</span> 
         <h1>
             @Model.ErrorMessage
         </h1>
         <br />
-        <a href="@(Model.RedirectUrl)" class="btn btn-primary px-4 redirect">
-            Go Back <span class="seconds">(3)</span>
+        <a href="@(Model.RedirectUrl)" class="btn btn-primary px-4" id="ErrorRedirect">
+            Go Back <span id="ErrorRedirectSeconds">(3)</span>
         </a>
     </div>
 </div>
