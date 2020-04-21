@@ -1,6 +1,6 @@
 # ConfirmationService
 
-You can use the `ConfirmationService` in @abp/ng.theme.shared package to place a confirmation popup at the root level.
+You can use the `ConfirmationService` in @abp/ng.theme.shared package to display a confirmation popup by placing at the root level in your project.
 
 
 ## Getting Started
@@ -21,7 +21,7 @@ class DemoComponent {
 
 ## Usage
 
-You can use the `success`, `warn`, `error`, and `info` methods of `ConfirmationService` to display a confirmation popup at the root level in your project.
+You can use the `success`, `warn`, `error`, and `info` methods of `ConfirmationService` to display a confirmation popup.
 
 ### How to Display a Confirmation Popup
 
