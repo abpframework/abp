@@ -172,11 +172,11 @@ namespace MyCompany.MyProject
             {
                 options.Tenants = new[]
                 {
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"), //Id
                         "tenant1" //Name
                     ),
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"), //Id
                         "tenant2" //Name
                     )
@@ -252,7 +252,7 @@ TODO: This package implements ITenantStore using a real database...
 
 #### Tenant Information
 
-ITenantStore works with **TenantInformation** class that has several properties for a tenant:
+ITenantStore works with **TenantConfiguration** class that has several properties for a tenant:
 
 * **Id**: Unique Id of the tenant.
 * **Name**: Unique name of the tenant.
