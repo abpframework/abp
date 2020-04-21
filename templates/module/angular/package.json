@@ -1,14 +1,14 @@
 {
-  "name": "my-project-name",
+  "name": "MyProjectName",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "start:hmr": "ng serve --open",
-    "build": "ng build my-project-name",
-    "test": "ng test my-project-name",
-    "lint": "ng lint my-project-name",
-    "e2e": "ng e2e my-project-name"
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
