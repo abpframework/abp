@@ -19,7 +19,7 @@ export function generateHash(value: string): number {
 }
 
 export function generatePassword(length = 8) {
-  length = length < 4 ? 4 : length;
+  length = Math.min(Math.max(4, length), 128);
 
   const lowers = 'abcdefghijklmnopqrstuvwxyz';
   const uppers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
