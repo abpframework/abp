@@ -136,6 +136,7 @@ export class TestCoreModule {}
 @NgModule({
   exports: [BaseCoreModule, LocalizationModule],
   imports: [BaseCoreModule, LocalizationModule],
+  providers: [LocalizationPipe],
 })
 export class CoreModule {
   static forTest({ baseHref = '/' } = {} as ABP.Test): ModuleWithProviders<TestCoreModule> {

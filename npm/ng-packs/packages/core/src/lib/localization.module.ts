@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { LocalizationPipe } from './pipes';
+import { LocalizationPipe } from './pipes/localization.pipe';
 
 @NgModule({
-  providers: [LocalizationPipe],
   exports: [LocalizationPipe],
   declarations: [LocalizationPipe],
 })
