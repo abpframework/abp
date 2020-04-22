@@ -46,7 +46,7 @@ namespace Volo.Abp.Emailing.Templates.VirtualFiles
                 {
                     return dictionaries;
                 }
-
+                
                 _templateDictionary = new Dictionary<string, string>();
                 foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath))
                 {

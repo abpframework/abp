@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.Emailing.Templates
+namespace Volo.Abp.TextTemplating
 {
-    public class EmailTemplateContributorList : List<IEmailTemplateContributor>
+    public class TemplateContributorList : List<ITemplateContributor>
     {
         public string GetOrNull(string cultureName)
         {
