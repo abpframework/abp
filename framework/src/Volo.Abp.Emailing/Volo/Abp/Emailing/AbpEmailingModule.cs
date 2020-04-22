@@ -50,7 +50,6 @@ namespace Volo.Abp.Emailing
 
             services.OnRegistred(context =>
             {
-
                 if (typeof(IEmailTemplateDefinitionProvider).IsAssignableFrom(context.ImplementationType))
                 {
                     definitionProviders.Add(context.ImplementationType);
