@@ -1,5 +1,5 @@
 ﻿{
-  "culture": "pl",
+  "culture": "pl-PL",
   "texts": {
     "GivenTenantIsNotAvailable": "Podany tenant jest niedostępny: {0}",
     "Tenant": "Tenant",
