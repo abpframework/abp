@@ -1,4 +1,5 @@
 import { EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
 import { Config } from './config';
@@ -12,6 +13,10 @@ export namespace ABP {
      */
     requirements?: Config.Requirements;
     skipGetAppConfiguration?: boolean;
+  }
+
+  export interface Test {
+    baseHref?: Router;
   }
 
   export type PagedResponse<T> = {

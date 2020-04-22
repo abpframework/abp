@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { ConfirmationService } from '../../services/confirmation.service';
 import { Confirmation } from '../../models/confirmation';
-import { LocalizationService } from '@abp/ng.core';
+import { ConfirmationService } from '../../services/confirmation.service';
 
 @Component({
   selector: 'abp-confirmation',
@@ -32,10 +31,7 @@ export class ConfirmationComponent {
     }
   }
 
-  constructor(
-    private confirmationService: ConfirmationService,
-    private localizationService: LocalizationService,
-  ) {
+  constructor(private confirmationService: ConfirmationService) {
     this.confirmationService.confirmation$.subscribe(confirmation => {
       this.data = confirmation;
       this.visible = !!confirmation;
