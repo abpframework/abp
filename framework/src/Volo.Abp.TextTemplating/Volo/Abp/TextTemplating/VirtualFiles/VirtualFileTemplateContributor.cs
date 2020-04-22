@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -15,9 +14,10 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         private volatile Dictionary<string, string> _templateDictionary;
         private readonly object _syncObj = new object();
 
-        public VirtualFileTemplateContributor(string virtualPath)
+        public VirtualFileTemplateContributor(
+            [NotNull] string virtualPath)
         {
-            _virtualPath = virtualPath;
+            _virtualPath = Check.NotNullOrWhiteSpace(virtualPath, nameof(virtualPath));
         }
 
         public void Initialize(TemplateContributorInitializationContext context)

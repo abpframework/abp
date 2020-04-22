@@ -1,6 +1,4 @@
-﻿using Volo.Abp.TextTemplating.VirtualFiles;
-
-namespace Volo.Abp.TextTemplating
+﻿namespace Volo.Abp.TextTemplating
 {
     public class TestTemplateDefinitionProvider : TemplateDefinitionProvider
     {
@@ -9,9 +7,7 @@ namespace Volo.Abp.TextTemplating
             context.Add(
                 new TemplateDefinition(
                     TestTemplates.TestTemplate1
-                ).AddContributor(
-                    new VirtualFileTemplateContributor("/SampleTemplates/WelcomeEmail")
-                )
+                ).AddVirtualFiles("/SampleTemplates/WelcomeEmail")
             );
 
             context.Add(new TemplateDefinition(
