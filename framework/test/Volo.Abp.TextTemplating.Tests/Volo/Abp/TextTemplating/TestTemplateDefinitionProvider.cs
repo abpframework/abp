@@ -5,8 +5,11 @@
         public override void Define(ITemplateDefinitionContext context)
         {
             context
-                .Add(new TemplateDefinition(
+                .Add(
+                    new TemplateDefinition(
                         TestTemplates.TestTemplate1
+                    ), new TemplateDefinition(
+                        TestTemplates.TestTemplateLayout1
                     )
                 );
         }
