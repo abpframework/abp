@@ -13,13 +13,13 @@ export class AppComponent implements OnInit {
   constructor(private lazyLoadService: LazyLoadService) {}
 
   ngOnInit() {
-    forkJoin(
+    forkJoin([
       this.lazyLoadService.load(
         LOADING_STRATEGY.PrependAnonymousStyleToHead('fontawesome-v4-shims.min.css'),
       ),
       this.lazyLoadService.load(
         LOADING_STRATEGY.PrependAnonymousStyleToHead('fontawesome-all.min.css'),
       ),
-    ).subscribe();
+    ]).subscribe();
   }
 }
