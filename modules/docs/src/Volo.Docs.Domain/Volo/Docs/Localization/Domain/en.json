@@ -9,6 +9,8 @@
     "Edit": "Edit",
     "LastEditTime": "Last edit",
     "Delete": "Delete",
+    "ClearCache": "Clear cache",
+    "ClearCacheConfirmationMessage": "Are you sure to clear all caches for project \"{0}\"",
     "InThisDocument": "In this document",
     "GoToTop": "Go to top",
     "Projects": "Project(s)",

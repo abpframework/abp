@@ -7,6 +7,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Guids;
+using Volo.Docs.Caching;
 using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
@@ -51,7 +52,7 @@ namespace Volo.Docs.Projects
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             var versions = await _versionCache.GetOrAddAsync(
-                project.ShortName,
+                CacheKeyGenerator.GenerateProjectVersionsCacheKey(project),
                 () => GetVersionsAsync(project),
                 () => new DistributedCacheEntryOptions
                 {
@@ -116,7 +117,7 @@ namespace Volo.Docs.Projects
             }
 
             return await LanguageCache.GetOrAddAsync(
-                project.ShortName,
+                CacheKeyGenerator.GenerateProjectLanguageCacheKey(project),
                 GetLanguagesAsync,
                 () => new DistributedCacheEntryOptions
                 {

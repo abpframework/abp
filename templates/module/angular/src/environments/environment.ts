@@ -1,6 +1,5 @@
 export const environment = {
   production: false,
-  hmr: false,
   application: {
     name: 'MyProjectName',
     logoUrl: '',

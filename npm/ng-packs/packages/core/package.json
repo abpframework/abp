@@ -7,7 +7,7 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/utils": "^2.4.0",
+    "@abp/utils": "^2.6.0",
     "@angular/localize": "~9.1.0",
     "@ngxs/router-plugin": "^3.6.2",
     "@ngxs/storage-plugin": "^3.6.2",
