@@ -153,11 +153,11 @@
                                         <label class="input-group-text"><i class="fa fa-filter"></i></label>
                                     </div>
 
-                                    <input class="form-control" 
-                                           id="filter" 
-                                           type="search" 
-                                           data-search-url="@Model." 
-                                           placeholder="@L["FilterTopics"].Value" 
+                                    <input class="form-control"
+                                           id="filter"
+                                           type="search"
+                                           data-search-url="@Model."
+                                           placeholder="@L["FilterTopics"].Value"
                                            aria-label="Filter">
                                 </div>
                             </div>
@@ -172,11 +172,11 @@
                                             <label class="input-group-text"><i class="fa fa-search"></i></label>
                                         </div>
 
-                                        <input class="form-control" 
-                                               id="fullsearch" 
-                                               type="search" 
-                                               data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/" 
-                                               placeholder="@L["FullSearch"].Value" 
+                                        <input class="form-control"
+                                               id="fullsearch"
+                                               type="search"
+                                               data-fullsearch-url="/search/@Model.LanguageCode/@Model.ProjectName/@Model.Version/"
+                                               placeholder="@L["FullSearch"].Value"
                                                aria-label="Filter">
                                     </div>
                                 </div>
@@ -226,8 +226,8 @@
                             @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                             {
                                 <a href="@Model.Document.EditLink" target="_blank">
-                                    <i class="fa fa-edit"></i> 
-                                    @(L["Edit"]) 
+                                    <i class="fa fa-edit"></i>
+                                    @(L["Edit"])
                                     <span class="for-desktop">(@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())</span>
                                 </a>
                             }
@@ -349,6 +349,19 @@
 }
 else
 {
+    if (!Model.ProjectFound)
+        {
+             @(await Component.InvokeAsync<ErrorViewComponent>(new
+              {
+                  model = new ErrorPageModel
+                  {
+                      RedirectUrl = Model.DocumentsUrlPrefix,
+                      ErrorCode =  "404",
+                      ErrorMessage = L.GetString("ProjectNotFound")
+                  }
+              }))
+        }
+
     if (!Model.DocumentFound)
     {
         @(await Component.InvokeAsync<ErrorViewComponent>(new
@@ -359,18 +372,6 @@ else
                                 + (Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
                   ErrorCode =  "404",
                   ErrorMessage = L.GetString("DocumentNotFound")
-              }
-          }))
-    }
-    if (!Model.EntityFound)
-    {
-         @(await Component.InvokeAsync<ErrorViewComponent>(new
-          {
-              model = new ErrorPageModel
-              {
-                  RedirectUrl = Model.DocumentsUrlPrefix,
-                  ErrorCode =  "404",
-                  ErrorMessage = L.GetString("ProjectNotFound")
               }
           }))
     }

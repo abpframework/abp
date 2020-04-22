@@ -35,9 +35,9 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool DocumentFound { get; set; } = true;
         
-        public bool EntityFound { get; set; } = true;
+        public bool ProjectFound { get; set; } = true;
 
-        public bool LoadSuccess => DocumentFound && EntityFound;
+        public bool LoadSuccess => DocumentFound && ProjectFound;
 
         public string DefaultLanguageCode { get; set; }
 
@@ -122,7 +122,7 @@ namespace Volo.Docs.Pages.Documents.Project
             catch (EntityNotFoundException e)
             {
                 Logger.LogWarning(e.Message);
-                EntityFound = false;
+                ProjectFound = false;
                 return Page();
             }
 
