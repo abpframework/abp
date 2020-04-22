@@ -7,7 +7,7 @@ export * from './lib/abstracts';
 export * from './lib/actions';
 export * from './lib/components';
 export * from './lib/constants';
-export * from './lib/core.module';
+export { CoreModule } from './lib/core.module';
 export * from './lib/directives';
 export * from './lib/enums';
 export * from './lib/guards';
