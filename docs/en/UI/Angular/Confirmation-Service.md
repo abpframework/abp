@@ -1,4 +1,4 @@
-# ConfirmationService
+# Confirmation Popup
 
 You can use the `ConfirmationService` in @abp/ng.theme.shared package to display a confirmation popup by placing at the root level in your project.
 
@@ -160,5 +160,4 @@ clear(
 
 ## What's Next?
 
-- ToasterService 
-<!-- TODO: Add ToasterService link -->
+- [Toast Overlay](./Toaster-Service.md)
