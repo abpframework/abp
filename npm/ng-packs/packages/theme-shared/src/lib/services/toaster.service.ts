@@ -37,7 +37,7 @@ export class ToasterService {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ) {
+  ): number {
     return this.show(message, title, 'info', options);
   }
 
@@ -51,7 +51,7 @@ export class ToasterService {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ) {
+  ): number {
     return this.show(message, title, 'success', options);
   }
 
@@ -65,7 +65,7 @@ export class ToasterService {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ) {
+  ): number {
     return this.show(message, title, 'warning', options);
   }
 
@@ -79,7 +79,7 @@ export class ToasterService {
     message: Config.LocalizationParam,
     title?: Config.LocalizationParam,
     options?: Partial<Toaster.ToastOptions>,
-  ) {
+  ): number {
     return this.show(message, title, 'error', options);
   }
 
@@ -96,7 +96,7 @@ export class ToasterService {
     title: Config.LocalizationParam = null,
     severity: Toaster.Severity = 'neutral',
     options = {} as Partial<Toaster.ToastOptions>,
-  ) {
+  ): number {
     if (!this.containerComponentRef) this.setContainer();
 
     const id = ++this.lastId;
@@ -114,7 +114,7 @@ export class ToasterService {
    * Removes the toast with given id.
    * @param id ID of the toast to be removed.
    */
-  remove(id: number) {
+  remove(id: number): void {
     this.toasts = this.toasts.filter(toast => snq(() => toast.options.id) !== id);
     this.toasts$.next(this.toasts);
   }
@@ -122,7 +122,7 @@ export class ToasterService {
   /**
    * Removes all open toasts at once.
    */
-  clear(key?: string) {
+  clear(key?: string): void {
     this.toasts = !key
       ? []
       : this.toasts.filter(toast => snq(() => toast.options.containerKey) !== key);
