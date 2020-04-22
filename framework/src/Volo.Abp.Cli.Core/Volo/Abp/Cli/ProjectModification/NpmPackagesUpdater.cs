@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.IO;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
@@ -78,12 +79,9 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private async Task DeleteNpmrcFileAsync(string directoryName)
         {
-            var fileName = Path.Combine(directoryName, ".npmrc");
+            FileHelper.DeleteIfExists(Path.Combine(directoryName, ".npmrc"));
 
-            if (File.Exists(fileName))
-            {
-                File.Delete(fileName);
-            }
+            await Task.CompletedTask;
         }
 
         private async Task CreateNpmrcFileAsync(string directoryName)
