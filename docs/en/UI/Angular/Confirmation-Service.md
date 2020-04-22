@@ -44,21 +44,17 @@ constructor(private confirmation: ConfirmationService) {}
 this.confirmation
   .warn('::WillBeDeleted', { key: '::AreYouSure', defaultValue: 'Are you sure?' })
   .subscribe((status: Confirmation.Status) => {
-    switch (status) {
-      case Confirmation.Status.confirm:
-        // confirmed, the popup was closed by clicking the confirm button
-        break;
-      case Confirmation.Status.reject:
-        // rejected, the popup was closed by clicking the cancel button
-        break;
-      case Confirmation.Status.dismiss:
-        // dismissed, the popup was closed by pressing the escape
-        break;
-    }
+    // your code here
   });
 ```
 
+
 - The `message` and `title` parameters accept a string, localization key or localization object. See the [localization document](./Localization.md)
+- `Confirmation.Status` is an enum and has three properties;
+    - `Confirmation.Status.confirm` is a closing event value that will be emitted when the popup is closed by the confirm button.
+    - `Confirmation.Status.reject` is a closing event value that will be emitted when the popup is closed by the cancel button.
+    - `Confirmation.Status.dismiss` is a closing event value that will be emitted when the popup is closed by pressing the escape.
+
 
 If the status is not important for you, you may not listen the closing event:
 
