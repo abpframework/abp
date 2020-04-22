@@ -108,7 +108,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 ### 配置连接字符串选择
 
 如果你的应用程序有多个数据库,你可以使用 `connectionStringName]` Attribute为你的DbContext配置连接字符串名称.
-例：
+例:
 
 ```csharp
 [ConnectionStringName("MySecondConnString")]
@@ -274,7 +274,7 @@ public override async Task DeleteAsync(
 
 ## 访问 EF Core API
 
-大多数情况下应该隐藏仓储后面的EF Core API(这也是仓储的设计目地). 但是如果想要通过仓储访问DbContext实现,则可以使用`GetDbContext()`或`GetDbSet()`扩展方法. 例：
+大多数情况下应该隐藏仓储后面的EF Core API(这也是仓储的设计目地). 但是如果想要通过仓储访问DbContext实现,则可以使用`GetDbContext()`或`GetDbSet()`扩展方法. 例:
 
 ````csharp
 public class BookService
@@ -304,7 +304,7 @@ public class BookService
 
 默认,实体的所有额外属性存储在数据库的一个 `JSON` 对象中.
 
-实体扩展系统允许你存储额外属性在数据库的单独字段中. 有关额外属性和实体扩展系统的更多信息,请参阅下列文档：
+实体扩展系统允许你存储额外属性在数据库的单独字段中. 有关额外属性和实体扩展系统的更多信息,请参阅下列文档:
 
 * [自定义应用模块: 扩展实体](Customizing-Application-Modules-Extending-Entities.md)
 * [实体](Entities.md)
@@ -313,7 +313,7 @@ public class BookService
 
 ### ObjectExtensionManager.Instance
 
-`ObjectExtensionManager` 实现单例模式，因此你需要使用静态的 `ObjectExtensionManager.Instance` 来执行所有操作。
+`ObjectExtensionManager` 实现单例模式,因此你需要使用静态的 `ObjectExtensionManager.Instance` 来执行所有操作.
 
 ### MapEfCoreProperty
 
@@ -417,7 +417,7 @@ context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 });
 ````
 
-现在,您的自定义仓储也可以使用`IBookStoreDbContext`接口:
+现在,你的自定义仓储也可以使用`IBookStoreDbContext`接口:
 
 ````csharp
 public class BookRepository : EfCoreRepository<IBookStoreDbContext, Book, Guid>, IBookRepository

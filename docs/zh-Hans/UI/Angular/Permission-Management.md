@@ -2,7 +2,7 @@
 
 权限是为特定用户,角色或客户端授予或禁止的简单策略. 你可以在[ABP授权文档](../../Authorization.md)中阅读更多信息.
 
-您可以使用 `ConfigState` 的 `getGrantedPolicy` 选择器获取经过身份验证的用户的权限.
+你可以使用 `ConfigState` 的 `getGrantedPolicy` 选择器获取经过身份验证的用户的权限.
 
 你可以从Store中获取权限的布尔值:
 

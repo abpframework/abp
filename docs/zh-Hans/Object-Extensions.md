@@ -62,7 +62,7 @@ if (user.GetProperty<bool>("IsSuperUser"))
 
 ##### 非基本属性类型
 
-如果您的属性类型不是原始类型(int,bool,枚举，字符串等),你需要使用 `GetProperty` 的非泛型版本,它会返回 `object`.
+如果你的属性类型不是原始类型(int,bool,枚举,字符串等),你需要使用 `GetProperty` 的非泛型版本,它会返回 `object`.
 
 #### HasProperty
 
@@ -180,7 +180,7 @@ ObjectExtensionManager.Instance
 
 假设你已向可扩展的实体对象添加了额外的属性并使用了自动[对象到对象的映射](Object-To-Object-Mapping.md)将该实体映射到可扩展的DTO类. 在这种情况下你需要格外小心,因为额外属性可能包含**敏感数据**,这些数据对于客户端不可用.
 
-本节提供了一些**好的做法**,可以控制对象映射的额外属性。
+本节提供了一些**好的做法**,可以控制对象映射的额外属性.
 
 ### MapExtraPropertiesTo
 
@@ -232,7 +232,7 @@ identityUser.MapExtraPropertiesTo(
 
 #### AutoMapper集成
 
-如果您使用的是[AutoMapper](https://automapper.org/)库,ABP框架还提供了一种扩展方法来利用上面定义的 `MapExtraPropertiesTo` 方法.
+如果你使用的是[AutoMapper](https://automapper.org/)库,ABP框架还提供了一种扩展方法来利用上面定义的 `MapExtraPropertiesTo` 方法.
 
 你可以在映射配置文件中使用 `MapExtraProperties()` 方法.
 
@@ -247,7 +247,7 @@ public class MyProfile : Profile
 }
 ````
 
-它与 `MapExtraPropertiesTo()` 方法具有相同的参数。
+它与 `MapExtraPropertiesTo()` 方法具有相同的参数.
 
 ## Entity Framework Core 数据库映射
 

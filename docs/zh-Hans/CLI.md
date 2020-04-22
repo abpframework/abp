@@ -41,12 +41,12 @@ abp new Acme.BookStore
 
 * `--template` 或者 `-t`: 指定模板. 默认的模板是 `app`,会生成web项目.可用的模板有:
   * `app` (default): [应用程序模板](Startup-Templates/Application.md). 其他选项:
-    * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项：
-      * `mvc`: ASP.NET Core MVC.此模板的其他选项：
+    * `--ui` 或者 `-u`: 指定ui框架.默认`mvc`框架.其他选项:
+      * `mvc`: ASP.NET Core MVC.此模板的其他选项:
         * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案,此解决方案没有那么复杂,适合大多数场景.
-      * `angular`: Angular. 这个模板还有一些额外的选项：
+      * `angular`: Angular. 这个模板还有一些额外的选项:
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
-      * `none`: 无UI. 这个模板还有一些额外的选项：
+      * `none`: 无UI. 这个模板还有一些额外的选项:
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
     * `--mobile` 或者 `-m`: 指定移动应用程序框架. 默认框架是 `react-native`. 其他选项:
       * `none`: 不包含移动应用程序.
@@ -57,7 +57,7 @@ abp new Acme.BookStore
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
 * `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
-* `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,您会希望使用最新的版本.
+* `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,你会希望使用最新的版本.
 * `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D\localTemplate` 或 `https://<your url>.zip`).
 * `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
 * `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true`. 如果你不想使用默认,你可以设置自己的连接字符串. 默认的数据库提供程序是 `SQL Server`, 所以你只能输入SQL Server连接字符串!
@@ -186,9 +186,9 @@ abp generate-proxy [options]
 
 #### Options
 
-* `--apiUrl` 或者 `-a`：指定HTTP API的根URL. 如果未指定这个选项,默认使用你Angular应用程序的`environment.ts`文件API URL. 在运行 `generate-proxy` 命令之前,你的host必须启动正在运行.
+* `--apiUrl` 或者 `-a`:指定HTTP API的根URL. 如果未指定这个选项,默认使用你Angular应用程序的`environment.ts`文件API URL. 在运行 `generate-proxy` 命令之前,你的host必须启动正在运行.
 * `--ui` 或者 `-u`: 指定UI框架,默认框架是angular.当前只有angular一个选项, 但我们会通过更改CLI增加新的选项. 尽请关注!
-* `--module` 或者 `-m`：指定模块名. 默认模块名称为app. 如果你想所有模块,你可以指定 `--module all` 命令.
+* `--module` 或者 `-m`:指定模块名. 默认模块名称为app. 如果你想所有模块,你可以指定 `--module all` 命令.
 
 示例:
 
