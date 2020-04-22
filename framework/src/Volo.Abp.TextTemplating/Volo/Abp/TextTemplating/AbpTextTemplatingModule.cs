@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating
 {
+    [DependsOn(
+        typeof(AbpVirtualFileSystemModule)
+        )]
     public class AbpTextTemplatingModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

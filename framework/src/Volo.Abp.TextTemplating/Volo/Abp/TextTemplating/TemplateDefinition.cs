@@ -22,15 +22,12 @@ namespace Volo.Abp.TextTemplating
         [CanBeNull]
         public string DefaultCultureName { get; }
 
-        public bool SingleTemplateFile { get; } //TODO: ???
-
         public TemplateDefinition(
             [NotNull] string name, 
             Type localizationResource = null, 
             bool isLayout = false,
             string layout = DefaultLayoutPlaceHolder, 
-            string defaultCultureName = null, 
-            bool singleTemplateFile = false)
+            string defaultCultureName = null)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             LocalizationResource = localizationResource;
@@ -38,7 +35,12 @@ namespace Volo.Abp.TextTemplating
             IsLayout = isLayout;
             Layout = layout;
             DefaultCultureName = defaultCultureName;
-            SingleTemplateFile = singleTemplateFile;
+        }
+
+        public virtual TemplateDefinition AddContributor(ITemplateContributor contributor)
+        {
+            Contributors.Add(contributor);
+            return this;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating
 {
@@ -10,6 +11,12 @@ namespace Volo.Abp.TextTemplating
     )]
     public class AbpTextTemplatingTestModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<AbpTextTemplatingTestModule>("Volo.Abp.TextTemplating");
+            });
+        }
     }
 }
