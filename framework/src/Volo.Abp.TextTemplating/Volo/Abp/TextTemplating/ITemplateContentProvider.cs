@@ -9,5 +9,10 @@ namespace Volo.Abp.TextTemplating
             [NotNull] string templateName,
             [CanBeNull] string cultureName = null
         );
+
+        Task<string> GetContentOrNullAsync(
+            [NotNull] TemplateDefinition templateDefinition,
+            [CanBeNull] string cultureName = null
+        );
     }
 }

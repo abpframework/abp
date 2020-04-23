@@ -1,16 +1,26 @@
-﻿using Volo.Abp.Emailing.Templates.VirtualFiles;
+﻿using Volo.Abp.TextTemplating;
 
 namespace Volo.Abp.Emailing.Templates
 {
-    public class DefaultEmailTemplateProvider : EmailTemplateDefinitionProvider
+    public class DefaultEmailTemplateProvider : TemplateDefinitionProvider
     {
-        public override void Define(IEmailTemplateDefinitionContext context)
+        public override void Define(ITemplateDefinitionContext context)
         {
-            context.Add(new EmailTemplateDefinition(StandardEmailTemplates.DefaultLayout, defaultCultureName: "en", isLayout: true, layout: null)
-                .AddTemplateVirtualFiles("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Layout"));
+            context.Add(
+                new TemplateDefinition(
+                    StandardEmailTemplates.DefaultLayout,
+                    defaultCultureName: "en",
+                    isLayout: true,
+                    layout: null
+                ).AddVirtualFiles("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Layout")
+            );
 
-            context.Add(new EmailTemplateDefinition(StandardEmailTemplates.SimpleMessage, defaultCultureName: "en")
-                .AddTemplateVirtualFiles("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Message"));
+            context.Add(
+                new TemplateDefinition(
+                    StandardEmailTemplates.SimpleMessage,
+                    defaultCultureName: "en"
+                ).AddVirtualFiles("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Message")
+            );
         }
     }
 }

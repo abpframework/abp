@@ -15,7 +15,8 @@ namespace Volo.Abp.TextTemplating
         [CanBeNull]
         public string Layout { get; set; }
 
-        public Type LocalizationResource { get; set; } //TODO: ???
+        [CanBeNull]
+        public Type LocalizationResource { get; set; }
 
         public TemplateContributorList Contributors { get; }
 
@@ -24,7 +25,7 @@ namespace Volo.Abp.TextTemplating
 
         public TemplateDefinition(
             [NotNull] string name, 
-            Type localizationResource = null, 
+            [CanBeNull] Type localizationResource = null, 
             bool isLayout = false,
             string layout = DefaultLayoutPlaceHolder, 
             string defaultCultureName = null)

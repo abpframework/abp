@@ -15,15 +15,23 @@ namespace Volo.Abp.TextTemplating
             _templateDefinitionManager = templateDefinitionManager;
         }
 
-        public async Task<string> GetContentOrNullAsync(
+        public Task<string> GetContentOrNullAsync(
             [NotNull] string templateName, 
             [CanBeNull] string cultureName = null)
         {
             var template = _templateDefinitionManager.Get(templateName);
+            return GetContentOrNullAsync(template, cultureName);
+        }
 
-            foreach (var contributor in template.Contributors)
+        public async Task<string> GetContentOrNullAsync(
+            [NotNull] TemplateDefinition templateDefinition,
+            [CanBeNull] string cultureName = null)
+        {
+            Check.NotNull(templateDefinition, nameof(templateDefinition));
+
+            foreach (var contributor in templateDefinition.Contributors)
             {
-                var templateString = contributor.GetOrNull(cultureName);
+                var templateString = contributor.GetOrNull(cultureName); //TODO: GetOrNull should be async!
                 if (templateString != null)
                 {
                     return templateString;
@@ -31,7 +39,7 @@ namespace Volo.Abp.TextTemplating
             }
 
             throw new AbpException(
-                $"None of the template contributors could get the content for the template '{templateName}'"
+                $"None of the template contributors could get the content for the template '{templateDefinition.Name}'"
             );
         }
     }
