@@ -10,7 +10,7 @@ namespace Volo.Abp.TextTemplating
                 new TemplateDefinition(
                     TestTemplates.WelcomeEmail,
                     defaultCultureName: "en"
-                ).AddVirtualFiles("/SampleTemplates/WelcomeEmail")
+                ).WithVirtualFilePath("/SampleTemplates/WelcomeEmail")
             );
 
             context.Add(
@@ -18,14 +18,14 @@ namespace Volo.Abp.TextTemplating
                     TestTemplates.ForgotPasswordEmail,
                     localizationResource: typeof(TestLocalizationSource),
                     layout: TestTemplates.TestTemplateLayout1
-                ).AddVirtualFiles("/SampleTemplates/ForgotPasswordEmail.tpl")
+                ).WithVirtualFilePath("/SampleTemplates/ForgotPasswordEmail.tpl")
             );
 
             context.Add(
                 new TemplateDefinition(
                     TestTemplates.TestTemplateLayout1,
                     isLayout: true
-                ).AddVirtualFiles("/SampleTemplates/TestTemplateLayout1.tpl")
+                ).WithVirtualFilePath("/SampleTemplates/TestTemplateLayout1.tpl")
             );
         }
     }

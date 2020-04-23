@@ -15,13 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Emailing\Templates\DefaultEmailTemplates\*\*.tpl" />
-    <None Remove="Volo\Abp\Emailing\Templates\DefaultEmailTemplates\*\*.tpl" />
+    <Content Remove="Volo\Abp\Emailing\Localization\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Volo\Abp\Emailing\Localization\*.json" />
-    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
+    <Content Remove="Volo\Abp\Emailing\Templates\**\*.tpl" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\Templates\**\*.tpl" />
   </ItemGroup>
 
   <ItemGroup>

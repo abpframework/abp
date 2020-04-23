@@ -36,7 +36,7 @@ namespace Volo.Abp.TextTemplating
             DefaultCultureName = defaultCultureName;
         }
 
-        public virtual TemplateDefinition AddContributor(ITemplateContributor contributor)
+        public virtual TemplateDefinition WithContributor(ITemplateContributor contributor)
         {
             Contributors.Add(contributor);
             return this;

@@ -8,18 +8,18 @@ namespace Volo.Abp.Emailing.Templates
         {
             context.Add(
                 new TemplateDefinition(
-                    StandardEmailTemplates.DefaultLayout,
+                    StandardEmailTemplates.Layout,
                     defaultCultureName: "en",
-                    isLayout: true,
-                    layout: null
-                ).AddVirtualFiles("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Layout")
+                    isLayout: true
+                ).WithVirtualFilePath("/Volo/Abp/Emailing/Templates/Layout")
             );
 
             context.Add(
                 new TemplateDefinition(
-                    StandardEmailTemplates.SimpleMessage,
-                    defaultCultureName: "en"
-                ).AddVirtualFiles("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Message")
+                    StandardEmailTemplates.Message,
+                    defaultCultureName: "en",
+                    layout: StandardEmailTemplates.Layout
+                ).WithVirtualFilePath("/Volo/Abp/Emailing/Templates/Message")
             );
         }
     }
