@@ -1,9 +1,13 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
 using Scriban;
+using Scriban.Runtime;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.TextTemplating
 {
@@ -14,8 +18,8 @@ namespace Volo.Abp.TextTemplating
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
         public TemplateRenderer(
-            ITemplateContentProvider templateContentProvider, 
-            ITemplateDefinitionManager templateDefinitionManager, 
+            ITemplateContentProvider templateContentProvider,
+            ITemplateDefinitionManager templateDefinitionManager,
             IStringLocalizerFactory stringLocalizerFactory)
         {
             _templateContentProvider = templateContentProvider;
@@ -30,43 +34,111 @@ namespace Volo.Abp.TextTemplating
         {
             Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
-            var templateDefinition = _templateDefinitionManager.Get(templateName);
-
-            var content = await _templateContentProvider.GetContentOrNullAsync(
-                templateDefinition,
-                cultureName
-            );
-
-            if (templateDefinition.LocalizationResource != null)
+            if (cultureName == null)
             {
-                var localizer = _stringLocalizerFactory.Create(templateDefinition.LocalizationResource);
-                content = Localize(localizer, content);
+                cultureName = CultureInfo.CurrentUICulture.Name;
             }
 
-            var renderedContent = await Template.Parse(content).RenderAsync(model);
+            using (CultureHelper.Use(cultureName))
+            {
+                return await RenderInternalAsync(
+                    templateName,
+                    new Dictionary<string, object>(),
+                    model
+                );
+            }
+        }
+
+        private async Task<string> RenderInternalAsync(
+            string templateName,
+            Dictionary<string, object> globalContext,
+            object model = null)
+        {
+            var templateDefinition = _templateDefinitionManager.Get(templateName);
+
+            var renderedContent = await RenderSingleTemplateAsync(
+                templateDefinition,
+                globalContext,
+                model
+            );
 
             if (templateDefinition.Layout != null)
             {
-                renderedContent = await RenderAsync(
+                globalContext["content"] = renderedContent;
+                renderedContent = await RenderInternalAsync(
                     templateDefinition.Layout,
-                    new
-                    {
-                        content = renderedContent
-                    },
-                    cultureName: cultureName
+                    globalContext
                 );
             }
 
             return renderedContent;
         }
 
-        public string Localize(IStringLocalizer localizer, string text)
+        private async Task<string> RenderSingleTemplateAsync(
+            TemplateDefinition templateDefinition,
+            Dictionary<string, object> globalContext,
+            object model = null)
         {
-            return new Regex("\\{\\{#L:.+?\\}\\}")
-                .Replace(
-                    text,
-                    match => localizer[match.Value.Substring(5, match.Length - 7)]
+            var rawTemplateContent = await _templateContentProvider
+                .GetContentOrNullAsync(
+                    templateDefinition
                 );
+
+            return await RenderTemplateContentWithScribanAsync(
+                templateDefinition,
+                rawTemplateContent,
+                globalContext,
+                model
+            );
+        }
+
+        protected virtual async Task<string> RenderTemplateContentWithScribanAsync(
+            TemplateDefinition templateDefinition,
+            string templateContent,
+            Dictionary<string, object> globalContext,
+            object model = null)
+        {
+            var context = CreateScribanTemplateContext(
+                templateDefinition,
+                globalContext,
+                model
+            );
+
+            return await Template
+                    .Parse(templateContent)
+                    .RenderAsync(context);
+        }
+
+        protected virtual TemplateContext CreateScribanTemplateContext(
+            TemplateDefinition templateDefinition,
+            Dictionary<string, object> globalContext,
+            object model = null)
+        {
+            var context = new TemplateContext();
+
+            var scriptObject = new ScriptObject();
+
+            scriptObject.Import(globalContext);
+
+            if (model != null)
+            {
+                scriptObject["model"] = model;
+            }
+
+            if (templateDefinition.LocalizationResource != null)
+            {
+                var localizer = _stringLocalizerFactory.Create(templateDefinition.LocalizationResource);
+                scriptObject.Import(
+                    "l",
+                    new Func<string, string>(
+                        name => localizer[name]
+                    )
+                );
+            }
+
+            context.PushGlobal(scriptObject);
+
+            return context;
         }
     }
 }

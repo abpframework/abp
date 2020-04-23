@@ -15,16 +15,6 @@ namespace Volo.Abp.TextTemplating
         }
 
         [Fact]
-        public async Task Should_Get_Rendered_Non_Localized_Template_Content()
-        {
-            var content = await _templateRenderer.RenderAsync(
-                TestTemplates.ForgotPasswordEmail
-            );
-
-            content.ShouldBe("Please click to the following link to get an email to reset your password!");
-        }
-
-        [Fact]
         public async Task Should_Get_Rendered_Localized_Template_Content_With_Different_Cultures()
         {
             (await _templateRenderer.RenderAsync(
@@ -84,6 +74,20 @@ namespace Volo.Abp.TextTemplating
                 model: new Dictionary<string, object>() { { "name", "John" } },
                 cultureName: "en"
             )).ShouldBe("Welcome John to the abp.io!");
+        }
+
+        [Fact]
+        public async Task Should_Get_Rendered_Inline_Localized_Template()
+        {
+            (await _templateRenderer.RenderAsync(
+                TestTemplates.ForgotPasswordEmail,
+                cultureName: "en"
+            )).ShouldBe("*BEGIN*Hello. Please click to the following link to get an email to reset your password!*END*");
+
+            (await _templateRenderer.RenderAsync(
+                TestTemplates.ForgotPasswordEmail,
+                cultureName: "tr"
+            )).ShouldBe("*BEGIN*Merhaba. Please click to the following link to get an email to reset your password!*END*");
         }
 
         private class WelcomeEmailModel

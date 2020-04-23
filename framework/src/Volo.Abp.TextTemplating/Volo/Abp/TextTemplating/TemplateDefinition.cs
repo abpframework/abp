@@ -5,8 +5,6 @@ namespace Volo.Abp.TextTemplating
 {
     public class TemplateDefinition
     {
-        public const string DefaultLayoutPlaceHolder = "_";
-
         [NotNull]
         public string Name { get; }
 
@@ -27,7 +25,7 @@ namespace Volo.Abp.TextTemplating
             [NotNull] string name, 
             [CanBeNull] Type localizationResource = null, 
             bool isLayout = false,
-            string layout = DefaultLayoutPlaceHolder, 
+            string layout = null, 
             string defaultCultureName = null)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));

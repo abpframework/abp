@@ -1,1 +1,1 @@
-﻿Welcome {{name}} to the abp.io!
+﻿Welcome {{model.name}} to the abp.io!

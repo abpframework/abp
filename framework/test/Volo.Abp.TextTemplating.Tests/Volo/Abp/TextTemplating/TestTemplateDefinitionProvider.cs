@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.TextTemplating
+﻿using Volo.Abp.TextTemplating.Localization;
+
+namespace Volo.Abp.TextTemplating
 {
     public class TestTemplateDefinitionProvider : TemplateDefinitionProvider
     {
@@ -13,13 +15,18 @@
 
             context.Add(
                 new TemplateDefinition(
-                    TestTemplates.ForgotPasswordEmail
+                    TestTemplates.ForgotPasswordEmail,
+                    localizationResource: typeof(TestLocalizationSource),
+                    layout: TestTemplates.TestTemplateLayout1
                 ).AddVirtualFiles("/SampleTemplates/ForgotPasswordEmail.tpl")
             );
 
-            context.Add(new TemplateDefinition(
-                TestTemplates.TestTemplateLayout1
-            ));
+            context.Add(
+                new TemplateDefinition(
+                    TestTemplates.TestTemplateLayout1,
+                    isLayout: true
+                ).AddVirtualFiles("/SampleTemplates/TestTemplateLayout1.tpl")
+            );
         }
     }
 }

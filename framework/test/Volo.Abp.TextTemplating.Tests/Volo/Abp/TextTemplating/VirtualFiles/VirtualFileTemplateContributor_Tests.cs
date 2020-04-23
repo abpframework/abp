@@ -21,11 +21,11 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
             contributor
                 .GetOrNull("en")
-                .ShouldBe("Welcome {{name}} to the abp.io!");
+                .ShouldBe("Welcome {{model.name}} to the abp.io!");
 
             contributor
                 .GetOrNull("tr")
-                .ShouldBe("Merhaba {{name}}, abp.io'ya hoşgeldiniz!");
+                .ShouldBe("Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!");
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
             contributor
                 .GetOrNull()
-                .ShouldBe("Please click to the following link to get an email to reset your password!");
+                .ShouldBe("{{l \"HelloText\"}}. Please click to the following link to get an email to reset your password!");
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Volo.Abp.Autofac;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.TextTemplating.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating
@@ -7,7 +9,8 @@ namespace Volo.Abp.TextTemplating
     [DependsOn(
         typeof(AbpTextTemplatingModule),
         typeof(AbpTestBaseModule),
-        typeof(AbpAutofacModule)
+        typeof(AbpAutofacModule),
+        typeof(AbpLocalizationModule)
     )]
     public class AbpTextTemplatingTestModule : AbpModule
     {
@@ -16,6 +19,13 @@ namespace Volo.Abp.TextTemplating
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpTextTemplatingTestModule>("Volo.Abp.TextTemplating");
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<TestLocalizationSource>("en")
+                    .AddVirtualJson("/Localization");
             });
         }
     }
