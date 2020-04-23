@@ -30,7 +30,8 @@ namespace Volo.Abp.TextTemplating
         public virtual async Task<string> RenderAsync(
             [NotNull] string templateName,
             [CanBeNull] object model = null,
-            [CanBeNull] string cultureName = null)
+            [CanBeNull] string cultureName = null,
+            [CanBeNull] Dictionary<string, object> globalContext = null)
         {
             Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
@@ -43,7 +44,7 @@ namespace Volo.Abp.TextTemplating
             {
                 return await RenderInternalAsync(
                     templateName,
-                    new Dictionary<string, object>(),
+                    globalContext ?? new Dictionary<string, object>(),
                     model
                 );
             }
