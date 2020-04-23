@@ -10,7 +10,7 @@ namespace Volo.Abp.TextTemplating
 {
     public class TemplateDefinitionManager : ITemplateDefinitionManager, ISingletonDependency
     {
-        protected Lazy<IDictionary<string, TemplateDefinition>> EmailTemplateDefinitions { get; }
+        protected Lazy<IDictionary<string, TemplateDefinition>> TemplateDefinitions { get; }
 
         protected AbpTextTemplatingOptions Options { get; }
 
@@ -23,7 +23,7 @@ namespace Volo.Abp.TextTemplating
             ServiceProvider = serviceProvider;
             Options = options.Value;
 
-            EmailTemplateDefinitions =
+            TemplateDefinitions =
                 new Lazy<IDictionary<string, TemplateDefinition>>(CreateEmailTemplateDefinitions, true);
         }
 
@@ -43,12 +43,12 @@ namespace Volo.Abp.TextTemplating
 
         public virtual IReadOnlyList<TemplateDefinition> GetAll()
         {
-            return EmailTemplateDefinitions.Value.Values.ToImmutableList();
+            return TemplateDefinitions.Value.Values.ToImmutableList();
         }
 
         public virtual TemplateDefinition GetOrNull(string name)
         {
-            return EmailTemplateDefinitions.Value.GetOrDefault(name);
+            return TemplateDefinitions.Value.GetOrDefault(name);
         }
 
         protected virtual IDictionary<string, TemplateDefinition> CreateEmailTemplateDefinitions()
