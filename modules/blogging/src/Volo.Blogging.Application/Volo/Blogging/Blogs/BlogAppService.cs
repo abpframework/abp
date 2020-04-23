@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -32,6 +33,13 @@ namespace Volo.Blogging.Blogs
 
             if (blog == null)
             {
+                FileInfo fi = new FileInfo(shortName);
+
+                if (!string.IsNullOrEmpty(fi.Extension))
+                {
+                    return null;
+                }
+
                 throw new EntityNotFoundException(typeof(Blog), shortName);
             }
 
