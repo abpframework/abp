@@ -129,6 +129,13 @@
   dependencies:
     just-compare "^1.3.0"
 
+"@abp/utils@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-2.6.0.tgz#ca174b19f74594a0ae8d64f56b032f07b9168ed1"
+  integrity sha512-ABQUgFHbv8ktGR+tKx/1s+5a9JHuBwUVAy/Hn8OjbEDoSK73UHoapfFSShF/x12dWDKLcpvErmeiASiXb+soCw==
+  dependencies:
+    just-compare "^1.3.0"
+
 "@angular-builders/jest@^8.2.0":
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/@angular-builders/jest/-/jest-8.3.2.tgz#669c350c9df2e3afc9ae048c5067759c36113728"
