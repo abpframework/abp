@@ -156,7 +156,7 @@ services.AddApplication<AppModule>(options =>
 });
 ````
 
-4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器)：
+4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器):
 
  ````csharp
 public class Program

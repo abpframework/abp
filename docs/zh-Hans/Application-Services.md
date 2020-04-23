@@ -380,4 +380,4 @@ public class DistrictKey
 
 ### 生命周期
 
-应用服务的生命周期是[transient](Dependency-Injection)的，它们会自动注册到依赖注入系统.
+应用服务的生命周期是[transient](Dependency-Injection)的,它们会自动注册到依赖注入系统.
