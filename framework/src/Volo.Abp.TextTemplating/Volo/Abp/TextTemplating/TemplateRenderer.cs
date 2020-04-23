@@ -35,10 +35,7 @@ namespace Volo.Abp.TextTemplating
         {
             Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
-            if (cultureName == null)
-            {
-                cultureName = CultureInfo.CurrentUICulture.Name;
-            }
+            cultureName ??= CultureInfo.CurrentUICulture.Name;
 
             using (CultureHelper.Use(cultureName))
             {
