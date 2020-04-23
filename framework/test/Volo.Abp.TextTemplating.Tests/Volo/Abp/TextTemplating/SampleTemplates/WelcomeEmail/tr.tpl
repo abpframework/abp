@@ -1,1 +1,1 @@
-﻿abp.io'ya hoşgeldiniz!
+﻿Merhaba {{name}}, abp.io'ya hoşgeldiniz!

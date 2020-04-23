@@ -1,1 +1,1 @@
-﻿Welcome to the abp.io!
+﻿Welcome {{name}} to the abp.io!

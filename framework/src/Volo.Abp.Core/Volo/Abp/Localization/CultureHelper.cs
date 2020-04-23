@@ -29,5 +29,12 @@ namespace Volo.Abp.Localization
                 CultureInfo.CurrentUICulture = currentUiCulture;
             });
         }
+
+        public static string GetBaseCultureName(string cultureName)
+        {
+            return cultureName.Contains("-")
+                ? cultureName.Left(cultureName.IndexOf("-", StringComparison.Ordinal))
+                : cultureName;
+        }
     }
 }

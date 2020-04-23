@@ -21,11 +21,11 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
             contributor
                 .GetOrNull("en")
-                .ShouldBe("Welcome to the abp.io!");
+                .ShouldBe("Welcome {{name}} to the abp.io!");
 
             contributor
                 .GetOrNull("tr")
-                .ShouldBe("abp.io'ya hoşgeldiniz!");
+                .ShouldBe("Merhaba {{name}}, abp.io'ya hoşgeldiniz!");
         }
 
         [Fact]

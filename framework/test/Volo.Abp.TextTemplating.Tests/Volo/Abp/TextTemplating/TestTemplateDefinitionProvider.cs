@@ -6,7 +6,8 @@
         {
             context.Add(
                 new TemplateDefinition(
-                    TestTemplates.WelcomeEmail
+                    TestTemplates.WelcomeEmail,
+                    defaultCultureName: "en"
                 ).AddVirtualFiles("/SampleTemplates/WelcomeEmail")
             );
 

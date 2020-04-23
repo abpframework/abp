@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.TextTemplating
@@ -14,7 +15,9 @@ namespace Volo.Abp.TextTemplating
             _templateDefinitionManager = templateDefinitionManager;
         }
 
-        public async Task<string> GetContentOrNullAsync(string templateName, string cultureName)
+        public async Task<string> GetContentOrNullAsync(
+            [NotNull] string templateName, 
+            [CanBeNull] string cultureName = null)
         {
             var template = _templateDefinitionManager.Get(templateName);
 

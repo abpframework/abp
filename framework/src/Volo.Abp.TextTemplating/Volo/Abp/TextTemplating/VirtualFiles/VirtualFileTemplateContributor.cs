@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Volo.Abp.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
 {
     public class VirtualFileTemplateContributor : ITemplateContributor
     {
+        public TemplateDefinition TemplateDefinition { get; private set; }
+
         private readonly string _virtualPath;
         private IVirtualFileProvider _virtualFileProvider;
         private volatile Dictionary<string, string> _templateDictionary;
@@ -23,21 +27,46 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         public void Initialize(TemplateContributorInitializationContext context)
         {
             _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
+            TemplateDefinition = context.TemplateDefinition;
         }
 
         public string GetOrNull([CanBeNull] string cultureName = null)
         {
-            var dictionary = GetTemplateDictionary();
+            //TODO: Refactor: Split implementation based on single file or dictionary of culture-specific contents
 
             if (cultureName == null)
             {
-                return dictionary.GetOrDefault("__default");
+                cultureName = CultureInfo.CurrentUICulture.Name;
             }
-            else
+
+            var dictionary = GetTemplateDictionary();
+
+            var content = dictionary.GetOrDefault(cultureName);
+            if (content != null)
             {
-                return dictionary.GetOrDefault(cultureName) ??
-                       dictionary.GetOrDefault("__default");
+                return content;
             }
+
+            if (cultureName.Contains("-"))
+            {
+                var baseCultureName = CultureHelper.GetBaseCultureName(cultureName);
+                content = dictionary.GetOrDefault(baseCultureName);
+                if (content != null)
+                {
+                    return content;
+                }
+            }
+
+            if (TemplateDefinition.DefaultCultureName != null)
+            {
+                content = dictionary.GetOrDefault(TemplateDefinition.DefaultCultureName);
+                if (content != null)
+                {
+                    return content;
+                }
+            }
+
+            return dictionary.GetOrDefault("__default");
         }
 
         private Dictionary<string, string> GetTemplateDictionary()
