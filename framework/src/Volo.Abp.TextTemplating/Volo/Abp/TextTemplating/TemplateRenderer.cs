@@ -50,7 +50,7 @@ namespace Volo.Abp.TextTemplating
             }
         }
 
-        private async Task<string> RenderInternalAsync(
+        protected virtual async Task<string> RenderInternalAsync(
             string templateName,
             Dictionary<string, object> globalContext,
             object model = null)
@@ -75,7 +75,7 @@ namespace Volo.Abp.TextTemplating
             return renderedContent;
         }
 
-        private async Task<string> RenderSingleTemplateAsync(
+        protected virtual async Task<string> RenderSingleTemplateAsync(
             TemplateDefinition templateDefinition,
             Dictionary<string, object> globalContext,
             object model = null)
