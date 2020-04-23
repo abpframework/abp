@@ -6,8 +6,14 @@
         {
             context.Add(
                 new TemplateDefinition(
-                    TestTemplates.TestTemplate1
+                    TestTemplates.WelcomeEmail
                 ).AddVirtualFiles("/SampleTemplates/WelcomeEmail")
+            );
+
+            context.Add(
+                new TemplateDefinition(
+                    TestTemplates.ForgotPasswordEmail
+                ).AddVirtualFiles("/SampleTemplates/ForgotPasswordEmail.tpl")
             );
 
             context.Add(new TemplateDefinition(

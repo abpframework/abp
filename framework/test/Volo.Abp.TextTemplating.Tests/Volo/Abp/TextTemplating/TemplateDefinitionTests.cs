@@ -15,8 +15,8 @@ namespace Volo.Abp.TextTemplating
         [Fact]
         public void Should_Retrieve_Template_Definition_By_Name()
         {
-            var definition = _templateDefinitionManager.Get(TestTemplates.TestTemplate1);
-            definition.Name.ShouldBe(TestTemplates.TestTemplate1);
+            var definition = _templateDefinitionManager.Get(TestTemplates.WelcomeEmail);
+            definition.Name.ShouldBe(TestTemplates.WelcomeEmail);
         }
 
         [Fact]

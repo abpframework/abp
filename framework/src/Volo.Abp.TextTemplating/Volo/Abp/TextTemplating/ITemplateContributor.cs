@@ -1,9 +1,11 @@
-﻿namespace Volo.Abp.TextTemplating
+﻿using JetBrains.Annotations;
+
+namespace Volo.Abp.TextTemplating
 {
     public interface ITemplateContributor
     {
         void Initialize(TemplateContributorInitializationContext context);
 
-        string GetOrNull(string cultureName);
+        string GetOrNull([CanBeNull] string cultureName);
     }
 }

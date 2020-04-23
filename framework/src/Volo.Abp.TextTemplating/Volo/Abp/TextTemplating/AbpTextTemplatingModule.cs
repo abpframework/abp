@@ -33,5 +33,28 @@ namespace Volo.Abp.TextTemplating
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });
         }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            //TODO: Consider to move to the TemplateContentProvider and invoke lazy (with making it singleton)
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var templateDefinitionManager = scope.ServiceProvider
+                        .GetRequiredService<ITemplateDefinitionManager>();
+
+                foreach (var templateDefinition in templateDefinitionManager.GetAll())
+                {
+                    var contributorInitializationContext = new TemplateContributorInitializationContext(
+                        templateDefinition,
+                        scope.ServiceProvider
+                    );
+
+                    foreach (var contributor in templateDefinition.Contributors)
+                    {
+                        contributor.Initialize(contributorInitializationContext);
+                    }
+                }
+            }
+        }
     }
 }
