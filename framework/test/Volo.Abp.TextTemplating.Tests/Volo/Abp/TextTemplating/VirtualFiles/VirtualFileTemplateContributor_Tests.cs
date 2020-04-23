@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System.Threading.Tasks;
+using Shouldly;
 using Xunit;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
@@ -6,7 +7,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
     public class VirtualFileTemplateContributor_Tests : AbpTextTemplatingTestBase
     {
         [Fact]
-        public void Should_Get_Localized_Content_By_Culture()
+        public async Task Should_Get_Localized_Content_By_Culture()
         {
             var contributor = new VirtualFileTemplateContributor(
                 "/SampleTemplates/WelcomeEmail"
@@ -19,17 +20,15 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 )
             );
 
-            contributor
-                .GetOrNull("en")
-                .ShouldBe("Welcome {{model.name}} to the abp.io!");
+            (await contributor
+                    .GetOrNullAsync("en")).ShouldBe("Welcome {{model.name}} to the abp.io!");
 
-            contributor
-                .GetOrNull("tr")
-                .ShouldBe("Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!");
+            (await contributor
+                    .GetOrNullAsync("tr")).ShouldBe("Merhaba {{model.name}}, abp.io'ya hoşgeldiniz!");
         }
 
         [Fact]
-        public void Should_Get_Non_Localized_Template_Content()
+        public async Task Should_Get_Non_Localized_Template_Content()
         {
             var contributor = new VirtualFileTemplateContributor(
                 "/SampleTemplates/ForgotPasswordEmail.tpl"
@@ -42,9 +41,8 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 )
             );
 
-            contributor
-                .GetOrNull()
-                .ShouldBe("{{l \"HelloText\"}}. Please click to the following link to get an email to reset your password!");
+            (await contributor
+                    .GetOrNullAsync()).ShouldBe("{{l \"HelloText\"}}. Please click to the following link to get an email to reset your password!");
         }
     }
 }

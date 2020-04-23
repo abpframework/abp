@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -30,7 +31,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             TemplateDefinition = context.TemplateDefinition;
         }
 
-        public string GetOrNull([CanBeNull] string cultureName = null)
+        public async Task<string> GetOrNullAsync([CanBeNull] string cultureName = null)
         {
             //TODO: Refactor: Split implementation based on single file or dictionary of culture-specific contents
 

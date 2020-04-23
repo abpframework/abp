@@ -31,7 +31,7 @@ namespace Volo.Abp.TextTemplating
 
             foreach (var contributor in templateDefinition.Contributors)
             {
-                var templateString = contributor.GetOrNull(cultureName); //TODO: GetOrNull should be async!
+                var templateString = await contributor.GetOrNullAsync(cultureName);
                 if (templateString != null)
                 {
                     return templateString;

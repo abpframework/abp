@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.TextTemplating
 {
@@ -6,6 +7,6 @@ namespace Volo.Abp.TextTemplating
     {
         void Initialize(TemplateContributorInitializationContext context);
 
-        string GetOrNull([CanBeNull] string cultureName);
+        Task<string> GetOrNullAsync([CanBeNull] string cultureName);
     }
 }
