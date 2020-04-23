@@ -83,10 +83,10 @@ this.confirmation.warn(
 );
 ```
 
-- `hideCancelBtn` option is the boolean value that hides or displays the "Cancel" button (hides if `true`). Default value is `false`
-- `hideYesBtn` option is the boolean value that hides or displays the "Confirm" button (hides if `true`). Default value is `false`
-- `cancelText` is the text of the "Cancel" button. A localization key or localization object can be passed. Default value is `AbpUi::Cancel`
-- `yesText` is the text of the "Confirm" button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`
+- `hideCancelBtn` option hides the cancellation button when `true`. Default value is `false`
+- `hideYesBtn` option hides the confirmation button when `true`. Default value is `false`
+- `cancelText` is the text of the cancellation button. A localization key or localization object can be passed. Default value is `AbpUi::Cancel`
+- `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`
 - `messageLocalizationParams` is the interpolation parameters for the localization of the message.
 - `titleLocalizationParams` is the interpolation parameters for the localization of the title.
 
