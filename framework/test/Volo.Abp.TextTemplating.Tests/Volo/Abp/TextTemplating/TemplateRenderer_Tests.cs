@@ -16,7 +16,9 @@ namespace Volo.Abp.TextTemplating
         [Fact]
         public async Task Should_Get_Rendered_Non_Localized_Template_Content()
         {
-            var content = await _templateRenderer.RenderAsync(TestTemplates.ForgotPasswordEmail);
+            var content = await _templateRenderer.RenderAsync(
+                TestTemplates.ForgotPasswordEmail
+            );
             content.ShouldBe("Please click to the following link to get an email to reset your password!");
         }
     }

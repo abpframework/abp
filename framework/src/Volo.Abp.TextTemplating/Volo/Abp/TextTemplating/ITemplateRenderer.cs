@@ -8,6 +8,7 @@ namespace Volo.Abp.TextTemplating
     {
         Task<string> RenderAsync(
             [NotNull] string templateName,
+            [CanBeNull] object model = null,
             [CanBeNull] string cultureName = null
         );
     }
