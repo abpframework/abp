@@ -35,10 +35,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         {
             //TODO: Refactor: Split implementation based on single file or dictionary of culture-specific contents
 
-            if (cultureName == null)
-            {
-                cultureName = CultureInfo.CurrentUICulture.Name;
-            }
+            cultureName ??= CultureInfo.CurrentUICulture.Name;
 
             var dictionary = GetTemplateDictionary();
 
