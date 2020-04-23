@@ -9,7 +9,7 @@ ABP框架遵循选项模式,并定义了用于配置框架和模块的选项类(
 ## 配置选项
 
 通常配置选项在 `Startup` 类的 `ConfigureServices` 方法中. 但由于ABP框架提供了模块化基础设施,因此你可以在[模块](Module-Development-Basics.md)的`ConfigureServices` 方法配置选项.
-例：
+例:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -34,7 +34,7 @@ public class MyOptions
 }
 ````
 
-然后开发人员可以像上面 `AbpAuditingOptions` 示例一样配置你的选项：
+然后开发人员可以像上面 `AbpAuditingOptions` 示例一样配置你的选项:
 
 ````csharp
 public override void ConfigureServices(ServiceConfigurationContext context)
@@ -80,9 +80,9 @@ public class MyService : ITransientDependency
 
 如果你正在开发一个模块,可能需要让开发者能够设置一些选项,并在依赖注入注册阶段使用这些选项. 你可能需要根据选项值配置其他服务或更改依赖注入的注册代码.
 
-对于此类情况,ABP为 `IServiceCollection` 引入了 `PreConfigure<TOptions>` 和 `ExecutePreConfiguredActions<TOptions>` 扩展方法. 该模式的工作原理如下所述。
+对于此类情况,ABP为 `IServiceCollection` 引入了 `PreConfigure<TOptions>` 和 `ExecutePreConfiguredActions<TOptions>` 扩展方法. 该模式的工作原理如下所述.
 
-1. 你的模块中定义计划选项类. 例：
+1. 你的模块中定义计划选项类. 例:
 
 ````csharp
 public class MyPreOptions
@@ -92,7 +92,7 @@ public class MyPreOptions
 ````
 
 然后任何依赖于模块的模块类都可以在其 `PreConfigureServices` 方法中使用 `PreConfigure<TOptions>` 方法.
-例：
+例:
 
 ````csharp
 public override void PreConfigureServices(ServiceConfigurationContext context)

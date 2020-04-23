@@ -125,6 +125,16 @@ removeContent(element: HTMLScriptElement | HTMLStyleElement): void
 
 - `element` 参数是已插入的 `HTMLScriptElement` 或 `HTMLStyleElement` 元素,它们应由 `insertContent` 方法返回.
 
+### has
+
+```js
+has(content: string): boolean
+```
+
+`has` 返回一个布尔值,用于表示给定的内容是否插入到DOM.
+
+- `content` 参数是 `HTMLScriptElement` 或 `HTMLStyleElement` 元素的内容.
+
 ## 下一步是什么?
 
 - [ContentProjectionService](./Content-Projection-Service.md)

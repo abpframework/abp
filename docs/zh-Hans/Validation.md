@@ -8,7 +8,7 @@ ABP增加了以下优点:
 
 * 定义 `IValidationEnabled` 向任意类添加自动验证. 所有的[应用服务](Application-Services.md)都实现了该接口,所以它们会被自动验证.
 * 自动将数据注解属性的验证错误信息本地化.
-* 提供可扩展的服务来验证方法调用或对象的状态。
+* 提供可扩展的服务来验证方法调用或对象的状态.
 * 提供[FluentValidation](https://fluentvalidation.net/)的集成.
 
 ## 验证DTO
@@ -80,7 +80,7 @@ namespace Acme.BookStore
 #### 解析服务
 
 如果你需要从[依赖注入系统](Dependency-Injection.md)解析服务,可以使用 `ValidationContext` 对象.
-例：
+例:
 
 ````csharp
 var myService = validationContext.GetRequiredService<IMyService>();
