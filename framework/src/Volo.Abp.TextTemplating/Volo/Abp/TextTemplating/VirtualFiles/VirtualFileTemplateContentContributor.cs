@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Microsoft.Extensions.FileProviders;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
@@ -20,74 +17,50 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             _virtualFileProvider = virtualFileProvider;
         }
 
-        public async Task<string> GetOrNullAsync(TemplateContentContributorContext context)
+        public virtual async Task<string> GetOrNullAsync(TemplateContentContributorContext context)
         {
-            var virtualPath = context.TemplateDefinition.Properties.GetOrDefault(VirtualPathPropertyName) as string;
-            if (virtualPath == null)
-            {
-                return null;
-            }
-
-            //TODO: Refactor: Split implementation based on single file or dictionary of culture-specific contents
-
             var cultureName = context.Culture ??
                               CultureInfo.CurrentUICulture.Name;
 
-            var dictionary = GetTemplateDictionary(virtualPath);
+            var localizedReader = await CreateLocalizedReader(context);
 
-            var content = dictionary.GetOrDefault(cultureName);
-            if (content != null)
-            {
-                return content;
-            }
-
-            if (cultureName.Contains("-"))
-            {
-                var baseCultureName = CultureHelper.GetBaseCultureName(cultureName);
-                content = dictionary.GetOrDefault(baseCultureName);
-                if (content != null)
-                {
-                    return content;
-                }
-            }
-
-            if (context.TemplateDefinition.DefaultCultureName != null)
-            {
-                content = dictionary.GetOrDefault(context.TemplateDefinition.DefaultCultureName);
-                if (content != null)
-                {
-                    return content;
-                }
-            }
-
-            return dictionary.GetOrDefault("__default");
+            return localizedReader.GetContent(
+                cultureName,
+                context.TemplateDefinition.DefaultCultureName
+            );
         }
 
-        private Dictionary<string, string> GetTemplateDictionary(string virtualPath)
+        protected async Task<ILocalizedTemplateContentReader> CreateLocalizedReader(
+            TemplateContentContributorContext context)
         {
-            var dictionary = new Dictionary<string, string>();
+            var virtualPath = context
+                .TemplateDefinition
+                .Properties
+                .GetOrDefault(VirtualPathPropertyName) as string;
+
+            if (virtualPath == null)
+            {
+                return NullLocalizedTemplateContentReader.Instance;
+            }
 
             var fileInfo = _virtualFileProvider.GetFileInfo(virtualPath);
-            if (!fileInfo.IsDirectory)
+            if (!fileInfo.Exists)
             {
-                //TODO: __default to consts
-                dictionary.Add("__default", fileInfo.ReadAsString());
-            }
-            else
-            {
-                foreach (var file in _virtualFileProvider.GetDirectoryContents(virtualPath))
-                {
-                    if (file.IsDirectory)
-                    {
-                        continue;
-                    }
-
-                    // TODO: How to normalize file names?
-                    dictionary.Add(file.Name.RemovePostFix(".tpl"), file.ReadAsString());
-                }
+                throw new AbpException("Could not find a file/folder at the location: " + virtualPath);
             }
 
-            return dictionary;
+            if (fileInfo.IsDirectory)
+            {
+                var folderReader = new FolderLocalizedTemplateContentReader();
+                await folderReader.ReadContentsAsync(_virtualFileProvider, virtualPath);
+                return folderReader;
+            }
+            else //File
+            {
+                var singleFileReader = new SingleFileLocalizedTemplateContentReader();
+                await singleFileReader.ReadContentsAsync(fileInfo);
+                return singleFileReader;
+            }
         }
     }
 }
