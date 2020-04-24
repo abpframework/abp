@@ -43,12 +43,12 @@ Configure<AbpAuditingOptions>(options =>
 * `IsEnabledForGetRequests` (默认值: `false`): HTTP GET请求通常不应该在数据库进行任何更改,审计日志系统不会为GET请求保存审计日志对象. 将此值设置为 `true` 可为GET请求启用审计日志系统.
 * `ApplicationName`: 如果有多个应用程序保存审计日志到单一的数据库,使用此属性设置为你的应用程序名称区分不同的应用程序日志.
 * `IgnoredTypes`: 审计日志系统忽略的 `Type` 列表. 如果它是实体类型,则不会保存此类型实体的更改. 在序列化操作参数时也使用此列表.
-* `EntityHistorySelectors`：选择器列表,用于确定是否选择了用于保存实体更改的实体类型. 有关详细信息请参阅下面的部分.
+* `EntityHistorySelectors`:选择器列表,用于确定是否选择了用于保存实体更改的实体类型. 有关详细信息请参阅下面的部分.
 * `Contributors`: `AuditLogContributor` 实现的列表. 贡献者是扩展审计日志系统的一种方式. 有关详细信息请参阅下面的"审计日志贡献者"部分.
 
 ### 实体历史选择器
 
-保存您的所有实体的所有变化将需要大量的数据库空间. 出于这个原因**审计日志系统不保存为实体的任何改变,除非你明确地对其进行配置**.
+保存你的所有实体的所有变化将需要大量的数据库空间. 出于这个原因**审计日志系统不保存为实体的任何改变,除非你明确地对其进行配置**.
 
 要保存的所有实体的所有更改,只需使用 `AddAllEntities()` 扩展方法.
 
@@ -131,7 +131,7 @@ public class HomeController : AbpController
 
 可以为任何类型的类(注册到[依赖注入](Dependency-Injection.md)并从依赖注入解析)启用审计日志,默认情况下仅对控制器和应用程序服务启用.
 
-对于任何需要被审计记录的类或方法都可以使用 `[Audited]` 和`IAuditingEnabled`.此外，您的类可以(直接或固有的)实现 `IAuditingEnabled` 接口以认启用该类的审计日志记录.
+对于任何需要被审计记录的类或方法都可以使用 `[Audited]` 和`IAuditingEnabled`.此外,你的类可以(直接或固有的)实现 `IAuditingEnabled` 接口以认启用该类的审计日志记录.
 
 ### 启用/禁用 实体 & 属性
 
@@ -211,8 +211,8 @@ public class MyUser : Entity<Guid>
 
 * **AuditLogInfo**: 具有以下属性:
   * `ApplicationName`: 当你保存不同的应用审计日志到同一个数据库,这个属性用来区分应用程序.
-  * `UserId`：当前用户的Id,用户未登录为 `null`.
-  * `UserName`：当前用户的用户名,如果用户已经登录(这里的值不依赖于标识模块/系统进行查找).
+  * `UserId`:当前用户的Id,用户未登录为 `null`.
+  * `UserName`:当前用户的用户名,如果用户已经登录(这里的值不依赖于标识模块/系统进行查找).
   * `TenantId`: 当前租户的Id,对于多租户应用.
   * `TenantName`: 当前租户的名称,对于多租户应用.
   * `ExecutionTime`: 审计日志对象创建的时间.
@@ -222,28 +222,28 @@ public class MyUser : Entity<Guid>
   * `ClientIpAddress`: 客户端/用户设备的IP地址.
   * `CorrelationId`: 当前[相关Id](CorrelationId.md). 相关Id用于在单个逻辑操作中关联由不同应用程序(或微服务)写入的审计日志.
   * `BrowserInfo`: 当前用户的浏览器名称/版本信息,如果有的话.
-  * `HttpMethod`: 当前HTTP请求的方法(GET，POST，PUT，DELETE ...等).
+  * `HttpMethod`: 当前HTTP请求的方法(GET,POST,PUT,DELETE ...等).
   * `HttpStatusCode`: HTTP响应状态码.
   * `Url`: 请求的URL.
 * **AuditLogActionInfo**: 一个  审计日志动作通常是web请求期间控制器动作或[应用服务](Application-Services.md)方法调用. 一个审计日志可以包含多个动作. 动作对象具有以下属性:
-  * `ServiceName`：执行的控制器/服务的名称.
-  * `MethodName`：控制器/服务执行的方法的名称.
-  * `Parameters`：传递给方法的参数的JSON格文本.
+  * `ServiceName`:执行的控制器/服务的名称.
+  * `MethodName`:控制器/服务执行的方法的名称.
+  * `Parameters`:传递给方法的参数的JSON格文本.
   * `ExecutionTime`: 执行的时间.
   * `ExecutionDuration`: 方法执行时长,以毫秒为单位. 可以用来观察方法的性能.
 * **EntityChangeInfo**: 表示一个实体在Web请求中的变更. 审计日志可以包含0个或多个实体的变更. 实体变更具有以下属性:
   * `ChangeTime`: 当实体被改变的时间.
-  * `ChangeType`：具有以下字段的枚举: `Created`(0), `Updated`(1)和 `Deleted`(2).
+  * `ChangeType`:具有以下字段的枚举: `Created`(0), `Updated`(1)和 `Deleted`(2).
   * `EntityId`: 更改实体的Id.
-  * `EntityTenantId`：实体所属的租户Id.
+  * `EntityTenantId`:实体所属的租户Id.
   * `EntityTypeFullName`: 实体的类型(类)的完整命名空间名称(例如Book实体的*Acme.BookStore.Book*.
 * **EntityPropertyChangeInfo**: 表示一个实体的属性的更改.一个实体的更改信息(上面已说明)可含有具有以下属性的一个或多个属性的更改:
   * `NewValue`: 属性的新值. 如果实体已被删除为 `null`.
-  * `OriginalValue`：变更前旧/初始值. 如果实体是新创建为 `null`.
+  * `OriginalValue`:变更前旧/初始值. 如果实体是新创建为 `null`.
   * `PropertyName`: 实体类的属性名称.
-  * `PropertyTypeFullName`：属性类型的完整命名空间名称.
+  * `PropertyTypeFullName`:属性类型的完整命名空间名称.
 * **Exception**: 审计日志对象可能包含零个或多个异常. 可以得到失败请求的异常信息.
-* **Comment**：用于将自定义消息添加到审计日志条目的任意字符串值. 审计日志对象可能包含零个或多个注释.
+* **Comment**:用于将自定义消息添加到审计日志条目的任意字符串值. 审计日志对象可能包含零个或多个注释.
 
 除了上面说明的标准属性之外,`AuditLogInfo`, `AuditLogActionInfo` 和 `EntityChangeInfo` 对象还实现了`IHasExtraProperties` 接口,你可以向这些对象添加自定义属性.
 
@@ -331,7 +331,7 @@ public class MyService : ITransientDependency
 ### 手动创建审计日志范围
 
 你很少需要手动创建审计日志的范围,但如果你需要,可以使用 `IAuditingManager` 创建审计日志的范围.
-例：
+例:
 
 ````csharp
 public class MyService : ITransientDependency
@@ -366,7 +366,7 @@ public class MyService : ITransientDependency
 }
 ````
 
-您可以调用其他服务,它们可能调用其他服务,它们可能更改实体,等等. 所有这些交互都保存为finally块中的一个审计日志对象.
+你可以调用其他服务,它们可能调用其他服务,它们可能更改实体,等等. 所有这些交互都保存为finally块中的一个审计日志对象.
 
 ## 审计日志模块
 

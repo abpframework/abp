@@ -60,6 +60,7 @@ In most cases, you will want to change one or a few methods of the current imple
 
 ````csharp
 [Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...
@@ -160,6 +161,105 @@ Check the [localization system](Localization.md) to learn how to localize the er
 ### Overriding Other Classes
 
 Overriding controllers, framework services, view component classes and any other type of classes registered to dependency injection can be overridden just like the examples above.
+
+## Extending Data Transfer Objects
+
+**Extending [entities](Entities.md)** is possible as described in the [Extending Entities document](Customizing-Application-Modules-Extending-Entities.md). In this way, you can add **custom properties** to entities and perform **additional business logic** by overriding the related services as described above.
+
+It is also possible to extend Data Transfer Objects (**DTOs**) used by the application services. In this way, you can get extra properties from the UI (or client) and return extra properties from the service.
+
+### Example
+
+Assuming that you've already added a `SocialSecurityNumber` as described in the [Extending Entities document](Customizing-Application-Modules-Extending-Entities.md) and want to include this information while getting the list of users from the `GetListAsync`  method of the `IdentityUserAppService`.
+
+You can use the [object extension system](Object-Extensions.md) to add the property to the `IdentityUserDto`. Write this code inside the `YourProjectNameDtoExtensions` class comes with the application startup template:
+
+````csharp
+ObjectExtensionManager.Instance                    
+    .AddOrUpdateProperty<IdentityUserDto, string>(
+        "SocialSecurityNumber"
+    );
+````
+
+This code defines a `SocialSecurityNumber` to the `IdentityUserDto` class as a `string` type. That's all. Now, if you call the `/api/identity/users` HTTP API (which uses the `IdentityUserAppService` internally) from a REST API client, you will see the `SocialSecurityNumber` value in the `extraProperties` section.
+
+````json
+{
+    "totalCount": 1,
+    "items": [{
+        "tenantId": null,
+        "userName": "admin",
+        "name": "admin",
+        "surname": null,
+        "email": "admin@abp.io",
+        "emailConfirmed": false,
+        "phoneNumber": null,
+        "phoneNumberConfirmed": false,
+        "twoFactorEnabled": false,
+        "lockoutEnabled": true,
+        "lockoutEnd": null,
+        "concurrencyStamp": "b4c371a0ab604de28af472fa79c3b70c",
+        "isDeleted": false,
+        "deleterId": null,
+        "deletionTime": null,
+        "lastModificationTime": "2020-04-09T21:25:47.0740706",
+        "lastModifierId": null,
+        "creationTime": "2020-04-09T21:25:46.8308744",
+        "creatorId": null,
+        "id": "8edecb8f-1894-a9b1-833b-39f4725db2a3",
+        "extraProperties": {
+            "SocialSecurityNumber": "123456789"
+        }
+    }]
+}
+````
+
+Manually added the `123456789` value to the database for now.
+
+All pre-built modules support extra properties in their DTOs, so you can configure easily.
+
+### Definition Check
+
+When you [define](Customizing-Application-Modules-Extending-Entities.md) an extra property for an entity, it doesn't automatically appear in all the related DTOs, because of the security. The extra property may contain a sensitive data and you may not want to expose it to the clients by default.
+
+So, you need to explicitly define the same property for the corresponding DTO if you want to make it available for the DTO (as just done above). If you want to allow to set it on user creation, you also need to define it for the `IdentityUserCreateDto`.
+
+If the property is not so secure, this can be tedious. Object extension system allows you to ignore this definition check for a desired property. See the example below:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.MapEfCore(b => b.HasMaxLength(32));
+            options.CheckPairDefinitionOnMapping = false;
+        }
+    );
+````
+
+This is another approach to define a property for an entity (`ObjectExtensionManager` has more, see [its document](Object-Extensions.md)). This time, we set `CheckPairDefinitionOnMapping` to false to skip definition check while mapping entities to DTOs and vice verse.
+
+If you don't like this approach but want to add a single property to multiple objects (DTOs) easier, `AddOrUpdateProperty` can get an array of types to add the extra property:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<string>(
+        new[]
+        {
+            typeof(IdentityUserDto), 
+            typeof(IdentityUserCreateDto), 
+            typeof(IdentityUserUpdateDto)
+        },
+        "SocialSecurityNumber"
+    );
+````
+
+### About the User Interface
+
+This system allows you to add extra properties to entities and DTOs and execute custom business code, however it does nothing related to the User Interface.
+
+See [Overriding the User Interface](Customizing-Application-Modules-Overriding-User-Interface.md) guide for the UI part.
 
 ## How to Find the Services?
 

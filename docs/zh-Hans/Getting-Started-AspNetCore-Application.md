@@ -156,7 +156,7 @@ services.AddApplication<AppModule>(options =>
 });
 ````
 
-4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器)：
+4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器):
 
  ````csharp
 public class Program
@@ -186,4 +186,4 @@ public class Program
 
 ### 源码
 
-从[此处](https://github.com/abpframework/abp/tree/dev/samples/BasicAspNetCoreApplication)获取本教程中创建的示例项目的源代码.
+从[此处](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)获取本教程中创建的示例项目的源代码.

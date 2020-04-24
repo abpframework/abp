@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -20,9 +21,19 @@ namespace Volo.Abp.Quartz
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpQuartzPreOptions>>().Value;
+            
             _scheduler = context.ServiceProvider.GetService<IScheduler>();
             _scheduler.JobFactory = context.ServiceProvider.GetService<IJobFactory>();
-            AsyncHelper.RunSync(() => _scheduler.Start());
+            
+            if (options.StartDelay.Ticks > 0)
+            {
+                AsyncHelper.RunSync(() => _scheduler.StartDelayed(options.StartDelay));
+            }
+            else
+            {
+                AsyncHelper.RunSync(() => _scheduler.Start());
+            }
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)

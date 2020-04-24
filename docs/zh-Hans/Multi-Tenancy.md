@@ -172,11 +172,11 @@ namespace MyCompany.MyProject
             {
                 options.Tenants = new[]
                 {
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"), //Id
                         "tenant1" //Name
                     ),
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"), //Id
                         "tenant2" //Name
                     )
@@ -252,7 +252,7 @@ TODO: This package implements ITenantStore using a real database...
 
 #### 租户信息
 
-ITenantStore跟 **TenantInformation**类一起工作,并且包含了几个租户属性:
+ITenantStore跟 **TenantConfiguration**类一起工作,并且包含了几个租户属性:
 
 * **Id**:租户的唯一Id.
 * **Name**: 租户的唯一名称.

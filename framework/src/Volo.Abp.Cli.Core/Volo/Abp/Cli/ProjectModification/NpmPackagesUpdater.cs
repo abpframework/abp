@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.IO;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
@@ -55,7 +56,14 @@ namespace Volo.Abp.Cli.ProjectModification
 
                     if (IsAngularProject(fileDirectory))
                     {
-                        await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
+                        if (includePreviews)
+                        {
+                            await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
+                        }
+                        else if (switchToStable)
+                        {
+                            await DeleteNpmrcFileAsync(Path.GetDirectoryName(file));
+                        }
                     }
 
                     RunYarn(fileDirectory);
@@ -69,11 +77,18 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
+        private async Task DeleteNpmrcFileAsync(string directoryName)
+        {
+            FileHelper.DeleteIfExists(Path.Combine(directoryName, ".npmrc"));
+
+            await Task.CompletedTask;
+        }
+
         private async Task CreateNpmrcFileAsync(string directoryName)
         {
             var fileName = Path.Combine(directoryName, ".npmrc");
 
-            var abpRegistry = "@abp:registry:https://www.myget.org/F/abp-nightly/npm";
+            var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
             var voloRegistry = await GetVoloRegistryAsync();
 
             if (File.Exists(fileName))

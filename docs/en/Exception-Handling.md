@@ -315,8 +315,8 @@ The `context` object contains necessary information about the exception occurred
 
 Some exception types are automatically thrown by the framework:
 
-- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See authorization document (TODO: link) for more.
-- `AbpValidationException` is thrown if the input of the current request is not valid. See validation document (TODO: link) for more.
+- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See [authorization](Authorization.md) for more.
+- `AbpValidationException` is thrown if the input of the current request is not valid. See [validation](Validation.md) for more.
 - `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
 
 You can also throw these type of exceptions in your code (although it's rarely needed).

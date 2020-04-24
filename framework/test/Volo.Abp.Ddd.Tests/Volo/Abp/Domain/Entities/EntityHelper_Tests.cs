@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Shouldly;
 using Xunit;
 
@@ -33,6 +34,15 @@ namespace Volo.Abp.Domain.Entities
             myEntityDisablesIdGeneration.Id.ShouldBe(default);
         }
 
+        [Fact]
+        public static void SetId_NewIdFromBaseClass()
+        {
+            var idValue = Guid.NewGuid();
+            var myNewIdEntity = new NewIdEntity();
+            EntityHelper.TrySetId(myNewIdEntity, () => idValue, true);
+            myNewIdEntity.Id.ShouldBe(idValue);
+        }
+
         private class MyEntityDerivedFromAggregateRoot : AggregateRoot<Guid>
         {
 
@@ -52,6 +62,15 @@ namespace Volo.Abp.Domain.Entities
         {
             [DisableIdGeneration]
             public override Guid Id { get; protected set; }
+        }
+        
+        public class NewIdEntity : Entity<Guid>
+        {
+            public new Guid Id
+            {
+                get => base.Id;
+                set => base.Id = value;
+            }
         }
     }
 }

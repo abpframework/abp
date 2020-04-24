@@ -1,0 +1,20 @@
+{
+  "culture": "ru",
+  "texts": {
+    "Menu:TenantManagement": "Управление арендаторами",
+    "Tenants": "Арендаторы",
+    "NewTenant": "Новый арендатор",
+    "TenantName": "Имя арендатора",
+    "DisplayName:TenantName": "Имя арендатора",
+    "TenantDeletionConfirmationMessage": "Арендатор '{0}' будет удален. Вы подтверждаете это?",
+    "ConnectionStrings": "Строки подключения",
+    "DisplayName:DefaultConnectionString": "Строка подключения по умолчанию",
+    "DisplayName:UseSharedDatabase": "Использование общей базы данных",
+    "Permission:TenantManagement": "Управление арендаторами",
+    "Permission:Create": "Создать",
+    "Permission:Edit": "Редактировать",
+    "Permission:Delete": "Удалить",
+    "Permission:ManageConnectionStrings": "Управление строками подключения",
+    "Permission:ManageFeatures": "Управление функциями"
+  }
+}

@@ -14,7 +14,7 @@
 
 ### 解决方案中的测试项目
 
-解决方案中有多个测试项目：
+解决方案中有多个测试项目:
 
 ![bookstore-test-projects-v2](images/bookstore-test-projects-v2.png)
 
@@ -68,7 +68,7 @@ namespace Acme.BookStore
 ````
 
 * 注入`IRepository<Book,Guid>`并在`SeedAsync`中使用它来创建两个书实体作为测试数据.
-* 使用`IGuidGenerator`服务创建GUID. 虽然`Guid.NewGuid()`非常适合测试，但`IGuidGenerator`在使用真实数据库时还有其他特别重要的功能(参见[Guid生成文档](../../../Guid-Generation.md)了解更多信息).
+* 使用`IGuidGenerator`服务创建GUID. 虽然`Guid.NewGuid()`非常适合测试,但`IGuidGenerator`在使用真实数据库时还有其他特别重要的功能(参见[Guid生成文档](../../../Guid-Generation.md)了解更多信息).
 
 ### 测试 BookAppService
 

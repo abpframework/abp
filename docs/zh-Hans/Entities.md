@@ -72,7 +72,7 @@ public class BookAppService : ApplicationService, IBookAppService
 
 * `BookAppService` 注入图书实体的默认[仓库](Repositories.md),使用`InsertAsync`方法插入 `Book` 到数据库中.
 * `GuidGenerator`类型是 `IGuidGenerator`,它是在`ApplicationService`基类中定义的属性. ABP将这样常用属性预注入,所以不需要手动[注入](Dependency-Injection.md).
-* 如果您想遵循DDD最佳实践，请参阅下面的*聚合示例*部分.
+* 如果你想遵循DDD最佳实践,请参阅下面的*聚合示例*部分.
 
 ### 具有复合键的实体
 
@@ -228,7 +228,7 @@ ABP框架不强制你应用任何DDD规则或模式.但是,当你准备应用的
 
 ## 基类和接口的审计属性
 
-有一些属性,像`CreationTime`，`CreatorId`，`LastModificationTime`...在所有应用中都很常见. ABP框架提供了一些接口和基类来**标准化**这些属性,并**自动设置它们的值**.
+有一些属性,像`CreationTime`,`CreatorId`,`LastModificationTime`...在所有应用中都很常见. ABP框架提供了一些接口和基类来**标准化**这些属性,并**自动设置它们的值**.
 
 ### 审计接口
 
@@ -285,7 +285,7 @@ ABP框架不强制你应用任何DDD规则或模式.但是,当你准备应用的
 
 所有这些基类都有非泛型版本,可以使用 `AuditedEntity` 和 `FullAuditedAggregateRoot` 来支持复合主键;
 
-所有这些基类也有 `... WithUser`，像 `FullAuditedAggregateRootWithUser<TUser>` 和 `FullAuditedAggregateRootWithUser<TKey, TUser>`. 这样就可以将导航属性添加到你的用户实体. 但在聚合根之间添加导航属性不是一个好做法,所以这种用法是不建议的(除非你使用EF Core之类的ORM可以很好地支持这种情况,并且你真的需要它. 请记住这种方法不适用于NoSQL数据库(如MongoDB),你必须真正实现聚合模式）.
+所有这些基类也有 `... WithUser`,像 `FullAuditedAggregateRootWithUser<TUser>` 和 `FullAuditedAggregateRootWithUser<TKey, TUser>`. 这样就可以将导航属性添加到你的用户实体. 但在聚合根之间添加导航属性不是一个好做法,所以这种用法是不建议的(除非你使用EF Core之类的ORM可以很好地支持这种情况,并且你真的需要它. 请记住这种方法不适用于NoSQL数据库(如MongoDB),你必须真正实现聚合模式）.
 
 ## 额外的属性
 
@@ -379,7 +379,7 @@ public static class IdentityUserExtensions
 * 这些属性**不容易[自动映射](Object-To-Object-Mapping.md)到其他对象**.
 * 它**不会**为EF Core在数据库表中**创建字段**,因此在数据库中针对这个字段创建索引或搜索/排序并不容易.
 
-###　额外属性背后的实体
+### 额外属性背后的实体
 
 `IHasExtraProperties` 不限于与实体一起使用. 你可以为任何类型的类实现这个接口,使用 `GetProperty`,`SetProperty` 和其他相关方法.
 

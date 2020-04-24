@@ -39,6 +39,7 @@
     "PagerFirst": "První",
     "PagerLast": "Poslední",
     "PagerInfo": "Zobrazeno od _START_ do _END_ z celkem _TOTAL_ záznamů",
+    "PagerInfo{0}{1}{2}": "Zobrazeno od {0} do {1} z celkem {2} záznamů",
     "PagerInfoEmpty": "Zobrazeno od 0 do 0 z celkem 0 záznamů",
     "PagerInfoFiltered": "(filtrováno ze všech _MAX_ záznamů)",
     "NoDataAvailableInDatatable": "V tabulce nejsou žádná data",

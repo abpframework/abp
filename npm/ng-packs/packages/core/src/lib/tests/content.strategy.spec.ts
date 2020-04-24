@@ -1,9 +1,9 @@
 import {
-  CONTENT_STRATEGY,
-  StyleContentStrategy,
-  ScriptContentStrategy,
-  DOM_STRATEGY,
   CONTENT_SECURITY_STRATEGY,
+  CONTENT_STRATEGY,
+  DOM_STRATEGY,
+  ScriptContentStrategy,
+  StyleContentStrategy,
 } from '../strategies';
 import { uuid } from '../utils';
 
@@ -26,8 +26,8 @@ describe('StyleContentStrategy', () => {
       domStrategy.insertElement = jest.fn((el: HTMLScriptElement) => {}) as any;
 
       const strategy = new StyleContentStrategy('', domStrategy, contentSecurityStrategy);
-      const element = strategy.createElement();
-      strategy.insertElement();
+      strategy.createElement();
+      const element = strategy.insertElement();
 
       expect(contentSecurityStrategy.applyCSP).toHaveBeenCalledWith(element);
       expect(domStrategy.insertElement).toHaveBeenCalledWith(element);

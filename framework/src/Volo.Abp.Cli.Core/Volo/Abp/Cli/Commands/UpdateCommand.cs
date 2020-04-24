@@ -53,10 +53,11 @@ namespace Volo.Abp.Cli.Commands
 
         private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)
         {
-            var includePreviews =
-                commandLineArgs.Options.GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
+            var includePreviews = commandLineArgs
+                                      .Options
+                                      .GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
 
-            var solution = Directory.GetFiles(directory, "*.sln").FirstOrDefault();
+            var solution = Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories).FirstOrDefault();
 
             if (solution != null)
             {
@@ -123,7 +124,7 @@ namespace Volo.Abp.Cli.Commands
                 public const string Short = "sp";
                 public const string Long = "solution-path";
             }
-            
+
             public static class IncludePreviews
             {
                 public const string Short = "p";

@@ -24,7 +24,7 @@ namespace VoloDocs.Web.Pages
             _urlUiOptions = urlOptions.Value;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             var projects = await _projectAppService.GetListAsync();
 

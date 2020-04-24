@@ -50,15 +50,13 @@ ObjectExtensionManager.Instance
 * You provide the `IdentityUser` as the entity name, `string` as the type of the new property, `SocialSecurityNumber` as the property name (also, the field name in the database table).
 * You also need to provide an action that defines the database mapping properties using the [EF Core Fluent API](https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties).
 
-> This code part must be executed before the related `DbContext` used. The [application startup template](Startup-Templates/Application.md) defines a static class named `YourProjectNameEntityExtensions`. You can define your extensions in this class to ensure that it is executed in the proper time. Otherwise, you should handle it yourself.
+> This code part must be executed before the related `DbContext` used. The [application startup template](Startup-Templates/Application.md) defines a static class named `YourProjectNameEfCoreEntityExtensionMappings`. You can define your extensions in this class to ensure that it is executed in the proper time. Otherwise, you should handle it yourself.
 
 Once you define an entity extension, you then need to use the standard [Add-Migration](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#add-migration) and [Update-Database](https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell#update-database) commands of the EF Core to create a code first migration class and update your database.
 
 You can then use the same extra properties system defined in the previous section to manipulate the property over the entity.
 
 ## Creating a New Entity Maps to the Same Database Table/Collection
-
-While using the extra properties approach is **easy to use** and suitable for some scenarios, it has some drawbacks described in the [entities document](Entities.md).
 
 Another approach can be **creating your own entity** mapped to **the same database table** (or collection for a MongoDB database).
 
