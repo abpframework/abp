@@ -221,8 +221,11 @@
     },
     {
       "text": "Domain Driven Design",
-      "path": "Domain-Driven-Design.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Domain-Driven-Design.md"
+        },
         {
           "text": "Domain Layer",
           "items": [
@@ -393,8 +396,11 @@
     },
     {
       "text": "Data Access",
-      "path": "Data-Access.md",
       "items": [
+        {
+          "text": "Overall", 
+          "path": "Data-Access.md"
+        },
         {
           "text": "Connection Strings",
           "path": "Connection-Strings.md"
@@ -477,8 +483,11 @@
     },
     {
       "text": "Startup Templates",
-      "path": "Startup-Templates/Index.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Startup-Templates/Index.md"
+        },
         {
           "text": "Application",
           "path": "Startup-Templates/Application.md"
