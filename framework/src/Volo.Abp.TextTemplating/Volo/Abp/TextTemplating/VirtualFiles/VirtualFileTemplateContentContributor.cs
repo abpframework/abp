@@ -2,42 +2,38 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    public class VirtualFileTemplateContentContributor : ITemplateContentContributor
+    public class VirtualFileTemplateContentContributor : ITemplateContentContributor, ITransientDependency
     {
-        public TemplateDefinition TemplateDefinition { get; private set; }
+        public const string VirtualPathPropertyName = "VirtualPath";
 
-        private readonly string _virtualPath;
-        private IVirtualFileProvider _virtualFileProvider;
-        private volatile Dictionary<string, string> _templateDictionary;
-        private readonly object _syncObj = new object();
+        private readonly IVirtualFileProvider _virtualFileProvider;
 
-        public VirtualFileTemplateContentContributor(
-            [NotNull] string virtualPath)
+        public VirtualFileTemplateContentContributor(IVirtualFileProvider virtualFileProvider)
         {
-            _virtualPath = Check.NotNullOrWhiteSpace(virtualPath, nameof(virtualPath));
+            _virtualFileProvider = virtualFileProvider;
         }
 
-        public void Initialize(TemplateContentContributorInitializationContext context)
+        public async Task<string> GetOrNullAsync(TemplateContentContributorContext context)
         {
-            _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
-            TemplateDefinition = context.TemplateDefinition;
-        }
+            var virtualPath = context.TemplateDefinition.Properties.GetOrDefault(VirtualPathPropertyName) as string;
+            if (virtualPath == null)
+            {
+                return null;
+            }
 
-        public async Task<string> GetOrNullAsync([CanBeNull] string cultureName = null)
-        {
             //TODO: Refactor: Split implementation based on single file or dictionary of culture-specific contents
 
-            cultureName ??= CultureInfo.CurrentUICulture.Name;
+            var cultureName = context.Culture ??
+                              CultureInfo.CurrentUICulture.Name;
 
-            var dictionary = GetTemplateDictionary();
+            var dictionary = GetTemplateDictionary(virtualPath);
 
             var content = dictionary.GetOrDefault(cultureName);
             if (content != null)
@@ -55,9 +51,9 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 }
             }
 
-            if (TemplateDefinition.DefaultCultureName != null)
+            if (context.TemplateDefinition.DefaultCultureName != null)
             {
-                content = dictionary.GetOrDefault(TemplateDefinition.DefaultCultureName);
+                content = dictionary.GetOrDefault(context.TemplateDefinition.DefaultCultureName);
                 if (content != null)
                 {
                     return content;
@@ -67,45 +63,31 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             return dictionary.GetOrDefault("__default");
         }
 
-        private Dictionary<string, string> GetTemplateDictionary()
+        private Dictionary<string, string> GetTemplateDictionary(string virtualPath)
         {
-            if (_templateDictionary != null)
+            var dictionary = new Dictionary<string, string>();
+
+            var fileInfo = _virtualFileProvider.GetFileInfo(virtualPath);
+            if (!fileInfo.IsDirectory)
             {
-                return _templateDictionary;
+                //TODO: __default to consts
+                dictionary.Add("__default", fileInfo.ReadAsString());
             }
-
-            lock (_syncObj)
+            else
             {
-                if (_templateDictionary != null)
+                foreach (var file in _virtualFileProvider.GetDirectoryContents(virtualPath))
                 {
-                    return _templateDictionary;
-                }
-
-                var dictionary = new Dictionary<string, string>();
-
-                var fileInfo = _virtualFileProvider.GetFileInfo(_virtualPath);
-                if (!fileInfo.IsDirectory)
-                {
-                    //TODO: __default to consts
-                    dictionary.Add("__default", fileInfo.ReadAsString());
-                }
-                else
-                {
-                    foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath))
+                    if (file.IsDirectory)
                     {
-                        if (file.IsDirectory)
-                        {
-                            continue;
-                        }
-
-                        // TODO: How to normalize file names?
-                        dictionary.Add(file.Name.RemovePostFix(".tpl"), file.ReadAsString());
+                        continue;
                     }
-                }
 
-                _templateDictionary = dictionary;
-                return dictionary;
+                    // TODO: How to normalize file names?
+                    dictionary.Add(file.Name.RemovePostFix(".tpl"), file.ReadAsString());
+                }
             }
+
+            return dictionary;
         }
     }
 }

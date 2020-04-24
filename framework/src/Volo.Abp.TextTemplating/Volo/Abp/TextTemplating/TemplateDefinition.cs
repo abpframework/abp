@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.TextTemplating
@@ -16,10 +17,29 @@ namespace Volo.Abp.TextTemplating
         [CanBeNull]
         public Type LocalizationResource { get; set; }
 
-        public TemplateContentContributorList ContentContributors { get; }
-
         [CanBeNull]
         public string DefaultCultureName { get; }
+
+        /// <summary>
+        /// Gets/sets a key-value on the <see cref="Properties"/>.
+        /// </summary>
+        /// <param name="name">Name of the property</param>
+        /// <returns>
+        /// Returns the value in the <see cref="Properties"/> dictionary by given <see cref="name"/>.
+        /// Returns null if given <see cref="name"/> is not present in the <see cref="Properties"/> dictionary.
+        /// </returns>
+        [CanBeNull]
+        public object this[string name]
+        {
+            get => Properties.GetOrDefault(name);
+            set => Properties[name] = value;
+        }
+
+        /// <summary>
+        /// Can be used to get/set custom properties for this feature.
+        /// </summary>
+        [NotNull]
+        public Dictionary<string, object> Properties { get; }
 
         public TemplateDefinition(
             [NotNull] string name, 
@@ -30,15 +50,19 @@ namespace Volo.Abp.TextTemplating
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             LocalizationResource = localizationResource;
-            ContentContributors = new TemplateContentContributorList();
             IsLayout = isLayout;
             Layout = layout;
             DefaultCultureName = defaultCultureName;
+            Properties = new Dictionary<string, object>();
         }
 
-        public virtual TemplateDefinition WithContributor(ITemplateContentContributor contentContributor)
+        /// <summary>
+        /// Sets a property in the <see cref="Properties"/> dictionary.
+        /// This is a shortcut for nested calls on this object.
+        /// </summary>
+        public virtual TemplateDefinition WithProperty(string key, object value)
         {
-            ContentContributors.Add(contentContributor);
+            Properties[key] = value;
             return this;
         }
     }

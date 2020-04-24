@@ -17,8 +17,9 @@ namespace Volo.Abp.TextTemplating
         {
             Check.NotNull(templateDefinition, nameof(templateDefinition));
 
-            return templateDefinition.WithContributor(
-                new VirtualFileTemplateContentContributor(virtualPath)
+            return templateDefinition.WithProperty(
+                VirtualFileTemplateContentContributor.VirtualPathPropertyName,
+                virtualPath
             );
         }
     }

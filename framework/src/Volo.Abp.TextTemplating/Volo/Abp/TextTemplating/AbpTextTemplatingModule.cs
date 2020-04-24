@@ -13,12 +13,13 @@ namespace Volo.Abp.TextTemplating
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            AutoAddDefinitionProviders(context.Services);
+            AutoAddProvidersAndContributors(context.Services);
         }
 
-        private static void AutoAddDefinitionProviders(IServiceCollection services)
+        private static void AutoAddProvidersAndContributors(IServiceCollection services)
         {
             var definitionProviders = new List<Type>();
+            var contentContributors = new List<Type>();
 
             services.OnRegistred(context =>
             {
@@ -26,35 +27,18 @@ namespace Volo.Abp.TextTemplating
                 {
                     definitionProviders.Add(context.ImplementationType);
                 }
+
+                if (typeof(ITemplateContentContributor).IsAssignableFrom(context.ImplementationType))
+                {
+                    contentContributors.Add(context.ImplementationType);
+                }
             });
 
             services.Configure<AbpTextTemplatingOptions>(options =>
             {
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
+                options.ContentContributors.AddIfNotContains(contentContributors);
             });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            //TODO: Consider to move to the TemplateContentProvider and invoke lazy (with making it singleton)
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                var templateDefinitionManager = scope.ServiceProvider
-                        .GetRequiredService<ITemplateDefinitionManager>();
-
-                foreach (var templateDefinition in templateDefinitionManager.GetAll())
-                {
-                    var contributorInitializationContext = new TemplateContentContributorInitializationContext(
-                        templateDefinition,
-                        scope.ServiceProvider
-                    );
-
-                    foreach (var contributor in templateDefinition.ContentContributors)
-                    {
-                        contributor.Initialize(contributorInitializationContext);
-                    }
-                }
-            }
         }
     }
 }
