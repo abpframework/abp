@@ -39,13 +39,13 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
             if (fileInfo.IsDirectory)
             {
-                var folderReader = new FolderLocalizedTemplateContentReader();
+                var folderReader = new VirtualFolderLocalizedTemplateContentReader();
                 await folderReader.ReadContentsAsync(_virtualFileProvider, virtualPath);
                 return folderReader;
             }
             else //File
             {
-                var singleFileReader = new SingleFileLocalizedTemplateContentReader();
+                var singleFileReader = new FileInfoLocalizedTemplateContentReader();
                 await singleFileReader.ReadContentsAsync(fileInfo);
                 return singleFileReader;
             }

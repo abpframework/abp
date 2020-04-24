@@ -3,7 +3,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    public class SingleFileLocalizedTemplateContentReader : ILocalizedTemplateContentReader
+    public class FileInfoLocalizedTemplateContentReader : ILocalizedTemplateContentReader
     {
         private string _content;
 

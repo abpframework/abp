@@ -10,7 +10,8 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
         private readonly ILocalizedTemplateContentReaderFactory _localizedTemplateContentReaderFactory;
 
-        public VirtualFileTemplateContentContributor(ILocalizedTemplateContentReaderFactory localizedTemplateContentReaderFactory)
+        public VirtualFileTemplateContentContributor(
+            ILocalizedTemplateContentReaderFactory localizedTemplateContentReaderFactory)
         {
             _localizedTemplateContentReaderFactory = localizedTemplateContentReaderFactory;
         }

@@ -7,11 +7,13 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    public class FolderLocalizedTemplateContentReader : ILocalizedTemplateContentReader
+    public class VirtualFolderLocalizedTemplateContentReader : ILocalizedTemplateContentReader
     {
         private Dictionary<string, string> _dictionary;
 
-        public async Task ReadContentsAsync(IVirtualFileProvider virtualFileProvider, string virtualPath)
+        public async Task ReadContentsAsync(
+            IVirtualFileProvider virtualFileProvider, 
+            string virtualPath)
         {
             _dictionary = new Dictionary<string, string>();
 
