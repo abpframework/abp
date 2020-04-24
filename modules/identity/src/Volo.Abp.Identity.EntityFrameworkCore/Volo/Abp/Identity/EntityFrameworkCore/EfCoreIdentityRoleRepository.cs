@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Guids;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
@@ -32,7 +31,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
-            bool includeDetails = true,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
