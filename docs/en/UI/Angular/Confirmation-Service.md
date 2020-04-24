@@ -26,7 +26,7 @@ You can use the `success`, `warn`, `error`, and `info` methods of `ConfirmationS
 ### How to Display a Confirmation Popup
 
 ```js
-const confirmationStatus$ = this.confirmation.success('Message', 'Title')
+const confirmationStatus$ = this.confirmation.success('Message', 'Title');
 ```
 
 - The `ConfirmationService` methods accept three parameters that are `message`, `title`, and `options`.
@@ -34,7 +34,7 @@ const confirmationStatus$ = this.confirmation.success('Message', 'Title')
 
 ### How to Listen Closing Event
 
-You can subscribe the confirmation closing event like below:
+You can subscribe to the confirmation closing event like below:
 
 ```js
 import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
@@ -56,7 +56,7 @@ this.confirmation
     - `Confirmation.Status.dismiss` is a closing event value that will be emitted when the popup is closed by pressing the escape.
 
 
-If the status is not important for you, you may not listen the closing event:
+If you are not interested in the confirmation status, you do not have to subscribe to the returned observable:
 
 ```js
 this.confirmation.error('You are not authorized.', 'Error');
@@ -83,14 +83,14 @@ this.confirmation.warn(
 );
 ```
 
-- `hideCancelBtn` option is the boolean value that allows the cancel button to be displayed or hidden. Default value is `false`
-- `hideYesBtn` option is the boolean value that allows the confirm button to be displayed or hidden. Default value is `false`
-- `cancelText` is the text of the cancel button. A localization key or localization object can be passed. Default value is `AbpUi::Cancel`
-- `yesText` is the text of the confirm button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`
-- `messageLocalizationParams` is the interpolation parameters of the message localization.
-- `titleLocalizationParams` is the interpolation parameters of the title localization.
+- `hideCancelBtn` option hides the cancellation button when `true`. Default value is `false`
+- `hideYesBtn` option hides the confirmation button when `true`. Default value is `false`
+- `cancelText` is the text of the cancellation button. A localization key or localization object can be passed. Default value is `AbpUi::Cancel`
+- `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`
+- `messageLocalizationParams` is the interpolation parameters for the localization of the message.
+- `titleLocalizationParams` is the interpolation parameters for the localization of the title.
 
-With the above options, the confirmation popup looks like this:
+With the options above, the confirmation popup looks like this:
 
 ![confirmation](./images/confirmation.png)
 

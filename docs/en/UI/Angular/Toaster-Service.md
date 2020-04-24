@@ -26,7 +26,7 @@ You can use the `success`, `warn`, `error`, and `info` methods of `ToasterServic
 ### How to Display a Toast Overlay
 
 ```js
-this.toast.success('Message', 'Title')
+this.toast.success('Message', 'Title');
 ```
 
 - The `ToasterService` methods accept three parameters that are `message`, `title`, and `options`.
@@ -55,15 +55,15 @@ const options: Partial<Toaster.ToastOptions> = {
   this.toaster.error('AbpUi::EntityNotFoundErrorMessage', 'AbpUi::Error', options);
 ```
 
-- `life` option is the value in milliseconds that determines the closing time. Default value is `5000`
-- `sticky` option is the boolean value. If the value passed `true`, toast overlay keep on the screen by ignoring the life option. Default value is `false`
-- `closable` option is the boolean value that displays the close icon over the toast overlay or not. Default value is `true`.
-- `tapToDismiss` option is the boolean value that allows closing the toast overlay by clicking over. Default value is `false`.
-- `yesText` is the text of the confirm button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`
-- `messageLocalizationParams` is the interpolation parameters of the message localization.
-- `titleLocalizationParams` is the interpolation parameters of the title localization.
+- `life` option is the closing time in milliseconds. Default value is `5000`.
+- `sticky` option keeps toast overlay on the screen by ignoring the `life` option when `true`. Default value is `false`.
+- `closable` option displays the close icon on the toast overlay when it is `true`. Default value is `true`.
+- `tapToDismiss` option, when `true`, allows closing the toast overlay by clicking over it. Default value is `false`.
+- `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`.
+- `messageLocalizationParams` is the interpolation parameters for the localization of the message.
+- `titleLocalizationParams` is the interpolation parameters for the localization of the title.
 
-With the above options, the toast overlay looks like this:
+With the options above, the toast overlay looks like this:
 
 ![toast](./images/toast.png)
 
