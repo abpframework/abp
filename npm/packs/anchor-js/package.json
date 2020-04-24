@@ -1,12 +1,12 @@
 {
-  "version": "2.5.0",
+  "version": "2.6.2",
   "name": "@abp/anchor-js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^2.5.0",
+    "@abp/core": "^2.6.2",
     "anchor-js": "^4.2.2"
   },
-  "gitHead": "a9a36b8a4681df04377497addf94b15e6c521664"
+  "gitHead": "eb4a0e507f492e275865b72caeb02ce28d69ae56"
 }

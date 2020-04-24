@@ -3,23 +3,22 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {
   ApplicationRef,
   ComponentFactoryResolver,
+  ComponentRef,
   EmbeddedViewRef,
   Inject,
   Injectable,
   Injector,
   RendererFactory2,
-  Type,
-  ComponentRef,
 } from '@angular/core';
-import { Navigate, RouterError, RouterState, RouterDataResolved } from '@ngxs/router-plugin';
+import { Navigate, RouterDataResolved, RouterError, RouterState } from '@ngxs/router-plugin';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import snq from 'snq';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import { HttpErrorConfig, ErrorScreenErrorCodes } from '../models/common';
+import { ErrorScreenErrorCodes, HttpErrorConfig } from '../models/common';
 import { Confirmation } from '../models/confirmation';
 import { ConfirmationService } from '../services/confirmation.service';
-import { filter, tap } from 'rxjs/operators';
 
 export const DEFAULT_ERROR_MESSAGES = {
   defaultError: {
@@ -58,7 +57,6 @@ export class ErrorHandler {
     private injector: Injector,
     @Inject('HTTP_ERROR_CONFIG') private httpErrorConfig: HttpErrorConfig,
   ) {
-    this.httpErrorConfig.skipHandledErrorCodes = this.httpErrorConfig.skipHandledErrorCodes || [];
     this.listenToRestError();
     this.listenToRouterError();
     this.listenToRouterDataResolved();
@@ -66,7 +64,7 @@ export class ErrorHandler {
 
   private listenToRouterError() {
     this.actions
-      .pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors), tap(console.warn))
+      .pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors))
       .subscribe(() => this.show404Page());
   }
 
@@ -84,14 +82,15 @@ export class ErrorHandler {
 
   private listenToRestError() {
     this.actions
-      .pipe(ofActionSuccessful(RestOccurError), filter(this.filterRestErrors))
-      .subscribe(({ payload: { err = {} as HttpErrorResponse } }) => {
-        const body = snq(
-          () => (err as HttpErrorResponse).error.error,
-          DEFAULT_ERROR_MESSAGES.defaultError.title,
-        );
+      .pipe(
+        ofActionSuccessful(RestOccurError),
+        map(action => action.payload),
+        filter(this.filterRestErrors),
+      )
+      .subscribe(err => {
+        const body = snq(() => err.error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
 
-        if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
+        if (err.headers.get('_AbpErrorFormat')) {
           const confirmation$ = this.showError(null, null, body);
 
           if (err.status === 401) {
@@ -100,7 +99,7 @@ export class ErrorHandler {
             });
           }
         } else {
-          switch ((err as HttpErrorResponse).status) {
+          switch (err.status) {
             case 401:
               this.canCreateCustomError(401)
                 ? this.show401Page()
@@ -156,7 +155,7 @@ export class ErrorHandler {
               });
               break;
             case 0:
-              if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
+              if (err.statusText === 'Unknown Error') {
                 this.createErrorComponent({
                   title: {
                     key: 'AbpAccount::DefaultErrorMessage',
@@ -238,6 +237,7 @@ export class ErrorHandler {
       .create(this.injector);
 
     for (const key in instance) {
+      /* istanbul ignore else */
       if (this.componentRef.instance.hasOwnProperty(key)) {
         this.componentRef.instance[key] = instance[key];
       }
@@ -270,11 +270,8 @@ export class ErrorHandler {
     );
   }
 
-  private filterRestErrors = (instance: RestOccurError): boolean => {
-    const {
-      payload: { err: { status } = {} as HttpErrorResponse },
-    } = instance;
-    if (!status) return false;
+  private filterRestErrors = ({ status }: HttpErrorResponse): boolean => {
+    if (typeof status !== 'number') return false;
 
     return this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === status) < 0;
   };

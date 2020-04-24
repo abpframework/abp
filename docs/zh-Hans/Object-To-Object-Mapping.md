@@ -168,7 +168,7 @@ public class MyProfile : Profile
 
 假设你已经创建了一个**可重用的模块**,其中定义了AutoMapper配置文件,并在需要映射对象时使用 `IObjectMapper`. 根据[模块化](Module-Development-Basics.md)的性质,你的模块可以用于不同的应用程序.
 
-`IObjectMapper` 是一个抽象,可以由最终应用程序替换使用另一个映射库. 这里的问题是你的可重用模块设计为使用AutoMapper，因为它为其定义映射配置文件. 这种情况下即使最终应用程序使用另一个默认对象映射库,你也要保证模块始终使用AutoMapper.
+`IObjectMapper` 是一个抽象,可以由最终应用程序替换使用另一个映射库. 这里的问题是你的可重用模块设计为使用AutoMapper,因为它为其定义映射配置文件. 这种情况下即使最终应用程序使用另一个默认对象映射库,你也要保证模块始终使用AutoMapper.
 
 `IObjectMapper<TContext>`将对象映射器上下文化,你可以为不同的 模块/上下文 使用不同的库.
 
@@ -201,7 +201,7 @@ public class UserAppService : ApplicationService
 
 `UserAppService` 注入 `IObjectMapper<MyModule>`, 它是模块的特定对象映射器,用法与 `IObjectMapper` 完全相同.
 
-上面的示例代码未使用 `ApplicationService` 中定义的 `ObjectMapper` 属性，而是注入了 `IObjectMapper<MyModule>`. 但是 `ApplicationService` 定义了可以在类构造函数中设置的 `ObjectMapperContext` 属性, 因此仍然可以使用基类属性. 示例可以进行以下重写:
+上面的示例代码未使用 `ApplicationService` 中定义的 `ObjectMapper` 属性,而是注入了 `IObjectMapper<MyModule>`. 但是 `ApplicationService` 定义了可以在类构造函数中设置的 `ObjectMapperContext` 属性, 因此仍然可以使用基类属性. 示例可以进行以下重写:
 
 ````csharp
 public class UserAppService : ApplicationService

@@ -76,4 +76,4 @@ Granted Policies are stored in the `auth` property of `ConfigState`.
 
 ## What's Next?
 
-* [Config State](./Config-State.md)
+- [Confirmation Popup](./Confirmation-Service.md)

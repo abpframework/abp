@@ -234,7 +234,7 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 
 #### 贡献者扩展
 
-在某些高级应用场景中, 当用到一个bundle贡献者时，你可能想做一些额外的配置. 贡献者扩展可以和被扩展的贡献者无缝衔接.
+在某些高级应用场景中, 当用到一个bundle贡献者时,你可能想做一些额外的配置. 贡献者扩展可以和被扩展的贡献者无缝衔接.
 
 下面的示例为 prism.js 脚本库添加一些样式:
 

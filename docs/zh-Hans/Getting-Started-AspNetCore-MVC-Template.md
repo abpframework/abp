@@ -4,7 +4,7 @@
 
 本教程使用 **ABP CLI** 创建一个新项目. 更多选项, 请参阅[入门](https://abp.io/get-started)页面.
 
-如果你之前未安装，请使用命令行安装ABP CLI:
+如果你之前未安装,请使用命令行安装ABP CLI:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli

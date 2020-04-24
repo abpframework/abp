@@ -12,18 +12,18 @@ ABP Framework also adds some **useful features** to the standard bootstrap compo
 
 Here, the list of components those are wrapped by the ABP Framework:
 
+* [Alerts](Alerts.md)
 * [Buttons](Buttons.md)
 * [Cards](Cards.md)
-* [Alerts](Alerts.md)
-* [Tabs](Tabs.md)
-* [Grids](Grids.md)
-* [Modals](Modals.md)
 * [Collapse](Collapse.md)
 * [Dropdowns](Dropdowns.md)
+* [Grids](Grids.md)
 * [List Groups](List-Groups.md)
+* [Modals](Modals.md)
 * [Paginator](Paginator.md)
 * [Popovers](Popovers.md)
 * [Progress Bars](Progress-Bars.md)
+* [Tabs](Tabs.md)
 * [Tooltips](Tooltips.md)
 * ...
 

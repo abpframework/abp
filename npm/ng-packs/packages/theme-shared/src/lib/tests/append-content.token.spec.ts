@@ -3,6 +3,7 @@ import { createComponentFactory, Spectator } from '@ngneat/spectator';
 import { THEME_SHARED_APPEND_CONTENT } from '../tokens/append-content.token';
 import { DomInsertionService } from '@abp/ng.core';
 import { chartJsLoaded$ } from '../utils';
+import styles from '../constants/styles';
 
 @Component({ selector: 'abp-dummy', template: '' })
 class DummyComponent {}
@@ -15,7 +16,7 @@ describe('AppendContentToken', () => {
 
   it('should insert a style element to the DOM', () => {
     spectator.get(THEME_SHARED_APPEND_CONTENT);
-    expect(spectator.get(DomInsertionService).inserted.size).toBe(1);
+    expect(spectator.get(DomInsertionService).has(styles)).toBe(true);
   });
 
   it('should be loaded the chart.js', done => {

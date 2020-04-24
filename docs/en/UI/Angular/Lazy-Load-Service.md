@@ -52,7 +52,7 @@ class DemoComponent {
 
 The `load` method returns an observable to which you can subscibe in your component or with an `async` pipe. In the example above, the `NgIf` directive will render `<some-component>` only **if the script gets successfully loaded or is already loaded before**.
 
-> You can subscribe multiple times in your template with `async` pipe. The styles will only be loaded once.
+> You can subscribe multiple times in your template with `async` pipe. The Scripts will only be loaded once.
 
 Please refer to [LoadingStrategy](./Loading-Strategy.md) to see all available loading strategies and how you can build your own loading strategy.
 

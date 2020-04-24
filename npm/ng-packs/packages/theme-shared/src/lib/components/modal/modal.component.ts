@@ -27,6 +27,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   templateUrl: './modal.component.html',
   animations: [fadeAnimation],
   styleUrls: ['./modal.component.scss'],
+  providers: [ModalService],
 })
 export class ModalComponent implements OnDestroy {
   @Input()

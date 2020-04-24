@@ -2,7 +2,7 @@
 
 ## 介绍
 
-背景工人在应用简单独立的线程在后台运行。一般来说，他们定期运行，以执行一些任务。例子;
+背景工人在应用简单独立的线程在后台运行.一般来说,他们定期运行,以执行一些任务.例子;
 后台工作者在应用程序后台运行的简单的独立线程,一般来说它们定期运行执行一些任务.例如;
 
 * 后台工作者可以定期**删除过时的日志**.
@@ -72,7 +72,7 @@ public class PassiveUserCheckerWorker : AsyncPeriodicBackgroundWorkerBase
 }
 ````
 
-* `AsyncPeriodicBackgroundWorkerBase` 使用 `AbpTimer`(线程安全定时器)对象来确定**时间段**. 我们可以在构造函数中设置了`Period` 属性。
+* `AsyncPeriodicBackgroundWorkerBase` 使用 `AbpTimer`(线程安全定时器)对象来确定**时间段**. 我们可以在构造函数中设置了`Period` 属性.
 * 它需要实现 `DoWorkAsync` 方法**执行**定期任务.
 * 最好使用 `PeriodicBackgroundWorkerContext` **解析依赖** 而不是构造函数. 因为 `AsyncPeriodicBackgroundWorkerBase` 使用 `IServiceScope` 在你的任务执行结束时会对其 **disposed**.
 * `AsyncPeriodicBackgroundWorkerBase` **捕获并记录** 由 `DoWorkAsync` 方法抛出的 **异常**.
