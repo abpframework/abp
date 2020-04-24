@@ -33,19 +33,19 @@ namespace Volo.Abp.Identity
         );
 
         Task<IdentityUser> FindByNormalizedEmailAsync(
-            [NotNull] string normalizedEmail, 
+            [NotNull] string normalizedEmail,
             bool includeDetails = true,
             CancellationToken cancellationToken = default
         );
 
         Task<List<IdentityUser>> GetListByClaimAsync(
-            Claim claim, 
+            Claim claim,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
 
         Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
@@ -72,6 +72,10 @@ namespace Volo.Abp.Identity
 
         Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
             Guid organizationUnitId,
+            CancellationToken cancellationToken = default
+            );
+        Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+            List<Guid> organizationUnitIds,
             CancellationToken cancellationToken = default
             );
 

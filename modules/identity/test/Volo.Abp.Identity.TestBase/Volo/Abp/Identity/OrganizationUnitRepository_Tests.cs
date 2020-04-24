@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Guids;
@@ -20,6 +22,7 @@ namespace Volo.Abp.Identity
         private readonly OrganizationUnitManager _organizationUnitManager;
         private readonly IIdentityRoleRepository _identityRoleRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IIdentityUserRepository _identityUserRepository;
 
         public OrganizationUnitRepository_Tests()
         {
@@ -30,6 +33,7 @@ namespace Volo.Abp.Identity
             _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
             _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
             _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+            _identityUserRepository = GetRequiredService<IIdentityUserRepository>();
         }
 
         [Fact]
@@ -57,7 +61,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetOrganizationUnitAsync()
         {
-            var organizationUnit = await _organizationUnitRepository.GetOrganizationUnitAsync("OU111");
+            var organizationUnit = await _organizationUnitRepository.GetAsync("OU111");
             organizationUnit.ShouldNotBeNull();
         }
 
@@ -78,12 +82,22 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetOrganizationUnitRolesAsync()
         {
-            OrganizationUnit ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU111", true);
+            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
 
-            var ou111Roles = await _organizationUnitRepository.GetOrganizationUnitRoles(ou.Id, true);
+            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou.Id, true);
             ou111Roles.Count.ShouldBe(2);
             ou111Roles.ShouldContain(n => n.Name == "manager");
             ou111Roles.ShouldContain(n => n.Name == "moderator");
+        }
+
+        [Fact]
+        public async Task GetUsersInOrganizationUnitListAsync()
+        {
+            OrganizationUnit ou1 = await _organizationUnitRepository.GetAsync("OU111", true);
+            OrganizationUnit ou2 = await _organizationUnitRepository.GetAsync("OU112", true);
+            var users = await _identityUserRepository.GetUsersInOrganizationsListAsync(new List<Guid> { ou1.Id, ou2.Id });
+            //var dodo = users.ToDictionary(u => u.Id, u => u);
+            users.Count.ShouldBeGreaterThan(0);
         }
     }
 }

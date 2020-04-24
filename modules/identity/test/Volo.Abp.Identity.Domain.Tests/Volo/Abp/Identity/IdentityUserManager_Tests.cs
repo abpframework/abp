@@ -97,7 +97,7 @@ namespace Volo.Abp.Identity
                     _lookupNormalizer.NormalizeName("david"));
                 user.ShouldNotBeNull();
 
-                var ou = await _organizationUnitRepository.GetOrganizationUnitAsync(
+                var ou = await _organizationUnitRepository.GetAsync(
                     _lookupNormalizer.NormalizeName("OU11"));
                 ou.ShouldNotBeNull();
 
@@ -150,7 +150,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var ou = await _organizationUnitRepository.GetOrganizationUnitAsync(
+                var ou = await _organizationUnitRepository.GetAsync(
                     _lookupNormalizer.NormalizeName("OU111"));
                 ou.ShouldNotBeNull();
 
@@ -158,7 +158,7 @@ namespace Volo.Abp.Identity
                     _lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
-                var ouNew = await _organizationUnitRepository.GetOrganizationUnitAsync(
+                var ouNew = await _organizationUnitRepository.GetAsync(
                     _lookupNormalizer.NormalizeName("OU2"));
                 ouNew.ShouldNotBeNull();
 

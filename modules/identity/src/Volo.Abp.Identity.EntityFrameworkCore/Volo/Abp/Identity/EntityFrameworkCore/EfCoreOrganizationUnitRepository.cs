@@ -67,9 +67,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<OrganizationUnit> GetOrganizationUnitAsync(
+        public async Task<OrganizationUnit> GetAsync(
             string displayName,
-            bool includeDetails = false,
+            bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
@@ -79,7 +79,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     GetCancellationToken(cancellationToken)
                 );
         }
-        public async Task<List<IdentityRole>> GetOrganizationUnitRoles(
+        public async Task<List<IdentityRole>> GetRolesAsync(
             Guid organizationUnitId, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -95,11 +95,5 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return GetQueryable().IncludeDetails();
         }
-    }
-
-    public class OrganizationUnitRoleWithIdentityRole
-    {
-        public IdentityRole IdentityRole { get; set; }
-        public OrganizationUnitRole OrganizationUnitRole { get; set; }
     }
 }

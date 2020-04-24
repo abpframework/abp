@@ -199,6 +199,21 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+            List<Guid> organizationUnitIds,
+            CancellationToken cancellationToken = default
+            )
+        {
+            //var userIds = DbContext.Set<IdentityUserOrganizationUnit>()
+            //    .Where(q => organizationUnitIds.Contains(q.OrganizationUnitId))
+            //    .Select(u => u.UserId);
+            //var query = DbContext.Users.Where(u => userIds.Contains(u.Id));
+            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in DbSet on userOu.UserId equals user.Id
+                        where organizationUnitIds.Contains(userOu.OrganizationUnitId)
+                        select user;
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
 
         public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
             string code,

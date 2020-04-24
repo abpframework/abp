@@ -171,7 +171,7 @@ namespace Volo.Abp.Identity
 
         private async Task<OrganizationUnit> GetOU(string diplayName)
         {
-            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnitAsync(diplayName);
+            var organizationUnit = await OrganizationUnitRepository.GetAsync(diplayName);
             organizationUnit.ShouldNotBeNull();
             return organizationUnit;
         }

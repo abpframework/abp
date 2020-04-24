@@ -21,6 +21,10 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+        Task<List<IdentityRole>> GetListAsync(
+            IEnumerable<Guid> ids,
+            CancellationToken cancellationToken = default
+        );
 
         Task<List<IdentityRole>> GetDefaultOnesAsync(
             bool includeDetails = false,

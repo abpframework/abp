@@ -69,7 +69,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
-                var ou = await OrganizationUnitRepository.GetOrganizationUnitAsync(LookupNormalizer.NormalizeName("OU111"), includeDetails: false);
+                var ou = await OrganizationUnitRepository.GetAsync(LookupNormalizer.NormalizeName("OU111"), includeDetails: false);
                 ou.Roles.ShouldNotBeNull(); //?
                 ou.Roles.Any().ShouldBeTrue();
 

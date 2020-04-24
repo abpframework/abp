@@ -113,6 +113,7 @@ namespace Volo.Abp.Identity
             await _userRepository.InsertAsync(john);
 
             var david = new IdentityUser(_testData.UserDavidId, "david", "david@abp.io");
+            david.AddOrganizationUnit(_ou112.Id);
             await _userRepository.InsertAsync(david);
 
             var neo = new IdentityUser(_testData.UserNeoId, "neo", "neo@abp.io");

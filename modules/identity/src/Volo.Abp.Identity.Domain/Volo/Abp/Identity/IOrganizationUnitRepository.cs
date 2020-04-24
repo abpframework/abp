@@ -20,25 +20,28 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+
+        Task<OrganizationUnit> GetAsync(
+            string displayName,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<List<OrganizationUnit>> GetListAsync(
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
+
         Task<List<OrganizationUnit>> GetListAsync(
             IEnumerable<Guid> ids,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
-        Task<List<OrganizationUnit>> GetListAsync(
-            string sorting = null,
-            int maxResultCount = int.MaxValue,
-            int skipCount = 0,
-            bool includeDetails = true,
-            CancellationToken cancellationToken = default
-        );
 
-        Task<OrganizationUnit> GetOrganizationUnitAsync(
-            string displayName,
-            bool includeDetails = false,
-            CancellationToken cancellationToken = default
-        );
-        Task<List<IdentityRole>> GetOrganizationUnitRoles(
+        Task<List<IdentityRole>> GetRolesAsync(
             Guid organizationUnitId,
             bool includeDetails = false,
             CancellationToken cancellationToken = default

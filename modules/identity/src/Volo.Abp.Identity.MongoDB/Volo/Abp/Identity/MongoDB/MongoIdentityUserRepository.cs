@@ -23,7 +23,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
-            string normalizedUserName, 
+            string normalizedUserName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -35,7 +35,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public virtual async Task<List<string>> GetRoleNamesAsync(
-            Guid id, 
+            Guid id,
             CancellationToken cancellationToken = default)
         {
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
@@ -61,12 +61,12 @@ namespace Volo.Abp.Identity.MongoDB
             var organizationUnitIds = user.OrganizationUnits
                 .Select(r => r.OrganizationUnitId)
                 .ToArray();
-            
+
             var organizationUnits = DbContext.OrganizationUnits
                 .AsQueryable()
                 .Where(ou => organizationUnitIds.Contains(ou.Id))
                 .ToArray();
-            
+
             var roleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.RoleId)).ToArray();
 
             return await DbContext.Roles //TODO: Such usage suppress filters!
@@ -77,8 +77,8 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public virtual async Task<IdentityUser> FindByLoginAsync(
-            string loginProvider, 
-            string providerKey, 
+            string loginProvider,
+            string providerKey,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -106,7 +106,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -195,6 +195,17 @@ namespace Volo.Abp.Identity.MongoDB
         {
             var result = await GetMongoQueryable()
                     .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnitId))
+                    .ToListAsync(GetCancellationToken(cancellationToken))
+                    ;
+            return result;
+        }
+
+        public async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
+            List<Guid> organizationUnitIds,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await GetMongoQueryable()
+                    .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
                     .ToListAsync(GetCancellationToken(cancellationToken))
                     ;
             return result;

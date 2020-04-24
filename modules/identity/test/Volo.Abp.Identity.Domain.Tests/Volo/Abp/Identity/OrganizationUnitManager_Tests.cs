@@ -33,55 +33,55 @@ namespace Volo.Abp.Identity
         {
             await _organizationUnitManager.CreateAsync(new OrganizationUnit(_guidGenerator.Create(), "Root 1"));
 
-            var root1 = await _organizationUnitRepository.GetOrganizationUnitAsync("Root 1");
+            var root1 = await _organizationUnitRepository.GetAsync("Root 1");
             root1.ShouldNotBeNull();
         }
 
         [Fact]
         public async Task UpdateAsync()
         {
-            var ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU111");
+            var ou = await _organizationUnitRepository.GetAsync("OU111");
             ou.Code = OrganizationUnit.CreateCode(123);
             await _organizationUnitManager.UpdateAsync(ou);
 
-            var ouAfterChange = await _organizationUnitRepository.GetOrganizationUnitAsync("OU111");
+            var ouAfterChange = await _organizationUnitRepository.GetAsync("OU111");
             ouAfterChange.Code.ShouldContain("123");
         }
 
         [Fact]
         public async Task DeleteAsync()
         {
-            var ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU11");
+            var ou = await _organizationUnitRepository.GetAsync("OU11");
             await _organizationUnitManager.DeleteAsync(ou.Id);
 
-            (await _organizationUnitRepository.GetOrganizationUnitAsync("OU11")).ShouldBeNull();
+            (await _organizationUnitRepository.GetAsync("OU11")).ShouldBeNull();
         }
 
         [Fact]
         public async Task MoveAsync()
         {
-            var ou1 = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1");
-            var ou2 = await _organizationUnitRepository.GetOrganizationUnitAsync("OU2");
+            var ou1 = await _organizationUnitRepository.GetAsync("OU1");
+            var ou2 = await _organizationUnitRepository.GetAsync("OU2");
 
             await _organizationUnitManager.MoveAsync(ou1.Id, ou2.Id);
 
-            ou1 = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1");
+            ou1 = await _organizationUnitRepository.GetAsync("OU1");
             ou1.ParentId.ShouldBe(ou2.Id);
             ou1.Code.ShouldBe(OrganizationUnit.CreateCode(2, 2));
 
-            var ou11 = await _organizationUnitRepository.GetOrganizationUnitAsync("OU11");
+            var ou11 = await _organizationUnitRepository.GetAsync("OU11");
             ou11.ParentId.ShouldBe(ou1.Id);
             ou11.Code.ShouldBe(OrganizationUnit.CreateCode(2, 2, 1));
 
-            var ou111 = await _organizationUnitRepository.GetOrganizationUnitAsync("OU111");
+            var ou111 = await _organizationUnitRepository.GetAsync("OU111");
             ou111.ParentId.ShouldBe(ou11.Id);
             ou111.Code.ShouldBe(OrganizationUnit.CreateCode(2, 2, 1, 1));
 
-            var ou112 = await _organizationUnitRepository.GetOrganizationUnitAsync("OU112");
+            var ou112 = await _organizationUnitRepository.GetAsync("OU112");
             ou112.ParentId.ShouldBe(ou11.Id);
             ou112.Code.ShouldBe(OrganizationUnit.CreateCode(2, 2, 1, 2));
 
-            var ou12 = await _organizationUnitRepository.GetOrganizationUnitAsync("OU12");
+            var ou12 = await _organizationUnitRepository.GetAsync("OU12");
             ou12.ParentId.ShouldBe(ou1.Id);
             ou12.Code.ShouldBe(OrganizationUnit.CreateCode(2, 2, 2));
         }
@@ -94,7 +94,7 @@ namespace Volo.Abp.Identity
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", true);
+                ou = await _organizationUnitRepository.GetAsync("OU1", true);
                 adminRole = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin"));
                 await _organizationUnitManager.AddRoleToOrganizationUnitAsync(adminRole, ou);
                 await _organizationUnitRepository.UpdateAsync(ou);
@@ -102,19 +102,19 @@ namespace Volo.Abp.Identity
                 await uow.CompleteAsync();
             }
 
-            ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", includeDetails: true);
+            ou = await _organizationUnitRepository.GetAsync("OU1", includeDetails: true);
             ou.Roles.First().RoleId.ShouldBe(adminRole.Id);
         }
 
         [Fact]
         public async Task RemoveRoleFromOrganizationUnitAsync()
         {
-            var ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", true);
+            var ou = await _organizationUnitRepository.GetAsync("OU1", true);
             var adminRole = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin"));
             await _organizationUnitManager.AddRoleToOrganizationUnitAsync(adminRole.Id, ou.Id);
 
             await _organizationUnitManager.RemoveRoleFromOrganizationUnitAsync(adminRole.Id, ou.Id);
-            ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", includeDetails: true);
+            ou = await _organizationUnitRepository.GetAsync("OU1", includeDetails: true);
             ou.Roles.FirstOrDefault(r => r.RoleId == adminRole.Id).ShouldBeNull();
         }
     }

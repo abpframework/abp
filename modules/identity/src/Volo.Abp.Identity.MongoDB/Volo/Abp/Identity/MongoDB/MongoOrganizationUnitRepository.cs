@@ -64,9 +64,9 @@ namespace Volo.Abp.Identity.MongoDB
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<OrganizationUnit> GetOrganizationUnitAsync(
+        public async Task<OrganizationUnit> GetAsync(
             string displayName,
-            bool includeDetails = false,
+            bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
@@ -76,7 +76,7 @@ namespace Volo.Abp.Identity.MongoDB
                 );
         }
 
-        public async Task<List<IdentityRole>> GetOrganizationUnitRoles(
+        public async Task<List<IdentityRole>> GetRolesAsync(
             Guid organizationUnitId,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
