@@ -338,6 +338,14 @@
               "path": "UI/Angular/Permission-Management.md"
             },
             {
+              "text": "Confirmation Popup",
+              "path": "UI/Angular/Confirmation-Service.md"
+            },
+            {
+              "text": "Toast Overlay",
+              "path": "UI/Angular/Toaster-Service.md"
+            },
+            {
               "text": "Config State",
               "path": "UI/Angular/Config-State.md"
             },
