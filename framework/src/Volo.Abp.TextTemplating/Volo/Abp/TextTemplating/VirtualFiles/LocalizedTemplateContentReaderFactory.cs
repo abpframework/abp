@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
@@ -8,18 +11,48 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
     public class LocalizedTemplateContentReaderFactory : ILocalizedTemplateContentReaderFactory, ISingletonDependency
     {
         private readonly IVirtualFileProvider _virtualFileProvider;
+        private readonly Dictionary<string, ILocalizedTemplateContentReader> _readerCache;
+        private readonly ReaderWriterLockSlim _lock;
 
         public LocalizedTemplateContentReaderFactory(IVirtualFileProvider virtualFileProvider)
         {
             _virtualFileProvider = virtualFileProvider;
+            _readerCache = new Dictionary<string, ILocalizedTemplateContentReader>();
+            _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         }
 
-        public Task<ILocalizedTemplateContentReader> CreateAsync(TemplateDefinition templateDefinition)
+        public async Task<ILocalizedTemplateContentReader> CreateAsync(TemplateDefinition templateDefinition)
         {
-            return CreateLocalizedReader(templateDefinition);
+            _lock.EnterUpgradeableReadLock();
+
+            try
+            {
+                var reader = _readerCache.GetOrDefault(templateDefinition.Name);
+                if (reader != null)
+                {
+                    return reader;
+                }
+
+                _lock.EnterWriteLock();
+
+                try
+                {
+                    reader = await CreateInternalAsync(templateDefinition);
+                    _readerCache[templateDefinition.Name] = reader;
+                    return reader;
+                }
+                finally
+                {
+                    _lock.ExitWriteLock();
+                }
+            }
+            finally
+            {
+                _lock.ExitUpgradeableReadLock();
+            }
         }
 
-        protected async Task<ILocalizedTemplateContentReader> CreateLocalizedReader(
+        protected virtual async Task<ILocalizedTemplateContentReader> CreateInternalAsync(
             TemplateDefinition templateDefinition)
         {
             var virtualPath = templateDefinition
