@@ -62,9 +62,21 @@ namespace Volo.Abp.TextTemplating
                     .Select(p => scope.ServiceProvider.GetRequiredService(p) as ITemplateDefinitionProvider)
                     .ToList();
 
+                var context = new TemplateDefinitionContext(templates);
+
                 foreach (var provider in providers)
                 {
-                    provider.Define(new TemplateDefinitionContext(templates));
+                    provider.PreDefine(context);
+                }
+
+                foreach (var provider in providers)
+                {
+                    provider.Define(context);
+                }
+
+                foreach (var provider in providers)
+                {
+                    provider.PostDefine(context);
                 }
             }
 

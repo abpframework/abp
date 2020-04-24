@@ -12,6 +12,11 @@ namespace Volo.Abp.TextTemplating
             TextTemplates = textTemplates;
         }
 
+        public IReadOnlyList<TemplateDefinition> GetAll(string name)
+        {
+            return TextTemplates.Values.ToImmutableList();
+        }
+
         public virtual TemplateDefinition GetOrNull(string name)
         {
             return TextTemplates.GetOrDefault(name);
