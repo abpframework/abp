@@ -4,14 +4,25 @@ import { generateHash } from '../utils';
 
 @Injectable({ providedIn: 'root' })
 export class DomInsertionService {
-  readonly inserted = new Set();
+  readonly inserted = new Set<number>();
 
-  insertContent(contentStrategy: ContentStrategy) {
+  insertContent<T extends HTMLScriptElement | HTMLStyleElement>(
+    contentStrategy: ContentStrategy<T>,
+  ): T {
     const hash = generateHash(contentStrategy.content);
 
     if (this.inserted.has(hash)) return;
 
-    contentStrategy.insertElement();
+    const element = contentStrategy.insertElement();
     this.inserted.add(hash);
+
+    return element;
+  }
+
+  removeContent(element: HTMLScriptElement | HTMLStyleElement) {
+    const hash = generateHash(element.textContent);
+    this.inserted.delete(hash);
+
+    element.parentNode.removeChild(element);
   }
 }

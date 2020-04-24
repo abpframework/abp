@@ -10,7 +10,7 @@
 - [Part II: 创建,编辑,删除书籍](Part-II.md)
 - [Part III: 集成测试](Part-III.md)
 
-你可以从[GitHub存储库](https://github.com/abpframework/abp/tree/master/samples/BookStore)访问应用程序的**源代码**.
+你可以从[GitHub存储库](https://github.com/abpframework/abp-samples/tree/master/BookStore)访问应用程序的**源代码**.
 
 > 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
 

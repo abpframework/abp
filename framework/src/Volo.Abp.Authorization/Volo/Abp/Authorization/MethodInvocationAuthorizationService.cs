@@ -3,26 +3,21 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Authorization
 {
     public class MethodInvocationAuthorizationService : IMethodInvocationAuthorizationService, ITransientDependency
     {
-        private readonly IAuthorizationService _authorizationService;
-        private readonly ICurrentUser _currentUser;
-        private readonly ICurrentClient _currentClient;
+        private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
+        private readonly IAbpAuthorizationService _abpAuthorizationService;
 
         public MethodInvocationAuthorizationService(
-            IAuthorizationService authorizationService, 
-            ICurrentUser currentUser,
-            ICurrentClient currentClient)
+            IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
+            IAbpAuthorizationService abpAuthorizationService)
         {
-            _authorizationService = authorizationService;
-            _currentUser = currentUser;
-            _currentClient = currentClient;
+            _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
+            _abpAuthorizationService = abpAuthorizationService;
         }
 
         public async Task CheckAsync(MethodInvocationAuthorizationContext context)
@@ -32,10 +27,17 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            foreach (var authorizationAttribute in GetAuthorizationDataAttributes(context.Method))
+            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(
+                _abpAuthorizationPolicyProvider,
+                GetAuthorizationDataAttributes(context.Method)
+            );
+
+            if (authorizationPolicy == null)
             {
-                await CheckAsync(authorizationAttribute);
+                return;
             }
+            
+            await _abpAuthorizationService.CheckAsync(authorizationPolicy);
         }
 
         protected virtual bool AllowAnonymous(MethodInvocationAuthorizationContext context)
@@ -49,7 +51,7 @@ namespace Volo.Abp.Authorization
                 .GetCustomAttributes(true)
                 .OfType<IAuthorizeData>();
 
-            if (methodInfo.IsPublic)
+            if (methodInfo.IsPublic && methodInfo.DeclaringType != null)
             {
                 attributes = attributes
                     .Union(
@@ -60,24 +62,6 @@ namespace Volo.Abp.Authorization
             }
 
             return attributes;
-        }
-
-        protected async Task CheckAsync(IAuthorizeData authorizationAttribute)
-        {
-            if (authorizationAttribute.Policy == null)
-            {
-                //TODO: Can we find a better, unified, way of checking if current request has been authenticated
-                if (!_currentUser.IsAuthenticated && !_currentClient.IsAuthenticated)
-                {
-                    throw new AbpAuthorizationException("Authorization failed! User has not logged in.");
-                }
-            }
-            else
-            {
-                await _authorizationService.CheckAsync(authorizationAttribute.Policy);
-            }
-
-            //TODO: What about roles and other props?
         }
     }
 }

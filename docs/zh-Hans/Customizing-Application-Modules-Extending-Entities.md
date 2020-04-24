@@ -58,8 +58,6 @@ ObjectExtensionManager.Instance
 
 ## 创建新实体映射到同一个数据库表/Collection
 
-尽管额外属性方法**易于使用**并且适用于一些场景,但它具有[实体文档](Entities.md)中描述的一些缺点.
-
 另一个方法是**创建你自己的实体**映射到**同一个数据库库**(对于MongoDB数据库是collection)
 
 [应用程序启动模板](Startup-Templates/Application.md)的 `AppUser` 已经实现了这种方法. [EF Core迁移文档](Entity-Framework-Core-Migrations.md)描述了在这些情况下如何实现和管理**EF Core数据库迁移**. 这种方法同样适用于MongoDB,但你不需要处理数据库迁移问题.

@@ -5,6 +5,7 @@ import styles from '../constants/styles';
 import { ApplicationLayoutComponent } from '../components/application-layout/application-layout.component';
 import { AccountLayoutComponent } from '../components/account-layout/account-layout.component';
 import { EmptyLayoutComponent } from '../components/empty-layout/empty-layout.component';
+import { eThemeBasicComponents } from '../enums/components';
 
 @Injectable({ providedIn: 'root' })
 export class InitialService {
@@ -13,15 +14,15 @@ export class InitialService {
 
     this.store.dispatch([
       new AddReplaceableComponent({
-        key: 'Theme.ApplicationLayoutComponent',
+        key: eThemeBasicComponents.ApplicationLayout,
         component: ApplicationLayoutComponent,
       }),
       new AddReplaceableComponent({
-        key: 'Theme.AccountLayoutComponent',
+        key: eThemeBasicComponents.AccountLayout,
         component: AccountLayoutComponent,
       }),
       new AddReplaceableComponent({
-        key: 'Theme.EmptyLayoutComponent',
+        key: eThemeBasicComponents.EmptyLayout,
         component: EmptyLayoutComponent,
       }),
     ]);

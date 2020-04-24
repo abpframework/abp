@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 using Shouldly;
 using Volo.Abp.Auditing;
 using Volo.Abp.Guids;
@@ -760,6 +761,230 @@ namespace Volo.Abp.AuditLogging
             var entityChanges = await AuditLogRepository.GetEntityChangeListAsync(changeType: EntityChangeType.Created);
             entityChanges.ShouldNotBeNull();
             entityChanges.Count.ShouldBe(1);
+        }
+
+        [Fact]
+        public async Task GetEntityChangesWithUsernameAsync()
+        {
+            // Arrange
+            var userId = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var userId2 = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var ipAddress = "153.1.7.61";
+            var firstComment = "first Comment";
+
+            var firstUser = "Douglas";
+            var secondUser = "John Doe";
+
+            var entityId = Guid.NewGuid().ToString();
+            var entityType = "Volo.Abp.AuditLogging.TestEntity";
+
+            var log1 = new AuditLogInfo
+            {
+                UserId = userId,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Today,
+                ExecutionDuration = 42,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                UserName = firstUser,
+                EntityChanges = {
+                    new EntityChangeInfo
+                {
+                    EntityId = entityId,
+                    EntityTypeFullName = entityType,
+                    ChangeType = EntityChangeType.Created,
+                    ChangeTime = DateTime.Now,
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                },
+                    new EntityChangeInfo
+                {
+                    EntityId = Guid.NewGuid().ToString(),
+                    EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity",
+                    ChangeType = EntityChangeType.Created,
+                    ChangeTime = DateTime.Now,
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                }
+
+                }
+            };
+
+            var log2 = new AuditLogInfo
+            {
+                UserId = userId2,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Today,
+                ExecutionDuration = 42,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                HttpStatusCode = (int?)HttpStatusCode.Accepted,
+                UserName = secondUser,
+                EntityChanges = {
+                    new EntityChangeInfo
+                    {
+                        EntityId = entityId,
+                        EntityTypeFullName = entityType,
+                        ChangeType = EntityChangeType.Updated,
+                        ChangeTime = DateTime.Now,
+                        PropertyChanges = new List<EntityPropertyChangeInfo>
+                        {
+                            new EntityPropertyChangeInfo
+                            {
+                                PropertyTypeFullName = typeof(string).FullName,
+                                PropertyName = "Name",
+                                NewValue = "New value",
+                                OriginalValue = null
+                            }
+                        }
+                    }
+
+                }
+            };
+
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+
+            //Assert
+            var entityHistory = await AuditLogRepository.GetEntityChangesWithUsernameAsync(entityId, entityType);
+
+            entityHistory.Count.ShouldBe(2);
+            var firstUserChange = entityHistory.First(x => x.UserName == firstUser);
+            firstUserChange.ShouldNotBeNull();
+            firstUserChange.EntityChange.ShouldNotBeNull();
+            firstUserChange.EntityChange.ChangeType.ShouldBe(EntityChangeType.Created);
+
+            var secondUserChange = entityHistory.First(x => x.UserName == secondUser);
+            secondUserChange.ShouldNotBeNull();
+            secondUserChange.EntityChange.ShouldNotBeNull();
+            secondUserChange.EntityChange.ChangeType.ShouldBe(EntityChangeType.Updated);
+        }
+
+        [Fact]
+        public async Task GetEntityChangeWithUsernameAsync()
+        {
+            // Arrange
+            var userId = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var userId2 = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var ipAddress = "153.1.7.61";
+            var firstComment = "first Comment";
+
+            var log1 = new AuditLogInfo
+            {
+                UserId = userId,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Today,
+                ExecutionDuration = 42,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                UserName = "Douglas",
+                EntityChanges = {
+                    new EntityChangeInfo
+                {
+                    EntityId = Guid.NewGuid().ToString(),
+                    EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity_Deleted",
+                    ChangeType = EntityChangeType.Deleted,
+                    ChangeTime = new DateTime(1995, 3, 27),
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                },
+                    new EntityChangeInfo
+                {
+                    EntityId = Guid.NewGuid().ToString(),
+                    EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity_Created",
+                    ChangeType = EntityChangeType.Created,
+                    ChangeTime = DateTime.Now,
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                }
+
+                }
+            };
+
+            var log2 = new AuditLogInfo
+            {
+                UserId = userId2,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Today,
+                ExecutionDuration = 42,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                HttpStatusCode = (int?)HttpStatusCode.BadGateway,
+                UserName = "John Doe",
+                EntityChanges = {
+                    new EntityChangeInfo
+                    {
+                        EntityId = Guid.NewGuid().ToString(),
+                        EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity_Updated",
+                        ChangeType = EntityChangeType.Updated,
+                        ChangeTime = DateTime.Now,
+                        PropertyChanges = new List<EntityPropertyChangeInfo>
+                        {
+                            new EntityPropertyChangeInfo
+                            {
+                                PropertyTypeFullName = typeof(string).FullName,
+                                PropertyName = "Name",
+                                NewValue = "New value",
+                                OriginalValue = null
+                            }
+                        }
+                    }
+                }
+            };
+
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
+
+            var entityChanges = await AuditLogRepository.GetEntityChangeListAsync();
+            var entityHistory =
+                await AuditLogRepository.GetEntityChangeWithUsernameAsync(entityChanges.First().Id);
+
+            entityHistory.EntityChange.ChangeTime.ShouldBe(entityChanges.First().ChangeTime);
+            entityHistory.UserName.ShouldNotBeNull();
         }
     }
 }

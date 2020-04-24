@@ -21,13 +21,6 @@ $solutionPaths = (
     "../modules/client-simulation",
     "../templates/module/aspnet-core",
     "../templates/app/aspnet-core",
-    "../samples/BookStore",
-    "../samples/BookStore-Angular-MongoDb/aspnet-core",
-    "../samples/BookStore-Modular/modules/book-management",
-    "../samples/BookStore-Modular/application",
-    "../samples/DashboardDemo",
-    "../samples/EfCoreMigrationDemo",
     "../samples/MicroserviceDemo",
-    "../samples/RabbitMqEventBus",
     "../abp_io/AbpIoLocalization"
 )

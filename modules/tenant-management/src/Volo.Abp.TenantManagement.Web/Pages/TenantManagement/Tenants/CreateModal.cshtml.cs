@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +16,9 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             TenantAppService = tenantAppService;
         }
 
-        public virtual Task OnGetAsync()
+        public virtual Task<IActionResult> OnGetAsync()
         {
-            return Task.CompletedTask;
+            return Task.FromResult<IActionResult>(Page());
         }
 
         public virtual async Task<IActionResult> OnPostAsync()

@@ -145,6 +145,23 @@ options.AddProfile<MyProfile>(validate: true);
 
 > 如果你有多个配置文件,并且只需要为其中几个启用验证,那么首先使用`AddMaps`而不进行验证,然后为你想要验证的每个配置文件使用`AddProfile`.
 
+### 映射对象扩展
+
+[对象扩展系统](Object-Extensions.md) 允许为已存在的类定义额外属性. ABP 框架提供了一个映射定义扩展可以正确的映射两个对象的额外属性.
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<User, UserDto>()
+            .MapExtraProperties();
+    }
+}
+````
+
+如果两个类都是可扩展对象(实现了 `IHasExtraProperties` 接口),建议使用 `MapExtraProperties` 方法. 更多信息请参阅[对象扩展文档](Object-Extensions.md).
+
 ## 高级主题
 
 ### IObjectMapper<TContext> 接口
