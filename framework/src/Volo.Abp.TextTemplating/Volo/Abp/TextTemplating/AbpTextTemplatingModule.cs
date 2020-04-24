@@ -44,12 +44,12 @@ namespace Volo.Abp.TextTemplating
 
                 foreach (var templateDefinition in templateDefinitionManager.GetAll())
                 {
-                    var contributorInitializationContext = new TemplateContributorInitializationContext(
+                    var contributorInitializationContext = new TemplateContentContributorInitializationContext(
                         templateDefinition,
                         scope.ServiceProvider
                     );
 
-                    foreach (var contributor in templateDefinition.Contributors)
+                    foreach (var contributor in templateDefinition.ContentContributors)
                     {
                         contributor.Initialize(contributorInitializationContext);
                     }

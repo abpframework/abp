@@ -9,12 +9,12 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         [Fact]
         public async Task Should_Get_Localized_Content_By_Culture()
         {
-            var contributor = new VirtualFileTemplateContributor(
+            var contributor = new VirtualFileTemplateContentContributor(
                 "/SampleTemplates/WelcomeEmail"
             );
 
             contributor.Initialize(
-                new TemplateContributorInitializationContext(
+                new TemplateContentContributorInitializationContext(
                     new TemplateDefinition("Test"),
                     ServiceProvider
                 )
@@ -30,12 +30,12 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         [Fact]
         public async Task Should_Get_Non_Localized_Template_Content()
         {
-            var contributor = new VirtualFileTemplateContributor(
+            var contributor = new VirtualFileTemplateContentContributor(
                 "/SampleTemplates/ForgotPasswordEmail.tpl"
             );
 
             contributor.Initialize(
-                new TemplateContributorInitializationContext(
+                new TemplateContentContributorInitializationContext(
                     new TemplateDefinition("Test"),
                     ServiceProvider
                 )

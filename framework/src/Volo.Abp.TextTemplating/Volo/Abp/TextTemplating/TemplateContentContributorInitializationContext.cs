@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.TextTemplating
 {
-    public class TemplateContributorInitializationContext
+    public class TemplateContentContributorInitializationContext
     {
         [NotNull]
         public TemplateDefinition TemplateDefinition { get; }
@@ -11,7 +11,7 @@ namespace Volo.Abp.TextTemplating
         [NotNull]
         public IServiceProvider ServiceProvider { get; }
 
-        public TemplateContributorInitializationContext(
+        public TemplateContentContributorInitializationContext(
             [NotNull] TemplateDefinition templateDefinition,
             [NotNull] IServiceProvider serviceProvider)
         {

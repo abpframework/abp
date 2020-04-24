@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.TextTemplating
 {
-    public class TemplateContributorList : List<ITemplateContributor>
+    public class TemplateContentContributorList : List<ITemplateContentContributor>
     {
         
     }

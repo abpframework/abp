@@ -3,9 +3,9 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.TextTemplating
 {
-    public interface ITemplateContributor
+    public interface ITemplateContentContributor
     {
-        void Initialize(TemplateContributorInitializationContext context);
+        void Initialize(TemplateContentContributorInitializationContext context);
 
         Task<string> GetOrNullAsync([CanBeNull] string cultureName);
     }

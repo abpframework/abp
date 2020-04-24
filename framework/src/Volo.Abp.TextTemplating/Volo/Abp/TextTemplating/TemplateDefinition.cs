@@ -16,7 +16,7 @@ namespace Volo.Abp.TextTemplating
         [CanBeNull]
         public Type LocalizationResource { get; set; }
 
-        public TemplateContributorList Contributors { get; }
+        public TemplateContentContributorList ContentContributors { get; }
 
         [CanBeNull]
         public string DefaultCultureName { get; }
@@ -30,15 +30,15 @@ namespace Volo.Abp.TextTemplating
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             LocalizationResource = localizationResource;
-            Contributors = new TemplateContributorList();
+            ContentContributors = new TemplateContentContributorList();
             IsLayout = isLayout;
             Layout = layout;
             DefaultCultureName = defaultCultureName;
         }
 
-        public virtual TemplateDefinition WithContributor(ITemplateContributor contributor)
+        public virtual TemplateDefinition WithContributor(ITemplateContentContributor contentContributor)
         {
-            Contributors.Add(contributor);
+            ContentContributors.Add(contentContributor);
             return this;
         }
     }

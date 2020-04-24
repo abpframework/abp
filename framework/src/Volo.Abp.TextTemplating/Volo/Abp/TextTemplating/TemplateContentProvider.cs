@@ -29,7 +29,7 @@ namespace Volo.Abp.TextTemplating
         {
             Check.NotNull(templateDefinition, nameof(templateDefinition));
 
-            foreach (var contributor in templateDefinition.Contributors)
+            foreach (var contributor in templateDefinition.ContentContributors)
             {
                 var templateString = await contributor.GetOrNullAsync(cultureName);
                 if (templateString != null)

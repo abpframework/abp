@@ -10,7 +10,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
 {
-    public class VirtualFileTemplateContributor : ITemplateContributor
+    public class VirtualFileTemplateContentContributor : ITemplateContentContributor
     {
         public TemplateDefinition TemplateDefinition { get; private set; }
 
@@ -19,13 +19,13 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         private volatile Dictionary<string, string> _templateDictionary;
         private readonly object _syncObj = new object();
 
-        public VirtualFileTemplateContributor(
+        public VirtualFileTemplateContentContributor(
             [NotNull] string virtualPath)
         {
             _virtualPath = Check.NotNullOrWhiteSpace(virtualPath, nameof(virtualPath));
         }
 
-        public void Initialize(TemplateContributorInitializationContext context)
+        public void Initialize(TemplateContentContributorInitializationContext context)
         {
             _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
             TemplateDefinition = context.TemplateDefinition;
