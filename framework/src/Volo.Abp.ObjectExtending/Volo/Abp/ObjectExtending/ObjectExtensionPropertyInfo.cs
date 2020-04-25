@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending
 {
     public class ObjectExtensionPropertyInfo
     {
+        [NotNull] private ILocalizableString _displayName;
+
         [NotNull]
         public ObjectExtensionInfo ObjectExtension { get; }
 
@@ -21,6 +24,17 @@ namespace Volo.Abp.ObjectExtending
 
         [NotNull]
         public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
+
+        [NotNull]
+        public ILocalizableString DisplayName
+        {
+            get => _displayName;
+            set
+            {
+                Check.NotNull(value, nameof(value));
+                _displayName = value;
+            }
+        }
 
         /// <summary>
         /// Indicates whether to check the other side of the object mapping
@@ -40,13 +54,15 @@ namespace Volo.Abp.ObjectExtending
         public Dictionary<object, object> Configuration { get; }
 
         public ObjectExtensionPropertyInfo(
-            [NotNull] ObjectExtensionInfo objectExtension, 
-            [NotNull] Type type, 
+            [NotNull] ObjectExtensionInfo objectExtension,
+            [NotNull] Type type,
             [NotNull] string name)
         {
             ObjectExtension = Check.NotNull(objectExtension, nameof(objectExtension));
             Type = Check.NotNull(type, nameof(type));
             Name = Check.NotNull(name, nameof(name));
+
+            DisplayName = new FixedLocalizableString(Name);
 
             Configuration = new Dictionary<object, object>();
             ValidationAttributes = new List<ValidationAttribute>();
