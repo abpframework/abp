@@ -877,94 +877,51 @@ Run the following command in the terminal to create a new state, named `BooksSta
 ![Initial book list page](./images/bookstore-generate-state-books.png)
 
 ```bash
-yarn ng generate ngxs-schematic:state books
+npx @ngxs/cli --name books --directory src/app/books
 ```
 
-* This command creates several new files and updates `app.modules.ts` file to import the `NgxsModule` with the new state.
+* This command creates `books.state.ts` and `books.actions.ts` files in the `src/app/books/state` folder. See the [NGXS CLI documentation](https://www.ngxs.io/plugins/cli).
 
-#### Get books data from backend
-
-Create data types to map the data from the backend (you can check Swagger UI or your backend API to see the data format).
-
-![BookDto properties](./images/bookstore-swagger-book-dto-properties.png)
-
-Open the `books.ts` file in the `app\store\models` folder and replace the content as below:
+Import the `BooksState` to the `app.module.ts` in the `src/app` folder and then add the `BooksState` to `forRoot` static method of `NgxsModule` as an array element of the first parameter of the method.
 
 ```js
-export namespace Books {
-  export interface State {
-    books: Response;
-  }
+// ...
+import { BooksState } from './books/state/books.state'; //<== imported BooksState ==>
 
-  export interface Response {
-    items: Book[];
-    totalCount: number;
-  }
+@NgModule({
+  imports: [
+    // other imports
 
-  export interface Book {
-    name: string;
-    type: BookType;
-    publishDate: string;
-    price: number;
-    lastModificationTime: string;
-    lastModifierId: string;
-    creationTime: string;
-    creatorId: string;
-    id: string;
-  }
+    NgxsModule.forRoot([BooksState]), //<== added BooksState ==>
 
-  export enum BookType {
-    Undefined,
-    Adventure,
-    Biography,
-    Dystopia,
-    Fantastic,
-    Horror,
-    Science,
-    ScienceFiction,
-    Poetry,
-  }
-}
+    //other imports
+  ],
+  // ...
+})
+export class AppModule {}
 ```
 
-* Added `Book` interface that represents a book object and `BookType` enum which represents a book category.
+#### Generate proxies
 
-#### BooksService
+ABP CLI provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running generate-proxy command, your host must be up and running. See the [CLI documentation](../CLI.md)
 
-Create a new service, named `BooksService` to perform `HTTP` calls to the server:
+Run the following command in the `angular` folder:
 
 ```bash
-yarn ng generate service books/shared/books
+abp generate-proxy --module app
 ```
 
-![service-terminal-output](./images/bookstore-service-terminal-output.png)
+![Generate proxy command](./images/generate-proxy-command.png)
 
-Open the `books.service.ts` file in `app\books\shared` folder and replace the content as below:
+The generated files looks like below:
 
-```js
-import { Injectable } from '@angular/core';
-import { RestService } from '@abp/ng.core';
-import { Books } from '../../store/models';
-import { Observable } from 'rxjs';
+![Generated files](./images/generated-proxies.png)
 
-@Injectable({
-  providedIn: 'root',
-})
-export class BooksService {
-  constructor(private restService: RestService) {}
+#### GetBooks Action
 
-  get(): Observable<Books.Response> {
-    return this.restService.request<void, Books.Response>({
-      method: 'GET',
-      url: '/api/app/book'
-    });
-  }
-}
-```
+Actions can either be thought of as a command which should trigger something to happen, or as the resulting event of something that has already happened. [See NGXS Actions documentation](https://www.ngxs.io/concepts/actions).
 
-* We added the `get` method to get the list of books by performing an HTTP request to the related endpoint.
-
-Open the`books.actions.ts` file in `app\store\actions` folder and replace the content below:
+Open the `books.actions.ts` file in `app/books/state` folder and replace the content below:
 
 ```js
 export class GetBooks {
@@ -974,43 +931,48 @@ export class GetBooks {
 
 #### Implement BooksState
 
-Open the `books.state.ts` file in `app\store\states` folder and replace the content below:
+Open the `books.state.ts` file in `app/books/state` folder and replace the content below:
 
 ```js
+import { PagedResultDto } from '@abp/ng.core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks } from '../actions/books.actions';
-import { Books } from '../models/books';
-import { BooksService } from '../../books/shared/books.service';
+import { GetBooks } from './books.actions';
+import { BookService } from '../../app/shared/services';
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { BookDto } from '../../app/shared/models';
 
-@State<Books.State>({
+export class BooksStateModel {
+  public book: PagedResultDto<BookDto>;
+}
+
+@State<BooksStateModel>({
   name: 'BooksState',
-  defaults: { books: {} } as Books.State,
+  defaults: { book: {} } as BooksStateModel,
 })
 @Injectable()
 export class BooksState {
   @Selector()
-  static getBooks(state: Books.State) {
-    return state.books.items || [];
+  static getBooks(state: BooksStateModel) {
+    return state.book.items || [];
   }
 
-  constructor(private booksService: BooksService) {}
+  constructor(private bookService: BookService) {}
 
   @Action(GetBooks)
-  get(ctx: StateContext<Books.State>) {
-    return this.booksService.get().pipe(
-      tap(booksResponse => {
+  get(ctx: StateContext<BooksStateModel>) {
+    return this.bookService.getListByInput().pipe(
+      tap((booksResponse) => {
         ctx.patchState({
-          books: booksResponse,
+          book: booksResponse,
         });
-      }),
+      })
     );
   }
 }
 ```
-
-* We added the `GetBooks` action that retrieves the books data via `BooksService` and patches the state.
+* We added the book property to BooksStateModel model.
+* We added the `GetBooks` action that retrieves the books data via `BooksService` that generated via ABP CLI and patches the state.
 * `NGXS` requires to return the observable without subscribing it in the get function.
 
 #### BookListComponent
@@ -1019,11 +981,12 @@ Open the `book-list.component.ts` file in `app\books\book-list` folder and repla
 
 ```js
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks } from '../../store/actions';
+import { finalize } from 'rxjs/operators';
+import { BookDto, BookType } from '../../app/shared/models';
+import { GetBooks } from '../state/books.actions';
+import { BooksState } from '../state/books.state';
 
 @Component({
   selector: 'app-book-list',
@@ -1032,13 +995,13 @@ import { GetBooks } from '../../store/actions';
 })
 export class BookListComponent implements OnInit {
   @Select(BooksState.getBooks)
-  books$: Observable<Books.Book[]>;
+  books$: Observable<BookDto[]>;
 
-  booksType = Books.BookType;
+  booksType = BookType;
 
   loading = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.get();
@@ -1046,9 +1009,10 @@ export class BookListComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new GetBooks()).subscribe(() => {
-      this.loading = false;
-    });
+    this.store
+      .dispatch(new GetBooks())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(() => {});
   }
 }
 ```
