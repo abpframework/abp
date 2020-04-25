@@ -131,5 +131,20 @@ namespace Volo.Abp.Reflection
                    type == typeof(TimeSpan) ||
                    type == typeof(Guid);
         }
+
+        public static object GetDefaultValue<T>()
+        {
+            return GetDefaultValue(typeof(T));
+        }
+
+        public static object GetDefaultValue(Type type)
+        {
+            if (type.IsValueType)
+            {
+                return Activator.CreateInstance(type);
+            }
+
+            return null;
+        }
     }
 }

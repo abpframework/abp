@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Data
@@ -48,6 +49,35 @@ namespace Volo.Abp.Data
         {
             source.ExtraProperties.Remove(name);
             return source;
+        }
+
+        public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type objectType = null)
+            where TSource : IHasExtraProperties
+        {
+            var properties = ObjectExtensionManager.Instance
+                .GetProperties(objectType ?? typeof(TSource));
+
+            foreach (var property in properties)
+            {
+                if (source.HasProperty(property.Name))
+                {
+                    continue;
+                }
+
+                source.ExtraProperties[property.Name] = TypeHelper.GetDefaultValue(property.Type);
+            }
+
+            return source;
+        }
+
+        public static void SetDefaultsForExtraProperties(object source, Type objectType)
+        {
+            if (!(source is IHasExtraProperties))
+            {
+                throw new ArgumentException($"Given {nameof(source)} object does not implement the {nameof(IHasExtraProperties)} interface!", nameof(source));
+            }
+
+            ((IHasExtraProperties) source).SetDefaultsForExtraProperties(objectType);
         }
     }
 }
