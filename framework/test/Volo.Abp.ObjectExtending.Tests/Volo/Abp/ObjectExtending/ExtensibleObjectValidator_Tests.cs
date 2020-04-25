@@ -55,7 +55,7 @@ namespace Volo.Abp.ObjectExtending
                                         context.ValidationErrors.Add(
                                             new ValidationResult(
                                                 "If you specify a password, then please correctly repeat it!",
-                                                new[] {"Password", "PasswordRepeat"}
+                                                new[] { "Password", "PasswordRepeat" }
                                             )
                                         );
                                     }
@@ -84,14 +84,9 @@ namespace Volo.Abp.ObjectExtending
         {
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Name", "John"},
-                            {"Age", "42"},
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Name", "John")
+                        .SetProperty("Age", 42)
                 ).Count.ShouldBe(0); //All Valid
         }
 
@@ -105,62 +100,37 @@ namespace Volo.Abp.ObjectExtending
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Address", new string('x', 256) }
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Address", new string('x', 256))
                 ).Count.ShouldBe(3); // Name, Age & Address
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Age", "42" }
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Age", 42)
                 ).Count.ShouldBe(1); // Name
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Address", new string('x', 256) },
-                            {"Age", "100" }
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Address", new string('x', 256))
+                        .SetProperty("Age", 100)
                 ).Count.ShouldBe(3); // Name, Age & Address
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Name", "John"},
-                            {"Age", "42"},
-                            {"Password", "123"},
-                            {"PasswordRepeat", "1256"}
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Name", "John")
+                        .SetProperty("Age", 42)
+                        .SetProperty("Password", "123")
+                        .SetProperty("PasswordRepeat", "1256")
                 ).Count.ShouldBe(1); // PasswordRepeat != Password
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Name", "BadValue"},
-                            {"Age", "42"},
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Name", "BadValue")
+                        .SetProperty("Age", 42)
                 ).Count.ShouldBe(1); //Name is 'BadValue'!
         }
 
