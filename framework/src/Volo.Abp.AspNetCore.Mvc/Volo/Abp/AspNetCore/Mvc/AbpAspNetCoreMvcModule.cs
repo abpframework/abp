@@ -90,8 +90,11 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
-            
-            var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
+
+            var abpMvcDataAnnotationsLocalizationOptions = context.Services
+                .ExecutePreConfiguredActions(
+                    new AbpMvcDataAnnotationsLocalizationOptions()
+                );
 
             context.Services
                 .AddSingleton<IOptions<AbpMvcDataAnnotationsLocalizationOptions>>(

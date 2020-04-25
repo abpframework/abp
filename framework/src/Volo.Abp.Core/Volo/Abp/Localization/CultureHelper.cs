@@ -29,5 +29,23 @@ namespace Volo.Abp.Localization
                 CultureInfo.CurrentUICulture = currentUiCulture;
             });
         }
+
+        public static bool IsValidCultureCode(string cultureCode)
+        {
+            if (cultureCode.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            try
+            {
+                CultureInfo.GetCultureInfo(cultureCode);
+                return true;
+            }
+            catch (CultureNotFoundException)
+            {
+                return false;
+            }
+        }
     }
 }
