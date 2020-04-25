@@ -109,14 +109,18 @@ namespace Volo.Abp.ObjectExtending
         private static readonly ImmutableList<ObjectExtensionPropertyInfo> EmptyPropertyList 
             = new List<ObjectExtensionPropertyInfo>().ToImmutableList();
 
+        public static ImmutableList<ObjectExtensionPropertyInfo> GetProperties<TObject>(
+            [NotNull] this ObjectExtensionManager objectExtensionManager)
+        {
+            return objectExtensionManager.GetProperties(typeof(TObject));
+        }
+
         public static ImmutableList<ObjectExtensionPropertyInfo> GetProperties(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
-            [NotNull] Type objectType,
-            [NotNull] string propertyName)
+            [NotNull] Type objectType)
         {
             Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
             Check.NotNull(objectType, nameof(objectType));
-            Check.NotNull(propertyName, nameof(propertyName));
 
             var extensionInfo = objectExtensionManager.GetOrNull(objectType);
             if (extensionInfo == null)
