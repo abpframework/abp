@@ -27,6 +27,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                 expression
             );
 
+            AbpExtraPropertyValidationMetadataProvider.CurrentModeInfo.Value = null;
+
             if (result.ModelExplorer.Container == null)
             {
                 return result;
