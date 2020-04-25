@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                 return value;
             }
 
-            var propertyName = ExtractExtraPropertyName(bindingContext.ModelName);
+            var propertyName = ExtraPropertyBindingHelper.ExtractExtraPropertyName(bindingContext.ModelName);
             if (propertyName == null)
             {
                 return value;
@@ -60,20 +60,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
             }
 
             return Convert.ChangeType(value, propertyInfo.Type);
-        }
-
-        /* modelName is a string like "UserInfo.ExtraProperties[SocialSecurityNumber]"
-         * This method returns "SocialSecurityNumber" for this example. */
-        protected virtual string ExtractExtraPropertyName(string modelName)
-        {
-            //TODO: Use regex(?) and add unit test (by extracting to a helper class)
-            var index = modelName.IndexOf(".ExtraProperties[", StringComparison.Ordinal);
-            if (index < 0)
-            {
-                return null;
-            }
-
-            return modelName.Substring(index + 17, modelName.Length - index - 18);
         }
     }
 }

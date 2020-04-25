@@ -79,5 +79,19 @@ namespace Volo.Abp.ObjectExtending
                     );
                 });
         }
+
+        public static ObjectExtensionPropertyInfo GetPropertyOrNull(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] Type objectType,
+            [NotNull] string propertyName)
+        {
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+            Check.NotNull(objectType, nameof(objectType));
+            Check.NotNull(propertyName, nameof(propertyName));
+
+            return objectExtensionManager
+                .GetOrNull(objectType)?
+                .GetPropertyOrNull(propertyName);
+        }
     }
 }
