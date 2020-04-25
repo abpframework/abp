@@ -8,8 +8,6 @@ namespace Volo.Abp.ObjectExtending
 {
     public class ObjectExtensionPropertyInfo
     {
-        [NotNull] private ILocalizableString _displayName;
-
         [NotNull]
         public ObjectExtensionInfo ObjectExtension { get; }
 
@@ -35,6 +33,7 @@ namespace Volo.Abp.ObjectExtending
                 _displayName = value;
             }
         }
+        private ILocalizableString _displayName;
 
         /// <summary>
         /// Indicates whether to check the other side of the object mapping
