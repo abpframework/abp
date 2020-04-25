@@ -265,7 +265,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            foreach (var property in objectExtension.GetProperties())
+            var efMappedProperties = ObjectExtensionManager.Instance
+                .GetProperties(entityType)
+                .Where(p => p.IsMappedToFieldForEfCore());
+
+            foreach (var property in efMappedProperties)
             {
                 if (!entity.HasProperty(property.Name))
                 {
