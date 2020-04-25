@@ -1,0 +1,8 @@
+﻿{
+	"culture": "de",
+	"texts": {
+		"Hello <b>{0}</b>.": "Hallo <b>{0}</b>.",
+		"Car": "Auto",
+		"SeeYou": "Bis bald"
+	}
+}
