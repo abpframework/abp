@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
@@ -12,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ModelBinding;
+using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation.Localization;
@@ -20,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ViewFeatures
 {
     [Dependency(ReplaceServices = true)]
     [ExposeServices(typeof(ValidationHtmlAttributeProvider))]
-    public class AbpValidationHtmlAttributeProvider 
+    public class AbpValidationHtmlAttributeProvider
         : DefaultValidationHtmlAttributeProvider, ISingletonDependency
     {
         private readonly IModelMetadataProvider _metadataProvider;
@@ -29,15 +28,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ViewFeatures
         private readonly IValidationAttributeAdapterProvider _validationAttributeAdapterProvider;
 
         public AbpValidationHtmlAttributeProvider(
-            IOptions<MvcViewOptions> optionsAccessor, 
-            IModelMetadataProvider metadataProvider, 
+            IOptions<MvcViewOptions> optionsAccessor,
+            IModelMetadataProvider metadataProvider,
             ClientValidatorCache clientValidatorCache,
-            IValidationAttributeAdapterProvider validationAttributeAdapterProvider, 
-            IStringLocalizerFactory stringLocalizerFactory, 
-            IStringLocalizer<AbpValidationResource> validationStringLocalizer) 
+            IValidationAttributeAdapterProvider validationAttributeAdapterProvider,
+            IStringLocalizerFactory stringLocalizerFactory,
+            IStringLocalizer<AbpValidationResource> validationStringLocalizer)
             : base(
-                optionsAccessor, 
-                metadataProvider, 
+                optionsAccessor,
+                metadataProvider,
                 clientValidatorCache)
         {
             _metadataProvider = metadataProvider;
@@ -47,52 +46,85 @@ namespace Volo.Abp.AspNetCore.Mvc.ViewFeatures
         }
 
         public override void AddValidationAttributes(
-            ViewContext viewContext, 
-            ModelExplorer modelExplorer, 
+            ViewContext viewContext,
+            ModelExplorer modelExplorer,
             IDictionary<string, string> attributes)
         {
             base.AddValidationAttributes(viewContext, modelExplorer, attributes);
+            AddExtraPropertyValidationsAttributes(viewContext, modelExplorer, attributes);
+        }
 
+        protected virtual void AddExtraPropertyValidationsAttributes(ViewContext viewContext, ModelExplorer modelExplorer, IDictionary<string, string> attributes)
+        {
             var nameAttribute = attributes.GetOrDefault("name");
-            var propertyName = ExtraPropertyBindingHelper.ExtractExtraPropertyName(nameAttribute);
-            if (propertyName == null)
+            if (nameAttribute == null)
             {
                 return;
             }
 
-            //NOTE: containerName can be null on controller actions..?
+            var extraPropertyName = ExtraPropertyBindingHelper.ExtractExtraPropertyName(nameAttribute);
+            if (extraPropertyName == null)
+            {
+                return;
+            }
 
+            //TODO: containerName can be null on controller actions..?
             var containerName = ExtraPropertyBindingHelper.ExtractContainerName(nameAttribute);
             if (containerName == null)
             {
                 return;
             }
 
+            if (modelExplorer.Container?.ModelType == null)
+            {
+                return;
+            }
+
             var extensibleObjectType = modelExplorer.Container.ModelType
                 .GetProperty(containerName, BindingFlags.Instance | BindingFlags.Public)
-                .PropertyType;
+                ?.PropertyType;
+            if (extensibleObjectType == null)
+            {
+                return;
+            }
 
-            var propertyInfo = ObjectExtensionManager.Instance.GetPropertyOrNull(extensibleObjectType, propertyName);
+            var extensionPropertyInfo = ObjectExtensionManager.Instance.GetPropertyOrNull(
+                extensibleObjectType,
+                extraPropertyName
+            );
 
-            modelExplorer.Metadata.As<DefaultModelMetadata>().DisplayMetadata.DisplayName = () => propertyInfo.DisplayName.Localize(_stringLocalizerFactory);
+            if (extensionPropertyInfo == null)
+            {
+                return;
+            }
 
-            foreach (var validationAttribute in propertyInfo.ValidationAttributes)
+            if (modelExplorer.Metadata is DefaultModelMetadata metadata)
+            {
+                metadata.DisplayMetadata.DisplayName =
+                    () => extensionPropertyInfo.DisplayName.Localize(_stringLocalizerFactory);
+            }
+
+            foreach (var validationAttribute in extensionPropertyInfo.ValidationAttributes)
             {
                 var validationContext = new ClientModelValidationContext(
                     viewContext,
                     modelExplorer.Metadata,
                     _metadataProvider,
-                    attributes);
+                    attributes
+                );
 
-                validationAttribute.ErrorMessage = ValidationAttributeErrorMessageStringProperty.GetValue(validationAttribute) as string;
+                if (validationAttribute.ErrorMessage == null)
+                {
+                    ValidationAttributeHelper.SetDefaultErrorMessage(validationAttribute);
+                }
 
-                _validationAttributeAdapterProvider.GetAttributeAdapter(validationAttribute, _validationStringLocalizer)
-                    .AddValidation(validationContext);
+                var validationAttributeAdapter = _validationAttributeAdapterProvider.GetAttributeAdapter(
+                        validationAttribute,
+                        _validationStringLocalizer
+                    );
+
+                validationAttributeAdapter.AddValidation(validationContext);
             }
         }
-
-        private static readonly PropertyInfo ValidationAttributeErrorMessageStringProperty = typeof(ValidationAttribute)
-            .GetProperty("ErrorMessageString", BindingFlags.Instance | BindingFlags.NonPublic);
-
     }
 }
