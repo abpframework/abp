@@ -5,33 +5,33 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
     public static class ExtraPropertyBindingHelper
     {
         /// <summary>
-        /// modelName is a string like "UserInfo.ExtraProperties[SocialSecurityNumber]"
+        /// <paramref name="expression"/> is a string like "UserInfo.ExtraProperties[SocialSecurityNumber]"
         /// This method returns "SocialSecurityNumber" for this example. */
         /// </summary>
-        public static string ExtractExtraPropertyName(string modelName)
+        public static string ExtractExtraPropertyName(string expression)
         {
-            var index = modelName.IndexOf(".ExtraProperties[", StringComparison.Ordinal);
+            var index = expression.IndexOf("ExtraProperties[", StringComparison.Ordinal);
             if (index < 0)
             {
                 return null;
             }
 
-            return modelName.Substring(index + 17, modelName.Length - index - 18);
+            return expression.Substring(index + 16, expression.Length - index - 17);
         }
 
         /// <summary>
-        /// modelName is a string like "UserInfo.ExtraProperties[SocialSecurityNumber]"
+        /// <paramref name="expression"/> is a string like "UserInfo.ExtraProperties[SocialSecurityNumber]"
         /// This method returns "UserInfo" for this example.
         /// </summary>
-        public static string ExtractContainerName(string modelName)
+        public static string ExtractContainerName(string expression)
         {
-            var index = modelName.IndexOf(".ExtraProperties[", StringComparison.Ordinal);
+            var index = expression.IndexOf("ExtraProperties[", StringComparison.Ordinal);
             if (index < 0)
             {
                 return null;
             }
 
-            return modelName.Left(index);
+            return expression.Left(index).TrimEnd('.');
         }
     }
 }
