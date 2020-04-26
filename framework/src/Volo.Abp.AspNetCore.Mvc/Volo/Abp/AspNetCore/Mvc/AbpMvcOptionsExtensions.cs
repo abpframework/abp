@@ -57,7 +57,6 @@ namespace Volo.Abp.AspNetCore.Mvc
             options.ModelMetadataDetailsProviders.Add(
                 new AbpDataAnnotationAutoLocalizationMetadataDetailsProvider(services)
             );
-            options.ModelMetadataDetailsProviders.Add(new AbpExtraPropertyValidationMetadataProvider());
         }
     }
 }
