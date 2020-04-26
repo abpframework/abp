@@ -150,6 +150,7 @@ clear(): void
 Removes all open toasts.
 
 ## See Also
+
 - [Confirmation Popup](./Confirmation-Service.md)
 
 ## What's Next?
