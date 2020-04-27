@@ -874,8 +874,6 @@ We'll see **book-list works!**  text on the books page:
 
 Run the following command in the terminal to create a new state, named `BooksState`:
 
-![Initial book list page](./images/bookstore-generate-state-books.png)
-
 ```bash
 npx @ngxs/cli --name books --directory src/app/books
 ```
