@@ -1,12 +1,12 @@
 {
-  "version": "2.6.1",
+  "version": "2.6.2",
   "name": "@abp/select2",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^2.6.1",
+    "@abp/core": "^2.6.2",
     "select2": "^4.0.12"
   },
-  "gitHead": "b030633c829b061c38a244e499279a6a3189e3f7"
+  "gitHead": "eb4a0e507f492e275865b72caeb02ce28d69ae56"
 }

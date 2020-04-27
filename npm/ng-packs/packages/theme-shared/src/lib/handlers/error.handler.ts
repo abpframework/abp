@@ -90,7 +90,7 @@ export class ErrorHandler {
       .subscribe(err => {
         const body = snq(() => err.error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
 
-        if (err.headers.get('_AbpErrorFormat')) {
+        if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
           const confirmation$ = this.showError(null, null, body);
 
           if (err.status === 401) {
