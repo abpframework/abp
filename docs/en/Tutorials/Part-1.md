@@ -38,7 +38,7 @@ Create a new project named `Acme.BookStore` where `Acme` is the company name and
 
 #### Create the project
 
-By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `MVC`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
+By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `{{UI_Value}}`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
 
 ```bash
 abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}} --mobile none
