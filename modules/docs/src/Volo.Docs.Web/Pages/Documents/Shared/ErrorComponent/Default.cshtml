@@ -1,17 +1,19 @@
-﻿@using Volo.Docs.Pages.Documents.Shared.DocumentNotFoundComponent
-@model DocumentNotFoundPageModel
+﻿@model Volo.Docs.Pages.Documents.Shared.ErrorComponent.ErrorPageModel
 @{
 }
 <div class="row position-relative vh-100" style="background: #e8e8e8;">
-    <div class="center">
-        <span class="notfound-404">404</span> 
+    <div class="center" id="DocumentErrorContainer">
+        <span class="notfound-@Model.ErrorCode">@Model.ErrorCode</span>
         <h1>
-            <strong>"@Model.DocumentName"</strong> not found in <strong>@Model.ProjectName</strong> documents, with <strong>@Model.Version</strong> version and <strong>@Model.LanguageCode</strong> language.
+            @Model.ErrorMessage
         </h1>
-        <br />
-        <a href="@(Model.DocumentsUrlPrefix + Model.LanguageCode + "/" +Model.ProjectName + "/" + Model.Version)" class="btn btn-primary px-4">
-            Go Back
-        </a>
+        <br/>
+        @if (Model.AutoRedirect)
+        {
+            <a href="@(Model.RedirectUrl)" class="btn btn-primary px-4" id="ErrorRedirect">
+                Go Back <span id="ErrorRedirectSeconds">(3)</span>
+            </a>
+        }
     </div>
 </div>
 
@@ -20,7 +22,7 @@
     h1 {
         font-size: 1.75em;
         line-height: 1.75;
-        color: #777; 
+        color: #777;
         font-weight: normal;
     }
 
@@ -37,7 +39,7 @@
         transform: translate(-50%, -50%);
         text-align: center;
     }
-    
+
     .notfound-404 {
     font-size: 300px;
     font-weight: 700;
@@ -49,5 +51,5 @@
     margin-bottom: -150px;
     z-index: -1;
     position: relative;
-    } 
+    }
 </style>
