@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization
@@ -28,6 +29,11 @@ namespace Volo.Abp.Localization
                 CultureInfo.CurrentCulture = currentCulture;
                 CultureInfo.CurrentUICulture = currentUiCulture;
             });
+        }
+
+        public static bool IsRtl
+        {
+            get { return Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft; }
         }
     }
 }

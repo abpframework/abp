@@ -1,0 +1,7 @@
+﻿{
+  "culture": "ar",
+  "texts": {
+    "ThisFieldIsRequired": "الحقل مطلوب",
+    "MaxLenghtErrorMessage": "اقصى طول للحقل '{0}' حرف"
+  }
+}
