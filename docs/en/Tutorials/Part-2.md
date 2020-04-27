@@ -525,7 +525,7 @@ export class BooksState {
 
 * We imported `CreateUpdateBook` action and defined the `save` method that will listen to a `CreateUpdateBook` action to create a book.
 
-When the `SaveBook` action dispatched, the save method is being executed. It calls `create` method of the `BookService`. 
+When the `SaveBook` action dispatched, the save method is being executed. It calls `createByInput` method of the `BookService`. 
 
 #### Add a modal to BookListComponent
 
@@ -885,32 +885,6 @@ Now, you can open your browser to see the changes:
 
 #### Saving the book
 
-Open `book-list.component.html` in `app\books\book-list` folder and add the following `abp-button` to save the new book.
-
-```html
-<ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
-      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
-  </button>
-    
-  <!--added save button-->
-  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
-        <i class="fa fa-check mr-1"></i>
-        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
-  </button>
-</ng-template>
-```
-
-Find the `<form [formGroup]="form">` tag and replace below content:
-
-```html
-<form [formGroup]="form" (ngSubmit)="save()"> <!-- added the ngSubmit -->
-```
-
-  
-* We added the `(ngSubmit)="save()"` to `<form>` element to save a new book by pressing the enter.
-* We added `abp-button` to the bottom area of the modal to save a new book.
-
 Open `book-list.component.ts` file in `app\books\book-list` folder and replace the content as below:
 
 ```js
@@ -992,6 +966,32 @@ export class BookListComponent implements OnInit {
 
 * We imported `CreateUpdateBook`.
 * We added `save` method
+
+Open `book-list.component.html` in `app\books\book-list` folder and add the following `abp-button` to save the new book.
+
+```html
+<ng-template #abpFooter>
+  <button type="button" class="btn btn-secondary" #abpClose>
+      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
+  </button>
+    
+  <!--added save button-->
+  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+        <i class="fa fa-check mr-1"></i>
+        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
+  </button>
+</ng-template>
+```
+
+Find the `<form [formGroup]="form">` tag and replace below content:
+
+```html
+<form [formGroup]="form" (ngSubmit)="save()"> <!-- added the ngSubmit -->
+```
+
+  
+* We added the `(ngSubmit)="save()"` to `<form>` element to save a new book by pressing the enter.
+* We added `abp-button` to the bottom area of the modal to save a new book.
 
 The final modal UI looks like below:
 
