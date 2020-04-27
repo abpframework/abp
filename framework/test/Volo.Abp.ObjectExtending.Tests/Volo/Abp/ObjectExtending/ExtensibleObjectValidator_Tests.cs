@@ -19,19 +19,19 @@ namespace Volo.Abp.ObjectExtending
                     {
                         options.AddOrUpdateProperty<string>("Name", propertyInfo =>
                         {
-                            propertyInfo.ValidationAttributes.Add(new RequiredAttribute());
-                            propertyInfo.ValidationAttributes.Add(new StringLengthAttribute(64) { MinimumLength = 2 });
+                            propertyInfo.Attributes.Add(new RequiredAttribute());
+                            propertyInfo.Attributes.Add(new StringLengthAttribute(64) { MinimumLength = 2 });
                         });
 
                         options.AddOrUpdateProperty<string>("Address", propertyInfo =>
                         {
-                            propertyInfo.ValidationAttributes.Add(new StringLengthAttribute(255));
+                            propertyInfo.Attributes.Add(new StringLengthAttribute(255));
                         });
 
                         options.AddOrUpdateProperty<byte>("Age", propertyInfo =>
                         {
-                            propertyInfo.ValidationAttributes.Add(new RequiredAttribute());
-                            propertyInfo.ValidationAttributes.Add(new RangeAttribute(18, 99));
+                            propertyInfo.Attributes.Add(new RequiredAttribute());
+                            propertyInfo.Attributes.Add(new RangeAttribute(18, 99));
                         });
 
                         options.AddOrUpdateProperty<bool>("IsMarried", propertyInfo =>

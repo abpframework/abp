@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
@@ -104,7 +106,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ViewFeatures
                     () => extensionPropertyInfo.DisplayName.Localize(_stringLocalizerFactory);
             }
 
-            foreach (var validationAttribute in extensionPropertyInfo.ValidationAttributes)
+            foreach (var validationAttribute in extensionPropertyInfo.GetValidationAttributes())
             {
                 var validationContext = new ClientModelValidationContext(
                     viewContext,
@@ -123,7 +125,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ViewFeatures
                         _validationStringLocalizer
                     );
 
-                validationAttributeAdapter.AddValidation(validationContext);
+                validationAttributeAdapter?.AddValidation(validationContext);
             }
         }
     }

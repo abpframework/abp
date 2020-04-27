@@ -123,7 +123,9 @@ namespace Volo.Abp.ObjectExtending
             ValidationContext objectValidationContext, 
             ObjectExtensionPropertyInfo property)
         {
-            if (!property.ValidationAttributes.Any())
+            var validationAttributes = property.GetValidationAttributes();
+
+            if (!validationAttributes.Any())
             {
                 return;
             }
@@ -134,7 +136,7 @@ namespace Volo.Abp.ObjectExtending
                 MemberName = property.Name
             };
 
-            foreach (var attribute in property.ValidationAttributes)
+            foreach (var attribute in validationAttributes)
             {
                 var result = attribute.GetValidationResult(
                     extensibleObject.GetProperty(property.Name),
