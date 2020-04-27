@@ -12,7 +12,7 @@
             }, 1000);
         }
 
-        if (document.getElementById("DocumentErrorContainer")) {
+        if (document.getElementById("ErrorRedirect")) {
             errorPageRedirect();
         }
     });

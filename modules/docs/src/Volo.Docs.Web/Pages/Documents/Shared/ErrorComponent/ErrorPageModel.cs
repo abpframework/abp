@@ -7,5 +7,7 @@
         public string ErrorCode { get; set; }
 
         public string RedirectUrl { get; set; }
+
+        public bool AutoRedirect { get; set; } = true;
     }
 }

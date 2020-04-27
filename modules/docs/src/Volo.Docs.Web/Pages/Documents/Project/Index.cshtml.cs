@@ -34,7 +34,7 @@ namespace Volo.Docs.Pages.Documents.Project
         public string LanguageCode { get; set; }
 
         public bool DocumentFound { get; set; } = true;
-        
+
         public bool ProjectFound { get; set; } = true;
 
         public bool LoadSuccess => DocumentFound && ProjectFound;
@@ -347,43 +347,13 @@ namespace Volo.Docs.Pages.Documents.Project
 
             try
             {
-                if (DocumentName.IsNullOrWhiteSpace())
-                {
-                    Document = await _documentAppService.GetDefaultAsync(
-                        new GetDefaultDocumentInput
-                        {
-                            ProjectId = Project.Id,
-                            LanguageCode = LanguageCode,
-                            Version = Version
-                        }
-                    );
-                }
-                else
-                {
-                    Document = await _documentAppService.GetAsync(
-                        new GetDocumentInput
-                        {
-                            ProjectId = Project.Id,
-                            Name = DocumentNameWithExtension,
-                            LanguageCode = LanguageCode,
-                            Version = Version
-                        }
-                    );
-                }
+                Document = await GetSpecificDocumentOrDefaultAsync(LanguageCode);
             }
             catch (DocumentNotFoundException)
             {
                 if (LanguageCode != DefaultLanguageCode)
                 {
-                    Document = await _documentAppService.GetAsync(
-                        new GetDocumentInput
-                        {
-                            ProjectId = Project.Id,
-                            Name = DocumentNameWithExtension,
-                            LanguageCode = DefaultLanguageCode,
-                            Version = Version
-                        }
-                    );
+                    Document = await GetSpecificDocumentOrDefaultAsync(DefaultLanguageCode);
 
                     DocumentLanguageIsDifferent = true;
                 }
@@ -545,6 +515,33 @@ namespace Volo.Docs.Pages.Documents.Project
 
         }
 
+        private async Task<DocumentWithDetailsDto> GetSpecificDocumentOrDefaultAsync(string languageCode)
+        {
+            if (DocumentName.IsNullOrWhiteSpace())
+            {
+                return await _documentAppService.GetDefaultAsync(
+                    new GetDefaultDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        LanguageCode = languageCode,
+                        Version = Version
+                    }
+                );
+            }
+            else
+            {
+                return await _documentAppService.GetAsync(
+                    new GetDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        Name = DocumentNameWithExtension,
+                        LanguageCode = languageCode,
+                        Version = Version
+                    }
+                );
+            }
+        }
+
         public async Task SetDocumentPreferencesAsync()
         {
             var projectParameters = await _documentAppService.GetParametersAsync(
@@ -604,7 +601,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return null;
             }
-            
+
             var firstParagraph = new Regex(@"<p>(.*?)</p>", RegexOptions.IgnoreCase);
             var match = firstParagraph.Match(Document.Content);
             if (!match.Success)
