@@ -17,6 +17,6 @@
     "Permission:ManageConnectionStrings": "Verbindungszeichenfolgen verwalten",
     "Permission:ManageFeatures": "Funktionen verwalten",
     "DisplayName:AdminEmailAddress": "Admin E-Mail-Adresse",
-    "DisplayName:AdminPassword": "Admin Kennwort"
+    "DisplayName:AdminPassword": "Admin Password"
   }
 }
