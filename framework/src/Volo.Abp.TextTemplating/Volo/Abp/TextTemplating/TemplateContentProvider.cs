@@ -52,7 +52,7 @@ namespace Volo.Abp.TextTemplating
                     cultureName
                 );
 
-                foreach (var contentContributorType in Options.ContentContributors)
+                foreach (var contentContributorType in Options.ContentContributors.Reverse())
                 {
                     var contributor = (ITemplateContentContributor) scope.ServiceProvider
                             .GetRequiredService(contentContributorType);
