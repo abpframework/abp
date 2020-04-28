@@ -15,10 +15,13 @@ namespace Volo.Abp.ObjectExtending
 
         protected Dictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
         
+        public ModuleObjectExtensionConfigurationDictionary Modules { get; }
+
         protected internal ObjectExtensionManager()
         {
             ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
             Configuration = new Dictionary<object, object>();
+            Modules = new ModuleObjectExtensionConfigurationDictionary();
         }
 
         [NotNull]
