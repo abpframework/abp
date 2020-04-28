@@ -21,6 +21,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public bool AutoFocus { get; set; }
 
+        [HtmlAttributeName("type")]
+        public string InputTypeName { get; set; }
+
         public AbpFormControlSize Size { get; set; } = AbpFormControlSize.Default;
 
         [HtmlAttributeName("required-symbol")]
