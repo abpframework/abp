@@ -24,7 +24,7 @@ namespace Volo.Abp.TextTemplating
             Options = options.Value;
 
             TemplateDefinitions =
-                new Lazy<IDictionary<string, TemplateDefinition>>(CreateEmailTemplateDefinitions, true);
+                new Lazy<IDictionary<string, TemplateDefinition>>(CreateTextTemplateDefinitions, true);
         }
 
         public virtual TemplateDefinition Get(string name)
@@ -51,7 +51,7 @@ namespace Volo.Abp.TextTemplating
             return TemplateDefinitions.Value.GetOrDefault(name);
         }
 
-        protected virtual IDictionary<string, TemplateDefinition> CreateEmailTemplateDefinitions()
+        protected virtual IDictionary<string, TemplateDefinition> CreateTextTemplateDefinitions()
         {
             var templates = new Dictionary<string, TemplateDefinition>();
 
