@@ -1,7 +1,7 @@
 ﻿{
-	"culture": "de",
-	"texts": {
-		"USA": "Vereinigte Staaten von Amerika",
-		"Brazil": "Brasilien"
-	}
+  "culture": "de",
+  "texts": {
+    "USA": "Vereinigte Staaten von Amerika",
+    "Brazil": "Brasilien"
+  }
 }
