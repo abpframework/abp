@@ -8,7 +8,7 @@ namespace Volo.Abp.ObjectExtending
             this IdentityModuleObjectExtensionConfiguration configurations,
             Action<ModuleEntityObjectExtensionConfiguration> configureAction)
         {
-            return configurations.ConfigureEntity(
+            return configurations.ConfigureObject(
                 "User",
                 configureAction
             );
