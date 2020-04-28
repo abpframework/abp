@@ -53,7 +53,14 @@ namespace Volo.Abp.ObjectExtending
                         return "date";
                     case DataType.Time:
                         return "time";
-                    //TODO: Others..?
+                    case DataType.EmailAddress:
+                        return "email";
+                    case DataType.Url:
+                        return "url";
+                    case DataType.PhoneNumber:
+                        return "tel";
+                    case DataType.DateTime:
+                        return "datetime-local";
                 }
             }
 
