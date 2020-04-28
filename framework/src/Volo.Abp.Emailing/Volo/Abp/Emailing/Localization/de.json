@@ -6,7 +6,7 @@
     "DisplayName:Abp.Mailing.Smtp.Host": "Host",
     "DisplayName:Abp.Mailing.Smtp.Port": "Port",
     "DisplayName:Abp.Mailing.Smtp.UserName": "Benutzername",
-    "DisplayName:Abp.Mailing.Smtp.Password": "Kennwort",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Passwort",
     "DisplayName:Abp.Mailing.Smtp.Domain": "Domain",
     "DisplayName:Abp.Mailing.Smtp.EnableSsl": "SSL aktivieren",
     "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Standard-Anmeldeinformationen verwenden",
