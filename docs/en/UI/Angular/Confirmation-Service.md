@@ -94,6 +94,28 @@ With the options above, the confirmation popup looks like this:
 
 ![confirmation](./images/confirmation.png)
 
+You are able to pass in an HTML string as title, message, or button texts. Here is an example:
+
+```js
+const options: Partial<Confirmation.Options> = {
+  yesText: '<i class="fa fa-trash mr-1"></i>Yes, delete it',
+};
+
+this.confirmation.warn(
+  `
+    <strong>Role Demo</strong> will be <strong>deleted</strong>
+    <br>
+    Do you confirm that?
+  `,
+  '<span class="my-custom-title">Are you sure?</span>',
+  options,
+);
+```
+
+Since the values are HTML now, localization should be handled manually. Check out the [LocalizationService](./Localization#using-the-localization-service) to see how you can accomplish that.
+
+> Please note that all strings will be sanitized by Angular and not every HTML string will work. Only values that are considered as "safe" by Angular will be displayed.
+
 ### How to Remove a Confirmation Popup
 
 The open confirmation popup can be removed manually via the `clear` method:
