@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating
 {
     [DependsOn(
-        typeof(AbpVirtualFileSystemModule)
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpLocalizationAbstractionsModule)
         )]
     public class AbpTextTemplatingModule : AbpModule
     {

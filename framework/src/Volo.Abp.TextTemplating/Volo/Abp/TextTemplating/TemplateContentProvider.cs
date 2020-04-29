@@ -63,21 +63,18 @@ namespace Volo.Abp.TextTemplating
                 var contributors = CreateTemplateContentContributors(scope.ServiceProvider);
 
                 //Try to get from the requested culture
-                if (cultureName != null)
-                {
-                    templateString = await GetContentOrNullAsync(
-                        contributors,
-                        new TemplateContentContributorContext(
-                            templateDefinition,
-                            scope.ServiceProvider,
-                            cultureName
-                        )
-                    );
+                templateString = await GetContentOrNullAsync(
+                    contributors,
+                    new TemplateContentContributorContext(
+                        templateDefinition,
+                        scope.ServiceProvider,
+                        cultureName
+                    )
+                );
 
-                    if (templateString != null)
-                    {
-                        return templateString;
-                    }
+                if (templateString != null)
+                {
+                    return templateString;
                 }
 
                 if (!tryDefaults)

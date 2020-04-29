@@ -1,13 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.TextTemplating
 {
     public class TemplateDefinition
     {
+        public const int MaxNameLength = 128;
+
         [NotNull]
         public string Name { get; }
+
+        [NotNull]
+        public ILocalizableString DisplayName
+        {
+            get => _displayName;
+            set
+            {
+                Check.NotNull(value, nameof(value));
+                _displayName = value;
+            }
+        }
+        private ILocalizableString _displayName;
 
         public bool IsLayout { get; }
 
@@ -44,14 +59,16 @@ namespace Volo.Abp.TextTemplating
         public Dictionary<string, object> Properties { get; }
 
         public TemplateDefinition(
-            [NotNull] string name, 
-            [CanBeNull] Type localizationResource = null, 
+            [NotNull] string name,
+            [CanBeNull] Type localizationResource = null,
+            [CanBeNull] ILocalizableString displayName = null,
             bool isLayout = false,
-            string layout = null, 
+            string layout = null,
             string defaultCultureName = null)
         {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name), MaxNameLength);
             LocalizationResource = localizationResource;
+            DisplayName = displayName ?? new FixedLocalizableString(Name);
             IsLayout = isLayout;
             Layout = layout;
             DefaultCultureName = defaultCultureName;
