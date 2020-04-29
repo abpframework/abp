@@ -135,6 +135,8 @@ abp update [options]
 * `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
 * `--npm`: Only updates NPM packages.
 * `--nuget`: Only updates NuGet packages.
+* `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
+* `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 
 ### switch-to-preview
 
