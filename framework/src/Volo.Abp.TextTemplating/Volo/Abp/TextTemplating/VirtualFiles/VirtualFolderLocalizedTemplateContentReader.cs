@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
-using Volo.Abp.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.TextTemplating.VirtualFiles
@@ -34,34 +33,9 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             }
         }
 
-        public string GetContent(string cultureName, string defaultCultureName)
+        public string GetContentOrNull(string cultureName)
         {
-            var content = _dictionary.GetOrDefault(cultureName);
-            if (content != null)
-            {
-                return content;
-            }
-
-            if (cultureName.Contains("-"))
-            {
-                var baseCultureName = CultureHelper.GetBaseCultureName(cultureName);
-                content = _dictionary.GetOrDefault(baseCultureName);
-                if (content != null)
-                {
-                    return content;
-                }
-            }
-
-            if (defaultCultureName != null)
-            {
-                content = _dictionary.GetOrDefault(defaultCultureName);
-                if (content != null)
-                {
-                    return content;
-                }
-            }
-
-            return null;
+            return _dictionary.GetOrDefault(cultureName);
         }
     }
 }

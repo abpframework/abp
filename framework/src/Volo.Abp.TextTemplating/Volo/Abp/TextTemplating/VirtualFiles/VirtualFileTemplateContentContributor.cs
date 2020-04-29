@@ -21,9 +21,8 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             var localizedReader = await _localizedTemplateContentReaderFactory
                 .CreateAsync(context.TemplateDefinition);
 
-            return localizedReader.GetContent(
-                context.Culture ?? CultureInfo.CurrentUICulture.Name,
-                context.TemplateDefinition.DefaultCultureName
+            return localizedReader.GetContentOrNull(
+                context.Culture
             );
         }
     }

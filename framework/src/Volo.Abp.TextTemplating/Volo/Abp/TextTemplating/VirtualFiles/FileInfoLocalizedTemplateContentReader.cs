@@ -12,7 +12,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             _content = await fileInfo.ReadAsStringAsync();
         }
 
-        public string GetContent(string culture, string defaultCultureName)
+        public string GetContentOrNull(string culture)
         {
             return _content;
         }

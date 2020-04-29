@@ -9,9 +9,7 @@
             
         }
 
-        public string GetContent(
-            string culture,
-            string defaultCultureName = null)
+        public string GetContentOrNull(string culture)
         {
             return null;
         }

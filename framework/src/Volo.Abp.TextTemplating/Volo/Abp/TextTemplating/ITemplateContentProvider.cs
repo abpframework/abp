@@ -7,12 +7,14 @@ namespace Volo.Abp.TextTemplating
     {
         Task<string> GetContentOrNullAsync(
             [NotNull] string templateName,
-            [CanBeNull] string cultureName = null
+            [CanBeNull] string cultureName = null,
+            bool tryDefaults = true
         );
 
         Task<string> GetContentOrNullAsync(
             [NotNull] TemplateDefinition templateDefinition,
-            [CanBeNull] string cultureName = null
+            [CanBeNull] string cultureName = null,
+            bool tryDefaults = true
         );
     }
 }
