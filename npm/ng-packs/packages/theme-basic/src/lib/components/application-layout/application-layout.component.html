@@ -5,7 +5,13 @@
 >
   <div class="container ">
     <a class="navbar-brand" routerLink="/">
-      <img *ngIf="appInfo.logoUrl; else appName" [src]="appInfo.logoUrl" [alt]="appInfo.name" />
+      <img
+        *ngIf="appInfo.logoUrl; else appName"
+        [src]="appInfo.logoUrl"
+        [alt]="appInfo.name"
+        width="100%"
+        height="auto"
+      />
     </a>
     <button
       class="navbar-toggler"
