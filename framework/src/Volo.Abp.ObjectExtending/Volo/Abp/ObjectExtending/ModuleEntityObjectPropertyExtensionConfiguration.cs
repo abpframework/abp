@@ -36,6 +36,9 @@ namespace Volo.Abp.ObjectExtending
 
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
+        
+        [NotNull]
+        public ModuleEntityObjectPropertyExtensionUIConfiguration UI { get; }
 
         public ModuleEntityObjectPropertyExtensionConfiguration(
             [NotNull] ModuleEntityObjectExtensionConfiguration entityObjectExtensionConfiguration,
@@ -51,6 +54,8 @@ namespace Volo.Abp.ObjectExtending
             Configuration = new Dictionary<object, object>();
             Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
+
+            UI = new ModuleEntityObjectPropertyExtensionUIConfiguration();
         }
     }
 }

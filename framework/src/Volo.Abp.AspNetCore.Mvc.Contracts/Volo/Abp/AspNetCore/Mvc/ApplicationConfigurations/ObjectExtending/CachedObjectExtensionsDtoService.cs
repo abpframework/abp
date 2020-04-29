@@ -28,6 +28,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 
         protected virtual ObjectExtensionsDto GenerateCacheValue()
         {
+            //TODO: Obviously needs refactoring!
+
             var objectExtensionsDto = new ObjectExtensionsDto
             {
                 Modules = new Dictionary<string, ModuleExtensionDto>()
@@ -61,15 +63,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                                 {
                                     CreateForm = new ModuleObjectExtraPropertyUiFormExtensionDto
                                     {
-                                        Visible = true
+                                        IsVisible = propertyConfig.UI.CreateForm.IsVisible
                                     },
                                     EditForm = new ModuleObjectExtraPropertyUiFormExtensionDto
                                     {
-                                        Visible = true
+                                        IsVisible = propertyConfig.UI.EditForm.IsVisible
                                     },
                                     Table = new ModuleObjectExtraPropertyUiTableExtensionDto
                                     {
-                                        Visible = true
+                                        IsVisible = propertyConfig.UI.Table.IsVisible
                                     }
                                 }
                             };

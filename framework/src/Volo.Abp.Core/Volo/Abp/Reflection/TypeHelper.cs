@@ -133,9 +133,9 @@ namespace Volo.Abp.Reflection
                    type == typeof(Guid);
         }
 
-        public static object GetDefaultValue<T>()
+        public static T GetDefaultValue<T>()
         {
-            return GetDefaultValue(typeof(T));
+            return default;
         }
 
         public static object GetDefaultValue(Type type)
