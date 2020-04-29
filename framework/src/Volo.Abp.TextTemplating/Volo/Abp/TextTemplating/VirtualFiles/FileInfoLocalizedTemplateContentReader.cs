@@ -14,7 +14,12 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
         public string GetContentOrNull(string culture)
         {
-            return _content;
+            if (culture == null)
+            {
+                return _content;
+            }
+
+            return null;
         }
     }
 }

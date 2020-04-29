@@ -17,7 +17,7 @@ namespace Volo.Abp.TextTemplating
         [CanBeNull]
         public Type LocalizationResource { get; set; }
 
-        public bool IsInlineLocalized { get; internal set; }
+        public bool IsInlineLocalized { get; set; }
 
         [CanBeNull]
         public string DefaultCultureName { get; }

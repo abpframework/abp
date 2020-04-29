@@ -35,6 +35,11 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 
         public string GetContentOrNull(string cultureName)
         {
+            if (cultureName == null)
+            {
+                return null;
+            }
+
             return _dictionary.GetOrDefault(cultureName);
         }
     }

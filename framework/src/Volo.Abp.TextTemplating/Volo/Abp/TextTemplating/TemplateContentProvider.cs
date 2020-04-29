@@ -47,14 +47,12 @@ namespace Volo.Abp.TextTemplating
                     $"No template content contributor was registered. Use {nameof(AbpTextTemplatingOptions)} to register contributors!"
                 );
             }
-
-            if (cultureName == null)
-            {
-                cultureName = CultureInfo.CurrentUICulture.Name;
-            }
-
+            
             using (var scope = ServiceScopeFactory.CreateScope())
             {
+                var searchCultureName = cultureName ??
+                                        CultureInfo.CurrentUICulture.Name;
+
                 var contributors = Options.ContentContributors
                     .Select(type => (ITemplateContentContributor) scope.ServiceProvider.GetRequiredService(type))
                     .Reverse()
@@ -66,7 +64,7 @@ namespace Volo.Abp.TextTemplating
                     new TemplateContentContributorContext(
                         templateDefinition,
                         scope.ServiceProvider,
-                        cultureName
+                        searchCultureName
                     )
                 );
 
@@ -77,18 +75,36 @@ namespace Volo.Abp.TextTemplating
 
                 if (!tryDefaults)
                 {
+                    if (templateDefinition.IsInlineLocalized && cultureName == null)
+                    {
+                        //Try to get culture independent content
+                        templateString = await GetContentOrNullAsync(
+                            contributors,
+                            new TemplateContentContributorContext(
+                                templateDefinition,
+                                scope.ServiceProvider,
+                                null
+                            )
+                        );
+
+                        if (templateString != null)
+                        {
+                            return templateString;
+                        }
+                    }
+
                     return null;
                 }
 
                 //Try to get from same culture without country code
-                if (cultureName.Contains("-")) //Example: "tr-TR"
+                if (searchCultureName.Contains("-")) //Example: "tr-TR"
                 {
                     templateString = await GetContentOrNullAsync(
                         contributors,
                         new TemplateContentContributorContext(
                             templateDefinition,
                             scope.ServiceProvider,
-                            CultureHelper.GetBaseCultureName(cultureName)
+                            CultureHelper.GetBaseCultureName(searchCultureName)
                         )
                     );
 
@@ -97,22 +113,42 @@ namespace Volo.Abp.TextTemplating
                         return templateString;
                     }
                 }
-
-                //Try to get from default culture
-                if (templateDefinition.DefaultCultureName != null)
+                
+                if (templateDefinition.IsInlineLocalized)
                 {
+                    //Try to get culture independent content
                     templateString = await GetContentOrNullAsync(
                         contributors,
                         new TemplateContentContributorContext(
                             templateDefinition,
                             scope.ServiceProvider,
-                            templateDefinition.DefaultCultureName
+                            null
                         )
                     );
 
                     if (templateString != null)
                     {
                         return templateString;
+                    }
+                }
+                else
+                {
+                    //Try to get from default culture
+                    if (templateDefinition.DefaultCultureName != null)
+                    {
+                        templateString = await GetContentOrNullAsync(
+                            contributors,
+                            new TemplateContentContributorContext(
+                                templateDefinition,
+                                scope.ServiceProvider,
+                                templateDefinition.DefaultCultureName
+                            )
+                        );
+
+                        if (templateString != null)
+                        {
+                            return templateString;
+                        }
                     }
                 }
             }

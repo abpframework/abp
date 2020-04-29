@@ -11,17 +11,17 @@ namespace Volo.Abp.TextTemplating
         [NotNull]
         public IServiceProvider ServiceProvider { get; }
 
-        [NotNull]
+        [CanBeNull]
         public string Culture { get; }
 
         public TemplateContentContributorContext(
             [NotNull] TemplateDefinition templateDefinition,
             [NotNull] IServiceProvider serviceProvider, 
-            [NotNull] string culture)
+            [CanBeNull] string culture)
         {
             TemplateDefinition = Check.NotNull(templateDefinition, nameof(templateDefinition));
             ServiceProvider = Check.NotNull(serviceProvider, nameof(serviceProvider));
-            Culture = Check.NotNull(culture, nameof(culture));
+            Culture = culture;
         }
     }
 }

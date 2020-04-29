@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
@@ -35,15 +34,29 @@ namespace Volo.Abp.TextTemplating
         {
             Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
-            cultureName ??= CultureInfo.CurrentUICulture.Name;
+            if (globalContext == null)
+            {
+                globalContext = new Dictionary<string, object>();
+            }
 
-            using (CultureHelper.Use(cultureName))
+            if (cultureName == null)
             {
                 return await RenderInternalAsync(
                     templateName,
-                    globalContext ?? new Dictionary<string, object>(),
+                    globalContext,
                     model
                 );
+            }
+            else
+            {
+                using (CultureHelper.Use(cultureName))
+                {
+                    return await RenderInternalAsync(
+                        templateName,
+                        globalContext,
+                        model
+                    );
+                }
             }
         }
 
