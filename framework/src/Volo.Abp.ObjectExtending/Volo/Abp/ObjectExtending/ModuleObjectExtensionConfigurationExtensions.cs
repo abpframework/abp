@@ -14,7 +14,7 @@ namespace Volo.Abp.ObjectExtending
             var configuration = objectConfiguration.GetOrAdd(
                 objectName,
                 () => new ModuleEntityObjectExtensionConfiguration()
-            ) as ModuleEntityObjectExtensionConfiguration;
+            );
 
             configureAction(configuration);
 

@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.ObjectExtending
 {
-    public class ModuleObjectExtensionConfigurationDictionary : Dictionary<string, object>
+    public class ModuleObjectExtensionConfigurationDictionary : Dictionary<string, ModuleObjectExtensionConfiguration>
     {
 
     }
