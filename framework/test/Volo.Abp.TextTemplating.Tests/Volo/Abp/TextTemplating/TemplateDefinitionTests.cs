@@ -15,8 +15,13 @@ namespace Volo.Abp.TextTemplating
         [Fact]
         public void Should_Retrieve_Template_Definition_By_Name()
         {
-            var definition = _templateDefinitionManager.Get(TestTemplates.WelcomeEmail);
-            definition.Name.ShouldBe(TestTemplates.WelcomeEmail);
+            var welcomeEmailTemplate = _templateDefinitionManager.Get(TestTemplates.WelcomeEmail);
+            welcomeEmailTemplate.Name.ShouldBe(TestTemplates.WelcomeEmail);
+            welcomeEmailTemplate.IsInlineLocalized.ShouldBeFalse();
+
+            var forgotPasswordEmailTemplate = _templateDefinitionManager.Get(TestTemplates.ForgotPasswordEmail);
+            forgotPasswordEmailTemplate.Name.ShouldBe(TestTemplates.ForgotPasswordEmail);
+            forgotPasswordEmailTemplate.IsInlineLocalized.ShouldBeTrue();
         }
 
         [Fact]

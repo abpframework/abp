@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,10 +54,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
         protected virtual async Task<ILocalizedTemplateContentReader> CreateInternalAsync(
             TemplateDefinition templateDefinition)
         {
-            var virtualPath = templateDefinition
-                .Properties
-                .GetOrDefault(VirtualFileTemplateContentContributor.VirtualPathPropertyName) as string;
-
+            var virtualPath = templateDefinition.GetVirtualFilePathOrNull();
             if (virtualPath == null)
             {
                 return NullLocalizedTemplateContentReader.Instance;

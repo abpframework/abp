@@ -5,26 +5,26 @@ namespace Volo.Abp.TextTemplating
 {
     public class TemplateDefinitionContext : ITemplateDefinitionContext
     {
-        protected Dictionary<string, TemplateDefinition> TextTemplates { get; }
+        protected Dictionary<string, TemplateDefinition> Templates { get; }
 
-        public TemplateDefinitionContext(Dictionary<string, TemplateDefinition> textTemplates)
+        public TemplateDefinitionContext(Dictionary<string, TemplateDefinition> templates)
         {
-            TextTemplates = textTemplates;
+            Templates = templates;
         }
 
         public IReadOnlyList<TemplateDefinition> GetAll(string name)
         {
-            return TextTemplates.Values.ToImmutableList();
+            return Templates.Values.ToImmutableList();
         }
 
         public virtual TemplateDefinition GetOrNull(string name)
         {
-            return TextTemplates.GetOrDefault(name);
+            return Templates.GetOrDefault(name);
         }
 
         public virtual IReadOnlyList<TemplateDefinition> GetAll()
         {
-            return TextTemplates.Values.ToImmutableList();
+            return Templates.Values.ToImmutableList();
         }
 
         public virtual void Add(params TemplateDefinition[] definitions)
@@ -36,7 +36,7 @@ namespace Volo.Abp.TextTemplating
 
             foreach (var definition in definitions)
             {
-                TextTemplates[definition.Name] = definition;
+                Templates[definition.Name] = definition;
             }
         }
     }

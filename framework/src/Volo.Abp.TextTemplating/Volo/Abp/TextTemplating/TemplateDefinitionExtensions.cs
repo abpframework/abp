@@ -1,16 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Volo.Abp.TextTemplating.VirtualFiles;
 
 namespace Volo.Abp.TextTemplating
 {
     public static class TemplateDefinitionExtensions
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="templateDefinition"></param>
-        /// <param name="virtualPath"></param>
-        /// <returns></returns>
         public static TemplateDefinition WithVirtualFilePath(
             [NotNull] this TemplateDefinition templateDefinition,
             [NotNull] string virtualPath)
@@ -21,6 +16,16 @@ namespace Volo.Abp.TextTemplating
                 VirtualFileTemplateContentContributor.VirtualPathPropertyName,
                 virtualPath
             );
+        }
+
+        public static string GetVirtualFilePathOrNull(
+            [NotNull] this TemplateDefinition templateDefinition)
+        {
+            Check.NotNull(templateDefinition, nameof(templateDefinition));
+
+            return templateDefinition
+                .Properties
+                .GetOrDefault(VirtualFileTemplateContentContributor.VirtualPathPropertyName) as string;
         }
     }
 }
