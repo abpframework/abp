@@ -166,6 +166,10 @@ CLI的一些功能需要登录到abp.io平台. 使用你的用户名登录
 abp login <username>
 ```
 
+```bash
+abp login <username> -p <password>
+```
+
 请注意,新的登录将终止先前的会话并创建一个新的会话.
 
 ### logout
