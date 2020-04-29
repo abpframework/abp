@@ -172,7 +172,11 @@ Some features of the CLI requires to be logged in to abp.io platform. To login w
 abp login <username>
 ```
 
-Notice that, a new login with an already active session, will kill the previous session and creates a new one.
+```bash
+abp login <username> -p <password>
+```
+
+Notice that, a new login with an already active session, overwrites the previous session.
 
 ### logout
 
