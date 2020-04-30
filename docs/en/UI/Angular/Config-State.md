@@ -236,7 +236,7 @@ const newRoute: ABP.Route = {
   path: "page",
   invisible: false,
   order: 2,
-  requiredPolicy: "MyProjectName::MyNewPage"
+  requiredPolicy: "MyProjectName.MyNewPage"
 };
 
 this.config.dispatchAddRoute(newRoute);
@@ -248,23 +248,25 @@ The `newRoute` will be placed as at root level, i.e. without any parent routes a
 If you want **to add a child route, you can do this:**
 
 ```js
+import { eIdentityRouteNames } from '@abp/ng.identity';
+
 // this.config is instance of ConfigStateService
 
 const newRoute: ABP.Route = {
-  parentName: "AbpAccount::Login",
+  parentName: eIdentityRouteNames.IdentityManagement,
   name: "My New Page",
   iconClass: "fa fa-dashboard",
   path: "page",
   invisible: false,
   order: 2,
-  requiredPolicy: "MyProjectName::MyNewPage"
+  requiredPolicy: "MyProjectName.MyNewPage"
 };
 
 this.config.dispatchAddRoute(newRoute);
 // returns a state stream which emits after dispatch action is complete
 ```
 
-The `newRoute` will then be placed as a child of the parent route named `'AbpAccount::Login'` and its url will be set as `'/account/login/page'`.
+The `newRoute` will then be placed as a child of the parent route named `eIdentityRouteNames.IdentityManagement` and its url will be set as `'/identity/page'`.
 
 #### Route Configuration Properties
 
@@ -291,4 +293,4 @@ Please refer to `Config.Environment` type for all the properties you can pass to
 
 ## What's Next?
 
-* [Component Replacement](./Component-Replacement.md)
+- [Modifying the Menu](./Modifying-the-Menu.md)
