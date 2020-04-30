@@ -45,7 +45,7 @@ namespace Volo.Abp.Identity
             await _organizationUnitManager.UpdateAsync(ou);
 
             var ouAfterChange = await _organizationUnitRepository.GetAsync("OU111 Updated");
-            ouAfterChange.Code.ShouldContain("123");
+            ouAfterChange.DisplayName.ShouldContain("OU111 Updated");
         }
 
         [Fact]
