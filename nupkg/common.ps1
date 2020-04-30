@@ -101,6 +101,7 @@ $projects = (
     "framework/src/Volo.Abp.Sms",
     "framework/src/Volo.Abp.Specifications",
     "framework/src/Volo.Abp.TestBase",
+    "framework/src/Volo.Abp.TextTemplating",
     "framework/src/Volo.Abp.Threading",
     "framework/src/Volo.Abp.Timing",
     "framework/src/Volo.Abp.UI",
