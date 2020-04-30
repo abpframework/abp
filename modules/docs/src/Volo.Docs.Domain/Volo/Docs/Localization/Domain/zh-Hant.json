@@ -14,6 +14,7 @@
     "Projects": "專案",
     "NoProjectWarning": "沒有專案!",
     "DocumentNotFound": "找不到要求的文件!",
+    "ProjectNotFound": "找不到請求的項目!",
     "NavigationDocumentNotFound": "這個版本沒有導覽文件!",
     "DocumentNotFoundInSelectedLanguage": "本文件不適用於所選語系，將以預設語系顯示.",
     "FilterTopics": "過濾主題",

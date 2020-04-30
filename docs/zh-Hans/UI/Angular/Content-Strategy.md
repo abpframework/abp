@@ -1,6 +1,6 @@
 # ContentStrategy
 
-`ContentStrategy` 是@abp/ng.core包暴露出的抽象类. 它可以帮助您创建内联脚本或样式.
+`ContentStrategy` 是@abp/ng.core包暴露出的抽象类. 它可以帮助你创建内联脚本或样式.
 
 ## API
 

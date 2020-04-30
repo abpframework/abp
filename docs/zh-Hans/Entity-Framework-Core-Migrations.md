@@ -1,7 +1,7 @@
 ﻿
 # EF Core数据库迁移
 
-本文首先介绍[应用程序启动模板](Startup-Templates/Application.md)提供的**默认结构**,并讨论您可能希望为自己的应用程序实现的**各种场景**.
+本文首先介绍[应用程序启动模板](Startup-Templates/Application.md)提供的**默认结构**,并讨论你可能希望为自己的应用程序实现的**各种场景**.
 
 > 本文档适用于希望完全理解和自定义[应用程序启动模板](Startup-Templates/Application.md)附带的数据库结构的人员. 如果你只是想创建实体和管理代码优先(code first)迁移,只需要遵循[启动教程](Tutorials/Index.md).
 
@@ -95,7 +95,7 @@ Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = "Ids";
 
 这个项目有应用程序的 `DbContext`类(本例中的 `BookStoreDbContex` ).
 
-**每个模块都使用自己的 `DbContext` 类**来访问数据库。同样你的应用程序有它自己的 `DbContext`. 通常在应用程序中使用这个 `DbContet`(如果你遵循最佳实践,应该在[仓储](Repositories.md)中使用). 它几乎是一个空的 `DbContext`,因为你的应用程序在一开始没有任何实体,除了预定义的 `AppUser` 实体:
+**每个模块都使用自己的 `DbContext` 类**来访问数据库.同样你的应用程序有它自己的 `DbContext`. 通常在应用程序中使用这个 `DbContet`(如果你遵循最佳实践,应该在[仓储](Repositories.md)中使用). 它几乎是一个空的 `DbContext`,因为你的应用程序在一开始没有任何实体,除了预定义的 `AppUser` 实体:
 
 ````csharp
 [ConnectionStringName("Default")]
@@ -268,10 +268,10 @@ public class BackgroundJobsDbContext
 
 ##### 重用模块的表
 
-您可能想在应用程序中**重用依赖模块的表**. 在这种情况下你有两个选择:
+你可能想在应用程序中**重用依赖模块的表**. 在这种情况下你有两个选择:
 
 1. 你可以**直接使用模块定义的实体**(你仍然可以在某种程度上[扩展实体](Customizing-Application-Modules-Extending-Entities.md)).
-2. 你可以**创建一个新的实体**映射到同一个数据库表。
+2. 你可以**创建一个新的实体**映射到同一个数据库表.
 
 ###### 使用由模块定义的实体
 
@@ -307,7 +307,7 @@ namespace Acme.BookStore
 
 示例注入了 `IRepository<IdentityUser,Guid>`(默认仓储). 它定义了标准的存储库方法并实现了 `IQueryable` 接口.
 
-另外，身份模块定义了 `IIdentityUserRepository`(自定义仓储),你的应用程序也可以注入和使用它. `IIdentityUserRepository` 为 `IdentityUser` 实体提供了额外的定制方法,但它没有实现 `IQueryable`.
+另外,身份模块定义了 `IIdentityUserRepository`(自定义仓储),你的应用程序也可以注入和使用它. `IIdentityUserRepository` 为 `IdentityUser` 实体提供了额外的定制方法,但它没有实现 `IQueryable`.
 
 ###### 创建一个新的实体
 
@@ -352,7 +352,7 @@ namespace Acme.BookStore.Roles
 * 它继承了[`AggregateRoot<Guid>`类](Entities.md)和实现了[`IMultiTenant`]接口(Multi-Tenancy.md),因为 `IdentityRole` 也做了同样的继承.
 * 你可以添加 `IdentityRole` 实体定义的任何属性. 本例只加了 `TenantId` 和 `Name` 属性,因为我们这里只需要它们. 你可以把setters设置为私有(如同本例)以防意外更改身份模块的属性.
 * 你可以添加自定义(附加)属性. 本例添加了 `Title` 属性.
-* **构造函数是私有的**,所以它不允许直接创建一个新的 `AppRole` 实体。创建角色身份模块的责任. 你可以查询角色,设置/更新自定义属性,但做为最佳实践你不应该在代码中创建和删除角色(尽管没有强制的限制).
+* **构造函数是私有的**,所以它不允许直接创建一个新的 `AppRole` 实体.创建角色身份模块的责任. 你可以查询角色,设置/更新自定义属性,但做为最佳实践你不应该在代码中创建和删除角色(尽管没有强制的限制).
 
 现在是时候定义EF Core映射. 打开应用程序的 `DbContext` (此示例中是 `BookStoreDbContext` )添加以下属性:
 
@@ -360,7 +360,7 @@ namespace Acme.BookStore.Roles
 public DbSet<AppRole> Roles { get; set; }
 ````
 
-然后在 `OnModelCreating` 方法中配置映射(调用 `base.OnModelCreating(builder)` 之后)：
+然后在 `OnModelCreating` 方法中配置映射(调用 `base.OnModelCreating(builder)` 之后):
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)

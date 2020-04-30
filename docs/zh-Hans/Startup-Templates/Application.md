@@ -348,7 +348,7 @@ Home模块是一个可延迟加载的模块, 它加载应用程序的根地址.
 
 React 本机应用程序是用 [Expo](https://expo.io/)生成的. Expo 是一套基于 React Native 构建的工具, 帮助你快速启动一个应用程序, 尽管它有很多功能. 
 
-React Native 应用文件夹结构, 如下图所示：
+React Native 应用文件夹结构, 如下图所示:
 
 ![react-native-folder-structure](../images/react-native-folder-structure.png)
 
@@ -380,7 +380,7 @@ Screens 是通过在 `src/screens` 文件夹中创建将名称分开的文件夹
 
 [Redux](https://redux.js.org/) 被用作状态管理库. [Redux Toolkit](https://redux-toolkit.js.org/) 库被用作高效Redux开发的工具集.
 
-在 `src/store` 文件夹中创建 Actions, reducers, sagas, selectors. 存储文件夹如下：
+在 `src/store` 文件夹中创建 Actions, reducers, sagas, selectors. 存储文件夹如下:
 
 ![react-native-store-folder](../images/react-native-store-folder.png)
 

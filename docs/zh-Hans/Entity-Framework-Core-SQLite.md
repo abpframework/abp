@@ -12,12 +12,12 @@
 
 ## UseSqlite()
 
-查找你的解决方案中 `UseSqlServer()`调用，替换为 `UseSqlite()`. 检查下列文件:
+查找你的解决方案中 `UseSqlServer()`调用,替换为 `UseSqlite()`. 检查下列文件:
 
 * `.EntityFrameworkCore` 项目中的*YourProjectName*EntityFrameworkCoreModule.cs.
 * `.EntityFrameworkCore` 项目中的*YourProjectName*MigrationsDbContextFactory.cs.
 
-> 根据你的解决方案的结构，你可能发现更多需要改变代码的文件.
+> 根据你的解决方案的结构,你可能发现更多需要改变代码的文件.
 
 ## 更改连接字符串
 

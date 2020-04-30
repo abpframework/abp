@@ -86,7 +86,7 @@ ABP框架定义了Tag Helper用于简单的创建bootstrap按钮.
 
 ### `icon-type`
 
-`icon-type` 是一个可选参数。它的默认值是 `FontAwesome`. 你可以创建自己的图标类型提供程序并更改它.
+`icon-type` 是一个可选参数.它的默认值是 `FontAwesome`. 你可以创建自己的图标类型提供程序并更改它.
 
 你可以为按钮选择以下图标类型:
 

@@ -13,6 +13,8 @@
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
     "Permission:Create": "Create",
+	"Permission:Accounting": "Accounting",
+	"Permission:Accounting:Quotation": "Quotation",
     "Menu:Organizations": "Organizations",
     "Menu:Accounting": "Accounting",  
     "Menu:Packages": "Packages",
@@ -94,13 +96,15 @@
     "UsernameOrEmail": "Username or email",
     "UsernameOrEmailPlaceholder": "Username or email...",
     "Member": "Member",
-    "QuotationPurchasedOrderNo": "Quotation Purchased Order No",
-    "QuotationTime": "Quotation Time",
-    "CompanyName": "Company Name",
-    "CompanyAddress": "Company Address",
+    "PurchaseOrderNo": "Purchase order no",
+    "QuotationDate": "Quotation date",
+    "CompanyName": "Company name",
+    "CompanyAddress": "Company address",
     "Price": "Price",
-    "ExtraText": "Extra Text",
-    "ExtraAmount": "Extra Amount",
-    "DownloadQuotation": "Download Quotation"
+    "DiscountText": "Discount text",
+    "DiscountQuantity": "Discount quantity",
+	"DiscountPrice": "Discount price",
+    "Quotation": "Quotation",
+	"Generate": "Generate"
   }
 }
