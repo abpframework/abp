@@ -1,4 +1,4 @@
-## Modifying the Menu
+# Modifying the Menu
 
 The menu is inside of the `ApplicationLayoutComponent` that is in the @abp/ng.theme.basic package. There are several methods to modify the menu elements. This document covers these methods. If you would like to replace all menu. Please refer to [Component Replacement documentation](./Component-Replacement.md) to learn how to replace a layout.
 
@@ -6,7 +6,7 @@ The menu is inside of the `ApplicationLayoutComponent` that is in the @abp/ng.th
 <!-- TODO: Replace layout replacement document with component replacement. Layout replacement document will be created.-->
 
 
-### How to Add Logo
+## How to Add Logo
 
 `logoUrl` property in environment is the url of the logo. 
 
@@ -23,9 +23,9 @@ export const environment = {
 };
 ```
 
-### How to Add a Navigation Element
+## How to Add a Navigation Element
 
-#### Via `routes` object in the `AppRoutingModule`
+## Via `routes` object in the `AppRoutingModule`
 
 You can define your routes by adding the `routes` object to the `data` object of a route in the `app-routing.module`. The `@abp/ng.core` package organizes your routes and stores them in the `ConfigState`. `ApplicationLayoutComponent` gets routes and displays on the menu.
 
@@ -65,7 +65,7 @@ After adding the routes object above, the navigation menu looks like this:
 
 ![navigation-menu-via-app-routing](./images/navigation-menu-via-app-routing.png)
 
-#### Via ConfigState
+## Via ConfigState
 
 The `dispatchAddRoute` method of `ConfigStateService` adds a new navigation element to the menu.
 
@@ -115,7 +115,7 @@ The new route will be added like below:
 
 ![navigation-menu-via-config-state](./images/navigation-menu-via-config-state.png)
 
-### How to Patch a Navigation Element
+## How to Patch a Navigation Element
 
 The `dispatchPatchRouteByName` finds a route by its name and replaces its configuration in the `Store` with the new configuration passed as the second parameter.
 
@@ -151,7 +151,7 @@ After the patching above, navigation elements looks like below:
 ![navigation-menu-after-patching](./images/navigation-menu-after-patching.png)
 
 
-### How to Add an Element to Right Part of the Menu
+## How to Add an Element to Right Part of the Menu
 
 The right part elements are stored in the `LayoutState` that is in the @abp/ng.theme.basic package.
 
@@ -197,7 +197,7 @@ The final UI looks like below:
 
 ![navigation-menu-search-input](./images/navigation-menu-search-input.png)
 
-### How to Remove an Element From Right Part of the Menu
+## How to Remove an Element From Right Part of the Menu
 
 TODO
 
