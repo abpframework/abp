@@ -1,14 +1,14 @@
 # Modifying the Menu
 
-The menu is inside of the `ApplicationLayoutComponent` that is in the @abp/ng.theme.basic package. There are several methods to modify the menu elements. This document covers these methods. If you would like to replace all menu. Please refer to [Component Replacement documentation](./Component-Replacement.md) to learn how to replace a layout.
+The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic package. There are several methods for modifying the menu elements. This document covers these methods. If you would like to replace the menu completely, please refer to [Component Replacement documentation](./Component-Replacement.md) and learn how to replace a layout.
 
 
 <!-- TODO: Replace layout replacement document with component replacement. Layout replacement document will be created.-->
 
 
-## How to Add Logo
+## How to Add a Logo
 
-`logoUrl` property in environment is the url of the logo. 
+The `logoUrl` property in the environment variables is the url of the logo. 
 
 You can add your logo to `src/assets` folder and set the `logoUrl` as shown below:
 
@@ -25,16 +25,14 @@ export const environment = {
 
 ## How to Add a Navigation Element
 
-## Via `routes` object in the `AppRoutingModule`
+### Via `routes` Property in `AppRoutingModule`
 
-You can define your routes by adding the `routes` object to the `data` object of a route in the `app-routing.module`. The `@abp/ng.core` package organizes your routes and stores them in the `ConfigState`. `ApplicationLayoutComponent` gets routes and displays on the menu.
+You can define your routes by adding `routes` as a child property to `data` property of a route configuration in the `app-routing.module`. The `@abp/ng.core` package organizes your routes and stores them in the `ConfigState`. `ApplicationLayoutComponent` gets routes from store and displays them on the menu.
 
-You can add `routes` object like below:
+You can add the `routes` property like below:
 
 ```js
-import { ABP } from '@abp/ng.core';
 {
-// ...
   path: 'your-path',
   data: {
     routes: {
@@ -50,18 +48,18 @@ import { ABP } from '@abp/ng.core';
           requiredPolicy: 'permission key here',
         },
       ],
-    } as ABP.Route,
+    } as ABP.Route, // can be imported from @abp/ng.core
   }
 }
 ```
 
-- `name` is the label of navigation element. A localization key or localization object can be passed.
-- `order` is order of the navigation element.
+- `name` is the label of the navigation element. A localization key or a localization object can be passed.
+- `order` is the order of the navigation element.
 - `iconClass` is the class of the `i` tag, which is placed to the left of the navigation label.
 - `requiredPolicy` is the permission key to access the page. See the [Permission Management document](./Permission-Management.md)
-- `children` is an array that child navigation elements are able to declare. The `path` property in an element of children array will be placed as a child route. Its url will be set as `'/your-path/child'`.
+- `children` is an array and is used for declaring child navigation elements. The child navigation element will be placed as a child route which will be available at `'/your-path/child'` based on the given `path` property.
 
-After adding the routes object above, the navigation menu looks like this:
+After adding the `routes` property as described above, the navigation menu looks like this:
 
 ![navigation-menu-via-app-routing](./images/navigation-menu-via-app-routing.png)
 
@@ -73,27 +71,25 @@ The `dispatchAddRoute` method of `ConfigStateService` adds a new navigation elem
 // this.config is instance of ConfigStateService
 
 const newRoute: ABP.Route = {
-    name: 'My New Page',
-    iconClass: 'fa fa-dashboard',
-    path: 'page',
-    invisible: false,
-    order: 2,
-    requiredPolicy: 'MyProjectName.MyNewPage',
-  } as Omit<ABP.Route, 'children'>;
+  name: 'My New Page',
+  iconClass: 'fa fa-dashboard',
+  path: 'page',
+  invisible: false,
+  order: 2,
+  requiredPolicy: 'MyProjectName.MyNewPage',
+} as Omit<ABP.Route, 'children'>;
 
-  this.config.dispatchAddRoute(newRoute);
+this.config.dispatchAddRoute(newRoute);
 // returns a state stream which emits after dispatch action is complete
 ```
 
-The `newRoute` will be placed as at root level, i.e. without any parent routes and its url will be stored as `'/path'`.
+The `newRoute` will be placed as at root level, i.e. without any parent routes, and its url will be stored as `'/path'`.
 
 If you want **to add a child route, you can do this:**
 
 ```js
-import { ConfigStateService } from '@abp/ng.core';
-import { eIdentityRouteNames } from '@abp/ng.identity';
-
-constructor(private config: ConfigStateService) {}
+// this.config is instance of ConfigStateService
+// eIdentityRouteNames enum can be imported from @abp/ng.identity
 
 const newRoute: ABP.Route = {
   parentName: eIdentityRouteNames.IdentityManagement,
@@ -117,13 +113,11 @@ The new route will be added like below:
 
 ## How to Patch a Navigation Element
 
-The `dispatchPatchRouteByName` finds a route by its name and replaces its configuration in the `Store` with the new configuration passed as the second parameter.
+The `dispatchPatchRouteByName` method finds a route by its name and replaces its configuration in the store with the new configuration passed as the second parameter.
 
 ```js
-import { ConfigStateService } from '@abp/ng.core';
-import { eIdentityRouteNames } from '@abp/ng.identity';
-
-constructor(private config: ConfigStateService) {}
+// this.config is instance of ConfigStateService
+// eIdentityRouteNames enum can be imported from @abp/ng.identity
 
 const newRouteConfig: Partial<ABP.Route> = {
   iconClass: 'fas fa-home',
@@ -141,12 +135,12 @@ this.config.dispatchPatchRouteByName('::Menu:Home', newRouteConfig);
 // returns a state stream which emits after dispatch action is complete
 ```
 
-* Moved the home navigation to under the _Administration_ dropdown by passing `parentName`.
+* Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.
 * Added an icon.
 * Specified the order.
-* Added a child route named _Dashboard_
+* Added a child route named _Dashboard_.
 
-After the patching above, navigation elements looks like below:
+After the patch above, navigation elements looks like below:
 
 ![navigation-menu-after-patching](./images/navigation-menu-after-patching.png)
 
@@ -157,7 +151,7 @@ The right part elements are stored in the `LayoutState` that is in the @abp/ng.t
 
 The `dispatchAddNavigationElement` method of the `LayoutStateService` adds an element to the right part of the menu. 
 
-You can add an element by adding your template to `app.component` and call the `dispatchAddNavigationElement` method:
+You can insert an element by adding your template to `app.component` and calling the `dispatchAddNavigationElement` method:
 
 ```js
 import { Layout, LayoutStateService } from '@abp/ng.theme.basic'; // added this line
@@ -178,7 +172,7 @@ export class AppComponent {
 
   constructor(private layout: LayoutStateService) {} // injected LayoutStateService
 
-// Added ngAfterViewInit
+  // Added ngAfterViewInit
   ngAfterViewInit() {
     const newElement = {
       name: 'Search',
@@ -191,9 +185,7 @@ export class AppComponent {
 }
 ```
 
-We added the search input to the menu.
-
-The final UI looks like below:
+This inserts a search input to the menu. The final UI looks like below:
 
 ![navigation-menu-search-input](./images/navigation-menu-search-input.png)
 
