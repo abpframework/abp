@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -58,7 +59,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(propertyConfig.Type),
                                 TypeSimple = TypeHelper.GetSimplifiedName(propertyConfig.Type),
                                 Attributes = new List<ModuleObjectExtraPropertyAttributeDto>(), 
-                                DisplayName = LocalizedDisplayNameDto.CreateOrNull(propertyConfig.DisplayName),
+                                DisplayName = CreateDisplayNameDto(propertyConfig),
                                 Ui = new ModuleObjectExtraPropertyUiExtensionDto
                                 {
                                     CreateForm = new ModuleObjectExtraPropertyUiFormExtensionDto
@@ -87,6 +88,35 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             }
 
             return objectExtensionsDto;
+        }
+
+        private static LocalizableStringDto CreateDisplayNameDto(
+            ModuleEntityObjectPropertyExtensionConfiguration propertyConfig)
+        {
+            if (propertyConfig.DisplayName == null)
+            {
+                return null;
+            }
+
+            if (propertyConfig.DisplayName is LocalizableString localizableStringInstance)
+            {
+                return new LocalizableStringDto
+                {
+                    Name = localizableStringInstance.Name,
+                    Resource = LocalizationResourceNameAttribute.GetName(localizableStringInstance.ResourceType)
+                };
+            }
+
+            if (propertyConfig.DisplayName is FixedLocalizableString fixedLocalizableString)
+            {
+                return new LocalizableStringDto
+                {
+                    Name = fixedLocalizableString.Value,
+                    Resource = "_"
+                };
+            }
+
+            return null;
         }
     }
 }

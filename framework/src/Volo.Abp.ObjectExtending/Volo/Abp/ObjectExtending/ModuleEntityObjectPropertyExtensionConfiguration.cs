@@ -22,17 +22,8 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
 
-        [NotNull]
-        public ILocalizableString DisplayName
-        {
-            get => _displayName;
-            set
-            {
-                Check.NotNull(value, nameof(value));
-                _displayName = value;
-            }
-        }
-        private ILocalizableString _displayName;
+        [CanBeNull]
+        public ILocalizableString DisplayName { get; set; }
 
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
@@ -48,8 +39,6 @@ namespace Volo.Abp.ObjectExtending
             EntityObjectExtensionConfiguration = Check.NotNull(entityObjectExtensionConfiguration, nameof(entityObjectExtensionConfiguration));
             Type = Check.NotNull(type, nameof(type));
             Name = Check.NotNull(name, nameof(name));
-
-            DisplayName = new FixedLocalizableString(Name);
 
             Configuration = new Dictionary<object, object>();
             Attributes = new List<Attribute>();

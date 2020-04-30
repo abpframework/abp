@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending
@@ -27,17 +28,8 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
 
-        [NotNull]
-        public ILocalizableString DisplayName
-        {
-            get => _displayName;
-            set
-            {
-                Check.NotNull(value, nameof(value));
-                _displayName = value;
-            }
-        }
-        private ILocalizableString _displayName;
+        [CanBeNull]
+        public ILocalizableString DisplayName { get; set; }
 
         /// <summary>
         /// Indicates whether to check the other side of the object mapping
@@ -65,12 +57,40 @@ namespace Volo.Abp.ObjectExtending
             Type = Check.NotNull(type, nameof(type));
             Name = Check.NotNull(name, nameof(name));
 
-            DisplayName = new FixedLocalizableString(Name);
-
             Configuration = new Dictionary<object, object>();
             ValidationAttributes = new List<ValidationAttribute>();
             Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
+        }
+        
+        [NotNull]
+        public string GetDisplayName(
+            [NotNull] IStringLocalizerFactory stringLocalizerFactory)
+        {
+            if (DisplayName != null)
+            {
+                return DisplayName.Localize(stringLocalizerFactory);
+            }
+
+            var defaultStringLocalizer = stringLocalizerFactory.CreateDefaultOrNull();
+            if (defaultStringLocalizer == null)
+            {
+                return Name;
+            }
+
+            var localizedString = defaultStringLocalizer[$"DisplayName:{Name}"];
+            if (!localizedString.ResourceNotFound)
+            {
+                return localizedString;
+            }
+
+            localizedString = defaultStringLocalizer[Name];
+            if (!localizedString.ResourceNotFound)
+            {
+                return localizedString;
+            }
+
+            return Name;
         }
     }
 }

@@ -103,7 +103,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ViewFeatures
             if (modelExplorer.Metadata is DefaultModelMetadata metadata)
             {
                 metadata.DisplayMetadata.DisplayName =
-                    () => extensionPropertyInfo.DisplayName.Localize(_stringLocalizerFactory);
+                    () => extensionPropertyInfo.GetDisplayName(_stringLocalizerFactory);
             }
 
             foreach (var validationAttribute in extensionPropertyInfo.GetValidationAttributes())
