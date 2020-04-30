@@ -174,7 +174,7 @@ namespace Volo.Abp.Auditing
         }
 
         [Fact]
-        public virtual async Task Should_Write_AuditLog_For_Entity_That_Property_Has_Audited_Attribute_Even_Entity_Has_DisableAuditing_Attribute2()
+        public virtual async Task Should_Write_AuditLog_For_Entity_That_Property_Has_Audited_Attribute_And_Has_Changed_Even_Entity_Has_DisableAuditing_Attribute()
         {
             var entityId = Guid.NewGuid();
             var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithDisableAuditingAndPropertyHasAudited, Guid>>();
