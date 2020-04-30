@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,21 @@ namespace Volo.Abp.VirtualFileSystem
 
             var contentList = contents.ToList();
             contentList.ShouldContain(x => x.Name == "jquery-3-1-1-min.js");
+        }
+
+        [Theory]
+        [InlineData("/")]
+        [InlineData("")]
+        public void Should_Define_And_Get_Embedded_Root_Directory_Contents(string path)
+        {
+            //Act
+            var contents = _virtualFileProvider.GetDirectoryContents(path);
+
+            //Assert
+            contents.Exists.ShouldNotBeNull();
+
+            var contentList = contents.ToList();
+            contentList.ShouldContain(x => x.Name == "js");
         }
 
         [DependsOn(typeof(AbpVirtualFileSystemModule))]
