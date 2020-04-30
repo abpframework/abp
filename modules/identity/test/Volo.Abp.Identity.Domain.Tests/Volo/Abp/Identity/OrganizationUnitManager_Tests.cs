@@ -41,10 +41,10 @@ namespace Volo.Abp.Identity
         public async Task UpdateAsync()
         {
             var ou = await _organizationUnitRepository.GetAsync("OU111");
-            ou.Code = OrganizationUnit.CreateCode(123);
+            ou.DisplayName = "OU111 Updated";
             await _organizationUnitManager.UpdateAsync(ou);
 
-            var ouAfterChange = await _organizationUnitRepository.GetAsync("OU111");
+            var ouAfterChange = await _organizationUnitRepository.GetAsync("OU111 Updated");
             ouAfterChange.Code.ShouldContain("123");
         }
 

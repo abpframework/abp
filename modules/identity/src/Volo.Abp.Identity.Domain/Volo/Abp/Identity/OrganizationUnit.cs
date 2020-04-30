@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity
         /// Parent <see cref="OrganizationUnit"/> Id.
         /// Null, if this OU is a root.
         /// </summary>
-        public virtual Guid? ParentId { get; set; }
+        public virtual Guid? ParentId { get; internal set; }
 
         /// <summary>
         /// Hierarchical Code of this organization unit.
@@ -26,13 +26,13 @@ namespace Volo.Abp.Identity
         /// This is a unique code for a Tenant.
         /// It's changeable if OU hierarchy is changed.
         /// </summary>
-        public virtual string Code { get; set; }
+        public virtual string Code { get; internal set; }
 
         /// <summary>
         /// Display name of this role.
         /// </summary>
         public virtual string DisplayName { get; set; }
-        
+
         /// <summary>
         /// Roles of this OU.
         /// </summary>
