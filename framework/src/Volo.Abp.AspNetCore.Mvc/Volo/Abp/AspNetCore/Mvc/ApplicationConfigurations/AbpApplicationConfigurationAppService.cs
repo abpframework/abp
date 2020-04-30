@@ -157,6 +157,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             }
 
             localizationConfig.CurrentCulture = GetCurrentCultureInfo();
+            localizationConfig.DefaultResourceName = LocalizationResourceNameAttribute.GetName(
+                _localizationOptions.DefaultResourceType
+            );
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetLocalizationConfigAsync()");
 

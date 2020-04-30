@@ -87,6 +87,21 @@ A JSON localization file content is shown below:
 * Every localization file should define the `culture` code for the file (like "en" or "en-US").
 * `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
 
+### Default Resource
+
+`AbpLocalizationOptions.DefaultResourceType` can be set to a resource type, so it is used when the localization resource was not specified:
+
+````csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.DefaultResourceType = typeof(TestResource);
+});
+````
+
+> The [application startup template](Startup-Templates/Application.md) sets `DefaultResourceType` to the localization resource of the application.
+
+See the *Client Side* section below for a use case.
+
 ### Short Localization Resource Name
 
 Localization resources are also available in the client (JavaScript) side. So, setting a short name for the localization resource makes it easy to use localization texts. Example:
@@ -180,16 +195,34 @@ Refer to the [Microsoft's localization documentation](https://docs.microsoft.com
 
 ABP provides JavaScript services to use the same localized texts in the client side.
 
-Get a localization resource:
+#### getResource
+
+`abp.localization.getResource` function is used to get a localization resource:
 
 ````js
 var testResource = abp.localization.getResource('Test');
 ````
 
-Localize a string:
+Then you can localize a string based on this resource:
 
 ````js
 var str = testResource('HelloWorld');
+````
+
+#### localize
+
+`abp.localization.localize` function is a shortcut where you can both specify the text name and the resource name:
+
+````js
+var str = abp.localization.localize('HelloWorld', 'Test');
+````
+
+`HelloWorld` is the text to localize, where `Test` is the localization resource name here.
+
+If you don't specify the localization resource name, it uses the default localization resource defined on the `AbpLocalizationOptions` (see the *Default Resource* section above). Example:
+
+````js
+var str = abp.localization.localize('HelloWorld'); //uses the default resource
 ````
 
 ## See Also
