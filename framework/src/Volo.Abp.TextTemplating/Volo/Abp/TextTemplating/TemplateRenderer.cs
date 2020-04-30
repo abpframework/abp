@@ -140,7 +140,7 @@ namespace Volo.Abp.TextTemplating
             {
                 var localizer = _stringLocalizerFactory.Create(templateDefinition.LocalizationResource);
                 scriptObject.Import(
-                    "l",
+                    "L",
                     new Func<string, string>(
                         name => localizer[name]
                     )

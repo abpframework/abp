@@ -1,1 +1,1 @@
-﻿{{message}}
+﻿{{model.message}}
