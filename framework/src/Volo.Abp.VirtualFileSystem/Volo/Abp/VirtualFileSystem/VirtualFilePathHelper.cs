@@ -10,7 +10,7 @@ namespace Volo.Abp.VirtualFileSystem
 
         public static string NormalizePath(string fullPath)
         {
-            if (fullPath == "/")
+            if (fullPath.Equals("/", StringComparison.Ordinal))
             {
                 return string.Empty;
             }
