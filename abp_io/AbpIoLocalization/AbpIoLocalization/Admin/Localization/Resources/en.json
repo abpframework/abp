@@ -15,6 +15,7 @@
     "Permission:Create": "Create",
     "Permission:Accounting": "Accounting",
     "Permission:Accounting:Quotation": "Quotation",
+    "Permission:Accounting:Invoice": "Invoice",
     "Menu:Organizations": "Organizations",
     "Menu:Accounting": "Accounting",
     "Menu:Packages": "Packages",
