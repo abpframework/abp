@@ -5,8 +5,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Validation</AssemblyName>
-    <PackageId>Volo.Abp.Validation</PackageId>
+    <AssemblyName>Volo.Abp.Validation.Abstractions</AssemblyName>
+    <PackageId>Volo.Abp.Validation.Abstractions</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -15,13 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\Validation\Localization\*.json" />
-    <EmbeddedResource Include="Volo\Abp\Validation\Localization\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Validation.Abstractions\Volo.Abp.Validation.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
   </ItemGroup>
 
 </Project>

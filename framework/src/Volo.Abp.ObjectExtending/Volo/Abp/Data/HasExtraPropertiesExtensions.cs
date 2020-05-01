@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
@@ -37,10 +38,20 @@ namespace Volo.Abp.Data
             throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
         }
 
-        public static TSource SetProperty<TSource>(this TSource source, string name, object value)
+        public static TSource SetProperty<TSource>(
+            this TSource source, 
+            string name, 
+            object value,
+            bool validate = true)
             where TSource : IHasExtraProperties
         {
+            if (validate)
+            {
+                ExtensibleObjectValidator.CheckValue(source, name, value);
+            }
+
             source.ExtraProperties[name] = value;
+
             return source;
         }
 
