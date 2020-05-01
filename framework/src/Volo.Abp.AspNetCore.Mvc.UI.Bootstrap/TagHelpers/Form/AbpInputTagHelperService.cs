@@ -58,7 +58,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         protected virtual async Task<(string, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
         {
             var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output);
-            
+
             var inputHtml = inputTag.Render(_encoder);
             var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox);
             var info = GetInfoAsHtml(context, output, inputTag, isCheckBox);
@@ -162,7 +162,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void AddDisabledAttribute(TagHelperOutput inputTagHelperOutput)
         {
-            if (inputTagHelperOutput.Attributes.ContainsName("disabled") == false && 
+            if (inputTagHelperOutput.Attributes.ContainsName("disabled") == false &&
                      (TagHelper.IsDisabled || TagHelper.AspFor.ModelExplorer.GetAttribute<DisabledInput>() != null))
             {
                 inputTagHelperOutput.Attributes.Add("disabled", "");
@@ -171,7 +171,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual void AddReadOnlyAttribute(TagHelperOutput inputTagHelperOutput)
         {
-            if (inputTagHelperOutput.Attributes.ContainsName("readonly") == false && 
+            if (inputTagHelperOutput.Attributes.ContainsName("readonly") == false &&
                     (TagHelper.IsReadonly != false || TagHelper.AspFor.ModelExplorer.GetAttribute<ReadOnlyInput>() != null))
             {
                 inputTagHelperOutput.Attributes.Add("readonly", "");
@@ -407,7 +407,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 list.Add(new FormGroupItem
                 {
                     HtmlContent = html,
-                    Order = order
+                    Order = order,
+                    PropertyName = propertyName
                 });
             }
         }

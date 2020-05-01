@@ -10,7 +10,12 @@ namespace Volo.Abp.Localization
         {
             Check.NotNull(culture, nameof(culture));
 
-            return Use(new CultureInfo(culture), uiCulture == null ? null : new CultureInfo(uiCulture));
+            return Use(
+                new CultureInfo(culture),
+                uiCulture == null
+                    ? null
+                    : new CultureInfo(uiCulture)
+            );
         }
 
         public static IDisposable Use([NotNull] CultureInfo culture, CultureInfo uiCulture = null)
@@ -46,6 +51,13 @@ namespace Volo.Abp.Localization
             {
                 return false;
             }
+        }
+
+        public static string GetBaseCultureName(string cultureName)
+        {
+            return cultureName.Contains("-")
+                ? cultureName.Left(cultureName.IndexOf("-", StringComparison.Ordinal))
+                : cultureName;
         }
     }
 }

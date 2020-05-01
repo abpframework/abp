@@ -38,7 +38,7 @@ Create a new project named `Acme.BookStore` where `Acme` is the company name and
 
 #### Create the project
 
-By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `MVC`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
+By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `{{UI_Value}}`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
 
 ```bash
 abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}} --mobile none
@@ -61,7 +61,7 @@ After creating the project, you need to apply the initial migrations and create 
 
 To run the project, right click to the {{if UI == "MVC"}} `Acme.BookStore.Web`{{end}} {{if UI == "NG"}} `Acme.BookStore.HttpApi.Host` {{end}} project and click **Set As StartUp Project**. And run the web project by pressing **CTRL+F5** (*without debugging and fast*) or press **F5** (*with debugging and slow*). {{if UI == "NG"}}You will see the Swagger UI for BookStore API.{{end}}
 
-Further information, see the [running the application section](../../Getting-Started-{{if UI == "NG"}}Angular{{else}}AspNetCore-MVC{{end}}-Template#running-the-application).Getting-Started-AspNetCore-MVC-Template#running-the-application
+Further information, see the [running the application section](../Getting-Started?UI={{UI}}#run-the-application).
 
 ![Set as startup project](./images/bookstore-start-project-{{UI_Text}}.png)
 
@@ -335,7 +335,7 @@ INSERT INTO AppBooks (Id,CreationTime,[Name],[Type],PublishDate,Price) VALUES
 
 ### Create the application service
 
-The next step is to create an [application service](../../Application-Services.md) to manage the books which will allow us the four basic functions: creating, reading, updating and deleting. Application layer is separated into two projects:
+The next step is to create an [application service](../Application-Services.md) to manage the books which will allow us the four basic functions: creating, reading, updating and deleting. Application layer is separated into two projects:
 
 * `Acme.BookStore.Application.Contracts` mainly contains your `DTO`s and application service interfaces.
 * `Acme.BookStore.Application` contains the implementations of your application services.
@@ -873,8 +873,6 @@ We'll see **book-list works!**  text on the books page:
 #### Create BooksState
 
 Run the following command in the terminal to create a new state, named `BooksState`:
-
-![Initial book list page](./images/bookstore-generate-state-books.png)
 
 ```bash
 npx @ngxs/cli --name books --directory src/app/books

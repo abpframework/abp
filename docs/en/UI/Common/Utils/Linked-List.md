@@ -1270,7 +1270,7 @@ find(predicate: ListIteratorFn<T>): ListNode<T> | undefined
 Finds the first node from the list that matches the given predicate:
 
 ```js
-list.addTailMany(['a', 'b', 'b', 'c']);
+list.addManyTail(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -1294,7 +1294,7 @@ findIndex(predicate: ListIteratorFn<T>): number
 Finds the position of the first node from the list that matches the given predicate:
 
 ```js
-list.addTailMany(['a', 'b', 'b', 'c']);
+list.addManyTail(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -1322,7 +1322,7 @@ get(position: number): ListNode<T> | undefined
 Finds and returns the node with specific position in the list:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1346,7 +1346,7 @@ indexOf(value: T, compareFn?: ListComparisonFn<T>): number
 Finds the position of the first node from the list that has the given value:
 
 ```js
-list.addTailMany(['a', 'b', 'b', 'c']);
+list.addManyTail(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -1368,7 +1368,7 @@ i3 === -1
 You may pass a custom compare function to detect the searched value:
 
 ```js
-list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
+list.addManyTail([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
@@ -1408,7 +1408,7 @@ forEach(iteratorFn: ListIteratorFn<T>): void
 Runs a function on all nodes in a linked list from head to tail:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1425,7 +1425,7 @@ list.forEach((node, index) => console.log(node.value + index));
 A linked list is iterable. In other words, you may use methods like `for...of` on it.
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1449,7 +1449,7 @@ toArray(): T[]
 Converts a linked list to an array of values:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1471,7 +1471,7 @@ toNodeArray(): ListNode<T>[]
 Converts a linked list to an array of nodes:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1495,7 +1495,7 @@ toString(mapperFn: ListMapperFn<T> = JSON.stringify): string
 Converts a linked list to a string representation of nodes and their relations:
 
 ```js
-list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
+list.addManyTail(['a', 2, 'c', { k: 4, v: 'd' }]);
 
 // "a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}
 
@@ -1562,7 +1562,7 @@ export class ListNode<T = any> {
 - `previous` refers to the previous node in the list.
 
 ```js
-list.addTailMany([ 0, 1, 2 ]);
+list.addManyTail([ 0, 1, 2 ]);
 
 console.log(
   list.head.value,                              // 0

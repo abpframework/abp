@@ -2,7 +2,7 @@
 
 本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. 
 
-通常情况下你需要下载一个 ***[启动模板](https://abp.io/Templates)***
+通常情况下你需要下载一个 ***[启动模板](Getting-Started-AspNetCore-MVC-Template.md)***
 
 ### 创建一个新项目
 
