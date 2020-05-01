@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.ObjectExtending
+namespace Volo.Abp.ObjectExtending.Modularity
 {
     public static class ModuleObjectExtensionConfigurationDictionaryExtensions
     {

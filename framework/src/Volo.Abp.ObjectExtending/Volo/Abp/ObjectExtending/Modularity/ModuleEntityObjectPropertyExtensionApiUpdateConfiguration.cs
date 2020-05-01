@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.ObjectExtending
+﻿namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public class ModuleEntityObjectPropertyExtensionEntityConfiguration
+    public class ModuleEntityObjectPropertyExtensionApiUpdateConfiguration
     {
         /// <summary>
         /// Default: true.

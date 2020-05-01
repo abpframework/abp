@@ -6,7 +6,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity

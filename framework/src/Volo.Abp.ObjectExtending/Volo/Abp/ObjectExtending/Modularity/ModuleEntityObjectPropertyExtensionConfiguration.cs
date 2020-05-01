@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.ObjectExtending
+namespace Volo.Abp.ObjectExtending.Modularity
 {
     public class ModuleEntityObjectPropertyExtensionConfiguration : IHasNameWithLocalizableDisplayName
     {

@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.ObjectExtending
+namespace Volo.Abp.ObjectExtending.Modularity
 {
     public class ModuleEntityObjectPropertyExtensionApiConfiguration
     {

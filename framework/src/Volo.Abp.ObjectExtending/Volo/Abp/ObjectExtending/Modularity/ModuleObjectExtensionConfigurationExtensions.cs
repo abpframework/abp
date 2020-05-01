@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Volo.Abp.ObjectExtending
+namespace Volo.Abp.ObjectExtending.Modularity
 {
     public static class ModuleObjectExtensionConfigurationExtensions
     {

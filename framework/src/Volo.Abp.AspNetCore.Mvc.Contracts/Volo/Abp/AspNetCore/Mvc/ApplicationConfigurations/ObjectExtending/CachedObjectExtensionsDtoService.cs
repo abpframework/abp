@@ -2,6 +2,7 @@
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
