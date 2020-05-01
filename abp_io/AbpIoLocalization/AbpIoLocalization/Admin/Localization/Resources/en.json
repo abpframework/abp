@@ -115,8 +115,10 @@
     "InvoiceDate": "Invoice Date",
     "Quantity": "Quantity",
     "AddProduct": "Add Product",
-    "NeedToAddProduct": "Need to add product to generate invoice !",
+    "AddProductWarning": "You need to add product!",
     "TotalPrice": "Total Price",
-    "Generate": "Generate"
+    "Generate": "Generate",
+    "MissingQuantityField": "The quantity field is required!",
+    "MissingPriceField": "The Price field is required!"
   }
 }
