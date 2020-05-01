@@ -13,8 +13,8 @@
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
     "Permission:Create": "Create",
-	"Permission:Accounting": "Accounting",
-	"Permission:Accounting:Quotation": "Quotation",
+    "Permission:Accounting": "Accounting",
+    "Permission:Accounting:Quotation": "Quotation",
     "Menu:Organizations": "Organizations",
     "Menu:Accounting": "Accounting",
     "Menu:Packages": "Packages",
@@ -101,13 +101,10 @@
     "CompanyName": "Company name",
     "CompanyAddress": "Company address",
     "Price": "Price",
-<<<<<<< Updated upstream
     "DiscountText": "Discount text",
     "DiscountQuantity": "Discount quantity",
-	"DiscountPrice": "Discount price",
+    "DiscountPrice": "Discount price",
     "Quotation": "Quotation",
-	"Generate": "Generate"
-=======
     "ExtraText": "Extra Text",
     "ExtraAmount": "Extra Amount",
     "DownloadQuotation": "Download Quotation",
@@ -119,7 +116,6 @@
     "AddProduct": "Add Product",
     "NeedToAddProduct": "Need to add product to generate invoice !",
     "TotalPrice": "Total Price",
-    "Generate": "Generate" 
->>>>>>> Stashed changes
+    "Generate": "Generate"
   }
 }
