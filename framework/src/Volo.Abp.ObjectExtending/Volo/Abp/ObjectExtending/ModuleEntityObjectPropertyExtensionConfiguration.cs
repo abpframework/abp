@@ -30,6 +30,9 @@ namespace Volo.Abp.ObjectExtending
         
         [NotNull]
         public ModuleEntityObjectPropertyExtensionUIConfiguration UI { get; }
+        
+        [NotNull]
+        public ModuleEntityObjectPropertyExtensionApiConfiguration Api { get; }
 
         public ModuleEntityObjectPropertyExtensionConfiguration(
             [NotNull] ModuleEntityObjectExtensionConfiguration entityObjectExtensionConfiguration,
@@ -45,6 +48,7 @@ namespace Volo.Abp.ObjectExtending
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
 
             UI = new ModuleEntityObjectPropertyExtensionUIConfiguration();
+            Api = new ModuleEntityObjectPropertyExtensionApiConfiguration();
         }
     }
 }

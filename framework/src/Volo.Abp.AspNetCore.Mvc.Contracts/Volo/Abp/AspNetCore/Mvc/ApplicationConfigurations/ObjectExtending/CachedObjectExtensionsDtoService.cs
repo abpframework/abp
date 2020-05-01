@@ -58,21 +58,36 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                             {
                                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(propertyConfig.Type),
                                 TypeSimple = TypeHelper.GetSimplifiedName(propertyConfig.Type),
-                                Attributes = new List<ModuleObjectExtraPropertyAttributeDto>(), 
+                                Attributes = new List<ModuleObjectExtraPropertyAttributeDto>(),
                                 DisplayName = CreateDisplayNameDto(propertyConfig),
+                                Api = new ModuleEntityObjectPropertyExtensionApiConfigurationDto
+                                {
+                                    OnGet = new ModuleEntityObjectPropertyExtensionApiGetConfigurationDto
+                                    {
+                                        IsAvailable = propertyConfig.Api.OnGet.IsAvailable
+                                    },
+                                    OnCreate = new ModuleEntityObjectPropertyExtensionApiCreateConfigurationDto
+                                    {
+                                        IsAvailable = propertyConfig.Api.OnCreate.IsAvailable
+                                    },
+                                    OnUpdate = new ModuleEntityObjectPropertyExtensionApiUpdateConfigurationDto
+                                    {
+                                        IsAvailable = propertyConfig.Api.OnUpdate.IsAvailable
+                                    }
+                                },
                                 Ui = new ModuleObjectExtraPropertyUiExtensionDto
                                 {
-                                    CreateForm = new ModuleObjectExtraPropertyUiFormExtensionDto
+                                    OnCreateForm = new ModuleObjectExtraPropertyUiFormExtensionDto
                                     {
-                                        IsVisible = propertyConfig.UI.CreateForm.IsVisible
+                                        IsVisible = propertyConfig.UI.OnCreateForm.IsVisible
                                     },
-                                    EditForm = new ModuleObjectExtraPropertyUiFormExtensionDto
+                                    OnEditForm = new ModuleObjectExtraPropertyUiFormExtensionDto
                                     {
-                                        IsVisible = propertyConfig.UI.EditForm.IsVisible
+                                        IsVisible = propertyConfig.UI.OnEditForm.IsVisible
                                     },
-                                    Table = new ModuleObjectExtraPropertyUiTableExtensionDto
+                                    OnTable = new ModuleObjectExtraPropertyUiTableExtensionDto
                                     {
-                                        IsVisible = propertyConfig.UI.Table.IsVisible
+                                        IsVisible = propertyConfig.UI.OnTable.IsVisible
                                     }
                                 }
                             };

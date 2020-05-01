@@ -5,19 +5,19 @@ namespace Volo.Abp.ObjectExtending
     public class ModuleEntityObjectPropertyExtensionUIConfiguration
     {
         [NotNull]
-        public ModuleEntityObjectPropertyExtensionUITableConfiguration Table { get; }
+        public ModuleEntityObjectPropertyExtensionUITableConfiguration OnTable { get; }
 
         [NotNull]
-        public ModuleEntityObjectPropertyExtensionUIFormConfiguration CreateForm { get; }
+        public ModuleEntityObjectPropertyExtensionUIFormConfiguration OnCreateForm { get; }
 
         [NotNull]
-        public ModuleEntityObjectPropertyExtensionUIFormConfiguration EditForm { get; }
+        public ModuleEntityObjectPropertyExtensionUIFormConfiguration OnEditForm { get; }
 
         public ModuleEntityObjectPropertyExtensionUIConfiguration()
         {
-            Table = new ModuleEntityObjectPropertyExtensionUITableConfiguration();
-            CreateForm = new ModuleEntityObjectPropertyExtensionUIFormConfiguration();
-            EditForm = new ModuleEntityObjectPropertyExtensionUIFormConfiguration();
+            OnTable = new ModuleEntityObjectPropertyExtensionUITableConfiguration();
+            OnCreateForm = new ModuleEntityObjectPropertyExtensionUIFormConfiguration();
+            OnEditForm = new ModuleEntityObjectPropertyExtensionUIFormConfiguration();
         }
     }
 }

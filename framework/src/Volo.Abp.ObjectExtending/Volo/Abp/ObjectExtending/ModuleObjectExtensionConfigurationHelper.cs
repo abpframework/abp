@@ -10,21 +10,42 @@ namespace Volo.Abp.ObjectExtending
             string moduleName,
             string objectName,
             Type[] createFormTypes = null,
-            Type[] editFormTypes = null
+            Type[] editFormTypes = null,
+            Type[] getApiTypes = null,
+            Type[] createApiTypes = null,
+            Type[] updateApiTypes = null
         )
         {
             foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
             {
-                if (propertyConfig.UI.CreateForm.IsVisible &&
+                if (propertyConfig.UI.OnCreateForm.IsVisible &&
                     createFormTypes != null)
                 {
                     ApplyPropertyConfigurationToTypes(propertyConfig, createFormTypes);
                 }
 
-                if (propertyConfig.UI.EditForm.IsVisible &&
+                if (propertyConfig.UI.OnEditForm.IsVisible &&
                     editFormTypes != null)
                 {
                     ApplyPropertyConfigurationToTypes(propertyConfig, editFormTypes);
+                }
+
+                if (propertyConfig.Api.OnGet.IsAvailable &&
+                    getApiTypes != null)
+                {
+                    ApplyPropertyConfigurationToTypes(propertyConfig, getApiTypes);
+                }
+
+                if (propertyConfig.Api.OnCreate.IsAvailable &&
+                    createApiTypes != null)
+                {
+                    ApplyPropertyConfigurationToTypes(propertyConfig, createApiTypes);
+                }
+
+                if (propertyConfig.Api.OnUpdate.IsAvailable &&
+                    updateApiTypes != null)
+                {
+                    ApplyPropertyConfigurationToTypes(propertyConfig, updateApiTypes);
                 }
             }
         }

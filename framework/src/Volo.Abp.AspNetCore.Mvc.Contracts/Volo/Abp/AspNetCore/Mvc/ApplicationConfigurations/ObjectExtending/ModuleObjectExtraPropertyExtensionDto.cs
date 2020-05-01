@@ -14,6 +14,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
         [CanBeNull]
         public LocalizableStringDto DisplayName { get; set; }
 
+        public ModuleEntityObjectPropertyExtensionApiConfigurationDto Api { get; set; }
+     
         public ModuleObjectExtraPropertyUiExtensionDto Ui { get; set; }
 
         public List<ModuleObjectExtraPropertyAttributeDto> Attributes { get; set; }
