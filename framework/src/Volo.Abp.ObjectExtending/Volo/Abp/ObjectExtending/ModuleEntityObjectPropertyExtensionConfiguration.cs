@@ -5,7 +5,7 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending
 {
-    public class ModuleEntityObjectPropertyExtensionConfiguration
+    public class ModuleEntityObjectPropertyExtensionConfiguration : IHasNameWithLocalizableDisplayName
     {
         [NotNull]
         public ModuleEntityObjectExtensionConfiguration EntityObjectExtensionConfiguration { get; }
