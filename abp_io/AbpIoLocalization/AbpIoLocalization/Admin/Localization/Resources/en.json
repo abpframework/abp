@@ -16,7 +16,7 @@
 	"Permission:Accounting": "Accounting",
 	"Permission:Accounting:Quotation": "Quotation",
     "Menu:Organizations": "Organizations",
-    "Menu:Accounting": "Accounting",  
+    "Menu:Accounting": "Accounting",
     "Menu:Packages": "Packages",
     "NpmPackageDeletionWarningMessage": "This NPM Package will be deleted. Do you confirm that?",
     "NugetPackageDeletionWarningMessage": "This Nuget Package will be deleted. Do you confirm that?",
@@ -101,10 +101,25 @@
     "CompanyName": "Company name",
     "CompanyAddress": "Company address",
     "Price": "Price",
+<<<<<<< Updated upstream
     "DiscountText": "Discount text",
     "DiscountQuantity": "Discount quantity",
 	"DiscountPrice": "Discount price",
     "Quotation": "Quotation",
 	"Generate": "Generate"
+=======
+    "ExtraText": "Extra Text",
+    "ExtraAmount": "Extra Amount",
+    "DownloadQuotation": "Download Quotation",
+    "Invoice": "Invoice",
+    "TaxNumber": "Tax Number",
+    "InvoiceNumber": "Invoice Number",
+    "InvoiceDate": "Invoice Date",
+    "Quantity": "Quantity",
+    "AddProduct": "Add Product",
+    "NeedToAddProduct": "Need to add product to generate invoice !",
+    "TotalPrice": "Total Price",
+    "Generate": "Generate" 
+>>>>>>> Stashed changes
   }
 }
