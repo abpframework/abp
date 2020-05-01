@@ -6,6 +6,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
@@ -43,6 +44,15 @@ namespace Volo.Abp.Identity
             context.Services.ExecutePreConfiguredActions(identityBuilder);
 
             AddAbpIdentityOptionsFactory(context.Services);
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            ModuleObjectExtensionConfigurationHelper.ApplyModuleObjectExtensionConfigurationToEntity(
+                "Identity",
+                "User",
+                typeof(IdentityUser)
+            );
         }
 
         private static void AddAbpIdentityOptionsFactory(IServiceCollection services)

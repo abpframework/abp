@@ -6,30 +6,30 @@ namespace Volo.Abp.ObjectExtending
 {
     public static class ModuleObjectExtensionConfigurationHelper
     {
-        public static void ApplyModuleObjectExtensionConfigurations(
+        public static void ApplyModuleObjectExtensionConfigurationToEntity(
             string moduleName,
             string objectName,
-            Type[] createFormTypes = null,
-            Type[] editFormTypes = null,
-            Type[] getApiTypes = null,
-            Type[] createApiTypes = null,
-            Type[] updateApiTypes = null
-        )
+            Type entityType)
         {
             foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
             {
-                if (propertyConfig.UI.OnCreateForm.IsVisible &&
-                    createFormTypes != null)
+                if (propertyConfig.Entity.IsAvailable &&
+                    entityType != null)
                 {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, createFormTypes);
+                    ApplyPropertyConfigurationToTypes(propertyConfig, new[] { entityType });
                 }
+            }
+        }
 
-                if (propertyConfig.UI.OnEditForm.IsVisible &&
-                    editFormTypes != null)
-                {
-                    ApplyPropertyConfigurationToTypes(propertyConfig, editFormTypes);
-                }
-
+        public static void ApplyModuleObjectExtensionConfigurationToApi(
+            string moduleName,
+            string objectName,
+            Type[] getApiTypes = null,
+            Type[] createApiTypes = null,
+            Type[] updateApiTypes = null)
+        {
+            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
+            {
                 if (propertyConfig.Api.OnGet.IsAvailable &&
                     getApiTypes != null)
                 {
@@ -50,9 +50,66 @@ namespace Volo.Abp.ObjectExtending
             }
         }
 
+        public static void ApplyModuleObjectExtensionConfigurationToUI(
+            string moduleName,
+            string objectName,
+            Type[] createFormTypes = null,
+            Type[] editFormTypes = null)
+        {
+            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
+            {
+                if (propertyConfig.UI.OnCreateForm.IsVisible &&
+                    createFormTypes != null)
+                {
+                    ApplyPropertyConfigurationToTypes(propertyConfig, createFormTypes);
+                }
+
+                if (propertyConfig.UI.OnEditForm.IsVisible &&
+                    editFormTypes != null)
+                {
+                    ApplyPropertyConfigurationToTypes(propertyConfig, editFormTypes);
+                }
+            }
+        }
+
+        public static void ApplyModuleObjectExtensionConfigurations(
+            string moduleName,
+            string objectName,
+            Type entityType = null,
+            Type[] createFormTypes = null,
+            Type[] editFormTypes = null,
+            Type[] getApiTypes = null,
+            Type[] createApiTypes = null,
+            Type[] updateApiTypes = null)
+        {
+            if (entityType != null)
+            {
+                ApplyModuleObjectExtensionConfigurationToEntity(
+                    moduleName,
+                    objectName,
+                    entityType
+                );
+            }
+
+            ApplyModuleObjectExtensionConfigurationToApi(
+                moduleName,
+                objectName,
+                getApiTypes: getApiTypes,
+                createApiTypes: createApiTypes,
+                updateApiTypes: updateApiTypes
+            );
+
+            ApplyModuleObjectExtensionConfigurationToUI(
+                moduleName,
+                objectName,
+                createFormTypes: createFormTypes,
+                editFormTypes: editFormTypes
+            );
+        }
+
         [NotNull]
         public static IEnumerable<ModuleEntityObjectPropertyExtensionConfiguration> GetPropertyConfigurations(
-            string moduleName, 
+            string moduleName,
             string objectName)
         {
             var moduleConfig = ObjectExtensionManager.Instance.Modules.GetOrDefault(moduleName);
