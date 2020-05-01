@@ -181,6 +181,10 @@ public class MyService
 }
 ````
 
+##### Format Arguments
+
+Format arguments can be passed after the localization key. If your message is `Hello {0}, welcome!`, then you can pass the `{0}` argument to the localizer like `_localizer["HelloMessage", "John"]`
+
 #### Simplest Usage In A Razor View/Page
 
 ````c#
@@ -224,6 +228,17 @@ If you don't specify the localization resource name, it uses the default localiz
 ````js
 var str = abp.localization.localize('HelloWorld'); //uses the default resource
 ````
+
+##### Format Arguments
+
+If your localized string contains arguments, like `Hello {0}, welcome!`, you can pass arguments to the localization methods. Examples:
+
+````js
+var str1 = abp.localization.getResource('Test')('HelloWelcomeMessage', 'John');
+var str2 = abp.localization.localize('HelloWorld', 'Test', 'John');
+````
+
+Both of the samples above produce the output `Hello John, welcome!`.
 
 ## See Also
 
