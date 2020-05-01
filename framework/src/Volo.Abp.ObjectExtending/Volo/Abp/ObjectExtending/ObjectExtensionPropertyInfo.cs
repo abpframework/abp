@@ -7,7 +7,7 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending
 {
-    public class ObjectExtensionPropertyInfo
+    public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName
     {
         [NotNull]
         public ObjectExtensionInfo ObjectExtension { get; }
@@ -61,36 +61,6 @@ namespace Volo.Abp.ObjectExtending
             ValidationAttributes = new List<ValidationAttribute>();
             Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
-        }
-        
-        [NotNull]
-        public string GetDisplayName(
-            [NotNull] IStringLocalizerFactory stringLocalizerFactory)
-        {
-            if (DisplayName != null)
-            {
-                return DisplayName.Localize(stringLocalizerFactory);
-            }
-
-            var defaultStringLocalizer = stringLocalizerFactory.CreateDefaultOrNull();
-            if (defaultStringLocalizer == null)
-            {
-                return Name;
-            }
-
-            var localizedString = defaultStringLocalizer[$"DisplayName:{Name}"];
-            if (!localizedString.ResourceNotFound)
-            {
-                return localizedString;
-            }
-
-            localizedString = defaultStringLocalizer[Name];
-            if (!localizedString.ResourceNotFound)
-            {
-                return localizedString;
-            }
-
-            return Name;
         }
     }
 }

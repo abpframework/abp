@@ -76,7 +76,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             };
         }
 
-        protected  virtual  CurrentTenantDto GetCurrentTenant()
+        protected virtual CurrentTenantDto GetCurrentTenant()
         {
             return new CurrentTenantDto()
             {
@@ -157,9 +157,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             }
 
             localizationConfig.CurrentCulture = GetCurrentCultureInfo();
-            localizationConfig.DefaultResourceName = LocalizationResourceNameAttribute.GetName(
-                _localizationOptions.DefaultResourceType
-            );
+
+            if (_localizationOptions.DefaultResourceType != null)
+            {
+                localizationConfig.DefaultResourceName = LocalizationResourceNameAttribute.GetName(
+                    _localizationOptions.DefaultResourceType
+                );
+            }
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetLocalizationConfigAsync()");
 

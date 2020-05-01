@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
@@ -14,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ModelBinding;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation.Localization;
 
@@ -103,7 +103,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ViewFeatures
             if (modelExplorer.Metadata is DefaultModelMetadata metadata)
             {
                 metadata.DisplayMetadata.DisplayName =
-                    () => extensionPropertyInfo.GetDisplayName(_stringLocalizerFactory);
+                    () => extensionPropertyInfo.GetLocalizedDisplayName(_stringLocalizerFactory);
             }
 
             foreach (var validationAttribute in extensionPropertyInfo.GetValidationAttributes())
