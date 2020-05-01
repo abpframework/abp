@@ -204,7 +204,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 var currentValue = e.Entry.CurrentValues[property.Name];
                 if (currentValue != null)
                 {
-                    entity.SetProperty(property.Name, currentValue);
+                    entity.ExtraProperties[property.Name] = currentValue;
                 }
             }
         }
