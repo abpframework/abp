@@ -1,5 +1,5 @@
 {
-  "culture": "pl",
+  "culture": "pl-PL",
   "texts": {
     "InternalServerErrorMessage": "Błąd wewnętrzny serwera podczas przetwarzania żądania!",
     "ValidationErrorMessage": "Twoje żądanie jest niepoprawnie!",

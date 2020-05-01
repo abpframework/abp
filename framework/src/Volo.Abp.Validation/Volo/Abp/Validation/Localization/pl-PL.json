@@ -1,5 +1,5 @@
 {
-  "culture": "pl",
+  "culture": "pl-PL",
   "texts": {
     "'{0}' and '{1}' do not match.": "'{0}' i '{1}' nie są takie same.",
     "The {0} field is not a valid credit card number.": "Pole {0} nie jest poprawnym numerem karty kredytowej.",
