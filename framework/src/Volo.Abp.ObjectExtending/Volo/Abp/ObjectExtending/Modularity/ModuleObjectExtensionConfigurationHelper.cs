@@ -30,6 +30,11 @@ namespace Volo.Abp.ObjectExtending.Modularity
         {
             foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
             {
+                if (!propertyConfig.IsAvailableToClients)
+                {
+                    continue;
+                }
+
                 if (propertyConfig.Api.OnGet.IsAvailable &&
                     getApiTypes != null)
                 {
@@ -58,6 +63,11 @@ namespace Volo.Abp.ObjectExtending.Modularity
         {
             foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
             {
+                if (!propertyConfig.IsAvailableToClients)
+                {
+                    continue;
+                }
+
                 if (propertyConfig.UI.OnCreateForm.IsVisible &&
                     createFormTypes != null)
                 {

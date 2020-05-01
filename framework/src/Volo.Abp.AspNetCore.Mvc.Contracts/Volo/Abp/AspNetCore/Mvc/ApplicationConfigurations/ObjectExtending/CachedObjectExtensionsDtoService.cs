@@ -54,6 +54,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 
                     foreach (var propertyConfig in objectConfig.Value.GetProperties())
                     {
+                        if (!propertyConfig.IsAvailableToClients)
+                        {
+                            continue;
+                        }
+
                         var propertyExtensionDto = moduleObjectExtensionDto.ExtraProperties[propertyConfig.Name] =
                             new ModuleObjectExtraPropertyExtensionDto
                             {

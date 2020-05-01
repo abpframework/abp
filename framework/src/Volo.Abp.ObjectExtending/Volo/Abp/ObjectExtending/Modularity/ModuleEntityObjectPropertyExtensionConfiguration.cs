@@ -27,9 +27,17 @@ namespace Volo.Abp.ObjectExtending.Modularity
 
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
-
+        
         [NotNull]
         public ModuleEntityObjectPropertyExtensionEntityConfiguration Entity { get; }
+
+        /// <summary>
+        /// Single point to enable/disable this property for the clients (UI and API).
+        /// If this is false, the configuration made in the <see cref="UI"/> and the <see cref="Api"/>
+        /// properties are not used.
+        /// Default: true.
+        /// </summary>
+        public bool IsAvailableToClients { get; set; } = true;
 
         [NotNull]
         public ModuleEntityObjectPropertyExtensionUIConfiguration UI { get; }
