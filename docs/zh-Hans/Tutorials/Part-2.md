@@ -26,7 +26,7 @@ end
 这是ASP.NET Core{{UI_Value}}系列教程的第二章. 共有三章:
 
 - [Part-1: 创建项目和书籍列表页面](Part-1.md)
-- **Part II: 创建,编辑,删除书籍(本章)**
+- **Part 2: 创建,编辑,删除书籍(本章)**
 - [Part-3: 集成测试](Part-3.md)
 
 > 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
