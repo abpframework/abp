@@ -123,7 +123,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private async Task<string> GetLatestVersionFromMyGet(string packageId)
         {
-            var myGetPack = await _myGetPackageListFinder.GetPackages();
+            var myGetPack = await _myGetPackageListFinder.GetPackagesAsync();
 
             return myGetPack.Packages.FirstOrDefault(p => p.Id == packageId)?.Versions.LastOrDefault();
         }
