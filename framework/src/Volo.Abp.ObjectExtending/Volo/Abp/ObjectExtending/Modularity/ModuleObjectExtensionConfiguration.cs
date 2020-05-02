@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Volo.Abp.ObjectExtending.Modularity
+﻿namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public class ModuleObjectExtensionConfiguration : Dictionary<string, ModuleEntityObjectExtensionConfiguration>
+    public class ModuleObjectExtensionConfiguration
     {
+        public ModuleEntityObjectExtensionConfigurationDictionary Entities { get; set; }
 
+        public ModuleObjectExtensionConfiguration()
+        {
+            Entities = new ModuleEntityObjectExtensionConfigurationDictionary();
+        }
     }
 }

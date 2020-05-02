@@ -128,7 +128,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
                 return Array.Empty<ModuleEntityObjectPropertyExtensionConfiguration>();
             }
 
-            var objectConfig = moduleConfig.GetOrDefault(objectName);
+            var objectConfig = moduleConfig.Entities.GetOrDefault(objectName);
             if (objectConfig == null)
             {
                 return Array.Empty<ModuleEntityObjectPropertyExtensionConfiguration>();

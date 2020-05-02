@@ -8,14 +8,14 @@ namespace Volo.Abp.ObjectExtending.Modularity
     public class ModuleEntityObjectExtensionConfiguration
     {
         [NotNull]
-        protected Dictionary<string, ModuleEntityObjectPropertyExtensionConfiguration> Properties { get; }
+        protected ModuleEntityObjectPropertyExtensionConfigurationDictionary Properties { get; }
 
         [NotNull]
         public List<Action<ObjectExtensionValidationContext>> Validators { get; }
 
         public ModuleEntityObjectExtensionConfiguration()
         {
-            Properties = new Dictionary<string, ModuleEntityObjectPropertyExtensionConfiguration>();
+            Properties = new ModuleEntityObjectPropertyExtensionConfigurationDictionary();
             Validators = new List<Action<ObjectExtensionValidationContext>>();
         }
 

@@ -44,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                     Objects = new Dictionary<string, ModuleObjectExtensionDto>()
                 };
 
-                foreach (var objectConfig in moduleConfig.Value)
+                foreach (var objectConfig in moduleConfig.Value.Entities)
                 {
                     var moduleObjectExtensionDto = moduleExtensionDto.Objects[objectConfig.Key] =
                         new ModuleObjectExtensionDto

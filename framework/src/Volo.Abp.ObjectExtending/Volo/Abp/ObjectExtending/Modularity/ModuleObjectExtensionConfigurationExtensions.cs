@@ -11,7 +11,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
             Action<ModuleEntityObjectExtensionConfiguration> configureAction)
             where T : ModuleObjectExtensionConfiguration
         {
-            var configuration = objectConfiguration.GetOrAdd(
+            var configuration = objectConfiguration.Entities.GetOrAdd(
                 objectName,
                 () => new ModuleEntityObjectExtensionConfiguration()
             );
