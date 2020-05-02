@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
-using Volo.Abp.ObjectExtending.Modularity;
 
 namespace Volo.Abp.ObjectExtending
 {
@@ -16,13 +15,10 @@ namespace Volo.Abp.ObjectExtending
 
         protected Dictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
         
-        public ModuleObjectExtensionConfigurationDictionary Modules { get; }
-
         protected internal ObjectExtensionManager()
         {
             ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
             Configuration = new Dictionary<object, object>();
-            Modules = new ModuleObjectExtensionConfigurationDictionary();
         }
 
         [NotNull]

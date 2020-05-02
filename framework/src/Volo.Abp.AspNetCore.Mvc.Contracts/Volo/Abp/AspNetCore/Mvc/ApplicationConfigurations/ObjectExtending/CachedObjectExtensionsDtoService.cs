@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                 Modules = new Dictionary<string, ModuleExtensionDto>()
             };
 
-            foreach (var moduleConfig in ObjectExtensionManager.Instance.Modules)
+            foreach (var moduleConfig in ObjectExtensionManager.Instance.Modules())
             {
                 var moduleExtensionDto = objectExtensionsDto.Modules[moduleConfig.Key] = new ModuleExtensionDto
                 {

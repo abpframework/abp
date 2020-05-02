@@ -122,7 +122,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
             string moduleName,
             string objectName)
         {
-            var moduleConfig = ObjectExtensionManager.Instance.Modules.GetOrDefault(moduleName);
+            var moduleConfig = ObjectExtensionManager.Instance.Modules().GetOrDefault(moduleName);
             if (moduleConfig == null)
             {
                 return Array.Empty<ModuleEntityObjectPropertyExtensionConfiguration>();
