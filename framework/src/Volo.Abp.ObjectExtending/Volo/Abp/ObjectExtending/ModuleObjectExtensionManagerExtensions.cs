@@ -8,15 +8,15 @@ namespace Volo.Abp.ObjectExtending
     {
         private const string ObjectExtensionManagerConfigurationKey = "_Modules";
 
-        public static ModuleObjectExtensionConfigurationDictionary Modules(
+        public static ModuleExtensionConfigurationDictionary Modules(
             [NotNull]this ObjectExtensionManager objectExtensionManager)
         {
             Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
             return objectExtensionManager.Configuration.GetOrAdd(
                 ObjectExtensionManagerConfigurationKey,
-                () => new ModuleObjectExtensionConfigurationDictionary()
-            ) as ModuleObjectExtensionConfigurationDictionary;
+                () => new ModuleExtensionConfigurationDictionary()
+            ) as ModuleExtensionConfigurationDictionary;
         }
     }
 }

@@ -3,7 +3,7 @@
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
     [Serializable]
-    public class ModuleEntityObjectPropertyExtensionApiGetConfigurationDto
+    public class ExtensionPropertyApiCreateDto
     {
         /// <summary>
         /// Default: true.

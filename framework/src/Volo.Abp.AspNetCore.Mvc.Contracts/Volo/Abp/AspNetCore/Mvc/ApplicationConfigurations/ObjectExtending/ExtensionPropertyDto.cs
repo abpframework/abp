@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
     [Serializable]
-    public class ModuleObjectExtraPropertyExtensionDto
+    public class ExtensionPropertyDto
     {
         public string Type { get; set; }
 
@@ -14,10 +14,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
         [CanBeNull]
         public LocalizableStringDto DisplayName { get; set; }
 
-        public ModuleEntityObjectPropertyExtensionApiConfigurationDto Api { get; set; }
+        public ExtensionPropertyApiDto Api { get; set; }
      
-        public ModuleObjectExtraPropertyUiExtensionDto Ui { get; set; }
+        public ExtensionPropertyUiDto Ui { get; set; }
 
-        public List<ModuleObjectExtraPropertyAttributeDto> Attributes { get; set; }
+        public List<ExtensionPropertyAttributeDto> Attributes { get; set; }
+
+        public Dictionary<string, object> Configuration { get; set; }
     }
 }

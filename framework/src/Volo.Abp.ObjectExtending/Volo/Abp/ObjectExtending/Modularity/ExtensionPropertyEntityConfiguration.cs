@@ -1,10 +1,10 @@
 ﻿namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public class ModuleEntityObjectPropertyExtensionUIFormConfiguration
+    public class ExtensionPropertyEntityConfiguration
     {
         /// <summary>
         /// Default: true.
         /// </summary>
-        public bool IsVisible { get; set; } = true;
+        public bool IsAvailable { get; set; } = true;
     }
 }

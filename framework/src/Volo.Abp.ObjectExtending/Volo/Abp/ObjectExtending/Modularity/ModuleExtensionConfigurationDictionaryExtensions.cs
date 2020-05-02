@@ -4,13 +4,13 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public static class ModuleObjectExtensionConfigurationDictionaryExtensions
+    public static class ModuleExtensionConfigurationDictionaryExtensions
     {
-        public static ModuleObjectExtensionConfigurationDictionary ConfigureModule<T>(
-            [NotNull] this ModuleObjectExtensionConfigurationDictionary configurationDictionary,
+        public static ModuleExtensionConfigurationDictionary ConfigureModule<T>(
+            [NotNull] this ModuleExtensionConfigurationDictionary configurationDictionary,
             [NotNull] string moduleName,
             [NotNull] Action<T> configureAction)
-            where T : ModuleObjectExtensionConfiguration, new()
+            where T : ModuleExtensionConfiguration, new()
         {
             Check.NotNull(moduleName, nameof(moduleName));
             Check.NotNull(configureAction, nameof(configureAction));

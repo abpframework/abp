@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public static class ModuleObjectExtensionConfigurationExtensions
+    public static class ModuleExtensionConfigurationExtensions
     {
-        public static T ConfigureObject<T>(
+        public static T ConfigureEntity<T>(
             this T objectConfiguration,
             string objectName,
-            Action<ModuleEntityObjectExtensionConfiguration> configureAction)
-            where T : ModuleObjectExtensionConfiguration
+            Action<EntityExtensionConfiguration> configureAction)
+            where T : ModuleExtensionConfiguration
         {
             var configuration = objectConfiguration.Entities.GetOrAdd(
                 objectName,
-                () => new ModuleEntityObjectExtensionConfiguration()
+                () => new EntityExtensionConfiguration()
             );
 
             configureAction(configuration);

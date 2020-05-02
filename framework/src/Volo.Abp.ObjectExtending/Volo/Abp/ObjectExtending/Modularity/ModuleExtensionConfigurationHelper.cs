@@ -4,14 +4,14 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public static class ModuleObjectExtensionConfigurationHelper
+    public static class ModuleExtensionConfigurationHelper
     {
-        public static void ApplyModuleObjectExtensionConfigurationToEntity(
+        public static void ApplyEntityConfigurationToEntity(
             string moduleName,
-            string objectName,
+            string entityName,
             Type entityType)
         {
-            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
+            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, entityName))
             {
                 if (propertyConfig.Entity.IsAvailable &&
                     entityType != null)
@@ -21,7 +21,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
             }
         }
 
-        public static void ApplyModuleObjectExtensionConfigurationToApi(
+        public static void ApplyEntityConfigurationToApi(
             string moduleName,
             string objectName,
             Type[] getApiTypes = null,
@@ -55,13 +55,13 @@ namespace Volo.Abp.ObjectExtending.Modularity
             }
         }
 
-        public static void ApplyModuleObjectExtensionConfigurationToUI(
+        public static void ApplyEntityConfigurationToUi(
             string moduleName,
-            string objectName,
+            string entityName,
             Type[] createFormTypes = null,
             Type[] editFormTypes = null)
         {
-            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, objectName))
+            foreach (var propertyConfig in GetPropertyConfigurations(moduleName, entityName))
             {
                 if (!propertyConfig.IsAvailableToClients)
                 {
@@ -82,9 +82,9 @@ namespace Volo.Abp.ObjectExtending.Modularity
             }
         }
 
-        public static void ApplyModuleObjectExtensionConfigurations(
+        public static void ApplyEntityConfigurations(
             string moduleName,
-            string objectName,
+            string entityName,
             Type entityType = null,
             Type[] createFormTypes = null,
             Type[] editFormTypes = null,
@@ -94,51 +94,51 @@ namespace Volo.Abp.ObjectExtending.Modularity
         {
             if (entityType != null)
             {
-                ApplyModuleObjectExtensionConfigurationToEntity(
+                ApplyEntityConfigurationToEntity(
                     moduleName,
-                    objectName,
+                    entityName,
                     entityType
                 );
             }
 
-            ApplyModuleObjectExtensionConfigurationToApi(
+            ApplyEntityConfigurationToApi(
                 moduleName,
-                objectName,
+                entityName,
                 getApiTypes: getApiTypes,
                 createApiTypes: createApiTypes,
                 updateApiTypes: updateApiTypes
             );
 
-            ApplyModuleObjectExtensionConfigurationToUI(
+            ApplyEntityConfigurationToUi(
                 moduleName,
-                objectName,
+                entityName,
                 createFormTypes: createFormTypes,
                 editFormTypes: editFormTypes
             );
         }
 
         [NotNull]
-        public static IEnumerable<ModuleEntityObjectPropertyExtensionConfiguration> GetPropertyConfigurations(
+        public static IEnumerable<ExtensionPropertyConfiguration> GetPropertyConfigurations(
             string moduleName,
-            string objectName)
+            string entityName)
         {
             var moduleConfig = ObjectExtensionManager.Instance.Modules().GetOrDefault(moduleName);
             if (moduleConfig == null)
             {
-                return Array.Empty<ModuleEntityObjectPropertyExtensionConfiguration>();
+                return Array.Empty<ExtensionPropertyConfiguration>();
             }
 
-            var objectConfig = moduleConfig.Entities.GetOrDefault(objectName);
+            var objectConfig = moduleConfig.Entities.GetOrDefault(entityName);
             if (objectConfig == null)
             {
-                return Array.Empty<ModuleEntityObjectPropertyExtensionConfiguration>();
+                return Array.Empty<ExtensionPropertyConfiguration>();
             }
 
             return objectConfig.GetProperties();
         }
 
         public static void ApplyPropertyConfigurationToTypes(
-            ModuleEntityObjectPropertyExtensionConfiguration propertyConfig,
+            ExtensionPropertyConfiguration propertyConfig,
             Type[] types)
         {
             ObjectExtensionManager.Instance

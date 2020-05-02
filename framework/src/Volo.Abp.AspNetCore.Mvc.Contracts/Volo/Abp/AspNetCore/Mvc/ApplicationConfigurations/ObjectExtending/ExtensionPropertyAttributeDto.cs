@@ -6,16 +6,16 @@ using Volo.Abp.Reflection;
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
     [Serializable]
-    public class ModuleObjectExtraPropertyAttributeDto
+    public class ExtensionPropertyAttributeDto
     {
         public string Type { get; set; }
         public string TypeSimple { get; set; }
         public Dictionary<string, object> Configuration { get; set; }
 
-        public static ModuleObjectExtraPropertyAttributeDto Create(Attribute attribute)
+        public static ExtensionPropertyAttributeDto Create(Attribute attribute)
         {
             var attributeType = attribute.GetType();
-            var dto = new ModuleObjectExtraPropertyAttributeDto
+            var dto = new ExtensionPropertyAttributeDto
             {
                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(attributeType),
                 TypeSimple = TypeHelper.GetSimplifiedName(attributeType),

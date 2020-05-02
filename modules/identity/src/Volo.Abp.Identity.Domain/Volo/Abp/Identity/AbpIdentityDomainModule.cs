@@ -48,7 +48,7 @@ namespace Volo.Abp.Identity
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
-            ModuleObjectExtensionConfigurationHelper.ApplyModuleObjectExtensionConfigurationToEntity(
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 "Identity",
                 "User",
                 typeof(IdentityUser)

@@ -5,10 +5,10 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public class ModuleEntityObjectPropertyExtensionConfiguration : IHasNameWithLocalizableDisplayName
+    public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName
     {
         [NotNull]
-        public ModuleEntityObjectExtensionConfiguration EntityObjectExtensionConfiguration { get; }
+        public EntityExtensionConfiguration EntityExtensionConfiguration { get; }
 
         [NotNull]
         public string Name { get; }
@@ -26,11 +26,8 @@ namespace Volo.Abp.ObjectExtending.Modularity
         public ILocalizableString DisplayName { get; set; }
 
         [NotNull]
-        public Dictionary<object, object> Configuration { get; }
+        public Dictionary<string, object> Configuration { get; }
         
-        [NotNull]
-        public ModuleEntityObjectPropertyExtensionEntityConfiguration Entity { get; }
-
         /// <summary>
         /// Single point to enable/disable this property for the clients (UI and API).
         /// If this is false, the configuration made in the <see cref="UI"/> and the <see cref="Api"/>
@@ -40,27 +37,30 @@ namespace Volo.Abp.ObjectExtending.Modularity
         public bool IsAvailableToClients { get; set; } = true;
 
         [NotNull]
-        public ModuleEntityObjectPropertyExtensionUIConfiguration UI { get; }
+        public ExtensionPropertyEntityConfiguration Entity { get; }
+
+        [NotNull]
+        public ExtensionPropertyUiConfiguration UI { get; }
         
         [NotNull]
-        public ModuleEntityObjectPropertyExtensionApiConfiguration Api { get; }
+        public ExtensionPropertyApiConfiguration Api { get; }
 
-        public ModuleEntityObjectPropertyExtensionConfiguration(
-            [NotNull] ModuleEntityObjectExtensionConfiguration entityObjectExtensionConfiguration,
+        public ExtensionPropertyConfiguration(
+            [NotNull] EntityExtensionConfiguration entityExtensionConfiguration,
             [NotNull] Type type,
             [NotNull] string name)
         {
-            EntityObjectExtensionConfiguration = Check.NotNull(entityObjectExtensionConfiguration, nameof(entityObjectExtensionConfiguration));
+            EntityExtensionConfiguration = Check.NotNull(entityExtensionConfiguration, nameof(entityExtensionConfiguration));
             Type = Check.NotNull(type, nameof(type));
             Name = Check.NotNull(name, nameof(name));
 
-            Configuration = new Dictionary<object, object>();
+            Configuration = new Dictionary<string, object>();
             Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
 
-            Entity = new ModuleEntityObjectPropertyExtensionEntityConfiguration();
-            UI = new ModuleEntityObjectPropertyExtensionUIConfiguration();
-            Api = new ModuleEntityObjectPropertyExtensionApiConfiguration();
+            Entity = new ExtensionPropertyEntityConfiguration();
+            UI = new ExtensionPropertyUiConfiguration();
+            Api = new ExtensionPropertyApiConfiguration();
         }
     }
 }

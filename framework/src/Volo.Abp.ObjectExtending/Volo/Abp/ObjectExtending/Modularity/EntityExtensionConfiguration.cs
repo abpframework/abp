@@ -5,24 +5,27 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public class ModuleEntityObjectExtensionConfiguration
+    public class EntityExtensionConfiguration
     {
         [NotNull]
-        protected ModuleEntityObjectPropertyExtensionConfigurationDictionary Properties { get; }
+        protected ExtensionPropertyConfigurationDictionary Properties { get; }
 
         [NotNull]
         public List<Action<ObjectExtensionValidationContext>> Validators { get; }
 
-        public ModuleEntityObjectExtensionConfiguration()
+        public Dictionary<string, object> Configuration { get; }
+
+        public EntityExtensionConfiguration()
         {
-            Properties = new ModuleEntityObjectPropertyExtensionConfigurationDictionary();
+            Properties = new ExtensionPropertyConfigurationDictionary();
             Validators = new List<Action<ObjectExtensionValidationContext>>();
+            Configuration = new Dictionary<string, object>();
         }
 
         [NotNull]
-        public virtual ModuleEntityObjectExtensionConfiguration AddOrUpdateProperty<TProperty>(
+        public virtual EntityExtensionConfiguration AddOrUpdateProperty<TProperty>(
             [NotNull] string propertyName,
-            [CanBeNull] Action<ModuleEntityObjectPropertyExtensionConfiguration> configureAction = null)
+            [CanBeNull] Action<ExtensionPropertyConfiguration> configureAction = null)
         {
             return AddOrUpdateProperty(
                 typeof(TProperty),
@@ -32,17 +35,17 @@ namespace Volo.Abp.ObjectExtending.Modularity
         }
 
         [NotNull]
-        public virtual ModuleEntityObjectExtensionConfiguration AddOrUpdateProperty(
+        public virtual EntityExtensionConfiguration AddOrUpdateProperty(
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
-            [CanBeNull] Action<ModuleEntityObjectPropertyExtensionConfiguration> configureAction = null)
+            [CanBeNull] Action<ExtensionPropertyConfiguration> configureAction = null)
         {
             Check.NotNull(propertyType, nameof(propertyType));
             Check.NotNull(propertyName, nameof(propertyName));
 
             var propertyInfo = Properties.GetOrAdd(
                 propertyName,
-                () => new ModuleEntityObjectPropertyExtensionConfiguration(this, propertyType, propertyName)
+                () => new ExtensionPropertyConfiguration(this, propertyType, propertyName)
             );
 
             configureAction?.Invoke(propertyInfo);
@@ -51,7 +54,7 @@ namespace Volo.Abp.ObjectExtending.Modularity
         }
 
         [NotNull]
-        public virtual ImmutableList<ModuleEntityObjectPropertyExtensionConfiguration> GetProperties()
+        public virtual ImmutableList<ExtensionPropertyConfiguration> GetProperties()
         {
             return Properties.Values.ToImmutableList();
         }
