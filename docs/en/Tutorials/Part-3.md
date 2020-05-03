@@ -96,9 +96,9 @@ namespace Acme.BookStore
 ````
 
 * `IRepository<Book, Guid>` is injected and used it in the `SeedAsync` to create two book entities as the test data.
+* `IGuidGenerator` is injected to create GUIDs. While `Guid.NewGuid()` would perfectly work for testing, `IGuidGenerator` has additional features especially important while using real databases. Further information, see the [Guid generation document](../Guid-Generation.md).
 
-### Testing the application service BookAppService 
-* `IGuidGenerator` is injected to create GUIDs. While `Guid.NewGuid()` would perfectly work for testing, `IGuidGenerator` has additional features especially important while using real databases. Further information, see the [Guid generation document](https://docs.abp.io/{{Document_Language_Code}}/abp/{{Document_Version}}/Guid-Generation).
+### Testing the application service BookAppService
 
 Create a test class named `BookAppService_Tests` in the `Acme.BookStore.Application.Tests` project:
 
