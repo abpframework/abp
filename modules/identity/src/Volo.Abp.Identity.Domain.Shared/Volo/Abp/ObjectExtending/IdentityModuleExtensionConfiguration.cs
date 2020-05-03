@@ -22,5 +22,14 @@ namespace Volo.Abp.ObjectExtending
                 configureAction
             );
         }
+
+        public IdentityModuleExtensionConfiguration ConfigureClaimType(
+            Action<EntityExtensionConfiguration> configureAction)
+        {
+            return this.ConfigureEntity(
+                IdentityModuleExtensionConsts.EntityNames.ClaimType,
+                configureAction
+            );
+        }
     }
 }

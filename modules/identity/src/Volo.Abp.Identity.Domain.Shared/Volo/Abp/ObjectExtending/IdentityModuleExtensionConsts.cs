@@ -9,6 +9,8 @@
             public const string User = "User";
 
             public const string Role = "Role";
+
+            public const string ClaimType = "ClaimType";
         }
     }
 }
