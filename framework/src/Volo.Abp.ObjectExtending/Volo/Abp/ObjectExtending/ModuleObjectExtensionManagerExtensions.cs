@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Volo.Abp.ObjectExtending.Modularity;
 
 namespace Volo.Abp.ObjectExtending
@@ -15,7 +14,7 @@ namespace Volo.Abp.ObjectExtending
 
             return objectExtensionManager.Configuration.GetOrAdd(
                 ObjectExtensionManagerConfigurationKey,
-                () => new ModuleExtensionConfigurationDictionary()
+                _ => new ModuleExtensionConfigurationDictionary()
             ) as ModuleExtensionConfigurationDictionary;
         }
     }
