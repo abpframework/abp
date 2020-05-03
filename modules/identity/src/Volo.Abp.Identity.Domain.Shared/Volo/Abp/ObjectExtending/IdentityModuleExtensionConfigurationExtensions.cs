@@ -10,7 +10,7 @@ namespace Volo.Abp.ObjectExtending
             Action<EntityExtensionConfiguration> configureAction)
         {
             return configurations.ConfigureEntity(
-                "User",
+                IdentityModuleExtensionConsts.EntityNames.User,
                 configureAction
             );
         }

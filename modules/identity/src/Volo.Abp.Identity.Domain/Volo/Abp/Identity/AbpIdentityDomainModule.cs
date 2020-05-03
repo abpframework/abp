@@ -6,6 +6,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Users;
 
@@ -49,9 +50,15 @@ namespace Volo.Abp.Identity
         public override void PostConfigureServices(ServiceConfigurationContext context)
         {
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                "Identity",
-                "User",
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.User,
                 typeof(IdentityUser)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.Role,
+                typeof(IdentityRole)
             );
         }
 
