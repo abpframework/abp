@@ -144,8 +144,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 }
             }
         }
-
-
+        
         protected virtual void RemoveFormGroupItemsNotInModel(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items)
         {
             var models = GetModels(context, output);
