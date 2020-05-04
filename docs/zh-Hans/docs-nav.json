@@ -5,13 +5,7 @@
       "items": [
         {
           "text": "从启动模板开始",
-          "path": "Getting-Started-With-Startup-Templates.md",
-          "items": [
-            {
-              "text": "ASP.NET Core MVC 模板",
-              "path": "Getting-Started-AspNetCore-MVC-Template.md"
-            }
-          ]
+          "path": "Getting-Started.md"
         },
         {
           "text": "从空项目开始",
@@ -218,8 +212,11 @@
     },
     {
       "text": "领域驱动设计",
-      "path": "Domain-Driven-Design.md",
       "items": [
+        {
+          "text": "概述",
+          "path": "Domain-Driven-Design.md"
+        },
         {
           "text": "领域层",
           "items": [
@@ -325,8 +322,20 @@
               "path": "UI/Angular/Permission-Management.md"
             },
             {
+              "text": "确认弹层",
+              "path": "UI/Angular/Confirmation-Service.md"
+            },
+            {
+              "text": "Toast Overlay",
+              "path": "UI/Angular/Toaster-Service.md"
+            },
+            {
               "text": "配置状态",
               "path": "UI/Angular/Config-State.md"
+            },
+            {
+              "text": "修改菜单",
+              "path": "UI/Angular/Modifying-the-Menu.md"
             },
             {
               "text": "替换组件",
@@ -372,8 +381,11 @@
     },
     {
       "text": "数据访问",
-      "path":"Data-Access.md",
       "items": [
+        {
+          "text": "概述", 
+          "path": "Data-Access.md"
+        },
         {
           "text": "连接字符串",
           "path": "Connection-Strings.md"
@@ -457,8 +469,11 @@
     },
     {
       "text": "启动模板",
-      "path": "Startup-Templates/Index.md",
       "items": [
+        {
+          "text": "概述",
+          "path": "Startup-Templates/Index.md"
+        },
         {
           "text": "应用程序",
           "path": "Startup-Templates/Application.md"

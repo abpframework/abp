@@ -221,8 +221,11 @@
     },
     {
       "text": "Domain Driven Design",
-      "path": "Domain-Driven-Design.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Domain-Driven-Design.md"
+        },
         {
           "text": "Domain Layer",
           "items": [
@@ -338,8 +341,20 @@
               "path": "UI/Angular/Permission-Management.md"
             },
             {
+              "text": "Confirmation Popup",
+              "path": "UI/Angular/Confirmation-Service.md"
+            },
+            {
+              "text": "Toast Overlay",
+              "path": "UI/Angular/Toaster-Service.md"
+            },
+            {
               "text": "Config State",
               "path": "UI/Angular/Config-State.md"
+            },
+            {
+              "text": "Modifying the Menu",
+              "path": "UI/Angular/Modifying-the-Menu.md"
             },
             {
               "text": "Component Replacement",
@@ -385,8 +400,11 @@
     },
     {
       "text": "Data Access",
-      "path": "Data-Access.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Data-Access.md"
+        },
         {
           "text": "Connection Strings",
           "path": "Connection-Strings.md"
@@ -469,8 +487,11 @@
     },
     {
       "text": "Startup Templates",
-      "path": "Startup-Templates/Index.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Startup-Templates/Index.md"
+        },
         {
           "text": "Application",
           "path": "Startup-Templates/Application.md"

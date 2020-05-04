@@ -135,6 +135,8 @@ abp update [options]
 * `--include-previews` 或 `-p`: 将预览版, 测试版本 和 rc 包 同时更新到最新版本.
 * `--npm`: 仅更新NPM包
 * `--nuget`: 仅更新的NuGet包
+* `--solution-path` 或 `-sp`: 指定解决方案路径/目录. 默认使用当前目录
+* `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
 
 ### 切换到每晚构建(预览)包
 
@@ -162,6 +164,10 @@ CLI的一些功能需要登录到abp.io平台. 使用你的用户名登录
 
 ```bash
 abp login <username>
+```
+
+```bash
+abp login <username> -p <password>
 ```
 
 请注意,新的登录将终止先前的会话并创建一个新的会话.
