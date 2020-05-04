@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Toaster } from '../../models/toaster';
 import { toastInOut } from '../../animations/toast.animations';
-import { ToasterService } from '../../services/toaster.service';
+import { Toaster } from '../../models/toaster';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'abp-toast-container',
@@ -10,6 +10,8 @@ import { ToasterService } from '../../services/toaster.service';
   animations: [toastInOut],
 })
 export class ToastContainerComponent implements OnInit {
+  toasts$: ReplaySubject<Toaster.Toast[]>;
+
   toasts = [] as Toaster.Toast[];
 
   @Input()
@@ -27,10 +29,8 @@ export class ToastContainerComponent implements OnInit {
   @Input()
   toastKey: string;
 
-  constructor(private toastService: ToasterService) {}
-
   ngOnInit() {
-    this.toastService.toasts$.subscribe(toasts => {
+    this.toasts$.subscribe(toasts => {
       this.toasts = this.toastKey
         ? toasts.filter(t => {
             return t.options && t.options.containerKey !== this.toastKey;

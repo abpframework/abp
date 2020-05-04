@@ -92,8 +92,6 @@ export function appendScript(injector: Injector) {
   ],
 })
 export class ThemeSharedModule {
-  constructor(private errorHandler: ErrorHandler) {}
-
   static forRoot(options = {} as RootParams): ModuleWithProviders {
     return {
       ngModule: ThemeSharedModule,
@@ -102,6 +100,12 @@ export class ThemeSharedModule {
           provide: APP_INITIALIZER,
           multi: true,
           deps: [THEME_SHARED_APPEND_CONTENT],
+          useFactory: noop,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [ErrorHandler],
           useFactory: noop,
         },
         { provide: HTTP_ERROR_CONFIG, useValue: options.httpErrorConfig },
