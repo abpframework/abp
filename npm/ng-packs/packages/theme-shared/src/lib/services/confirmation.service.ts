@@ -1,9 +1,9 @@
-import { Injectable, ComponentRef } from '@angular/core';
-import { Confirmation } from '../models/confirmation';
-import { fromEvent, Observable, Subject, ReplaySubject } from 'rxjs';
-import { takeUntil, debounceTime, filter } from 'rxjs/operators';
 import { Config, ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
+import { ComponentRef, Injectable } from '@angular/core';
+import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
+import { Confirmation } from '../models/confirmation';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
@@ -27,7 +27,9 @@ export class ConfirmationService {
       }),
     );
 
-    this.containerComponentRef.changeDetectorRef.detectChanges();
+    setTimeout(() => {
+      this.containerComponentRef.changeDetectorRef.detectChanges();
+    }, 0);
   }
 
   info(
