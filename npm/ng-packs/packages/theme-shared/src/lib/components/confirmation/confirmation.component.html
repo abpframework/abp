@@ -1,8 +1,8 @@
-<div class="confirmation" *ngIf="visible">
+<div class="confirmation" *ngIf="confirmation$ | async as data">
   <div class="confirmation-backdrop"></div>
   <div class="confirmation-dialog">
     <div class="icon-container" [ngClass]="data.severity" *ngIf="data.severity">
-      <i class="fa icon" [ngClass]="iconClass"></i>
+      <i class="fa icon" [ngClass]="getIconClass(data)"></i>
     </div>
     <div class="content">
       <h1

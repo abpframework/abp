@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Confirmation } from '../../models/confirmation';
 
@@ -7,21 +7,21 @@ import { Confirmation } from '../../models/confirmation';
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.scss'],
 })
-export class ConfirmationComponent implements OnInit {
+export class ConfirmationComponent {
   confirm = Confirmation.Status.confirm;
   reject = Confirmation.Status.reject;
   dismiss = Confirmation.Status.dismiss;
-
-  visible = false;
-
-  data: Confirmation.DialogData;
 
   confirmation$: ReplaySubject<Confirmation.DialogData>;
 
   clear: (status: Confirmation.Status) => void;
 
-  get iconClass(): string {
-    switch (this.data.severity) {
+  close(status: Confirmation.Status) {
+    this.clear(status);
+  }
+
+  getIconClass({ severity }: Confirmation.DialogData): string {
+    switch (severity) {
       case 'info':
         return 'fa-info-circle';
       case 'success':
@@ -33,16 +33,5 @@ export class ConfirmationComponent implements OnInit {
       default:
         return 'fa-question-circle';
     }
-  }
-
-  ngOnInit() {
-    this.confirmation$.subscribe(confirmation => {
-      this.data = confirmation;
-      this.visible = !!confirmation;
-    });
-  }
-
-  close(status: Confirmation.Status) {
-    this.clear(status);
   }
 }
