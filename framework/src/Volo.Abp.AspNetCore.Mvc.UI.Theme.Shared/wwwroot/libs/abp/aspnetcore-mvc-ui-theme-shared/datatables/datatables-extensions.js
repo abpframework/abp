@@ -336,6 +336,9 @@
         };
 
         datatables.normalizeConfiguration = function (configuration) {
+
+            configuration.scrollX = true;
+
             for (var i = 0; i < configuration.columnDefs.length; i++) {
                 var column = configuration.columnDefs[i];
                 if (!column.targets) {
