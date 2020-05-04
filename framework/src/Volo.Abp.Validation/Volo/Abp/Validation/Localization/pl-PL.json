@@ -10,7 +10,7 @@
     "The field {0} must be a string or array type with a minimum length of '{1}'.": "Pole {0} musi być łańcuchem znaków lub talicą o minimalnej długości '{1}'.",
     "The {0} field is not a valid phone number.": "Pole {0} nie jest poprawnym numerem telefonu.",
     "The field {0} must be between {1} and {2}.": "Pole {0} musi być pomiędzy {1} i {2}.",
-    "The field {0} must match the regular expression '{1}'.": "Pole {0} musi pasować do wyrażenia regularnego '{1}'.",
+    "The field {0} must match the regular expression '{1}'.": "Pole {0} nie pasuje do żądanego formatu.",
     "The {0} field is required.": "Pole {0} jest wymagane.",
     "The field {0} must be a string with a maximum length of {1}.": "Pole {0} musi być łańcuchem znaków o maksymalnej długości {1}.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "Pole {0} musi być łańcuchem znaków o minimalnej długości {2} i maksymalnej długości {1}.",
