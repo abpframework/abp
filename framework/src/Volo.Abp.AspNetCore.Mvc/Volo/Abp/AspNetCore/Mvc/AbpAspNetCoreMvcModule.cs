@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
@@ -90,8 +91,11 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
-            
-            var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
+
+            var abpMvcDataAnnotationsLocalizationOptions = context.Services
+                .ExecutePreConfiguredActions(
+                    new AbpMvcDataAnnotationsLocalizationOptions()
+                );
 
             context.Services
                 .AddSingleton<IOptions<AbpMvcDataAnnotationsLocalizationOptions>>(
@@ -111,8 +115,17 @@ namespace Volo.Abp.AspNetCore.Mvc
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
-                        var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
-                        return factory.Create(resourceType ?? type);
+                        var resourceType = abpMvcDataAnnotationsLocalizationOptions
+                            .AssemblyResources
+                            .GetOrDefault(type.Assembly);
+
+                        if (resourceType != null)
+                        {
+                            return factory.Create(resourceType);
+                        }
+
+                        return factory.CreateDefaultOrNull() ?? 
+                               factory.Create(type);
                     };
                 })                
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.

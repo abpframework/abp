@@ -400,8 +400,8 @@ Enter **admin** as the username and **1q2w3E*** as the password to login to the 
 
 The application is up and running. You can continue to develop your application based on this startup template.
 
-> The [application startup template](startup-templates/application/index.md) includes the TenantManagement and Identity modules.
+> The [application startup template](Startup-Templates/Application.md) includes the TenantManagement and Identity modules.
 
 ## What's next?
 
-[Application development tutorial](tutorials/book-store/part-1.md)
+[Application development tutorial](Tutorials/Part-1.md)

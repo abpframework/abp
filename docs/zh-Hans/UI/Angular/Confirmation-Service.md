@@ -86,9 +86,31 @@ this.confirmation.warn(
 - `messageLocalizationParams`是用于消息本地化的插值参数.
 - `titleLocalizationParams` 是标题本地化的插值参数.
 
-With the options above, the confirmation popup looks like this:
+使用以上选项确认弹层窗口如下所示:
 
 ![confirmation](./images/confirmation.png)
+
+你可以传递HTML字符串作为标题,消息或按钮文本. 例如:
+
+```js
+const options: Partial<Confirmation.Options> = {
+  yesText: '<i class="fa fa-trash mr-1"></i>Yes, delete it',
+};
+
+this.confirmation.warn(
+  `
+    <strong>Role Demo</strong> will be <strong>deleted</strong>
+    <br>
+    Do you confirm that?
+  `,
+  '<span class="my-custom-title">Are you sure?</span>',
+  options,
+);
+```
+
+由于这些值现在是HTML,因此应该手动处理本地化. 参阅[LocalizationService](./Localization#using-the-localization-service)了解如何实现.
+
+> 注意,Angular会清除所有字符串,并且并非每个HTML字符串都可以使用. 仅显示被Angular视为"安全"的值.
 
 ### 如何删除一个确认弹层
 
