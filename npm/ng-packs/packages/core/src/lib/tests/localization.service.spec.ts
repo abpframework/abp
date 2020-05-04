@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Store } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
+import { Store, Actions } from '@ngxs/store';
+import { Observable, of, Subject } from 'rxjs';
 import { LocalizationService } from '../services/localization.service';
 
 describe('LocalizationService', () => {
@@ -13,6 +13,7 @@ describe('LocalizationService', () => {
     service: LocalizationService,
     entryComponents: [],
     mocks: [Store, Router],
+    providers: [{ provide: Actions, useValue: new Subject() }],
   });
 
   beforeEach(() => {
@@ -74,7 +75,7 @@ describe('LocalizationService', () => {
 
     it('should throw an error message when service have an otherInstance', async () => {
       try {
-        const instance = new LocalizationService(null, null, null, {} as any);
+        const instance = new LocalizationService(new Subject(), null, null, null, {} as any);
       } catch (error) {
         expect((error as Error).message).toBe('LocalizationService should have only one instance.');
       }
