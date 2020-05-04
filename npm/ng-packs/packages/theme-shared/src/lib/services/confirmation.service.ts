@@ -12,6 +12,11 @@ export class ConfirmationService {
 
   private containerComponentRef: ComponentRef<ConfirmationComponent>;
 
+  clear = (status: Confirmation.Status = Confirmation.Status.dismiss) => {
+    this.confirmation$.next();
+    this.status$.next(status);
+  };
+
   constructor(private contentProjectionService: ContentProjectionService) {}
 
   private setContainer() {
@@ -75,11 +80,6 @@ export class ConfirmationService {
     this.listenToEscape();
     return this.status$;
   }
-
-  clear = (status: Confirmation.Status = Confirmation.Status.dismiss) => {
-    this.confirmation$.next();
-    this.status$.next(status);
-  };
 
   private listenToEscape() {
     fromEvent(document, 'keyup')
