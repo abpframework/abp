@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { Confirmation } from '../../models/confirmation';
-import { ConfirmationService } from '../../services/confirmation.service';
 
 @Component({
   selector: 'abp-confirmation',
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.scss'],
 })
-export class ConfirmationComponent {
+export class ConfirmationComponent implements OnInit {
   confirm = Confirmation.Status.confirm;
   reject = Confirmation.Status.reject;
   dismiss = Confirmation.Status.dismiss;
@@ -15,6 +15,10 @@ export class ConfirmationComponent {
   visible = false;
 
   data: Confirmation.DialogData;
+
+  confirmation$: ReplaySubject<Confirmation.DialogData>;
+
+  clear: (status: Confirmation.Status) => void;
 
   get iconClass(): string {
     switch (this.data.severity) {
@@ -31,14 +35,14 @@ export class ConfirmationComponent {
     }
   }
 
-  constructor(private confirmationService: ConfirmationService) {
-    this.confirmationService.confirmation$.subscribe(confirmation => {
+  ngOnInit() {
+    this.confirmation$.subscribe(confirmation => {
       this.data = confirmation;
       this.visible = !!confirmation;
     });
   }
 
   close(status: Confirmation.Status) {
-    this.confirmationService.clear(status);
+    this.clear(status);
   }
 }

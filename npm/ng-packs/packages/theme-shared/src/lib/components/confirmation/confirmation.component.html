@@ -20,14 +20,14 @@
       <button
         id="cancel"
         class="confirmation-button confirmation-button--reject"
-        [innerHTML]="data.options?.cancelText || 'AbpUi::Cancel'"
+        [innerHTML]="data.options?.cancelText || 'AbpUi::Cancel' | abpLocalization"
         *ngIf="!data?.options?.hideCancelBtn"
         (click)="close(reject)"
       ></button>
       <button
         id="confirm"
         class="confirmation-button confirmation-button--approve"
-        [innerHTML]="data.options?.yesText || 'AbpUi::Yes'"
+        [innerHTML]="data.options?.yesText || 'AbpUi::Yes' | abpLocalization"
         *ngIf="!data?.options?.hideYesBtn"
         (click)="close(confirm)"
       ></button>

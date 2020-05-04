@@ -15,13 +15,14 @@ export class ConfirmationService {
   constructor(private contentProjectionService: ContentProjectionService) {}
 
   private setContainer() {
-    setTimeout(() => {
-      this.containerComponentRef = this.contentProjectionService.projectContent(
-        PROJECTION_STRATEGY.AppendComponentToBody(ConfirmationComponent),
-      );
+    this.containerComponentRef = this.contentProjectionService.projectContent(
+      PROJECTION_STRATEGY.AppendComponentToBody(ConfirmationComponent, {
+        confirmation$: this.confirmation$,
+        clear: this.clear,
+      }),
+    );
 
-      this.containerComponentRef.changeDetectorRef.detectChanges();
-    }, 0);
+    this.containerComponentRef.changeDetectorRef.detectChanges();
   }
 
   info(
@@ -75,10 +76,10 @@ export class ConfirmationService {
     return this.status$;
   }
 
-  clear(status: Confirmation.Status = Confirmation.Status.dismiss) {
+  clear = (status: Confirmation.Status = Confirmation.Status.dismiss) => {
     this.confirmation$.next();
     this.status$.next(status);
-  }
+  };
 
   private listenToEscape() {
     fromEvent(document, 'keyup')
