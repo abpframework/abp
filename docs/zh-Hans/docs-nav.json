@@ -334,6 +334,10 @@
               "path": "UI/Angular/Config-State.md"
             },
             {
+              "text": "修改菜单",
+              "path": "UI/Angular/Modifying-the-Menu.md"
+            },
+            {
               "text": "替换组件",
               "path": "UI/Angular/Component-Replacement.md"
             },
