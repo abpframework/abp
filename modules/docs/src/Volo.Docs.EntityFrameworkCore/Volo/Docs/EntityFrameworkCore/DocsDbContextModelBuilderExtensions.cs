@@ -63,6 +63,8 @@ namespace Volo.Docs.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "DocumentContributors", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.HasKey(x => new { x.DocumentId, x.Username });
             });
         }

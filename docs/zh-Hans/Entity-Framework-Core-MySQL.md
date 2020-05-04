@@ -12,12 +12,12 @@
 
 ## UseMySQL()
 
-查找你的解决方案中 `UseSqlServer()`调用，替换为 `UseMySQL()`. 检查下列文件:
+查找你的解决方案中 `UseSqlServer()`调用,替换为 `UseMySQL()`. 检查下列文件:
 
 * `.EntityFrameworkCore` 项目中的*YourProjectName*EntityFrameworkCoreModule.cs.
 * `.EntityFrameworkCore` 项目中的*YourProjectName*MigrationsDbContextFactory.cs.
 
-> 根据你的解决方案的结构，你可能发现更多需要改变代码的文件.
+> 根据你的解决方案的结构,你可能发现更多需要改变代码的文件.
 
 ## 更改连接字符串
 
@@ -27,7 +27,7 @@ MySQL连接字符串与SQL Server连接字符串不同. 所以检查你的解决
 
 ## 更改迁移DbContext
 
-MySQL DBMS与SQL Server有一些细微的差异. 某些模块数据库映射配置(尤其是字段长度)会导致MySQL出现问题. 例如某些[IdentityServer模块](Modules/IdentityServer.md)表就存在这样的问题,它提供了一个选项可以根据您的DBMS配置字段.
+MySQL DBMS与SQL Server有一些细微的差异. 某些模块数据库映射配置(尤其是字段长度)会导致MySQL出现问题. 例如某些[IdentityServer模块](Modules/IdentityServer.md)表就存在这样的问题,它提供了一个选项可以根据你的DBMS配置字段.
 
 启动模板包含*YourProjectName*MigrationsDbContext,它负责维护和迁移数据库架构. 此DbContext基本上调用依赖模块的扩展方法来配置其数据库表.
 

@@ -12,7 +12,7 @@
 
 ## Demo
 
-参阅 [按钮Demo页面](https://bootstrap-taghelpers.abp.io/Components/Buttons) 查看示例.
+参阅[按钮Demo页面](https://bootstrap-taghelpers.abp.io/Components/Buttons)查看示例.
 
 ## Attributes
 
@@ -20,7 +20,7 @@
 
 指定按钮的主样式/类型. 应为以下值之一:
 
-* `Default` (default value)
+* `Default` (默认值)
 * `Primary`
 * `Secondary`
 * `Success`

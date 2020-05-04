@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
@@ -18,11 +17,13 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             TenantAppService = tenantAppService;
         }
 
-        public virtual async Task OnGetAsync(Guid id)
+        public virtual async Task<IActionResult> OnGetAsync(Guid id)
         {
             Tenant = ObjectMapper.Map<TenantDto, TenantInfoModel>(
                 await TenantAppService.GetAsync(id)
             );
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPostAsync()

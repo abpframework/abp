@@ -9,11 +9,14 @@
     "Edit": "Edit",
     "LastEditTime": "Last edit",
     "Delete": "Delete",
+    "ClearCache": "Clear cache",
+    "ClearCacheConfirmationMessage": "Are you sure to clear all caches for project \"{0}\"",
     "InThisDocument": "In this document",
     "GoToTop": "Go to top",
     "Projects": "Project(s)",
     "NoProjectWarning": "There are no projects yet!",
     "DocumentNotFound": "Oops, the requested document was not found!",
+    "ProjectNotFound": "Oops, the requested project was not found!",
     "NavigationDocumentNotFound": "This version does not have a navigation document!",
     "DocumentNotFoundInSelectedLanguage": "Document in the language you wanted is not found. Document in the default language is shown.",
     "FilterTopics": "Filter topics",
@@ -23,6 +26,7 @@
     "New": "New",
     "Upd": "Upd",
     "NewExplanation": "Created in the last two weeks.",
-    "UpdatedExplanation": "Updated in the last two weeks."
+    "UpdatedExplanation": "Updated in the last two weeks.",
+    "Volo.Docs.Domain:010002": "ShortName {ShortName} already exists."
   }
 }

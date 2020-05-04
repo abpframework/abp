@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        internal static List<IConventionalRegistrar> GetConventionalRegistrars(this IServiceCollection services)
+        public static List<IConventionalRegistrar> GetConventionalRegistrars(this IServiceCollection services)
         {
             return GetOrCreateRegistrarList(services);
         }

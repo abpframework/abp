@@ -6,19 +6,23 @@
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @inject IAuthorizationService Authorization
 @model DetailModel
 @{
-    ViewBag.PageTitle = Model.Post.Title;
+    ViewBag.Title = Model.Post.Title;
+    ViewBag.Description = Model.Post.Description;
     var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
 }
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
         <abp-script src="/Pages/Blogs/Posts/detail.js" />
     </abp-script-bundle>
 }
 @section styles {
     <abp-style-bundle name="@typeof(DetailModel).FullName">
+        <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
         <abp-style src="/Pages/Blogs/Shared/Styles/blog.css" />
     </abp-style-bundle>
 }
@@ -84,7 +88,7 @@
                 </section>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-10 col-md-8 col-lg-7 mx-auto">
                 <section class="post-content">
@@ -94,7 +98,7 @@
                 </section>
             </div>
         </div>
-    
+
         <div class="row">
             <div class="col-10 col-md-8 col-lg-7 mx-auto">
                 <hr />

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Volo.Abp.Validation;
@@ -108,7 +109,8 @@ namespace Volo.Abp.FluentValidation
             {
                 context.Services.OnRegistred(onServiceRegistredContext =>
                 {
-                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType))
+                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
+                        !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
                     {
                         onServiceRegistredContext.Interceptors.TryAdd<ValidationInterceptor>();
                     }

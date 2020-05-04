@@ -43,8 +43,9 @@
                                     </h2>
                                     <p class="article-sum">
                                         @Html.Raw(GetShortContent(post.Content))
-                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">Continue Reading</a>
                                     </p>
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
+
                                 </div>
                                 @if (post.Writer != null)
                                 {
@@ -113,7 +114,7 @@
                                                         }
                                                         <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
                                                         <span class="vs-seperator">|</span>
-                                                        <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount] 
+                                                        <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
                                                     </div>
                                                 </div>
                                             </div>
@@ -157,11 +158,12 @@
                                             </h3>
                                             <p>
                                                 @Html.Raw(GetShortContent(post.Content))
-                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url"  asp-route-blogShortName="@Model.BlogShortName">Continue Reading</a>
                                             </p>
+                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="read-more-btn">Continue Reading &#8594;</a>
+
                                             <div class="article-owner">
                                                 <div class="article-infos">
-                                                    <div class="user-card">  
+                                                    <div class="user-card">
                                                         <div class="row">
                                                             <div class="col-auto pr-1">
                                                                 <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
@@ -198,14 +200,11 @@
                         <div class="vs-blog-title">
                             <h2>@L["PopularTags"]</h2>
                         </div>
-                        <div class="list-group small-list popular-tags">
+                        <div class="tags">
                             @foreach (var popularTag in Model.PopularTags)
-                            {
-                                <div class="list-group-item">
-                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
-                                </div>
-
-                            }
+                                { 
+                                    <a class="tag" asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <small>(@popularTag.UsageCount)</small></a>
+                                }
                         </div>
                     </div>
                 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.Auditing
 {
@@ -16,6 +17,11 @@ namespace Volo.Abp.Auditing
 
         private static bool ShouldIntercept(Type type)
         {
+            if (DynamicProxyIgnoreTypes.Contains(type))
+            {
+                return false;
+            }
+            
             if (ShouldAuditTypeByDefault(type))
             {
                 return true;

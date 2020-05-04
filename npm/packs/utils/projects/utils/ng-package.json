@@ -1,0 +1,10 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist",
+  "deleteDestPath": true,
+  "lib": {
+    "entryFile": "src/public-api.ts",
+    "umdId": "abp.utils.common"
+  },
+  "whitelistedNonPeerDependencies": ["just-compare"]
+}

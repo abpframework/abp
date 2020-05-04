@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
@@ -45,6 +46,7 @@ namespace Volo.Abp.Identity
         public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
         {
             var roles = await UserRepository.GetRolesAsync(id);
+
             return new ListResultDto<IdentityRoleDto>(
                 ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
             );
@@ -53,7 +55,14 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Create)]
         public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
-            var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.Email, CurrentTenant.Id);
+            var user = new IdentityUser(
+                GuidGenerator.Create(),
+                input.UserName,
+                input.Email,
+                CurrentTenant.Id
+            );
+
+            input.MapExtraPropertiesTo(user);
 
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
             await UpdateUserByInput(user, input);
@@ -70,7 +79,10 @@ namespace Volo.Abp.Identity
             user.ConcurrencyStamp = input.ConcurrencyStamp;
 
             (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+
             await UpdateUserByInput(user, input);
+            input.MapExtraPropertiesTo(user);
+
             (await UserManager.UpdateAsync(user)).CheckErrors();
 
             if (!input.Password.IsNullOrEmpty())
@@ -78,7 +90,7 @@ namespace Volo.Abp.Identity
                 (await UserManager.RemovePasswordAsync(user)).CheckErrors();
                 (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
             }
-
+            
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);

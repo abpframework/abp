@@ -1,5 +1,5 @@
-import { ABP, ConfigState } from '@abp/ng.core';
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import { ABP } from '@abp/ng.core';
+import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
   AbstractControl,
@@ -9,7 +9,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { PasswordRules, validatePassword } from '@ngx-validate/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
@@ -23,8 +22,9 @@ import {
   UpdateUser,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
-import { IdentityState } from '../../states/identity.state';
 import { IdentityService } from '../../services/identity.service';
+import { IdentityState } from '../../states/identity.state';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
@@ -63,9 +63,7 @@ export class UsersComponent implements OnInit {
 
   sortKey = '';
 
-  passwordRulesArr = [] as PasswordRules;
-
-  requiredPasswordLength = 1;
+  permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -86,32 +84,6 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.get();
-
-    const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
-      ConfigState.getSettings('Identity.Password'),
-    );
-
-    if ((passwordRules['Abp.Identity.Password.RequireDigit'] || '').toLowerCase() === 'true') {
-      this.passwordRulesArr.push('number');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireLowercase'] || '').toLowerCase() === 'true') {
-      this.passwordRulesArr.push('small');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireUppercase'] || '').toLowerCase() === 'true') {
-      this.passwordRulesArr.push('capital');
-    }
-
-    if (
-      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
-    ) {
-      this.passwordRulesArr.push('special');
-    }
-
-    if (Number.isInteger(+passwordRules['Abp.Identity.Password.RequiredLength'])) {
-      this.requiredPasswordLength = +passwordRules['Abp.Identity.Password.RequiredLength'];
-    }
   }
 
   onSearch(value: string) {
@@ -146,11 +118,7 @@ export class UsersComponent implements OnInit {
         ),
       });
 
-      const passwordValidators = [
-        validatePassword(this.passwordRulesArr),
-        Validators.minLength(this.requiredPasswordLength),
-        Validators.maxLength(128),
-      ];
+      const passwordValidators = getPasswordValidators(this.store);
 
       this.form.addControl('password', new FormControl('', [...passwordValidators]));
 

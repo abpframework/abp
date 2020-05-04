@@ -12,7 +12,7 @@ ABP是一个**开源应用程序框架**,专注于基于ASP.NET Core的Web应用
 
 * [ASP.NET Core MVC 模板](Getting-Started-AspNetCore-MVC-Template.md)
 
-如果您想从头开始(使用空项目),请手动安装ABP框架并使用以下教程:
+如果你想从头开始(使用空项目),请手动安装ABP框架并使用以下教程:
 
 * [控制台应用程序](Getting-Started-Console-Application.md)
 * [ASP.NET Core Web 应用程序](Getting-Started-AspNetCore-Application.md)

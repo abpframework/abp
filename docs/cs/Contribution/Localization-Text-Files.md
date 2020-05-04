@@ -29,8 +29,8 @@ Toto je seznam lokalizačních textových souborů pro každého kdo chce přisp
 * https://github.com/abpframework/abp/tree/master/modules/setting-management/src/Volo.Abp.SettingManagement.Web/Localization/Resources/AbpSettingManagement/en.json
 * https://github.com/abpframework/abp/tree/master/modules/tenant-management/src/Volo.Abp.TenantManagement.Application.Contracts/Volo/Abp/TenantManagement/Localization/ApplicationContracts/en.json
 * https://github.com/abpframework/abp/tree/master/modules/tenant-management/src/Volo.Abp.TenantManagement.Web/Localization/Resources/AbpTenantManagement/Web/en.json
-* https://github.com/abpframework/abp/tree/master/samples/BookStore/src/Acme.BookStore.Domain.Shared/Localization/BookStore/en.json
-* https://github.com/abpframework/abp/tree/master/samples/DashboardDemo/src/DashboardDemo.Domain/Localization/DashboardDemo/en.json
+* https://github.com/abpframework/abp-samples/tree/master/BookStore/src/Acme.BookStore.Domain.Shared/Localization/BookStore/en.json
+* https://github.com/abpframework/abp-samples/tree/master/DashboardDemo/src/DashboardDemo.Domain/Localization/DashboardDemo/en.json
 * https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo/modules/product/src/ProductManagement.Application.Contracts/ProductManagement/Localization/ApplicationContracts/en.json
 * https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo/modules/product/src/ProductManagement.Domain/ProductManagement/Localization/Domain/en.json
 * https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo/modules/product/src/ProductManagement.Web/Localization/Resources/ProductManagement/en.json

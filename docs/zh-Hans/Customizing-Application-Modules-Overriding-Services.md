@@ -54,12 +54,13 @@ context.Services.Replace(
 
 ## 重写一个服务类
 
-大多数情况下,你会仅想改变服务当前实现的一个或几个方法. 重新实现完整的接口变的繁琐,更好的方法是继承原始类并重写方法。
+大多数情况下,你会仅想改变服务当前实现的一个或几个方法. 重新实现完整的接口变的繁琐,更好的方法是继承原始类并重写方法.
 
 ### 示例: 重写服务方法
 
 ````csharp
 [Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...
@@ -160,6 +161,105 @@ public class MyIdentityUserManager : IdentityUserManager
 ### 重写其他服务
 
 控制器,框架服务,视图组件类以及其他类型注册到依赖注入的类都可以像上面的示例那样被重写.
+
+## 扩展数据传输对象
+
+你可以如[扩展实体文档](Customizing-Application-Modules-Extending-Entities.md)所述扩展实体. 并使用上面介绍的重写相关服务**使用自定义属性****执行其他业务逻辑**.
+
+应用程序使用的数据传输对象(**DTO**)同样可扩展. 这样你可以使服务返回其他属性并在UI(或其他客户端)得到其他属性.
+
+### 示例
+
+假设你已经按照[扩展实体文档](Customizing-Application-Modules-Extending-Entities.md)中的说明添加了 `SocialSecurityNumber` 并希望从 `IdentityUserAppService的GetListAsync` 方法获取用户列表时包括此属性.
+
+你可以使用[对象扩展系统](Object-Extensions.md)将属性添加到 `IdentityUserDto`.  在应用程序启动模板带有的 `YourProjectNameDtoExtensions` 类中编写以下代码:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUserDto, string>(
+        "SocialSecurityNumber"
+    );
+````
+
+这段代码为 `IdentityUserDto` 类添加了 `string` 类型的 `SocialSecurityNumber` 属性. 现在你可以在RREST API客户端调用 `/api/identity/users` HTTP API(内部使用 `IdentityUserAppService`),你会在 `extraProperties` 部分看到 `SocialSecurityNumber` 值.
+
+````json
+{
+    "totalCount": 1,
+    "items": [{
+        "tenantId": null,
+        "userName": "admin",
+        "name": "admin",
+        "surname": null,
+        "email": "admin@abp.io",
+        "emailConfirmed": false,
+        "phoneNumber": null,
+        "phoneNumberConfirmed": false,
+        "twoFactorEnabled": false,
+        "lockoutEnabled": true,
+        "lockoutEnd": null,
+        "concurrencyStamp": "b4c371a0ab604de28af472fa79c3b70c",
+        "isDeleted": false,
+        "deleterId": null,
+        "deletionTime": null,
+        "lastModificationTime": "2020-04-09T21:25:47.0740706",
+        "lastModifierId": null,
+        "creationTime": "2020-04-09T21:25:46.8308744",
+        "creatorId": null,
+        "id": "8edecb8f-1894-a9b1-833b-39f4725db2a3",
+        "extraProperties": {
+            "SocialSecurityNumber": "123456789"
+        }
+    }]
+}
+````
+
+手动添加了 `123456789` 值到数据库中.
+
+所有预构建的模块都在DTO中支持额外属性,你可以对其轻松的配置.
+
+### 定义检查
+
+当为实体[定义](Customizing-Application-Modules-Extending-Entities.md)额外的属性时,由于安全性它不会自动出现在所有相关的DTO中. 额外属性可能包含敏感数据并且你可能不想默认公开给客户端.
+
+因此如果要用于DTO,需要为相应的DTO显式定义相同的属性(如上所述).  如果要允许在用户创建时进行设置还需要为 `IdentityUserCreateDto` 定义.
+
+如果属性并不是安全敏感,这可能会很枯燥. 对象扩展系统允许你忽略检查定义的属性. 参阅示例:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.MapEfCore(b => b.HasMaxLength(32));
+            options.CheckPairDefinitionOnMapping = false;
+        }
+    );
+````
+
+这是定义实体属性的另一种方法( 有关 `ObjectExtensionManager` 更多信息,请参阅[文档](Object-Extensions.md)). 这次我们设置了 `CheckPairDefinitionOnMapping` 为false,在将实体映射到DTO时会跳过定义检查.
+
+如果你不喜欢这种方法,但想简单的向多个对象(DTO)添加单个属, `AddOrUpdateProperty` 可以使用类型数组添加额外的属性:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<string>(
+        new[]
+        {
+            typeof(IdentityUserDto), 
+            typeof(IdentityUserCreateDto), 
+            typeof(IdentityUserUpdateDto)
+        },
+        "SocialSecurityNumber"
+    );
+````
+
+### 关于用户界面
+
+该系统允许你向实体和DTO添加额外的属性并执行自定义业务代码,但它与用户界面无关.
+
+参阅 [重写用户界面](Customizing-Application-Modules-Overriding-User-Interface.md) 指南了解关于UI部分.
 
 ## 如何找到服务?
 

@@ -1,17 +1,35 @@
 import { registerLocaleData } from '@angular/common';
 import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { tap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import differentLocales from '../constants/different-locales';
+import { ABP } from '../models/common';
+import { ConfigState } from '../states/config.state';
+import { CORE_OPTIONS } from '../tokens/options.token';
 
 export function getInitialData(injector: Injector) {
   const fn = () => {
     const store: Store = injector.get(Store);
+    const { skipGetAppConfiguration } = injector.get(CORE_OPTIONS) as ABP.Root;
 
-    return store.dispatch(new GetAppConfiguration()).toPromise();
+    if (skipGetAppConfiguration) return;
+
+    return store
+      .dispatch(new GetAppConfiguration())
+      .pipe(tap(res => checkAccessToken(store, injector)))
+      .toPromise();
   };
 
   return fn;
+}
+
+function checkAccessToken(store: Store, injector: Injector) {
+  const oAuth = injector.get(OAuthService);
+  if (oAuth.hasValidAccessToken() && !store.selectSnapshot(ConfigState.getDeep('currentUser.id'))) {
+    oAuth.logOut();
+  }
 }
 
 export function localeInitializer(injector: Injector) {

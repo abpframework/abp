@@ -7,6 +7,8 @@ import { Profile, Rest } from '../models';
   providedIn: 'root',
 })
 export class ProfileService {
+  apiName = 'AbpIdentity';
+
   constructor(private rest: RestService) {}
 
   get(): Observable<Profile.Response> {
@@ -15,7 +17,7 @@ export class ProfileService {
       url: '/api/identity/my-profile',
     };
 
-    return this.rest.request<null, Profile.Response>(request);
+    return this.rest.request<null, Profile.Response>(request, { apiName: this.apiName });
   }
 
   update(body: Profile.Response): Observable<Profile.Response> {
@@ -25,16 +27,24 @@ export class ProfileService {
       body,
     };
 
-    return this.rest.request<Profile.Response, Profile.Response>(request);
+    return this.rest.request<Profile.Response, Profile.Response>(request, {
+      apiName: this.apiName,
+    });
   }
 
-  changePassword(body: Profile.ChangePasswordRequest, skipHandleError: boolean = false): Observable<null> {
+  changePassword(
+    body: Profile.ChangePasswordRequest,
+    skipHandleError: boolean = false,
+  ): Observable<null> {
     const request: Rest.Request<Profile.ChangePasswordRequest> = {
       method: 'POST',
       url: '/api/identity/my-profile/change-password',
       body,
     };
 
-    return this.rest.request<Profile.ChangePasswordRequest, null>(request, { skipHandleError });
+    return this.rest.request<Profile.ChangePasswordRequest, null>(request, {
+      skipHandleError,
+      apiName: this.apiName,
+    });
   }
 }

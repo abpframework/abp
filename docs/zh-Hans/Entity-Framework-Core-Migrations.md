@@ -1,13 +1,13 @@
 ﻿
 # EF Core数据库迁移
 
-本文首先介绍[应用程序启动模板](Startup-Templates/Application.md)提供的**默认结构**,并讨论您可能希望为自己的应用程序实现的**各种场景**.
+本文首先介绍[应用程序启动模板](Startup-Templates/Application.md)提供的**默认结构**,并讨论你可能希望为自己的应用程序实现的**各种场景**.
 
 > 本文档适用于希望完全理解和自定义[应用程序启动模板](Startup-Templates/Application.md)附带的数据库结构的人员. 如果你只是想创建实体和管理代码优先(code first)迁移,只需要遵循[启动教程](Tutorials/Index.md).
 
 ### 源码
 
-你可以在[这里](https://github.com/abpframework/abp/tree/dev/samples/EfCoreMigrationDemo)找到本文引用的示例项目的源代码; 但是为了理解示例项目的源代码,你需要阅读和理解这个文档.
+你可以在[这里](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo)找到本文引用的示例项目的源代码; 但是为了理解示例项目的源代码,你需要阅读和理解这个文档.
 
 ## 关于EF Core 代码优先迁移
 
@@ -95,7 +95,7 @@ Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = "Ids";
 
 这个项目有应用程序的 `DbContext`类(本例中的 `BookStoreDbContex` ).
 
-**每个模块都使用自己的 `DbContext` 类**来访问数据库。同样你的应用程序有它自己的 `DbContext`. 通常在应用程序中使用这个 `DbContet`(如果你遵循最佳实践,应该在自定义[仓储](Repositories.md)中使用). 它几乎是一个空的 `DbContext`,因为你的应用程序在一开始没有任何实体,除了预定义的 `AppUser` 实体:
+**每个模块都使用自己的 `DbContext` 类**来访问数据库.同样你的应用程序有它自己的 `DbContext`. 通常在应用程序中使用这个 `DbContet`(如果你遵循最佳实践,应该在[仓储](Repositories.md)中使用). 它几乎是一个空的 `DbContext`,因为你的应用程序在一开始没有任何实体,除了预定义的 `AppUser` 实体:
 
 ````csharp
 [ConnectionStringName("Default")]
@@ -119,15 +119,15 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
         builder.Entity<AppUser>(b =>
         {
-            //Sharing the same table "AbpUsers" with the IdentityUser
-            b.ToTable("AbpUsers");
+            //Sharing the same Users table with the IdentityUser
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users");
 
-            //Configure base properties
             b.ConfigureByConvention();
             b.ConfigureAbpUser();
 
-            //Moved customization of the "AbpUsers" table to an extension method
-            b.ConfigureCustomUserProperties();
+            /* Configure mappings for your additional properties
+             * Also see the MyProjectNameEntityExtensions class
+             */
         });
 
         /* Configure your own tables/entities inside the ConfigureBookStore method */
@@ -189,12 +189,6 @@ public class BookStoreMigrationsDbContext : AbpDbContext<BookStoreMigrationsDbCo
         builder.ConfigureIdentityServer();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
-
-        /* Configure customizations for entities from the modules included  */
-        builder.Entity<IdentityUser>(b =>
-        {
-            b.ConfigureCustomUserProperties();
-        });
 
         /* Configure your own tables/entities inside the ConfigureBookStore method */
         builder.ConfigureBookStore();
@@ -274,10 +268,10 @@ public class BackgroundJobsDbContext
 
 ##### 重用模块的表
 
-您可能想在应用程序中**重用依赖模块的表**. 在这种情况下你有两个选择:
+你可能想在应用程序中**重用依赖模块的表**. 在这种情况下你有两个选择:
 
-1. 你可以**直接使用模块定义的实体**.
-2. 你可以**创建一个新的实体**映射到同一个数据库表。
+1. 你可以**直接使用模块定义的实体**(你仍然可以在某种程度上[扩展实体](Customizing-Application-Modules-Extending-Entities.md)).
+2. 你可以**创建一个新的实体**映射到同一个数据库表.
 
 ###### 使用由模块定义的实体
 
@@ -313,7 +307,7 @@ namespace Acme.BookStore
 
 示例注入了 `IRepository<IdentityUser,Guid>`(默认仓储). 它定义了标准的存储库方法并实现了 `IQueryable` 接口.
 
-另外，身份模块定义了 `IIdentityUserRepository`(自定义仓储),你的应用程序也可以注入和使用它. `IIdentityUserRepository` 为 `IdentityUser` 实体提供了额外的定制方法,但它没有实现 `IQueryable`.
+另外,身份模块定义了 `IIdentityUserRepository`(自定义仓储),你的应用程序也可以注入和使用它. `IIdentityUserRepository` 为 `IdentityUser` 实体提供了额外的定制方法,但它没有实现 `IQueryable`.
 
 ###### 创建一个新的实体
 
@@ -358,7 +352,7 @@ namespace Acme.BookStore.Roles
 * 它继承了[`AggregateRoot<Guid>`类](Entities.md)和实现了[`IMultiTenant`]接口(Multi-Tenancy.md),因为 `IdentityRole` 也做了同样的继承.
 * 你可以添加 `IdentityRole` 实体定义的任何属性. 本例只加了 `TenantId` 和 `Name` 属性,因为我们这里只需要它们. 你可以把setters设置为私有(如同本例)以防意外更改身份模块的属性.
 * 你可以添加自定义(附加)属性. 本例添加了 `Title` 属性.
-* **构造函数是私有的**,所以它不允许直接创建一个新的 `AppRole` 实体。创建角色身份模块的责任. 你可以查询角色,设置/更新自定义属性,但做为最佳实践你不应该在代码中创建和删除角色(尽管没有强制的限制).
+* **构造函数是私有的**,所以它不允许直接创建一个新的 `AppRole` 实体.创建角色身份模块的责任. 你可以查询角色,设置/更新自定义属性,但做为最佳实践你不应该在代码中创建和删除角色(尽管没有强制的限制).
 
 现在是时候定义EF Core映射. 打开应用程序的 `DbContext` (此示例中是 `BookStoreDbContext` )添加以下属性:
 
@@ -366,7 +360,7 @@ namespace Acme.BookStore.Roles
 public DbSet<AppRole> Roles { get; set; }
 ````
 
-然后在 `OnModelCreating` 方法中配置映射(调用 `base.OnModelCreating(builder)` 之后)：
+然后在 `OnModelCreating` 方法中配置映射(调用 `base.OnModelCreating(builder)` 之后):
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)
@@ -379,10 +373,8 @@ protected override void OnModelCreating(ModelBuilder builder)
     builder.Entity<AppRole>(b =>
     {
         b.ToTable("AbpRoles");
-
         b.ConfigureByConvention();
-
-        b.ConfigureCustomRoleProperties();
+        b.Property(x => x.Title).HasMaxLength(128);
     });
 
     ...
@@ -399,68 +391,43 @@ protected override void OnModelCreating(ModelBuilder builder)
 builder.Entity<AppRole>(b =>
 {
     b.ToTable("AbpRoles");
-
     b.ConfigureByConvention();
-
-    b.ConfigureCustomRoleProperties();
+    b.Property(x => x.Title).HasMaxLength(128);
 });
 ````
 
 * 它映射到 `AbpRoles` 表,与 `IdentityRole` 实体共享.
 * `ConfigureByConvention()` 配置了标准/基本属性(像`TenantId`),建议总是调用它.
 
-`ConfigureCustomRoleProperties()` 还不存在. 在 `BookStoreDbContextModelCreatingExtensions` 类中定义它 (在 `.EntityFrameworkCore` 项目的 `DbContext` 附近):
+你已经为你的 `DbContext` 配置自定义属性,该属性在应用程序运行时使用.
+与其直接更改 `MigrationsDbContext`,我们应该使用ABP框架的实体扩展系统,在解决方案的 `.EntityFrameworkCore` 项目中找到 `YourProjectNameEntityExtensions` 类(本示例中是 `BookStoreEntityExtensions`)并且进行以下更改:
 
 ````csharp
-public static void ConfigureCustomRoleProperties<TRole>(this EntityTypeBuilder<TRole> b)
-    where TRole : class, IEntity<Guid>
+public static class MyProjectNameEntityExtensions
 {
-    b.Property<string>(nameof(AppRole.Title)).HasMaxLength(128);
-}
-````
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
-* 这个方法只定义实体的**自定义属性**.
-* 遗憾的是,我们不能在这里充分的利用**类型安全**(通过引用`AppRole`实体). 我们能做的最好就是使用 `Title` 名称做为类型安全。
-
-你已经为运行应用程序使用的 `DbContext` 配置了自定义属性. 我们还需要配置 `MigrationsDbContext`.
-
-打开`MigrationsDbContext`(本例是 `BookStoreMigrationsDbContext`)进行以下更改:
-
-````csharp
-protected override void OnModelCreating(ModelBuilder builder)
-{
-    base.OnModelCreating(builder);
-
-    /* Include modules to your migration db context */
-
-    ...
-
-    /* Configure customizations for entities from the modules included  */
-
-    //CONFIGURE THE CUSTOM ROLE PROPERTIES
-    builder.Entity<IdentityRole>(b =>
+    public static void Configure()
     {
-        b.ConfigureCustomRoleProperties();
-    });
-
-    ...
-
-    /* Configure your own tables/entities inside the ConfigureBookStore method */
-
-    builder.ConfigureBookStore();
+        OneTimeRunner.Run(() =>
+        {
+            ObjectExtensionManager.Instance
+                .MapEfCoreProperty<IdentityRole, string>(
+                    "Title",
+                    builder => { builder.HasMaxLength(64); }
+                );
+        });
+    }
 }
 ````
 
-只增加下面几行:
+> 我们建议使用 `nameof(AppRole.Title)` 而不是硬编码 "Title" 字符串
 
-````csharp
-builder.Entity<IdentityRole>(b =>
-{
-    b.ConfigureCustomRoleProperties();
-});
-````
+`ObjectExtensionManager` 用于添加属性到现有的实体. 由于 `ObjectExtensionManager.Instance` 是静态实例(单例),因此应调用一次. `OneTimeRunner` 是ABP框架定义简单的工具类.
 
-通过这种方式,我们重用了用于为角色配置自定义属性映射的扩展方法. 但是对 `IdentityRole` 实体进行了相同的自定义.
+参阅[EF Core集成文档](Entity-Framework-Core.md)了解更多关于实体扩展系统.
+
+我们在两个类中都重复了类似的数据库映射代码,例如 `HasMaxLength(128)`.
 
 现在你可以在包管理控制台(记得选择 `.EntityFrameworkCore.DbMigrations` 做为PMC的默认项目并将 `.Web` 项目设置为启动项目)使用标准的 `Add-Migration` 命令添加一个新的EF Core数据库迁移.
 
@@ -540,7 +507,7 @@ public class AppRoleAppService : ApplicationService, IAppRoleAppService
 
 ###### 使用ExtraProperties
 
-所有从 `AggregateRoot` 派生的实体都可以在 `ExtraProperties` 属性中存储键值对, 它是 `Dictionary<string, object>` 类型在数据库中被序列化为JSON. 所以你可以在字典中添加值用于查询,无需更改实体.
+所有从 `AggregateRoot` 派生的实体都可以在 `ExtraProperties` 属性(因为它们都实现了 `IHasExtraProperties` 接口)中存储键值对, 它是 `Dictionary<string, object>` 类型在数据库中被序列化为JSON. 所以你可以在字典中添加值用于查询,无需更改实体.
 
 例如你可以将查询属性 `Title` 存储在 `IdentityRole` 中,而不是创建一个新的实体.
 例:
@@ -558,16 +525,13 @@ public class IdentityRoleExtendingService : ITransientDependency
     public async Task<string> GetTitleAsync(Guid id)
     {
         var role = await _identityRoleRepository.GetAsync(id);
-
         return role.GetProperty<string>("Title");
     }
 
     public async Task SetTitleAsync(Guid id, string newTitle)
     {
         var role = await _identityRoleRepository.GetAsync(id);
-
         role.SetProperty("Title", newTitle);
-
         await _identityRoleRepository.UpdateAsync(role);
     }
 }
@@ -579,6 +543,12 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 * 所有的额外属性都存储在数据库中的一个**JSON对象**,它们不是作为表的字段存储,与简单的表字段相比创建索引和针对此属性使用SQL查询将更加困难.
 * 属性名称是字符串,他们**不是类型安全的**. 建议这些类型的属性定义常量,以防止拼写错误.
+
+###### 使用实体扩展系统
+
+实体扩展系统解决了额外属性主要的问题: 它可以将额外属性做为**标准表字段**存储到数据库.
+
+你需要做的就是如上所诉使用 `ObjectExtensionManager` 定义额外属性, 然后你就可以使得 `GetProperty` 和 `SetProperty` 方法对实体的属性进行get/set,但是这时它存储在数据库表的单独字段中.
 
 ###### 创建新表
 

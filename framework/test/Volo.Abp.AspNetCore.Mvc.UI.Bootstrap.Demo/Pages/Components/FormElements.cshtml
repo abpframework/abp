@@ -354,6 +354,14 @@
  public class FormElementsModel : PageModel
     {
         public SampleModel MyModel { get; set; }
+                    
+        public List&quot;SelectListItem&quot; CityList { get; set; } = new List&quot;SelectListItem&quot;
+        {
+            new SelectListItem { Value = "NY", Text = "New York"},
+            new SelectListItem { Value = "LDN", Text = "London"},
+            new SelectListItem { Value = "IST", Text = "Istanbul"},
+            new SelectListItem { Value = "MOS", Text = "Moscow"}
+        };
 
         public void OnGet()
         {

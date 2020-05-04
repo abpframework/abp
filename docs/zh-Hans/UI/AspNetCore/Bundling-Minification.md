@@ -115,7 +115,7 @@ public class MyWebModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BundlingOptions>(options =>
+        Configure<AbpBundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -153,7 +153,7 @@ public class MyWebExtensionModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BundlingOptions>(options =>
+        Configure<AbpBundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -191,7 +191,7 @@ public class MyExtensionGlobalStyleContributor : BundleContributor
 然后你可以按照下面的代码使用这个贡献者:
 
 ````C#
-services.Configure<BundlingOptions>(options =>
+services.Configure<AbpBundlingOptions>(options =>
 {
     options
         .ScriptBundles
@@ -234,7 +234,7 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 
 #### 贡献者扩展
 
-在某些高级应用场景中, 当用到一个bundle贡献者时，你可能想做一些额外的配置. 贡献者扩展可以和被扩展的贡献者无缝衔接.
+在某些高级应用场景中, 当用到一个bundle贡献者时,你可能想做一些额外的配置. 贡献者扩展可以和被扩展的贡献者无缝衔接.
 
 下面的示例为 prism.js 脚本库添加一些样式:
 
@@ -248,10 +248,10 @@ public class MyPrismjsStyleExtension : BundleContributor
 }
 ````
 
-然后你可以配置 `BundleContributorOptions` 去扩展已存在的 `PrismjsStyleBundleContributor`.
+然后你可以配置 `AbpBundleContributorOptions` 去扩展已存在的 `PrismjsStyleBundleContributor`.
 
 ````csharp
-Configure<BundleContributorOptions>(options =>
+Configure<AbpBundleContributorOptions>(options =>
 {
     options
         .Extensions<PrismjsStyleBundleContributor>()
@@ -319,7 +319,7 @@ namespace MyCompany.MyProject
 例如:
 
 ````c#
-services.Configure<BundlingOptions>(options =>
+services.Configure<AbpBundlingOptions>(options =>
 {
     options
         .StyleBundles

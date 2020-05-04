@@ -127,11 +127,17 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var jestConfigPath = Path.Combine(angularProjectsPath, project, "jest.config.js");
 
-                File.Delete(jestConfigPath);
+                if (File.Exists(jestConfigPath))
+                {
+                    File.Delete(jestConfigPath);
+                }
 
                 var testPath = Path.Combine(angularProjectsPath, project, "src", "test.ts");
 
-                File.Delete(testPath);
+                if (File.Exists(testPath))
+                {
+                    File.Delete(testPath);
+                }
             }
         }
 

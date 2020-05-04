@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
-    public class UpdateProfileDto
+    public class UpdateProfileDto : ExtensibleObject
     {
         [StringLength(IdentityUserConsts.MaxUserNameLength)]
         public string UserName { get; set; }

@@ -40,3 +40,7 @@ ngOnInit() {
 Navigate to `/setting-management` route to see the changes:
 
 ![Custom Settings Tab](./images/custom-settings.png)
+
+## What's Next?
+
+- [Lazy Loading Scripts & Styles](./Lazy-Load-Service.md)

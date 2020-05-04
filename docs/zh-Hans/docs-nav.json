@@ -5,12 +5,7 @@
       "items": [
         {
           "text": "从启动模板开始",
-          "items": [
-            {
-              "text": "ASP.NET Core MVC 模板",
-              "path": "Getting-Started-AspNetCore-MVC-Template.md"
-            }
-          ]
+          "path": "Getting-Started.md"
         },
         {
           "text": "从空项目开始",
@@ -62,6 +57,10 @@
               "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
             }
           ]
+        },
+        {
+          "text": "\"如何\" 指南",
+          "path": "How-To/Index.md"
         },
         {
           "text": "从ASP.NET Boilerplate迁移",
@@ -135,6 +134,14 @@
         {
           "text": "设置管理",
           "path": "Settings.md"
+        },
+        {
+          "text": "数据过滤",
+          "path": "Data-Filtering.md"
+        },
+        {
+          "text": "对象扩展",
+          "path": "Object-Extensions.md"
         }
       ]
     },
@@ -205,8 +212,11 @@
     },
     {
       "text": "领域驱动设计",
-      "path": "Domain-Driven-Design.md",
       "items": [
+        {
+          "text": "概述",
+          "path": "Domain-Driven-Design.md"
+        },
         {
           "text": "领域层",
           "items": [
@@ -283,6 +293,10 @@
               "path": "UI/AspNetCore/Widgets.md"
             },
             {
+              "text": "自定义/扩展UI",
+              "path": "UI/AspNetCore/Customization-User-Interface.md"
+            },
+            {
               "text": "主题化",
               "path": "UI/AspNetCore/Theming.md"
             }
@@ -292,6 +306,14 @@
           "text": "Angular",
           "items": [
             {
+              "text": "服务代理",
+              "path": "UI/Angular/Service-Proxies.md"
+            },
+            {
+              "text": "HTTP请求",
+              "path": "UI/Angular/HTTP-Requests.md"
+            },
+            {
               "text": "本地化",
               "path": "UI/Angular/Localization.md"
             },
@@ -300,8 +322,58 @@
               "path": "UI/Angular/Permission-Management.md"
             },
             {
+              "text": "确认弹层",
+              "path": "UI/Angular/Confirmation-Service.md"
+            },
+            {
+              "text": "Toast Overlay",
+              "path": "UI/Angular/Toaster-Service.md"
+            },
+            {
+              "text": "配置状态",
+              "path": "UI/Angular/Config-State.md"
+            },
+            {
+              "text": "修改菜单",
+              "path": "UI/Angular/Modifying-the-Menu.md"
+            },
+            {
               "text": "替换组件",
               "path": "UI/Angular/Component-Replacement.md"
+            },
+            {
+              "text": "自定义设置页",
+              "path": "UI/Angular/Custom-Setting-Page.md"
+            },
+            {
+              "text": "懒加载Scripts与Styles",
+              "path": "UI/Angular/Lazy-Load-Service.md"
+            },
+            {
+              "text": "DomInsertionService",
+              "path": "UI/Angular/Dom-Insertion-Service.md"
+            },
+            {
+              "text": "ContentProjectionService",
+              "path": "UI/Angular/Content-Projection-Service.md"
+            },
+            {
+              "text": "TrackByService",
+              "path": "UI/Angular/Track-By-Service.md"
+            }
+          ]
+        },
+        {
+          "text": "通用",
+          "items": [
+            {
+              "text": "Utilities",
+              "items": [
+                {
+                  "text": "链表 (双向)",
+                  "path": "UI/Common/Utils/Linked-List.md"
+                }
+              ]
             }
           ]
         } 
@@ -309,8 +381,11 @@
     },
     {
       "text": "数据访问",
-      "path":"Data-Access.md",
       "items": [
+        {
+          "text": "概述", 
+          "path": "Data-Access.md"
+        },
         {
           "text": "连接字符串",
           "path": "Connection-Strings.md"
@@ -394,8 +469,11 @@
     },
     {
       "text": "启动模板",
-      "path": "Startup-Templates/Index.md",
       "items": [
+        {
+          "text": "概述",
+          "path": "Startup-Templates/Index.md"
+        },
         {
           "text": "应用程序",
           "path": "Startup-Templates/Application.md"

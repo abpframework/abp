@@ -4,7 +4,7 @@ ABP Multi-tenancy module provides base functionality to create multi tenant appl
 
 Wikipedia [defines](https://en.wikipedia.org/wiki/Multitenancy) multi-tenancy as like that:
 
-> Software **Multi-tenancy** refers to a software **architecture** in which a **single instance** of a software runs on a server and serves **multiple tenants**. A tenant is a group of users who share a common access with specific privileges to the software instance. With a multitenant architecture, a software application is designed to provide every tenant a **dedicated share of the instance including its data**, configuration, user management, tenant individual functionality and non-functional properties. Multi-tenancy contrasts with multi-instance architectures, where separate software instances operate on behalf of different tenants.
+> Software **Multi-tenancy** refers to a software **architecture** in which a **single instance** of software runs on a server and serves **multiple tenants**. A tenant is a group of users who share a common access with specific privileges to the software instance. With a multitenant architecture, a software application is designed to provide every tenant a **dedicated share of the instance including its data**, configuration, user management, tenant individual functionality and non-functional properties. Multi-tenancy contrasts with multi-instance architectures, where separate software instances operate on behalf of different tenants.
 
 ### Volo.Abp.MultiTenancy Package
 
@@ -172,11 +172,11 @@ namespace MyCompany.MyProject
             {
                 options.Tenants = new[]
                 {
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"), //Id
                         "tenant1" //Name
                     ),
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"), //Id
                         "tenant2" //Name
                     )
@@ -252,7 +252,7 @@ TODO: This package implements ITenantStore using a real database...
 
 #### Tenant Information
 
-ITenantStore works with **TenantInformation** class that has several properties for a tenant:
+ITenantStore works with **TenantConfiguration** class that has several properties for a tenant:
 
 * **Id**: Unique Id of the tenant.
 * **Name**: Unique name of the tenant.

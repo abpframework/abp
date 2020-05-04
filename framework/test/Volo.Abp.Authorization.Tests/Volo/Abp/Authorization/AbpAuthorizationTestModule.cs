@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.TestServices;
 using Volo.Abp.Autofac;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Authorization
@@ -13,7 +14,8 @@ namespace Volo.Abp.Authorization
         {
             context.Services.OnRegistred(onServiceRegistredContext =>
             {
-                if (typeof(IMyAuthorizedService1).IsAssignableFrom(onServiceRegistredContext.ImplementationType))
+                if (typeof(IMyAuthorizedService1).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
+                    !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
                 {
                     onServiceRegistredContext.Interceptors.TryAdd<AuthorizationInterceptor>();
                 }

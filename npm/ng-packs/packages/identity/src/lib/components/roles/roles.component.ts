@@ -1,5 +1,5 @@
 import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -14,6 +14,7 @@ import {
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 
 @Component({
   selector: 'abp-roles',
@@ -45,6 +46,8 @@ export class RolesComponent implements OnInit {
   sortOrder = '';
 
   sortKey = '';
+
+  permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   @ViewChild('formRef', { static: false, read: ElementRef })
   formRef: ElementRef<HTMLFormElement>;
@@ -116,8 +119,8 @@ export class RolesComponent implements OnInit {
       .warn('AbpIdentity::RoleDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
         messageLocalizationParams: [name],
       })
-      .subscribe((status: Toaster.Status) => {
-        if (status === Toaster.Status.confirm) {
+      .subscribe((status: Confirmation.Status) => {
+        if (status === Confirmation.Status.confirm) {
           this.store.dispatch(new DeleteRole(id)).subscribe(() => this.get());
         }
       });

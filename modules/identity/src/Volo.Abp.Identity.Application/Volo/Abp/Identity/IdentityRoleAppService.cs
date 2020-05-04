@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
@@ -24,14 +25,16 @@ namespace Volo.Abp.Identity
         public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(
-                await RoleManager.GetByIdAsync(id));
+                await RoleManager.GetByIdAsync(id)
+            );
         }
 
         public virtual async Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
         {
             var list = await RoleRepository.GetListAsync();
             return new ListResultDto<IdentityRoleDto>(
-                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list)
+            );
         }
 
         public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
@@ -48,10 +51,17 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Roles.Create)]
         public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
-            var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
+            var role = new IdentityRole(
+                GuidGenerator.Create(),
+                input.Name,
+                CurrentTenant.Id
+            )
+            {
+                IsDefault = input.IsDefault, 
+                IsPublic = input.IsPublic
+            };
 
-            role.IsDefault = input.IsDefault;
-            role.IsPublic = input.IsPublic;
+            input.MapExtraPropertiesTo(role);
 
             (await RoleManager.CreateAsync(role)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -69,6 +79,8 @@ namespace Volo.Abp.Identity
 
             role.IsDefault = input.IsDefault;
             role.IsPublic = input.IsPublic;
+
+            input.MapExtraPropertiesTo(role);
 
             (await RoleManager.UpdateAsync(role)).CheckErrors();
             await CurrentUnitOfWork.SaveChangesAsync();

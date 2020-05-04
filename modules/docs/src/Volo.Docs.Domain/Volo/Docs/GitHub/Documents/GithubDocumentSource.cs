@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Volo.Abp.Domain.Services;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
-using Newtonsoft.Json.Linq;
 using Octokit;
+using Volo.Abp;
+using Volo.Extensions;
 using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents
@@ -48,68 +48,155 @@ namespace Volo.Docs.GitHub.Documents
                 fileName = documentName.Substring(documentName.LastIndexOf('/') + 1);
             }
 
-            var fileCommits = await GetFileCommitsAsync(project, version, project.GetGitHubInnerUrl(languageCode, documentName));
+            var content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent);
+            var commits = await GetGitHubCommitsOrNull(project, documentName, languageCode, version);
 
-            var documentCreationTime = fileCommits.LastOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue;
+            var documentCreationTime = GetFirstCommitDate(commits);
+            var lastUpdateTime = GetLastCommitDate(commits);
+            var lastSignificantUpdateTime = await GetLastKnownSignificantUpdateTime(project, documentName, languageCode, version, lastKnownSignificantUpdateTime, isNavigationDocument, isParameterDocument, commits, documentCreationTime);
 
-            var lastSignificantUpdateTime = !isNavigationDocument && !isParameterDocument && version == project.LatestVersionBranchName ?
-                await GetLastSignificantUpdateTime(
-                    fileCommits,
-                    project, 
-                    project.GetGitHubInnerUrl(languageCode, documentName),
-                    lastKnownSignificantUpdateTime,
-                    documentCreationTime
-                    ) ?? lastKnownSignificantUpdateTime 
-                : null;
-
-            var document = new Document(GuidGenerator.Create(),
+            var document = new Document
+            (
+                GuidGenerator.Create(),
                 project.Id,
                 documentName,
                 version,
                 languageCode,
                 fileName,
-                await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent),
+                content,
                 project.Format,
                 editLink,
                 rootUrl,
                 rawRootUrl,
                 localDirectory,
                 documentCreationTime,
-                fileCommits.FirstOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
+                lastUpdateTime,
                 DateTime.Now,
-                lastSignificantUpdateTime);
+                lastSignificantUpdateTime
+            );
 
-            var authors = fileCommits
-                .Where(x => x.Author != null)
-                .Select(x => x.Author)
-                .GroupBy(x => x.Id)
-                .OrderByDescending(x => x.Count())
-                .Select(x => x.FirstOrDefault()).ToList();
-
-            if (!isNavigationDocument && !isParameterDocument)
+            if (isNavigationDocument || isParameterDocument)
             {
-                foreach (var author in authors)
-                {
-                    document.AddContributor(author.Login, author.HtmlUrl, author.AvatarUrl);
-                }
+                return document;
+            }
+
+            var authors = GetAuthors(commits);
+            foreach (var author in authors)
+            {
+                document.AddContributor(author.Login, author.HtmlUrl, author.AvatarUrl);
             }
 
             return document;
         }
 
+        private async Task<DateTime?> GetLastKnownSignificantUpdateTime(
+            Project project,
+            string documentName,
+            string languageCode,
+            string version,
+            DateTime? lastKnownSignificantUpdateTime,
+            bool isNavigationDocument,
+            bool isParameterDocument,
+            IReadOnlyList<GitHubCommit> commits,
+            DateTime documentCreationTime)
+        {
+            return !isNavigationDocument && !isParameterDocument && version == project.LatestVersionBranchName
+                ? await GetLastSignificantUpdateTime(
+                      commits,
+                      project,
+                      project.GetGitHubInnerUrl(languageCode, documentName),
+                      lastKnownSignificantUpdateTime,
+                      documentCreationTime
+                  ) ?? lastKnownSignificantUpdateTime
+                : null;
+        }
+
+        private static List<Author> GetAuthors(IReadOnlyList<GitHubCommit> commits)
+        {
+            if (commits == null || !commits.Any())
+            {
+                return new List<Author>();
+            }
+
+            return commits
+                .Where(x => x.Author != null)
+                .Select(x => x.Author)
+                .GroupBy(x => x.Id)
+                .OrderByDescending(x => x.Count())
+                .Select(x => x.FirstOrDefault())
+                .ToList();
+        }
+
+        private static DateTime GetLastCommitDate(IReadOnlyList<GitHubCommit> commits)
+        {
+            return GetCommitDate(commits, false);
+        }
+
+        private static DateTime GetFirstCommitDate(IReadOnlyList<GitHubCommit> commits)
+        {
+            return GetCommitDate(commits, true);
+        }
+
+        private static DateTime GetCommitDate(IReadOnlyList<GitHubCommit> commits, bool isFirstCommit)
+        {
+            if (commits == null)
+            {
+                return DateTime.MinValue;
+            }
+
+            var gitHubCommit = isFirstCommit ?
+                commits.LastOrDefault() : //first commit
+                commits.FirstOrDefault(); //last commit
+
+            if (gitHubCommit == null)
+            {
+                return DateTime.MinValue;
+            }
+
+            if (gitHubCommit.Commit == null)
+            {
+                return DateTime.MinValue;
+            }
+
+            if (gitHubCommit.Commit.Author == null)
+            {
+                return DateTime.MinValue;
+            }
+
+            return gitHubCommit.Commit.Author.Date.DateTime;
+        }
+
+        private async Task<IReadOnlyList<GitHubCommit>> GetGitHubCommitsOrNull(Project project, string documentName, string languageCode, string version)
+        {
+            /*
+            * Getting file commits usually throws "Resource temporarily unavailable" or "Network is unreachable"
+            * This is a trival information and running this inside try-catch is safer.
+            */
+            
+            try
+            {
+                return await GetFileCommitsAsync(project, version, project.GetGitHubInnerUrl(languageCode, documentName));
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.ToString());
+                return null;
+            }
+        }
+
         private async Task<DateTime?> GetLastSignificantUpdateTime(
-            IReadOnlyList<GitHubCommit> fileCommits,
+            IReadOnlyList<GitHubCommit> commits,
             Project project,
             string fileName,
             DateTime? lastKnownSignificantUpdateTime,
             DateTime documentCreationTime)
         {
-            if (!fileCommits.Any())
+            if (commits == null || !commits.Any())
             {
                 return null;
             }
 
-            var fileCommitsAfterCreation = fileCommits.Take(fileCommits.Count - 1);
+            var fileCommitsAfterCreation = commits.Take(commits.Count - 1);
 
             var commitsToEvaluate = (lastKnownSignificantUpdateTime != null
                 ? fileCommitsAfterCreation.Where(c => c.Commit.Author.Date.DateTime > lastKnownSignificantUpdateTime)
@@ -117,7 +204,6 @@ namespace Volo.Docs.GitHub.Documents
 
             foreach (var gitHubCommit in commitsToEvaluate)
             {
-
                 var fullCommit = await _githubRepositoryManager.GetSingleCommitsAsync(
                     GetOwnerNameFromUrl(project.GetGitHubUrl()),
                     GetRepositoryNameFromUrl(project.GetGitHubUrl()),
@@ -179,11 +265,16 @@ namespace Volo.Docs.GitHub.Documents
             var rootUrl = project.GetGitHubUrl(version);
             var userAgent = project.GetGithubUserAgentOrNull();
 
-            var url = CalculateRawRootUrl(rootUrl) + "docs-langs.json";
+            var url = CalculateRawRootUrl(rootUrl) + DocsDomainConsts.LanguageConfigFileName;
 
             var configAsJson = await DownloadWebContentAsStringAsync(url, token, userAgent);
 
-            return JsonConvert.DeserializeObject<LanguageConfig>(configAsJson);
+            if (!JsonConvertExtensions.TryDeserializeObject<LanguageConfig>(configAsJson, out var languageConfig))
+            {
+                throw new UserFriendlyException($"Cannot validate language config file '{DocsDomainConsts.LanguageConfigFileName}' for the project {project.Name} - v{version}.");
+            }
+
+            return languageConfig;
         }
 
         private async Task<IReadOnlyList<Release>> GetReleasesAsync(Project project)
@@ -199,8 +290,14 @@ namespace Volo.Docs.GitHub.Documents
             var url = project.GetGitHubUrl();
             var ownerName = GetOwnerNameFromUrl(url);
             var repositoryName = GetRepositoryNameFromUrl(url);
-            return await _githubRepositoryManager.GetFileCommitsAsync(ownerName, repositoryName,
-                version, filename, project.GetGitHubAccessTokenOrNull());
+
+            return await _githubRepositoryManager.GetFileCommitsAsync(
+                ownerName,
+                repositoryName,
+                version,
+                filename,
+                project.GetGitHubAccessTokenOrNull()
+            );
         }
 
         protected virtual string GetOwnerNameFromUrl(string url)
@@ -212,7 +309,7 @@ namespace Volo.Docs.GitHub.Documents
             }
             catch (Exception)
             {
-                throw new Exception($"Github url is not valid: {url}");
+                throw new Exception($"GitHub url is not valid: {url}");
             }
         }
 

@@ -22,7 +22,7 @@ end
 
 ### About this tutorial:
 
-In this tutorial series, you will build an ABP Commercial application named `Acme.BookStore`. In this sample project, we will manage a list of books and authors. **{{DB_Text}}** will be used as the ORM provider. And on the front-end side {{UI_Value}} and JavaScript will be used.
+In this tutorial series, you will build an ABP application named `Acme.BookStore`. In this sample project, we will manage a list of books and authors. **{{DB_Text}}** will be used as the ORM provider. And on the front-end side {{UI_Value}} and JavaScript will be used.
 
 The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
 
@@ -34,14 +34,14 @@ The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
 
 ### Creating the project
 
-Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI. But first of all, we need to login to the ABP Platform to create a commercial project.
+Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI.
 
 #### Create the project
 
-By running the below command, it creates a new ABP Commercial project with the database provider `{{DB_Text}}` and UI option `MVC`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
+By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `{{UI_Value}}`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
 
 ```bash
-abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}}
+abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}} --mobile none
 ```
 ![Creating project](./images/bookstore-create-project-{{UI_Text}}.png)
 
@@ -61,7 +61,7 @@ After creating the project, you need to apply the initial migrations and create 
 
 To run the project, right click to the {{if UI == "MVC"}} `Acme.BookStore.Web`{{end}} {{if UI == "NG"}} `Acme.BookStore.HttpApi.Host` {{end}} project and click **Set As StartUp Project**. And run the web project by pressing **CTRL+F5** (*without debugging and fast*) or press **F5** (*with debugging and slow*). {{if UI == "NG"}}You will see the Swagger UI for BookStore API.{{end}}
 
-Further information, see the [running the application section](../../Getting-Started-{{if UI == "NG"}}Angular{{else}}AspNetCore-MVC{{end}}-Template#running-the-application).Getting-Started-AspNetCore-MVC-Template#running-the-application
+Further information, see the [running the application section](../Getting-Started?UI={{UI}}#run-the-application).
 
 ![Set as startup project](./images/bookstore-start-project-{{UI_Text}}.png)
 
@@ -335,7 +335,7 @@ INSERT INTO AppBooks (Id,CreationTime,[Name],[Type],PublishDate,Price) VALUES
 
 ### Create the application service
 
-The next step is to create an [application service](../../Application-Services.md) to manage the books which will allow us the four basic functions: creating, reading, updating and deleting. Application layer is separated into two projects:
+The next step is to create an [application service](../Application-Services.md) to manage the books which will allow us the four basic functions: creating, reading, updating and deleting. Application layer is separated into two projects:
 
 * `Acme.BookStore.Application.Contracts` mainly contains your `DTO`s and application service interfaces.
 * `Acme.BookStore.Application` contains the implementations of your application services.
@@ -874,97 +874,52 @@ We'll see **book-list works!**  text on the books page:
 
 Run the following command in the terminal to create a new state, named `BooksState`:
 
-![Initial book list page](./images/bookstore-generate-state-books.png)
-
 ```bash
-yarn ng generate ngxs-schematic:state books
+npx @ngxs/cli --name books --directory src/app/books
 ```
 
-* This command creates several new files and updates `app.modules.ts` file to import the `NgxsModule` with the new state.
+* This command creates `books.state.ts` and `books.actions.ts` files in the `src/app/books/state` folder. See the [NGXS CLI documentation](https://www.ngxs.io/plugins/cli).
 
-#### Get books data from backend
-
-Create data types to map the data from the backend (you can check Swagger UI or your backend API to see the data format).
-
-![BookDto properties](./images/bookstore-swagger-book-dto-properties.png)
-
-Open the `books.ts` file in the `app\store\models` folder and replace the content as below:
+Import the `BooksState` to the `app.module.ts` in the `src/app` folder and then add the `BooksState` to `forRoot` static method of `NgxsModule` as an array element of the first parameter of the method.
 
 ```js
-export namespace Books {
-  export interface State {
-    books: Response;
-  }
+// ...
+import { BooksState } from './books/state/books.state'; //<== imported BooksState ==>
 
-  export interface Response {
-    items: Book[];
-    totalCount: number;
-  }
+@NgModule({
+  imports: [
+    // other imports
 
-  export interface Book {
-    name: string;
-    type: BookType;
-    publishDate: string;
-    price: number;
-    lastModificationTime: string;
-    lastModifierId: string;
-    creationTime: string;
-    creatorId: string;
-    id: string;
-  }
+    NgxsModule.forRoot([BooksState]), //<== added BooksState ==>
 
-  export enum BookType {
-    Undefined,
-    Adventure,
-    Biography,
-    Dystopia,
-    Fantastic,
-    Horror,
-    Science,
-    ScienceFiction,
-    Poetry,
-  }
-}
-```
-
-* Added `Book` interface that represents a book object and `BookType` enum which represents a book category.
-
-#### BooksService
-
-Create a new service, named `BooksService` to perform `HTTP` calls to the server:
-
-```bash
-yarn ng generate service books/shared/books
-```
-
-![service-terminal-output](./images/bookstore-service-terminal-output.png)
-
-Open the `books.service.ts` file in `app\books\shared` folder and replace the content as below:
-
-```js
-import { Injectable } from '@angular/core';
-import { RestService } from '@abp/ng.core';
-import { Books } from '../../store/models';
-import { Observable } from 'rxjs';
-
-@Injectable({
-  providedIn: 'root',
+    //other imports
+  ],
+  // ...
 })
-export class BooksService {
-  constructor(private restService: RestService) {}
-
-  get(): Observable<Books.Response> {
-    return this.restService.request<void, Books.Response>({
-      method: 'GET',
-      url: '/api/app/book'
-    });
-  }
-}
+export class AppModule {}
 ```
 
-* We added the `get` method to get the list of books by performing an HTTP request to the related endpoint.
+#### Generate proxies
 
-Open the`books.actions.ts` file in `app\store\actions` folder and replace the content below:
+ABP CLI provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running generate-proxy command, your host must be up and running. See the [CLI documentation](../CLI.md)
+
+Run the following command in the `angular` folder:
+
+```bash
+abp generate-proxy --module app
+```
+
+![Generate proxy command](./images/generate-proxy-command.png)
+
+The generated files looks like below:
+
+![Generated files](./images/generated-proxies.png)
+
+#### GetBooks Action
+
+Actions can either be thought of as a command which should trigger something to happen, or as the resulting event of something that has already happened. [See NGXS Actions documentation](https://www.ngxs.io/concepts/actions).
+
+Open the `books.actions.ts` file in `app/books/state` folder and replace the content below:
 
 ```js
 export class GetBooks {
@@ -974,41 +929,48 @@ export class GetBooks {
 
 #### Implement BooksState
 
-Open the `books.state.ts` file in `app\store\states` folder and replace the content below:
+Open the `books.state.ts` file in `app/books/state` folder and replace the content below:
 
 ```js
+import { PagedResultDto } from '@abp/ng.core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks } from '../actions/books.actions';
-import { Books } from '../models/books';
-import { BooksService } from '../../books/shared/books.service';
+import { GetBooks } from './books.actions';
+import { BookService } from '../../app/shared/services';
 import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { BookDto } from '../../app/shared/models';
 
-@State<Books.State>({
+export class BooksStateModel {
+  public book: PagedResultDto<BookDto>;
+}
+
+@State<BooksStateModel>({
   name: 'BooksState',
-  defaults: { books: {} } as Books.State,
+  defaults: { book: {} } as BooksStateModel,
 })
+@Injectable()
 export class BooksState {
   @Selector()
-  static getBooks(state: Books.State) {
-    return state.books.items || [];
+  static getBooks(state: BooksStateModel) {
+    return state.book.items || [];
   }
 
-  constructor(private booksService: BooksService) {}
+  constructor(private bookService: BookService) {}
 
   @Action(GetBooks)
-  get(ctx: StateContext<Books.State>) {
-    return this.booksService.get().pipe(
-      tap(booksResponse => {
+  get(ctx: StateContext<BooksStateModel>) {
+    return this.bookService.getListByInput().pipe(
+      tap((booksResponse) => {
         ctx.patchState({
-          books: booksResponse,
+          book: booksResponse,
         });
-      }),
+      })
     );
   }
 }
 ```
-
-* We added the `GetBooks` action that retrieves the books data via `BooksService` and patches the state.
+* We added the book property to BooksStateModel model.
+* We added the `GetBooks` action that retrieves the books data via `BooksService` that generated via ABP CLI and patches the state.
 * `NGXS` requires to return the observable without subscribing it in the get function.
 
 #### BookListComponent
@@ -1017,11 +979,12 @@ Open the `book-list.component.ts` file in `app\books\book-list` folder and repla
 
 ```js
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks } from '../../store/actions';
+import { finalize } from 'rxjs/operators';
+import { BookDto, BookType } from '../../app/shared/models';
+import { GetBooks } from '../state/books.actions';
+import { BooksState } from '../state/books.state';
 
 @Component({
   selector: 'app-book-list',
@@ -1030,13 +993,13 @@ import { GetBooks } from '../../store/actions';
 })
 export class BookListComponent implements OnInit {
   @Select(BooksState.getBooks)
-  books$: Observable<Books.Book[]>;
+  books$: Observable<BookDto[]>;
 
-  booksType = Books.BookType;
+  booksType = BookType;
 
   loading = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.get();
@@ -1044,9 +1007,10 @@ export class BookListComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new GetBooks()).subscribe(() => {
-      this.loading = false;
-    });
+    this.store
+      .dispatch(new GetBooks())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(() => {});
   }
 }
 ```

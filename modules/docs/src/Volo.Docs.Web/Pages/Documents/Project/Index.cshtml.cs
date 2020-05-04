@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Volo.Abp;
-using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -34,6 +34,10 @@ namespace Volo.Docs.Pages.Documents.Project
         public string LanguageCode { get; set; }
 
         public bool DocumentFound { get; set; } = true;
+
+        public bool ProjectFound { get; set; } = true;
+
+        public bool LoadSuccess => DocumentFound && ProjectFound;
 
         public string DefaultLanguageCode { get; set; }
 
@@ -64,9 +68,10 @@ namespace Volo.Docs.Pages.Documents.Project
         public DocumentParametersDto DocumentPreferences { get; set; }
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
-        
+
         public bool FullSearchEnabled { get; set; }
 
+        private const int MaxDescriptionMetaTagLength = 200;
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
@@ -89,7 +94,7 @@ namespace Volo.Docs.Pages.Documents.Project
             _uiOptions = options.Value;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             try
             {
@@ -117,7 +122,8 @@ namespace Volo.Docs.Pages.Documents.Project
             catch (EntityNotFoundException e)
             {
                 Logger.LogWarning(e.Message);
-                return NotFound();
+                ProjectFound = false;
+                return Page();
             }
 
             if (ShowProjectsCombobox)
@@ -341,43 +347,13 @@ namespace Volo.Docs.Pages.Documents.Project
 
             try
             {
-                if (DocumentName.IsNullOrWhiteSpace())
-                {
-                    Document = await _documentAppService.GetDefaultAsync(
-                        new GetDefaultDocumentInput
-                        {
-                            ProjectId = Project.Id,
-                            LanguageCode = LanguageCode,
-                            Version = Version
-                        }
-                    );
-                }
-                else
-                {
-                    Document = await _documentAppService.GetAsync(
-                        new GetDocumentInput
-                        {
-                            ProjectId = Project.Id,
-                            Name = DocumentNameWithExtension,
-                            LanguageCode = LanguageCode,
-                            Version = Version
-                        }
-                    );
-                }
+                Document = await GetSpecificDocumentOrDefaultAsync(LanguageCode);
             }
             catch (DocumentNotFoundException)
             {
                 if (LanguageCode != DefaultLanguageCode)
                 {
-                    Document = await _documentAppService.GetAsync(
-                        new GetDocumentInput
-                        {
-                            ProjectId = Project.Id,
-                            Name = DocumentNameWithExtension,
-                            LanguageCode = DefaultLanguageCode,
-                            Version = Version
-                        }
-                    );
+                    Document = await GetSpecificDocumentOrDefaultAsync(DefaultLanguageCode);
 
                     DocumentLanguageIsDifferent = true;
                 }
@@ -423,6 +399,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 Document.RawRootUrl,
                 Document.LocalDirectory
             );
+
+            content = HtmlNormalizer.WrapImagesWithinAnchors(content);
 
             //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
             content = HtmlNormalizer.ReplaceCodeBlocksLanguage(
@@ -539,6 +517,33 @@ namespace Volo.Docs.Pages.Documents.Project
 
         }
 
+        private async Task<DocumentWithDetailsDto> GetSpecificDocumentOrDefaultAsync(string languageCode)
+        {
+            if (DocumentName.IsNullOrWhiteSpace())
+            {
+                return await _documentAppService.GetDefaultAsync(
+                    new GetDefaultDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        LanguageCode = languageCode,
+                        Version = Version
+                    }
+                );
+            }
+            else
+            {
+                return await _documentAppService.GetAsync(
+                    new GetDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        Name = DocumentNameWithExtension,
+                        LanguageCode = languageCode,
+                        Version = Version
+                    }
+                );
+            }
+        }
+
         public async Task SetDocumentPreferencesAsync()
         {
             var projectParameters = await _documentAppService.GetParametersAsync(
@@ -590,6 +595,28 @@ namespace Volo.Docs.Pages.Documents.Project
                     DocumentPreferences.Parameters.Add(newParameter);
                 }
             }
+        }
+
+        public string GetDescription()
+        {
+            if (Document == null || Document.Content.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            var firstParagraph = new Regex(@"<p>(.*?)</p>", RegexOptions.IgnoreCase);
+            var match = firstParagraph.Match(Document.Content);
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            var description = HttpUtility.HtmlDecode(match.Value);
+
+            var htmlTagReplacer = new Regex(@"<[^>]*>", RegexOptions.IgnoreCase);
+            description = htmlTagReplacer.Replace(description, m => string.Empty);
+
+            return description.Truncate(MaxDescriptionMetaTagLength);
         }
     }
 }

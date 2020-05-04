@@ -39,6 +39,7 @@
     "PagerFirst": "Trang đầu",
     "PagerLast": "Trang cuối",
     "PagerInfo": "Hiển thị từ _START_ đến _END_ trong _TOTAL_ mục",
+    "PagerInfo{0}{1}{2}": "Hiển thị từ {0} đến {1} trong {2} mục",
     "PagerInfoEmpty": "Hiển thị từ 0 đến 0 trong 0 mục",
     "PagerInfoFiltered": "(được lọc từ tổng số _MAX_ mục)",
     "NoDataAvailableInDatatable": "Không có dữ liệu trong bảng",

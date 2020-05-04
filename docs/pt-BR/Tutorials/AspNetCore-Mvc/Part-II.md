@@ -8,7 +8,7 @@ Esta é a segunda parte da série de tutoriais do ASP.NET Core MVC. Veja todas a
 - **Parte II: Criar, atualizar e excluir livros (este tutorial)**
 - [Parte III: Testes de Integração](https://docs.abp.io/en/abp/latest/Tutorials/AspNetCore-Mvc/Part-III)
 
-Você pode acessar o **código fonte** do aplicativo [no repositório GitHub](https://github.com/volosoft/abp/tree/master/samples/BookStore) .
+Você pode acessar o **código fonte** do aplicativo [no repositório GitHub](https://github.com/abpframework/abp-samples/tree/master/BookStore) .
 
 > Você também pode assistir a [este curso em vídeo](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) preparado por um membro da comunidade ABP, com base neste tutorial.
 

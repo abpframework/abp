@@ -4,7 +4,7 @@ ABP v0.18已发布, 包含解决的[80+个issue](https://github.com/abpframework
 
 ## 网站更改
 
-[abp.io](https://abp.io)网站**完全更新**以突出ABP框架的目标和重要功能.文档和博客网址也会更改：
+[abp.io](https://abp.io)网站**完全更新**以突出ABP框架的目标和重要功能.文档和博客网址也会更改:
 
 - `abp.io/documents`移至[docs.abp.io](https://docs.abp.io).
 - `abp.io/blog`转移到[blog.abp.io](https://blog.abp.io).
@@ -21,25 +21,25 @@ ABP CLI现在是创建新项目的首选方式,你仍然可以从[开始](https:
 
 ### 用法
 
-使用命令行窗口安装ABP CLI：
+使用命令行窗口安装ABP CLI:
 
 ```` bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-创建一个新应用程序：
+创建一个新应用程序:
 
 ```` bash
 abp new Acme.BookStore
 ````
 
-将模块添加到应用程序：
+将模块添加到应用程序:
 
 ```` bash
 abp add-module Volo.Blogging
 ````
 
-更新解决方案中所有与ABP相关的包：
+更新解决方案中所有与ABP相关的包:
 
 ```` bash
 abp update
@@ -59,7 +59,7 @@ abp update
 
 ## 更改日志
 
-以下是此版本附带的一些其他功能和增强功能：
+以下是此版本附带的一些其他功能和增强功能:
 
 * 新[Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper)包.
 * 新[Volo.Abp.Specifications](https://www.nuget.org/packages/Volo.Abp.Specifications)包.

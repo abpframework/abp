@@ -2,11 +2,17 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.IO;
@@ -47,16 +53,44 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string version = null,
             string templateSource = null)
         {
+            DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
 
-            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
+            string latestVersion;
+
+#if DEBUG
+            latestVersion = await GetLatestSourceCodeVersionAsync(name, type, $"{CliUrls.WwwAbpIoProduction}api/download/{type}/get-version/");
+#else
+            latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
+#endif
             if (version == null)
             {
+                if (latestVersion == null)
+                {
+                    Logger.LogWarning("The remote service is currently unavailable, please specify the version.");
+                    Logger.LogWarning(string.Empty);
+                    Logger.LogWarning("Find the following template in your cache directory: ");
+                    Logger.LogWarning("\t Template Name\tVersion");
+
+                    var templateList = GetLocalTemplates();
+                    foreach (var cacheFile in templateList)
+                    {
+                        Logger.LogWarning($"\t {cacheFile.TemplateName}\t\t{cacheFile.Version}");
+                    }
+
+                    Logger.LogWarning(string.Empty);
+                    throw new CliUsageException("Use command: abp new Acme.BookStore -v version");
+                }
+
                 version = latestVersion;
             }
 
-            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
+            string nugetVersion;
 
-            DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+#if DEBUG
+            nugetVersion = version;
+#else
+            nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
+#endif
 
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {
@@ -65,6 +99,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
 
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
+
+#if DEBUG
+            if (File.Exists(localCacheFile))
+            {
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
+            }
+#endif
+
             if (Options.CacheTemplates && File.Exists(localCacheFile) && templateSource.IsNullOrWhiteSpace())
             {
                 Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
@@ -89,12 +131,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
 
             return new TemplateFile(fileContent, version, latestVersion, nugetVersion);
-
         }
 
-        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type, string url = null)
         {
-            var url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/";
+            if (url == null)
+            {
+                url = $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/";
+            }
 
             try
             {
@@ -122,7 +166,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             catch (Exception ex)
             {
                 Console.WriteLine("Error occured while getting the latest version from {0} : {1}", url, ex.Message);
-                throw;
+                return null;
             }
         }
 
@@ -195,9 +239,28 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
         }
 
-        private static bool IsNetworkSource(string source)
+        private bool IsNetworkSource(string source)
         {
             return source.ToLower().StartsWith("http");
+        }
+
+        private List<(string TemplateName, string Version)> GetLocalTemplates()
+        {
+            var templateList = new List<(string TemplateName, string Version)>();
+
+            var stringBuilder = new StringBuilder();
+            foreach (var cacheFile in Directory.GetFiles(CliPaths.TemplateCache))
+            {
+                stringBuilder.AppendLine(cacheFile);
+            }
+
+            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName})-(.+).zip");
+            foreach (Match match in matches)
+            {
+                templateList.Add((match.Groups[1].Value, match.Groups[2].Value));
+            }
+
+            return templateList;
         }
 
         public class SourceCodeDownloadInputDto

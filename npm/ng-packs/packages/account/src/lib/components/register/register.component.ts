@@ -1,18 +1,16 @@
-import { ConfigState, GetAppConfiguration, ABP, SessionState, AuthService } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
+import { AuthService, ConfigState } from '@abp/ng.core';
+import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { from, throwError } from 'rxjs';
-import { catchError, finalize, switchMap, take, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import snq from 'snq';
 import { RegisterRequest } from '../../models';
 import { AccountService } from '../../services/account.service';
-import { PasswordRules, validatePassword } from '@ngx-validate/core';
-import { HttpHeaders } from '@angular/common/http';
-const { maxLength, minLength, required, email } = Validators;
+import { eAccountComponents } from '../../enums/components';
+const { maxLength, required, email } = Validators;
 
 @Component({
   selector: 'abp-register',
@@ -24,6 +22,8 @@ export class RegisterComponent implements OnInit {
   inProgress: boolean;
 
   isSelfRegistrationEnabled = true;
+
+  authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
     private fb: FormBuilder,
@@ -53,40 +53,9 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
-      ConfigState.getSettings('Identity.Password'),
-    );
-    const passwordRulesArr = [] as PasswordRules;
-    let requiredLength = 1;
-
-    if ((passwordRules['Abp.Identity.Password.RequireDigit'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('number');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireLowercase'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('small');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireUppercase'] || '').toLowerCase() === 'true') {
-      passwordRulesArr.push('capital');
-    }
-
-    if (
-      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
-    ) {
-      passwordRulesArr.push('special');
-    }
-
-    if (Number.isInteger(+passwordRules['Abp.Identity.Password.RequiredLength'])) {
-      requiredLength = +passwordRules['Abp.Identity.Password.RequiredLength'];
-    }
-
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: [
-        '',
-        [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(128)],
-      ],
+      password: ['', [required, ...getPasswordValidators(this.store)]],
       email: ['', [required, email]],
     });
   }
