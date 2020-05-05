@@ -31,7 +31,7 @@
     <abp-input asp-for="FocusCommentId" class="m-0" />
     <div class="container">
         <div class="row">
-            <div class="col-10 col-md-8 col-lg-7 mx-auto">
+            <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <section class="hero-section">
                     <div class="hero-articles">
                         <div class="hero-content">
@@ -90,7 +90,7 @@
         </div>
 
         <div class="row">
-            <div class="col-10 col-md-8 col-lg-7 mx-auto">
+            <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <section class="post-content">
                     <p>
                         @Html.Raw(RenderMarkdownToHtml(Model.Post.Content))
@@ -100,7 +100,7 @@
         </div>
 
         <div class="row">
-            <div class="col-10 col-md-8 col-lg-7 mx-auto">
+            <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <hr />
                 <div class="mb-2 mt-1">
                     @(L["ShareOn"].Value + " :")
