@@ -3,6 +3,8 @@ using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApiExploring
 {
+    [Area("abp")]
+    [RemoteService(Name = "abp")]
     [Route("api/abp/api-definition")]
     public class AbpApiDefinitionController : AbpController, IRemoteService
     {
