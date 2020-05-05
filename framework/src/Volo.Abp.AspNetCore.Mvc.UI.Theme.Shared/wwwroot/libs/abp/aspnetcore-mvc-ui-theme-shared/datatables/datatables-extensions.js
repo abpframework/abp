@@ -1,5 +1,4 @@
-﻿var abp = abp;
-
+﻿var abp = abp || {};
 (function ($) {
 
     var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
