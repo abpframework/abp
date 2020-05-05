@@ -38,7 +38,7 @@ namespace Volo.Abp.Localization
 
         public static bool IsRtl
         {
-            get { return Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft; }
+            get { return CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft; }
         }
         public static bool IsValidCultureCode(string cultureCode)
         {
