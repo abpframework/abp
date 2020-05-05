@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Features;
@@ -30,6 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly ISettingDefinitionManager _settingDefinitionManager;
         private readonly IFeatureDefinitionManager _featureDefinitionManager;
         private readonly ILanguageProvider _languageProvider;
+        private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
 
         public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
@@ -41,7 +43,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             ISettingProvider settingProvider,
             ISettingDefinitionManager settingDefinitionManager,
             IFeatureDefinitionManager featureDefinitionManager,
-            ILanguageProvider languageProvider)
+            ILanguageProvider languageProvider,
+            ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService)
         {
             _serviceProvider = serviceProvider;
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -51,6 +54,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _settingDefinitionManager = settingDefinitionManager;
             _featureDefinitionManager = featureDefinitionManager;
             _languageProvider = languageProvider;
+            _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
             _localizationOptions = localizationOptions.Value;
             _multiTenancyOptions = multiTenancyOptions.Value;
         }
@@ -67,12 +71,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 CurrentUser = GetCurrentUser(),
                 Setting = await GetSettingConfigAsync(),
                 MultiTenancy = GetMultiTenancy(),
-                CurrentTenant = GetCurrentTenant()
-
+                CurrentTenant = GetCurrentTenant(),
+                ObjectExtensions = _cachedObjectExtensionsDtoService.Get()
             };
         }
 
-        protected  virtual  CurrentTenantDto GetCurrentTenant()
+        protected virtual CurrentTenantDto GetCurrentTenant()
         {
             return new CurrentTenantDto()
             {
@@ -153,6 +157,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             }
 
             localizationConfig.CurrentCulture = GetCurrentCultureInfo();
+
+            if (_localizationOptions.DefaultResourceType != null)
+            {
+                localizationConfig.DefaultResourceName = LocalizationResourceNameAttribute.GetName(
+                    _localizationOptions.DefaultResourceType
+                );
+            }
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetLocalizationConfigAsync()");
 

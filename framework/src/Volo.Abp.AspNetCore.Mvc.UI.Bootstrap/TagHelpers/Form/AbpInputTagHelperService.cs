@@ -117,6 +117,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return new InputTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
+                InputTypeName = TagHelper.InputTypeName,
                 ViewContext = TagHelper.ViewContext
             };
         }
@@ -331,11 +332,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var groupPrefix = "group-";
 
             var tagHelperAttributes = output.Attributes.Where(a => !a.Name.StartsWith(groupPrefix)).ToList();
+            
             var attrList = new TagHelperAttributeList();
 
             foreach (var tagHelperAttribute in tagHelperAttributes)
             {
                 attrList.Add(tagHelperAttribute);
+            }
+
+            if (!TagHelper.InputTypeName.IsNullOrEmpty() && !attrList.ContainsName("type"))
+            {
+                attrList.Add("type", TagHelper.InputTypeName);
             }
 
             return attrList;

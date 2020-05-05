@@ -5,7 +5,7 @@ using Volo.Abp.Localization;
 
 namespace Volo.Abp.TextTemplating
 {
-    public class TemplateDefinition
+    public class TemplateDefinition : IHasNameWithLocalizableDisplayName
     {
         public const int MaxNameLength = 128;
 

@@ -35,6 +35,24 @@ namespace Volo.Abp.Localization
             });
         }
 
+        public static bool IsValidCultureCode(string cultureCode)
+        {
+            if (cultureCode.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            try
+            {
+                CultureInfo.GetCultureInfo(cultureCode);
+                return true;
+            }
+            catch (CultureNotFoundException)
+            {
+                return false;
+            }
+        }
+
         public static string GetBaseCultureName(string cultureName)
         {
             return cultureName.Contains("-")

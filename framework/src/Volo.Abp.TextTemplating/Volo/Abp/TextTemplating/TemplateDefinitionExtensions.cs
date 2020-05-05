@@ -8,9 +8,12 @@ namespace Volo.Abp.TextTemplating
     {
         public static TemplateDefinition WithVirtualFilePath(
             [NotNull] this TemplateDefinition templateDefinition,
-            [NotNull] string virtualPath)
+            [NotNull] string virtualPath,
+            bool isInlineLocalized)
         {
             Check.NotNull(templateDefinition, nameof(templateDefinition));
+
+            templateDefinition.IsInlineLocalized = isInlineLocalized;
 
             return templateDefinition.WithProperty(
                 VirtualFileTemplateContentContributor.VirtualPathPropertyName,
