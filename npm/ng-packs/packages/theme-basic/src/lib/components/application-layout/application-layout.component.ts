@@ -28,6 +28,7 @@ import snq from 'snq';
 import { AddNavigationElement } from '../../actions';
 import { Layout } from '../../models/layout';
 import { LayoutState } from '../../states';
+import { eNavigationElementNames } from '../../enums/navigation-element-names';
 
 @Component({
   selector: 'abp-layout-application',
@@ -131,11 +132,11 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
       .selectSnapshot(LayoutState.getNavigationElements)
       .map(({ name }) => name);
 
-    if (navigations.indexOf('LanguageRef') < 0) {
+    if (navigations.indexOf(eNavigationElementNames.Language) < 0) {
       this.store.dispatch(
         new AddNavigationElement([
-          { element: this.languageRef, order: 4, name: 'LanguageRef' },
-          { element: this.currentUserRef, order: 5, name: 'CurrentUserRef' },
+          { element: this.languageRef, order: 4, name: eNavigationElementNames.Language },
+          { element: this.currentUserRef, order: 5, name: eNavigationElementNames.User },
         ]),
       );
     }

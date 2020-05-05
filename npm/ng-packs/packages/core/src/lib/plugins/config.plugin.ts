@@ -10,7 +10,7 @@ import {
 } from '@ngxs/store';
 import clone from 'just-clone';
 import snq from 'snq';
-import { ABP } from '../models';
+import { ABP } from '../models/common';
 import { getAbpRoutes, organizeRoutes } from '../utils/route-utils';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
@@ -30,8 +30,8 @@ export class ConfigPlugin implements NgxsPlugin {
 
     if (isInitAction && !this.initialized) {
       const transformedRoutes = transformRoutes(this.router.config);
-      let { routes } = transformedRoutes;
-      const { wrappers } = transformedRoutes;
+      let { routes, wrappers } = transformedRoutes;
+      wrappers = reduceWrappers(wrappers);
 
       routes = organizeRoutes(routes, wrappers);
       const flattedRoutes = flatRoutes(clone(routes));
@@ -117,4 +117,15 @@ function flatRoutes(routes: ABP.FullRoute[]): ABP.FullRoute[] {
   };
 
   return flat(routes);
+}
+
+function reduceWrappers(wrappers: ABP.FullRoute[] = []) {
+  const existingWrappers = new Set();
+
+  return wrappers.filter(wrapper => {
+    if (existingWrappers.has(wrapper.name)) return false;
+
+    existingWrappers.add(wrapper.name);
+    return true;
+  });
 }

@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Emailing\TestTemplates\*\*.tpl" />
-    <None Remove="Volo\Abp\Emailing\TestTemplates\*\*.tpl" />
-    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
-    <None Remove="Volo\Abp\Emailing\Localization\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Emailing\Volo.Abp.Emailing.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />

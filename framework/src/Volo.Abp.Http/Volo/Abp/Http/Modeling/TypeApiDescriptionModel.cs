@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -32,7 +33,7 @@ namespace Volo.Abp.Http.Modeling
             var typeModel = new TypeApiDescriptionModel
             {
                 IsEnum = type.IsEnum,
-                BaseType = baseType != null ? ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(baseType) : null
+                BaseType = baseType != null ? TypeHelper.GetFullNameHandlingNullableAndGenerics(baseType) : null
             };
 
             if (typeModel.IsEnum)

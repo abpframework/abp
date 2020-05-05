@@ -13,6 +13,7 @@ using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Licensing
 {
@@ -20,14 +21,21 @@ namespace Volo.Abp.Cli.Licensing
     {
         protected IJsonSerializer JsonSerializer { get; }
         protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
         private readonly ILogger<AbpIoApiKeyService> _logger;
         private DeveloperApiKeyResult _apiKeyResult = null;
 
-        public AbpIoApiKeyService(IJsonSerializer jsonSerializer, IRemoteServiceExceptionHandler remoteServiceExceptionHandler, ILogger<AbpIoApiKeyService> logger)
+        public AbpIoApiKeyService(
+            IJsonSerializer jsonSerializer,
+            ICancellationTokenProvider cancellationTokenProvider,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
+            ILogger<AbpIoApiKeyService> logger)
         {
             JsonSerializer = jsonSerializer;
             RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             _logger = logger;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
         public async Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync(bool invalidateCache = false)
@@ -51,31 +59,10 @@ namespace Volo.Abp.Cli.Licensing
 
             using (var client = new CliHttpClient())
             {
-                var response = await HttpPolicyExtensions
-                    .HandleTransientHttpError()
-                    .OrResult(msg => !msg.IsSuccessStatusCode)
-                    .WaitAndRetryAsync(new[]
-                        {
-                            TimeSpan.FromSeconds(1),
-                            TimeSpan.FromSeconds(3),
-                            TimeSpan.FromSeconds(7)
-                        },
-                        (responseMessage, timeSpan, retryCount, context) =>
-                        {
-                            if (responseMessage.Exception != null)
-                            {
-                                _logger.LogWarning(
-                                    $"{retryCount}. request attempt failed to {url} with an error: \"{responseMessage.Exception.Message}\". " +
-                                    $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
-                            }
-                            else if (responseMessage.Result != null)
-                            {
-                                _logger.LogWarning(
-                                    $"{retryCount}. request attempt failed {url} with {(int)responseMessage.Result.StatusCode}-{responseMessage.Result.ReasonPhrase}. " +
-                                    $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
-                            }
-                        })
-                    .ExecuteAsync(async () => await client.GetAsync(url));
+                var response = await client.GetHttpResponseMessageWithRetryAsync(
+                    url: url,
+                    cancellationToken: CancellationTokenProvider.Token,
+                    logger: _logger);
 
                 if (!response.IsSuccessStatusCode)
                 {

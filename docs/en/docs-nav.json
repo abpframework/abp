@@ -353,6 +353,10 @@
               "path": "UI/Angular/Config-State.md"
             },
             {
+              "text": "Modifying the Menu",
+              "path": "UI/Angular/Modifying-the-Menu.md"
+            },
+            {
               "text": "Component Replacement",
               "path": "UI/Angular/Component-Replacement.md"
             },
@@ -398,7 +402,7 @@
       "text": "Data Access",
       "items": [
         {
-          "text": "Overall", 
+          "text": "Overall",
           "path": "Data-Access.md"
         },
         {

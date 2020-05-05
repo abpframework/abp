@@ -2,59 +2,16 @@
 
 (function ($) {
 
-    /************************************************************************
-    * RECORD-ACTIONS extension for datatables                               
-     ---------------------------------------------------------------
-    * SINGLE BUTTON USAGE (creates the given JQuery element)
-       {
-            targets: 0,  //optional
-            rowAction: 
-            {
-                element: $("<button/>")
-                    .addClass("btn btn-primary btn-sm m-btn--icon")
-                    .text("My button")
-                    .prepend($("<i/>").addClass("la la-sign-in"))
-                    .click(function () {
-                        console.log($(this).data());
-                    })
-            },
-        },
+    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
 
-     ---------------------------------------------------------------
-     * LIST OF ITEMS USAGE
-       {
-           targets: 0, //optional
-           rowAction: 
-           {
-                text: 'My actions', //optional. default value: Actions
-                icon: 'bolt' //optional. default value: cog. See fa icon set https://fontawesome.com/v4.7.0/icons/
-                items:
-                    [
-                        {
-                            text: "My first action", //mandatory
-                            icon: "thumbs-o-down",  //optional.
-                            visible: true //optional. default value: true. Accepts boolean returning function too. Eg: function(){ return true/false;} ,
-                            action: function (data) {
-                                console.log(data.record);
-                            }
-                        },
-                         {
-                            text: "My second action",
-                            icon: "thumbs-o-up",
-                            visible: true, 
-                            action: function (data) {
-                                console.log(data.record);
-                            }
-                        }
-                    ]
-           }
-        },
-    *************************************************************************/
     var localize = function (key) {
         return abp.localization.getResource('AbpUi')(key);
     };
 
-    var recordActions = function () {
+    /************************************************************************
+    * RECORD-ACTIONS extension for datatables                                         *
+    *************************************************************************/
+    (function () {
         if (!$.fn.dataTableExt) {
             return;
         }
@@ -117,7 +74,7 @@
                 .addClass('action-button');
 
             var $dropdownButton = $('<button/>');
-            
+
             if (field.icon !== undefined) {
                 if (field.icon) {
                     $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
@@ -267,14 +224,12 @@
                 }
             });
 
-    }();
+    })();
 
     /************************************************************************
     * AJAX extension for datatables                                         *
     *************************************************************************/
-    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
-
-    var ajaxActions = function () {
+    (function () {
         datatables.createAjax = function (serverMethod, inputAction) {
             return function (requestData, callback, settings) {
                 var input = inputAction ? inputAction() : {};
@@ -318,14 +273,14 @@
                 }
             };
         };
-    }();
+    })();
 
     /************************************************************************
     * Configuration/Options normalizer for datatables                       *
     *************************************************************************/
-    var optionNormalizer = function () {
+    (function () {
 
-        var customizeRowActionColumn = function(column) {
+        var customizeRowActionColumn = function (column) {
             column.data = null;
             column.orderable = false;
             column.defaultContent = "";
@@ -336,6 +291,9 @@
         };
 
         datatables.normalizeConfiguration = function (configuration) {
+
+            configuration.scrollX = true;
+
             for (var i = 0; i < configuration.columnDefs.length; i++) {
                 var column = configuration.columnDefs[i];
                 if (!column.targets) {
@@ -369,6 +327,6 @@
             return configuration;
         };
 
-    }();
+    })();
 
 })(jQuery);
