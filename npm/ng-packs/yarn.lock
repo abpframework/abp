@@ -9,7 +9,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@abp/ng.account@~2.6.2":
+"@abp/ng.account@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@abp/ng.account/-/ng.account-2.6.2.tgz#aac921c49bcd8cdec506bd27d2546193416ea187"
   integrity sha512-s3gLSqNdCW6D+DvuML+aGFT8braCfSXUbxvJ1WRCovd2Ec0jNxPBKj84zgYPYEb3smD294DcXxNx36jtJK+1OA==
@@ -18,7 +18,7 @@
     "@abp/ng.theme.shared" "^2.6.2"
     tslib "^1.9.0"
 
-"@abp/ng.core@^2.6.2":
+"@abp/ng.core@^2.6.2", "@abp/ng.core@~2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@abp/ng.core/-/ng.core-2.6.2.tgz#d0e4f6666a9a207fc7425001449bea2cdfe93522"
   integrity sha512-e7c82d9VF20d4JFUkyzT5iTqGKnkq5FBHdv6IW6lsVyuz2Zf/p4wNtKATRr2ntM7qNIjIQebtGNFyxxX4nmL+w==
@@ -50,7 +50,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@abp/ng.identity@~2.6.2":
+"@abp/ng.identity@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@abp/ng.identity/-/ng.identity-2.6.2.tgz#14f83305415d27b67d01405e582978682cfd7f22"
   integrity sha512-wzR/QFoSSRhIxfH91QsTSCc0rBsFfsg8aiP5xPheNx3/lZygCnMogH3blRgLiNIoyxuG00MTfp+e9lFIBfDnbQ==
@@ -75,7 +75,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@abp/ng.setting-management@~2.6.2":
+"@abp/ng.setting-management@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@abp/ng.setting-management/-/ng.setting-management-2.6.2.tgz#f49d361ed8412380fdf2173f28b890115748a52b"
   integrity sha512-0VdGa+t8lEZRsUdKL1EHoZei+ZCDMTu4n3UvXvD0OzRJyYPUjHRrMSSOYifuN4gPatluIe0E2I+tO3lQ3/2tjw==
@@ -91,7 +91,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@abp/ng.tenant-management@~2.6.2":
+"@abp/ng.tenant-management@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management/-/ng.tenant-management-2.6.2.tgz#6be284fe6691946e2e6766e34ae958d7d2ec5e3a"
   integrity sha512-BGARok01Eqn1kEltOwjwIpMJ8LD0jtYfbSbnO8V9TRg7f4ZEqFmfXudOIluDIwHjSEkNXk+Cs0/iV53lyi5+lg==
@@ -101,7 +101,7 @@
     "@abp/ng.theme.shared" "^2.6.2"
     tslib "^1.9.0"
 
-"@abp/ng.theme.basic@~2.6.2":
+"@abp/ng.theme.basic@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@abp/ng.theme.basic/-/ng.theme.basic-2.6.2.tgz#4b0414411e164885b8c467b04d635a0a3c81bd01"
   integrity sha512-qgA4hh7ipIWY88JOqjChjoJgFB0csqXbwdb/pabrsFoHYuiFVT3cqvHq6jMfKQHEPBJSEnl6/GUIm+26DQ5eDw==
@@ -122,7 +122,7 @@
     chart.js "^2.9.3"
     tslib "^1.9.0"
 
-"@abp/utils@^2.6.0":
+"@abp/utils@^2.6.0", "@abp/utils@~2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-2.6.2.tgz#dba9e7c0aa1531fae6c5ff22fcbdfb4d98c576e3"
   integrity sha512-MqExfPA4FRYORsskVG7kbkAwzs9z4XaMaZ75XkoahD+FyZtm1e0miEEoDvwrdye9jgL/FrWeShWNE49GY7PvpA==
@@ -2129,10 +2129,10 @@
     tree-kill "1.2.2"
     webpack-sources "1.4.3"
 
-"@ngx-validate/core@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.7.tgz#35a4364e8c8bb43ce1731e8d681ce1ab307c5955"
-  integrity sha512-APT7kstDaJ0JkC6cDkypbVSXAOAEyPTQ9P8DjEI1szi+Xzuz69XLASK3NdTYjFwogWevhYXoYRaR2Bq9iWzl+g==
+"@ngx-validate/core@^0.0.7", "@ngx-validate/core@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.8.tgz#8577405eb1af0f5002cdda7a86fbcda56280f116"
+  integrity sha512-caIG5ao76Xhf7T+pNA8crnpAwK0yqj3i0OAUGZRUq1W+kNgz+ZnrSd4F9an/W4g+38u/8gfUVvsfsm07ju6qYA==
   dependencies:
     tslib "^1.9.0"
 
