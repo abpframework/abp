@@ -217,8 +217,31 @@ You can also check history for an entity when you click to the actions menu for 
 
 ![tenant-entity-changes](tenant-entity-changes.png)
 
-### Samples
+### More Samples
 
-We are creating more advanced sample applications built with the ABP Commercial.
+We are creating more advanced sample applications built with the ABP Commercial. Easy CRM is one of them which will be available in a few days to the commercial customers.
 
-More Modules
+Here, a screenshot from the Easy CRM dashboard:
+
+![easy-crm](easy-crm.png)
+
+It has accounts, contacts, product groups, products, orders and so on.
+
+### New Modules
+
+We continue to improve existing modules and creating new modules. In addition to the new [text template management](https://docs.abp.io/en/commercial/latest/modules/text-template-management) module introduced above;
+
+* We've recently released a [payment module](https://commercial.abp.io/modules/Volo.Payment) that currently works with PayU and 2Checkout payment gateways. More gateways will be added by the time.
+* We've created a simple [Twilio SMS integration](https://docs.abp.io/en/commercial/latest/modules/twilio-sms) module to send SMS over the Twilio.
+* We are working on a **chat module** that is currently being developed and will be available in the next weeks.
+* We are working on the **organization unit management** system for the identity module to create hierarchical organization units (domain layer will be open source & free).
+
+More modules, theme and tooling options are being developed for the ABP Commercial and the ABP Framework.
+
+## ABP Framework vs ABP Commercial
+
+We ([Volosoft](https://volosoft.com/) - the core team behind the ABP.IO platform), are spending almost equal time on the ABP Framework and the ABP Commercial and we consider the ABP.IO platform as a whole.
+
+[ABP Framework](https://abp.io/) provides all the infrastructure and application independent framework features to make you more productive, focus on your own business code and implement software development best practices. It provides you a well defined and comfortable development experience without repeating yourself.
+
+[ABP Commercial](https://commercial.abp.io/) provides pre-built functionalities, themes and tooling to save your time if your requirements involve these functionalities in addition to the premium support for the framework and the pre-built modules.
