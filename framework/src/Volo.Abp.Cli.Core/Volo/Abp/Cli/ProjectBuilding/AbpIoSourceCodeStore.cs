@@ -199,7 +199,6 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error occured while getting the NuGet version from {0} : {1}", url, ex.Message);
                 return null;
             }
         }
