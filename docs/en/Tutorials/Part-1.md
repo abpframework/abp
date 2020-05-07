@@ -970,6 +970,7 @@ export class BooksState {
 }
 ```
 * We added the book property to BooksStateModel model.
+* We added `@Injectable()` decorator to BookState class (Regquired for Ivy to work properly).
 * We added the `GetBooks` action that retrieves the books data via `BooksService` that generated via ABP CLI and patches the state.
 * `NGXS` requires to return the observable without subscribing it in the get function.
 
