@@ -2,10 +2,11 @@
   <ng-container
     *ngFor="let element of rightPartElements; trackBy: trackByFn"
     [ngTemplateOutlet]="element"
+    [ngTemplateOutletContext]="{ smallScreen: smallScreen }"
   ></ng-container>
 </ul>
 
-<ng-template #language>
+<ng-template #language let-smallScreen="smallScreen">
   <li *ngIf="(dropdownLanguages$ | async)?.length > 0" class="nav-item">
     <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">
       <a
@@ -37,7 +38,7 @@
   </li>
 </ng-template>
 
-<ng-template #currentUser>
+<ng-template #currentUser let-smallScreen="smallScreen">
   <li class="nav-item">
     <ng-template #loginBtn>
       <a role="button" class="nav-link" routerLink="/account/login">{{
