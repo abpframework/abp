@@ -48,37 +48,31 @@
         <div class="p-5 card-body">
             @foreach (var docs in Model.SearchOutputs)
             {
-                <div class="media text-muted">
-                    <div class="media-body pb-3 small">
-                        <div class="list-group">
-
-                            @functions
+                <div class="pb-4 small">
+                    @functions
                                 {
-                                string RemoveFileExtensionFromPath(string path)
-                                {
-                                    if (path == null)
-                                    {
-                                        return null;
-                                    }
-
-                                    return path.EndsWith("." + @Model.Project.Format)
-                                        ? path.Left(path.Length - Model.Project.Format.Length - 1)
-                                        : path;
-                                }
+                        string RemoveFileExtensionFromPath(string path)
+                        {
+                            if (path == null)
+                            {
+                                return null;
                             }
 
-                            <h5 class="mb-3">
-                                <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
-                                    @RemoveFileExtensionFromPath(docs.Name)
-                                </a>
-                            </h5>
-                            <div class="mb-4">
-                                @foreach (var highlight in docs.Highlight)
-                                {
-                                    <p class=" ">@Html.Raw(highlight)</p>
-                                }
-                            </div>
-                        </div>
+                            return path.EndsWith("." + @Model.Project.Format)
+                                ? path.Left(path.Length - Model.Project.Format.Length - 1)
+                                : path;
+                        }
+                    } 
+                    <h5 class="mb-3">
+                        <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
+                            @RemoveFileExtensionFromPath(docs.Name)
+                        </a>
+                    </h5>
+                    <div class="mb-4">
+                        @foreach (var highlight in docs.Highlight)
+                        {
+                            <p class="mb-2">@Html.Raw(highlight)</p>
+                        }
                     </div>
                 </div>
             }
