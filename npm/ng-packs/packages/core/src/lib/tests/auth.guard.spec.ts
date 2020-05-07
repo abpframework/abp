@@ -10,7 +10,7 @@ describe('AuthGuard', () => {
   let guard: AuthGuard;
   const createService = createServiceFactory({
     service: AuthGuard,
-    mocks: [OAuthService, Router],
+    mocks: [OAuthService],
     imports: [RouterModule.forRoot([{ path: '', component: RouterOutletComponent }])],
     declarations: [RouterOutletComponent],
     providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
@@ -26,13 +26,10 @@ describe('AuthGuard', () => {
     expect(guard.canActivate(null, null)).toBe(true);
   });
 
-  it('should return navigate to login page with redirectUrl state', () => {
+  it('should return url tree when user not logged in', () => {
     const router = spectator.get(Router);
+    const expectedUrlTree = router.createUrlTree(['/account/login'], { state: { redirectUrl: '/' } });
     spectator.get(OAuthService).hasValidAccessToken.andReturn(false);
-
-    expect(guard.canActivate(null, { url: '/' } as any)).toBe(true);
-    expect(router.navigate).toHaveBeenCalledWith(['/account/login'], {
-      state: { redirectUrl: '/' },
-    });
+    expect(guard.canActivate(null, { url: '/' } as any) as UrlTree).toEqual(expectedUrlTree);
   });
 });

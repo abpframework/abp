@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Services;
-using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 using Volo.Abp.Authorization;
 using Volo.Abp.Features;
@@ -31,7 +30,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly ISettingDefinitionManager _settingDefinitionManager;
         private readonly IFeatureDefinitionManager _featureDefinitionManager;
         private readonly ILanguageProvider _languageProvider;
-        private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
 
         public AbpApplicationConfigurationAppService(
             IOptions<AbpLocalizationOptions> localizationOptions,
@@ -43,8 +41,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             ISettingProvider settingProvider,
             ISettingDefinitionManager settingDefinitionManager,
             IFeatureDefinitionManager featureDefinitionManager,
-            ILanguageProvider languageProvider,
-            ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService)
+            ILanguageProvider languageProvider)
         {
             _serviceProvider = serviceProvider;
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
@@ -54,7 +51,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _settingDefinitionManager = settingDefinitionManager;
             _featureDefinitionManager = featureDefinitionManager;
             _languageProvider = languageProvider;
-            _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
             _localizationOptions = localizationOptions.Value;
             _multiTenancyOptions = multiTenancyOptions.Value;
         }
@@ -63,9 +59,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         {
             //TODO: Optimize & cache..?
 
-            Logger.LogDebug("Executing AbpApplicationConfigurationAppService.GetAsync()...");
-
-            var result = new ApplicationConfigurationDto
+            return new ApplicationConfigurationDto
             {
                 Auth = await GetAuthConfigAsync(),
                 Features = await GetFeaturesConfigAsync(),
@@ -73,16 +67,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 CurrentUser = GetCurrentUser(),
                 Setting = await GetSettingConfigAsync(),
                 MultiTenancy = GetMultiTenancy(),
-                CurrentTenant = GetCurrentTenant(),
-                ObjectExtensions = _cachedObjectExtensionsDtoService.Get()
+                CurrentTenant = GetCurrentTenant()
+
             };
-
-            Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetAsync().");
-
-            return result;
         }
 
-        protected virtual CurrentTenantDto GetCurrentTenant()
+        protected  virtual  CurrentTenantDto GetCurrentTenant()
         {
             return new CurrentTenantDto()
             {
@@ -113,13 +103,19 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         protected virtual async Task<ApplicationAuthConfigurationDto> GetAuthConfigAsync()
         {
+            Logger.LogDebug("Executing AbpApplicationConfigurationAppService.GetAuthConfigAsync()");
+
             var authConfig = new ApplicationAuthConfigurationDto();
 
             var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
 
+            Logger.LogDebug($"GetPoliciesNamesAsync returns {policyNames.Count} items.");
+
             foreach (var policyName in policyNames)
             {
                 authConfig.Policies[policyName] = true;
+
+                Logger.LogDebug($"_authorizationService.IsGrantedAsync? {policyName}");
 
                 if (await _authorizationService.IsGrantedAsync(policyName))
                 {
@@ -127,11 +123,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 }
             }
 
+            Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetAuthConfigAsync()");
+
             return authConfig;
         }
 
         protected virtual async Task<ApplicationLocalizationConfigurationDto> GetLocalizationConfigAsync()
         {
+            Logger.LogDebug("Executing AbpApplicationConfigurationAppService.GetLocalizationConfigAsync()");
+
             var localizationConfig = new ApplicationLocalizationConfigurationDto();
 
             localizationConfig.Languages.AddRange(await _languageProvider.GetLanguagesAsync());
@@ -154,12 +154,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
             localizationConfig.CurrentCulture = GetCurrentCultureInfo();
 
-            if (_localizationOptions.DefaultResourceType != null)
-            {
-                localizationConfig.DefaultResourceName = LocalizationResourceNameAttribute.GetName(
-                    _localizationOptions.DefaultResourceType
-                );
-            }
+            Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetLocalizationConfigAsync()");
 
             return localizationConfig;
         }
@@ -191,6 +186,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         private async Task<ApplicationSettingConfigurationDto> GetSettingConfigAsync()
         {
+            Logger.LogDebug("Executing AbpApplicationConfigurationAppService.GetSettingConfigAsync()");
+
             var result = new ApplicationSettingConfigurationDto
             {
                 Values = new Dictionary<string, string>()
@@ -206,11 +203,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name);
             }
 
+            Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetSettingConfigAsync()");
+
             return result;
         }
 
         protected virtual async Task<ApplicationFeatureConfigurationDto> GetFeaturesConfigAsync()
         {
+            Logger.LogDebug("Executing AbpApplicationConfigurationAppService.GetFeaturesConfigAsync()");
+
             var result = new ApplicationFeatureConfigurationDto();
 
             foreach (var featureDefinition in _featureDefinitionManager.GetAll())
@@ -222,6 +223,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
                 result.Values[featureDefinition.Name] = await FeatureChecker.GetOrNullAsync(featureDefinition.Name);
             }
+
+            Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetFeaturesConfigAsync()");
 
             return result;
         }

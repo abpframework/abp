@@ -3,8 +3,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace BackendAdminApp.Host
 {
-    public class BrandingProvider : DefaultBrandingProvider, ISingletonDependency
+    public class BrandingProvider : IBrandingProvider, ISingletonDependency
     {
-        public override string AppName => "Backend Admin App";
+        public string AppName => "Backend Admin App";
+        public string LogoUrl => null;
     }
 }

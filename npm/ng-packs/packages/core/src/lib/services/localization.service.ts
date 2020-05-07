@@ -1,11 +1,10 @@
 import { Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
 import { ConfigState } from '../states/config.state';
 import { registerLocale } from '../utils/initial-utils';
 import { Config } from '../models/config';
-import { SetLanguage } from '../actions/session.actions';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
 
@@ -19,7 +18,6 @@ export class LocalizationService {
   }
 
   constructor(
-    private actions: Actions,
     private store: Store,
     private router: Router,
     private ngZone: NgZone,
@@ -28,14 +26,6 @@ export class LocalizationService {
     otherInstance: LocalizationService,
   ) {
     if (otherInstance) throw new Error('LocalizationService should have only one instance.');
-
-    this.listenToSetLanguage();
-  }
-
-  private listenToSetLanguage() {
-    this.actions
-      .pipe(ofActionSuccessful(SetLanguage))
-      .subscribe(({ payload }) => this.registerLocale(payload));
   }
 
   setRouteReuse(reuse: ShouldReuseRoute) {

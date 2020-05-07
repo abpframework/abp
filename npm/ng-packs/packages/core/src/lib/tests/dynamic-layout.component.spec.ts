@@ -7,7 +7,6 @@ import { eLayoutType } from '../enums';
 import { ABP } from '../models';
 import { ConfigState, ReplaceableComponentsState } from '../states';
 import { ApplicationConfigurationService } from '../services';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'abp-layout-application',
@@ -93,7 +92,7 @@ describe('DynamicLayoutComponent', () => {
     component: RouterOutletComponent,
     stubsEnabled: false,
     declarations: [DummyComponent, DynamicLayoutComponent],
-    mocks: [ApplicationConfigurationService, HttpClient],
+    mocks: [ApplicationConfigurationService],
     imports: [
       RouterModule,
       DummyLayoutModule,

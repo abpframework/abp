@@ -25,13 +25,17 @@ namespace Volo.Docs.Admin.Documents
         private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDistributedCache<LanguageConfig> _languageCache;
+        private readonly IDistributedCache<DocumentResource> _resourceCache;
+        private readonly IDocumentFullSearch _documentFullSearch;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDistributedCache<LanguageConfig> languageCache)
+            IDistributedCache<LanguageConfig> languageCache,
+            IDistributedCache<DocumentResource> resourceCache,
+            IDocumentFullSearch documentFullSearch)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
@@ -39,6 +43,8 @@ namespace Volo.Docs.Admin.Documents
             _documentUpdateCache = documentUpdateCache;
             _versionCache = versionCache;
             _languageCache = languageCache;
+            _resourceCache = resourceCache;
+            _documentFullSearch = documentFullSearch;
 
             LocalizationResource = typeof(DocsResource);
         }
@@ -117,6 +123,32 @@ namespace Volo.Docs.Admin.Documents
                 sourceDocument.LanguageCode, sourceDocument.Version);
             await _documentRepository.InsertAsync(sourceDocument, true);
             await UpdateDocumentUpdateInfoCache(sourceDocument);
+        }
+
+        public async Task ReindexAsync()
+        {
+            var docs = await _documentRepository.GetListAsync();
+            var projects = await _projectRepository.GetListAsync();
+            foreach (var doc in docs)
+            {
+                var project = projects.FirstOrDefault(x => x.Id == doc.ProjectId);
+                if (project == null)
+                {
+                    continue;
+                }
+
+                if (doc.FileName == project.NavigationDocumentName)
+                {
+                    continue;
+                }
+
+                if (doc.FileName == project.ParametersDocumentName)
+                {
+                    continue;
+                }
+
+                await _documentFullSearch.AddOrUpdateAsync(doc);
+            }
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

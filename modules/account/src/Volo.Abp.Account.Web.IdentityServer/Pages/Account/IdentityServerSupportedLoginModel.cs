@@ -29,12 +29,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public IdentityServerSupportedLoginModel(
             IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions,
-            IIdentityServerInteractionService interaction,
-            IClientStore clientStore,
+            IOptions<AbpAccountOptions> accountOptions, 
+            IIdentityServerInteractionService interaction, 
+            IClientStore clientStore, 
             IEventService identityServerEvents)
             :base(
-                schemeProvider,
+                schemeProvider, 
                 accountOptions)
         {
             Interaction = interaction;
@@ -95,6 +95,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return Page();
         }
 
+        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public override async Task<IActionResult> OnPostAsync(string action)
         {
             if (action == "Cancel")
@@ -115,7 +116,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ValidateModel();
 
             ExternalProviders = await GetExternalProviders();
-
+            
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
@@ -165,6 +166,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
 
+        [UnitOfWork]
         public override async Task<IActionResult> OnPostExternalLogin(string provider)
         {
             if (AccountOptions.WindowsAuthenticationSchemeName == provider)

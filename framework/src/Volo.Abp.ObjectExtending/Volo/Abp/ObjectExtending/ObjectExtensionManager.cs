@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using JetBrains.Annotations;
@@ -11,15 +10,11 @@ namespace Volo.Abp.ObjectExtending
     {
         public static ObjectExtensionManager Instance { get; set; } = new ObjectExtensionManager();
 
-        [NotNull]
-        public ConcurrentDictionary<object, object> Configuration { get; }
-
         protected Dictionary<Type, ObjectExtensionInfo> ObjectsExtensions { get; }
-        
+
         protected internal ObjectExtensionManager()
         {
             ObjectsExtensions = new Dictionary<Type, ObjectExtensionInfo>();
-            Configuration = new ConcurrentDictionary<object, object>();
         }
 
         [NotNull]

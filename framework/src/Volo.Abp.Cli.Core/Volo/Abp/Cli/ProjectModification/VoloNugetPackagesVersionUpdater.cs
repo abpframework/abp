@@ -42,9 +42,8 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual async Task UpdateInternalAsync(string projectPath, bool includePreviews = false, bool switchToStable = false)
         {
             var fileContent = File.ReadAllText(projectPath);
-            var updatedContent = await UpdateVoloPackagesAsync(fileContent, includePreviews, switchToStable);
 
-            File.WriteAllText(projectPath, updatedContent);
+            File.WriteAllText(projectPath, await UpdateVoloPackagesAsync(fileContent, includePreviews, switchToStable));
         }
 
         private async Task<string> UpdateVoloPackagesAsync(string content, bool includePreviews = false, bool switchToStable = false)
@@ -75,13 +74,16 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         var versionAttribute = package.Attributes["Version"];
                         var currentVersion = versionAttribute.Value;
-                        var currentSemanticVersion = SemanticVersion.Parse(currentVersion);
+                        var packageVersion = SemanticVersion.Parse(currentVersion);
 
-                        Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, currentSemanticVersion);
+                        Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, packageVersion);
+
 
                         if (includePreviews || (currentVersion.Contains("-preview") && !switchToStable))
                         {
-                            var latestVersion = await GetLatestVersionFromMyGet(packageId);
+                            var latestVersion = (await _myGetPackageListFinder.GetPackages()).Packages
+                                .FirstOrDefault(p => p.Id == packageId)
+                                ?.Versions.LastOrDefault();
 
                             if (currentVersion != latestVersion)
                             {
@@ -97,14 +99,14 @@ namespace Volo.Abp.Cli.ProjectModification
                         {
                             var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId);
 
-                            if (latestVersion != null && (currentVersion.Contains("-preview") || currentSemanticVersion < latestVersion))
+                            if (latestVersion != null && (currentVersion.Contains("-preview") || packageVersion < latestVersion))
                             {
-                                Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentSemanticVersion.ToString(), latestVersion.ToString());
+                                Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, packageVersion.ToString(), latestVersion.ToString());
                                 versionAttribute.Value = latestVersion.ToString();
                             }
                             else
                             {
-                                Logger.LogInformation("Package: \"{0}-v{1}\" is up to date.", packageId, currentSemanticVersion);
+                                Logger.LogInformation("Package: \"{0}-v{1}\" is up to date.", packageId, packageVersion);
                             }
                         }
                     }
@@ -114,18 +116,11 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             catch (Exception ex)
             {
-                Logger.LogError("Cannot update Volo.* packages! An error occured while updating the package \"{0}\". Error: {1}", packageId, ex.Message);
+                Logger.LogError("Cannot update volo packages! An error occured while updating the package \"{0}\". Error: {1}", packageId, ex.Message);
                 Logger.LogException(ex);
             }
 
             return await Task.FromResult(content);
-        }
-
-        private async Task<string> GetLatestVersionFromMyGet(string packageId)
-        {
-            var myGetPack = await _myGetPackageListFinder.GetPackagesAsync();
-
-            return myGetPack.Packages.FirstOrDefault(p => p.Id == packageId)?.Versions.LastOrDefault();
         }
     }
 }

@@ -25,9 +25,8 @@ namespace Volo.Abp.Domain.Entities
 
         protected AggregateRoot()
         {
-            ConcurrencyStamp = Guid.NewGuid().ToString("N");
             ExtraProperties = new Dictionary<string, object>();
-            this.SetDefaultsForExtraProperties();
+            ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
 
         protected virtual void AddLocalEvent(object eventData)
@@ -86,17 +85,15 @@ namespace Volo.Abp.Domain.Entities
 
         protected AggregateRoot()
         {
-            ConcurrencyStamp = Guid.NewGuid().ToString("N");
             ExtraProperties = new Dictionary<string, object>();
-            this.SetDefaultsForExtraProperties();
+            ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
 
         protected AggregateRoot(TKey id)
             : base(id)
         {
-            ConcurrencyStamp = Guid.NewGuid().ToString("N");
             ExtraProperties = new Dictionary<string, object>();
-            this.SetDefaultsForExtraProperties();
+            ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
 
         protected virtual void AddLocalEvent(object eventData)

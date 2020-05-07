@@ -4,29 +4,12 @@ using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Data;
 using Volo.Abp.DynamicProxy;
-using Volo.Abp.Validation;
 
 namespace Volo.Abp.ObjectExtending
 {
     public static class ExtensibleObjectValidator
     {
-        public static void CheckValue(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] string propertyName,
-            [CanBeNull] object value)
-        {
-            var validationErrors = GetValidationErrors(
-                extensibleObject,
-                propertyName,
-                value
-            );
-
-            if (validationErrors.Any())
-            {
-                throw new AbpValidationException(validationErrors);
-            }
-        }
-
+        [NotNull]
         public static bool IsValid(
             [NotNull] IHasExtraProperties extensibleObject,
             [CanBeNull] ValidationContext objectValidationContext = null)
@@ -37,50 +20,16 @@ namespace Volo.Abp.ObjectExtending
             ).Any();
         }
 
-        public static bool IsValid(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] string propertyName,
-            [CanBeNull] object value,
-            [CanBeNull] ValidationContext objectValidationContext = null)
-        {
-            return GetValidationErrors(
-                extensibleObject,
-                propertyName,
-                value,
-                objectValidationContext
-            ).Any();
-        }
-
         [NotNull]
         public static List<ValidationResult> GetValidationErrors(
             [NotNull] IHasExtraProperties extensibleObject,
             [CanBeNull] ValidationContext objectValidationContext = null)
         {
             var validationErrors = new List<ValidationResult>();
-
+            
             AddValidationErrors(
                 extensibleObject,
                 validationErrors,
-                objectValidationContext
-            );
-
-            return validationErrors;
-        }
-
-        [NotNull]
-        public static List<ValidationResult> GetValidationErrors(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] string propertyName,
-            [CanBeNull] object value,
-            [CanBeNull] ValidationContext objectValidationContext = null)
-        {
-            var validationErrors = new List<ValidationResult>();
-
-            AddValidationErrors(
-                extensibleObject,
-                validationErrors,
-                propertyName,
-                value,
                 objectValidationContext
             );
 
@@ -129,55 +78,10 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
-        public static void AddValidationErrors(
-            [NotNull] IHasExtraProperties extensibleObject,
-            [NotNull] List<ValidationResult> validationErrors,
-            [NotNull] string propertyName,
-            [CanBeNull] object value,
-            [CanBeNull] ValidationContext objectValidationContext = null)
-        {
-            Check.NotNull(extensibleObject, nameof(extensibleObject));
-            Check.NotNull(validationErrors, nameof(validationErrors));
-            Check.NotNullOrWhiteSpace(propertyName, nameof(propertyName));
-
-            if (objectValidationContext == null)
-            {
-                objectValidationContext = new ValidationContext(
-                    extensibleObject,
-                    null,
-                    new Dictionary<object, object>()
-                );
-            }
-
-            var objectType = ProxyHelper.UnProxy(extensibleObject).GetType();
-
-            var objectExtensionInfo = ObjectExtensionManager.Instance
-                .GetOrNull(objectType);
-
-            if (objectExtensionInfo == null)
-            {
-                return;
-            }
-
-            var property = objectExtensionInfo.GetPropertyOrNull(propertyName);
-            if (property == null)
-            {
-                return;
-            }
-
-            AddPropertyValidationErrors(
-                extensibleObject,
-                validationErrors,
-                objectValidationContext,
-                property,
-                value
-            );
-        }
-
         private static void AddPropertyValidationErrors(
-            IHasExtraProperties extensibleObject,
+            IHasExtraProperties extensibleObject, 
             List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
+            ValidationContext objectValidationContext, 
             ObjectExtensionInfo objectExtensionInfo)
         {
             var properties = objectExtensionInfo.GetProperties();
@@ -188,50 +92,38 @@ namespace Volo.Abp.ObjectExtending
 
             foreach (var property in properties)
             {
-                AddPropertyValidationErrors(
-                    extensibleObject,
-                    validationErrors,
-                    objectValidationContext,
-                    property,
-                    extensibleObject.GetProperty(property.Name)
-                );
+                AddPropertyValidationErrors(extensibleObject, validationErrors, objectValidationContext, property);
             }
         }
 
         private static void AddPropertyValidationErrors(
-            IHasExtraProperties extensibleObject,
+            IHasExtraProperties extensibleObject, 
             List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
-            ObjectExtensionPropertyInfo property,
-            object value)
+            ValidationContext objectValidationContext, 
+            ObjectExtensionPropertyInfo property)
         {
             AddPropertyValidationAttributeErrors(
                 extensibleObject,
                 validationErrors,
                 objectValidationContext,
-                property,
-                value
+                property
             );
 
             ExecuteCustomPropertyValidationActions(
                 extensibleObject,
                 validationErrors,
                 objectValidationContext,
-                property,
-                value
+                property
             );
         }
 
         private static void AddPropertyValidationAttributeErrors(
-            IHasExtraProperties extensibleObject,
+            IHasExtraProperties extensibleObject, 
             List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
-            ObjectExtensionPropertyInfo property,
-            object value)
+            ValidationContext objectValidationContext, 
+            ObjectExtensionPropertyInfo property)
         {
-            var validationAttributes = property.GetValidationAttributes();
-
-            if (!validationAttributes.Any())
+            if (!property.ValidationAttributes.Any())
             {
                 return;
             }
@@ -242,10 +134,10 @@ namespace Volo.Abp.ObjectExtending
                 MemberName = property.Name
             };
 
-            foreach (var attribute in validationAttributes)
+            foreach (var attribute in property.ValidationAttributes)
             {
                 var result = attribute.GetValidationResult(
-                    value,
+                    extensibleObject.GetProperty(property.Name),
                     propertyValidationContext
                 );
 
@@ -260,8 +152,7 @@ namespace Volo.Abp.ObjectExtending
             IHasExtraProperties extensibleObject,
             List<ValidationResult> validationErrors,
             ValidationContext objectValidationContext,
-            ObjectExtensionPropertyInfo property,
-            object value)
+            ObjectExtensionPropertyInfo property)
         {
             if (!property.Validators.Any())
             {
@@ -273,7 +164,7 @@ namespace Volo.Abp.ObjectExtending
                 extensibleObject,
                 validationErrors,
                 objectValidationContext,
-                value
+                extensibleObject.GetProperty(property.Name)
             );
 
             foreach (var validator in property.Validators)
@@ -283,9 +174,9 @@ namespace Volo.Abp.ObjectExtending
         }
 
         private static void ExecuteCustomObjectValidationActions(
-            IHasExtraProperties extensibleObject,
+            IHasExtraProperties extensibleObject, 
             List<ValidationResult> validationErrors,
-            ValidationContext objectValidationContext,
+            ValidationContext objectValidationContext, 
             ObjectExtensionInfo objectExtensionInfo)
         {
             if (!objectExtensionInfo.Validators.Any())

@@ -3,8 +3,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace PublicWebSite.Host
 {
-    public class BrandingProvider : DefaultBrandingProvider, ISingletonDependency
+    public class BrandingProvider : IBrandingProvider, ISingletonDependency
     {
-        public override string AppName => "Public Web Site";
+        public string AppName => "Public Web Site";
+        public string LogoUrl => null;
     }
 }

@@ -2,20 +2,18 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using Volo.Abp.Localization;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
     [Area("Abp")]
     [Route("Abp/Languages/[action]")]
-    [RemoteService(false)]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class AbpLanguagesController : AbpController
     {
         [HttpGet]
         public IActionResult Switch(string culture, string uiCulture = "", string returnUrl = "")
         {
-            if (!CultureHelper.IsValidCultureCode(culture))
+            if (!GlobalizationHelper.IsValidCultureCode(culture))
             {
                 throw new AbpException("Unknown language: " + culture + ". It must be a valid culture!");
             }

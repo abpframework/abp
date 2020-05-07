@@ -44,10 +44,7 @@ namespace Volo.Docs.Markdown
                 languageCode
             );
 
-            var html = _markdownConverter.ConvertToHtml(content);
-
-            return html;
-            //  return HtmlNormalizer.WrapImagesWithinAnchors(html);
+            return _markdownConverter.ConvertToHtml(content);
         }
 
         protected virtual string NormalizeLinks(

@@ -167,8 +167,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 list.Add(new FormGroupItem
                 {
                     HtmlContent = html,
-                    Order = order,
-                    PropertyName = propertyName
+                    Order = order
                 });
             }
         }

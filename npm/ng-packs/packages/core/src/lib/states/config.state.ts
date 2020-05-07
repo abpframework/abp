@@ -1,8 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
-import { of, throwError } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
 import {
   AddRoute,
@@ -10,11 +9,10 @@ import {
   PatchRouteByName,
   SetEnvironment,
 } from '../actions/config.actions';
-import { RestOccurError } from '../actions/rest.actions';
 import { SetLanguage } from '../actions/session.actions';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
+import { ApplicationConfigurationService } from '../services/application-configuration.service';
 import { organizeRoutes } from '../utils/route-utils';
 import { SessionState } from './session.state';
 
@@ -197,37 +195,31 @@ export class ConfigState {
     return selector;
   }
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(
+    private appConfigurationService: ApplicationConfigurationService,
+    private store: Store,
+  ) {}
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
-    const apiName = this.store.selectSnapshot(ConfigState.getDeep('environment.application.name'));
-    const api = this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
-    return this.http
-      .get<ApplicationConfiguration.Response>(`${api}/api/abp/application-configuration`)
-      .pipe(
-        tap(configuration =>
-          patchState({
-            ...configuration,
-          }),
-        ),
-        switchMap(configuration => {
-          let defaultLang: string =
-            configuration.setting.values['Abp.Localization.DefaultLanguage'];
-
-          if (defaultLang.includes(';')) {
-            defaultLang = defaultLang.split(';')[0];
-          }
-
-          return this.store.selectSnapshot(SessionState.getLanguage)
-            ? of(null)
-            : dispatch(new SetLanguage(defaultLang));
+    return this.appConfigurationService.getConfiguration().pipe(
+      tap(configuration =>
+        patchState({
+          ...configuration,
         }),
-        catchError(err => {
-          dispatch(new RestOccurError(new HttpErrorResponse({ status: 0, error: err })));
-          return throwError(err);
-        }),
-      );
+      ),
+      switchMap(configuration => {
+        let defaultLang: string = configuration.setting.values['Abp.Localization.DefaultLanguage'];
+
+        if (defaultLang.includes(';')) {
+          defaultLang = defaultLang.split(';')[0];
+        }
+
+        return this.store.selectSnapshot(SessionState.getLanguage)
+          ? of(null)
+          : dispatch(new SetLanguage(defaultLang));
+      }),
+    );
   }
 
   @Action(PatchRouteByName)

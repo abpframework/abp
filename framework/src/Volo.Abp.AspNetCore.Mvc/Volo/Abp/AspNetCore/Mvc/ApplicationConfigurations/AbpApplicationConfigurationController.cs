@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 {
-    [Area("abp")]
-    [RemoteService(Name = "abp")]
     [Route("api/abp/application-configuration")]
     public class AbpApplicationConfigurationController : AbpController, IAbpApplicationConfigurationAppService
     {

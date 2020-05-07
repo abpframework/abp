@@ -56,8 +56,6 @@ namespace Volo.Abp.TenantManagement
 
             await TenantRepository.InsertAsync(tenant);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-
             using (CurrentTenant.Change(tenant.Id, tenant.Name))
             {
                 //TODO: Handle database creation?

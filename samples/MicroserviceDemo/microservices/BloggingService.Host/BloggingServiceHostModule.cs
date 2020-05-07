@@ -29,7 +29,6 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Blogging;
 using Volo.Blogging.Blogs;
@@ -50,8 +49,7 @@ namespace BloggingService.Host
         typeof(BloggingApplicationModule),
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule)
+        typeof(AbpAspNetCoreMultiTenancyModule)
         )]
     public class BloggingServiceHostModule : AbpModule
     {
@@ -84,7 +82,7 @@ namespace BloggingService.Host
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
             });
-
+            
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();

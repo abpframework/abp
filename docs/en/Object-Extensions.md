@@ -197,8 +197,8 @@ ObjectExtensionManager.Instance
         "SocialSecurityNumber",
         options =>
         {
-            options.Attributes.Add(new RequiredAttribute());
-            options.Attributes.Add(
+            options.ValidationAttributes.Add(new RequiredAttribute());
+            options.ValidationAttributes.Add(
                 new StringLengthAttribute(32) {
                     MinimumLength = 6 
                 }
@@ -248,12 +248,12 @@ ObjectExtensionManager.Instance
     
     objConfig.AddOrUpdateProperty<string>("Password", propertyConfig =>
     {
-        propertyConfig.Attributes.Add(new RequiredAttribute());
+        propertyConfig.ValidationAttributes.Add(new RequiredAttribute());
     });
 
     objConfig.AddOrUpdateProperty<string>("PasswordRepeat", propertyConfig =>
     {
-        propertyConfig.Attributes.Add(new RequiredAttribute());
+        propertyConfig.ValidationAttributes.Add(new RequiredAttribute());
     });
 
     //Write a common validation logic works on multiple properties

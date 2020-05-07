@@ -32,7 +32,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             IAuditingStore auditingStore,
             IOptions<AbpAuditingOptions> options,
             IClock clock,
-            IJsonSerializer jsonSerializer,
+            IJsonSerializer jsonSerializer, 
             IAuditingHelper auditingHelper)
         {
             _clock = clock;
@@ -241,8 +241,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 }
             }
 
-            var isModified = !(propertyEntry.OriginalValue?.Equals(propertyEntry.CurrentValue) ?? propertyEntry.CurrentValue == null);
-            if (isModified)
+            if (propertyEntry.IsModified)
             {
                 return true;
             }

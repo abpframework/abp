@@ -1,6 +1,5 @@
 import { addAbpRoutes, eLayoutType } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import { eAccountRouteNames } from '@abp/ng.account';
 
 @Injectable({
   providedIn: 'root',
@@ -8,14 +7,14 @@ import { eAccountRouteNames } from '@abp/ng.account';
 export class AccountConfigService {
   constructor() {
     addAbpRoutes({
-      name: eAccountRouteNames.Account,
+      name: 'AbpAccount::Menu:Account',
       path: 'account',
       invisible: true,
       layout: eLayoutType.application,
       children: [
-        { path: 'login', name: eAccountRouteNames.Login, order: 1 },
-        { path: 'register', name: eAccountRouteNames.Register, order: 2 },
-        { path: 'manage-profile', name: eAccountRouteNames.ManageProfile, order: 3 },
+        { path: 'login', name: 'AbpAccount::Login', order: 1 },
+        { path: 'register', name: 'AbpAccount::Register', order: 2 },
+        { path: 'manage-profile', name: 'AbpAccount::ManageYourProfile', order: 3 },
       ],
     });
   }

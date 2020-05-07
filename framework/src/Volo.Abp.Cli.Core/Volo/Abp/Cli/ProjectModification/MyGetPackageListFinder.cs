@@ -20,7 +20,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<MyGetPackageListFinder>.Instance;
         }
 
-        public async Task<MyGetApiResponse> GetPackagesAsync()
+        public async Task<MyGetApiResponse> GetPackages()
         {
             if (_response != null)
             {

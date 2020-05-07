@@ -76,17 +76,10 @@ var abp = abp || {};
     abp.localization.values = {};
 
     abp.localization.localize = function (key, sourceName) {
-        if (sourceName === '_') { //A convention to suppress the localization
-            return key;
-        }
-
         sourceName = sourceName || abp.localization.defaultResourceName;
-        if (!sourceName) {
-            abp.log.warn('Localization source name is not specified and the defaultResourceName was not defined!');
-            return key;
-        }
 
         var source = abp.localization.values[sourceName];
+
         if (!source) {
             abp.log.warn('Could not find localization source: ' + sourceName);
             return key;
@@ -102,29 +95,6 @@ var abp = abp || {};
         copiedArguments[0] = value;
 
         return abp.utils.formatString.apply(this, copiedArguments);
-    };
-
-    abp.localization.isLocalized = function (key, sourceName) {
-        if (sourceName === '_') { //A convention to suppress the localization
-            return true;
-        }
-
-        sourceName = sourceName || abp.localization.defaultResourceName;
-        if (!sourceName) {
-            return false;
-        }
-
-        var source = abp.localization.values[sourceName];
-        if (!source) {
-            return false;
-        }
-
-        var value = source[key];
-        if (value === undefined) {
-            return false;
-        }
-
-        return true;
     };
 
     abp.localization.getResource = function (name) {

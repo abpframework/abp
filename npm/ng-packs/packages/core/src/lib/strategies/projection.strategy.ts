@@ -95,10 +95,7 @@ export class TemplateProjectionStrategy<T extends TemplateRef<any>> extends Proj
 }
 
 export const PROJECTION_STRATEGY = {
-  AppendComponentToBody<T extends Type<unknown>>(
-    component: T,
-    context?: Partial<InferredInstanceOf<T>>,
-  ) {
+  AppendComponentToBody<T extends Type<unknown>>(component: T, context?: InferredInstanceOf<T>) {
     return new RootComponentProjectionStrategy<T>(
       component,
       context && CONTEXT_STRATEGY.Component(context),
@@ -107,7 +104,7 @@ export const PROJECTION_STRATEGY = {
   AppendComponentToContainer<T extends Type<unknown>>(
     component: T,
     containerRef: ViewContainerRef,
-    context?: Partial<InferredInstanceOf<T>>,
+    context?: InferredInstanceOf<T>,
   ) {
     return new ComponentProjectionStrategy<T>(
       component,
@@ -118,7 +115,7 @@ export const PROJECTION_STRATEGY = {
   AppendTemplateToContainer<T extends TemplateRef<unknown>>(
     templateRef: T,
     containerRef: ViewContainerRef,
-    context?: Partial<InferredContextOf<T>>,
+    context?: InferredContextOf<T>,
   ) {
     return new TemplateProjectionStrategy<T>(
       templateRef,
@@ -129,7 +126,7 @@ export const PROJECTION_STRATEGY = {
   PrependComponentToContainer<T extends Type<unknown>>(
     component: T,
     containerRef: ViewContainerRef,
-    context?: Partial<InferredInstanceOf<T>>,
+    context?: InferredInstanceOf<T>,
   ) {
     return new ComponentProjectionStrategy<T>(
       component,
@@ -140,7 +137,7 @@ export const PROJECTION_STRATEGY = {
   PrependTemplateToContainer<T extends TemplateRef<unknown>>(
     templateRef: T,
     containerRef: ViewContainerRef,
-    context?: Partial<InferredContextOf<T>>,
+    context?: InferredContextOf<T>,
   ) {
     return new TemplateProjectionStrategy<T>(
       templateRef,
@@ -151,7 +148,7 @@ export const PROJECTION_STRATEGY = {
   ProjectComponentToContainer<T extends Type<unknown>>(
     component: T,
     containerRef: ViewContainerRef,
-    context?: Partial<InferredInstanceOf<T>>,
+    context?: InferredInstanceOf<T>,
   ) {
     return new ComponentProjectionStrategy<T>(
       component,
@@ -162,7 +159,7 @@ export const PROJECTION_STRATEGY = {
   ProjectTemplateToContainer<T extends TemplateRef<unknown>>(
     templateRef: T,
     containerRef: ViewContainerRef,
-    context?: Partial<InferredContextOf<T>>,
+    context?: InferredContextOf<T>,
   ) {
     return new TemplateProjectionStrategy<T>(
       templateRef,

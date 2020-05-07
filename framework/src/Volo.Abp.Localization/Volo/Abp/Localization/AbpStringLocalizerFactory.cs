@@ -9,12 +9,13 @@ using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.Localization
 {
-    public class AbpStringLocalizerFactory : IStringLocalizerFactory, IAbpStringLocalizerFactoryWithDefaultResourceSupport
+    public class AbpStringLocalizerFactory : IStringLocalizerFactory
     {
-        protected internal AbpLocalizationOptions AbpLocalizationOptions { get; }
-        protected ResourceManagerStringLocalizerFactory InnerFactory { get; }
-        protected IServiceProvider ServiceProvider { get; }
-        protected ConcurrentDictionary<Type, StringLocalizerCacheItem> LocalizerCache { get; }
+        private readonly ResourceManagerStringLocalizerFactory _innerFactory;
+        private readonly AbpLocalizationOptions _abpLocalizationOptions;
+        private readonly IServiceProvider _serviceProvider;
+
+        private readonly ConcurrentDictionary<Type, StringLocalizerCacheItem> _localizerCache;
 
         //TODO: It's better to use decorator pattern for IStringLocalizerFactory instead of getting ResourceManagerStringLocalizerFactory as a dependency.
         public AbpStringLocalizerFactory(
@@ -22,29 +23,29 @@ namespace Volo.Abp.Localization
             IOptions<AbpLocalizationOptions> abpLocalizationOptions,
             IServiceProvider serviceProvider)
         {
-            InnerFactory = innerFactory;
-            ServiceProvider = serviceProvider;
-            AbpLocalizationOptions = abpLocalizationOptions.Value;
+            _innerFactory = innerFactory;
+            _serviceProvider = serviceProvider;
+            _abpLocalizationOptions = abpLocalizationOptions.Value;
 
-            LocalizerCache = new ConcurrentDictionary<Type, StringLocalizerCacheItem>();
+            _localizerCache = new ConcurrentDictionary<Type, StringLocalizerCacheItem>();
         }
 
         public virtual IStringLocalizer Create(Type resourceType)
         {
-            var resource = AbpLocalizationOptions.Resources.GetOrDefault(resourceType);
+            var resource = _abpLocalizationOptions.Resources.GetOrDefault(resourceType);
             if (resource == null)
             {
-                return InnerFactory.Create(resourceType);
+                return _innerFactory.Create(resourceType);
             }
 
-            if (LocalizerCache.TryGetValue(resourceType, out var cacheItem))
+            if (_localizerCache.TryGetValue(resourceType, out var cacheItem))
             {
                 return cacheItem.Localizer;
             }
 
-            lock (LocalizerCache)
+            lock (_localizerCache)
             {
-                return LocalizerCache.GetOrAdd(
+                return _localizerCache.GetOrAdd(
                     resourceType,
                     _ => CreateStringLocalizerCacheItem(resource)
                 ).Localizer;
@@ -53,12 +54,12 @@ namespace Volo.Abp.Localization
 
         private StringLocalizerCacheItem CreateStringLocalizerCacheItem(LocalizationResource resource)
         {
-            foreach (var globalContributor in AbpLocalizationOptions.GlobalContributors)
+            foreach (var globalContributor in _abpLocalizationOptions.GlobalContributors)
             {
                 resource.Contributors.Add((ILocalizationResourceContributor) Activator.CreateInstance(globalContributor));
             }
 
-            using (var scope = ServiceProvider.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
                 var context = new LocalizationResourceInitializationContext(resource, scope.ServiceProvider);
 
@@ -80,7 +81,7 @@ namespace Volo.Abp.Localization
         {
             //TODO: Investigate when this is called?
 
-            return InnerFactory.Create(baseName, location);
+            return _innerFactory.Create(baseName, location);
         }
 
         internal static void Replace(IServiceCollection services)
@@ -89,7 +90,7 @@ namespace Volo.Abp.Localization
             services.AddSingleton<ResourceManagerStringLocalizerFactory>();
         }
 
-        protected class StringLocalizerCacheItem
+        private class StringLocalizerCacheItem
         {
             public AbpDictionaryBasedStringLocalizer Localizer { get; }
 
@@ -97,16 +98,6 @@ namespace Volo.Abp.Localization
             {
                 Localizer = localizer;
             }
-        }
-
-        public IStringLocalizer CreateDefaultOrNull()
-        {
-            if (AbpLocalizationOptions.DefaultResourceType == null)
-            {
-                return null;
-            }
-
-            return Create(AbpLocalizationOptions.DefaultResourceType);
         }
     }
 }

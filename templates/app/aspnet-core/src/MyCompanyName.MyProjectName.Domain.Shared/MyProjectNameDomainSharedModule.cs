@@ -39,8 +39,6 @@ namespace MyCompanyName.MyProjectName
                     .Add<MyProjectNameResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName");
-                
-                options.DefaultResourceType = typeof(MyProjectNameResource);
             });
         }
     }

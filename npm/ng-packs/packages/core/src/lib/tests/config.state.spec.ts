@@ -7,7 +7,6 @@ import { ABP } from '../models';
 import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
-import { HttpClient } from '@angular/common/http';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -105,26 +104,6 @@ export const CONFIG_STATE_DATA = {
         flagIcon: null,
       },
     ],
-    currentCulture: {
-      displayName: 'English',
-      englishName: 'English',
-      threeLetterIsoLanguageName: 'eng',
-      twoLetterIsoLanguageName: 'en',
-      isRightToLeft: false,
-      cultureName: 'en',
-      name: 'en',
-      nativeName: 'English',
-      dateTimeFormat: {
-        calendarAlgorithmType: 'SolarCalendar',
-        dateTimeFormatLong: 'dddd, MMMM d, yyyy',
-        shortDatePattern: 'M/d/yyyy',
-        fullDateTimePattern: 'dddd, MMMM d, yyyy h:mm:ss tt',
-        dateSeparator: '/',
-        shortTimePattern: 'h:mm tt',
-        longTimePattern: 'h:mm:ss tt',
-      },
-    },
-    defaultResourceName: null,
   },
   auth: {
     policies: {
@@ -157,17 +136,19 @@ describe('ConfigState', () => {
   let store: SpyObject<Store>;
   let service: ConfigStateService;
   let state: ConfigState;
+  let appConfigService: SpyObject<ApplicationConfigurationService>;
 
   const createService = createServiceFactory({
     service: ConfigStateService,
-    mocks: [ApplicationConfigurationService, Store, HttpClient],
+    mocks: [ApplicationConfigurationService, Store],
   });
 
   beforeEach(() => {
     spectator = createService();
     store = spectator.get(Store);
     service = spectator.service;
-    state = new ConfigState(spectator.get(HttpClient), store);
+    appConfigService = spectator.get(ApplicationConfigurationService);
+    state = new ConfigState(spectator.get(ApplicationConfigurationService), store);
   });
 
   describe('#getAll', () => {
@@ -302,7 +283,7 @@ describe('ConfigState', () => {
   });
 
   describe('#GetAppConfiguration', () => {
-    it('should call the app-configuration API and patch the state', done => {
+    it('should call the getConfiguration of ApplicationConfigurationService and patch the state', done => {
       let patchStateArg;
       let dispatchArg;
 
@@ -318,8 +299,7 @@ describe('ConfigState', () => {
         dispatchArg = a;
         return of(a);
       });
-      const httpClient = spectator.get(HttpClient);
-      httpClient.get.andReturn(res$);
+      appConfigService.getConfiguration.andReturn(res$);
 
       state.addData({ patchState, dispatch } as any).subscribe();
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
@@ -20,7 +19,5 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         public MultiTenancyInfoDto MultiTenancy { get; set; }
 
         public CurrentTenantDto CurrentTenant { get; set; }
-
-        public ObjectExtensionsDto ObjectExtensions { get; set; }
     }
 }

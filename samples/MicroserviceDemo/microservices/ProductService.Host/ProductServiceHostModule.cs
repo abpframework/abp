@@ -25,7 +25,6 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 
 namespace ProductService.Host
@@ -40,8 +39,7 @@ namespace ProductService.Host
         typeof(ProductManagementApplicationModule),
         typeof(ProductManagementHttpApiModule),
         typeof(ProductManagementEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule)
+        typeof(AbpAspNetCoreMultiTenancyModule)
         )]
     public class ProductServiceHostModule : AbpModule
     {

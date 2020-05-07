@@ -1,24 +1,26 @@
-import { Injectable } from '@angular/core';
 import {
   Action,
-  Actions,
-  ofActionSuccessful,
   Selector,
   State,
   StateContext,
   Store,
+  NgxsOnInit,
+  Actions,
+  ofActionSuccessful,
 } from '@ngxs/store';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { fromEvent } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { from, fromEvent } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import {
-  ModifyOpenedTabCount,
   SetLanguage,
-  SetRemember,
   SetTenant,
+  ModifyOpenedTabCount,
+  SetRemember,
 } from '../actions/session.actions';
 import { ABP, Session } from '../models';
+import { LocalizationService } from '../services/localization.service';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { Injectable } from '@angular/core';
 
 @State<Session.State>({
   name: 'SessionState',
@@ -41,7 +43,12 @@ export class SessionState {
     return sessionDetail;
   }
 
-  constructor(private oAuthService: OAuthService, private store: Store, private actions: Actions) {
+  constructor(
+    private localizationService: LocalizationService,
+    private oAuthService: OAuthService,
+    private store: Store,
+    private actions: Actions,
+  ) {
     actions
       .pipe(ofActionSuccessful(GetAppConfiguration))
       .pipe(take(1))
@@ -74,7 +81,9 @@ export class SessionState {
       language: payload,
     });
 
-    return dispatch(new GetAppConfiguration());
+    return dispatch(new GetAppConfiguration()).pipe(
+      switchMap(() => from(this.localizationService.registerLocale(payload))),
+    );
   }
 
   @Action(SetTenant)

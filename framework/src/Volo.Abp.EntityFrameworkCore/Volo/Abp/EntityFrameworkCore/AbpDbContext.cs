@@ -204,7 +204,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 var currentValue = e.Entry.CurrentValues[property.Name];
                 if (currentValue != null)
                 {
-                    entity.ExtraProperties[property.Name] = currentValue;
+                    entity.SetProperty(property.Name, currentValue);
                 }
             }
         }
@@ -265,11 +265,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            var efMappedProperties = ObjectExtensionManager.Instance
-                .GetProperties(entityType)
-                .Where(p => p.IsMappedToFieldForEfCore());
-
-            foreach (var property in efMappedProperties)
+            foreach (var property in objectExtension.GetProperties())
             {
                 if (!entity.HasProperty(property.Name))
                 {

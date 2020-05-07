@@ -10,10 +10,8 @@ export namespace ApplicationConfiguration {
   }
 
   export interface Localization {
-    currentCulture: CurrentCulture;
-    defaultResourceName: string;
-    languages: Language[];
     values: LocalizationValue;
+    languages: Language[];
   }
 
   export interface LocalizationValue {
@@ -25,27 +23,6 @@ export namespace ApplicationConfiguration {
     uiCultureName: string;
     displayName: string;
     flagIcon: string;
-  }
-
-  export interface CurrentCulture {
-    cultureName: string;
-    dateTimeFormat: DateTimeFormat;
-    displayName: string;
-    englishName: string;
-    isRightToLeft: boolean;
-    name: string;
-    nativeName: string;
-    threeLetterIsoLanguageName: string;
-    twoLetterIsoLanguageName: string;
-  }
-
-  export interface DateTimeFormat {
-    calendarAlgorithmType: string;
-    dateSeparator: string;
-    fullDateTimePattern: string;
-    longTimePattern: string;
-    shortDatePattern: string;
-    shortTimePattern: string;
   }
 
   export interface Auth {

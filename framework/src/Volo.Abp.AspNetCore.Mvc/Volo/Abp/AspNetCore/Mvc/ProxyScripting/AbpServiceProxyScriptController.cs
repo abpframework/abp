@@ -10,8 +10,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
     [Area("Abp")]
     [Route("Abp/ServiceProxyScript")]
     [DisableAuditing]
-    [RemoteService(false)]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class AbpServiceProxyScriptController : AbpController
     {
         private readonly IProxyScriptManager _proxyScriptManager;

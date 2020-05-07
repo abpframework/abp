@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -34,10 +36,6 @@ namespace Volo.Docs.Pages.Documents.Project
         public string LanguageCode { get; set; }
 
         public bool DocumentFound { get; set; } = true;
-
-        public bool ProjectFound { get; set; } = true;
-
-        public bool LoadSuccess => DocumentFound && ProjectFound;
 
         public string DefaultLanguageCode { get; set; }
 
@@ -122,8 +120,7 @@ namespace Volo.Docs.Pages.Documents.Project
             catch (EntityNotFoundException e)
             {
                 Logger.LogWarning(e.Message);
-                ProjectFound = false;
-                return Page();
+                return NotFound();
             }
 
             if (ShowProjectsCombobox)
@@ -347,13 +344,43 @@ namespace Volo.Docs.Pages.Documents.Project
 
             try
             {
-                Document = await GetSpecificDocumentOrDefaultAsync(LanguageCode);
+                if (DocumentName.IsNullOrWhiteSpace())
+                {
+                    Document = await _documentAppService.GetDefaultAsync(
+                        new GetDefaultDocumentInput
+                        {
+                            ProjectId = Project.Id,
+                            LanguageCode = LanguageCode,
+                            Version = Version
+                        }
+                    );
+                }
+                else
+                {
+                    Document = await _documentAppService.GetAsync(
+                        new GetDocumentInput
+                        {
+                            ProjectId = Project.Id,
+                            Name = DocumentNameWithExtension,
+                            LanguageCode = LanguageCode,
+                            Version = Version
+                        }
+                    );
+                }
             }
             catch (DocumentNotFoundException)
             {
                 if (LanguageCode != DefaultLanguageCode)
                 {
-                    Document = await GetSpecificDocumentOrDefaultAsync(DefaultLanguageCode);
+                    Document = await _documentAppService.GetAsync(
+                        new GetDocumentInput
+                        {
+                            ProjectId = Project.Id,
+                            Name = DocumentNameWithExtension,
+                            LanguageCode = DefaultLanguageCode,
+                            Version = Version
+                        }
+                    );
 
                     DocumentLanguageIsDifferent = true;
                 }
@@ -399,8 +426,6 @@ namespace Volo.Docs.Pages.Documents.Project
                 Document.RawRootUrl,
                 Document.LocalDirectory
             );
-
-            content = HtmlNormalizer.WrapImagesWithinAnchors(content);
 
             //todo find a way to make it on client in prismJS configuration (eg: map C# => csharp)
             content = HtmlNormalizer.ReplaceCodeBlocksLanguage(
@@ -515,33 +540,6 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
             }
 
-        }
-
-        private async Task<DocumentWithDetailsDto> GetSpecificDocumentOrDefaultAsync(string languageCode)
-        {
-            if (DocumentName.IsNullOrWhiteSpace())
-            {
-                return await _documentAppService.GetDefaultAsync(
-                    new GetDefaultDocumentInput
-                    {
-                        ProjectId = Project.Id,
-                        LanguageCode = languageCode,
-                        Version = Version
-                    }
-                );
-            }
-            else
-            {
-                return await _documentAppService.GetAsync(
-                    new GetDocumentInput
-                    {
-                        ProjectId = Project.Id,
-                        Name = DocumentNameWithExtension,
-                        LanguageCode = languageCode,
-                        Version = Version
-                    }
-                );
-            }
         }
 
         public async Task SetDocumentPreferencesAsync()

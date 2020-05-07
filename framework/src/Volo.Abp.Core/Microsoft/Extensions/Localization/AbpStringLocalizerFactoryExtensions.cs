@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.Extensions.Localization
 {
-    public static class AbpCoreStringLocalizerFactoryExtensions
+    public static class AbpStringLocalizerFactoryExtensions
     {
         public static IStringLocalizer Create<TResource>(this IStringLocalizerFactory localizerFactory)
         {
