@@ -24,6 +24,11 @@
 
 * [Node v12+](https://nodejs.org)
 * [Yarn v1.19+](https://classic.yarnpkg.com/)
+{{ if Tiered == "Yes" }}
+
+* [Redis](https://redis.io/): 应用程序将Redis用作[分布式缓存](../Caching.md). 因此你需要安装并运行Redis.
+
+{{ end }}
 
 > 你可以也使用其他支持.NET Core 和 ASP.NET Core的编辑器.
 
