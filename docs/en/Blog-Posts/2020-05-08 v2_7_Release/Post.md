@@ -197,3 +197,28 @@ There are also some other pre-defined points to customize and extend the user in
 
 See the [Customizing the Modules](https://docs.abp.io/en/commercial/latest/guides/customizing-modules) guide to learn all the possible ways to customize a depended module.
 
+### Text Template Management Module
+
+We are introducing a new module with the v2.7 release: [Text Template Management](https://docs.abp.io/en/commercial/latest/modules/text-template-management). It is basically used to edit text/email templates (introduced with the ABP Framework 2.7) on the user interface and save changed in the database.
+
+A screenshot from the content editing for the password reset email template:
+
+![text-template-content-ui](text-template-content-ui.png)
+
+This module comes pre-installed when you create a new project.
+
+### Entity History Views
+
+Audit logging UI module now shows all the entity changes in the application with property change details.
+
+![audit-log-entity-changes](audit-log-entity-changes.png)
+
+You can also check history for an entity when you click to the actions menu for the entity:
+
+![tenant-entity-changes](tenant-entity-changes.png)
+
+### Samples
+
+We are creating more advanced sample applications built with the ABP Commercial.
+
+More Modules
