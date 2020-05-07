@@ -66,6 +66,8 @@ ObjectExtensionManager.Instance
 
 See the [Object Extensions document](https://docs.abp.io/en/abp/latest/Object-Extensions) for details about this system.
 
+See also the [Customizing the Existing Modules](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Guide) guide to learn all the possible customization options.
+
 ### Text Templating Package
 
 [Volo.Abp.TextTemplating](https://www.nuget.org/packages/Volo.Abp.TextTemplating) is a new package introduced with the v2.7.0. Previously, [Volo.Abp.Emailing](https://www.nuget.org/packages/Volo.Abp.Emailing) package had a similar functionality but it was limited, experimental and tightly coupled to the emailing.
@@ -134,4 +136,64 @@ There are many minor features and enhancements made to the framework in the past
 
 * Added `AbpLocalizationOptions.DefaultResourceType` to set the default resource type for the application. In this way, the localization system uses the default resource whenever the resource was not specified. The latest application startup template already configures it, but you may want to set it for your existing applications.
 * Added `IsEnabled` to permission definition. In this way, you can completely disable a permission and hide the related functionality from the application. This can be a way of feature switch for some applications. See [#3486](https://github.com/abpframework/abp/issues/3486) for usage.
+* Added Dutch and German localizations to all the localization resources defined by the framework. Thanks to the contributors.
+
+## What's New in the ABP Commercial
+
+The goal of the [ABP Commercial](https://commercial.abp.io/) is to provide pre-build application functionalities, code generation tools, professional themes, advanced samples and premium support for ABP Framework based projects.
+
+We are working on the ABP Commercial in the parallel to align with the ABP Framework features and provide more modules, theme options and tooling.
+
+This section explains what's going on the ABP Commercial side.
+
+### Module Entity Extension System
+
+Module entity extension system is a higher level API that uses the object extension system (introduced above) and provides an easy way to add extension properties to existing entities. A new extension property easily automatically becomes a part of the HTTP API and the User Interface.
+
+Example: Add a `SocialSecurityNumber` to the user entity of the identity module
+
+````csharp
+ObjectExtensionManager.Instance.Modules()
+    .ConfigureIdentity(identity =>
+    {
+        identity.ConfigureUser(user =>
+        {
+            user.AddOrUpdateProperty<string>( //property type: string
+                "SocialSecurityNumber", //property name
+                property =>
+                {
+                    //validation rules
+                    property.Attributes.Add(new RequiredAttribute());
+                    property.Attributes.Add(
+                        new StringLengthAttribute(64) {
+                            MinimumLength = 4
+                        }
+                    );
+
+                    //...other configurations for this property
+                }
+            );
+        });
+    });
+````
+
+With just such a configuration, the user interface will have the new property (on the table and on the create/edit forms):
+
+![module-entity-extended-ui](module-entity-extended-ui.png)
+
+The new property can be easily localized and validated. Currently, it supports primitive types like string, number and boolean, but we planned to add more advanced scenarios by the time (like navigation/lookup properties).
+
+See the [Module Entity Extensions](https://docs.abp.io/en/commercial/latest/guides/module-entity-extensions) guide to learn how to use it and configure details.
+
+#### Other Extension Points
+
+There are also some other pre-defined points to customize and extend the user interface of a depended module:
+
+* You can add a new action for an entity on the data table (left side on the picture below).
+* You can add new buttons (or other controls) to the page toolbar (right side on the picture below).
+* You can add custom columns to a data table.
+
+![abp-commercial-ui-extensions](abp-commercial-ui-extensions.png)
+
+See the [Customizing the Modules](https://docs.abp.io/en/commercial/latest/guides/customizing-modules) guide to learn all the possible ways to customize a depended module.
 
