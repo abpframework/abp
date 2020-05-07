@@ -1,12 +1,12 @@
 {
-  "version": "2.6.0",
+  "version": "2.7.0",
   "name": "@abp/markdown-it",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^2.6.0",
+    "@abp/core": "^2.7.0",
     "markdown-it": "^10.0.0"
   },
-  "gitHead": "03238c9aa7d4090b7c6ae9cc8c790bc0545501eb"
+  "gitHead": "0ea3895f3b0b489e3ea81fc88f8f0896b22b61bd"
 }

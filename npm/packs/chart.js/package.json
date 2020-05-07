@@ -1,5 +1,5 @@
 {
-  "version": "2.6.0",
+  "version": "2.7.0",
   "name": "@abp/chart.js",
   "publishConfig": {
     "access": "public"
@@ -7,5 +7,5 @@
   "dependencies": {
     "chart.js": "^2.9.3"
   },
-  "gitHead": "03238c9aa7d4090b7c6ae9cc8c790bc0545501eb"
+  "gitHead": "0ea3895f3b0b489e3ea81fc88f8f0896b22b61bd"
 }

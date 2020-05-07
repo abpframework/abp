@@ -33,7 +33,7 @@
  - `Acme.BookStore.Domain`包含你的[实体](https://docs.abp.io/zh-Hans/abp/latest/Entities), [领域服务](https://docs.abp.io/zh-Hans/abp/latest/Domain-Services)和其他核心域对象.
  - `Acme.BookStore.Domain.Shared`包含可与客户共享的常量,枚举或其他域相关对象.
 
-在解决方案的**领域层**(`Acme.BookStore.Domain`项目)中定义[实体](https://docs.abp.io/zh-Hans/abp/latest/Entities). 该应用程序的主要实体是`Book`. 在`Acme.BookStore.Domain`项目中创建一个名为`Book`的类，如下所示：
+在解决方案的**领域层**(`Acme.BookStore.Domain`项目)中定义[实体](https://docs.abp.io/zh-Hans/abp/latest/Entities). 该应用程序的主要实体是`Book`. 在`Acme.BookStore.Domain`项目中创建一个名为`Book`的类,如下所示:
 
 ````C#
 using System;
@@ -132,7 +132,7 @@ PM> Update-Database
 
 #### 添加示例数据
 
-`Update-Database`命令在数据库中创建了`AppBooks`表. 打开数据库并输入几个示例行，以便在页面上显示它们:
+`Update-Database`命令在数据库中创建了`AppBooks`表. 打开数据库并输入几个示例行,以便在页面上显示它们:
 
 ![bookstore-books-table](images/bookstore-books-table.png)
 
@@ -290,7 +290,7 @@ namespace Acme.BookStore
 
 #### Swagger UI
 
-启动模板配置为使用[Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)运行[swagger UI](https://swagger.io/tools/swagger-ui/). 运行应用程序并在浏览器中输入`https://localhost:XXXX/swagger/`(用您自己的端口替换XXXX)作为URL.
+启动模板配置为使用[Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore)运行[swagger UI](https://swagger.io/tools/swagger-ui/). 运行应用程序并在浏览器中输入`https://localhost:XXXX/swagger/`(用你自己的端口替换XXXX)作为URL.
 
 你会看到一些内置的接口和`Book`的接口,它们都是REST风格的:
 
@@ -380,7 +380,7 @@ context.Menu.AddItem(
 
 ![bookstore-localization-files](images/bookstore-localization-files-v2.png)
 
-打开`en.json`文件,将`Menu：BookStore`和`Menu：Books`键的本地化文本添加到文件末尾:
+打开`en.json`文件,将`Menu:BookStore`和`Menu:Books`键的本地化文本添加到文件末尾:
 
 ````json
 {

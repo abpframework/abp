@@ -1,24 +1,24 @@
 {
-  "version": "2.6.0",
+  "version": "2.7.0",
   "name": "@abp/aspnetcore.mvc.ui.theme.shared",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui": "^2.6.0",
-    "@abp/bootstrap": "^2.6.0",
-    "@abp/bootstrap-datepicker": "^2.6.0",
-    "@abp/datatables.net-bs4": "^2.6.0",
-    "@abp/font-awesome": "^2.6.0",
-    "@abp/jquery-form": "^2.6.0",
-    "@abp/jquery-validation-unobtrusive": "^2.6.0",
-    "@abp/lodash": "^2.6.0",
-    "@abp/luxon": "^2.6.0",
-    "@abp/malihu-custom-scrollbar-plugin": "^2.6.0",
-    "@abp/select2": "^2.6.0",
-    "@abp/sweetalert": "^2.6.0",
-    "@abp/timeago": "^2.6.0",
-    "@abp/toastr": "^2.6.0"
+    "@abp/aspnetcore.mvc.ui": "^2.7.0",
+    "@abp/bootstrap": "^2.7.0",
+    "@abp/bootstrap-datepicker": "^2.7.0",
+    "@abp/datatables.net-bs4": "^2.7.0",
+    "@abp/font-awesome": "^2.7.0",
+    "@abp/jquery-form": "^2.7.0",
+    "@abp/jquery-validation-unobtrusive": "^2.7.0",
+    "@abp/lodash": "^2.7.0",
+    "@abp/luxon": "^2.7.0",
+    "@abp/malihu-custom-scrollbar-plugin": "^2.7.0",
+    "@abp/select2": "^2.7.0",
+    "@abp/sweetalert": "^2.7.0",
+    "@abp/timeago": "^2.7.0",
+    "@abp/toastr": "^2.7.0"
   },
-  "gitHead": "03238c9aa7d4090b7c6ae9cc8c790bc0545501eb"
+  "gitHead": "0ea3895f3b0b489e3ea81fc88f8f0896b22b61bd"
 }

@@ -164,7 +164,7 @@ const hasIdentityOrAccountPermission = this.config.getGrantedPolicy(
 
 ### 如何从Store中获取翻译
 
-`ConfigStateService` 的 `getLocalization` 用法翻译. 这里有一些示例:
+`ConfigStateService` 的 `getLocalization` 方法用于翻译. 这里有一些示例:
 
 ```js
 // this.config is instance of ConfigStateService
@@ -186,7 +186,7 @@ const defaultValue = this.config.getLocalization({
 
 ## 分发方法
 
-`ConfigStateService` 有几种分发方法，让你方便地将预定义操作分发到 `Store`.
+`ConfigStateService` 有几种分发方法,让你方便地将预定义操作分发到 `Store`.
 
 ### 如何从服务器获取应用程序配置
 
@@ -236,7 +236,7 @@ const newRoute: ABP.Route = {
   path: "page",
   invisible: false,
   order: 2,
-  requiredPolicy: "MyProjectName::MyNewPage"
+  requiredPolicy: "MyProjectName.MyNewPage"
 };
 
 this.config.dispatchAddRoute(newRoute);
@@ -245,19 +245,20 @@ this.config.dispatchAddRoute(newRoute);
 
 `newRoute` 将被放置在根级别,没有任何父路由,并且其url将存储为 `'/path'`.
 
-如果你想要**添加一个子路由,您可以这样做:**
+如果你想要**添加一个子路由,你可以这样做:**
 
 ```js
+import { eIdentityRouteNames } from '@abp/ng.identity';
 // this.config is instance of ConfigStateService
 
 const newRoute: ABP.Route = {
-  parentName: "AbpAccount::Login",
+  parentName: eIdentityRouteNames.IdentityManagement,
   name: "My New Page",
   iconClass: "fa fa-dashboard",
   path: "page",
   invisible: false,
   order: 2,
-  requiredPolicy: "MyProjectName::MyNewPage"
+  requiredPolicy: "MyProjectName.MyNewPage"
 };
 
 this.config.dispatchAddRoute(newRoute);
@@ -291,4 +292,4 @@ this.config.dispatchSetEnvironment({
 
 ## 下一步是什么?
 
-* [组件替换]](./Component-Replacement.md)
+- [修改菜单](./Modifying-the-Menu.md)

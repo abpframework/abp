@@ -1,0 +1,12 @@
+﻿{
+  "culture": "nl",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identiteitsbronnaam bestaat al: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "API-bronnaam bestaat al: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId bestaat al: {ClientId}",
+    "UserLockedOut": "Het gebruikersaccount is geblokkeerd vanwege ongeldige inlogpogingen. Wacht even en probeer het opnieuw.",
+    "InvalidUserNameOrPassword": "ongeldige gebruikersnaam of wachtwoord!",
+    "LoginIsNotAllowed": "U mag niet inloggen! U moet uw e-mailadres / telefoonnummer bevestigen.",
+    "InvalidUsername": "Ongeldige gebruikersnaam of wachtwoord!"
+  }
+}

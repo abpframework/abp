@@ -7,6 +7,7 @@ using NSubstitute;
 using Volo.Abp.Auditing.App.Entities;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.Auditing
@@ -15,10 +16,12 @@ namespace Volo.Abp.Auditing
     {
         private IAuditingStore _auditingStore;
         private IAuditingManager _auditingManager;
+        private IUnitOfWorkManager _unitOfWorkManager;
 
         public Auditing_Tests()
         {
             _auditingManager = GetRequiredService<IAuditingManager>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         protected override void AfterAddApplication(IServiceCollection services)
@@ -158,18 +161,46 @@ namespace Volo.Abp.Auditing
             using (var scope = _auditingManager.BeginScope())
             {
                 var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithDisableAuditingAndPropertyHasAudited, Guid>>();
-                await repository.InsertAsync(new AppEntityWithDisableAuditingAndPropertyHasAudited(Guid.NewGuid(), "test name", "test name2"));
+                await repository.InsertAsync(new AppEntityWithDisableAuditingAndPropertyHasAudited(Guid.NewGuid(), "test name", "test name2", "test name3"));
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x =>
+                x.EntityChanges.Count == 1 && x.EntityChanges[0].PropertyChanges.Count == 2 &&
+                x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithDisableAuditingAndPropertyHasAudited.Name) &&
+                x.EntityChanges[0].PropertyChanges[1].PropertyName == nameof(AppEntityWithDisableAuditingAndPropertyHasAudited.Name3)));
+#pragma warning restore 4014
+        }
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_For_Entity_That_Property_Has_Audited_Attribute_And_Has_Changed_Even_Entity_Has_DisableAuditing_Attribute()
+        {
+            var entityId = Guid.NewGuid();
+            var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithDisableAuditingAndPropertyHasAudited, Guid>>();
+            await repository.InsertAsync(new AppEntityWithDisableAuditingAndPropertyHasAudited(entityId, "test name", "test name2", "test name3"));
+
+            using (var scope = _auditingManager.BeginScope())
+            {
+                using (var uow = _unitOfWorkManager.Begin())
+                {
+                    var entity = await repository.GetAsync(entityId);
+                    entity.Name = "new name1";
+
+                    await repository.UpdateAsync(entity);
+
+                    await uow.CompleteAsync();
+                }
+
                 await scope.SaveAsync();
             }
 
 #pragma warning disable 4014
             _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x =>
                 x.EntityChanges.Count == 1 && x.EntityChanges[0].PropertyChanges.Count == 1 &&
-                x.EntityChanges[0].PropertyChanges[0].PropertyName ==
-                nameof(AppEntityWithDisableAuditingAndPropertyHasAudited.Name)));
+                x.EntityChanges[0].PropertyChanges[0].PropertyName == nameof(AppEntityWithDisableAuditingAndPropertyHasAudited.Name)));
 #pragma warning restore 4014
         }
-
 
         [Fact]
         public virtual async Task Should_Write_AuditLog_If_There_No_Action_And_No_EntityChanges()

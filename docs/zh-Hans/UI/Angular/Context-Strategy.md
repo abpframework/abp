@@ -76,7 +76,7 @@ setContext(): undefined
 CONTEXT_STRATEGY.None()
 ```
 
-该策略不会将任何上下文传递到投影内容。
+该策略不会将任何上下文传递到投影内容.
 
 ### Component
 

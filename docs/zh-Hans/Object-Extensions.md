@@ -62,7 +62,7 @@ if (user.GetProperty<bool>("IsSuperUser"))
 
 ##### 非基本属性类型
 
-如果您的属性类型不是原始类型(int,bool,枚举，字符串等),你需要使用 `GetProperty` 的非泛型版本,它会返回 `object`.
+如果你的属性类型不是原始类型(int,bool,枚举,字符串等),你需要使用 `GetProperty` 的非泛型版本,它会返回 `object`.
 
 #### HasProperty
 
@@ -176,11 +176,111 @@ ObjectExtensionManager.Instance
 
 `options` 有一个名为 `Configuration` 的字典,该字典存储对象扩展定义甚至可以扩展. EF Core使用它来将其他属性映射到数据库中的表字段. 请参阅[扩展实体文档](Customizing-Application-Modules-Extending-Entities.md).
 
+#### CheckPairDefinitionOnMapping
+
+控制在映射两个可扩展对象时如何检查属性定义. 请参阅*对象到对象映射*部分,了解 `CheckPairDefinitionOnMapping` 选项.
+
+## Validation
+
+你可能要为你定义的额外属性添加一些 **验证规则**. `AddOrUpdateProperty` 方法选项允许进行验证的方法有两种:
+
+1. 你可以为属性添加 **数据注解 attributes**.
+2. 你可以给定一个action(代码块)执行 **自定义验证**.
+
+当你在**自动验证**的方法(例如:控制器操作,页面处理程序方法,应用程序服务方法...)中使用对象时,验证会工作. 因此,每当扩展对象被验证时,所有额外的属性都会被验证.
+
+### 数据注解 Attributes
+
+所有标准的数据注解Attributes对于额外属性都是有效的. 例:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUserCreateDto, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.Attributes.Add(new RequiredAttribute());
+            options.Attributes.Add(
+                new StringLengthAttribute(32) {
+                    MinimumLength = 6 
+                }
+            );
+        });
+````
+
+使用以上配置,如果没有提供有效的 `SocialSecurityNumber` 值, `IdentityUserCreateDto` 对象将是无效的.
+
+### 自定义验证
+
+如果需要,可以添加一个自定义action验证额外属性. 例:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUserCreateDto, string>(
+        "SocialSecurityNumber",
+        options =>
+        {
+            options.Validators.Add(context =>
+            {
+                var socialSecurityNumber = context.Value as string;
+
+                if (socialSecurityNumber == null ||
+                    socialSecurityNumber.StartsWith("X"))
+                {
+                    context.ValidationErrors.Add(
+                        new ValidationResult(
+                            "Invalid social security number: " + socialSecurityNumber,
+                            new[] { "SocialSecurityNumber" }
+                        )
+                    );
+                }
+            });
+        });
+````
+
+`context.ServiceProvider` 可以解析服务.
+
+除了为单个属性添加自定义验证逻辑外,还可以添加在对象级执行的自定义验证逻辑. 例:
+
+````csharp
+ObjectExtensionManager.Instance
+.AddOrUpdate<IdentityUserCreateDto>(objConfig =>
+{
+    //Define two properties with their own validation rules
+    
+    objConfig.AddOrUpdateProperty<string>("Password", propertyConfig =>
+    {
+        propertyConfig.Attributes.Add(new RequiredAttribute());
+    });
+
+    objConfig.AddOrUpdateProperty<string>("PasswordRepeat", propertyConfig =>
+    {
+        propertyConfig.Attributes.Add(new RequiredAttribute());
+    });
+
+    //Write a common validation logic works on multiple properties
+    
+    objConfig.Validators.Add(context =>
+    {
+        if (context.ValidatingObject.GetProperty<string>("Password") !=
+            context.ValidatingObject.GetProperty<string>("PasswordRepeat"))
+        {
+            context.ValidationErrors.Add(
+                new ValidationResult(
+                    "Please repeat the same password!",
+                    new[] { "Password", "PasswordRepeat" }
+                )
+            );
+        }
+    });
+});
+````
+
 ## 对象到对象映射
 
 假设你已向可扩展的实体对象添加了额外的属性并使用了自动[对象到对象的映射](Object-To-Object-Mapping.md)将该实体映射到可扩展的DTO类. 在这种情况下你需要格外小心,因为额外属性可能包含**敏感数据**,这些数据对于客户端不可用.
 
-本节提供了一些**好的做法**,可以控制对象映射的额外属性。
+本节提供了一些**好的做法**,可以控制对象映射的额外属性.
 
 ### MapExtraPropertiesTo
 
@@ -232,7 +332,7 @@ identityUser.MapExtraPropertiesTo(
 
 #### AutoMapper集成
 
-如果您使用的是[AutoMapper](https://automapper.org/)库,ABP框架还提供了一种扩展方法来利用上面定义的 `MapExtraPropertiesTo` 方法.
+如果你使用的是[AutoMapper](https://automapper.org/)库,ABP框架还提供了一种扩展方法来利用上面定义的 `MapExtraPropertiesTo` 方法.
 
 你可以在映射配置文件中使用 `MapExtraProperties()` 方法.
 
@@ -247,7 +347,7 @@ public class MyProfile : Profile
 }
 ````
 
-它与 `MapExtraPropertiesTo()` 方法具有相同的参数。
+它与 `MapExtraPropertiesTo()` 方法具有相同的参数.
 
 ## Entity Framework Core 数据库映射
 

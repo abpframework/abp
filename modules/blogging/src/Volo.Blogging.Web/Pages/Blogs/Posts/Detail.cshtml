@@ -2,24 +2,36 @@
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.Extensions.Options
 @using Volo.Abp.Users
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @inject IAuthorizationService Authorization
+@inject IOptionsSnapshot<BloggingTwitterOptions> twitterOptions
 @model DetailModel
 @{
     ViewBag.Title = Model.Post.Title;
     ViewBag.Description = Model.Post.Description;
+
+    ViewBag.TwitterCard = "summary_large_image";
+    ViewBag.TwitterSite = string.IsNullOrWhiteSpace(twitterOptions.Value.Site) ? "" : twitterOptions.Value.Site;
+    ViewBag.TwitterTitle = Model.Post.Title;
+    ViewBag.TwitterDescription = Model.Post.Description;
+    ViewBag.TwitterImage = $"{Request.Scheme}://{Request.Host}{Request.PathBase}{Model.Post.CoverImage}";
+
     var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
 }
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
         <abp-script src="/Pages/Blogs/Posts/detail.js" />
     </abp-script-bundle>
 }
 @section styles {
     <abp-style-bundle name="@typeof(DetailModel).FullName">
+        <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
         <abp-style src="/Pages/Blogs/Shared/Styles/blog.css" />
     </abp-style-bundle>
 }
@@ -28,7 +40,7 @@
     <abp-input asp-for="FocusCommentId" class="m-0" />
     <div class="container">
         <div class="row">
-            <div class="col-10 col-md-8 col-lg-7 mx-auto">
+            <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <section class="hero-section">
                     <div class="hero-articles">
                         <div class="hero-content">
@@ -85,9 +97,9 @@
                 </section>
             </div>
         </div>
-        
+
         <div class="row">
-            <div class="col-10 col-md-8 col-lg-7 mx-auto">
+            <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <section class="post-content">
                     <p>
                         @Html.Raw(RenderMarkdownToHtml(Model.Post.Content))
@@ -95,9 +107,9 @@
                 </section>
             </div>
         </div>
-    
+
         <div class="row">
-            <div class="col-10 col-md-8 col-lg-7 mx-auto">
+            <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <hr />
                 <div class="mb-2 mt-1">
                     @(L["ShareOn"].Value + " :")

@@ -34,7 +34,7 @@ namespace Volo.Abp.ObjectExtending
             _personDto.GetProperty<string>("NoPairCheck").ShouldBe("test-value"); //CheckPairDefinitionOnMapping = false
             _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
             _personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
-            _personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
+            _personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default in the constructor
             _personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
         }
 
@@ -46,9 +46,9 @@ namespace Volo.Abp.ObjectExtending
             _personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
             _personDto.GetProperty<string>("NoPairCheck").ShouldBe("test-value"); //CheckPairDefinitionOnMapping = false
             _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
-            _personDto.HasProperty("CityName").ShouldBeFalse(); //Ignored!
+            _personDto.GetProperty<string>("CityName").ShouldBeNull(); //Ignored, but was set to the default in the constructor
             _personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
-            _personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
+            _personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default in the constructor
             _personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
         }
 
@@ -61,7 +61,7 @@ namespace Volo.Abp.ObjectExtending
             _personDto.GetProperty<string>("CityName").ShouldBe("Adana"); //Defined in both classes
             _personDto.GetProperty<int>("Age").ShouldBe(42); //Defined in source
             _personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
-            _personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
+            _personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default in the constructor
             _personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
         }
 

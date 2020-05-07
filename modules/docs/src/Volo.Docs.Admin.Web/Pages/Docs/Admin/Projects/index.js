@@ -74,6 +74,18 @@
                                             _dataTable.ajax.reload();
                                         });
                                 }
+                            },
+                            {
+                                text: l('ReIndexProject'),
+                                visible: abp.auth.isGranted('Docs.Admin.Documents'),
+                                confirmMessage: function (data) { return l('ReIndexProjectConfirmationMessage', data.record.name); },
+                                action: function (data) {
+                                    volo.docs.admin.projectsAdmin
+                                        .reindex({ projectId: data.record.id})
+                                        .then(function () {
+                                            abp.message.success(l('SuccessfullyReIndexProject', data.record.name));
+                                        });
+                                }
                             }
                         ]
                 }
@@ -108,6 +120,19 @@
     $("#CreateNewGithubProjectButtonId").click(function (event) {
         event.preventDefault();
         _createModal.open({source:"GitHub"});
+    });
+
+    $("#ReIndexAllProjects").click(function (event) {
+        abp.message.confirm(l('ReIndexAllProjectConfirmationMessage'))
+            .done(function (accepted) {
+                if (accepted) {
+                    volo.docs.admin.projectsAdmin
+                    .reindexAll()
+                    .then(function () {
+                        abp.message.success(l('SuccessfullyReIndexAllProject'));
+                    });
+                }
+            });
     });
 
     _createModal.onClose(function () {

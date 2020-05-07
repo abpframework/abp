@@ -2,6 +2,15 @@
 {
     public class ExtensibleTestPerson : ExtensibleObject
     {
+        public ExtensibleTestPerson()
+        {
 
+        }
+
+        public ExtensibleTestPerson(bool setDefaultsForExtraProperties)
+            : base(setDefaultsForExtraProperties)
+        {
+
+        }
     }
 }

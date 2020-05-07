@@ -6,7 +6,7 @@ ABP可以按照惯例 **自动** 将你的应用程序服务配置为API控制�
 
 ## 配置
 
-基本配置很简单. 只需配置`AbpAspNetCoreMvcOptions`并使用`ConventionalControllers.Create`方法，如下所示：
+基本配置很简单. 只需配置`AbpAspNetCoreMvcOptions`并使用`ConventionalControllers.Create`方法,如下所示:
 
 ````csharp
 [DependsOn(BookStoreApplicationModule)]
@@ -82,7 +82,7 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
   * 删除'**Async**'后缀. 如果方法名称为'GetPhonesAsync',则变为`GetPhones`.
   * 删除**HTTP method前缀**. 基于的HTTP method删除`GetList`,`GetAll`,`Get`,`Put`,`Update`,`Delete`,`Remove`,`Create`,`Add`,`Insert`,`Post`和`Patch`前缀, 因此`GetPhones`变为`Phones`, 因为`Get`前缀和GET请求重复.
   * 将结果转换为**camelCase**.
-  * 如果生成的操作名称为**空**,则它不会添加到路径中.否则它会被添加到路由中(例如'/phones').对于`GetAllAsync`方法名称，它将为空,因为`GetPhonesAsync`方法名称将为`phone`.
+  * 如果生成的操作名称为**空**,则它不会添加到路径中.否则它会被添加到路由中(例如'/phones').对于`GetAllAsync`方法名称,它将为空,因为`GetPhonesAsync`方法名称将为`phone`.
   * 可以通过设置`UrlActionNameNormalizer`选项来自定义.It's an action delegate that is called for every method.
 * 如果有另一个带有'Id'后缀的参数,那么它也会作为最终路线段添加到路线中(例如'/phoneId').
 
