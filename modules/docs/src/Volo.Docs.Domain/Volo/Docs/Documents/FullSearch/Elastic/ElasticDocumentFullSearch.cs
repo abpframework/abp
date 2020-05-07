@@ -92,6 +92,48 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteAsync(DocumentPath<Document>.Id(id), x => x.Index(_options.IndexName), cancellationToken));
         }
 
+        public async Task DeleteAllAsync(CancellationToken cancellationToken = default)
+        {
+            ValidateElasticSearchEnabled();
+
+            var request = new DeleteByQueryRequest(_options.IndexName)
+            {
+                Query = new MatchAllQuery()
+            };
+
+            HandleError(await _clientProvider.GetClient()
+                .DeleteByQueryAsync(request, cancellationToken));
+        }
+
+        public async Task DeleteAllByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
+        {
+            ValidateElasticSearchEnabled();
+
+            var request = new DeleteByQueryRequest(_options.IndexName)
+            {
+                Query = new BoolQuery
+                {
+                    Filter = new QueryContainer[]
+                    {
+                        new BoolQuery
+                        {
+                            Must = new QueryContainer[]
+                            {
+                                new TermQuery
+                                {
+                                    Field = "projectId",
+                                    Value = projectId
+                                }
+                            }
+                        }
+                    }
+                },
+            };
+
+            HandleError(await _clientProvider.GetClient()
+                .DeleteByQueryAsync(request, cancellationToken));
+        }
+
         public async Task<List<EsDocument>> SearchAsync(string context, Guid projectId, string languageCode,
             string version, int? skipCount = null, int? maxResultCount = null,
             CancellationToken cancellationToken = default)
