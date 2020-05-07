@@ -841,7 +841,6 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class BookRoutingModule { }
-
 ```
 
 * We imported `BookListComponent` and replaced `routes` const.
