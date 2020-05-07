@@ -2,6 +2,7 @@
 using Shouldly;
 using Volo.Abp.Data;
 using Volo.Abp.Threading;
+using Volo.Abp.Validation;
 using Xunit;
 
 namespace Volo.Abp.ObjectExtending
@@ -19,19 +20,19 @@ namespace Volo.Abp.ObjectExtending
                     {
                         options.AddOrUpdateProperty<string>("Name", propertyInfo =>
                         {
-                            propertyInfo.ValidationAttributes.Add(new RequiredAttribute());
-                            propertyInfo.ValidationAttributes.Add(new StringLengthAttribute(64) { MinimumLength = 2 });
+                            propertyInfo.Attributes.Add(new RequiredAttribute());
+                            propertyInfo.Attributes.Add(new StringLengthAttribute(64) { MinimumLength = 2 });
                         });
 
                         options.AddOrUpdateProperty<string>("Address", propertyInfo =>
                         {
-                            propertyInfo.ValidationAttributes.Add(new StringLengthAttribute(255));
+                            propertyInfo.Attributes.Add(new StringLengthAttribute(255));
                         });
 
                         options.AddOrUpdateProperty<byte>("Age", propertyInfo =>
                         {
-                            propertyInfo.ValidationAttributes.Add(new RequiredAttribute());
-                            propertyInfo.ValidationAttributes.Add(new RangeAttribute(18, 99));
+                            propertyInfo.Attributes.Add(new RequiredAttribute());
+                            propertyInfo.Attributes.Add(new RangeAttribute(18, 99));
                         });
 
                         options.AddOrUpdateProperty<bool>("IsMarried", propertyInfo =>
@@ -55,7 +56,7 @@ namespace Volo.Abp.ObjectExtending
                                         context.ValidationErrors.Add(
                                             new ValidationResult(
                                                 "If you specify a password, then please correctly repeat it!",
-                                                new[] {"Password", "PasswordRepeat"}
+                                                new[] { "Password", "PasswordRepeat" }
                                             )
                                         );
                                     }
@@ -84,14 +85,9 @@ namespace Volo.Abp.ObjectExtending
         {
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Name", "John"},
-                            {"Age", "42"},
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Name", "John", validate: false)
+                        .SetProperty("Age", 42, validate: false)
                 ).Count.ShouldBe(0); //All Valid
         }
 
@@ -105,63 +101,48 @@ namespace Volo.Abp.ObjectExtending
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Address", new string('x', 256) }
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Address", new string('x', 256), validate: false)
                 ).Count.ShouldBe(3); // Name, Age & Address
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Age", "42" }
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Age", 42, validate: false)
                 ).Count.ShouldBe(1); // Name
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Address", new string('x', 256) },
-                            {"Age", "100" }
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Address", new string('x', 256), validate: false)
+                        .SetProperty("Age", 100, validate: false)
                 ).Count.ShouldBe(3); // Name, Age & Address
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Name", "John"},
-                            {"Age", "42"},
-                            {"Password", "123"},
-                            {"PasswordRepeat", "1256"}
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Name", "John", validate: false)
+                        .SetProperty("Age", 42, validate: false)
+                        .SetProperty("Password", "123", validate: false)
+                        .SetProperty("PasswordRepeat", "1256", validate: false)
                 ).Count.ShouldBe(1); // PasswordRepeat != Password
 
             ExtensibleObjectValidator
                 .GetValidationErrors(
-                    new ExtensiblePersonObject
-                    {
-                        ExtraProperties =
-                        {
-                            {"Name", "BadValue"},
-                            {"Age", "42"},
-                        }
-                    }
+                    new ExtensiblePersonObject()
+                        .SetProperty("Name", "BadValue", validate: false)
+                        .SetProperty("Age", 42, validate: false)
                 ).Count.ShouldBe(1); //Name is 'BadValue'!
+        }
+
+        [Fact]
+        public void Should_Check_Validation_On_SetProperty()
+        {
+            Assert.Throws<AbpValidationException>(() =>
+            {
+                new ExtensiblePersonObject()
+                    .SetProperty("Address", new string('x', 256));
+            });
         }
 
         private class ExtensiblePersonObject : ExtensibleObject

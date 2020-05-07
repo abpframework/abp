@@ -25,6 +25,12 @@ The following tools should be installed on your development machine:
 
 * [Node v12+](https://nodejs.org)
 * [Yarn v1.19+](https://classic.yarnpkg.com/)
+{{ if Tiered == "Yes" }}
+
+* [Redis](https://redis.io/): The applications use Redis as as [distributed cache](../Caching.md). So, you need to have Redis installed & running.
+
+{{ end }}
+
 
 > You can use another editor instead of Visual Studio as long as it supports .NET Core and ASP.NET Core.
 
@@ -400,8 +406,8 @@ Enter **admin** as the username and **1q2w3E*** as the password to login to the 
 
 The application is up and running. You can continue to develop your application based on this startup template.
 
-> The [application startup template](startup-templates/application/index.md) includes the TenantManagement and Identity modules.
+> The [application startup template](Startup-Templates/Application.md) includes the TenantManagement and Identity modules.
 
 ## What's next?
 
-[Application development tutorial](tutorials/book-store/part-1.md)
+[Application development tutorial](Tutorials/Part-1.md)

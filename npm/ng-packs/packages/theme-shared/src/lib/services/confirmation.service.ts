@@ -1,9 +1,9 @@
-import { Injectable, ComponentRef } from '@angular/core';
-import { Confirmation } from '../models/confirmation';
-import { fromEvent, Observable, Subject, ReplaySubject } from 'rxjs';
-import { takeUntil, debounceTime, filter } from 'rxjs/operators';
 import { Config, ContentProjectionService, PROJECTION_STRATEGY } from '@abp/ng.core';
+import { ComponentRef, Injectable } from '@angular/core';
+import { fromEvent, Observable, ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { ConfirmationComponent } from '../components/confirmation/confirmation.component';
+import { Confirmation } from '../models/confirmation';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
@@ -12,14 +12,22 @@ export class ConfirmationService {
 
   private containerComponentRef: ComponentRef<ConfirmationComponent>;
 
+  clear = (status: Confirmation.Status = Confirmation.Status.dismiss) => {
+    this.confirmation$.next();
+    this.status$.next(status);
+  };
+
   constructor(private contentProjectionService: ContentProjectionService) {}
 
   private setContainer() {
-    setTimeout(() => {
-      this.containerComponentRef = this.contentProjectionService.projectContent(
-        PROJECTION_STRATEGY.AppendComponentToBody(ConfirmationComponent),
-      );
+    this.containerComponentRef = this.contentProjectionService.projectContent(
+      PROJECTION_STRATEGY.AppendComponentToBody(ConfirmationComponent, {
+        confirmation$: this.confirmation$,
+        clear: this.clear,
+      }),
+    );
 
+    setTimeout(() => {
       this.containerComponentRef.changeDetectorRef.detectChanges();
     }, 0);
   }
@@ -73,11 +81,6 @@ export class ConfirmationService {
     this.status$ = new Subject();
     this.listenToEscape();
     return this.status$;
-  }
-
-  clear(status: Confirmation.Status = Confirmation.Status.dismiss) {
-    this.confirmation$.next();
-    this.status$.next(status);
   }
 
   private listenToEscape() {

@@ -32,8 +32,9 @@ import program from 'commander';
         'copy',
         '--angular',
         '--no-watch',
-        '--packages',
-        '@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
+        '--all-packages',
+        '--excluded-packages',
+        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -45,9 +46,8 @@ import program from 'commander';
         'copy',
         '--angular',
         '--no-watch',
-        '--all-packages',
-        '--excluded-packages',
-        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
+        '--packages',
+        '@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

@@ -23,7 +23,7 @@ namespace Volo.Abp.ObjectExtending
                     .AddOrUpdateProperty<ExtensibleTestPerson, string>("CityName")
                     .AddOrUpdateProperty<ExtensibleTestPersonDto, string>("Name")
                     .AddOrUpdateProperty<ExtensibleTestPersonDto, int>("ChildCount")
-                    .AddOrUpdateProperty<ExtensibleTestPersonDto, int>("CityName");
+                    .AddOrUpdateProperty<ExtensibleTestPersonDto, string>("CityName");
             });
         }
     }

@@ -101,11 +101,13 @@ $projects = (
     "framework/src/Volo.Abp.Sms",
     "framework/src/Volo.Abp.Specifications",
     "framework/src/Volo.Abp.TestBase",
+    "framework/src/Volo.Abp.TextTemplating",
     "framework/src/Volo.Abp.Threading",
     "framework/src/Volo.Abp.Timing",
     "framework/src/Volo.Abp.UI",
     "framework/src/Volo.Abp.UI.Navigation",
     "framework/src/Volo.Abp.Uow",
+    "framework/src/Volo.Abp.Validation.Abstractions",
     "framework/src/Volo.Abp.Validation",
     "framework/src/Volo.Abp.VirtualFileSystem",
 

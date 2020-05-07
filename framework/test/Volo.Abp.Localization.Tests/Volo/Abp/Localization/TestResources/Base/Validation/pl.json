@@ -1,7 +1,0 @@
-﻿{
-  "culture": "pl",
-  "texts": {
-    "ThisFieldIsRequired": "To pole jest wymagane",
-    "MaxLenghtErrorMessage": "To pole może mieć maksymalnie '{0}' znaków"
-  }
-}

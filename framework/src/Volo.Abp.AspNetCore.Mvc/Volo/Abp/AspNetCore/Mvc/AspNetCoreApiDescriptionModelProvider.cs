@@ -206,7 +206,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             /* TODO: Add interfaces
              */
 
-            var typeName = ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(type);
+            var typeName = TypeHelper.GetFullNameHandlingNullableAndGenerics(type);
 
             if (applicationModel.Types.ContainsKey(typeName))
             {

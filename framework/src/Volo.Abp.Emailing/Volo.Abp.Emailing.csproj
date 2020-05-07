@@ -15,23 +15,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Emailing\Templates\DefaultEmailTemplates\*\*.tpl" />
-    <None Remove="Volo\Abp\Emailing\Templates\DefaultEmailTemplates\*\*.tpl" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="Volo\Abp\Emailing\Localization\*.json" />
     <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Scriban" Version="2.1.1" />
+    <Content Remove="Volo\Abp\Emailing\Templates\**\*.tpl" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\Templates\**\*.tpl" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BackgroundJobs.Abstractions\Volo.Abp.BackgroundJobs.Abstractions.csproj" />
     <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
+    <ProjectReference Include="..\Volo.Abp.TextTemplating\Volo.Abp.TextTemplating.csproj" />
     <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
 
