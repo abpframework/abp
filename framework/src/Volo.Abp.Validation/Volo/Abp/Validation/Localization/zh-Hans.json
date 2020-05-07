@@ -20,7 +20,7 @@
     "ThisFieldIsNotValid.": "验证未通过.",
     "ThisFieldIsNotAValidEmailAddress.": "字段不是有效的邮箱地址.",
     "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "字段只允许以下扩展名的文件: {0}",
-    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}": "字段必须是最大长度为'{0}'的字符串或数组.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "字段必须是最大长度为'{0}'的字符串或数组.",
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "字段必须是最小长度为'{0}'的字符串或数组.",
     "ThisFieldIsNotAValidPhoneNumber.": "字段不是有效的手机号码.",
     "ThisFieldMustBeBetween{0}And{1}": "字段值必须在{0}和{1}范围内.",
