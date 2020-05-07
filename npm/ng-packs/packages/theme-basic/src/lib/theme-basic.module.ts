@@ -10,11 +10,20 @@ import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.com
 import { LayoutState } from './states/layout.state';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
 import { InitialService } from './services/initial.service';
+import { LogoComponent } from './components/logo/logo.component';
+import { RoutesComponent } from './components/routes/routes.component';
+import { NavItemsComponent } from './components/nav-items/nav-items.component';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
 @NgModule({
-  declarations: [...LAYOUTS, ValidationErrorComponent],
+  declarations: [
+    ...LAYOUTS,
+    ValidationErrorComponent,
+    LogoComponent,
+    NavItemsComponent,
+    RoutesComponent,
+  ],
   imports: [
     CoreModule,
     ThemeSharedModule,
@@ -38,7 +47,7 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       errorTemplate: ValidationErrorComponent,
     }),
   ],
-  exports: [...LAYOUTS],
+  exports: [...LAYOUTS, LogoComponent, ValidationErrorComponent],
   entryComponents: [...LAYOUTS, ValidationErrorComponent],
 })
 export class ThemeBasicModule {
