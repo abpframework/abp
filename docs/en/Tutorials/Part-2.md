@@ -605,7 +605,7 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
 * `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
 * We added `New book` button to the `AbpContentToolbar`.
 
-Open `book-list.component.ts` file in `ağğ\book\book-list` folder and replace the content as below:
+Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
 ```js
 import { Component, OnInit } from '@angular/core';
@@ -1210,7 +1210,7 @@ Open `book-list.component.html` in `app\book\book-list` folder and find the `<ng
 
 #### DeleteBook action
 
-Open `book.actions.ts` in `app\book\state `folder and add an action named `DeleteBook`.
+Open `book.actions.ts` in `app\book\state` folder and add an action named `DeleteBook`.
 
 ```js
 export class DeleteBook {
