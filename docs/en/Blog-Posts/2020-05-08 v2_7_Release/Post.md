@@ -12,11 +12,11 @@ We've completed & merged hundreds of issues and pull requests with **1,300+ comm
 
 ABP.IO Platform is rapidly growing and we are getting more and more contributions from the community.
 
-## What's New?
-
-In the last few releases, we've mostly focused on providing ways to extend existing modules when you use them as NuGet/NPM Packages. We've also added some useful features and some helpful guides.
+## What's New in the ABP Framework?
 
 ### Object Extending System
+
+In the last few releases, we've mostly focused on providing ways to extend existing modules when you use them as NuGet/NPM Packages. 
 
 The Object Extending System allows module developers to create extensible modules and allows application developers to customize and extend a module easily.
 
@@ -66,10 +66,72 @@ ObjectExtensionManager.Instance
 
 See the [Object Extensions document](https://docs.abp.io/en/abp/latest/Object-Extensions) for details about this system.
 
-### Guide: Customizing the Existing Modules
+### Text Templating Package
 
-[Customizing the Existing Modules guide](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Guide) explains all the ways of extending/customizing a reusable module including [entities](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities), [services](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Overriding-Services) and the [user interface](https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Overriding-User-Interface).
+[Volo.Abp.TextTemplating](https://www.nuget.org/packages/Volo.Abp.TextTemplating) is a new package introduced with the v2.7.0. Previously, [Volo.Abp.Emailing](https://www.nuget.org/packages/Volo.Abp.Emailing) package had a similar functionality but it was limited, experimental and tightly coupled to the emailing.
 
-### Guide: EF Core Database Migrations
+The new text templating package allows you to define text based templates those can be easily localized and reused. You can define layout templates and share the layout from other templates.
 
-TODO
+We are currently using it for email sending. A module needs to send an email typically defines a template. Example:
+
+````xml
+<h3>{{L "PasswordReset"}}</h3>
+
+<p>{{L "PasswordResetInfoInEmail"}}</p>
+
+<div>
+    <a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
+</div>
+````
+
+This is a typical password reset email template.
+
+* The template system is based on the open source [Scriban library](https://github.com/lunet-io/scriban). So it supports if conditions, loops and much more.
+* `model` is used to pass data to the template (just like the ASP.NET Core MVC).
+* `L` is a special function that localizes the given string.
+
+It is typical to use the same layout for all emails. So, you can define a layout template. This is the standard layout template comes with the framework:
+
+````xml
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+    {{content}}
+</body>
+</html>
+````
+
+A layout should have a `{{content}}` area to render the child content (just like the `RenderBody()` in the MVC).
+
+It is very easy to override a template content by the final application to customize it.
+
+Whenever you need to render a template, use the `ITemplateRenderer` service by providing the template name and a model. See the [text templating documentation](https://docs.abp.io/en/abp/latest/Text-Templating) for details. We've even created a UI for the ABP Commercial (see the related section below).
+
+### Subscribing to the Exceptions
+
+ABP Framework's [exception handling system](https://docs.abp.io/en/abp/latest/Exception-Handling) automatically handles exceptions and returns an appropriate result to the client. In some cases, you may want to have a callback that is notified whenever an exception occurs. In this way, for example, you can send an email or take any action based on the exception.
+
+Just create a class derived from the `ExceptionSubscriber` class in your application:
+
+````csharp
+public class MyExceptionSubscriber : ExceptionSubscriber
+{
+    public override async Task HandleAsync(ExceptionNotificationContext context)
+    {
+        //TODO...
+    }
+}
+````
+
+See the [exception handling](https://docs.abp.io/en/abp/latest/Exception-Handling) document for more.
+
+### Others
+
+There are many minor features and enhancements made to the framework in the past releases. Here, a few ones:
+
+* Added `AbpLocalizationOptions.DefaultResourceType` to set the default resource type for the application. In this way, the localization system uses the default resource whenever the resource was not specified. The latest application startup template already configures it, but you may want to set it for your existing applications.
+* Added `IsEnabled` to permission definition. In this way, you can completely disable a permission and hide the related functionality from the application. This can be a way of feature switch for some applications. See [#3486](https://github.com/abpframework/abp/issues/3486) for usage.
+
