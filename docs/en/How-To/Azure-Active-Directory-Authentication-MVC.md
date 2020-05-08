@@ -163,9 +163,9 @@ You can find the source code of the completed example [here](https://github.com/
   
   * This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
   
-  ````csharp
-  options.Scope.Add("email");
-  ````
+    ````csharp
+    options.Scope.Add("email");
+    ````
   
   to your openid configuration.
   
