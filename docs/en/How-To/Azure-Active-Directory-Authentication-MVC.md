@@ -158,6 +158,17 @@ You can find the source code of the completed example [here](https://github.com/
        ````
 
 
+* Help! I am getting ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** error!
+
+  
+*  This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
+  
+      ````csharp
+      options.Scope.Add("email");
+      ````
+  
+      to your openid configuration.
+
 * Help! I keep getting ***AADSTS50011: The reply URL specified in the request does not match the reply URLs configured for the application*** error!
 
   * If you set your **CallbackPath** in appsettings as:
@@ -174,17 +185,6 @@ You can find the source code of the completed example [here](https://github.com/
 * Help! I keep getting ***AADSTS700051: The response_type 'token' is not enabled for the application.*** error!
 
   * This error occurs when you request **token** (access token) along with **id_token** without enabling Access tokens on Azure portal  app registrations. Simply tick **Access tokens** checkbox located on top of ID tokens to be able to request token aswell.
-
-* Help! I am getting ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** error!
-
-
-  *  This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
-
-      ````csharp
-      options.Scope.Add("email");
-      ````
-
-      to your openid configuration.
 
 * Help! I keep getting ***AADSTS7000218: The request body must contain the following parameter: 'client_assertion' or 'client_secret*** error!
 
