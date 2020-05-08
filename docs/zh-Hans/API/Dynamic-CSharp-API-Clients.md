@@ -39,7 +39,7 @@ public class MyClientAppModule : AbpModule
 ````csharp
 [DependsOn(
     typeof(AbpHttpClientModule), //用来创建客户端代理
-    typeof(BookStoreApplicationModule) //包含应用服务接口
+    typeof(BookStoreApplicationContractsModule) //包含应用服务接口
     )]
 public class MyClientAppModule : AbpModule
 {
@@ -47,7 +47,7 @@ public class MyClientAppModule : AbpModule
     {
         //创建动态客户端代理
         context.Services.AddHttpClientProxies(
-            typeof(BookStoreApplicationModule).Assembly
+            typeof(BookStoreApplicationContractsModule).Assembly
         );
     }
 }
@@ -142,12 +142,12 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ````csharp
 context.Services.AddHttpClientProxies(
-    typeof(BookStoreApplicationModule).Assembly,
-    remoteServiceName: "BookStore"
+    typeof(BookStoreApplicationContractsModule).Assembly,
+    remoteServiceConfigurationName: "BookStore"
 );
 ````
 
-`remoteServiceName`参数会匹配通过`AbpRemoteServiceOptions`配置的服务端点.如果`BookStore`端点没有定义就会使用默认的`Default`端点.
+`remoteServiceConfigurationName`参数会匹配通过`AbpRemoteServiceOptions`配置的服务端点.如果`BookStore`端点没有定义就会使用默认的`Default`端点.
 
 ### 作为默认服务
 
@@ -155,7 +155,7 @@ context.Services.AddHttpClientProxies(
 
 ````csharp
 context.Services.AddHttpClientProxies(
-    typeof(BookStoreApplicationModule).Assembly,
+    typeof(BookStoreApplicationContractsModule).Assembly,
     asDefaultServices: false
 );
 ````
