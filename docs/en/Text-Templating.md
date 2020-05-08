@@ -1,6 +1,6 @@
 # Text Templating
 
-In ABP Framework, `text template` is a mixture of text blocks and control logic that can generate a `string` result. [Scriban](https://github.com/lunet-io/scriban) is used for the control logic and [Abp.Localization](Localization.md) is used to make content easily localizable. The generated string can be text of any kind, such as a web page, an e-mail content etc.
+In ABP Framework, `text template` is a mixture of text blocks and control logic that can generate a `string` result. An open source package [Scriban](https://github.com/lunet-io/scriban) is used for the control logic and [Abp.Localization](Localization.md) is used to make content easily localizable. The generated string can be text of any kind, such as a web page, an e-mail content etc.
 
 > **stored content**
 ```html
@@ -36,9 +36,9 @@ If you want to manually install;
 
 1. Add the [Volo.Abp.TextTemplating](https://www.nuget.org/packages/Volo.Abp.TextTemplating) NuGet package to your project:
 
-   ````
-   Install-Package Volo.Abp.TextTemplating
-   ````
+````
+Install-Package Volo.Abp.TextTemplating
+````
 
 2. Add the `AbpTextTemplatingModule` to the dependency list of your module:
 
@@ -142,9 +142,29 @@ You can store your Text Templates for any culture in different content resource.
 </div>
 ```
 
-## Definition a Text Template
+## Layout System
 
-## Rendering
+It is typical to use the same layout for all emails. So, you can define a layout template. 
+
+A text template can be layout for different text templates and also a text template may use a layout.
+
+A layout Text Template must have `{{content}}` area to render the child content. _(just like the `RenderBody()` in the MVC)_
+
+> Example Email Layout Text Template
+
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+    {{content}}
+</body>
+</html>
+```
+
+## Definition a Text Template
 
 ## Getting Template Definitions
 
@@ -153,3 +173,5 @@ You can store your Text Templates for any culture in different content resource.
 ## Getting Template Contents
 
 ### Template Content Contributor
+
+## Rendering
