@@ -114,8 +114,6 @@ Inline localized Text Templates is using only one content resource, and it is us
 
 You can store your Text Templates for any culture in different content resource.
 
-**Examples given by using `Virtual File` contents.**
-
 > Example Multiple Content Localization
 
 > ForgotPasswordEmail / en.tpl
