@@ -283,7 +283,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TextTemplating", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TextTemplating.Tests", "test\Volo.Abp.TextTemplating.Tests\Volo.Abp.TextTemplating.Tests.csproj", "{251C7FD3-D313-4BCE-8068-352EC7EEA275}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Validation.Abstractions", "src\Volo.Abp.Validation.Abstractions\Volo.Abp.Validation.Abstractions.csproj", "{FA5D1D6A-2A05-4A3D-99C1-2B6C1D1F99A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Validation.Abstractions", "src\Volo.Abp.Validation.Abstractions\Volo.Abp.Validation.Abstractions.csproj", "{FA5D1D6A-2A05-4A3D-99C1-2B6C1D1F99A3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.SignalR", "src\Volo.Abp.AspNetCore.SignalR\Volo.Abp.AspNetCore.SignalR.csproj", "{B64FCE08-E9D2-4984-BF12-FE199F257416}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -847,6 +849,10 @@ Global
 		{FA5D1D6A-2A05-4A3D-99C1-2B6C1D1F99A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA5D1D6A-2A05-4A3D-99C1-2B6C1D1F99A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA5D1D6A-2A05-4A3D-99C1-2B6C1D1F99A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B64FCE08-E9D2-4984-BF12-FE199F257416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B64FCE08-E9D2-4984-BF12-FE199F257416}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B64FCE08-E9D2-4984-BF12-FE199F257416}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B64FCE08-E9D2-4984-BF12-FE199F257416}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -991,6 +997,7 @@ Global
 		{9E53F91F-EACD-4191-A487-E727741F1311} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{251C7FD3-D313-4BCE-8068-352EC7EEA275} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{FA5D1D6A-2A05-4A3D-99C1-2B6C1D1F99A3} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{B64FCE08-E9D2-4984-BF12-FE199F257416} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
