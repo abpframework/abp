@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 # How to Use the Azure Active Directory Authentication for MVC / Razor Page Applications
 
 This guide demonstrates how to  integrate AzureAD to an ABP application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
@@ -161,14 +169,14 @@ You can find the source code of the completed example [here](https://github.com/
 * Help! I am getting ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** error! 
 
   
-*  This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
+  * This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
   
-    ````csharp
+  ````csharp
   options.Scope.Add("email");
-    ````
-    
-      to your openid configuration.
-
+  ````
+  
+  to your openid configuration.
+  
 * Help! I keep getting ***AADSTS50011: The reply URL specified in the request does not match the reply URLs configured for the application*** error!
 
   * If you set your **CallbackPath** in appsettings as:
@@ -197,15 +205,15 @@ You can find the source code of the completed example [here](https://github.com/
 * How can I **debug/watch** which claims I get before they get mapped?
 
 
-  * You can add a simple event under openid configuration to debug before mapping like: 
+      * You can add a simple event under openid configuration to debug before mapping like: 
 
-    ````csharp
-    options.Events.OnTokenValidated = (async context =>
-    {
-    	var claimsFromOidcProvider = context.Principal.Claims.ToList();
-    	await Task.CompletedTask;
-    });
-    ````
+        ````csharp
+        options.Events.OnTokenValidated = (async context =>
+        {
+        	var claimsFromOidcProvider = context.Principal.Claims.ToList();
+        	await Task.CompletedTask;
+        });
+        ````
 
 ## See Also
 
