@@ -51,6 +51,7 @@ public class YourModule : AbpModule
 {
 }
 ````
+
 ## Logic
 
 A Text Template is a combination of two object.
@@ -163,6 +164,47 @@ A layout Text Template must have `{{content}}` area to render the child content.
 ```
 
 ## Definition a Text Template
+
+First of all, create a class that inherited from `TemplateDefinitionProvider` abstract class and create `Define` method that derived from the base class.
+
+`Define` method requires a context that is `ITemplateDefinitionContext`. This `context` is a storage for template definitions and we will add our template definitions to the context.
+
+> For default, ABP uses **`Virtual Files`** for text templates. All given examples are for `Virtual File Text Template Definitions`.
+
+```csharp
+public class MyTemplateDefinitionProvider : TemplateDefinitionProvider
+    {
+        public override void Define(ITemplateDefinitionContext context)
+        {
+            // Layout Text Template
+            context.Add(
+                new TemplateDefinition(
+                    name: "MySampleTemplateLayout", // Template Definition Name
+                    isLayout: true 
+                ).WithVirtualFilePath("/SampleTemplates/SampleTemplateLayout.tpl", true)
+            );
+
+            // Inline Localized Text Template
+            context.Add(
+                new TemplateDefinition(
+                    name: "ForgotPasswordEmail",
+                    localizationResource: typeof(MyLocalizationResource),
+                    layout: TestTemplates.TestTemplateLayout1
+                ).WithVirtualFilePath("/SampleTemplates/ForgotPasswordEmail.tpl", true)
+            );
+
+            // Multiple File Localized Text Template
+            context.Add(
+                new TemplateDefinition(
+                    name: "ForgotPasswordEmail",
+                    defaultCultureName: "en"
+                ).WithVirtualFilePath("/SampleTemplates/ForgotPasswordEmail", false)
+            );
+        }
+    }
+```
+
+### Context
 
 ## Getting Template Definitions
 
