@@ -85,14 +85,14 @@ This is a simple content for your templates. For default, template contents stor
 
 ```
 
-## Localization
+### Localization
 
 You can localize your Text Templates by choosing two different method.
 
 - `Inline Localization`
 - `Multiple Content Localization`
 
-### Inline Localization
+#### Inline Localization
 
 Inline localized Text Templates is using only one content resource, and it is using the `Abp.Localization` to get content in different languages/cultures. 
 
@@ -110,7 +110,7 @@ Inline localized Text Templates is using only one content resource, and it is us
 </div>
 ```
 
-### Multiple Content Localization
+#### Multiple Content Localization
 
 You can store your Text Templates for any culture in different content resource.
 
@@ -142,7 +142,7 @@ You can store your Text Templates for any culture in different content resource.
 </div>
 ```
 
-## Layout System
+### Layout System
 
 It is typical to use the same layout for all emails. So, you can define a layout template. 
 
