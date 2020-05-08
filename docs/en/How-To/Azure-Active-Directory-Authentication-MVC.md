@@ -171,18 +171,31 @@ You can find the source code of the completed example [here](https://github.com/
 
     your **Redirect URI** of your application in azure portal must be with <u>domain</u> like `https://localhost:44320/signin-azuread-oidc`, not only `/signin-azuread-oidc`. 
 
+* Help! I keep getting ***AADSTS700051: The response_type 'token' is not enabled for the application.*** error!
+
+  * This error occurs when you request **token** (access token) along with **id_token** without enabling Access tokens on Azure portal  app registrations. Simply tick **Access tokens** checkbox located on top of ID tokens to be able to request token aswell.
+
 * Help! I am getting ***System.ArgumentNullException: Value cannot be null. (Parameter 'userName')*** error!
 
 
-    * This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
-    
+  *  This occurs when you use Azure Authority **v2.0 endpoint** without requesting `email` scope. [Abp checks unique email to create user](https://github.com/abpframework/abp/blob/037ef9abe024c03c1f89ab6c933710bcfe3f5c93/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml.cs#L208). Simply add 
+
       ````csharp
       options.Scope.Add("email");
       ````
-    
+
       to your openid configuration.
 
+* Help! I keep getting ***AADSTS7000218: The request body must contain the following parameter: 'client_assertion' or 'client_secret*** error!
+
+  * This error occurs when you request **code** along with **id_token**. You need to add **client secret** on azure portal app registrations, under **Certificates & secrets** menu. Afterwards, you need to add openid configuration option like:
+
+    ````csharp
+    options.ClientSecret = "Value of your secret on azure portal";
+    ````
+
 * How can I **debug/watch** which claims I get before they get mapped?
+
 
   * You can add a simple event under openid configuration to debug before mapping like: 
 
@@ -193,7 +206,6 @@ You can find the source code of the completed example [here](https://github.com/
     	await Task.CompletedTask;
     });
     ````
-
 
 ## See Also
 
