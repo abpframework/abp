@@ -143,7 +143,7 @@ You can store your Text Templates for any culture in different content resource.
 
 ### Layout System
 
-It is typical to use the same layout for all emails. So, you can define a layout template. 
+It is typical to use the same layout for some different Text Templates. So, you can define a layout template. 
 
 A text template can be layout for different text templates and also a text template may use a layout.
 
@@ -204,7 +204,9 @@ public class MyTemplateDefinitionProvider : TemplateDefinitionProvider
     }
 ```
 
-### Context
+As you see in the given example all Text Templates are added with `(ITemplateDefinitionContext)context.Add` method. This method requires a `TemplateDefinition` object. Then we call `WithVirtualFilePath` method with chaining for the describe where is the virtual files.
+
+
 
 ## Getting Template Definitions
 
