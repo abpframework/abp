@@ -20,7 +20,7 @@
     "ThisFieldIsNotValid.": "{0} není platný.",
     "ThisFieldIsNotAValidEmailAddress.": "V poli {0} není platný email.",
     "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "Pole přijímá soubory pouze s následujícími koncovkami: {0}",
-    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}": "Vy poli musí být řežezec nebo řada o maximální délce '{0}'.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "Vy poli musí být řežezec nebo řada o maximální délce '{0}'.",
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "V poli musí být řežezec nebo řada o minimální délce '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "V poli není platné telefonní číslo.",
     "ThisFieldMustBeBetween{0}And{1}": "Pole musí být mezi {0} a {1}.",

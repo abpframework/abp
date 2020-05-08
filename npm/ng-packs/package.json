@@ -97,5 +97,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "resolutions": {
+    "@ngx-validate/core": "^0.0.8"
   }
 }

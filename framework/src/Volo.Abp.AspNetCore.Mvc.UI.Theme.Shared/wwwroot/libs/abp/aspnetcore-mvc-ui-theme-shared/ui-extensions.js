@@ -144,7 +144,8 @@
                 var tableProperty = properties[i];
                 columnConfigs.push({
                     title: localizeDisplayName(tableProperty.name, tableProperty.config.displayName),
-                    data: "extraProperties." + tableProperty.name
+                    data: "extraProperties." + tableProperty.name,
+                    orderable: false
                 });
             }
 
