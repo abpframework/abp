@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 # How to Use the Azure Active Directory Authentication for MVC / Razor Page Applications
 
 This guide demonstrates how to  integrate AzureAD to an ABP application that enables users to sign in using OAuth 2.0 with credentials from **Azure Active Directory**. 
@@ -188,7 +180,7 @@ You can find the source code of the completed example [here](https://github.com/
       }
     ````
 
-    your **Redirect URI** of your application in azure portal must be with <u>domain</u> like `https://localhost:44320/signin-azuread-oidc`, not only `/signin-azuread-oidc`. 
+    your **Redirect URI** of your application in azure portal must be <u>with domain</u> like `https://localhost:44320/signin-azuread-oidc`, not only `/signin-azuread-oidc`. 
 
 * Help! I keep getting ***AADSTS700051: The response_type 'token' is not enabled for the application.*** error!
 
@@ -204,16 +196,15 @@ You can find the source code of the completed example [here](https://github.com/
 
 * How can I **debug/watch** which claims I get before they get mapped?
 
+  * You can add a simple event under openid configuration to debug before mapping like: 
 
-      * You can add a simple event under openid configuration to debug before mapping like: 
-
-        ````csharp
-        options.Events.OnTokenValidated = (async context =>
-        {
-        	var claimsFromOidcProvider = context.Principal.Claims.ToList();
-        	await Task.CompletedTask;
-        });
-        ````
+    ````csharp
+    options.Events.OnTokenValidated = (async context =>
+      {
+      	var claimsFromOidcProvider = context.Principal.Claims.ToList();
+      	await Task.CompletedTask;
+      });
+    ````
 
 ## See Also
 
