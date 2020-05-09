@@ -129,7 +129,7 @@ namespace ProductService.Host
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Product Service API");
             });
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             //TODO: Problem on a clustered environment
             AsyncHelper.RunSync(async () =>

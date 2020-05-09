@@ -95,7 +95,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             app.UseAuthorization();
             app.UseAuditing();
             app.UseUnitOfWork();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

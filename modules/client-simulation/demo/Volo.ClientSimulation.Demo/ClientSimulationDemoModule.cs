@@ -42,7 +42,7 @@ namespace Volo.ClientSimulation.Demo
 
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }
