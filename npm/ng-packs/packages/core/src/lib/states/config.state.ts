@@ -324,7 +324,7 @@ function patchRouteDeep(
 ): ABP.FullRoute[] {
   routes = routes.map(route => {
     if (route.name === name) {
-      newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === ''
+      newValue.url = `${parentUrl}/${(!newValue.path || newValue.path === ''
         ? route.path
         : newValue.path) || ''}`;
 
