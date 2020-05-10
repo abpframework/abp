@@ -10,14 +10,16 @@
     "DisplayName:Abp.Mailing.Smtp.Domain": "網域",
     "DisplayName:Abp.Mailing.Smtp.EnableSsl": "啟用SSL",
     "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "使用預設憑證",
-    "Description:Abp.Mailing.DefaultFromAddress": "預設的發信者地址.",
-    "Description:Abp.Mailing.DefaultFromDisplayName": "預設的發信者名稱.",
-    "Description:Abp.Mailing.Smtp.Host": "SMTP 服務的主機名稱或主機IP位址.",
+    "Description:Abp.Mailing.DefaultFromAddress": "預設發信者地址.",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "預設發信者名稱.",
+    "Description:Abp.Mailing.Smtp.Host": "SMTP 服務的主機名稱或IP位址.",
     "Description:Abp.Mailing.Smtp.Port": "SMTP 服務的埠號.",
     "Description:Abp.Mailing.Smtp.UserName": "憑證使用者名稱.",
     "Description:Abp.Mailing.Smtp.Password": "憑證使用者密碼.",
-    "Description:Abp.Mailing.Smtp.Domain": "驗證憑證的網域名稱或電腦名稱.",
-    "Description:Abp.Mailing.Smtp.EnableSsl": "設定 SmtpClient 是否使用安全通訊協定.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "設定是否使用預設憑證."
+    "Description:Abp.Mailing.Smtp.Domain": "驗證憑證的網域或電腦名稱.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "指定 SmtpClient 是否使用安全通訊(SSL)協定.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "設定是否使用預設憑證.",
+    "TextTemplate:StandardEmailTemplates.Layout": "預設的電子郵件樣式",
+    "TextTemplate:StandardEmailTemplates.Message": "電子郵件內的文字訊息"
   }
 }
