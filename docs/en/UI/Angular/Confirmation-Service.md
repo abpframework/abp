@@ -86,7 +86,7 @@ this.confirmation.warn(
 
 - `hideCancelBtn` option hides the cancellation button when `true`. Default value is `false`.
 - `hideYesBtn` option hides the confirmation button when `true`. Default value is `false`.
-- `dismissible` option allows dismissing the confirmation overlay by pressing escape or clicking the backdrop. Default value is `true`.
+- `dismissible` option allows dismissing the confirmation popup by pressing escape or clicking the backdrop. Default value is `true`.
 - `cancelText` is the text of the cancellation button. A localization key or localization object can be passed. Default value is `AbpUi::Cancel`.
 - `yesText` is the text of the confirmation button. A localization key or localization object can be passed. Default value is `AbpUi::Yes`.
 - `messageLocalizationParams` is the interpolation parameters for the localization of the message.
