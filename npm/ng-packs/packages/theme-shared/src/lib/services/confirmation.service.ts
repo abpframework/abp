@@ -68,7 +68,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     severity?: Confirmation.Severity,
-    options?: Partial<Confirmation.Options>,
+    options = {} as Partial<Confirmation.Options>,
   ): Observable<Confirmation.Status> {
     if (!this.containerComponentRef) this.setContainer();
 
@@ -78,8 +78,11 @@ export class ConfirmationService {
       severity: severity || 'neutral',
       options,
     });
+
     this.status$ = new Subject();
-    this.listenToEscape();
+    const { dismissible = true } = options;
+    if (dismissible) this.listenToEscape();
+
     return this.status$;
   }
 
