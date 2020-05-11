@@ -145,7 +145,7 @@ namespace BloggingService.Host
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Blogging Service API");
             });
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             //TODO: Problem on a clustered environment
             AsyncHelper.RunSync(async () =>

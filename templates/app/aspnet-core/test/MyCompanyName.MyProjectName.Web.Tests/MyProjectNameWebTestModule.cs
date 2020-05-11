@@ -107,7 +107,7 @@ namespace MyCompanyName.MyProjectName
                 }
             });
 
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

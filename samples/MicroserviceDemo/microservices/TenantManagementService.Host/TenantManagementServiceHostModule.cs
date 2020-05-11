@@ -130,7 +130,7 @@ namespace TenantManagementService.Host
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tenant Management Service API");
             });
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }
