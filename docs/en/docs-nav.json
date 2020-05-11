@@ -506,6 +506,10 @@
       "text": "Samples",
       "items": [
         {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
           "text": "Microservice Demo",
           "path": "Samples/Microservice-Demo.md"
         }
