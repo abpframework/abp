@@ -28,4 +28,4 @@ ABP是一个 **模块化的应用程序框架** 由十多个 **nuget packages** 
 
 ## 商业应用模块
 
-[ABP商业](https://commercial.abp.io/)许可证在ABP框架上提供了额外的预构建应用程序模块. 参见ABP商业版提供的[模块列表](https://commercial.abp.io/module).
+[ABP商业](https://commercial.abp.io/)许可证在ABP框架上提供了额外的预构建应用程序模块. 参见ABP商业版提供的[模块列表](https://commercial.abp.io/modules).
