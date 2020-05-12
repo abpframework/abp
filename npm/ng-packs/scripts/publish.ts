@@ -28,7 +28,15 @@ const publish = async () => {
 
     await execa(
       'yarn',
-      ['lerna', 'version', program.nextVersion, '--yes', '--no-commit-hooks', '--skip-git'],
+      [
+        'lerna',
+        'version',
+        program.nextVersion,
+        '--yes',
+        '--no-commit-hooks',
+        '--skip-git',
+        '--force-publish',
+      ],
       { stdout: 'inherit', cwd: '../' },
     );
 
