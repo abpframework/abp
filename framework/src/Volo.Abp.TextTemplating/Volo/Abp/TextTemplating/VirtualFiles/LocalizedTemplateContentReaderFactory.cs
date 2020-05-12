@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -42,12 +41,18 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 }
                 finally
                 {
-                    _lock.ExitWriteLock();
+                    if (_lock.IsWriteLockHeld)
+                    {
+                        _lock.ExitWriteLock();
+                    }
                 }
             }
             finally
             {
-                _lock.ExitUpgradeableReadLock();
+                if (_lock.IsUpgradeableReadLockHeld)
+                {
+                    _lock.ExitUpgradeableReadLock();
+                }
             }
         }
 
