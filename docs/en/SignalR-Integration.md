@@ -42,6 +42,8 @@ public class YourModule : AbpModule
 }
 ```
 
+> You don't need to use the `services.AddSignalR()` and the `app.UseEndpoints(...)`, it's done by the `AbpAspNetCoreSignalRModule`.
+
 ### Client Side
 
 Client side installation depends on your UI framework.
@@ -98,5 +100,55 @@ Please refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/asp
 
 ## The ABP Framework Integration
 
-When you use the ABP Framework integration, you have some additional benefits.
+This section covers the additional benefits when you use the ABP Framework integration packages.
 
+### Hub Route & Mapping
+
+ABP automatically registers Hubs to the [dependency injection](Dependency-Injection.md) (as transient) and maps the hub endpoint. So, you don't have to use the ` app.UseEndpoints(...)` to map your hubs. Hub route (URL) is determined conventionally based on your hub name.
+
+Example:
+
+````csharp
+public class MessagingHub : Hub
+{
+    //...
+}
+````
+
+The hub route will be `/signalr-hubs/messasing` for the `MessasingHub`:
+
+* Adding a standard `/signalr-hubs/` prefix
+* Continue with the **camel case** hub name, without the `Hub` postfix.
+
+If you want to specify the route, you can use the `HubRoute` attribute:
+
+````csharp
+[HubRoute("/my-messasing-hub")]
+public class MessagingHub : Hub
+{
+    //...
+}
+````
+
+### AbpHub Base Class
+
+Instead of the standard `Hub` class, you can inherit from the `AbpHub` which has useful base properties, like `CurrentUser`.
+
+Example:
+
+````csharp
+public class MessagingHub : AbpHub
+{
+    public async Task SendMessage(string targetUserName, string message)
+    {
+        var currentUserName = CurrentUser.UserName; //Access to the current user info
+        var txt = L["MyText"]; //Localization
+    }
+}
+````
+
+
+
+## Example Application
+
+See the [SignalR Integration Demo](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo) as a sample application. It has a simple Chat page to send messaged between (authenticated) users.
