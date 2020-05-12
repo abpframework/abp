@@ -230,20 +230,20 @@ When one template is registered, it is easy to render and get the result with `I
 
 `ITemplateRenderer` service has one method that named `RenderAsync` and to render your content and it is requires some parametres. 
 
-- `templateName` (string) **_Not Null_**
-- `model` (object) **_Can Be Null_**
-- `cultureName` (string) **_Can Be Null_**
-- `globalContext` (dictionary) **_Can Be Null_**
+- `templateName` (_string_)
+- `model` (_object_)
+- `cultureName` (_string_)
+- `globalContext` (_dictionary_)
 
 `templateName` is exactly same with Template Definition Name.
 
 `model` is a dynamic object. This is using to put dynamic data into template. For more information, please look at  [Scriban Documentation](https://github.com/lunet-io/scriban).
 
-`cultureName` is your rendering destination culture. When it is not exist, it will use the default culture. 
+`cultureName` is your destination rendering culture. When it is not exist, it will use the default culture. 
 
 > If `cultureName` has a language tag it will try to find exact culture with tag, if it is not exist it will use the language family.
 
-> If you try to render content with _"es-MX"_ it will search your template with  _"es-MX"_ culture, when it fails to find, it will try to render _"es"_ culture content. If still can't find it will render the default culture content that you defined.
+> Example: If you try to render content with _"es-MX"_ it will search your template with  _"es-MX"_ culture, when it fails to find, it will try to render _"es"_ culture content. If still can't find it will render the default culture content that you defined.
 
 `globalContext` = TODO
 
@@ -288,4 +288,4 @@ It has three method that you can get your Template Definitions.
 
 You can store your `Template Contents` in any resource. To make it, just create a class that implements `ITemplateContentContributor` interface. 
 
-`ITemplateContentContributor` has a one method that named `GetOrNullAsync`. This method must return content **without rendering** if it finds in your resource or returns `null`. 
+`ITemplateContentContributor` has a one method that named `GetOrNullAsync`. This method must return content **without rendering** if that is exist in your resource or must return `null`. 
