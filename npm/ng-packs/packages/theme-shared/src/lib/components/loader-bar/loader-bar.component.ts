@@ -12,6 +12,7 @@ import { filter } from 'rxjs/operators';
     <div id="abp-loader-bar" [ngClass]="containerClass" [class.is-loading]="isLoading">
       <div
         class="abp-progress"
+        [class.progressing]="progressLevel"
         [style.width.vw]="progressLevel"
         [ngStyle]="{
           'background-color': color,
@@ -40,7 +41,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
   intervalPeriod = 350;
 
-  stopDelay = 820;
+  stopDelay = 800;
 
   @Input()
   filter = (action: StartLoader | StopLoader) =>
@@ -85,10 +86,11 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   }
 
   startLoading() {
-    if (this.isLoading || this.progressLevel !== 0) return;
+    if (this.isLoading || (this.interval && !this.interval.closed)) return;
 
     this.isLoading = true;
-    this.interval = interval(this.intervalPeriod).subscribe(() => {
+
+    const progress = () => {
       if (this.progressLevel < 75) {
         this.progressLevel += Math.random() * 10;
       } else if (this.progressLevel < 90) {
@@ -99,7 +101,10 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
         this.interval.unsubscribe();
       }
       this.cdRef.detectChanges();
-    });
+    };
+
+    progress();
+    this.interval = interval(this.intervalPeriod).subscribe(() => progress());
   }
 
   stopLoading() {
