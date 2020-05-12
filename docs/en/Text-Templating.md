@@ -247,6 +247,27 @@ When one template is registered, it is easy to render and get the result with `I
 
 `globalContext` = TODO
 
+## Template Content Provider
+
+When you want to get your stored template content you can use `ITemplateContentProvider`. 
+
+`ITemplateContentProvider` has one method that named `GetContentOrNullAsync` with two different overriding, and it returns you a string of template content or null. (**without rendering**)
+
+- `templateName` (_string_) or `templateDefinition` (_`TemplateDefinition`_)
+- `cultureName` (_string_)
+- `tryDefaults` (_bool_)
+- `useCurrentCultureIfCultureNameIsNull` (_bool_)
+
+### Usage
+
+First parametres of `GetContentOrNullAsync` (`templateName` or `templateDefinition`) are required, the other three parametres can be null.
+
+If you want to get exact culture content, set `tryDefaults` and `useCurrentCultureIfCultureNameIsNull` as a `false`. Because the `GetContentOrNullAsync` tries to return content of template.
+
+> Example Scenario
+
+> If you have a template content that culture "`es`", when you try to get template content with "`es-MX`" it will try to return first "`es-MX`", if it fails it will return "`es`" content. If you set `tryDefaults` and `useCurrentCultureIfCultureNameIsNull` as `false` it will return `null`.
+
 ## Template Definition Manager
 
 When you want to get your `Template Definitions`, you can use a singleton service that named `Template Definition Manager` in runtime.
@@ -265,3 +286,6 @@ It has three method that you can get your Template Definitions.
  
 ## Template Content Contributor
 
+You can store your `Template Contents` in any resource. To make it, just create a class that implements `ITemplateContentContributor` interface. 
+
+`ITemplateContentContributor` has a one method that named `GetOrNullAsync`. This method must return content **without rendering**. 
