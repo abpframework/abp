@@ -78,7 +78,7 @@ gulp
 
 This will copy the SignalR JavaScript files into your project:
 
-![signal-js-file](D:\Github\abp\docs\en\images\signal-js-file.png)
+![signal-js-file](images/signal-js-file.png)
 
 Finally, add the following code to your page/view to include the `signalr.js` file 
 
@@ -222,4 +222,6 @@ ABP implements SignalR's `IUserIdProvider` interface to provide the current user
 
 ## Example Application
 
-See the [SignalR Integration Demo](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo) as a sample application. It has a simple Chat page to send messaged between (authenticated) users.
+See the [SignalR Integration Demo](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo) as a sample application. It has a simple Chat page to send messages between (authenticated) users.
+
+![signalr-demo-chat](images/signalr-demo-chat.png)
