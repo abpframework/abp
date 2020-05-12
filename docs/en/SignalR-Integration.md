@@ -1,4 +1,4 @@
-## SignalR Integration
+# SignalR Integration
 
 > It is already possible to follow [the standard Microsoft tutorial](https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr) to add [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction) to your application. However, ABP provides a SignalR integration packages that simplify the integration and usage.
 
@@ -46,7 +46,7 @@ public class YourModule : AbpModule
 
 ### Client Side
 
-Client side installation depends on your UI framework.
+Client side installation depends on your UI framework / client type.
 
 #### ASP.NET Core MVC / Razor Pages UI
 
@@ -104,7 +104,7 @@ This section covers the additional benefits when you use the ABP Framework integ
 
 ### Hub Route & Mapping
 
-ABP automatically registers Hubs to the [dependency injection](Dependency-Injection.md) (as transient) and maps the hub endpoint. So, you don't have to use the ` app.UseEndpoints(...)` to map your hubs. Hub route (URL) is determined conventionally based on your hub name.
+ABP automatically registers all the hubs to the [dependency injection](Dependency-Injection.md) (as transient) and maps the hub endpoint. So, you don't have to use the ` app.UseEndpoints(...)` to map your hubs. Hub route (URL) is determined conventionally based on your hub name.
 
 Example:
 
@@ -118,7 +118,7 @@ public class MessagingHub : Hub
 The hub route will be `/signalr-hubs/messasing` for the `MessasingHub`:
 
 * Adding a standard `/signalr-hubs/` prefix
-* Continue with the **camel case** hub name, without the `Hub` postfix.
+* Continue with the **camel case** hub name, without the `Hub` suffix.
 
 If you want to specify the route, you can use the `HubRoute` attribute:
 
@@ -130,9 +130,9 @@ public class MessagingHub : Hub
 }
 ````
 
-### AbpHub Base Class
+### AbpHub Base Classes
 
-Instead of the standard `Hub` class, you can inherit from the `AbpHub` which has useful base properties, like `CurrentUser`.
+Instead of the standard `Hub` and `Hub<T>` classes, you can inherit from the `AbpHub` or `AbpHub<T>` which hve useful base properties like `CurrentUser`.
 
 Example:
 
@@ -147,7 +147,78 @@ public class MessagingHub : AbpHub
 }
 ````
 
+> While you could inject the same properties into your hub constructor, this way simplifies your hub class.
 
+### Manual Registration / Mapping
+
+ABP automatically registers all the hubs to the [dependency injection](Dependency-Injection.md) as a **transient service**. If you want to **disable auto dependency injection** registration for your hub class, just add a `DisableConventionalRegistration` attribute. You can still register your hub class to dependency injection in the `ConfigureServices` method of your module if you like:
+
+````csharp
+context.Services.AddTransient<MessagingHub>();
+````
+
+When **you or ABP** register the class to the dependency injection, it is automatically mapped to the endpoint route configuration just as described in the previous sections. You can use `DisableAutoHubMap` attribute if you want to manually map your hub class.
+
+For manual mapping, you have two options:
+
+1. Use the `AbpSignalROptions` to add your map configuration (in the `ConfigureServices` method of your [module](Module-Development-Basics.md)), so ABP still performs the endpoint mapping for your hub:
+
+````csharp
+Configure<AbpSignalROptions>(options =>
+{
+    options.Hubs.Add(
+        new HubConfig(
+            typeof(MessagingHub), //Hub type
+            "/my-messaging/route", //Hub route (URL)
+            hubOptions =>
+            {
+                //Additional options
+                hubOptions.LongPolling.PollTimeout = TimeSpan.FromSeconds(30);
+            }
+        )
+    );
+});
+````
+
+This is a good way to provide additional SignalR options.
+
+If you don't want to disable auto hub map, but still want to perform additional SignalR configuration, use the `options.Hubs.AddOrUpdate(...)` method:
+
+````csharp
+Configure<AbpSignalROptions>(options =>
+{
+    options.Hubs.AddOrUpdate(
+        typeof(MessagingHub), //Hub type
+        config => //Additional configuration
+        {
+            config.RoutePattern = "/my-messaging-hub"; //override the default route
+            config.ConfigureActions.Add(hubOptions =>
+            {
+                //Additional options
+                hubOptions.LongPolling.PollTimeout = TimeSpan.FromSeconds(30);
+            });
+        }
+    );
+});
+````
+
+This is the way you can modify the options of a hub class defined in a depended module (where you don't have the source code access).
+
+2. Change `app.UseConfiguredEndpoints` in the `OnApplicationInitialization` method of your [module](Module-Development-Basics.md) as shown below (added a lambda method as the parameter).
+
+````csharp
+app.UseConfiguredEndpoints(endpoints =>
+{
+    endpoints.MapHub<MessagingHub>("/my-messaging-hub", options =>
+    {
+        options.LongPolling.PollTimeout = TimeSpan.FromSeconds(30);
+    });
+});
+````
+
+### UserIdProvider
+
+ABP implements SignalR's `IUserIdProvider` interface to provide the current user id from the `ICurrentUser` service of the ABP framework (see [the current user service](CurrentUser.md)), so it will be integrated to the authentication system of your application. The implementing class is the `AbpSignalRUserIdProvider`, if you want to change/override it.
 
 ## Example Application
 
