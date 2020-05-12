@@ -54,14 +54,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string templateSource = null)
         {
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
+            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
 
-            string latestVersion;
-
-#if DEBUG
-            latestVersion = await GetLatestSourceCodeVersionAsync(name, type, $"{CliUrls.WwwAbpIoProduction}api/download/{type}/get-version/");
-#else
-            latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
-#endif
             if (version == null)
             {
                 if (latestVersion == null)
@@ -84,13 +78,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 version = latestVersion;
             }
 
-            string nugetVersion;
-
-#if DEBUG
-            nugetVersion = version;
-#else
-            nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
-#endif
+            var nugetVersion = (await GetTemplateNugetVersionAsync(name, type, version)) ?? version;
 
             if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
             {

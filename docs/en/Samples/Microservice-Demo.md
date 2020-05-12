@@ -552,7 +552,7 @@ app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                    ctx.Request.Path.ToString().StartsWith("/Abp/"),
     app2 =>
     {
-        app2.UseMvcWithDefaultRouteAndArea();
+        app2.UseConfiguredEndpoints();
     });
 
 app.UseOcelot().Wait();

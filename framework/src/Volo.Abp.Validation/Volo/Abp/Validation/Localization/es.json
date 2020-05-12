@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "es",
   "texts": {
     "'{0}' and '{1}' do not match.": "'{0} \" y \"{1} \" no coinciden.",
@@ -11,7 +11,7 @@
     "The {0} field is not a valid phone number.": "{0} no es un número de teléfono válido.",
     "The field {0} must be between {1} and {2}.": "El campo {0} debe ser entre {1} y {2}.",
     "The field {0} must match the regular expression '{1}'.": "El campo {0} no coincide con el formato solicitado.",
-    "The {0} field is required.": "La {0} campo es obligatorio.",
+    "The {0} field is required.": "El {0} campo es obligatorio.",
     "The field {0} must be a string with a maximum length of {1}.": "El campo {0} debe ser una cadena con una longitud máxima de {1}.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "El campo {0} debe ser una cadena con una longitud mínima de {2} y una longitud máxima de {1}.",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "El campo {0} no es una dirección URL válida http, https o ftp.",

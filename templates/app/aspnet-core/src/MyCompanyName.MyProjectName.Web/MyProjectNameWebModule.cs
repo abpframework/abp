@@ -192,8 +192,6 @@ namespace MyCompanyName.MyProjectName.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            app.UseCorrelationId();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -202,6 +200,8 @@ namespace MyCompanyName.MyProjectName.Web
             {
                 app.UseErrorPage();
             }
+
+            app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
@@ -221,7 +221,7 @@ namespace MyCompanyName.MyProjectName.Web
             });
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

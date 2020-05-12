@@ -8,7 +8,15 @@ namespace Volo.Abp.EntityFrameworkCore
 {
     public static class AbpDbContextConfigurationContextPostgreSqlExtensions
     {
+        [Obsolete("Use 'UseNpgsql(...)' method instead. This will be removed in future versions.")]
         public static DbContextOptionsBuilder UsePostgreSql(
+            [NotNull] this AbpDbContextConfigurationContext context,
+            [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
+        {
+            return context.UseNpgsql(postgreSqlOptionsAction);
+        }
+
+        public static DbContextOptionsBuilder UseNpgsql(
             [NotNull] this AbpDbContextConfigurationContext context,
             [CanBeNull] Action<NpgsqlDbContextOptionsBuilder> postgreSqlOptionsAction = null)
         {

@@ -146,6 +146,7 @@ export const CONFIG_STATE_DATA = {
     id: null,
     tenantId: null,
     userName: null,
+    email: null,
   },
   features: {
     values: {},

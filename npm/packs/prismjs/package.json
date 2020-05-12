@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "@abp/core": "^2.7.0",
+    "@abp/clipboard": "^2.7.0",
     "prismjs": "^1.17.1"
   },
   "gitHead": "0ea3895f3b0b489e3ea81fc88f8f0896b22b61bd"
