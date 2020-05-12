@@ -169,7 +169,9 @@ First of all, create a class that inherited from `TemplateDefinitionProvider` ab
 
 `Define` method requires a context that is `ITemplateDefinitionContext`. This `context` is a storage for template definitions and we will add our template definitions to the context.
 
-> For default, ABP uses **`Virtual Files`** for text templates. All given examples are for `Virtual File Text Template Definitions`.
+> **NOTE!** For default, ABP uses **Virtual File System** for text templates. Do not forget to register your files as an `Embedded Resource`. Please check the [Virtual File System Documentation](Virtual-File-System.md) for more details.
+
+> All given examples are for `Virtual File Text Template Definitions`.
 
 ```csharp
 public class MyTemplateDefinitionProvider : TemplateDefinitionProvider
@@ -204,9 +206,42 @@ public class MyTemplateDefinitionProvider : TemplateDefinitionProvider
     }
 ```
 
-As you see in the given example all Text Templates are added with `(ITemplateDefinitionContext)context.Add` method. This method requires a `TemplateDefinition` object. Then we call `WithVirtualFilePath` method with chaining for the describe where is the virtual files.
+As you see in the given example, all Text Templates are added with `(ITemplateDefinitionContext)context.Add` method. This method requires a `TemplateDefinition` object. Then we call `WithVirtualFilePath` method with chaining for the describe where is the virtual files.
+
+`WithVirtualFilePath` is requires one `tpl` file path for the `Inline Localized` Text Templates. If your Text Tempalte is `Multi Localized` you should create a folder and store each different culture files under that. So you can send the folder path as a parameter to `WithVirtualFilePath`.
+
+> Inline Localized File
+
+```
+/ Folder / ForgotPasswordEmail.tpl
+```
+
+> Multi Content Localization
+
+```
+/ Folder / ForgotPasswordEmail / en.tpl
+/ Folder / ForgotPasswordEmail / tr.tpl
+```
 
 
+## Rendering
+
+When one template is registered, it is easy to render and get the result with `ITemplateRenderer` service. 
+
+`ITemplateRenderer` service has one method that named `RenderAsync` and to render your content and it is requires some parametres. 
+
+- `templateName` (string) **_Not Null_**
+- `model` (object) **_Can Be Null_**
+- `cultureName` (string) **_Can Be Null_**
+- `globalContext` (dictionary) **_Can Be Null_**
+
+`templateName` is exactly same with Template Definition Name.
+
+`model` is a dynamic object. This is using to put dynamic data into template. For more information, please check by [Scriban Documentation](https://github.com/lunet-io/scriban).
+
+`cultureName` is your rendering destination culture. When it is not exist, it will use the default culture. 
+
+`globalContext` = TODO
 
 ## Getting Template Definitions
 
@@ -215,5 +250,3 @@ As you see in the given example all Text Templates are added with `(ITemplateDef
 ## Getting Template Contents
 
 ### Template Content Contributor
-
-## Rendering
