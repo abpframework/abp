@@ -104,7 +104,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     };
 
     moveOn();
-    this.interval = interval(this.intervalPeriod).subscribe(() => moveOn());
+    this.interval = interval(this.intervalPeriod).subscribe(moveOn);
   }
 
   stopLoading() {
