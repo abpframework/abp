@@ -237,16 +237,31 @@ When one template is registered, it is easy to render and get the result with `I
 
 `templateName` is exactly same with Template Definition Name.
 
-`model` is a dynamic object. This is using to put dynamic data into template. For more information, please check by [Scriban Documentation](https://github.com/lunet-io/scriban).
+`model` is a dynamic object. This is using to put dynamic data into template. For more information, please look at  [Scriban Documentation](https://github.com/lunet-io/scriban).
 
 `cultureName` is your rendering destination culture. When it is not exist, it will use the default culture. 
 
+> If `cultureName` has a language tag it will try to find exact culture with tag, if it is not exist it will use the language family.
+
+> If you try to render content with _"es-MX"_ it will search your template with  _"es-MX"_ culture, when it fails to find, it will try to render _"es"_ culture content. If still can't find it will render the default culture content that you defined.
+
 `globalContext` = TODO
 
-## Getting Template Definitions
+## Template Definition Manager
 
-### Template Definition Manager
+When you want to get your `Template Definitions`, you can use a singleton service that named `Template Definition Manager` in runtime.
 
-## Getting Template Contents
+To use it, inject `ITemplateDefinitionManager` service. 
 
-### Template Content Contributor
+It has three method that you can get your Template Definitions.
+
+- `Get`
+- `GetOrNull`
+- `GetAll`
+
+`Get` and `GetOrNull` requires a string parameter that name of template definition. `Get` will throw error when it is not exist but `GetOrNull` returns `null`.
+
+`GetAll` returns you all registered template definitions.
+ 
+## Template Content Contributor
+
