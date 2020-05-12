@@ -95,7 +95,7 @@ You can localize your Text Templates by choosing two different method.
 
 #### Inline Localization
 
-Inline localized Text Templates is using only one content resource, and it is using the `Abp.Localization` to get content in different languages/cultures. 
+Inline localized Text Templates is using only one content resource, and it is using the [Abp.Localization](Localization.md) to get content in different languages/cultures. 
 
 > Example Inline Localized Text Template: 
 >
@@ -288,4 +288,4 @@ It has three method that you can get your Template Definitions.
 
 You can store your `Template Contents` in any resource. To make it, just create a class that implements `ITemplateContentContributor` interface. 
 
-`ITemplateContentContributor` has a one method that named `GetOrNullAsync`. This method must return content **without rendering**. 
+`ITemplateContentContributor` has a one method that named `GetOrNullAsync`. This method must return content **without rendering** if it finds in your resource or returns `null`. 
