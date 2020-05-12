@@ -107,22 +107,25 @@ public class MyIdentityUserAppService : IdentityUserAppService
 public class MyIdentityUserManager : IdentityUserManager
 {
     public MyIdentityUserManager(
-        IdentityUserStore store, 
+        IdentityUserStore store,
+        IIdentityRoleRepository roleRepository, 
+        IIdentityUserRepository userRepository,
         IOptions<IdentityOptions> optionsAccessor, 
         IPasswordHasher<IdentityUser> passwordHasher,
         IEnumerable<IUserValidator<IdentityUser>> userValidators, 
         IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, 
-        ILookupNormalizer keyNormalizer, 
-        IdentityErrorDescriber errors, 
-        IServiceProvider services, 
+        ILookupNormalizer keyNormalizer,
+        IdentityErrorDescriber errors,
+        IServiceProvider services,
         ILogger<IdentityUserManager> logger, 
-        ICancellationTokenProvider cancellationTokenProvider
-        ) : base(
-            store, 
+        ICancellationTokenProvider cancellationTokenProvider) : 
+        base(store,
+            roleRepository,
+            userRepository, 
             optionsAccessor, 
             passwordHasher, 
             userValidators, 
-            passwordValidators, 
+            passwordValidators,
             keyNormalizer, 
             errors, 
             services, 

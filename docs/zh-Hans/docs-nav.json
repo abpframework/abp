@@ -496,6 +496,10 @@
       "text": "示例",
       "items": [
         {
+          "text": "所有示例",
+          "path": "Samples/Index.md"
+        },
+        {
           "text": "微服务示例",
           "path": "Samples/Microservice-Demo.md"
         }
