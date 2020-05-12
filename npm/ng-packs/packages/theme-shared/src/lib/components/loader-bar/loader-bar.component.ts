@@ -90,7 +90,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
     this.isLoading = true;
 
-    const progress = () => {
+    const moveOn = () => {
       if (this.progressLevel < 75) {
         this.progressLevel += Math.random() * 10;
       } else if (this.progressLevel < 90) {
@@ -103,8 +103,8 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
       this.cdRef.detectChanges();
     };
 
-    progress();
-    this.interval = interval(this.intervalPeriod).subscribe(() => progress());
+    moveOn();
+    this.interval = interval(this.intervalPeriod).subscribe(() => moveOn());
   }
 
   stopLoading() {
