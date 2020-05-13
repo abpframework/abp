@@ -42,6 +42,10 @@ Template rendering engine is very powerful;
 * You can define **layout templates** to be used as the layout while rendering other templates.
 * You can pass arbitrary objects to the template context (beside the model) for advanced scenarios.
 
+### Source Code
+
+Get [the source code of the sample application](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo) developed and referred through this document.
+
 ## Installation
 
 It is suggested to use the [ABP CLI](CLI.md) to install this package.
@@ -443,3 +447,9 @@ Return `null` if your source can not find the content, so `ITemplateContentProvi
 ### Template Definition Manager
 
 `ITemplateDefinitionManager` service can be used to get the template definitions (created by the template definition providers).
+
+## See Also
+
+* [The source code of the sample application](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo) developed and referred through this document.
+* [Localization system](Localization.md).
+* [Virtual File System](Virtual-File-System.md).
