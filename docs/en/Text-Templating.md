@@ -10,6 +10,8 @@ It is very similar to an ASP.NET Core Razor View (or Page):
 
 RAZOR VIEW (or PAGE) + MODEL => HTML CONTENT
 
+You can use the rendered output for any purpose, like sending emails or preparing some reports.
+
 ### Example
 
 Here, a simple template:
@@ -346,35 +348,31 @@ context.Add(
 
 ## Global Context
 
+ABP passes the `model` that can be used to access to the model inside the template. You can pass more global variables if you need.
 
+An example template content:
 
+````
+A global object value: {{myGlobalObject}}
+````
 
-## Rendering
+This template assumes that that is a `myGlobalObject` object in the template rendering context. You can provide it like shown below:
 
-When one template is registered, it is easy to render and get the result with `ITemplateRenderer` service. 
+````csharp
+var result = await _templateRenderer.RenderAsync(
+    "GlobalContextUsage",
+    globalContext: new Dictionary<string, object>
+    {
+        {"myGlobalObject", "TEST VALUE"}
+    }
+);
+````
 
-`ITemplateRenderer` service has one method that named `RenderAsync` and to render your content and it is requires some parameters. 
+The rendering result will be:
 
-- `templateName` (_string_)
-- `model` (_object_)
-- `cultureName` (_string_)
-- `globalContext` (_dictionary_)
-
-`templateName` is exactly same with Template Definition Name.
-
-`model` is a dynamic object. This is using to put dynamic data into template. For more information, please look at  [Scriban Documentation](https://github.com/lunet-io/scriban).
-
-`cultureName` is your destination rendering culture. When it is not exist, it will use the default culture. 
-
-> If `cultureName` has a language tag it will try to find exact culture with tag, if it is not exist it will use the language family.
-
-> Example: If you try to render content with _"es-MX"_ it will search your template with  _"es-MX"_ culture, when it fails to find, it will try to render _"es"_ culture content. If still can't find it will render the default culture content that you defined.
-
-`globalContext` = TODO
-
-
-
-
+````
+A global object value: TEST VALUE
+````
 
 
 
