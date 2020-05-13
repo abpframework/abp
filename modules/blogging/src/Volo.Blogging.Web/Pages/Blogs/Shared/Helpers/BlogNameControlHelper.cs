@@ -7,7 +7,7 @@ namespace Volo.Blogging.Pages.Blogs.Shared.Helpers
     {
         public static readonly string[] ProhibitedFileExtensions = new string[] {".ico", ".txt", ".php"};
 
-        public static bool IsFileFormat(string blogShortName)
+        public static bool IsProhibitedFileFormatName(string blogShortName)
         {
             if (!string.IsNullOrWhiteSpace(blogShortName))
             {

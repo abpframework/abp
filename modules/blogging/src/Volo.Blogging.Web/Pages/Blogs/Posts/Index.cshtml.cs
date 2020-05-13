@@ -38,7 +38,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public virtual async Task<ActionResult> OnGetAsync()
         {
-            if (BlogNameControlHelper.IsFileFormat(BlogShortName))
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
             {
                 return NotFound();
             }
