@@ -125,7 +125,9 @@ Configure<AbpVirtualFileSystemOptions>(options =>
 
 ## Rendering the Template
 
-`ITemplateRenderer` service is used to render a template content. Example:
+`ITemplateRenderer` service is used to render a template content.
+
+### Example: Rendering a Simple Template
 
 ````csharp
 public class HelloDemo : ITransientDependency
@@ -165,11 +167,11 @@ Hello John :)
 
 ### Anonymous Model
 
-While it is suggested to create model classes for the templates, it would be practical (and possible) to use an anonymous object for simple cases:
+While it is suggested to create model classes for the templates, it would be practical (and possible) to use anonymous objects for simple cases:
 
 ````csharp
 var result = await _templateRenderer.RenderAsync(
-    "Hello", //the template name
+    "Hello",
     new
     {
         Name = "John"
@@ -179,25 +181,115 @@ var result = await _templateRenderer.RenderAsync(
 
 In this case, we haven't created a model class, but created an anonymous object as the model.
 
-### PascalCase vs CamelCase
+### PascalCase vs camelCase
 
-PascalCase property names (like `UserName`) is used as camelCase (like `userName`) in the template as a convention.
+PascalCase property names (like `UserName`) is used as camelCase (like `userName`) in the templates.
 
+## Localization
 
+It is possible to localize a template content based on the current culture. There are two types of localization options described in the following sections.
 
+### Inline localization
 
+Inline localization uses the [localization system](Localization.md) to localize texts inside templates.
 
+#### Example: Reset Password Link
 
+Assuming you need to send an email to a user to reset her/his password. Here, the template content:
 
+````
+<a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
+````
 
+`L` function is used to localize the given key based on the current user culture. You need to define the `ResetMyPassword` key inside your localization file:
 
+````json
+"ResetMyPassword": "Click here to reset your password"
+````
 
+You also need to declare the localization resource to be used with this template, inside your template definition provider class:
 
+````csharp
+context.Add(
+    new TemplateDefinition(
+            "PasswordReset", //Template name
+            typeof(DemoResource) //LOCALIZATION RESOURCE
+        ).WithVirtualFilePath(
+            "/Demos/PasswordReset/PasswordReset.tpl", //template content path
+            isInlineLocalized: true
+        )
+);
+````
 
+That's all. When you render this template like that:
 
+````csharp
+var result = await _templateRenderer.RenderAsync(
+    "PasswordReset", //the template name
+    new PasswordResetModel
+    {
+        Link = "https://abp.io/example-link?userId=123&token=ABC"
+    }
+);
+````
 
+You will see the localized result:
 
+````csharp
+<a href="https://abp.io/example-link?userId=123&token=ABC">Click here to reset your password</a>
+````
 
+> If you define the [default localization resource](Localization.md) for your application, then no need to declare the resource type for the template definition.
+
+### Multiple Contents Localization
+
+Instead of a single template that uses the localization system to localize the template, you may want to create different template files for each language. It can be needed if the template should be completely different for a specific culture rather than simple text localizations.
+
+#### Example: Welcome Email
+
+Assuming that you want to send a welcome email to your users, but want to define a completely different template based on the user culture.
+
+First, create a folder and put your templates inside it, like `en.tpl`, `tr.tpl`... one for each culture you support:
+
+![multiple-file-template](D:\Github\abp\docs\en\images\multiple-file-template.png)
+
+Then add your template definition in the template definition provider class:
+
+````csharp
+context.Add(
+    new TemplateDefinition(
+            name: "WelcomeEmail",
+            defaultCultureName: "en"
+        )
+        .WithVirtualFilePath(
+            "/Demos/WelcomeEmail/Templates", //template content folder
+            isInlineLocalized: false
+        )
+);
+````
+
+* Set **default culture name**, so it fallbacks to the default culture if there is no template for the desired culture.
+* Specify **the template folder** rather than a single template file.
+* Set `isInlineLocalized` to `false` for this case.
+
+That's all, you can render the template for the current culture:
+
+````csharp
+var result = await _templateRenderer.RenderAsync("WelcomeEmail");
+````
+
+> Skipped the modal for this example to keep it simple, but you can use models as just explained before.
+
+### Specify the Culture
+
+`ITemplateRenderer` service uses the current culture (`CultureInfo.CurrentUICulture`) if not specified. If you need, you can specify the culture as the `cultureName` parameter:
+
+````csharp
+var result = await _templateRenderer.RenderAsync(
+    "WelcomeEmail",
+    cultureName: "en"
+);
+````
 
 
 
@@ -251,13 +343,7 @@ An inline localized text template is using only one content resource, and it is 
 Example Inline Localized Text Template content: 
 
 ```html
-<h3>{{L "PasswordReset"}}</h3>
-
-<p>{{L "PasswordResetInfoInEmail"}}</p>
-
-<div>
-    <a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
-</div>
+<a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
 ```
 
 #### Multiple Content Localization
@@ -395,6 +481,12 @@ When one template is registered, it is easy to render and get the result with `I
 > Example: If you try to render content with _"es-MX"_ it will search your template with  _"es-MX"_ culture, when it fails to find, it will try to render _"es"_ culture content. If still can't find it will render the default culture content that you defined.
 
 `globalContext` = TODO
+
+
+
+
+
+
 
 ## Template Content Provider
 
