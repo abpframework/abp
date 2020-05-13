@@ -30,10 +30,8 @@ ABP是一个模块化框架,它需要一个**启动 (根) 模块**继承自``Abp
 
 ````C#
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 
@@ -42,7 +40,8 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public override void OnApplicationInitialization(
+            ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
@@ -51,8 +50,14 @@ namespace BasicAspNetCoreApplication
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
-            app.UseMvcWithDefaultRoute();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseConfiguredEndpoints();
         }
     }
 }
