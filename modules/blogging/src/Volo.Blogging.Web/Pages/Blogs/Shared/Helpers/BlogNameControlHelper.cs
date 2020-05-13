@@ -1,19 +1,19 @@
 ﻿using System.IO;
+using System.Linq;
 
 namespace Volo.Blogging.Pages.Blogs.Shared.Helpers
 {
     public static class BlogNameControlHelper
     {
+        public static readonly string[] ProhibitedFileExtensions = new string[] {".ico", ".txt", ".php"};
+
         public static bool IsFileFormat(string blogShortName)
         {
             if (!string.IsNullOrWhiteSpace(blogShortName))
             {
                 var fileInfo = new FileInfo(blogShortName);
 
-                if (!string.IsNullOrEmpty(fileInfo.Extension))
-                {
-                    return true;
-                }
+                return ProhibitedFileExtensions.Contains(fileInfo.Extension);
             }
 
             return false;
