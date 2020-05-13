@@ -9,33 +9,33 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
 {
     public class LocalizedTemplateContentReaderFactory : ILocalizedTemplateContentReaderFactory, ISingletonDependency
     {
-        private readonly IVirtualFileProvider _virtualFileProvider;
-        private readonly ConcurrentDictionary<string, ILocalizedTemplateContentReader> _readerCache;
+        protected IVirtualFileProvider VirtualFileProvider { get; }
+        protected ConcurrentDictionary<string, ILocalizedTemplateContentReader> ReaderCache { get; }
         protected SemaphoreSlim SyncObj;
 
         public LocalizedTemplateContentReaderFactory(IVirtualFileProvider virtualFileProvider)
         {
-            _virtualFileProvider = virtualFileProvider;
-            _readerCache = new ConcurrentDictionary<string, ILocalizedTemplateContentReader>();
+            VirtualFileProvider = virtualFileProvider;
+            ReaderCache = new ConcurrentDictionary<string, ILocalizedTemplateContentReader>();
             SyncObj = new SemaphoreSlim(1, 1);
         }
 
-        public async Task<ILocalizedTemplateContentReader> CreateAsync(TemplateDefinition templateDefinition)
+        public virtual async Task<ILocalizedTemplateContentReader> CreateAsync(TemplateDefinition templateDefinition)
         {
-            if (_readerCache.TryGetValue(templateDefinition.Name, out var reader))
+            if (ReaderCache.TryGetValue(templateDefinition.Name, out var reader))
             {
                 return reader;
             }
 
             using (await SyncObj.LockAsync())
             {
-                if (_readerCache.TryGetValue(templateDefinition.Name, out reader))
+                if (ReaderCache.TryGetValue(templateDefinition.Name, out reader))
                 {
                     return reader;
                 }
 
                 reader = await CreateInternalAsync(templateDefinition);
-                _readerCache[templateDefinition.Name] = reader;
+                ReaderCache[templateDefinition.Name] = reader;
                 return reader;
             }
         }
@@ -49,7 +49,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
                 return NullLocalizedTemplateContentReader.Instance;
             }
 
-            var fileInfo = _virtualFileProvider.GetFileInfo(virtualPath);
+            var fileInfo = VirtualFileProvider.GetFileInfo(virtualPath);
             if (!fileInfo.Exists)
             {
                 throw new AbpException("Could not find a file/folder at the location: " + virtualPath);
@@ -58,7 +58,7 @@ namespace Volo.Abp.TextTemplating.VirtualFiles
             if (fileInfo.IsDirectory)
             {
                 var folderReader = new VirtualFolderLocalizedTemplateContentReader();
-                await folderReader.ReadContentsAsync(_virtualFileProvider, virtualPath);
+                await folderReader.ReadContentsAsync(VirtualFileProvider, virtualPath);
                 return folderReader;
             }
             else //File
