@@ -6,9 +6,13 @@ using Volo.Abp.Security.Claims;
 namespace MyCompanyName.MyProjectName.Security
 {
     [Dependency(ReplaceServices = true)]
-    public class FakeCurrentPrincipalAccessor : ICurrentPrincipalAccessor, ISingletonDependency
+    public class FakeCurrentPrincipalAccessor : ThreadCurrentPrincipalAccessor
     {
-        public ClaimsPrincipal Principal => GetPrincipal();
+        protected override ClaimsPrincipal GetClaimsPrincipal()
+        {
+            return GetPrincipal();
+        }
+
         private ClaimsPrincipal _principal;
 
         private ClaimsPrincipal GetPrincipal()

@@ -1,43 +1,33 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading;
-using System.Xml.Schema;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Security.Claims
 {
     public class ThreadCurrentPrincipalAccessor : ICurrentPrincipalAccessor, ISingletonDependency
     {
-        public Guid Id = Guid.NewGuid();
+        public ClaimsPrincipal Principal => _currentPrincipal.Value ?? GetClaimsPrincipal();
 
-        public virtual ClaimsPrincipal Principal
-        {
-            get => CurrentScope.Value?.Invoke();
-            set => CurrentScope.Value = () => value;
-        }
+        private readonly AsyncLocal<ClaimsPrincipal> _currentPrincipal = new AsyncLocal<ClaimsPrincipal>();
 
-        protected readonly AsyncLocal<Func<ClaimsPrincipal>> CurrentScope;
-
-        public ThreadCurrentPrincipalAccessor()
-        {
-            CurrentScope = new AsyncLocal<Func<ClaimsPrincipal>>
-            {
-                Value = GetThreadClaimsPrincipal
-            };
-        }
-
-        protected ClaimsPrincipal GetThreadClaimsPrincipal()
+        protected virtual ClaimsPrincipal GetClaimsPrincipal()
         {
             return Thread.CurrentPrincipal as ClaimsPrincipal;
         }
 
         public virtual IDisposable Change(ClaimsPrincipal principal)
         {
-            var parentScope = Principal;
-            Principal = principal;
+            return SetCurrent(principal);
+        }
+
+        private IDisposable SetCurrent(ClaimsPrincipal principal)
+        {
+            var parent = Principal;
+            _currentPrincipal.Value = principal;
             return new DisposeAction(() =>
             {
-                Principal = parentScope;
+                _currentPrincipal.Value = parent;
             });
         }
     }
