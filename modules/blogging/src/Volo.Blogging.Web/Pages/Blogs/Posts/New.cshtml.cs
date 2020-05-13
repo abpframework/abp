@@ -42,7 +42,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
             {
                 return Redirect("/");
             }
-            if (BlogNameControlHelper.IsFileFormat(BlogShortName))
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
             {
                 return NotFound();
             }
