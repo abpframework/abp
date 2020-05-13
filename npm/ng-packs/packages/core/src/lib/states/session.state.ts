@@ -69,12 +69,15 @@ export class SessionState {
   }
 
   @Action(SetLanguage)
-  setLanguage({ patchState, dispatch }: StateContext<Session.State>, { payload }: SetLanguage) {
+  setLanguage(
+    { patchState, dispatch }: StateContext<Session.State>,
+    { payload, dispatchAppConfiguration = true }: SetLanguage,
+  ) {
     patchState({
       language: payload,
     });
 
-    return dispatch(new GetAppConfiguration());
+    if (dispatchAppConfiguration) return dispatch(new GetAppConfiguration());
   }
 
   @Action(SetTenant)

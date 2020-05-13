@@ -231,9 +231,13 @@ export class ConfigState {
             defaultLang = defaultLang.split(';')[0];
           }
 
+          document.documentElement.setAttribute(
+            'lang',
+            configuration.localization.currentCulture.cultureName,
+          );
           return this.store.selectSnapshot(SessionState.getLanguage)
             ? of(null)
-            : dispatch(new SetLanguage(defaultLang));
+            : dispatch(new SetLanguage(defaultLang, false));
         }),
         catchError(err => {
           dispatch(new RestOccurError(new HttpErrorResponse({ status: 0, error: err })));
