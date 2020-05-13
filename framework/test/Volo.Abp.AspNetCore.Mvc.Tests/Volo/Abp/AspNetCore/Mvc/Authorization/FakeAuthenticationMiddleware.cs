@@ -4,19 +4,16 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {
     public class FakeAuthenticationMiddleware : IMiddleware, ITransientDependency
     {
         private readonly FakeUserClaims _fakeUserClaims;
-        private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
-        public FakeAuthenticationMiddleware(FakeUserClaims fakeUserClaims, ICurrentPrincipalAccessor currentPrincipalAccessor)
+        public FakeAuthenticationMiddleware(FakeUserClaims fakeUserClaims)
         {
             _fakeUserClaims = fakeUserClaims;
-            _currentPrincipalAccessor = currentPrincipalAccessor;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
