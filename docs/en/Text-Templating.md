@@ -257,7 +257,7 @@ Assuming that you want to send a welcome email to your users, but want to define
 
 First, create a folder and put your templates inside it, like `en.tpl`, `tr.tpl`... one for each culture you support:
 
-![multiple-file-template](D:\Github\abp\docs\en\images\multiple-file-template.png)
+![multiple-file-template](images/multiple-file-template.png)
 
 Then add your template definition in the template definition provider class:
 
