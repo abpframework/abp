@@ -33,10 +33,9 @@ export class LocalizationService {
   }
 
   private listenToSetLanguage() {
-    this.actions.pipe(ofActionSuccessful(SetLanguage)).subscribe(({ payload }) => {
-      this.registerLocale(payload);
-      document.documentElement.lang = payload;
-    });
+    this.actions
+      .pipe(ofActionSuccessful(SetLanguage))
+      .subscribe(({ payload }) => this.registerLocale(payload));
   }
 
   setRouteReuse(reuse: ShouldReuseRoute) {
