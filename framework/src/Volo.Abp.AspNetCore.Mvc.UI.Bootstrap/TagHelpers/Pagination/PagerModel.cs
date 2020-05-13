@@ -38,7 +38,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             PageSize = pageSize;
             TotalPageCount = (int)Math.Ceiling(Convert.ToDouble((decimal)TotalItemsCount / PageSize));
             Sort = sort;
-            PageUrl = pageUrl;
+
+            PageUrl = pageUrl?.EnsureStartsWith('/') ?? "/";
 
             if (currentPage > TotalPageCount)
             {
