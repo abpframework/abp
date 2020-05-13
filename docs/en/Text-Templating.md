@@ -4,11 +4,11 @@
 
 ABP Framework provides a simple, yet efficient text template system. Text templating is used to dynamically render contents based on a template and a model (a data object):
 
-TEMPLATE + MODEL => RENDERED CONTENT
+***TEMPLATE + MODEL ==render==> RENDERED CONTENT***
 
 It is very similar to an ASP.NET Core Razor View (or Page):
 
-RAZOR VIEW (or PAGE) + MODEL => HTML CONTENT
+*RAZOR VIEW (or PAGE) + MODEL ==render==> HTML CONTENT*
 
 You can use the rendered output for any purpose, like sending emails or preparing some reports.
 
@@ -374,47 +374,72 @@ The rendering result will be:
 A global object value: TEST VALUE
 ````
 
+## Advanced Features
 
+This section covers some internals and more advanced usages of the text templating system.
 
-## Template Content Provider
+### Template Content Provider
 
-When you want to get your stored template content you can use `ITemplateContentProvider`. 
+`ITemplateRenderer` is used to render the template, which is what you want for most of the cases. However, you can use the `ITemplateContentProvider` to get the raw (not rendered) template contents.
 
-`ITemplateContentProvider` has one method that named `GetContentOrNullAsync` with two different overriding, and it returns you a string of template content or null. (**without rendering**)
+> `ITemplateContentProvider` is internally used by the `ITemplateRenderer` to get the raw template contents.
 
-- `templateName` (_string_) or `templateDefinition` (_`TemplateDefinition`_)
-- `cultureName` (_string_)
-- `tryDefaults` (_bool_)
-- `useCurrentCultureIfCultureNameIsNull` (_bool_)
+Example:
 
-### Usage
+````csharp
+public class TemplateContentDemo : ITransientDependency
+{
+    private readonly ITemplateContentProvider _templateContentProvider;
 
-First parametres of `GetContentOrNullAsync` (`templateName` or `templateDefinition`) are required, the other three parametres can be null.
+    public TemplateContentDemo(ITemplateContentProvider templateContentProvider)
+    {
+        _templateContentProvider = templateContentProvider;
+    }
 
-If you want to get exact culture content, set `tryDefaults` and `useCurrentCultureIfCultureNameIsNull` as a `false`. Because the `GetContentOrNullAsync` tries to return content of template.
+    public async Task RunAsync()
+    {
+        var result = await _templateContentProvider
+            .GetContentOrNullAsync("Hello");
 
-> Example Scenario
+        Console.WriteLine(result);
+    }
+}
+````
 
-> If you have a template content that culture "`es`", when you try to get template content with "`es-MX`" it will try to return first "`es-MX`", if it fails it will return "`es`" content. If you set `tryDefaults` and `useCurrentCultureIfCultureNameIsNull` as `false` it will return `null`.
+The result will be the raw template content:
 
-## Template Definition Manager
+````
+Hello {{model.name}} :)
+````
 
-When you want to get your `Template Definitions`, you can use a singleton service that named `Template Definition Manager` in runtime.
+* `GetContentOrNullAsync` returns `null` if no content defined for the requested template.
+* It can get a `cultureName` parameter that is used if template has different files for different cultures (see Multiple Contents Localization section above).
 
-To use it, inject `ITemplateDefinitionManager` service. 
+### Template Content Contributor
 
-It has three method that you can get your Template Definitions.
+`ITemplateContentProvider` service uses `ITemplateContentContributor` implementations to find template contents. There is a single pre-implemented content contributor, `VirtualFileTemplateContentContributor`, which gets template contents from the virtual file system as described above.
 
-- `Get`
-- `GetOrNull`
-- `GetAll`
+You can implement the `ITemplateContentContributor` to read raw template contents from another source.
 
-`Get` and `GetOrNull` requires a string parameter that name of template definition. `Get` will throw error when it is not exist but `GetOrNull` returns `null`.
+Example:
 
-`GetAll` returns you all registered template definitions.
+````csharp
+public class MyTemplateContentProvider
+    : ITemplateContentContributor, ITransientDependency
+{
+    public async Task<string> GetOrNullAsync(TemplateContentContributorContext context)
+    {
+        var templateName = context.TemplateDefinition.Name;
 
-## Template Content Contributor
+        //TODO: Try to find content from another source
+        return null;
+    }
+}
 
-You can store your `Template Contents` in any resource. To make it, just create a class that implements `ITemplateContentContributor` interface. 
+````
 
-`ITemplateContentContributor` has a one method that named `GetOrNullAsync`. This method must return content **without rendering** if that is exist in your resource or must return `null`. 
+Return `null` if your source can not find the content, so `ITemplateContentProvider` fallbacks to the next contributor.
+
+### Template Definition Manager
+
+`ITemplateDefinitionManager` service can be used to get the template definitions (created by the template definition providers).
