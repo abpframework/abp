@@ -155,33 +155,45 @@ export class ConfigState {
     }
 
     const keys = key.split('::') as string[];
-    const selector = createSelector([ConfigState], (state: Config.State) => {
-      if (!state.localization) return defaultValue || key;
+    const selector = createSelector([ConfigState], (state: Config.State): string => {
+      const warn = (message: string) => {
+        if (!state.environment.production) console.warn(message);
+      };
 
-      const defaultResourceName = snq(() => state.environment.localization.defaultResourceName);
-      if (keys[0] === '') {
-        if (!defaultResourceName) {
-          throw new Error(
-            `Please check your environment. May you forget set defaultResourceName?
-              Here is the example:
-               { production: false,
-                 localization: {
-                   defaultResourceName: 'MyProjectName'
-                  }
-               }`,
-          );
-        }
+      if (keys.length < 2) {
+        warn('The localization source separator (::) not found.');
+        return key as string;
+      }
+      if (!state.localization) return defaultValue || keys[1];
 
-        keys[0] = defaultResourceName;
+      const sourceName =
+        keys[0] ||
+        snq(() => state.environment.localization.defaultResourceName) ||
+        state.localization.defaultResourceName;
+      const sourceKey = keys[1];
+
+      if (sourceName === '_') {
+        return sourceKey;
       }
 
-      let localization = (keys as any).reduce((acc, val) => {
-        if (acc) {
-          return acc[val];
-        }
+      if (!sourceName) {
+        warn(
+          'Localization source name is not specified and the defaultResourceName was not defined!',
+        );
 
-        return undefined;
-      }, state.localization.values);
+        return sourceKey;
+      }
+
+      const source = state.localization.values[sourceName];
+      if (!source) {
+        warn('Could not find localization source: ' + sourceName);
+        return sourceKey;
+      }
+
+      let localization = source[sourceKey];
+      if (typeof localization === 'undefined') {
+        return sourceKey;
+      }
 
       interpolateParams = interpolateParams.filter(params => params != null);
       if (localization && interpolateParams && interpolateParams.length) {
@@ -191,7 +203,7 @@ export class ConfigState {
       }
 
       if (typeof localization !== 'string') localization = '';
-      return localization || defaultValue || key;
+      return localization || defaultValue || (key as string);
     });
 
     return selector;
