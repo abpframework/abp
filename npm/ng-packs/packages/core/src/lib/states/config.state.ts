@@ -162,7 +162,7 @@ export class ConfigState {
 
       if (keys.length < 2) {
         warn('The localization source separator (::) not found.');
-        return key as string;
+        return defaultValue || (key as string);
       }
       if (!state.localization) return defaultValue || keys[1];
 
@@ -173,7 +173,7 @@ export class ConfigState {
       const sourceKey = keys[1];
 
       if (sourceName === '_') {
-        return sourceKey;
+        return defaultValue || sourceKey;
       }
 
       if (!sourceName) {
@@ -181,18 +181,18 @@ export class ConfigState {
           'Localization source name is not specified and the defaultResourceName was not defined!',
         );
 
-        return sourceKey;
+        return defaultValue || sourceKey;
       }
 
       const source = state.localization.values[sourceName];
       if (!source) {
         warn('Could not find localization source: ' + sourceName);
-        return sourceKey;
+        return defaultValue || sourceKey;
       }
 
       let localization = source[sourceKey];
       if (typeof localization === 'undefined') {
-        return sourceKey;
+        return defaultValue || sourceKey;
       }
 
       interpolateParams = interpolateParams.filter(params => params != null);
