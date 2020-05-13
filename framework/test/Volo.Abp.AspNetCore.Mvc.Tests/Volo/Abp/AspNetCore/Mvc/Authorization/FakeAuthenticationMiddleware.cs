@@ -27,8 +27,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 {
                     new ClaimsIdentity(_fakeUserClaims.Claims, "FakeSchema")
                 });
-
-                //_currentPrincipalAccessor.Change(context.User);
             }
 
             await next(context);

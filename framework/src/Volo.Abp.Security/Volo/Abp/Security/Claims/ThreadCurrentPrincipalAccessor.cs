@@ -11,7 +11,7 @@ namespace Volo.Abp.Security.Claims
 
         private readonly AsyncLocal<ClaimsPrincipal> _currentPrincipal = new AsyncLocal<ClaimsPrincipal>();
 
-        protected virtual ClaimsPrincipal GetClaimsPrincipal()
+        public virtual ClaimsPrincipal GetClaimsPrincipal()
         {
             return Thread.CurrentPrincipal as ClaimsPrincipal;
         }
