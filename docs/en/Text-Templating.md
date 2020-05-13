@@ -245,7 +245,7 @@ You will see the localized result:
 
 Instead of a single template that uses the localization system to localize the template, you may want to create different template files for each language. It can be needed if the template should be completely different for a specific culture rather than simple text localizations.
 
-#### Example: Welcome Email
+#### Example: Welcome Email Template
 
 Assuming that you want to send a welcome email to your users, but want to define a completely different template based on the user culture.
 
@@ -291,102 +291,17 @@ var result = await _templateRenderer.RenderAsync(
 );
 ````
 
+## Layout Templates
 
+Layout templates are used to create shared layouts among other templates. It is similar to the layout system in the ASP.NET Core MVC / Razor Pages.
 
+### Example: Email HTML Layout Template
 
+For example, you may want to create a single layout for all of your email templates.
 
+First, create a template file just like before:
 
-
-
-
-## Logic
-
-A Text Template is a combination of two parts: template definition and template content.
-### Template Definition
-
-Template Definition is an object that contains some information about your text templates. Template Definition object contains the following properties.
-
-- `Name` *(string)*: Unique name of the template. It is then used to render the template.
-- `IsLayout` *(boolean)*:
-- `Layout` *(string)* contains the <u>name of layout template</u>
-- `LocalizationResource` *(Type)* The localization resource type that is used if this template is inline localized.
-- `IsInlineLocalized` *(boolean)* describes that the template is inline localized or not
-- `DefaultCultureName` *(string)* defines the default culture for the template
-
-### Template Content
-
-This is a simple content for your templates. For default, template contents stored as `Virtual File`.
-
-> Example: ForgotPasswordEmail.tpl
-
-```html
-<h3>{{L "PasswordReset"}}</h3>
-
-<p>{{L "PasswordResetInfoInEmail"}}</p>
-
-<div>
-    <a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
-</div>
-```
-
-### Localization
-
-You can localize your Text Templates by choosing two different methods.
-
-- `Inline Localization`
-- `Multiple Content Localization`
-
-#### Inline Localization
-
-An inline localized text template is using only one content resource, and it is using the [Abp.Localization](Localization.md) to get content in different languages/cultures. 
-
-Example Inline Localized Text Template content: 
-
-```html
-<a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
-```
-
-#### Multiple Content Localization
-
-You can store your Text Templates for any culture in different content resource.
-
-> Example Multiple Content Localization
-
-> ForgotPasswordEmail / en.tpl
-
-```html
-<h3>Reset Your Password</h3>
-
-<p>Hello, this is a password changing email.</p>
-
-<div>
-    <a href="{{model.link}}">Click To Reset Your Password</a>
-</div>
-```
-
-> ForgotPasswordEmail / tr.tpl
-
-```html
-<h3>Şifrenizi Değiştirin</h3>
-
-<p>Merhaba, bu bir şifre yenileme e postasıdır.</p>
-
-<div>
-    <a href="{{model.link}}">Şifrenizi Yenilemek İçin Tıklayınız</a>
-</div>
-```
-
-### Layout System
-
-It is typical to use the same layout for some different text templates. So, you can define a layout template. 
-
-A text template can be layout for different text templates and also a text template may use a layout.
-
-A layout Text Template must have `{{content}}` area to render the child content. _(just like the `RenderBody()` in the MVC)_
-
-Example Email Layout Text Template
-
-```html
+````xml
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -396,67 +311,42 @@ Example Email Layout Text Template
     {{content}}
 </body>
 </html>
-```
+````
 
-## Definition of a Text Template
+* A layout template must have a **{{content}}** part as a place holder for the rendered child content.
 
-First of all, create a class that inherited from `TemplateDefinitionProvider` abstract class and create `Define` method that derived from the base class.
+The register your template in the template definition provider:
 
-`Define` method requires a context that is `ITemplateDefinitionContext`. This `context` is a storage for template definitions and we will add our template definitions to the context.
+````csharp
+context.Add(
+    new TemplateDefinition(
+        "EmailLayout",
+        isLayout: true //SET isLayout!
+    ).WithVirtualFilePath(
+        "/Demos/EmailLayout/EmailLayout.tpl",
+        isInlineLocalized: true
+    )
+);
+````
 
-> **NOTE!** For default, ABP uses **Virtual File System** for text templates. Do not forget to register your files as an `Embedded Resource`. Please check the [Virtual File System Documentation](Virtual-File-System.md) for more details.
+Now, you can use this template as the layout of any other template:
 
-> All given examples are for `Virtual File Text Template Definitions`.
+````csharp
+context.Add(
+    new TemplateDefinition(
+            name: "WelcomeEmail",
+            defaultCultureName: "en",
+            layout: "EmailLayout" //Set the LAYOUT
+        ).WithVirtualFilePath(
+            "/Demos/WelcomeEmail/Templates",
+            isInlineLocalized: false
+        )
+);
+````
 
-```csharp
-public class MyTemplateDefinitionProvider : TemplateDefinitionProvider
-    {
-        public override void Define(ITemplateDefinitionContext context)
-        {
-            // Layout Text Template
-            context.Add(
-                new TemplateDefinition(
-                    name: "MySampleTemplateLayout", // Template Definition Name
-                    isLayout: true 
-                ).WithVirtualFilePath("/SampleTemplates/SampleTemplateLayout.tpl", true)
-            );
+## Global Context
 
-            // Inline Localized Text Template
-            context.Add(
-                new TemplateDefinition(
-                    name: "ForgotPasswordEmail",
-                    localizationResource: typeof(MyLocalizationResource),
-                    layout: TestTemplates.TestTemplateLayout1
-                ).WithVirtualFilePath("/SampleTemplates/ForgotPasswordEmail.tpl", true)
-            );
 
-            // Multiple File Localized Text Template
-            context.Add(
-                new TemplateDefinition(
-                    name: "ForgotPasswordEmail",
-                    defaultCultureName: "en"
-                ).WithVirtualFilePath("/SampleTemplates/ForgotPasswordEmail", false)
-            );
-        }
-    }
-```
-
-As you see in the given example, all Text Templates are added with `(ITemplateDefinitionContext)context.Add` method. This method requires a `TemplateDefinition` object. Then we call `WithVirtualFilePath` method with chaining for the describe where is the virtual files.
-
-`WithVirtualFilePath` is requires one `tpl` file path for the `Inline Localized` Text Templates. If your Text Tempalte is `Multi Localized` you should create a folder and store each different culture files under that. So you can send the folder path as a parameter to `WithVirtualFilePath`.
-
-> Inline Localized File
-
-```
-/ Folder / ForgotPasswordEmail.tpl
-```
-
-> Multi Content Localization
-
-```
-/ Folder / ForgotPasswordEmail / en.tpl
-/ Folder / ForgotPasswordEmail / tr.tpl
-```
 
 
 ## Rendering
