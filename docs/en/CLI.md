@@ -9,7 +9,7 @@ ABP CLI is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/t
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
-
+(You may need a restart whe you get: 'abp' is not recognized as an internal or external command ...)
 To update an existing installation:
 
 ````bash
