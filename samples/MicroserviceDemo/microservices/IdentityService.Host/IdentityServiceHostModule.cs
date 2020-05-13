@@ -101,6 +101,7 @@ namespace IdentityService.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseAuthentication();
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
@@ -121,7 +122,6 @@ namespace IdentityService.Host
                 await next();
             });
 
-            app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

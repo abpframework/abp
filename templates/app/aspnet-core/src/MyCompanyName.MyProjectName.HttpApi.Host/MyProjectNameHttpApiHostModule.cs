@@ -178,13 +178,13 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
+            app.UseAbpRequestLocalization();
             app.UseAuthentication();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
             app.UseAuthorization();
-            app.UseAbpRequestLocalization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>

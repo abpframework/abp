@@ -135,7 +135,7 @@ namespace MyCompanyName.MyProjectName
                 });
             });
         }
-        
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
@@ -154,6 +154,7 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
+            app.UseAbpRequestLocalization();
             app.UseAuthentication();
             if (MultiTenancyConsts.IsEnabled)
             {
@@ -161,7 +162,6 @@ namespace MyCompanyName.MyProjectName
             }
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();

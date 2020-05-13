@@ -204,6 +204,7 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
@@ -213,7 +214,6 @@ namespace MyCompanyName.MyProjectName.Web
             }
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

@@ -127,6 +127,7 @@ namespace MyCompanyName.MyProjectName
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization();
             app.UseAuthentication();
             app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
@@ -140,7 +141,6 @@ namespace MyCompanyName.MyProjectName
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });
 
-            app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();

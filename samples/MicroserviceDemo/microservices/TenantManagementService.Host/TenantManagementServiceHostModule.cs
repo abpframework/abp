@@ -105,6 +105,7 @@ namespace TenantManagementService.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseAuthentication();
 
             app.Use(async (ctx, next) =>
@@ -125,7 +126,6 @@ namespace TenantManagementService.Host
             {
                 app.UseMultiTenancy();
             }
-            app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

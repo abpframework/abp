@@ -89,10 +89,10 @@ namespace MyCompanyName.MyProjectName
 
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseAbpRequestLocalization();
 
             app.Use(async (ctx, next) =>
             {

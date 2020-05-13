@@ -73,7 +73,7 @@ namespace MyCompanyName.MyProjectName
                 );
             });
         }
-        
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -234,6 +234,7 @@ namespace MyCompanyName.MyProjectName
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization();
             app.UseAuthentication();
 
             if (MultiTenancyConsts.IsEnabled)
@@ -243,7 +244,6 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAuthorization();
 
-            app.UseAbpRequestLocalization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>

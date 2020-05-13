@@ -95,12 +95,12 @@ namespace AuthServer.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization();
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }
             app.UseIdentityServer();
-            app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseConfiguredEndpoints();
 

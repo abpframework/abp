@@ -168,6 +168,7 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
+            app.UseAbpRequestLocalization();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
@@ -178,7 +179,6 @@ namespace MyCompanyName.MyProjectName
 
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseAbpRequestLocalization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
