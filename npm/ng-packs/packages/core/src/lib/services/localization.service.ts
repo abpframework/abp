@@ -79,7 +79,7 @@ export class LocalizationService {
 
   isLocalized(key, sourceName) {
     if (sourceName === '_') {
-      //A convention to suppress the localization
+      // A convention to suppress the localization
       return true;
     }
 
