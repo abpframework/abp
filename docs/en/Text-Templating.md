@@ -1,22 +1,44 @@
 # Text Templating
 
-In ABP Framework, `text template` is a mixture of text blocks and control logic that can generate a `string` result. An open source package [Scriban](https://github.com/lunet-io/scriban) is used for the control logic and [Abp.Localization](Localization.md) is used to make content easily localizable. The generated string can be text of any kind, such as a web page, an e-mail content etc.
+## Introduction
 
-> **stored content**
-```html
-<ol>
-{{~ for $i in 0..3 ~}}
- <li>{{ L "WelcomeMessage" }}</li>
-{{~ endfor ~}}
-</ol>
-```
-> **result** (for en culture)
-```
-1. Welcome to the abp.io!
-2. Welcome to the abp.io!
-3. Welcome to the abp.io!
-4. Welcome to the abp.io!
-```
+ABP Framework provides a simple, yet efficient text template system. Text templating is used to dynamically render contents based on a template and a model (a data object):
+
+TEMPLATE + MODEL => RENDERED CONTENT
+
+It is very similar to an ASP.NET Core Razor View (or Page):
+
+RAZOR VIEW (or PAGE) + MODEL => HTML CONTENT
+
+### Example
+
+Here, a simple template:
+
+````
+Hello {{model.name}} :)
+````
+
+You can define a class with a `Name` property to render this template:
+
+````csharp
+public class HelloModel
+{
+    public string Name { get; set; }
+}
+````
+
+If you render the template with a `HelloModel` with the `Name` is `John`, the rendered output is will be:
+
+````
+Hello John :)
+````
+
+Template rendering engine is very powerful;
+
+* It is based on the [Scriban](https://github.com/lunet-io/scriban) library, so it supports **conditional logics**, **loops** and much more.
+* Template content **can be localized**.
+* You can define **layout templates** to be used as the layout while rendering other templates.
+* You can pass arbitrary objects to the template context (beside the model) for advanced scenarios.
 
 ## Installation
 
@@ -52,21 +74,151 @@ public class YourModule : AbpModule
 }
 ````
 
+## Defining Templates
+
+Before rendering a template, you should define it. Create a class inheriting from the `TemplateDefinitionProvider` base class:
+
+````csharp
+public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
+{
+    public override void Define(ITemplateDefinitionContext context)
+    {
+        context.Add(
+            new TemplateDefinition("Hello") //template name: "Hello"
+                .WithVirtualFilePath(
+                    "/Demos/Hello/Hello.tpl", //template content path
+                    isInlineLocalized: true
+                )
+        );
+    }
+}
+````
+
+* `context` object is used to add new templates or get the templates defined by depended modules. Used `context.Add(...)` to define a new template.
+* `TemplateDefinition` is the class represents a template. Each template must have a unique name (that will be used while you are rendering the template).
+* `/Demos/Hello/Hello.tpl` is the path of the template file.
+* `isInlineLocalized` is used to declare if you are using a single template for all languages (`true`) or different templates for each language (`false`). See the Localization section below for more.
+
+### The Template Content
+
+`WithVirtualFilePath` indicates that we are using the [Virtual File System](Virtual-File-System.md) to store the template content. Create a `Hello.tpl` file inside your project and mark it as "**embedded resource**" on the properties window:
+
+![hello-template](images/hello-template.png)
+
+Example `Hello.tpl` content is shown below:
+
+````
+Hello {{model.name}} :)
+````
+
+The [Virtual File System](Virtual-File-System.md) requires to add your files in the `ConfigureServices` method of your [module](Module-Development-Basics.md) class:
+
+````csharp
+Configure<AbpVirtualFileSystemOptions>(options =>
+{
+    options.FileSets.AddEmbedded<TextTemplateDemoModule>("TextTemplateDemo");
+});
+````
+
+* `TextTemplateDemoModule` is the module class that you define your template in.
+* `TextTemplateDemo` is the root namespace of your project.
+
+## Rendering the Template
+
+`ITemplateRenderer` service is used to render a template content. Example:
+
+````csharp
+public class HelloDemo : ITransientDependency
+{
+    private readonly ITemplateRenderer _templateRenderer;
+
+    public HelloDemo(ITemplateRenderer templateRenderer)
+    {
+        _templateRenderer = templateRenderer;
+    }
+
+    public async Task RunAsync()
+    {
+        var result = await _templateRenderer.RenderAsync(
+            "Hello", //the template name
+            new HelloModel
+            {
+                Name = "John"
+            }
+        );
+
+        Console.WriteLine(result);
+    }
+}
+````
+
+* `HelloDemo` is a simple class that injects the `ITemplateRenderer` in its constructor and uses it inside the `RunAsync` method.
+* `RenderAsync` gets two fundamental parameters:
+  * `templateName`: The name of the template to be rendered (`Hello` in this example).
+  * `model`: An object that is used as the `model` inside the template (a `HelloModel` object in this example).
+
+The result shown below for this example:
+
+````csharp
+Hello John :)
+````
+
+### Anonymous Model
+
+While it is suggested to create model classes for the templates, it would be practical (and possible) to use an anonymous object for simple cases:
+
+````csharp
+var result = await _templateRenderer.RenderAsync(
+    "Hello", //the template name
+    new
+    {
+        Name = "John"
+    }
+);
+````
+
+In this case, we haven't created a model class, but created an anonymous object as the model.
+
+### PascalCase vs CamelCase
+
+PascalCase property names (like `UserName`) is used as camelCase (like `userName`) in the template as a convention.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Logic
 
-A Text Template is a combination of two object.
-- `TemplateDefinition`
-- `TemplateContent`
-
+A Text Template is a combination of two parts: template definition and template content.
 ### Template Definition
 
-Template Definition is an object that contains some information about your `Text Templates`. Template Definition object contains the following properties.
+Template Definition is an object that contains some information about your text templates. Template Definition object contains the following properties.
 
-- `Name` *(string)*
-- `IsLayout` *(boolean)*
+- `Name` *(string)*: Unique name of the template. It is then used to render the template.
+- `IsLayout` *(boolean)*:
 - `Layout` *(string)* contains the <u>name of layout template</u>
-- `LocalizationResource` *(Type)*  <u>Inline Localized</u>
-- `IsInlineLocalized`*(boolean)* describes that the template is inline localized or not
+- `LocalizationResource` *(Type)* The localization resource type that is used if this template is inline localized.
+- `IsInlineLocalized` *(boolean)* describes that the template is inline localized or not
 - `DefaultCultureName` *(string)* defines the default culture for the template
 
 ### Template Content
@@ -83,23 +235,20 @@ This is a simple content for your templates. For default, template contents stor
 <div>
     <a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
 </div>
-
 ```
 
 ### Localization
 
-You can localize your Text Templates by choosing two different method.
+You can localize your Text Templates by choosing two different methods.
 
 - `Inline Localization`
 - `Multiple Content Localization`
 
 #### Inline Localization
 
-Inline localized Text Templates is using only one content resource, and it is using the [Abp.Localization](Localization.md) to get content in different languages/cultures. 
+An inline localized text template is using only one content resource, and it is using the [Abp.Localization](Localization.md) to get content in different languages/cultures. 
 
-> Example Inline Localized Text Template: 
->
-> ForgotPasswordEmail.tpl
+Example Inline Localized Text Template content: 
 
 ```html
 <h3>{{L "PasswordReset"}}</h3>
@@ -143,13 +292,13 @@ You can store your Text Templates for any culture in different content resource.
 
 ### Layout System
 
-It is typical to use the same layout for some different Text Templates. So, you can define a layout template. 
+It is typical to use the same layout for some different text templates. So, you can define a layout template. 
 
 A text template can be layout for different text templates and also a text template may use a layout.
 
 A layout Text Template must have `{{content}}` area to render the child content. _(just like the `RenderBody()` in the MVC)_
 
-> Example Email Layout Text Template
+Example Email Layout Text Template
 
 ```html
 <!DOCTYPE html>
@@ -163,7 +312,7 @@ A layout Text Template must have `{{content}}` area to render the child content.
 </html>
 ```
 
-## Definition a Text Template
+## Definition of a Text Template
 
 First of all, create a class that inherited from `TemplateDefinitionProvider` abstract class and create `Define` method that derived from the base class.
 
@@ -228,7 +377,7 @@ As you see in the given example, all Text Templates are added with `(ITemplateDe
 
 When one template is registered, it is easy to render and get the result with `ITemplateRenderer` service. 
 
-`ITemplateRenderer` service has one method that named `RenderAsync` and to render your content and it is requires some parametres. 
+`ITemplateRenderer` service has one method that named `RenderAsync` and to render your content and it is requires some parameters. 
 
 - `templateName` (_string_)
 - `model` (_object_)
@@ -283,7 +432,7 @@ It has three method that you can get your Template Definitions.
 `Get` and `GetOrNull` requires a string parameter that name of template definition. `Get` will throw error when it is not exist but `GetOrNull` returns `null`.
 
 `GetAll` returns you all registered template definitions.
- 
+
 ## Template Content Contributor
 
 You can store your `Template Contents` in any resource. To make it, just create a class that implements `ITemplateContentContributor` interface. 
