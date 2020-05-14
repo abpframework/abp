@@ -153,3 +153,13 @@ this.bookService.createByInput(form.value)
     // Other subscription logic here
   })
 ```
+
+## How to Implement Server-Side Search in a Table
+
+`ListService` exposes a `filter` property that will trigger a request with the current query and the given search string. All you need to do is to bind it to an input element with two-way binding.
+
+```html
+<!-- simplified representation -->
+
+<input type="text" name="search" [(ngModel)]="list.filter">
+```
