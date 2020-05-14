@@ -10,7 +10,6 @@ namespace Volo.Docs
     )]
     public class DocsHttpApiClientModule : AbpModule
     {
-        //TODO: Create client proxies
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(typeof(DocsApplicationContractsModule).Assembly);
