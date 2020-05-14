@@ -711,11 +711,11 @@ var abp = abp || {};
         }
 
         if (kind === 'Local') {
-            return toLocal(new Date());
+            return toLocal(date);
         }
 
         if (kind === 'Utc') {
-            return toUtc(new Date());
+            return toUtc(date);
         }
     };
 
