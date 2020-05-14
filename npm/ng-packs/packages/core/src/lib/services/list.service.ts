@@ -1,4 +1,4 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { ABP } from '../models/common';
@@ -7,7 +7,7 @@ import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens/list.token';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
 
 @Injectable()
-export class ListService {
+export class ListService implements OnDestroy {
   private _filter = '';
   set filter(value: string) {
     this._filter = value;
@@ -37,7 +37,6 @@ export class ListService {
 
   private _sortKey = '';
   set sortKey(value: string) {
-    console.log(value);
     this._sortKey = value;
     this.get();
   }
