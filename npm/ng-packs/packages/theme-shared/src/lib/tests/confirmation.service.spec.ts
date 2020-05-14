@@ -106,13 +106,20 @@ describe('ConfirmationService', () => {
     selectConfirmationElement<HTMLButtonElement>('button#cancel').click();
   });
 
-  test('should not call the listenToEscape method when dismissible is false', () => {
-    const spy = spyOn(service as any, 'listenToEscape');
+  test.each`
+    dismissible | count
+    ${true}     | ${1}
+    ${false}    | ${0}
+  `(
+    'should call the listenToEscape method $count times when dismissible is $dismissible',
+    ({ dismissible, count }) => {
+      const spy = spyOn(service as any, 'listenToEscape');
 
-    service.info('', '', { dismissible: false });
+      service.info('', '', { dismissible });
 
-    expect(spy.calls.count()).toBe(0);
-  });
+      expect(spy).toHaveBeenCalledTimes(count);
+    },
+  );
 });
 
 function clearElements(selector = '.confirmation') {
