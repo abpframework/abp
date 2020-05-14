@@ -17,7 +17,7 @@ You can use the rendered output for any purpose, like sending emails or preparin
 Here, a simple template:
 
 ````
-Hello {{model.name}} :)
+Hello {%{{{model.name}}}%} :)
 ````
 
 You can define a class with a `Name` property to render this template:
@@ -114,7 +114,7 @@ public class DemoTemplateDefinitionProvider : TemplateDefinitionProvider
 Example `Hello.tpl` content is shown below:
 
 ````
-Hello {{model.name}} :)
+Hello {%{{{model.name}}}%} :)
 ````
 
 The [Virtual File System](Virtual-File-System.md) requires to add your files in the `ConfigureServices` method of your [module](Module-Development-Basics.md) class:
@@ -204,7 +204,7 @@ Inline localization uses the [localization system](Localization.md) to localize 
 Assuming you need to send an email to a user to reset her/his password. Here, the template content:
 
 ````
-<a href="{{model.link}}">{{L "ResetMyPassword"}}</a>
+<a href="{%{{{model.link}}}%}">{%{{{L "ResetMyPassword"}}}%}</a>
 ````
 
 `L` function is used to localize the given key based on the current user culture. You need to define the `ResetMyPassword` key inside your localization file:
@@ -314,12 +314,12 @@ First, create a template file just like before:
     <meta charset="utf-8" />
 </head>
 <body>
-    {{content}}
+    {%{{{content}}}%}
 </body>
 </html>
 ````
 
-* A layout template must have a **{{content}}** part as a place holder for the rendered child content.
+* A layout template must have a **{%{{{content}}}%}** part as a place holder for the rendered child content.
 
 The register your template in the template definition provider:
 
@@ -357,7 +357,7 @@ ABP passes the `model` that can be used to access to the model inside the templa
 An example template content:
 
 ````
-A global object value: {{myGlobalObject}}
+A global object value: {%{{{myGlobalObject}}}%}
 ````
 
 This template assumes that that is a `myGlobalObject` object in the template rendering context. You can provide it like shown below:
@@ -413,7 +413,7 @@ public class TemplateContentDemo : ITransientDependency
 The result will be the raw template content:
 
 ````
-Hello {{model.name}} :)
+Hello {%{{{model.name}}}%} :)
 ````
 
 * `GetContentOrNullAsync` returns `null` if no content defined for the requested template.
