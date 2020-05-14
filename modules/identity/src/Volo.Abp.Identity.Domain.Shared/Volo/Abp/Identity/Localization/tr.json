@@ -87,7 +87,7 @@
     "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "Kullanıcı adı güncellenebilir",
     "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "E-posta güncellenebilir",
     "Description:Abp.Identity.Password.RequiredLength": "Minimum parola uzunluğu.",
-    "Description:Abp.Identity.Password.RequiredUniqueChars": Bir parolanın içermesi gereken minimum tekil karakter sayısı.",
+    "Description:Abp.Identity.Password.RequiredUniqueChars": "Bir parolanın içermesi gereken minimum tekil karakter sayısı.",
     "Description:Abp.Identity.Password.RequireNonAlphanumeric": "Parolaların alfasayısal olmayan bir karakter içermesi gerekiyorsa.",
     "Description:Abp.Identity.Password.RequireLowercase": "Parolaların küçük harfli bir ASCII karakteri içermesi gerekiyorsa.",
     "Description:Abp.Identity.Password.RequireUppercase": "Parolaların büyük harfli bir ASCII karakteri içermesi gerekiyorsa.",
