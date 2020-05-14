@@ -111,3 +111,9 @@ class DemoComponent {
   trackByTenantAccountId = trackByDeep<Item>('tenant', 'account', 'id');
 }
 ```
+
+
+
+## What's Next?
+
+- [ListService](./List-Service.md)
