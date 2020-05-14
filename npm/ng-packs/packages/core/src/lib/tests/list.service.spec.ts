@@ -1,7 +1,8 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { of } from 'rxjs';
 import { bufferCount, take } from 'rxjs/operators';
-import { ListService } from '../services/list.service';
+import { ABP } from '../models';
+import { ListService, QueryStreamCreatorCallback } from '../services/list.service';
 import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens';
 
 describe('ListService', () => {
@@ -119,9 +120,10 @@ describe('ListService', () => {
 
   describe('#hookToQuery', () => {
     it('should call given callback with the query', done => {
-      const callback = query => of(query);
+      const callback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query =>
+        of({ items: [query], totalCount: 1 });
 
-      service.hookToQuery(callback).subscribe(query => {
+      service.hookToQuery(callback).subscribe(({ items: [query] }) => {
         expect(query).toEqual({
           filter: undefined,
           maxResultCount: 10,
@@ -134,7 +136,8 @@ describe('ListService', () => {
     });
 
     it('should emit isLoading as side effect', done => {
-      const callback = query => of(query);
+      const callback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query =>
+        of({ items: [query], totalCount: 1 });
 
       service.isLoading$.pipe(bufferCount(3)).subscribe(([idle, init, end]) => {
         expect(idle).toBe(false);

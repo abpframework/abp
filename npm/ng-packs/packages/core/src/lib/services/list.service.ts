@@ -2,6 +2,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { ABP } from '../models/common';
+import { PagedResultDto } from '../models/dtos';
 import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens/list.token';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
 
@@ -67,25 +68,28 @@ export class ListService {
     return this._isLoading$.asObservable();
   }
 
-  constructor(@Optional() @Inject(LIST_QUERY_DEBOUNCE_TIME) private delay: number) {
-    this.get();
-  }
-
-  get() {
+  get = () => {
     this._query$.next({
       filter: this._filter || undefined,
       maxResultCount: this._maxResultCount,
       skipCount: (this._page - 1) * this._maxResultCount,
       sorting: this._sortOrder ? `${this._sortKey} ${this._sortOrder}` : undefined,
     });
+  };
+
+  constructor(@Optional() @Inject(LIST_QUERY_DEBOUNCE_TIME) private delay: number) {
+    this.get();
   }
 
-  hookToQuery<T extends any>(streamCreatorCallback: QueryStreamCreatorCallback<T>): Observable<T> {
+  hookToQuery<T extends any>(
+    streamCreatorCallback: QueryStreamCreatorCallback<T>,
+  ): Observable<PagedResultDto<T>> {
     this._isLoading$.next(true);
 
     return this.query$.pipe(
       switchMap(streamCreatorCallback),
       tap(() => this._isLoading$.next(false)),
+      shareReplay({ bufferSize: 1, refCount: true }),
       takeUntilDestroy(this),
     );
   }
@@ -93,4 +97,6 @@ export class ListService {
   ngOnDestroy() {}
 }
 
-export type QueryStreamCreatorCallback<T> = (query: ABP.PageQueryParams) => Observable<T>;
+export type QueryStreamCreatorCallback<T> = (
+  query: ABP.PageQueryParams,
+) => Observable<PagedResultDto<T>>;
