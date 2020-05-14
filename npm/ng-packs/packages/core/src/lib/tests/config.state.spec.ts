@@ -306,6 +306,7 @@ describe('ConfigState', () => {
 
       const configuration = {
         setting: { values: { 'Abp.Localization.DefaultLanguage': 'tr;TR' } },
+        localization: { currentCulture: {} },
       };
 
       const res$ = new ReplaySubject(1);
@@ -324,7 +325,7 @@ describe('ConfigState', () => {
       timer(0).subscribe(() => {
         expect(patchStateArg).toEqual(configuration);
         expect(dispatchArg instanceof SetLanguage).toBeTruthy();
-        expect(dispatchArg).toEqual({ payload: 'tr' });
+        expect(dispatchArg).toEqual({ payload: 'tr', dispatchAppConfiguration: false });
         done();
       });
     });
