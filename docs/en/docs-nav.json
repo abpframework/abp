@@ -180,6 +180,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Text Templating",
+          "path": "Text-Templating.md"
+        },
+        {
           "text": "Object Serialization"
         },
         {

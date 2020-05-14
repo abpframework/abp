@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +12,10 @@ namespace Volo.Abp.Users
 
         Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default);
 
-        //TODO: More...
+        Task<List<IUserData>> SearchAsync(
+            string sorting,
+            string filter,
+            int maxResultCount,
+            CancellationToken cancellationToken = default);
     }
 }
