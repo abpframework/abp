@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +7,31 @@ namespace Volo.Abp.ObjectExtending
 {
     public static class ObjectExtensionPropertyInfoAspNetCoreMvcExtensions
     {
+        private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
+            typeof(int),
+            typeof(long),
+            typeof(byte),
+            typeof(sbyte),
+            typeof(short),
+            typeof(ushort),
+            typeof(uint),
+            typeof(long),
+            typeof(ulong),
+            typeof(float),
+            typeof(double),
+            typeof(int?),
+            typeof(long?),
+            typeof(byte?),
+            typeof(sbyte?),
+            typeof(short?),
+            typeof(ushort?),
+            typeof(uint?),
+            typeof(long?),
+            typeof(ulong?),
+            typeof(float?),
+            typeof(double?),
+        };
+
         public static string GetInputType(this ObjectExtensionPropertyInfo propertyInfo)
         {
             foreach (var attribute in propertyInfo.Attributes)
@@ -79,15 +105,7 @@ namespace Volo.Abp.ObjectExtending
                 return "datetime-local";
             }
 
-            if (type == typeof(int) ||
-                type == typeof(long) || 
-                type == typeof(byte) ||
-                type == typeof(sbyte) ||
-                type == typeof(short) ||
-                type == typeof(ushort) ||
-                type == typeof(uint) ||
-                type == typeof(long) ||
-                type == typeof(ulong))
+            if (NumberTypes.Contains(type))
             {
                 return "number";
             }

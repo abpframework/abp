@@ -75,6 +75,14 @@ namespace Volo.Abp.Reflection
             TypeHelper.GetDefaultValue(typeof(string)).ShouldBeNull();
         }
 
+        [Fact]
+        public void ConvertFromString()
+        {
+            TypeHelper.ConvertFromString<int>("42").ShouldBe(42);
+            TypeHelper.ConvertFromString<int?>("42").ShouldBe((int?)42);
+            TypeHelper.ConvertFromString<int?>(null).ShouldBeNull();
+        }
+
         public class MyDictionary : Dictionary<bool, TypeHelper_Tests>
         {
 

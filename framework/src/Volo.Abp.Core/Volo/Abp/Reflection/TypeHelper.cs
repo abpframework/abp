@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -263,6 +264,18 @@ namespace Volo.Abp.Reflection
             }
 
             return type.FullName;
+        }
+
+        public static object ConvertFromString<TTargetType>(string value)
+        {
+            return ConvertFromString(typeof(TTargetType), value);
+        }
+
+        public static object ConvertFromString(Type targetType, string value)
+        {
+            return TypeDescriptor
+                .GetConverter(targetType)
+                .ConvertFromString(value);
         }
     }
 }
