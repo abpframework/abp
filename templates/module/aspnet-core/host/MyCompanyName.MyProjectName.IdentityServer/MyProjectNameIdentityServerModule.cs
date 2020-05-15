@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -185,14 +185,16 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
-            app.UseAbpRequestLocalization();
+            app.UseCors(DefaultCorsPolicyName); 
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
+            app.UseAbpRequestLocalization();
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Localization.Resources.AbpUi;
@@ -154,12 +154,14 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
-            app.UseAbpRequestLocalization();
             app.UseAuthentication();
+            app.UseAbpRequestLocalization();
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+            
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseAuditing();

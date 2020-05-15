@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -120,7 +120,6 @@ namespace BloggingService.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseAuthentication();
 
             app.Use(async (ctx, next) =>
@@ -137,6 +136,7 @@ namespace BloggingService.Host
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
+            app.UseAbpRequestLocalization(); //TODO: localization?
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();

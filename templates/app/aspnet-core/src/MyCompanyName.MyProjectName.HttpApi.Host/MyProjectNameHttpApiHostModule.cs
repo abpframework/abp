@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
@@ -178,8 +178,8 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
-            app.UseAbpRequestLocalization();
             app.UseAuthentication();
+            app.UseAbpRequestLocalization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();

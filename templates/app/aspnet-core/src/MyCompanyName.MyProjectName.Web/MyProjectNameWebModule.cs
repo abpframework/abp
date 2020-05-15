@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore;
@@ -204,9 +204,9 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAbpRequestLocalization();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
+            app.UseAbpRequestLocalization();
 
             if (MultiTenancyConsts.IsEnabled)
             {

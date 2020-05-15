@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
@@ -225,8 +225,8 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAbpRequestLocalization();
             app.UseAuthentication();
+            app.UseAbpRequestLocalization();
 
             if (MultiTenancyConsts.IsEnabled)
             {

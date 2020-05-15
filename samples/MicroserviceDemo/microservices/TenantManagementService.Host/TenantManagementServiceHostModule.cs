@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Builder;
@@ -105,7 +105,6 @@ namespace TenantManagementService.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseAuthentication();
 
             app.Use(async (ctx, next) =>
@@ -122,6 +121,7 @@ namespace TenantManagementService.Host
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
+            app.UseAbpRequestLocalization(); //TODO: localization?
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();

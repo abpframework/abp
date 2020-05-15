@@ -234,8 +234,8 @@ namespace MyCompanyName.MyProjectName
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAbpRequestLocalization();
             app.UseAuthentication();
+            app.UseAbpRequestLocalization();
 
             if (MultiTenancyConsts.IsEnabled)
             {

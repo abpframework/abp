@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using IdentityModel;
@@ -164,13 +164,15 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
-            app.UseAbpRequestLocalization();
+            app.UseCors(DefaultCorsPolicyName);        
             app.UseAuthentication();
+            app.UseAbpRequestLocalization();
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
             app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
