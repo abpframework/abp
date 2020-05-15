@@ -3,13 +3,19 @@ import { Config } from '@abp/ng.core';
 export namespace Confirmation {
   export interface Options {
     id?: any;
-    closable?: boolean;
+    dismissible?: boolean;
     messageLocalizationParams?: string[];
     titleLocalizationParams?: string[];
     hideCancelBtn?: boolean;
     hideYesBtn?: boolean;
     cancelText?: Config.LocalizationParam;
     yesText?: Config.LocalizationParam;
+
+    /**
+     *
+     * @deprecated To be deleted in v2.9
+     */
+    closable?: boolean;
   }
 
   export interface DialogData {

@@ -10,6 +10,11 @@ namespace Volo.Abp.VirtualFileSystem
 
         public static string NormalizePath(string fullPath)
         {
+            if (fullPath.Equals("/", StringComparison.Ordinal))
+            {
+                return string.Empty;
+            }
+
             var fileName = fullPath;
             var extension = "";
 
@@ -29,7 +34,7 @@ namespace Volo.Abp.VirtualFileSystem
 
             return NormalizeChars(fileName) + extension;
         }
-        
+
         private static string NormalizeChars(string fileName)
         {
             var folderParts = fileName.Replace(".", "/").Split("/");

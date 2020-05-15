@@ -546,6 +546,8 @@ Entity extension system solves the main problem of the extra properties: It can 
 
 All you need to do is to use the `ObjectExtensionManager` to define the extra property as explained above, in the `AppRole` example. Then you can continue to use the same `GetProperty` and `SetProperty` methods  defined above to get/set the related property on the entity, but this time stored as a separate field in the database.
 
+See the [entity extension system](Customizing-Application-Modules-Extending-Entities.md) for details.
+
 ###### Creating a New Table
 
 Instead of creating a new entity and mapping to the same table, you can also create **your own table** to store your properties. You typically duplicate some values of the original entity. For example, you can add `Name` field to your own table which is a duplication of the `Name` field in the original table.

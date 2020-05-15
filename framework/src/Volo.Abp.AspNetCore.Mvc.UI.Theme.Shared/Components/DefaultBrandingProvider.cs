@@ -7,5 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
         public virtual string AppName => "MyApplication";
 
         public virtual string LogoUrl => null;
+
+        public virtual string LogoReverseUrl => null;
     }
 }

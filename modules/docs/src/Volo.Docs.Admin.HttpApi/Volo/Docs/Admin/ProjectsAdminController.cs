@@ -53,5 +53,19 @@ namespace Volo.Docs.Admin
         {
             return _projectAppService.DeleteAsync(id);
         }
+
+        [HttpPost]
+        [Route("ReindexAll")]
+        public Task ReindexAllAsync()
+        {
+            return _projectAppService.ReindexAllAsync();
+        }
+
+        [HttpPost]
+        [Route("Reindex")]
+        public Task ReindexAsync(ReindexInput input)
+        {
+            return _projectAppService.ReindexAsync(input);
+        }
     }
 }

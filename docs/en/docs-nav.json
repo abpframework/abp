@@ -180,6 +180,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Text Templating",
+          "path": "Text-Templating.md"
+        },
+        {
           "text": "Object Serialization"
         },
         {
@@ -221,8 +225,11 @@
     },
     {
       "text": "Domain Driven Design",
-      "path": "Domain-Driven-Design.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Domain-Driven-Design.md"
+        },
         {
           "text": "Domain Layer",
           "items": [
@@ -350,6 +357,10 @@
               "path": "UI/Angular/Config-State.md"
             },
             {
+              "text": "Modifying the Menu",
+              "path": "UI/Angular/Modifying-the-Menu.md"
+            },
+            {
               "text": "Component Replacement",
               "path": "UI/Angular/Component-Replacement.md"
             },
@@ -372,6 +383,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "ListService",
+              "path": "UI/Angular/List-Service.md"
             }
           ]
         },
@@ -393,8 +408,11 @@
     },
     {
       "text": "Data Access",
-      "path": "Data-Access.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Data-Access.md"
+        },
         {
           "text": "Connection Strings",
           "path": "Connection-Strings.md"
@@ -477,8 +495,11 @@
     },
     {
       "text": "Startup Templates",
-      "path": "Startup-Templates/Index.md",
       "items": [
+        {
+          "text": "Overall",
+          "path": "Startup-Templates/Index.md"
+        },
         {
           "text": "Application",
           "path": "Startup-Templates/Application.md"
@@ -492,6 +513,10 @@
     {
       "text": "Samples",
       "items": [
+        {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
         {
           "text": "Microservice Demo",
           "path": "Samples/Microservice-Demo.md"

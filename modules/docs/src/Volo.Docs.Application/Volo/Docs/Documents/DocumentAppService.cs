@@ -7,8 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Nest;
-using Newtonsoft.Json;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Docs.Caching;

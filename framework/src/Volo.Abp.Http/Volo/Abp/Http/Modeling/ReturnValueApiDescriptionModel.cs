@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Modeling
@@ -21,8 +22,8 @@ namespace Volo.Abp.Http.Modeling
 
             return new ReturnValueApiDescriptionModel
             {
-                Type = ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(unwrappedType),
-                TypeSimple = ModelingTypeHelper.GetSimplifiedName(unwrappedType)
+                Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(unwrappedType),
+                TypeSimple = TypeHelper.GetSimplifiedName(unwrappedType)
             };
         }
     }

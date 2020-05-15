@@ -1,4 +1,4 @@
-﻿/**
+/**
  * TODO: Document & prepare typescript definitions
  * TODO: Refactor & test more
  */
@@ -49,6 +49,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             var _publicApi = null;
             var _args = null;
 
+            var _onOpenCallbacks = new CallbackList();
             var _onCloseCallbacks = new CallbackList();
             var _onResultCallbacks = new CallbackList();
 
@@ -106,6 +107,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     }
 
                     $firstVisibleInput.focus();
+                    _onOpenCallbacks.triggerAll(_publicApi);
                 });
 
                 var modalClass = abp.modals[options.modalClass];
@@ -145,6 +147,10 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 }
 
                 _$modal.modal('hide');
+            };
+
+            var _onOpen = function (onOpenCallback) {
+                _onOpenCallbacks.add(onOpenCallback);
             };
 
             var _onClose = function (onCloseCallback) {
@@ -187,6 +193,8 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 setResult: function () {
                     _onResultCallbacks.triggerAll(_publicApi, arguments);
                 },
+
+                onOpen: _onOpen,
 
                 onClose: _onClose,
 

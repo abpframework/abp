@@ -1229,7 +1229,7 @@ find(predicate: ListIteratorFunction<T>): ListNode<T> | undefined
 从链表中找到与给定谓词匹配的第一个节点:
 
 ```js
-list.addTailMany(['a', 'b', 'b', 'c']);
+list.addManyTail(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -1251,7 +1251,7 @@ findIndex(predicate: ListIteratorFunction<T>): number
 从链表中找到与给定谓词匹配的第一个节点的位置:
 
 ```js
-list.addTailMany(['a', 'b', 'b', 'c']);
+list.addManyTail(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -1279,7 +1279,7 @@ get(position: number): ListNode<T> | undefined
 查找并返回链表中特定位置的节点:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1303,7 +1303,7 @@ indexOf(value: T, compareFn?: ListComparisonFn<T>): number
 在链表中找到匹配给定值的第一个节点位置:
 
 ```js
-list.addTailMany(['a', 'b', 'b', 'c']);
+list.addManyTail(['a', 'b', 'b', 'c']);
 
 // "a" <-> "b" <-> "b" <-> "c"
 
@@ -1325,7 +1325,7 @@ i3 === -1
 你可以自定义比较器
 
 ```js
-list.addTailMany([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
+list.addManyTail([{ x: 1 }, { x: 0 }, { x: 2 }, { x: 0 }, { x: 3 }]);
 
 // {"x":1} <-> {"x":0} <-> {"x":2} <-> {"x":0} <-> {"x":3}
 
@@ -1365,7 +1365,7 @@ forEach(iteratorFn: ListIteratorFn<T>): void
 从头到尾在链表中的所有节点上运行回调函数:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1381,7 +1381,7 @@ list.forEach((node, index) => console.log(node.value + index));
 链表是可迭代的. 换句话说你可以使用诸如`for ... of`之类的方法.
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1405,7 +1405,7 @@ toArray(): T[]
 转换链表值为数组:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1427,7 +1427,7 @@ toNodeArray(): T[]
 转换链表节点为数组:
 
 ```js
-list.addTailMany(['a', 'b', 'c']);
+list.addManyTail(['a', 'b', 'c']);
 
 // "a" <-> "b" <-> "c"
 
@@ -1449,7 +1449,7 @@ toString(mapperFn: ListMapperFn<T> = JSON.stringify): string
 将链表转换为节点及其关系的字符串表示形式:
 
 ```js
-list.addTailMany(['a', 2, 'c', { k: 4, v: 'd' }]);
+list.addManyTail(['a', 2, 'c', { k: 4, v: 'd' }]);
 
 // "a" <-> 2 <-> "c" <-> {"k":4,"v":"d"}
 
@@ -1507,7 +1507,7 @@ export class ListNode<T = any> {
 - `previous`引用列表中的上一个节点.
 
 ```js
-list.addTailMany([ 0, 1, 2 ]);
+list.addManyTail([ 0, 1, 2 ]);
 
 console.log(
   list.head.value,                              // 0

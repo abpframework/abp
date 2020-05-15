@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Docs.Admin.Documents
@@ -10,7 +11,5 @@ namespace Volo.Docs.Admin.Documents
         Task PullAllAsync(PullAllDocumentInput input);
 
         Task PullAsync(PullDocumentInput input);
-
-        Task ReindexAsync();
     }
 }

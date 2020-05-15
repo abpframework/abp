@@ -17,7 +17,7 @@ const updateAndInstall = async () => {
       ...packageJson.devDependencies,
       ...dependencies,
       ...peerDependencies,
-      [name]: `^${version}`,
+      [name]: `~${version}`,
     };
 
     packageJson.devDependencies = Object.keys(packageJson.devDependencies)

@@ -102,7 +102,7 @@ namespace AuthServer.Host
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             //TODO: Problem on a clustered environment
             AsyncHelper.RunSync(async () =>

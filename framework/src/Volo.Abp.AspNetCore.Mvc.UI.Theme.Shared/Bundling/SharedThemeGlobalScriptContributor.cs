@@ -36,6 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         {
             context.Files.AddRange(new[]
             {
+                "/libs/abp/aspnetcore-mvc-ui-theme-shared/ui-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/widget-manager.js",

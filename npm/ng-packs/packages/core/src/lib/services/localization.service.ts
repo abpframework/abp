@@ -1,10 +1,12 @@
 import { Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
+import { SetLanguage } from '../actions/session.actions';
+import { ApplicationConfiguration } from '../models/application-configuration';
+import { Config } from '../models/config';
 import { ConfigState } from '../states/config.state';
 import { registerLocale } from '../utils/initial-utils';
-import { Config } from '../models/config';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
 
@@ -18,6 +20,7 @@ export class LocalizationService {
   }
 
   constructor(
+    private actions: Actions,
     private store: Store,
     private router: Router,
     private ngZone: NgZone,
@@ -26,6 +29,14 @@ export class LocalizationService {
     otherInstance: LocalizationService,
   ) {
     if (otherInstance) throw new Error('LocalizationService should have only one instance.');
+
+    this.listenToSetLanguage();
+  }
+
+  private listenToSetLanguage() {
+    this.actions
+      .pipe(ofActionSuccessful(SetLanguage))
+      .subscribe(({ payload }) => this.registerLocale(payload));
   }
 
   setRouteReuse(reuse: ShouldReuseRoute) {
@@ -64,5 +75,32 @@ export class LocalizationService {
    */
   instant(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]): string {
     return this.store.selectSnapshot(ConfigState.getLocalization(key, ...interpolateParams));
+  }
+
+  isLocalized(key, sourceName) {
+    if (sourceName === '_') {
+      // A convention to suppress the localization
+      return true;
+    }
+
+    const localization = this.store.selectSnapshot(
+      ConfigState.getOne('localization'),
+    ) as ApplicationConfiguration.Localization;
+    sourceName = sourceName || localization.defaultResourceName;
+    if (!sourceName) {
+      return false;
+    }
+
+    const source = localization.values[sourceName];
+    if (!source) {
+      return false;
+    }
+
+    const value = source[key];
+    if (value === undefined) {
+      return false;
+    }
+
+    return true;
   }
 }

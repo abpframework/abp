@@ -3,9 +3,8 @@ using Volo.Abp.DependencyInjection;
 
 namespace AuthServer.Host
 {
-    public class BrandingProvider : IBrandingProvider, ISingletonDependency
+    public class BrandingProvider : DefaultBrandingProvider, ISingletonDependency
     {
-        public string AppName => "Authentication Server";
-        public string LogoUrl => null;
+        public override string AppName => "Authentication Server";
     }
 }

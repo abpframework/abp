@@ -21,7 +21,7 @@ export class ToasterService {
 
   private setContainer() {
     this.containerComponentRef = this.contentProjectionService.projectContent(
-      PROJECTION_STRATEGY.AppendComponentToBody(ToastContainerComponent),
+      PROJECTION_STRATEGY.AppendComponentToBody(ToastContainerComponent, { toasts$: this.toasts$ }),
     );
 
     this.containerComponentRef.changeDetectorRef.detectChanges();

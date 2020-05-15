@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using CommonMark;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Localization;
+using Markdig;
 
 namespace Volo.Blogging.Pages.Blog
 {
@@ -32,7 +32,7 @@ namespace Volo.Blogging.Pages.Blog
 
         public string GetShortContent(string content) 
         {
-            var html = RenderMarkdownToString(content);
+            var html = RenderMarkdownToHtmlAsString(content);
             var plainText = Regex.Replace(html, "<[^>]*>", "");
 
             if (string.IsNullOrWhiteSpace(plainText))
@@ -65,26 +65,37 @@ namespace Volo.Blogging.Pages.Blog
             {
                 return new HtmlString("");
             }
-            
-            byte[] bytes = Encoding.Default.GetBytes(content);
-            var utf8Content = Encoding.UTF8.GetString(bytes);
 
-            var html = CommonMarkConverter.Convert(utf8Content);
+            var html = RenderMarkdownToHtmlAsString(content);
+
+            html = ReplaceCodeBlocksLanguage(
+                html,
+                "language-C#",
+                "language-csharp"
+            );
 
             return new HtmlString(html);
         }
 
-        public string RenderMarkdownToString(string content)
+        protected string ReplaceCodeBlocksLanguage(string content, string currentLanguage, string newLanguage)
+        {
+            return Regex.Replace(content, "<code class=\"" + currentLanguage + "\">", "<code class=\"" + newLanguage + "\">", RegexOptions.IgnoreCase);
+        }
+
+        public string RenderMarkdownToHtmlAsString(string content)
         {
             if (content.IsNullOrWhiteSpace())
             {
                 return "";
             }
 
-            byte[] bytes = Encoding.Default.GetBytes(content);
-            var utf8Content = Encoding.UTF8.GetString(bytes);
-
-            return CommonMarkConverter.Convert(utf8Content);
+            return Markdig.Markdown.ToHtml(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)),
+                new MarkdownPipelineBuilder()
+                    .UseAutoLinks()
+                    .UseBootstrap()
+                    .UseGridTables()
+                    .UsePipeTables()
+                    .Build());
         }
 
         public LocalizedHtmlString ConvertDatetimeToTimeAgo(DateTime dt)

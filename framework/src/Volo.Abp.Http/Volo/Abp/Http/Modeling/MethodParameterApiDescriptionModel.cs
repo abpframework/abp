@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -29,8 +30,8 @@ namespace Volo.Abp.Http.Modeling
             {
                 Name = parameterInfo.Name,
                 TypeAsString = parameterInfo.ParameterType.GetFullNameWithAssemblyName(),
-                Type = parameterInfo.ParameterType != null ? ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(parameterInfo.ParameterType) : null,
-                TypeSimple = parameterInfo.ParameterType != null ? ModelingTypeHelper.GetSimplifiedName(parameterInfo.ParameterType) : null,
+                Type = parameterInfo.ParameterType != null ? TypeHelper.GetFullNameHandlingNullableAndGenerics(parameterInfo.ParameterType) : null,
+                TypeSimple = parameterInfo.ParameterType != null ? TypeHelper.GetSimplifiedName(parameterInfo.ParameterType) : null,
                 IsOptional = parameterInfo.IsOptional,
                 DefaultValue = parameterInfo.HasDefaultValue ? parameterInfo.DefaultValue : null
             };

@@ -236,7 +236,7 @@ const newRoute: ABP.Route = {
   path: "page",
   invisible: false,
   order: 2,
-  requiredPolicy: "MyProjectName::MyNewPage"
+  requiredPolicy: "MyProjectName.MyNewPage"
 };
 
 this.config.dispatchAddRoute(newRoute);
@@ -248,16 +248,17 @@ this.config.dispatchAddRoute(newRoute);
 如果你想要**添加一个子路由,你可以这样做:**
 
 ```js
+import { eIdentityRouteNames } from '@abp/ng.identity';
 // this.config is instance of ConfigStateService
 
 const newRoute: ABP.Route = {
-  parentName: "AbpAccount::Login",
+  parentName: eIdentityRouteNames.IdentityManagement,
   name: "My New Page",
   iconClass: "fa fa-dashboard",
   path: "page",
   invisible: false,
   order: 2,
-  requiredPolicy: "MyProjectName::MyNewPage"
+  requiredPolicy: "MyProjectName.MyNewPage"
 };
 
 this.config.dispatchAddRoute(newRoute);
@@ -291,4 +292,4 @@ this.config.dispatchSetEnvironment({
 
 ## 下一步是什么?
 
-* [组件替换](./Component-Replacement.md)
+- [修改菜单](./Modifying-the-Menu.md)

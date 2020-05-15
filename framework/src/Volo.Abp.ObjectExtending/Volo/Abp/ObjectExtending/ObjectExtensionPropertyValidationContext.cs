@@ -40,6 +40,7 @@ namespace Volo.Abp.ObjectExtending
 
         /// <summary>
         /// Can be used to resolve services from the dependency injection container.
+        /// This can be null when SetProperty method is used on the object.
         /// </summary>
         [CanBeNull]
         public IServiceProvider ServiceProvider => ValidationContext;

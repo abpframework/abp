@@ -456,161 +456,76 @@ Run the application and try to delete a book.
 
 In this section, you will learn how to create a new modal dialog form to create a new book.
 
-#### Type definition
-
-Open `books.ts` file in `app\store\models` folder and replace the content as below:
-
-```js
-export namespace Books {
-  export interface State {
-    books: Response;
-  }
-
-  export interface Response {
-    items: Book[];
-    totalCount: number;
-  }
-
-  export interface Book {
-    name: string;
-    type: BookType;
-    publishDate: string;
-    price: number;
-    lastModificationTime: string;
-    lastModifierId: string;
-    creationTime: string;
-    creatorId: string;
-    id: string;
-  }
-
-  export enum BookType {
-    Undefined,
-    Adventure,
-    Biography,
-    Dystopia,
-    Fantastic,
-    Horror,
-    Science,
-    ScienceFiction,
-    Poetry,
-  }
-
-  //<== added CreateUpdateBookInput interface ==>
-  export interface CreateUpdateBookInput {
-    name: string;
-    type: BookType;
-    publishDate: string;
-    price: number;
-  }
-}
-```
-
-* We added `CreateUpdateBookInput` interface.
-* You can see the properties of this interface from Swagger UI.
-* The `CreateUpdateBookInput` interface matches with the `CreateUpdateBookDto` in the backend.
-
-#### Service method
-
-Open the `books.service.ts` file in `app\books\shared` folder and replace the content as below:
-
-```js
-import { Injectable } from '@angular/core';
-import { RestService } from '@abp/ng.core';
-import { Books } from '../../store/models';
-import { Observable } from 'rxjs';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class BooksService {
-  constructor(private restService: RestService) {}
-
-  get(): Observable<Books.Response> {
-    return this.restService.request<void, Books.Response>({
-      method: 'GET',
-      url: '/api/app/book'
-    });
-  }
-
-  //<== added create method ==>
-  create(createBookInput: Books.CreateUpdateBookInput): Observable<Books.Book> {
-    return this.restService.request<Books.CreateUpdateBookInput, Books.Book>({
-      method: 'POST',
-      url: '/api/app/book',
-      body: createBookInput
-    });
-  }
-}
-```
-
-- We added the `create` method to perform an HTTP Post request to the server.
-- `restService.request` function gets generic parameters for the types sent to and received from the server. This example sends a `CreateUpdateBookInput` object and receives a `Book` object (you can set `void` for request or return type if not used).
-
 #### State definitions
 
-Open `books.action.ts` in `app\store\actions` folder and replace the content as below:
+Open `book.action.ts` in `app\book\state` folder and replace the content as below:
 
 ```js
-import { Books } from '../models'; //<== added this line ==>
+import { CreateUpdateBookDto } from '../models'; //<== added this line ==>
 
 export class GetBooks {
-  static readonly type = '[Books] Get';
+  static readonly type = '[Book] Get';
 }
 
-//added CreateUpdateBook class
+// added CreateUpdateBook class
 export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: Books.CreateUpdateBookInput) { }
+  static readonly type = '[Book] Create Update Book';
+  constructor(public payload: CreateUpdateBookDto) { }
 }
 ```
 
-* We imported the Books namespace and created the `CreateUpdateBook` action.
+* We imported the `CreateUpdateBookDto` model and created the `CreateUpdateBook` action.
 
-Open `books.state.ts` file in `app\store\states` and replace the content as below:
+Open `book.state.ts` file in `app\book\state` folder and replace the content as below:
 
 ```js
+import { PagedResultDto } from '@abp/ng.core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook } from '../actions/books.actions'; //<== added CreateUpdateBook==>
-import { Books } from '../models/books';
-import { BooksService } from '../../books/shared/books.service';
+import { GetBooks, CreateUpdateBook } from './book.actions'; // <== added CreateUpdateBook==>
+import { BookService } from '../services';
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { BookDto } from '../models';
 
-@State<Books.State>({
-  name: 'BooksState',
-  defaults: { books: {} } as Books.State,
+export class BookStateModel {
+  public book: PagedResultDto<BookDto>;
+}
+
+@State<BookStateModel>({
+  name: 'BookState',
+  defaults: { book: {} } as BookStateModel,
 })
 @Injectable()
-export class BooksState {
+export class BookState {
   @Selector()
-  static getBooks(state: Books.State) {
-    return state.books.items || [];
+  static getBooks(state: BookStateModel) {
+    return state.book.items || [];
   }
 
-  constructor(private booksService: BooksService) { }
+  constructor(private bookService: BookService) {}
 
   @Action(GetBooks)
-  get(ctx: StateContext<Books.State>) {
-    return this.booksService.get().pipe(
-      tap(booksResponse => {
+  get(ctx: StateContext<BookStateModel>) {
+    return this.bookService.getListByInput().pipe(
+      tap((bookResponse) => {
         ctx.patchState({
-          books: booksResponse,
+          book: bookResponse,
         });
-      }),
+      })
     );
   }
 
-  //added CreateUpdateBook action listener
+  // added CreateUpdateBook action listener
   @Action(CreateUpdateBook)
-  save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
-    return this.booksService.create(action.payload);
+  save(ctx: StateContext<BookStateModel>, action: CreateUpdateBook) {
+    return this.bookService.createByInput(action.payload);
   }
 }
 ```
 
 * We imported `CreateUpdateBook` action and defined the `save` method that will listen to a `CreateUpdateBook` action to create a book.
 
-When the `SaveBook` action dispatched, the save method is being executed. It calls `create` method of the `BooksService`. 
+When the `SaveBook` action dispatched, the save method is being executed. It calls `createByInput` method of the `BookService`. 
 
 #### Add a modal to BookListComponent
 
@@ -690,15 +605,16 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
 * `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
 * We added `New book` button to the `AbpContentToolbar`.
 
-Open `book-list.component.ts` file in `books\book-list` folder and replace the content as below:
+Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
 ```js
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks } from '../../store/actions';
+import { finalize } from 'rxjs/operators';
+import { BookDto, BookType } from '../models';
+import { GetBooks } from '../state/book.actions';
+import { BookState } from '../state/book.state';
 
 @Component({
   selector: 'app-book-list',
@@ -706,16 +622,16 @@ import { GetBooks } from '../../store/actions';
   styleUrls: ['./book-list.component.scss'],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<Books.Book[]>;
+  @Select(BookState.getBooks)
+  books$: Observable<BookDto[]>;
 
-  booksType = Books.BookType;
+  booksType = BookType;
 
   loading = false;
 
-  isModalOpen = false; //<== added this line ==>
+  isModalOpen = false; // <== added this line ==>
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.get();
@@ -723,12 +639,13 @@ export class BookListComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new GetBooks()).subscribe(() => {
-      this.loading = false;
-    });
+    this.store
+      .dispatch(new GetBooks())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(() => {});
   }
 
-  //added createBook method
+  // added createBook method
   createBook() {
     this.isModalOpen = true;
   }
@@ -745,16 +662,17 @@ You can open your browser and click **New book** button to see the new modal.
 
 [Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
 
-Open `book-list.component.ts` file in `app\books\book-list` folder and replace the content as below:
+Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
 ```js
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks } from '../../store/actions';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'; //<== added this line ==>
+import { finalize } from 'rxjs/operators';
+import { BookDto, BookType } from '../models';
+import { GetBooks } from '../state/book.actions';
+import { BookState } from '../state/book.state';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== added this line ==>
 
 @Component({
   selector: 'app-book-list',
@@ -762,18 +680,18 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'; //<== added
   styleUrls: ['./book-list.component.scss'],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<Books.Book[]>;
+  @Select(BookState.getBooks)
+  books$: Observable<BookDto[]>;
 
-  booksType = Books.BookType;
+  booksType = BookType;
 
   loading = false;
 
   isModalOpen = false;
 
-  form: FormGroup;
+  form: FormGroup; // <== added this line ==>
 
-  constructor(private store: Store, private fb: FormBuilder) { } //<== added FormBuilder ==>
+  constructor(private store: Store, private fb: FormBuilder) {} // <== added FormBuilder ==>
 
   ngOnInit() {
     this.get();
@@ -781,9 +699,10 @@ export class BookListComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new GetBooks()).subscribe(() => {
-      this.loading = false;
-    });
+    this.store
+      .dispatch(new GetBooks())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(() => {});
   }
 
   createBook() {
@@ -791,7 +710,7 @@ export class BookListComponent implements OnInit {
     this.isModalOpen = true;
   }
 
-  //added buildForm method
+  // added buildForm method
   buildForm() {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -804,6 +723,7 @@ export class BookListComponent implements OnInit {
 ```
 
 * We imported `FormGroup, FormBuilder and Validators`.
+* We added `form: FormGroup` variable.
 * We injected `fb: FormBuilder` service to the constructor. The [FormBuilder](https://angular.io/api/forms/FormBuilder) service provides convenient methods for generating controls. It reduces the amount of boilerplate needed to build complex forms.
 * We added `buildForm` method to the end of the file and executed  `buildForm()` in the `createBook` method. This method creates a reactive form to be able to create a new book.
   * The `group` method of `FormBuilder`, `fb` creates a `FormGroup`.
@@ -854,61 +774,58 @@ Open `book-list.component.html` in `app\books\book-list` folder and replace `<ng
 
 #### Datepicker requirements
 
-Open `books.module.ts` file in `app\books` folder and replace the content as below:
+Open `book.module.ts` file in `app\book` folder and replace the content as below:
 
 ```js
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { BooksRoutingModule } from './books-routing.module';
-import { BooksComponent } from './books.component';
+import { BookRoutingModule } from './book-routing.module';
 import { BookListComponent } from './book-list/book-list.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; //<== added this line ==>
 
 @NgModule({
-  declarations: [BooksComponent, BookListComponent],
+  declarations: [BookListComponent],
   imports: [
     CommonModule,
-    BooksRoutingModule,
+    BookRoutingModule,
     SharedModule,
-    NgbDatepickerModule //<== added this line ==>
-  ]
+    NgbDatepickerModule, //<== added this line ==>
+  ],
 })
-export class BooksModule { }
+export class BookModule {}
 ```
 
 * We imported `NgbDatepickerModule`  to be able to use the date picker.
 
-  
-
-Open `book-list.component.ts` file in `app\books\book-list` folder and replace the content as below:
+Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
 ```js
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks } from '../../store/actions';
+import { finalize } from 'rxjs/operators';
+import { BookDto, BookType } from '../models';
+import { GetBooks } from '../state/book.actions';
+import { BookState } from '../state/book.state';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap'; //<== added this line ==>
+import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap'; // <== added this line ==>
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }] //<== added this line ==>
+  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }], // <== added this line ==>
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<Books.Book[]>;
+  @Select(BookState.getBooks)
+  books$: Observable<BookDto[]>;
 
-  booksType = Books.BookType;
+  booksType = BookType;
 
   //added bookTypeArr array
-  bookTypeArr = Object.keys(Books.BookType).filter(
-    bookType => typeof this.booksType[bookType] === 'number'
+  bookTypeArr = Object.keys(BookType).filter(
+    (bookType) => typeof this.booksType[bookType] === 'number'
   );
 
   loading = false;
@@ -917,7 +834,7 @@ export class BookListComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private store: Store, private fb: FormBuilder) { }
+  constructor(private store: Store, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.get();
@@ -925,9 +842,10 @@ export class BookListComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new GetBooks()).subscribe(() => {
-      this.loading = false;
-    });
+    this.store
+      .dispatch(new GetBooks())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(() => {});
   }
 
   createBook() {
@@ -965,35 +883,16 @@ Now, you can open your browser to see the changes:
 
 #### Saving the book
 
-Open `book-list.component.html` in `app\books\book-list` folder and add the following `abp-button` to save the new book.
-
-```html
-<ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
-      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
-  </button>
-    
-  <!--added save button-->
-  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
-        <i class="fa fa-check mr-1"></i>
-        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
-  </button>
-</ng-template>
-```
-
-* This adds a save button to the bottom area of the modal:
-
-![Save button to the modal](./images/bookstore-new-book-form-v2.png)
-
-Open `book-list.component.ts` file in `app\books\book-list` folder and replace the content as below:
+Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
 ```js
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks, CreateUpdateBook } from '../../store/actions'; //<== added CreateUpdateBook ==>
+import { finalize } from 'rxjs/operators';
+import { BookDto, BookType } from '../models';
+import { GetBooks, CreateUpdateBook } from '../state/book.actions'; // <== added CreateUpdateBook ==>
+import { BookState } from '../state/book.state';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
@@ -1001,16 +900,16 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }]
+  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<Books.Book[]>;
+  @Select(BookState.getBooks)
+  books$: Observable<BookDto[]>;
 
-  booksType = Books.BookType;
+  booksType = BookType;
 
-  bookTypeArr = Object.keys(Books.BookType).filter(
-    bookType => typeof this.booksType[bookType] === 'number'
+  bookTypeArr = Object.keys(BookType).filter(
+    (bookType) => typeof this.booksType[bookType] === 'number'
   );
 
   loading = false;
@@ -1019,7 +918,7 @@ export class BookListComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private store: Store, private fb: FormBuilder) { }
+  constructor(private store: Store, private fb: FormBuilder) {}
 
   ngOnInit() {
     this.get();
@@ -1027,9 +926,10 @@ export class BookListComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new GetBooks()).subscribe(() => {
-      this.loading = false;
-    });
+    this.store
+      .dispatch(new GetBooks())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(() => {});
   }
 
   createBook() {
@@ -1046,7 +946,7 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  //<== added save ==>
+  // <== added save ==>
   save() {
     if (this.form.invalid) {
       return;
@@ -1062,92 +962,102 @@ export class BookListComponent implements OnInit {
 ```
 
 * We imported `CreateUpdateBook`.
-* We added `save` method 
+* We added `save` method
 
-### Updating an existing book
+Open `book-list.component.html` in `app\book\book-list` folder and add the following `abp-button` to save the new book.
 
-#### BooksService
-
-Open the `books.service.ts` in `app\books\shared` folder and add the `getById` and `update` methods.
-
-```js
-getById(id: string): Observable<Books.Book> {
-  return this.restService.request<void, Books.Book>({
-    method: 'GET',
-    url: `/api/app/book/${id}`
-  });
-}
-
-update(updateBookInput: Books.CreateUpdateBookInput, id: string): Observable<Books.Book> {
-  return this.restService.request<Books.CreateUpdateBookInput, Books.Book>({
-    method: 'PUT',
-    url: `/api/app/book/${id}`,
-    body: updateBookInput
-  });
-}
+```html
+<ng-template #abpFooter>
+  <button type="button" class="btn btn-secondary" #abpClose>
+      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
+  </button>
+    
+  <!--added save button-->
+  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+        <i class="fa fa-check mr-1"></i>
+        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
+  </button>
+</ng-template>
 ```
+
+Find the `<form [formGroup]="form">` tag and replace below content:
+
+```html
+<form [formGroup]="form" (ngSubmit)="save()"> <!-- added the ngSubmit -->
+```
+
+  
+* We added the `(ngSubmit)="save()"` to `<form>` element to save a new book by pressing the enter.
+* We added `abp-button` to the bottom area of the modal to save a new book.
+
+The final modal UI looks like below:
+
+![Save button to the modal](./images/bookstore-new-book-form-v2.png)
+
+### Updating a book
 
 #### CreateUpdateBook action
 
-Open the `books.actions.ts` in `app\store\actions` folder and replace the content as below:
+Open the `book.actions.ts` in `app\book\state` folder and replace the content as below:
 
 ```js
-import { Books } from '../models';
+import { CreateUpdateBookDto } from '../models';
 
 export class GetBooks {
-  static readonly type = '[Books] Get';
+  static readonly type = '[Book] Get';
 }
 
 export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: Books.CreateUpdateBookInput, public id?: string) { } //<== added id parameter ==>
+  static readonly type = '[Book] Create Update Book';
+  constructor(public payload: CreateUpdateBookDto, public id?: string) {} // <== added id parameter ==>
 }
 ```
 
 * We added `id` parameter to the `CreateUpdateBook` action's constructor.
 
-Open the `books.state.ts` in `app\store\states` folder and replace the `save` method as below:
+Open the `book.state.ts` in `app\book\state` folder and replace the `save` method as below:
 
 ```js
 @Action(CreateUpdateBook)
-save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
-    if (action.id) {
-        return this.booksService.update(action.payload, action.id);
-    } else {
-        return this.booksService.create(action.payload);
-    }
+save(ctx: StateContext<BookStateModel>, action: CreateUpdateBook) {
+  if (action.id) {
+    return this.bookService.updateByIdAndInput(action.payload, action.id);
+  } else {
+    return this.bookService.createByInput(action.payload);
+  }
 }
 ```
 
 #### BookListComponent
 
-Open `book-list.component.ts` in `app\books\book-list` folder and inject `BooksService` dependency by adding it to the constructor and add a variable named `selectedBook`.
+Open `book-list.component.ts` in `app\book\book-list` folder and inject `BookService` dependency by adding it to the constructor and add a variable named `selectedBook`.
 
 ```js
 import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { BooksState } from '../../store/states';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Books } from '../../store/models';
-import { GetBooks, CreateUpdateBook } from '../../store/actions';
+import { finalize } from 'rxjs/operators';
+import { BookDto, BookType } from '../models';
+import { GetBooks, CreateUpdateBook } from '../state/book.actions';
+import { BookState } from '../state/book.state';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { BooksService } from '../shared/books.service'; //<== imported BooksService ==>
+import { BookService } from '../services'; // <== imported BookService ==>
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }]
+  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<Books.Book[]>;
+  @Select(BookState.getBooks)
+  books$: Observable<BookDto[]>;
 
-  booksType = Books.BookType;
+  booksType = BookType;
 
-  bookTypeArr = Object.keys(Books.BookType).filter(
-    bookType => typeof this.booksType[bookType] === 'number'
+  bookTypeArr = Object.keys(BookType).filter(
+    (bookType) => typeof this.booksType[bookType] === 'number'
   );
 
   loading = false;
@@ -1156,9 +1066,9 @@ export class BookListComponent implements OnInit {
 
   form: FormGroup;
 
-  selectedBook = {} as Books.Book; //<== declared selectedBook ==>
+  selectedBook = {} as BookDto; // <== declared selectedBook ==>
 
-  constructor(private store: Store, private fb: FormBuilder, private booksService: BooksService) { }
+  constructor(private store: Store, private fb: FormBuilder, private bookService: BookService) {} //<== injected BookService ==>
 
   ngOnInit() {
     this.get();
@@ -1166,39 +1076,38 @@ export class BookListComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new GetBooks()).subscribe(() => {
-      this.loading = false;
-    });
+    this.store
+      .dispatch(new GetBooks())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe(() => {});
   }
 
-  //<== this method is replaced ==>
+  // <== this method is replaced ==>
   createBook() {
-    this.selectedBook = {} as Books.Book; //<== added ==>
+    this.selectedBook = {} as BookDto; // <== added ==>
     this.buildForm();
     this.isModalOpen = true;
   }
 
-  //<== added editBook method ==>
+  // <== added editBook method ==>
   editBook(id: string) {
-    this.booksService.getById(id).subscribe(book => {
+    this.bookService.getById(id).subscribe((book) => {
       this.selectedBook = book;
       this.buildForm();
       this.isModalOpen = true;
     });
   }
 
-  //<== this method is replaced ==>
+  // <== this method is replaced ==>
   buildForm() {
     this.form = this.fb.group({
-      name: [this.selectedBook.name || "", Validators.required],
+      name: [this.selectedBook.name || '', Validators.required],
       type: [this.selectedBook.type || null, Validators.required],
       publishDate: [
-        this.selectedBook.publishDate
-          ? new Date(this.selectedBook.publishDate)
-          : null,
-        Validators.required
+        this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
+        Validators.required,
       ],
-      price: [this.selectedBook.price || null, Validators.required]
+      price: [this.selectedBook.price || null, Validators.required],
     });
   }
 
@@ -1208,7 +1117,8 @@ export class BookListComponent implements OnInit {
     }
 
     //<== added this.selectedBook.id ==>
-    this.store.dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id))
+    this.store
+      .dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id))
       .subscribe(() => {
         this.isModalOpen = false;
         this.form.reset();
@@ -1218,9 +1128,9 @@ export class BookListComponent implements OnInit {
 }
 ```
 
-* We imported `BooksService`.
-* We declared a variable named `selectedBook` as `Books.Book`.
-* We injected  `BooksService` to the constructor. `BooksService` is being used to retrieve the book data which is being edited.
+* We imported `BookService`.
+* We declared a variable named `selectedBook` as `BookDto`.
+* We injected  `BookService` to the constructor. `BookService` is being used to retrieve the book data which is being edited.
 * We added `editBook`  method. This method fetches the book with the given `Id` and sets it to `selectedBook` object. 
 * We replaced the `buildForm` method so that it creates the form with the `selectedBook` data.
 * We replaced the `createBook` method so it sets `selectedBook` to an empty object.
@@ -1228,7 +1138,7 @@ export class BookListComponent implements OnInit {
 
 #### Add "Actions" dropdown to the table
 
-Open the `book-list.component.html` in `app\books\book-list` folder and replace the `<div class="card-body">` tag as below:
+Open the `book-list.component.html` in `app\book\book-list` folder and replace the `<div class="card-body">` tag as below:
 
 ```html
 <div class="card-body">
@@ -1286,7 +1196,7 @@ The final UI looks like as below:
 
 ![Action buttons](./images/bookstore-actions-buttons.png)
 
-Open `book-list.component.html` in `app\books\book-list` folder and find the `<ng-template #abpHeader>` tag and replace the content as below.
+Open `book-list.component.html` in `app\book\book-list` folder and find the `<ng-template #abpHeader>` tag and replace the content as below.
 
 ```html
 <ng-template #abpHeader>
@@ -1298,79 +1208,69 @@ Open `book-list.component.html` in `app\books\book-list` folder and find the `<n
 
 ### Deleting a book
 
-#### BooksService
-
-Open `books.service.ts` in `app\books\shared` folder and add the below `delete` method to delete a book.
-
-```js
-delete(id: string): Observable<void> {
-  return this.restService.request<void, void>({
-    method: 'DELETE',
-    url: `/api/app/book/${id}`
-  });
-}
-```
-
-* `Delete` method gets  `id` parameter and makes a `DELETE` HTTP request to the relevant endpoint.
-
 #### DeleteBook action
 
-Open `books.actions.ts` in `app\store\actions `folder and add an action named `DeleteBook`.
+Open `book.actions.ts` in `app\book\state` folder and add an action named `DeleteBook`.
 
 ```js
 export class DeleteBook {
-  static readonly type = '[Books] Delete';
+  static readonly type = '[Book] Delete';
   constructor(public id: string) {}
 }
 ```
 
-Open the `books.state.ts` in `app\store\states` folder and replace the content as below:
+Open the `book.state.ts` in `app\book\state` folder and replace the content as below:
 
 ```js
+import { PagedResultDto } from '@abp/ng.core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook, DeleteBook } from '../actions/books.actions'; //<== added DeleteBook==>
-import { Books } from '../models/books';
-import { BooksService } from '../../books/shared/books.service';
+import { GetBooks, CreateUpdateBook, DeleteBook } from './book.actions'; // <== added DeleteBook==>
+import { BookService } from '../services';
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { BookDto } from '../models';
 
-@State<Books.State>({
-  name: 'BooksState',
-  defaults: { books: {} } as Books.State,
+export class BookStateModel {
+  public book: PagedResultDto<BookDto>;
+}
+
+@State<BookStateModel>({
+  name: 'BookState',
+  defaults: { book: {} } as BookStateModel,
 })
 @Injectable()
-export class BooksState {
+export class BookState {
   @Selector()
-  static getBooks(state: Books.State) {
-    return state.books.items || [];
+  static getBooks(state: BookStateModel) {
+    return state.book.items || [];
   }
 
-  constructor(private booksService: BooksService) { }
+  constructor(private bookService: BookService) {}
 
   @Action(GetBooks)
-  get(ctx: StateContext<Books.State>) {
-    return this.booksService.get().pipe(
-      tap(booksResponse => {
+  get(ctx: StateContext<BookStateModel>) {
+    return this.bookService.getListByInput().pipe(
+      tap((booksResponse) => {
         ctx.patchState({
-          books: booksResponse,
+          book: booksResponse,
         });
-      }),
+      })
     );
   }
 
   @Action(CreateUpdateBook)
-  save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
+  save(ctx: StateContext<BookStateModel>, action: CreateUpdateBook) {
     if (action.id) {
-      return this.booksService.update(action.payload, action.id);
+      return this.bookService.updateByIdAndInput(action.payload, action.id);
     } else {
-      return this.booksService.create(action.payload);
+      return this.bookService.createByInput(action.payload);
     }
   }
 
-  //<== added DeleteBook ==>
+  // <== added DeleteBook action listener ==>
   @Action(DeleteBook)
-  delete(ctx: StateContext<Books.State>, action: DeleteBook) {
-    return this.booksService.delete(action.id);
+  delete(ctx: StateContext<BookStateModel>, action: DeleteBook) {
+    return this.bookService.deleteById(action.id);
   }
 }
 ```
@@ -1379,29 +1279,10 @@ export class BooksState {
 
 - We added `DeleteBook` action listener to the end of the file.
 
-  
 
-#### Add a delete button
+#### Delete confirmation popup
 
-
-Open `book-list.component.html` in `app\books\book-list` folder and modify the `ngbDropdownMenu` to add the delete button as shown below:
-
-```html
-<div ngbDropdownMenu>
-  <!-- added Delete button -->
-    <button ngbDropdownItem (click)="delete(data.id, data.name)">
-        {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
-    </button>
-</div>
-```
-
-The final actions dropdown UI looks like below:
-
-![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
-
-#### Delete confirmation dialog
-
-Open `book-list.component.ts`  in`app\books\book-list` folder and inject the `ConfirmationService`.
+Open `book-list.component.ts`  in`app\book\book-list` folder and inject the `ConfirmationService`.
 
 Replace the constructor as below:
 
@@ -1410,26 +1291,29 @@ import { ConfirmationService } from '@abp/ng.theme.shared';
 //...
 
 constructor(
-    private store: Store, private fb: FormBuilder,
-    private booksService: BooksService,
-    private confirmationService: ConfirmationService // <== added this line ==>
+    private store: Store, 
+    private fb: FormBuilder,
+    private bookService: BookService,
+    private confirmation: ConfirmationService // <== added this line ==>
 ) { }
 ```
 
 * We imported `ConfirmationService`.
 * We injected `ConfirmationService` to the constructor.
 
+See the [Confirmation Popup documentation](https://docs.abp.io/en/abp/latest/UI/Angular/Confirmation-Service)
+
 In the `book-list.component.ts` add a delete method :
 
 ```js
-import { GetBooks, CreateUpdateBook, DeleteBook } from '../../store/actions'; //<== added DeleteBook ==>
+import { GetBooks, CreateUpdateBook, DeleteBook } from '../state/book.actions' ;// <== imported DeleteBook ==>
 
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared'; //<== added Confirmation ==>
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared'; //<== imported Confirmation ==>
 
 //...
 
-delete(id: string, name: string) {
-    this.confirmationService
+delete(id: string) {
+    this.confirmation
         .warn('::AreYouSureToDelete', 'AbpAccount::AreYouSure')
         .subscribe(status => {
         if (status === Confirmation.Status.confirm) {
@@ -1439,9 +1323,29 @@ delete(id: string, name: string) {
 }
 ```
 
+
 The `delete` method shows a confirmation popup and subscribes for the user response. `DeleteBook` action dispatched only if user clicks to the `Yes` button. The confirmation popup looks like below:
 
 ![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
+
+
+#### Add a delete button
+
+
+Open `book-list.component.html` in `app\book\book-list` folder and modify the `ngbDropdownMenu` to add the delete button as shown below:
+
+```html
+<div ngbDropdownMenu>
+  <!-- added Delete button -->
+    <button ngbDropdownItem (click)="delete(data.id)">
+        {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
+    </button>
+</div>
+```
+
+The final actions dropdown UI looks like below:
+
+![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
 
 {{end}}
 

@@ -125,7 +125,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             return await GetLabelAsHtmlUsingTagHelperAsync(context, output) + GetRequiredSymbol(context, output);
         }
-        
+
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
         {
             if (!TagHelper.DisplayRequiredSymbol)
@@ -221,7 +221,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         }
 
         protected virtual List<SelectListItem> GetSelectItemsFromAttribute(
-            SelectItems selectItemsAttribute, 
+            SelectItems selectItemsAttribute,
             ModelExplorer explorer)
         {
             var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
@@ -329,7 +329,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 list.Add(new FormGroupItem
                 {
                     HtmlContent = html,
-                    Order = order
+                    Order = order,
+                    PropertyName = propertyName
                 });
             }
         }

@@ -26,6 +26,7 @@ export class AuthGuard implements CanActivate {
       return hasValidAccessToken;
     }
 
-    return router.createUrlTree(['/account/login'], { state: { redirectUrl: state.url } });
+    router.navigate(['/account/login'], { state: { redirectUrl: state.url } });
+    return true;
   }
 }

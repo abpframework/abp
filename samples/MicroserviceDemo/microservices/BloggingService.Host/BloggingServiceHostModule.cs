@@ -13,6 +13,7 @@ using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
@@ -29,6 +30,7 @@ using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 using Volo.Blogging;
 using Volo.Blogging.Blogs;
@@ -39,6 +41,7 @@ namespace BloggingService.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
+        typeof(AbpAspNetCoreMvcModule),
         typeof(AbpEventBusRabbitMqModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
@@ -49,7 +52,8 @@ namespace BloggingService.Host
         typeof(BloggingApplicationModule),
         typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpAspNetCoreMultiTenancyModule)
+        typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpTenantManagementEntityFrameworkCoreModule)
         )]
     public class BloggingServiceHostModule : AbpModule
     {
@@ -82,7 +86,7 @@ namespace BloggingService.Host
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
             });
-            
+
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
@@ -143,7 +147,7 @@ namespace BloggingService.Host
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Blogging Service API");
             });
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             //TODO: Problem on a clustered environment
             AsyncHelper.RunSync(async () =>

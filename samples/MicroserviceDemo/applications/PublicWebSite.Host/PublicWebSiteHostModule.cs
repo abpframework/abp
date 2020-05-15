@@ -103,7 +103,7 @@ namespace PublicWebSite.Host
             }
             app.UseAuthorization();
             app.UseAbpRequestLocalization();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }
