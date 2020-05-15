@@ -1,0 +1,26 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.VirtualFileExplorer.Localization
+@using Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
+@model Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer.FileContentModal
+@inject IHtmlLocalizer<VirtualFileExplorerResource> L
+@{
+    Layout = null;
+}
+
+<abp-script-bundle name="@typeof(VirtualFileExplorerResource).FullName">
+    <abp-script src="/Pages/VirtualFileExplorer/prism.js"/>
+</abp-script-bundle>
+
+<abp-modal size="ExtraLarge">
+    <abp-modal-header title="@L["FileContent"].Value"></abp-modal-header>
+    <abp-modal-body>
+        <pre class="language-markup" data-src="plugins/toolbar/prism-toolbar.js">
+            <code class="language-markup">
+@Model.Content.Trim()
+		   </code>
+    </pre>
+    </abp-modal-body>
+    <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
+</abp-modal>
