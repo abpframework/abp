@@ -16,6 +16,9 @@
     left: 0;
     position: fixed;
     top: 0;
-    transition: width 0.4s ease;
+
+    &.progressing {
+      transition: width 0.4s ease;
+    }
   }
 }
