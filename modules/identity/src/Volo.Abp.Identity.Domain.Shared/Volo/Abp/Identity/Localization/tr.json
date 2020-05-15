@@ -73,7 +73,7 @@
     "Permission:ChangePermissions": "İzinleri değiştirme",
     "Permission:UserManagement": "Kullanıcı yönetimi",
     "Permission:UserLookup": "Kullanıcı sorgulama",
-    "Volo.Abp.Identity:010002": "Bir kullanıcı en fazla {MaxUserMembershipCount} organizasyon birimine üye olabilir!"
+    "Volo.Abp.Identity:010002": "Bir kullanıcı en fazla {MaxUserMembershipCount} organizasyon birimine üye olabilir!",
 	  "DisplayName:Abp.Identity.Password.RequiredLength": "Uzunluk gerekli",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Tekil karakter gerekli",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Alfasayısal olmayan karakter gerekli",
