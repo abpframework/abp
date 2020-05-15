@@ -97,11 +97,13 @@ namespace PublicWebSite.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAbpRequestLocalization();
+            
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseAbpRequestLocalization();
             app.UseAuthorization();
             app.UseConfiguredEndpoints();
         }

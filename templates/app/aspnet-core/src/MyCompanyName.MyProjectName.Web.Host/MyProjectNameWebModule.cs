@@ -226,13 +226,13 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAbpRequestLocalization();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
+            app.UseAbpRequestLocalization();
             app.UseAuthorization();
 
             app.UseSwagger();

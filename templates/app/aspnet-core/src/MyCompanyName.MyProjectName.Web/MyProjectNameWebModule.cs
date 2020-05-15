@@ -206,12 +206,13 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
-            app.UseAbpRequestLocalization();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();

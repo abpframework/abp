@@ -128,14 +128,15 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAbpRequestLocalization();
-            app.UseAuthorization();
-            
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
+            app.UseAbpRequestLocalization();
+            app.UseAuthorization();
+            
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

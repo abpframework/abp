@@ -234,16 +234,15 @@ namespace MyCompanyName.MyProjectName
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAbpRequestLocalization();
+            app.UseAuthentication(); 
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
+            app.UseAbpRequestLocalization();
             app.UseAuthorization();
-
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
