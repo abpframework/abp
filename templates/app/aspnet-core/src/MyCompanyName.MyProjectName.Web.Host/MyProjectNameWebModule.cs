@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
@@ -67,7 +67,7 @@ namespace MyCompanyName.MyProjectName.Web
                 );
             });
         }
-        
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -232,10 +232,8 @@ namespace MyCompanyName.MyProjectName.Web
                 app.UseMultiTenancy();
             }
 
-            app.UseAuthorization();
-
-
             app.UseAbpRequestLocalization();
+            app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>

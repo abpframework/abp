@@ -36,7 +36,7 @@ namespace Volo.Abp.Auditing
             IClock clock,
             IAuditingStore auditingStore,
             ILogger<AuditingHelper> logger,
-            IServiceProvider serviceProvider, 
+            IServiceProvider serviceProvider,
             ICorrelationIdProvider correlationIdProvider)
         {
             Options = options.Value;
@@ -77,9 +77,10 @@ namespace Volo.Abp.Auditing
             var classType = methodInfo.DeclaringType;
             if (classType != null)
             {
-                if (AuditingInterceptorRegistrar.ShouldAuditTypeByDefault(classType))
+                var shouldAudit = AuditingInterceptorRegistrar.ShouldAuditTypeByDefaultOrNull(classType);
+                if (shouldAudit != null)
                 {
-                    return true;
+                    return shouldAudit.Value;
                 }
             }
 
@@ -123,7 +124,7 @@ namespace Volo.Abp.Auditing
 
             return defaultValue;
         }
-        
+
         public virtual AuditLogInfo CreateAuditLogInfo()
         {
             var auditInfo = new AuditLogInfo
@@ -147,8 +148,8 @@ namespace Volo.Abp.Auditing
 
         public virtual AuditLogActionInfo CreateAuditLogAction(
             AuditLogInfo auditLog,
-            Type type, 
-            MethodInfo method, 
+            Type type,
+            MethodInfo method,
             object[] arguments)
         {
             return CreateAuditLogAction(auditLog, type, method, CreateArgumentsDictionary(method, arguments));
@@ -156,8 +157,8 @@ namespace Volo.Abp.Auditing
 
         public virtual AuditLogActionInfo CreateAuditLogAction(
             AuditLogInfo auditLog,
-            Type type, 
-            MethodInfo method, 
+            Type type,
+            MethodInfo method,
             IDictionary<string, object> arguments)
         {
             var actionInfo = new AuditLogActionInfo

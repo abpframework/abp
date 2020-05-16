@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Builder;
@@ -102,10 +102,12 @@ namespace IdentityService.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
+
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }
+            
             app.Use(async (ctx, next) =>
             {
                 var currentPrincipalAccessor = ctx.RequestServices.GetRequiredService<ICurrentPrincipalAccessor>();
@@ -120,7 +122,6 @@ namespace IdentityService.Host
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
-
             app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseSwagger();
             app.UseSwaggerUI(options =>

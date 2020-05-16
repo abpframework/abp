@@ -1,0 +1,12 @@
+{
+  "version": "2.7.0",
+  "name": "@abp/jstree",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@abp/jquery": "^2.7.0",
+    "jstree": "^3.3.9"
+  },
+  "gitHead": "0ea3895f3b0b489e3ea81fc88f8f0896b22b61bd"
+}
