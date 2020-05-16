@@ -17,7 +17,8 @@ $solutions = (
     "modules/permission-management",
     "modules/setting-management",
     "modules/tenant-management",
-    "modules/users"
+    "modules/users",
+    "modules/virtual-file-explorer"
 )
 
 # List of projects
@@ -228,5 +229,8 @@ $projects = (
     "modules/users/src/Volo.Abp.Users.Domain",
     "modules/users/src/Volo.Abp.Users.Domain.Shared",
     "modules/users/src/Volo.Abp.Users.EntityFrameworkCore",
-    "modules/users/src/Volo.Abp.Users.MongoDB"
+    "modules/users/src/Volo.Abp.Users.MongoDB",
+
+    # modules/virtual-file-explorer
+    "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Web
 )
