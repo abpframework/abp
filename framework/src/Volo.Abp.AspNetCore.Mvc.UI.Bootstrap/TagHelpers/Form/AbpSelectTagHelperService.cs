@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -102,7 +101,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return TagHelper.AspItems.ToList();
             }
 
-            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            if (IsEnum())
             {
                 return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
             }
@@ -114,6 +113,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
 
             throw new Exception("No items provided for select attribute.");
+        }
+
+        private bool IsEnum()
+        {
+            var value = TagHelper.AspFor.Model;
+            if (value != null && value.GetType().IsEnum)
+            {
+                return true;
+            }
+
+            return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
         }
 
         protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
