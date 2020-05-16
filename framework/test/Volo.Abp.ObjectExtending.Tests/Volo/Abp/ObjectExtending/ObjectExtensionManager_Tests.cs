@@ -119,6 +119,56 @@ namespace Volo.Abp.ObjectExtending
                 .ShouldNotContain(x => x is RequiredAttribute);
         }
 
+        [Fact]
+        public void Should_Set_DefaultValues()
+        {
+            _objectExtensionManager
+                .AddOrUpdateProperty<MyExtensibleObject, int>("IntProp")
+                .AddOrUpdateProperty<MyExtensibleObject, int>("IntPropWithCustomDefaultValue", property =>
+                {
+                    property.DefaultValue = 42;
+                })
+                .AddOrUpdateProperty<MyExtensibleObject, bool>("BoolProp")
+                .AddOrUpdateProperty<MyExtensibleObject, int?>("NullableIntProp")
+                .AddOrUpdateProperty<MyExtensibleObject, int?>("NullableIntPropWithCustomDefaultValueFactory", property =>
+                {
+                    property.DefaultValueFactory = () => 2;
+                })
+                .AddOrUpdateProperty<MyExtensibleObject, string>("StringProp")
+                .AddOrUpdateProperty<MyExtensibleObject, string>("StringPropWithCustomDefaultValue", property =>
+                {
+                    property.DefaultValue = "custom-value";
+                });
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("IntProp")
+                .DefaultValue.ShouldBe(0);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("IntPropWithCustomDefaultValue")
+                .DefaultValue.ShouldBe(42);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("BoolProp")
+                .DefaultValue.ShouldBe(false);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("NullableIntProp")
+                .DefaultValue.ShouldBeNull();
+
+            var propWithDefaultValueFactory = _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("NullableIntPropWithCustomDefaultValueFactory");
+            propWithDefaultValueFactory.GetDefaultValue().ShouldBe(2);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("StringProp")
+                .DefaultValue.ShouldBeNull();
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("StringPropWithCustomDefaultValue")
+                .DefaultValue.ShouldBe("custom-value");
+        }
+
         private class MyExtensibleObject : ExtensibleObject
         {
 

@@ -152,6 +152,8 @@ namespace Volo.Abp.ObjectExtending.Modularity
                         property.Attributes.AddRange(propertyConfig.Attributes);
                         property.DisplayName = propertyConfig.DisplayName;
                         property.Validators.AddRange(propertyConfig.Validators);
+                        property.DefaultValue = propertyConfig.DefaultValue;
+                        property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
                     }
                 );
         }

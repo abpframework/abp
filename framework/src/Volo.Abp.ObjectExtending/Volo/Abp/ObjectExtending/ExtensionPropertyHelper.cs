@@ -5,7 +5,7 @@ using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending
 {
-    public static class ExtensionPropertyHelper
+    internal static class ExtensionPropertyHelper
     {
         public static IEnumerable<Attribute> GetDefaultAttributes(Type type)
         {
@@ -18,6 +18,20 @@ namespace Volo.Abp.ObjectExtending
             {
                 yield return new EnumDataTypeAttribute(type);
             }
+        }
+
+        public static object GetDefaultValue(
+            Type propertyType,
+            Func<object> defaultValueFactory, 
+            object defaultValue)
+        {
+            if (defaultValueFactory != null)
+            {
+                return defaultValueFactory();
+            }
+
+            return defaultValue ??
+                   TypeHelper.GetDefaultValue(propertyType);
         }
     }
 }

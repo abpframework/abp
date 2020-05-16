@@ -108,6 +108,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                 Attributes = new List<ExtensionPropertyAttributeDto>(),
                 DisplayName = CreateDisplayNameDto(propertyConfig),
                 Configuration = new Dictionary<string, object>(),
+                DefaultValue = propertyConfig.GetDefaultValue(),
                 Api = new ExtensionPropertyApiDto
                 {
                     OnGet = new ExtensionPropertyApiGetDto

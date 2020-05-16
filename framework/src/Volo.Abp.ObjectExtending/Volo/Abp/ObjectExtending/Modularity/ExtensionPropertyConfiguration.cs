@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
@@ -45,6 +46,19 @@ namespace Volo.Abp.ObjectExtending.Modularity
         [NotNull]
         public ExtensionPropertyApiConfiguration Api { get; }
 
+        /// <summary>
+        /// Uses as the default value if <see cref="DefaultValueFactory"/> was not set.
+        /// </summary>
+        [CanBeNull]
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// Used with the first priority to create the default value for the property.
+        /// Uses to the <see cref="DefaultValue"/> if this was not set.
+        /// </summary>
+        [CanBeNull]
+        public Func<object> DefaultValueFactory { get; set; }
+
         public ExtensionPropertyConfiguration(
             [NotNull] EntityExtensionConfiguration entityExtensionConfiguration,
             [NotNull] Type type,
@@ -63,6 +77,12 @@ namespace Volo.Abp.ObjectExtending.Modularity
             Api = new ExtensionPropertyApiConfiguration();
 
             Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
+            DefaultValue = TypeHelper.GetDefaultValue(Type);
+        }
+
+        public object GetDefaultValue()
+        {
+            return ExtensionPropertyHelper.GetDefaultValue(Type, DefaultValueFactory, DefaultValue);
         }
     }
 }
