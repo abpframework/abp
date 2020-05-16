@@ -301,5 +301,17 @@ namespace Volo.Abp.Reflection
                 .GetConverter(targetType)
                 .ConvertFromString(value);
         }
+
+        public static object ConvertFrom<TTargetType>(object value)
+        {
+            return ConvertFrom(typeof(TTargetType), value);
+        }
+
+        public static object ConvertFrom(Type targetType, object value)
+        {
+            return TypeDescriptor
+                .GetConverter(targetType)
+                .ConvertFrom(value);
+        }
     }
 }
