@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.UI.Navigation;
-using Volo.Abp.VirtualFileExplorer.Localization;
+using Volo.Abp.VirtualFileExplorer.Web.Localization;
 
 namespace Volo.Abp.VirtualFileExplorer.Web.Navigation
 {

@@ -1,10 +1,8 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Abp.VirtualFileExplorer.Localization;
+using Volo.Abp.VirtualFileExplorer.Web.Localization;
 
 namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
 {
-    /* Inherit your PageModel classes from this class.
-     */
     public abstract class VirtualFileExplorerPageModel : AbpPageModel
     {
         protected VirtualFileExplorerPageModel()

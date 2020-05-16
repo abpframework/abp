@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Validation.Localization;
-using Volo.Abp.VirtualFileExplorer.Localization;
+using Volo.Abp.VirtualFileExplorer.Web.Localization;
 using Volo.Abp.VirtualFileExplorer.Web.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
