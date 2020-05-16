@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
@@ -179,12 +179,14 @@ namespace MyCompanyName.MyProjectName
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
+            
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
-            app.UseAuthorization();
+
             app.UseAbpRequestLocalization();
+            app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>

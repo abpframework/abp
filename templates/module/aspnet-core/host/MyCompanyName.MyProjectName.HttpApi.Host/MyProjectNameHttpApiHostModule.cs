@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -166,8 +166,9 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName);
+            app.UseCors(DefaultCorsPolicyName);        
             app.UseAuthentication();
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
@@ -186,8 +187,8 @@ namespace MyCompanyName.MyProjectName
                 currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(map[p.Type], p.Value, p.ValueType, p.Issuer))));
                 await next();
             });
-            app.UseAuthorization();
             app.UseAbpRequestLocalization();
+            app.UseAuthorization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
