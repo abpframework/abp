@@ -149,6 +149,7 @@
     "SuccessfullyDeleted": "Successfully Deleted",
     "DiscountRequestDeletionWarningMessage": "Discount request will be deleted" ,
 	"BusinessType": "Business Type",
-	"TotalQuestionCount": "Total question count"
+	"TotalQuestionCount": "Total question count",
+	"RemainingQuestionCount": "Remaining question count"
   }
 }
