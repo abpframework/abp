@@ -35,6 +35,9 @@
 * **Entity Framework 迁移**: 演示如何将应用程序拆分为多个数据库的解决方案. 每个数据库包含不同的模块.
   * [源码](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo)
   * [EF Core数据库迁移文档](../Entity-Framework-Core-Migrations.md)
+* **SignalR Demo**: A simple chat application that allows to send and receive messages among authenticated users.
+  * [源码](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo)
+  * [SignalR 集成文档](../SignalR-Integration.md)
 * **Dashboard Demo**: 一个简单的应用程序,展示了如何在ASP.NET Core MVC UI中使用widget系统.
   * [源码](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo)
   * [Widget 文档](../UI/AspNetCore/Widgets.md)

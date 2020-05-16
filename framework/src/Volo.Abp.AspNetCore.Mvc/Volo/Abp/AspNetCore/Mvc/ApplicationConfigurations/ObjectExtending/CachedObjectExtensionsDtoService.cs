@@ -10,23 +10,29 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
     public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoService, ISingletonDependency
     {
-        private volatile ObjectExtensionsDto _cachedValue;
-        private readonly object _syncLock = new object();
+        protected IExtensionPropertyAttributeDtoFactory ExtensionPropertyAttributeDtoFactory { get; }
+        protected volatile ObjectExtensionsDto CachedValue;
+        protected readonly object SyncLock = new object();
+
+        public CachedObjectExtensionsDtoService(IExtensionPropertyAttributeDtoFactory extensionPropertyAttributeDtoFactory)
+        {
+            ExtensionPropertyAttributeDtoFactory = extensionPropertyAttributeDtoFactory;
+        }
 
         public virtual ObjectExtensionsDto Get()
         {
-            if (_cachedValue == null)
+            if (CachedValue == null)
             {
-                lock (_syncLock)
+                lock (SyncLock)
                 {
-                    if (_cachedValue == null)
+                    if (CachedValue == null)
                     {
-                        _cachedValue = GenerateCacheValue();
+                        CachedValue = GenerateCacheValue();
                     }
                 }
             }
 
-            return _cachedValue;
+            return CachedValue;
         }
 
         protected virtual ObjectExtensionsDto GenerateCacheValue()
@@ -137,7 +143,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             foreach (var attribute in propertyConfig.Attributes)
             {
                 extensionPropertyDto.Attributes.Add(
-                    ExtensionPropertyAttributeDto.Create(attribute)
+                    ExtensionPropertyAttributeDtoFactory.Create(attribute)
                 );
             }
 

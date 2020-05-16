@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Alerts;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Guids;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Settings;
@@ -90,17 +91,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
             {
                 if (_localizer == null)
                 {
-                    if (LocalizationResourceType == null)
-                    {
-                        throw new AbpException($"{nameof(LocalizationResourceType)} should be set before using the {nameof(L)} object!");
-                    }
-
-                    _localizer = StringLocalizerFactory.Create(LocalizationResourceType);
+                    _localizer = CreateLocalizer();
                 }
 
                 return _localizer;
             }
         }
+
         private IStringLocalizer _localizer;
 
         protected Type LocalizationResourceType { get; set; }
@@ -151,6 +148,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.RazorPages
                 ViewData = new ViewDataDictionary<TModel>(ViewData, model),
                 TempData = TempData
             };
+        }
+
+        protected virtual IStringLocalizer CreateLocalizer()
+        {
+            if (LocalizationResourceType != null)
+            {
+                return StringLocalizerFactory.Create(LocalizationResourceType);
+            }
+
+            var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer == null)
+            {
+                throw new AbpException($"Set {nameof(LocalizationResourceType)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
+            }
+
+            return localizer;
         }
     }
 }
