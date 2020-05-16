@@ -61,6 +61,8 @@ namespace Volo.Abp.ObjectExtending.Modularity
             Entity = new ExtensionPropertyEntityConfiguration();
             UI = new ExtensionPropertyUiConfiguration();
             Api = new ExtensionPropertyApiConfiguration();
+
+            Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
         }
     }
 }

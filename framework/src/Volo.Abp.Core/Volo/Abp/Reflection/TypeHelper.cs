@@ -10,6 +10,30 @@ namespace Volo.Abp.Reflection
 {
     public static class TypeHelper
     {
+        private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
+        {
+            typeof(byte),
+            typeof(short),
+            typeof(int),
+            typeof(long),
+            typeof(sbyte),
+            typeof(ushort),
+            typeof(uint),
+            typeof(ulong),
+            typeof(bool),
+            typeof(float),
+            typeof(decimal),
+            typeof(DateTime),
+            typeof(DateTimeOffset),
+            typeof(TimeSpan),
+            typeof(Guid)
+        };
+
+        public static bool IsNonNullablePrimitiveType(Type type)
+        {
+            return NonNullablePrimitiveTypes.Contains(type);
+        }
+
         public static bool IsFunc(object obj)
         {
             if (obj == null)

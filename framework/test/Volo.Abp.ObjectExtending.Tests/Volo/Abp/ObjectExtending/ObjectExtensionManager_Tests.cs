@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Shouldly;
 using Xunit;
 
@@ -22,7 +23,7 @@ namespace Volo.Abp.ObjectExtending
 
             var objectExtension = _objectExtensionManager.GetOrNull<MyExtensibleObject>();
             objectExtension.ShouldNotBeNull();
-            
+
             var properties = objectExtension.GetProperties();
             properties.Count.ShouldBe(1);
             properties.FirstOrDefault(p => p.Name == "TestProp").ShouldNotBeNull();
@@ -55,9 +56,78 @@ namespace Volo.Abp.ObjectExtending
             property.Configuration["TestConfig2"].ShouldBe("TestConfig2-Value");
         }
 
+        [Fact]
+        public void Should_Automatically_Add_RequiredAttribute_To_Non_Nullable_Types_And_Enums()
+        {
+            _objectExtensionManager
+                .AddOrUpdateProperty<MyExtensibleObject, int>("IntProp")
+                .AddOrUpdateProperty<MyExtensibleObject, bool>("BoolProp")
+                .AddOrUpdateProperty<MyExtensibleObject, int?>("NullableIntProp")
+                .AddOrUpdateProperty<MyExtensibleObject, string>("StringProp")
+                .AddOrUpdateProperty<MyExtensibleObject, MyTestEnum>("EnumProp");
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("IntProp")
+                .Attributes
+                .ShouldContain(x => x is RequiredAttribute);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("BoolProp")
+                .Attributes
+                .ShouldContain(x => x is RequiredAttribute);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("EnumProp")
+                .Attributes
+                .ShouldContain(x => x is RequiredAttribute);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("NullableIntProp")
+                .Attributes
+                .ShouldNotContain(x => x is RequiredAttribute);
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("StringProp")
+                .Attributes
+                .ShouldNotContain(x => x is RequiredAttribute);
+        }
+
+        [Fact]
+        public void Should_Automatically_Add_EnumDataTypeAttribute_For_Enums()
+        {
+            _objectExtensionManager
+                .AddOrUpdateProperty<MyExtensibleObject, MyTestEnum>("EnumProp");
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("EnumProp")
+                .Attributes
+                .ShouldContain(x => x is EnumDataTypeAttribute);
+        }
+
+        [Fact]
+        public void Should_Be_Able_To_Clear_Auto_Added_Attributes()
+        {
+            _objectExtensionManager
+                .AddOrUpdateProperty<MyExtensibleObject, int>("IntProp", property =>
+                {
+                    property.Attributes.Clear();
+                });
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("IntProp")
+                .Attributes
+                .ShouldNotContain(x => x is RequiredAttribute);
+        }
+
         private class MyExtensibleObject : ExtensibleObject
         {
 
+        }
+
+        private enum MyTestEnum
+        {
+            EnumValue1,
+            EnumValue2,
         }
     }
 }

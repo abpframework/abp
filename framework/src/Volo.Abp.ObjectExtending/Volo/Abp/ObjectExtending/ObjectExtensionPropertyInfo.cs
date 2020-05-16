@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.ObjectExtending
@@ -61,6 +60,8 @@ namespace Volo.Abp.ObjectExtending
             ValidationAttributes = new List<ValidationAttribute>();
             Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
+
+            Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
         }
     }
 }

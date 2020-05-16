@@ -8,6 +8,13 @@ namespace Volo.Abp.Reflection
     public class TypeHelper_Tests
     {
         [Fact]
+        public void IsNonNullablePrimitiveType()
+        {
+            TypeHelper.IsNonNullablePrimitiveType(typeof(int)).ShouldBeTrue();
+            TypeHelper.IsNonNullablePrimitiveType(typeof(string)).ShouldBeFalse();
+        }
+
+        [Fact]
         public void Should_Generic_Type_From_Nullable()
         {
             var nullableType = typeof(Guid?);
