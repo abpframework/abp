@@ -208,6 +208,15 @@ ObjectExtensionManager.Instance
 
 With this configuration, `IdentityUserCreateDto` objects will be invalid without a valid `SocialSecurityNumber` value provided.
 
+#### Default Validation Attributes
+
+There are some attributes **automatically added** when you create certain type of properties;
+
+* `RequiredAttribute` is added for non nullable primitive property types (e.g. `int`, `bool`, `DateTime`...) and `enum` types.
+* `EnumDataTypeAttribute` is added for enum types, to prevent to set invalid enum values.
+
+Use `options.Attributes.Clear();` if you don't want these attributes.
+
 ### Custom Validation
 
 If you need, you can add a custom action that is executed to validate the extra properties. Example:
