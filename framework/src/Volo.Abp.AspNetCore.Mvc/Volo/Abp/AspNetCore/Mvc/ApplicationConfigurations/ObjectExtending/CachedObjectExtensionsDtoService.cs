@@ -104,7 +104,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             var extensionPropertyDto = new ExtensionPropertyDto
             {
                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(propertyConfig.Type),
-                TypeSimple = TypeHelper.GetSimplifiedName(propertyConfig.Type),
+                TypeSimple = propertyConfig.Type.IsEnum
+                    ? "enum"
+                    : TypeHelper.GetSimplifiedName(propertyConfig.Type),
                 Attributes = new List<ExtensionPropertyAttributeDto>(),
                 DisplayName = CreateDisplayNameDto(propertyConfig),
                 Configuration = new Dictionary<string, object>(),
