@@ -16,7 +16,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             throw new UserFriendlyException("This is a sample exception!");
         }
 
-
         public IActionResult OnGetUserFriendlyException_ActionResult()
         {
             throw new UserFriendlyException("This is a sample exception!");
