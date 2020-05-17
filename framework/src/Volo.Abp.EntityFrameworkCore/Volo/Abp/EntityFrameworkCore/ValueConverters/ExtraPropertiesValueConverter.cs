@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 using Volo.Abp.ObjectExtending;
@@ -11,7 +12,7 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
         public ExtraPropertiesValueConverter(Type entityType)
             : base(
                 d => SerializeObject(d, entityType),
-                s => DeserializeObject(s))
+                s => DeserializeObject(s, entityType))
         {
 
         }
@@ -38,9 +39,49 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
             return JsonConvert.SerializeObject(copyDictionary, Formatting.None);
         }
 
-        private static Dictionary<string, object> DeserializeObject(string extraPropertiesAsJson)
+        private static Dictionary<string, object> DeserializeObject(string extraPropertiesAsJson, Type entityType)
         {
-            return JsonConvert.DeserializeObject<Dictionary<string, object>>(extraPropertiesAsJson);
+            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(extraPropertiesAsJson);
+
+            if (entityType != null)
+            {
+                var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+                if (objectExtension != null)
+                {
+                    foreach (var property in objectExtension.GetProperties())
+                    {
+                        dictionary[property.Name] = GetNormalizedValue(dictionary, property);
+                    }
+                }
+            }
+
+            return dictionary;
+        }
+
+        private static object GetNormalizedValue(
+            Dictionary<string, object> dictionary, 
+            ObjectExtensionPropertyInfo property)
+        {
+            var value = dictionary.GetOrDefault(property.Name);
+            if (value == null)
+            {
+                return property.GetDefaultValue();
+            }
+
+            try
+            {
+                if (property.Type.IsEnum)
+                {
+                    return Enum.Parse(property.Type, value.ToString(), true);
+                }
+
+                //return Convert.ChangeType(value, property.Type);
+                return value;
+            }
+            catch
+            {
+                return value;
+            }
         }
     }
 }
