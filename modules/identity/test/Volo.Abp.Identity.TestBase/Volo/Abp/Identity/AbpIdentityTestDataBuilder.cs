@@ -119,6 +119,7 @@ namespace Volo.Abp.Identity
             var neo = new IdentityUser(_testData.UserNeoId, "neo", "neo@abp.io");
             neo.AddRole(_supporterRole.Id);
             neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
+            neo.AddOrganizationUnit(_ou111.Id);
             await _userRepository.InsertAsync(neo);
         }
 

@@ -84,20 +84,53 @@ namespace Volo.Abp.Identity
         {
             OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
 
-            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou.Id, true);
+            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou, true);
             ou111Roles.Count.ShouldBe(2);
             ou111Roles.ShouldContain(n => n.Name == "manager");
             ou111Roles.ShouldContain(n => n.Name == "moderator");
         }
 
         [Fact]
-        public async Task GetUsersInOrganizationUnitListAsync()
+        public async Task GetMembersInOrganizationUnitListAsync()
         {
             OrganizationUnit ou1 = await _organizationUnitRepository.GetAsync("OU111", true);
             OrganizationUnit ou2 = await _organizationUnitRepository.GetAsync("OU112", true);
             var users = await _identityUserRepository.GetUsersInOrganizationsListAsync(new List<Guid> { ou1.Id, ou2.Id });
-            //var dodo = users.ToDictionary(u => u.Id, u => u);
             users.Count.ShouldBeGreaterThan(0);
+        }
+        [Fact]
+        public async Task GetMembersInOrganizationUnitWithParamsAsync()
+        {
+            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var users = await _organizationUnitRepository.GetMembersAsync(ou, "UserName DESC", 5, 0, "n");
+
+            users.Count.ShouldBeGreaterThan(1);
+            users.Count.ShouldBeLessThanOrEqualTo(5);
+
+            //Filter check
+            users.ShouldAllBe(u => u.UserName.Contains("ne") || u.Email.Contains("n"));
+
+            //Order check
+            for (var i = 0; i < users.Count - 1; i++)
+            {
+                string.Compare(
+                    users[i].UserName,
+                    users[i + 1].UserName,
+                    StringComparison.OrdinalIgnoreCase
+                ).ShouldBeGreaterThan(0);
+            }
+
+            users = await _organizationUnitRepository.GetMembersAsync(ou, null, 999, 0, "undefined-username");
+            users.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task GetCountMembersCountInOrganizationUnit()
+        {
+            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var users = await _organizationUnitRepository.GetMembersCountAsync(ou);
+
+            users.ShouldBeGreaterThan(1);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
         }
 
-        public async Task<List<OrganizationUnit>> GetChildrenAsync(
+        public virtual async Task<List<OrganizationUnit>> GetChildrenAsync(
             Guid? parentId,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -31,7 +31,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
+        public virtual async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
             string code,
             Guid? parentId,
             bool includeDetails = false,
@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<OrganizationUnit>> GetListAsync(
+        public virtual async Task<List<OrganizationUnit>> GetListAsync(
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
@@ -56,7 +56,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
-        public async Task<List<OrganizationUnit>> GetListAsync(
+        public virtual async Task<List<OrganizationUnit>> GetListAsync(
             IEnumerable<Guid> ids,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<OrganizationUnit> GetAsync(
+        public virtual async Task<OrganizationUnit> GetAsync(
             string displayName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
@@ -79,16 +79,59 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     GetCancellationToken(cancellationToken)
                 );
         }
-        public async Task<List<IdentityRole>> GetRolesAsync(
-            Guid organizationUnitId, bool includeDetails = false,
+
+        public virtual async Task<List<IdentityRole>> GetRolesAsync(
+            OrganizationUnit organizationUnit,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             var query = from organizationRole in DbContext.Set<OrganizationUnitRole>()
                         join role in DbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
-                        where organizationRole.OrganizationUnitId == organizationUnitId
+                        where organizationRole.OrganizationUnitId == organizationUnit.Id
                         select role;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<IdentityUser>> GetMembersAsync(
+            OrganizationUnit organizationUnit,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default
+            )
+        {
+            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in DbContext.Users.IncludeDetails(includeDetails) on userOu.UserId equals user.Id
+                        where userOu.OrganizationUnitId == organizationUnit.Id
+                        select user;
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                query = query.Where(u =>
+                    u.UserName.Contains(filter) ||
+                    u.Email.Contains(filter) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                    );
+            }
+
+            return await query.OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                        .PageBy(skipCount, maxResultCount)
+                        .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<int> GetMembersCountAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default)
+        {
+            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in DbContext.Users on userOu.UserId equals user.Id
+                        where userOu.OrganizationUnitId == organizationUnit.Id
+                        select user;
+
+            return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<OrganizationUnit> WithDetails()

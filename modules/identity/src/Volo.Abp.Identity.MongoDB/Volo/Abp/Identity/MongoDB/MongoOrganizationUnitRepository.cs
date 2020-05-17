@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
         }
 
-        public async Task<List<OrganizationUnit>> GetChildrenAsync(
+        public virtual async Task<List<OrganizationUnit>> GetChildrenAsync(
             Guid? parentId,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -29,7 +29,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
+        public virtual async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
             string code,
             Guid? parentId,
             bool includeDetails = false,
@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity.MongoDB
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<OrganizationUnit>> GetListAsync(
+        public virtual async Task<List<OrganizationUnit>> GetListAsync(
             IEnumerable<Guid> ids,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
@@ -50,7 +50,7 @@ namespace Volo.Abp.Identity.MongoDB
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<OrganizationUnit>> GetListAsync(
+        public virtual async Task<List<OrganizationUnit>> GetListAsync(
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
@@ -64,7 +64,7 @@ namespace Volo.Abp.Identity.MongoDB
                     .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<OrganizationUnit> GetAsync(
+        public virtual async Task<OrganizationUnit> GetAsync(
             string displayName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
@@ -76,14 +76,43 @@ namespace Volo.Abp.Identity.MongoDB
                 );
         }
 
-        public async Task<List<IdentityRole>> GetRolesAsync(
-            Guid organizationUnitId,
+        public virtual async Task<List<IdentityRole>> GetRolesAsync(
+            OrganizationUnit organizationUnit,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var organizationUnit = await GetAsync(organizationUnitId, includeDetails, cancellationToken);
             var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
             return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).ToListAsync(cancellationToken);
+        }
+        public virtual async Task<List<IdentityUser>> GetMembersAsync(
+            OrganizationUnit organizationUnit,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbContext.Users.AsQueryable()
+                    .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                    .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter)
+                )
+                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .As<IMongoQueryable<IdentityUser>>()
+                .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<int> GetMembersCountAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        {
+            return await DbContext.Users.AsQueryable()
+                .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                .As<IMongoQueryable<IdentityUser>>()
+                .CountAsync(GetCancellationToken(cancellationToken));
         }
     }
 }
