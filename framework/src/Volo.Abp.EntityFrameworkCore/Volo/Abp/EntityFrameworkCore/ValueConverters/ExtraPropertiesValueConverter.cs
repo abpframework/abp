@@ -58,12 +58,14 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters
             return dictionary;
         }
 
-        private static object GetNormalizedValue(Dictionary<string, object> dictionary, ObjectExtensionPropertyInfo property)
+        private static object GetNormalizedValue(
+            Dictionary<string, object> dictionary, 
+            ObjectExtensionPropertyInfo property)
         {
             var value = dictionary.GetOrDefault(property.Name);
             if (value == null)
             {
-                return null;
+                return property.GetDefaultValue();
             }
 
             try

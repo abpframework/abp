@@ -80,6 +80,7 @@ namespace Volo.Abp.Reflection
             TypeHelper.GetDefaultValue(typeof(byte)).ShouldBe(0);
             TypeHelper.GetDefaultValue(typeof(int)).ShouldBe(0);
             TypeHelper.GetDefaultValue(typeof(string)).ShouldBeNull();
+            TypeHelper.GetDefaultValue(typeof(MyEnum)).ShouldBe(MyEnum.EnumValue0);
         }
 
         [Fact]
@@ -93,6 +94,12 @@ namespace Volo.Abp.Reflection
         public class MyDictionary : Dictionary<bool, TypeHelper_Tests>
         {
 
+        }
+
+        public enum MyEnum
+        {
+            EnumValue0,
+            EnumValue1,
         }
     }
 }

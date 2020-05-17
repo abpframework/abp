@@ -138,23 +138,27 @@ namespace Volo.Abp.ObjectExtending
                 .AddOrUpdateProperty<MyExtensibleObject, string>("StringPropWithCustomDefaultValue", property =>
                 {
                     property.DefaultValue = "custom-value";
+                })
+                .AddOrUpdateProperty<MyExtensibleObject, MyTestEnum>("EnumProp", property =>
+                {
+                    property.DefaultValue = MyTestEnum.EnumValue2;
                 });
 
             _objectExtensionManager
                 .GetPropertyOrNull<MyExtensibleObject>("IntProp")
-                .DefaultValue.ShouldBe(0);
+                .GetDefaultValue().ShouldBe(0);
 
             _objectExtensionManager
                 .GetPropertyOrNull<MyExtensibleObject>("IntPropWithCustomDefaultValue")
-                .DefaultValue.ShouldBe(42);
+                .GetDefaultValue().ShouldBe(42);
 
             _objectExtensionManager
                 .GetPropertyOrNull<MyExtensibleObject>("BoolProp")
-                .DefaultValue.ShouldBe(false);
+                .GetDefaultValue().ShouldBe(false);
 
             _objectExtensionManager
                 .GetPropertyOrNull<MyExtensibleObject>("NullableIntProp")
-                .DefaultValue.ShouldBeNull();
+                .GetDefaultValue().ShouldBeNull();
 
             var propWithDefaultValueFactory = _objectExtensionManager
                 .GetPropertyOrNull<MyExtensibleObject>("NullableIntPropWithCustomDefaultValueFactory");
@@ -162,11 +166,15 @@ namespace Volo.Abp.ObjectExtending
 
             _objectExtensionManager
                 .GetPropertyOrNull<MyExtensibleObject>("StringProp")
-                .DefaultValue.ShouldBeNull();
+                .GetDefaultValue().ShouldBeNull();
 
             _objectExtensionManager
                 .GetPropertyOrNull<MyExtensibleObject>("StringPropWithCustomDefaultValue")
-                .DefaultValue.ShouldBe("custom-value");
+                .GetDefaultValue().ShouldBe("custom-value");
+
+            _objectExtensionManager
+                .GetPropertyOrNull<MyExtensibleObject>("EnumProp")
+                .GetDefaultValue().ShouldBe(MyTestEnum.EnumValue2);
         }
 
         private class MyExtensibleObject : ExtensibleObject
