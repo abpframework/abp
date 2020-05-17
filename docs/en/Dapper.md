@@ -2,9 +2,7 @@
 
 Dapper is a light-weight and simple database provider. The major benefit of using Dapper is writing T-SQL queries. It provides  some extension methods for `IDbConnection` interface.
 
-ABP does not encapsulate many functions for Dapper. ABP Dapper library provides a `DapperRepository<TDbContext>` base class based on  ABP EntityFrameworkCore module, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper.
-
-`IDbConnection` and `IDbTransaction` works well with the [ABP Unit-Of-Work](Unit-Of-Work.md).
+ABP does not encapsulate many functions for Dapper. ABP Dapper library provides a `DapperRepository<TDbContext>` base class based on  ABP EntityFrameworkCore module, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper. `IDbConnection` and `IDbTransaction` works well with the [ABP Unit-Of-Work](Unit-Of-Work.md).
 
 ## Installation
 
