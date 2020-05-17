@@ -8,9 +8,7 @@ ABP does not encapsulate many functions for Dapper. ABP Dapper library provides 
 
 Install and configure EF Core according to [EF Core's integrated documentation](Entity-Framework-Core.md).
 
-`Volo.Abp.Dapper` is the main nuget package for the Dapper integration. 
-
-You can find it on NuGet Gallery: https://www.nuget.org/packages/Volo.Abp.Dapper
+`Volo.Abp.Dapper` is the library for the Dapper integration. You can find it on NuGet Gallery: https://www.nuget.org/packages/Volo.Abp.Dapper
 
 Install it to your project (for a layered application, to your data/infrastructure layer):
 
