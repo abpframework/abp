@@ -2,15 +2,13 @@
 
 Dapper is a light-weight and simple database provider. The major benefit of using Dapper is writing T-SQL queries. It provides  some extension methods for `IDbConnection` interface.
 
-ABP does not encapsulate many functions for Dapper. ABP Dapper library provides a `DapperRepository<TDbContext>` base class based on  ABP EntityFrameworkCore module, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper.
-
-`IDbConnection` and `IDbTransaction` works well with the [ABP Unit-Of-Work](Unit-Of-Work.md).
+ABP does not encapsulate many functions for Dapper. ABP Dapper library provides a `DapperRepository<TDbContext>` base class based on  ABP EntityFrameworkCore module, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper. `IDbConnection` and `IDbTransaction` works well with the [ABP Unit-Of-Work](Unit-Of-Work.md).
 
 ## Installation
 
 Install and configure EF Core according to [EF Core's integrated documentation](Entity-Framework-Core.md).
 
-`Volo.Abp.Dapper` is the main nuget package for the Dapper integration. 
+`Volo.Abp.Dapper` is the library for the Dapper integration. 
 
 You can find it on NuGet Gallery: https://www.nuget.org/packages/Volo.Abp.Dapper
 
