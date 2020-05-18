@@ -19,6 +19,7 @@ namespace Volo.Abp.ObjectExtending
             typeof(ulong),
             typeof(float),
             typeof(double),
+            typeof(decimal),
             typeof(int?),
             typeof(long?),
             typeof(byte?),
@@ -30,6 +31,7 @@ namespace Volo.Abp.ObjectExtending
             typeof(ulong?),
             typeof(float?),
             typeof(double?),
+            typeof(decimal?)
         };
 
         public static string GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
