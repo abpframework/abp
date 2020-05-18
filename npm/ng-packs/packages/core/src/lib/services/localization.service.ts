@@ -2,11 +2,12 @@ import { Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SetLanguage } from '../actions/session.actions';
-import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
 import { ConfigState } from '../states/config.state';
 import { registerLocale } from '../utils/initial-utils';
+import { localize, localizeWithFallback } from '../utils/localization-utils';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
 
@@ -77,30 +78,35 @@ export class LocalizationService {
     return this.store.selectSnapshot(ConfigState.getLocalization(key, ...interpolateParams));
   }
 
-  isLocalized(key, sourceName) {
-    if (sourceName === '_') {
-      // A convention to suppress the localization
-      return true;
-    }
+  localize(resourceName: string, key: string, defaultValue: string): Observable<string> {
+    return this.store
+      .select(ConfigState.getOne('localization'))
+      .pipe(map(localize(resourceName, key, defaultValue)));
+  }
 
-    const localization = this.store.selectSnapshot(
-      ConfigState.getOne('localization'),
-    ) as ApplicationConfiguration.Localization;
-    sourceName = sourceName || localization.defaultResourceName;
-    if (!sourceName) {
-      return false;
-    }
+  localizeSync(resourceName: string, key: string, defaultValue: string): string {
+    return localize(
+      resourceName,
+      key,
+      defaultValue,
+    )(this.store.selectSnapshot(ConfigState.getOne('localization')));
+  }
 
-    const source = localization.values[sourceName];
-    if (!source) {
-      return false;
-    }
+  localizeWithFallback(
+    resourceNames: string[],
+    keys: string[],
+    defaultValue: string,
+  ): Observable<string> {
+    return this.store
+      .select(ConfigState.getOne('localization'))
+      .pipe(map(localizeWithFallback(resourceNames, keys, defaultValue)));
+  }
 
-    const value = source[key];
-    if (value === undefined) {
-      return false;
-    }
-
-    return true;
+  localizeWithFallbackSync(resourceNames: string[], keys: string[], defaultValue: string): string {
+    return localizeWithFallback(
+      resourceNames,
+      keys,
+      defaultValue,
+    )(this.store.selectSnapshot(ConfigState.getOne('localization')));
   }
 }
