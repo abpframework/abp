@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Volo.Abp.AspNetCore.SignalR
+﻿namespace Volo.Abp.AspNetCore.SignalR
 {
     public class AbpSignalROptions
     {
-        public List<HubConfig> Hubs { get; }
+        public HubConfigList Hubs { get; }
 
         public AbpSignalROptions()
         {
-            Hubs = new List<HubConfig>();
+            Hubs = new HubConfigList();
         }
     }
 }

@@ -127,7 +127,7 @@
     "Generate": "Generate",
     "MissingQuantityField": "The quantity field is required!",
     "MissingPriceField": "The Price field is required!",
-    "CodeUsageStatus": "Code Usage Status",
+    "CodeUsageStatus": "Status",
     "Country": "Country",
     "DeveloperCount": "Developer Count",
     "RequestCode": "Request Code",
@@ -149,6 +149,7 @@
     "SuccessfullyDeleted": "Successfully Deleted",
     "DiscountRequestDeletionWarningMessage": "Discount request will be deleted",
     "TotalQuestionMustBeGreaterWarningMessage": "TotalQuestionCount must be greater than RemainingQuestionCount !",
-    "QuestionCountsMustBeGreaterThanZero": "TotalQuestionCount and RemainingQuestionCount must be zero or greater than zero !"
+    "QuestionCountsMustBeGreaterThanZero": "TotalQuestionCount and RemainingQuestionCount must be zero or greater than zero !",
+  	"BusinessType": "Business Type"
   }
 }

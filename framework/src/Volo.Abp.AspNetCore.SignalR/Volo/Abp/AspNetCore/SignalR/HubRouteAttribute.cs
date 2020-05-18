@@ -13,6 +13,11 @@ namespace Volo.Abp.AspNetCore.SignalR
             RoutePattern = routePattern;
         }
 
+        public virtual string GetRoutePatternForType(Type hubType)
+        {
+            return RoutePattern;
+        }
+
         public static string GetRoutePattern<THub>()
             where THub : Hub
         {
@@ -24,7 +29,7 @@ namespace Volo.Abp.AspNetCore.SignalR
             var routeAttribute = hubType.GetSingleAttributeOrNull<HubRouteAttribute>();
             if (routeAttribute != null)
             {
-                return routeAttribute.RoutePattern;
+                return routeAttribute.GetRoutePatternForType(hubType);
             }
 
             return "/signalr-hubs/" + hubType.Name.RemovePostFix("Hub").ToKebabCase();

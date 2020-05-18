@@ -44,13 +44,7 @@ describe('LocalizationService', () => {
 
   describe('#instant', () => {
     it('should be return a localization', () => {
-      store.selectSnapshot.andCallFake(
-        (selector: (state: any, ...states: any[]) => Observable<string>) => {
-          return selector({
-            ConfigState: { getLocalization: (keys, ...interpolateParams) => keys },
-          });
-        },
-      );
+      store.selectSnapshot.andReturn('AbpTest');
 
       expect(service.instant('AbpTest')).toBe('AbpTest');
     });

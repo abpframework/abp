@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -136,6 +138,17 @@ namespace Volo.Abp.Users
             }
 
             return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
+        }
+
+        public async Task<List<IUserData>> SearchAsync(string sorting, string filter, int maxResultCount, CancellationToken cancellationToken = default)
+        {
+            if (ExternalUserLookupServiceProvider != null)
+            {
+                return await ExternalUserLookupServiceProvider.SearchAsync(sorting, filter, maxResultCount, cancellationToken);
+            }
+
+            var localUsers = await _userRepository.SearchAsync(sorting, maxResultCount, 0, filter, cancellationToken);
+            return localUsers.Cast<IUserData>().ToList();
         }
 
         protected abstract TUser CreateUser(IUserData externalUser);

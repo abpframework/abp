@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.SignalR
@@ -30,7 +31,7 @@ namespace Volo.Abp.AspNetCore.SignalR
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddSignalR();
-            
+
             Configure<AbpEndpointRouterOptions>(options =>
             {
                 options.EndpointConfigureActions.Add(endpointContext =>
@@ -65,7 +66,7 @@ namespace Volo.Abp.AspNetCore.SignalR
 
             services.OnRegistred(context =>
             {
-                if (typeof(Hub).IsAssignableFrom(context.ImplementationType))
+                if (IsHubClass(context) && !IsDisabledForAutoMap(context))
                 {
                     hubTypes.Add(context.ImplementationType);
                 }
@@ -80,7 +81,17 @@ namespace Volo.Abp.AspNetCore.SignalR
             });
         }
 
-        private void MapHubType( 
+        private static bool IsHubClass(IOnServiceRegistredContext context)
+        {
+            return typeof(Hub).IsAssignableFrom(context.ImplementationType);
+        }
+
+        private static bool IsDisabledForAutoMap(IOnServiceRegistredContext context)
+        {
+            return context.ImplementationType.IsDefined(typeof(DisableAutoHubMapAttribute), true);
+        }
+
+        private void MapHubType(
             Type hubType,
             IEndpointRouteBuilder endpoints,
             string pattern,
@@ -101,8 +112,8 @@ namespace Volo.Abp.AspNetCore.SignalR
 
         // ReSharper disable once UnusedMember.Local (used via reflection)
         private static void MapHub<THub>(
-            IEndpointRouteBuilder endpoints, 
-            string pattern, 
+            IEndpointRouteBuilder endpoints,
+            string pattern,
             Action<HttpConnectionDispatcherOptions> configureOptions)
             where THub : Hub
         {

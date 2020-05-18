@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Localization.Resources.AbpUi;
@@ -88,11 +88,11 @@ namespace MyCompanyName.MyProjectName
             });
 
             app.UseVirtualFiles();
-            app.UseRouting();
+            app.UseRouting();          
             app.UseAuthentication();
+            app.UseAbpRequestLocalization();
             app.UseAuthorization();
 
-            app.UseAbpRequestLocalization();
 
             app.Use(async (ctx, next) =>
             {

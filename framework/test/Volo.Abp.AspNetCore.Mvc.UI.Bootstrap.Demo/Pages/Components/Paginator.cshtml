@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
 
         public void OnGet(int currentPage, string sort)
         {
-            PagerModel = new PagerModel(100, 10, currentPage, 10, "Paginator", sort);
+            PagerModel = new PagerModel(100, 10, currentPage, 10, "/Components/Paginator", sort);
         }
     }
 }
@@ -60,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             </abp-tab>
             <abp-tab title="Rendered">
                 <pre><code>
-&lt;div class=&quot;row mt-3&quot;&gt;    
+&lt;div class=&quot;row mt-3&quot;&gt;
     &lt;div class=&quot;col-sm-12 col-md-5&quot;&gt;
         Showing 80 to 90 of 100 entries.
     &lt;/div&gt;

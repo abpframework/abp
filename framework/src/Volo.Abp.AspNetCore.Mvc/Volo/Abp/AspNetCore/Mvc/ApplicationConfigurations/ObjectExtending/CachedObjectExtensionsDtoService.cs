@@ -10,30 +10,37 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
 {
     public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoService, ISingletonDependency
     {
-        private volatile ObjectExtensionsDto _cachedValue;
-        private readonly object _syncLock = new object();
+        protected IExtensionPropertyAttributeDtoFactory ExtensionPropertyAttributeDtoFactory { get; }
+        protected volatile ObjectExtensionsDto CachedValue;
+        protected readonly object SyncLock = new object();
+
+        public CachedObjectExtensionsDtoService(IExtensionPropertyAttributeDtoFactory extensionPropertyAttributeDtoFactory)
+        {
+            ExtensionPropertyAttributeDtoFactory = extensionPropertyAttributeDtoFactory;
+        }
 
         public virtual ObjectExtensionsDto Get()
         {
-            if (_cachedValue == null)
+            if (CachedValue == null)
             {
-                lock (_syncLock)
+                lock (SyncLock)
                 {
-                    if (_cachedValue == null)
+                    if (CachedValue == null)
                     {
-                        _cachedValue = GenerateCacheValue();
+                        CachedValue = GenerateCacheValue();
                     }
                 }
             }
 
-            return _cachedValue;
+            return CachedValue;
         }
 
         protected virtual ObjectExtensionsDto GenerateCacheValue()
         {
             var objectExtensionsDto = new ObjectExtensionsDto
             {
-                Modules = new Dictionary<string, ModuleExtensionDto>()
+                Modules = new Dictionary<string, ModuleExtensionDto>(),
+                Enums = new Dictionary<string, ExtensionEnumDto>()
             };
 
             foreach (var moduleConfig in ObjectExtensionManager.Instance.Modules())
@@ -41,6 +48,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                 objectExtensionsDto.Modules[moduleConfig.Key] = CreateModuleExtensionDto(moduleConfig.Value);
             }
 
+            FillEnums(objectExtensionsDto);
+              
             return objectExtensionsDto;
         }
 
@@ -98,10 +107,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             var extensionPropertyDto = new ExtensionPropertyDto
             {
                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(propertyConfig.Type),
-                TypeSimple = TypeHelper.GetSimplifiedName(propertyConfig.Type),
+                TypeSimple = propertyConfig.Type.IsEnum
+                    ? "enum"
+                    : TypeHelper.GetSimplifiedName(propertyConfig.Type),
                 Attributes = new List<ExtensionPropertyAttributeDto>(),
                 DisplayName = CreateDisplayNameDto(propertyConfig),
                 Configuration = new Dictionary<string, object>(),
+                DefaultValue = propertyConfig.GetDefaultValue(),
                 Api = new ExtensionPropertyApiDto
                 {
                     OnGet = new ExtensionPropertyApiGetDto
@@ -137,7 +149,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             foreach (var attribute in propertyConfig.Attributes)
             {
                 extensionPropertyDto.Attributes.Add(
-                    ExtensionPropertyAttributeDto.Create(attribute)
+                    ExtensionPropertyAttributeDtoFactory.Create(attribute)
                 );
             }
 
@@ -173,6 +185,46 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             }
 
             return null;
+        }
+
+        protected virtual void FillEnums(ObjectExtensionsDto objectExtensionsDto)
+        {
+            var enumProperties = ObjectExtensionManager.Instance.Modules().Values
+                .SelectMany(
+                    m => m.Entities.Values.SelectMany(
+                        e => e.GetProperties()
+                    )
+                )
+                .Where(p => p.Type.IsEnum)
+                .ToList();
+
+            foreach (var enumProperty in enumProperties)
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute (enumProperty.Type.FullName can not be null for this case)
+                objectExtensionsDto.Enums[enumProperty.Type.FullName] = CreateExtensionEnumDto(enumProperty);
+            }
+        }
+
+        protected virtual ExtensionEnumDto CreateExtensionEnumDto(ExtensionPropertyConfiguration enumProperty)
+        {
+            var extensionEnumDto = new ExtensionEnumDto
+            {
+                Fields = new List<ExtensionEnumFieldDto>(),
+                LocalizationResource = enumProperty.GetLocalizationResourceNameOrNull()
+            };
+
+            foreach (var enumValue in enumProperty.Type.GetEnumValues())
+            {
+                extensionEnumDto.Fields.Add(
+                    new ExtensionEnumFieldDto
+                    {
+                        Name = enumProperty.Type.GetEnumName(enumValue),
+                        Value = enumValue
+                    }
+                );
+            }
+
+            return extensionEnumDto;
         }
     }
 }

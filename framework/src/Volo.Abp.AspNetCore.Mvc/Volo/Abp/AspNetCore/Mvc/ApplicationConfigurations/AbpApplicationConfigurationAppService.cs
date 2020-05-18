@@ -107,7 +107,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 IsAuthenticated = _currentUser.IsAuthenticated,
                 Id = _currentUser.Id,
                 TenantId = _currentUser.TenantId,
-                UserName = _currentUser.UserName
+                UserName = _currentUser.UserName,
+                Email = _currentUser.Email
             };
         }
 

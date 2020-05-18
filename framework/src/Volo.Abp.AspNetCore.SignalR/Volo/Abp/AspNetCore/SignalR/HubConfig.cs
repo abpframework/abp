@@ -19,11 +19,17 @@ namespace Volo.Abp.AspNetCore.SignalR
 
         public HubConfig(
             [NotNull] Type hubType,
-            [NotNull] string routePattern)
+            [NotNull] string routePattern,
+            [CanBeNull] Action<HttpConnectionDispatcherOptions> configureAction = null)
         {
             HubType = Check.NotNull(hubType, nameof(hubType));
             RoutePattern = Check.NotNullOrWhiteSpace(routePattern, nameof(routePattern));
             ConfigureActions = new List<Action<HttpConnectionDispatcherOptions>>();
+
+            if (configureAction != null)
+            {
+                ConfigureActions.Add(configureAction);
+            }
         }
 
         public static HubConfig Create<THub>()
