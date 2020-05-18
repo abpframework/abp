@@ -67,6 +67,17 @@ You typically want to copy the original `.cshtml` file of the module, then make 
 
 That's all, you can change the file content however you like.
 
+Please note that you should configure your project to support the virtual file system.If you don't do this, you will got no effect when publish the project.
+
+some sample code like below:
+``` C#
+    Configure<AbpVirtualFileSystemOptions>(options =>
+    {
+        options.FileSets.AddEmbedded<YunAuthServerHostModule>("Yun.AuthServer.Host");
+    });
+```
+
+
 ### Completely Overriding a Razor Page
 
 You may want to completely override a page; the razor and the c# file related to the page.
