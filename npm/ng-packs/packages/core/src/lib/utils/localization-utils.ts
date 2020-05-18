@@ -1,6 +1,7 @@
 import { ApplicationConfiguration } from '../models/application-configuration';
 
 export function localize(resourceName: string, key: string, defaultValue: string) {
+  /* tslint:disable-next-line:only-arrow-functions */
   return function(localization: ApplicationConfiguration.Localization) {
     if (resourceName === '_') return key;
 
@@ -17,6 +18,7 @@ export function localizeWithFallback(
   keys: string[],
   defaultValue: string,
 ) {
+  /* tslint:disable-next-line:only-arrow-functions */
   return function(localization: ApplicationConfiguration.Localization) {
     resourceNames = resourceNames.concat(localization.defaultResourceName).filter(Boolean);
 
