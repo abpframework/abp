@@ -96,7 +96,7 @@
             get: _get
         };
     })();
-
+    
     function initializeObjectExtensions() {
 
         var getShortEnumTypeName = function (enumType) {
@@ -150,10 +150,9 @@
             return defaultValue;
         }
         
-        function localizeEnumMember(property, row) {
+        function localizeEnumMember(property, enumMemberValue) {
             var enumType = property.config.type;
             var enumInfo = abp.objectExtensions.enums[enumType];
-            var enumMemberValue = row.extraProperties[property.name];
             var enumMemberName = getEnumMemberName(enumInfo, enumMemberValue);
 
             if (!enumMemberName) {
@@ -199,6 +198,10 @@
             return tableProperties;
         }
 
+        function getValueFromRow(property, row) {
+            return row.extraProperties[property.name];;
+        }
+
         function convertPropertyToColumnConfig(property) {
             var columnConfig = {
                 title: localizeDisplayName(property.name, property.config.displayName),
@@ -206,12 +209,19 @@
                 orderable: false
             };
 
+
             if (property.config.typeSimple === 'enum') {
-                columnConfig.render = function (data, type, row) {
-                    return localizeEnumMember(
-                        property,
-                        row
-                    );
+                columnConfig.render = function(data, type, row) {
+                    var value = getValueFromRow(property, row);
+                    return localizeEnumMember(property, value);
+                }
+            } else {
+                var defaultRenderer = abp.libs.datatables.defaultRenderers[property.config.typeSimple];
+                if (defaultRenderer) {
+                    columnConfig.render = function (data, type, row) {
+                        var value = getValueFromRow(property, row);
+                        return defaultRenderer(value);
+                    }
                 }
             }
 
