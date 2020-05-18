@@ -110,7 +110,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return new TextAreaTagHelper(_generator)
                 {
                     For = TagHelper.AspFor,
-                    ViewContext = TagHelper.ViewContext
+                    ViewContext = TagHelper.ViewContext,
+                    Name = TagHelper.Name
                 };
             }
 
@@ -118,7 +119,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 For = TagHelper.AspFor,
                 InputTypeName = TagHelper.InputTypeName,
-                ViewContext = TagHelper.ViewContext
+                ViewContext = TagHelper.ViewContext,
+                Format = TagHelper.Format,
+                Name = TagHelper.Name,
+                Value = TagHelper.Value
             };
         }
 
