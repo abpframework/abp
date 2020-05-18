@@ -22,10 +22,13 @@ export function localizeWithFallback(
   return function(localization: ApplicationConfiguration.Localization) {
     resourceNames = resourceNames.concat(localization.defaultResourceName).filter(Boolean);
 
-    for (let i = 0; i < resourceNames.length; i++) {
+    const resourceCount = resourceNames.length;
+    const keyCount = keys.length;
+
+    for (let i = 0; i < resourceCount; i++) {
       const resourceName = resourceNames[i];
 
-      for (let j = 0; j < keys.length; j++) {
+      for (let j = 0; j < keyCount; j++) {
         const localized = localize(resourceName, keys[j], null)(localization);
         if (localized) return localized;
       }
