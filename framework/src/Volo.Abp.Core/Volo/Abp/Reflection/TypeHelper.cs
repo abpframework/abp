@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
@@ -9,6 +10,30 @@ namespace Volo.Abp.Reflection
 {
     public static class TypeHelper
     {
+        private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
+        {
+            typeof(byte),
+            typeof(short),
+            typeof(int),
+            typeof(long),
+            typeof(sbyte),
+            typeof(ushort),
+            typeof(uint),
+            typeof(ulong),
+            typeof(bool),
+            typeof(float),
+            typeof(decimal),
+            typeof(DateTime),
+            typeof(DateTimeOffset),
+            typeof(TimeSpan),
+            typeof(Guid)
+        };
+
+        public static bool IsNonNullablePrimitiveType(Type type)
+        {
+            return NonNullablePrimitiveTypes.Contains(type);
+        }
+
         public static bool IsFunc(object obj)
         {
             if (obj == null)
@@ -144,7 +169,7 @@ namespace Volo.Abp.Reflection
             {
                 return Activator.CreateInstance(type);
             }
-
+            
             return null;
         }
 
@@ -263,6 +288,30 @@ namespace Volo.Abp.Reflection
             }
 
             return type.FullName;
+        }
+
+        public static object ConvertFromString<TTargetType>(string value)
+        {
+            return ConvertFromString(typeof(TTargetType), value);
+        }
+
+        public static object ConvertFromString(Type targetType, string value)
+        {
+            return TypeDescriptor
+                .GetConverter(targetType)
+                .ConvertFromString(value);
+        }
+
+        public static object ConvertFrom<TTargetType>(object value)
+        {
+            return ConvertFrom(typeof(TTargetType), value);
+        }
+
+        public static object ConvertFrom(Type targetType, object value)
+        {
+            return TypeDescriptor
+                .GetConverter(targetType)
+                .ConvertFrom(value);
         }
     }
 }

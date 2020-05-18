@@ -9,7 +9,7 @@ namespace Volo.Abp.ObjectExtending
 {
     public class ObjectExtensionManager
     {
-        public static ObjectExtensionManager Instance { get; set; } = new ObjectExtensionManager();
+        public static ObjectExtensionManager Instance { get; protected set; } = new ObjectExtensionManager();
 
         [NotNull]
         public ConcurrentDictionary<object, object> Configuration { get; }

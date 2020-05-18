@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
-            string normalizedUserName, 
+            string normalizedUserName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -32,7 +32,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<string>> GetRoleNamesAsync(
-            Guid id, 
+            Guid id,
             CancellationToken cancellationToken = default)
         {
             var query = from userRole in DbContext.Set<IdentityUserRole>()
@@ -44,8 +44,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<IdentityUser> FindByLoginAsync(
-            string loginProvider, 
-            string providerKey, 
+            string loginProvider,
+            string providerKey,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -77,7 +77,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -97,10 +97,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<IdentityUser>> GetListAsync(
-            string sorting = null, 
+            string sorting = null,
             int maxResultCount = int.MaxValue,
-            int skipCount = 0, 
-            string filter = null, 
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -110,7 +110,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
+                        u.Email.Contains(filter) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .PageBy(skipCount, maxResultCount)
@@ -131,7 +132,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<long> GetCountAsync(
-            string filter = null, 
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
             return await this.WhereIf(

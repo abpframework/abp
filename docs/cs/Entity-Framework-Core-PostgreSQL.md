@@ -10,9 +10,9 @@ Projekt `.EntityFrameworkCore` v řešení závisí na NuGet balíku [Volo.Abp.E
 
 Najděte třídu ***YourProjectName*EntityFrameworkCoreModule** v projektu `.EntityFrameworkCore`, odstraňte `typeof(AbpEntityFrameworkCoreSqlServerModule)` z atributu `DependsOn`, přidejte `typeof(AbpEntityFrameworkCorePostgreSqlModule)` (také nahraďte `using Volo.Abp.EntityFrameworkCore.SqlServer;` za `using Volo.Abp.EntityFrameworkCore.PostgreSql;`).
 
-## UsePostgreSql()
+## UseNpgsql()
 
-Najděte volání `UseSqlServer()` v *YourProjectName*EntityFrameworkCoreModule.cs uvnitř projektu `.EntityFrameworkCore` a nahraďte za `UsePostgreSql()`.
+Najděte volání `UseSqlServer()` v *YourProjectName*EntityFrameworkCoreModule.cs uvnitř projektu `.EntityFrameworkCore` a nahraďte za `UseNpgsql()`.
 
 Najděte volání `UseSqlServer()` v *YourProjectName*MigrationsDbContextFactory.cs uvnitř projektu `.EntityFrameworkCore.DbMigrations` a nahraďte za `UseNpgsql()`.
 

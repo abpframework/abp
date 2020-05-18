@@ -21,5 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
         public List<ExtensionPropertyAttributeDto> Attributes { get; set; }
 
         public Dictionary<string, object> Configuration { get; set; }
+        
+        public object DefaultValue { get; set; }
     }
 }
