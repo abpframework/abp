@@ -1,19 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Volo.Abp.ObjectExtending
 {
     public static class MvcUiObjectExtensionPropertyInfoExtensions
     {
-        private static readonly Type[] DateTypes = new[]
-        {
-            typeof(DateTime), typeof(DateTimeOffset)
+        private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
+            typeof(int),
+            typeof(long),
+            typeof(byte),
+            typeof(sbyte),
+            typeof(short),
+            typeof(ushort),
+            typeof(uint),
+            typeof(long),
+            typeof(ulong),
+            typeof(float),
+            typeof(double),
+            typeof(int?),
+            typeof(long?),
+            typeof(byte?),
+            typeof(sbyte?),
+            typeof(short?),
+            typeof(ushort?),
+            typeof(uint?),
+            typeof(long?),
+            typeof(ulong?),
+            typeof(float?),
+            typeof(double?),
         };
 
-        public static string GetInputFormatOrNull(this ObjectExtensionPropertyInfo property)
+        public static string GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
         {
-            if (IsDate(property))
+            if (property.IsDate())
             {
                 return "{0:yyyy-MM-dd}";
             }
@@ -21,24 +42,85 @@ namespace Volo.Abp.ObjectExtending
             return null;
         }
 
-        private static bool IsDate(ObjectExtensionPropertyInfo property)
+        public static string GetInputType(this ObjectExtensionPropertyInfo propertyInfo)
         {
-            if (!DateTypes.Contains(property.Type))
+            foreach (var attribute in propertyInfo.Attributes)
             {
-                return false;
+                var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute);
+                if (inputTypeByAttribute != null)
+                {
+                    return inputTypeByAttribute;
+                }
             }
 
-            var dataTypeAttribute = property
-                .Attributes
-                .OfType<DataTypeAttribute>()
-                .FirstOrDefault();
+            return GetInputTypeFromTypeOrNull(propertyInfo.Type)
+                   ?? "text"; //default
+        }
 
-            if (dataTypeAttribute == null)
+        private static string GetInputTypeFromAttributeOrNull(Attribute attribute)
+        {
+            if (attribute is EmailAddressAttribute)
             {
-                return false;
+                return "email";
             }
 
-            return dataTypeAttribute.DataType == DataType.Date;
+            if (attribute is UrlAttribute)
+            {
+                return "url";
+            }
+
+            if (attribute is HiddenInputAttribute)
+            {
+                return "hidden";
+            }
+
+            if (attribute is PhoneAttribute)
+            {
+                return "tel";
+            }
+
+            if (attribute is DataTypeAttribute dataTypeAttribute)
+            {
+                switch (dataTypeAttribute.DataType)
+                {
+                    case DataType.Password:
+                        return "password";
+                    case DataType.Date:
+                        return "date";
+                    case DataType.Time:
+                        return "time";
+                    case DataType.EmailAddress:
+                        return "email";
+                    case DataType.Url:
+                        return "url";
+                    case DataType.PhoneNumber:
+                        return "tel";
+                    case DataType.DateTime:
+                        return "datetime-local";
+                }
+            }
+
+            return null;
+        }
+
+        private static string GetInputTypeFromTypeOrNull(Type type)
+        {
+            if (type == typeof(bool))
+            {
+                return "checkbox";
+            }
+
+            if (type == typeof(DateTime))
+            {
+                return "datetime-local";
+            }
+
+            if (NumberTypes.Contains(type))
+            {
+                return "number";
+            }
+
+            return null;
         }
     }
 }

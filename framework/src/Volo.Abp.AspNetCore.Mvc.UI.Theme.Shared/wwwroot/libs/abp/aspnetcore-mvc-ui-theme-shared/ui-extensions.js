@@ -96,7 +96,7 @@
             get: _get
         };
     })();
-
+    
     function initializeObjectExtensions() {
 
         var getShortEnumTypeName = function (enumType) {
@@ -209,19 +209,18 @@
                 orderable: false
             };
 
+
             if (property.config.typeSimple === 'enum') {
-                columnConfig.render = function (data, type, row) {
+                columnConfig.render = function(data, type, row) {
                     var value = getValueFromRow(property, row);
                     return localizeEnumMember(property, value);
                 }
-            }
-            else if (property.config.typeSimple === 'boolean') {
-                columnConfig.render = function (data, type, row) {
-                    var value = getValueFromRow(property, row);
-                    if (value) {
-                        return '<i class="fa fa-check"></i>';
-                    } else {
-                        return '<i class="fa fa-times"></i>';
+            } else {
+                var defaultRenderer = abp.libs.datatables.defaultRenderers[property.config.typeSimple];
+                if (defaultRenderer) {
+                    columnConfig.render = function (data, type, row) {
+                        var value = getValueFromRow(property, row);
+                        return defaultRenderer(value);
                     }
                 }
             }

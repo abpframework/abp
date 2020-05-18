@@ -6,7 +6,7 @@ using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending.Modularity
 {
-    public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName
+    public class ExtensionPropertyConfiguration : IHasNameWithLocalizableDisplayName, IBasicObjectExtensionPropertyInfo
     {
         [NotNull]
         public EntityExtensionConfiguration EntityExtensionConfiguration { get; }

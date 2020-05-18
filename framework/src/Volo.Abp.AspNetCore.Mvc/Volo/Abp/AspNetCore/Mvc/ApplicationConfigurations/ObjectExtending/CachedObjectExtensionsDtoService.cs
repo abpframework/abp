@@ -107,9 +107,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             var extensionPropertyDto = new ExtensionPropertyDto
             {
                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(propertyConfig.Type),
-                TypeSimple = propertyConfig.Type.IsEnum
-                    ? "enum"
-                    : TypeHelper.GetSimplifiedName(propertyConfig.Type),
+                TypeSimple = GetSimpleTypeName(propertyConfig),
                 Attributes = new List<ExtensionPropertyAttributeDto>(),
                 DisplayName = CreateDisplayNameDto(propertyConfig),
                 Configuration = new Dictionary<string, object>(),
@@ -159,6 +157,26 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             }
 
             return extensionPropertyDto;
+        }
+
+        protected virtual string GetSimpleTypeName(ExtensionPropertyConfiguration propertyConfig)
+        {
+            if (propertyConfig.Type.IsEnum)
+            {
+                return "enum";
+            }
+
+            if (propertyConfig.IsDate())
+            {
+                return "date";
+            }
+
+            if (propertyConfig.IsDateTime())
+            {
+                return "datetime";
+            }
+
+            return TypeHelper.GetSimplifiedName(propertyConfig.Type);
         }
 
         protected virtual LocalizableStringDto CreateDisplayNameDto(ExtensionPropertyConfiguration propertyConfig)

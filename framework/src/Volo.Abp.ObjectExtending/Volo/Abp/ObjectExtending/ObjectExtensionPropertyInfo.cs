@@ -7,7 +7,7 @@ using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending
 {
-    public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName
+    public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, IBasicObjectExtensionPropertyInfo
     {
         [NotNull]
         public ObjectExtensionInfo ObjectExtension { get; }
