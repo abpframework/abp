@@ -12,7 +12,7 @@ namespace Volo.Docs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddHttpClientProxies(typeof(DocsApplicationContractsModule).Assembly);
+            context.Services.AddHttpClientProxies(typeof(DocsApplicationContractsModule).Assembly, DocsRemoteServiceConsts.RemoteServiceName);
         }
     }
 }
