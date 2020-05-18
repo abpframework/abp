@@ -147,7 +147,9 @@
     "EmailSent": "Email Sent",
     "SuccessfullySent": "Successfully Sent",
     "SuccessfullyDeleted": "Successfully Deleted",
-    "DiscountRequestDeletionWarningMessage": "Discount request will be deleted" ,
-	"BusinessType": "Business Type"
+    "DiscountRequestDeletionWarningMessage": "Discount request will be deleted",
+    "TotalQuestionMustBeGreaterWarningMessage": "TotalQuestionCount must be greater than RemainingQuestionCount !",
+    "QuestionCountsMustBeGreaterThanZero": "TotalQuestionCount and RemainingQuestionCount must be zero or greater than zero !",
+  	"BusinessType": "Business Type"
   }
 }
