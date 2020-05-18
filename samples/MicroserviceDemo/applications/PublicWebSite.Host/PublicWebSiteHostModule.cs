@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -97,12 +97,14 @@ namespace PublicWebSite.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
+            
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }
-            app.UseAuthorization();
+
             app.UseAbpRequestLocalization();
+            app.UseAuthorization();
             app.UseConfiguredEndpoints();
         }
     }

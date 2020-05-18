@@ -65,8 +65,13 @@ namespace Volo.Abp.Data
         public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type objectType = null)
             where TSource : IHasExtraProperties
         {
+            if (objectType == null)
+            {
+                objectType = typeof(TSource);
+            }
+
             var properties = ObjectExtensionManager.Instance
-                .GetProperties(objectType ?? typeof(TSource));
+                .GetProperties(objectType);
 
             foreach (var property in properties)
             {
@@ -75,7 +80,7 @@ namespace Volo.Abp.Data
                     continue;
                 }
 
-                source.ExtraProperties[property.Name] = TypeHelper.GetDefaultValue(property.Type);
+                source.ExtraProperties[property.Name] = property.GetDefaultValue();
             }
 
             return source;

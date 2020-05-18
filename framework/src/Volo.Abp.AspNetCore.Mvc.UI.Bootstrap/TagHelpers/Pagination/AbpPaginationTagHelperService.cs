@@ -7,6 +7,7 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -17,12 +18,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
         private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public AbpPaginationTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
+        public AbpPaginationTagHelperService(
+            IHtmlGenerator generator, 
+            HtmlEncoder encoder, 
+            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
             _encoder = encoder;
             _tagHelperLocalizer = tagHelperLocalizer;
+            _stringLocalizerFactory = stringLocalizerFactory;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -119,7 +126,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual async Task<string> RenderAnchorTagHelperLinkHtmlAsync(TagHelperContext context, TagHelperOutput output, string currentPage, string localizationKey)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+            var localizer = _stringLocalizerFactory.Create(typeof(AbpUiResource));
 
             var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
 
@@ -156,7 +163,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string GetOpeningTags(TagHelperContext context, TagHelperOutput output)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+            var localizer = _stringLocalizerFactory.Create(typeof(AbpUiResource));
 
             var pagerInfo = (TagHelper.ShowInfo ?? false) ?
                 "    <div class=\"col-sm-12 col-md-5\"> " + localizer["PagerInfo{0}{1}{2}", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
