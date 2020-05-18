@@ -38,6 +38,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep());
             }
 
+            if (context.BuildArgs.DatabaseProvider == DatabaseProvider.EntityFrameworkCore)
+            {
+                steps.Add(new AppTemplateRemoveMongodbCollectionFixtureStep());
+            }
+
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
