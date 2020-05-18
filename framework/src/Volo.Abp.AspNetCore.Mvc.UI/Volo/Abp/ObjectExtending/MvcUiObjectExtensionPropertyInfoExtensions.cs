@@ -39,6 +39,11 @@ namespace Volo.Abp.ObjectExtending
                 return "{0:yyyy-MM-dd}";
             }
 
+            if (property.IsDateTime())
+            {
+                return "{0:yyyy-MM-ddTHH:mm}";
+            }
+
             return null;
         }
 
