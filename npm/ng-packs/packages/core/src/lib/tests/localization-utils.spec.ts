@@ -1,4 +1,8 @@
-import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
+import {
+  createLocalizationPipeKeyGenerator,
+  createLocalizer,
+  createLocalizerWithFallback,
+} from '../utils/localization-utils';
 
 describe('Localization Utils', () => {
   describe('#createLocalizer', () => {
@@ -82,6 +86,52 @@ describe('Localization Utils', () => {
       'should return $expected when resource names are $resources and keys are $keys',
       ({ resources, keys, defaultValue, expected }) => {
         const result = localizeWithFallback(resources, keys, defaultValue);
+
+        expect(result).toBe(expected);
+      },
+    );
+  });
+
+  describe('#createLocalizationPipeKeyGenerator', () => {
+    const generateLocalizationPipeKey = createLocalizationPipeKeyGenerator({
+      values: { foo: { bar: 'baz' }, x: { y: 'z' } },
+      defaultResourceName: 'x',
+      currentCulture: null,
+      languages: [],
+    });
+
+    test.each`
+      resources          | keys                 | defaultKey   | expected
+      ${['', '_']}       | ${['TEST', 'OTHER']} | ${'DEFAULT'} | ${'TEST'}
+      ${['foo']}         | ${['bar']}           | ${'DEFAULT'} | ${'foo::bar'}
+      ${['x']}           | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['foo']}         | ${['y']}             | ${'DEFAULT'} | ${'x::y'}
+      ${['x']}           | ${['y']}             | ${'DEFAULT'} | ${'x::y'}
+      ${['a', 'b', 'c']} | ${['y']}             | ${'DEFAULT'} | ${'x::y'}
+      ${['']}            | ${['y']}             | ${'DEFAULT'} | ${'x::y'}
+      ${[]}              | ${['y']}             | ${'DEFAULT'} | ${'x::y'}
+      ${['foo']}         | ${['bar', 'y']}      | ${'DEFAULT'} | ${'foo::bar'}
+      ${['x']}           | ${['bar', 'y']}      | ${'DEFAULT'} | ${'x::y'}
+      ${['a', 'b', 'c']} | ${['bar', 'y']}      | ${'DEFAULT'} | ${'x::y'}
+      ${['']}            | ${['bar', 'y']}      | ${'DEFAULT'} | ${'x::y'}
+      ${[]}              | ${['bar', 'y']}      | ${'DEFAULT'} | ${'x::y'}
+      ${['foo']}         | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['x']}           | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['foo']}         | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['x']}           | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+    `(
+      'should return $expected when resource names are $resources and keys are $keys',
+      ({ resources, keys, defaultKey, expected }) => {
+        const result = generateLocalizationPipeKey(resources, keys, defaultKey);
 
         expect(result).toBe(expected);
       },

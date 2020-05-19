@@ -22,6 +22,18 @@ export function createLocalizerWithFallback(localization: ApplicationConfigurati
   };
 }
 
+export function createLocalizationPipeKeyGenerator(
+  localization: ApplicationConfiguration.Localization,
+) {
+  const findLocalization = createLocalizationFinder(localization);
+
+  /* tslint:disable-next-line:only-arrow-functions */
+  return function(resourceNames: string[], keys: string[], defaultKey: string) {
+    const { resourceName, key } = findLocalization(resourceNames, keys);
+    return !resourceName ? defaultKey : resourceName === '_' ? key : `${resourceName}::${key}`;
+  };
+}
+
 function createLocalizationFinder(localization: ApplicationConfiguration.Localization) {
   const localize = createLocalizer(localization);
 
