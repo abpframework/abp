@@ -1,6 +1,6 @@
 # SignalR Integration
 
-> It is already possible to follow [the standard Microsoft tutorial](https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr) to add [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction) to your application. However, ABP provides a SignalR integration packages that simplify the integration and usage.
+> It is already possible to follow [the standard Microsoft tutorial](https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr) to add [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction) to your application. However, ABP provides a SignalR integration packages those simplify the integration and usage.
 
 ## Installation
 
@@ -225,3 +225,13 @@ ABP implements SignalR's `IUserIdProvider` interface to provide the current user
 See the [SignalR Integration Demo](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo) as a sample application. It has a simple Chat page to send messages between (authenticated) users.
 
 ![signalr-demo-chat](images/signalr-demo-chat.png)
+
+## Remarks
+
+ABP Framework doesn't change the SignalR. It works in your ABP Framework based application just like any other ASP.NET Core application.
+
+Refer to the Microsoft's documentation to [host and scale](https://docs.microsoft.com/en-us/aspnet/core/signalr/scale) your application, integrate to [Azure](https://docs.microsoft.com/en-us/aspnet/core/signalr/publish-to-azure-web-app) or [Redis backplane](https://docs.microsoft.com/en-us/aspnet/core/signalr/redis-backplane)... etc.
+
+## See Also
+
+* [Microsoft SignalR documentation](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction)
