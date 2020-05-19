@@ -20,6 +20,10 @@ export class LocalizationService {
     return this.store.selectSnapshot(state => state.SessionState.language);
   }
 
+  get languageChange(): Observable<SetLanguage> {
+    return this.actions.pipe(ofActionSuccessful(SetLanguage));
+  }
+
   constructor(
     private actions: Actions,
     private store: Store,
@@ -35,9 +39,7 @@ export class LocalizationService {
   }
 
   private listenToSetLanguage() {
-    this.actions
-      .pipe(ofActionSuccessful(SetLanguage))
-      .subscribe(({ payload }) => this.registerLocale(payload));
+    this.languageChange.subscribe(({ payload }) => this.registerLocale(payload));
   }
 
   setRouteReuse(reuse: ShouldReuseRoute) {
