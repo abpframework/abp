@@ -31,10 +31,6 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   color = '#77b6ff';
 
   @Input()
-  filter = (action: StartLoader | StopLoader) =>
-    action.payload.url.indexOf('openid-configuration') < 0;
-
-  @Input()
   isLoading = false;
 
   progressLevel = 0;
@@ -46,6 +42,10 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   intervalPeriod = 350;
 
   stopDelay = 800;
+
+  @Input()
+  filter = (action: StartLoader | StopLoader) =>
+    action.payload.url.indexOf('openid-configuration') < 0;
 
   private readonly clearProgress = () => {
     this.progressLevel = 0;
