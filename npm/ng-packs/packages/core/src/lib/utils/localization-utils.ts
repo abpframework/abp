@@ -1,8 +1,8 @@
 import { ApplicationConfiguration } from '../models/application-configuration';
 
-export function localize(resourceName: string, key: string, defaultValue: string) {
+export function createLocalizer(localization: ApplicationConfiguration.Localization) {
   /* tslint:disable-next-line:only-arrow-functions */
-  return function(localization: ApplicationConfiguration.Localization) {
+  return function(resourceName: string, key: string, defaultValue: string) {
     if (resourceName === '_') return key;
 
     const resource = localization.values[resourceName];
@@ -13,13 +13,20 @@ export function localize(resourceName: string, key: string, defaultValue: string
   };
 }
 
-export function localizeWithFallback(
-  resourceNames: string[],
-  keys: string[],
-  defaultValue: string,
-) {
+export function createLocalizerWithFallback(localization: ApplicationConfiguration.Localization) {
+  const findLocalization = createLocalizationFinder(localization);
   /* tslint:disable-next-line:only-arrow-functions */
-  return function(localization: ApplicationConfiguration.Localization) {
+  return function(resourceNames: string[], keys: string[], defaultValue: string) {
+    const { localized } = findLocalization(resourceNames, keys);
+    return localized || defaultValue;
+  };
+}
+
+function createLocalizationFinder(localization: ApplicationConfiguration.Localization) {
+  const localize = createLocalizer(localization);
+
+  /* tslint:disable-next-line:only-arrow-functions */
+  return function(resourceNames: string[], keys: string[]) {
     resourceNames = resourceNames.concat(localization.defaultResourceName).filter(Boolean);
 
     const resourceCount = resourceNames.length;
@@ -29,11 +36,12 @@ export function localizeWithFallback(
       const resourceName = resourceNames[i];
 
       for (let j = 0; j < keyCount; j++) {
-        const localized = localize(resourceName, keys[j], null)(localization);
-        if (localized) return localized;
+        const key = keys[j];
+        const localized = localize(resourceName, key, null);
+        if (localized) return { resourceName, key, localized };
       }
     }
 
-    return defaultValue;
+    return { resourceName: undefined, key: undefined, localized: undefined };
   };
 }

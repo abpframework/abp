@@ -79,6 +79,7 @@ describe('LocalizationService', () => {
   describe('#localize', () => {
     test.each`
       resource     | key          | defaultValue | expected
+      ${'_'}       | ${'TEST'}    | ${'DEFAULT'} | ${'TEST'}
       ${'foo'}     | ${'bar'}     | ${'DEFAULT'} | ${'baz'}
       ${'x'}       | ${'bar'}     | ${'DEFAULT'} | ${'DEFAULT'}
       ${'a'}       | ${'bar'}     | ${'DEFAULT'} | ${'DEFAULT'}
@@ -119,6 +120,7 @@ describe('LocalizationService', () => {
   describe('#localizeSync', () => {
     test.each`
       resource     | key          | defaultValue | expected
+      ${'_'}       | ${'TEST'}    | ${'DEFAULT'} | ${'TEST'}
       ${'foo'}     | ${'bar'}     | ${'DEFAULT'} | ${'baz'}
       ${'x'}       | ${'bar'}     | ${'DEFAULT'} | ${'DEFAULT'}
       ${'a'}       | ${'bar'}     | ${'DEFAULT'} | ${'DEFAULT'}
@@ -156,32 +158,33 @@ describe('LocalizationService', () => {
 
   describe('#localizeWithFallback', () => {
     test.each`
-      resources          | keys            | defaultValue | expected
-      ${['foo']}         | ${['bar']}      | ${'DEFAULT'} | ${'baz'}
-      ${['x']}           | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['a', 'b', 'c']} | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['']}            | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${[]}              | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['foo']}         | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['x']}           | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['a', 'b', 'c']} | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['']}            | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${[]}              | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['foo']}         | ${['bar', 'y']} | ${'DEFAULT'} | ${'baz'}
-      ${['x']}           | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${['a', 'b', 'c']} | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${['']}            | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${[]}              | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${['foo']}         | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['x']}           | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['a', 'b', 'c']} | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['']}            | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${[]}              | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['foo']}         | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['x']}           | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['a', 'b', 'c']} | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['']}            | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${[]}              | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
+      resources          | keys                 | defaultValue | expected
+      ${['', '_']}       | ${['TEST', 'OTHER']} | ${'DEFAULT'} | ${'TEST'}
+      ${['foo']}         | ${['bar']}           | ${'DEFAULT'} | ${'baz'}
+      ${['x']}           | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['foo']}         | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['x']}           | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['a', 'b', 'c']} | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['']}            | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${[]}              | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['foo']}         | ${['bar', 'y']}      | ${'DEFAULT'} | ${'baz'}
+      ${['x']}           | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${['a', 'b', 'c']} | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${['']}            | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${[]}              | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${['foo']}         | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['x']}           | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['foo']}         | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['x']}           | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
     `(
       'should return observable $expected when resource names are $resources and keys are $keys',
       async ({ resources, keys, defaultValue, expected }) => {
@@ -203,32 +206,33 @@ describe('LocalizationService', () => {
 
   describe('#localizeWithFallbackSync', () => {
     test.each`
-      resources          | keys            | defaultValue | expected
-      ${['foo']}         | ${['bar']}      | ${'DEFAULT'} | ${'baz'}
-      ${['x']}           | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['a', 'b', 'c']} | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['']}            | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${[]}              | ${['bar']}      | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['foo']}         | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['x']}           | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['a', 'b', 'c']} | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['']}            | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${[]}              | ${['y']}        | ${'DEFAULT'} | ${'z'}
-      ${['foo']}         | ${['bar', 'y']} | ${'DEFAULT'} | ${'baz'}
-      ${['x']}           | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${['a', 'b', 'c']} | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${['']}            | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${[]}              | ${['bar', 'y']} | ${'DEFAULT'} | ${'z'}
-      ${['foo']}         | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['x']}           | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['a', 'b', 'c']} | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['']}            | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${[]}              | ${['']}         | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['foo']}         | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['x']}           | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['a', 'b', 'c']} | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${['']}            | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
-      ${[]}              | ${[]}           | ${'DEFAULT'} | ${'DEFAULT'}
+      resources          | keys                 | defaultValue | expected
+      ${['', '_']}       | ${['TEST', 'OTHER']} | ${'DEFAULT'} | ${'TEST'}
+      ${['foo']}         | ${['bar']}           | ${'DEFAULT'} | ${'baz'}
+      ${['x']}           | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${['bar']}           | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['foo']}         | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['x']}           | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['a', 'b', 'c']} | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['']}            | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${[]}              | ${['y']}             | ${'DEFAULT'} | ${'z'}
+      ${['foo']}         | ${['bar', 'y']}      | ${'DEFAULT'} | ${'baz'}
+      ${['x']}           | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${['a', 'b', 'c']} | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${['']}            | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${[]}              | ${['bar', 'y']}      | ${'DEFAULT'} | ${'z'}
+      ${['foo']}         | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['x']}           | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${['']}              | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['foo']}         | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['x']}           | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['a', 'b', 'c']} | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${['']}            | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
+      ${[]}              | ${[]}                | ${'DEFAULT'} | ${'DEFAULT'}
     `(
       'should return $expected when resource names are $resources and keys are $keys',
       ({ resources, keys, defaultValue, expected }) => {
