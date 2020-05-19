@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending
 {
@@ -46,6 +47,22 @@ namespace Volo.Abp.ObjectExtending
                 return "{0:yyyy-MM-ddTHH:mm}";
             }
 
+            return null;
+        }
+
+        public static string GetInputValueOrNull(this IBasicObjectExtensionPropertyInfo property, object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            if (TypeHelper.IsFloatingType(property.Type))
+            {
+                return value.ToString()?.Replace(',', '.');
+            }
+
+            /* Let the ASP.NET Core handle it! */
             return null;
         }
 

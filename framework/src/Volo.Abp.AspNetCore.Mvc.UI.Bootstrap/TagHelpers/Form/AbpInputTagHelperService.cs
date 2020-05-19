@@ -115,22 +115,40 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 };
             }
 
-            return new InputTagHelper(_generator)
+            var inputTagHelper = new InputTagHelper(_generator)
             {
                 For = TagHelper.AspFor,
                 InputTypeName = TagHelper.InputTypeName,
-                ViewContext = TagHelper.ViewContext,
-                Format = TagHelper.Format,
-                Name = TagHelper.Name,
-                Value = TagHelper.Value
+                ViewContext = TagHelper.ViewContext
             };
+
+            if (!TagHelper.Format.IsNullOrEmpty())
+            {
+                inputTagHelper.Format = TagHelper.Format;
+            }
+
+            if (!TagHelper.Name.IsNullOrEmpty())
+            {
+                inputTagHelper.Name = TagHelper.Name;
+            }
+
+            if (!TagHelper.Value.IsNullOrEmpty())
+            {
+                inputTagHelper.Value = TagHelper.Value;
+            }
+
+            return inputTagHelper;
         }
 
         protected virtual async Task<(TagHelperOutput, bool)> GetInputTagHelperOutputAsync(TagHelperContext context, TagHelperOutput output)
         {
             var tagHelper = GetInputTagHelper(context, output);
 
-            var inputTagHelperOutput = await tagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "input");
+            var inputTagHelperOutput = await tagHelper.ProcessAndGetOutputAsync(
+                GetInputAttributes(context, output),
+                context,
+                "input"
+            );
 
             ConvertToTextAreaIfTextArea(inputTagHelperOutput);
             AddDisabledAttribute(inputTagHelperOutput);
@@ -347,6 +365,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             if (!TagHelper.InputTypeName.IsNullOrEmpty() && !attrList.ContainsName("type"))
             {
                 attrList.Add("type", TagHelper.InputTypeName);
+            }
+
+            if (!TagHelper.Name.IsNullOrEmpty() && !attrList.ContainsName("name"))
+            {
+                attrList.Add("name", TagHelper.Name);
+            }
+
+            if (!TagHelper.Value.IsNullOrEmpty() && !attrList.ContainsName("value"))
+            {
+                attrList.Add("value", TagHelper.Value);
             }
 
             return attrList;
