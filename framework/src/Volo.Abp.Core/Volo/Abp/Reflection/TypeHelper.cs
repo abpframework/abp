@@ -2,14 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Volo.Abp.Localization;
 
 namespace Volo.Abp.Reflection
 {
     public static class TypeHelper
     {
+        private static readonly HashSet<Type> FloatingTypes = new HashSet<Type>
+        {
+            typeof(float),
+            typeof(double),
+            typeof(decimal)
+        };
+
         private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
         {
             typeof(byte),
@@ -40,7 +49,7 @@ namespace Volo.Abp.Reflection
             {
                 return false;
             }
-            
+
             var type = obj.GetType();
             if (!type.GetTypeInfo().IsGenericType)
             {
@@ -297,9 +306,39 @@ namespace Volo.Abp.Reflection
 
         public static object ConvertFromString(Type targetType, string value)
         {
-            return TypeDescriptor
-                .GetConverter(targetType)
-                .ConvertFromString(value);
+            if (value == null)
+            {
+                return null;
+            }
+
+            var converter = TypeDescriptor.GetConverter(targetType);
+
+            if (IsFloatingType(targetType))
+            {
+                using (CultureHelper.Use(CultureInfo.InvariantCulture))
+                {
+                    return converter.ConvertFromString(value.Replace(',', '.'));
+                }
+            }
+
+            return converter.ConvertFromString(value);
+        }
+
+        public static bool IsFloatingType(Type type, bool includeNullable = true)
+        {
+            if (FloatingTypes.Contains(type))
+            {
+                return true;
+            }
+
+            if (includeNullable &&
+                IsNullable(type) &&
+                FloatingTypes.Contains(type.GenericTypeArguments[0]))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static object ConvertFrom<TTargetType>(object value)
@@ -312,6 +351,13 @@ namespace Volo.Abp.Reflection
             return TypeDescriptor
                 .GetConverter(targetType)
                 .ConvertFrom(value);
+        }
+
+        public static Type StripNullable(Type type)
+        {
+            return IsNullable(type)
+                ? type.GenericTypeArguments[0]
+                : type;
         }
     }
 }

@@ -33,6 +33,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
+        [HtmlAttributeName("asp-format")]
+        public string Format { get; set; }
+
+        public string Name { get; set; }
+        
+        public string Value { get; set; }
+
         public AbpInputTagHelper(AbpInputTagHelperService tagHelperService)
             : base(tagHelperService)
         {

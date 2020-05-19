@@ -29,20 +29,36 @@ namespace Volo.Abp.Identity
         }
 
         public async Task<List<IUserData>> SearchAsync(
-            string sorting,
-            string filter, 
-            int maxResultCount, 
+            string sorting = null,
+            string filter = null, 
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
             var result = await UserLookupAppService.SearchAsync(
                 new UserLookupSearchInputDto
                 {
                     Filter = filter,
-                    MaxResultCount = maxResultCount
+                    MaxResultCount = maxResultCount,
+                    SkipCount = skipCount,
+                    Sorting = sorting
                 }
             );
 
             return result.Items.Cast<IUserData>().ToList();
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await UserLookupAppService
+                .GetCountAsync(
+                    new UserLookupCountInputDto
+                    {
+                        Filter = filter
+                    }
+                );
         }
     }
 }

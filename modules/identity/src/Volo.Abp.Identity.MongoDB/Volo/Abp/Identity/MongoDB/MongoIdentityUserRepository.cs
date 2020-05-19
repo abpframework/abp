@@ -15,9 +15,7 @@ namespace Volo.Abp.Identity.MongoDB
 {
     public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentityUser, Guid>, IIdentityUserRepository
     {
-        private readonly IGuidGenerator _guidGenerator;
-
-        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IGuidGenerator guidGenerator)
+        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
@@ -135,7 +133,9 @@ namespace Volo.Abp.Identity.MongoDB
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
+                        u.Email.Contains(filter) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter))
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .As<IMongoQueryable<IdentityUser>>()
@@ -184,7 +184,9 @@ namespace Volo.Abp.Identity.MongoDB
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
+                        u.Email.Contains(filter) ||
+                        (u.Name != null && u.Name.Contains(filter)) ||
+                        (u.Surname != null && u.Surname.Contains(filter))
                 )
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
