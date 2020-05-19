@@ -91,7 +91,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 inputHtml + label :
                 label + inputHtml;
 
-            return  innerContent + infoHtml + validation;
+            return innerContent + infoHtml + validation;
         }
 
         protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
@@ -103,16 +103,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
         {
-            var textAreaAttribute = TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>();
-
-            if (textAreaAttribute != null)
+            if (TagHelper.AspFor.ModelExplorer.GetAttribute<TextArea>() != null)
             {
-                return new TextAreaTagHelper(_generator)
+                var textAreaTagHelper = new TextAreaTagHelper(_generator)
                 {
                     For = TagHelper.AspFor,
-                    ViewContext = TagHelper.ViewContext,
-                    Name = TagHelper.Name
+                    ViewContext = TagHelper.ViewContext
                 };
+
+                if (!TagHelper.Name.IsNullOrEmpty())
+                {
+                    textAreaTagHelper.Name = TagHelper.Name;
+                }
+
+                return textAreaTagHelper;
             }
 
             var inputTagHelper = new InputTagHelper(_generator)
@@ -267,7 +271,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return "";
             }
 
-            return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>":"";
+            return TagHelper.AspFor.ModelExplorer.GetAttribute<RequiredAttribute>() != null ? "<span> * </span>" : "";
         }
 
         protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
@@ -304,7 +308,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
             var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
-            return "<small id=\""+ idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
+            return "<small id=\"" + idAttr?.Value + "InfoText\" class=\"form-text text-muted\">" +
                    localizedText +
                    "</small>";
         }
@@ -354,7 +358,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var groupPrefix = "group-";
 
             var tagHelperAttributes = output.Attributes.Where(a => !a.Name.StartsWith(groupPrefix)).ToList();
-            
+
             var attrList = new TagHelperAttributeList();
 
             foreach (var tagHelperAttribute in tagHelperAttributes)
