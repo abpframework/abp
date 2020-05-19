@@ -32,7 +32,7 @@ namespace Volo.Abp.Users.EntityFrameworkCore
 
         public async Task<List<TUser>> SearchAsync(
             string sorting = null, 
-            int maxResultCount = Int32.MaxValue, 
+            int maxResultCount = int.MaxValue, 
             int skipCount = 0,
             string filter = null,
             CancellationToken cancellationToken = default)
@@ -42,7 +42,9 @@ namespace Volo.Abp.Users.EntityFrameworkCore
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
+                        u.Email.Contains(filter) ||
+                        u.Name.Contains(filter) ||
+                        u.Surname.Contains(filter)
                 )
                 .OrderBy(sorting ?? nameof(IUser.UserName))
                 .PageBy(skipCount, maxResultCount)

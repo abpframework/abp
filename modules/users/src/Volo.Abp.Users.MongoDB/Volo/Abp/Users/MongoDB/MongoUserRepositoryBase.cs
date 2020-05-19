@@ -31,7 +31,11 @@ namespace Volo.Abp.Users.MongoDB
             return await GetMongoQueryable().Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<TUser>> SearchAsync(string sorting = null, int maxResultCount = Int32.MaxValue, int skipCount = 0, string filter = null,
+        public async Task<List<TUser>> SearchAsync(
+            string sorting = null, 
+            int maxResultCount = int.MaxValue, 
+            int skipCount = 0,
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
@@ -39,7 +43,9 @@ namespace Volo.Abp.Users.MongoDB
                     !filter.IsNullOrWhiteSpace(),
                     u =>
                         u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
+                        u.Email.Contains(filter) ||
+                        u.Name.Contains(filter) ||
+                        u.Surname.Contains(filter)
                 )
                 .OrderBy(sorting ?? nameof(IUserData.UserName))
                 .As<IMongoQueryable<TUser>>()
