@@ -13,5 +13,7 @@ namespace Volo.Abp.Identity
         Task<UserData> FindByUserNameAsync(string userName);
 
         Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input);
+        
+        Task<long> GetCountAsync(UserLookupCountInputDto input);
     }
 }

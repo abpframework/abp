@@ -17,5 +17,10 @@ namespace Volo.Abp.Users
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
             CancellationToken cancellationToken = default);
+
+        Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default
+        );
     }
 }

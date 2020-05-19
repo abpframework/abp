@@ -21,5 +21,9 @@ namespace Volo.Abp.Users
             string filter = null,
             CancellationToken cancellationToken = default
         );
+
+        Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default);
     }
 }

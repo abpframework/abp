@@ -52,5 +52,20 @@ namespace Volo.Abp.Users.MongoDB
                 .PageBy<TUser, IMongoQueryable<TUser>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
+
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .WhereIf<TUser, IMongoQueryable<TUser>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter) ||
+                        u.Name.Contains(filter) ||
+                        u.Surname.Contains(filter)
+                )
+                .As<IMongoQueryable<TUser>>()
+                .CountAsync(GetCancellationToken(cancellationToken));
+        }
     }
 }

@@ -47,5 +47,18 @@ namespace Volo.Abp.Identity
 
             return result.Items.Cast<IUserData>().ToList();
         }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await UserLookupAppService
+                .GetCountAsync(
+                    new UserLookupCountInputDto
+                    {
+                        Filter = filter
+                    }
+                );
+        }
     }
 }

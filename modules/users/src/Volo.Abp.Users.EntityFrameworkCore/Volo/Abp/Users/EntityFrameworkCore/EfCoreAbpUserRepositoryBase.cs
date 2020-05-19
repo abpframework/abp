@@ -50,5 +50,21 @@ namespace Volo.Abp.Users.EntityFrameworkCore
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter) ||
+                        u.Name.Contains(filter) ||
+                        u.Surname.Contains(filter)
+                )
+                .CountAsync(GetCancellationToken(cancellationToken));
+        }
     }
 }

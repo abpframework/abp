@@ -55,5 +55,10 @@ namespace Volo.Abp.Identity
                     .ToList()
             );
         }
+
+        public async Task<long> GetCountAsync(UserLookupCountInputDto input)
+        {
+            return await UserLookupServiceProvider.GetCountAsync(input.Filter);
+        }
     }
 }

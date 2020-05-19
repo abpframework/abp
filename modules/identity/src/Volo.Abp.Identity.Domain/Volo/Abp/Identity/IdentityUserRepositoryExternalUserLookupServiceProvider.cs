@@ -66,5 +66,12 @@ namespace Volo.Abp.Identity
 
             return users.Select(u => u.ToAbpUserData()).ToList();
         }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await UserRepository.GetCountAsync(filter, cancellationToken);
+        }
     }
 }

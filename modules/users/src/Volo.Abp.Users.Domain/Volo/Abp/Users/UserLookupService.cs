@@ -173,6 +173,26 @@ namespace Volo.Abp.Users
                 .ToList();
         }
 
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = default)
+        {
+            if (ExternalUserLookupServiceProvider != null)
+            {
+                return await ExternalUserLookupServiceProvider
+                    .GetCountAsync(
+                        filter,
+                        cancellationToken
+                    );
+            }
+
+            return await _userRepository
+                .GetCountAsync(
+                    filter,
+                    cancellationToken
+                );
+        }
+
         protected abstract TUser CreateUser(IUserData externalUser);
 
         private async Task WithNewUowAsync(Func<Task> func)
