@@ -45,7 +45,8 @@ namespace Volo.Abp.Identity
             var users = await UserLookupServiceProvider.SearchAsync(
                 input.Sorting,
                 input.Filter,
-                input.MaxResultCount
+                input.MaxResultCount,
+                input.SkipCount
             );
 
             return new ListResultDto<UserData>(

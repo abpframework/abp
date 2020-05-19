@@ -12,9 +12,10 @@ namespace Volo.Abp.Users
         Task<IUserData> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default);
 
         Task<List<IUserData>> SearchAsync(
-            string sorting,
-            string filter,
-            int maxResultCount,
+            string sorting = null,
+            string filter = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             CancellationToken cancellationToken = default);
     }
 }

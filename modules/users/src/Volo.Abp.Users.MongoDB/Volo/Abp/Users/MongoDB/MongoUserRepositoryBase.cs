@@ -33,7 +33,7 @@ namespace Volo.Abp.Users.MongoDB
 
         public async Task<List<TUser>> SearchAsync(
             string sorting = null, 
-            int maxResultCount = int.MaxValue, 
+            int maxResultCount = int.MaxValue,
             int skipCount = 0,
             string filter = null,
             CancellationToken cancellationToken = default)

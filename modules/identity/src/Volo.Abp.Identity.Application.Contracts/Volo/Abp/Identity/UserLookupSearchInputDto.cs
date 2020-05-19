@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Identity
 {
-    public class UserLookupSearchInputDto : LimitedResultRequestDto, ISortedResultRequest
+    public class UserLookupSearchInputDto : PagedResultRequestDto, ISortedResultRequest
     {
         public string Sorting { get; set; }
 
