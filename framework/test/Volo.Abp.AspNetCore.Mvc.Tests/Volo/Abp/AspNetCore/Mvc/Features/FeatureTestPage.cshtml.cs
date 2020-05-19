@@ -14,9 +14,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
         }
 
         [RequiresFeature("NotAllowedFeature")]
-        public void OnGetNotAllowedFeature()
+        public ObjectResult OnGetNotAllowedFeature()
         {
-            
+            return new ObjectResult(42);
         }
 
         public ObjectResult OnGetNoFeature()
