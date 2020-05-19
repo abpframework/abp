@@ -1,8 +1,7 @@
 import { ApplicationConfiguration } from '../models/application-configuration';
 
 export function createLocalizer(localization: ApplicationConfiguration.Localization) {
-  /* tslint:disable-next-line:only-arrow-functions */
-  return function(resourceName: string, key: string, defaultValue: string) {
+  return (resourceName: string, key: string, defaultValue: string) => {
     if (resourceName === '_') return key;
 
     const resource = localization.values[resourceName];
@@ -15,8 +14,8 @@ export function createLocalizer(localization: ApplicationConfiguration.Localizat
 
 export function createLocalizerWithFallback(localization: ApplicationConfiguration.Localization) {
   const findLocalization = createLocalizationFinder(localization);
-  /* tslint:disable-next-line:only-arrow-functions */
-  return function(resourceNames: string[], keys: string[], defaultValue: string) {
+
+  return (resourceNames: string[], keys: string[], defaultValue: string) => {
     const { localized } = findLocalization(resourceNames, keys);
     return localized || defaultValue;
   };
@@ -27,8 +26,7 @@ export function createLocalizationPipeKeyGenerator(
 ) {
   const findLocalization = createLocalizationFinder(localization);
 
-  /* tslint:disable-next-line:only-arrow-functions */
-  return function(resourceNames: string[], keys: string[], defaultKey: string) {
+  return (resourceNames: string[], keys: string[], defaultKey: string) => {
     const { resourceName, key } = findLocalization(resourceNames, keys);
     return !resourceName ? defaultKey : resourceName === '_' ? key : `${resourceName}::${key}`;
   };
@@ -37,8 +35,7 @@ export function createLocalizationPipeKeyGenerator(
 function createLocalizationFinder(localization: ApplicationConfiguration.Localization) {
   const localize = createLocalizer(localization);
 
-  /* tslint:disable-next-line:only-arrow-functions */
-  return function(resourceNames: string[], keys: string[]) {
+  return (resourceNames: string[], keys: string[]) => {
     resourceNames = resourceNames.concat(localization.defaultResourceName).filter(Boolean);
 
     const resourceCount = resourceNames.length;
