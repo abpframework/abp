@@ -140,12 +140,7 @@ namespace Volo.Abp.TextTemplating
             var localizer = GetLocalizerOrNull(templateDefinition);
             if (localizer != null)
             {
-                scriptObject.Import(
-                    "L",
-                    new Func<string, string>(
-                        name => localizer[name]
-                    )
-                );
+                scriptObject.SetValue("L", new TemplateLocalizer(localizer), true);
             }
 
             context.PushGlobal(scriptObject);

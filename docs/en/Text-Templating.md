@@ -204,13 +204,14 @@ Inline localization uses the [localization system](Localization.md) to localize 
 Assuming you need to send an email to a user to reset her/his password. Here, the template content:
 
 ````
-<a href="{%{{{model.link}}}%}">{%{{{L "ResetMyPassword"}}}%}</a>
+<a title="{%{{{L "ResetMyPasswordTitle"}}}%}" href="{%{{{model.link}}}%}">{%{{{L "ResetMyPassword" model.name}}}%}</a>
 ````
 
 `L` function is used to localize the given key based on the current user culture. You need to define the `ResetMyPassword` key inside your localization file:
 
 ````json
-"ResetMyPassword": "Click here to reset your password"
+"ResetMyPasswordTitle": "Reset my password",
+"ResetMyPassword": "Hi {0}, Click here to reset your password"
 ````
 
 You also need to declare the localization resource to be used with this template, inside your template definition provider class:
@@ -234,6 +235,7 @@ var result = await _templateRenderer.RenderAsync(
     "PasswordReset", //the template name
     new PasswordResetModel
     {
+        Name = "john",
         Link = "https://abp.io/example-link?userId=123&token=ABC"
     }
 );
@@ -242,7 +244,7 @@ var result = await _templateRenderer.RenderAsync(
 You will see the localized result:
 
 ````csharp
-<a href="https://abp.io/example-link?userId=123&token=ABC">Click here to reset your password</a>
+<a title="Reset my password" href="https://abp.io/example-link?userId=123&token=ABC">Hi john, Click here to reset your password</a>
 ````
 
 > If you define the [default localization resource](Localization.md) for your application, then no need to declare the resource type for the template definition.

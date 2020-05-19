@@ -1,6 +1,7 @@
 {
   "culture": "tr",
   "texts": {
-    "HelloText": "Merhaba"
-  } 
+    "HelloText": "Merhaba {0}",
+    "HowAreYou": "nasılsın?"
+  }
 }
