@@ -64,7 +64,7 @@ namespace Volo.Abp.Users.EntityFrameworkCore
                         u.Name.Contains(filter) ||
                         u.Surname.Contains(filter)
                 )
-                .CountAsync(GetCancellationToken(cancellationToken));
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

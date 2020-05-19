@@ -64,8 +64,7 @@ namespace Volo.Abp.Users.MongoDB
                         u.Name.Contains(filter) ||
                         u.Surname.Contains(filter)
                 )
-                .As<IMongoQueryable<TUser>>()
-                .CountAsync(GetCancellationToken(cancellationToken));
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
     }
 }
