@@ -180,6 +180,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Text Templating",
+          "path": "Text-Templating.md"
+        },
+        {
           "text": "Object Serialization"
         },
         {
@@ -379,6 +383,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "ListService",
+              "path": "UI/Angular/List-Service.md"
             }
           ]
         },

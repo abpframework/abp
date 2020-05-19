@@ -4,7 +4,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
 {
     [DependsOn(typeof(JQueryScriptContributor))]
     public class BootstrapDatepickerScriptContributor : BundleContributor

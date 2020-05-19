@@ -45,6 +45,9 @@ While there is no Razor Pages & MongoDB combination, you can check both document
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/RabbitMqEventBus)
   * [Distributed event bus document](../Distributed-Event-Bus.md)
   * [RabbitMQ distributed event bus integration document](../Distributed-Event-Bus-RabbitMQ-Integration.md)
+* **Text Templates Demo**: Shows different use cases of the text templating system.
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
+  * [Text templating documentation](../Text-Templating.md)
 * **Authentication Customization**: A solution to show how to customize the authentication for ASP.NET Core MVC / Razor Pages applications.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)
   * Related "[How To](../How-To/Index.md)" documents:
