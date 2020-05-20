@@ -8,15 +8,15 @@ namespace Volo.Abp.BackgroundJobs.Quartz
 {
     [Dependency(ReplaceServices = true)]
     public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDependency
-    { 
+    {
         public const string JobDataPrefix = "Abp";
         public const string RetryIndex = "RetryIndex";
-        
+
         protected IScheduler Scheduler { get; }
+
         protected AbpBackgroundJobQuartzOptions Options { get; }
-        
-        
-        public QuartzBackgroundJobManager(IScheduler scheduler,IOptions<AbpBackgroundJobQuartzOptions> options)
+
+        public QuartzBackgroundJobManager(IScheduler scheduler, IOptions<AbpBackgroundJobQuartzOptions> options)
         {
             Scheduler = scheduler;
             Options = options.Value;
@@ -38,7 +38,7 @@ namespace Volo.Abp.BackgroundJobs.Quartz
                 {JobDataPrefix+ nameof(Options.RetryIntervalMillisecond), retryIntervalMillisecond},
                 {JobDataPrefix+ RetryIndex, 0}
             };
-            
+
             var jobDetail = JobBuilder.Create<QuartzJobExecutionAdapter<TArgs>>().RequestRecovery().SetJobData(jobDataMap).Build();
             var trigger = !delay.HasValue ? TriggerBuilder.Create().StartNow().Build() : TriggerBuilder.Create().StartAt(new DateTimeOffset(DateTime.Now.Add(delay.Value))).Build();
             await Scheduler.ScheduleJob(jobDetail, trigger);
