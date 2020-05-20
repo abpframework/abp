@@ -31,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Security.Claims
                         mapClaims
                             .Select(
                                 claim => new Claim(
-                                    mapOptions.Maps[claim.Type],
+                                    mapOptions.Maps[claim.Type](),
                                     claim.Value,
                                     claim.ValueType,
                                     claim.Issuer

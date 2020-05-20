@@ -84,8 +84,8 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             Configure<AbpClaimsMapOptions>(options =>
             {
-                options.Maps.Add("SerialNumber", ClaimTypes.SerialNumber);
-                options.Maps.Add("DateOfBirth", ClaimTypes.DateOfBirth);
+                options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
+                options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
             });
         }
 
