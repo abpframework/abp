@@ -1,4 +1,5 @@
 import { FormControl } from '@angular/forms';
+import { validateRange } from '../validators';
 import { validateCreditCard } from '../validators/credit-card.validator';
 import { validateRequired } from '../validators/required.validator';
 
@@ -35,6 +36,42 @@ describe('Validators', () => {
     it('should return null when control is pristine', () => {
       const invalidNumber = '5105105105105101';
       const control = new FormControl(invalidNumber, [validateCreditCard()]);
+      // control is not dirty
+
+      expect(control.valid).toBe(true);
+    });
+  });
+
+  describe('Range Validator', () => {
+    test.each`
+      input        | options                       | expected
+      ${null}      | ${undefined}                  | ${{ min: 0, max: Infinity }}
+      ${undefined} | ${undefined}                  | ${{ min: 0, max: Infinity }}
+      ${''}        | ${undefined}                  | ${{ min: 0, max: Infinity }}
+      ${0}         | ${undefined}                  | ${null}
+      ${Infinity}  | ${undefined}                  | ${null}
+      ${null}      | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
+      ${undefined} | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
+      ${''}        | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
+      ${0}         | ${{ minimum: 0 }}             | ${null}
+      ${2}         | ${{ minimum: 3, maximum: 5 }} | ${{ min: 3, max: 5 }}
+      ${3}         | ${{ minimum: 3, maximum: 5 }} | ${null}
+      ${5}         | ${{ minimum: 3, maximum: 5 }} | ${null}
+      ${6}         | ${{ minimum: 3, maximum: 5 }} | ${{ min: 3, max: 5 }}
+    `(
+      'should return $expected when input is $input and options are $options',
+      ({ input, options, expected }) => {
+        const control = new FormControl(input, [validateRange(options)]);
+        control.markAsDirty({ onlySelf: true });
+        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+        expect(control.errors).toEqual(expected);
+      },
+    );
+
+    it('should return null when control is pristine', () => {
+      const invalidUrl = '';
+      const control = new FormControl(invalidUrl, [validateRange({ minimum: 3 })]);
       // control is not dirty
 
       expect(control.valid).toBe(true);
