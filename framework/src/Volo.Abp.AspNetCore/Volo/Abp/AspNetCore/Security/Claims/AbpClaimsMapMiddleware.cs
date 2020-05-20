@@ -13,15 +13,32 @@ namespace Volo.Abp.AspNetCore.Security.Claims
     {
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var currentPrincipalAccessor = context.RequestServices.GetRequiredService<ICurrentPrincipalAccessor>();
-            var mapOptions = context.RequestServices.GetRequiredService<IOptions<AbpClaimsMapOptions>>().Value;
+            var currentPrincipalAccessor = context.RequestServices
+                .GetRequiredService<ICurrentPrincipalAccessor>();
 
-            var mapClaims = currentPrincipalAccessor.Principal.Claims.Where(p => mapOptions.Maps.Keys.Contains(p.Type));
-            currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(
-                mapOptions.Maps[p.Type],
-                p.Value,
-                p.ValueType,
-                p.Issuer))));
+            var mapOptions = context.RequestServices
+                .GetRequiredService<IOptions<AbpClaimsMapOptions>>().Value;
+
+            var mapClaims = currentPrincipalAccessor
+                .Principal
+                .Claims
+                .Where(claim => mapOptions.Maps.Keys.Contains(claim.Type));
+
+            currentPrincipalAccessor
+                .Principal
+                .AddIdentity(
+                    new ClaimsIdentity(
+                        mapClaims
+                            .Select(
+                                claim => new Claim(
+                                    mapOptions.Maps[claim.Type],
+                                    claim.Value,
+                                    claim.ValueType,
+                                    claim.Issuer
+                                )
+                            )
+                    )
+                );
 
             await next(context);
         }

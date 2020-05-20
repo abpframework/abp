@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
@@ -16,7 +13,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
-using Volo.Abp.Security.Claims;
 using Volo.Abp.TestApp;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
