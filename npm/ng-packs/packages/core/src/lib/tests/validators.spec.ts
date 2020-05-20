@@ -2,6 +2,7 @@ import { FormControl } from '@angular/forms';
 import { validateRange } from '../validators';
 import { validateCreditCard } from '../validators/credit-card.validator';
 import { validateRequired } from '../validators/required.validator';
+import { validateStringLength } from '../validators/string-length.validator';
 
 describe('Validators', () => {
   describe('Credit Card Validator', () => {
@@ -105,6 +106,42 @@ describe('Validators', () => {
     it('should return null when control is pristine', () => {
       const invalidUrl = '';
       const control = new FormControl(invalidUrl, [validateRequired()]);
+      // control is not dirty
+
+      expect(control.valid).toBe(true);
+    });
+  });
+
+  describe('String Length Validator', () => {
+    test.each`
+      input        | options                 | expected
+      ${null}      | ${undefined}            | ${null}
+      ${undefined} | ${undefined}            | ${null}
+      ${''}        | ${undefined}            | ${null}
+      ${null}      | ${{ minimumLength: 0 }} | ${null}
+      ${undefined} | ${{ minimumLength: 0 }} | ${null}
+      ${''}        | ${{ minimumLength: 0 }} | ${null}
+      ${null}      | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
+      ${undefined} | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
+      ${''}        | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
+      ${'ab'}      | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
+      ${'abp'}     | ${{ minimumLength: 3 }} | ${null}
+      ${'abp'}     | ${{ maximumLength: 2 }} | ${{ maxlength: 2 }}
+      ${'abp'}     | ${{ maximumLength: 3 }} | ${null}
+    `(
+      'should return $expected when input is $input and options are $options',
+      ({ input, options, expected }) => {
+        const control = new FormControl(input, [validateStringLength(options)]);
+        control.markAsDirty({ onlySelf: true });
+        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+        expect(control.errors).toEqual(expected);
+      },
+    );
+
+    it('should return null when control is pristine', () => {
+      const invalidUrl = '';
+      const control = new FormControl(invalidUrl, [validateStringLength({ minimumLength: 3 })]);
       // control is not dirty
 
       expect(control.valid).toBe(true);
