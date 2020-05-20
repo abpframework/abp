@@ -16,6 +16,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.AspNetCore.Routing;
@@ -27,6 +28,7 @@ using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.ViewFeatures;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -75,14 +77,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                     (int) HttpStatusCode.NotImplemented,
                     (int) HttpStatusCode.InternalServerError
                 };
-                
+
                 options.SupportedResponseTypes.AddIfNotContains(statusCodes.Select(statusCode => new ApiResponseType
                 {
                     Type = typeof(RemoteServiceErrorResponse),
                     StatusCode = statusCode
                 }));
             });
-            
+
             context.Services.PostConfigure<AbpAspNetCoreMvcOptions>(options =>
             {
                 if (options.MinifyGeneratedScript == null)
@@ -126,10 +128,10 @@ namespace Volo.Abp.AspNetCore.Mvc
                             return factory.Create(resourceType);
                         }
 
-                        return factory.CreateDefaultOrNull() ?? 
+                        return factory.CreateDefaultOrNull() ??
                                factory.Create(type);
                     };
-                })                
+                })
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
             Configure<MvcRazorRuntimeCompilationOptions>(options =>
@@ -161,6 +163,15 @@ namespace Volo.Abp.AspNetCore.Mvc
             var application = context.Services.GetSingletonInstance<IAbpApplication>();
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
+
+            //Replace the built-in RazorCompiledItemFeatureProvider in ASP NET Core.
+            var viewsFeatureProvider = partManager.FeatureProviders.FirstOrDefault(x => x is IApplicationFeatureProvider<ViewsFeature>);
+            if (viewsFeatureProvider != null)
+            {
+                partManager.FeatureProviders.Remove(viewsFeatureProvider);
+            }
+            partManager.FeatureProviders.Add(new AbpRazorCompiledItemFeatureProvider(application));
+
             partManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcModule).Assembly));
 
             Configure<MvcOptions>(mvcOptions =>
