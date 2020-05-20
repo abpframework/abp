@@ -66,5 +66,6 @@ export namespace ApplicationConfiguration {
     id: string;
     tenantId: string;
     userName: string;
+    email: string;
   }
 }

@@ -32,21 +32,21 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
         }
 
         [UnitOfWork(isTransactional: true)]
-        public void OnGetHandledException()
+        public ObjectResult OnGetHandledException()
         {
             CurrentUnitOfWork.ShouldNotBeNull();
             CurrentUnitOfWork.Options.IsTransactional.ShouldBeTrue();
 
             throw new UserFriendlyException("This is a sample exception!");
         }
-        
+
         public ObjectResult OnGetExceptionOnComplete()
         {
             CurrentUnitOfWork.ShouldNotBeNull();
             CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
 
             _testUnitOfWorkConfig.ThrowExceptionOnComplete = true;
-            
+
             //Prevent rendering of pages.
             return new ObjectResult("");
         }

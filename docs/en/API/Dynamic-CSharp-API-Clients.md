@@ -39,7 +39,7 @@ Now, it's ready to create the client proxies. Example:
 ````csharp
 [DependsOn(
     typeof(AbpHttpClientModule), //used to create client proxies
-    typeof(BookStoreApplicationModule) //contains the application service interfaces
+    typeof(BookStoreApplicationContractsModule) //contains the application service interfaces
     )]
 public class MyClientAppModule : AbpModule
 {
@@ -47,7 +47,7 @@ public class MyClientAppModule : AbpModule
     {
         //Create dynamic client proxies
         context.Services.AddHttpClientProxies(
-            typeof(BookStoreApplicationModule).Assembly
+            typeof(BookStoreApplicationContractsModule).Assembly
         );
     }
 }
@@ -142,12 +142,12 @@ The examples above have configured the "Default" remote service endpoint. You ma
 
 ````csharp
 context.Services.AddHttpClientProxies(
-    typeof(BookStoreApplicationModule).Assembly,
-    remoteServiceName: "BookStore"
+    typeof(BookStoreApplicationContractsModule).Assembly,
+    remoteServiceConfigurationName: "BookStore"
 );
 ````
 
-`remoteServiceName` parameter matches the service endpoint configured via `AbpRemoteServiceOptions`. If the `BookStore` endpoint is not defined then it fallbacks to the `Default` endpoint.
+`remoteServiceConfigurationName` parameter matches the service endpoint configured via `AbpRemoteServiceOptions`. If the `BookStore` endpoint is not defined then it fallbacks to the `Default` endpoint.
 
 ### As Default Services
 
@@ -155,7 +155,7 @@ When you create a service proxy for `IBookAppService`, you can directly inject t
 
 ````csharp
 context.Services.AddHttpClientProxies(
-    typeof(BookStoreApplicationModule).Assembly,
+    typeof(BookStoreApplicationContractsModule).Assembly,
     asDefaultServices: false
 );
 ````

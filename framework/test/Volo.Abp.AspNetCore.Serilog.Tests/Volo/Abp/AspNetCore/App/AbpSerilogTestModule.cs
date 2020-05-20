@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.App
             app.UseMultiTenancy();
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

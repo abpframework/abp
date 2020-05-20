@@ -50,6 +50,8 @@ namespace Volo.Abp.ObjectExtending.Modularity
 
             configureAction?.Invoke(propertyInfo);
 
+            NormalizeProperty(propertyInfo);
+
             return this;
         }
 
@@ -57,6 +59,24 @@ namespace Volo.Abp.ObjectExtending.Modularity
         public virtual ImmutableList<ExtensionPropertyConfiguration> GetProperties()
         {
             return Properties.Values.ToImmutableList();
+        }
+
+        private static void NormalizeProperty(ExtensionPropertyConfiguration propertyInfo)
+        {
+            if (!propertyInfo.Api.OnGet.IsAvailable)
+            {
+                propertyInfo.UI.OnTable.IsVisible = false;
+            }
+
+            if (!propertyInfo.Api.OnCreate.IsAvailable)
+            {
+                propertyInfo.UI.OnCreateForm.IsVisible = false;
+            }
+
+            if (!propertyInfo.Api.OnUpdate.IsAvailable)
+            {
+                propertyInfo.UI.OnEditForm.IsVisible = false;
+            }
         }
     }
 }

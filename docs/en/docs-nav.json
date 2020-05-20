@@ -383,6 +383,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "ListService",
+              "path": "UI/Angular/List-Service.md"
             }
           ]
         },

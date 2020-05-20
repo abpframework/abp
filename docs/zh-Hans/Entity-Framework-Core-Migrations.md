@@ -550,6 +550,8 @@ public class IdentityRoleExtendingService : ITransientDependency
 
 你需要做的就是如上所诉使用 `ObjectExtensionManager` 定义额外属性, 然后你就可以使得 `GetProperty` 和 `SetProperty` 方法对实体的属性进行get/set,但是这时它存储在数据库表的单独字段中.
 
+参阅[实体扩展系统](Customizing-Application-Modules-Extending-Entities.md)了解更多.
+
 ###### 创建新表
 
 你可以创建**自己的表**来存储属性,而不是创建新实体并映射到同一表. 你通常复制原始实体的一些值. 例如可以将 `Name` 字段添加到你自己的表中,它是原表中 `Name` 字段的副本.

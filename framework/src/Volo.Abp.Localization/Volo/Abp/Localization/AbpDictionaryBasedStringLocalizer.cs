@@ -177,9 +177,7 @@ namespace Volo.Abp.Localization
 
             return allStrings.Values.ToImmutableList();
         }
-
         
-
         public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
         {
             private readonly string _cultureName;

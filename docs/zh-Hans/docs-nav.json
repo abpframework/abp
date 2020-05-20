@@ -30,8 +30,16 @@
           "text": "应用开发",
           "items": [
             {
-              "text": "使用 ASP.NET Core MVC",
-              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+              "text": "第一章: 创建新解决方案和列表页",
+              "path": "Tutorials/Part-1.md"
+            },
+            {
+              "text": "第一章: 增删改查操作",
+              "path": "Tutorials/Part-2.md"
+            },
+            {
+              "text": "第三章: 集成测试",
+              "path": "Tutorials/Part-3.md"
             }
           ]
         }
@@ -172,6 +180,10 @@
           "text": "对象到对象映射",
           "path": "Object-To-Object-Mapping.md"
 
+        },
+        {
+          "text": "文本模板",
+          "path": "Text-Templating.md"
         },
         {
           "text": "JSON序列化"
@@ -487,6 +499,10 @@
     {
       "text": "示例",
       "items": [
+        {
+          "text": "所有示例",
+          "path": "Samples/Index.md"
+        },
         {
           "text": "微服务示例",
           "path": "Samples/Microservice-Demo.md"

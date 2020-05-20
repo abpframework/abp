@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.ObjectExtending.Modularity
@@ -148,9 +149,12 @@ namespace Volo.Abp.ObjectExtending.Modularity
                     propertyConfig.Name,
                     property =>
                     {
+                        property.Attributes.Clear();
                         property.Attributes.AddRange(propertyConfig.Attributes);
                         property.DisplayName = propertyConfig.DisplayName;
                         property.Validators.AddRange(propertyConfig.Validators);
+                        property.DefaultValue = propertyConfig.DefaultValue;
+                        property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
                     }
                 );
         }
