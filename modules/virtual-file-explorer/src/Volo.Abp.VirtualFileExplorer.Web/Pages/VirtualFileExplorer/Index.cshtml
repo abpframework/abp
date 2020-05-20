@@ -5,7 +5,6 @@
 @using Volo.Abp.VirtualFileExplorer.Web.Localization
 @using Volo.Abp.VirtualFileExplorer.Web.Navigation
 @using Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
-@using Volo.Abp.VirtualFileSystem.Embedded
 @model IndexModel
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<VirtualFileExplorerResource> L
@@ -53,36 +52,45 @@
 
             <tbody>
             @{
-                foreach (var item in Model.FileInfoList)
+                if (!Model.FileInfoList.Any())
                 {
                     <tr>
-                        <td>
-                            @if (!item.IsDirectory)
-                            {
-                                <div class="dropdown action-button">
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a onclick="showContent('@item.FilePath')">@L["FileContent"]</a>
-                                        </li>
-                                    </ul>
-                                    <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-cog mr-1"></i>@UiLocalizer["Actions"]
-                                    </button>
-                                </div>
-                            }
-                            else
-                            {
-                                <span>/</span>
-                            }
-                        </td>
-                        <td>@Html.Raw(item.FileName)</td>
-                        <td>
-                            <i class="@item.Icon"></i>
-                            <span>@item.FileType</span>
-                        </td>
-                        <td>@item.LastUpdateTime</td>
-                        <td>@item.Length</td>
+                        <td colspan="5" style="text-align: center">@L["EmptyFileInfoList"]</td>
                     </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.FileInfoList)
+                    {
+                        <tr>
+                            <td>
+                                @if (!item.IsDirectory)
+                                {
+                                    <div class="dropdown action-button">
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a onclick="showContent('@item.FilePath')">@L["FileContent"]</a>
+                                            </li>
+                                        </ul>
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                            <i class="fa fa-cog mr-1"></i>@UiLocalizer["Actions"]
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span>/</span>
+                                }
+                            </td>
+                            <td>@Html.Raw(item.FileName)</td>
+                            <td>
+                                <i class="@item.Icon"></i>
+                                <span>@item.FileType</span>
+                            </td>
+                            <td>@item.LastUpdateTime</td>
+                            <td>@item.Length</td>
+                        </tr>
+                    }
                 }
             }
             </tbody>

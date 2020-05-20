@@ -7,6 +7,8 @@
     "LastUpdateTime" : "Last update time",
     "VirtualFileName" : "Virtual file name",
     "FileContent" : "File content",
-    "Size" : "Size"
+    "Size" : "Size",
+    "BackToRoot" : "Back to root",
+    "EmptyFileInfoList" : "There are no virtual files"
   }
 }

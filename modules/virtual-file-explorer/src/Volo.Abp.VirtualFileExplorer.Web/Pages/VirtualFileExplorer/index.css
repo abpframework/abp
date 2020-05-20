@@ -1,3 +1,7 @@
-﻿.breadcrumb {
-    background-color: transparent;
+﻿.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    max-height: 80vh;
+    overflow-y: auto;
 }

@@ -7,6 +7,8 @@
     "LastUpdateTime" : "最后更新时间",
     "VirtualFileName" : "虚拟文件名称",
     "FileContent" : "文件内容",
-    "Size" : "文件大小"
+    "Size" : "文件大小",
+    "BackToRoot" : "回到根目录",
+    "EmptyFileInfoList" : "这里没有任何虚拟文件"
   }
 }

@@ -90,7 +90,7 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
 
             navigationBuild.Append($"<nav aria-label='breadcrumb'>" +
                                    $" <ol class='breadcrumb'>" +
-                                   $"<li class='breadcrumb-item'><a href='{href}/'>Root</a></li>");
+                                   $"<li class='breadcrumb-item'><a href='{href}/'>{L["BackToRoot"]}</a></li>");
 
             foreach (var item in pathArray)
             {
