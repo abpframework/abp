@@ -16,9 +16,9 @@ namespace Volo.Abp.AspNetCore.Security.Claims
             var currentPrincipalAccessor = context.RequestServices.GetRequiredService<ICurrentPrincipalAccessor>();
             var mapOptions = context.RequestServices.GetRequiredService<IOptions<AbpClaimsMapOptions>>().Value;
 
-            var mapClaims = currentPrincipalAccessor.Principal.Claims.Where(p => mapOptions.Map.Keys.Contains(p.Type));
+            var mapClaims = currentPrincipalAccessor.Principal.Claims.Where(p => mapOptions.Maps.Keys.Contains(p.Type));
             currentPrincipalAccessor.Principal.AddIdentity(new ClaimsIdentity(mapClaims.Select(p => new Claim(
-                mapOptions.Map[p.Type],
+                mapOptions.Maps[p.Type],
                 p.Value,
                 p.ValueType,
                 p.Issuer))));

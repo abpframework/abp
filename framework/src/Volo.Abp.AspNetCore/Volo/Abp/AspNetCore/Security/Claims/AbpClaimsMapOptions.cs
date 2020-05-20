@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Security.Claims
 {
     public class AbpClaimsMapOptions
     {
-        public Dictionary<string, string> Map { get; }
+        public Dictionary<string, string> Maps { get; }
 
         public AbpClaimsMapOptions()
         {
-            Map = new Dictionary<string, string>();
+            Maps = new Dictionary<string, string>()
+            {
+                { "sub", AbpClaimTypes.UserId },
+                { "role", AbpClaimTypes.Role },
+                { "email", AbpClaimTypes.Email },
+            };
         }
     }
 }
