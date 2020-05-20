@@ -99,6 +99,18 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public virtual async Task<int> GetRolesCountAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default)
+        {
+            var query = from organizationRole in DbContext.Set<OrganizationUnitRole>()
+                        join role in DbContext.Roles on organizationRole.RoleId equals role.Id
+                        where organizationRole.OrganizationUnitId == organizationUnit.Id
+                        select role;
+
+            return await query.CountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,

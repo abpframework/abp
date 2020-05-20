@@ -91,6 +91,17 @@ namespace Volo.Abp.Identity.MongoDB
                 .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }
+
+        public virtual async Task<int> GetRolesCountAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default)
+        {
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id))
+                .As<IMongoQueryable<IdentityRole>>()
+                .CountAsync(cancellationToken);
+        }
+
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
@@ -114,7 +125,9 @@ namespace Volo.Abp.Identity.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<int> GetMembersCountAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        public virtual async Task<int> GetMembersCountAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default)
         {
             return await DbContext.Users.AsQueryable()
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))

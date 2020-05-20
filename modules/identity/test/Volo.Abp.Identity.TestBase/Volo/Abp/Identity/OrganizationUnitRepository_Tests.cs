@@ -135,12 +135,21 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
-        public async Task GetCountMembersCountInOrganizationUnit()
+        public async Task GetMembersCountOfOrganizationUnit()
         {
             OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
-            var users = await _organizationUnitRepository.GetMembersCountAsync(ou);
+            var usersCount = await _organizationUnitRepository.GetMembersCountAsync(ou);
 
-            users.ShouldBeGreaterThan(1);
+            usersCount.ShouldBeGreaterThan(1);
+        }
+
+        [Fact]
+        public async Task GetRolesCountOfOrganizationUnit()
+        {
+            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var rolesCount = await _organizationUnitRepository.GetRolesCountAsync(ou);
+
+            rolesCount.ShouldBeGreaterThan(1);
         }
     }
 }

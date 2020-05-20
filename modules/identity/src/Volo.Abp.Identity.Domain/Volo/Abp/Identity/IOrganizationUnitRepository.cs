@@ -50,6 +50,11 @@ namespace Volo.Abp.Identity
             CancellationToken cancellationToken = default
         );
 
+        Task<int> GetRolesCountAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default
+        );
+
         Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
