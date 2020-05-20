@@ -3,6 +3,7 @@ import { validateRange } from '../validators';
 import { validateCreditCard } from '../validators/credit-card.validator';
 import { validateRequired } from '../validators/required.validator';
 import { validateStringLength } from '../validators/string-length.validator';
+import { validateUrl } from '../validators/url.validator';
 
 describe('Validators', () => {
   describe('Credit Card Validator', () => {
@@ -142,6 +143,42 @@ describe('Validators', () => {
     it('should return null when control is pristine', () => {
       const invalidUrl = '';
       const control = new FormControl(invalidUrl, [validateStringLength({ minimumLength: 3 })]);
+      // control is not dirty
+
+      expect(control.valid).toBe(true);
+    });
+  });
+
+  describe('Url Validator', () => {
+    const error = { url: true };
+
+    test.each`
+      input                     | expected
+      ${'http://x'}             | ${null}
+      ${'http:///x'}            | ${error}
+      ${'https://x'}            | ${null}
+      ${'https:///x'}           | ${error}
+      ${'ftp://x'}              | ${null}
+      ${'ftp:///x'}             | ${error}
+      ${'http://x.com'}         | ${null}
+      ${'http://x.photography'} | ${null}
+      ${'http://www.x.org'}     | ${null}
+      ${'http://sub.x.gov.tr'}  | ${null}
+      ${'x'}                    | ${error}
+      ${'x.com'}                | ${error}
+      ${'www.x.org'}            | ${error}
+      ${'sub.x.gov.tr'}         | ${error}
+    `('should return $expected when input is $input', ({ input, expected }) => {
+      const control = new FormControl(input, [validateUrl()]);
+      control.markAsDirty({ onlySelf: true });
+      control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+      expect(control.errors).toEqual(expected);
+    });
+
+    it('should return null when control is pristine', () => {
+      const invalidUrl = 'x';
+      const control = new FormControl(invalidUrl, [validateUrl()]);
       // control is not dirty
 
       expect(control.valid).toBe(true);
