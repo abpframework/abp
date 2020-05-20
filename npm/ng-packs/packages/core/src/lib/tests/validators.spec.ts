@@ -1,5 +1,5 @@
-import { FormControl } from '@angular/forms';
-import { validateRange } from '../validators';
+import { FormControl, Validators } from '@angular/forms';
+import { AbpValidators, validateRange } from '../validators';
 import { validateCreditCard } from '../validators/credit-card.validator';
 import { validateRequired } from '../validators/required.validator';
 import { validateStringLength } from '../validators/string-length.validator';
@@ -44,6 +44,12 @@ describe('Validators', () => {
       // control is not dirty
 
       expect(control.valid).toBe(true);
+    });
+  });
+
+  describe('Email Validator', () => {
+    it('should return email validator of Angular', () => {
+      expect(AbpValidators.email()).toBe(Validators.email);
     });
   });
 
