@@ -78,11 +78,18 @@ namespace Volo.Abp.Identity.MongoDB
 
         public virtual async Task<List<IdentityRole>> GetRolesAsync(
             OrganizationUnit organizationUnit,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
-            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).ToListAsync(cancellationToken);
+            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id))
+                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .As<IMongoQueryable<IdentityRole>>()
+                .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
+                .ToListAsync(cancellationToken);
         }
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,

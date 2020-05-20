@@ -82,11 +82,21 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetOrganizationUnitRolesAsync()
         {
-            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", includeDetails: true);
 
-            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou, true);
+            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou, includeDetails: true);
             ou111Roles.Count.ShouldBe(2);
             ou111Roles.ShouldContain(n => n.Name == "manager");
+            ou111Roles.ShouldContain(n => n.Name == "moderator");
+        }
+
+        [Fact]
+        public async Task GetOrganizationUnitRolesWithPagingAsync()
+        {
+            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", includeDetails: true);
+
+            var ou111Roles = await _organizationUnitRepository.GetRolesAsync(ou, sorting: "name desc", maxResultCount: 1, includeDetails: true);
+            ou111Roles.Count.ShouldBe(1);
             ou111Roles.ShouldContain(n => n.Name == "moderator");
         }
 

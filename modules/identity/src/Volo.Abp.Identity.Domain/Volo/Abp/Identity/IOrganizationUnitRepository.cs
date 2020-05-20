@@ -43,6 +43,9 @@ namespace Volo.Abp.Identity
 
         Task<List<IdentityRole>> GetRolesAsync(
             OrganizationUnit organizationUnit,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );

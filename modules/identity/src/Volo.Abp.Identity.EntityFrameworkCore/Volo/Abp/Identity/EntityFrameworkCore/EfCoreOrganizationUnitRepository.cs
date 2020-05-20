@@ -82,6 +82,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public virtual async Task<List<IdentityRole>> GetRolesAsync(
             OrganizationUnit organizationUnit,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -89,6 +92,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         join role in DbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
                         where organizationRole.OrganizationUnitId == organizationUnit.Id
                         select role;
+            query = query
+                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .PageBy(skipCount, maxResultCount);
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
