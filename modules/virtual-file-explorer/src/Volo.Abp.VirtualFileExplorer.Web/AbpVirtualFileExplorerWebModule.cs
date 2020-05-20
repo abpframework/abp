@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Validation.Localization;
+using Volo.Abp.VirtualFileExplorer.Web.Bundling;
 using Volo.Abp.VirtualFileExplorer.Web.Localization;
 using Volo.Abp.VirtualFileExplorer.Web.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -45,6 +48,17 @@ namespace Volo.Abp.VirtualFileExplorer.Web
                         .Add<VirtualFileExplorerResource>("en")
                         .AddBaseTypes(typeof(AbpValidationResource))
                         .AddVirtualJson("/Localization/Resources");
+                });
+
+                Configure<AbpBundleContributorOptions>(options =>
+                {
+                    options
+                        .Extensions<PrismjsStyleBundleContributor>()
+                        .Add<PrismjsStyleBundleContributorDocsExtension>();
+
+                    options
+                        .Extensions<PrismjsScriptBundleContributor>()
+                        .Add<PrismjsScriptBundleContributorDocsExtension>();
                 });
             }
         }
