@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
@@ -40,6 +41,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
             {
                 return Redirect("/");
+            }
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
+            {
+                return NotFound();
             }
 
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
