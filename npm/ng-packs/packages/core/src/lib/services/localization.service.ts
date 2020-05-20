@@ -42,12 +42,6 @@ export class LocalizationService {
     this.languageChange.subscribe(({ payload }) => this.registerLocale(payload));
   }
 
-  /**
-   *
-   * @deprecated To be deleted in v2.9
-   */
-  setRouteReuse(reuse: ShouldReuseRoute) {}
-
   registerLocale(locale: string) {
     const router = this.injector.get(Router);
     const { shouldReuseRoute } = router.routeReuseStrategy;
