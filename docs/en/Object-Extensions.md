@@ -200,17 +200,17 @@ ObjectExtensionManager.Instance
 
 ````csharp
 ObjectExtensionManager.Instance
-    .AddOrUpdateProperty<IdentityUser, int>(
-        "MyIntProperty",
+    .AddOrUpdateProperty<IdentityUser, DateTime>(
+        "MyDateTimeProperty",
         options =>
         {
-            options.DefaultValueFactory = () => 42;
+            options.DefaultValueFactory = () => DateTime.Now;
         });
 ````
 
 `options.DefaultValueFactory` has a higher priority than the `options.DefaultValue` .
 
-> Tip: Use `DefaultValueFactory` option only if the default value may change over the time. If it is a constant value, then use the `DefaultValue` option.
+> Tip: Use `DefaultValueFactory` option only if the default value may change over the time (like `DateTime.Now` in this example). If it is a constant value, then use the `DefaultValue` option.
 
 #### CheckPairDefinitionOnMapping
 

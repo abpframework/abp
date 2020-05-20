@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Volo.Abp.ObjectExtending;
@@ -61,7 +60,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                 return value;
             }
 
-            return TypeHelper.ConvertFromString(propertyInfo.Type, value);
+            return TypeHelper.ConvertFromString(
+                propertyInfo.Type,
+                value
+            );
         }
     }
 }

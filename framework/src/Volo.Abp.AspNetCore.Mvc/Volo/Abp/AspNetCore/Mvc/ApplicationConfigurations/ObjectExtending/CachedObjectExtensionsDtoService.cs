@@ -39,7 +39,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
         {
             var objectExtensionsDto = new ObjectExtensionsDto
             {
-                Modules = new Dictionary<string, ModuleExtensionDto>()
+                Modules = new Dictionary<string, ModuleExtensionDto>(),
+                Enums = new Dictionary<string, ExtensionEnumDto>()
             };
 
             foreach (var moduleConfig in ObjectExtensionManager.Instance.Modules())
@@ -47,6 +48,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
                 objectExtensionsDto.Modules[moduleConfig.Key] = CreateModuleExtensionDto(moduleConfig.Value);
             }
 
+            FillEnums(objectExtensionsDto);
+              
             return objectExtensionsDto;
         }
 
@@ -104,9 +107,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             var extensionPropertyDto = new ExtensionPropertyDto
             {
                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(propertyConfig.Type),
-                TypeSimple = propertyConfig.Type.IsEnum
-                    ? "enum"
-                    : TypeHelper.GetSimplifiedName(propertyConfig.Type),
+                TypeSimple = GetSimpleTypeName(propertyConfig),
                 Attributes = new List<ExtensionPropertyAttributeDto>(),
                 DisplayName = CreateDisplayNameDto(propertyConfig),
                 Configuration = new Dictionary<string, object>(),
@@ -158,6 +159,26 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             return extensionPropertyDto;
         }
 
+        protected virtual string GetSimpleTypeName(ExtensionPropertyConfiguration propertyConfig)
+        {
+            if (propertyConfig.Type.IsEnum)
+            {
+                return "enum";
+            }
+
+            if (propertyConfig.IsDate())
+            {
+                return "date";
+            }
+
+            if (propertyConfig.IsDateTime())
+            {
+                return "datetime";
+            }
+
+            return TypeHelper.GetSimplifiedName(propertyConfig.Type);
+        }
+
         protected virtual LocalizableStringDto CreateDisplayNameDto(ExtensionPropertyConfiguration propertyConfig)
         {
             if (propertyConfig.DisplayName == null)
@@ -182,6 +203,46 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending
             }
 
             return null;
+        }
+
+        protected virtual void FillEnums(ObjectExtensionsDto objectExtensionsDto)
+        {
+            var enumProperties = ObjectExtensionManager.Instance.Modules().Values
+                .SelectMany(
+                    m => m.Entities.Values.SelectMany(
+                        e => e.GetProperties()
+                    )
+                )
+                .Where(p => p.Type.IsEnum)
+                .ToList();
+
+            foreach (var enumProperty in enumProperties)
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute (enumProperty.Type.FullName can not be null for this case)
+                objectExtensionsDto.Enums[enumProperty.Type.FullName] = CreateExtensionEnumDto(enumProperty);
+            }
+        }
+
+        protected virtual ExtensionEnumDto CreateExtensionEnumDto(ExtensionPropertyConfiguration enumProperty)
+        {
+            var extensionEnumDto = new ExtensionEnumDto
+            {
+                Fields = new List<ExtensionEnumFieldDto>(),
+                LocalizationResource = enumProperty.GetLocalizationResourceNameOrNull()
+            };
+
+            foreach (var enumValue in enumProperty.Type.GetEnumValues())
+            {
+                extensionEnumDto.Fields.Add(
+                    new ExtensionEnumFieldDto
+                    {
+                        Name = enumProperty.Type.GetEnumName(enumValue),
+                        Value = enumValue
+                    }
+                );
+            }
+
+            return extensionEnumDto;
         }
     }
 }

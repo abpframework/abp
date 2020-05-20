@@ -49,20 +49,29 @@ namespace Volo.Abp.Identity
         }
 
         public virtual async Task<List<IUserData>> SearchAsync(
-            string sorting,
-            string filter, 
-            int maxResultCount,
+            string sorting = null,
+            string filter = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
             var users = await UserRepository.GetListAsync(
                 sorting: sorting,
                 maxResultCount: maxResultCount,
+                skipCount: skipCount,
                 filter: filter,
                 includeDetails: false,
                 cancellationToken: cancellationToken
             );
 
             return users.Select(u => u.ToAbpUserData()).ToList();
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            return await UserRepository.GetCountAsync(filter, cancellationToken);
         }
     }
 }

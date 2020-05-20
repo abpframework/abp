@@ -8,7 +8,7 @@
     };
 
     /************************************************************************
-    * RECORD-ACTIONS extension for datatables                                         *
+    * RECORD-ACTIONS extension for datatables                               *
     *************************************************************************/
     (function () {
         if (!$.fn.dataTableExt) {
@@ -327,5 +327,33 @@
         };
 
     })();
+
+    /************************************************************************
+    * Default Renderers                                                     *
+    *************************************************************************/
+    
+    datatables.defaultRenderers = datatables.defaultRenderers || {};
+
+    datatables.defaultRenderers['boolean'] = function(value) {
+        if (value) {
+            return '<i class="fa fa-check"></i>';
+        } else {
+            return '<i class="fa fa-times"></i>';
+        }
+    };
+
+    datatables.defaultRenderers['date'] = function (value) {
+        return luxon
+            .DateTime
+            .fromISO(value, { locale: abp.localization.currentCulture.name })
+            .toLocaleString();
+    };
+
+    datatables.defaultRenderers['datetime'] = function (value) {
+        return luxon
+            .DateTime
+            .fromISO(value, { locale: abp.localization.currentCulture.name })
+            .toLocaleString(luxon.DateTime.DATETIME_SHORT);
+    };
 
 })(jQuery);
