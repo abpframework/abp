@@ -14,7 +14,7 @@ export function validateRange({ maximum = Infinity, minimum = 0 }: RangeOptions 
   return (control: AbstractControl): RangeError | null => {
     if (control.pristine) return null;
 
-    if (['', null, undefined].indexOf(control.value) > -1) return { min: minimum, max: maximum };
+    if (['', null, undefined].indexOf(control.value) > -1) return null;
 
     const value = Number(control.value);
     return getMinError(value, minimum, maximum) || getMaxError(value, maximum, minimum);

@@ -11,6 +11,9 @@ describe('Validators', () => {
 
     test.each`
       input                                       | expected
+      ${undefined}                                | ${null}
+      ${null}                                     | ${null}
+      ${''}                                       | ${null}
       ${'0'}                                      | ${error}
       ${'5105105105105100' /* Mastercard */}      | ${null}
       ${'5105105105105101' /* Mastercard */}      | ${error}
@@ -47,15 +50,13 @@ describe('Validators', () => {
   describe('Range Validator', () => {
     test.each`
       input        | options                       | expected
-      ${null}      | ${undefined}                  | ${{ min: 0, max: Infinity }}
-      ${undefined} | ${undefined}                  | ${{ min: 0, max: Infinity }}
-      ${''}        | ${undefined}                  | ${{ min: 0, max: Infinity }}
+      ${null}      | ${undefined}                  | ${null}
+      ${undefined} | ${undefined}                  | ${null}
+      ${''}        | ${undefined}                  | ${null}
       ${0}         | ${undefined}                  | ${null}
       ${Infinity}  | ${undefined}                  | ${null}
-      ${null}      | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
-      ${undefined} | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
-      ${''}        | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
-      ${0}         | ${{ minimum: 0 }}             | ${null}
+      ${'-1'}      | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
+      ${-1}        | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
       ${2}         | ${{ minimum: 3, maximum: 5 }} | ${{ min: 3, max: 5 }}
       ${3}         | ${{ minimum: 3, maximum: 5 }} | ${null}
       ${5}         | ${{ minimum: 3, maximum: 5 }} | ${null}
@@ -119,12 +120,6 @@ describe('Validators', () => {
       ${null}      | ${undefined}            | ${null}
       ${undefined} | ${undefined}            | ${null}
       ${''}        | ${undefined}            | ${null}
-      ${null}      | ${{ minimumLength: 0 }} | ${null}
-      ${undefined} | ${{ minimumLength: 0 }} | ${null}
-      ${''}        | ${{ minimumLength: 0 }} | ${null}
-      ${null}      | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
-      ${undefined} | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
-      ${''}        | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
       ${'ab'}      | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
       ${'abp'}     | ${{ minimumLength: 3 }} | ${null}
       ${'abp'}     | ${{ maximumLength: 2 }} | ${{ maxlength: 2 }}
@@ -154,6 +149,9 @@ describe('Validators', () => {
 
     test.each`
       input                     | expected
+      ${undefined}              | ${null}
+      ${null}                   | ${null}
+      ${''}                     | ${null}
       ${'http://x'}             | ${null}
       ${'http:///x'}            | ${error}
       ${'https://x'}            | ${null}
