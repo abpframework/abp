@@ -24,13 +24,11 @@
     Layout = null;
     AbpAntiForgeryManager.SetCookie();
     var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
-
 }
 
 <!DOCTYPE html>
 
 <html lang="@CultureInfo.CurrentCulture.Name" dir=@(CultureHelper.IsRtl ? "rtl" : "")>
-<!--<![endif]-->">
 <head>
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Account)
 

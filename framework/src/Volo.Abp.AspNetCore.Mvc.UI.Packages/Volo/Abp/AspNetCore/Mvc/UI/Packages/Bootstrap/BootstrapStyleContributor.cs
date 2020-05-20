@@ -8,10 +8,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            if(CultureHelper.IsRtl)
+            if (CultureHelper.IsRtl)
+            {
                 context.Files.AddIfNotContains("/libs/bootstrap/css/bootstrap-rtl.css");
+            }
             else
+            {
                 context.Files.AddIfNotContains("/libs/bootstrap/css/bootstrap.css");
+            }
         }
     }
 }
