@@ -24,6 +24,11 @@
 
 * [Node v12+](https://nodejs.org)
 * [Yarn v1.19+](https://classic.yarnpkg.com/)
+{{ if Tiered == "Yes" }}
+
+* [Redis](https://redis.io/): 应用程序将Redis用作[分布式缓存](../Caching.md). 因此你需要安装并运行Redis.
+
+{{ end }}
 
 > 你可以也使用其他支持.NET Core 和 ASP.NET Core的编辑器.
 
@@ -106,6 +111,7 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 {{end}}
 
 {{ else if UI == "NG" }}
+
 在创建的解决方案中有三个文件夹:
 
 ![](images/solution-files-non-mvc.png)
@@ -115,6 +121,7 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 * `react-native` 文件夹包含React Native UI 应用程序.
 
 打开 `aspnet-core` 文件夹下的 `.sln`(`Visual Studio`解决方案)文件:
+
 ![vs-angular-app-backend-solution-structure](images/vs-spa-app-backend-structure{{if DB == "Mongo"}}-mongodb{{end}}.png)
 
 {{ end }}

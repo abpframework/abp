@@ -105,7 +105,14 @@ namespace Volo.Abp.Modularity
             //PreConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
             {
-                ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
+                try
+                {
+                    ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during {nameof(IPreConfigureServices.PreConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                }
             }
 
             //ConfigureServices
@@ -119,13 +126,27 @@ namespace Volo.Abp.Modularity
                     }
                 }
 
-                module.Instance.ConfigureServices(context);
+                try
+                {
+                    module.Instance.ConfigureServices(context);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during {nameof(IAbpModule.ConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                }
             }
 
             //PostConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
             {
-                ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
+                try
+                {
+                    ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
+                }
+                catch (Exception ex)
+                {
+                    throw new AbpInitializationException($"An error occurred during {nameof(IPostConfigureServices.PostConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                }
             }
 
             foreach (var module in modules)

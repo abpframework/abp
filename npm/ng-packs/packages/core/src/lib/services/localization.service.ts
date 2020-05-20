@@ -1,11 +1,13 @@
 import { Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { SetLanguage } from '../actions/session.actions';
+import { Config } from '../models/config';
 import { ConfigState } from '../states/config.state';
 import { registerLocale } from '../utils/initial-utils';
-import { Config } from '../models/config';
-import { SetLanguage } from '../actions/session.actions';
+import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
 
@@ -16,6 +18,10 @@ export class LocalizationService {
    */
   get currentLang(): string {
     return this.store.selectSnapshot(state => state.SessionState.language);
+  }
+
+  get languageChange(): Observable<SetLanguage> {
+    return this.actions.pipe(ofActionSuccessful(SetLanguage));
   }
 
   constructor(
@@ -33,9 +39,7 @@ export class LocalizationService {
   }
 
   private listenToSetLanguage() {
-    this.actions
-      .pipe(ofActionSuccessful(SetLanguage))
-      .subscribe(({ payload }) => this.registerLocale(payload));
+    this.languageChange.subscribe(({ payload }) => this.registerLocale(payload));
   }
 
   setRouteReuse(reuse: ShouldReuseRoute) {
@@ -74,5 +78,33 @@ export class LocalizationService {
    */
   instant(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]): string {
     return this.store.selectSnapshot(ConfigState.getLocalization(key, ...interpolateParams));
+  }
+
+  localize(resourceName: string, key: string, defaultValue: string): Observable<string> {
+    return this.store.select(ConfigState.getOne('localization')).pipe(
+      map(createLocalizer),
+      map(localize => localize(resourceName, key, defaultValue)),
+    );
+  }
+
+  localizeSync(resourceName: string, key: string, defaultValue: string): string {
+    const localization = this.store.selectSnapshot(ConfigState.getOne('localization'));
+    return createLocalizer(localization)(resourceName, key, defaultValue);
+  }
+
+  localizeWithFallback(
+    resourceNames: string[],
+    keys: string[],
+    defaultValue: string,
+  ): Observable<string> {
+    return this.store.select(ConfigState.getOne('localization')).pipe(
+      map(createLocalizerWithFallback),
+      map(localizeWithFallback => localizeWithFallback(resourceNames, keys, defaultValue)),
+    );
+  }
+
+  localizeWithFallbackSync(resourceNames: string[], keys: string[], defaultValue: string): string {
+    const localization = this.store.selectSnapshot(ConfigState.getOne('localization'));
+    return createLocalizerWithFallback(localization)(resourceNames, keys, defaultValue);
   }
 }

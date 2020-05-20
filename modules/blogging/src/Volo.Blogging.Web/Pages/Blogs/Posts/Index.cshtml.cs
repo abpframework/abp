@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
@@ -37,6 +38,11 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public virtual async Task<ActionResult> OnGetAsync()
         {
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
+            {
+                return NotFound();
+            }
+
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
             Posts = (await _postAppService.GetListByBlogIdAndTagName(Blog.Id, TagName)).Items;
             PopularTags = (await _tagAppService.GetPopularTags(Blog.Id, new GetPopularTagsInput {ResultCount = 10, MinimumPostCount = 2}));

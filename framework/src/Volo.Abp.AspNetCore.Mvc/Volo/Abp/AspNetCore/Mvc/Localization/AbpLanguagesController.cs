@@ -8,6 +8,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
 {
     [Area("Abp")]
     [Route("Abp/Languages/[action]")]
+    [RemoteService(false)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AbpLanguagesController : AbpController
     {
         [HttpGet]

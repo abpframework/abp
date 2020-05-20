@@ -48,10 +48,9 @@
         <div class="p-5 card-body">
             @foreach (var docs in Model.SearchOutputs)
             {
-                <div class="media text-muted">
-                    <div class="media-body pb-3 small">
-                        <div class="list-group">
-
+                <div class="row">
+                    <div class="col">
+                        <div class="pb-4 small">
                             @functions
                                 {
                                 string RemoveFileExtensionFromPath(string path)
@@ -66,7 +65,6 @@
                                         : path;
                                 }
                             }
-
                             <h5 class="mb-3">
                                 <a href="/@Model.LanguageCode/@Model.ProjectName/@Model.Version/@RemoveFileExtensionFromPath(docs.Name)">
                                     @RemoveFileExtensionFromPath(docs.Name)
@@ -75,10 +73,10 @@
                             <div class="mb-4">
                                 @foreach (var highlight in docs.Highlight)
                                 {
-                                    <p class=" ">@Html.Raw(highlight)</p>
+                                    <p class="mb-2">@Html.Raw(highlight)</p>
                                 }
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
             }

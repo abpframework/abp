@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore;
@@ -193,8 +193,6 @@ namespace MyCompanyName.MyProjectName.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            app.UseCorrelationId();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -203,6 +201,8 @@ namespace MyCompanyName.MyProjectName.Web
             {
                 app.UseErrorPage();
             }
+
+            app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
@@ -212,9 +212,10 @@ namespace MyCompanyName.MyProjectName.Web
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -222,7 +223,7 @@ namespace MyCompanyName.MyProjectName.Web
             });
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

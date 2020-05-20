@@ -34,6 +34,7 @@
     <ProjectReference Include="..\..\modules\product\src\ProductManagement.EntityFrameworkCore\ProductManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\product\src\ProductManagement.HttpApi\ProductManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\shared\MsDemo.Shared\MsDemo.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.EntityFrameworkCore\Volo.Abp.TenantManagement.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,5 +43,5 @@
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
   </ItemGroup>
-
+  
 </Project>

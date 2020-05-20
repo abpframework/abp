@@ -20,7 +20,7 @@
     "ThisFieldIsNotValid.": "Campo inválido.",
     "ThisFieldIsNotAValidEmailAddress.": "E-mail inválido.",
     "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "Este campo só aceita arquivos com asseguintes extensões: {0}",
-    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}": "This field must be a string or array type with a maximum length of '{0}'.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}": "This field must be a string or array type with a maximum length of '{0}'.",
     "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "This field must be a string or array type with a minimum length of '{0}'.",
     "ThisFieldIsNotAValidPhoneNumber.": "Número de telefone inválido.",
     "ThisFieldMustBeBetween{0}And{1}": "Este campo deve estar entre {0} e {1}.",

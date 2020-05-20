@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
-using Microsoft.Extensions.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending
 {
-    public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName
+    public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, IBasicObjectExtensionPropertyInfo
     {
         [NotNull]
         public ObjectExtensionInfo ObjectExtension { get; }
@@ -48,6 +48,19 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
 
+        /// <summary>
+        /// Uses as the default value if <see cref="DefaultValueFactory"/> was not set.
+        /// </summary>
+        [CanBeNull]
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// Used with the first priority to create the default value for the property.
+        /// Uses to the <see cref="DefaultValue"/> if this was not set.
+        /// </summary>
+        [CanBeNull]
+        public Func<object> DefaultValueFactory { get; set; }
+
         public ObjectExtensionPropertyInfo(
             [NotNull] ObjectExtensionInfo objectExtension,
             [NotNull] Type type,
@@ -61,6 +74,14 @@ namespace Volo.Abp.ObjectExtending
             ValidationAttributes = new List<ValidationAttribute>();
             Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
+
+            Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
+            DefaultValue = TypeHelper.GetDefaultValue(Type);
+        }
+
+        public object GetDefaultValue()
+        {
+            return ExtensionPropertyHelper.GetDefaultValue(Type, DefaultValueFactory, DefaultValue);
         }
     }
 }
