@@ -3,10 +3,15 @@
   background: white;
   padding: 10px;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  font-size: 16px; }
-  div.vs-blog a, div.vs-blog a:hover {
-    text-decoration: none;
-    color: #000000; }
+  font-size: 15px; }
+  div.vs-blog .post-content {
+    color: #555; }
+    div.vs-blog .post-content a {
+      text-decoration: underline !important;
+      color: #555; }
+    div.vs-blog .post-content a:hover {
+      text-decoration: underline !important;
+      color: #000000; }
   div.vs-blog p {
     color: #444; }
     div.vs-blog p a {
@@ -96,11 +101,25 @@
     div.vs-blog .hero-section .hero-articles {
       position: relative;
       overflow: hidden; }
+      div.vs-blog .hero-section .hero-articles .hero-content h1 {
+        margin-top: 2em;
+        font-size: 2em;
+        font-weight: bold;
+        line-height: 1.25; }
+        div.vs-blog .hero-section .hero-articles .hero-content h1 a {
+          color: #000;
+          font-weight: 700; }
+          div.vs-blog .hero-section .hero-articles .hero-content h1 a:hover {
+            text-decoration: none; }
       div.vs-blog .hero-section .hero-articles .hero-content h2 {
         margin-top: .5rem;
         font-size: 1.75em;
         font-weight: bold;
         line-height: 1.25; }
+        div.vs-blog .hero-section .hero-articles .hero-content h2 a {
+          color: #000; }
+          div.vs-blog .hero-section .hero-articles .hero-content h2 a:hover {
+            text-decoration: none; }
       div.vs-blog .hero-section .hero-articles .tags .tag {
         background: rgba(208, 208, 208, 0.3);
         color: #fff !important; }
@@ -294,5 +313,10 @@
       width: 64px; }
     div.vs-blog .comment-area .answer-avatar {
       width: 64px; }
+  div.vs-blog .box-articles h3 a {
+    color: #000;
+    font-weight: 700; }
+    div.vs-blog .box-articles h3 a:hover {
+      text-decoration: none; }
   div.vs-blog > .form-group {
     margin: 0 !important; }
