@@ -1,4 +1,4 @@
-# ABP v2.8.0 Releases & Road Maps
+# ABP v2.8.0 Releases & Road Map
 
 The **ABP Framework** & and the **ABP Commercial** v2.8 have been released. This post will cover **what's new** with these releases and the **middle-term road maps** for the projects.
 
