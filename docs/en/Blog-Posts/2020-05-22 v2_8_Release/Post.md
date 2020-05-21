@@ -194,7 +194,7 @@ In addition, we will be working on the following items in the middle term:
 
 While the ABP Framework and the ABP Commercial are the fundamental components of the ABP.IO Platform, we want to create a much bigger platform to bring the .NET community together to create reusable modules, share knowledge, help each other by taking the advantage of the ABP Framework's unified and standardized development model.
 
-So, we new *.abp.io web site ideas I want to share with the community
+So, we have new *.abp.io web site ideas I want to share with the community
 
 #### market.abp.io
 
