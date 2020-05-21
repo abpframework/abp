@@ -45,6 +45,9 @@
   * [源码](https://github.com/abpframework/abp-samples/tree/master/RabbitMqEventBus)
   * [分布式事件总线文档](../Distributed-Event-Bus.md)
   * [RabbitMQ 分布式事件总线集成文档](../Distributed-Event-Bus-RabbitMQ-Integration.md)
+* **文本模板 Demo**: 文本模板系统的不同用例.
+  * [源码](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
+  * [文本模板文档](../Text-Templating.md)
 * **自定义认证**: 如何为ASP.NET Core MVC / Razor Pages应用程序自定义身份验证的解决方案.
   * [源码](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)
   * 相关 "[How To](../How-To/Index.md)" 文档:

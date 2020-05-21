@@ -6,7 +6,8 @@
   },
   "dependencies": {
     "@abp/core": "^2.7.0",
-    "bootstrap": "^4.3.1"
+    "bootstrap": "^4.3.1",
+    "@laylazi/bootstrap-rtl": "4.4.101"
   },
   "gitHead": "0ea3895f3b0b489e3ea81fc88f8f0896b22b61bd"
 }

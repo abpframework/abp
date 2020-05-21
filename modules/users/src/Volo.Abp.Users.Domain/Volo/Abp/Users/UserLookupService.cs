@@ -140,15 +140,57 @@ namespace Volo.Abp.Users
             return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
         }
 
-        public async Task<List<IUserData>> SearchAsync(string sorting, string filter, int maxResultCount, CancellationToken cancellationToken = default)
+        public async Task<List<IUserData>> SearchAsync(
+            string sorting = null,
+            string filter = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            CancellationToken cancellationToken = default)
         {
             if (ExternalUserLookupServiceProvider != null)
             {
-                return await ExternalUserLookupServiceProvider.SearchAsync(sorting, filter, maxResultCount, cancellationToken);
+                return await ExternalUserLookupServiceProvider
+                    .SearchAsync(
+                        sorting,
+                        filter,
+                        maxResultCount,
+                        skipCount,
+                        cancellationToken
+                    );
             }
 
-            var localUsers = await _userRepository.SearchAsync(sorting, maxResultCount, 0, filter, cancellationToken);
-            return localUsers.Cast<IUserData>().ToList();
+            var localUsers = await _userRepository
+                .SearchAsync(
+                    sorting,
+                    maxResultCount,
+                    skipCount,
+                    filter,
+                    cancellationToken
+                );
+            
+            return localUsers
+                .Cast<IUserData>()
+                .ToList();
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = default)
+        {
+            if (ExternalUserLookupServiceProvider != null)
+            {
+                return await ExternalUserLookupServiceProvider
+                    .GetCountAsync(
+                        filter,
+                        cancellationToken
+                    );
+            }
+
+            return await _userRepository
+                .GetCountAsync(
+                    filter,
+                    cancellationToken
+                );
         }
 
         protected abstract TUser CreateUser(IUserData externalUser);

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -266,6 +267,7 @@ namespace Volo.Abp.Cli.Commands
         protected virtual MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
+            var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
             switch (optionValue)
             {
                 case "none":
@@ -273,7 +275,7 @@ namespace Volo.Abp.Cli.Commands
                 case "react-native":
                     return MobileApp.ReactNative;
                 default:
-                    return MobileApp.ReactNative;
+                    return ConsoleTemplate.TemplateName == template ? MobileApp.None : MobileApp.ReactNative;
             }
         }
 
