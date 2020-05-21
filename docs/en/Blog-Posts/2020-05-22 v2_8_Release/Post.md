@@ -63,9 +63,9 @@ Old methods are marked as `Obsolete` and will be removed in the next major versi
 
 ### The New Lepton Theme
 
-We've completely revised [the lepton theme](https://commercial.abp.io/themes). A screenshot from the Material Style demo page:
+We've completely revised [the lepton theme](https://commercial.abp.io/themes). See with different styles:
 
-![lepton-theme-material](lepton-theme-material.png)
+![lepton-themes](lepton-themes.gif)
 
 Example screenshots from the language management page of the ABP Commercial:
 
