@@ -1,8 +1,10 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export interface RangeError {
-  max: number;
-  min: number;
+  range: {
+    max: number;
+    min: number;
+  };
 }
 
 export interface RangeOptions {
@@ -22,9 +24,9 @@ export function validateRange({ maximum = Infinity, minimum = 0 }: RangeOptions 
 }
 
 function getMaxError(value: number, max: number, min: number): RangeError {
-  return value > max ? { max, min } : null;
+  return value > max ? { range: { max, min } } : null;
 }
 
 function getMinError(value: number, min: number, max: number): RangeError {
-  return value < min ? { min, max } : null;
+  return value < min ? { range: { min, max } } : null;
 }

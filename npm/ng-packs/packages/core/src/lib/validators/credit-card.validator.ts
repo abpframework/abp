@@ -1,7 +1,7 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export interface CreditCardError {
-  creditCardNumber: true;
+  creditCard: true;
 }
 
 export function validateCreditCard(): ValidatorFn {
@@ -10,7 +10,7 @@ export function validateCreditCard(): ValidatorFn {
 
     if (['', null, undefined].indexOf(control.value) > -1) return null;
 
-    return isValidCreditCard(String(control.value)) ? null : { creditCardNumber: true };
+    return isValidCreditCard(String(control.value)) ? null : { creditCard: true };
   };
 }
 

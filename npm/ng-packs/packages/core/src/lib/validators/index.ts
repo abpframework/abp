@@ -12,7 +12,7 @@ export * from './url.validator';
 
 export const AbpValidators = {
   creditCard: validateCreditCard,
-  email: () => Validators.email,
+  emailAddress: () => Validators.email,
   range: validateRange,
   required: validateRequired,
   stringLength: validateStringLength,

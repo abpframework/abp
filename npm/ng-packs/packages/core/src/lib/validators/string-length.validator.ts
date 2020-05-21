@@ -1,8 +1,12 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export interface StringLengthError {
-  maxlength?: number;
-  minlength?: number;
+  maxlength?: {
+    requiredLength: number;
+  };
+  minlength?: {
+    requiredLength: number;
+  };
 }
 
 export interface StringLengthOptions {
@@ -25,10 +29,10 @@ export function validateStringLength({
   };
 }
 
-function getMaxLengthError(value: string, maxlength: number): StringLengthError {
-  return value.length > maxlength ? { maxlength } : null;
+function getMaxLengthError(value: string, requiredLength: number): StringLengthError {
+  return value.length > requiredLength ? { maxlength: { requiredLength } } : null;
 }
 
-function getMinLengthError(value: string, minlength: number): StringLengthError {
-  return value.length < minlength ? { minlength } : null;
+function getMinLengthError(value: string, requiredLength: number): StringLengthError {
+  return value.length < requiredLength ? { minlength: { requiredLength } } : null;
 }

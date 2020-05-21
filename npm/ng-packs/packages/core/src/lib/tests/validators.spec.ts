@@ -7,7 +7,7 @@ import { validateUrl } from '../validators/url.validator';
 
 describe('Validators', () => {
   describe('Credit Card Validator', () => {
-    const error = { creditCardNumber: true };
+    const error = { creditCard: true };
 
     test.each`
       input                                       | expected
@@ -49,7 +49,7 @@ describe('Validators', () => {
 
   describe('Email Validator', () => {
     it('should return email validator of Angular', () => {
-      expect(AbpValidators.email()).toBe(Validators.email);
+      expect(AbpValidators.emailAddress()).toBe(Validators.email);
     });
   });
 
@@ -61,12 +61,12 @@ describe('Validators', () => {
       ${''}        | ${undefined}                  | ${null}
       ${0}         | ${undefined}                  | ${null}
       ${Infinity}  | ${undefined}                  | ${null}
-      ${'-1'}      | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
-      ${-1}        | ${{ minimum: 0 }}             | ${{ min: 0, max: Infinity }}
-      ${2}         | ${{ minimum: 3, maximum: 5 }} | ${{ min: 3, max: 5 }}
+      ${'-1'}      | ${{ minimum: 0 }}             | ${{ range: { min: 0, max: Infinity } }}
+      ${-1}        | ${{ minimum: 0 }}             | ${{ range: { min: 0, max: Infinity } }}
+      ${2}         | ${{ minimum: 3, maximum: 5 }} | ${{ range: { min: 3, max: 5 } }}
       ${3}         | ${{ minimum: 3, maximum: 5 }} | ${null}
       ${5}         | ${{ minimum: 3, maximum: 5 }} | ${null}
-      ${6}         | ${{ minimum: 3, maximum: 5 }} | ${{ min: 3, max: 5 }}
+      ${6}         | ${{ minimum: 3, maximum: 5 }} | ${{ range: { min: 3, max: 5 } }}
     `(
       'should return $expected when input is $input and options are $options',
       ({ input, options, expected }) => {
@@ -126,9 +126,9 @@ describe('Validators', () => {
       ${null}      | ${undefined}            | ${null}
       ${undefined} | ${undefined}            | ${null}
       ${''}        | ${undefined}            | ${null}
-      ${'ab'}      | ${{ minimumLength: 3 }} | ${{ minlength: 3 }}
+      ${'ab'}      | ${{ minimumLength: 3 }} | ${{ minlength: { requiredLength: 3 } }}
       ${'abp'}     | ${{ minimumLength: 3 }} | ${null}
-      ${'abp'}     | ${{ maximumLength: 2 }} | ${{ maxlength: 2 }}
+      ${'abp'}     | ${{ maximumLength: 2 }} | ${{ maxlength: { requiredLength: 2 } }}
       ${'abp'}     | ${{ maximumLength: 3 }} | ${null}
     `(
       'should return $expected when input is $input and options are $options',
