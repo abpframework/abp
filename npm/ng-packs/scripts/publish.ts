@@ -42,6 +42,8 @@ const publish = async () => {
 
     await fse.rename('../lerna.json', '../lerna.version.json');
 
+    await execa('yarn', ['replace-with-tilde']);
+
     await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
 
     await fse.rename('../lerna.publish.json', '../lerna.json');
