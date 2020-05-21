@@ -169,13 +169,28 @@ While we will **continue to add other exciting features**, we will work on the f
 
 * **gRPC integration** and implementation for all the pre-built modules.
 * **Blazor UI** for the framework and all the pre-built modules.
-* **.NET 5.0**! As Microsoft has announced that the .NET 5.0 will be released in November 2020, we will prepare for this change and move to the .NET 5.0 just after Microsoft releases it.
+* **.NET 5.0**! As Microsoft has announced that the .NET 5.0 will be released in November 2020, we will prepare for this change before and move to the .NET 5.0 just after Microsoft releases it. We hope a smooth transition.
 
 ### ABP Commercial Road Map
 
-TODO
+We will work on the same items in parallel to to ABP Framework to implement them in the ABP Commercial side:
 
-### ABP.IO Platform Road Map
+* gRPC integration
+* Blazor UI
+* .NET 5.0
+
+In addition, we will be working on the following items in the middle term:
+
+* A startup template to create microservice solutions (that has Ocelot, Redis, RabbitMQ, ElasticSearch, IdentityServer... etc. pre-integrated and configured).
+* More module extension points.
+* Dynamic dashboard system.
+* Real-time notification system.
+* Subscription and payment system for the SaaS module.
+* More authentication options.
+* New application modules (we have tens of module ideas and will share by the time - the "file management" announced above was one of them).
+* New themes & theme styles (including public/corporate web site themes).
+
+## BONUS: ABP.IO Platform Road Map
 
 While the ABP Framework and the ABP Commercial are the fundamental components of the ABP.IO Platform, we want to create a much bigger platform to bring the .NET community together to create reusable modules, share knowledge, help each other by taking the advantage of the ABP Framework's unified and standardized development model.
 
@@ -190,3 +205,10 @@ A platform that is used by developers/companies to publish their reusable applic
 We are getting too many emails from companies want to hire developers or other other companies to build their products based on the ABP.IO Platform. We, as [Volosoft](https://volosoft.com/), want to stay in the product side rather than customer basis projects. We generally lead them to experienced developers and companies. 
 
 We have a plan to create a web site to meet each side, so you can find developers for your projects or you find short or long term works to do.
+
+## Follow the ABP!
+
+Follow the social media accounts to get informed about happenings on the ABP.IO Platform:
+
+* [@abpframework](https://twitter.com/abpframework): ABP Framework official Twitter account
+* [@abpcommercial](https://twitter.com/abpcommercial): ABP Commercial official Twitter account
