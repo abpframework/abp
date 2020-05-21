@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Threading;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization
@@ -36,10 +35,8 @@ namespace Volo.Abp.Localization
             });
         }
 
-        public static bool IsRtl
-        {
-            get { return CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft; }
-        }
+        public static bool IsRtl => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+
         public static bool IsValidCultureCode(string cultureCode)
         {
             if (cultureCode.IsNullOrWhiteSpace())

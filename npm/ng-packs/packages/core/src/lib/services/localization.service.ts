@@ -1,4 +1,4 @@
-import { Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
+import { Injectable, Injector, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
@@ -27,7 +27,7 @@ export class LocalizationService {
   constructor(
     private actions: Actions,
     private store: Store,
-    private router: Router,
+    private injector: Injector,
     private ngZone: NgZone,
     @Optional()
     @SkipSelf()
@@ -42,19 +42,16 @@ export class LocalizationService {
     this.languageChange.subscribe(({ payload }) => this.registerLocale(payload));
   }
 
-  setRouteReuse(reuse: ShouldReuseRoute) {
-    this.router.routeReuseStrategy.shouldReuseRoute = reuse;
-  }
-
   registerLocale(locale: string) {
-    const { shouldReuseRoute } = this.router.routeReuseStrategy;
-    this.setRouteReuse(() => false);
-    this.router.navigated = false;
+    const router = this.injector.get(Router);
+    const { shouldReuseRoute } = router.routeReuseStrategy;
+    router.routeReuseStrategy.shouldReuseRoute = () => false;
+    router.navigated = false;
 
     return registerLocale(locale).then(() => {
       this.ngZone.run(async () => {
-        await this.router.navigateByUrl(this.router.url).catch(noop);
-        this.setRouteReuse(shouldReuseRoute);
+        await router.navigateByUrl(router.url).catch(noop);
+        router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;
       });
     });
   }
