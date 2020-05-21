@@ -156,15 +156,37 @@ We are working to improve current [modules](https://commercial.abp.io/modules), 
 
 We are frequently asked about the road map of the [ABP Framework](https://abp.io/) and the [ABP Commercial](https://commercial.abp.io/). While we've answered to it in various platforms, with this release, we've adding road map pages for these products to their documentation:
 
-* ABP Framework Road Map
-* ABP Commercial Road Map
+* [ABP Framework Road Map](https://docs.abp.io/en/abp/latest/Road-Map)
+* [ABP Commercial Road Map](https://docs.abp.io/en/commercial/latest/road-map)
 
 I am also writing the road map here, in the following sections;
 
 ### ABP Framework Road Map
 
-TODO
+You can always check the milestone planning and the prioritized backlog issues on [the GitHub repository](https://github.com/abpframework/abp/milestones).
+
+While we will **continue to add other exciting features**, we will work on the following major items in the middle term:
+
+* **gRPC integration** and implementation for all the pre-built modules.
+* **Blazor UI** for the framework and all the pre-built modules.
+* **.NET 5.0**! As Microsoft has announced that the .NET 5.0 will be released in November 2020, we will prepare for this change and move to the .NET 5.0 just after Microsoft releases it.
 
 ### ABP Commercial Road Map
 
 TODO
+
+### ABP.IO Platform Road Map
+
+While the ABP Framework and the ABP Commercial are the fundamental components of the ABP.IO Platform, we want to create a much bigger platform to bring the .NET community together to create reusable modules, share knowledge, help each other by taking the advantage of the ABP Framework's unified and standardized development model.
+
+So, we new *.abp.io web site ideas I want to share with the community
+
+#### market.abp.io
+
+A platform that is used by developers/companies to publish their reusable application modules, themes, libraries and tools base don the ABP Framework. There will be free/open source and commercial products on this web site.
+
+#### jobs.abp.io
+
+We are getting too many emails from companies want to hire developers or other other companies to build their products based on the ABP.IO Platform. We, as [Volosoft](https://volosoft.com/), want to stay in the product side rather than customer basis projects. We generally lead them to experienced developers and companies. 
+
+We have a plan to create a web site to meet each side, so you can find developers for your projects or you find short or long term works to do.
