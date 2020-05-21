@@ -461,6 +461,15 @@
       ]
     },
     {
+      "text": "Real Time",
+      "items": [
+        {
+          "text": "SignalR Integration",
+          "path": "SignalR-Integration.md"
+        }
+      ]
+    },
+    {
       "text": "Background",
       "items": [
         {
