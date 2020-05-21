@@ -1,3 +1,5 @@
+import { ABP } from './common';
+
 export class ListResultDto<T> {
   items?: T[];
 
@@ -119,6 +121,98 @@ export class FullAuditedEntityWithUserDto<
   deleter?: TUserDto;
 
   constructor(initialValues: Partial<FullAuditedEntityWithUserDto<TUserDto, TPrimaryKey>> = {}) {
+    super(initialValues);
+  }
+}
+
+export class ExtensibleObject {
+  extraProperties: ABP.Dictionary<any>;
+
+  constructor(initialValues: Partial<ExtensibleObject> = {}) {
+    for (const key in initialValues) {
+      if (initialValues.hasOwnProperty(key)) {
+        this[key] = initialValues[key];
+      }
+    }
+  }
+}
+
+export class ExtensibleEntityDto<TKey = string> extends ExtensibleObject {
+  id: TKey;
+
+  constructor(initialValues: Partial<ExtensibleEntityDto<TKey>> = {}) {
+    super(initialValues);
+  }
+}
+
+export class ExtensibleCreationAuditedEntityDto<TPrimaryKey = string> extends ExtensibleEntityDto<
+  TPrimaryKey
+> {
+  creationTime: Date | string;
+  creatorId?: string;
+
+  constructor(initialValues: Partial<ExtensibleCreationAuditedEntityDto<TPrimaryKey>> = {}) {
+    super(initialValues);
+  }
+}
+
+export class ExtensibleAuditedEntityDto<
+  TPrimaryKey = string
+> extends ExtensibleCreationAuditedEntityDto<TPrimaryKey> {
+  lastModificationTime?: Date | string;
+  lastModifierId?: string;
+
+  constructor(initialValues: Partial<ExtensibleAuditedEntityDto<TPrimaryKey>> = {}) {
+    super(initialValues);
+  }
+}
+
+export class ExtensibleAuditedEntityWithUserDto<
+  TPrimaryKey = string,
+  TUserDto = any
+> extends ExtensibleAuditedEntityDto<TPrimaryKey> {
+  creator: TUserDto;
+  lastModifier: TUserDto;
+
+  constructor(initialValues: Partial<ExtensibleAuditedEntityWithUserDto<TPrimaryKey>> = {}) {
+    super(initialValues);
+  }
+}
+
+export class ExtensibleCreationAuditedEntityWithUserDto<
+  TPrimaryKey = string,
+  TUserDto = any
+> extends ExtensibleCreationAuditedEntityDto<TPrimaryKey> {
+  creator: TUserDto;
+
+  constructor(
+    initialValues: Partial<ExtensibleCreationAuditedEntityWithUserDto<TPrimaryKey>> = {},
+  ) {
+    super(initialValues);
+  }
+}
+
+export class ExtensibleFullAuditedEntityDto<
+  TPrimaryKey = string
+> extends ExtensibleAuditedEntityDto<TPrimaryKey> {
+  isDeleted: boolean;
+  deleterId?: string;
+  deletionTime: Date | string;
+
+  constructor(initialValues: Partial<ExtensibleFullAuditedEntityDto<TPrimaryKey>> = {}) {
+    super(initialValues);
+  }
+}
+
+export class ExtensibleFullAuditedEntityWithUserDto<
+  TPrimaryKey = string,
+  TUserDto = any
+> extends ExtensibleFullAuditedEntityDto<TPrimaryKey> {
+  creator: TUserDto;
+  lastModifier: TUserDto;
+  deleter: TUserDto;
+
+  constructor(initialValues: Partial<ExtensibleFullAuditedEntityWithUserDto<TPrimaryKey>> = {}) {
     super(initialValues);
   }
 }
