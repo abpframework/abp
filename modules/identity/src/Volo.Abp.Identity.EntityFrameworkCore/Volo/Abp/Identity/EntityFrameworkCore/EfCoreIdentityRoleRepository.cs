@@ -19,7 +19,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<IdentityRole> FindByNormalizedNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -29,14 +29,18 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<IdentityRole>> GetListAsync(
-            string sorting = null, 
-            int maxResultCount = int.MaxValue, 
-            int skipCount = 0, 
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .WhereIf(filter != null,
+                        x => x.Name.Contains(filter) ||
+                        x.NormalizedName.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
