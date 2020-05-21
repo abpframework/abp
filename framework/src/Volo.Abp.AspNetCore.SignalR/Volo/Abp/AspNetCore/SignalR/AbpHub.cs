@@ -57,7 +57,18 @@ namespace Volo.Abp.AspNetCore.SignalR
         public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
 
-        public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
+        public IStringLocalizer L
+        {
+            get
+            {
+                if (_localizer == null)
+                {
+                    _localizer = CreateLocalizer();
+                }
+
+                return _localizer;
+            }
+        }
         private IStringLocalizer _localizer;
 
         protected Type LocalizationResource
@@ -70,6 +81,22 @@ namespace Volo.Abp.AspNetCore.SignalR
             }
         }
         private Type _localizationResource = typeof(DefaultResource);
+
+        protected virtual IStringLocalizer CreateLocalizer()
+        {
+            if (LocalizationResource != null)
+            {
+                return StringLocalizerFactory.Create(LocalizationResource);
+            }
+
+            var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer == null)
+            {
+                throw new AbpException($"Set {nameof(LocalizationResource)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
+            }
+
+            return localizer;
+        }
     }
 
     public abstract class AbpHub<T> : Hub<T> 
@@ -118,7 +145,18 @@ namespace Volo.Abp.AspNetCore.SignalR
         public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
 
-        public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
+        public IStringLocalizer L
+        {
+            get
+            {
+                if (_localizer == null)
+                {
+                    _localizer = CreateLocalizer();
+                }
+
+                return _localizer;
+            }
+        }
         private IStringLocalizer _localizer;
 
         protected Type LocalizationResource
@@ -131,5 +169,21 @@ namespace Volo.Abp.AspNetCore.SignalR
             }
         }
         private Type _localizationResource = typeof(DefaultResource);
+
+        protected virtual IStringLocalizer CreateLocalizer()
+        {
+            if (LocalizationResource != null)
+            {
+                return StringLocalizerFactory.Create(LocalizationResource);
+            }
+
+            var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer == null)
+            {
+                throw new AbpException($"Set {nameof(LocalizationResource)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
+            }
+
+            return localizer;
+        }
     }
 }

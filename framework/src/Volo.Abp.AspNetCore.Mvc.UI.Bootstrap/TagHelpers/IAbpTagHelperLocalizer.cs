@@ -10,10 +10,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
     {
         string GetLocalizedText(string text, ModelExplorer explorer);
 
-        IStringLocalizer GetLocalizer(ModelExplorer explorer);
+        IStringLocalizer GetLocalizerOrNull(ModelExplorer explorer);
 
-        IStringLocalizer GetLocalizer(Assembly assembly);
-
-        IStringLocalizer GetLocalizer(Type resourceType);
+        IStringLocalizer GetLocalizerOrNull(Assembly assembly);
     }
 }

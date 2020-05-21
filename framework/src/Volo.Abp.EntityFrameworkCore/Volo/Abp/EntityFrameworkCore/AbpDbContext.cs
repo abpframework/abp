@@ -194,6 +194,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     continue;
                 }
+
                 /* Checking "currentValue != null" has a good advantage:
                  * Assume that you we already using a named extra property,
                  * then decided to create a field (entity extension) for it.
