@@ -87,6 +87,11 @@ namespace Volo.Docs.FileSystem.Documents
             {
                 throw new SecurityException("Can not get a resource file out of the project folder!");
             }
+
+            if (!File.Exists(path))
+            {
+                throw new DocumentNotFoundException(path);
+            }
         }
     }
 }

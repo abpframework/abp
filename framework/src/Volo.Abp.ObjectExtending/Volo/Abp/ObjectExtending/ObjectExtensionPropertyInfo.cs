@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Volo.Abp.Localization;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.ObjectExtending
 {
-    public class ObjectExtensionPropertyInfo
+    public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, IBasicObjectExtensionPropertyInfo
     {
         [NotNull]
         public ObjectExtensionInfo ObjectExtension { get; }
@@ -17,10 +19,17 @@ namespace Volo.Abp.ObjectExtending
         public Type Type { get; }
 
         [NotNull]
+        [Obsolete("Add validation attributes to the Attributes list instead! ValidationAttributes property will be removed in future versions.")]
         public List<ValidationAttribute> ValidationAttributes { get; }
 
         [NotNull]
+        public List<Attribute> Attributes { get; }
+
+        [NotNull]
         public List<Action<ObjectExtensionPropertyValidationContext>> Validators { get; }
+
+        [CanBeNull]
+        public ILocalizableString DisplayName { get; set; }
 
         /// <summary>
         /// Indicates whether to check the other side of the object mapping
@@ -39,9 +48,22 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
 
+        /// <summary>
+        /// Uses as the default value if <see cref="DefaultValueFactory"/> was not set.
+        /// </summary>
+        [CanBeNull]
+        public object DefaultValue { get; set; }
+
+        /// <summary>
+        /// Used with the first priority to create the default value for the property.
+        /// Uses to the <see cref="DefaultValue"/> if this was not set.
+        /// </summary>
+        [CanBeNull]
+        public Func<object> DefaultValueFactory { get; set; }
+
         public ObjectExtensionPropertyInfo(
-            [NotNull] ObjectExtensionInfo objectExtension, 
-            [NotNull] Type type, 
+            [NotNull] ObjectExtensionInfo objectExtension,
+            [NotNull] Type type,
             [NotNull] string name)
         {
             ObjectExtension = Check.NotNull(objectExtension, nameof(objectExtension));
@@ -50,7 +72,16 @@ namespace Volo.Abp.ObjectExtending
 
             Configuration = new Dictionary<object, object>();
             ValidationAttributes = new List<ValidationAttribute>();
+            Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
+
+            Attributes.AddRange(ExtensionPropertyHelper.GetDefaultAttributes(Type));
+            DefaultValue = TypeHelper.GetDefaultValue(Type);
+        }
+
+        public object GetDefaultValue()
+        {
+            return ExtensionPropertyHelper.GetDefaultValue(Type, DefaultValueFactory, DefaultValue);
         }
     }
 }

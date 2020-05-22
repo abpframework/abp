@@ -82,6 +82,7 @@
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "鎖定時間(秒)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "最大失敗存取嘗試次數",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "要求驗證的電子信箱",
+    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "啟用手機號碼驗證",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "要求驗證的手機號碼",
     "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "啟用使用者名稱更新",
     "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "啟用電子信箱更新",
@@ -95,9 +96,9 @@
     "Description:Abp.Identity.Lockout.LockoutDuration": "當鎖定發生時使用者被鎖定的時間(秒).",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "如果啟用鎖定,當使用者被鎖定前失敗的存取嘗試次數.",
     "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "登入時是否需要驗證電子信箱.",
+    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "使用者手機號碼是否需要驗證.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "登入時是否需要驗證手機號碼.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "是否允許使用者更新使用者名稱.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "是否允許使用者更新電子信箱."
-
   }
 }

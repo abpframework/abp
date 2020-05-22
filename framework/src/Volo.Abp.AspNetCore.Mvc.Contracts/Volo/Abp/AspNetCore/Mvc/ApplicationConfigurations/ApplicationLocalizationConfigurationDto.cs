@@ -14,6 +14,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         public CurrentCultureDto CurrentCulture { get; set; }
 
+        public string DefaultResourceName { get; set; }
+
         public ApplicationLocalizationConfigurationDto()
         {
             Values = new Dictionary<string, Dictionary<string, string>>();

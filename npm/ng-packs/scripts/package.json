@@ -8,6 +8,7 @@
     "build:prod": "ts-node -r tsconfig-paths/register prod-build.ts",
     "publish-packages": "ts-node -r tsconfig-paths/register publish.ts",
     "install-new-dependencies": "ts-node -r tsconfig-paths/register install-new-dependencies.ts",
+    "replace-with-tilde": "ts-node -r tsconfig-paths/register replace-with-tilde.ts",
     "sync": "ts-node -r tsconfig-paths/register sync.ts"
   },
   "author": "",
@@ -16,6 +17,7 @@
     "commander": "^4.1.1",
     "execa": "^2.0.3",
     "fs-extra": "^8.1.0",
+    "glob": "^7.1.6",
     "prompt-confirm": "^2.0.4"
   },
   "devDependencies": {

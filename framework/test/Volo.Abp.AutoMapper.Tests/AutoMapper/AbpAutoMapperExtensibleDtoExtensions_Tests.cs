@@ -34,10 +34,10 @@ namespace AutoMapper
 
             personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
             personDto.GetProperty<string>("ExistingDtoProperty").ShouldBe("existing-value"); //Should not clear existing values
+            personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default value by ExtensibleTestPersonDto constructor
+            personDto.GetProperty("CityName").ShouldBeNull(); //Ignored, but was set to the default value by ExtensibleTestPersonDto constructor
             personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
-            personDto.HasProperty("ChildCount").ShouldBeFalse(); //Not defined in the source
             personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
-            personDto.HasProperty("CityName").ShouldBeFalse(); //Ignored
         }
     }
 }

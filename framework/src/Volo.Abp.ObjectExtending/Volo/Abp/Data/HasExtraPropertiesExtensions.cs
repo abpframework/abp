@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Volo.Abp.DynamicProxy;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Data
@@ -36,10 +38,20 @@ namespace Volo.Abp.Data
             throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
         }
 
-        public static TSource SetProperty<TSource>(this TSource source, string name, object value)
+        public static TSource SetProperty<TSource>(
+            this TSource source, 
+            string name, 
+            object value,
+            bool validate = true)
             where TSource : IHasExtraProperties
         {
+            if (validate)
+            {
+                ExtensibleObjectValidator.CheckValue(source, name, value);
+            }
+
             source.ExtraProperties[name] = value;
+
             return source;
         }
 
@@ -48,6 +60,40 @@ namespace Volo.Abp.Data
         {
             source.ExtraProperties.Remove(name);
             return source;
+        }
+
+        public static TSource SetDefaultsForExtraProperties<TSource>(this TSource source, Type objectType = null)
+            where TSource : IHasExtraProperties
+        {
+            if (objectType == null)
+            {
+                objectType = typeof(TSource);
+            }
+
+            var properties = ObjectExtensionManager.Instance
+                .GetProperties(objectType);
+
+            foreach (var property in properties)
+            {
+                if (source.HasProperty(property.Name))
+                {
+                    continue;
+                }
+
+                source.ExtraProperties[property.Name] = property.GetDefaultValue();
+            }
+
+            return source;
+        }
+
+        public static void SetDefaultsForExtraProperties(object source, Type objectType)
+        {
+            if (!(source is IHasExtraProperties))
+            {
+                throw new ArgumentException($"Given {nameof(source)} object does not implement the {nameof(IHasExtraProperties)} interface!", nameof(source));
+            }
+
+            ((IHasExtraProperties) source).SetDefaultsForExtraProperties(objectType);
         }
     }
 }

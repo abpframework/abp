@@ -103,7 +103,7 @@ export class LinkedList<T = any> {
     };
   }
 
-  addAfter(value: T, nextValue: T): ListNode<T>;
+  addAfter(value: T, previousValue: T): ListNode<T>;
   addAfter(value: T, previousValue: any, compareFn: ListComparisonFn<T>): ListNode<T>;
   addAfter(value: T, previousValue: any, compareFn: ListComparisonFn<T> = compare): ListNode<T> {
     const previous = this.find(node => compareFn(node.value, previousValue));
@@ -173,7 +173,7 @@ export class LinkedList<T = any> {
     return previous ? this.attachMany(values, previous, previous.next) : this.addManyTail(values);
   }
 
-  addManyBefore(values: T[], previousValue: T): ListNode<T>[];
+  addManyBefore(values: T[], nextValue: T): ListNode<T>[];
   addManyBefore(values: T[], nextValue: any, compareFn: ListComparisonFn<T>): ListNode<T>[];
   addManyBefore(
     values: T[],

@@ -1,6 +1,6 @@
 {
   "culture": "zh-Hans",
-  "texts": {
+  "texts": {  
     "Documents": "文档",
     "BackToWebsite": "返回主网站",
     "Contributors": "贡献者",
@@ -14,6 +14,7 @@
     "Projects": "项目",
     "NoProjectWarning": "还没有项目!",
     "DocumentNotFound": "找不到请求的文档!",
+    "ProjectNotFound": "找不到请求的项目!",
     "NavigationDocumentNotFound": "这个版本没有导航文件!",
     "DocumentNotFoundInSelectedLanguage": "本文档不适用于所选语言, 将以默认语言显示文档.",
     "FilterTopics": "过滤主题",

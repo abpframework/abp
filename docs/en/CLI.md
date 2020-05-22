@@ -40,7 +40,7 @@ abp new Acme.BookStore
 #### Options
 
 * `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
-  * `app` (default): [Application template](Startup-Templates/Application.md). Additional options:
+  * **`app`** (default): [Application template](Startup-Templates/Application.md). Additional options:
     * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
@@ -51,10 +51,10 @@ abp new Acme.BookStore
     * `--mobile` or `-m`: Specifies the mobile application framework. Default framework is `react-native`. Available frameworks:
       * `none`: no mobile application.
       * `react-native`: React Native.
-	* `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
-      * `ef`: Entity Framework Core.
-      * `mongodb`: MongoDB.
-  * `module`: [Module template](Startup-Templates/Module.md). Additional options:
+	  * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+        * `ef`: Entity Framework Core.
+        * `mongodb`: MongoDB.
+  * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
@@ -135,6 +135,8 @@ abp update [options]
 * `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
 * `--npm`: Only updates NPM packages.
 * `--nuget`: Only updates NuGet packages.
+* `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
+* `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 
 ### switch-to-preview
 
@@ -170,7 +172,11 @@ Some features of the CLI requires to be logged in to abp.io platform. To login w
 abp login <username>
 ```
 
-Notice that, a new login with an already active session, will kill the previous session and creates a new one.
+```bash
+abp login <username> -p <password>
+```
+
+Notice that, a new login with an already active session, overwrites the previous session.
 
 ### logout
 

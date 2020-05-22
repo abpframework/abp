@@ -9,7 +9,7 @@
     "The field {0} must be a string or array type with a maximum length of '{1}'.": "Trường {0} phải là một chuỗi hoặc một mảng với độ dài tối đa là '{1}'.",
     "The {0} field is not a valid phone number.": "Trường {0} không phải là một số điện thoại hợp lệ",
     "The field {0} must be between {1} and {2}.": "Trường {0} phải ở giữa {1} and {2}.",
-    "The field {0} must match the regular expression '{1}'.": "Trường {0} phải khớp với biểu thức chính quy '{1}'.",
+    "The field {0} must match the regular expression '{1}'.": "Trường {0} không khớp với định dạng được yêu cầu.",
     "The {0} field is required.": "Trường {0} là bắt buộc.",
     "The field {0} must be a string with a maximum length of {1}.": "Trường {0} phải là một chuỗi với độ dài tối đa là {1}.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "Trường {0} phải là một chuỗi với độ dài tối thiểu {2} và tối đa là {1}.",

@@ -88,6 +88,8 @@ You can set some of the attributes on your c# property, or directly on html tag.
 * `label`: Sets the label for input.
 * `display-required-symbol`: Adds the required symbol (*) to label if input is required. Default `True`.
 
+`asp-format`, `name` and `value` attributes of [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-3.1#the-input-tag-helper) are also valid for `abp-input` tag helper.
+
 ### Label & Localization
 
 You can set label of your input in different ways:

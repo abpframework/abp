@@ -174,6 +174,44 @@ ObjectExtensionManager.Instance
 
 The following sections explain the fundamental property configuration options.
 
+#### Default Value
+
+A default value is automatically set for the new property, which is the natural default value for the property type, like `null` for `string`, `false` for `bool` or `0` for `int`.
+
+There are two ways to override the default value:
+
+##### DefaultValue Option
+
+`DefaultValue` option can be set to any value:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, int>(
+        "MyIntProperty",
+        options =>
+        {
+            options.DefaultValue = 42;
+        });
+````
+
+##### DefaultValueFactory Options
+
+`DefaultValueFactory` can be set to a function that returns the default value:
+
+````csharp
+ObjectExtensionManager.Instance
+    .AddOrUpdateProperty<IdentityUser, DateTime>(
+        "MyDateTimeProperty",
+        options =>
+        {
+            options.DefaultValueFactory = () => DateTime.Now;
+        });
+````
+
+`options.DefaultValueFactory` has a higher priority than the `options.DefaultValue` .
+
+> Tip: Use `DefaultValueFactory` option only if the default value may change over the time (like `DateTime.Now` in this example). If it is a constant value, then use the `DefaultValue` option.
+
 #### CheckPairDefinitionOnMapping
 
 Controls how to check property definitions while mapping two extensible objects. See the "Object to Object Mapping" section to understand the `CheckPairDefinitionOnMapping` option better.
@@ -197,8 +235,8 @@ ObjectExtensionManager.Instance
         "SocialSecurityNumber",
         options =>
         {
-            options.ValidationAttributes.Add(new RequiredAttribute());
-            options.ValidationAttributes.Add(
+            options.Attributes.Add(new RequiredAttribute());
+            options.Attributes.Add(
                 new StringLengthAttribute(32) {
                     MinimumLength = 6 
                 }
@@ -207,6 +245,15 @@ ObjectExtensionManager.Instance
 ````
 
 With this configuration, `IdentityUserCreateDto` objects will be invalid without a valid `SocialSecurityNumber` value provided.
+
+#### Default Validation Attributes
+
+There are some attributes **automatically added** when you create certain type of properties;
+
+* `RequiredAttribute` is added for non nullable primitive property types (e.g. `int`, `bool`, `DateTime`...) and `enum` types.
+* `EnumDataTypeAttribute` is added for enum types, to prevent to set invalid enum values.
+
+Use `options.Attributes.Clear();` if you don't want these attributes.
 
 ### Custom Validation
 
@@ -248,12 +295,12 @@ ObjectExtensionManager.Instance
     
     objConfig.AddOrUpdateProperty<string>("Password", propertyConfig =>
     {
-        propertyConfig.ValidationAttributes.Add(new RequiredAttribute());
+        propertyConfig.Attributes.Add(new RequiredAttribute());
     });
 
     objConfig.AddOrUpdateProperty<string>("PasswordRepeat", propertyConfig =>
     {
-        propertyConfig.ValidationAttributes.Add(new RequiredAttribute());
+        propertyConfig.Attributes.Add(new RequiredAttribute());
     });
 
     //Write a common validation logic works on multiple properties

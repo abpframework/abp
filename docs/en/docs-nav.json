@@ -180,6 +180,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Text Templating",
+          "path": "Text-Templating.md"
+        },
+        {
           "text": "Object Serialization"
         },
         {
@@ -353,6 +357,10 @@
               "path": "UI/Angular/Config-State.md"
             },
             {
+              "text": "Modifying the Menu",
+              "path": "UI/Angular/Modifying-the-Menu.md"
+            },
+            {
               "text": "Component Replacement",
               "path": "UI/Angular/Component-Replacement.md"
             },
@@ -375,6 +383,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "ListService",
+              "path": "UI/Angular/List-Service.md"
             }
           ]
         },
@@ -398,7 +410,7 @@
       "text": "Data Access",
       "items": [
         {
-          "text": "Overall", 
+          "text": "Overall",
           "path": "Data-Access.md"
         },
         {
@@ -445,6 +457,15 @@
               "path": "Dapper.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "Real Time",
+      "items": [
+        {
+          "text": "SignalR Integration",
+          "path": "SignalR-Integration.md"
         }
       ]
     },
@@ -502,6 +523,10 @@
       "text": "Samples",
       "items": [
         {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
           "text": "Microservice Demo",
           "path": "Samples/Microservice-Demo.md"
         }
@@ -516,11 +541,12 @@
       "path": "Microservice-Architecture.md"
     },
     {
-      "text": "Testing"
-    },
-    {
       "text": "Nightly Builds",
       "path": "Nightly-Builds.md"
+    },
+    {
+      "text": "Road Map",
+      "path": "Road-Map.md"
     },
     {
       "text": "Contribution Guide",

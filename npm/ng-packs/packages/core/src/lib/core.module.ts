@@ -28,11 +28,13 @@ import { LocalizationPipe, MockLocalizationPipe } from './pipes/localization.pip
 import { SortPipe } from './pipes/sort.pipe';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugin';
 import { LocaleProvider } from './providers/locale.provider';
+import { LocalizationService } from './services/localization.service';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
 import { SessionState } from './states/session.state';
 import { CORE_OPTIONS } from './tokens/options.token';
+import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 
@@ -186,6 +188,12 @@ export class CoreModule {
           multi: true,
           deps: [Injector],
           useFactory: localeInitializer,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [LocalizationService],
+          useFactory: noop,
         },
         ...OAuthModule.forRoot().providers,
         { provide: OAuthStorage, useFactory: storageFactory },

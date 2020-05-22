@@ -167,7 +167,7 @@ namespace VoloDocs.Web
            
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             using (var scope = context.ServiceProvider.CreateScope())
             {

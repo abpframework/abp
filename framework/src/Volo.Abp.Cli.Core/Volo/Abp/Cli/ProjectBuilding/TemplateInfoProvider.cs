@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.DependencyInjection;
 
@@ -25,6 +26,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return new ModuleTemplate();
                 case ModuleProTemplate.TemplateName:
                     return new ModuleProTemplate();
+                case ConsoleTemplate.TemplateName:
+                    return new ConsoleTemplate();
                 default:
                     throw new Exception("There is no template found with given name: " + name);
             }

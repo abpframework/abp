@@ -2,7 +2,7 @@ import { ABP } from '../models';
 
 export class SetLanguage {
   static readonly type = '[Session] Set Language';
-  constructor(public payload: string) {}
+  constructor(public payload: string, public dispatchAppConfiguration?: boolean) {}
 }
 export class SetTenant {
   static readonly type = '[Session] Set Tenant';

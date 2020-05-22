@@ -1,5 +1,6 @@
 import { addAbpRoutes, eLayoutType } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import { eIdentityRouteNames } from '@abp/ng.identity';
 
 @Injectable({
   providedIn: 'root',
@@ -8,29 +9,29 @@ export class IdentityConfigService {
   constructor() {
     addAbpRoutes([
       {
-        name: 'AbpUiNavigation::Menu:Administration',
+        name: eIdentityRouteNames.Administration,
         path: '',
         order: 1,
         wrapper: true,
         iconClass: 'fa fa-wrench',
       },
       {
-        name: 'AbpIdentity::Menu:IdentityManagement',
+        name: eIdentityRouteNames.IdentityManagement,
         path: 'identity',
         order: 1,
-        parentName: 'AbpUiNavigation::Menu:Administration',
+        parentName: eIdentityRouteNames.Administration,
         layout: eLayoutType.application,
         iconClass: 'fa fa-id-card-o',
         children: [
           {
             path: 'roles',
-            name: 'AbpIdentity::Roles',
+            name: eIdentityRouteNames.Roles,
             order: 1,
             requiredPolicy: 'AbpIdentity.Roles',
           },
           {
             path: 'users',
-            name: 'AbpIdentity::Users',
+            name: eIdentityRouteNames.Users,
             order: 2,
             requiredPolicy: 'AbpIdentity.Users',
           },

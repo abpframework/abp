@@ -49,7 +49,7 @@ this.confirmation
 - `message` 和 `title` 参数接收字符串,本地化Key或本地化对象. 参阅[本地化文档](./Localization.md)
 - `Confirmation.Status` 是一个枚举,具有三个属性;
     - `Confirmation.Status.confirm` 是一个关闭事件值,当通过确认按钮关闭弹出窗口时触发此事件.
-    - `Confirmation.Status.reject` 是一个关闭事件值,当通过“取消”按钮关闭弹出窗口时触发此事件.
+    - `Confirmation.Status.reject` 是一个关闭事件值,当通过取消按钮关闭弹出窗口时触发此事件.
     - `Confirmation.Status.dismiss` 是一个关闭事件值,当通过按Escape键关闭弹出窗口时触发此事件.
 
 如果你对确认状态不感兴趣,则不必订阅返回的observable:
@@ -66,6 +66,7 @@ this.confirmation.error('You are not authorized.', 'Error');
 const options: Partial<Confirmation.Options> = {
   hideCancelBtn: false,
   hideYesBtn: false,
+  dismissible: false,
   cancelText: 'Close',
   yesText: 'Confirm',
   messageLocalizationParams: ['Demo'],
@@ -81,14 +82,37 @@ this.confirmation.warn(
 
 - `hideCancelBtn` 选项为 `true` 时隐藏取消按钮. 默认值为 `false`.
 - `hideYesBtn` 选项为 `true` 时隐藏确认按钮. 默认值为 `false`.
-- `cancelText` 是取消按钮的文本,可以传递本地化键或本地化对象. 默认值是 `AbpUi::Cancel`.
-- `yesText` 是确定按钮的文本,可以传递本地化键或本地化对象. 默认值是 `AbpUi::Yes`.
+- `dismissible`选项允许通过按Escape键或单击背景来取消确认弹出窗口. 默认值为 `true`.
+- `cancelText` 是取消按钮的文本,可以传递本地化键或本地化对象. 默认值为 `AbpUi::Cancel`.
+- `yesText` 是确定按钮的文本,可以传递本地化键或本地化对象. 默认值为 `AbpUi::Yes`.
 - `messageLocalizationParams`是用于消息本地化的插值参数.
 - `titleLocalizationParams` 是标题本地化的插值参数.
 
-With the options above, the confirmation popup looks like this:
+使用以上选项确认弹层窗口如下所示:
 
 ![confirmation](./images/confirmation.png)
+
+你可以传递HTML字符串作为标题,消息或按钮文本. 例如:
+
+```js
+const options: Partial<Confirmation.Options> = {
+  yesText: '<i class="fa fa-trash mr-1"></i>Yes, delete it',
+};
+
+this.confirmation.warn(
+  `
+    <strong>Role Demo</strong> will be <strong>deleted</strong>
+    <br>
+    Do you confirm that?
+  `,
+  '<span class="my-custom-title">Are you sure?</span>',
+  options,
+);
+```
+
+由于这些值现在是HTML,因此应该手动处理本地化. 参阅[LocalizationService](./Localization#using-the-localization-service)了解如何实现.
+
+> 注意,Angular会清除所有字符串,并且并非每个HTML字符串都可以使用. 仅显示被Angular视为"安全"的值.
 
 ### 如何删除一个确认弹层
 

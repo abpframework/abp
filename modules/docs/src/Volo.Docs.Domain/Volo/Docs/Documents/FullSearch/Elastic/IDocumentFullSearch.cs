@@ -13,6 +13,10 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
+        Task DeleteAllAsync(CancellationToken cancellationToken = default);
+
+        Task DeleteAllByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default);
+
         Task<List<EsDocument>> SearchAsync(string context, Guid projectId, string languageCode,
             string version, int? skipCount = null, int? maxResultCount = null,
             CancellationToken cancellationToken = default);

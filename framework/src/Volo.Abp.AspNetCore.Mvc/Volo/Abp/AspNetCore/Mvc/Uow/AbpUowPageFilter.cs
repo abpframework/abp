@@ -38,7 +38,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
             context.HttpContext.Items["_AbpActionInfo"] = new AbpActionInfoInHttpContext
             {
-                IsObjectResult = ActionResultHelper.IsObjectResult(context.HandlerMethod.MethodInfo.ReturnType)
+                IsObjectResult = ActionResultHelper.IsObjectResult(context.HandlerMethod.MethodInfo.ReturnType, typeof(void))
             };
 
             if (unitOfWorkAttr?.IsDisabled == true)
@@ -71,7 +71,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
                 }
             }
         }
-        
+
         private AbpUnitOfWorkOptions CreateOptions(PageHandlerExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)
         {
             var options = new AbpUnitOfWorkOptions();

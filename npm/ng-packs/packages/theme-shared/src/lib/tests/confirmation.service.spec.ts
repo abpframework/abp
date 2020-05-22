@@ -43,6 +43,25 @@ describe('ConfirmationService', () => {
     expect(selectConfirmationContent('.message')).toBe('MESSAGE');
   }));
 
+  test('should display HTML string in title, message, and buttons', fakeAsync(() => {
+    service.show(
+      '<span class="custom-message">MESSAGE<span>',
+      '<span class="custom-title">TITLE<span>',
+      'neutral',
+      {
+        cancelText: '<span class="custom-cancel">CANCEL</span>',
+        yesText: '<span class="custom-yes">YES</span>',
+      },
+    );
+
+    tick();
+
+    expect(selectConfirmationContent('.custom-title')).toBe('TITLE');
+    expect(selectConfirmationContent('.custom-message')).toBe('MESSAGE');
+    expect(selectConfirmationContent('.custom-cancel')).toBe('CANCEL');
+    expect(selectConfirmationContent('.custom-yes')).toBe('YES');
+  }));
+
   test.each`
     type         | selector      | icon
     ${'info'}    | ${'.info'}    | ${'.fa-info-circle'}
@@ -86,6 +105,21 @@ describe('ConfirmationService', () => {
 
     selectConfirmationElement<HTMLButtonElement>('button#cancel').click();
   });
+
+  test.each`
+    dismissible | count
+    ${true}     | ${1}
+    ${false}    | ${0}
+  `(
+    'should call the listenToEscape method $count times when dismissible is $dismissible',
+    ({ dismissible, count }) => {
+      const spy = spyOn(service as any, 'listenToEscape');
+
+      service.info('', '', { dismissible });
+
+      expect(spy).toHaveBeenCalledTimes(count);
+    },
+  );
 });
 
 function clearElements(selector = '.confirmation') {
