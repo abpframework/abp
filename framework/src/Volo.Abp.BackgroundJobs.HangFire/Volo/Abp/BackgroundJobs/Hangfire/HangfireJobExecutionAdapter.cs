@@ -8,8 +8,6 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
 {
     public class HangfireJobExecutionAdapter<TArgs>
     {
-        public ILogger<HangfireJobExecutionAdapter<TArgs>> Logger { get; set; }
-        
         protected AbpBackgroundJobOptions Options { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
@@ -22,15 +20,19 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
             JobExecuter = jobExecuter;
             ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
-            Logger = NullLogger<HangfireJobExecutionAdapter<TArgs>>.Instance;
         }
 
         public void Execute(TArgs args)
         {
             if (!Options.IsJobExecutionEnabled)
             {
-                Logger.LogWarning("Background jobs system is disabled");
-                return;
+                throw new AbpException(
+                    "Background job execution is disabled. " +
+                    "This method should not be called! " +
+                    "If you want to enable the background job execution, " +
+                    $"set {nameof(AbpBackgroundJobOptions)}.{nameof(AbpBackgroundJobOptions.IsJobExecutionEnabled)} to true! " +
+                    "If you've intentionally disabled job execution and this seems a bug, please report it."
+                );
             }
 
             using (var scope = ServiceScopeFactory.CreateScope())

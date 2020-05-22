@@ -149,6 +149,7 @@ namespace MyCompanyName.MyProjectName.Web
                         typeof(AbpUiResource)
                     );
 
+                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));

@@ -129,6 +129,13 @@
   dependencies:
     just-compare "^1.3.0"
 
+"@abp/utils@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-2.7.0.tgz#492b5ee5c19694caf5f782ca374d7884914c78d4"
+  integrity sha512-pYU4rXgDVef+osba2TXjmBTzB9B9+aXY6vssf9+9DONZWyBDLAiK+UrV89X2SbRPaAxD9N0CRWHD3EAVPnqXiA==
+  dependencies:
+    just-compare "^1.3.0"
+
 "@angular-builders/jest@^8.2.0":
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/@angular-builders/jest/-/jest-8.3.2.tgz#669c350c9df2e3afc9ae048c5067759c36113728"
@@ -2129,7 +2136,14 @@
     tree-kill "1.2.2"
     webpack-sources "1.4.3"
 
-"@ngx-validate/core@^0.0.7", "@ngx-validate/core@^0.0.8":
+"@ngx-validate/core@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.7.tgz#35a4364e8c8bb43ce1731e8d681ce1ab307c5955"
+  integrity sha512-APT7kstDaJ0JkC6cDkypbVSXAOAEyPTQ9P8DjEI1szi+Xzuz69XLASK3NdTYjFwogWevhYXoYRaR2Bq9iWzl+g==
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngx-validate/core@^0.0.8":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.8.tgz#8577405eb1af0f5002cdda7a86fbcda56280f116"
   integrity sha512-caIG5ao76Xhf7T+pNA8crnpAwK0yqj3i0OAUGZRUq1W+kNgz+ZnrSd4F9an/W4g+38u/8gfUVvsfsm07ju6qYA==

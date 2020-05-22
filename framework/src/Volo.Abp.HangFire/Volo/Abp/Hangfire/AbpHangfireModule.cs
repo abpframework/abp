@@ -25,9 +25,11 @@ namespace Volo.Abp.Hangfire
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            //TODO: ABP may provide two methods for application shutdown: OnPreApplicationShutdown & OnApplicationShutdown
-            _backgroundJobServer.SendStop();
-            _backgroundJobServer.Dispose();
+            if (_backgroundJobServer != null)
+            {
+                _backgroundJobServer.SendStop();
+                _backgroundJobServer.Dispose();
+            }
         }
     }
 }
