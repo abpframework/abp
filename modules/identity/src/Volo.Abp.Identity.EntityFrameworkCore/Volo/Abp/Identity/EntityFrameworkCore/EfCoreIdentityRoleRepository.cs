@@ -38,7 +38,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .WhereIf(filter != null,
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
                         x => x.Name.Contains(filter) ||
                         x.NormalizedName.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))

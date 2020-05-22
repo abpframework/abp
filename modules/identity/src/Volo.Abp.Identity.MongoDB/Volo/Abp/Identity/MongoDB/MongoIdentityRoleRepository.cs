@@ -36,7 +36,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .WhereIf(filter != null,
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
                         x => x.Name.Contains(filter) ||
                         x.NormalizedName.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))

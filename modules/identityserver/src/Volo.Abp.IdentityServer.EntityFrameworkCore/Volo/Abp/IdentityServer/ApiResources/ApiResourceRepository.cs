@@ -50,7 +50,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .WhereIf(filter != null, x => x.Name.Contains(filter) ||
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))
                 .OrderBy(sorting ?? "name desc")

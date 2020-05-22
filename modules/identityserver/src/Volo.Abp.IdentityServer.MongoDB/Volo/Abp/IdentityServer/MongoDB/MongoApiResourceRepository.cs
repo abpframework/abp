@@ -37,7 +37,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .WhereIf(filter != null,
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
                          x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))

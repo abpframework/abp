@@ -18,10 +18,10 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
         }
 
-        public virtual async Task<List<IdentityResource>> GetListAsync(string sorting, int skipCount, int maxResultCount,string filter, bool includeDetails = false, CancellationToken cancellationToken = default)
+        public virtual async Task<List<IdentityResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .WhereIf(filter != null, x => x.Name.Contains(filter) ||
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.Name.Contains(filter) ||
                          x.Description.Contains(filter) ||
                          x.DisplayName.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityResource.Name))

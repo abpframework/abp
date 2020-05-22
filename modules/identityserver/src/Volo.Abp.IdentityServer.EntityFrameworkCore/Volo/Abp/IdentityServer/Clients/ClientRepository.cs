@@ -34,7 +34,7 @@ namespace Volo.Abp.IdentityServer.Clients
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .WhereIf(filter != null, x => x.ClientId.Contains(filter))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
                 .OrderBy(sorting ?? nameof(Client.ClientName) + " desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));

@@ -38,7 +38,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .WhereIf(filter != null, x=>x.ClientId.Contains(filter))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x=>x.ClientId.Contains(filter))
                 .OrderBy(sorting ?? nameof(Client.ClientName))
                 .As<IMongoQueryable<Client>>()
                 .PageBy<Client, IMongoQueryable<Client>>(skipCount, maxResultCount)
