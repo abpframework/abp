@@ -99,6 +99,8 @@ This class **overrides** the `CreateAsync` method of the `IdentityUserAppService
 
 You could completely **re-write** the entire business logic for a user creation without calling the base method.
 
+> It's better to add the attribute `[RemoteService(IsEnabled = false)]` if the [Auto API Controllers](API/Auto-API-Controllers.md) is enabled, otherwise the extra APIs for MyIdentityUser will be generated.
+
 ### Example: Overriding a Domain Service
 
 ````csharp
