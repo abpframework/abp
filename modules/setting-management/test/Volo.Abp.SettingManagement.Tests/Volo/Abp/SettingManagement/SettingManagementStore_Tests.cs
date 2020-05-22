@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Settings;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.SettingManagement
@@ -13,12 +14,14 @@ namespace Volo.Abp.SettingManagement
         private readonly ISettingManagementStore _settingManagementStore;
         private readonly ISettingRepository _settingRepository;
         private readonly SettingTestData _testData;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public SettingManagementStore_Tests()
         {
             _settingManagementStore = GetRequiredService<ISettingManagementStore>();
             _settingRepository = GetRequiredService<ISettingRepository>();
             _testData = GetRequiredService<SettingTestData>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
@@ -40,6 +43,25 @@ namespace Volo.Abp.SettingManagement
         }
 
         [Fact]
+        public async Task SetThenGetOnUnitOfWorkAsync()
+        {
+            using (_unitOfWorkManager.Begin())
+            {
+                var value = await _settingManagementStore.GetOrNullAsync("MySetting1",
+                    GlobalSettingValueProvider.ProviderName, null);
+                value.ShouldBe("42");
+
+                await _settingManagementStore.SetAsync("MySetting1", "43", GlobalSettingValueProvider.ProviderName,
+                    null);
+
+                var valueAfterSet =
+                    await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName,
+                        null);
+                valueAfterSet.ShouldBe("43");
+            }
+        }
+
+        [Fact]
         public async Task SetAsync()
         {
             var setting = await _settingRepository.FindAsync(_testData.SettingId);
@@ -49,6 +71,7 @@ namespace Volo.Abp.SettingManagement
 
             (await _settingRepository.FindAsync(_testData.SettingId)).Value.ShouldBe("43");
         }
+
 
         [Fact]
         public async Task DeleteAsync()

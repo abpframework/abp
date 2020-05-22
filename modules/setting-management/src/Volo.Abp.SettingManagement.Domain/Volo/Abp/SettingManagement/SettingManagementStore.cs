@@ -42,6 +42,10 @@ namespace Volo.Abp.SettingManagement
             {
                 setting.Value = value;
                 await SettingRepository.UpdateAsync(setting);
+                
+                /* Re-set on cache */
+                var cacheKey = CalculateCacheKey(name, providerName, providerKey);
+                await Cache.RemoveAsync(cacheKey);
             }
         }
 
