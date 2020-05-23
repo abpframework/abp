@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
@@ -42,6 +44,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
             Theme = currentTheme;
             Toolbar = toolbar;
             ServiceProvider = serviceProvider;
+        }
+        
+        public Task<bool> IsGrantedAsync(string policyName)
+        {
+            return AuthorizationService.IsGrantedAsync(policyName);
+        }
+
+        [CanBeNull]
+        public IStringLocalizer GetDefaultLocalizer()
+        {
+            return StringLocalizerFactory.CreateDefaultOrNull();
+        }
+
+        [NotNull]
+        public IStringLocalizer GetLocalizer<T>()
+        {
+            return StringLocalizerFactory.Create<T>();
+        }
+        
+        [NotNull]
+        public IStringLocalizer GetLocalizer(Type resourceType)
+        {
+            return StringLocalizerFactory.Create(resourceType);
         }
     }
 }
