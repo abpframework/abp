@@ -31,6 +31,11 @@ namespace Volo.Abp.Identity.MongoDB
             {
                 b.CollectionName = options.CollectionPrefix + "ClaimTypes";
             });
+
+            builder.Entity<OrganizationUnit>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "OrganizationUnits";
+            });
         }
     }
 }
