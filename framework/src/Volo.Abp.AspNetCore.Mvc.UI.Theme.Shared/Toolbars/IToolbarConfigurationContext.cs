@@ -1,4 +1,7 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
@@ -8,5 +11,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
         ITheme Theme { get; }
 
         Toolbar Toolbar { get; }
+
+        IAuthorizationService AuthorizationService { get; }
+
+        IStringLocalizerFactory StringLocalizerFactory { get; }
     }
 }
