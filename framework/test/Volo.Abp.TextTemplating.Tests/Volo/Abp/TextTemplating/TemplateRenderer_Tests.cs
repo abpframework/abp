@@ -81,13 +81,15 @@ namespace Volo.Abp.TextTemplating
         {
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ForgotPasswordEmail,
+                new ForgotPasswordEmailModel("John"),
                 cultureName: "en"
-            )).ShouldBe("*BEGIN*Hello. Please click to the following link to get an email to reset your password!*END*");
+            )).ShouldBe("*BEGIN*Hello John, how are you?. Please click to the following link to get an email to reset your password!*END*");
 
             (await _templateRenderer.RenderAsync(
                 TestTemplates.ForgotPasswordEmail,
+                model: new Dictionary<string, object>() { { "name", "John" } },
                 cultureName: "tr"
-            )).ShouldBe("*BEGIN*Merhaba. Please click to the following link to get an email to reset your password!*END*");
+            )).ShouldBe("*BEGIN*Merhaba John, nasılsın?. Please click to the following link to get an email to reset your password!*END*");
         }
 
         private class WelcomeEmailModel
@@ -100,6 +102,21 @@ namespace Volo.Abp.TextTemplating
             }
 
             public WelcomeEmailModel(string name)
+            {
+                Name = name;
+            }
+        }
+
+        private class ForgotPasswordEmailModel
+        {
+            public string Name { get; set; }
+
+            public ForgotPasswordEmailModel()
+            {
+
+            }
+
+            public ForgotPasswordEmailModel(string name)
             {
                 Name = name;
             }

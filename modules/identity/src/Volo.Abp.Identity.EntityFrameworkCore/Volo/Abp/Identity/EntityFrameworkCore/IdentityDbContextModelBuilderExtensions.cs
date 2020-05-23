@@ -40,7 +40,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(u => u.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
                 b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
                 b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
-                
+                b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+
                 b.HasIndex(u => u.NormalizedUserName);
                 b.HasIndex(u => u.NormalizedEmail);
                 b.HasIndex(u => u.UserName);
@@ -145,6 +146,47 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(uc => uc.RegexDescription).HasMaxLength(IdentityClaimTypeConsts.MaxRegexDescriptionLength);
                 b.Property(uc => uc.Description).HasMaxLength(IdentityClaimTypeConsts.MaxDescriptionLength);
                 b.Property(uc => uc.ConcurrencyStamp).IsRequired().IsConcurrencyToken().HasMaxLength(IdentityClaimTypeConsts.MaxConcurrencyStampLength).HasColumnName(nameof(IdentityClaimType.ConcurrencyStamp));
+            });
+
+            builder.Entity<OrganizationUnit>(b =>
+            {
+                b.ToTable(options.TablePrefix + "OrganizationUnits", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.Property(ou => ou.Code).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxCodeLength).HasColumnName(nameof(OrganizationUnit.Code));
+                b.Property(ou => ou.DisplayName).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxDisplayNameLength).HasColumnName(nameof(OrganizationUnit.DisplayName));
+
+                b.HasMany<OrganizationUnit>().WithOne().HasForeignKey(ou => ou.ParentId);
+                b.HasMany(ou => ou.Roles).WithOne().HasForeignKey(our => our.OrganizationUnitId).IsRequired();
+
+                b.HasIndex(ou => ou.Code);
+            });
+
+            builder.Entity<OrganizationUnitRole>(b =>
+            {
+                b.ToTable(options.TablePrefix + "OrganizationUnitRoles", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.HasKey(ou => new { ou.OrganizationUnitId, ou.RoleId });
+
+                b.HasOne<IdentityRole>().WithMany().HasForeignKey(ou => ou.RoleId).IsRequired();
+
+                b.HasIndex(ou => new { ou.RoleId, ou.OrganizationUnitId });
+            });
+
+            builder.Entity<IdentityUserOrganizationUnit>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserOrganizationUnits", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.HasKey(ou => new { ou.OrganizationUnitId, ou.UserId });
+
+                b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
+
+                b.HasIndex(ou => new { ou.UserId, ou.OrganizationUnitId });
             });
         }
     }

@@ -40,5 +40,12 @@ namespace Volo.Abp.Identity
         {
             return LookupAppService.SearchAsync(input);
         }
+
+        [HttpGet]
+        [Route("count")]
+        public Task<long> GetCountAsync(UserLookupCountInputDto input)
+        {
+            return LookupAppService.GetCountAsync(input);
+        }
     }
 }

@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "HelloText": "Hello"
-  } 
+    "HelloText": "Hello {0}",
+    "HowAreYou": "how are you?"
+  }
 }
