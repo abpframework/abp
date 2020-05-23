@@ -461,6 +461,15 @@
       ]
     },
     {
+      "text": "Real Time",
+      "items": [
+        {
+          "text": "SignalR Integration",
+          "path": "SignalR-Integration.md"
+        }
+      ]
+    },
+    {
       "text": "Background",
       "items": [
         {
@@ -532,11 +541,12 @@
       "path": "Microservice-Architecture.md"
     },
     {
-      "text": "Testing"
-    },
-    {
       "text": "Nightly Builds",
       "path": "Nightly-Builds.md"
+    },
+    {
+      "text": "Road Map",
+      "path": "Road-Map.md"
     },
     {
       "text": "Contribution Guide",
