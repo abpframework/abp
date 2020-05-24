@@ -204,13 +204,14 @@ PascalCase 属性名(如 `UserName`) 在模板中用做小驼峰(如 `userName`)
 假设你需要向用户发送电子邮件重置密码. 模板内容:
 
 ````
-<a href="{%{{{model.link}}}%}">{%{{{L "ResetMyPassword"}}}%}</a>
+<a title="{%{{{L "ResetMyPasswordTitle"}}}%}" href="{%{{{model.link}}}%}">{%{{{L "ResetMyPassword" model.name}}}%}</a>
 ````
 
 `L` 函数用于根据当前用户的文化来定位给定的Key,你需要在本地化文件中定义 `ResetMyPassword` 键:
 
 ````json
-"ResetMyPassword": "Click here to reset your password"
+"ResetMyPasswordTitle": "Reset my password",
+"ResetMyPassword": "Hi {0}, Click here to reset your password"
 ````
 
 你还需要在模板定义提供程序类中声明要与此模板一起使用的本地化资源:
@@ -234,6 +235,7 @@ var result = await _templateRenderer.RenderAsync(
     "PasswordReset", //the template name
     new PasswordResetModel
     {
+        Name = "john",
         Link = "https://abp.io/example-link?userId=123&token=ABC"
     }
 );
@@ -242,7 +244,7 @@ var result = await _templateRenderer.RenderAsync(
 你可以看到以下本地化结果:
 
 ````csharp
-<a href="https://abp.io/example-link?userId=123&token=ABC">Click here to reset your password</a>
+<a title="Reset my password" href="https://abp.io/example-link?userId=123&token=ABC">Hi john, Click here to reset your password</a>
 ````
 
 > 如果你为应用程序定义了 [默认本地化资源](Localization.md), 则无需声明模板定义的资源类型.
