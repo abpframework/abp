@@ -79,9 +79,4 @@ namespace Volo.Abp.BlobStoring
         
         //TODO: Create shortcut extension methods: GetAsArraryAsync, GetAsStringAsync(encoding) (and null versions)
     }
-    
-    public interface IBlobContainerManager
-    {
-        //Get (or create), Delete (if does exists)
-    }
 }
