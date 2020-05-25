@@ -75,7 +75,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             var bundleFiles = RequestResources.TryAdd(await GetBundleFilesAsync(contributors));
             var dynamicResources = RequestResources.TryAdd(await GetDynamicResourcesAsync(contributors));
 
-            if (!IsBundlingEnabled())
+            if (!Options.IsBundlingEnabled(HostingEnvironment))
             {
                 return bundleFiles.Union(dynamicResources).ToImmutableList();
             }
@@ -99,7 +99,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     new BundlerContext(
                         bundleRelativePath,
                         bundleFiles,
-                        IsMinficationEnabled()
+                        Options.IsMinficationEnabled(HostingEnvironment)
                     )
                 );
 
@@ -145,38 +145,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
                     fileName
                 )
             );
-        }
-
-        protected virtual bool IsBundlingEnabled()
-        {
-            switch (Options.Mode)
-            {
-                case BundlingMode.None:
-                    return false;
-                case BundlingMode.Bundle:
-                case BundlingMode.BundleAndMinify:
-                    return true;
-                case BundlingMode.Auto:
-                    return !HostingEnvironment.IsDevelopment();
-                default:
-                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {Options.Mode}");
-            }
-        }
-
-        protected virtual bool IsMinficationEnabled()
-        {
-            switch (Options.Mode)
-            {
-                case BundlingMode.None:
-                case BundlingMode.Bundle:
-                    return false;
-                case BundlingMode.BundleAndMinify:
-                    return true;
-                case BundlingMode.Auto:
-                    return !HostingEnvironment.IsDevelopment();
-                default:
-                    throw new AbpException($"Unhandled {nameof(BundlingMode)}: {Options.Mode}");
-            }
         }
 
         protected async Task<List<string>> GetBundleFilesAsync(List<IBundleContributor> contributors)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -16,12 +17,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             IBundleManager bundleManager,
             IWebContentFileProvider webContentFileProvider,
             IOptions<AbpBundlingOptions> options,
-            IWebHostEnvironment hostingEnvironment
+            IWebHostEnvironment hostingEnvironment,
+            IHttpContextAccessor contextAccessor
             ) : base(
                 bundleManager,
                 webContentFileProvider,
                 options,
-                hostingEnvironment)
+                hostingEnvironment,
+                contextAccessor)
         {
         }
 

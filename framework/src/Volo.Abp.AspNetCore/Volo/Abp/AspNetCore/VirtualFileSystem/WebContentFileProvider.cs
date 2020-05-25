@@ -42,6 +42,8 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 return new NotFoundFileInfo(subpath);
             }
 
+            subpath = NormalizePath(subpath);
+
             if (ExtraAllowedFolder(subpath) && ExtraAllowedExtension(subpath))
             {
                 var fileInfo = _fileProvider.GetFileInfo(subpath);
@@ -122,6 +124,13 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
         protected virtual bool ExtraAllowedExtension(string path)
         {
             return Options.AllowedExtraWebContentFileExtensions.Any(e => path.EndsWith(e, StringComparison.OrdinalIgnoreCase));
+        }
+
+        protected virtual string NormalizePath(string subpath)
+        {
+            subpath = subpath.RemovePreFix(StringComparison.Ordinal, ".", "~");
+
+            return subpath.EnsureStartsWith('/');
         }
     }
 }
