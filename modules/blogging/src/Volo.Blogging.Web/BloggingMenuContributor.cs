@@ -19,7 +19,7 @@ namespace Volo.Blogging
 
         private async Task ConfigureMainMenu(MenuConfigurationContext context)
         {
-            var l = context..GetLocalizer<BloggingResource>();
+            var l = context.GetLocalizer<BloggingResource>();
 
             if (await context.IsGrantedAsync(BloggingPermissions.Blogs.Management))
             {
