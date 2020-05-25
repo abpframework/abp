@@ -45,15 +45,8 @@ namespace Volo.Abp.Cli.Commands
                     );
                 }
 
-                var referenceCulture = commandLineArgs.Options.GetOrNull(Options.ReferenceCulture.Short, Options.ReferenceCulture.Long);
-                if (referenceCulture == null)
-                {
-                    throw new CliUsageException(
-                        "reference culture is missing!" +
-                        Environment.NewLine + Environment.NewLine +
-                        GetUsageInfo()
-                    );
-                }
+                var referenceCulture = commandLineArgs.Options.GetOrNull(Options.ReferenceCulture.Short, Options.ReferenceCulture.Long)
+                                       ?? "en";
 
                 var outputFile = Path.Combine(currentDirectory,
                     commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long)
@@ -354,9 +347,9 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Options:");
             sb.AppendLine("");
             sb.AppendLine("--culture|-c <culture>                       Target culture. eg: zh-Hans");
-            sb.AppendLine("--reference-culture|-r <culture>             Default: en)");
-            sb.AppendLine("--output|-o <file-name>                      Output file name");
-            sb.AppendLine("--all-values|-all                            Include all keys");
+            sb.AppendLine("--reference-culture|-r <culture>             Default: en");
+            sb.AppendLine("--output|-o <file-name>                      Output file name, Default abp-translation.json");
+            sb.AppendLine("--all-values|-all                            Include all keys. Default false");
             sb.AppendLine("--apply|-a                                   Creates or updates the file for the translated culture.");
             sb.AppendLine("--file|-f <file-name>                        Default: abp-translation.json");
             sb.AppendLine("");

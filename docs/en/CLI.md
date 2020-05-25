@@ -138,6 +138,29 @@ abp update [options]
 * `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 
+
+### translate
+
+This command will create a unified json file based on the reference culture. It will search all localized `json` files in the current directory. It will include the localized translations that are missing from the reference culture. You can complete the translation in this `json`(eg: `abp-translation.json`) file.
+
+Finally, use `abp translate --apply` to submit the changes.This command will synchronize your translated text to the localized `json` file in the project. You can view the changes of localized information through git.
+
+Usage:
+
+````bash
+abp translate [options]
+````
+
+#### Options
+
+* `--culture` or `-c`: Target culture. eg: `zh-Hans`
+* `--reference-culture` or `-r`: Default `en`
+* `--output` or `-o`: Output file name. Default `abp-translation.json`.
+* `--all-values` or `-all`: Include all keys.  Default `false`
+* `--apply` or `-a`: Creates or updates the file for the translated culture.
+* `--file` or `-f`: Default: `abp-translation.json`
+
+
 ### switch-to-preview
 
 You can use this command to switch your project to latest preview version of the ABP framework packages.
@@ -147,6 +170,7 @@ Usage:
 ````bash
 abp switch-to-preview [options]
 ````
+
 #### Options
 
 `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
