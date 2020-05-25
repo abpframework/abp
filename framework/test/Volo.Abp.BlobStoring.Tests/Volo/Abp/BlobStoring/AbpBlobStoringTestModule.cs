@@ -8,6 +8,20 @@ namespace Volo.Abp.BlobStoring
         )]
     public class AbpBlobStoringTestModule : AbpModule
     {
-        
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers
+                    .Configure<TestContainer1>(container =>
+                    {
+                        container["TestConfig1"] = "TestValue1";
+                    })
+                    .Configure<TestContainer2>(container =>
+                    {
+                        container["TestConfig2"] = "TestValue2";
+                    });
+            });
+        }
     }
 }
