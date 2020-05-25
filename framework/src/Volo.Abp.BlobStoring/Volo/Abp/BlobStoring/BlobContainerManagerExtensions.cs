@@ -12,12 +12,12 @@ namespace Volo.Abp.BlobStoring
         /// <returns>
         /// The container object.
         /// </returns>
-        public static IBlobContainer Get<TContainer>(
+        public static IBlobContainer Create<TContainer>(
             this IBlobContainerFactory blobContainerFactory,
             CancellationToken cancellationToken = default
         )
         {
-            return blobContainerFactory.Get(
+            return blobContainerFactory.Create(
                 BlobContainerNameAttribute.GetContainerName<TContainer>(),
                 cancellationToken
             );

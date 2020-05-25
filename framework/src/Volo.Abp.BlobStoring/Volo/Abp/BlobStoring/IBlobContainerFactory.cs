@@ -12,7 +12,7 @@ namespace Volo.Abp.BlobStoring
         /// <returns>
         /// The container object.
         /// </returns>
-        IBlobContainer Get(
+        IBlobContainer Create(
             string name,
             CancellationToken cancellationToken = default
         );

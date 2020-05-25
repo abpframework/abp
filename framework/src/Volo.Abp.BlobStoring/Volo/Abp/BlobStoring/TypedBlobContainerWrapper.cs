@@ -11,7 +11,7 @@ namespace Volo.Abp.BlobStoring
 
         public TypedBlobContainerWrapper(IBlobContainerFactory blobContainerFactory)
         {
-            _container = blobContainerFactory.Get<TContainer>();
+            _container = blobContainerFactory.Create<TContainer>();
         }
         
         public Task SaveAsync(string name, Stream stream, bool overrideExisting = false, CancellationToken cancellationToken = default)
