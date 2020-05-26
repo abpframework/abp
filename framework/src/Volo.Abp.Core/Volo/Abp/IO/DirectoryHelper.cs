@@ -16,6 +16,14 @@ namespace Volo.Abp.IO
                 Directory.CreateDirectory(directory);
             }
         }
+        
+        public static void CreateIfNotExists(DirectoryInfo directory)
+        {
+            if (!directory.Exists)
+            {
+                directory.Create();
+            }
+        }
 
         public static bool IsSubDirectoryOf([NotNull] string parentDirectoryPath, [NotNull] string childDirectoryPath)
         {
