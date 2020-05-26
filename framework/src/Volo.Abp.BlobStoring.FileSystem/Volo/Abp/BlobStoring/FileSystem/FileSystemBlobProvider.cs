@@ -9,9 +9,16 @@ namespace Volo.Abp.BlobStoring.FileSystem
 
     public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
     {
+        protected IBlogFilePathCalculator FilePathCalculator { get; }
+        
+        public FileSystemBlobProvider(IBlogFilePathCalculator filePathCalculator)
+        {
+            FilePathCalculator = filePathCalculator;
+        }
+        
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
-            var filePath = CalculateBlobFilePath(args);
+            var filePath = FilePathCalculator.Calculate(args);
             
             DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
 
@@ -35,21 +42,21 @@ namespace Volo.Abp.BlobStoring.FileSystem
 
         public override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
-            var filePath = CalculateBlobFilePath(args);
+            var filePath = FilePathCalculator.Calculate(args);
             
             return Task.FromResult(FileHelper.DeleteIfExists(filePath));
         }
 
         public override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
-            var filePath = CalculateBlobFilePath(args);
+            var filePath = FilePathCalculator.Calculate(args);
 
             return Task.FromResult(File.Exists(filePath));
         }
 
         public override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
-            var filePath = CalculateBlobFilePath(args);
+            var filePath = FilePathCalculator.Calculate(args);
 
             if (!File.Exists(filePath))
             {
@@ -57,30 +64,6 @@ namespace Volo.Abp.BlobStoring.FileSystem
             }
 
             return Task.FromResult<Stream>(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read));
-        }
-        
-        protected virtual string CalculateBlobFilePath(BlobProviderArgs args)
-        {
-            var fileSystemConfiguration = args.Configuration.GetFileSystemConfiguration();
-            var blobPath = fileSystemConfiguration.BasePath;
-
-            if (args.TenantId == null)
-            {
-                blobPath = Path.Combine(blobPath, "host");
-            }
-            else
-            {
-                blobPath = Path.Combine(blobPath, "tenants", args.TenantId.Value.ToString("D"));
-            }
-
-            if (fileSystemConfiguration.AppendContainerNameToBasePath)
-            {
-                blobPath = Path.Combine(blobPath, args.ContainerName);
-            }
-            
-            blobPath = Path.Combine(blobPath, args.BlobName);
-
-            return blobPath;
         }
     }
 }
