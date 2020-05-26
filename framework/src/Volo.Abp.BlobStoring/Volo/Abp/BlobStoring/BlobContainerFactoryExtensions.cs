@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.BlobStoring
 {
-    public static class BlobContainerManagerExtensions
+    public static class BlobContainerFactoryExtensions
     {
         /// <summary>
         /// Gets a named container.
