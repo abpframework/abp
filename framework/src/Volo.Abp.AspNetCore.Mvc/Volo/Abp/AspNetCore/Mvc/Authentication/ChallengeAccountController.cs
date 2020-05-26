@@ -86,7 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
 
         protected virtual string GetAppHomeUrl()
         {
-            return "/";
+            return "~/";
         }
     }
 }

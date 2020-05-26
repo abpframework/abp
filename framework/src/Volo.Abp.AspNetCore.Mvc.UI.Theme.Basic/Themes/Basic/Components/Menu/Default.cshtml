@@ -10,7 +10,7 @@
         if (menuItem.Url != null)
         {
             <li class="nav-item @cssClass @disabled" @elementId>
-                <a class="nav-link" href="@(menuItem.Url ?? "#")">
+                <a class="nav-link" href="@Url.Content(menuItem.Url ?? "#")">
                     @if (menuItem.Icon != null)
                     {
                         if (menuItem.Icon.StartsWith("fa"))
