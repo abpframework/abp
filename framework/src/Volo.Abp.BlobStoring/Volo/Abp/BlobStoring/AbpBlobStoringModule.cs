@@ -12,6 +12,12 @@ namespace Volo.Abp.BlobStoring
                 typeof(IBlobContainer<>),
                 typeof(TypedBlobContainerWrapper<>)
             );
+
+            context.Services.AddTransient(
+                typeof(IBlobContainer),
+                serviceProvider => serviceProvider
+                    .GetRequiredService<IBlobContainer<DefaultContainer>>()
+            );
         }
     }
 }

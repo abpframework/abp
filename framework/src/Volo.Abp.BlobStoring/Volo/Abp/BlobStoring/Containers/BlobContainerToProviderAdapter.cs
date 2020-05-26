@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.BlobStoring.Containers;
+using Volo.Abp.BlobStoring.Providers;
 
-namespace Volo.Abp.BlobStoring.Providers
+namespace Volo.Abp.BlobStoring.Containers
 {
     public class BlobContainerToProviderAdapter : IBlobContainer
     {
