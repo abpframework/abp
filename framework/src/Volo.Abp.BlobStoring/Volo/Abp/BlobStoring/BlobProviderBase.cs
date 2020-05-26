@@ -11,18 +11,6 @@ namespace Volo.Abp.BlobStoring
 
         public abstract Task<bool> ExistsAsync(BlobProviderExistsArgs args);
 
-        public virtual async Task<Stream> GetAsync(BlobProviderGetArgs args)
-        {
-            var result = await GetOrNullAsync(args);
-            if (result == null)
-            {
-                //TODO: Consider to throw some type of "not found" exception and handle on the HTTP status side
-                throw new AbpException($"Could not found the requested BLOB '{args.BlobName}' in the container '{args.ContainerName}'!");
-            }
-
-            return result;
-        }
-
         public abstract Task<Stream> GetOrNullAsync(BlobProviderGetArgs args);
     }
 }

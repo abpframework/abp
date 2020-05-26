@@ -12,8 +12,6 @@ namespace Volo.Abp.BlobStoring
         
         Task<bool> ExistsAsync(BlobProviderExistsArgs args);
         
-        Task<Stream> GetAsync(BlobProviderGetArgs args);
-        
         Task<Stream> GetOrNullAsync(BlobProviderGetArgs args);
     }
 }
