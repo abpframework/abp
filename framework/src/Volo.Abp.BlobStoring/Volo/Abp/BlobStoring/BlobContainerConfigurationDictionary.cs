@@ -10,7 +10,7 @@ namespace Volo.Abp.BlobStoring
 
         public BlobContainerConfigurationDictionary()
         {
-            Default = new BlobContainerConfiguration("_default");
+            Default = new BlobContainerConfiguration();
         }
 
         public BlobContainerConfigurationDictionary Configure<TContainer>(
@@ -29,7 +29,7 @@ namespace Volo.Abp.BlobStoring
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNull(configureAction, nameof(configureAction));
             
-            configureAction(this.GetOrAdd(name, () => new BlobContainerConfiguration(name)));
+            configureAction(this.GetOrAdd(name, () => new BlobContainerConfiguration()));
             
             return this;
         }
@@ -38,12 +38,6 @@ namespace Volo.Abp.BlobStoring
         {
             configureAction(Default);
             return this;
-        }
-
-        public BlobContainerConfiguration GetOrDefaultConfiguration(string name)
-        {
-            return AbpDictionaryExtensions.GetOrDefault(this, name) ??
-                   Default;
         }
     }
 }

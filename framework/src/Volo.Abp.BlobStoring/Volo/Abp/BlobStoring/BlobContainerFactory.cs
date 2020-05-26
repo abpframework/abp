@@ -26,16 +26,18 @@ namespace Volo.Abp.BlobStoring
         
         public virtual IBlobContainer Create(string name, CancellationToken cancellationToken = default)
         {
-            var configuration = Options.Containers.GetOrDefaultConfiguration(name);
+            var configuration = Options.Containers.GetOrDefault(name);
             return new BlobContainerToProviderAdapter(
                 name,
                 configuration,
-                GetProvider(configuration)
+                GetProvider(name, configuration)
             );
         }
 
         [NotNull]
-        protected virtual IBlobProvider GetProvider(BlobContainerConfiguration configuration)
+        protected virtual IBlobProvider GetProvider(
+            string containerName,
+            BlobContainerConfiguration configuration)
         {
             if (!BlobProviders.Any())
             {
@@ -51,7 +53,7 @@ namespace Volo.Abp.BlobStoring
             }
 
             throw new AbpException(
-                $"Could not find the BLOB Storage provider with the type ({configuration.ProviderType.AssemblyQualifiedName}) configured for the container {configuration.Name}"
+                $"Could not find the BLOB Storage provider with the type ({configuration.ProviderType.AssemblyQualifiedName}) configured for the container {containerName} and no default provider was set."
             );
         }
     }
