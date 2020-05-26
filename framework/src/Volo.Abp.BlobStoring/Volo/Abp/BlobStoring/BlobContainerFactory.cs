@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using JetBrains.Annotations;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.MultiTenancy;
@@ -13,29 +12,29 @@ namespace Volo.Abp.BlobStoring
 {
     public class BlobContainerFactory : IBlobContainerFactory, ITransientDependency
     {
-        protected AbpBlobStoringOptions Options { get; }
-
         protected  IEnumerable<IBlobProvider> BlobProviders { get; }
+        
+        protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
         protected ICurrentTenant CurrentTenant { get; }
         
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public BlobContainerFactory(
-            IOptions<AbpBlobStoringOptions> options,
             IEnumerable<IBlobProvider> blobProviders,
+            IBlobContainerConfigurationProvider configurationProvider,
             ICurrentTenant currentTenant,
             ICancellationTokenProvider cancellationTokenProvider)
         {
-            Options = options.Value;
             BlobProviders = blobProviders;
+            ConfigurationProvider = configurationProvider;
             CurrentTenant = currentTenant;
             CancellationTokenProvider = cancellationTokenProvider;
         }
         
         public virtual IBlobContainer Create(string name, CancellationToken cancellationToken = default)
         {
-            var configuration = Options.Containers.GetConfiguration(name);
+            var configuration = ConfigurationProvider.Get(name);
             return new BlobContainer(
                 name,
                 configuration,
