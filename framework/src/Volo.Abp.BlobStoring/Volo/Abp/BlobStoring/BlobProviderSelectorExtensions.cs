@@ -5,7 +5,7 @@ namespace Volo.Abp.BlobStoring
     public static class BlobProviderSelectorExtensions
     {
         public static IBlobProvider Get<TContainer>(
-            [NotNull] IBlobProviderSelector selector)
+            [NotNull] this IBlobProviderSelector selector)
         {
             Check.NotNull(selector, nameof(selector));
 
