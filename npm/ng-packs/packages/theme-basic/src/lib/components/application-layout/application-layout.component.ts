@@ -15,8 +15,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   // required for dynamic component
   static type = eLayoutType.application;
 
-  isDropdownChildDynamic: boolean;
-
   isCollapsed = true;
 
   smallScreen: boolean; // do not set true or false
@@ -31,8 +29,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   private checkWindowWidth() {
     setTimeout(() => {
-      if (window.innerWidth < 768) {
-        this.isDropdownChildDynamic = false;
+      if (window.innerWidth < 992) {
         if (this.smallScreen === false) {
           this.isCollapsed = false;
           setTimeout(() => {
@@ -41,7 +38,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
         }
         this.smallScreen = true;
       } else {
-        this.isDropdownChildDynamic = true;
         this.smallScreen = false;
       }
     }, 0);
