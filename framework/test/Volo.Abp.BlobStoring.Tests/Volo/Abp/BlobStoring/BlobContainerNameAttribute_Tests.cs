@@ -1,4 +1,5 @@
 ﻿using Shouldly;
+using Volo.Abp.BlobStoring.TestObjects;
 using Xunit;
 
 namespace Volo.Abp.BlobStoring
@@ -9,27 +10,16 @@ namespace Volo.Abp.BlobStoring
         public void Should_Get_Specified_Name()
         {
             BlobContainerNameAttribute
-                .GetContainerName<MyContainerType2>()
-                .ShouldBe("ContName2");
+                .GetContainerName<TestContainer2>()
+                .ShouldBe("Test2");
         }
         
         [Fact]
         public void Should_Get_Full_Class_Name_If_Not_Specified()
         {
             BlobContainerNameAttribute
-                .GetContainerName<MyContainerType1>()
-                .ShouldBe(typeof(MyContainerType1).FullName);
-        }
-        
-        private class MyContainerType1
-        {
-            
-        }
-        
-        [BlobContainerName("ContName2")]
-        private class MyContainerType2
-        {
-            
+                .GetContainerName<TestContainer1>()
+                .ShouldBe(typeof(TestContainer1).FullName);
         }
     }
 }
