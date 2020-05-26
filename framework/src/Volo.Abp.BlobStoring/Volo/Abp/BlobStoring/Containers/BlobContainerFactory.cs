@@ -8,7 +8,7 @@ using Volo.Abp.BlobStoring.Providers;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
-namespace Volo.Abp.BlobStoring
+namespace Volo.Abp.BlobStoring.Containers
 {
     public class BlobContainerFactory : IBlobContainerFactory, ITransientDependency
     {

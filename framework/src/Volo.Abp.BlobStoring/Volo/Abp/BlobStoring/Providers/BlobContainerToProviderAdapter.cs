@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.BlobStoring.Containers;
 
 namespace Volo.Abp.BlobStoring.Providers
 {

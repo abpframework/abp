@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.BlobStoring
+namespace Volo.Abp.BlobStoring.Containers
 {
     public class TypedBlobContainerWrapper<TContainer> : IBlobContainer<TContainer>
         where TContainer: class

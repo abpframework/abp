@@ -2,7 +2,7 @@
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.BlobStoring
+namespace Volo.Abp.BlobStoring.Containers
 {
     public class BlobContainerNameAttribute : Attribute
     {

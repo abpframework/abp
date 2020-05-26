@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Volo.Abp.BlobStoring.Providers;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BlobStoring.Fakes
+namespace Volo.Abp.BlobStoring.Providers.Fakes
 {
     public class FakeProviders : ISingletonDependency
     {

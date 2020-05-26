@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.BlobStoring.Containers;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring

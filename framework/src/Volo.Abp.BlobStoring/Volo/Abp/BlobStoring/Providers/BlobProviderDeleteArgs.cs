@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using JetBrains.Annotations;
+using Volo.Abp.BlobStoring.Containers;
 
 namespace Volo.Abp.BlobStoring.Providers
 {

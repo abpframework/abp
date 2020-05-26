@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Volo.Abp.BlobStoring.Providers;
 
-namespace Volo.Abp.BlobStoring.Fakes
+namespace Volo.Abp.BlobStoring.Providers.Fakes
 {
     public class FakeBlobProvider2 : IBlobProvider
     {
