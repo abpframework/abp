@@ -221,24 +221,50 @@ abp switch-to-stable [options]
 
 ### translate
 
-This command will create a unified json file based on the reference culture. It will search all localized `json` files in the current directory. It will include the localized translations that are missing from the reference culture. You can complete the translation in this `json`(eg: `abp-translation.json`) file.
+Simplifies to translate [localization](Localization.md) files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 
-Finally, use `abp translate --apply` to submit the changes.This command will synchronize your translated text to the localized `json` file in the project. You can view the changes of localized information through git.
+* This command will create a unified json file based on the reference culture. 
+* It searches all the localization `JSON` files in the current directory and all subdirectories (recursively). Then creates a single file (named `abp-translation.json` by default) that includes all the entries need to be translated.
+* Once you translate the entries in this file, you can then apply your changes to the original localization files using the `--apply` command.
 
-Usage:
+> The main purpose of this command is to translate ABP Framework localization files (since the [abp repository](https://github.com/abpframework/abp) has tens of localization files to be translated in different directories).
+
+#### Creating the Translation File
+
+First step is to create the unified translation file:
 
 ````bash
-abp translate [options]
+abp translate -c <culture> [options]
 ````
 
-#### Options
+Example:
 
-* `--culture` or `-c`: Target culture. eg: `zh-Hans`
-* `--reference-culture` or `-r`: Default `en`
+````bash
+abp translate -c de-DE
+````
+
+This command created the unified translation file for the `de-DE` (German) culture.
+
+##### Additional Options
+
+* `--reference-culture` or `-r`: Default `en`. Specifies the reference culture.
 * `--output` or `-o`: Output file name. Default `abp-translation.json`.
-* `--all-values` or `-all`: Include all keys.  Default `false`
-* `--apply` or `-a`: Creates or updates the file for the translated culture.
-* `--file` or `-f`: Default: `abp-translation.json`
+* `--all-values` or `-all`: Include all keys to translate. By default, the unified translation file only includes the missing texts for the target culture. Specify this parameter if you may need to revise the values already translated before.
+
+#### Applying Changes
+
+Once you translate the entries in the unified translation file, you can apply your changes to the original localization files using the `--apply` parameter:
+
+````bash
+abp translate --apply  # apply all changes
+abp translate -a       # shortcut for --apply
+````
+
+Then review changes on your source control system to be sure that it has changed the proper files and send a Pull Request if you've translated ABP Framework resources. Thank you in advance for your contribution.
+
+##### Additional Options
+
+* `--file` or `-f`: Default: `abp-translation.json`. The translation file (use only if you've used the `--output` option before).
 
 ### login
 

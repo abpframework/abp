@@ -59,6 +59,7 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Target culture: " + targetCulture);
                 Logger.LogInformation("Reference culture: " + referenceCulture);
                 Logger.LogInformation("Output file: " + outputFile);
+                
                 if (allValues)
                 {
                     Logger.LogInformation("Include all keys");
