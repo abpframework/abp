@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Threading\Volo.Abp.Threading.csproj" />
   </ItemGroup>
 
 </Project>

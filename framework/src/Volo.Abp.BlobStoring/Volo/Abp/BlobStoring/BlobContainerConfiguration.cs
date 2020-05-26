@@ -6,14 +6,27 @@ namespace Volo.Abp.BlobStoring
 {
     public class BlobContainerConfiguration
     {
+        /// <summary>
+        /// The provider to be used to store BLOBs of this container.
+        /// </summary>
         public Type ProviderType { get; set; }
 
-        [NotNull]
-        private readonly Dictionary<string, object> _properties;
-        
-        [CanBeNull]
-        private readonly BlobContainerConfiguration _fallbackConfiguration;
-        
+        /// <summary>
+        /// Indicates whether this container is multi-tenant or not.
+        ///
+        /// If this is <code>false</code> and your application is multi-tenant,
+        /// then the container is shared by all tenants in the system.
+        ///
+        /// This can be <code>true</code> even if your application is not multi-tenant.
+        /// 
+        /// Default: true.
+        /// </summary>
+        public bool IsMultiTenant { get; set; } = true;
+
+        [NotNull] private readonly Dictionary<string, object> _properties;
+
+        [CanBeNull] private readonly BlobContainerConfiguration _fallbackConfiguration;
+
         public BlobContainerConfiguration(BlobContainerConfiguration fallbackConfiguration = null)
         {
             _fallbackConfiguration = fallbackConfiguration;
@@ -25,7 +38,7 @@ namespace Volo.Abp.BlobStoring
         {
             return (T) GetConfigurationOrNull(name, defaultValue);
         }
-        
+
         [CanBeNull]
         public object GetConfigurationOrNull(string name, object defaultValue = null)
         {
@@ -33,25 +46,25 @@ namespace Volo.Abp.BlobStoring
                    _fallbackConfiguration?.GetConfigurationOrNull(name, defaultValue) ??
                    defaultValue;
         }
-        
+
         [NotNull]
         public BlobContainerConfiguration SetConfiguration([NotNull] string name, [CanBeNull] object value)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNull(value, nameof(value));
-            
+
             _properties[name] = value;
-            
+
             return this;
         }
-        
+
         [NotNull]
         public BlobContainerConfiguration ClearConfiguration([NotNull] string name)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
 
             _properties.Remove(name);
-            
+
             return this;
         }
     }
