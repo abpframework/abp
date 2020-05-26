@@ -19,11 +19,11 @@ namespace Volo.Abp.BlobStoring
         public void Should_Property_Set_And_Get_Options_For_Different_Containers()
         {
             var testContainer1Config = _options.Containers
-                .GetOrDefaultConfiguration(BlobContainerNameAttribute.GetContainerName<TestContainer1>());
+                .GetOrDefault(BlobContainerNameAttribute.GetContainerName<TestContainer1>());
             testContainer1Config.ShouldContainKeyAndValue("TestConfig1", "TestValue1");
             
             var testContainer2Config = _options.Containers
-                .GetOrDefaultConfiguration(BlobContainerNameAttribute.GetContainerName<TestContainer2>());
+                .GetOrDefault(BlobContainerNameAttribute.GetContainerName<TestContainer2>());
             testContainer2Config.ShouldContainKeyAndValue("TestConfig2", "TestValue2");
         }
     }
