@@ -52,10 +52,10 @@ namespace Volo.Abp.Cli.Commands
                     commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long)
                     ?? "abp-translation.json");
 
-                var allValues = Convert.ToBoolean(commandLineArgs.Options.GetOrNull(Options.AllValues.Short, Options.AllValues.Long)
-                                                  ?? "false");
+                var allValues = commandLineArgs.Options.ContainsKey(Options.AllValues.Short) ||
+                                commandLineArgs.Options.ContainsKey(Options.AllValues.Long);
 
-                Logger.LogInformation("Abp translateA...");
+                Logger.LogInformation("Abp translate...");
                 Logger.LogInformation("Target culture: " + targetCulture);
                 Logger.LogInformation("Reference culture: " + referenceCulture);
                 Logger.LogInformation("Output file: " + outputFile);
@@ -194,12 +194,12 @@ namespace Volo.Abp.Cli.Commands
                     var targetText = targetLocalizationInfo.Texts.FirstOrDefault(x => x.Name == text.LocalizationKey);
                     if (targetText != null)
                     {
-                        Logger.LogInformation($"Update translation: {targetText.Name}=>" + text.Target);
+                        Logger.LogInformation($"Update translation: {targetText.Name} => " + text.Target);
                         targetText.Value = text.Target;
                     }
                     else
                     {
-                        Logger.LogInformation($"Create translation: {text.LocalizationKey}=>" + text.Target);
+                        Logger.LogInformation($"Create translation: {text.LocalizationKey} => " + text.Target);
                         targetLocalizationInfo.Texts.Add(new NameValue(text.LocalizationKey, text.Target));
                     }
                 }
@@ -216,7 +216,7 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private static IEnumerable<string> GetCultureJsonFiles(string directory,string cultureName)
+        private static IEnumerable<string> GetCultureJsonFiles(string path,string cultureName)
         {
             var excludeDirectory = new List<string>()
             {
@@ -227,7 +227,7 @@ namespace Volo.Abp.Cli.Commands
 
             var allCultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures);
 
-            return Directory.GetFiles(directory, "*.json", SearchOption.AllDirectories)
+            return Directory.GetFiles(path, "*.json", SearchOption.AllDirectories)
                 .Where(file => excludeDirectory.All(x => file.IndexOf(x, StringComparison.OrdinalIgnoreCase) == -1))
                 .Where(jsonFile => allCultureInfos.Any(culture => jsonFile.EndsWith($"{cultureName}.json", StringComparison.OrdinalIgnoreCase)));
         }
@@ -300,10 +300,9 @@ namespace Volo.Abp.Cli.Commands
             }
 
             AbpTranslateInfo translateInfo;
-            var json = File.ReadAllText(path);
             try
             {
-                translateInfo = JsonConvert.DeserializeObject<AbpTranslateInfo>(json);
+                translateInfo = JsonConvert.DeserializeObject<AbpTranslateInfo>(File.ReadAllText(path));
             }
             catch (Exception e)
             {
@@ -355,7 +354,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
-            sb.AppendLine("  abp translate -c zh-Hans -r en");
+            sb.AppendLine("  abp translate -c zh-Hans");
             sb.AppendLine("  abp translate -c zh-Hans -r en -a");
             sb.AppendLine("  abp translate --apply");
             sb.AppendLine("  abp translate -a -f my-translation.json");
