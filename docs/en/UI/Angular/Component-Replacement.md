@@ -234,7 +234,6 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
         class="dropdown-submenu"
         ngbDropdown
         #dropdownSubmenu="ngbDropdown"
-        [display]="smallScreen ? 'dynamic' : 'static'"
         placement="right-top"
         [autoClose]="true"
         *abpPermission="'AbpIdentity.Roles || AbpIdentity.Users'"
@@ -242,7 +241,7 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
         <div ngbDropdownToggle [class.dropdown-toggle]="false">
           <a
             abpEllipsis="210px"
-            [abpEllipsisEnabled]="smallScreen"
+            [abpEllipsisEnabled]="!smallScreen"
             role="button"
             class="btn d-block text-left dropdown-toggle"
           >
@@ -272,7 +271,6 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
         class="dropdown-submenu"
         ngbDropdown
         #dropdownSubmenu="ngbDropdown"
-        [display]="smallScreen ? 'dynamic' : 'static'"
         placement="right-top"
         [autoClose]="true"
         *abpPermission="'AbpTenantManagement.Tenants'"
@@ -280,7 +278,7 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
         <div ngbDropdownToggle [class.dropdown-toggle]="false">
           <a
             abpEllipsis="210px"
-            [abpEllipsisEnabled]="smallScreen"
+            [abpEllipsisEnabled]="!smallScreen"
             role="button"
             class="btn d-block text-left dropdown-toggle"
           >
