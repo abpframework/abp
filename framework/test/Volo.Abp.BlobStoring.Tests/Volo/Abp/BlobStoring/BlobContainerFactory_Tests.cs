@@ -18,7 +18,7 @@ namespace Volo.Abp.BlobStoring
             _factory = GetRequiredService<IBlobContainerFactory>();
             _fakeProviders = GetRequiredService<FakeProviders>();
         }
-
+        
         [Fact]
         public async Task Should_Create_Containers_With_Configured_Providers()
         {
