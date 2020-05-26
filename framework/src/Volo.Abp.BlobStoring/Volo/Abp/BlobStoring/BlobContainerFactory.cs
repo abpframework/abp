@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using JetBrains.Annotations;
+﻿using System.Threading;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.DynamicProxy;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -12,7 +7,7 @@ namespace Volo.Abp.BlobStoring
 {
     public class BlobContainerFactory : IBlobContainerFactory, ITransientDependency
     {
-        protected  IEnumerable<IBlobProvider> BlobProviders { get; }
+        protected IBlobProviderSelector ProviderSelector { get; }
         
         protected IBlobContainerConfigurationProvider ConfigurationProvider { get; }
 
@@ -21,49 +16,27 @@ namespace Volo.Abp.BlobStoring
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public BlobContainerFactory(
-            IEnumerable<IBlobProvider> blobProviders,
             IBlobContainerConfigurationProvider configurationProvider,
             ICurrentTenant currentTenant,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider, 
+            IBlobProviderSelector providerSelector)
         {
-            BlobProviders = blobProviders;
             ConfigurationProvider = configurationProvider;
             CurrentTenant = currentTenant;
             CancellationTokenProvider = cancellationTokenProvider;
+            ProviderSelector = providerSelector;
         }
         
         public virtual IBlobContainer Create(string name, CancellationToken cancellationToken = default)
         {
             var configuration = ConfigurationProvider.Get(name);
+            
             return new BlobContainer(
                 name,
                 configuration,
-                GetProvider(name, configuration),
+                ProviderSelector.Get(name),
                 CurrentTenant,
                 CancellationTokenProvider
-            );
-        }
-
-        [NotNull]
-        protected virtual IBlobProvider GetProvider(
-            string containerName,
-            BlobContainerConfiguration configuration)
-        {
-            if (!BlobProviders.Any())
-            {
-                throw new AbpException("No BLOB Storage provider was registered! At least one provider must be registered to be able to use the Blog Storing System.");
-            }
-            
-            foreach (var provider in BlobProviders)
-            {
-                if (ProxyHelper.GetUnProxiedType(provider).IsAssignableTo(configuration.ProviderType))
-                {
-                    return provider;
-                }
-            }
-
-            throw new AbpException(
-                $"Could not find the BLOB Storage provider with the type ({configuration.ProviderType.AssemblyQualifiedName}) configured for the container {containerName} and no default provider was set."
             );
         }
     }
