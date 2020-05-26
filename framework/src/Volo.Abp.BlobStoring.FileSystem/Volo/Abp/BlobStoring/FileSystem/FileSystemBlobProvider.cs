@@ -1,12 +1,13 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
 
 namespace Volo.Abp.BlobStoring.FileSystem
 {
     //TODO: What if the file is being used on create, delete or read?
 
-    public class FileSystemBlobProvider : BlobProviderBase
+    public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
     {
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
