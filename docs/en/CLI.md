@@ -18,6 +18,20 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## Commands
 
+Here, the list of all available commands before explaining their details:
+
+* **`help`**: Shows help on the usage of the ABP CLI.
+* **`new`**: Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
+* **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
+* **`add-package`**: Adds an ABP package to a project.
+* **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
+* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints on the server.
+* **`switch-to-preview`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
+* **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
+* **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
+* **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
+* **`logout`**: Logouts from your computer if you've authenticated before.
+
 ### new
 
 Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
