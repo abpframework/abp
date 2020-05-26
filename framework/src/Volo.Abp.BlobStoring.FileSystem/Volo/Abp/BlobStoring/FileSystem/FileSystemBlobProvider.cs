@@ -61,7 +61,8 @@ namespace Volo.Abp.BlobStoring.FileSystem
         
         protected virtual string CalculateBlobFilePath(BlobProviderArgs args)
         {
-            var blobPath = args.Configuration.GetFileSystemConfiguration().BasePath;
+            var fileSystemConfiguration = args.Configuration.GetFileSystemConfiguration();
+            var blobPath = fileSystemConfiguration.BasePath;
 
             if (args.TenantId == null)
             {
@@ -72,7 +73,12 @@ namespace Volo.Abp.BlobStoring.FileSystem
                 blobPath = Path.Combine(blobPath, "tenants", args.TenantId.Value.ToString("D"));
             }
 
-            blobPath = Path.Combine(blobPath, args.ContainerName, args.BlobName);
+            if (fileSystemConfiguration.AppendContainerNameToBasePath)
+            {
+                blobPath = Path.Combine(blobPath, args.ContainerName);
+            }
+            
+            blobPath = Path.Combine(blobPath, args.BlobName);
 
             return blobPath;
         }
