@@ -4,13 +4,16 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.BlobStoring
 {
-    public class BlobContainerConfigurationDictionary : Dictionary<string, BlobContainerConfiguration>
+    public class BlobContainerConfigurationDictionary
     {
         public BlobContainerConfiguration Default { get; }
+
+        private readonly Dictionary<string, BlobContainerConfiguration> _containers;
 
         public BlobContainerConfigurationDictionary()
         {
             Default = new BlobContainerConfiguration();
+            _containers = new Dictionary<string, BlobContainerConfiguration>();
         }
 
         public BlobContainerConfigurationDictionary Configure<TContainer>(
@@ -29,7 +32,7 @@ namespace Volo.Abp.BlobStoring
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNull(configureAction, nameof(configureAction));
             
-            configureAction(this.GetOrAdd(name, () => new BlobContainerConfiguration()));
+            configureAction(_containers.GetOrAdd(name, () => new BlobContainerConfiguration(Default)));
             
             return this;
         }
@@ -38,6 +41,24 @@ namespace Volo.Abp.BlobStoring
         {
             configureAction(Default);
             return this;
+        }
+        
+        [NotNull]
+        public BlobContainerConfiguration GetConfiguration<TContainer>([NotNull] string name)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+
+            return _containers.GetOrDefault(name) ?? 
+                   Default;
+        }
+
+        [NotNull]
+        public BlobContainerConfiguration GetConfiguration([NotNull] string name)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+
+            return _containers.GetOrDefault(name) ?? 
+                   Default;
         }
     }
 }

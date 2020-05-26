@@ -26,7 +26,7 @@ namespace Volo.Abp.BlobStoring
         
         public virtual IBlobContainer Create(string name, CancellationToken cancellationToken = default)
         {
-            var configuration = Options.Containers.GetOrDefault(name) ?? Options.Containers.Default;
+            var configuration = Options.Containers.GetConfiguration(name);
             return new BlobContainerToProviderAdapter(
                 name,
                 configuration,

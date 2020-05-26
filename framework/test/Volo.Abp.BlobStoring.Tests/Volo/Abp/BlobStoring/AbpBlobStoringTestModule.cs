@@ -25,17 +25,17 @@ namespace Volo.Abp.BlobStoring
                 options.Containers
                     .ConfigureDefault(container =>
                     {
-                        container["TestConfigDefault"] = "TestValueDefault";
+                        container.SetConfiguration("TestConfigDefault", "TestValueDefault");
                         container.ProviderType = typeof(FakeBlobProvider1);
                     })
                     .Configure<TestContainer1>(container =>
                     {
-                        container["TestConfig1"] = "TestValue1";
+                        container.SetConfiguration("TestConfig1", "TestValue1");
                         container.ProviderType = typeof(FakeBlobProvider1);
                     })
                     .Configure<TestContainer2>(container =>
                     {
-                        container["TestConfig2"] = "TestValue2";
+                        container.SetConfiguration("TestConfig2", "TestValue2");
                         container.ProviderType = typeof(FakeBlobProvider2);
                     });
             });
