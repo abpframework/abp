@@ -32,6 +32,23 @@ Here, the list of all available commands before explaining their details:
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`logout`**: Logouts from your computer if you've authenticated before.
 
+### help
+
+Shows basic usages of the ABP CLI.
+
+Usage:
+
+````bash
+abp help [command-name]
+````
+
+Examples:
+
+````bash
+abp help        # Shows a general help.
+abp help new    # Shows help about the "new" command.
+````
+
 ### new
 
 Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
@@ -76,6 +93,27 @@ abp new Acme.BookStore
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true`. You can set your own connection string if you don't want to use the default. Be aware that the default database provider is `SQL Server`, therefore you can only enter connection string for SQL Server!
 * `--local-framework-ref --abp-path`: keeps local references to projects instead of replacing with NuGet package references.
+
+### update
+
+Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions.
+
+Usage:
+
+````bash
+abp update [options]
+````
+
+* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
+* If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
+
+#### Options
+
+* `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
+* `--npm`: Only updates NPM packages.
+* `--nuget`: Only updates NuGet packages.
+* `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
+* `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 
 ### add-package
 
@@ -131,48 +169,27 @@ abp add-module Volo.Blogging
 * `-sp` or `--startup-project`: Relative path to the project folder of the startup project. Default value is the current folder.
 * `--with-source-code`: Add source code of the module instead of NuGet/NPM packages.
 
-### update
+### generate-proxy
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions.
-
-Usage:
-
-````bash
-abp update [options]
-````
-
-* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
-* If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
-
-#### Options
-
-* `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
-* `--npm`: Only updates NPM packages.
-* `--nuget`: Only updates NuGet packages.
-* `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
-* `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
-
-
-### translate
-
-This command will create a unified json file based on the reference culture. It will search all localized `json` files in the current directory. It will include the localized translations that are missing from the reference culture. You can complete the translation in this `json`(eg: `abp-translation.json`) file.
-
-Finally, use `abp translate --apply` to submit the changes.This command will synchronize your translated text to the localized `json` file in the project. You can view the changes of localized information through git.
+Generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
 
 Usage:
 
 ````bash
-abp translate [options]
+abp generate-proxy [options] 
 ````
 
 #### Options
 
-* `--culture` or `-c`: Target culture. eg: `zh-Hans`
-* `--reference-culture` or `-r`: Default `en`
-* `--output` or `-o`: Output file name. Default `abp-translation.json`.
-* `--all-values` or `-all`: Include all keys.  Default `false`
-* `--apply` or `-a`: Creates or updates the file for the translated culture.
-* `--file` or `-f`: Default: `abp-translation.json`
+* `--apiUrl` or `-a`: Specifies the root URL of the HTTP API. The default value is being retrieved from the `environment.ts` file for the Angular application. Make sure your host is up and running before running `abp generate-proxy`.
+* `--ui` or `-u`: Specifies the UI framework. Default value is `angular` and it is the only UI framework supported for now. Creates TypeScript code.
+* `--module` or `-m`: Specifies the module name. Default module name is `app`, which indicates your own application (you typically want this since every module is responsible to maintain its own client proxies). Set `all` for to generate proxies for all the modules.
+
+Example usage with the options:
+
+````bash
+abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
+````
 
 
 ### switch-to-preview
@@ -202,19 +219,39 @@ abp switch-to-stable [options]
 
 `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
+### translate
+
+This command will create a unified json file based on the reference culture. It will search all localized `json` files in the current directory. It will include the localized translations that are missing from the reference culture. You can complete the translation in this `json`(eg: `abp-translation.json`) file.
+
+Finally, use `abp translate --apply` to submit the changes.This command will synchronize your translated text to the localized `json` file in the project. You can view the changes of localized information through git.
+
+Usage:
+
+````bash
+abp translate [options]
+````
+
+#### Options
+
+* `--culture` or `-c`: Target culture. eg: `zh-Hans`
+* `--reference-culture` or `-r`: Default `en`
+* `--output` or `-o`: Output file name. Default `abp-translation.json`.
+* `--all-values` or `-all`: Include all keys.  Default `false`
+* `--apply` or `-a`: Creates or updates the file for the translated culture.
+* `--file` or `-f`: Default: `abp-translation.json`
+
 ### login
 
 Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:
 
 ```bash
-abp login <username>
+abp login <username>                # Asks password separately
+abp login <username> -p <password>  # Specify the password as a parameter
 ```
 
-```bash
-abp login <username> -p <password>
-```
+> Using `-p` parameter might not be safe if someone is watching your screen :) It can be useful for automation purposes.
 
-Notice that, a new login with an already active session, overwrites the previous session.
+A new login with an already active session overwrites the previous session.
 
 ### logout
 
@@ -224,42 +261,3 @@ Logs you out by removing the session token from your computer.
 abp logout
 ```
 
-### generate-proxy
-
-Generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
-
-Usage:
-
-````bash
-abp generate-proxy [options] 
-````
-
-#### Options
-
-* `--apiUrl` or `-a`: Specifies the root URL of the HTTP API. The default value is being retrieved from the `environment.ts` file for the Angular application. Make sure your host is up and running before running `abp generate-proxy`.
-* `--ui` or `-u`: Specifies the UI framework. Default value is `angular` and it is the only UI framework supported for now. Creates TypeScript code.
-* `--module` or `-m`: Specifies the module name. Default module name is `app`, which indicates your own application (you typically want this since every module is responsible to maintain its own client proxies). Set `all` for to generate proxies for all the modules.
-
-Example usage with the options:
-
-````bash
-abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
-````
-
-
-### help
-
-Writes basic usage information of the CLI.
-
-Usage:
-
-````bash
-abp help [command-name]
-````
-
-Examples:
-
-````bash
-abp help        # Shows a general help.
-abp help new    # Shows help about the "new" command.
-````
