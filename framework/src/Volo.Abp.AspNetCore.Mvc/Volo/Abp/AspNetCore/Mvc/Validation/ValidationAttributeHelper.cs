@@ -20,13 +20,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
                 {
                     validationAttribute.ErrorMessage =
                         "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.";
+                    return;
                 }
             }
-            else
-            {
-                validationAttribute.ErrorMessage =
-                    ValidationAttributeErrorMessageStringProperty.GetValue(validationAttribute) as string;
-            }
+
+            validationAttribute.ErrorMessage =
+                ValidationAttributeErrorMessageStringProperty.GetValue(validationAttribute) as string;
         }
     }
 }
