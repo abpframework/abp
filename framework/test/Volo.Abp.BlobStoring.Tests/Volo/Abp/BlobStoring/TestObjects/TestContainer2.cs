@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.BlobStoring.Containers.TestObjects
+﻿namespace Volo.Abp.BlobStoring.TestObjects
 {
     [BlobContainerName("Test2")]
     public class TestContainer2

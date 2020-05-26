@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.BlobStoring.Containers
+namespace Volo.Abp.BlobStoring
 {
     public class BlobContainerConfiguration
     {

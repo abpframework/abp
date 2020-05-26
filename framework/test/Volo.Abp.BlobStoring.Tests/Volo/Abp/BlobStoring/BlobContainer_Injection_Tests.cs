@@ -1,8 +1,8 @@
 ﻿using Shouldly;
-using Volo.Abp.BlobStoring.Containers.TestObjects;
+using Volo.Abp.BlobStoring.TestObjects;
 using Xunit;
 
-namespace Volo.Abp.BlobStoring.Containers
+namespace Volo.Abp.BlobStoring
 {
     public class BlobContainer_Injection_Tests : AbpBlobStoringTestBase
     {

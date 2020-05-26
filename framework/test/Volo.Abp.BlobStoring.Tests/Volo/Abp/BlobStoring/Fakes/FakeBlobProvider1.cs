@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.BlobStoring.Providers.Fakes
+namespace Volo.Abp.BlobStoring.Fakes
 {
-    public class FakeBlobProvider2 : IBlobProvider
+    public class FakeBlobProvider1 : IBlobProvider
     {
         public virtual Task SaveAsync(BlobProviderSaveArgs args)
         {

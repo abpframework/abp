@@ -1,6 +1,4 @@
-﻿using Volo.Abp.BlobStoring.Containers;
-
-namespace Volo.Abp.BlobStoring
+﻿namespace Volo.Abp.BlobStoring
 {
     public class AbpBlobStoringOptions
     {

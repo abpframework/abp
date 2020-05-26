@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Volo.Abp.BlobStoring.Containers
+namespace Volo.Abp.BlobStoring
 {
     public interface IBlobContainerFactory
     {

@@ -2,7 +2,7 @@
 using System.Linq;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.BlobStoring.Providers.Fakes
+namespace Volo.Abp.BlobStoring.Fakes
 {
     public class FakeProviders : ISingletonDependency
     {

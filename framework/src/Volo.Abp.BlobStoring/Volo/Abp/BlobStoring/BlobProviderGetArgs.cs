@@ -1,12 +1,11 @@
 ﻿using System.Threading;
 using JetBrains.Annotations;
-using Volo.Abp.BlobStoring.Containers;
 
-namespace Volo.Abp.BlobStoring.Providers
+namespace Volo.Abp.BlobStoring
 {
-    public class BlobProviderDeleteArgs : BlobProviderArgs
+    public class BlobProviderGetArgs : BlobProviderArgs
     {
-        public BlobProviderDeleteArgs(
+        public BlobProviderGetArgs(
             [NotNull] string containerName,
             [NotNull] BlobContainerConfiguration configuration,
             [NotNull] string blobName,

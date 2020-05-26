@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.BlobStoring.Containers
+﻿namespace Volo.Abp.BlobStoring
 {
     [BlobContainerName("Default")]
     public class DefaultContainer

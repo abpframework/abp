@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace Volo.Abp.BlobStoring.Providers
+namespace Volo.Abp.BlobStoring
 {
     public interface IBlobProvider
     {

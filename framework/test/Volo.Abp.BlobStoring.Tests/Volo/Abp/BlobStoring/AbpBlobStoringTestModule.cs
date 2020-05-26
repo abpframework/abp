@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Volo.Abp.Autofac;
-using Volo.Abp.BlobStoring.Containers.TestObjects;
-using Volo.Abp.BlobStoring.Providers;
-using Volo.Abp.BlobStoring.Providers.Fakes;
+using Volo.Abp.BlobStoring.Fakes;
+using Volo.Abp.BlobStoring.TestObjects;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring

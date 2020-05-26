@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using Shouldly;
-using Volo.Abp.BlobStoring.Containers;
-using Volo.Abp.BlobStoring.Containers.TestObjects;
-using Volo.Abp.BlobStoring.Providers.Fakes;
+using Volo.Abp.BlobStoring.Fakes;
+using Volo.Abp.BlobStoring.TestObjects;
 using Xunit;
 
 namespace Volo.Abp.BlobStoring

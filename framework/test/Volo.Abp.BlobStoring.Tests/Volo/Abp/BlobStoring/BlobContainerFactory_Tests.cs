@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 using NSubstitute;
-using Volo.Abp.BlobStoring.Containers.TestObjects;
-using Volo.Abp.BlobStoring.Providers;
-using Volo.Abp.BlobStoring.Providers.Fakes;
+using Volo.Abp.BlobStoring.Fakes;
+using Volo.Abp.BlobStoring.TestObjects;
 using Xunit;
 
-namespace Volo.Abp.BlobStoring.Containers
+namespace Volo.Abp.BlobStoring
 {
     public class BlobContainerFactory_Tests : AbpBlobStoringTestBase
     {
