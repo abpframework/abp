@@ -2,11 +2,11 @@
 {
     public class AbpBlobStoringOptions
     {
-        public BlobContainerConfigurationDictionary Containers { get; }
+        public BlobContainerConfigurations Containers { get; }
 
         public AbpBlobStoringOptions()
         {
-            Containers = new BlobContainerConfigurationDictionary();
+            Containers = new BlobContainerConfigurations();
         }
     }
 }

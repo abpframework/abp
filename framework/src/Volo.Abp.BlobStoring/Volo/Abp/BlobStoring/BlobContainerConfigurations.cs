@@ -4,19 +4,19 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.BlobStoring
 {
-    public class BlobContainerConfigurationDictionary
+    public class BlobContainerConfigurations
     {
         public BlobContainerConfiguration Default { get; }
 
         private readonly Dictionary<string, BlobContainerConfiguration> _containers;
 
-        public BlobContainerConfigurationDictionary()
+        public BlobContainerConfigurations()
         {
             Default = new BlobContainerConfiguration();
             _containers = new Dictionary<string, BlobContainerConfiguration>();
         }
 
-        public BlobContainerConfigurationDictionary Configure<TContainer>(
+        public BlobContainerConfigurations Configure<TContainer>(
             Action<BlobContainerConfiguration> configureAction)
         {
             return Configure(
@@ -25,7 +25,7 @@ namespace Volo.Abp.BlobStoring
             );
         }
 
-        public BlobContainerConfigurationDictionary Configure(
+        public BlobContainerConfigurations Configure(
             [NotNull] string name,
             [NotNull] Action<BlobContainerConfiguration> configureAction)
         {
@@ -37,19 +37,16 @@ namespace Volo.Abp.BlobStoring
             return this;
         }
 
-        public BlobContainerConfigurationDictionary ConfigureDefault(Action<BlobContainerConfiguration> configureAction)
+        public BlobContainerConfigurations ConfigureDefault(Action<BlobContainerConfiguration> configureAction)
         {
             configureAction(Default);
             return this;
         }
         
         [NotNull]
-        public BlobContainerConfiguration GetConfiguration<TContainer>([NotNull] string name)
+        public BlobContainerConfiguration GetConfiguration<TContainer>()
         {
-            Check.NotNullOrWhiteSpace(name, nameof(name));
-
-            return _containers.GetOrDefault(name) ?? 
-                   Default;
+            return GetConfiguration(BlobContainerNameAttribute.GetContainerName<TContainer>());
         }
 
         [NotNull]
