@@ -2,7 +2,6 @@
 {
     public class FileSystemBlobProviderConfiguration
     {
-        
         public string BasePath
         {
             get => _containerConfiguration.GetConfiguration<string>(FileSystemBlobProviderConfigurationNames.BasePath);

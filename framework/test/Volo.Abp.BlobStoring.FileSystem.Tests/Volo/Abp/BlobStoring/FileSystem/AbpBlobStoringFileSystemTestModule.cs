@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Volo.Abp.BlobStoring.FileSystem.TestObjects;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring.FileSystem
