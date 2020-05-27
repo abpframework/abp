@@ -15,16 +15,20 @@ import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddRepl
 import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
 import { Store } from '@ngxs/store'; // imported Store
 //...
-export class AppComponent {
+
+@Component(/* component metadata */)
+export class AppComponent implements OnInit {
   constructor(..., private store: Store) {} // injected Store
 
   ngOnInit() {
+    // added dispatch
     this.store.dispatch(
       new AddReplaceableComponent({
         component: YourNewRoleComponent,
         key: eIdentityComponents.Roles,
       }),
     );
+
     //...
   }
 }
@@ -35,11 +39,11 @@ export class AppComponent {
 
 ## How to Replace a Layout
 
-Each ABP theme module has 3 layouts named `ApplicationLayoutComponent`, `AccountLayoutComponent`, `EmptyLayoutComponent`. These layouts can be replaced with the same way.
+Each ABP theme module has 3 layouts named `ApplicationLayoutComponent`, `AccountLayoutComponent`, `EmptyLayoutComponent`. These layouts can be replaced the same way.
 
 > A layout component template should contain `<router-outlet></router-outlet>` element.
 
-The below example describes how to replace the `ApplicationLayoutComponent`:
+The example below describes how to replace the `ApplicationLayoutComponent`:
 
 Run the following command to generate a layout in `angular` folder:
 
@@ -55,7 +59,7 @@ Add the following code in your layout template (`my-layout.component.html`) wher
 <router-outlet></router-outlet>
 ```
 
-Open the `app.component.ts` and add the below content:
+Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
 import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
@@ -63,11 +67,13 @@ import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeB
 import { MyApplicationLayoutComponent } from './shared/my-application-layout/my-application-layout.component'; // imported MyApplicationLayoutComponent
 import { Store } from '@ngxs/store'; // imported Store
 //...
-export class AppComponent {
+
+@Component(/* component metadata */)
+export class AppComponent implements OnInit {
   constructor(..., private store: Store) {} // injected Store
 
   ngOnInit() {
-    // added below content
+    // added dispatch
     this.store.dispatch(
       new AddReplaceableComponent({
         component: MyApplicationLayoutComponent,
@@ -96,7 +102,7 @@ yarn ng generate component logo --inlineTemplate --inlineStyle --entryComponent
 # You don't need the --entryComponent option in Angular 9
 ```
 
-Open the generated `logo.component.ts` in `src/app/logo` folder and replace the content with the below:
+Open the generated `logo.component.ts` in `src/app/logo` folder and replace its content with the following:
 
 ```js
 import { Component } from '@angular/core';
@@ -118,7 +124,7 @@ import { Component } from '@angular/core';
 export class LogoComponent {}
 ```
 
-Open `app.component.ts` in `src/app` folder and modify as shown below:
+Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
 import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
@@ -127,6 +133,7 @@ import { LogoComponent } from './logo/logo.component'; // imported NavItemsCompo
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
+@Component(/* component metadata */)
 export class AppComponent implements OnInit {
   constructor(..., private store: Store) {} // injected Store
 
@@ -160,7 +167,7 @@ yarn ng generate component routes --entryComponent
 # You don't need the --entryComponent option in Angular 9
 ```
 
-Open the generated `routes.component.ts` in `src/app/routes` folder and replace the content with the below:
+Open the generated `routes.component.ts` in `src/app/routes` folder and replace its content with the following:
 
 ```js
 import { ABP, ReplaceableComponents } from '@abp/ng.core';
@@ -197,7 +204,7 @@ export class RoutesComponent implements AfterViewInit {
 }
 ```
 
-Open the generated `routes.component.html` in `src/app/routes` folder and replace the content with the below:
+Open the generated `routes.component.html` in `src/app/routes` folder and replace its content with the following:
 
 ```html
 <ul class="navbar-nav">
@@ -303,7 +310,7 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
 </ul>
 ```
 
-Open `app.component.ts` in `src/app` folder and modify as shown below:
+Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
 import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
@@ -312,6 +319,7 @@ import { RoutesComponent } from './routes/routes.component'; // imported NavItem
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
+@Component(/* component metadata */)
 export class AppComponent implements OnInit {
   constructor(..., private store: Store) {} // injected Store
 
@@ -345,7 +353,7 @@ yarn ng generate component nav-items --entryComponent
 # You don't need the --entryComponent option in Angular 9
 ```
 
-Open the generated `nav-items.component.ts` in `src/app/nav-items` folder and replace the content with the below:
+Open the generated `nav-items.component.ts` in `src/app/nav-items` folder and replace the content with the following:
 
 ```js
 import {
@@ -427,7 +435,7 @@ export class NavItemsComponent implements AfterViewInit {
 }
 ```
 
-Open the generated `nav-items.component.html` in `src/app/nav-items` folder and replace the content with the below:
+Open the generated `nav-items.component.html` in `src/app/nav-items` folder and replace the content with the following:
 
 ```html
 <ul class="navbar-nav">
@@ -504,7 +512,7 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
 </ul>
 ```
 
-Open `app.component.ts` in `src/app` folder and modify as shown below:
+Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
 import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
@@ -513,6 +521,7 @@ import { NavItemsComponent } from './nav-items/nav-items.component'; // imported
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents
 //...
 
+@Component(/* component metadata */)
 export class AppComponent implements OnInit {
   constructor(..., private store: Store) {} // injected Store
 
