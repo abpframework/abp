@@ -37,4 +37,22 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Themes\**\*.cshtml" />
+    <EmbeddedResource Include="Themes\**\*.css" />
+    <EmbeddedResource Include="Themes\**\*.js" />
+    <Content Remove="Themes\**\*.cshtml" />
+    <Content Remove="Themes\**\*.css" />
+    <Content Remove="Themes\**\*.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Pages\**\*.css" />
+    <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Pages\**\*.css" />
+  </ItemGroup>
+
 </Project>
