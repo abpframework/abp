@@ -234,5 +234,5 @@ $projects = (
     "modules/users/src/Volo.Abp.Users.MongoDB",
 
     # modules/virtual-file-explorer
-    "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Web
+    "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Web"
 )
