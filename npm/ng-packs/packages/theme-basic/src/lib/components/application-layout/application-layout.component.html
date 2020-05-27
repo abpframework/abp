@@ -22,14 +22,23 @@
 
       <ng-template #navigations>
         <abp-routes
-          *abpReplaceableTemplate="{ componentKey: routesComponentKey }"
+          *abpReplaceableTemplate="{
+            componentKey: routesComponentKey,
+            inputs: {
+              smallScreen: { value: smallScreen }
+            }
+          }"
           class="mx-auto"
           [smallScreen]="smallScreen"
-          [isDropdownChildDynamic]="isDropdownChildDynamic"
         ></abp-routes>
 
         <abp-nav-items
-          *abpReplaceableTemplate="{ componentKey: navItemsComponentKey }"
+          *abpReplaceableTemplate="{
+            componentKey: navItemsComponentKey,
+            inputs: {
+              smallScreen: { value: smallScreen }
+            }
+          }"
           [smallScreen]="smallScreen"
         ></abp-nav-items>
       </ng-template>

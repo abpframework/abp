@@ -46,7 +46,7 @@ export default `
 .container > .card {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 992px) {
     .navbar .dropdown:hover > .dropdown-menu {
         display: block;
     }
