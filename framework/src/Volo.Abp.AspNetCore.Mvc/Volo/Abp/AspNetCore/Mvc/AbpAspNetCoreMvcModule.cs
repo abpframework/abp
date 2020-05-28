@@ -170,11 +170,11 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             Configure<AbpEndpointRouterOptions>(options =>
             {
-                options.EndpointConfigureActions.Add(context =>
+                options.EndpointConfigureActions.Add(endpointContext =>
                 {
-                    context.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
-                    context.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                    context.Endpoints.MapRazorPages();
+                    endpointContext.Endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                    endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                    endpointContext.Endpoints.MapRazorPages();
                 });
             });
         }
