@@ -6,7 +6,7 @@ using Volo.Abp.IO;
 namespace Volo.Abp.BlobStoring.FileSystem
 {
     //TODO: What if the file is being used on create, delete or read?
-    //TODO: Implement all methods truly async!
+    //TODO: Implement all methods truly async (if possible)!
 
     public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
     {
@@ -20,6 +20,11 @@ namespace Volo.Abp.BlobStoring.FileSystem
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var filePath = FilePathCalculator.Calculate(args);
+
+            if (!args.OverrideExisting && await ExistsAsync(filePath))
+            {
+                throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{args.ContainerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
+            }
             
             DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
 
@@ -29,8 +34,6 @@ namespace Volo.Abp.BlobStoring.FileSystem
             
             using (var fileStream = File.Open(filePath, fileMode, FileAccess.Write))
             {
-                //TODO: Truely implement this (like this? http://writeasync.net/?p=2621 or https://www.infoworld.com/article/2995387/how-to-perform-asynchronous-file-operations-in-c.html)
-                
                 await args.BlobStream.CopyToAsync(
                     fileStream,
                     args.CancellationToken
@@ -43,15 +46,13 @@ namespace Volo.Abp.BlobStoring.FileSystem
         public override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var filePath = FilePathCalculator.Calculate(args);
-            
             return Task.FromResult(FileHelper.DeleteIfExists(filePath));
         }
 
         public override Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var filePath = FilePathCalculator.Calculate(args);
-
-            return Task.FromResult(File.Exists(filePath));
+            return ExistsAsync(filePath);
         }
 
         public override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
@@ -64,6 +65,11 @@ namespace Volo.Abp.BlobStoring.FileSystem
             }
 
             return Task.FromResult<Stream>(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read));
+        }
+        
+        protected virtual Task<bool> ExistsAsync(string filePath)
+        {
+            return Task.FromResult(File.Exists(filePath));
         }
     }
 }
