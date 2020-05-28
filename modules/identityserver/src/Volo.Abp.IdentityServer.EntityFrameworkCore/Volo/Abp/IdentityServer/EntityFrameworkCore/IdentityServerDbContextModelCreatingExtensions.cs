@@ -78,7 +78,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new { x.ClientId, x.RedirectUri });
 
-                if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
+                if (IsMySql(builder, options))
                 {
                     b.Property(x => x.RedirectUri).HasMaxLength(300).IsRequired();
                 }
@@ -96,7 +96,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new { x.ClientId, x.PostLogoutRedirectUri });
 
-                if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
+                if (IsMySql(builder, options))
                 {
                     b.Property(x => x.PostLogoutRedirectUri).HasMaxLength(300).IsRequired();
                 }
@@ -127,7 +127,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
 
-                if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
+                if (IsMySql(builder, options))
                 {
                     b.Property(x => x.Value).HasMaxLength(300).IsRequired();
                 }
@@ -197,7 +197,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.ClientId).HasMaxLength(PersistedGrantConsts.ClientIdMaxLength).IsRequired();
                 b.Property(x => x.CreationTime).IsRequired();
 
-                if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
+                if (IsMySql(builder, options))
                 {
                     b.Property(x => x.Data).HasMaxLength(10000).IsRequired();
                 }
@@ -268,7 +268,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
                 b.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
 
-                if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
+                if (IsMySql(builder, options))
                 {
                     b.Property(x => x.Value).HasMaxLength(300).IsRequired();
                 }
@@ -333,6 +333,14 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasIndex(x => x.DeviceCode).IsUnique();
                 b.HasIndex(x => x.Expiration);
             });
+        }
+
+        private static bool IsMySql(
+            ModelBuilder modelBuilder,
+            IdentityServerModelBuilderConfigurationOptions options)
+        {
+            return options.DatabaseProvider == EfCoreDatabaseProvider.MySql ||
+                   modelBuilder.IsUsingMySQL();
         }
     }
 }
