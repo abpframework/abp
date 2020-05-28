@@ -25,6 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             }
             else
             {
+                ResourceService.ViewContext = TagHelper.ViewContext;
                 await ResourceService.ProcessAsync(
                     context,
                     output,

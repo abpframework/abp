@@ -1,4 +1,7 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
@@ -16,6 +19,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         /// A bundle contributor type.
         /// </summary>
         public Type Type { get; set; }
+
+        [HtmlAttributeNotBound]
+        [ViewContext]
+        public ViewContext ViewContext { get; set; }
 
         protected AbpBundleItemTagHelper(TTagHelperService service)
             : base(service)

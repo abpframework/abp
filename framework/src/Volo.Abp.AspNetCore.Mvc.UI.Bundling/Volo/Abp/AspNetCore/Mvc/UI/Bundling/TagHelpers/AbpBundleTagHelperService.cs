@@ -17,6 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            ResourceService.ViewContext = TagHelper.ViewContext;
             await ResourceService.ProcessAsync(
                 context,
                 output,

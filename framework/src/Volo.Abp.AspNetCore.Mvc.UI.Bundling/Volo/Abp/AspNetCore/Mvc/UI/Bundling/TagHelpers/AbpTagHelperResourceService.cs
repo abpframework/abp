@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -20,10 +19,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
     {
         public ILogger<AbpTagHelperResourceService> Logger { get; set; }
 
-        protected IHttpContextAccessor HttpContextAccessor { get; }
+        public ViewContext ViewContext { get; set; }
+
         protected IBundleManager BundleManager { get; }
         protected IWebContentFileProvider WebContentFileProvider { get; }
         protected IWebHostEnvironment HostingEnvironment { get; }
+        protected IUrlHelperFactory UrlHelperFactory { get; }
         protected readonly AbpBundlingOptions Options;
 
         protected AbpTagHelperResourceService(
@@ -31,12 +32,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             IWebContentFileProvider webContentFileProvider,
             IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment,
-            IHttpContextAccessor httpContextAccessor)
+            IUrlHelperFactory urlHelperFactory)
         {
             BundleManager = bundleManager;
             WebContentFileProvider = webContentFileProvider;
             HostingEnvironment = hostingEnvironment;
-            HttpContextAccessor = httpContextAccessor;
+            UrlHelperFactory = urlHelperFactory;
             Options = options.Value;
 
             Logger = NullLogger<AbpTagHelperResourceService>.Instance;
@@ -76,7 +77,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
                     throw new AbpException($"Could not find the bundle file '{bundleFile}' from {nameof(IWebContentFileProvider)}");
                 }
 
-                AddHtmlTag(context, output, ResolveUrl(bundleFile) + "?_v=" + file.LastModified.UtcTicks);
+                AddHtmlTag(context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
             }
 
             stopwatch.Stop();
@@ -101,11 +102,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
                 return contentPath;
             }
 
-            var segment = new PathString(contentPath.TrimStart('~'));
-            var applicationPath = HttpContextAccessor.HttpContext.Request.PathBase;
-
-            return applicationPath.Add(segment).Value;
-
+            var urlHelper = UrlHelperFactory.GetUrlHelper(ViewContext);
+            return urlHelper.Content(contentPath.EnsureStartsWith('~'));
         }
     }
 }

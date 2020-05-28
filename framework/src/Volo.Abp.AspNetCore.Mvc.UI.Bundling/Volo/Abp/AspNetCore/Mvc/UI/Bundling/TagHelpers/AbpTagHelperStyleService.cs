@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -18,14 +18,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             IWebContentFileProvider webContentFileProvider,
             IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment,
-            IHttpContextAccessor contextAccessor
+            IUrlHelperFactory urlHelperFactory
             ) : base(
                 bundleManager,
                 webContentFileProvider,
                 options,
                 hostingEnvironment,
-                contextAccessor)
+                urlHelperFactory)
         {
+
         }
 
         protected override void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems)
@@ -44,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected override void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file)
         {
-            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{file}\" />{Environment.NewLine}");
+            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{ResolveUrl(file)}\" />{Environment.NewLine}");
         }
     }
 }
