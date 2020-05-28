@@ -115,9 +115,10 @@ export class LazyLoadService {
   }
 
   remove(path: string): boolean {
-    if (!this.loaded.has(path)) return false;
-
     const element = this.loaded.get(path);
+
+    if (!element) return false;
+
     element.parentNode.removeChild(element);
     this.loaded.delete(path);
     return true;
