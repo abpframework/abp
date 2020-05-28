@@ -7,9 +7,9 @@ namespace Volo.Abp.BlobStoring.FileSystem
 {
     public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
     {
-        protected IBlogFilePathCalculator FilePathCalculator { get; }
+        protected IBlobFilePathCalculator FilePathCalculator { get; }
         
-        public FileSystemBlobProvider(IBlogFilePathCalculator filePathCalculator)
+        public FileSystemBlobProvider(IBlobFilePathCalculator filePathCalculator)
         {
             FilePathCalculator = filePathCalculator;
         }

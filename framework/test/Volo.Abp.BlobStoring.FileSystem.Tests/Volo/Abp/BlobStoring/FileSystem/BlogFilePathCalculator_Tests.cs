@@ -7,11 +7,11 @@ namespace Volo.Abp.BlobStoring.FileSystem
 {
     public class BlogFilePathCalculator_Tests : AbpBlobStoringFileSystemTestBase
     {
-        private readonly IBlogFilePathCalculator _calculator;
+        private readonly IBlobFilePathCalculator _calculator;
 
         public BlogFilePathCalculator_Tests()
         {
-            _calculator = GetRequiredService<IBlogFilePathCalculator>();
+            _calculator = GetRequiredService<IBlobFilePathCalculator>();
         }
 
         [Fact]
