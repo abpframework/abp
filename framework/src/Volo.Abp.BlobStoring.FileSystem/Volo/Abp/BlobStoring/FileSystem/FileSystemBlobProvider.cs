@@ -6,6 +6,7 @@ using Volo.Abp.IO;
 namespace Volo.Abp.BlobStoring.FileSystem
 {
     //TODO: What if the file is being used on create, delete or read?
+    //TODO: Implement all methods truly async!
 
     public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
     {

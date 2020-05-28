@@ -5,7 +5,8 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BlobStoring.FileSystem
 {
     [DependsOn(
-        typeof(AbpBlobStoringFileSystemModule)
+        typeof(AbpBlobStoringFileSystemModule),
+        typeof(AbpBlobStoringTestModule)
         )]
     public class AbpBlobStoringFileSystemTestModule : AbpModule
     {
@@ -13,9 +14,9 @@ namespace Volo.Abp.BlobStoring.FileSystem
         {
             Configure<AbpBlobStoringOptions>(options =>
             {
-                options.Containers.ConfigureDefault(container =>
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
                 {
-                    container.UseFileSystem(fileSystem =>
+                    containerConfiguration.UseFileSystem(fileSystem =>
                     {
                         fileSystem.BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
                     });

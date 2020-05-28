@@ -45,7 +45,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
             ).ShouldBe($"C:{separator}my-files{separator}host{separator}my-blob");
         }
 
-        private BlobProviderArgs GetArgs(
+        private static BlobProviderArgs GetArgs(
             string basePath,
             string containerName,
             string blobName,
