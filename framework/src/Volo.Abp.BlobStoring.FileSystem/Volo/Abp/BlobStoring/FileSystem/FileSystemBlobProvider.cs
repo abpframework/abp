@@ -33,7 +33,6 @@ namespace Volo.Abp.BlobStoring.FileSystem
                 
                 await args.BlobStream.CopyToAsync(
                     fileStream,
-                    81920, //this is already the default value, but needed to set to be able to pass the cancellationToken
                     args.CancellationToken
                 );
 

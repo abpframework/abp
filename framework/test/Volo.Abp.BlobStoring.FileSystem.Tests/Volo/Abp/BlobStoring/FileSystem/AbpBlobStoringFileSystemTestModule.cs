@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Volo.Abp.IO;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring.FileSystem
@@ -10,6 +11,16 @@ namespace Volo.Abp.BlobStoring.FileSystem
         )]
     public class AbpBlobStoringFileSystemTestModule : AbpModule
     {
+        private readonly string _testDirectoryPath;
+
+        public AbpBlobStoringFileSystemTestModule()
+        {
+            _testDirectoryPath = Path.Combine(
+                Path.GetTempPath(),
+                Guid.NewGuid().ToString("N")
+            );
+        }
+        
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpBlobStoringOptions>(options =>
@@ -18,10 +29,15 @@ namespace Volo.Abp.BlobStoring.FileSystem
                 {
                     containerConfiguration.UseFileSystem(fileSystem =>
                     {
-                        fileSystem.BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+                        fileSystem.BasePath = _testDirectoryPath;
                     });
                 });
             });
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            DirectoryHelper.DeleteIfExists(_testDirectoryPath, true);
         }
     }
 }

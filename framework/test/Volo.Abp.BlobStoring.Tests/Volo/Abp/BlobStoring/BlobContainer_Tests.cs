@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
@@ -25,21 +24,53 @@ namespace Volo.Abp.BlobStoring
             options.UseAutofac();
         }
 
-        [Fact]
-        public async Task SaveAsync()
+        [Theory]
+        [InlineData("test-blob-1")]
+        [InlineData("test-blob-1.txt")]
+        [InlineData("test-folder/test-blob-1")]
+        public async Task Should_Save_And_Get_Blobs(string blobName)
         {
             var testContent = "test content".GetBytes();
-            
-            using (var memoryStream = new MemoryStream(testContent))
-            {
-                await Container.SaveAsync("test-blob-1", memoryStream);
-            }
+            await Container.SaveAsync(blobName, testContent);
 
-            using (var stream = await Container.GetAsync("test-blob-1"))
-            {
-                var result = await stream.GetAllBytesAsync();
-                result.SequenceEqual(testContent).ShouldBeTrue();
-            }
+            var result = await Container.GetAllBytesAsync(blobName);
+            result.SequenceEqual(testContent).ShouldBeTrue();
+        }
+        
+        [Theory]
+        [InlineData("test-blob-1")]
+        [InlineData("test-blob-1.txt")]
+        [InlineData("test-folder/test-blob-1")]
+        public async Task Should_Delete_Saved_Blobs(string blobName)
+        {
+            await Container.SaveAsync(blobName, "test content".GetBytes());
+            (await Container.GetAllBytesAsync(blobName)).ShouldNotBeNull();
+
+            await Container.DeleteAsync(blobName);
+            (await Container.GetAllBytesOrNullAsync(blobName)).ShouldBeNull();
+        }
+
+        [Theory]
+        [InlineData("test-blob-1")]
+        [InlineData("test-blob-1.txt")]
+        [InlineData("test-folder/test-blob-1")]
+        public async Task Saved_Blobs_Should_Exists(string blobName)
+        {
+            await Container.SaveAsync(blobName, "test content".GetBytes());
+            (await Container.ExistsAsync(blobName)).ShouldBeTrue();
+
+            await Container.DeleteAsync(blobName);
+            (await Container.ExistsAsync(blobName)).ShouldBeFalse();
+        }
+        
+        [Theory]
+        [InlineData("test-blob-1")]
+        [InlineData("test-blob-1.txt")]
+        [InlineData("test-folder/test-blob-1")]
+        public async Task Unknown_Blobs_Should_Not_Exists(string blobName)
+        {
+            await Container.DeleteAsync(blobName);
+            (await Container.ExistsAsync(blobName)).ShouldBeFalse();
         }
     }
 }
