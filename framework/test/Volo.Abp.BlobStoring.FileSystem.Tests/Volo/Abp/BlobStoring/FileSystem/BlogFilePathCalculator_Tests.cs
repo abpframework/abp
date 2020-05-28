@@ -7,11 +7,11 @@ namespace Volo.Abp.BlobStoring.FileSystem
 {
     public class BlogFilePathCalculator_Tests : AbpBlobStoringFileSystemTestBase
     {
-        private readonly IBlogFilePathCalculator _calculator;
+        private readonly IBlobFilePathCalculator _calculator;
 
         public BlogFilePathCalculator_Tests()
         {
-            _calculator = GetRequiredService<IBlogFilePathCalculator>();
+            _calculator = GetRequiredService<IBlobFilePathCalculator>();
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
             ).ShouldBe($"C:{separator}my-files{separator}host{separator}my-blob");
         }
 
-        private BlobProviderArgs GetArgs(
+        private static BlobProviderArgs GetArgs(
             string basePath,
             string containerName,
             string blobName,

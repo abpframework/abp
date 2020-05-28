@@ -1,27 +1,43 @@
 ﻿using System;
 using System.IO;
-using Volo.Abp.BlobStoring.FileSystem.TestObjects;
+using Volo.Abp.IO;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring.FileSystem
 {
     [DependsOn(
-        typeof(AbpBlobStoringFileSystemModule)
+        typeof(AbpBlobStoringFileSystemModule),
+        typeof(AbpBlobStoringTestModule)
         )]
     public class AbpBlobStoringFileSystemTestModule : AbpModule
     {
+        private readonly string _testDirectoryPath;
+
+        public AbpBlobStoringFileSystemTestModule()
+        {
+            _testDirectoryPath = Path.Combine(
+                Path.GetTempPath(),
+                Guid.NewGuid().ToString("N")
+            );
+        }
+        
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpBlobStoringOptions>(options =>
             {
-                options.Containers.ConfigureDefault(container =>
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
                 {
-                    container.UseFileSystem(fileSystem =>
+                    containerConfiguration.UseFileSystem(fileSystem =>
                     {
-                        fileSystem.BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+                        fileSystem.BasePath = _testDirectoryPath;
                     });
                 });
             });
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            DirectoryHelper.DeleteIfExists(_testDirectoryPath, true);
         }
     }
 }

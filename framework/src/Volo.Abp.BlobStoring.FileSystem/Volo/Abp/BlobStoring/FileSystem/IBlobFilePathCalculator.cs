@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.BlobStoring.FileSystem
 {
-    public interface IBlogFilePathCalculator
+    public interface IBlobFilePathCalculator
     {
         string Calculate(BlobProviderArgs args);
     }

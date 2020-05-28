@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
             {
                 var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action?value1=a", HttpStatusCode.BadRequest); //value1 has min length of 2 chars.
                 result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
-                result.Error.ValidationErrors[0].Message.ShouldBe("Değer Bir alanı en az '2' uzunluğunda bir metin ya da dizi olmalıdır.");
+                result.Error.ValidationErrors[0].Message.ShouldBe("Değer Bir alanı en az 2, en fazla 5 uzunluğunda bir metin olmalıdır.");
             }
         }
 

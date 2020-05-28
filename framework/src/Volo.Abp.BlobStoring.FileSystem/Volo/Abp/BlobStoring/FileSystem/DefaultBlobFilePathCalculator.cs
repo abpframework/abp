@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlobStoring.FileSystem
 {
-    public class DefaultBlogFilePathCalculator : IBlogFilePathCalculator, ITransientDependency
+    public class DefaultBlobFilePathCalculator : IBlobFilePathCalculator, ITransientDependency
     {
         public virtual string Calculate(BlobProviderArgs args)
         {

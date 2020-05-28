@@ -147,11 +147,11 @@ namespace Volo.Abp.BlobStoring
             );
         }
 
-        public virtual Task<Stream> GetAsync(
+        public virtual async Task<Stream> GetAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
-            var stream = Provider.GetOrNullAsync(
+            var stream = await Provider.GetOrNullAsync(
                 new BlobProviderGetArgs(
                     ContainerName,
                     Configuration,

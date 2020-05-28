@@ -6,14 +6,17 @@ namespace Volo.Abp.BlobStoring
 {
     public class BlobContainerConfigurations
     {
-        public BlobContainerConfiguration Default { get; }
+        private BlobContainerConfiguration Default => GetConfiguration<DefaultContainer>();
 
         private readonly Dictionary<string, BlobContainerConfiguration> _containers;
 
         public BlobContainerConfigurations()
         {
-            Default = new BlobContainerConfiguration();
-            _containers = new Dictionary<string, BlobContainerConfiguration>();
+            _containers = new Dictionary<string, BlobContainerConfiguration>
+            {
+                //Add default container
+                [BlobContainerNameAttribute.GetContainerName<DefaultContainer>()] = new BlobContainerConfiguration()
+            };
         }
 
         public BlobContainerConfigurations Configure<TContainer>(
@@ -31,9 +34,14 @@ namespace Volo.Abp.BlobStoring
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNull(configureAction, nameof(configureAction));
-            
-            configureAction(_containers.GetOrAdd(name, () => new BlobContainerConfiguration(Default)));
-            
+
+            configureAction(
+                _containers.GetOrAdd(
+                    name,
+                    () => new BlobContainerConfiguration(Default)
+                )
+            );
+
             return this;
         }
 
@@ -42,7 +50,17 @@ namespace Volo.Abp.BlobStoring
             configureAction(Default);
             return this;
         }
-        
+
+        public BlobContainerConfigurations ConfigureAll(Action<string, BlobContainerConfiguration> configureAction)
+        {
+            foreach (var container in _containers)
+            {
+                configureAction(container.Key, container.Value);
+            }
+            
+            return this;
+        }
+
         [NotNull]
         public BlobContainerConfiguration GetConfiguration<TContainer>()
         {
@@ -54,7 +72,7 @@ namespace Volo.Abp.BlobStoring
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
 
-            return _containers.GetOrDefault(name) ?? 
+            return _containers.GetOrDefault(name) ??
                    Default;
         }
     }

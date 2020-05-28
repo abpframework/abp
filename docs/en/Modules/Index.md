@@ -23,6 +23,7 @@ There are some **free and open source** application modules developed and mainta
 * **[Setting Management](Setting-Management.md)**: Used to persist and manage the [settings](../Settings.md).
 * **Tenant Management**: Manages tenants for a [multi-tenant](../Multi-Tenancy.md) application.
 * **Users**: Abstract users, so other modules can depend on this module instead of the Identity module.
+* [**Virtual File Explorer**](Virtual-File-Explorer.md): Provided a simple UI to view files in [virtual file system](../Virtual-File-System.md).
 
 See [the GitHub repository](https://github.com/abpframework/abp/tree/master/modules) for source code of all modules.
 

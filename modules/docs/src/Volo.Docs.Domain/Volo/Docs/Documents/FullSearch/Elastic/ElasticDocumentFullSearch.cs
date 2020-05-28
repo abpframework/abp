@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Elasticsearch.Net;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Nest;
 using Volo.Abp;
@@ -14,10 +15,14 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
     {
         private readonly IElasticClientProvider _clientProvider;
         private readonly DocsElasticSearchOptions _options;
+        private readonly ILogger<ElasticDocumentFullSearch> _logger;
 
-        public ElasticDocumentFullSearch(IElasticClientProvider clientProvider, IOptions<DocsElasticSearchOptions> options)
+        public ElasticDocumentFullSearch(IElasticClientProvider clientProvider,
+            IOptions<DocsElasticSearchOptions> options,
+            ILogger<ElasticDocumentFullSearch> logger)
         {
             _clientProvider = clientProvider;
+            _logger = logger;
             _options = options.Value;
         }
 
@@ -215,7 +220,8 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         {
             if (!response.ApiCall.Success)
             {
-                throw response.ApiCall.OriginalException;
+                _logger.LogError(response.ApiCall.OriginalException,
+                    "An error occurred in the elastic search api call.");
             }
         }
 
