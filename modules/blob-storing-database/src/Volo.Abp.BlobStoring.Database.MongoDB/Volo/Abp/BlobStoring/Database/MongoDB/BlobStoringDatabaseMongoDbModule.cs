@@ -5,14 +5,14 @@ using Volo.Abp.MongoDB;
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
     [DependsOn(
-        typeof(DatabaseDomainModule),
+        typeof(BlobStoringDatabaseDomainModule),
         typeof(AbpMongoDbModule)
         )]
-    public class DatabaseMongoDbModule : AbpModule
+    public class BlobStoringDatabaseMongoDbModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddMongoDbContext<DatabaseMongoDbContext>(options =>
+            context.Services.AddMongoDbContext<BlobStoringDatabaseMongoDbContext>(options =>
             {
                 /* Add custom repositories here. Example:
                  * options.AddRepository<Question, MongoQuestionRepository>();

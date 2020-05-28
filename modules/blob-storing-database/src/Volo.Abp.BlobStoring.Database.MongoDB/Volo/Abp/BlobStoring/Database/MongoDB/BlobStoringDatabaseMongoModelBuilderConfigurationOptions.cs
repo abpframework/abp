@@ -3,9 +3,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    public class DatabaseMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
+    public class BlobStoringDatabaseMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
     {
-        public DatabaseMongoModelBuilderConfigurationOptions(
+        public BlobStoringDatabaseMongoModelBuilderConfigurationOptions(
             [NotNull] string collectionPrefix = "")
             : base(collectionPrefix)
         {

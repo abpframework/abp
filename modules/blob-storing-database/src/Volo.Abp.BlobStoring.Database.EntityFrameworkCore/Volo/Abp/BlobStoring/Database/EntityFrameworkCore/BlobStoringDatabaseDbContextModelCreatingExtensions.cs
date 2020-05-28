@@ -4,17 +4,17 @@ using Volo.Abp;
 
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
-    public static class DatabaseDbContextModelCreatingExtensions
+    public static class BlobStoringDatabaseDbContextModelCreatingExtensions
     {
         public static void ConfigureDatabase(
             this ModelBuilder builder,
-            Action<DatabaseModelBuilderConfigurationOptions> optionsAction = null)
+            Action<BlobStoringDatabaseModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new DatabaseModelBuilderConfigurationOptions(
-                DatabaseDbProperties.DbTablePrefix,
-                DatabaseDbProperties.DbSchema
+            var options = new BlobStoringDatabaseModelBuilderConfigurationOptions(
+                BlobStoringDatabaseDbProperties.DbTablePrefix,
+                BlobStoringDatabaseDbProperties.DbSchema
             );
 
             optionsAction?.Invoke(options);

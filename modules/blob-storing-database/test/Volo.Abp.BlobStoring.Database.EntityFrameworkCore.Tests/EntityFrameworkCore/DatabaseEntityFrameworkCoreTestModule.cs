@@ -9,7 +9,7 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
     [DependsOn(
         typeof(DatabaseTestBaseModule),
-        typeof(DatabaseEntityFrameworkCoreModule)
+        typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
         )]
     public class DatabaseEntityFrameworkCoreTestModule : AbpModule
     {
@@ -31,8 +31,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            new DatabaseDbContext(
-                new DbContextOptionsBuilder<DatabaseDbContext>().UseSqlite(connection).Options
+            new BlobStoringDatabaseDbContext(
+                new DbContextOptionsBuilder<BlobStoringDatabaseDbContext>().UseSqlite(connection).Options
             ).GetService<IRelationalDatabaseCreator>().CreateTables();
             
             return connection;

@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    public static class DatabaseMongoDbContextExtensions
+    public static class BlobStoringDatabaseMongoDbContextExtensions
     {
         public static void ConfigureDatabase(
             this IMongoModelBuilder builder,
@@ -12,8 +12,8 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new DatabaseMongoModelBuilderConfigurationOptions(
-                DatabaseDbProperties.DbTablePrefix
+            var options = new BlobStoringDatabaseMongoModelBuilderConfigurationOptions(
+                BlobStoringDatabaseDbProperties.DbTablePrefix
             );
 
             optionsAction?.Invoke(options);

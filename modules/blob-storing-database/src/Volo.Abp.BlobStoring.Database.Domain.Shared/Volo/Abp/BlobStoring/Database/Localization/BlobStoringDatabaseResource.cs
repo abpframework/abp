@@ -2,8 +2,8 @@
 
 namespace Volo.Abp.BlobStoring.Database.Localization
 {
-    [LocalizationResourceName("Database")]
-    public class DatabaseResource
+    [LocalizationResourceName("BlobStoringDatabase")]
+    public class BlobStoringDatabaseResource
     {
         
     }

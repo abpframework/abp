@@ -2,12 +2,12 @@
 
 namespace Volo.Abp.BlobStoring.Database.Settings
 {
-    public class DatabaseSettingDefinitionProvider : SettingDefinitionProvider
+    public class BlobStoringDatabaseSettingDefinitionProvider : SettingDefinitionProvider
     {
         public override void Define(ISettingDefinitionContext context)
         {
             /* Define module settings here.
-             * Use names from DatabaseSettings class.
+             * Use names from BlobStoringDatabaseSettings class.
              */
         }
     }

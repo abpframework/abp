@@ -12,7 +12,7 @@ namespace Volo.Abp.BlobStoring.Database
         typeof(AbpAutofacModule),
         typeof(AbpTestBaseModule),
         typeof(AbpAuthorizationModule),
-        typeof(DatabaseDomainModule)
+        typeof(BlobStoringDatabaseDomainModule)
         )]
     public class DatabaseTestBaseModule : AbpModule
     {

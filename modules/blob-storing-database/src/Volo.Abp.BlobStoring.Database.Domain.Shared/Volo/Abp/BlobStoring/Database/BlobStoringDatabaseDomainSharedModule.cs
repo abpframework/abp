@@ -11,26 +11,26 @@ namespace Volo.Abp.BlobStoring.Database
     [DependsOn(
         typeof(AbpValidationModule)
     )]
-    public class DatabaseDomainSharedModule : AbpModule
+    public class BlobStoringDatabaseDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<DatabaseDomainSharedModule>("Volo.Abp.BlobStoring.Database");
+                options.FileSets.AddEmbedded<BlobStoringDatabaseDomainSharedModule>("Volo.Abp.BlobStoring.Database");
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<DatabaseResource>("en")
+                    .Add<BlobStoringDatabaseResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/Database");
+                    .AddVirtualJson("/Localization/BlobStoringDatabase");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("Database", typeof(DatabaseResource));
+                options.MapCodeNamespace("BlobStoringDatabase", typeof(BlobStoringDatabaseResource));
             });
         }
     }

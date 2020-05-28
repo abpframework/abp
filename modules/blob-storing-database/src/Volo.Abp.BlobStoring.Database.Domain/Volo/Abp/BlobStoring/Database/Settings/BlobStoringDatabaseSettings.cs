@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.BlobStoring.Database.Settings
 {
-    public static class DatabaseSettings
+    public static class BlobStoringDatabaseSettings
     {
         public const string GroupName = "Database";
 

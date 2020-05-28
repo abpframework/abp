@@ -6,7 +6,7 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
     [DependsOn(
         typeof(DatabaseTestBaseModule),
-        typeof(DatabaseMongoDbModule)
+        typeof(BlobStoringDatabaseMongoDbModule)
         )]
     public class DatabaseMongoDbTestModule : AbpModule
     {

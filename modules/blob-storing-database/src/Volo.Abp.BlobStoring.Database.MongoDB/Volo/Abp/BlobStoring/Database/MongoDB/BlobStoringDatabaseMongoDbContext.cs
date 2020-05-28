@@ -3,8 +3,8 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    [ConnectionStringName(DatabaseDbProperties.ConnectionStringName)]
-    public class DatabaseMongoDbContext : AbpMongoDbContext, IDatabaseMongoDbContext
+    [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
+    public class BlobStoringDatabaseMongoDbContext : AbpMongoDbContext, IBlobStoringDatabaseMongoDbContext
     {
         /* Add mongo collections here. Example:
          * public IMongoCollection<Question> Questions => Collection<Question>();
