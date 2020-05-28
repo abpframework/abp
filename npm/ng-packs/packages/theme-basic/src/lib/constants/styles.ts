@@ -26,7 +26,7 @@ export default `
     min-height: 44px;
 }
 [dir=rtl] .navbar .dropdown-menu a {
-    text-align: right;
+    text-align: right!important;
 }
 .navbar .dropdown-submenu a::after {
     transform: rotate(-90deg);
