@@ -25,61 +25,31 @@ namespace Microsoft.EntityFrameworkCore
         {
             return (EfCoreDatabaseProvider?) modelBuilder.Model[ModelDatabaseProviderAnnotationKey];
         }
-        
-        public static void UseMySQL(
-            this ModelBuilder modelBuilder)
-        {
-            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.MySql);
-        }
-        
+
         public static bool IsUsingMySQL(
             this ModelBuilder modelBuilder)
         {
             return modelBuilder.GetDatabaseProvider() == EfCoreDatabaseProvider.MySql;
         }
-        
-        public static void UseOracle(
-            this ModelBuilder modelBuilder)
-        {
-            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.Oracle);
-        }
-        
+
         public static bool IsUsingOracle(
             this ModelBuilder modelBuilder)
         {
             return modelBuilder.GetDatabaseProvider() == EfCoreDatabaseProvider.Oracle;
         }
 
-        public static void UseSqlServer(
-            this ModelBuilder modelBuilder)
-        {
-            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.SqlServer);
-        }
-        
         public static bool IsUsingSqlServer(
             this ModelBuilder modelBuilder)
         {
             return modelBuilder.GetDatabaseProvider() == EfCoreDatabaseProvider.SqlServer;
         }
 
-        public static void UsePostgreSql(
-            this ModelBuilder modelBuilder)
-        {
-            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.PostgreSql);
-        }
-        
         public static bool IsUsingPostgreSql(
             this ModelBuilder modelBuilder)
         {
             return modelBuilder.GetDatabaseProvider() == EfCoreDatabaseProvider.PostgreSql;
         }
 
-        public static void UseSqlite(
-            this ModelBuilder modelBuilder)
-        {
-            modelBuilder.SetDatabaseProvider(EfCoreDatabaseProvider.Sqlite);
-        }
-        
         public static bool IsUsingSqlite(
             this ModelBuilder modelBuilder)
         {
