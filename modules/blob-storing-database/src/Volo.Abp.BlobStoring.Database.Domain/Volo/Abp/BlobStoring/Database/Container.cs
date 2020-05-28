@@ -13,7 +13,8 @@ namespace Volo.Abp.BlobStoring.Database
 
         public Container(Guid id, [NotNull]string name, Guid? tenantId = null) : base(id)
         {
-            // Todo: check null and length etc
+            Check.NotNullOrWhiteSpace(name, nameof(name), ContainerConsts.MaxNameLength);
+
             TenantId = tenantId;
             Name = name;
         }

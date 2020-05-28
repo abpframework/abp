@@ -31,7 +31,7 @@ namespace Volo.Abp.BlobStoring.Database
                     throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{args.ContainerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
                 }
 
-                blob.Content = content;
+                blob.SetContent(content);
                 await BlobRepository.UpdateAsync(blob);
             }
             else

@@ -36,8 +36,9 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
-                b.Property(p => p.Name).IsRequired().HasMaxLength(ContainerConsts.MaxNameLength);
+                b.Property(p => p.Name).IsRequired().HasMaxLength(BlobConsts.MaxNameLength);
                 b.Property(p => p.ContainerId).IsRequired();
+                b.Property(p => p.Content).HasMaxLength(BlobConsts.MaxContentLength);
 
                 b.HasIndex(x => x.Name);
             });
