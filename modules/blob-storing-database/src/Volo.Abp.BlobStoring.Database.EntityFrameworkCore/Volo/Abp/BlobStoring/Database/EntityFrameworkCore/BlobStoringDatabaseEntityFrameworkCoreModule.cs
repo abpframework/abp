@@ -14,9 +14,9 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<BlobStoringDatabaseDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+                 options.AddRepository<Container, EfCoreContainerRepository>();
+
+                 options.AddRepository<Blob, EfCoreBlobRepository>();
             });
         }
     }

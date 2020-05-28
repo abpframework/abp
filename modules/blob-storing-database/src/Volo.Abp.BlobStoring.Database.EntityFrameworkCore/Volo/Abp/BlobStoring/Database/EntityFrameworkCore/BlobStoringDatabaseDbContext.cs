@@ -7,9 +7,9 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
     [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
     public class BlobStoringDatabaseDbContext : AbpDbContext<BlobStoringDatabaseDbContext>, IBlobStoringDatabaseDbContext
     {
-        /* Add DbSet for each Aggregate Root here. Example:
-         * public DbSet<Question> Questions { get; set; }
-         */
+        public DbSet<Container> Containers { get; set; }
+
+        public DbSet<Blob> Blobs { get; set; }
 
         public BlobStoringDatabaseDbContext(DbContextOptions<BlobStoringDatabaseDbContext> options) 
             : base(options)
@@ -21,7 +21,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureDatabase();
+            builder.ConfigureDatabaseBlobStoring();
         }
+
     }
 }

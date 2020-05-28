@@ -1,12 +1,12 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
     public static class BlobStoringDatabaseDbContextModelCreatingExtensions
     {
-        public static void ConfigureDatabase(
+        public static void ConfigureDatabaseBlobStoring(
             this ModelBuilder builder,
             Action<BlobStoringDatabaseModelBuilderConfigurationOptions> optionsAction = null)
         {
@@ -19,25 +19,28 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            /* Configure all entities here. Example:
-
-            builder.Entity<Question>(b =>
+            builder.Entity<Container>(b =>
             {
-                //Configure table & schema name
-                b.ToTable(options.TablePrefix + "Questions", options.Schema);
-            
-                b.ConfigureByConvention();
-            
-                //Properties
-                b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-                
-                //Relations
-                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
+                b.ToTable(options.TablePrefix + "Containers", options.Schema);
 
-                //Indexes
-                b.HasIndex(q => q.CreationTime);
+                b.ConfigureByConvention();
+
+                b.Property(p => p.Name).IsRequired().HasMaxLength(ContainerConsts.MaxNameLength);
+
+                b.HasIndex(x => x.Name);
             });
-            */
+
+            builder.Entity<Blob>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Blobs", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.Property(p => p.Name).IsRequired().HasMaxLength(ContainerConsts.MaxNameLength);
+                b.Property(p => p.ContainerId).IsRequired();
+
+                b.HasIndex(x => x.Name);
+            });
         }
     }
 }

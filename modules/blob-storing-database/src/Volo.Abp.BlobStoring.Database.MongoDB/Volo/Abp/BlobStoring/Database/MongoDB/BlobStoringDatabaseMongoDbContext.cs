@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Data;
+﻿using MongoDB.Driver;
+using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
@@ -6,15 +7,15 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
     [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
     public class BlobStoringDatabaseMongoDbContext : AbpMongoDbContext, IBlobStoringDatabaseMongoDbContext
     {
-        /* Add mongo collections here. Example:
-         * public IMongoCollection<Question> Questions => Collection<Question>();
-         */
+        public IMongoCollection<Container> Containers => Collection<Container>();
+
+        public IMongoCollection<Blob> Blobs => Collection<Blob>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureDatabase();
+            modelBuilder.ConfigureDatabaseBlobStoring();
         }
     }
 }
