@@ -17,11 +17,6 @@ export default `
   text-align: left;
 }
 
-[dir=rtl] .dropdown-menu-right {
-  left: 0;
-  right: auto;
-}
-
 .pointer {
   cursor: pointer;
 }
