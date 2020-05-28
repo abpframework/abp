@@ -5,11 +5,11 @@ using Volo.Abp.Guids;
 
 namespace Volo.Abp.BlobStoring.Database
 {
-    public class DatabaseDataSeedContributor : IDataSeedContributor, ITransientDependency
+    public class BlobStoringDatabaseDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly IGuidGenerator _guidGenerator;
 
-        public DatabaseDataSeedContributor(
+        public BlobStoringDatabaseDataSeedContributor(
             IGuidGenerator guidGenerator)
         {
             _guidGenerator = guidGenerator;

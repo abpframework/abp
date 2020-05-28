@@ -12,13 +12,22 @@ namespace Volo.Abp.BlobStoring.Database
         typeof(AbpAutofacModule),
         typeof(AbpTestBaseModule),
         typeof(AbpAuthorizationModule),
-        typeof(BlobStoringDatabaseDomainModule)
+        typeof(BlobStoringDatabaseDomainModule),
+        typeof(AbpBlobStoringTestModule)
         )]
-    public class DatabaseTestBaseModule : AbpModule
+    public class BlobStoringDatabaseTestBaseModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAlwaysAllowAuthorization();
+
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+                {
+                    containerConfiguration.UseDatabase();
+                });
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

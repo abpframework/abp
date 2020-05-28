@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
@@ -9,5 +10,12 @@ namespace Volo.Abp.BlobStoring.Database
         public Guid? TenantId { get; }
 
         public string Name { get; set; }
+
+        public Container(Guid id, [NotNull]string name, Guid? tenantId = null) : base(id)
+        {
+            // Todo: check null and length etc
+            TenantId = tenantId;
+            Name = name;
+        }
     }
 }

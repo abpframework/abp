@@ -18,7 +18,7 @@ namespace Volo.Abp.BlobStoring.Database
 
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
-            var container = await ContainerRepository.GetContainerAsync(args.ContainerName);
+            var container = await ContainerRepository.CreateIfNotExistAsync(args.ContainerName, args.TenantId, args.CancellationToken);
             
             var blob = await BlobRepository.FindAsync(container.Id, args.BlobName, args.TenantId, args.CancellationToken);
 
@@ -43,7 +43,7 @@ namespace Volo.Abp.BlobStoring.Database
 
         public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
-            var container = await ContainerRepository.FindContainerAsync(args.ContainerName);
+            var container = await ContainerRepository.FindAsync(args.ContainerName, args.TenantId, args.CancellationToken);
 
             if (container == null)
             {
@@ -55,7 +55,7 @@ namespace Volo.Abp.BlobStoring.Database
 
         public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
-            var container = await ContainerRepository.FindContainerAsync(args.ContainerName);
+            var container = await ContainerRepository.FindAsync(args.ContainerName, args.TenantId, args.CancellationToken);
 
             if (container == null)
             {
@@ -67,7 +67,7 @@ namespace Volo.Abp.BlobStoring.Database
 
         public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
-            var container = await ContainerRepository.FindContainerAsync(args.ContainerName);
+            var container = await ContainerRepository.FindAsync(args.ContainerName, args.TenantId, args.CancellationToken);
 
             if (container == null)
             {

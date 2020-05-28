@@ -5,10 +5,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
     [DependsOn(
-        typeof(DatabaseTestBaseModule),
+        typeof(BlobStoringDatabaseTestBaseModule),
         typeof(BlobStoringDatabaseMongoDbModule)
         )]
-    public class DatabaseMongoDbTestModule : AbpModule
+    public class BlobStoringDatabaseMongoDbTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

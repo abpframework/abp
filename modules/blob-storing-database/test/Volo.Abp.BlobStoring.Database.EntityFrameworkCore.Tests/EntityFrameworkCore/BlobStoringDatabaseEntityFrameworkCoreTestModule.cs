@@ -8,10 +8,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(DatabaseTestBaseModule),
+        typeof(BlobStoringDatabaseTestBaseModule),
         typeof(BlobStoringDatabaseEntityFrameworkCoreModule)
         )]
-    public class DatabaseEntityFrameworkCoreTestModule : AbpModule
+    public class BlobStoringDatabaseEntityFrameworkCoreTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

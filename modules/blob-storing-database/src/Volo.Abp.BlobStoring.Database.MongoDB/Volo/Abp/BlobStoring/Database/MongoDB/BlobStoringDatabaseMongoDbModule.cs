@@ -14,8 +14,8 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
         {
             context.Services.AddMongoDbContext<BlobStoringDatabaseMongoDbContext>(options =>
             {
-                options.AddRepository<Container, MongoContainerRepository>();
-                options.AddRepository<Blob, MongoBlobRepository>();
+                options.AddRepository<Container, MongoDbContainerRepository>();
+                options.AddRepository<Blob, MongoDbBlobRepository>();
             });
         }
     }

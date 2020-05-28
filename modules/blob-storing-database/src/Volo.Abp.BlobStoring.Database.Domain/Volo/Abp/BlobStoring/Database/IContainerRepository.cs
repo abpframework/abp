@@ -8,8 +8,8 @@ namespace Volo.Abp.BlobStoring.Database
 {
     public interface IContainerRepository : IBasicRepository<Container, Guid>
     {
-        Task<Container> GetContainerAsync([NotNull] string name, CancellationToken cancellationToken = default);
-
-        Task<Container> FindContainerAsync([NotNull] string name, CancellationToken cancellationToken = default);
+        Task<Container> CreateIfNotExistAsync([NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
+        
+        Task<Container> FindAsync([NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
     }
 }

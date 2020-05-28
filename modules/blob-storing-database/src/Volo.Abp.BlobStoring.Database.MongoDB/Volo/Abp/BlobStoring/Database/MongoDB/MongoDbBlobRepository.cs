@@ -7,9 +7,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    public class MongoBlobRepository : MongoDbRepository<IBlobStoringDatabaseMongoDbContext, Blob, Guid>, IBlobRepository
+    public class MongoDbBlobRepository : MongoDbRepository<IBlobStoringDatabaseMongoDbContext, Blob, Guid>, IBlobRepository
     {
-        public MongoBlobRepository(IMongoDbContextProvider<IBlobStoringDatabaseMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoDbBlobRepository(IMongoDbContextProvider<IBlobStoringDatabaseMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 
