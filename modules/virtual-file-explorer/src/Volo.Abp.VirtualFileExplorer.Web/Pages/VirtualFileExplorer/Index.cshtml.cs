@@ -43,7 +43,7 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
                 .Where(d => VirtualFileExplorerConsts.AllowFileInfoTypes.Contains(d.GetType().Name))
                 .OrderByDescending(f => f.IsDirectory).ToList();
 
-            PagerModel = new PagerModel(query.Count, PageSize, CurrentPage, PageSize, $"{ResolveUrl()}VirtualFileExplorer?Path={Path}&PageSize={PageSize}");
+            PagerModel = new PagerModel(query.Count, PageSize, CurrentPage, PageSize, $"{Url.Content("~/")}VirtualFileExplorer?Path={Path}&PageSize={PageSize}");
 
             SetViewModel(query.Skip((CurrentPage - 1) * PageSize).Take(PageSize));
             SetPathNavigation();
@@ -72,7 +72,7 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
                     fileInfoViewModel.Icon = "fas fa-folder";
                     fileInfoViewModel.FileType = "folder";
                     fileInfoViewModel.Length = "/";
-                    fileInfoViewModel.FileName =$"<a href='{ResolveUrl()}VirtualFileExplorer?path={fileInfo.PhysicalPath}'>{fileInfo.Name}</a>";
+                    fileInfoViewModel.FileName =$"<a href='{Url.Content("~/")}VirtualFileExplorer?path={fileInfo.PhysicalPath}'>{fileInfo.Name}</a>";
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
         {
             var navigationBuild = new StringBuilder();
             var pathArray = Path.Split('/').Where(p => !p.IsNullOrWhiteSpace());
-            var href = $"{ResolveUrl()}VirtualFileExplorer?path=";
+            var href = $"{Url.Content("~/")}VirtualFileExplorer?path=";
 
             navigationBuild.Append($"<nav aria-label='breadcrumb'>" +
                                    $" <ol class='breadcrumb'>" +
@@ -102,14 +102,6 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
             navigationBuild.Append("</ol></nav>");
 
             PathNavigation = navigationBuild.ToString();
-        }
-
-        private string ResolveUrl()
-        {
-            var segment = new PathString("/");
-            var applicationPath = Request.PathBase;
-
-            return applicationPath.Add(segment).Value;
         }
     }
 }

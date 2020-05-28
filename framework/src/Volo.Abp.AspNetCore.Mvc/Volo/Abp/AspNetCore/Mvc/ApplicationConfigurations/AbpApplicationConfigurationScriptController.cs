@@ -55,8 +55,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             script.AppendLine();
             script.AppendLine($"$.extend(true, abp, {_jsonSerializer.Serialize(config, indented: true)})");
             script.AppendLine();
-            script.AppendLine($"abp.appPath = abp.toAbsAppPath('{Request.PathBase}/')");
-            script.AppendLine();
             script.AppendLine("abp.event.trigger('abp.configurationInitialized');");
             script.AppendLine();
             script.Append("})();");

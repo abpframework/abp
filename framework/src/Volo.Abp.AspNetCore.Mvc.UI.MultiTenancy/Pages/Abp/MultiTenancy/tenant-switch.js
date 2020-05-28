@@ -1,13 +1,10 @@
 ﻿(function($) {
 
-    var tenantSwitchModal = new abp.ModalManager();
+    var tenantSwitchModal = new abp.ModalManager(abp.appPath + 'Abp/MultiTenancy/TenantSwitchModal');
 
     $(function() {
         $('#AbpTenantSwitchLink').click(function(e) {
             e.preventDefault();
-            tenantSwitchModal.setOptions({
-                viewUrl : abp.appPath + 'Abp/MultiTenancy/TenantSwitchModal'
-            })
             tenantSwitchModal.open();
         });
 

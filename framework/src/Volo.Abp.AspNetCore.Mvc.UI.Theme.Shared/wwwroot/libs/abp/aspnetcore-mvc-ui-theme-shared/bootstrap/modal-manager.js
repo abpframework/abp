@@ -112,7 +112,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     $firstVisibleInput.focus();
                 });
 
-                var modalClass = abp.modals[_options.modalClass];
+                var modalClass = abp.modals[options.modalClass];
                 if (modalClass) {
                     _modalObject = new modalClass();
                     _modalObject.init && _modalObject.init(_publicApi, _args); //TODO: Remove later
@@ -127,14 +127,14 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _args = args || {};
 
                 _createContainer(_modalId)
-                    .load(_options.viewUrl, $.param(_args), function (response, status, xhr) {
+                    .load(options.viewUrl, $.param(_args), function (response, status, xhr) {
                         if (status === "error") {
                             //TODO: Handle!
                             return;
                         };
 
-                        if (_options.scriptUrl) {
-                            abp.ResourceLoader.loadScript(_options.scriptUrl, function () {
+                        if (options.scriptUrl) {
+                            abp.ResourceLoader.loadScript(options.scriptUrl, function () {
                                 _initAndShowModal();
                             });
                         } else {
@@ -190,10 +190,6 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
                 getOptions: function () {
                     return _options;
-                },
-
-                setOptions: function(options){
-                    _options = options;
                 },
 
                 setResult: function () {
