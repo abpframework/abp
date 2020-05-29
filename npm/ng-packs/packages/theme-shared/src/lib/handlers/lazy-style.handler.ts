@@ -22,7 +22,7 @@ export class LazyStyleHandler {
     if (dir === this._dir) return;
 
     this.switchCSS(dir);
-    this.setHtmlDir(dir);
+    this.setBodyDir(dir);
     this._dir = dir;
   }
 
@@ -53,12 +53,13 @@ export class LazyStyleHandler {
         startWith(l10n.currentLang),
       )
       .subscribe(locale => {
+        if (locale === 'tr') locale = 'ar';
         this.dir = getLocaleDirection(locale);
       });
   }
 
-  private setHtmlDir(dir: LocaleDirection) {
-    document.querySelector('html').dir = dir;
+  private setBodyDir(dir: LocaleDirection) {
+    document.body.dir = dir;
   }
 
   private setLazyLoad(injector: Injector) {
