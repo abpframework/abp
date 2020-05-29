@@ -53,7 +53,6 @@ export class LazyStyleHandler {
         startWith(l10n.currentLang),
       )
       .subscribe(locale => {
-        if (locale === 'tr') locale = 'ar';
         this.dir = getLocaleDirection(locale);
       });
   }
