@@ -50,20 +50,28 @@
             scriptObject.initDom && scriptObject.initDom($el);
         });
     }
+    
+    function initializeToolTip($tooltips){
+        $tooltips.tooltip({
+            container: 'body'
+        });
+    }
+
+    function initializePopover($popovers){
+        $popovers.popover({
+            container: 'body'
+        });
+    }
+
+    function initializeTimeAgo($timeagos){
+        $timeagos.timeago();
+    }
 
     abp.dom.onNodeAdded(function (args) {
-        args.$el.findWithSelf('[data-toggle="tooltip"]').tooltip({
-            container: 'body'
-        });
-
-        args.$el.findWithSelf('[data-toggle="popover"]').popover({
-            container: 'body'
-        });
-
-        args.$el.findWithSelf('.timeago').timeago();
-
+        initializeToolTip(args.$el.findWithSelf('[data-toggle="tooltip"]'));
+        initializePopover(args.$el.findWithSelf('[data-toggle="popover"]'));
+        initializeTimeAgo(args.$el.findWithSelf('.timeago'));
         enableFormFeatures(args.$el.findWithSelf('form'), true);
-
         initializeScript(args.$el);
     });
 
@@ -74,18 +82,10 @@
     });
 
     $(function () {
+        initializeToolTip($('[data-toggle="tooltip"]'));
+        initializePopover($('[data-toggle="popover"]'));
+        initializeTimeAgo($('.timeago'));
         enableFormFeatures($('form'));
-
-        $('[data-toggle="tooltip"]').tooltip({
-            container: 'body'
-        });
-
-        $('[data-toggle="popover"]').popover({
-            container: 'body'
-        });
-
-        $('.timeago').timeago();
-
         $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
     });
 
