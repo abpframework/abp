@@ -1,9 +1,9 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   TemplateRef,
   TrackByFunction,
@@ -17,7 +17,7 @@ import {
   styleUrls: ['table.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TableComponent {
+export class TableComponent implements OnInit {
   private _totalRecords: number;
   bodyScrollLeft = 0;
 
@@ -87,4 +87,20 @@ export class TableComponent {
   trackByFn: TrackByFunction<any> = (_, value) => {
     return typeof value === 'object' ? value[this.trackingProp] || value : value;
   };
+
+  marginCalculator: MarginCalculator;
+
+  ngOnInit() {
+    this.marginCalculator = document.body.dir === 'rtl' ? rtlCalculator : ltrCalculator;
+  }
 }
+
+function ltrCalculator(div: HTMLDivElement): string {
+  return `0 auto 0 -${div.scrollLeft}px`;
+}
+
+function rtlCalculator(div: HTMLDivElement): string {
+  return `0 ${-(div.scrollWidth - div.clientWidth - div.scrollLeft)}px 0 auto`;
+}
+
+type MarginCalculator = (div: HTMLDivElement) => string;
