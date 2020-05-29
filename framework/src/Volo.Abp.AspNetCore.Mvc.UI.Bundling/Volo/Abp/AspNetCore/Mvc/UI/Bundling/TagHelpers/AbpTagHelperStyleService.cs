@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,9 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected override void AddHtmlTag(ViewContext viewContext, TagHelperContext context, TagHelperOutput output, string file)
         {
-            var urlHelperFactory = viewContext.HttpContext.RequestServices.GetRequiredService<IUrlHelperFactory>();
-            var urlHelper = urlHelperFactory.GetUrlHelper(viewContext);
-            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{urlHelper.Content(file.EnsureStartsWith('~'))}\" />{Environment.NewLine}");
+            output.Content.AppendHtml($"<link rel=\"stylesheet\" href=\"{viewContext.GetUrlHelper().Content(file.EnsureStartsWith('~'))}\" />{Environment.NewLine}");
         }
     }
 }
