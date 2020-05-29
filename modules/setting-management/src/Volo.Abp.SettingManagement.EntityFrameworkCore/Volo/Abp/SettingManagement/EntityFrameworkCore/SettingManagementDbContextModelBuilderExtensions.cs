@@ -41,7 +41,16 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
                 b.ConfigureByConvention();
 
                 b.Property(x => x.Name).HasMaxLength(SettingConsts.MaxNameLength).IsRequired();
-                b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLength).IsRequired();
+
+                if (builder.IsUsingOracle())
+                {
+                    b.Property(x => x.Value).HasMaxLength(2000).IsRequired();
+                }
+                else
+                {
+                    b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLength).IsRequired();
+                }
+                
                 b.Property(x => x.ProviderName).HasMaxLength(SettingConsts.MaxProviderNameLength);
                 b.Property(x => x.ProviderKey).HasMaxLength(SettingConsts.MaxProviderKeyLength);
 
