@@ -7,14 +7,17 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Timing
 {
-    [DependsOn(typeof(AbpVirtualFileSystemModule), typeof(AbpSettingsModule))]
+    [DependsOn(
+        typeof(AbpVirtualFileSystemModule),
+        typeof(AbpSettingsModule)
+        )]
     public class AbpTimingModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpTimingModule>("Volo.Abp", "Volo/Abp");
+                options.FileSets.AddEmbedded<AbpTimingModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -22,7 +25,7 @@ namespace Volo.Abp.Timing
                 options
                     .Resources
                     .Add<AbpTimingResource>("en")
-                    .AddVirtualJson("/Timing/Localization/Resources/AbpTiming");
+                    .AddVirtualJson("/Volo/Abp/Timing/Localization");
             });
         }
     }
