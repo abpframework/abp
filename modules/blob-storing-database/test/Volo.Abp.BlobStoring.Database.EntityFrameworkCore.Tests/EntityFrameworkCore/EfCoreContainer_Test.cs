@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
-    public class EfCoreContainer_Test : BlobStoringDatabaseTestBase<BlobStoringDatabaseEntityFrameworkCoreTestModule>
+    public class EfCoreContainer_Test : BlobContainer_Tests<BlobStoringDatabaseEntityFrameworkCoreTestModule>
     {
         
     }

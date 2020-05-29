@@ -8,7 +8,7 @@ using Volo.Abp.Testing;
 
 namespace Volo.Abp.BlobStoring.Database
 {
-    public abstract class BlobStoringDatabaseTestBase<TStartupModule> : BlobContainer_Tests<TStartupModule> 
+    public abstract class BlobStoringDatabaseTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> 
         where TStartupModule : IAbpModule
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
