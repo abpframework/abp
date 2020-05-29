@@ -84,11 +84,11 @@ export class TableComponent implements OnInit {
     return this.value.slice(start, start + this.rows);
   }
 
+  marginCalculator: MarginCalculator;
+
   trackByFn: TrackByFunction<any> = (_, value) => {
     return typeof value === 'object' ? value[this.trackingProp] || value : value;
   };
-
-  marginCalculator: MarginCalculator;
 
   ngOnInit() {
     this.marginCalculator = document.body.dir === 'rtl' ? rtlCalculator : ltrCalculator;
