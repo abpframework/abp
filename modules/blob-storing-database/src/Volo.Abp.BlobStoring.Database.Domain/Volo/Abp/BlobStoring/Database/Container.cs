@@ -5,18 +5,17 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BlobStoring.Database
 {
-    public class Container : AggregateRoot<Guid>, IMultiTenant
+    public class Container : AggregateRoot<Guid>, IMultiTenant //TODO: Rename to BlobContainer
     {
-        public Guid? TenantId { get; }
+        public virtual Guid? TenantId { get; protected set; }
 
-        public string Name { get; set; }
+        public virtual string Name { get; protected set; }
 
-        public Container(Guid id, [NotNull]string name, Guid? tenantId = null) : base(id)
+        public Container(Guid id, [NotNull] string name, Guid? tenantId = null) 
+            : base(id)
         {
-            Check.NotNullOrWhiteSpace(name, nameof(name), ContainerConsts.MaxNameLength);
-
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name), ContainerConsts.MaxNameLength);
             TenantId = tenantId;
-            Name = name;
         }
     }
 }

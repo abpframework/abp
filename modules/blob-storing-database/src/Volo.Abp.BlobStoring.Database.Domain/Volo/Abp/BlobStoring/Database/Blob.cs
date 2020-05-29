@@ -7,38 +7,38 @@ namespace Volo.Abp.BlobStoring.Database
 {
     public class Blob : AggregateRoot<Guid>, IMultiTenant
     {
-        public Guid ContainerId { get; set; }
+        public virtual Guid ContainerId { get; protected set; }
 
-        public Guid? TenantId { get; }
+        public virtual Guid? TenantId { get; protected set; }
 
-        public string Name { get; set; }
+        public virtual string Name { get; protected set; }
 
-        public byte[] Content { get; private set; }
-        
-        public Blob(Guid id, Guid containerId, [NotNull]string name, byte[] content, Guid? tenantId) : base(id)
+        public virtual byte[] Content { get; protected set; }
+
+        public Blob(Guid id, Guid containerId, [NotNull] string name, [NotNull] byte[] content, Guid? tenantId = null)
+            : base(id)
         {
-            Check.NotNullOrWhiteSpace(name, nameof(name), BlobConsts.MaxNameLength);
-            CheckContentLength(content);
-
-            Content = content;
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name), BlobConsts.MaxNameLength);
             ContainerId = containerId;
-            Name = name;
+            Content = CheckContentLength(content);
             TenantId = tenantId;
         }
 
         public virtual void SetContent(byte[] content)
         {
-            CheckContentLength(content);
-
-            Content = content;
+            Content = CheckContentLength(content);
         }
 
-        protected virtual void CheckContentLength(byte[] content)
+        protected virtual byte[] CheckContentLength(byte[] content)
         {
+            Check.NotNull(content, nameof(content));
+            
             if (content.Length >= BlobConsts.MaxContentLength)
             {
                 throw new AbpException($"Blob content size cannot be more than {BlobConsts.MaxContentLength} Bytes.");
             }
+
+            return content;
         }
     }
 }
