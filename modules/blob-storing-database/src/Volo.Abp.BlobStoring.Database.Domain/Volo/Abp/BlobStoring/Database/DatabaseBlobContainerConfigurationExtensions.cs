@@ -12,11 +12,11 @@ namespace Volo.Abp.BlobStoring.Database
 
         public static BlobContainerConfiguration UseDatabase(
             this BlobContainerConfiguration containerConfiguration,
-            Action<DatabaseBlobProviderConfiguration> fileSystemConfigureAction)
+            Action<DatabaseBlobProviderConfiguration> databaseConfigureAction)
         {
             containerConfiguration.ProviderType = typeof(DatabaseBlobProvider);
 
-            fileSystemConfigureAction(new DatabaseBlobProviderConfiguration(containerConfiguration));
+            databaseConfigureAction(new DatabaseBlobProviderConfiguration(containerConfiguration));
 
             return containerConfiguration;
         }

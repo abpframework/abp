@@ -18,7 +18,7 @@ namespace Volo.Abp.BlobStoring.Database
         public Blob(Guid id, Guid containerId, [NotNull]string name, byte[] content, Guid? tenantId) : base(id)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name), BlobConsts.MaxNameLength);
-            CheckContent(content);
+            CheckContentLength(content);
 
             Content = content;
             ContainerId = containerId;
@@ -28,16 +28,16 @@ namespace Volo.Abp.BlobStoring.Database
 
         public virtual void SetContent(byte[] content)
         {
-            CheckContent(content);
+            CheckContentLength(content);
 
             Content = content;
         }
 
-        protected void CheckContent(byte[] content)
+        protected virtual void CheckContentLength(byte[] content)
         {
             if (content.Length >= BlobConsts.MaxContentLength)
             {
-                throw new AbpException("Blob content size cannot be more than 2GB.");
+                throw new AbpException($"Blob content size cannot be more than {BlobConsts.MaxContentLength} Bytes.");
             }
         }
     }
