@@ -46,7 +46,7 @@
                 "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
               },
-              "apps/dev-app/src/styles.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           },
