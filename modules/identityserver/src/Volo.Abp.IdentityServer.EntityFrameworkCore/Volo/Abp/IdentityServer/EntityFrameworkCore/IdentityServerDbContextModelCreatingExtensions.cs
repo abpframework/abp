@@ -80,13 +80,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
                 {
-                    b.Property(x => x.RedirectUri).HasMaxLength(300).IsRequired();
-                }
-                else
-                {
-                    b.Property(x => x.RedirectUri).HasMaxLength(ClientRedirectUriConsts.RedirectUriMaxLength)
-                        .IsRequired();
-                }
+                    ClientRedirectUriConsts.RedirectUriMaxLengthValue = 300;
+                } 
+                
+                b.Property(x => x.RedirectUri).HasMaxLength(ClientRedirectUriConsts.RedirectUriMaxLengthValue).IsRequired();
             });
 
             builder.Entity<ClientPostLogoutRedirectUri>(b =>
@@ -99,13 +96,12 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
                 {
-                    b.Property(x => x.PostLogoutRedirectUri).HasMaxLength(300).IsRequired();
-                }
-                else
-                {
-                    b.Property(x => x.PostLogoutRedirectUri)
-                        .HasMaxLength(ClientPostLogoutRedirectUriConsts.PostLogoutRedirectUriMaxLength).IsRequired();
-                }
+                    ClientPostLogoutRedirectUriConsts.PostLogoutRedirectUriMaxLengthValue = 300;
+                } 
+                
+                b.Property(x => x.PostLogoutRedirectUri)
+                    .HasMaxLength(ClientPostLogoutRedirectUriConsts.PostLogoutRedirectUriMaxLengthValue)
+                    .IsRequired();
             });
 
             builder.Entity<ClientScope>(b =>
@@ -199,12 +195,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
                 {
-                    b.Property(x => x.Data).HasMaxLength(10000).IsRequired();
+                    PersistedGrantConsts.DataMaxLengthValue = 10000; //TODO: MySQL accepts 20.000. We can consider to change in v3.0. 
                 }
-                else
-                {
-                    b.Property(x => x.Data).HasMaxLength(PersistedGrantConsts.DataMaxLength).IsRequired();
-                }
+                
+                b.Property(x => x.Data).HasMaxLength(PersistedGrantConsts.DataMaxLengthValue).IsRequired();
 
                 b.HasKey(x => x.Key); //TODO: What about Id!!!
 
