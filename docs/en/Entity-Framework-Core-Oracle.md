@@ -19,6 +19,23 @@ Find `UseSqlServer()` calls in your solution, replace with `UseOracle()`. Check 
 * *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
 * *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
 
+
+In the `CreateDbContext()` method of the *YourProjectName*MigrationsDbContextFactory.cs, replace the following code block
+
+```
+var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
+                .UseSqlServer(configuration.GetConnectionString("Default"));
+```
+
+with this one
+```
+var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
+	new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>().UseOracle
+	(
+		configuration.GetConnectionString("Default")
+	);
+``` 
+
 > Depending on your solution structure, you may find more code files need to be changed.
 
 ## Change the Connection Strings
