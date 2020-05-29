@@ -1,17 +1,22 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity.MongoDB
 {
-    public class MongoOrganizationUnitRepository : MongoDbRepository<IAbpIdentityMongoDbContext, OrganizationUnit, Guid>, IOrganizationUnitRepository
+    public class MongoOrganizationUnitRepository
+        : MongoDbRepository<IAbpIdentityMongoDbContext, OrganizationUnit, Guid>,
+        IOrganizationUnitRepository
     {
         public MongoOrganizationUnitRepository(
             IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
@@ -133,6 +138,31 @@ namespace Volo.Abp.Identity.MongoDB
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
                 .As<IMongoQueryable<IdentityUser>>()
                 .CountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual Task RemoveAllRolesAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        {
+            organizationUnit.Roles.Clear();
+            return Task.FromResult(0);
+        }
+
+        public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        {
+            var users = await DbContext.Users.AsQueryable()
+                .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                .As<IMongoQueryable<IdentityUser>>()
+                .ToListAsync(GetCancellationToken(cancellationToken))
+                ;
+
+            //var filter = Builders<IdentityUser>.Filter.Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id));
+
+            //var update = Builders<IdentityUser>.Update.PullFilter(y => y.OrganizationUnits, iou=> iou);
+            //var result = await DbContext.Users.UpdateManyAsync(filter, update);
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                users[i].RemoveOrganizationUnit(organizationUnit.Id);
+            }
         }
     }
 }

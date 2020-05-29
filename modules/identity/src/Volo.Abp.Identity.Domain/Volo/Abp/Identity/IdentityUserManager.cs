@@ -96,7 +96,6 @@ namespace Volo.Abp.Identity
             return IdentityResult.Success;
         }
 
-
         public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             var user = await IdentityUserRepository.GetAsync(userId, cancellationToken: CancellationToken);
