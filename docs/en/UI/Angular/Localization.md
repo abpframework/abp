@@ -130,6 +130,68 @@ this.store.selectSnapshot(
 
 Localization resources are stored in the `localization` property of `ConfigState`.
 
+## RTL Support
+
+As of v2.9 ABP has RTL support. If you are generating a new project with v2.9 and above, everything is set, you do not need to do any changes. If you are migrating your project from an earlier version, please follow the 2 steps below:
+
+#### Step 1. Create Chunks for Bootstrap LTR and RTL
+
+Find [styles configuration in angular.json](https://angular.io/guide/workspace-config#style-script-config) and make sure the chunks in your project has `bootstrap-rtl.min` and `bootstrap-ltr.min` as shown below.
+
+```json
+{
+  "projects": {
+    "MyProjectName": {
+      "architect": {
+        "build": {
+          "options": {
+            "styles": [
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": true,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": true,
+                "bundleName": "fontawesome-v4-shims.min"
+              },
+              "apps/dev-app/src/styles.scss"
+            ],
+          }
+        }
+      }
+    }
+  }
+}
+
+#### Step 2. Clear Lazy Loaded Fontawesome in AppComponent
+
+If you have created and injected chunks for Fontawesome as seen above, you no longer need the lazy loading in the `AppComponent` which was implemented before v2.9. Simply remove them. The `AppComponent` in the template of the new version looks like this:
+
+```js
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <abp-loader-bar></abp-loader-bar>
+    <router-outlet></router-outlet>
+  `,
+})
+export class AppComponent {}
+```
+
 
 ## See Also
 
