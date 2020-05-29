@@ -50,10 +50,6 @@
 
     @await RenderSectionAsync("styles", false)
 
-    <script type="text/javascript">
-        var abp = abp || {}; abp.appPath = '@ApplicationPath';
-    </script>
-
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Empty)
 </head>
 <body class="abp-empty-layout">

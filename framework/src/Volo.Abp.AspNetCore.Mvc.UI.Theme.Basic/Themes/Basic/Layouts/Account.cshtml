@@ -46,10 +46,6 @@
 
     @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
 
-    <script type="text/javascript">
-        var abp = abp || {}; abp.appPath = '@ApplicationPath';
-    </script>
-
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
 <body class="abp-account-layout bg-light">
