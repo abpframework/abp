@@ -13,9 +13,9 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
         {
         }
         
-        public virtual async Task<DatabaseBlobContainer> FindAsync(string name, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<DatabaseBlobContainer> FindAsync(string name, CancellationToken cancellationToken = default)
         {
-            return await base.FindAsync(x => x.Name == name && x.TenantId == tenantId, cancellationToken: GetCancellationToken(cancellationToken));
+            return await base.FindAsync(x => x.Name == name, cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Volo.Abp.BlobStoring.Database
 {
     public interface IDatabaseBlobRepository : IBasicRepository<DatabaseBlob, Guid>
     {
-        Task<DatabaseBlob> FindAsync(Guid containerId, [NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
+        Task<DatabaseBlob> FindAsync(Guid containerId, [NotNull] string name, CancellationToken cancellationToken = default);
 
-        Task<bool> ExistsAsync(Guid containerId, [NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
+        Task<bool> ExistsAsync(Guid containerId, [NotNull] string name, CancellationToken cancellationToken = default);
 
-        Task<bool> DeleteAsync(Guid containerId, [NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(Guid containerId, [NotNull] string name, CancellationToken cancellationToken = default);
     }
 }

@@ -15,10 +15,9 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
         {
         }
 
-        public virtual async Task<DatabaseBlobContainer> FindAsync(string name, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<DatabaseBlobContainer> FindAsync(string name, CancellationToken cancellationToken = default)
         {
-            return await DbSet.WhereIf(tenantId != null, x => x.TenantId == tenantId)
-                        .FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
+            return await DbSet.FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -25,9 +24,9 @@ namespace Volo.Abp.BlobStoring.Database
 
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
-            var container = await GetOrCreateContainerAsync(args.ContainerName, args.TenantId, args.CancellationToken);
+            var container = await GetOrCreateContainerAsync(args.ContainerName, args.CancellationToken);
 
-            var blob = await DatabaseBlobRepository.FindAsync(container.Id, args.BlobName, args.TenantId,
+            var blob = await DatabaseBlobRepository.FindAsync(container.Id, args.BlobName,
                 args.CancellationToken);
 
             var content = await args.BlobStream.GetAllBytesAsync(args.CancellationToken);
@@ -45,7 +44,7 @@ namespace Volo.Abp.BlobStoring.Database
             }
             else
             {
-                blob = new DatabaseBlob(GuidGenerator.Create(), container.Id, args.BlobName, content, args.TenantId);
+                blob = new DatabaseBlob(GuidGenerator.Create(), container.Id, args.BlobName, content);
                 await DatabaseBlobRepository.InsertAsync(blob);
             }
         }
@@ -53,7 +52,7 @@ namespace Volo.Abp.BlobStoring.Database
         public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var container =
-                await DatabaseBlobContainerRepository.FindAsync(args.ContainerName, args.TenantId,
+                await DatabaseBlobContainerRepository.FindAsync(args.ContainerName,
                     args.CancellationToken);
 
             if (container == null)
@@ -61,14 +60,14 @@ namespace Volo.Abp.BlobStoring.Database
                 return false;
             }
 
-            return await DatabaseBlobRepository.DeleteAsync(container.Id, args.BlobName, args.TenantId,
+            return await DatabaseBlobRepository.DeleteAsync(container.Id, args.BlobName,
                 args.CancellationToken);
         }
 
         public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var container =
-                await DatabaseBlobContainerRepository.FindAsync(args.ContainerName, args.TenantId,
+                await DatabaseBlobContainerRepository.FindAsync(args.ContainerName,
                     args.CancellationToken);
 
             if (container == null)
@@ -76,14 +75,14 @@ namespace Volo.Abp.BlobStoring.Database
                 return false;
             }
 
-            return await DatabaseBlobRepository.ExistsAsync(container.Id, args.BlobName, args.TenantId,
+            return await DatabaseBlobRepository.ExistsAsync(container.Id, args.BlobName,
                 args.CancellationToken);
         }
 
         public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var container =
-                await DatabaseBlobContainerRepository.FindAsync(args.ContainerName, args.TenantId,
+                await DatabaseBlobContainerRepository.FindAsync(args.ContainerName,
                     args.CancellationToken);
 
             if (container == null)
@@ -91,7 +90,7 @@ namespace Volo.Abp.BlobStoring.Database
                 return null;
             }
 
-            var blob = await DatabaseBlobRepository.FindAsync(container.Id, args.BlobName, args.TenantId,
+            var blob = await DatabaseBlobRepository.FindAsync(container.Id, args.BlobName,
                 args.CancellationToken);
 
             if (blob == null)
@@ -104,16 +103,15 @@ namespace Volo.Abp.BlobStoring.Database
 
         protected virtual async Task<DatabaseBlobContainer> GetOrCreateContainerAsync(
             string name,
-            Guid? tenantId = null,
             CancellationToken cancellationToken = default)
         {
-            var container = await DatabaseBlobContainerRepository.FindAsync(name, tenantId, cancellationToken);
+            var container = await DatabaseBlobContainerRepository.FindAsync(name, cancellationToken);
             if (container != null)
             {
                 return container;
             }
 
-            container = new DatabaseBlobContainer(GuidGenerator.Create(), name, tenantId);
+            container = new DatabaseBlobContainer(GuidGenerator.Create(), name);
             await DatabaseBlobContainerRepository.InsertAsync(container, cancellationToken: cancellationToken);
 
             return container;
