@@ -95,13 +95,16 @@
             }
         },
         getFormattedValue: function (isoFormattedValue) {
+            if (!isoFormattedValue) {
+                return isoFormattedValue;
+            }
             return luxon
                 .DateTime
                 .fromISO(isoFormattedValue, {
                     locale: abp.localization.currentCulture.name
                 }).toLocaleString();
         },
-        getOptions($input){ //$input may needed if developer wants to override this method
+        getOptions($input) { //$input may needed if developer wants to override this method
             return {
                 todayBtn: "linked",
                 autoclose: true,
