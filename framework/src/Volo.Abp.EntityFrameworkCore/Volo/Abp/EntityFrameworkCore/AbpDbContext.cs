@@ -129,7 +129,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     return EfCoreDatabaseProvider.PostgreSql;
                 case "Pomelo.EntityFrameworkCore.MySql":
                     return EfCoreDatabaseProvider.MySql;
-                case "Devart.Data.Oracle.EFCore":
+                case "Devart.Data.Oracle.Entity.EFCore":
                     return EfCoreDatabaseProvider.Oracle;
                 case "Microsoft.EntityFrameworkCore.Sqlite":
                     return EfCoreDatabaseProvider.Sqlite;

@@ -440,18 +440,27 @@
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "extractCss": true,
             "styles": [
-              "apps/dev-app/src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
+              },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-                "lazy": true,
+                "inject": true,
                 "bundleName": "fontawesome-all.min"
               },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
-                "lazy": true,
+                "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
-              }
+              },
+              "apps/dev-app/src/styles.scss"
             ],
             "scripts": []
           },

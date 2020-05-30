@@ -27,21 +27,26 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
                 "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
                 "inject": true,
-                "bundleName": "bootstrap.min"
+                "bundleName": "bootstrap-ltr.min"
               },
-              "src/styles.scss",
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-                "inject": false,
+                "inject": true,
                 "bundleName": "fontawesome-all.min"
               },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
-                "inject": false,
+                "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
-              }
+              },
+              "src/styles.scss"
             ],
             "scripts": []
           },

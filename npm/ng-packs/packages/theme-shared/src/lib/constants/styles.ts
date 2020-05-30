@@ -13,6 +13,10 @@ export default `
   text-align: right;
 }
 
+[dir=rtl] .data-tables-filter {
+  text-align: left;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -155,3 +159,5 @@ export default `
 /* </animations */
 
 `;
+
+export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';
