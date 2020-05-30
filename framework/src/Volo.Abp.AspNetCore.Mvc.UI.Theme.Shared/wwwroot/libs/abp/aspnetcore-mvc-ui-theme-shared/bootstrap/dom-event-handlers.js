@@ -100,6 +100,13 @@
                 .fromISO(isoFormattedValue, {
                     locale: abp.localization.currentCulture.name
                 }).toLocaleString();
+        },
+        getOptions($input){ //$input may needed if developer wants to override this method
+            return {
+                todayBtn: "linked",
+                autoclose: true,
+                language: abp.libs.bootstrapDatepicker.mapLanguageName(abp.localization.currentCulture.cultureName)
+            };
         }
     };
 
@@ -108,15 +115,13 @@
             .findWithSelf('input.datepicker,input[type=date]')
             .each(function () {
                 var $input = $(this);
-                $input.attr('type', 'text');
-                $input.val(abp.libs.bootstrapDatepicker.getFormattedValue($input.val()))
-                $input.datepicker({
-                    todayBtn: "linked",
-                    autoclose: true,
-                    language: abp.libs.bootstrapDatepicker.mapLanguageName(abp.localization.currentCulture.cultureName)
-                }).on('hide', function (e) {
-                    e.stopPropagation();
-                });
+                $input
+                    .attr('type', 'text')
+                    .val(abp.libs.bootstrapDatepicker.getFormattedValue($input.val()))
+                    .datepicker(abp.libs.bootstrapDatepicker.getOptions($input))
+                    .on('hide', function (e) {
+                        e.stopPropagation();
+                    });
             });
     }
 
