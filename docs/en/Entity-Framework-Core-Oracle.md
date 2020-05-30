@@ -40,7 +40,7 @@ var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
 
 ## Change the Connection Strings
 
-Oracle connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/mysql/ ) for details of Oracle connection string options.
+Oracle connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/oracle/ ) for details of Oracle connection string options.
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 
