@@ -12,10 +12,10 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddMongoDbContext<BlobStoringDatabaseMongoDbContext>(options =>
+            context.Services.AddMongoDbContext<BlobStoringMongoDbContext>(options =>
             {
-                options.AddRepository<Container, MongoDbContainerRepository>();
-                options.AddRepository<Blob, MongoDbBlobRepository>();
+                options.AddRepository<DatabaseBlobContainer, MongoDbDatabaseBlobContainerRepository>();
+                options.AddRepository<DatabaseBlob, MongoDbDatabaseBlobRepository>();
             });
         }
     }

@@ -7,13 +7,13 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    public class MongoDbBlobRepository : MongoDbRepository<IBlobStoringDatabaseMongoDbContext, Blob, Guid>, IBlobRepository
+    public class MongoDbDatabaseBlobRepository : MongoDbRepository<IBlobStoringMongoDbContext, DatabaseBlob, Guid>, IDatabaseBlobRepository
     {
-        public MongoDbBlobRepository(IMongoDbContextProvider<IBlobStoringDatabaseMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoDbDatabaseBlobRepository(IMongoDbContextProvider<IBlobStoringMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 
-        public virtual async Task<Blob> FindAsync(Guid containerId, string name, Guid? tenantId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<DatabaseBlob> FindAsync(Guid containerId, string name, Guid? tenantId = null, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().FirstOrDefaultAsync(
                     x => x.ContainerId == containerId &&

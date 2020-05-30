@@ -3,26 +3,26 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
-    public static class BlobStoringDatabaseMongoDbContextExtensions
+    public static class BlobStoringMongoDbContextExtensions
     {
-        public static void ConfigureDatabaseBlobStoring(
+        public static void ConfigureBlobStoring(
             this IMongoModelBuilder builder,
             Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new BlobStoringDatabaseMongoModelBuilderConfigurationOptions(
+            var options = new BlobStoringMongoModelBuilderConfigurationOptions(
                 BlobStoringDatabaseDbProperties.DbTablePrefix
             );
 
             optionsAction?.Invoke(options);
 
-            builder.Entity<Container>(b =>
+            builder.Entity<DatabaseBlobContainer>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "Containers";
+                b.CollectionName = options.CollectionPrefix + "BlobContainers";
             });
 
-            builder.Entity<Blob>(b =>
+            builder.Entity<DatabaseBlob>(b =>
             {
                 b.CollectionName = options.CollectionPrefix + "Blobs";
             });

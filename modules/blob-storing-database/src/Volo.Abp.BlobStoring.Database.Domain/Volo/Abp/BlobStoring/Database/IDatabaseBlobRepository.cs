@@ -6,9 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.BlobStoring.Database
 {
-    public interface IBlobRepository : IBasicRepository<Blob, Guid>
+    public interface IDatabaseBlobRepository : IBasicRepository<DatabaseBlob, Guid>
     {
-        Task<Blob> FindAsync(Guid containerId, [NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
+        Task<DatabaseBlob> FindAsync(Guid containerId, [NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
 
         Task<bool> ExistsAsync(Guid containerId, [NotNull] string name, Guid? tenantId = null, CancellationToken cancellationToken = default);
 

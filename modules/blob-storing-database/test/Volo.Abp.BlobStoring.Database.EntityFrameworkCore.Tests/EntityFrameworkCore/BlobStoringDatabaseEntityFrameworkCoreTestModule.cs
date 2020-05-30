@@ -31,8 +31,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            new BlobStoringDatabaseDbContext(
-                new DbContextOptionsBuilder<BlobStoringDatabaseDbContext>().UseSqlite(connection).Options
+            new BlobStoringDbContext(
+                new DbContextOptionsBuilder<BlobStoringDbContext>().UseSqlite(connection).Options
             ).GetService<IRelationalDatabaseCreator>().CreateTables();
             
             return connection;

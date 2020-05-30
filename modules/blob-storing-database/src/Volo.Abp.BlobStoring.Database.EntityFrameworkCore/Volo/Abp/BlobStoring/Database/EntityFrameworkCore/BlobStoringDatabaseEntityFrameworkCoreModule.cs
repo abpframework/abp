@@ -12,11 +12,11 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAbpDbContext<BlobStoringDatabaseDbContext>(options =>
+            context.Services.AddAbpDbContext<BlobStoringDbContext>(options =>
             {
-                 options.AddRepository<Container, EfCoreContainerRepository>();
+                 options.AddRepository<DatabaseBlobContainer, EfCoreDatabaseBlobContainerRepository>();
 
-                 options.AddRepository<Blob, EfCoreBlobRepository>();
+                 options.AddRepository<DatabaseBlob, EfCoreDatabaseBlobRepository>();
             });
         }
     }

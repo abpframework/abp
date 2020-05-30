@@ -5,17 +5,17 @@ using Volo.Abp.MongoDB;
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
     [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
-    public class BlobStoringDatabaseMongoDbContext : AbpMongoDbContext, IBlobStoringDatabaseMongoDbContext
+    public class BlobStoringMongoDbContext : AbpMongoDbContext, IBlobStoringMongoDbContext
     {
-        public IMongoCollection<Container> Containers => Collection<Container>();
+        public IMongoCollection<DatabaseBlobContainer> BlobContainers => Collection<DatabaseBlobContainer>();
 
-        public IMongoCollection<Blob> Blobs => Collection<Blob>();
+        public IMongoCollection<DatabaseBlob> Blobs => Collection<DatabaseBlob>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureDatabaseBlobStoring();
+            modelBuilder.ConfigureBlobStoring();
         }
     }
 }

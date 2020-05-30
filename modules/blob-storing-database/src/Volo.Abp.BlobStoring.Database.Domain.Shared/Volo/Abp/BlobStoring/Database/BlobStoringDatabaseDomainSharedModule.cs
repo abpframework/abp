@@ -17,7 +17,7 @@ namespace Volo.Abp.BlobStoring.Database
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BlobStoringDatabaseDomainSharedModule>("Volo.Abp.BlobStoring.Database");
+                options.FileSets.AddEmbedded<BlobStoringDatabaseDomainSharedModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -25,7 +25,7 @@ namespace Volo.Abp.BlobStoring.Database
                 options.Resources
                     .Add<BlobStoringDatabaseResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/BlobStoringDatabase");
+                    .AddVirtualJson("/Volo/Abp/BlobStoring/Database/Localization");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

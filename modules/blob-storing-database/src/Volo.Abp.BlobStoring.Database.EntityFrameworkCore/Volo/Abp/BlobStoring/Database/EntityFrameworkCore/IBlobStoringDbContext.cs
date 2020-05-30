@@ -5,10 +5,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
     [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
-    public interface IBlobStoringDatabaseDbContext : IEfCoreDbContext
+    public interface IBlobStoringDbContext : IEfCoreDbContext
     {
-        DbSet<Container> Containers { get; }
+        DbSet<DatabaseBlobContainer> BlobContainers { get; }
 
-        DbSet<Blob> Blobs { get; }
+        DbSet<DatabaseBlob> Blobs { get; }
     }
 }

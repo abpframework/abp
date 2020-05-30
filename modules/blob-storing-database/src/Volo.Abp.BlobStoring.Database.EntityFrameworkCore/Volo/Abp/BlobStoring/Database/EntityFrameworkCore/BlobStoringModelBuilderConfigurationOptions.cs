@@ -3,9 +3,9 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
-    public class BlobStoringDatabaseModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
+    public class BlobStoringModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
-        public BlobStoringDatabaseModelBuilderConfigurationOptions(
+        public BlobStoringModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix = "",
             [CanBeNull] string schema = null)
             : base(
