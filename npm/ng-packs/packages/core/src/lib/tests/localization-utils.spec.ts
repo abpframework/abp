@@ -2,9 +2,53 @@ import {
   createLocalizationPipeKeyGenerator,
   createLocalizer,
   createLocalizerWithFallback,
+  getLocaleDirection,
 } from '../utils/localization-utils';
 
 describe('Localization Utils', () => {
+  describe('#getLocaleDirection', () => {
+    test.each`
+      locale       | expected
+      ${undefined} | ${'ltr'}
+      ${null}      | ${'ltr'}
+      ${''}        | ${'ltr'}
+      ${'en'}      | ${'ltr'}
+      ${'en-US'}   | ${'ltr'}
+      ${'pt'}      | ${'ltr'}
+      ${'pt-PT'}   | ${'ltr'}
+      ${'ar'}      | ${'rtl'}
+      ${'ar-AE'}   | ${'rtl'}
+      ${'ar-QA'}   | ${'rtl'}
+      ${'ckb'}     | ${'rtl'}
+      ${'ckb-IR'}  | ${'rtl'}
+      ${'fa'}      | ${'rtl'}
+      ${'fa-AF'}   | ${'rtl'}
+      ${'he'}      | ${'rtl'}
+      ${'ks'}      | ${'rtl'}
+      ${'ksb'}     | ${'ltr'}
+      ${'ksf'}     | ${'ltr'}
+      ${'ksh'}     | ${'ltr'}
+      ${'lrc'}     | ${'rtl'}
+      ${'lrc-IQ'}  | ${'rtl'}
+      ${'mzn'}     | ${'rtl'}
+      ${'pa'}      | ${'ltr'}
+      ${'pa-Arab'} | ${'rtl'}
+      ${'ps'}      | ${'rtl'}
+      ${'ps-PK'}   | ${'rtl'}
+      ${'sd'}      | ${'rtl'}
+      ${'ug'}      | ${'rtl'}
+      ${'ur'}      | ${'rtl'}
+      ${'ur-IN'}   | ${'rtl'}
+      ${'uz'}      | ${'ltr'}
+      ${'uz-Arab'} | ${'rtl'}
+      ${'yi'}      | ${'rtl'}
+      ${'zh'}      | ${'ltr'}
+      ${'zh-Hans'} | ${'ltr'}
+    `('should return $expected when $locale is given as parameter', ({ locale, expected }) => {
+      expect(getLocaleDirection(locale)).toBe(expected);
+    });
+  });
+
   describe('#createLocalizer', () => {
     const localize = createLocalizer({
       values: { foo: { bar: 'baz' }, x: { y: 'z' } },

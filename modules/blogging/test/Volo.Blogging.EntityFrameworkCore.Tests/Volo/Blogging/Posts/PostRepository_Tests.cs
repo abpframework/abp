@@ -1,4 +1,5 @@
-﻿using Volo.Blogging.Posts;
+﻿using Volo.Blogging.EntityFrameworkCore;
+using Volo.Blogging.Posts;
 
 namespace Volo.Blogging
 {

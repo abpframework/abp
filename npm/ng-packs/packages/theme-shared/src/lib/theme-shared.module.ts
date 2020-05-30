@@ -22,6 +22,7 @@ import styles from './constants/styles';
 import { LoadingDirective } from './directives/loading.directive';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
+import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
@@ -103,6 +104,12 @@ export class ThemeSharedModule {
           multi: true,
           deps: [THEME_SHARED_APPEND_CONTENT],
           useFactory: noop,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [Injector],
+          useFactory: initLazyStyleHandler,
         },
         { provide: HTTP_ERROR_CONFIG, useValue: options.httpErrorConfig },
         {

@@ -26,14 +26,18 @@ namespace Volo.Abp.Identity.MongoDB
             return await GetMongoQueryable().FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityRole>> GetListAsync(
+        public async Task<List<IdentityRole>> GetListAsync(
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                        x => x.Name.Contains(filter) ||
+                        x.NormalizedName.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .As<IMongoQueryable<IdentityRole>>()
                 .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)

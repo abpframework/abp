@@ -441,6 +441,10 @@
                       "path": "Entity-Framework-Core-PostgreSQL.md"
                     },
                     {
+                      "text": "To Oracle",
+                      "path": "Entity-Framework-Core-Oracle.md"
+                    },
+                    {
                       "text": "To SQLite",
                       "path": "Entity-Framework-Core-SQLite.md"
                     }

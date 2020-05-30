@@ -36,6 +36,7 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       blueprints: {
         creditCard: 'AbpValidation::ThisFieldIsNotAValidCreditCardNumber.',
         email: 'AbpValidation::ThisFieldIsNotAValidEmailAddress.',
+        invalid: 'AbpValidation::ThisFieldIsNotValid.',
         max: 'AbpValidation::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
         maxlength:
           'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}[{{ requiredLength }}]',

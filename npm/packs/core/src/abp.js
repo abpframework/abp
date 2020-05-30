@@ -663,4 +663,60 @@ var abp = abp || {};
         return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);
     };
 
+    /* CLOCK *****************************************/
+    abp.clock = abp.clock || {};
+
+    abp.clock.kind = 'Unspecified';
+
+    abp.clock.supportsMultipleTimezone = function () {
+        return abp.clock.kind === 'Utc';
+    };
+
+    var toLocal = function (date) {
+        return new Date(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes(),
+            date.getUTCSeconds(),
+            date.getUTCMilliseconds()
+        );
+    };
+
+    var toUtc = function (date) {
+        Date.UTC(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes(),
+            date.getUTCSeconds(),
+            date.getUTCMilliseconds()
+        );
+    };
+
+    abp.clock.now = function () {
+        if (abp.clock.kind === 'Utc') {
+            return toUtc(new Date());
+        }
+        return new Date();
+    };
+
+    abp.clock.normalize = function (date) {
+        var kind = abp.clock.kind;
+
+        if (kind === 'Unspecified') {
+            return date;
+        }
+
+        if (kind === 'Local') {
+            return toLocal(date);
+        }
+
+        if (kind === 'Utc') {
+            return toUtc(date);
+        }
+    };
+
 })();

@@ -22,7 +22,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         }
 
         public virtual async Task<Client> FindByCliendIdAsync(
-            string clientId, 
+            string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -30,13 +30,15 @@ namespace Volo.Abp.IdentityServer.MongoDB
         }
 
         public virtual async Task<List<Client>> GetListAsync(
-            string sorting, 
-            int skipCount, 
-            int maxResultCount, 
+            string sorting,
+            int skipCount,
+            int maxResultCount,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x=>x.ClientId.Contains(filter))
                 .OrderBy(sorting ?? nameof(Client.ClientName))
                 .As<IMongoQueryable<Client>>()
                 .PageBy<Client, IMongoQueryable<Client>>(skipCount, maxResultCount)

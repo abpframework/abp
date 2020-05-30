@@ -1,12 +1,12 @@
-﻿using Volo.Abp.Localization;
+﻿using Volo.Abp.Authorization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Localization.Resource;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.UI.Navigation
 {
-    [DependsOn(typeof(AbpUiModule))]
+    [DependsOn(typeof(AbpUiModule), typeof(AbpAuthorizationModule))]
     public class AbpUiNavigationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

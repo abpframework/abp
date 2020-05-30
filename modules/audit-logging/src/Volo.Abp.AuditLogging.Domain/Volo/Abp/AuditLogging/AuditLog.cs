@@ -99,7 +99,7 @@ namespace Volo.Abp.AuditLogging
             Exceptions = auditInfo
                 .Exceptions?
                 .JoinAsString(Environment.NewLine)
-                .Truncate(AuditLogConsts.MaxExceptionsLength);
+                .Truncate(AuditLogConsts.MaxExceptionsLengthValue);
 
             Comments = auditInfo
                 .Comments?

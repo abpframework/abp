@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
@@ -19,7 +20,8 @@ namespace Volo.Abp.Account
         typeof(AbpIdentityAspNetCoreModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule)
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
     )]
     public class AbpAccountApplicationTestModule : AbpModule
     {
