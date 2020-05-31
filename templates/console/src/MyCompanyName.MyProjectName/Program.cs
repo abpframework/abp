@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace MyCompanyName.MyProjectName.ConsoleApp
+namespace MyCompanyName.MyProjectName
 {
     public class Program
     {
@@ -45,7 +45,7 @@ namespace MyCompanyName.MyProjectName.ConsoleApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<MyProjectNameConsoleAppHostedService>();
+                    services.AddHostedService<MyProjectNameHostedService>();
                 });
     }
 }
