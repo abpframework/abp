@@ -431,6 +431,10 @@
                       "path": "Entity-Framework-Core-PostgreSQL.md"
                     },
                     {
+                      "text": " Oracle",
+                      "path": "Entity-Framework-Core-Oracle.md"
+                    },
+                    {
                       "text": "到SQLite",
                       "path": "Entity-Framework-Core-SQLite.md"
                     }

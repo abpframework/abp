@@ -403,7 +403,7 @@ yarn start
 
 在上面的管理界面中,可以通过使用[Expo Client](https://expo.io/tools#client)扫描二维码,使用Android模拟器,iOS模拟器或真机来启动应用程序.
 
-> 请参阅[expo.io](https://docs.expo.io/versions/v36.0.0/workflow/ios-simulator/)上的[Android Studio模拟器](https://docs.expo.io/versions/v36.0.0/workflow/android-studio-emulator/)和[iOS模拟器文档](https://docs.expo.io/versions/v36.0.0/workflow/android-studio-emulator/).
+> 请参阅expo.io上的[Android Studio模拟器](https://docs.expo.io/workflow/android-simulator/)和[iOS模拟器文档](https://docs.expo.io/workflow/ios-simulator/).
 
 ![React Native login screen on iPhone 11](images/rn-login-iphone.png)
 
