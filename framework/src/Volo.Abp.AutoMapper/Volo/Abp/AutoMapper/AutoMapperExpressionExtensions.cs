@@ -59,5 +59,39 @@ namespace Volo.Abp.AutoMapper
                 .IgnoreCreationAuditedObjectProperties()
                 .IgnoreModificationAuditedObjectProperties();
         }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreSoftDeleteProperties<TSource, TDestination>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : ISoftDelete
+        {
+            return mappingExpression.Ignore(x => x.IsDeleted);
+        }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreHasDeletionTimeProperties<TSource, TDestination>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IHasDeletionTime
+        {
+            return mappingExpression
+                .IgnoreSoftDeleteProperties()
+                .Ignore(x => x.DeletionTime);
+        }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreDeletionAuditedObjectProperties<TSource, TDestination>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IDeletionAuditedObject
+        {
+            return mappingExpression
+                .IgnoreHasDeletionTimeProperties()
+                .Ignore(x => x.DeleterId);
+        }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreFullAuditedObjectProperties<TSource, TDestination>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IFullAuditedObject
+        {
+            return mappingExpression
+                .IgnoreAuditedObjectProperties()
+                .IgnoreDeletionAuditedObjectProperties();
+        }
     }
 }

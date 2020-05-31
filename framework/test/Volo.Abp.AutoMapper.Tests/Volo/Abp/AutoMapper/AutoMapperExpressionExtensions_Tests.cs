@@ -37,7 +37,7 @@ namespace Volo.Abp.AutoMapper
             var mapper = CreateMapper(
                 cfg => cfg
                     .CreateMap<SimpleClassAudited1, SimpleClassAudited2>()
-                    .IgnoreAuditedObjectProperties()
+                    .IgnoreFullAuditedObjectProperties()
             );
 
             var obj2 = mapper.Map<SimpleClassAudited2>(
@@ -46,7 +46,10 @@ namespace Volo.Abp.AutoMapper
                     CreationTime = DateTime.Now,
                     CreatorId = Guid.NewGuid(),
                     LastModificationTime = DateTime.Now,
-                    LastModifierId = Guid.NewGuid()
+                    LastModifierId = Guid.NewGuid(),
+                    DeleterId = Guid.NewGuid(),
+                    DeletionTime = DateTime.Now,
+                    IsDeleted = true
                 }
             );
             
@@ -54,6 +57,9 @@ namespace Volo.Abp.AutoMapper
             obj2.CreatorId.ShouldBeNull();
             obj2.LastModificationTime.ShouldBe(default);
             obj2.LastModifierId.ShouldBeNull();
+            obj2.DeleterId.ShouldBeNull();
+            obj2.DeletionTime.ShouldBeNull();
+            obj2.IsDeleted.ShouldBeFalse();
         }
 
         private static IMapper CreateMapper(Action<IMapperConfigurationExpression> configure)
@@ -76,20 +82,26 @@ namespace Volo.Abp.AutoMapper
             public string Value3 { get; set; }
         }
 
-        public class SimpleClassAudited1 : IAuditedObject
+        public class SimpleClassAudited1 : IFullAuditedObject
         {
             public DateTime CreationTime { get; set; }
             public Guid? CreatorId { get; set; }
             public DateTime? LastModificationTime { get; set; }
             public Guid? LastModifierId { get; set; }
+            public bool IsDeleted { get; set; }
+            public DateTime? DeletionTime { get; set; }
+            public Guid? DeleterId { get; set; }
         }
         
-        public class SimpleClassAudited2 : IAuditedObject
+        public class SimpleClassAudited2 : IFullAuditedObject
         {
             public DateTime CreationTime { get; set; }
             public Guid? CreatorId { get; set; }
             public DateTime? LastModificationTime { get; set; }
             public Guid? LastModifierId { get; set; }
+            public bool IsDeleted { get; set; }
+            public DateTime? DeletionTime { get; set; }
+            public Guid? DeleterId { get; set; }
         }
     }
 }
