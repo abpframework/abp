@@ -104,7 +104,7 @@
                     locale: abp.localization.currentCulture.name
                 }).toLocaleString();
         },
-        getOptions($input) { //$input may needed if developer wants to override this method
+        getOptions: function($input) { //$input may needed if developer wants to override this method
             return {
                 todayBtn: "linked",
                 autoclose: true,
