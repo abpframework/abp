@@ -8,6 +8,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using MyCompanyName.MyProjectName.Permissions;
 
 namespace MyCompanyName.MyProjectName.Web
 {
