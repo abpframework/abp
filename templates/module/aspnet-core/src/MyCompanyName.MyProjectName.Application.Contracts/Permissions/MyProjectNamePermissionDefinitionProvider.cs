@@ -8,7 +8,7 @@ namespace MyCompanyName.MyProjectName.Permissions
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            //var moduleGroup = context.AddGroup(MyProjectNamePermissions.GroupName, L("Permission:MyProjectName"));
+            var myGroup = context.AddGroup(MyProjectNamePermissions.GroupName, L("Permission:MyProjectName"));
         }
 
         private static LocalizableString L(string name)
