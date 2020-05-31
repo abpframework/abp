@@ -40,8 +40,4 @@
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Widgets\Volo.Abp.AspNetCore.Mvc.UI.Widgets.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Shared\Components\AbpPageToolbar\AbpPageSearchBox\Default.cshtml" />
-  </ItemGroup>
-
 </Project>

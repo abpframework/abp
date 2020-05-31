@@ -1,8 +1,7 @@
-﻿@model Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPageSearchBox.SearchBoxViewModel
-
-<form method="post" class="@Model.FormClassName">
+﻿
+<form method="post" class="searchForm">
     <div class="input-group">
-        <input class="form-control @Model.TextBoxClassName" placeholder="@Model.PlaceHolder"/>
+        <input class="form-control filterText" placeholder="Search"/>
         <div class="input-group-append">
             <abp-button button-type="Primary" type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>

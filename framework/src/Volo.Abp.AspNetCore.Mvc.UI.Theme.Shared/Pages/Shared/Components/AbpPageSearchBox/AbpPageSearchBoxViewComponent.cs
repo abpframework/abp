@@ -5,30 +5,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPag
 {
     public class AbpPageSearchBoxViewComponent : AbpViewComponent
     {
-        public string PlaceHolder { get; set; }
-
-        public async Task<IViewComponentResult> InvokeAsync(
-            string placeHolder,
-            string formClassName,
-            string textBoxClassName)
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            return await Task.FromResult(View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml",
-                new SearchBoxViewModel
-                {
-                    PlaceHolder = placeHolder,
-                    FormClassName = formClassName,
-                    TextBoxClassName = textBoxClassName
-                }));
-            ;
+            return await Task.FromResult(View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml"));
         }
-    }
-
-    public class SearchBoxViewModel
-    {
-        public string PlaceHolder { get; set; }
-
-        public string FormClassName { get; set; }
-
-        public string TextBoxClassName { get; set; }
     }
 }
