@@ -93,5 +93,59 @@ namespace Volo.Abp.AutoMapper
                 .IgnoreAuditedObjectProperties()
                 .IgnoreDeletionAuditedObjectProperties();
         }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreMayHaveCreatorProperties<TSource, TDestination, TUser>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IMayHaveCreator<TUser>
+        {
+            return mappingExpression
+                .Ignore(x => x.Creator);
+        }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreCreationAuditedObjectProperties<TSource, TDestination, TUser>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : ICreationAuditedObject<TUser>
+        {
+            return mappingExpression
+                .IgnoreCreationAuditedObjectProperties()
+                .IgnoreMayHaveCreatorProperties<TSource, TDestination, TUser>();
+        }
+
+        public static IMappingExpression<TSource, TDestination> IgnoreModificationAuditedObjectProperties<TSource, TDestination, TUser>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IModificationAuditedObject<TUser>
+        {
+            return mappingExpression
+                .IgnoreModificationAuditedObjectProperties()
+                .Ignore(x => x.LastModifier);
+        }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreAuditedObjectProperties<TSource, TDestination, TUser>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IAuditedObject<TUser>
+        {
+            return mappingExpression
+                .IgnoreCreationAuditedObjectProperties<TSource, TDestination, TUser>()
+                .IgnoreModificationAuditedObjectProperties<TSource, TDestination, TUser>();
+        }
+
+        public static IMappingExpression<TSource, TDestination> IgnoreDeletionAuditedObjectProperties<TSource, TDestination, TUser>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IDeletionAuditedObject<TUser>
+        {
+            return mappingExpression
+                .IgnoreDeletionAuditedObjectProperties()
+                .Ignore(x => x.Deleter);
+        }
+        
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreFullAuditedObjectProperties<TSource, TDestination, TUser>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IFullAuditedObject<TUser>
+        {
+            return mappingExpression
+                .IgnoreAuditedObjectProperties<TSource, TDestination, TUser>()
+                .IgnoreDeletionAuditedObjectProperties<TSource, TDestination, TUser>();
+        }
     }
 }
