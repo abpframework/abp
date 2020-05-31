@@ -5,10 +5,10 @@ using Volo.Abp.MongoDB;
 namespace Volo.Abp.BlobStoring.Database.MongoDB
 {
     [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
-    public interface IBlobStoringDatabaseMongoDbContext : IAbpMongoDbContext
+    public interface IBlobStoringMongoDbContext : IAbpMongoDbContext
     {
-        IMongoCollection<Container> Containers { get; }
+        IMongoCollection<DatabaseBlobContainer> BlobContainers { get; }
         
-        IMongoCollection<Blob> Blobs { get; }
+        IMongoCollection<DatabaseBlob> Blobs { get; }
     }
 }

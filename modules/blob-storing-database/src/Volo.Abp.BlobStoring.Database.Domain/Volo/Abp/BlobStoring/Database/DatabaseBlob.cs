@@ -5,7 +5,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BlobStoring.Database
 {
-    public class Blob : AggregateRoot<Guid>, IMultiTenant
+    public class DatabaseBlob : AggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid ContainerId { get; protected set; }
 
@@ -15,10 +15,10 @@ namespace Volo.Abp.BlobStoring.Database
 
         public virtual byte[] Content { get; protected set; }
 
-        public Blob(Guid id, Guid containerId, [NotNull] string name, [NotNull] byte[] content, Guid? tenantId = null)
+        public DatabaseBlob(Guid id, Guid containerId, [NotNull] string name, [NotNull] byte[] content, Guid? tenantId = null)
             : base(id)
         {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name), BlobConsts.MaxNameLength);
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name), DatabaseBlobConsts.MaxNameLength);
             ContainerId = containerId;
             Content = CheckContentLength(content);
             TenantId = tenantId;
@@ -33,9 +33,9 @@ namespace Volo.Abp.BlobStoring.Database
         {
             Check.NotNull(content, nameof(content));
             
-            if (content.Length >= BlobConsts.MaxContentLength)
+            if (content.Length >= DatabaseBlobConsts.MaxContentLength)
             {
-                throw new AbpException($"Blob content size cannot be more than {BlobConsts.MaxContentLength} Bytes.");
+                throw new AbpException($"Blob content size cannot be more than {DatabaseBlobConsts.MaxContentLength} Bytes.");
             }
 
             return content;

@@ -1,6 +1,7 @@
 ﻿(function ($) {
 
     abp.dom = abp.dom || {};
+
     abp.dom.initializers = abp.dom.initializers || {};
 
     abp.dom.initializers.initializeForms = function ($forms, validate) {
@@ -70,10 +71,68 @@
         $timeagos.timeago();
     }
 
+    abp.libs = abp.libs = abp.libs || {};
+    abp.libs.bootstrapDatepicker = {
+        languageMap: {
+            'zh-Hans': 'zh-CN'
+        },
+        mapLanguageName: function (name) {
+            return abp.libs.bootstrapDatepicker.languageMap[abp.localization.currentCulture.name] || name;
+        },
+        isLanguageMapped: function (name) {
+            return abp.libs.bootstrapDatepicker.languageMap[abp.localization.currentCulture.name] !== undefined;
+        },
+        getCurrentLanguageConfig: function () {
+            var mappedName = abp.libs.bootstrapDatepicker.mapLanguageName(abp.localization.currentCulture.name);
+            return $.fn.datepicker.dates[mappedName];
+        },
+        normalizeLanguageConfig: function () {
+            var languageConfig = abp.libs.bootstrapDatepicker.getCurrentLanguageConfig();
+            if (languageConfig) {
+                if (!languageConfig.format || abp.libs.bootstrapDatepicker.isLanguageMapped(abp.localization.currentCulture.name)) {
+                    languageConfig.format = abp.localization.currentCulture.dateTimeFormat.shortDatePattern.toLowerCase();
+                }
+            }
+        },
+        getFormattedValue: function (isoFormattedValue) {
+            if (!isoFormattedValue) {
+                return isoFormattedValue;
+            }
+            return luxon
+                .DateTime
+                .fromISO(isoFormattedValue, {
+                    locale: abp.localization.currentCulture.name
+                }).toLocaleString();
+        },
+        getOptions($input) { //$input may needed if developer wants to override this method
+            return {
+                todayBtn: "linked",
+                autoclose: true,
+                language: abp.libs.bootstrapDatepicker.mapLanguageName(abp.localization.currentCulture.cultureName)
+            };
+        }
+    };
+
+    abp.dom.initializers.initializeDatepickers = function ($rootElement) {
+        $rootElement
+            .findWithSelf('input.datepicker,input[type=date]')
+            .each(function () {
+                var $input = $(this);
+                $input
+                    .attr('type', 'text')
+                    .val(abp.libs.bootstrapDatepicker.getFormattedValue($input.val()))
+                    .datepicker(abp.libs.bootstrapDatepicker.getOptions($input))
+                    .on('hide', function (e) {
+                        e.stopPropagation();
+                    });
+            });
+    }
+
     abp.dom.onNodeAdded(function (args) {
         abp.dom.initializers.initializeToolTips(args.$el.findWithSelf('[data-toggle="tooltip"]'));
         abp.dom.initializers.initializePopovers(args.$el.findWithSelf('[data-toggle="popover"]'));
         abp.dom.initializers.initializeTimeAgos(args.$el.findWithSelf('.timeago'));
+        abp.dom.initializers.initializeDatepickers(args.$el);
         abp.dom.initializers.initializeForms(args.$el.findWithSelf('form'), true);
         abp.dom.initializers.initializeScript(args.$el);
     });
@@ -84,10 +143,15 @@
         });
     });
 
+    abp.event.on('abp.configurationInitialized', function () {
+        abp.libs.bootstrapDatepicker.normalizeLanguageConfig();
+    });
+
     $(function () {
         abp.dom.initializers.initializeToolTips($('[data-toggle="tooltip"]'));
         abp.dom.initializers.initializePopovers($('[data-toggle="popover"]'));
         abp.dom.initializers.initializeTimeAgos($('.timeago'));
+        abp.dom.initializers.initializeDatepickers($(document));
         abp.dom.initializers.initializeForms($('form'));
         $('[data-auto-focus="true"]').first().findWithSelf('input,select').focus();
     });

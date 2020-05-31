@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\BlobStoring\Database\Localization\Database\*.json" />
-    <Content Remove="Volo\Abp\BlobStoring\Database\Localization\Database\*.json" />
+    <EmbeddedResource Include="Volo\Abp\BlobStoring\Database\Localization\*.json" />
+    <Content Remove="Volo\Abp\BlobStoring\Database\Localization\*.json" />
   </ItemGroup>
 
 </Project>

@@ -5,13 +5,13 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
     [ConnectionStringName(BlobStoringDatabaseDbProperties.ConnectionStringName)]
-    public class BlobStoringDatabaseDbContext : AbpDbContext<BlobStoringDatabaseDbContext>, IBlobStoringDatabaseDbContext
+    public class BlobStoringDbContext : AbpDbContext<BlobStoringDbContext>, IBlobStoringDbContext
     {
-        public DbSet<Container> Containers { get; set; }
+        public DbSet<DatabaseBlobContainer> BlobContainers { get; set; }
 
-        public DbSet<Blob> Blobs { get; set; }
+        public DbSet<DatabaseBlob> Blobs { get; set; }
 
-        public BlobStoringDatabaseDbContext(DbContextOptions<BlobStoringDatabaseDbContext> options) 
+        public BlobStoringDbContext(DbContextOptions<BlobStoringDbContext> options) 
             : base(options)
         {
 
@@ -21,8 +21,7 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureDatabaseBlobStoring();
+            builder.ConfigureBlobStoring();
         }
-
     }
 }
