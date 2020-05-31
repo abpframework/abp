@@ -15,7 +15,7 @@ namespace Volo.Abp.VirtualFileExplorer.Web.Navigation
                 return Task.CompletedTask;
             }
 
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<VirtualFileExplorerResource>>();
+            var l = context.GetLocalizer<VirtualFileExplorerResource>();
 
             context.Menu.Items.Add(new ApplicationMenuItem(VirtualFileExplorerMenuNames.Index, l["Menu:VirtualFileExplorer"], icon: "fa fa-file", url: "/VirtualFileExplorer"));
 

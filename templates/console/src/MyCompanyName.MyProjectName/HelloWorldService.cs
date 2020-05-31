@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
 
-namespace MyCompanyName.MyProjectName.ConsoleApp
+namespace MyCompanyName.MyProjectName
 {
     public class HelloWorldService : ITransientDependency
     {

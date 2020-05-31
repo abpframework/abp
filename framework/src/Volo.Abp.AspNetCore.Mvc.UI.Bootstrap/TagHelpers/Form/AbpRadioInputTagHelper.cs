@@ -18,10 +18,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public IEnumerable<SelectListItem> AspItems { get; set; }
 
-        [HtmlAttributeNotBound]
-        [ViewContext]
-        public ViewContext ViewContext { get; set; }
-
         public AbpRadioInputTagHelper(AbpRadioInputTagHelperService tagHelperService)
             : base(tagHelperService)
         {
