@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Auditing;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
@@ -10,7 +11,9 @@ namespace Volo.Abp.AutoMapper
 {
     [DependsOn(
         typeof(AbpObjectMappingModule),
-        typeof(AbpObjectExtendingModule))]
+        typeof(AbpObjectExtendingModule),
+        typeof(AbpAuditingModule)
+        )]
     public class AbpAutoMapperModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

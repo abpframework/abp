@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Shouldly;
+using Volo.Abp.Auditing;
 using Xunit;
 
 namespace Volo.Abp.AutoMapper
@@ -9,14 +11,11 @@ namespace Volo.Abp.AutoMapper
         [Fact]
         public void Should_Ignore_Configured_Property()
         {
-            var configuration = new MapperConfiguration(
+            var mapper = CreateMapper(
                 cfg => cfg.CreateMap<SimpleClass1, SimpleClass2>()
                     .Ignore(x => x.Value2)
                     .Ignore(x => x.Value3)
             );
-
-            configuration.AssertConfigurationIsValid();
-            var mapper = configuration.CreateMapper();
 
             var obj2 = mapper.Map<SimpleClass2>(
                 new SimpleClass1
@@ -31,6 +30,31 @@ namespace Volo.Abp.AutoMapper
             obj2.Value3.ShouldBeNull();
         }
 
+        [Fact]
+        public void Should_Ignore_CreationTime()
+        {
+            var mapper = CreateMapper(
+                cfg => cfg.CreateMap<SimpleClassWithCreationTime1, SimpleClassWithCreationTime2>()
+                    .IgnoreCreationTime()
+            );
+
+            var obj2 = mapper.Map<SimpleClassWithCreationTime2>(
+                new SimpleClassWithCreationTime1
+                {
+                    CreationTime = DateTime.Now
+                }
+            );
+            
+            obj2.CreationTime.ShouldBe(default);
+        }
+
+        private static IMapper CreateMapper(Action<IMapperConfigurationExpression> configurer)
+        {
+            var configuration = new MapperConfiguration(configurer);
+            configuration.AssertConfigurationIsValid();
+            return configuration.CreateMapper();
+        }
+
         public class SimpleClass1
         {
             public string Value1 { get; set; }
@@ -42,6 +66,16 @@ namespace Volo.Abp.AutoMapper
             public string Value1 { get; set; }
             public string Value2 { get; set; }
             public string Value3 { get; set; }
+        }
+
+        public class SimpleClassWithCreationTime1 : IHasCreationTime
+        {
+            public DateTime CreationTime { get; set; }
+        }
+        
+        public class SimpleClassWithCreationTime2 : IHasCreationTime
+        {
+            public DateTime CreationTime { get; set; }
         }
     }
 }
