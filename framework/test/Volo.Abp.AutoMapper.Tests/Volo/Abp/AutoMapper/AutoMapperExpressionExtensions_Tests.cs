@@ -12,7 +12,8 @@ namespace Volo.Abp.AutoMapper
         public void Should_Ignore_Configured_Property()
         {
             var mapper = CreateMapper(
-                cfg => cfg.CreateMap<SimpleClass1, SimpleClass2>()
+                cfg => cfg
+                    .CreateMap<SimpleClass1, SimpleClass2>()
                     .Ignore(x => x.Value2)
                     .Ignore(x => x.Value3)
             );
@@ -31,26 +32,33 @@ namespace Volo.Abp.AutoMapper
         }
 
         [Fact]
-        public void Should_Ignore_CreationTime()
+        public void Should_Ignore_Audit_Properties()
         {
             var mapper = CreateMapper(
-                cfg => cfg.CreateMap<SimpleClassWithCreationTime1, SimpleClassWithCreationTime2>()
-                    .IgnoreCreationTime()
+                cfg => cfg
+                    .CreateMap<SimpleClassAudited1, SimpleClassAudited2>()
+                    .IgnoreAuditedObjectProperties()
             );
 
-            var obj2 = mapper.Map<SimpleClassWithCreationTime2>(
-                new SimpleClassWithCreationTime1
+            var obj2 = mapper.Map<SimpleClassAudited2>(
+                new SimpleClassAudited1
                 {
-                    CreationTime = DateTime.Now
+                    CreationTime = DateTime.Now,
+                    CreatorId = Guid.NewGuid(),
+                    LastModificationTime = DateTime.Now,
+                    LastModifierId = Guid.NewGuid()
                 }
             );
             
             obj2.CreationTime.ShouldBe(default);
+            obj2.CreatorId.ShouldBeNull();
+            obj2.LastModificationTime.ShouldBe(default);
+            obj2.LastModifierId.ShouldBeNull();
         }
 
-        private static IMapper CreateMapper(Action<IMapperConfigurationExpression> configurer)
+        private static IMapper CreateMapper(Action<IMapperConfigurationExpression> configure)
         {
-            var configuration = new MapperConfiguration(configurer);
+            var configuration = new MapperConfiguration(configure);
             configuration.AssertConfigurationIsValid();
             return configuration.CreateMapper();
         }
@@ -68,14 +76,20 @@ namespace Volo.Abp.AutoMapper
             public string Value3 { get; set; }
         }
 
-        public class SimpleClassWithCreationTime1 : IHasCreationTime
+        public class SimpleClassAudited1 : IAuditedObject
         {
             public DateTime CreationTime { get; set; }
+            public Guid? CreatorId { get; set; }
+            public DateTime? LastModificationTime { get; set; }
+            public Guid? LastModifierId { get; set; }
         }
         
-        public class SimpleClassWithCreationTime2 : IHasCreationTime
+        public class SimpleClassAudited2 : IAuditedObject
         {
             public DateTime CreationTime { get; set; }
+            public Guid? CreatorId { get; set; }
+            public DateTime? LastModificationTime { get; set; }
+            public Guid? LastModifierId { get; set; }
         }
     }
 }
