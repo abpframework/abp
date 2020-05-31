@@ -455,6 +455,15 @@
       ]
     },
     {
+      "text": "实时",
+      "items": [
+        {
+          "text": "SignalR集成",
+          "path": "SignalR-Integration.md"
+        }
+      ]
+    },
+    {
       "text": "后台服务",
       "items": [
         {
