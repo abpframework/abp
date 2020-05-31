@@ -198,7 +198,7 @@ public class MyProfile : Profile
 {
     public MyProfile()
     {
-        CreateMap<SimpleClassAudited1, SimpleClassAudited2>()
+        CreateMap<SimpleClass1, SimpleClass2>()
             .ForMember(x => x.CreationTime, map => map.Ignore());
     }
 }
@@ -211,7 +211,7 @@ public class MyProfile : Profile
 {
     public MyProfile()
     {
-        CreateMap<SimpleClassAudited1, SimpleClassAudited2>()
+        CreateMap<SimpleClass1, SimpleClass2>()
             .Ignore(x => x.CreationTime);
     }
 }
