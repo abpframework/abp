@@ -5,9 +5,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPag
 {
     public class AbpPageSearchBoxViewComponent : AbpViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(string placeHolder)
         {
-            return await Task.FromResult(View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml"));
+            return await Task.FromResult(
+                View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml",
+                new AbpSearchBoxViewModel {PlaceHolder = placeHolder}));
         }
     }
 }
