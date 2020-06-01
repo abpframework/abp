@@ -161,7 +161,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var application = context.Services.GetSingletonInstance<IAbpApplication>();
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
-            partManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcModule).Assembly));
+            partManager.ApplicationParts.AddIfNotContains(typeof(AbpAspNetCoreMvcModule).Assembly);
 
             Configure<MvcOptions>(mvcOptions =>
             {
@@ -220,12 +220,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             foreach (var moduleAssembly in moduleAssemblies)
             {
-                if (partManager.ApplicationParts.OfType<AssemblyPart>().Any(p => p.Assembly == moduleAssembly))
-                {
-                    continue;
-                }
-
-                partManager.ApplicationParts.Add(new AssemblyPart(moduleAssembly));
+                partManager.ApplicationParts.AddIfNotContains(moduleAssembly);
             }
         }
     }
