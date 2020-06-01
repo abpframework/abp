@@ -123,7 +123,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return Array.Empty<AssemblyPart>();
             }
 
-            var moduleDependedAssemblies = moduleDescriptor.Dependencies.Select(d => d.Assembly).ToArray();
+            var moduleDependedAssemblies = moduleDescriptor
+                .Dependencies
+                .Select(d => d.Assembly)
+                .ToArray();
+            
             return partManager.ApplicationParts
                 .OfType<AssemblyPart>()
                 .Where(a => a.Assembly.IsIn(moduleDependedAssemblies))
@@ -134,10 +138,11 @@ namespace Volo.Abp.AspNetCore.Mvc
         private static CompiledRazorAssemblyPart GetViewsPartOrNull(ApplicationPartManager partManager,
             ApplicationPart assemblyPart)
         {
+            var viewsAssemblyName = assemblyPart.Name + ".Views";
             return partManager
                 .ApplicationParts
                 .OfType<CompiledRazorAssemblyPart>()
-                .FirstOrDefault(p => p.Name == assemblyPart.Name + ".Views");
+                .FirstOrDefault(p => p.Name == viewsAssemblyName);
         }
 
         private static AssemblyPart GetOriginalAssemblyPartOrNull(
@@ -147,13 +152,16 @@ namespace Volo.Abp.AspNetCore.Mvc
             var originalAssemblyName = compiledRazorAssemblyPart.Name.RemovePostFix(".Views");
             return partManager.ApplicationParts
                 .OfType<AssemblyPart>()
-                .FirstOrDefault(p => p.Assembly.GetName().Name == originalAssemblyName);
+                .FirstOrDefault(p => p.Name == originalAssemblyName);
         }
 
-        private static IAbpModuleDescriptor GetModuleDescriptorForAssemblyOrNull(IModuleContainer moduleContainer,
+        private static IAbpModuleDescriptor GetModuleDescriptorForAssemblyOrNull(
+            IModuleContainer moduleContainer,
             Assembly assembly)
         {
-            return moduleContainer.Modules.FirstOrDefault(m => m.Assembly == assembly);
+            return moduleContainer
+                .Modules
+                .FirstOrDefault(m => m.Assembly == assembly);
         }
     }
 }
