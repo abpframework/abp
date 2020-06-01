@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -177,6 +178,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                     endpointContext.Endpoints.MapRazorPages();
                 });
             });
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            ApplicationPartSorter.Sort(
+                context.Services.GetSingletonInstance<ApplicationPartManager>(),
+                context.Services.GetSingletonInstance<IModuleContainer>()
+            );
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
