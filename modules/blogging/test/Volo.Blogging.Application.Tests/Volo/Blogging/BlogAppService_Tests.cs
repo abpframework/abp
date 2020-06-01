@@ -6,6 +6,7 @@ using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Comments.Dtos;
+using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 using Xunit;
 
@@ -39,6 +40,25 @@ namespace Volo.Blogging
 
             blog.ShouldNotBeNull();
             blog.Name.ShouldBe(targetBlog.Name);
+        }
+
+        [Theory]
+        [InlineData("favicon.ICO")]
+        [InlineData("favicon.ico")]
+        [InlineData("wp-login.php")]
+        [InlineData("wp-login.PHP")]
+        [InlineData("robots.txt")]
+        public void Should_Return_True_For_FileExtension_Shortname(string blogShortName)
+        {
+            BlogNameControlHelper.IsProhibitedFileFormatName(blogShortName).ShouldBe(true);
+        }
+
+        [Theory]
+        [InlineData("test-post")]
+        [InlineData("Test.Module")]
+        public void Should_Return_False_For_Normal_Shortname(string blogShortName)
+        {
+            BlogNameControlHelper.IsProhibitedFileFormatName(blogShortName).ShouldBe(false);
         }
 
         [Fact]

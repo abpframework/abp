@@ -1,0 +1,6 @@
+﻿{
+  "culture": "ar",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "لا يمكن أن يكون {0} أكثر من {1}! قم بزيادة{2}. {3} على الخادم للسماح بمزيد من النتائج."
+  }
+}

@@ -29,7 +29,7 @@ end
 - **Part 2: 创建,编辑,删除书籍(本章)**
 - [Part-3: 集成测试](Part-3.md)
 
-> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-booktore-application).
+> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
 
 {{if UI == "MVC"}}
 
@@ -37,13 +37,13 @@ end
 
 通过本节, 你将会了解如何创建一个 modal form 来实现新增书籍的功能. 最终成果如下图所示:
 
-![booktore-create-dialog](./images/booktore-create-dialog-2.png)
+![bookstore-create-dialog](./images/bookstore-create-dialog-2.png)
 
 #### 新建 modal form
 
 在 `Acme.BookStore.Web` 项目的 `Pages/Books` 目录下新建一个 `CreateModal.cshtml` Razor页面:
 
-![booktore-add-create-dialog](./images/booktore-add-create-dialog-v2.png)
+![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
 
 ##### CreateModal.cshtml.cs
 
@@ -130,7 +130,7 @@ namespace Acme.BookStore.Web.Pages.Books
 
 如下图所示,只是在表格 **右上方** 添加了 **New book** 按钮:
 
-![booktore-new-book-button](./images/booktore-new-book-button.png)
+![bookstore-new-book-button](./images/bookstore-new-book-button.png)
 
 打开 `Pages/book/index.js` 在 `datatable` 配置代码后面添加如下代码:
 
@@ -155,7 +155,7 @@ $('#NewBookButton').click(function (e) {
 
 在 `Acme.BookStore.Web` 项目的 `Pages/Books` 目录下新建一个名叫 `EditModal.cshtml` 的Razor页面:
 
-![booktore-add-edit-dialog](./images/booktore-add-edit-dialog.png)
+![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
 
 #### EditModal.cshtml.cs
 
@@ -258,7 +258,7 @@ namespace Acme.BookStore.Web
 
 我们将为表格每行添加下拉按钮 ("Actions") . 最终效果如下:
 
-![booktore-book-table-actions](images/booktore-book-table-actions.png)
+![bookstore-book-table-actions](images/bookstore-book-table-actions.png)
 
 打开 `Pages/Books/Index.cshtml` 页面,并按下方所示修改表格部分的代码:
 
@@ -449,6 +449,8 @@ $(function () {
 运行程序并尝试删除一个book实体.
 
 {{end}}
+
+{{if UI == "NG"}}
 
 ### 新增 Book 实体
 
@@ -654,7 +656,7 @@ export class BookListComponent implements OnInit {
 
 你可以打开浏览器,点击**New book**按钮看到模态框.
 
-![Empty modal for new book](./images/booktore-empty-new-book-modal.png)
+![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
 
 #### 添加响应式表单
 
@@ -878,7 +880,7 @@ export class BookListComponent implements OnInit {
 
 现在你可以打开浏览器看到以下变化:
 
-![New book modal](./images/booktore-new-book-form.png)
+![New book modal](./images/bookstore-new-book-form.png)
 
 #### 保存图书
 
@@ -990,7 +992,7 @@ export class BookListComponent implements OnInit {
 
 模态框最终看起来像这样:
 
-![Save button to the modal](./images/booktore-new-book-form-v2.png)
+![Save button to the modal](./images/bookstore-new-book-form-v2.png)
 
 ### 更新图书
 
@@ -1192,7 +1194,7 @@ export class BookListComponent implements OnInit {
 
 UI最终看起来像这样:
 
-![Action buttons](./images/booktore-actions-buttons.png)
+![Action buttons](./images/bookstore-actions-buttons.png)
 
 打开 `app\app\book\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<ng-template #abpHeader>` 标签:
 
@@ -1322,7 +1324,7 @@ delete(id: string) {
 
 `delete` 方法会显示一个确认弹层并订阅用户响应. 只在用户点击 `Yes` 按钮时分派动作. 确认弹层看起来如下:
 
-![booktore-confirmation-popup](./images/booktore-confirmation-popup.png)
+![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
 
 #### 添加删除按钮
 
@@ -1339,7 +1341,7 @@ delete(id: string) {
 
 最终操作下拉框UI看起来如下:
 
-![booktore-final-actions-dropdown](./images/booktore-final-actions-dropdown.png)
+![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
 
 {{end}}
 

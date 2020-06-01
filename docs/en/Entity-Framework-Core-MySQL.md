@@ -25,23 +25,6 @@ MySQL connection strings are different than SQL Server connection strings. So, c
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 
-## Change the Migrations DbContext
-
-MySQL DBMS has some slight differences than the SQL Server. Some module database mapping configuration (especially the field lengths) causes problems with MySQL. For example, some of the the [IdentityServer module](Modules/IdentityServer.md) tables has such problems and it provides an option to configure the fields based on your DBMS.
-
-The startup template contains a *YourProjectName*MigrationsDbContext which is responsible to maintain and migrate the database schema. This DbContext basically calls extension methods of the depended modules to configure their database tables.
-
-Open the *YourProjectName*MigrationsDbContext and change the `builder.ConfigureIdentityServer();` line as shown below:
-
-````csharp
-builder.ConfigureIdentityServer(options =>
-{
-    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
-});
-````
-
-Then `ConfigureIdentityServer()` method will set the field lengths to not exceed the MySQL limits. Refer to related module documentation if you have any problem while creating or executing the database migrations.
-
 ## Re-Generate the Migrations
 
 The startup template uses [Entity Framework Core's Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). EF Core Migrations depend on the selected DBMS provider. So, changing the DBMS provider will cause the migration fails.

@@ -124,9 +124,13 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
+        /// <summary>
+        /// Navigation property for this organization units.
+        /// </summary>
+        public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; }
+
         protected IdentityUser()
         {
-            ExtraProperties = new Dictionary<string, object>();
         }
 
         public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
@@ -147,6 +151,7 @@ namespace Volo.Abp.Identity
             Claims = new Collection<IdentityUserClaim>();
             Logins = new Collection<IdentityUserLogin>();
             Tokens = new Collection<IdentityUserToken>();
+            OrganizationUnits = new Collection<IdentityUserOrganizationUnit>();
 
             ExtraProperties = new Dictionary<string, object>();
         }
@@ -274,6 +279,41 @@ namespace Volo.Abp.Identity
         public virtual void RemoveToken(string loginProvider, string name)
         {
             Tokens.RemoveAll(t => t.LoginProvider == loginProvider && t.Name == name);
+        }
+
+        public virtual void AddOrganizationUnit(Guid organizationUnitId)
+        {
+            if (IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.Add(
+                new IdentityUserOrganizationUnit(
+                    Id,
+                    organizationUnitId,
+                    TenantId
+                )
+            );
+        }
+
+        public virtual void RemoveOrganizationUnit(Guid organizationUnitId)
+        {
+            if (!IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.RemoveAll(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
+        }
+
+        public virtual bool IsInOrganizationUnit(Guid organizationUnitId)
+        {
+            return OrganizationUnits.Any(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
         }
 
         public override string ToString()

@@ -40,7 +40,7 @@ public class YourModule : AbpModule
 
 ## Configuration
 
-Quartz is a very configurable library,and the ABP framework provides `AbpQuartzPreOptions` for this. You can use the `PreConfigure` method in your module class to pre-configure this option. ABP will use it when initializing the Quartz module. For example:
+Quartz is a very configurable library,and the ABP framework provides `AbpQuartzOptions` for this. You can use the `PreConfigure` method in your module class to pre-configure this option. ABP will use it when initializing the Quartz module. For example:
 
 ````csharp
 [DependsOn(
@@ -53,7 +53,7 @@ public class YourModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        PreConfigure<AbpQuartzPreOptions>(options =>
+        PreConfigure<AbpQuartzOptions>(options =>
         {
             options.Properties = new NameValueCollection
             {
@@ -71,3 +71,51 @@ public class YourModule : AbpModule
 ````
 
 Quartz stores job and scheduling information **in memory by default**. In the example, we use the pre-configuration of [options pattern](Options.md) to change it to the database. For more configuration of Quartz, please refer to the Quartz's [documentation](https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/index.html).
+
+## Exception handling
+
+### Default exception handling strategy
+
+When an exception occurs in the background job,ABP provide the **default handling strategy** retrying once every 3 seconds, up to 3 times. You can change the retry count and retry interval via `AbpBackgroundJobQuartzOptions` options:
+
+```csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpBackgroundJobsQuartzModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBackgroundJobQuartzOptions>(options =>
+        {
+            options.RetryCount = 1;
+            options.RetryIntervalMillisecond = 1000;
+        });
+    }
+}
+```
+
+### Customize exception handling strategy
+
+You can customize the exception handling strategy via `AbpBackgroundJobQuartzOptions` options:
+
+```csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpBackgroundJobsQuartzModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpBackgroundJobQuartzOptions>(options =>
+        {
+            options.RetryStrategy = async (retryIndex, executionContext, exception) =>
+            {
+                // customize exception handling
+            };
+        });
+    }
+}
+```

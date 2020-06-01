@@ -44,7 +44,7 @@ namespace Volo.Abp.Modularity
                     }
                     catch (Exception ex)
                     {
-                        throw new AbpInitializationException($"An error occurred during the initialize {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                        throw new AbpInitializationException($"An error occurred during the initialize {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace Volo.Abp.Modularity
                     }
                     catch (Exception ex)
                     {
-                        throw new AbpInitializationException($"An error occurred during the shutdown {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
+                        throw new AbpShutdownException($"An error occurred during the shutdown {contributor.GetType().FullName} phase of the module {module.Type.AssemblyQualifiedName}: {ex.Message}. See the inner exception for details.", ex);
                     }
                 }
             }

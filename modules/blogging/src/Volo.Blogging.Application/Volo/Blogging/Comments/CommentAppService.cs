@@ -86,6 +86,8 @@ namespace Volo.Blogging.Comments
 
             comment = await _commentRepository.InsertAsync(comment);
 
+            await CurrentUnitOfWork.SaveChangesAsync();
+
             return ObjectMapper.Map<Comment, CommentWithDetailsDto>(comment);
         }
 

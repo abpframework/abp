@@ -151,7 +151,7 @@
                             }
                             else
                             {
-                                <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
+                                <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                             }
                         </abp-column>
                     </abp-row>
@@ -342,7 +342,7 @@
                 }
                 else
                 {
-                    <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
+                    <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                 }
             </div>
         </div>

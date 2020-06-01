@@ -77,16 +77,14 @@
       class="dropdown-submenu"
       ngbDropdown
       #dropdownSubmenu="ngbDropdown"
-      [display]="isDropdownChildDynamic ? 'dynamic' : 'static'"
       placement="right-top"
       [autoClose]="true"
       *abpPermission="child.requiredPolicy"
-      (openChange)="openChange($event, childrenContainer)"
     >
       <div ngbDropdownToggle [class.dropdown-toggle]="false">
         <a
           abpEllipsis="210px"
-          [abpEllipsisEnabled]="isDropdownChildDynamic"
+          [abpEllipsisEnabled]="!smallScreen"
           role="button"
           class="btn d-block text-left dropdown-toggle"
         >

@@ -31,7 +31,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected virtual string GetInstalledNpmPackages()
         {
             Logger.LogInformation("Checking installed npm global packages...");
-            return CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0");
+            return CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0 --silent");
         }
 
         protected virtual void InstallYarn()

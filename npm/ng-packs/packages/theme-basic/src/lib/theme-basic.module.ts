@@ -7,12 +7,12 @@ import { NgxsModule } from '@ngxs/store';
 import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
 import { ApplicationLayoutComponent } from './components/application-layout/application-layout.component';
 import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.component';
-import { LayoutState } from './states/layout.state';
+import { LogoComponent } from './components/logo/logo.component';
+import { NavItemsComponent } from './components/nav-items/nav-items.component';
+import { RoutesComponent } from './components/routes/routes.component';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
 import { InitialService } from './services/initial.service';
-import { LogoComponent } from './components/logo/logo.component';
-import { RoutesComponent } from './components/routes/routes.component';
-import { NavItemsComponent } from './components/nav-items/nav-items.component';
+import { LayoutState } from './states/layout.state';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -34,15 +34,20 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     NgxValidateCoreModule.forRoot({
       targetSelector: '.form-group',
       blueprints: {
-        email: 'AbpAccount::ThisFieldIsNotAValidEmailAddress.',
-        max: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
+        creditCard: 'AbpValidation::ThisFieldIsNotAValidCreditCardNumber.',
+        email: 'AbpValidation::ThisFieldIsNotAValidEmailAddress.',
+        invalid: 'AbpValidation::ThisFieldIsNotValid.',
+        max: 'AbpValidation::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
         maxlength:
-          'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}[{{ requiredLength }}]',
-        min: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
+          'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}[{{ requiredLength }}]',
+        min: 'AbpValidation::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
         minlength:
-          'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}[{{ requiredLength }}]',
-        required: 'AbpAccount::ThisFieldIsRequired.',
+          'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}[{{ requiredLength }}]',
+        ngbDate: 'AbpValidation::ThisFieldIsNotValid.',
         passwordMismatch: 'AbpIdentity::Identity.PasswordConfirmationFailed',
+        range: 'AbpValidation::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
+        required: 'AbpValidation::ThisFieldIsRequired.',
+        url: 'AbpValidation::ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl',
       },
       errorTemplate: ValidationErrorComponent,
     }),

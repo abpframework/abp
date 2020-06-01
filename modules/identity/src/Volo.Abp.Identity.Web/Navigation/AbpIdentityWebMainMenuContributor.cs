@@ -16,17 +16,14 @@ namespace Volo.Abp.Identity.Web.Navigation
                 return;
             }
 
-            var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
-
-            var hasRolePermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Roles.Default);
-            var hasUserPermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Users.Default);
+            var hasRolePermission = await context.IsGrantedAsync(IdentityPermissions.Roles.Default);
+            var hasUserPermission = await context.IsGrantedAsync(IdentityPermissions.Users.Default);
 
             if (hasRolePermission || hasUserPermission)
             {
                 var administrationMenu = context.Menu.GetAdministration();
 
-
-                var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<IdentityResource>>();
+                var l = context.GetLocalizer<IdentityResource>();
 
                 var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "fa fa-id-card-o");
                 administrationMenu.AddItem(identityMenuItem);

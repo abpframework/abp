@@ -1,13 +1,13 @@
 using System;
-using System.Linq;
+using System.Security.Claims;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
@@ -76,10 +76,16 @@ namespace Volo.Abp.AspNetCore.Mvc
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
-            
+
             Configure<RazorPagesOptions>(options =>
             {
                 options.RootDirectory = "/Volo/Abp/AspNetCore/Mvc";
+            });
+
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
+                options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
             });
         }
 
@@ -92,6 +98,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
+            app.UseAbpClaimsMap();
             app.UseAuthorization();
             app.UseAuditing();
             app.UseUnitOfWork();

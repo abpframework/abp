@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
         public class ValidationTest1Model
         {
             [Required]
-            [MinLength(2)]
+            [StringLength(5, MinimumLength = 2)]
             public string Value1 { get; set; }
         }
 
