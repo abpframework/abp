@@ -59,6 +59,7 @@ In most cases, you will want to change one or a few methods of the current imple
 ### Example: Overriding an Application Service
 
 ````csharp
+//[RemoteService(IsEnabled = false)] // If you use dynamic controller feature you can disable remote service. Prevent creating duplicate controller for the application service.
 [Dependency(ReplaceServices = true)]
 [ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
@@ -98,8 +99,6 @@ public class MyIdentityUserAppService : IdentityUserAppService
 This class **overrides** the `CreateAsync` method of the `IdentityUserAppService` [application service](Application-Services.md) to check the phone number. Then calls the base method to continue to the **underlying business logic**. In this way, you can perform additional business logic **before** and **after** the base logic.
 
 You could completely **re-write** the entire business logic for a user creation without calling the base method.
-
-> It's better to add the attribute `[RemoteService(IsEnabled = false)]` if the [Auto API Controllers](API/Auto-API-Controllers.md) is enabled, otherwise the extra APIs for MyIdentityUser will be generated.
 
 ### Example: Overriding a Domain Service
 
