@@ -18,5 +18,5 @@ export function addNavItem(item: NavItem) {
 }
 
 export function getNavItems() {
-  return navItems$;
+  return navItems$.asObservable();
 }
