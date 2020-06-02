@@ -15,7 +15,7 @@ namespace Volo.Abp.IdentityModel
         {
             var configuration = context.Services.GetConfiguration();
 
-            context.Services.AddHttpClient();
+            context.Services.AddHttpClient(IdentityModelAuthenticationService.HttpClientName);
 
             Configure<AbpIdentityClientOptions>(configuration);
         }
