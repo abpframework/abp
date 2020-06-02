@@ -158,7 +158,7 @@ namespace Volo.Abp.Identity.MongoDB
 
             //var update = Builders<IdentityUser>.Update.PullFilter(y => y.OrganizationUnits, iou=> iou);
             //var result = await DbContext.Users.UpdateManyAsync(filter, update);
-
+            //TODO: gterdem - Not working, not saving/updating the user. Fix
             for (int i = 0; i < users.Count; i++)
             {
                 users[i].RemoveOrganizationUnit(organizationUnit.Id);

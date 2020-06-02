@@ -190,12 +190,13 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user)
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user, bool includeDetails = false)
         {
             await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
 
             return await OrganizationUnitRepository.GetListAsync(
                 user.OrganizationUnits.Select(t => t.OrganizationUnitId),
+                includeDetails,
                 cancellationToken: CancellationToken
             );
         }
