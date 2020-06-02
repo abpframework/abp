@@ -8,7 +8,7 @@ namespace MyCompanyName.MyProjectName.MongoDB
         private static readonly MongoDbRunner MongoDbRunner;
         public static readonly string ConnectionString;
 
-        static MongoDbFixture()
+        static MyProjectNameMongoDbFixture()
         {
             MongoDbRunner = MongoDbRunner.Start();
             ConnectionString = MongoDbRunner.ConnectionString;
