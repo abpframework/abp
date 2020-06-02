@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using JetBrains.Annotations;
 
@@ -18,13 +17,11 @@ namespace Volo.Abp.BlobStoring
             [NotNull] string blobName,
             [NotNull] Stream blobStream,
             bool overrideExisting = false,
-            [CanBeNull] Guid? tenantId = null,
             CancellationToken cancellationToken = default)
             : base(
                 containerName,
                 configuration,
                 blobName,
-                tenantId,
                 cancellationToken)
         {
             BlobStream = Check.NotNull(blobStream, nameof(blobStream));

@@ -8,7 +8,7 @@ import { uuid } from '../utils';
   providedIn: 'root',
 })
 export class LazyLoadService {
-  readonly loaded = new Set();
+  readonly loaded = new Map<string, HTMLScriptElement | HTMLLinkElement>();
 
   loadedLibraries: { [url: string]: ReplaySubject<void> } = {};
 
@@ -45,7 +45,7 @@ export class LazyLoadService {
             throwError(new CustomEvent('error')),
           ),
         ),
-        tap(() => this.loaded.add(strategy.path)),
+        tap(() => this.loaded.set(strategy.path, strategy.element)),
         delay(100),
         shareReplay({ bufferSize: 1, refCount: true }),
       );
@@ -112,5 +112,15 @@ export class LazyLoadService {
         document.querySelector(targetQuery).insertAdjacentElement(position, library);
       });
     });
+  }
+
+  remove(path: string): boolean {
+    const element = this.loaded.get(path);
+
+    if (!element) return false;
+
+    element.parentNode.removeChild(element);
+    this.loaded.delete(path);
+    return true;
   }
 }

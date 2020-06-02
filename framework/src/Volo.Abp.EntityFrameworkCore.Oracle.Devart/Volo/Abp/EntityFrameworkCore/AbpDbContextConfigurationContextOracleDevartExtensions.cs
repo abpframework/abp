@@ -10,9 +10,10 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         public static DbContextOptionsBuilder UseOracle(
            [NotNull] this AbpDbContextConfigurationContext context,
-           [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null)
+           [CanBeNull] Action<OracleDbContextOptionsBuilder> oracleOptionsAction = null,
+           bool useExistingConnectionIfAvailable = false)
         {
-            if (context.ExistingConnection != null)
+            if (useExistingConnectionIfAvailable && context.ExistingConnection != null)
             {
                 return context.DbContextOptions.UseOracle(context.ExistingConnection, oracleOptionsAction);
             }
