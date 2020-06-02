@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { takeUntilDestroy } from '@ngx-validate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
-import { interval, Subscription, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -12,6 +12,7 @@ import { filter } from 'rxjs/operators';
     <div id="abp-loader-bar" [ngClass]="containerClass" [class.is-loading]="isLoading">
       <div
         class="abp-progress"
+        [class.progressing]="progressLevel"
         [style.width.vw]="progressLevel"
         [ngStyle]="{
           'background-color': color,
@@ -40,11 +41,29 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
   intervalPeriod = 350;
 
-  stopDelay = 820;
+  stopDelay = 800;
 
   @Input()
   filter = (action: StartLoader | StopLoader) =>
     action.payload.url.indexOf('openid-configuration') < 0;
+
+  private readonly clearProgress = () => {
+    this.progressLevel = 0;
+    this.cdRef.detectChanges();
+  };
+
+  private readonly reportProgress = () => {
+    if (this.progressLevel < 75) {
+      this.progressLevel += 1 + Math.random() * 9;
+    } else if (this.progressLevel < 90) {
+      this.progressLevel += 0.4;
+    } else if (this.progressLevel < 100) {
+      this.progressLevel += 0.1;
+    } else {
+      this.interval.unsubscribe();
+    }
+    this.cdRef.detectChanges();
+  };
 
   get boxShadow(): string {
     return `0 0 10px rgba(${this.color}, 0.5)`;
@@ -52,7 +71,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
   constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {}
 
-  ngOnInit() {
+  private subscribeToLoadActions() {
     this.actions
       .pipe(
         ofActionSuccessful(StartLoader, StopLoader),
@@ -63,7 +82,9 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
         if (action instanceof StartLoader) this.startLoading();
         else this.stopLoading();
       });
+  }
 
+  private subscribeToRouterEvents() {
     this.router.events
       .pipe(
         filter(
@@ -80,37 +101,31 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
       });
   }
 
+  ngOnInit() {
+    this.subscribeToLoadActions();
+    this.subscribeToRouterEvents();
+  }
+
   ngOnDestroy() {
     if (this.interval) this.interval.unsubscribe();
   }
 
   startLoading() {
-    if (this.isLoading || this.progressLevel !== 0) return;
+    if (this.isLoading || (this.interval && !this.interval.closed)) return;
 
     this.isLoading = true;
-    this.interval = interval(this.intervalPeriod).subscribe(() => {
-      if (this.progressLevel < 75) {
-        this.progressLevel += Math.random() * 10;
-      } else if (this.progressLevel < 90) {
-        this.progressLevel += 0.4;
-      } else if (this.progressLevel < 100) {
-        this.progressLevel += 0.1;
-      } else {
-        this.interval.unsubscribe();
-      }
-      this.cdRef.detectChanges();
-    });
+
+    this.interval = timer(0, this.intervalPeriod).subscribe(this.reportProgress);
   }
 
   stopLoading() {
     if (this.interval) this.interval.unsubscribe();
+
     this.progressLevel = 100;
     this.isLoading = false;
+
     if (this.timer && !this.timer.closed) return;
 
-    this.timer = timer(this.stopDelay).subscribe(() => {
-      this.progressLevel = 0;
-      this.cdRef.detectChanges();
-    });
+    this.timer = timer(this.stopDelay).subscribe(this.clearProgress);
   }
 }

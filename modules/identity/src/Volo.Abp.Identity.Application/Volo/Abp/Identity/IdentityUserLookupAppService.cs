@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
@@ -36,6 +38,27 @@ namespace Volo.Abp.Identity
             }
 
             return new UserData(userData);
+        }
+
+        public async Task<ListResultDto<UserData>> SearchAsync(UserLookupSearchInputDto input)
+        {
+            var users = await UserLookupServiceProvider.SearchAsync(
+                input.Sorting,
+                input.Filter,
+                input.MaxResultCount,
+                input.SkipCount
+            );
+
+            return new ListResultDto<UserData>(
+                users
+                    .Select(u => new UserData(u))
+                    .ToList()
+            );
+        }
+
+        public async Task<long> GetCountAsync(UserLookupCountInputDto input)
+        {
+            return await UserLookupServiceProvider.GetCountAsync(input.Filter);
         }
     }
 }

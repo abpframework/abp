@@ -146,6 +146,7 @@ export const CONFIG_STATE_DATA = {
     id: null,
     tenantId: null,
     userName: null,
+    email: null,
   },
   features: {
     values: {},
@@ -271,7 +272,7 @@ describe('ConfigState', () => {
       );
 
       expect(ConfigState.getLocalization('AbpIdentity::NoIdentity')(CONFIG_STATE_DATA)).toBe(
-        'AbpIdentity::NoIdentity',
+        'NoIdentity',
       );
 
       expect(
@@ -286,18 +287,15 @@ describe('ConfigState', () => {
         )(CONFIG_STATE_DATA),
       ).toBe('first and second do not match.');
 
-      try {
+      expect(
         ConfigState.getLocalization('::Test')({
           ...CONFIG_STATE_DATA,
           environment: {
             ...CONFIG_STATE_DATA.environment,
             localization: {} as any,
           },
-        });
-        expect(false).toBeTruthy(); // fail
-      } catch (error) {
-        expect((error as Error).message).toContain('Please check your environment');
-      }
+        }),
+      ).toBe('Test');
     });
   });
 
@@ -308,6 +306,7 @@ describe('ConfigState', () => {
 
       const configuration = {
         setting: { values: { 'Abp.Localization.DefaultLanguage': 'tr;TR' } },
+        localization: { currentCulture: {} },
       };
 
       const res$ = new ReplaySubject(1);
@@ -326,7 +325,7 @@ describe('ConfigState', () => {
       timer(0).subscribe(() => {
         expect(patchStateArg).toEqual(configuration);
         expect(dispatchArg instanceof SetLanguage).toBeTruthy();
-        expect(dispatchArg).toEqual({ payload: 'tr' });
+        expect(dispatchArg).toEqual({ payload: 'tr', dispatchAppConfiguration: false });
         done();
       });
     });

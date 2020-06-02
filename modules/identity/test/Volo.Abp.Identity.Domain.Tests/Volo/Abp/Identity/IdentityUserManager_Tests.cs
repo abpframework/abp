@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
-using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -16,6 +14,7 @@ namespace Volo.Abp.Identity
         private readonly IdentityUserManager _identityUserManager;
         private readonly IIdentityUserRepository _identityUserRepository;
         private readonly IIdentityRoleRepository _identityRoleRepository;
+        private readonly IOrganizationUnitRepository _organizationUnitRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IdentityTestData _testData;
@@ -25,6 +24,7 @@ namespace Volo.Abp.Identity
             _identityUserManager = GetRequiredService<IdentityUserManager>();
             _identityUserRepository = GetRequiredService<IIdentityUserRepository>();
             _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
+            _organizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
             _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
             _testData = GetRequiredService<IdentityTestData>();
             _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
@@ -89,6 +89,35 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task SetOrganizationUnitsAsync()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("david"));
+                user.ShouldNotBeNull();
+
+                var ou = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU11"));
+                ou.ShouldNotBeNull();
+
+                await _identityUserManager.SetOrganizationUnitsAsync(user, new Guid[]
+                {
+                    ou.Id
+                });
+
+                user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("david"));
+                user.OrganizationUnits.Count.ShouldBeGreaterThan(0);
+                user.OrganizationUnits.FirstOrDefault(uou => uou.OrganizationUnitId == ou.Id).ShouldNotBeNull();
+
+                await uow.CompleteAsync();
+
+
+            }
+        }
+
+        [Fact]
         public async Task AddDefaultRolesAsync_In_Same_Uow()
         {
             await CreateRandomDefaultRoleAsync();
@@ -110,6 +139,35 @@ namespace Volo.Abp.Identity
                     var role = await _identityRoleRepository.GetAsync(roleId);
                     role.IsDefault.ShouldBe(true);
                 }
+
+                await uow.CompleteAsync();
+
+            }
+        }
+
+        [Fact]
+        public async Task SetOrganizationUnits_Should_Remove()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU111"));
+                ou.ShouldNotBeNull();
+
+                var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("john.nash"));
+                user.ShouldNotBeNull();
+
+                var ouNew = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU2"));
+                ouNew.ShouldNotBeNull();
+
+                await _identityUserManager.SetOrganizationUnitsAsync(user, new Guid[]
+                {
+                    ouNew.Id
+                });
+
+                user.OrganizationUnits.ShouldNotContain(x => x.OrganizationUnitId == ou.Id);
 
                 await uow.CompleteAsync();
             }

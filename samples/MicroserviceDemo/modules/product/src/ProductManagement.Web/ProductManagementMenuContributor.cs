@@ -19,13 +19,11 @@ namespace ProductManagement
 
         private async Task ConfigureMainMenu(MenuConfigurationContext context)
         {
-            var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<ProductManagementResource>>();
-
+            var l = context.GetLocalizer<ProductManagementResource>();
 
             var rootMenuItem = new ApplicationMenuItem("ProductManagement", l["Menu:ProductManagement"]);
 
-            if (await authorizationService.IsGrantedAsync(ProductManagementPermissions.Products.Default))
+            if (await context.IsGrantedAsync(ProductManagementPermissions.Products.Default))
             {
                 rootMenuItem.AddItem(new ApplicationMenuItem("Products", l["Menu:Products"], "/ProductManagement/Products"));
             }

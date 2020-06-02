@@ -19,6 +19,7 @@ $solutionPaths = (
     "../modules/audit-logging",
     "../modules/background-jobs",
     "../modules/client-simulation",
+    "../modules/virtual-file-explorer",
     "../templates/module/aspnet-core",
     "../templates/app/aspnet-core",
     "../samples/MicroserviceDemo",

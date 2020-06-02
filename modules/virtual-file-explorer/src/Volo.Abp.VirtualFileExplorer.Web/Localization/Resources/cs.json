@@ -1,0 +1,14 @@
+{
+  "culture": "cs",
+  "texts": {
+    "VirtualFileExplorer": "Prohlížeč virtuálních souborů",
+    "VirtualFileType": "Typ virtuálního souborů",
+    "Menu:VirtualFileExplorer": "Prohlížeč virtuálních souborů",
+    "LastUpdateTime": "Čas poslední aktualizace",
+    "VirtualFileName": "Virtuální název souboru",
+    "FileContent": "Obsah souboru",
+    "Size": "Velikost",
+    "BackToRoot": "Zpět na kořen",
+    "EmptyFileInfoList": "Nejsou žádné virtuální soubory"
+  }
+}

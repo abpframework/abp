@@ -13,6 +13,8 @@ namespace Volo.Abp.Identity.MongoDB
 
         public IMongoCollection<IdentityClaimType> ClaimTypes => Collection<IdentityClaimType>();
 
+        public IMongoCollection<OrganizationUnit> OrganizationUnits => Collection<OrganizationUnit>();
+
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);

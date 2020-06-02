@@ -8,6 +8,7 @@
 @using Volo.Blogging.Pages.Blog.Posts
 @using Volo.Blogging.Areas.Blog.Helpers.TagHelpers
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
+@using Volo.Blogging.SocialMedia
 @inject IAuthorizationService Authorization
 @inject IOptionsSnapshot<BloggingTwitterOptions> twitterOptions
 @model DetailModel
@@ -20,6 +21,11 @@
     ViewBag.TwitterTitle = Model.Post.Title;
     ViewBag.TwitterDescription = Model.Post.Description;
     ViewBag.TwitterImage = $"{Request.Scheme}://{Request.Host}{Request.PathBase}{Model.Post.CoverImage}";
+
+    ViewBag.LinkedInUrl = Request.GetEncodedUrl();
+    ViewBag.LinkedInTitle = Model.Post.Title;
+    ViewBag.LinkedInDescription = Model.Post.Description;
+    ViewBag.LinkedInImage = $"{Request.Scheme}://{Request.Host}{Request.PathBase}{Model.Post.CoverImage}";
 
     var hasCommentingPermission = CurrentUser.IsAuthenticated; //TODO: Apply real policy!
 }
@@ -129,7 +135,7 @@
                         <h5>@L["TagsInThisArticle"]</h5>
                         @foreach (var tag in Model.Post.Tags)
                         {
-                            <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                            <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                         }
                     </div>
                 }
@@ -145,7 +151,7 @@
                             }
                             else
                             {
-                                <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
+                                <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                             }
                         </abp-column>
                     </abp-row>
@@ -336,7 +342,7 @@
                 }
                 else
                 {
-                    <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
+                    <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@System.Web.HttpUtility.UrlEncode(@Request.Path)">@L["LeaveComment"]</a>
                 }
             </div>
         </div>

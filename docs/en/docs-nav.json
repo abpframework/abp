@@ -180,6 +180,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Text Templating",
+          "path": "Text-Templating.md"
+        },
+        {
           "text": "Object Serialization"
         },
         {
@@ -379,6 +383,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "ListService",
+              "path": "UI/Angular/List-Service.md"
             }
           ]
         },
@@ -433,6 +441,10 @@
                       "path": "Entity-Framework-Core-PostgreSQL.md"
                     },
                     {
+                      "text": "To Oracle",
+                      "path": "Entity-Framework-Core-Oracle.md"
+                    },
+                    {
                       "text": "To SQLite",
                       "path": "Entity-Framework-Core-SQLite.md"
                     }
@@ -449,6 +461,15 @@
               "path": "Dapper.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "Real Time",
+      "items": [
+        {
+          "text": "SignalR Integration",
+          "path": "SignalR-Integration.md"
         }
       ]
     },
@@ -506,6 +527,10 @@
       "text": "Samples",
       "items": [
         {
+          "text": "All Samples",
+          "path": "Samples/Index.md"
+        },
+        {
           "text": "Microservice Demo",
           "path": "Samples/Microservice-Demo.md"
         }
@@ -520,11 +545,12 @@
       "path": "Microservice-Architecture.md"
     },
     {
-      "text": "Testing"
-    },
-    {
       "text": "Nightly Builds",
       "path": "Nightly-Builds.md"
+    },
+    {
+      "text": "Road Map",
+      "path": "Road-Map.md"
     },
     {
       "text": "Contribution Guide",

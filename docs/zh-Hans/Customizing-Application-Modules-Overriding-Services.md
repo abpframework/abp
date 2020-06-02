@@ -59,6 +59,7 @@ context.Services.Replace(
 ### 示例: 重写服务方法
 
 ````csharp
+//[RemoteService(IsEnabled = false)] // 如果你在使用动态控制器,为了避免为应用服务创建重复的控制器, 你可以禁用远程访问.
 [Dependency(ReplaceServices = true)]
 [ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
@@ -107,22 +108,25 @@ public class MyIdentityUserAppService : IdentityUserAppService
 public class MyIdentityUserManager : IdentityUserManager
 {
     public MyIdentityUserManager(
-        IdentityUserStore store, 
+        IdentityUserStore store,
+        IIdentityRoleRepository roleRepository, 
+        IIdentityUserRepository userRepository,
         IOptions<IdentityOptions> optionsAccessor, 
         IPasswordHasher<IdentityUser> passwordHasher,
         IEnumerable<IUserValidator<IdentityUser>> userValidators, 
         IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators, 
-        ILookupNormalizer keyNormalizer, 
-        IdentityErrorDescriber errors, 
-        IServiceProvider services, 
+        ILookupNormalizer keyNormalizer,
+        IdentityErrorDescriber errors,
+        IServiceProvider services,
         ILogger<IdentityUserManager> logger, 
-        ICancellationTokenProvider cancellationTokenProvider
-        ) : base(
-            store, 
+        ICancellationTokenProvider cancellationTokenProvider) : 
+        base(store,
+            roleRepository,
+            userRepository, 
             optionsAccessor, 
             passwordHasher, 
             userValidators, 
-            passwordValidators, 
+            passwordValidators,
             keyNormalizer, 
             errors, 
             services, 

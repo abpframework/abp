@@ -105,6 +105,21 @@ describe('ConfirmationService', () => {
 
     selectConfirmationElement<HTMLButtonElement>('button#cancel').click();
   });
+
+  test.each`
+    dismissible | count
+    ${true}     | ${1}
+    ${false}    | ${0}
+  `(
+    'should call the listenToEscape method $count times when dismissible is $dismissible',
+    ({ dismissible, count }) => {
+      const spy = spyOn(service as any, 'listenToEscape');
+
+      service.info('', '', { dismissible });
+
+      expect(spy).toHaveBeenCalledTimes(count);
+    },
+  );
 });
 
 function clearElements(selector = '.confirmation') {

@@ -41,7 +41,7 @@ namespace MyCompanyName.MyProjectName.Web.Menus
                 administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
             }
 
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<MyProjectNameResource>>();
+            var l = context.GetLocalizer<MyProjectNameResource>();
 
             context.Menu.Items.Insert(0, new ApplicationMenuItem("MyProjectName.Home", l["Menu:Home"], "/"));
 
@@ -50,8 +50,8 @@ namespace MyCompanyName.MyProjectName.Web.Menus
 
         private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
         {
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<MyProjectNameResource>>();
-            var accountStringLocalizer = context.ServiceProvider.GetRequiredService<IStringLocalizer<AccountResource>>();
+            var l = context.GetLocalizer<MyProjectNameResource>();
+            var accountStringLocalizer = context.GetLocalizer<AccountResource>();
             var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
 
             var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";

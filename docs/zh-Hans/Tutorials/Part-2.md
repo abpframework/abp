@@ -132,7 +132,7 @@ namespace Acme.BookStore.Web.Pages.Books
 
 ![bookstore-new-book-button](./images/bookstore-new-book-button.png)
 
-打开 `Pages/books/index.js` 在 `datatable` 配置代码后面添加如下代码:
+打开 `Pages/book/index.js` 在 `datatable` 配置代码后面添加如下代码:
 
 ````js
 var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
@@ -258,7 +258,7 @@ namespace Acme.BookStore.Web
 
 我们将为表格每行添加下拉按钮 ("Actions") . 最终效果如下:
 
-![bookstore-books-table-actions](images/bookstore-books-table-actions.png)
+![bookstore-book-table-actions](images/bookstore-book-table-actions.png)
 
 打开 `Pages/Books/Index.cshtml` 页面,并按下方所示修改表格部分的代码:
 
@@ -279,7 +279,7 @@ namespace Acme.BookStore.Web
 
 * 只是为"Actions"增加了一个 `th` 标签.
 
-打开 `Pages/books/index.js` 并用以下内容进行替换:
+打开 `Pages/book/index.js` 并用以下内容进行替换:
 
 ````js
 $(function () {
@@ -346,7 +346,7 @@ $(function () {
 
 ### 删除一个已有的Book实体
 
-打开 `Pages/books/index.js` 文件,在 `rowAction` `items` 下新增一项:
+打开 `Pages/book/index.js` 文件,在 `rowAction` `items` 下新增一项:
 
 ````js
 {
@@ -450,60 +450,62 @@ $(function () {
 
 {{end}}
 
+{{if UI == "NG"}}
+
 ### 新增 Book 实体
 
 下面的章节中,你将学习到如何创建一个新的模态对话框来新增Book实体.
 
 #### 状态定义
 
-在 `books\state` 文件夹下打开 `books.action.ts` 文件,使用以下内容替换它:
+在 `app\book\state` 文件夹下打开 `book.action.ts` 文件,使用以下内容替换它:
 
 ```js
-import { CreateUpdateBookDto } from '../../app/shared/models'; //<== added this line ==>
+import { CreateUpdateBookDto } from '../models'; //<== added this line ==>
 
 export class GetBooks {
-  static readonly type = '[Books] Get';
+  static readonly type = '[Book] Get';
 }
 
 // added CreateUpdateBook class
 export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
+  static readonly type = '[Book] Create Update Book';
   constructor(public payload: CreateUpdateBookDto) { }
 }
 ```
 
 * 我们导入了 `CreateUpdateBookDto` 模型并且创建了 `CreateUpdateBook` 动作.
 
-打开 `books\state` 文件夹下的 `books.state.ts` 文件,使用以下内容替换它:
+打开 `app\book\state` 文件夹下的 `book.state.ts` 文件,使用以下内容替换它:
 
 ```js
 import { PagedResultDto } from '@abp/ng.core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook } from './books.actions'; // <== added CreateUpdateBook==>
-import { BookService } from '../../app/shared/services';
+import { GetBooks, CreateUpdateBook } from './book.actions'; // <== added CreateUpdateBook==>
+import { BookService } from '../services';
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { BookDto } from '../../app/shared/models';
+import { BookDto } from '../models';
 
-export class BooksStateModel {
+export class BookStateModel {
   public book: PagedResultDto<BookDto>;
 }
 
-@State<BooksStateModel>({
-  name: 'BooksState',
-  defaults: { book: {} } as BooksStateModel,
+@State<BookStateModel>({
+  name: 'BookState',
+  defaults: { book: {} } as BookStateModel,
 })
 @Injectable()
-export class BooksState {
+export class BookState {
   @Selector()
-  static getBooks(state: BooksStateModel) {
+  static getBooks(state: BookStateModel) {
     return state.book.items || [];
   }
 
   constructor(private bookService: BookService) {}
 
   @Action(GetBooks)
-  get(ctx: StateContext<BooksStateModel>) {
+  get(ctx: StateContext<BookStateModel>) {
     return this.bookService.getListByInput().pipe(
       tap((bookResponse) => {
         ctx.patchState({
@@ -515,7 +517,7 @@ export class BooksState {
 
   // added CreateUpdateBook action listener
   @Action(CreateUpdateBook)
-  save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
+  save(ctx: StateContext<BookStateModel>, action: CreateUpdateBook) {
     return this.bookService.createByInput(action.payload);
   }
 }
@@ -527,7 +529,7 @@ export class BooksState {
 
 #### 添加模态到 BookListComponent
 
-打开 `books\book-list` 文件夹内的 `book-list.component.html` 文件,使用以下内容替换它:
+打开 `app\book\book-list` 文件夹内的 `book-list.component.html` 文件,使用以下内容替换它:
 
 ```html
 <div class="card">
@@ -556,7 +558,7 @@ export class BooksState {
   </div>
   <div class="card-body">
     <abp-table
-      [value]="books$ | async"
+      [value]="book$ | async"
       [abpLoading]="loading"
       [headerTemplate]="tableHeader"
       [bodyTemplate]="tableBody"
@@ -575,7 +577,7 @@ export class BooksState {
     <ng-template #tableBody let-data>
       <tr>
         <td>{%{{{ data.name }}}%}</td>
-        <td>{%{{{ booksType[data.type] }}}%}</td>
+        <td>{%{{{ bookType[data.type] }}}%}</td>
         <td>{%{{{ data.publishDate | date }}}%}</td>
         <td>{%{{{ data.price }}}%}</td>
       </tr>
@@ -603,16 +605,16 @@ export class BooksState {
 * `abp-modal` 是显示模态框的预构建组件. 你也可以使用其它方法显示模态框,但 `abp-modal` 提供了一些附加的好处.
 * 我们添加了 `New book` 按钮到 `AbpContentToolbar`.
 
-打开 `books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
+打开 `app\book\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
 
 ```js
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
+import { BookDto, BookType } from '../models';
+import { GetBooks } from '../state/book.actions';
+import { BookState } from '../state/book.state';
 
 @Component({
   selector: 'app-book-list',
@@ -620,7 +622,7 @@ import { BooksState } from '../state/books.state';
   styleUrls: ['./book-list.component.scss'],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
+  @Select(BookState.getBooks)
   books$: Observable<BookDto[]>;
 
   booksType = BookType;
@@ -660,16 +662,16 @@ export class BookListComponent implements OnInit {
 
 [响应式表单](https://angular.io/guide/reactive-forms) 提供一种模型驱动的方法来处理其值随时间变化的表单输入.
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
 
 ```js
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
+import { BookDto, BookType } from '../models';
+import { GetBooks } from '../state/book.actions';
+import { BookState } from '../state/book.state';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== added this line ==>
 
 @Component({
@@ -678,7 +680,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== adde
   styleUrls: ['./book-list.component.scss'],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
+  @Select(BookState.getBooks)
   books$: Observable<BookDto[]>;
 
   booksType = BookType;
@@ -729,7 +731,7 @@ export class BookListComponent implements OnInit {
 
 #### 创建表单的DOM元素
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<ng-template #abpBody> </ng-template>`:
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<ng-template #abpBody> </ng-template>`:
 
 ```html
 <ng-template #abpBody>
@@ -748,7 +750,7 @@ export class BookListComponent implements OnInit {
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
+        <option [ngValue]="bookType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -772,14 +774,14 @@ export class BookListComponent implements OnInit {
 
 #### Datepicker 要求
 
-打开 `app\books` 文件夹下的  `books.module.ts` 文件,使用以下内容替换它:
+打开 `app\book` 文件夹下的  `book.module.ts` 文件,使用以下内容替换它:
 
 ```js
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BooksRoutingModule } from './books-routing.module';
-import { BooksComponent } from './books.component';
+import { BooksRoutingModule } from './book-routing.module';
+import { BooksComponent } from './book.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; //<== added this line ==>
@@ -798,16 +800,16 @@ export class BooksModule { }
 
 * 我们导入了 `NgbDatepickerModule`  来使用日期选择器.
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
 
 ```js
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
+import { BookDto, BookType } from '../models';
+import { GetBooks } from '../state/book.actions';
+import { BookState } from '../state/book.state';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap'; // <== added this line ==>
 
@@ -818,7 +820,7 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }], // <== added this line ==>
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
+  @Select(BookState.getBooks)
   books$: Observable<BookDto[]>;
 
   booksType = BookType;
@@ -882,16 +884,16 @@ export class BookListComponent implements OnInit {
 
 #### 保存图书
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.ts` 文件,使用以下内容替换它:
 
 ```js
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks, CreateUpdateBook } from '../state/books.actions'; // <== added CreateUpdateBook ==>
-import { BooksState } from '../state/books.state';
+import { BookDto, BookType } from '../models';
+import { GetBooks, CreateUpdateBook } from '../state/book.actions'; // <== added CreateUpdateBook ==>
+import { BookState } from '../state/book.state';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
@@ -902,12 +904,11 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
+  @Select(BookState.getBooks)
   books$: Observable<BookDto[]>;
 
   booksType = BookType;
 
-  //added bookTypeArr array
   bookTypeArr = Object.keys(BookType).filter(
     (bookType) => typeof this.booksType[bookType] === 'number'
   );
@@ -946,7 +947,7 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  //<== added save ==>
+  // <== added save ==>
   save() {
     if (this.form.invalid) {
       return;
@@ -964,7 +965,7 @@ export class BookListComponent implements OnInit {
 * 我们导入了 `CreateUpdateBook`.
 * 我们添加了 `save` 方法.
 
-打开 `app\books\book-list` 文件夹下的 `app\books\book-list`文件, 添加 `abp-button` 保存图书.
+打开 `app\app\book\book-list` 文件夹下的 `app\app\book\book-list`文件, 添加 `abp-button` 保存图书.
 
 ```html
 <ng-template #abpFooter>
@@ -997,28 +998,28 @@ export class BookListComponent implements OnInit {
 
 #### CreateUpdateBook 动作
 
-打开 `books\state` 文件夹下的 `books.actions.ts` 文件,使用以下内容替换它:
+打开 `app\book\state` 文件夹下的 `book.actions.ts` 文件,使用以下内容替换它:
 
 ```js
-import { CreateUpdateBookDto } from '../../app/shared/models';
+import { CreateUpdateBookDto } from '../models';
 
 export class GetBooks {
-  static readonly type = '[Books] Get';
+  static readonly type = '[Book] Get';
 }
 
 export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: CreateUpdateBookDto, public id?: string) { } // <== added id parameter ==>
+  static readonly type = '[Book] Create Update Book';
+  constructor(public payload: CreateUpdateBookDto, public id?: string) {} // <== added id parameter ==>
 }
 ```
 
 * 我们在 `CreateUpdateBook` 动作的构造函数添加了 `id` 参数.
 
-打开 `books\state` 文件夹下的 `books.state.ts` 文件,使用以下内容替换 `save` 方法:
+打开 `app\book\state` 文件夹下的 `book.state.ts` 文件,使用以下内容替换 `save` 方法:
 
 ```js
 @Action(CreateUpdateBook)
-save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
+save(ctx: StateContext<BookStateModel>, action: CreateUpdateBook) {
   if (action.id) {
     return this.bookService.updateByIdAndInput(action.payload, action.id);
   } else {
@@ -1029,19 +1030,19 @@ save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
 
 #### BookListComponent
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,在构造函数注入 `BookService` 服务,并添加 名为 `selectedBook` 的变量.
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.ts` 文件,在构造函数注入 `BookService` 服务,并添加 名为 `selectedBook` 的变量.
 
 ```js
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { BookDto, BookType } from '../../app/shared/models';
-import { GetBooks, CreateUpdateBook } from '../state/books.actions';
-import { BooksState } from '../state/books.state';
+import { BookDto, BookType } from '../models';
+import { GetBooks, CreateUpdateBook } from '../state/book.actions';
+import { BookState } from '../state/book.state';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { BookService } from '../../app/shared/services'; // <== imported BookService ==>
+import { BookService } from '../services'; // <== imported BookService ==>
 
 @Component({
   selector: 'app-book-list',
@@ -1050,13 +1051,13 @@ import { BookService } from '../../app/shared/services'; // <== imported BookSer
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookListComponent implements OnInit {
-  @Select(BooksState.getBooks)
-  books$: Observable<BookDto[]>;
+  @Select(BookState.getBooks)
+  book$: Observable<BookDto[]>;
 
-  booksType = BookType;
+  bookType = BookType;
 
   bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
+    (bookType) => typeof this.bookType[bookType] === 'number'
   );
 
   loading = false;
@@ -1137,12 +1138,12 @@ export class BookListComponent implements OnInit {
 
 #### 添加 "Actions" 下拉框到表格
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<div class="card-body">` 标签:
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<div class="card-body">` 标签:
 
 ```html
 <div class="card-body">
   <abp-table
-    [value]="books$ | async"
+    [value]="book$ | async"
     [abpLoading]="loading"
     [headerTemplate]="tableHeader"
     [bodyTemplate]="tableBody"
@@ -1179,7 +1180,7 @@ export class BookListComponent implements OnInit {
         </div>
       </td>
       <td>{%{{{ data.name }}}%}</td>
-      <td>{%{{{ booksType[data.type] }}}%}</td>
+      <td>{%{{{ bookType[data.type] }}}%}</td>
       <td>{%{{{ data.publishDate | date }}}%}</td>
       <td>{%{{{ data.price }}}%}</td>
     </tr>
@@ -1195,7 +1196,7 @@ UI最终看起来像这样:
 
 ![Action buttons](./images/bookstore-actions-buttons.png)
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<ng-template #abpHeader>` 标签:
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.html` 文件,使用以下内容替换 `<ng-template #abpHeader>` 标签:
 
 ```html
 <ng-template #abpHeader>
@@ -1209,45 +1210,45 @@ UI最终看起来像这样:
 
 #### DeleteBook 动作
 
-打开 `books\state` 文件夹下的 `books.actions.ts` 文件添加名为 `DeleteBook` 的动作.
+打开 `app\book\state` 文件夹下的 `book.actions.ts` 文件添加名为 `DeleteBook` 的动作.
 
 ```js
 export class DeleteBook {
-  static readonly type = '[Books] Delete';
+  static readonly type = '[Book] Delete';
   constructor(public id: string) {}
 }
 ```
 
-打开 `books\state` 文件夹下的 `books.state.ts` 文件,使用以下内容替换它:
+打开 `app\book\state` 文件夹下的 `book.state.ts` 文件,使用以下内容替换它:
 
 ```js
 import { PagedResultDto } from '@abp/ng.core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks, CreateUpdateBook, DeleteBook } from './books.actions'; // <== added DeleteBook==>
-import { BookService } from '../../app/shared/services';
+import { GetBooks, CreateUpdateBook, DeleteBook } from './book.actions'; // <== added DeleteBook==>
+import { BookService } from '../services';
 import { tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { BookDto } from '../../app/shared/models';
+import { BookDto } from '../models';
 
-export class BooksStateModel {
+export class BookStateModel {
   public book: PagedResultDto<BookDto>;
 }
 
-@State<BooksStateModel>({
-  name: 'BooksState',
-  defaults: { book: {} } as BooksStateModel,
+@State<BookStateModel>({
+  name: 'BookState',
+  defaults: { book: {} } as BookStateModel,
 })
 @Injectable()
-export class BooksState {
+export class BookState {
   @Selector()
-  static getBooks(state: BooksStateModel) {
+  static getBooks(state: BookStateModel) {
     return state.book.items || [];
   }
 
   constructor(private bookService: BookService) {}
 
   @Action(GetBooks)
-  get(ctx: StateContext<BooksStateModel>) {
+  get(ctx: StateContext<BookStateModel>) {
     return this.bookService.getListByInput().pipe(
       tap((booksResponse) => {
         ctx.patchState({
@@ -1258,7 +1259,7 @@ export class BooksState {
   }
 
   @Action(CreateUpdateBook)
-  save(ctx: StateContext<BooksStateModel>, action: CreateUpdateBook) {
+  save(ctx: StateContext<BookStateModel>, action: CreateUpdateBook) {
     if (action.id) {
       return this.bookService.updateByIdAndInput(action.payload, action.id);
     } else {
@@ -1268,7 +1269,7 @@ export class BooksState {
 
   // <== added DeleteBook action listener ==>
   @Action(DeleteBook)
-  delete(ctx: StateContext<BooksStateModel>, action: DeleteBook) {
+  delete(ctx: StateContext<BookStateModel>, action: DeleteBook) {
     return this.bookService.deleteById(action.id);
   }
 }
@@ -1280,7 +1281,7 @@ export class BooksState {
 
 #### 删除确认弹层
 
-打开 `app\books\book-list` 文件夹下的 `book-list.component.ts` 文件,注入 `ConfirmationService`.
+打开 `app\app\book\book-list` 文件夹下的 `book-list.component.ts` 文件,注入 `ConfirmationService`.
 
 替换构造函数:
 
@@ -1304,7 +1305,7 @@ constructor(
 在 `book-list.component.ts` 中添加删除方法:
 
 ```js
-import { GetBooks, CreateUpdateBook, DeleteBook } from '../state/books.actions' ;// <== imported DeleteBook ==>
+import { GetBooks, CreateUpdateBook, DeleteBook } from '../state/book.actions' ;// <== imported DeleteBook ==>
 
 import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared'; //<== imported Confirmation ==>
 
@@ -1327,7 +1328,7 @@ delete(id: string) {
 
 #### 添加删除按钮
 
-打开 `app\books\book-list` 文件夹下的 `app\books\book-list` 文件,修改 `ngbDropdownMenu` 添加删除按钮:
+打开 `app\app\book\book-list` 文件夹下的 `app\app\book\book-list` 文件,修改 `ngbDropdownMenu` 添加删除按钮:
 
 ```html
 <div ngbDropdownMenu>

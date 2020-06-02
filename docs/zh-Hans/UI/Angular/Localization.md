@@ -130,6 +130,68 @@ this.store.selectSnapshot(
 
 本地化资源存储在 `ConfigState` 的 `localization` 属性中.
 
+## RTL支持
+
+从v2.9开始,ABP支持RTL. 如果使用v2.9及更高版本生成新项目,你无需进行任何更改. 如果要从早期版本迁移项目,请按照以下2个步骤操作:
+
+#### 步骤 1. 为 Bootstrap LRT和RTL创建Chunks
+
+在[angular.json中找到样式配置](https://angular.io/guide/workspace-config#style-script-config)确保项目中的chunks含有 `bootstrap-rtl.min` 和 `bootstrap-ltr.min`:
+
+```json
+{
+  "projects": {
+    "MyProjectName": {
+      "architect": {
+        "build": {
+          "options": {
+            "styles": [
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": true,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": true,
+                "bundleName": "fontawesome-v4-shims.min"
+              },
+              "apps/dev-app/src/styles.scss"
+            ],
+          }
+        }
+      }
+    }
+  }
+}
+
+#### 步骤 2. 清除AppComponent中延迟加载的Fontawesome
+
+如果你如上所述为Fontawesome创建并且注入了chunks,就不再需要v2.9版本之前的实现的 `AppComponent` 延迟加载. 删除它们即可,新版的 `AppComponent` 如下所示:
+
+```js
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <abp-loader-bar></abp-loader-bar>
+    <router-outlet></router-outlet>
+  `,
+})
+export class AppComponent {}
+```
+
 ## 另请参阅
 
 * [ASP.NET Core中的本地化](../../Localization.md)

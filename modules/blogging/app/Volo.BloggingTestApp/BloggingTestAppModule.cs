@@ -158,7 +158,7 @@ namespace Volo.BloggingTestApp
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
 
             using (var scope = context.ServiceProvider.CreateScope())

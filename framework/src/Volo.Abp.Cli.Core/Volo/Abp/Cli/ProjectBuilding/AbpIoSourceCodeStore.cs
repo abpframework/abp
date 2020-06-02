@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Console;
 using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -63,12 +64,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Logger.LogWarning("The remote service is currently unavailable, please specify the version.");
                     Logger.LogWarning(string.Empty);
                     Logger.LogWarning("Find the following template in your cache directory: ");
-                    Logger.LogWarning("\t Template Name\tVersion");
+                    Logger.LogWarning("\tTemplate Name\tVersion");
 
                     var templateList = GetLocalTemplates();
                     foreach (var cacheFile in templateList)
                     {
-                        Logger.LogWarning($"\t {cacheFile.TemplateName}\t\t{cacheFile.Version}");
+                        Logger.LogWarning($"\t{cacheFile.TemplateName}\t\t{cacheFile.Version}");
                     }
 
                     Logger.LogWarning(string.Empty);
@@ -241,7 +242,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 stringBuilder.AppendLine(cacheFile);
             }
 
-            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName})-(.+).zip");
+            var matches = Regex.Matches(stringBuilder.ToString(), $"({AppTemplate.TemplateName}|{AppProTemplate.TemplateName}|{ModuleTemplate.TemplateName}|{ModuleProTemplate.TemplateName}|{ConsoleTemplate.TemplateName})-(.+).zip");
             foreach (Match match in matches)
             {
                 templateList.Add((match.Groups[1].Value, match.Groups[2].Value));

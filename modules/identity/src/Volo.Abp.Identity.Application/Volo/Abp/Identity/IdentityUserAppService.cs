@@ -45,6 +45,8 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Default)]
         public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
         {
+            //TODO: Should also include roles of the related OUs.
+
             var roles = await UserRepository.GetRolesAsync(id);
 
             return new ListResultDto<IdentityRoleDto>(

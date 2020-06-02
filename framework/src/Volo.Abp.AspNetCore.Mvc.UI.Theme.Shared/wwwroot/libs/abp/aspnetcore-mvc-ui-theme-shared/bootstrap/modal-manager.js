@@ -1,4 +1,4 @@
-﻿/**
+/**
  * TODO: Document & prepare typescript definitions
  * TODO: Refactor & test more
  */
@@ -49,6 +49,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             var _publicApi = null;
             var _args = null;
 
+            var _onOpenCallbacks = new CallbackList();
             var _onCloseCallbacks = new CallbackList();
             var _onResultCallbacks = new CallbackList();
 
@@ -94,8 +95,11 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 });
 
                 _$modal.on('shown.bs.modal', function () {
-                    //focuses first element if it's a typeable input. 
+                    //focuses first element if it's a typeable input.
                     var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
+
+                    _onOpenCallbacks.triggerAll(_publicApi);
+
                     if ($firstVisibleInput.hasClass("datepicker")) {
                         return; //don't pop-up date pickers...
                     }
@@ -147,6 +151,10 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal.modal('hide');
             };
 
+            var _onOpen = function (onOpenCallback) {
+                _onOpenCallbacks.add(onOpenCallback);
+            };
+
             var _onClose = function (onCloseCallback) {
                 _onCloseCallbacks.add(onCloseCallback);
             };
@@ -187,6 +195,8 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 setResult: function () {
                     _onResultCallbacks.triggerAll(_publicApi, arguments);
                 },
+
+                onOpen: _onOpen,
 
                 onClose: _onClose,
 

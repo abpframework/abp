@@ -96,8 +96,28 @@
             get: _get
         };
     })();
-
+    
     function initializeObjectExtensions() {
+
+        var getShortEnumTypeName = function (enumType) {
+            var lastDotIndex = enumType.lastIndexOf('.');
+            if (lastDotIndex < 0) {
+                return enumType;
+            }
+
+            return enumType.substr(lastDotIndex + 1);
+        };
+
+        var getEnumMemberName = function (enumInfo, enumMemberValue) {
+            for (var i = 0; i < enumInfo.fields.length; i++) {
+                var enumField = enumInfo.fields[i];
+                if (enumField.value == enumMemberValue) {
+                    return enumField.name;
+                }
+            }
+
+            return null;
+        };
 
         function localizeDisplayName(propertyName, displayName) {
             if (displayName && displayName.name) {
@@ -109,6 +129,47 @@
             }
 
             return abp.localization.localize(propertyName);
+        }
+
+        function localizeWithFallback(localizationResources, keys, defaultValue) {
+            for (var i = 0; i < localizationResources.length; i++) {
+                var localizationResource = localizationResources[i];
+                if (!localizationResource) {
+                    continue;
+                }
+
+                for (var j = 0; j < keys.length; j++) {
+                    var key = keys[j];
+
+                    if (abp.localization.isLocalized(key, localizationResource)) {
+                        return abp.localization.localize(key, localizationResource);
+                    }
+                }
+            }
+
+            return defaultValue;
+        }
+        
+        function localizeEnumMember(property, enumMemberValue) {
+            var enumType = property.config.type;
+            var enumInfo = abp.objectExtensions.enums[enumType];
+            var enumMemberName = getEnumMemberName(enumInfo, enumMemberValue);
+
+            if (!enumMemberName) {
+                return enumMemberValue;
+            }
+
+            var shortEnumType = getShortEnumTypeName(enumType);
+
+            return localizeWithFallback(
+                [enumInfo.localizationResource, abp.localization.defaultResourceName],
+                [
+                    'Enum:' + shortEnumType + '.' + enumMemberName,
+                    shortEnumType + '.' + enumMemberName,
+                    enumMemberName
+                ],
+                enumMemberName
+            );
         }
 
         function configureTableColumns(tableName, columnConfigs) {
@@ -137,16 +198,41 @@
             return tableProperties;
         }
 
+        function getValueFromRow(property, row) {
+            return row.extraProperties[property.name];;
+        }
+
+        function convertPropertyToColumnConfig(property) {
+            var columnConfig = {
+                title: localizeDisplayName(property.name, property.config.displayName),
+                data: "extraProperties." + property.name,
+                orderable: false
+            };
+
+
+            if (property.config.typeSimple === 'enum') {
+                columnConfig.render = function(data, type, row) {
+                    var value = getValueFromRow(property, row);
+                    return localizeEnumMember(property, value);
+                }
+            } else {
+                var defaultRenderer = abp.libs.datatables.defaultRenderers[property.config.typeSimple];
+                if (defaultRenderer) {
+                    columnConfig.render = function (data, type, row) {
+                        var value = getValueFromRow(property, row);
+                        return defaultRenderer(value);
+                    }
+                }
+            }
+
+            return columnConfig;
+        }
+
         function convertPropertiesToColumnConfigs(properties) {
             var columnConfigs = [];
 
             for (var i = 0; i < properties.length; i++) {
-                var tableProperty = properties[i];
-                columnConfigs.push({
-                    title: localizeDisplayName(tableProperty.name, tableProperty.config.displayName),
-                    data: "extraProperties." + tableProperty.name,
-                    orderable: false
-                });
+                columnConfigs.push(convertPropertyToColumnConfig(properties[i]));
             }
 
             return columnConfigs;

@@ -111,6 +111,7 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 {{end}}
 
 {{ else if UI == "NG" }}
+
 在创建的解决方案中有三个文件夹:
 
 ![](images/solution-files-non-mvc.png)
@@ -120,6 +121,7 @@ abp new Acme.BookStore -t app{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mon
 * `react-native` 文件夹包含React Native UI 应用程序.
 
 打开 `aspnet-core` 文件夹下的 `.sln`(`Visual Studio`解决方案)文件:
+
 ![vs-angular-app-backend-solution-structure](images/vs-spa-app-backend-structure{{if DB == "Mongo"}}-mongodb{{end}}.png)
 
 {{ end }}
@@ -401,7 +403,7 @@ yarn start
 
 在上面的管理界面中,可以通过使用[Expo Client](https://expo.io/tools#client)扫描二维码,使用Android模拟器,iOS模拟器或真机来启动应用程序.
 
-> 请参阅[expo.io](https://docs.expo.io/versions/v36.0.0/workflow/ios-simulator/)上的[Android Studio模拟器](https://docs.expo.io/versions/v36.0.0/workflow/android-studio-emulator/)和[iOS模拟器文档](https://docs.expo.io/versions/v36.0.0/workflow/android-studio-emulator/).
+> 请参阅expo.io上的[Android Studio模拟器](https://docs.expo.io/workflow/android-simulator/)和[iOS模拟器文档](https://docs.expo.io/workflow/ios-simulator/).
 
 ![React Native login screen on iPhone 11](images/rn-login-iphone.png)
 

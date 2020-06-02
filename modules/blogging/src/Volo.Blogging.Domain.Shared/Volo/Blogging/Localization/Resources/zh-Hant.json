@@ -42,6 +42,8 @@
     "CreationTime": "建立時間",
     "Description": "描述",
     "Blogs": "部落格",
-    "Tags": "標籤"
+    "Tags": "標籤",
+    "ShareOn": "分享在",
+    "TitleLengthWarning": "為了優化搜索引擎，標題建議保持在60個字元以內"
   }
 }
