@@ -126,6 +126,7 @@ namespace Volo.Abp.IdentityModel
             IdentityClientConfiguration configuration)
         {
             var httpClient = HttpClientFactory.CreateClient(HttpClientName);
+
             AddHeaders(httpClient);
 
             switch (configuration.GrantType)
