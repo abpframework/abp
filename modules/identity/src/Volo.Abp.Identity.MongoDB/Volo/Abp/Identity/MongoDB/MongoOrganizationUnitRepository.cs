@@ -151,17 +151,12 @@ namespace Volo.Abp.Identity.MongoDB
             var users = await DbContext.Users.AsQueryable()
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
                 .As<IMongoQueryable<IdentityUser>>()
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                ;
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
-            //var filter = Builders<IdentityUser>.Filter.Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id));
-
-            //var update = Builders<IdentityUser>.Update.PullFilter(y => y.OrganizationUnits, iou=> iou);
-            //var result = await DbContext.Users.UpdateManyAsync(filter, update);
-            //TODO: gterdem - Not working, not saving/updating the user. Fix
-            for (int i = 0; i < users.Count; i++)
+            foreach (var user in users)
             {
-                users[i].RemoveOrganizationUnit(organizationUnit.Id);
+                user.RemoveOrganizationUnit(organizationUnit.Id);
+                DbContext.Users.ReplaceOne(u => u.Id == user.Id, user);
             }
         }
     }
