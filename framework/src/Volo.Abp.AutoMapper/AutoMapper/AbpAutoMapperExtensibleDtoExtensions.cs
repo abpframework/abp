@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
 
@@ -34,6 +35,14 @@ namespace AutoMapper
                             return result;
                         })
                 );
+        }
+        
+        public static IMappingExpression<TSource, TDestination> IgnoreExtraProperties<TSource, TDestination>(
+            this IMappingExpression<TSource, TDestination> mappingExpression)
+            where TDestination : IHasExtraProperties
+            where TSource : IHasExtraProperties
+        {
+            return mappingExpression.Ignore(x => x.ExtraProperties);
         }
     }
 }

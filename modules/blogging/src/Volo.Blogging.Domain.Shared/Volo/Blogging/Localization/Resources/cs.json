@@ -42,6 +42,8 @@
     "CreationTime": "Vytvořeno",
     "Description": "Popis",
     "Blogs": "Blogy",
-    "Tags": "Tagy"
+    "Tags": "Tagy",
+    "ShareOn": "Sdílet na",
+    "TitleLengthWarning": "Zachovejte velikost titulku pod 60 znaků kvůli SEO!"
   }
 }

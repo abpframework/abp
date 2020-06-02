@@ -32,14 +32,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 return Redirect(GetRedirectUrl(returnUrl));
             }
 
-            return Redirect("/");
+            return Redirect("~/");
         }
 
         private string GetRedirectUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {
-                return "/";
+                return "~/";
             }
 
             if (Url.IsLocalUrl(returnUrl))
@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
                 return returnUrl;
             }
 
-            return "/";
+            return "~/";
         }
     }
 }

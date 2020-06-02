@@ -5,13 +5,13 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName.ConsoleApp
+namespace MyCompanyName.MyProjectName
 {
-    public class MyProjectNameConsoleAppHostedService : IHostedService
+    public class MyProjectNameHostedService : IHostedService
     {
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            using (var application = AbpApplicationFactory.Create<MyProjectNameConsoleAppModule>(options =>
+            using (var application = AbpApplicationFactory.Create<MyProjectNameModule>(options =>
             {
                 options.UseAutofac(); //Autofac integration
                 options.Services.AddLogging(c => c.AddSerilog());

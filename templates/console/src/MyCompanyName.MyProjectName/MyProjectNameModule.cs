@@ -1,13 +1,13 @@
 ﻿using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
-namespace MyCompanyName.MyProjectName.ConsoleApp
+namespace MyCompanyName.MyProjectName
 {
 
     [DependsOn(
         typeof(AbpAutofacModule)
     )]
-    public class MyProjectNameConsoleAppModule : AbpModule
+    public class MyProjectNameModule : AbpModule
     {
 
     }

@@ -30,7 +30,7 @@ ASP.NET Core {{UI_Value}} 系列教程包括三个3个部分:
 - [Part-2: 创建,编辑,删除书籍](Part-2.md)
 - [Part-3: 集成测试](Part-3.md)
 
-> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-booktore-application).
+> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
 
 ### 创建新项目
 
@@ -44,19 +44,19 @@ ASP.NET Core {{UI_Value}} 系列教程包括三个3个部分:
 abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}} --mobile none
 ```
 
-![Creating project](./images/booktore-create-project-{{UI_Text}}.png)
+![Creating project](./images/bookstore-create-project-{{UI_Text}}.png)
 
 ### 应用迁移
 
 项目创建后,需要应用初始化迁移创建数据库. 运行 `Acme.BookStore.DbMigrator` 应用程序. 它会应用所有迁移,完成流程后你会看到以下结果,数据库已经准备好了!
 
-![Migrations applied](./images/booktore-migrations-applied-{{UI_Text}}.png)
+![Migrations applied](./images/bookstore-migrations-applied-{{UI_Text}}.png)
 
 > 另外你也可以在 Visual Studio 包管理控制台运行 `Update-Database` 命令应用迁移.
 
 #### 初始化数据库表
 
-![Initial database tables](./images/booktore-database-tables-{{DB}}.png)
+![Initial database tables](./images/bookstore-database-tables-{{DB}}.png)
 
 ### 运行应用程序
 
@@ -64,7 +64,7 @@ abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}
 
 更多信息,参阅[入门教程](../../Getting-Started?UI={{UI}})的运行应用程序部分.
 
-![Set as startup project](./images/booktore-start-project-{{UI_Text}}.png)
+![Set as startup project](./images/bookstore-start-project-{{UI_Text}}.png)
 
 {{if UI == "NG"}}
 
@@ -105,7 +105,7 @@ http://localhost:4200/
 
 下面的图片展示了从启动模板创建的项目是如何分层的.
 
-![booktore-visual-studio-solution](./images/booktore-solution-structure-{{UI_Text}}.png)
+![bookstore-visual-studio-solution](./images/bookstore-solution-structure-{{UI_Text}}.png)
 
 > 你可以查看[应用程序模板文档](../startup-templates/application#solution-structure)以详细了解解决方案结构.
 
@@ -295,7 +295,7 @@ namespace Acme.BookStore
 
 这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **程序包管理器控制台(Package Manager Console) (PMC)** (工具/Nuget包管理器菜单)
 
-![Open Package Manager Console](./images/booktore-open-package-manager-console.png)
+![Open Package Manager Console](./images/bookstore-open-package-manager-console.png)
 
 选择 `Acme.BookStore.EntityFrameworkCore.DbMigrations`作为默认的项目然后执行下面的命令:
 
@@ -303,7 +303,7 @@ namespace Acme.BookStore
 Add-Migration "Created_Book_Entity"
 ```
 
-![booktore-pmc-add-book-migration](./images/booktore-pmc-add-book-migration-v2.png)
+![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
 
 这样就会在 `Migrations` 文件夹中创建一个新的migration类.然后执行 `Update-Database` 命令更新数据库结构:
 
@@ -311,7 +311,7 @@ Add-Migration "Created_Book_Entity"
 Update-Database
 ````
 
-![booktore-update-database-after-book-entity](./images/booktore-update-database-after-book-entity.png)
+![bookstore-update-database-after-book-entity](./images/bookstore-update-database-after-book-entity.png)
 
 #### 添加示例数据
 
@@ -328,7 +328,7 @@ INSERT INTO AppBook (Id,CreationTime,[Name],[Type],PublishDate,Price) VALUES
 ('4fa024a1-95ac-49c6-a709-6af9e4d54b54', '2018-07-02', 'Pet Sematary',5,'1983-11-14','23.7')
 ```
 
-![booktore-book-table](./images/booktore-book-table.png)
+![bookstore-book-table](./images/bookstore-book-table.png)
 
 {{end}}
 
@@ -501,7 +501,7 @@ namespace Acme.BookStore
 
 你会看到一些内置的接口和`Book`的接口,它们都是REST风格的:
 
-![booktore-swagger](images/booktore-swagger.png)
+![bookstore-swagger](images/bookstore-swagger.png)
 
 Swagger有一个很好的UI来测试API. 你可以尝试执行`[GET] /api/app/book` API来获取书籍列表.
 
@@ -529,11 +529,11 @@ acme.bookStore.book.getList({}).done(function (result) { console.log(result); })
 
 运行这段代码会产生下面的输出:
 
-![booktore-test-js-proxy-getlist](./images/booktore-test-js-proxy-getlist.png)
+![bookstore-test-js-proxy-getlist](./images/bookstore-test-js-proxy-getlist.png)
 
 你可以看到服务器返回的 **book list**.你还可以切换到开发者工具的 **network** 查看客户端到服务器端的通讯信息:
 
-![booktore-test-js-proxy-getlist-network](./images/booktore-test-js-proxy-getlist-network.png)
+![bookstore-test-js-proxy-getlist-network](./images/bookstore-test-js-proxy-getlist-network.png)
 
 我们使用`create`方法 **创建一本新书**:
 
@@ -555,7 +555,7 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 
 在 `Acme.BookStore.Web`项目的`Pages`文件夹下创建一个新的文件夹叫`Book`并添加一个名为`Index.cshtml`的Razor Page.
 
-![booktore-add-index-page](./images/booktore-add-index-page-v2.png)
+![bookstore-add-index-page](./images/bookstore-add-index-page-v2.png)
 
 打开`Index.cshtml`并把内容修改成下面这样:
 
@@ -621,7 +621,7 @@ namespace Acme.BookStore.Web.Menus
 
 本地化文本位于`Acme.BookStore.Domain.Shared`项目的`Localization/BookStore`文件夹下:
 
-![booktore-localization-files](./images/booktore-localization-files-v2.png)
+![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
 
 打开`en.json`文件,将`Menu:BookStore`和`Menu:Book`键的本地化文本添加到文件末尾:
 
@@ -653,7 +653,7 @@ namespace Acme.BookStore.Web.Menus
 
 运行该应用程序,看到新菜单项已添加到顶部栏:
 
-![booktore-menu-items](./images/booktore-new-menu-item.png)
+![bookstore-menu-items](./images/bookstore-new-menu-item.png)
 
 点击BookStore下Book子菜单项就会跳转到新增的书籍页面.
 
@@ -701,7 +701,7 @@ namespace Acme.BookStore.Web.Menus
 
 在`Pages/Book/`文件夹中创建 `index.js`文件
 
-![booktore-index-js-file](./images/booktore-index-js-file-v2.png)
+![bookstore-index-js-file](./images/bookstore-index-js-file-v2.png)
 
 `index.js`的内容如下:
 
@@ -727,7 +727,7 @@ $(function () {
 
 最终的页面如下:
 
-![Book list](./images/booktore-book-list-2.png)
+![Book list](./images/bookstore-book-list-2.png)
 
 {{end}}
 
@@ -760,7 +760,7 @@ yarn
 yarn ng generate module book --routing true
 ```
 
-![Generating book module](./images/booktore-creating-book-module-terminal.png)
+![Generating book module](./images/bookstore-creating-book-module-terminal.png)
 
 #### 路由
 
@@ -793,7 +793,7 @@ import { ApplicationLayoutComponent } from '@abp/ng.theme.basic'; //==> added th
 yarn ng generate component book/book-list
 ```
 
-![Creating book list](./images/booktore-creating-book-list-terminal.png)
+![Creating book list](./images/bookstore-creating-book-list-terminal.png)
 
 打开 `app\book` 目录下的 `book.module.ts` 文件,使用以下内容替换它:
 
@@ -849,7 +849,7 @@ yarn start
 
 我们将看到book页面的 **book-list works!**:
 
-![Initial book list page](./images/booktore-initial-book-list-page.png)
+![Initial book list page](./images/bookstore-initial-book-list-page.png)
 
 #### 创建 BookState
 
@@ -1048,11 +1048,11 @@ export class BookListComponent implements OnInit {
 
 现在你可以在浏览器看到最终结果:
 
-![Book list final result](./images/booktore-book-list.png)
+![Book list final result](./images/bookstore-book-list.png)
 
 项目的文件系统结构:
 
-![Book list final result](./images/booktore-angular-file-tree.png)
+![Book list final result](./images/bookstore-angular-file-tree.png)
 
 在本教程中我们遵循了官方的[Angular风格指南](https://angular.io/guide/styleguide#file-tree).
 
