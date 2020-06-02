@@ -38,11 +38,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep());
             }
 
-            if (context.BuildArgs.DatabaseProvider == DatabaseProvider.EntityFrameworkCore)
-            {
-                steps.Add(new AppTemplateRemoveMongodbCollectionFixtureStep());
-            }
-
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
@@ -52,6 +47,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
             {
+                steps.Add(new AppTemplateRemoveMongodbCollectionFixtureStep());
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
             }
