@@ -161,32 +161,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             OrganizationUnit organizationUnit,
             CancellationToken cancellationToken = default)
         {
-            var ouRolesQuery = DbContext.Set<OrganizationUnitRole>()
-                .Where(q => q.OrganizationUnitId == organizationUnit.Id);
-
-            DbContext.Set<OrganizationUnitRole>().RemoveRange(ouRolesQuery);
-            return Task.FromResult(0);
-            //Can be long running process that could be made available for cancellation perhaps
-            //return Task.Run(() =>
-            //        DbContext.Set<OrganizationUnitRole>().RemoveRange(ouRolesQuery),
-            //        GetCancellationToken(cancellationToken)
-            //);
+            organizationUnit.Roles.Clear();
+            return Task.CompletedTask;
         }
 
-        public virtual Task RemoveAllMembersAsync(
+        public virtual async Task RemoveAllMembersAsync(
             OrganizationUnit organizationUnit,
             CancellationToken cancellationToken = default)
         {
-            var ouMembersQuery = DbContext.Set<IdentityUserOrganizationUnit>()
-                .Where(q => q.OrganizationUnitId == organizationUnit.Id);
+            var ouMembersQuery = await DbContext.Set<IdentityUserOrganizationUnit>()
+                .Where(q => q.OrganizationUnitId == organizationUnit.Id)
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             DbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
-            return Task.FromResult(0);
-            //Can be long running process that could be made available for cancellation perhaps
-            //return Task.Run(() =>
-            //        DbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery),
-            //        GetCancellationToken(cancellationToken)
-            //);
         }
     }
 }
