@@ -48,16 +48,22 @@ namespace Volo.Abp.Cli.Commands
             var outputFolder = GetOutPutFolder(commandLineArgs);
             Logger.LogInformation("Output folder: " + outputFolder);
 
-            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
-            if (gitHubLocalRepositoryPath != null)
+            var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
+            if (gitHubAbpLocalRepositoryPath != null)
             {
-                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+                Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
+            }
+
+            var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
+            if (gitHubVoloLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
             }
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
             
             await _sourceCodeDownloadService.DownloadAsync(
-                commandLineArgs.Target, outputFolder, version, gitHubLocalRepositoryPath, commandLineArgs.Options);
+                commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
         }
 
         private static string GetOutPutFolder(CommandLineArgs commandLineArgs)
@@ -117,9 +123,14 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "output-folder";
             }
 
-            public static class GitHubLocalRepositoryPath
+            public static class GitHubAbpLocalRepositoryPath
             {
                 public const string Long = "abp-path";
+            }
+
+            public static class GitHubVoloLocalRepositoryPath
+            {
+                public const string Long = "volo-path";
             }
 
             public static class Version
