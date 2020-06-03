@@ -54,6 +54,7 @@
     "404Message": "Stránka nenalezena",
     "500Message": "Interní chyba serveru",
     "GoHomePage": "Přejít na domovskou stránku",
-    "GoBack": "Jít zpět"
+    "GoBack": "Jít zpět",
+    "Search": "Vyhledávání"
   }
 }

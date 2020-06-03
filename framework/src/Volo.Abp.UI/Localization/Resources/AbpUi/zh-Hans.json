@@ -55,6 +55,7 @@
     "404Message": "网页未找到",
     "500Message": "内部服务器错误",
     "GoHomePage": "返回主页",
-    "GoBack": "返回"
+    "GoBack": "返回",
+    "Search" : "搜索"
   }
 }

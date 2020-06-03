@@ -7,8 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Shared.Components.AbpPag
     {
         public IViewComponentResult Invoke(string placeHolder)
         {
-            return View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml",
-                new AbpSearchBoxViewModel {PlaceHolder = placeHolder});
+            return View("~/Pages/Shared/Components/AbpPageSearchBox/Default.cshtml");
         }
     }
 }
