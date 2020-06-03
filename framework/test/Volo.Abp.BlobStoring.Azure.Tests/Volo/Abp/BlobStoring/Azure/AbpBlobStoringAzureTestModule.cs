@@ -12,7 +12,9 @@ namespace Volo.Abp.BlobStoring.Azure
     )]
     public class AbpBlobStoringAzureTestModule : AbpModule
     {
-        public static string UserSecretsId = "9f0d2c00-80c1-435b-bfab-2c39c8249091";
+        private const string UserSecretsId = "9f0d2c00-80c1-435b-bfab-2c39c8249091";
+
+        private string _connectionString;
 
         private readonly string _randomContainerName = "abp-azure-test-container-" + Guid.NewGuid().ToString("N");
 
@@ -25,7 +27,9 @@ namespace Volo.Abp.BlobStoring.Azure
 
             var configuration = context.Services.GetConfiguration();
 
-            var blobServiceClient = new BlobServiceClient(configuration["Azure:ConnectionString"]);
+            _connectionString = configuration["Azure:ConnectionString"];
+
+            var blobServiceClient = new BlobServiceClient(_connectionString);
             blobServiceClient.CreateBlobContainer(_randomContainerName);
 
             Configure<AbpBlobStoringOptions>(options =>
@@ -34,7 +38,7 @@ namespace Volo.Abp.BlobStoring.Azure
                 {
                     containerConfiguration.UseAzure(azure =>
                     {
-                        azure.ConnectionString = configuration["Azure:ConnectionString"];
+                        azure.ConnectionString = _connectionString;
                         azure.ContainerName = _randomContainerName;
                     });
                 });
@@ -44,7 +48,7 @@ namespace Volo.Abp.BlobStoring.Azure
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-            var blobServiceClient = new BlobServiceClient(configuration["Azure:ConnectionString"]);
+            var blobServiceClient = new BlobServiceClient(_connectionString);
             blobServiceClient.DeleteBlobContainer(_randomContainerName);
         }
     }

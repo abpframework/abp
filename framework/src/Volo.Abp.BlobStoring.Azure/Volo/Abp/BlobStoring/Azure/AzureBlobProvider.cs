@@ -45,7 +45,6 @@ namespace Volo.Abp.BlobStoring.Azure
             }
 
             var download = await blobClient.DownloadAsync();
-
             var memoryStream = new MemoryStream();
             await download.Value.Content.CopyToAsync(memoryStream);
             return memoryStream;
@@ -65,8 +64,7 @@ namespace Volo.Abp.BlobStoring.Azure
 
         private static async Task<bool> BlobExistsAsync(BlobClient blobClient)
         {
-            var response = await blobClient.ExistsAsync();
-            return response.Value;
+            return (await blobClient.ExistsAsync()).Value;
         }
     }
 }
