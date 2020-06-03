@@ -29,7 +29,7 @@ namespace Volo.Docs.Admin.Navigation
 
             if (await context.IsGrantedAsync(DocsAdminPermissions.Projects.Default))
             {
-                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "/Docs/Admin/Projects"));
+                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects"));
             }
 
         }
