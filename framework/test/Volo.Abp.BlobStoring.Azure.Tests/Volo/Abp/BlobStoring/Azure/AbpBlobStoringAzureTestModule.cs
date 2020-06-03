@@ -12,13 +12,15 @@ namespace Volo.Abp.BlobStoring.Azure
     )]
     public class AbpBlobStoringAzureTestModule : AbpModule
     {
+        public static string UserSecretsId = "9f0d2c00-80c1-435b-bfab-2c39c8249091";
+
         private readonly string _randomContainerName = "abp-azure-test-container-" + Guid.NewGuid().ToString("N");
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.ReplaceConfiguration(ConfigurationHelper.BuildConfiguration(builderAction: builder =>
             {
-                builder.AddUserSecrets("9f0d2c00-80c1-435b-bfab-2c39c8249091");
+                builder.AddUserSecrets(UserSecretsId);
             }));
 
             var configuration = context.Services.GetConfiguration();
