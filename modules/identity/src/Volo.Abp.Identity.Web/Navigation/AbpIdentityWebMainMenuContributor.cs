@@ -30,12 +30,12 @@ namespace Volo.Abp.Identity.Web.Navigation
 
                 if (hasRolePermission)
                 {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "/Identity/Roles"));
+                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "~/Identity/Roles"));
                 }
 
                 if (hasUserPermission)
                 {
-                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "/Identity/Users"));
+                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "~/Identity/Users"));
                 }
             }
         }

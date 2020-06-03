@@ -28,7 +28,7 @@ namespace Volo.Blogging
                 //TODO: Using the same permission. Reconsider.
                 if (await context.IsGrantedAsync(BloggingPermissions.Blogs.Management))
                 {
-                    managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "/Admin/Blogs"));
+                    managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Admin/Blogs"));
                 }
 
                 context.Menu.AddItem(managementRootMenuItem);

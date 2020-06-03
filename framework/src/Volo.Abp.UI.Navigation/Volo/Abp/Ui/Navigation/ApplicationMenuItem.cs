@@ -102,7 +102,7 @@ namespace Volo.Abp.UI.Navigation
 
             Name = name;
             DisplayName = displayName;
-            Url = url?.EnsureStartsWith('~');
+            Url = url;
             Icon = icon;
             Order = order;
             CustomData = customData;

@@ -37,7 +37,7 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                     new ApplicationMenuItem(
                         SettingManagementMenuNames.GroupName,
                         l["Settings"],
-                        "/SettingManagement",
+                        "~/SettingManagement",
                         icon: "fa fa-cog"
                     )
                 );
