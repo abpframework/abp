@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Web.Http;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -102,7 +103,7 @@ namespace Volo.Abp.UI.Navigation
 
             Name = name;
             DisplayName = displayName;
-            Url = url?.EnsureStartsWith('~');
+            Url = AbpUrlHelper.IsLocalUrl(url) ? url?.EnsureStartsWith('~') : url;
             Icon = icon;
             Order = order;
             CustomData = customData;
