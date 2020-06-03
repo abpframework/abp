@@ -1,7 +1,7 @@
 using System;
 using Mongo2Go;
 
-namespace Volo.Abp.Identity.MongoDB
+namespace Volo.Abp.Users.MongoDB
 {
     public class MongoDbFixture : IDisposable
     {
