@@ -216,9 +216,9 @@ However, it provides the following methods those can be used to query a single e
 * `FindAsync(id)` returns the entity or null if not found.
 * `GetAsync(id)` method returns the entity or throws an `EntityNotFoundException` (which causes HTTP 404 status code) if not found.
 
-#### Sync vs Async 
+#### Sync vs Async
 
-ABP Framework repository has no sync methods (like `Insert`). All the methods are async (like `InsertAsync`). So, if your application has sync repository method usages, convert them to async versions. 
+ABP Framework repository has no sync methods (like `Insert`). All the methods are async (like `InsertAsync`). So, if your application has sync repository method usages, convert them to async versions.
 
 In general, ABP Framework forces you to completely use async everywhere, because mixing async & sync methods is not a recommended approach.
 
@@ -444,7 +444,7 @@ ASP.NET Boilerplate uses Castle Windsor's [logging facility](http://docs.castlep
 using Castle.Core.Logging; //1: Import Logging namespace
 
 public class TaskAppService : ITaskAppService
-{    
+{
     //2: Getting a logger using property injection
     public ILogger Logger { get; set; }
 
@@ -693,26 +693,22 @@ public class AbpTenantManagementWebMainMenuContributor : IMenuContributor
         var administrationMenu = context.Menu.GetAdministration();
 
         //Resolve some needed services from the DI container
-        var authorizationService = context.ServiceProvider
-            .GetRequiredService<IAuthorizationService>();
-        var l = context.ServiceProvider
-            .GetRequiredService<IStringLocalizer<AbpTenantManagementResource>>();
+        var l = context.GetLocalizer<AbpTenantManagementResource>();
 
         var tenantManagementMenuItem = new ApplicationMenuItem(
             TenantManagementMenuNames.GroupName,
             l["Menu:TenantManagement"],
             icon: "fa fa-users");
-        
+
         administrationMenu.AddItem(tenantManagementMenuItem);
 
         //Conditionally add the "Tenants" menu item based on the permission
-        if (await authorizationService
-            .IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
+        if (await context.IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
         {
             tenantManagementMenuItem.AddItem(
                 new ApplicationMenuItem(
                     TenantManagementMenuNames.Tenants,
-                    l["Tenants"], 
+                    l["Tenants"],
                     url: "/TenantManagement/Tenants"));
         }
     }

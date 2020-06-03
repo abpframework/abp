@@ -17,22 +17,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Modules\**\*.cshtml" />
     <EmbeddedResource Include="Modules\**\*.js" />
     <EmbeddedResource Include="Modules\**\*.css" />
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
-    <Content Remove="Modules\**\*.cshtml" />
     <Content Remove="Modules\**\*.js" />
     <Content Remove="Modules\**\*.css" />
-    <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Properties\launchSettings.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />

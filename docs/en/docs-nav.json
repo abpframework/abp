@@ -441,6 +441,10 @@
                       "path": "Entity-Framework-Core-PostgreSQL.md"
                     },
                     {
+                      "text": "To Oracle",
+                      "path": "Entity-Framework-Core-Oracle.md"
+                    },
+                    {
                       "text": "To SQLite",
                       "path": "Entity-Framework-Core-SQLite.md"
                     }
@@ -457,6 +461,15 @@
               "path": "Dapper.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "Real Time",
+      "items": [
+        {
+          "text": "SignalR Integration",
+          "path": "SignalR-Integration.md"
         }
       ]
     },
@@ -532,11 +545,12 @@
       "path": "Microservice-Architecture.md"
     },
     {
-      "text": "Testing"
-    },
-    {
       "text": "Nightly Builds",
       "path": "Nightly-Builds.md"
+    },
+    {
+      "text": "Road Map",
+      "path": "Road-Map.md"
     },
     {
       "text": "Contribution Guide",

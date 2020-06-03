@@ -18,6 +18,37 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## Commands
 
+这里是所有可用的命令列表:
+
+* **`help`**: 展示ABP CLI的用法帮助信息.
+* **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
+* **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
+* **`add-package`**: 添加ABP包到项目.
+* **`add-module`**: 添加[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index)到解决方案.
+* **`generate-proxy`**: 生成客户端代理以使用服务器上的HTTP API端点.
+* **`switch-to-preview`**: 切换解决方案所有ABP相关包为[夜间构建](Nightly-Builds.md)版本.
+* **`switch-to-stable`**: 切换解决方案所有ABP相关包为最新的稳定版本.
+* **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
+* **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
+* **`logout`**: 在你的计算机注销认证.
+
+### help
+
+展示ABP CLI的基本用法:
+
+用法:
+
+````bash
+abp help [command-name]
+````
+
+示例:
+
+````bash
+abp help        # Shows a general help.
+abp help new    # Shows help about the "new" command.
+````
+
 ### new
 
 生成基于ABP[启动模板](Startup-Templates/Index.md)的新解决方案.

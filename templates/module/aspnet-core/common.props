@@ -3,6 +3,7 @@
     <LangVersion>latest</LangVersion>
     <Version>0.1.0</Version>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
+	<AbpProjectType>module</AbpProjectType>
   </PropertyGroup>
 
   <ItemGroup>

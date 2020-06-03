@@ -13,6 +13,7 @@ using Volo.Abp.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -516,7 +517,16 @@ namespace Volo.Abp.Cli.Commands
                         baseTypeKebabCase = "@abp/ng.core";
 
                         baseTypeName = baseType.Split("Volo.Abp.Application.Dtos")[1].Split("<")[0].TrimStart('.');
-                        customBaseTypeName = baseType.Split("Volo.Abp.Application.Dtos")[1].Replace("System.Guid", "string").TrimStart('.');
+                        customBaseTypeName = baseType.Split("Volo.Abp.Application.Dtos")[1].TrimStart('.');
+                        if (customBaseTypeName.Contains("<"))
+                        {
+                            var genericType = customBaseTypeName.Split("<")[1].TrimEnd('>');
+                            var customBaseType = Type.GetType(genericType);
+                            if (customBaseType != null)
+                            {
+                                customBaseTypeName = customBaseTypeName.Replace(genericType, TypeHelper.GetSimplifiedName(customBaseType));
+                            }
+                        }
                     }
 
                     if (baseTypeName.Contains("guid") || baseTypeName.Contains("Guid"))

@@ -239,8 +239,8 @@ export class ConfigState {
             ? of(null)
             : dispatch(new SetLanguage(defaultLang, false));
         }),
-        catchError(err => {
-          dispatch(new RestOccurError(new HttpErrorResponse({ status: 0, error: err })));
+        catchError((err: HttpErrorResponse) => {
+          dispatch(new RestOccurError(err));
           return throwError(err);
         }),
       );

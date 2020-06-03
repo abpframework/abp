@@ -9,6 +9,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
     [DependsOn(typeof(JQueryScriptContributor))]
     public class BootstrapDatepickerScriptContributor : BundleContributor
     {
+        public static readonly Dictionary<string, string> CultureMap = new Dictionary<string, string>
+        {
+            {"zh-Hans", "zh-CN"}
+        };
+    
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
             context.Files.AddIfNotContains("/libs/bootstrap-datepicker/bootstrap-datepicker.min.js");
@@ -21,10 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
                 ? "en"
                 : CultureInfo.CurrentUICulture.Name;
 
-            if (TryAddCultureFile(context, MapCultureName(cultureName)))
-            {
-                return;
-            }
+            TryAddCultureFile(context, MapCultureName(cultureName));
         }
 
         protected virtual bool TryAddCultureFile(BundleConfigurationContext context, string cultureName)
@@ -42,7 +44,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
         
         protected virtual string MapCultureName(string cultureName)
         {
-            return cultureName;
+            return CultureMap.GetOrDefault(cultureName) ??
+                   cultureName;
         }
     }
 }

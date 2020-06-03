@@ -298,6 +298,9 @@ samples/MicroserviceDemo/microservices/TenantManagementService.Host/Logs/logs.tx
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web.Host/package-lock.json
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web/package-lock.json
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/package-lock.json
+
+modules/virtual-file-explorer/app/Volo.Abp.VirtualFileExplorer.DemoApp/Logs/
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package-lock.json
 /templates/app/angular/package-lock.json
 /modules/client-simulation/demo/Volo.ClientSimulation.Demo/package-lock.json
+

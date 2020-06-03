@@ -303,10 +303,10 @@ TODO:...
 Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to determine current tenant from current web request (ordered by priority). These resolvers are added and work out of the box:
 
 * **CurrentUserTenantResolveContributor**: Gets the tenant id from claims of the current user, if the current user has logged in. **This should always be the first contributor for security**.
-* **QueryStringTenantResolver**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
-* **RouteTenantResolver**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
-* **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
-* **CookieTenantResolver**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
+* **QueryStringTenantResolveContributor**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
+* **RouteTenantResolveContributor**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
+* **HeaderTenantResolveContributor**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
+* **CookieTenantResolveContributor**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
 
 > If you use nginx as a reverse proxy server, please note that if `TenantKey` contains an underscore or other special characters, there may be a problem, please refer to: 
 http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
@@ -346,7 +346,7 @@ namespace MyCompany.MyProject
                 //Subdomain format: {0}.mydomain.com 
                 //Adding as the second highest priority resolver after 'CurrentUserTenantResolveContributor' to
                 //ensure the user cannot impersonate a different tenant.
-                options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));
+                options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));
             });
 
             //...
@@ -357,7 +357,7 @@ namespace MyCompany.MyProject
 
 {0} is the the placeholder to determine current tenant's unique name.
 
-Instead of ``options.TenantResolvers.Insert(1, new DomainTenantResolver("{0}.mydomain.com"));`` you can use this shortcut:
+Instead of ``options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));`` you can use this shortcut:
 
 ````C#
 options.AddDomainTenantResolver("{0}.mydomain.com");

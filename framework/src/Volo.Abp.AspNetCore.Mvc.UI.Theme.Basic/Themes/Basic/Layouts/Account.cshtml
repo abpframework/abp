@@ -56,7 +56,7 @@
 
     <div class="@containerClass">
         <abp-row>
-            <abp-column size-md="_5" class="mx-auto">
+            <abp-column class="col mx-auto" style="max-width: 440px">
                 @if (MultiTenancyOptions.Value.IsEnabled &&
                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
                 {

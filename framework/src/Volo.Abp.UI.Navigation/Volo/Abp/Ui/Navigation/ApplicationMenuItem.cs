@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
@@ -101,7 +102,7 @@ namespace Volo.Abp.UI.Navigation
 
             Name = name;
             DisplayName = displayName;
-            Url = url;
+            Url = url?.EnsureStartsWith('~');
             Icon = icon;
             Order = order;
             CustomData = customData;
