@@ -16,8 +16,8 @@ type PermissionWithMargin = PermissionManagement.Permission & {
   exportAs: 'abpPermissionManagement',
   styles: [
     `
-      .permission-groups {
-        max-height: 75vh;
+      .overflow-scroll {
+        max-height: 70vh;
         overflow-y: scroll;
       }
     `,
