@@ -80,6 +80,10 @@ namespace Volo.Abp.Identity
                 await OrganizationUnitRepository.DeleteAsync(child);
             }
 
+            var organizationUnit = await OrganizationUnitRepository.GetAsync(id);
+
+            await OrganizationUnitRepository.RemoveAllMembersAsync(organizationUnit);
+            await OrganizationUnitRepository.RemoveAllRolesAsync(organizationUnit);
             await OrganizationUnitRepository.DeleteAsync(id);
         }
 

@@ -607,7 +607,7 @@ namespace Acme.BookStore.Web.Menus
         {
             //<-- added the below code
             context.Menu.AddItem(
-                new ApplicationMenuItem("BooksStore", l["Menu:BookStore"])
+                new ApplicationMenuItem("BooksStore", l["Menu:BookStore"], icon: "fa fa-book")
                     .AddItem(
                         new ApplicationMenuItem("BooksStore.Books", l["Menu:Books"], url: "/Books")
                     )
@@ -646,7 +646,16 @@ Open the `en.json` (*English translations*) file and add the below localization 
     "Type": "Type",
     "Price": "Price",
     "CreationTime": "Creation time",
-    "AreYouSureToDelete": "Are you sure you want to delete this item?"
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "Enum:BookType:0": "Undefined",
+    "Enum:BookType:1": "Adventure",
+    "Enum:BookType:2": "Biography",
+    "Enum:BookType:3": "Dystopia",
+    "Enum:BookType:4": "Fantastic",
+    "Enum:BookType:5": "Horror",
+    "Enum:BookType:6": "Science",
+    "Enum:BookType:7": "ScienceFiction",
+    "Enum:BookType:8": "Poetry"
   }
 }
 ````
@@ -716,7 +725,11 @@ $(function () {
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
             { data: "name" },
-            { data: "type" },
+            { data: "type",
+              render: function(data){
+                return l('Enum:BookType:' + data);
+              }
+            },
             { data: "publishDate" },
             { data: "price" },
             { data: "creationTime" }
