@@ -47,13 +47,10 @@ export class RestService {
           params: Object.keys(params).reduce((acc, key) => {
             const value = params[key];
 
-            if (
-              !isUndefinedOrEmptyString(value) &&
-              (value === null ? this.options.sendNullsAsQueryParam : true)
-            ) {
-              acc[key] = value;
-            }
+            if (isUndefinedOrEmptyString(value)) return acc;
+            if (value === null && !this.options.sendNullsAsQueryParam) return acc;
 
+            acc[key] = value;
             return acc;
           }, {}),
         }),
