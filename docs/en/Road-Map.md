@@ -7,8 +7,9 @@ While we will **continue to add other exciting features**, we will work on the f
 * **Blazor UI** for the framework and all the pre-built modules.
 * **.NET 5.0**! As Microsoft has announced that the .NET 5.0 will be released in November 2020, we will prepare for this change before and move to the .NET 5.0 just after Microsoft releases it. We hope a smooth transition.
 
-Beside this middle term goals, there are many features in the [backlog](https://github.com/abpframework/abp/milestone/2). Some of them are;
+Beside this middle term goals, there are many features in the [backlog](https://github.com/abpframework/abp/milestone/2). Here, a list of some major items in the backlog;
 
+* [#4098](https://github.com/abpframework/abp/issues/4098) / Blob Storing Azure provider.
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a **gRPC integration** infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](https://docs.abp.io/en/abp/latest/Modules/Index))
 * [#236](https://github.com/abpframework/abp/issues/236) Resource based authorization system
 * [#1754](https://github.com/abpframework/abp/issues/1754) / Multi-lingual entities
@@ -22,6 +23,7 @@ Beside this middle term goals, there are many features in the [backlog](https://
 * [#1638](https://github.com/abpframework/abp/issues/1638) Official React startup template
 * [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook system
 * [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB Integration for multitenancy
+* [#2296](https://github.com/abpframework/abp/issues/2296) / Feature toggling infrastructure
 
 The backlog items are subject to change. We are adding new items and changing priorities based on the community feedbacks and goals of the project.
 
