@@ -12,6 +12,14 @@ Pre-built pages (for [the application modules](https://docs.abp.io/en/abp/latest
 
 You do nothing to get the benefit of the new system. [Overriding UI pages/components](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Customization-User-Interface) are working just like before.
 
+### Organization Unit System
+
+[The Identity Module](https://docs.abp.io/en/abp/latest/Modules/Identity) now has the most requested feature: Organization Units!
+
+Organization unit system is used to create a hierarchical organization tree in your application. You can then use this organization tree to authorize data and functionality in your application.
+
+The documentation will come soon...
+
 ### New Blob Storing Package
 
 We've created a new [Blob Storing package](https://www.nuget.org/packages/Volo.Abp.BlobStoring) to store arbitrary binary object. It is generally used to store files in your application. This package provides an abstraction, so any application or [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics) can save and retrieve files independent from the actual storing provider.
@@ -97,3 +105,102 @@ Configure<AbpBlobStoringOptions>(options =>
 See the [blob storing documentation](https://docs.abp.io/en/abp/latest/Blob-Storing) for more information.
 
 ### Oracle Integration Package for Entity Framework Core
+
+We've create an [integration package for Oracle](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.Oracle.Devart), so you can easily switch to the Oracle for the EF Core. It is tested for the framework and pre-built modules.
+
+[See the documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Oracle) to start using the Oracle integration package.
+
+### Automatically Determining the Database Provider
+
+When you develop a **reusable application module** with EF Core integration, you want to develop your module **DBMS independent**. However, there are minor (sometimes major) differences between DBMSs. If you perform a custom mapping based on the DBMS, you can now use `ModelBuilder.IsUsingXXX()`  extension methods:
+
+````csharp
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+
+    modelBuilder.Entity<Phone>(b =>
+    {
+        //...
+        if (modelBuilder.IsUsingPostgreSql()) //Check if using PostgreSQL!
+        {
+            b.Property(x => x.Number).HasMaxLength(20);
+        }
+        else
+        {
+            b.Property(x => x.Number).HasMaxLength(32);
+        }
+    });
+}
+````
+
+Beside the stupid example above, you can configure your mapping however you need!
+
+### ABP CLI: Translate Command
+
+`abp translate` is a new command that simplifies to translate [localization](https://docs.abp.io/en/abp/latest/Localization) files when you have multiple JSON localization files in a source control repository.
+
+The main purpose of this command is to **translate the ABP Framework** localization files (since the [abp repository](https://github.com/abpframework/abp) has tens of localization files to be translated in different directories).
+
+It is appreciated if you use this command to translate the framework resources **for your mother language**.
+
+See [the documentation](https://docs.abp.io/en/abp/latest/CLI#translate) to learn how to use it.
+
+### The New Virtual File System Explorer Module
+
+Thanks to [@liangshiw](https://github.com/liangshiw) created and contributed a new module to explore files in the [Virtual File System](https://docs.abp.io/en/abp/latest/Virtual-File-System). It works for MVC UI and shows all the virtual files in the application. Example screenshots:
+
+![virtual-file-explorer-1](virtual-file-explorer-1.png)
+
+![virtual-file-explorer-2](virtual-file-explorer-2.png)
+
+### RTL Support for the Angular UI
+
+We had a contribution in the previous release to support RTL languages and the Arabic localization for the MVC module. Now, the Angular UI also supports RTL and Arabic localization:
+
+TODO: Image
+
+### Sample Application: SignalR with Tiered Architecture
+
+Implementing SignalR in a distributed/tiered architecture can be challenging. We've created a sample application that demonstrate how to easily implement it using the [SignalR integration](https://docs.abp.io/en/abp/latest/SignalR-Integration) and the [distributed event bus](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) system.
+
+![signalr-tiered-demo](signalr-tiered-demo.png)
+
+See [the source code](https://github.com/abpframework/abp-samples/tree/master/SignalRTieredDemo) of the sample solution.
+
+**An article is on the road** that will deeply explain the solution. Follow the [@abpframework](https://twitter.com/abpframework) Twitter account.
+
+### About gRPC
+
+Created a sample application to show how to create gRPC endpoints in your ABP based application.
+
+See [the source code](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) on GitHub.
+
+We were planning to create gRPC endpoints for all the pre-built application modules, but see that ASP.NET Core gRPC integration is not mature enough and doesn't support some common deployment scenarios yet. So, deferring this to the next versions ([see this comment](https://github.com/abpframework/abp/issues/2882#issuecomment-633080242) for more). However, it is pretty standard if you want to use gRPC in your applications. ABP Framework has no issue with gRPC. Just check the [sample application](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo).
+
+### Others
+
+* [Time zone system](https://github.com/abpframework/abp/pull/3933) to support different time zones for an application.
+* Support for [virtual path deployment](https://github.com/abpframework/abp/issues/4089) on IIS.
+
+## What's New with the ABP Commercial 2.9
+
+In addition to all the features coming with the ABP Framework, the ABP Commercial has additional features with this release, as always. This section covers the [ABP Commercial](https://commercial.abp.io/) highlights in the version 2.9.
+
+### Organization Unit Management UI
+
+### Chat Module Angular UI
+
+### Easy CRM Angular UI
+
+### Module Code Generation for the ABP Suite
+
+### Lepton Theme
+
+### Coming Soon: The File management Module
+
+## About the Next Version: 3.0
+
+We have added many new features with the v2.9. In the next version, we will completely focus on the **documentation, performance improvements** and and other enhancements as well as bug fixes.
+
+For a long time, we were releasing a new feature version in every 2 weeks. We will continue to this approach after v3.0. But, as an exception to the v3.0, the development cycle will be ~4 weeks. **The planned release date for the v3.0 is the July 1, 2020**.
