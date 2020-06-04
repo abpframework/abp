@@ -38,8 +38,6 @@ export class RolesComponent implements OnInit {
 
   providerKey: string;
 
-  loading = false;
-
   modalBusy = false;
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
@@ -139,8 +137,8 @@ export class RolesComponent implements OnInit {
     }, 0);
   }
 
-  onSort(event) {
-    const { prop, dir } = event.sorts[0];
+  sort(data) {
+    const { prop, dir } = data.sorts[0];
     this.list.sortKey = prop;
     this.list.sortOrder = dir;
   }
