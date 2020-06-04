@@ -48,7 +48,7 @@
       class="material"
     >
       <ngx-datatable-column
-        [name]="'AbpIdentity::Actions' | abpLocalization"
+        [name]="'AbpTenantManagement::Actions' | abpLocalization"
         [maxWidth]="150"
         [sortable]="false"
       >
@@ -117,7 +117,7 @@
       {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
     <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="isDisabledSaveButton">{{
-      'AbpIdentity::Save' | abpLocalization
+      'AbpTenantManagement::Save' | abpLocalization
     }}</abp-button>
   </ng-template>
 </abp-modal>
