@@ -110,39 +110,42 @@ namespace Volo.Abp.IdentityModel
         protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
-            var httpClient = HttpClientFactory.CreateClient(HttpClientName);
-            return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+            using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
-                Address = configuration.Authority,
-                Policy =
+                return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                 {
-                    RequireHttps = configuration.RequireHttps
-                }
-            });
+                    Address = configuration.Authority,
+                    Policy =
+                    {
+                        RequireHttps = configuration.RequireHttps
+                    }
+                });
+            }
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
             DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            var httpClient = HttpClientFactory.CreateClient(HttpClientName);
-
-            AddHeaders(httpClient);
-
-            switch (configuration.GrantType)
+            using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
-                case OidcConstants.GrantTypes.ClientCredentials:
-                    return await httpClient.RequestClientCredentialsTokenAsync(
-                        await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
-                        CancellationTokenProvider.Token
-                    );
-                case OidcConstants.GrantTypes.Password:
-                    return await httpClient.RequestPasswordTokenAsync(
-                        await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
-                        CancellationTokenProvider.Token
-                    );
-                default:
-                    throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
+                AddHeaders(httpClient);
+
+                switch (configuration.GrantType)
+                {
+                    case OidcConstants.GrantTypes.ClientCredentials:
+                        return await httpClient.RequestClientCredentialsTokenAsync(
+                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
+                            CancellationTokenProvider.Token
+                        );
+                    case OidcConstants.GrantTypes.Password:
+                        return await httpClient.RequestPasswordTokenAsync(
+                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
+                            CancellationTokenProvider.Token
+                        );
+                    default:
+                        throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
+                }
             }
         }
 
