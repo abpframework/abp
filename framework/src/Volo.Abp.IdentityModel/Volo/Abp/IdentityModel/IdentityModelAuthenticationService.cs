@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityModel
@@ -18,19 +19,23 @@ namespace Volo.Abp.IdentityModel
     [Dependency(ReplaceServices = true)]
     public class IdentityModelAuthenticationService : IIdentityModelAuthenticationService, ITransientDependency
     {
+        public const string HttpClientName = "IdentityModelAuthenticationServiceHttpClientName";
         public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
         protected AbpIdentityClientOptions ClientOptions { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
+        protected ICurrentTenant CurrentTenant { get; }
 
         public IdentityModelAuthenticationService(
             IOptions<AbpIdentityClientOptions> options,
             ICancellationTokenProvider cancellationTokenProvider,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            ICurrentTenant currentTenant)
         {
             ClientOptions = options.Value;
             CancellationTokenProvider = cancellationTokenProvider;
             HttpClientFactory = httpClientFactory;
+            CurrentTenant = currentTenant;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
 
@@ -46,7 +51,6 @@ namespace Volo.Abp.IdentityModel
 
             SetAccessToken(client, accessToken);
             return true;
-
         }
 
         protected virtual async Task<string> GetAccessTokenOrNullAsync(string identityClientName)
@@ -106,40 +110,39 @@ namespace Volo.Abp.IdentityModel
         protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = HttpClientFactory.CreateClient())
+            var httpClient = HttpClientFactory.CreateClient(HttpClientName);
+            return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
-                return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                Address = configuration.Authority,
+                Policy =
                 {
-                    Address = configuration.Authority,
-                    Policy =
-                    {
-                        RequireHttps = configuration.RequireHttps
-                    }
-                });
-            }
+                    RequireHttps = configuration.RequireHttps
+                }
+            });
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
             DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = HttpClientFactory.CreateClient())
+            var httpClient = HttpClientFactory.CreateClient(HttpClientName);
+
+            AddHeaders(httpClient);
+
+            switch (configuration.GrantType)
             {
-                switch (configuration.GrantType)
-                {
-                    case OidcConstants.GrantTypes.ClientCredentials:
-                        return await httpClient.RequestClientCredentialsTokenAsync(
-                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
-                            CancellationTokenProvider.Token
-                        );
-                    case OidcConstants.GrantTypes.Password:
-                        return await httpClient.RequestPasswordTokenAsync(
-                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
-                            CancellationTokenProvider.Token
-                        );
-                    default:
-                        throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
-                }
+                case OidcConstants.GrantTypes.ClientCredentials:
+                    return await httpClient.RequestClientCredentialsTokenAsync(
+                        await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
+                        CancellationTokenProvider.Token
+                    );
+                case OidcConstants.GrantTypes.Password:
+                    return await httpClient.RequestPasswordTokenAsync(
+                        await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
+                        CancellationTokenProvider.Token
+                    );
+                default:
+                    throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
             }
         }
 
@@ -185,6 +188,16 @@ namespace Volo.Abp.IdentityModel
             }
 
             return Task.CompletedTask;
+        }
+
+        protected virtual void AddHeaders(HttpClient client)
+        {
+            //tenantId
+            if (CurrentTenant.Id.HasValue)
+            {
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+                client.DefaultRequestHeaders.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
         }
     }
 }
