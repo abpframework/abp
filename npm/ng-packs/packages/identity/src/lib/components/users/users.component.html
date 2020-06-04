@@ -42,6 +42,7 @@
       (page)="list.page = $event.offset"
       [headerHeight]="50"
       [footerHeight]="50"
+      [scrollbarH]="true"
       columnMode="force"
       rowHeight="auto"
       class="material"
@@ -88,14 +89,17 @@
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column
+        [width]="200"
         [name]="'AbpIdentity::UserName' | abpLocalization"
         prop="userName"
       ></ngx-datatable-column>
       <ngx-datatable-column
+        [width]="200"
         [name]="'AbpIdentity::EmailAddress' | abpLocalization"
         prop="email"
       ></ngx-datatable-column>
       <ngx-datatable-column
+        [width]="200"
         [name]="'AbpIdentity::PhoneNumber' | abpLocalization"
         prop="phoneNumber"
       ></ngx-datatable-column>
