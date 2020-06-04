@@ -26,7 +26,7 @@ export class ListService implements OnDestroy {
     return this._maxResultCount;
   }
 
-  private _page = 1;
+  private _page = 0;
   set page(value: number) {
     this._page = value;
     this.get();
@@ -71,7 +71,7 @@ export class ListService implements OnDestroy {
     this._query$.next({
       filter: this._filter || undefined,
       maxResultCount: this._maxResultCount,
-      skipCount: (this._page - 1) * this._maxResultCount,
+      skipCount: this._page * this._maxResultCount,
       sorting: this._sortOrder ? `${this._sortKey} ${this._sortOrder}` : undefined,
     });
   };
