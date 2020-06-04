@@ -77,7 +77,7 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.get();
+    this.hookToQuery();
   }
 
   buildForm() {
@@ -172,7 +172,7 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
-        this.get();
+        this.list.get();
       });
   }
 
@@ -183,7 +183,7 @@ export class UsersComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.get());
+          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.list.get());
         }
       });
   }
@@ -194,7 +194,7 @@ export class UsersComponent implements OnInit {
     this.list.sortOrder = dir;
   }
 
-  get() {
+  private hookToQuery() {
     this.list.hookToQuery(query => this.store.dispatch(new GetUsers(query))).subscribe();
   }
 

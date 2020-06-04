@@ -107,7 +107,7 @@ export class TenantsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.get();
+    this.hookToQuery();
   }
 
   private createTenantForm() {
@@ -231,7 +231,7 @@ export class TenantsComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
-        this.get();
+        this.list.get();
       });
   }
 
@@ -246,12 +246,12 @@ export class TenantsComponent implements OnInit {
       )
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.get());
+          this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.list.get());
         }
       });
   }
 
-  get() {
+  hookToQuery() {
     this.list.hookToQuery(query => this.store.dispatch(new GetTenants(query))).subscribe();
   }
 

@@ -57,7 +57,7 @@ export class RolesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.get();
+    this.hookToQuery();
   }
 
   buildForm() {
@@ -104,7 +104,7 @@ export class RolesComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
-        this.get();
+        this.list.get();
       });
   }
 
@@ -115,12 +115,12 @@ export class RolesComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteRole(id)).subscribe(() => this.get());
+          this.store.dispatch(new DeleteRole(id)).subscribe(() => this.list.get());
         }
       });
   }
 
-  get() {
+  private hookToQuery() {
     this.list.hookToQuery(query => this.store.dispatch(new GetRoles(query))).subscribe();
   }
 
