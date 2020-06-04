@@ -1,4 +1,4 @@
-import { ABP } from '@abp/ng.core';
+import { ABP, ListService } from '@abp/ng.core';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
@@ -28,6 +28,7 @@ import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
+  providers: [ListService],
 })
 export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsers)
@@ -51,17 +52,9 @@ export class UsersComponent implements OnInit {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
-
   isModalVisible: boolean;
 
-  loading = false;
-
   modalBusy = false;
-
-  sortOrder = '';
-
-  sortKey = '';
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
@@ -76,6 +69,7 @@ export class UsersComponent implements OnInit {
   }
 
   constructor(
+    public readonly list: ListService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
@@ -83,11 +77,6 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.get();
-  }
-
-  onSearch(value: string) {
-    this.pageQuery.filter = value;
     this.get();
   }
 
@@ -199,18 +188,14 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  onPageChange(page: number) {
-    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
-
-    this.get();
+  sort(data) {
+    const { prop, dir } = data.sorts[0];
+    this.list.sortKey = prop;
+    this.list.sortOrder = dir;
   }
 
   get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetUsers(this.pageQuery))
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe();
+    this.list.hookToQuery(query => this.store.dispatch(new GetUsers(query))).subscribe();
   }
 
   openPermissionsModal(providerKey: string) {
