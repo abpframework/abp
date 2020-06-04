@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -46,7 +47,7 @@ export function appendScript(injector: Injector) {
 }
 
 @NgModule({
-  imports: [CoreModule, NgxValidateCoreModule, NgbPaginationModule],
+  imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
   declarations: [
     BreadcrumbComponent,
     ButtonComponent,
@@ -67,6 +68,7 @@ export function appendScript(injector: Injector) {
     TableSortDirective,
   ],
   exports: [
+    NgxDatatableModule,
     BreadcrumbComponent,
     ButtonComponent,
     ChartComponent,

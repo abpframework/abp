@@ -2350,6 +2350,13 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
+"@swimlane/ngx-datatable@^16.0.0":
+  version "16.1.1"
+  resolved "https://registry.yarnpkg.com/@swimlane/ngx-datatable/-/ngx-datatable-16.1.1.tgz#1215e81f51400314ba6899f66acdbd4e3bde2915"
+  integrity sha512-h2A9xC/jo314eC/CzA19aoY/YadhdTupolCwpgB9Cbw3sDRi3x/LeGsdLSV0bj3XBKQUB3DA/gPuASKYuhm8iA==
+  dependencies:
+    tslib "^1.9.0"
+
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@szmarczak/http-timer/-/http-timer-1.1.2.tgz#b1665e2c461a2cd92f4c1bbf50d5454de0d4b421"
