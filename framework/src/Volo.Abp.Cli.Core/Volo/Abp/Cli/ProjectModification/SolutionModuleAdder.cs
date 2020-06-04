@@ -129,6 +129,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 targetModuleFolder,
                 version,
                 null,
+                null,
                 null
             );
 

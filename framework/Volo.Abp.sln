@@ -291,6 +291,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.SignalR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.csproj", "{79323211-E658-493E-9863-035AA4C3F913}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring", "src\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj", "{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Tests", "test\Volo.Abp.BlobStoring.Tests\Volo.Abp.BlobStoring.Tests.csproj", "{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.FileSystem", "src\Volo.Abp.BlobStoring.FileSystem\Volo.Abp.BlobStoring.FileSystem.csproj", "{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.FileSystem.Tests", "test\Volo.Abp.BlobStoring.FileSystem.Tests\Volo.Abp.BlobStoring.FileSystem.Tests.csproj", "{68443D4A-1608-4039-B995-7AF4CF82E9F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.Oracle.Devart", "src\Volo.Abp.EntityFrameworkCore.Oracle.Devart\Volo.Abp.EntityFrameworkCore.Oracle.Devart.csproj", "{75E5C841-5F36-4C44-A532-57CB8E7FFE15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -865,6 +875,26 @@ Global
 		{79323211-E658-493E-9863-035AA4C3F913}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79323211-E658-493E-9863-035AA4C3F913}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79323211-E658-493E-9863-035AA4C3F913}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68443D4A-1608-4039-B995-7AF4CF82E9F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68443D4A-1608-4039-B995-7AF4CF82E9F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68443D4A-1608-4039-B995-7AF4CF82E9F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68443D4A-1608-4039-B995-7AF4CF82E9F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75E5C841-5F36-4C44-A532-57CB8E7FFE15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75E5C841-5F36-4C44-A532-57CB8E7FFE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75E5C841-5F36-4C44-A532-57CB8E7FFE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75E5C841-5F36-4C44-A532-57CB8E7FFE15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1012,6 +1042,11 @@ Global
 		{B64FCE08-E9D2-4984-BF12-FE199F257416} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{8B758716-DCC9-4223-8421-5588D1597487} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{79323211-E658-493E-9863-035AA4C3F913} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{68443D4A-1608-4039-B995-7AF4CF82E9F8} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{75E5C841-5F36-4C44-A532-57CB8E7FFE15} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

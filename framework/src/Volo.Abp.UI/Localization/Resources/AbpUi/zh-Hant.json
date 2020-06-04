@@ -54,6 +54,7 @@
     "404Message": "網頁未找到",
     "500Message": "內部伺服器錯誤",
     "GoHomePage": "返回首頁",
-    "GoBack": "返回"
+    "GoBack": "返回",
+    "Search": "搜索"
   }
 }

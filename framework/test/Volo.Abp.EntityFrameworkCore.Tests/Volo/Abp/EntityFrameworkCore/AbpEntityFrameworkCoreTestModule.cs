@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore.Domain;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
@@ -16,7 +17,7 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    [DependsOn(typeof(AbpEntityFrameworkCoreSqliteModule))]
     [DependsOn(typeof(TestAppModule))]
     [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]

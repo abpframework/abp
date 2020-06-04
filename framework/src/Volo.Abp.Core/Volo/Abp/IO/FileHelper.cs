@@ -17,12 +17,15 @@ namespace Volo.Abp.IO
         /// Checks and deletes given file if it does exists.
         /// </summary>
         /// <param name="filePath">Path of the file</param>
-        public static void DeleteIfExists(string filePath)
+        public static bool DeleteIfExists(string filePath)
         {
-            if (File.Exists(filePath))
+            if (!File.Exists(filePath))
             {
-                File.Delete(filePath);
+                return false;
             }
+
+            File.Delete(filePath);
+            return true;
         }
 
         /// <summary>

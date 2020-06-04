@@ -3,13 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
 namespace ProductManagement.EntityFrameworkCore
 {
     [DependsOn(
         typeof(ProductManagementTestBaseModule),
-        typeof(ProductManagementEntityFrameworkCoreModule)
+        typeof(ProductManagementEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class ProductManagementEntityFrameworkCoreTestModule : AbpModule
     {

@@ -49,12 +49,38 @@ describe('LazyLoadService', () => {
 
     it('should emit a custom load event if loaded if resource is loaded before', done => {
       const loadEvent = new CustomEvent('load');
-      service.loaded.add(strategy.path);
+      service.loaded.set(strategy.path, null);
 
       service.load(strategy).subscribe(event => {
         expect(event).toEqual(loadEvent);
         done();
       });
+    });
+  });
+
+  describe('#remove', () => {
+    const service = new LazyLoadService();
+
+    it('should remove an already lazy loaded element and return true', () => {
+      const script = document.createElement('script');
+      document.body.appendChild(script);
+      service.loaded.set('x', script);
+
+      expect(document.body.lastElementChild).toBe(script);
+
+      const result = service.remove('x');
+
+      expect(document.body.lastElementChild).toBeNull();
+      expect(service.loaded.has('x')).toBe(false);
+      expect(result).toBe(true);
+    });
+
+    it('should return false when path not found', () => {
+      service.loaded.set('foo', null);
+
+      const result = service.remove('bar');
+
+      expect(result).toBe(false);
     });
   });
 });

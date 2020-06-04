@@ -9,11 +9,13 @@ namespace Volo.Abp.AspNetCore.App
     {
         public IActionResult HelloJohn()
         {
+            // ReSharper disable once Mvc.ViewNotResolved
             return View();
         }
 
         public IActionResult PersonForm()
         {
+            // ReSharper disable once Mvc.ViewNotResolved
             return View(new PersonModel());
         }
 

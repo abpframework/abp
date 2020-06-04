@@ -31,7 +31,7 @@
     "MultiTenancy": "多租户",
     "MultiTenancyExplanationShort": "SaaS应用程序变得简单! 从数据库到UI的多租户集成.",
     "CrossCuttingConcerns": "横切关注点",
-    "CrossCuttingConcernsExplanationShort": "完整的基础架构,用于授权,验证,异常处理,缓存,审计日志记录，事务管理等.",
+    "CrossCuttingConcernsExplanationShort": "完整的基础架构,用于授权,验证,异常处理,缓存,审计日志记录,事务管理等.",
     "BuiltInBundlingMinification": "内置Bundling & Minification",
     "BuiltInBundlingMinificationExplanation": "无需使用外部工具进行Bundling & Minification. ABP提供了一种更简单,动态,功能强大,模块化和内置的方式!",
     "VirtualFileSystem": "虚拟文件系统",
@@ -39,7 +39,7 @@
     "Theming": "主题",
     "ThemingExplanationShort": "使用和定制基于bootstrap的标准UI主题,或创建自己的主题.",
     "BootstrapTagHelpersDynamicForms": "Bootstrap Tag Helpers和动态表单",
-    "BootstrapTagHelpersDynamicFormsExplanation": "内置的后台作业系统可以集成到Hangfire,RabbitMQ或您喜欢的任何工具中.", //TODO explanation doesn't match.
+    "BootstrapTagHelpersDynamicFormsExplanation": "与其手动重复编写Bootstrap的组件,不如使用ABP的Tag Helpers利用智能感知来简化它. 动态表单可以从C#类创建完整的表单.",
     "HTTPAPIsDynamicProxies": "HTTP APIs和动态代理",
     "HTTPAPIsDynamicProxiesExplanation": "自动将应用程序服务公开为REST样式的HTTP API,并与动态JavaScript和C#代理一起使用.",
     "CompleteArchitectureInfo": "现代架构用来创建可维护的软件解决方案.",

@@ -27,11 +27,13 @@
 
         pageTitle = PageLayout.Content.Title + pageTitle;
     }
+
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
 }
 
 <!DOCTYPE html>
 
-<html lang="@CultureInfo.CurrentCulture.Name" dir=@(CultureHelper.IsRtl ? "rtl" : "")>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
 <head>
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Empty)
 
@@ -52,7 +54,7 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Empty)
 </head>
-<body class="abp-empty-layout">
+<body class="abp-empty-layout @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Empty)
 
     <div class="@containerClass">

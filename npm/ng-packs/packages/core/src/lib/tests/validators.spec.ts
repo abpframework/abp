@@ -1,5 +1,5 @@
 import { FormControl, Validators } from '@angular/forms';
-import { AbpValidators, validateRange } from '../validators';
+import { AbpValidators, validateMinAge, validateRange } from '../validators';
 import { validateCreditCard } from '../validators/credit-card.validator';
 import { validateRequired } from '../validators/required.validator';
 import { validateStringLength } from '../validators/string-length.validator';
@@ -50,6 +50,44 @@ describe('Validators', () => {
   describe('Email Validator', () => {
     it('should return email validator of Angular', () => {
       expect(AbpValidators.emailAddress()).toBe(Validators.email);
+    });
+  });
+
+  describe('Min Age Validator', () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const sameDay21yAgo = `${year - 21}-${month}-${day}`;
+    const nextDay21yAgo = `${year - 21}-${month}-${day + 1}`;
+
+    test.each`
+      input            | options        | expected
+      ${null}          | ${undefined}   | ${null}
+      ${undefined}     | ${undefined}   | ${null}
+      ${''}            | ${undefined}   | ${null}
+      ${0}             | ${undefined}   | ${null}
+      ${Infinity}      | ${undefined}   | ${{ minAge: { age: 18 } }}
+      ${sameDay21yAgo} | ${undefined}   | ${null}
+      ${sameDay21yAgo} | ${{ age: 21 }} | ${null}
+      ${nextDay21yAgo} | ${{ age: 21 }} | ${{ minAge: { age: 21 } }}
+    `(
+      'should return $expected when input is $input and options are $options',
+      ({ input, options, expected }) => {
+        const control = new FormControl(input, [validateMinAge(options)]);
+        control.markAsDirty({ onlySelf: true });
+        control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+        expect(control.errors).toEqual(expected);
+      },
+    );
+
+    it('should return null when control is pristine', () => {
+      const invalidDate = '';
+      const control = new FormControl(invalidDate, [validateMinAge({ age: Infinity })]);
+      // control is not dirty
+
+      expect(control.valid).toBe(true);
     });
   });
 

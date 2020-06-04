@@ -372,6 +372,10 @@
             {
               "text": "TrackByService",
               "path": "UI/Angular/Track-By-Service.md"
+            },
+            {
+              "text": "ListService",
+              "path": "UI/Angular/List-Service.md"
             }
           ]
         },
@@ -427,6 +431,10 @@
                       "path": "Entity-Framework-Core-PostgreSQL.md"
                     },
                     {
+                      "text": " Oracle",
+                      "path": "Entity-Framework-Core-Oracle.md"
+                    },
+                    {
                       "text": "到SQLite",
                       "path": "Entity-Framework-Core-SQLite.md"
                     }
@@ -443,6 +451,15 @@
               "path": "Dapper.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "实时",
+      "items": [
+        {
+          "text": "SignalR集成",
+          "path": "SignalR-Integration.md"
         }
       ]
     },

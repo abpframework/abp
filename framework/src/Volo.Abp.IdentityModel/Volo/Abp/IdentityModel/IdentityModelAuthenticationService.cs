@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityModel
@@ -18,19 +19,23 @@ namespace Volo.Abp.IdentityModel
     [Dependency(ReplaceServices = true)]
     public class IdentityModelAuthenticationService : IIdentityModelAuthenticationService, ITransientDependency
     {
+        public const string HttpClientName = "IdentityModelAuthenticationServiceHttpClientName";
         public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
         protected AbpIdentityClientOptions ClientOptions { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
+        protected ICurrentTenant CurrentTenant { get; }
 
         public IdentityModelAuthenticationService(
             IOptions<AbpIdentityClientOptions> options,
             ICancellationTokenProvider cancellationTokenProvider,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            ICurrentTenant currentTenant)
         {
             ClientOptions = options.Value;
             CancellationTokenProvider = cancellationTokenProvider;
             HttpClientFactory = httpClientFactory;
+            CurrentTenant = currentTenant;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
 
@@ -46,7 +51,6 @@ namespace Volo.Abp.IdentityModel
 
             SetAccessToken(client, accessToken);
             return true;
-
         }
 
         protected virtual async Task<string> GetAccessTokenOrNullAsync(string identityClientName)
@@ -106,7 +110,7 @@ namespace Volo.Abp.IdentityModel
         protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = HttpClientFactory.CreateClient())
+            using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
                 return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                 {
@@ -123,8 +127,10 @@ namespace Volo.Abp.IdentityModel
             DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = HttpClientFactory.CreateClient())
+            using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
+                AddHeaders(httpClient);
+
                 switch (configuration.GrantType)
                 {
                     case OidcConstants.GrantTypes.ClientCredentials:
@@ -185,6 +191,16 @@ namespace Volo.Abp.IdentityModel
             }
 
             return Task.CompletedTask;
+        }
+
+        protected virtual void AddHeaders(HttpClient client)
+        {
+            //tenantId
+            if (CurrentTenant.Id.HasValue)
+            {
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+                client.DefaultRequestHeaders.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
         }
     }
 }
