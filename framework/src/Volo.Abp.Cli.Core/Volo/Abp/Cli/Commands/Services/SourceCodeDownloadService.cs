@@ -25,7 +25,7 @@ namespace Volo.Abp.Cli.Commands.Services
             Logger = NullLogger<SourceCodeDownloadService>.Instance;
         }
 
-        public async Task DownloadAsync(string moduleName, string outputFolder, string version, string gitHubLocalRepositoryPath, AbpCommandLineOptions options)
+        public async Task DownloadAsync(string moduleName, string outputFolder, string version, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath, AbpCommandLineOptions options)
         {
             Logger.LogInformation("Downloading source code of " + moduleName);
             Logger.LogInformation("Version: " + version);
@@ -39,7 +39,8 @@ namespace Volo.Abp.Cli.Commands.Services
                     DatabaseProvider.NotSpecified,
                     UiFramework.NotSpecified,
                     null,
-                    gitHubLocalRepositoryPath,
+                    gitHubAbpLocalRepositoryPath,
+                    gitHubVoloLocalRepositoryPath,
                     null,
                     options
                 )

@@ -50,7 +50,7 @@ namespace MyCompanyName.MyProjectName
                 context.Menu.Items.Add(new ApplicationMenuItem(
                     "Account.Logout",
                     l["Logout"],
-                    "/Account/Logout",
+                    "~/Account/Logout",
                     "fas fa-power-off",
                     order: int.MaxValue - 1000
                 ));

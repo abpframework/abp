@@ -58,6 +58,7 @@
     "404Message": "Page not found",
     "500Message": "Internal Server Error",
     "GoHomePage": "Go to the homepage",
-    "GoBack": "Go back"
+    "GoBack": "Go back",
+    "Search" : "Search"
   }
 }

@@ -54,6 +54,7 @@
     "404Message": "La página no existe",
     "500Message": "Error interno del servidor",
     "GoHomePage": "Ir a la página principal",
-    "GoBack": "Atras"
+    "GoBack": "Atras",
+    "Search": "Buscar"
   }
 }

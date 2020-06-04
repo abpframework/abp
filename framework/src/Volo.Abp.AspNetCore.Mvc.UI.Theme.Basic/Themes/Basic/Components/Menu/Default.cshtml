@@ -5,12 +5,13 @@
     var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
     var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
     var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
+    var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.Content(menuItem.Url);
     if (menuItem.IsLeaf)
     {
         if (menuItem.Url != null)
         {
             <li class="nav-item @cssClass @disabled" @elementId>
-                <a class="nav-link" href="@(menuItem.Url ?? "#")">
+                <a class="nav-link" href="@url">
                     @if (menuItem.Icon != null)
                     {
                         if (menuItem.Icon.StartsWith("fa"))

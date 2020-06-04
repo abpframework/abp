@@ -23,10 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
-    <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="compilerconfig.json" />

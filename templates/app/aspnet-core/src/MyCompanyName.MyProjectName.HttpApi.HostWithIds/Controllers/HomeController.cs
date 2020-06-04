@@ -7,7 +7,7 @@ namespace MyCompanyName.MyProjectName.Controllers
     {
         public ActionResult Index()
         {
-            return Redirect("/swagger");
+            return Redirect("~/swagger");
         }
     }
 }
