@@ -6,9 +6,21 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring.Azure
 {
+
+    /// <summary>
+    /// This module will not try to connect to azure.
+    /// </summary>
     [DependsOn(
         typeof(AbpBlobStoringAzureModule),
         typeof(AbpBlobStoringTestModule)
+    )]
+    public class AbpBlobStoringAzureTestCommonModule : AbpModule
+    {
+
+    }
+
+    [DependsOn(
+        typeof(AbpBlobStoringAzureTestCommonModule)
     )]
     public class AbpBlobStoringAzureTestModule : AbpModule
     {
@@ -47,9 +59,9 @@ namespace Volo.Abp.BlobStoring.Azure
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
             var blobServiceClient = new BlobServiceClient(_connectionString);
             blobServiceClient.DeleteBlobContainer(_randomContainerName);
         }
     }
+
 }

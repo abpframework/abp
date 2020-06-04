@@ -12,11 +12,11 @@ namespace Volo.Abp.BlobStoring.Azure
 
         public static BlobContainerConfiguration UseAzure(
             this BlobContainerConfiguration containerConfiguration,
-            Action<AzureBlobProviderConfiguration> fileSystemConfigureAction)
+            Action<AzureBlobProviderConfiguration> azureConfigureAction)
         {
             containerConfiguration.ProviderType = typeof(AzureBlobProvider);
 
-            fileSystemConfigureAction(new AzureBlobProviderConfiguration(containerConfiguration));
+            azureConfigureAction(new AzureBlobProviderConfiguration(containerConfiguration));
 
             return containerConfiguration;
         }
