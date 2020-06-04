@@ -7,7 +7,7 @@ import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens/list.token';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
 
 @Injectable()
-export class ListService implements OnDestroy {
+export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDestroy {
   private _filter = '';
   set filter(value: string) {
     this._filter = value;
@@ -53,9 +53,9 @@ export class ListService implements OnDestroy {
     return this._sortOrder;
   }
 
-  private _query$ = new ReplaySubject<ABP.PageQueryParams>(1);
+  private _query$ = new ReplaySubject<QueryParamsType>(1);
 
-  get query$(): Observable<ABP.PageQueryParams> {
+  get query$(): Observable<QueryParamsType> {
     return this._query$
       .asObservable()
       .pipe(debounceTime(this.delay || 300), shareReplay({ bufferSize: 1, refCount: true }));
@@ -68,12 +68,12 @@ export class ListService implements OnDestroy {
   }
 
   get = () => {
-    this._query$.next({
+    this._query$.next(({
       filter: this._filter || undefined,
       maxResultCount: this._maxResultCount,
       skipCount: this._page * this._maxResultCount,
       sorting: this._sortOrder ? `${this._sortKey} ${this._sortOrder}` : undefined,
-    });
+    } as any) as QueryParamsType);
   };
 
   constructor(@Optional() @Inject(LIST_QUERY_DEBOUNCE_TIME) private delay: number) {
@@ -81,7 +81,7 @@ export class ListService implements OnDestroy {
   }
 
   hookToQuery<T extends any>(
-    streamCreatorCallback: QueryStreamCreatorCallback<T>,
+    streamCreatorCallback: QueryStreamCreatorCallback<T, QueryParamsType>,
   ): Observable<PagedResultDto<T>> {
     this._isLoading$.next(true);
 
@@ -96,6 +96,6 @@ export class ListService implements OnDestroy {
   ngOnDestroy() {}
 }
 
-export type QueryStreamCreatorCallback<T> = (
-  query: ABP.PageQueryParams,
+export type QueryStreamCreatorCallback<T, QueryParamsType = ABP.PageQueryParams> = (
+  query: QueryParamsType,
 ) => Observable<PagedResultDto<T>>;
