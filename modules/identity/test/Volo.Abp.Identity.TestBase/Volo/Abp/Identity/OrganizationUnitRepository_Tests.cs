@@ -167,13 +167,21 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task RemoveAllRolesOfOrganizationUnit()
         {
-            OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
-            var rolesCount = await _organizationUnitRepository.GetRolesCountAsync(ou);
-            rolesCount.ShouldBeGreaterThan(1);
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                OrganizationUnit ou = await _organizationUnitRepository.GetAsync("OU111", true);
+                var rolesCount = await _organizationUnitRepository.GetRolesCountAsync(ou);
+                rolesCount.ShouldBeGreaterThan(1);
 
-            await _organizationUnitRepository.RemoveAllRolesAsync(ou);
-            var newCount = await _organizationUnitRepository.GetRolesCountAsync(ou);
-            newCount.ShouldBe(0);
+                await _organizationUnitRepository.RemoveAllRolesAsync(ou);
+
+                await uow.SaveChangesAsync();
+
+                var newCount = await _organizationUnitRepository.GetRolesCountAsync(ou);
+                newCount.ShouldBe(0);
+
+                await uow.CompleteAsync();
+            }
         }
     }
 }
