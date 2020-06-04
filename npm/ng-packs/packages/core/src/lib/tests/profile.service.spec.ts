@@ -1,12 +1,13 @@
 import { createHttpFactory, HttpMethod, SpectatorHttp } from '@ngneat/spectator/jest';
 import { ProfileService, RestService } from '../services';
 import { Store } from '@ngxs/store';
+import { CORE_OPTIONS } from '../tokens';
 
 describe('ProfileService', () => {
   let spectator: SpectatorHttp<ProfileService>;
   const createHttp = createHttpFactory({
     dataService: ProfileService,
-    providers: [RestService],
+    providers: [RestService, { provide: CORE_OPTIONS, useValue: { environment: {} } }],
     mocks: [Store],
   });
 
@@ -22,7 +23,10 @@ describe('ProfileService', () => {
     const mock = { currentPassword: 'test', newPassword: 'test' };
     spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.changePassword(mock).subscribe();
-    const req = spectator.expectOne('https://abp.io/api/identity/my-profile/change-password', HttpMethod.POST);
+    const req = spectator.expectOne(
+      'https://abp.io/api/identity/my-profile/change-password',
+      HttpMethod.POST,
+    );
     expect(req.request.body).toEqual(mock);
   });
 

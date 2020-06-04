@@ -39,7 +39,7 @@
     "Theming": "Theming",
     "ThemingExplanationShort": "Use and customize the bootstrap-based standard UI theme or create your own one.",
     "BootstrapTagHelpersDynamicForms": "Bootstrap Tag Helpers & Dynamic Forms",
-    "BootstrapTagHelpersDynamicFormsExplanation": "Built-in background job system that can be integrated to Hangfire, RabbitMQ or any tool you like.", //TODO explanation doesn't match.
+    "BootstrapTagHelpersDynamicFormsExplanation": "Instead of manually writing the repeating details of bootstrap components, Use ABP's tag helpers to simplify it and take advantage of intellisense. Dynamic form can create the complete form from a C# class as the model.",
     "HTTPAPIsDynamicProxies": "HTTP APIs & Dynamic Proxies",
     "HTTPAPIsDynamicProxiesExplanation": "Automatically expose application services as REST style HTTP APIs and consume with dynamic JavaScript & C# proxies.",
     "CompleteArchitectureInfo": "Modern architecture to create maintainable software solutions.",

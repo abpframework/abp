@@ -39,7 +39,7 @@
     "Theming": "主題",
     "ThemingExplanationShort": "使用和訂製基於bootstrap的標準UI主題,或建立自己的主題.",
     "BootstrapTagHelpersDynamicForms": "Bootstrap Tag Helpers和動態表單",
-    "BootstrapTagHelpersDynamicFormsExplanation": "內建的背景作業系統可以整合到Hangfire,RabbitMQ或您喜歡的任何工具中.", //TODO explanation doesn't match.
+    "BootstrapTagHelpersDynamicFormsExplanation": "與其手動重複編寫Bootstrap的組件,不如使用ABP的Tag Helpers利用智能感知來簡化它. 動態表單可以從C#類創建完整的表單.",
     "HTTPAPIsDynamicProxies": "HTTP APIs和動態代理",
     "HTTPAPIsDynamicProxiesExplanation": "自動將應用程式服務公開為REST樣式的HTTP API,並與動態JavaScript和C#代理一起使用.",
     "CompleteArchitectureInfo": "現在架構用來建立可維護的軟體解決方案.",
