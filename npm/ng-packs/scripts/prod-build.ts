@@ -2,10 +2,10 @@ import execa from 'execa';
 import fse from 'fs-extra';
 
 (async () => {
-  // await execa('yarn', ['ng', 'build', '--prod'], {
-  //   stdout: 'inherit',
-  //   cwd: '..',
-  // });
+  await execa('yarn', ['ng', 'build', '--prod'], {
+    stdout: 'inherit',
+    cwd: '..',
+  });
 
   await execa('yarn', ['install', '--ignore-scripts'], {
     stdout: 'inherit',
