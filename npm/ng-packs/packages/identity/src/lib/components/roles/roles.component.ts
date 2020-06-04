@@ -1,5 +1,6 @@
-import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import { ListService } from '@abp/ng.core';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
+import { Confirmation, ConfirmationService } from '@abp/ng.theme.shared';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -14,11 +15,11 @@ import {
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 
 @Component({
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
+  providers: [ListService],
 })
 export class RolesComponent implements OnInit {
   @Select(IdentityState.getRoles)
@@ -37,15 +38,9 @@ export class RolesComponent implements OnInit {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
-
   loading = false;
 
   modalBusy = false;
-
-  sortOrder = '';
-
-  sortKey = '';
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
@@ -57,6 +52,7 @@ export class RolesComponent implements OnInit {
   };
 
   constructor(
+    public readonly list: ListService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
@@ -126,18 +122,8 @@ export class RolesComponent implements OnInit {
       });
   }
 
-  onPageChange(page: number) {
-    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
-
-    this.get();
-  }
-
   get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetRoles(this.pageQuery))
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe();
+    this.list.hookToQuery(query => this.store.dispatch(new GetRoles(query))).subscribe();
   }
 
   onClickSaveButton() {
@@ -151,5 +137,11 @@ export class RolesComponent implements OnInit {
     setTimeout(() => {
       this.visiblePermissions = true;
     }, 0);
+  }
+
+  onSort(event) {
+    const { prop, dir } = event.sorts[0];
+    this.list.sortKey = prop;
+    this.list.sortOrder = dir;
   }
 }
