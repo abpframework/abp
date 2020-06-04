@@ -1,9 +1,9 @@
-import { CoreModule, LazyLoadService, noop } from '@abp/ng.core';
+import { CoreModule, LazyLoadService, noop, ConfigState } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxDatatableModule, INgxDatatableConfig } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -29,21 +29,22 @@ import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { chartJsLoaded$ } from './utils/widget-utils';
+import { Store } from '@ngxs/store';
 
-/**
- *
- * @deprecated To be deleted in v2.6
- *
- */
-export function appendScript(injector: Injector) {
-  const fn = () => {
-    import('chart.js').then(() => chartJsLoaded$.next(true));
+export function ngxDatatableMessageFactory(store: Store) {
+  const emptyMessage = store.selectSnapshot(
+    ConfigState.getLocalization('AbpUi::NoDataAvailableInDatatable'),
+  );
+  const totalMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Total'));
+  const selectedMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Selected'));
 
-    const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
-    return lazyLoadService.load(null, 'style', styles, 'head', 'beforeend').toPromise();
-  };
-
-  return fn;
+  return {
+    messages: {
+      emptyMessage,
+      totalMessage,
+      selectedMessage,
+    },
+  } as INgxDatatableConfig;
 }
 
 @NgModule({
@@ -120,6 +121,11 @@ export class ThemeSharedModule {
           deps: [HTTP_ERROR_CONFIG],
         },
         { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
+        {
+          provide: 'configuration',
+          useFactory: ngxDatatableMessageFactory,
+          deps: [Store],
+        },
       ],
     };
   }
