@@ -1,6 +1,6 @@
 # ABP Framework v2.9 Has Been Released
 
-The **ABP Framework** & and the **ABP Commercial** version 2.9 have been released, which is the last version before 3.0! This post will cover **what's new** with these this release and what you can expect from the version 3.0.
+The **ABP Framework** & and the **ABP Commercial** version 2.9 have been released, which is the last version before 3.0! This post will cover **what's new** with these this release.
 
 ## What's New with the ABP Framework 2.9?
 
@@ -211,11 +211,19 @@ In addition to all the features coming with the ABP Framework, the ABP Commercia
 
 ### Organization Unit Management UI
 
-TODO
+We've created the UI for manage organization units, their members and roles for the ABP Commercial [Identity Module](https://commercial.abp.io/modules/Volo.Identity.Pro):
+
+![organization-units](organization-units.png)
+
+OU management is available for both of the MVC (Razor Pages) & the Angular user interfaces.
 
 ### Chat Module Angular UI
 
 We had introduced a new [chat module](https://commercial.abp.io/modules/Volo.Chat) in the previous version, which was only supporting the ASP.NET Core MVC / Razor Pages UI. Now, it has also an Angular UI option.
+
+![abp-chat-module](abp-chat-module.png)
+
+*A screenshot from the chat module - two users are sending messages to each other*
 
 ### Easy CRM Angular UI
 
