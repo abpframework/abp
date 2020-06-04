@@ -227,7 +227,11 @@ We had introduced a new [chat module](https://commercial.abp.io/modules/Volo.Cha
 
 ### Easy CRM Angular UI
 
-TODO
+Easy CRM is a sample application that is built on the ABP Commercial to provide a relatively complex application to the customers. In the version 2.7, we have lunched it with MVC / Razor Pages UI. With the 2.9 version, we are releasing the AngularUI for the Easy CRM.
+
+![easy-crm](easy-crm.png)
+
+*A screenshot from the "Order Details" page of the Easy CRM application.*
 
 ### Module Code Generation for the ABP Suite
 
