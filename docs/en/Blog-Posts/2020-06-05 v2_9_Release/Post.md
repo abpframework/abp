@@ -75,9 +75,25 @@ public class MyService : ITransientDependency
 }
 ````
 
+`TestContainer1` is an empty class that has no purpose than identifying the container. 
+
 A typed (named) container can be configured to use a different storing provider than the default one. It is a good practice to always use a typed container while developing re-usable modules, so the final application can configure provider for this container without effecting the other containers.
 
+**Example: Configure the File System provider for the `TestContainer1`**
 
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<TestContainer1>(configuration =>
+    {
+        configuration.UseFileSystem(fileSystem =>
+        {
+            fileSystem.BasePath = "C:\\MyStorageFolder";
+        });
+    });
+});
+````
 
-See the blob storing documentation for more information.
+See the [blob storing documentation](https://docs.abp.io/en/abp/latest/Blob-Storing) for more information.
 
+### Oracle Integration Package for Entity Framework Core
