@@ -285,3 +285,10 @@ We plan to release the initial version with the ABP Commercial v3.0 and continue
 We have added many new features with the [v2.8](https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map) and v2.9. In the next version, we will completely focus on the **documentation, performance improvements** and and other enhancements as well as bug fixes.
 
 For a long time, we were releasing a new feature version in every 2 weeks. We will continue to this approach after v3.0. But, as an exception to the v3.0, the development cycle will be ~4 weeks. **The planned release date for the v3.0 is the July 1, 2020**.
+
+## Bonus: Articles!
+
+Beside developing our products, our team are constantly writing articles/tutorials on various topics. You may want to check the latest articles:
+
+* [ASP.NET Core 3.1 WebHook Implementation Using Pub/Sub](https://volosoft.com/blog/ASP.NET-CORE-3.1-Webhook-Implementation-Using-Pub-Sub)
+* [Using Azure Key Vault with ASP.NET Core](https://volosoft.com/blog/Using-Azure-Key-Vault-with-ASP.NET-Core)
