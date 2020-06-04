@@ -176,12 +176,6 @@ Thanks to [@liangshiw](https://github.com/liangshiw) created and contributed a n
 
 ![virtual-file-explorer-2](virtual-file-explorer-2.png)
 
-### RTL Support for the Angular UI
-
-We had a contribution in the previous release to support RTL languages and the Arabic localization for the MVC module. Now, the Angular UI also supports RTL and Arabic localization:
-
-TODO: Image
-
 ### Sample Application: SignalR with Tiered Architecture
 
 Implementing SignalR in a distributed/tiered architecture can be challenging. We've created a sample application that demonstrate how to easily implement it using the [SignalR integration](https://docs.abp.io/en/abp/latest/SignalR-Integration) and the [distributed event bus](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus) system.
@@ -204,6 +198,7 @@ We were planning to create gRPC endpoints for all the pre-built application modu
 
 * [Time zone system](https://github.com/abpframework/abp/pull/3933) to support different time zones for an application.
 * Support for [virtual path deployment](https://github.com/abpframework/abp/issues/4089) on IIS.
+* RTL support for the Angular UI.
 
 ## What's New with the ABP Commercial 2.9
 
