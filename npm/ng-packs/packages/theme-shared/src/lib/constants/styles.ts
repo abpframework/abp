@@ -137,7 +137,7 @@ export default `
   opacity: .3;
 }
 .ngx-datatable.material {
-box-shadow: none;
+  box-shadow: none;
 }
 
 @keyframes fadeInTop {
