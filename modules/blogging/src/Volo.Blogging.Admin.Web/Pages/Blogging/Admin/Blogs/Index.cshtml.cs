@@ -1,12 +1,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Blogging.Pages.Blog;
 
-namespace Volo.Blogging.Pages.Admin.Blogs
+namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 {
-    public class IndexModel : BloggingPageModel
+    public class IndexModel : BloggingAdminPageModel
     {
         private readonly IAuthorizationService _authorization;
 
@@ -17,7 +15,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
 
         public virtual async Task<ActionResult> OnGetAsync()
         {
-            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Management))
+            if (!await _authorization.IsGrantedAsync(BloggingAdminPermissions.Blogs.Management))
             {
                 return Redirect("/");
             }

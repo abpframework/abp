@@ -1,18 +1,17 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
-@using Volo.Blogging
-@using Volo.Blogging.Pages.Blog
-@inherits BloggingPage
-@model Volo.Blogging.Pages.Admin.Blogs.IndexModel
+@using Volo.Blogging.Admin
+@inherits Volo.Blogging.Admin.Pages.Blogging.BloggingAdminPage
+@model Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs.IndexModel
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Blogs";
 }
 
 @section scripts {
-    <abp-script src="/Pages/Admin/Blogs/index.js" />
-    <abp-script src="/Pages/Admin/Blogs/create.js" />
-    <abp-script src="/Pages/Admin/Blogs/edit.js" />
+    <abp-script src="/Pages/Blogging/Admin/Blogs/index.js" />
+    <abp-script src="/Pages/Blogging/Admin/Blogs/create.js" />
+    <abp-script src="/Pages/Blogging/Admin/Blogs/edit.js" />
 }
 
 <abp-card>
@@ -22,7 +21,7 @@
                 <h2>@L["Blogs"]</h2>
             </abp-column>
             <abp-column size-md="_6" class="text-right">
-                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Blogs.Create))
+                @if (await Authorization.IsGrantedAsync(BloggingAdminPermissions.Blogs.Create))
                 {
                     <abp-button icon="plus" text="@L["CreateANewBlog"].Value" button-type="Primary" id="CreateNewBlogButtonId"></abp-button>
                 }

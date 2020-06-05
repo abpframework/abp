@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 using Volo.Blogging.Localization;
 
-namespace Volo.Blogging
+namespace Volo.Blogging.Admin
 {
-    public class BloggingMenuContributor : IMenuContributor
+    public class BloggingAdminMenuContributor : IMenuContributor
     {
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
@@ -21,14 +18,14 @@ namespace Volo.Blogging
         {
             var l = context.GetLocalizer<BloggingResource>();
 
-            if (await context.IsGrantedAsync(BloggingPermissions.Blogs.Management))
+            if (await context.IsGrantedAsync(BloggingAdminPermissions.Blogs.Management))
             {
                 var managementRootMenuItem = new ApplicationMenuItem("BlogManagement", l["Menu:BlogManagement"]);
 
                 //TODO: Using the same permission. Reconsider.
-                if (await context.IsGrantedAsync(BloggingPermissions.Blogs.Management))
+                if (await context.IsGrantedAsync(BloggingAdminPermissions.Blogs.Management))
                 {
-                    managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Admin/Blogs"));
+                    managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Blogging/Admin/Blogs"));
                 }
 
                 context.Menu.AddItem(managementRootMenuItem);

@@ -1,8 +1,8 @@
 ﻿$(function () {
 
     var l = abp.localization.getResource('Blogging');
-    var _createModal = new abp.ModalManager(abp.appPath + 'Admin/Blogs/Create');
-    var _editModal = new abp.ModalManager(abp.appPath + 'Admin/Blogs/Edit');
+    var _createModal = new abp.ModalManager(abp.appPath + 'Blogging/Admin/Blogs/Create');
+    var _editModal = new abp.ModalManager(abp.appPath + 'Blogging/Admin/Blogs/Edit');
 
     var _dataTable = $('#BlogsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
@@ -14,7 +14,7 @@
         autoWidth: false,
         scrollCollapse: true,
         order: [[3, "desc"]],
-        ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getList),
+        ajax: abp.libs.datatables.createAjax(volo.blogging.admin.blogManagement.getList),
         columnDefs: [
             {
                 rowAction: {

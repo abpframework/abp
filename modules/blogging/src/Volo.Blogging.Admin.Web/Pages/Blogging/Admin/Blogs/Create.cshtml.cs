@@ -2,23 +2,20 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Blogging.Admin.Blogs;
 using Volo.Blogging.Blogs;
-using Volo.Blogging.Blogs.Dtos;
-using Volo.Blogging.Pages.Blog;
 
-namespace Volo.Blogging.Pages.Admin.Blogs
+namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 {
-    public class CreateModel : BloggingPageModel
+    public class CreateModel : BloggingAdminPageModel
     {
-        private readonly IBlogAppService _blogAppService;
+        private readonly IBlogManagementAppService _blogAppService;
         private readonly IAuthorizationService _authorization;
 
         [BindProperty]
         public BlogCreateModalView Blog { get; set; } = new BlogCreateModalView();
 
-        public CreateModel(IBlogAppService blogAppService, IAuthorizationService authorization)
+        public CreateModel(IBlogManagementAppService blogAppService, IAuthorizationService authorization)
         {
             _blogAppService = blogAppService;
             _authorization = authorization;
@@ -26,7 +23,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
 
         public virtual async Task<ActionResult> OnGetAsync()
         {
-            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Create))
+            if (!await _authorization.IsGrantedAsync(BloggingAdminPermissions.Blogs.Create))
             {
                 return Redirect("/");
             }

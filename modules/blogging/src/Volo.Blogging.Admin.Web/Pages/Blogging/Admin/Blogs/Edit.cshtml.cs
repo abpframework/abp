@@ -1,20 +1,16 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Blogging.Admin.Blogs;
 using Volo.Blogging.Blogs;
-using Volo.Blogging.Blogs.Dtos;
-using Volo.Blogging.Pages.Blog;
-using Volo.Blogging.Posts;
 
-namespace Volo.Blogging.Pages.Admin.Blogs
+namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 {
-    public class EditModel : BloggingPageModel
+    public class EditModel : BloggingAdminPageModel
     {
-        private readonly IBlogAppService _blogAppService;
+        private readonly IBlogManagementAppService _blogAppService;
         private readonly IAuthorizationService _authorization;
 
         [BindProperty(SupportsGet = true)]
@@ -23,7 +19,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
         [BindProperty]
         public BlogEditViewModel Blog { get; set; } = new BlogEditViewModel();
 
-        public EditModel(IBlogAppService blogAppService, IAuthorizationService authorization)
+        public EditModel(IBlogManagementAppService blogAppService, IAuthorizationService authorization)
         {
             _blogAppService = blogAppService;
             _authorization = authorization;
@@ -31,7 +27,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
 
         public virtual async Task<ActionResult> OnGetAsync()
         {
-            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Update))
+            if (!await _authorization.IsGrantedAsync(BloggingAdminPermissions.Blogs.Update))
             {
                 return Redirect("/");
             }
@@ -74,5 +70,5 @@ namespace Volo.Blogging.Pages.Admin.Blogs
         }
     }
 
-   
+
 }

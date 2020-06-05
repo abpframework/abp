@@ -33,4 +33,10 @@
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Admin\Blogs\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Admin\Blogs\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Admin\Blogs\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
