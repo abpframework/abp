@@ -96,7 +96,6 @@ namespace Volo.Abp.Identity
             return IdentityResult.Success;
         }
 
-
         public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             var user = await IdentityUserRepository.GetAsync(userId, cancellationToken: CancellationToken);
@@ -191,12 +190,13 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user)
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user, bool includeDetails = false)
         {
             await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
 
             return await OrganizationUnitRepository.GetListAsync(
                 user.OrganizationUnits.Select(t => t.OrganizationUnitId),
+                includeDetails,
                 cancellationToken: CancellationToken
             );
         }

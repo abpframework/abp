@@ -54,6 +54,7 @@
     "404Message": "Página não encontrada",
     "500Message": "Erro interno do servidor",
     "GoHomePage": "Voltar à página principal",
-    "GoBack": "Voltar"
+    "GoBack": "Voltar",
+    "Search": "Procurar"
   }
 }

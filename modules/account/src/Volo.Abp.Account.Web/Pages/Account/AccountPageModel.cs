@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Localization;
@@ -73,7 +74,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual string GetAppHomeUrl()
         {
-            return "/"; //TODO: ???
+            return "~/"; //TODO: ???
         }
     }
 }
