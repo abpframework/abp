@@ -1,16 +1,11 @@
-﻿using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web.Navigation;
-using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.UI.Navigation;
@@ -31,29 +26,26 @@ namespace Volo.Abp.Identity.Web
             {
                 options.AddAssemblyResource(typeof(IdentityResource), typeof(AbpIdentityWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpIdentityWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<IdentityResource>()
-                    .AddBaseTypes(
-                        typeof(AbpValidationResource),
-                        typeof(AbpUiResource)
-                    ).AddVirtualJson("/Localization/Resources/AbpIdentity");
-            });
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityWebModule>();
 
             Configure<AbpAutoMapperOptions>(options =>
             {
@@ -68,15 +60,6 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
                 options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
-            });
-
-            Configure<BundlingOptions>(options =>
-            {
-                options
-                    .ScriptBundles
-                    .Get(StandardBundles.Scripts.Global)
-                    .AddFiles("/Pages/Identity/Shared/change-password-modal.js")
-                    .AddFiles("/Pages/Identity/Shared/personal-settings-modal.js");
             });
         }
     }

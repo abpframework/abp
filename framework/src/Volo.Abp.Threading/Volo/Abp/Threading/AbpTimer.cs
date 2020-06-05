@@ -1,16 +1,16 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.Threading
 {
     /// <summary>
-    /// A roboust timer implementation that ensures no overlapping occurs. It waits exactly specified <see cref="Period"/> between ticks.
+    /// A robust timer implementation that ensures no overlapping occurs. It waits exactly specified <see cref="Period"/> between ticks.
     /// </summary>
-    public class AbpTimer : IRunnable, ITransientDependency
+    public class AbpTimer : ITransientDependency
     {
         /// <summary>
         /// This event is raised periodically according to Period of Timer.
@@ -30,18 +30,26 @@ namespace Volo.Abp.Threading
 
         public ILogger<AbpTimer> Logger { get; set; }
 
+        public IExceptionNotifier ExceptionNotifier { get; set; }
+
         private readonly Timer _taskTimer;
         private volatile bool _performingTasks;
         private volatile bool _isRunning;
 
         public AbpTimer()
         {
+            ExceptionNotifier = NullExceptionNotifier.Instance;
             Logger = NullLogger<AbpTimer>.Instance;
 
-            _taskTimer = new Timer(TimerCallBack, null, Timeout.Infinite, Timeout.Infinite);
+            _taskTimer = new Timer(
+                TimerCallBack,
+                null,
+                Timeout.Infinite,
+                Timeout.Infinite
+            );
         }
 
-        public Task StartAsync(CancellationToken cancellationToken = default)
+        public void Start(CancellationToken cancellationToken = default)
         {
             if (Period <= 0)
             {
@@ -53,11 +61,9 @@ namespace Volo.Abp.Threading
                 _taskTimer.Change(RunOnStart ? 0 : Period, Timeout.Infinite);
                 _isRunning = true;
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken = default)
+        public void Stop(CancellationToken cancellationToken = default)
         {
             lock (_taskTimer)
             {
@@ -69,8 +75,6 @@ namespace Volo.Abp.Threading
 
                 _isRunning = false;
             }
-
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -94,9 +98,10 @@ namespace Volo.Abp.Threading
             {
                 Elapsed.InvokeSafely(this, new EventArgs());
             }
-            catch
+            catch(Exception ex)
             {
-
+                Logger.LogException(ex);
+                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex));
             }
             finally
             {

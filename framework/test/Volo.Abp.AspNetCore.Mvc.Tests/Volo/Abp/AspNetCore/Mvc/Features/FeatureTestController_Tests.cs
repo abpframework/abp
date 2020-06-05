@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
         public async Task Should_Allow_Enabled_Features()
         {
             await GetResponseAsStringAsync(
-                "/api/feature-test/allowed-feature"
+                "/api/feature-test/allowed-feature", HttpStatusCode.NoContent
             );
         }
 

@@ -11,7 +11,7 @@ namespace System
 
         public StringExtensions_Tests()
         {
-            _cultureScope = AbpCultureHelper.Use("en-US");
+            _cultureScope = CultureHelper.Use("en-US");
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace System
         [Fact]
         public void EnsureEndsWith_CultureSpecific_Test()
         {
-            using (AbpCultureHelper.Use("tr-TR"))
+            using (CultureHelper.Use("tr-TR"))
             {
                 "Kırmızı".EnsureEndsWith('I', StringComparison.CurrentCultureIgnoreCase).ShouldBe("Kırmızı");
             }
@@ -59,7 +59,7 @@ namespace System
         [Fact]
         public void ToPascalCase_CurrentCulture_Test()
         {
-            using (AbpCultureHelper.Use("tr-TR"))
+            using (CultureHelper.Use("tr-TR"))
             {
                 "istanbul".ToPascalCase(true).ShouldBe("İstanbul");
             }
@@ -74,11 +74,23 @@ namespace System
         }
 
         [Fact]
+        public void ToKebabCase_Test()
+        {
+            (null as string).ToKebabCase().ShouldBe(null);
+            "helloMoon".ToKebabCase().ShouldBe("hello-moon");
+            "HelloWorld".ToKebabCase().ShouldBe("hello-world");
+            "HelloIsparta".ToKebabCase().ShouldBe("hello-isparta");
+            "ThisIsSampleText".ToKebabCase().ShouldBe("this-is-sample-text");
+        }
+
+        [Fact]
         public void ToSentenceCase_Test()
         {
             (null as string).ToSentenceCase().ShouldBe(null);
             "HelloWorld".ToSentenceCase().ShouldBe("Hello world");
             "HelloIsparta".ToSentenceCase().ShouldBe("Hello isparta");
+            "ThisIsSampleSentence".ToSentenceCase().ShouldBe("This is sample sentence");
+            "thisIsSampleSentence".ToSentenceCase().ShouldBe("this is sample sentence");
         }
 
         [Fact]

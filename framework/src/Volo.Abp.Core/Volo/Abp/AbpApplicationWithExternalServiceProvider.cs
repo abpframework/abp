@@ -26,5 +26,15 @@ namespace Volo.Abp
 
             InitializeModules();
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (ServiceProvider is IDisposable disposableServiceProvider)
+            {
+                disposableServiceProvider.Dispose();
+            }
+        }
     }
 }

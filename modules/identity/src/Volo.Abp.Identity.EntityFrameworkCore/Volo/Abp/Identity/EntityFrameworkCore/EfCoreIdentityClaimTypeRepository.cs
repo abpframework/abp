@@ -17,16 +17,22 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         }
 
-        public async Task<bool> AnyAsync(string name, Guid? ignoredId = null)
+        public virtual async Task<bool> AnyAsync(string name, Guid? ignoredId = null)
         {
             return await DbSet
                        .WhereIf(ignoredId != null, ct => ct.Id != ignoredId)
                        .CountAsync(ct => ct.Name == name) > 0;
         }
 
-        public async Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount)
+        public virtual async Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
         {
-            var identityClaimTypes = await DbSet.OrderBy(sorting ?? "name desc")
+            var identityClaimTypes = await DbSet
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter)
+                )
+                .OrderBy(sorting ?? "name desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync();
 

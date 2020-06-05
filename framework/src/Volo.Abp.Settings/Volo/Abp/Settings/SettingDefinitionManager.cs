@@ -12,12 +12,12 @@ namespace Volo.Abp.Settings
     {
         protected Lazy<IDictionary<string, SettingDefinition>> SettingDefinitions { get; }
 
-        protected SettingOptions Options { get; }
+        protected AbpSettingOptions Options { get; }
 
         protected IServiceProvider ServiceProvider { get; }
 
         public SettingDefinitionManager(
-            IOptions<SettingOptions> options,
+            IOptions<AbpSettingOptions> options,
             IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;

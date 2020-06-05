@@ -1,0 +1,21 @@
+﻿@model Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetResourcesViewModel
+@if (Model.Widgets.Any())
+{
+    var resourceItems = Model.Widgets.SelectMany(w => w.Styles).ToArray();
+    if (resourceItems.Any())
+    {
+        <abp-style-bundle>
+            @foreach (var resourceItem in resourceItems)
+            {
+                if (resourceItem.Src != null)
+                {
+                    <abp-style src="@resourceItem.Src" />
+                }
+                else
+                {
+                    <abp-style type="@resourceItem.Type" />
+                }
+            }
+        </abp-style-bundle>
+    }
+}

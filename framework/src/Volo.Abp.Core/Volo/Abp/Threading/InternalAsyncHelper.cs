@@ -15,7 +15,7 @@ namespace Volo.Abp.Threading
 
 			try
 			{
-				await actualReturnValue;
+                await actualReturnValue;
 			}
 			catch (Exception ex)
 			{
@@ -34,8 +34,8 @@ namespace Volo.Abp.Threading
 
 			try
 			{
-				await actualReturnValue;
-				await postAction();
+                await actualReturnValue;
+                await postAction();
 			}
 			catch (Exception ex)
 			{
@@ -56,14 +56,14 @@ namespace Volo.Abp.Threading
 			{
 				if (preAction != null)
 				{
-					await preAction();
+                    await preAction();
 				}
 
-				await actualReturnValue();
+                await actualReturnValue();
 
 				if (postAction != null)
 				{
-					await postAction();
+                    await postAction();
 				}
 			}
 			catch (Exception ex)
@@ -115,7 +115,7 @@ namespace Volo.Abp.Threading
 			try
 			{
 				var result = await actualReturnValue;
-				await postAction();
+                await postAction();
 				return result;
 			}
 			catch (Exception ex)
@@ -146,14 +146,14 @@ namespace Volo.Abp.Threading
 			{
 				if (preAction != null)
 				{
-					await preAction();
+                    await preAction();
 				}
 
 				var result = await actualReturnValue();
 
 				if (postAction != null)
 				{
-					await postAction();
+                    await postAction();
 				}
 
 				return result;

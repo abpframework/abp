@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow
 {
@@ -12,7 +13,7 @@ namespace Volo.Abp.Uow
     {
         public Guid Id { get; } = Guid.NewGuid();
 
-        public IUnitOfWorkOptions Options { get; private set; }
+        public IAbpUnitOfWorkOptions Options { get; private set; }
 
         public IUnitOfWork Outer { get; private set; }
 
@@ -31,24 +32,29 @@ namespace Volo.Abp.Uow
 
         public IServiceProvider ServiceProvider { get; }
 
+        [NotNull]
+        public Dictionary<string, object> Items { get; }
+
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
         private readonly Dictionary<string, ITransactionApi> _transactionApis;
-        private readonly UnitOfWorkDefaultOptions _defaultOptions;
+        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
 
         private Exception _exception;
         private bool _isCompleting;
         private bool _isRolledback;
 
-        public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkDefaultOptions> options)
+        public UnitOfWork(IServiceProvider serviceProvider, IOptions<AbpUnitOfWorkDefaultOptions> options)
         {
             ServiceProvider = serviceProvider;
             _defaultOptions = options.Value;
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
             _transactionApis = new Dictionary<string, ITransactionApi>();
+
+            Items = new Dictionary<string, object>();
         }
 
-        public virtual void Initialize(UnitOfWorkOptions options)
+        public virtual void Initialize(AbpUnitOfWorkOptions options)
         {
             Check.NotNull(options, nameof(options));
 
@@ -74,17 +80,9 @@ namespace Volo.Abp.Uow
             Outer = outer;
         }
 
-        public virtual void SaveChanges()
-        {
-            foreach (var databaseApi in _databaseApis.Values)
-            {
-                (databaseApi as ISupportsSavingChanges)?.SaveChanges();
-            }
-        }
-
         public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var databaseApi in _databaseApis.Values)
+            foreach (var databaseApi in GetAllActiveDatabaseApis())
             {
                 if (databaseApi is ISupportsSavingChanges)
                 {
@@ -93,28 +91,14 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public virtual void Complete()
+        public IReadOnlyList<IDatabaseApi> GetAllActiveDatabaseApis()
         {
-            if (_isRolledback)
-            {
-                return;
-            }
+            return _databaseApis.Values.ToImmutableList();
+        }
 
-            PreventMultipleComplete();
-
-            try
-            {
-                _isCompleting = true;
-                SaveChanges();
-                CommitTransactions();
-                IsCompleted = true;
-                OnCompleted();
-            }
-            catch (Exception ex)
-            {
-                _exception = ex;
-                throw;
-            }
+        public IReadOnlyList<ITransactionApi> GetAllActiveTransactionApis()
+        {
+            return _transactionApis.Values.ToImmutableList();
         }
 
         public virtual async Task CompleteAsync(CancellationToken cancellationToken = default)
@@ -139,18 +123,6 @@ namespace Volo.Abp.Uow
                 _exception = ex;
                 throw;
             }
-        }
-
-        public virtual void Rollback()
-        {
-            if (_isRolledback)
-            {
-                return;
-            }
-
-            _isRolledback = true;
-
-            RollbackAll();
         }
 
         public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
@@ -224,19 +196,6 @@ namespace Volo.Abp.Uow
             CompletedHandlers.Add(handler);
         }
 
-        public void OnFailed(Func<Task> handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual void OnCompleted()
-        {
-            foreach (var handler in CompletedHandlers)
-            {
-                AsyncHelper.RunSync(handler);
-            }
-        }
-
         protected virtual async Task OnCompletedAsync()
         {
             foreach (var handler in CompletedHandlers)
@@ -276,7 +235,7 @@ namespace Volo.Abp.Uow
 
         private void DisposeTransactions()
         {
-            foreach (var transactionApi in _transactionApis.Values)
+            foreach (var transactionApi in GetAllActiveTransactionApis())
             {
                 try
                 {
@@ -298,7 +257,7 @@ namespace Volo.Abp.Uow
 
         protected virtual void RollbackAll()
         {
-            foreach (var databaseApi in _databaseApis.Values)
+            foreach (var databaseApi in GetAllActiveDatabaseApis())
             {
                 try
                 {
@@ -307,7 +266,7 @@ namespace Volo.Abp.Uow
                 catch { }
             }
 
-            foreach (var transactionApi in _transactionApis.Values)
+            foreach (var transactionApi in GetAllActiveTransactionApis())
             {
                 try
                 {
@@ -319,7 +278,7 @@ namespace Volo.Abp.Uow
 
         protected virtual async Task RollbackAllAsync(CancellationToken cancellationToken)
         {
-            foreach (var databaseApi in _databaseApis.Values)
+            foreach (var databaseApi in GetAllActiveDatabaseApis())
             {
                 if (databaseApi is ISupportsRollback)
                 {
@@ -331,7 +290,7 @@ namespace Volo.Abp.Uow
                 }
             }
 
-            foreach (var transactionApi in _transactionApis.Values)
+            foreach (var transactionApi in GetAllActiveTransactionApis())
             {
                 if (transactionApi is ISupportsRollback)
                 {
@@ -346,7 +305,7 @@ namespace Volo.Abp.Uow
 
         protected virtual void CommitTransactions()
         {
-            foreach (var transaction in _transactionApis.Values)
+            foreach (var transaction in GetAllActiveTransactionApis())
             {
                 transaction.Commit();
             }
@@ -354,7 +313,7 @@ namespace Volo.Abp.Uow
 
         protected virtual async Task CommitTransactionsAsync()
         {
-            foreach (var transaction in _transactionApis.Values)
+            foreach (var transaction in GetAllActiveTransactionApis())
             {
                 await transaction.CommitAsync();
             }

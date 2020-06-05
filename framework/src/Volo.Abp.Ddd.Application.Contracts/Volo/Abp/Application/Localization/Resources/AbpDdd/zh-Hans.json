@@ -1,0 +1,6 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0}不能超过 {1}! 在服务器端增加{2}.{3}以获得更多结果."
+  }
+}

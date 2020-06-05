@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity
 {
     public class AbpProfileService : ProfileService<IdentityUser>
     {
-        private readonly ICurrentTenant _currentTenant;
+        protected ICurrentTenant CurrentTenant { get; }
 
         public AbpProfileService(
             IdentityUserManager userManager,
@@ -19,13 +20,13 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             ICurrentTenant currentTenant)
             : base(userManager, claimsFactory)
         {
-            _currentTenant = currentTenant;
+            CurrentTenant = currentTenant;
         }
 
         [UnitOfWork]
         public override async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            using (_currentTenant.Change(context.Subject.FindTenantId()))
+            using (CurrentTenant.Change(context.Subject.FindTenantId()))
             {
                 await base.GetProfileDataAsync(context);
             }
@@ -34,7 +35,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         [UnitOfWork]
         public override async Task IsActiveAsync(IsActiveContext context)
         {
-            using (_currentTenant.Change(context.Subject.FindTenantId()))
+            using (CurrentTenant.Change(context.Subject.FindTenantId()))
             {
                 await base.IsActiveAsync(context);
             }

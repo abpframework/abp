@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -15,15 +18,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
         private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public AbpPaginationTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
+        public AbpPaginationTagHelperService(
+            IHtmlGenerator generator, 
+            HtmlEncoder encoder, 
+            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
             _encoder = encoder;
             _tagHelperLocalizer = tagHelperLocalizer;
+            _stringLocalizerFactory = stringLocalizerFactory;
         }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             if (TagHelper.Model.ShownItemsCount <= 0)
             {
@@ -31,17 +40,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             }
 
             ProcessMainTag(context, output);
-            SetContentAsHtml(context, output);
+            await SetContentAsHtmlAsync(context, output);
         }
 
-        protected virtual void SetContentAsHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task SetContentAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
         {
             var html = new StringBuilder("");
 
             html.AppendLine(GetOpeningTags(context, output));
-            html.AppendLine(GetPreviousButton(context, output));
-            html.AppendLine(GetPages(context, output));
-            html.AppendLine(GetNextButton(context, output));
+            html.AppendLine(await GetPreviousButtonAsync(context, output));
+            html.AppendLine(await GetPagesAsync(context, output));
+            html.AppendLine(await GetNextButton(context, output));
             html.AppendLine(GetClosingTags(context, output));
 
             output.Content.SetHtmlContent(html.ToString());
@@ -55,19 +64,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             output.Attributes.AddClass("mt-3");
         }
 
-        protected virtual string GetPages(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> GetPagesAsync(TagHelperContext context, TagHelperOutput output)
         {
             var pagesHtml = new StringBuilder("");
 
             foreach (var page in TagHelper.Model.Pages)
             {
-                pagesHtml.AppendLine(GetPage(context, output, page));
+                pagesHtml.AppendLine(await GetPageAsync(context, output, page));
             }
 
             return pagesHtml.ToString();
         }
 
-        protected virtual string GetPage(TagHelperContext context, TagHelperOutput output, PageItem page)
+        protected virtual async Task<string> GetPageAsync(TagHelperContext context, TagHelperOutput output, PageItem page)
         {
             var pageHtml = new StringBuilder("");
 
@@ -86,7 +95,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             }
             else
             {
-                pageHtml.AppendLine(RenderAnchorTagHelperLinkHtml(context, output, page.Index.ToString(), page.Index.ToString()));
+                pageHtml.AppendLine(await RenderAnchorTagHelperLinkHtmlAsync(context, output, page.Index.ToString(), page.Index.ToString()));
             }
 
             pageHtml.AppendLine("</li>");
@@ -94,7 +103,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             return pageHtml.ToString();
         }
 
-        protected virtual string GetPreviousButton(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> GetPreviousButtonAsync(TagHelperContext context, TagHelperOutput output)
         {
             var localizationKey = "PagerPrevious";
             var currentPage = TagHelper.Model.CurrentPage == 1
@@ -102,27 +111,28 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 : (TagHelper.Model.CurrentPage - 1).ToString();
             return
                 "<li class=\"page-item " + (TagHelper.Model.CurrentPage == 1 ? "disabled" : "") + "\">\r\n" +
-                RenderAnchorTagHelperLinkHtml(context, output, currentPage, localizationKey) +
-                "                </li>";
+                (await RenderAnchorTagHelperLinkHtmlAsync(context, output, currentPage, localizationKey)) + "                </li>";
         }
 
-        protected virtual string GetNextButton(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> GetNextButton(TagHelperContext context, TagHelperOutput output)
         {
             var localizationKey = "PagerNext";
             var currentPage = (TagHelper.Model.CurrentPage + 1).ToString();
             return
                 "<li class=\"page-item " + (TagHelper.Model.CurrentPage >= TagHelper.Model.TotalPageCount ? "disabled" : "") + "\">\r\n" +
-                RenderAnchorTagHelperLinkHtml(context, output, currentPage, localizationKey) +
+                (await RenderAnchorTagHelperLinkHtmlAsync(context, output, currentPage, localizationKey)) +
                 "                </li>";
         }
 
-        protected virtual string RenderAnchorTagHelperLinkHtml(TagHelperContext context, TagHelperOutput output, string currentPage, string localizationKey)
+        protected virtual async Task<string> RenderAnchorTagHelperLinkHtmlAsync(TagHelperContext context, TagHelperOutput output, string currentPage, string localizationKey)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+            var localizer = _stringLocalizerFactory.Create(typeof(AbpUiResource));
 
             var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
 
-            var tagHelperOutput = anchorTagHelper.ProcessAndGetOutput(attributeList, context, "a", TagMode.StartTagAndEndTag);
+            var tagHelperOutput = await anchorTagHelper.ProcessAndGetOutputAsync(attributeList, context, "a", TagMode.StartTagAndEndTag);
+
+            SetHrefAttribute(currentPage, attributeList);
 
             tagHelperOutput.Content.SetHtmlContent(localizer[localizationKey]);
 
@@ -153,10 +163,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         protected virtual string GetOpeningTags(TagHelperContext context, TagHelperOutput output)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(typeof(AbpUiResource));
+            var localizer = _stringLocalizerFactory.Create(typeof(AbpUiResource));
 
             var pagerInfo = (TagHelper.ShowInfo ?? false) ?
-                "    <div class=\"col-sm-12 col-md-5\"> " + localizer["PagerInfo", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
+                "    <div class=\"col-sm-12 col-md-5\"> " + localizer["PagerInfo{0}{1}{2}", TagHelper.Model.ShowingFrom, TagHelper.Model.ShowingTo, TagHelper.Model.TotalItemsCount] + "</div>\r\n"
                 : "";
 
             return
@@ -172,6 +182,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 "            </ul>\r\n" +
                 "         </ nav>\r\n" +
                 "    </div>\r\n";
+        }
+
+        protected virtual void SetHrefAttribute(string currentPage, TagHelperAttributeList attributeList)
+        {
+            var hrefAttribute = attributeList.FirstOrDefault(x => x.Name.Equals("href", StringComparison.OrdinalIgnoreCase));
+
+            if (hrefAttribute != null)
+            {
+                var pageUrl = TagHelper.Model.PageUrl;
+                var routeValue = $"currentPage={currentPage}{(TagHelper.Model.Sort.IsNullOrWhiteSpace()? "" : "&sort="+TagHelper.Model.Sort)}";
+                pageUrl += pageUrl.Contains("?") ? "&" + routeValue : "?" + routeValue;
+
+                attributeList.Remove(hrefAttribute);
+                attributeList.Add(new TagHelperAttribute("href", pageUrl, hrefAttribute.ValueStyle));
+            }
         }
     }
 }

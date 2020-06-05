@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.Guids;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
@@ -19,7 +18,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<IdentityRole> FindByNormalizedNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -29,17 +28,36 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<IdentityRole>> GetListAsync(
-            string sorting = null, 
-            int maxResultCount = int.MaxValue, 
-            int skipCount = 0, 
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                        x => x.Name.Contains(filter) ||
+                        x.NormalizedName.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<IdentityRole>> GetListAsync(
+            IEnumerable<Guid> ids,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .Where(t => ids.Contains(t.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
+            bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return await DbSet.IncludeDetails(includeDetails).Where(r => r.IsDefault).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<IdentityRole> WithDetails()

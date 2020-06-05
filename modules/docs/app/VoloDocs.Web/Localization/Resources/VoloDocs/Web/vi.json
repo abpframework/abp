@@ -1,0 +1,9 @@
+{
+  "culture": "vi",
+  "texts": {
+    "WelcomeVoloDocs": "Chào mừng đến với VoloDocs!",
+    "NoProjectWarning": "Không có dự án nào!",
+    "CreateYourFirstProject": "Nhấn vào đây để bắt đầu dự án đầu tiên của bạn",
+    "NoProject": "Không có dự án!"
+  }
+}

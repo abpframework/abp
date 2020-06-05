@@ -1,12 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.TestApp.Domain
 {
-    [AutoMapTo(typeof(PersonEto))]
     public class Person : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid? TenantId { get; set; }
@@ -17,6 +16,11 @@ namespace Volo.Abp.TestApp.Domain
 
         public virtual int Age { get; set; }
 
+        public virtual DateTime? Birthday { get; set; }
+
+        [DisableDateTimeNormalization]
+        public virtual DateTime? LastActive { get; set; }
+
         public virtual Collection<Phone> Phones { get; set; }
 
         private Person()
@@ -25,8 +29,8 @@ namespace Volo.Abp.TestApp.Domain
         }
 
         public Person(Guid id, string name, int age, Guid? tenantId = null, Guid? cityId = null)
+            : base(id)
         {
-            Id = id;
             Name = name;
             Age = age;
             TenantId = tenantId;

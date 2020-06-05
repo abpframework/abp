@@ -89,7 +89,7 @@ namespace Autofac.Builder
             foreach (var interceptor in interceptors)
             {
                 registrationBuilder.InterceptedBy(
-                    typeof(CastleAbpInterceptorAdapter<>).MakeGenericType(interceptor)
+                    typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(interceptor)
                 );
             }
 

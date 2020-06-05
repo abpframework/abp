@@ -1,0 +1,25 @@
+{
+  "culture": "en",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "Default from address",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "Default from display name",
+    "DisplayName:Abp.Mailing.Smtp.Host": "Host",
+    "DisplayName:Abp.Mailing.Smtp.Port": "Port",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "User name",
+    "DisplayName:Abp.Mailing.Smtp.Password": "Password",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "Domain",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "Enable SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Use default credentials",
+    "Description:Abp.Mailing.DefaultFromAddress": "The default from address",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "The default from display name",
+    "Description:Abp.Mailing.Smtp.Host": "The name or IP address of the host used for SMTP transactions.",
+    "Description:Abp.Mailing.Smtp.Port": "The port used for SMTP transactions.",
+    "Description:Abp.Mailing.Smtp.UserName": "User name associated with the credentials.",
+    "Description:Abp.Mailing.Smtp.Password": "The password for the user name associated with the credentials.",
+    "Description:Abp.Mailing.Smtp.Domain": "The domain or computer name that verifies the credentials.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Whether the SmtpClient uses Secure Sockets Layer (SSL) to encrypt the connection.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Whether the DefaultCredentials are sent with requests.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Default email layout template",
+    "TextTemplate:StandardEmailTemplates.Message": "Simple message template for emails"
+  }
+}

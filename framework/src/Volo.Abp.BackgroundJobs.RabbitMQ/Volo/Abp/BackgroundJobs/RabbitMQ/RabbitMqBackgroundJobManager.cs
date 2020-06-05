@@ -14,14 +14,13 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             _jobQueueManager = jobQueueManager;
         }
 
-        public Task<string> EnqueueAsync<TArgs>(
+        public async Task<string> EnqueueAsync<TArgs>(
             TArgs args, 
             BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            return _jobQueueManager
-                .Get<TArgs>()
-                .EnqueueAsync(args, priority, delay);
+            var jobQueue = await _jobQueueManager.GetAsync<TArgs>();
+            return await jobQueue.EnqueueAsync(args, priority, delay);
         }
     }
 }

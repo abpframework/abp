@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
@@ -12,13 +14,6 @@ namespace Volo.Abp.Http.DynamicProxying
     public class RegularTestController : AbpController, IRegularTestController
     {
         [HttpGet]
-        [Route("increment/{value}")] //full URL: .../api/regular-test-controller/increment/{value}
-        public int IncrementValue(int value)
-        {
-            return value + 1;
-        }
-
-        [HttpGet]
         [Route("increment")]
         public Task<int> IncrementValueAsync(int value)
         {
@@ -30,6 +25,14 @@ namespace Volo.Abp.Http.DynamicProxying
         public Task GetException1Async()
         {
             throw new UserFriendlyException("This is an error message!");
+        }
+
+        [HttpGet]
+        [Route("get-with-datetime-parameter")]
+        public Task<DateTime> GetWithDateTimeParameterAsync(DateTime dateTime1)
+        {
+            var culture = CultureInfo.CurrentCulture;
+            return Task.FromResult(dateTime1);
         }
 
         [HttpPost]
@@ -55,7 +58,7 @@ namespace Volo.Abp.Http.DynamicProxying
 
         [HttpPost]
         [Route("post-object-with-query")]
-        public Task<Car> PostObjectWithQueryAsync( Car bodyValue)
+        public Task<Car> PostObjectWithQueryAsync(Car bodyValue)
         {
             return Task.FromResult(bodyValue);
         }
@@ -66,7 +69,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             return Task.FromResult(bodyValue);
         }
-        
+
         [HttpGet]
         [Route("post-object-and-id-with-url/{id}")]
         public Task<Car> GetObjectandIdAsync(int id, [FromBody] Car bodyValue)
@@ -74,7 +77,7 @@ namespace Volo.Abp.Http.DynamicProxying
             bodyValue.Year = id;
             return Task.FromResult(bodyValue);
         }
-        
+
         [HttpGet]
         [Route("post-object-and-id-with-url-and-query/{id}")]
         public Task<Car> GetObjectAndIdWithQueryAsync(int id, Car bodyValue)
@@ -123,7 +126,11 @@ namespace Volo.Abp.Http.DynamicProxying
     {
         [FromQuery]
         public int Year { get; set; }
+
         [FromQuery]
         public string Model { get; set; }
+
+        [FromQuery]
+        public DateTime FirstReleaseDate { get; set; }
     }
 }

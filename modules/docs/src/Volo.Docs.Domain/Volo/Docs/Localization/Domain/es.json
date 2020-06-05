@@ -3,13 +3,17 @@
   "texts": {
     "Documents": "Documentos",
     "BackToWebsite": "Regresar al sitio",
-    "Version": "VersiÛn",
+    "Contributors": "Contribuidores",
+    "ShareOn": "Compartilhar no",
+    "Version": "Vers√£o",
     "Edit": "Editar",
+    "Delete": "Excluir",
     "InThisDocument": "En este documento",
     "GoToTop": "Subir",
     "Projects": "Proyecto(s)",
-    "NoProjectWarning": "°Aun no hay proyectos!",
-    "DocumentNotFound": "°Oops, no se encontrÛ el documento solicitado!",
-    "NavigationDocumentNotFound": "Esta versiÛn no tiene un documento de navegaciÛn!"
+    "NoProjectWarning": "N√£o h√° projetos ainda!",
+    "DocumentNotFound": "Ups! O documento solicitado n√£o foi encontrado!",
+    "NavigationDocumentNotFound": "Esta vers√£o n√£o possui um documento de navega√ß√£o!",
+    "DocumentNotFoundInSelectedLanguage": "Documento no idioma desejado n√£o foi encontrado. Documento no idioma padr√£o √© mostrado."
   }
 }

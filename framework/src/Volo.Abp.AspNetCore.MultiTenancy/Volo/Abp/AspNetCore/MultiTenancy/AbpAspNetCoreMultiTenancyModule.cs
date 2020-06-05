@@ -5,14 +5,14 @@ using Volo.Abp.MultiTenancy;
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     [DependsOn(
-        typeof(AbpMultiTenancyAbstractionsModule), 
+        typeof(AbpMultiTenancyModule), 
         typeof(AbpAspNetCoreModule)
         )]
     public class AbpAspNetCoreMultiTenancyModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new QueryStringTenantResolveContributor());
                 options.TenantResolvers.Add(new RouteTenantResolveContributor());

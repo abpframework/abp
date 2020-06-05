@@ -1,4 +1,4 @@
-namespace Volo.Abp.Validation
+﻿namespace Volo.Abp.Validation
 {
     public interface IMethodInvocationValidator
     {

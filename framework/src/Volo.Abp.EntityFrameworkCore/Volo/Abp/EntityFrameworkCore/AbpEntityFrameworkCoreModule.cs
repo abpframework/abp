@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;

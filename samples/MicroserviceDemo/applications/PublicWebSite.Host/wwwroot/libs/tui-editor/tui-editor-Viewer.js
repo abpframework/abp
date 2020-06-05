@@ -1,19 +1,19 @@
 /*!
  * tui-editor
- * @version 1.3.0
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
+ * @version 1.4.7
+ * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("jquery"), require("tui-code-snippet"), require("markdown-it"), require("to-mark"), require("highlight.js"));
+		module.exports = factory(require("jquery"), require("tui-code-snippet"), require("to-mark"), require("markdown-it"), require("highlight.js"));
 	else if(typeof define === 'function' && define.amd)
-		define(["jquery", "tui-code-snippet", "markdown-it", "to-mark", "highlight.js"], factory);
+		define(["jquery", "tui-code-snippet", "to-mark", "markdown-it", "highlight.js"], factory);
 	else if(typeof exports === 'object')
-		exports["Editor"] = factory(require("jquery"), require("tui-code-snippet"), require("markdown-it"), require("to-mark"), require("highlight.js"));
+		exports["Editor"] = factory(require("jquery"), require("tui-code-snippet"), require("to-mark"), require("markdown-it"), require("highlight.js"));
 	else
-		root["tui"] = root["tui"] || {}, root["tui"]["Editor"] = factory(root["$"], (root["tui"] && root["tui"]["util"]), root["markdownit"], root["toMark"], root["hljs"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_22__, __WEBPACK_EXTERNAL_MODULE_23__, __WEBPACK_EXTERNAL_MODULE_31__) {
+		root["tui"] = root["tui"] || {}, root["tui"]["Editor"] = factory(root["$"], (root["tui"] && root["tui"]["util"]), root["toMark"], root["markdownit"], root["hljs"]);
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_18__, __WEBPACK_EXTERNAL_MODULE_23__, __WEBPACK_EXTERNAL_MODULE_32__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -76,7 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 142);
+/******/ 	return __webpack_require__(__webpack_require__.s = 150);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -95,7 +95,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ }),
 
-/***/ 11:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -109,7 +109,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _preview = __webpack_require__(12);
+var _preview = __webpack_require__(13);
 
 var _preview2 = _interopRequireDefault(_preview);
 
@@ -121,29 +121,26 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements markdown preview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
  * Class Markdown Preview
- * @extends {Preview}
+ * @param {jQuery} $el - base jQuery element
+ * @param {EventManager} eventManager - event manager
+ * @param {Convertor} convertor - convertor
+ * @param {boolean} isViewer - true for view only mode
+ * @param {Number} delayTime - lazyRunner delay time
+ * @ignore
  */
 var MarkdownPreview = function (_Preview) {
   _inherits(MarkdownPreview, _Preview);
 
-  /**
-   * Creates an instance of MarkdownPreview.
-   * @param {jQuery} $el - base jQuery element
-   * @param {EventManager} eventManager - event manager
-   * @param {Convertor} convertor - convertor
-   * @param {boolean} isViewer - true for view only mode
-   * @memberof MarkdownPreview
-   */
-  function MarkdownPreview($el, eventManager, convertor, isViewer) {
+  function MarkdownPreview($el, eventManager, convertor, isViewer, delayTime) {
     _classCallCheck(this, MarkdownPreview);
 
-    var _this = _possibleConstructorReturn(this, (MarkdownPreview.__proto__ || Object.getPrototypeOf(MarkdownPreview)).call(this, $el, eventManager, convertor, isViewer));
+    var _this = _possibleConstructorReturn(this, (MarkdownPreview.__proto__ || Object.getPrototypeOf(MarkdownPreview)).call(this, $el, eventManager, convertor, isViewer, delayTime));
 
     _this._initEvent();
     return _this;
@@ -166,7 +163,7 @@ var MarkdownPreview = function (_Preview) {
         latestMarkdownValue = markdownEditor.getValue();
 
         if (_this2.isVisible()) {
-          _this2.lazyRunner.run('refresh', latestMarkdownValue.replace(/<br>\n/g, '<br>'));
+          _this2.lazyRunner.run('refresh', latestMarkdownValue);
         }
       });
 
@@ -185,7 +182,6 @@ var MarkdownPreview = function (_Preview) {
     /**
      * render
      * @param {string} html - html string to render
-     * @memberof MarkdownPreview
      * @override
      */
 
@@ -196,6 +192,12 @@ var MarkdownPreview = function (_Preview) {
 
       this.eventManager.emit('previewRenderAfter', this);
     }
+  }, {
+    key: 'remove',
+    value: function remove() {
+      this.$el.off('scroll');
+      this.$el = null;
+    }
   }]);
 
   return MarkdownPreview;
@@ -205,7 +207,7 @@ exports.default = MarkdownPreview;
 
 /***/ }),
 
-/***/ 12:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -217,7 +219,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements preview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -225,7 +227,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _lazyRunner = __webpack_require__(20);
+var _lazyRunner = __webpack_require__(21);
 
 var _lazyRunner2 = _interopRequireDefault(_lazyRunner);
 
@@ -235,17 +237,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class Preview
- **/
+ * @param {jQuery} $el Container element for preview
+ * @param {EventManager} eventManager Event manager instance
+ * @param {Convertor} convertor Convertor instance
+ * @param {boolean} isViewer - whether viewer mode or not
+ * @param {Number} delayTime - lazyRunner delay time
+ * @ignore
+ */
 var Preview = function () {
-  /**
-   * Creates an instance of Preview.
-   * @param {jQuery} $el Container element for preview
-   * @param {EventManager} eventManager Event manager instance
-   * @param {Convertor} convertor Convertor instance
-   * @param {boolean} isViewer - whether viewer mode or not
-   * @memberof Preview
-   */
   function Preview($el, eventManager, convertor, isViewer) {
+    var delayTime = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 800;
+
     _classCallCheck(this, Preview);
 
     this.eventManager = eventManager;
@@ -257,7 +259,7 @@ var Preview = function () {
 
     this.lazyRunner = new _lazyRunner2.default();
 
-    this.lazyRunner.registerLazyRunFunction('refresh', this.refresh, 800, this);
+    this.lazyRunner.registerLazyRunFunction('refresh', this.refresh, delayTime, this);
   }
 
   /**
@@ -275,7 +277,6 @@ var Preview = function () {
 
     /**
      * Refresh rendering
-     * @memberof Preview
      * @param {string} markdown Markdown text
      */
 
@@ -288,7 +289,6 @@ var Preview = function () {
     /**
      * get html string
      * @returns {string} - html preview string
-     * @memberof Preview
      */
 
   }, {
@@ -300,7 +300,6 @@ var Preview = function () {
     /**
      * set html string
      * @param {string} html - html preview string
-     * @memberof Preview
      */
 
   }, {
@@ -311,9 +310,7 @@ var Preview = function () {
 
     /**
      * Render HTML on preview
-     * @memberof Preview
      * @param {string} html HTML string
-     * @protected
      */
 
   }, {
@@ -329,7 +326,6 @@ var Preview = function () {
 
     /**
      * Set preview height
-     * @memberof Preview
      * @param {number} height - Height for preview container
      */
 
@@ -342,7 +338,6 @@ var Preview = function () {
     /**
      * set min height
      * @param {number} minHeight - min height
-     * @memberof Preview
      */
 
   }, {
@@ -370,119 +365,6 @@ exports.default = Preview;
 
 /***/ }),
 
-/***/ 13:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _jquery = __webpack_require__(0);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @fileoverview Implements htmlSanitizer
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
- */
-var HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellpadding|cellspacing|class|clear|' + 'color|cols|compact|coords|dir|face|headers|height|hreflang|hspace|' + 'ismap|lang|language|nohref|nowrap|rel|rev|rows|rules|' + 'scope|scrolling|shape|size|span|start|summary|tabindex|target|title|type|' + 'valign|value|vspace|width|checked|mathvariant|encoding|id|name|' + 'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style)', 'g');
-
-var SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' + 'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' + 'cx|cy|d|dx|dy|descent|display|dur|end|fill|fill-rule|font-family|font-size|font-stretch|' + 'font-style|font-variant|font-weight|from|fx|fy|g1|g2|glyph-name|gradientUnits|hanging|' + 'height|horiz-adv-x|horiz-origin-x|ideographic|k|keyPoints|keySplines|keyTimes|lang|' + 'marker-end|marker-mid|marker-start|markerHeight|markerUnits|markerWidth|mathematical|' + 'max|min|offset|opacity|orient|origin|overline-position|overline-thickness|panose-1|' + 'path|pathLength|points|preserveAspectRatio|r|refX|refY|repeatCount|repeatDur|' + 'requiredExtensions|requiredFeatures|restart|rotate|rx|ry|slope|stemh|stemv|stop-color|' + 'stop-opacity|strikethrough-position|strikethrough-thickness|stroke|stroke-dasharray|' + 'stroke-dashoffset|stroke-linecap|stroke-linejoin|stroke-miterlimit|stroke-opacity|' + 'stroke-width|systemLanguage|target|text-anchor|to|transform|type|u1|u2|underline-position|' + 'underline-thickness|unicode|unicode-range|units-per-em|values|version|viewBox|visibility|' + 'width|widths|x|x-height|x1|x2|xlink:actuate|xlink:arcrole|xlink:role|xlink:show|xlink:title|' + 'xlink:type|xml:base|xml:lang|xml:space|xmlns|xmlns:xlink|y|y1|y2|zoomAndPan)', 'g');
-
-/**
- * htmlSanitizer
- * @param {string|Node} html html or Node
- * @param {boolean} [needHtmlText] pass true if need html text
- * @returns {string|DocumentFragment} result
- * @ignore
- */
-function htmlSanitizer(html, needHtmlText) {
-  var $html = (0, _jquery2.default)('<div />');
-
-  html = html.replace(/<!--[\s\S]*?-->/g, '');
-
-  $html.append(html);
-
-  removeUnnecessaryTags($html);
-  leaveOnlyWhitelistAttribute($html);
-
-  return finalizeHtml($html, needHtmlText);
-}
-
-/**
- * Remove unnecessary tags
- * @private
- * @param {jQuery} $html jQuery instance
- */
-function removeUnnecessaryTags($html) {
-  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title').remove();
-}
-
-/**
- * Leave only white list attributes
- * @private
- * @param {jQuery} $html jQuery instance
- */
-function leaveOnlyWhitelistAttribute($html) {
-  $html.find('*').each(function (index, node) {
-    var attrs = node.attributes;
-    var blacklist = _tuiCodeSnippet2.default.toArray(attrs).filter(function (attr) {
-      var isHTMLAttr = attr.name.match(HTML_ATTR_LIST_RX);
-      var isSVGAttr = attr.name.match(SVG_ATTR_LIST_RX);
-
-      return !isHTMLAttr && !isSVGAttr;
-    });
-
-    _tuiCodeSnippet2.default.forEachArray(blacklist, function (attr) {
-      // Edge svg attribute name returns uppercase bug. error guard.
-      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/5579311/
-      if (attrs.getNamedItem(attr.name)) {
-        attrs.removeNamedItem(attr.name);
-      }
-    });
-  });
-}
-
-/**
- * Finalize html result
- * @private
- * @param {jQuery} $html jQuery instance
- * @param {boolean} needHtmlText pass true if need html text
- * @returns {string|DocumentFragment} result
- */
-function finalizeHtml($html, needHtmlText) {
-  var returnValue = void 0;
-
-  if (needHtmlText) {
-    returnValue = $html[0].innerHTML;
-  } else {
-    var frag = document.createDocumentFragment();
-    var childNodes = _tuiCodeSnippet2.default.toArray($html[0].childNodes);
-    var length = childNodes.length;
-
-
-    for (var i = 0; i < length; i += 1) {
-      frag.appendChild(childNodes[i]);
-    }
-    returnValue = frag;
-  }
-
-  return returnValue;
-}
-
-exports.default = htmlSanitizer;
-
-/***/ }),
-
 /***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -497,7 +379,262 @@ module.exports = {
 
 /***/ }),
 
-/***/ 142:
+/***/ 15:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implements EventManager
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _tuiCodeSnippet = __webpack_require__(1);
+
+var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var eventList = ['previewBeforeHook', 'previewRenderAfter', 'previewNeedsRefresh', 'addImageBlobHook', 'setMarkdownAfter', 'contentChangedFromWysiwyg', 'changeFromWysiwyg', 'contentChangedFromMarkdown', 'changeFromMarkdown', 'change', 'changeModeToWysiwyg', 'changeModeToMarkdown', 'changeModeBefore', 'changeMode', 'changePreviewStyle', 'changePreviewTabPreview', 'changePreviewTabWrite', 'openPopupAddLink', 'openPopupAddImage', 'openPopupAddTable', 'openPopupTableUtils', 'openHeadingSelect', 'openPopupCodeBlockLanguages', 'openPopupCodeBlockEditor', 'openDropdownToolbar', 'closePopupCodeBlockLanguages', 'closePopupCodeBlockEditor', 'closeAllPopup', 'command', 'addCommandBefore', 'htmlUpdate', 'markdownUpdate', 'renderedHtmlUpdated', 'removeEditor', 'convertorAfterMarkdownToHtmlConverted', 'convertorBeforeHtmlToMarkdownConverted', 'convertorAfterHtmlToMarkdownConverted', 'stateChange', 'wysiwygSetValueAfter', 'wysiwygSetValueBefore', 'wysiwygGetValueBefore', 'wysiwygProcessHTMLText', 'wysiwygRangeChangeAfter', 'wysiwygKeyEvent', 'scroll', 'click', 'mousedown', 'mouseover', 'mouseout', 'mouseup', 'contextmenu', 'keydown', 'keyup', 'keyMap', 'load', 'focus', 'blur', 'paste', 'pasteBefore', 'willPaste', 'copy', 'copyBefore', 'copyAfter', 'cut', 'cutAfter', 'drop', 'show', 'hide'];
+
+/**
+ * Class EventManager
+ * @ignore
+ */
+
+var EventManager = function () {
+  function EventManager() {
+    _classCallCheck(this, EventManager);
+
+    this.events = new _tuiCodeSnippet2.default.Map();
+    this.TYPE = new _tuiCodeSnippet2.default.Enum(eventList);
+  }
+
+  /**
+   * Listen event and bind event handler
+   * @param {string} typeStr Event type string
+   * @param {function} handler Event handler
+   */
+
+
+  _createClass(EventManager, [{
+    key: 'listen',
+    value: function listen(typeStr, handler) {
+      var typeInfo = this._getTypeInfo(typeStr);
+      var eventHandlers = this.events.get(typeInfo.type) || [];
+
+      if (!this._hasEventType(typeInfo.type)) {
+        throw new Error('There is no event type ' + typeInfo.type);
+      }
+
+      if (typeInfo.namespace) {
+        handler.namespace = typeInfo.namespace;
+      }
+
+      eventHandlers.push(handler);
+
+      this.events.set(typeInfo.type, eventHandlers);
+    }
+
+    /**
+     * Emit event
+     * @param {string} eventName Event name to emit
+     * @returns {Array}
+     */
+
+  }, {
+    key: 'emit',
+    value: function emit() {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var typeStr = args.shift();
+      var typeInfo = this._getTypeInfo(typeStr);
+      var eventHandlers = this.events.get(typeInfo.type);
+      var results = void 0;
+
+      if (eventHandlers) {
+        _tuiCodeSnippet2.default.forEach(eventHandlers, function (handler) {
+          var result = handler.apply(undefined, args);
+
+          if (!_tuiCodeSnippet2.default.isUndefined(result)) {
+            results = results || [];
+            results.push(result);
+          }
+        });
+      }
+
+      return results;
+    }
+
+    /**
+     * Emit given event and return result
+     * @param {string} eventName Event name to emit
+     * @param {string} sourceText Source text to change
+     * @returns {string}
+     */
+
+  }, {
+    key: 'emitReduce',
+    value: function emitReduce() {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      var type = args.shift();
+      var eventHandlers = this.events.get(type);
+
+      if (eventHandlers) {
+        _tuiCodeSnippet2.default.forEach(eventHandlers, function (handler) {
+          var result = handler.apply(undefined, args);
+
+          if (!_tuiCodeSnippet2.default.isFalsy(result)) {
+            args[0] = result;
+          }
+        });
+      }
+
+      return args[0];
+    }
+
+    /**
+     * Get event type and namespace
+     * @param {string} typeStr Event type name
+     * @returns {{type: string, namespace: string}}
+     * @private
+     */
+
+  }, {
+    key: '_getTypeInfo',
+    value: function _getTypeInfo(typeStr) {
+      var splited = typeStr.split('.');
+
+      return {
+        type: splited[0],
+        namespace: splited[1]
+      };
+    }
+
+    /**
+     * Check whether event type exists or not
+     * @param {string} type Event type name
+     * @returns {boolean}
+     * @private
+     */
+
+  }, {
+    key: '_hasEventType',
+    value: function _hasEventType(type) {
+      return !_tuiCodeSnippet2.default.isUndefined(this.TYPE[this._getTypeInfo(type).type]);
+    }
+
+    /**
+     * Add event type when given event not exists
+     * @param {string} type Event type name
+     */
+
+  }, {
+    key: 'addEventType',
+    value: function addEventType(type) {
+      if (this._hasEventType(type)) {
+        throw new Error('There is already have event type ' + type);
+      }
+
+      this.TYPE.set(type);
+    }
+
+    /**
+     * Remove event handler from given event type
+     * @param {string} typeStr Event type name
+     * @param {function} [handler] - registered event handler
+     */
+
+  }, {
+    key: 'removeEventHandler',
+    value: function removeEventHandler(typeStr, handler) {
+      var _this = this;
+
+      var _getTypeInfo2 = this._getTypeInfo(typeStr),
+          type = _getTypeInfo2.type,
+          namespace = _getTypeInfo2.namespace;
+
+      if (type && handler) {
+        this._removeEventHandlerWithHandler(type, handler);
+      } else if (type && !namespace) {
+        // dont use dot notation cuz eslint
+        this.events['delete'](type);
+      } else if (!type && namespace) {
+        this.events.forEach(function (eventHandlers, eventType) {
+          _this._removeEventHandlerWithTypeInfo(eventType, namespace);
+        });
+      } else if (type && namespace) {
+        this._removeEventHandlerWithTypeInfo(type, namespace);
+      }
+    }
+
+    /**
+     * Remove event handler with event handler
+     * @param {string} type - event type name
+     * @param {function} handler - event handler
+     * @private
+     */
+
+  }, {
+    key: '_removeEventHandlerWithHandler',
+    value: function _removeEventHandlerWithHandler(type, handler) {
+      var eventHandlers = this.events.get(type) || [];
+      var handlerIndex = eventHandlers.indexOf(handler);
+      if (handlerIndex >= 0) {
+        eventHandlers.splice(handlerIndex, 1);
+      }
+    }
+
+    /**
+     * Remove event handler with event type information
+     * @param {string} type Event type name
+     * @param {string} namespace Event namespace
+     * @private
+     */
+
+  }, {
+    key: '_removeEventHandlerWithTypeInfo',
+    value: function _removeEventHandlerWithTypeInfo(type, namespace) {
+      var handlersToSurvive = [];
+      var eventHandlers = this.events.get(type);
+
+      if (!eventHandlers) {
+        return;
+      }
+
+      eventHandlers.map(function (handler) {
+        if (handler.namespace !== namespace) {
+          handlersToSurvive.push(handler);
+        }
+
+        return null;
+      });
+
+      this.events.set(type, handlersToSurvive);
+    }
+  }]);
+
+  return EventManager;
+}();
+
+exports.default = EventManager;
+
+/***/ }),
+
+/***/ 150:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -509,12 +646,12 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Viewer = __webpack_require__(32);
+var Viewer = __webpack_require__(33);
 
 // for jquery
 /**
  * @fileoverview entry point for viewer
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
 _jquery2.default.fn.tuiEditor = function () {
   var options = void 0,
@@ -551,272 +688,6 @@ module.exports = Viewer;
 
 /***/ }),
 
-/***/ 15:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implements EventManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var eventList = ['previewBeforeHook', 'previewRenderAfter', 'previewNeedsRefresh', 'addImageBlobHook', 'setMarkdownAfter', 'contentChangedFromWysiwyg', 'changeFromWysiwyg', 'contentChangedFromMarkdown', 'changeFromMarkdown', 'change', 'changeModeToWysiwyg', 'changeModeToMarkdown', 'changeModeBefore', 'changeMode', 'changePreviewStyle', 'changePreviewTabPreview', 'changePreviewTabWrite', 'openPopupAddLink', 'openPopupAddImage', 'openPopupAddTable', 'openPopupTableUtils', 'openHeadingSelect', 'openPopupCodeBlockLanguages', 'openPopupCodeBlockEditor', 'openDropdownToolbar', 'closePopupCodeBlockLanguages', 'closePopupCodeBlockEditor', 'closeAllPopup', 'command', 'addCommandBefore', 'htmlUpdate', 'markdownUpdate', 'renderedHtmlUpdated', 'removeEditor', 'convertorAfterMarkdownToHtmlConverted', 'convertorBeforeHtmlToMarkdownConverted', 'convertorAfterHtmlToMarkdownConverted', 'stateChange', 'wysiwygSetValueAfter', 'wysiwygSetValueBefore', 'wysiwygGetValueBefore', 'wysiwygProcessHTMLText', 'wysiwygRangeChangeAfter', 'wysiwygKeyEvent', 'scroll', 'click', 'mousedown', 'mouseover', 'mouseout', 'mouseup', 'contextmenu', 'keydown', 'keyup', 'keyMap', 'load', 'focus', 'blur', 'paste', 'pasteBefore', 'willPaste', 'copy', 'copyBefore', 'copyAfter', 'cut', 'cutAfter', 'drop', 'show', 'hide'];
-
-/**
- * Class EventManager
- */
-
-var EventManager = function () {
-  /**
-   * Creates an instance of EventManager.
-   * @memberof EventManager
-   */
-  function EventManager() {
-    _classCallCheck(this, EventManager);
-
-    this.events = new _tuiCodeSnippet2.default.Map();
-    this.TYPE = new _tuiCodeSnippet2.default.Enum(eventList);
-  }
-
-  /**
-   * Listen event and bind event handler
-   * @memberof EventManager
-   * @param {string} typeStr Event type string
-   * @param {function} handler Event handler
-   */
-
-
-  _createClass(EventManager, [{
-    key: 'listen',
-    value: function listen(typeStr, handler) {
-      var typeInfo = this._getTypeInfo(typeStr);
-      var eventHandlers = this.events.get(typeInfo.type) || [];
-
-      if (!this._hasEventType(typeInfo.type)) {
-        throw new Error('There is no event type ' + typeInfo.type);
-      }
-
-      if (typeInfo.namespace) {
-        handler.namespace = typeInfo.namespace;
-      }
-
-      eventHandlers.push(handler);
-
-      this.events.set(typeInfo.type, eventHandlers);
-    }
-
-    /**
-     * Emit event
-     * @memberof EventManager
-     * @param {string} eventName Event name to emit
-     * @returns {Array}
-     */
-
-  }, {
-    key: 'emit',
-    value: function emit() {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var typeStr = args.shift();
-      var typeInfo = this._getTypeInfo(typeStr);
-      var eventHandlers = this.events.get(typeInfo.type);
-      var results = void 0;
-
-      if (eventHandlers) {
-        _tuiCodeSnippet2.default.forEach(eventHandlers, function (handler) {
-          var result = handler.apply(undefined, args);
-
-          if (!_tuiCodeSnippet2.default.isUndefined(result)) {
-            results = results || [];
-            results.push(result);
-          }
-        });
-      }
-
-      return results;
-    }
-
-    /**
-     * Emit given event and return result
-     * @memberof EventManager
-     * @param {string} eventName Event name to emit
-     * @param {string} sourceText Source text to change
-     * @returns {string}
-     */
-
-  }, {
-    key: 'emitReduce',
-    value: function emitReduce() {
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      var type = args.shift();
-      var eventHandlers = this.events.get(type);
-
-      if (eventHandlers) {
-        _tuiCodeSnippet2.default.forEach(eventHandlers, function (handler) {
-          var result = handler.apply(undefined, args);
-
-          if (!_tuiCodeSnippet2.default.isFalsy(result)) {
-            args[0] = result;
-          }
-        });
-      }
-
-      return args[0];
-    }
-
-    /**
-     * Get event type and namespace
-     * @memberof EventManager
-     * @param {string} typeStr Event type name
-     * @returns {{type: string, namespace: string}}
-     * @private
-     */
-
-  }, {
-    key: '_getTypeInfo',
-    value: function _getTypeInfo(typeStr) {
-      var splited = typeStr.split('.');
-
-      return {
-        type: splited[0],
-        namespace: splited[1]
-      };
-    }
-
-    /**
-     * Check whether event type exists or not
-     * @param {string} type Event type name
-     * @returns {boolean}
-     * @private
-     */
-
-  }, {
-    key: '_hasEventType',
-    value: function _hasEventType(type) {
-      return !_tuiCodeSnippet2.default.isUndefined(this.TYPE[this._getTypeInfo(type).type]);
-    }
-
-    /**
-     * Add event type when given event not exists
-     * @memberof EventManager
-     * @param {string} type Event type name
-     */
-
-  }, {
-    key: 'addEventType',
-    value: function addEventType(type) {
-      if (this._hasEventType(type)) {
-        throw new Error('There is already have event type ' + type);
-      }
-
-      this.TYPE.set(type);
-    }
-
-    /**
-     * Remove event handler from given event type
-     * @memberof EventManager
-     * @param {string} typeStr Event type name
-     * @param {function} [handler] - registered event handler
-     */
-
-  }, {
-    key: 'removeEventHandler',
-    value: function removeEventHandler(typeStr, handler) {
-      var _this = this;
-
-      var _getTypeInfo2 = this._getTypeInfo(typeStr),
-          type = _getTypeInfo2.type,
-          namespace = _getTypeInfo2.namespace;
-
-      if (type && handler) {
-        this._removeEventHandlerWithHandler(type, handler);
-      } else if (type && !namespace) {
-        // dont use dot notation cuz eslint
-        this.events['delete'](type);
-      } else if (!type && namespace) {
-        this.events.forEach(function (eventHandlers, eventType) {
-          _this._removeEventHandlerWithTypeInfo(eventType, namespace);
-        });
-      } else if (type && namespace) {
-        this._removeEventHandlerWithTypeInfo(type, namespace);
-      }
-    }
-
-    /**
-     * Remove event handler with event handler
-     * @param {string} type - event type name
-     * @param {function} handler - event handler
-     * @memberof EventManager
-     * @private
-     */
-
-  }, {
-    key: '_removeEventHandlerWithHandler',
-    value: function _removeEventHandlerWithHandler(type, handler) {
-      var eventHandlers = this.events.get(type) || [];
-      var handlerIndex = eventHandlers.indexOf(handler);
-      if (handlerIndex >= 0) {
-        eventHandlers.splice(handlerIndex, 1);
-      }
-    }
-
-    /**
-     * Remove event handler with event type information
-     * @memberof EventManager
-     * @param {string} type Event type name
-     * @param {string} namespace Event namespace
-     * @private
-     */
-
-  }, {
-    key: '_removeEventHandlerWithTypeInfo',
-    value: function _removeEventHandlerWithTypeInfo(type, namespace) {
-      var handlersToSurvive = [];
-      var eventHandlers = this.events.get(type);
-
-      if (!eventHandlers) {
-        return;
-      }
-
-      eventHandlers.map(function (handler) {
-        if (handler.namespace !== namespace) {
-          handlersToSurvive.push(handler);
-        }
-
-        return null;
-      });
-
-      this.events.set(type, handlersToSurvive);
-    }
-  }]);
-
-  return EventManager;
-}();
-
-exports.default = EventManager;
-
-/***/ }),
-
 /***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -829,7 +700,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview extension manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -843,12 +714,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class ExtManager
+ * @ignore
  */
 var ExtManager = function () {
-  /**
-   * Creates an instance of ExtManager.
-   * @memberof ExtManager
-   */
   function ExtManager() {
     _classCallCheck(this, ExtManager);
 
@@ -856,11 +724,9 @@ var ExtManager = function () {
   }
 
   /**
-   * defineExtension
    * Defined Extension
-   * @memberof ExtManager
    * @param {string} name extension name
-   * @param {ExtManager~extension} ext extension
+   * @param {function} ext extension
    */
 
 
@@ -872,7 +738,6 @@ var ExtManager = function () {
 
     /**
      * Apply extensions
-     * @memberof ExtManager
      * @param {object} context Context
      * @param {Array.<string|object>} options - options or names array
      */
@@ -919,7 +784,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Convertor have responsible to convert markdown and html
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -931,15 +796,15 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _markdownIt = __webpack_require__(22);
+var _markdownIt = __webpack_require__(23);
 
 var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
-var _toMark = __webpack_require__(23);
+var _toMark = __webpack_require__(18);
 
 var _toMark2 = _interopRequireDefault(_toMark);
 
-var _htmlSanitizer = __webpack_require__(13);
+var _htmlSanitizer = __webpack_require__(9);
 
 var _htmlSanitizer2 = _interopRequireDefault(_htmlSanitizer);
 
@@ -970,6 +835,8 @@ var _markdownitHtmlBlockRenderer2 = _interopRequireDefault(_markdownitHtmlBlockR
 var _markdownitBackticksRenderer = __webpack_require__(30);
 
 var _markdownitBackticksRenderer2 = _interopRequireDefault(_markdownitBackticksRenderer);
+
+var _markdownitInlinePlugin = __webpack_require__(31);
 
 var _codeBlockManager = __webpack_require__(7);
 
@@ -1010,6 +877,20 @@ markdownitHighlight.inline.ruler.at('backticks', _markdownitBackticksRenderer2.d
 markdownitHighlight.use(_markdownitTaskPlugin2.default);
 markdownitHighlight.use(_markdownitCodeBlockPlugin2.default);
 
+markdownitHighlight.renderer.rules.softbreak = function (tokens, idx, options) {
+  if (!options.breaks) {
+    return '\n';
+  }
+
+  var prevToken = tokens[idx - 1];
+
+  if (prevToken && prevToken.type === 'html_inline' && prevToken.content === '<br>') {
+    return '';
+  }
+
+  return options.xhtmlOut ? '<br />\n' : '<br>\n';
+};
+
 // markdownit
 markdownit.block.ruler.at('code', _markdownitCodeRenderer2.default);
 markdownit.block.ruler.at('table', _markdownitTableRenderer2.default, {
@@ -1025,15 +906,24 @@ markdownit.inline.ruler.at('backticks', _markdownitBackticksRenderer2.default);
 markdownit.use(_markdownitTaskPlugin2.default);
 markdownit.use(_markdownitCodeBlockPlugin2.default);
 
+// This regular expression refere markdownIt.
+// https://github.com/markdown-it/markdown-it/blob/master/lib/common/html_re.js
+var attrName = '[a-zA-Z_:][a-zA-Z0-9:._-]*';
+var unquoted = '[^"\'=<>`\\x00-\\x20]+';
+var singleQuoted = "'[^']*'";
+var doubleQuoted = '"[^"]*"';
+var attrValue = '(?:' + unquoted + '|' + singleQuoted + '|' + doubleQuoted + ')';
+var attribute = '(?:\\s+' + attrName + '(?:\\s*=\\s*' + attrValue + ')?)*\\s*';
+var openingTag = '(\\\\<|<)([A-Za-z][A-Za-z0-9\\-]*' + attribute + ')(\\/?>)';
+var HTML_TAG_RX = new RegExp(openingTag, 'g');
+
 /**
  * Class Convertor
+ * @param {EventManager} em - EventManager instance
+ * @ignore
  */
 
 var Convertor = function () {
-  /**
-   * Convertor constructor
-   * @param {EventManager} em - EventManager instance
-   */
   function Convertor(em) {
     _classCallCheck(this, Convertor);
 
@@ -1043,52 +933,59 @@ var Convertor = function () {
   /**
    * _markdownToHtmlWithCodeHighlight
    * Convert markdown to html with Codehighlight
-   * @private
-   * @memberof Convertor
    * @param {string} markdown markdown text
+   * @param {object} env environment sandbox for markdownit
    * @returns {string} html text
+   * @private
    */
 
 
   _createClass(Convertor, [{
     key: '_markdownToHtmlWithCodeHighlight',
-    value: function _markdownToHtmlWithCodeHighlight(markdown) {
-      markdown = markdown.replace(/<br>/ig, '<br data-tomark-pass>');
-      // eslint-disable-next-line
-      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
-      while (onerrorStripeRegex.exec(markdown)) {
-        markdown = markdown.replace(onerrorStripeRegex, '$1$3');
-      }
+    value: function _markdownToHtmlWithCodeHighlight(markdown, env) {
+      markdown = this._replaceImgAttrToDataProp(markdown);
 
-      var renderedHTML = markdownitHighlight.render(markdown);
-      renderedHTML = this._removeBrToMarkPassAttributeInCode(renderedHTML);
-
-      return renderedHTML;
+      return markdownitHighlight.render(markdown, env);
     }
 
     /**
      * _markdownToHtml
      * Convert markdown to html
-     * @private
-     * @memberof Convertor
      * @param {string} markdown markdown text
+     * @param {object} env environment sandbox for markdownit
      * @returns {string} html text
+     * @private
      */
 
   }, {
     key: '_markdownToHtml',
-    value: function _markdownToHtml(markdown) {
-      markdown = markdown.replace(/<br>/ig, '<br data-tomark-pass>');
-      // eslint-disable-next-line
-      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
+    value: function _markdownToHtml(markdown, env) {
+      markdown = markdown.replace(HTML_TAG_RX, function (match, $1, $2, $3) {
+        return match[0] !== '\\' ? '' + $1 + $2 + ' data-tomark-pass ' + $3 : match;
+      });
+
+      markdown = this._replaceImgAttrToDataProp(markdown);
+
+      return markdownit.render(markdown, env);
+    }
+
+    /**
+     * Replace 'onerror' attribute of img tag to data property string
+     * @param {string} markdown markdown text
+     * @returns {string} replaced markdown text
+     * @private
+     */
+
+  }, {
+    key: '_replaceImgAttrToDataProp',
+    value: function _replaceImgAttrToDataProp(markdown) {
+      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\\"']?[^\\"']*[\\"']?)(.*)/i;
+
       while (onerrorStripeRegex.exec(markdown)) {
         markdown = markdown.replace(onerrorStripeRegex, '$1$3');
       }
 
-      var renderedHTML = markdownit.render(markdown);
-      renderedHTML = this._removeBrToMarkPassAttributeInCode(renderedHTML);
-
-      return renderedHTML;
+      return markdown;
     }
 
     /**
@@ -1107,7 +1004,7 @@ var Convertor = function () {
 
       $wrapperDiv.find('code, pre').each(function (i, codeOrPre) {
         var $code = (0, _jquery2.default)(codeOrPre);
-        $code.html($code.html().replace(/&lt;br data-tomark-pass&gt;/, '&lt;br&gt;'));
+        $code.html($code.html().replace(/\sdata-tomark-pass\s(\/?)&gt;/g, '$1&gt;'));
       });
 
       renderedHTML = $wrapperDiv.html();
@@ -1119,7 +1016,6 @@ var Convertor = function () {
      * toHTMLWithCodeHightlight
      * Convert markdown to html with Codehighlight
      * emit convertorAfterMarkdownToHtmlConverted
-     * @memberof Convertor
      * @param {string} markdown markdown text
      * @returns {string} html text
      */
@@ -1137,7 +1033,6 @@ var Convertor = function () {
      * toHTML
      * Convert markdown to html
      * emit convertorAfterMarkdownToHtmlConverted
-     * @memberof Convertor
      * @param {string} markdown markdown text
      * @returns {string} html text
      */
@@ -1148,6 +1043,7 @@ var Convertor = function () {
       var html = this._markdownToHtml(markdown);
 
       html = this.eventManager.emitReduce('convertorAfterMarkdownToHtmlConverted', html);
+      html = this._removeBrToMarkPassAttributeInCode(html);
 
       return html;
     }
@@ -1160,10 +1056,29 @@ var Convertor = function () {
     }
 
     /**
+     * set link attribute to markdownitHighlight, markdownit
+     * using linkAttribute of markdownItInlinePlugin
+     * @param {object} attr markdown text
+     */
+
+  }, {
+    key: 'setLinkAttribute',
+    value: function setLinkAttribute(attr) {
+      var keys = Object.keys(attr);
+      var setAttributeToToken = function setAttributeToToken(tokens, idx) {
+        keys.forEach(function (key) {
+          tokens[idx].attrPush([key, attr[key]]);
+        });
+      };
+
+      markdownitHighlight.use(_markdownitInlinePlugin.linkAttribute, setAttributeToToken);
+      markdownit.use(_markdownitInlinePlugin.linkAttribute, setAttributeToToken);
+    }
+
+    /**
      * toMarkdown
      * Convert html to markdown
      * emit convertorAfterHtmlToMarkdownConverted
-     * @memberof Convertor
      * @param {string} html html text
      * @param {object | null} toMarkOptions - toMark library options
      * @returns {string} markdown text
@@ -1179,6 +1094,7 @@ var Convertor = function () {
       var markdown = (0, _toMark2.default)(this._appendAttributeForBrIfNeed(html), toMarkOptions);
 
       markdown = this.eventManager.emitReduce('convertorAfterHtmlToMarkdownConverted', markdown);
+      markdown = this._removeNewlinesBeforeAfterAndBlockElement(markdown);
 
       _tuiCodeSnippet2.default.forEach(markdown.split('\n'), function (line, index) {
         var FIND_TABLE_RX = /^\|[^|]*\|/ig;
@@ -1193,6 +1109,18 @@ var Convertor = function () {
       return resultArray.join('\n');
     }
   }, {
+    key: '_removeNewlinesBeforeAfterAndBlockElement',
+    value: function _removeNewlinesBeforeAfterAndBlockElement(markdown) {
+      // Newlines('\n\n') are created on to-mark.
+      var NEWLINES_BEFORE_BLOCK_RX = /<br>\n\n(#{1,6} .*|```|\||(\*+|-+|\d+\.) .*| *>[^\n]+.*)/g;
+      var NEWLINES_AFTER_BLOCK_RX = /(#{1,6} .*|```|\|)\n\n<br>/g;
+
+      markdown = markdown.replace(NEWLINES_BEFORE_BLOCK_RX, '<br>$1');
+      markdown = markdown.replace(NEWLINES_AFTER_BLOCK_RX, '$1\n<br>');
+
+      return markdown;
+    }
+  }, {
     key: '_appendAttributeForBrIfNeed',
     value: function _appendAttributeForBrIfNeed(html) {
       var FIND_BR_RX = /<br>/ig;
@@ -1201,25 +1129,19 @@ var Convertor = function () {
       var FIRST_TWO_BRS_BEFORE_RX = /([^>]|<\/a>|<\/code>|<\/span>|<\/b>|<\/i>|<\/s>|<img [^>]*>)/;
       var TWO_BRS_RX = /<br data-tomark-pass \/><br data-tomark-pass \/>/;
       var FIND_FIRST_TWO_BRS_RX = new RegExp(FIRST_TWO_BRS_BEFORE_RX.source + TWO_BRS_RX.source, 'g');
+      var FIND_ATTRI_WITH_EMTPY_STR_RX = /<br data-tomark-pass="">/ig;
 
       html = html.replace(FIND_BR_RX, '<br />');
 
       html = html.replace(FIND_DOUBLE_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />');
-
-      var div = document.createElement('div');
-      var $div = (0, _jquery2.default)(div);
-      $div.html(html);
-      $div.find('pre br,code br').each(function (index, node) {
-        if (node.hasAttribute('data-tomark-pass')) {
-          node.removeAttribute('data-tomark-pass');
-        }
-      });
-
-      html = $div.html().replace(/<br data-tomark-pass="">/ig, '<br data-tomark-pass />');
-      html = html.replace(FIND_BR_RX, '<br />');
+      html = html.replace(FIND_ATTRI_WITH_EMTPY_STR_RX, '<br data-tomark-pass />');
 
       html = html.replace(FIND_PASSING_AND_NORMAL_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />$1');
       html = html.replace(FIND_FIRST_TWO_BRS_RX, '$1<br /><br />');
+
+      // Preserve <br> when there is only one empty line before or after a block element.
+      html = html.replace(/(.)<br \/><br \/>(<h[1-6]>|<pre>|<table>|<ul>|<ol>|<blockquote>)/g, '$1<br /><br data-tomark-pass />$2');
+      html = html.replace(/(<\/h[1-6]>|<\/pre>|<\/table>|<\/ul>|<\/ol>|<\/blockquote>)<br \/>(.)/g, '$1<br data-tomark-pass />$2');
 
       return html;
     }
@@ -1227,7 +1149,6 @@ var Convertor = function () {
     /**
      * get markdownit with code highlight
      * @returns {markdownit} - markdownit instance
-     * @memberof Convertor
      * @static
      */
 
@@ -1240,7 +1161,6 @@ var Convertor = function () {
     /**
      * get markdownit
      * @returns {markdownit} - markdownit instance
-     * @memberof Convertor
      * @static
      */
 
@@ -1258,6 +1178,13 @@ exports.default = Convertor;
 
 /***/ }),
 
+/***/ 18:
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_18__;
+
+/***/ }),
+
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1270,7 +1197,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements CommandManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -1282,7 +1209,7 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _command = __webpack_require__(21);
+var _command = __webpack_require__(22);
 
 var _command2 = _interopRequireDefault(_command);
 
@@ -1296,14 +1223,13 @@ var KEYMAP_OS_INDEX = _util.isMac ? 1 : 0;
 
 /**
  * Class CommandManager
+ * @param {ToastUIEditor} base nedInstance
+ * @param {object} [options={}] - option object
+ *     @param {boolean} [options.useCommandShortcut=true] - execute command with keyMap
+ * @ignore
  */
 
 var CommandManager = function () {
-  /**
-   * @param {ToastUIEditor} base nedInstance
-   * @param {object} [options={}] - option object
-   *  @param {boolean} [options.useCommandShortcut=true] - execute command with keyMap
-   */
   function CommandManager(base) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -1343,7 +1269,6 @@ var CommandManager = function () {
 
     /**
      * Add command
-     * @memberof CommandManager
      * @param {Command} command Command instance
      * @returns {Command} Command
      */
@@ -1386,7 +1311,6 @@ var CommandManager = function () {
      * _initEvent
      * Bind event handler to eventManager
      * @private
-     * @memberof CommandManager
      */
 
   }, {
@@ -1413,7 +1337,6 @@ var CommandManager = function () {
 
     /**
      * Execute command
-     * @memberof CommandManager
      * @param {String} name Command name
      * @param {*} ...args Command argument
      * @returns {*}
@@ -1458,10 +1381,10 @@ var CommandManager = function () {
 
 /**
  * Create command by given editor type and property object
- * @memberof CommandManager
  * @param {string} type Command type
  * @param {{name: string, keyMap: Array}} props Property
  * @returns {*}
+ * @static
  */
 
 
@@ -1477,7 +1400,7 @@ exports.default = CommandManager;
 
 /***/ }),
 
-/***/ 20:
+/***/ 21:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1489,7 +1412,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements LazyRunner
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -1503,12 +1426,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class LazyRunner
+ * @ignore
  */
 var LazyRunner = function () {
-  /**
-   * Creates an instance of LazyRunner.
-   * @memberof LazyRunner
-   */
   function LazyRunner() {
     _classCallCheck(this, LazyRunner);
 
@@ -1585,7 +1505,7 @@ exports.default = LazyRunner;
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1597,7 +1517,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements Command
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -1611,13 +1531,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class Command
+ * @param {string} name Command name
+ * @param {number} type Command type (Command.TYPE)
+ * @param {Array.<string>} [keyMap] keyMap
+ * @ignore
  */
 var Command = function () {
-  /**
-   * @param {string} name Command name
-   * @param {number} type Command type (Command.TYPE)
-   * @param {Array.<string>} [keyMap] keyMap
-   */
   function Command(name, type, keyMap) {
     _classCallCheck(this, Command);
 
@@ -1628,10 +1547,9 @@ var Command = function () {
       this.setKeyMap(keyMap);
     }
   }
+
   /**
-   * getName
    * returns Name of command
-   * @memberof Command
    * @returns {string} Command Name
    */
 
@@ -1643,9 +1561,7 @@ var Command = function () {
     }
 
     /**
-     * getType
      * returns Type of command
-     * @memberof Command
      * @returns {number} Command Command type number
      */
 
@@ -1656,9 +1572,7 @@ var Command = function () {
     }
 
     /**
-     * isMDType
      * returns whether Command Type is Markdown or not
-     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -1669,9 +1583,7 @@ var Command = function () {
     }
 
     /**
-     * isWWType
      * returns whether Command Type is Wysiwyg or not
-     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -1682,9 +1594,7 @@ var Command = function () {
     }
 
     /**
-     * isGlobalType
      * returns whether Command Type is Global or not
-     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -1695,9 +1605,7 @@ var Command = function () {
     }
 
     /**
-     * setKeyMap
      * Set keymap value for each os
-     * @memberof Command
      * @param {string} win Windows Key(and etc)
      * @param {string} mac Mac osx key
      */
@@ -1714,12 +1622,12 @@ var Command = function () {
 
 /**
  * Command factory method
- * @memberof Command
  * @param {string} typeStr Editor type name
  * @param {object} props Property
  *     @param {string} props.name Command name
  *     @param {number} props.type Command type number
  * @returns {Command}
+ * @static
  */
 
 
@@ -1746,8 +1654,8 @@ Command.factory = function (typeStr, props) {
  * markdown : 0
  * wysiwyg : 1
  * global : 2
- * @memberof Command
  * @type {object}
+ * @private
  */
 Command.TYPE = {
   MD: 0,
@@ -1756,13 +1664,6 @@ Command.TYPE = {
 };
 
 exports.default = Command;
-
-/***/ }),
-
-/***/ 22:
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_22__;
 
 /***/ }),
 
@@ -1784,8 +1685,8 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_23__;
 
 /**
  * @fileoverview Implements markdownitTaskPlugin
- * @modifier Sungho Kim(sungho-kim@nhnent.com) FE Development Lab/NHN Ent.
- * @modifier Junghwan Park(junghwan.park@nhnent.com) FE Development Lab/NHN Ent.
+ * @modifier Sungho Kim(sungho-kim@nhn.com) FE Development Lab/NHN
+ * @modifier Junghwan Park(junghwan.park@nhn.com) FE Development Lab/NHN
  */
 /* eslint-disable */
 
@@ -1893,7 +1794,7 @@ module.exports = MarkdownitTaskRenderer;
 /* eslint-disable */
 /**
  * @fileoverview Implements markdownitCodeBlockPlugin
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /**
@@ -1976,7 +1877,7 @@ module.exports = MarkdownitCodeBlockRenderer;
 // Distributed under an ISC license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements MarkdownItCodeRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /* eslint-disable */
@@ -2044,7 +1945,7 @@ module.exports = function code(state, startLine, endLine /*, silent*/) {
 // Distributed under MIT license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements markdownitCodeBlockQuoteRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /* eslint-disable */
@@ -2380,7 +2281,7 @@ module.exports = function blockquote(state, startLine, endLine, silent) {
 
 /**
  * @fileoverview Implements markdownitTableRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /*eslint-disable */
@@ -2593,7 +2494,7 @@ module.exports = function table(state, startLine, endLine, silent) {
 
 /**
  * @fileoverview Implements markdownitHtmlBlockRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 /* eslint-disable */
 // HTML block
@@ -2692,7 +2593,7 @@ module.exports = function html_block(state, startLine, endLine, silent) {
 // Distributed under MIT license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements markdownitBackticksRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 /* eslint-disable */
 
@@ -2737,7 +2638,7 @@ module.exports = function backtick(state, silent) {
         token.content = state.src.slice(pos, matchStart).replace(/[ \n]+/g, ' ').trim();
         // TUI.EDITOR MODIFICATION START
         // store number of backtick in data-backtick
-        // https://github.nhnent.com/fe/tui.editor/pull/981
+        // https://github.nhn.com/fe/tui.editor/pull/981
         token.attrSet('data-backticks', token.markup.length);
         // TUI.EDITOR MODIFICATION END
       }
@@ -2756,13 +2657,62 @@ module.exports = function backtick(state, silent) {
 /***/ }),
 
 /***/ 31:
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_31__;
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// Copyright (c) 2014, Vitaly Puzrin.
+// Distributed under an MIT license: https://github.com/markdown-it/markdown-it-for-inline
+/* eslint-disable */
+
+/**
+ * @fileoverview Implements markdownItLinkPlugin
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ */
+
+function for_inline_plugin(md, ruleName, tokenType, iteartor) {
+
+  function scan(state) {
+    var i, blkIdx, inlineTokens;
+
+    for (blkIdx = state.tokens.length - 1; blkIdx >= 0; blkIdx--) {
+      if (state.tokens[blkIdx].type !== 'inline') {
+        continue;
+      }
+
+      inlineTokens = state.tokens[blkIdx].children;
+
+      for (i = inlineTokens.length - 1; i >= 0; i--) {
+        if (inlineTokens[i].type !== tokenType) {
+          continue;
+        }
+
+        iteartor(inlineTokens, i);
+      }
+    }
+  }
+
+  md.core.ruler.push(ruleName, scan);
+};
+
+var linkAttribute = exports.linkAttribute = function linkAttribute(markdownit, iteartor) {
+  for_inline_plugin(markdownit, 'url_attribute', 'link_open', iteartor);
+};
 
 /***/ }),
 
 /***/ 32:
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_32__;
+
+/***/ }),
+
+/***/ 33:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2770,7 +2720,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_31__;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements editor preivew
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -2782,7 +2732,7 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _mdPreview = __webpack_require__(11);
+var _mdPreview = __webpack_require__(12);
 
 var _mdPreview2 = _interopRequireDefault(_mdPreview);
 
@@ -2819,24 +2769,21 @@ var TASK_CHECKED_CLASS_NAME = 'checked';
 
 /**
  * Class ToastUIEditorViewer
+ * @param {object} options Option object
+ *     @param {HTMLElement} options.el - container element
+ *     @param {string} options.initialValue Editor's initial value
+ *     @param {object} options.events eventlist Event list
+ *         @param {function} options.events.load It would be emitted when editor fully load
+ *         @param {function} options.events.change It would be emitted when content changed
+ *         @param {function} options.events.stateChange It would be emitted when format change by cursor position
+ *         @param {function} options.events.focus It would be emitted when editor get focus
+ *         @param {function} options.events.blur It would be emitted when editor loose focus
+ *     @param {object} options.hooks Hook list
+ *     @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
+ *     @param {string[]} [options.exts] - extensions
  */
 
 var ToastUIEditorViewer = function () {
-  /**
-   * Viewer
-   * @param {object} options Option object
-    * @param {HTMLElement} options.el - container element
-    * @param {string} options.initialValue Editor's initial value
-    * @param {object} options.events eventlist Event list
-      * @param {function} options.events.load It would be emitted when editor fully load
-      * @param {function} options.events.change It would be emitted when content changed
-      * @param {function} options.events.stateChange It would be emitted when format change by cursor position
-      * @param {function} options.events.focus It would be emitted when editor get focus
-      * @param {function} options.events.blur It would be emitted when editor loose focus
-    * @param {object} options.hooks Hook list
-      * @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
-    * @param {string[]} [options.exts] - extensions
-    */
   function ToastUIEditorViewer(options) {
     var _this = this;
 
@@ -2856,7 +2803,6 @@ var ToastUIEditorViewer = function () {
     } else {
       this.convertor = new _convertor2.default(this.eventManager);
     }
-    this.toMarkOptions = null;
 
     if (this.options.useDefaultHTMLSanitizer) {
       this.convertor.initHtmlSanitizer();
@@ -2874,13 +2820,24 @@ var ToastUIEditorViewer = function () {
       });
     }
 
-    this.preview = new _mdPreview2.default((0, _jquery2.default)(this.options.el), this.eventManager, this.convertor, true);
+    var _options = this.options,
+        el = _options.el,
+        initialValue = _options.initialValue;
+
+    var existingHTML = el.innerHTML;
+    el.innerHTML = '';
+
+    this.preview = new _mdPreview2.default((0, _jquery2.default)(el), this.eventManager, this.convertor, true);
 
     this.preview.$el.on('mousedown', _jquery2.default.proxy(this._toggleTask, this));
 
     _extManager2.default.applyExtension(this, this.options.exts);
 
-    this.setValue(this.options.initialValue);
+    if (initialValue) {
+      this.setValue(initialValue);
+    } else if (existingHTML) {
+      this.preview.setHTML(existingHTML);
+    }
 
     this.eventManager.emit('load', this);
   }
@@ -2895,9 +2852,9 @@ var ToastUIEditorViewer = function () {
   _createClass(ToastUIEditorViewer, [{
     key: '_toggleTask',
     value: function _toggleTask(ev) {
-      var isBeneathTaskBox = ev.offsetX < 18 && ev.offsetY > 18;
+      var style = getComputedStyle(ev.target, ':before');
 
-      if (ev.target.hasAttribute(TASK_ATTR_NAME) && !isBeneathTaskBox) {
+      if (ev.target.hasAttribute(TASK_ATTR_NAME) && _domUtils2.default.isInsideTaskBox(style, ev.offsetX, ev.offsetY)) {
         (0, _jquery2.default)(ev.target).toggleClass(TASK_CHECKED_CLASS_NAME);
         this.eventManager.emit('change', {
           source: 'viewer',
@@ -2908,7 +2865,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Set content for preview
-     * @memberof ToastUIEditorViewer
      * @param {string} markdown Markdown text
      */
 
@@ -2923,7 +2879,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Set content for preview
-     * @memberof ToastUIEditorViewer
      * @param {string} markdown Markdown text
      * @deprecated
      */
@@ -2936,7 +2891,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Bind eventHandler to event type
-     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -2949,7 +2903,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Unbind eventHandler from event type
-     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      */
 
@@ -2961,7 +2914,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Remove Viewer preview from document
-     * @memberof ToastUIEditorViewer
      */
 
   }, {
@@ -2969,6 +2921,7 @@ var ToastUIEditorViewer = function () {
     value: function remove() {
       this.eventManager.emit('removeEditor');
       this.preview.$el.off('mousedown', _jquery2.default.proxy(this._toggleTask, this));
+      this.preview.remove();
       this.options = null;
       this.eventManager = null;
       this.commandManager = null;
@@ -2978,7 +2931,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Add hook to Viewer preview's event
-     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -2992,7 +2944,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return true
-     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -3004,7 +2955,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return false
-     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -3016,7 +2966,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return false
-     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -3028,7 +2977,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Define extension
-     * @memberof ToastUIEditorViewer
      * @param {string} name Extension name
      * @param {ExtManager~extension} ext extension
      */
@@ -3054,6 +3002,7 @@ ToastUIEditorViewer.isViewer = true;
 /**
  * domUtil instance
  * @type {DomUtil}
+ * @ignore
  */
 ToastUIEditorViewer.domUtils = _domUtils2.default;
 
@@ -3126,12 +3075,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * @fileoverview DOM Utils
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
 var FIND_ZWB = /\u200B/g;
 
 /**
- * isTextNode
  * Check if node is text node
  * @param {Node} node node to check
  * @returns {boolean} result
@@ -3142,7 +3090,6 @@ var isTextNode = function isTextNode(node) {
 };
 
 /**
- * isElemNode
  * Check if node is element node
  * @param {Node} node node to check
  * @returns {boolean} result
@@ -3164,7 +3111,6 @@ var isBlockNode = function isBlockNode(node) {
 };
 
 /**
- * getNodeName
  * Get node name of node
  * @param {Node} node node
  * @returns {string} node name
@@ -3179,7 +3125,6 @@ var getNodeName = function getNodeName(node) {
 };
 
 /**
- * getTextLength
  * Get node offset length of node(for Range API)
  * @param {Node} node node
  * @returns {number} length
@@ -3198,7 +3143,6 @@ var getTextLength = function getTextLength(node) {
 };
 
 /**
- * getOffsetLength
  * Get node offset length of node(for Range API)
  * @param {Node} node node
  * @returns {number} length
@@ -3217,7 +3161,6 @@ var getOffsetLength = function getOffsetLength(node) {
 };
 
 /**
- * getNodeOffsetOfParent
  * get node offset between parent's childnodes
  * @param {Node} node node
  * @returns {number} offset(index)
@@ -3240,7 +3183,6 @@ var getNodeOffsetOfParent = function getNodeOffsetOfParent(node) {
 };
 
 /**
- * getChildNodeByOffset
  * get child node by offset
  * @param {Node} node node
  * @param {number} index offset index
@@ -3260,7 +3202,6 @@ var getChildNodeByOffset = function getChildNodeByOffset(node, index) {
 };
 
 /**
- * getNodeWithDirectionUntil
  * find next node from passed node
  * @param {strong} direction previous or next
  * @param {Node} node node
@@ -3291,7 +3232,6 @@ var getNodeWithDirectionUntil = function getNodeWithDirectionUntil(direction, no
 };
 
 /**
- * getPrevOffsetNodeUntil
  * get prev node of childnode pointed with index
  * @param {Node} node node
  * @param {number} index offset index
@@ -3330,7 +3270,6 @@ var getParentUntilBy = function getParentUntilBy(node, matchCondition, stopCondi
 };
 
 /**
- * getParentUntil
  * get parent node until paseed node name
  * @param {Node} node node
  * @param {string|HTMLNode} untilNode node name or node to limit
@@ -3354,7 +3293,6 @@ var getParentUntil = function getParentUntil(node, untilNode) {
 };
 
 /**
- * getNodeWithDirectionUnderParent
  * get node on the given direction under given parent
  * @param {strong} direction previous or next
  * @param {Node} node node
@@ -3376,7 +3314,6 @@ var getNodeWithDirectionUnderParent = function getNodeWithDirectionUnderParent(d
 };
 
 /**
- * getTopPrevNodeUnder
  * get top previous top level node under given node
  * @param {Node} node node
  * @param {Node} underNode underNode
@@ -3388,7 +3325,6 @@ var getTopPrevNodeUnder = function getTopPrevNodeUnder(node, underNode) {
 };
 
 /**
- * getNextTopBlockNode
  * get next top level block node
  * @param {Node} node node
  * @param {Node} underNode underNode
@@ -3442,6 +3378,7 @@ var getPrevTextNode = function getPrevTextNode(node) {
  * @param {HTMLNode} root - root node
  * @param {HTMLNode} node - node to test
  * @returns {Boolean} true if root contains node
+ * @ignore
  */
 var containsNode = function containsNode(root, node) {
   var walker = document.createTreeWalker(root, 4, null, false);
@@ -3552,19 +3489,14 @@ var getPath = function getPath(node, root) {
  * @ignore
  */
 var getTableCellByDirection = function getTableCellByDirection(node, direction) {
-  var isForward = true;
   var targetElement = null;
 
-  if (_tuiCodeSnippet2.default.isUndefined(direction) || direction !== 'next' && direction !== 'previous') {
-    return null;
-  } else if (direction === 'previous') {
-    isForward = false;
-  }
-
-  if (isForward) {
-    targetElement = node.nextElementSibling;
-  } else {
-    targetElement = node.previousElementSibling;
+  if (!_tuiCodeSnippet2.default.isUndefined(direction) && (direction === 'next' || direction === 'previous')) {
+    if (direction === 'next') {
+      targetElement = node.nextElementSibling;
+    } else {
+      targetElement = node.previousElementSibling;
+    }
   }
 
   return targetElement;
@@ -3579,7 +3511,6 @@ var getTableCellByDirection = function getTableCellByDirection(node, direction) 
  * @ignore
  */
 var getSiblingRowCellByDirection = function getSiblingRowCellByDirection(node, direction, needEdgeCell) {
-  var isForward = true;
   var tableCellElement = null;
   var $node = void 0,
       index = void 0,
@@ -3588,45 +3519,458 @@ var getSiblingRowCellByDirection = function getSiblingRowCellByDirection(node, d
       $siblingContainer = void 0,
       isSiblingContainerExists = void 0;
 
-  if (_tuiCodeSnippet2.default.isUndefined(direction) || direction !== 'next' && direction !== 'previous') {
-    return null;
-  } else if (direction === 'previous') {
-    isForward = false;
+  if (!_tuiCodeSnippet2.default.isUndefined(direction) && (direction === 'next' || direction === 'previous')) {
+    if (node) {
+      $node = (0, _jquery2.default)(node);
+
+      if (direction === 'next') {
+        $targetRowElement = $node.parent().next();
+        $currentContainer = $node.parents('thead');
+        $siblingContainer = $currentContainer[0] && $currentContainer.next();
+        isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'TBODY';
+
+        index = 0;
+      } else {
+        $targetRowElement = $node.parent().prev();
+        $currentContainer = $node.parents('tbody');
+        $siblingContainer = $currentContainer[0] && $currentContainer.prev();
+        isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'THEAD';
+
+        index = node.parentNode.childNodes.length - 1;
+      }
+
+      if (_tuiCodeSnippet2.default.isUndefined(needEdgeCell) || !needEdgeCell) {
+        index = getNodeOffsetOfParent(node);
+      }
+
+      if ($targetRowElement[0]) {
+        tableCellElement = $targetRowElement.children('td,th')[index];
+      } else if ($currentContainer[0] && isSiblingContainerExists) {
+        tableCellElement = $siblingContainer.find('td,th')[index];
+      }
+    }
   }
 
-  if (node) {
-    $node = (0, _jquery2.default)(node);
+  return tableCellElement;
+};
 
-    if (isForward) {
-      $targetRowElement = $node.parent().next();
-      $currentContainer = $node.parents('thead');
-      $siblingContainer = $currentContainer[0] && $currentContainer.next();
-      isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'TBODY';
+/**
+ * Check that the inline node is supported by markdown
+ * @param {Node} node TD element
+ * @returns {boolean}
+ * @ignore
+ */
+var isMDSupportInlineNode = function isMDSupportInlineNode(node) {
+  return (/^(A|B|BR|CODE|DEL|EM|I|IMG|S|SPAN|STRONG)$/ig.test(node.nodeName)
+  );
+};
 
-      index = 0;
+/**
+ * Check that node is styled node.
+ * Styled node is a node that has text and decorates text.
+ * @param {Node} node TD element
+ * @returns {boolean}
+ * @ignore
+ */
+var isStyledNode = function isStyledNode(node) {
+  return (/^(A|ABBR|ACRONYM|B|BDI|BDO|BIG|CITE|CODE|DEL|DFN|EM|I|INS|KBD|MARK|Q|S|SAMP|SMALL|SPAN|STRONG|SUB|SUP|U|VAR)$/ig.test(node.nodeName)
+  );
+};
+
+/**
+ * remove node from 'start' node to 'end-1' node inside parent
+ * if 'end' node is null, remove all child nodes after 'start' node.
+ * @param {Node} parent - parent node
+ * @param {Node} start - start node to remove
+ * @param {Node} end - end node to remove
+ * @ignore
+ */
+var removeChildFromStartToEndNode = function removeChildFromStartToEndNode(parent, start, end) {
+  var child = start;
+
+  if (!child || parent !== child.parentNode) {
+    return;
+  }
+
+  while (child !== end) {
+    var next = child.nextSibling;
+    parent.removeChild(child);
+    child = next;
+  }
+};
+
+/**
+ * remove nodes along the direction from the node to reach targetParent node
+ * @param {Node} targetParent - stop removing when reach target parent node
+ * @param {Node} node - start node
+ * @param {boolean} isForward - direction
+ * @ignore
+ */
+var removeNodesByDirection = function removeNodesByDirection(targetParent, node, isForward) {
+  var parent = node;
+
+  while (parent !== targetParent) {
+    var nextParent = parent.parentNode;
+    var _parent = parent,
+        nextSibling = _parent.nextSibling,
+        previousSibling = _parent.previousSibling;
+
+
+    if (!isForward && nextSibling) {
+      removeChildFromStartToEndNode(nextParent, nextSibling, null);
+    } else if (isForward && previousSibling) {
+      removeChildFromStartToEndNode(nextParent, nextParent.childNodes[0], parent);
+    }
+
+    parent = nextParent;
+  }
+};
+
+var getLeafNode = function getLeafNode(node) {
+  var result = node;
+  while (result.childNodes && result.childNodes.length) {
+    var _result = result,
+        nextLeaf = _result.firstChild;
+
+    // When inline tag have empty text node with other childnodes, ignore empty text node.
+
+    if (isTextNode(nextLeaf) && !getTextLength(nextLeaf)) {
+      result = nextLeaf.nextSibling || nextLeaf;
     } else {
-      $targetRowElement = $node.parent().prev();
-      $currentContainer = $node.parents('tbody');
-      $siblingContainer = $currentContainer[0] && $currentContainer.prev();
-      isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'THEAD';
-
-      index = node.parentNode.childNodes.length - 1;
+      result = nextLeaf;
     }
-
-    if (_tuiCodeSnippet2.default.isUndefined(needEdgeCell) || !needEdgeCell) {
-      index = getNodeOffsetOfParent(node);
-    }
-
-    if ($targetRowElement[0]) {
-      tableCellElement = $targetRowElement.children('td,th')[index];
-    } else if ($currentContainer[0] && isSiblingContainerExists) {
-      tableCellElement = $siblingContainer.find('td,th')[index];
-    }
-
-    return tableCellElement;
   }
 
-  return null;
+  return result;
+};
+/**
+ * check if a coordinates is inside a task box
+ * @param {object} style - computed style of task box
+ * @param {number} offsetX - event x offset
+ * @param {number} offsetY - event y offset
+ * @returns {boolean}
+ * @ignore
+ */
+var isInsideTaskBox = function isInsideTaskBox(style, offsetX, offsetY) {
+  var rect = {
+    left: parseInt(style.left, 10),
+    top: parseInt(style.top, 10),
+    width: parseInt(style.width, 10),
+    height: parseInt(style.height, 10)
+  };
+
+  return offsetX >= rect.left && offsetX <= rect.left + rect.width && offsetY >= rect.top && offsetY <= rect.top + rect.height;
+};
+
+/**
+ * Check whether node is OL or UL
+ * @param {node} node - node
+ * @returns {boolean} - whether node is OL or UL
+ * @ignore
+ */
+var isListNode = function isListNode(node) {
+  if (!node) {
+    return false;
+  }
+
+  return node.nodeName === 'UL' || node.nodeName === 'OL';
+};
+
+/**
+ * Check whether node is first list item
+ * @param {node} node - node
+ * @returns {boolean} whether node is first list item
+ * @ignore
+ */
+var isFirstListItem = function isFirstListItem(node) {
+  var nodeName = node.nodeName,
+      parentNode = node.parentNode;
+
+
+  return nodeName === 'LI' && node === parentNode.firstChild;
+};
+
+/**
+ * Check whether node is first level list item
+ * @param {node} node - node
+ * @returns {boolean} whether node is first level list item
+ * @ignore
+ */
+var isFirstLevelListItem = function isFirstLevelListItem(node) {
+  var nodeName = node.nodeName,
+      listNode = node.parentNode;
+  var listParentNode = listNode.parentNode;
+
+
+  return nodeName === 'LI' && !isListNode(listParentNode);
+};
+
+/**
+ * Merge node to target node and detach node
+ * @param {node} node - node
+ * @param {node} targetNode - target node
+ * @ignore
+ */
+var mergeNode = function mergeNode(node, targetNode) {
+  if (node.hasChildNodes()) {
+    _tuiCodeSnippet2.default.forEachArray(node.childNodes, function () {
+      targetNode.appendChild(node.firstChild);
+    });
+
+    targetNode.normalize();
+  }
+
+  if (node.parentNode) {
+    node.parentNode.removeChild(node);
+  }
+};
+
+/**
+ * Create hr that is not contenteditable
+ * @returns {node} hr is wraped div
+ * @ignore
+ */
+var createHorizontalRule = function createHorizontalRule() {
+  var div = document.createElement('div');
+  var hr = document.createElement('hr');
+
+  div.setAttribute('contenteditable', false);
+  hr.setAttribute('contenteditable', false);
+
+  div.appendChild(hr);
+
+  return div;
+};
+
+/**
+ * Create Empty Line
+ * @returns {node} <div><br></div>
+ * @private
+ */
+var createEmptyLine = function createEmptyLine() {
+  var div = document.createElement('div');
+  div.appendChild(document.createElement('br'));
+
+  return div;
+};
+
+/**
+ * Find same tagName child node and change wrapping order.
+ * For example, if below node need to optimize 'B' tag.
+ * <i><s><b>test</b></s></i>
+ * should be changed tag's order.
+ * <b><i><s>test</s></i></b>
+ * @param {node} node
+ * @param {string} tagName
+ * @returns {node}
+ * @private
+ */
+var changeTagOrder = function changeTagOrder(node, tagName) {
+  if (node.nodeName !== 'SPAN') {
+    var parentNode = node.parentNode;
+
+    var tempNode = node;
+
+    while (tempNode.childNodes && tempNode.childNodes.length === 1 && !isTextNode(tempNode.firstChild)) {
+      tempNode = tempNode.firstChild;
+
+      if (tempNode.nodeName === 'SPAN') {
+        break;
+      }
+
+      if (tempNode.nodeName === tagName) {
+        var wrapper = document.createElement(tagName);
+
+        mergeNode(tempNode, tempNode.parentNode);
+        parentNode.replaceChild(wrapper, node);
+        wrapper.appendChild(node);
+
+        return wrapper;
+      }
+    }
+  }
+
+  return node;
+};
+
+/**
+ * Find same tagName nodes and merge from startNode to endNode.
+ * @param {node} startNode
+ * @param {node} endNode
+ * @param {string} tagName
+ * @returns {node}
+ * @private
+ */
+var mergeSameNodes = function mergeSameNodes(startNode, endNode, tagName) {
+  var startBlockNode = changeTagOrder(startNode, tagName);
+
+  if (startBlockNode.nodeName === tagName) {
+    var endBlockNode = changeTagOrder(endNode, tagName);
+    var mergeTargetNode = startBlockNode;
+    var nextNode = startBlockNode.nextSibling;
+
+    while (nextNode) {
+      var tempNext = nextNode.nextSibling;
+
+      nextNode = changeTagOrder(nextNode, tagName);
+
+      if (nextNode.nodeName === tagName) {
+        // eslint-disable-next-line max-depth
+        if (mergeTargetNode) {
+          mergeNode(nextNode, mergeTargetNode);
+        } else {
+          mergeTargetNode = nextNode;
+        }
+      } else {
+        mergeTargetNode = null;
+      }
+
+      if (nextNode === endBlockNode) {
+        break;
+      }
+
+      nextNode = tempNext;
+    }
+  }
+};
+
+/**
+ * Find same tagName nodes in range and merge nodes.
+ * For example range is like this
+ * <s><b>AAA</b></s><b>BBB</b>
+ * nodes is changed below
+ * <b><s>AAA</s>BBB</b>
+ * @param {range} range
+ * @param {string} tagName
+ * @private
+ */
+var optimizeRange = function optimizeRange(range, tagName) {
+  var collapsed = range.collapsed,
+      commonAncestorContainer = range.commonAncestorContainer,
+      startContainer = range.startContainer,
+      endContainer = range.endContainer;
+
+
+  if (!collapsed) {
+    var optimizedNode = null;
+
+    if (startContainer !== endContainer) {
+      mergeSameNodes(getParentUntil(startContainer, commonAncestorContainer), getParentUntil(endContainer, commonAncestorContainer), tagName);
+
+      optimizedNode = commonAncestorContainer;
+    } else if (isTextNode(startContainer)) {
+      optimizedNode = startContainer.parentNode;
+    }
+
+    if (optimizedNode && optimizedNode.nodeName === tagName) {
+      var _optimizedNode = optimizedNode,
+          previousSibling = _optimizedNode.previousSibling;
+
+      var tempNode = void 0;
+
+      if (previousSibling) {
+        tempNode = changeTagOrder(previousSibling);
+
+        if (tempNode.nodeName === tagName) {
+          mergeNode(optimizedNode, tempNode);
+        }
+      }
+
+      var _optimizedNode2 = optimizedNode,
+          nextSibling = _optimizedNode2.nextSibling;
+
+
+      if (nextSibling) {
+        tempNode = changeTagOrder(nextSibling);
+
+        if (tempNode.nodeName === tagName) {
+          mergeNode(tempNode, optimizedNode);
+        }
+      }
+    }
+  }
+};
+
+/**
+ * Gets all text node from root element.
+ * @param {HTMLElement} root Root element
+ * @returns {Array} list of text nodes
+ * @ignore
+ */
+var getAllTextNode = function getAllTextNode(root) {
+  var walker = document.createTreeWalker(root, 4, null, false);
+  var result = [];
+
+  while (walker.nextNode()) {
+    var node = walker.currentNode;
+
+    if (isTextNode(node)) {
+      result.push(node);
+    }
+  }
+
+  return result;
+};
+
+/**
+ * Check whether the node is 'TD' or 'TH'
+ * @param {HTMLElement} node - the target node
+ * @returns {boolean} - whether the node is 'TD' or 'TH'
+ * @ignore
+ */
+var isCellNode = function isCellNode(node) {
+  if (!node) {
+    return false;
+  }
+
+  return node.nodeName === 'TD' || node.nodeName === 'TH';
+};
+
+/**
+ * Get the last node on the target node by the condition
+ * @param {HTMLElement} node - the target node
+ * @returns {function} - the condition to find the node
+ * @ignore
+ */
+var getLastNodeBy = function getLastNodeBy(node, condition) {
+  var lastNode = node && node.lastChild;
+
+  while (lastNode && condition(lastNode)) {
+    lastNode = lastNode.lastChild;
+  }
+
+  return lastNode;
+};
+
+/**
+ * Get the parent node on the target node by the condition
+ * @param {HTMLElement} node - the target node
+ * @returns {function} - the condition to find the node
+ * @ignore
+ */
+var getParentNodeBy = function getParentNodeBy(node, condition) {
+  while (node && condition(node.parentNode, node)) {
+    node = node.parentNode;
+  }
+
+  return node;
+};
+
+/**
+ * Get the sibling node on the target node by the condition
+ * @param {HTMLElement} node - the target node
+ * @param {string} direction - the direction to find node ('previous', 'next')
+ * @returns {function} - the condition to find the node
+ * @ignore
+ */
+var getSiblingNodeBy = function getSiblingNodeBy(node, direction, condition) {
+  var directionKey = direction + 'Sibling';
+
+  while (node && condition(node[directionKey], node)) {
+    node = node[directionKey];
+  }
+
+  return node;
 };
 
 exports.default = {
@@ -3639,6 +3983,7 @@ exports.default = {
   getPrevOffsetNodeUntil: getPrevOffsetNodeUntil,
   getNodeOffsetOfParent: getNodeOffsetOfParent,
   getChildNodeByOffset: getChildNodeByOffset,
+  getNodeWithDirectionUntil: getNodeWithDirectionUntil,
   containsNode: containsNode,
   getTopPrevNodeUnder: getTopPrevNodeUnder,
   getTopNextNodeUnder: getTopNextNodeUnder,
@@ -3650,7 +3995,27 @@ exports.default = {
   getPath: getPath,
   getNodeInfo: getNodeInfo,
   getTableCellByDirection: getTableCellByDirection,
-  getSiblingRowCellByDirection: getSiblingRowCellByDirection
+  getSiblingRowCellByDirection: getSiblingRowCellByDirection,
+  isMDSupportInlineNode: isMDSupportInlineNode,
+  isStyledNode: isStyledNode,
+  removeChildFromStartToEndNode: removeChildFromStartToEndNode,
+  removeNodesByDirection: removeNodesByDirection,
+  getLeafNode: getLeafNode,
+  isInsideTaskBox: isInsideTaskBox,
+  isListNode: isListNode,
+  isFirstListItem: isFirstListItem,
+  isFirstLevelListItem: isFirstLevelListItem,
+  mergeNode: mergeNode,
+  createHorizontalRule: createHorizontalRule,
+  createEmptyLine: createEmptyLine,
+  changeTagOrder: changeTagOrder,
+  mergeSameNodes: mergeSameNodes,
+  optimizeRange: optimizeRange,
+  getAllTextNode: getAllTextNode,
+  isCellNode: isCellNode,
+  getLastNodeBy: getLastNodeBy,
+  getParentNodeBy: getParentNodeBy,
+  getSiblingNodeBy: getSiblingNodeBy
 };
 
 /***/ }),
@@ -3668,11 +4033,11 @@ exports.CodeBlockManager = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements CodeBlockManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-var _highlight = __webpack_require__(31);
+var _highlight = __webpack_require__(32);
 
 var _highlight2 = _interopRequireDefault(_highlight);
 
@@ -3684,10 +4049,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Class Code Block Manager
  */
 var CodeBlockManager = function () {
-  /**
-   * Creates an instance of CodeBlockManager.
-   * @memberof CodeBlockManager
-   */
   function CodeBlockManager() {
     _classCallCheck(this, CodeBlockManager);
 
@@ -3711,7 +4072,6 @@ var CodeBlockManager = function () {
      * get replacer for code block
      * @param {string} language - code block type
      * @returns {function} - replacer function
-     * @memberof CodeBlockManager
      */
 
   }, {
@@ -3745,7 +4105,6 @@ var CodeBlockManager = function () {
     /**
      * get supported languages by highlight-js
      * @returns {Array<string>} - supported languages by highlight-js
-     * @static
      */
 
   }], [{
@@ -3773,6 +4132,148 @@ function escape(html, encode) {
 
 exports.CodeBlockManager = CodeBlockManager;
 exports.default = new CodeBlockManager();
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _jquery = __webpack_require__(0);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _tuiCodeSnippet = __webpack_require__(1);
+
+var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @fileoverview Implements htmlSanitizer
+ * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ */
+var HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellpadding|cellspacing|class|clear|' + 'color|cols|compact|coords|dir|face|headers|height|hreflang|hspace|' + 'ismap|lang|language|nohref|nowrap|rel|rev|rows|rules|' + 'scope|scrolling|shape|size|span|start|summary|tabindex|target|title|type|' + 'valign|value|vspace|width|checked|mathvariant|encoding|id|name|' + 'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style)', 'g');
+
+var SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' + 'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' + 'cx|cy|d|dx|dy|descent|display|dur|end|fill|fill-rule|font-family|font-size|font-stretch|' + 'font-style|font-variant|font-weight|from|fx|fy|g1|g2|glyph-name|gradientUnits|hanging|' + 'height|horiz-adv-x|horiz-origin-x|ideographic|k|keyPoints|keySplines|keyTimes|lang|' + 'marker-end|marker-mid|marker-start|markerHeight|markerUnits|markerWidth|mathematical|' + 'max|min|offset|opacity|orient|origin|overline-position|overline-thickness|panose-1|' + 'path|pathLength|points|preserveAspectRatio|r|refX|refY|repeatCount|repeatDur|' + 'requiredExtensions|requiredFeatures|restart|rotate|rx|ry|slope|stemh|stemv|stop-color|' + 'stop-opacity|strikethrough-position|strikethrough-thickness|stroke|stroke-dasharray|' + 'stroke-dashoffset|stroke-linecap|stroke-linejoin|stroke-miterlimit|stroke-opacity|' + 'stroke-width|systemLanguage|target|text-anchor|to|transform|type|u1|u2|underline-position|' + 'underline-thickness|unicode|unicode-range|units-per-em|values|version|viewBox|visibility|' + 'width|widths|x|x-height|x1|x2|xlink:actuate|xlink:arcrole|xlink:role|xlink:show|xlink:title|' + 'xlink:type|xml:base|xml:lang|xml:space|xmlns|xmlns:xlink|y|y1|y2|zoomAndPan)', 'g');
+
+var ATTR_VALUE_BLACK_LIST_RX = {
+  'href': /^(javascript:).*/g
+};
+
+/**
+ * htmlSanitizer
+ * @param {string|Node} html html or Node
+ * @param {boolean} [needHtmlText] pass true if need html text
+ * @returns {string|DocumentFragment} result
+ * @ignore
+ */
+function htmlSanitizer(html, needHtmlText) {
+  var $html = (0, _jquery2.default)('<div />');
+
+  html = html.replace(/<!--[\s\S]*?-->/g, '');
+
+  $html.append(html);
+
+  removeUnnecessaryTags($html);
+  leaveOnlyWhitelistAttribute($html);
+  removeInvalidAttributeValues($html);
+
+  return finalizeHtml($html, needHtmlText);
+}
+
+/**
+ * Remove unnecessary tags
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function removeUnnecessaryTags($html) {
+  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title, embed, object').remove();
+}
+
+/**
+ * Leave only white list attributes
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function leaveOnlyWhitelistAttribute($html) {
+  $html.find('*').each(function (index, node) {
+    var attrs = node.attributes;
+    var blacklist = _tuiCodeSnippet2.default.toArray(attrs).filter(function (attr) {
+      var isHTMLAttr = attr.name.match(HTML_ATTR_LIST_RX);
+      var isSVGAttr = attr.name.match(SVG_ATTR_LIST_RX);
+
+      return !isHTMLAttr && !isSVGAttr;
+    });
+
+    _tuiCodeSnippet2.default.forEachArray(blacklist, function (attr) {
+      // Edge svg attribute name returns uppercase bug. error guard.
+      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/5579311/
+      if (attrs.getNamedItem(attr.name)) {
+        attrs.removeNamedItem(attr.name);
+      }
+    });
+  });
+}
+
+/**
+ * Remove invalid attribute values
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function removeInvalidAttributeValues($html) {
+  var _loop = function _loop(attr) {
+    if (ATTR_VALUE_BLACK_LIST_RX.hasOwnProperty(attr)) {
+      $html.find('[' + attr + ']').each(function (index, node) {
+        var attrs = node.attributes;
+        var valueBlackListRX = ATTR_VALUE_BLACK_LIST_RX[attr];
+        var attrItem = attrs.getNamedItem(attr);
+        if (valueBlackListRX && attrItem && attrItem.value.toLowerCase().match(valueBlackListRX)) {
+          attrs.removeNamedItem(attr);
+        }
+      });
+    }
+  };
+
+  for (var attr in ATTR_VALUE_BLACK_LIST_RX) {
+    _loop(attr);
+  }
+}
+
+/**
+ * Finalize html result
+ * @private
+ * @param {jQuery} $html jQuery instance
+ * @param {boolean} needHtmlText pass true if need html text
+ * @returns {string|DocumentFragment} result
+ */
+function finalizeHtml($html, needHtmlText) {
+  var returnValue = void 0;
+
+  if (needHtmlText) {
+    returnValue = $html[0].innerHTML;
+  } else {
+    var frag = document.createDocumentFragment();
+    var childNodes = _tuiCodeSnippet2.default.toArray($html[0].childNodes);
+    var length = childNodes.length;
+
+
+    for (var i = 0; i < length; i += 1) {
+      frag.appendChild(childNodes[i]);
+    }
+    returnValue = frag;
+  }
+
+  return returnValue;
+}
+
+exports.default = htmlSanitizer;
 
 /***/ })
 

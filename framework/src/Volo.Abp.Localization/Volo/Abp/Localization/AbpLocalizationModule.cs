@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Localization.Resources.AbpValidation;
+﻿using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
@@ -17,16 +16,21 @@ namespace Volo.Abp.Localization
         {
             AbpStringLocalizerFactory.Replace(context.Services);
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpLocalizationModule>("Volo.Abp", "Volo/Abp");
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources
-                .Add<AbpValidationResource>("en")
-                .AddVirtualJson("/Localization/Resources/AbpValidation");
+                options
+                    .Resources
+                    .Add<DefaultResource>("en");
+
+                options
+                    .Resources
+                    .Add<AbpLocalizationResource>("en")
+                    .AddVirtualJson("/Localization/Resources/AbpLocalization");
             });
         }
     }

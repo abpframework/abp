@@ -6,7 +6,7 @@ namespace ProductManagement
     {
         public ProductManagementApplicationAutoMapperProfile()
         {
-            
+            CreateMap<Product, ProductDto>();
         }
     }
 }

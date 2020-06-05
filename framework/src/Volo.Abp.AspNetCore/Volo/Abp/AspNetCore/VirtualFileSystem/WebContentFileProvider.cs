@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Volo.Abp.DependencyInjection;
@@ -14,15 +16,15 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
     {
         private readonly IVirtualFileProvider _virtualFileProvider;
         private readonly IFileProvider _fileProvider;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private string _rootPath = "/wwwroot"; //TODO: How to handle wwwroot naming?
 
-        protected AspNetCoreContentOptions Options { get; }
+        protected AbpAspNetCoreContentOptions Options { get; }
 
         public WebContentFileProvider(
-            IVirtualFileProvider virtualFileProvider, 
-            IHostingEnvironment hostingEnvironment,
-            IOptions<AspNetCoreContentOptions> options)
+            IVirtualFileProvider virtualFileProvider,
+            IWebHostEnvironment hostingEnvironment,
+            IOptions<AbpAspNetCoreContentOptions> options)
         {
             _virtualFileProvider = virtualFileProvider;
             _hostingEnvironment = hostingEnvironment;
@@ -91,9 +93,24 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
 
         protected virtual IFileProvider CreateFileProvider()
         {
-            return new CompositeFileProvider(
+            var fileProviders = new List<IFileProvider>()
+            {
                 new PhysicalFileProvider(_hostingEnvironment.ContentRootPath),
                 _virtualFileProvider
+            };
+
+            if (_hostingEnvironment.IsDevelopment() &&
+                _hostingEnvironment.WebRootFileProvider is CompositeFileProvider compositeFileProvider)
+            {
+                var staticWebAssetsFileProviders = compositeFileProvider
+                    .FileProviders
+                    .Where(f => f.GetType().Name.Equals("StaticWebAssetsFileProvider")).ToList();
+
+                fileProviders.AddRange(staticWebAssetsFileProviders);
+            }
+
+            return new CompositeFileProvider(
+                fileProviders
             );
         }
 

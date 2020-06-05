@@ -7,23 +7,9 @@ namespace Volo.Abp.Domain.Values
 
     public abstract class ValueObject
     {
-        protected static bool EqualOperator(ValueObject left, ValueObject right)
-        {
-            if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
-            {
-                return false;
-            }
-            return ReferenceEquals(left, null) || left.Equals(right);
-        }
-
-        protected static bool NotEqualOperator(ValueObject left, ValueObject right)
-        {
-            return !(EqualOperator(left, right));
-        }
-
         protected abstract IEnumerable<object> GetAtomicValues();
 
-        public override bool Equals(object obj)
+        public bool ValueEquals(object obj)
         {
             if (obj == null || obj.GetType() != GetType())
             {
@@ -31,8 +17,10 @@ namespace Volo.Abp.Domain.Values
             }
 
             ValueObject other = (ValueObject)obj;
+
             IEnumerator<object> thisValues = GetAtomicValues().GetEnumerator();
             IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
+
             while (thisValues.MoveNext() && otherValues.MoveNext())
             {
                 if (ReferenceEquals(thisValues.Current, null) ^
@@ -47,15 +35,8 @@ namespace Volo.Abp.Domain.Values
                     return false;
                 }
             }
+
             return !thisValues.MoveNext() && !otherValues.MoveNext();
         }
-
-        public override int GetHashCode()
-        {
-            return GetAtomicValues()
-                .Select(x => x != null ? x.GetHashCode() : 0)
-                .Aggregate((x, y) => x ^ y);
-        }
-        // Other utilility methods
     }
 }

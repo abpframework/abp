@@ -11,10 +11,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
         public bool? ShowInfo { get; set; }
 
-        [HtmlAttributeNotBound]
-        [ViewContext]
-        public ViewContext ViewContext { get; set; }
-
         public AbpPaginationTagHelper(AbpPaginationTagHelperService tagHelperService)
             : base(tagHelperService)
         {

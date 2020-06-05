@@ -17,7 +17,7 @@ namespace Volo.Abp.BackgroundJobs
     {
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<BackgroundJobOptions>>().Value;
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
             if (options.IsJobExecutionEnabled)
             {
                 context.ServiceProvider

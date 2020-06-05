@@ -1,26 +1,30 @@
-﻿using AuthServer.Host.EntityFrameworkCore;
+using AuthServer.Host.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
+using MsDemo.Shared;
 using StackExchange.Redis;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Autofac;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.EventBus.RabbitMq;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
 
 namespace AuthServer.Host
@@ -33,11 +37,14 @@ namespace AuthServer.Host
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityApplicationContractsModule),
+        typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
-        )]
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpTenantManagementEntityFrameworkCoreModule),
+        typeof(AbpTenantManagementApplicationContractsModule)
+    )]
     public class AuthServerHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -47,6 +54,11 @@ namespace AuthServer.Host
             context.Services.AddAbpDbContext<AuthServerDbContext>(options =>
             {
                 options.AddDefaultRepositories();
+            });
+
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
             });
 
             Configure<AbpDbContextOptions>(options =>
@@ -59,7 +71,7 @@ namespace AuthServer.Host
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -82,32 +94,26 @@ namespace AuthServer.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
-            app.UseIdentityServer();
+            app.UseRouting();
             app.UseAbpRequestLocalization();
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+            app.UseIdentityServer();
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             //TODO: Problem on a clustered environment
-            using (var scope = context.ServiceProvider.CreateScope())
+            AsyncHelper.RunSync(async () =>
             {
-                AsyncHelper.RunSync(async () =>
+                using (var scope = context.ServiceProvider.CreateScope())
                 {
                     await scope.ServiceProvider
-                        .GetRequiredService<IIdentityDataSeeder>()
-                        .SeedAsync(
-                            adminUserPassword: "1q2w3E*"
-                        );
-
-                    await scope.ServiceProvider
-                        .GetRequiredService<IPermissionDataSeeder>()
-                        .SeedAsync(
-                            RolePermissionValueProvider.ProviderName,
-                            "admin",
-                            IdentityPermissions.GetAll()
-                        );
-                });
-            }
-            
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
+                }
+            });
         }
     }
 }

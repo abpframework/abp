@@ -84,7 +84,7 @@ namespace Volo.Abp.Localization.VirtualFiles
                 var dictionary = CreateDictionaryFromFile(file);
                 if (dictionaries.ContainsKey(dictionary.CultureName))
                 {
-                    throw new AbpException($"{file.PhysicalPath} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
+                    throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined!");
                 }
 
                 dictionaries[dictionary.CultureName] = dictionary;

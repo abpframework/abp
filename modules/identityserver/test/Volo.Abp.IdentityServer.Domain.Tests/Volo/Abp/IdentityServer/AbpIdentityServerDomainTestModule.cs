@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.IdentityServer
 {
-    [DependsOn(typeof(AbpIdentityServerMongoDbTestModule))]
+    [DependsOn(typeof(AbpIdentityServerTestEntityFrameworkCoreModule))]
     public class AbpIdentityServerDomainTestModule : AbpModule
     {
 

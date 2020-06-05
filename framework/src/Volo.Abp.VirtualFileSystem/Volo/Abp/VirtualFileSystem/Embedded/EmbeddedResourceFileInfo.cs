@@ -29,7 +29,9 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
         }
         private long? _length;
 
-        public string PhysicalPath { get; }
+        public string PhysicalPath => null;
+
+        public string VirtualPath { get; }
 
         public string Name { get; }
 
@@ -46,14 +48,14 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
         public EmbeddedResourceFileInfo(
             Assembly assembly,
             string resourcePath,
-            string physicalPath,
+            string virtualPath,
             string name,
             DateTimeOffset lastModified)
         {
             _assembly = assembly;
             _resourcePath = resourcePath;
 
-            PhysicalPath = physicalPath;
+            VirtualPath = virtualPath;
             Name = name;
             LastModified = lastModified;
         }
@@ -63,7 +65,7 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
         {
             var stream = _assembly.GetManifestResourceStream(_resourcePath);
 
-            if (!_length.HasValue)
+            if (!_length.HasValue && stream != null)
             {
                 _length = stream.Length;
             }
@@ -73,7 +75,7 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
 
         public override string ToString()
         {
-            return $"[EmbeddedResourceFileInfo] {Name} ({PhysicalPath})";
+            return $"[EmbeddedResourceFileInfo] {Name} ({this.VirtualPath})";
         }
     }
 }

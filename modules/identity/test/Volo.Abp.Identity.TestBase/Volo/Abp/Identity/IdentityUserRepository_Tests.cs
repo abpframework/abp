@@ -15,36 +15,39 @@ namespace Volo.Abp.Identity
     {
         protected IIdentityUserRepository UserRepository { get; }
         protected ILookupNormalizer LookupNormalizer { get; }
+        protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
 
         protected IdentityUserRepository_Tests()
         {
             UserRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
             LookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
+            OrganizationUnitRepository = ServiceProvider.GetRequiredService<IOrganizationUnitRepository>();
         }
 
         [Fact]
         public async Task FindByNormalizedUserNameAsync()
         {
-            (await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.Normalize("john.nash"))).ShouldNotBeNull();
-            (await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.Normalize("undefined-user"))).ShouldBeNull();
+            (await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"))).ShouldNotBeNull();
+            (await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("undefined-user"))).ShouldBeNull();
         }
 
         [Fact]
         public async Task FindByNormalizedEmailAsync()
         {
-            (await UserRepository.FindByNormalizedEmailAsync(LookupNormalizer.Normalize("john.nash@abp.io"))).ShouldNotBeNull();
-            (await UserRepository.FindByNormalizedEmailAsync(LookupNormalizer.Normalize("david@abp.io"))).ShouldNotBeNull();
-            (await UserRepository.FindByNormalizedEmailAsync(LookupNormalizer.Normalize("undefined-user@abp.io"))).ShouldBeNull();
+            (await UserRepository.FindByNormalizedEmailAsync(LookupNormalizer.NormalizeEmail("john.nash@abp.io"))).ShouldNotBeNull();
+            (await UserRepository.FindByNormalizedEmailAsync(LookupNormalizer.NormalizeEmail("david@abp.io"))).ShouldNotBeNull();
+            (await UserRepository.FindByNormalizedEmailAsync(LookupNormalizer.NormalizeEmail("undefined-user@abp.io"))).ShouldBeNull();
         }
 
         [Fact]
         public async Task GetRoleNamesAsync()
         {
-            var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.Normalize("john.nash"));
+            var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
             var roles = await UserRepository.GetRoleNamesAsync(john.Id);
-            roles.Count.ShouldBe(2);
+            roles.Count.ShouldBe(3);
             roles.ShouldContain("moderator");
             roles.ShouldContain("supporter");
+            roles.ShouldContain("manager");
         }
 
         [Fact]
@@ -80,7 +83,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetListByNormalizedRoleNameAsync()
         {
-            var users = await UserRepository.GetListByNormalizedRoleNameAsync(LookupNormalizer.Normalize("supporter"));
+            var users = await UserRepository.GetListByNormalizedRoleNameAsync(LookupNormalizer.NormalizeName("supporter"));
             users.Count.ShouldBe(2);
             users.ShouldContain(u => u.UserName == "john.nash");
             users.ShouldContain(u => u.UserName == "neo");
@@ -107,18 +110,19 @@ namespace Volo.Abp.Identity
                 ).ShouldBeGreaterThan(0);
             }
 
-            users = await UserRepository.GetListAsync(null, int.MaxValue, 0, "undefined-username");
+            users = await UserRepository.GetListAsync(null, 999, 0, "undefined-username");
             users.Count.ShouldBe(0);
         }
 
         [Fact]
         public async Task GetRolesAsync()
         {
-            var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.Normalize("john.nash"));
+            var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
             var roles = await UserRepository.GetRolesAsync(john.Id);
-            roles.Count.ShouldBe(2);
+            roles.Count.ShouldBe(3);
             roles.ShouldContain(r => r.Name == "moderator");
             roles.ShouldContain(r => r.Name == "supporter");
+            roles.ShouldContain(r => r.Name == "manager");
         }
 
         [Fact]
@@ -129,9 +133,25 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetUsersInOrganizationUnitAsync()
+        {
+            var users = await UserRepository.GetUsersInOrganizationUnitAsync((await GetOU("OU111")).Id);
+            users.ShouldNotBeNull();
+            users.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetUsersInOrganizationUnitWithChildrenAsync()
+        {
+            var users = await UserRepository.GetUsersInOrganizationUnitWithChildrenAsync((await GetOU("OU111")).Code);
+            users.ShouldNotBeNull();
+            users.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
         public async Task Should_Eager_Load_User_Collections()
         {
-            var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.Normalize("john.nash"));
+            var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
 
             john.Roles.ShouldNotBeNull();
             john.Roles.Any().ShouldBeTrue();
@@ -144,6 +164,16 @@ namespace Volo.Abp.Identity
 
             john.Tokens.ShouldNotBeNull();
             john.Tokens.Any().ShouldBeTrue();
+
+            john.OrganizationUnits.ShouldNotBeNull();
+            john.OrganizationUnits.Any().ShouldBeTrue();
+        }
+
+        private async Task<OrganizationUnit> GetOU(string diplayName)
+        {
+            var organizationUnit = await OrganizationUnitRepository.GetAsync(diplayName);
+            organizationUnit.ShouldNotBeNull();
+            return organizationUnit;
         }
     }
 }

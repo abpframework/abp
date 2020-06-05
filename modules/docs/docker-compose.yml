@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    volumes:
+      - dbdata:/var/opt/mssql
+
+  volo-docs:
+    image: 'volosoft/volo-docs:${TAG:-latest}'
+    build:
+      context: ../../
+      dockerfile: modules/docs/app/VoloDocs.Web/Dockerfile
+    depends_on: 
+      - sqlserver
+
+volumes:
+  dbdata:

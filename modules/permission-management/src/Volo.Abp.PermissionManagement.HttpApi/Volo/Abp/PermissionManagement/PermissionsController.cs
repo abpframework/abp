@@ -4,25 +4,25 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.PermissionManagement
 {
-    [RemoteService]
+    [RemoteService(Name = PermissionManagementRemoteServiceConsts.RemoteServiceName)]
     [Area("abp")]
     public class PermissionsController : AbpController, IPermissionAppService
     {
-        private readonly IPermissionAppService _permissionAppService;
+        protected IPermissionAppService PermissionAppService { get; }
 
         public PermissionsController(IPermissionAppService permissionAppService)
         {
-            _permissionAppService = permissionAppService;
+            PermissionAppService = permissionAppService;
         }
 
-        public Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
+        public virtual Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
-            return _permissionAppService.GetAsync(providerName, providerKey);
+            return PermissionAppService.GetAsync(providerName, providerKey);
         }
 
-        public Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
+        public virtual Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
-            return _permissionAppService.UpdateAsync(providerName, providerKey, input);
+            return PermissionAppService.UpdateAsync(providerName, providerKey, input);
         }
     }
 }

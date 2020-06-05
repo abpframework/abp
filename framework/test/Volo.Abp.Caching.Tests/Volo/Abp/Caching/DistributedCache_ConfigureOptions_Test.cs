@@ -3,6 +3,7 @@ using Shouldly;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Caching
@@ -10,7 +11,7 @@ namespace Volo.Abp.Caching
     public class DistributedCache_ConfigureOptions_Test : AbpIntegratedTest<AbpCachingTestModule>
     {
         [Fact]
-        public void Configure_CacheOptions()
+        public void Configure_AbpCacheOptions()
         {
             var personCache = GetRequiredService<IDistributedCache<Sail.Testing.Caching.PersonCacheItem>>();
             GetDefaultCachingOptions(personCache).SlidingExpiration.ShouldBeNull();
@@ -18,7 +19,7 @@ namespace Volo.Abp.Caching
         }
 
         [Fact]
-        public async Task Default_CacheOptions_Should_Be_20_Mins()
+        public async Task Default_AbpCacheOptions_Should_Be_20_Mins()
         {
             var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
 

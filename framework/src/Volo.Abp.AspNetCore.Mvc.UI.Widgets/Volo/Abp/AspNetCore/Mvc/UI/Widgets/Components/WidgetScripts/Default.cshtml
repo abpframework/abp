@@ -1,0 +1,21 @@
+﻿@model Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetResourcesViewModel
+@if (Model.Widgets.Any())
+{
+    var resourceItems = Model.Widgets.SelectMany(w => w.Scripts).ToArray();
+    if (resourceItems.Any())
+    {
+        <abp-script-bundle>
+            @foreach (var resourceItem in resourceItems)
+            {
+                if (resourceItem.Src != null)
+                {
+                    <abp-script src="@resourceItem.Src" />
+                }
+                else
+                {
+                    <abp-script type="@resourceItem.Type" />
+                }
+            }
+        </abp-script-bundle>
+    }
+}

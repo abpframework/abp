@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Timing;
@@ -18,27 +21,110 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public abstract class AbpController : Controller, IAvoidDuplicateCrossCuttingConcerns
     {
-        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
+        public IServiceProvider ServiceProvider { get; set; }
+        protected readonly object ServiceProviderLock = new object();
 
-        public IObjectMapper ObjectMapper { get; set; }
+        protected TService LazyGetRequiredService<TService>(ref TService reference)
+            => LazyGetRequiredService(typeof(TService), ref reference);
 
-        public IGuidGenerator GuidGenerator { get; set; }
+        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
+        {
+            if (reference == null)
+            {
+                lock (ServiceProviderLock)
+                {
+                    if (reference == null)
+                    {
+                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
+                    }
+                }
+            }
 
-        public ILoggerFactory LoggerFactory { get; set; }
+            return reference;
+        }
 
-        public ICurrentUser CurrentUser { get; set; }
+        public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
+        private IUnitOfWorkManager _unitOfWorkManager;
 
-        public ICurrentTenant CurrentTenant { get; set; }
+        protected Type ObjectMapperContext { get; set; }
+        public IObjectMapper ObjectMapper
+        {
+            get
+            {
+                if (_objectMapper != null)
+                {
+                    return _objectMapper;
+                }
 
-        public IAuthorizationService AuthorizationService { get; set; }
+                if (ObjectMapperContext == null)
+                {
+                    return LazyGetRequiredService(ref _objectMapper);
+                }
+
+                return LazyGetRequiredService(
+                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
+                    ref _objectMapper
+                );
+            }
+        }
+        private IObjectMapper _objectMapper;
+
+        public IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);
+        private IGuidGenerator _guidGenerator;
+
+        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        private ILoggerFactory _loggerFactory;
+
+        protected ILogger Logger => _lazyLogger.Value;
+        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+
+        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
+        private ICurrentUser _currentUser;
+
+        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+        private ICurrentTenant _currentTenant;
+
+        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
+        private IAuthorizationService _authorizationService;
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
-        public IClock Clock { get; set; }
+        public IClock Clock => LazyGetRequiredService(ref _clock);
+        private IClock _clock;
 
-        public IModelStateValidator ModelValidator { get; set; }
+        public IModelStateValidator ModelValidator => LazyGetRequiredService(ref _modelValidator);
+        private IModelStateValidator _modelValidator;
 
-        public IFeatureChecker FeatureChecker { get; set; }
+        public IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
+        private IFeatureChecker _featureChecker;
+
+        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        private IStringLocalizerFactory _stringLocalizerFactory;
+
+        public IStringLocalizer L
+        {
+            get
+            {
+                if (_localizer == null)
+                {
+                    _localizer = CreateLocalizer();
+                }
+
+                return _localizer;
+            }
+        }
+        private IStringLocalizer _localizer;
+
+        protected Type LocalizationResource
+        {
+            get => _localizationResource;
+            set
+            {
+                _localizationResource = value;
+                _localizer = null;
+            }
+        }
+        private Type _localizationResource = typeof(DefaultResource);
 
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
@@ -47,7 +133,20 @@ namespace Volo.Abp.AspNetCore.Mvc
             ModelValidator?.Validate(ModelState);
         }
 
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+        protected virtual IStringLocalizer CreateLocalizer()
+        {
+            if (LocalizationResource != null)
+            {
+                return StringLocalizerFactory.Create(LocalizationResource);
+            }
+
+            var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer == null)
+            {
+                throw new AbpException($"Set {nameof(LocalizationResource)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
+            }
+
+            return localizer;
+        }
     }
 }

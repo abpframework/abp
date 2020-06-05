@@ -1,20 +1,28 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using ProductManagement;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
 using Volo.Blogging;
 
 namespace InternalGateway.Host
@@ -26,7 +34,9 @@ namespace InternalGateway.Host
         typeof(ProductManagementHttpApiModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule)
+        typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpTenantManagementHttpApiModule),
+        typeof(AbpAspNetCoreMultiTenancyModule)
         )]
     public class InternalGatewayHostModule : AbpModule
     {
@@ -34,25 +44,22 @@ namespace InternalGateway.Host
         {
             var configuration = context.Services.GetConfiguration();
 
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
+
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.ApiName = configuration["AuthServer:ApiName"];
                     options.RequireHttpsMetadata = false;
-                    //TODO: Should create an extension method for that (may require to create a new ABP package depending on the IdentityServer4.AccessTokenValidation)
-                    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
-                    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
-                    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
-                    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
-                    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
-                    options.InboundJwtClaimTypeMap["phone_number_verified"] = AbpClaimTypes.PhoneNumberVerified;
-                    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
                 });
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "Internal Gateway API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Internal Gateway API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -64,7 +71,7 @@ namespace InternalGateway.Host
                 options.UseSqlServer();
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -80,7 +87,13 @@ namespace InternalGateway.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -92,7 +105,11 @@ namespace InternalGateway.Host
                     ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                     ctx.Request.Path.ToString().StartsWith("/Abp/") ||
                     ctx.Request.Path.ToString().StartsWith("/Test/"),
-                app2 => { app2.UseMvcWithDefaultRouteAndArea(); }
+                app2 =>
+                {
+                    app2.UseRouting();
+                    app2.UseConfiguredEndpoints();
+                }
             );
 
             app.UseOcelot().Wait();

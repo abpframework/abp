@@ -1,0 +1,10 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permissions": "Permissions",
+    "OnlyProviderPermissons": "Only this provider",
+    "All": "All",
+    "SelectAllInAllTabs": "Grant all permissions",
+    "SelectAllInThisTab": "Select all"
+  }
+}

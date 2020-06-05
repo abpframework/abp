@@ -1,0 +1,16 @@
+{
+  "name": "@abp/ng.account",
+  "version": "2.9.0",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "dependencies": {
+    "@abp/ng.account.config": "~2.9.0",
+    "@abp/ng.theme.shared": "~2.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

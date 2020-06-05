@@ -20,7 +20,6 @@ namespace Volo.Abp.Modularity
             var modules = GetDescriptors(services, startupModuleType, plugInSources);
 
             modules = SortByDependency(modules, startupModuleType);
-            ConfigureServices(modules, services);
 
             return modules.ToArray();
         }
@@ -87,54 +86,6 @@ namespace Volo.Abp.Modularity
             var module = (IAbpModule)Activator.CreateInstance(moduleType);
             services.AddSingleton(moduleType, module);
             return module;
-        }
-
-        protected virtual void ConfigureServices(List<IAbpModuleDescriptor> modules, IServiceCollection services)
-        {
-            var context = new ServiceConfigurationContext(services);
-            services.AddSingleton(context);
-
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    abpModule.ServiceConfigurationContext = context;
-                }
-            }
-
-            //PreConfigureServices
-            foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
-            {
-                ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
-            }
-
-            //ConfigureServices
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    if (!abpModule.SkipAutoServiceRegistration)
-                    {
-                        services.AddAssembly(module.Type.Assembly);
-                    }
-                }
-
-                module.Instance.ConfigureServices(context);
-            }
-
-            //PostConfigureServices
-            foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
-            {
-                ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
-            }
-
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    abpModule.ServiceConfigurationContext = null;
-                }
-            }
         }
 
         protected virtual void SetDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)

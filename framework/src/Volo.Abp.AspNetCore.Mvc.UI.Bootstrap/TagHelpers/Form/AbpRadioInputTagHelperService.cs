@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -29,9 +29,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var html = GetHtml(context, output, selectItems);
 
-            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order, out var surpress);
+            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, html, order, out var suppress);
 
-            if (surpress)
+            if (suppress)
             {
                 output.SuppressOutput();
             }
@@ -90,7 +90,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
+            var localizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer);
 
             var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
@@ -130,7 +130,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (!selectItems.Any(si => si.Selected))
             {
-                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
+                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value == selectedValue);
 
                 if (itemToBeSelected != null)
                 {
@@ -157,17 +157,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return TagHelper.AspFor.ModelExplorer.Model?.ToString();
         }
 
-        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
         {
             var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
-            surpress = list == null;
+            suppress = list == null;
 
             if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
             {
                 list.Add(new FormGroupItem
                 {
                     HtmlContent = html,
-                    Order = order
+                    Order = order,
+                    PropertyName = propertyName
                 });
             }
         }

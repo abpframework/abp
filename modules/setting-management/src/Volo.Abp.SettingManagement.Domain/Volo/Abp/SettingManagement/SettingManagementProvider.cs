@@ -15,7 +15,7 @@ namespace Volo.Abp.SettingManagement
             SettingManagementStore = settingManagementStore;
         }
 
-        public async Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
+        public virtual async Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
         {
             return await SettingManagementStore.GetOrNullAsync(setting.Name, Name, NormalizeProviderKey(providerKey));
         }

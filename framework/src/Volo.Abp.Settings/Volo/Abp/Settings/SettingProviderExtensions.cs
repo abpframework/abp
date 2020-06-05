@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Settings
 {
@@ -28,29 +26,6 @@ namespace Volo.Abp.Settings
 
             var value = await settingProvider.GetOrNullAsync(name);
             return value?.To<T>() ?? defaultValue;
-        }
-
-        public static string GetOrNull([NotNull] this ISettingProvider settingProvider, [NotNull] string name)
-        {
-            Check.NotNull(settingProvider, nameof(settingProvider));
-            return AsyncHelper.RunSync(() => settingProvider.GetOrNullAsync(name));
-        }
-
-        public static List<SettingValue> GetAll([NotNull] this ISettingProvider settingProvider)
-        {
-            Check.NotNull(settingProvider, nameof(settingProvider));
-            return AsyncHelper.RunSync(settingProvider.GetAllAsync);
-        }
-
-        public static T Get<T>([NotNull] this ISettingProvider settingProvider, [NotNull] string name, T defaultValue = default)
-            where T : struct
-        {
-            return AsyncHelper.RunSync(() => settingProvider.GetAsync(name, defaultValue));
-        }
-
-        public static bool IsTrue([NotNull] this ISettingProvider settingProvider, [NotNull] string name)
-        {
-            return AsyncHelper.RunSync(() => settingProvider.IsTrueAsync(name));
         }
     }
 }

@@ -2,23 +2,18 @@
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDb
+namespace Volo.Abp.TenantManagement.MongoDB
 {
-    [ConnectionStringName("AbpTenantManagement")]
+    [ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
     public class TenantManagementMongoDbContext : AbpMongoDbContext, ITenantManagementMongoDbContext
     {
-        public static string CollectionPrefix { get; set; } = AbpTenantManagementConsts.DefaultDbTablePrefix;
-
         public IMongoCollection<Tenant> Tenants => Collection<Tenant>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureTenantManagement(options =>
-            {
-                options.CollectionPrefix = CollectionPrefix;
-            });
+            modelBuilder.ConfigureTenantManagement();
         }
     }
 }

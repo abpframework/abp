@@ -42,7 +42,7 @@ namespace Volo.Abp.Account.Web.Pages
             _resourceStore = resourceStore;
         }
 
-        public virtual async Task OnGet()
+        public virtual async Task<IActionResult> OnGet()
         {
             var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
             if (request == null)
@@ -74,6 +74,8 @@ namespace Volo.Abp.Account.Web.Pages
             {
                 ConsentInput.ApiScopes.Add(GetOfflineAccessScope(true));
             }
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPost(string userDecision)
@@ -106,7 +108,7 @@ namespace Volo.Abp.Account.Web.Pages
             }
             else
             {
-                if (ConsentInput.IdentityScopes.Any() || ConsentInput.ApiScopes.Any())
+                if (!ConsentInput.IdentityScopes.IsNullOrEmpty() || !ConsentInput.ApiScopes.IsNullOrEmpty())
                 {
                     grantedConsent = new ConsentResponse
                     {
@@ -187,7 +189,9 @@ namespace Volo.Abp.Account.Web.Pages
 
             public List<string> GetAllowedScopeNames()
             {
-                return IdentityScopes.Union(ApiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
+                var identityScopes = IdentityScopes ?? new List<ConsentModel.ScopeViewModel>();
+                var apiScopes = ApiScopes ?? new List<ConsentModel.ScopeViewModel>();
+                return identityScopes.Union(apiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
             }
         }
 

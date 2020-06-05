@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.MongoDB;
 using Volo.Abp.Users.MongoDB;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Comments;
@@ -11,6 +12,7 @@ namespace Volo.Blogging.MongoDB
 {
     [DependsOn(
         typeof(BloggingDomainModule),
+        typeof(AbpMongoDbModule),
         typeof(AbpUsersMongoDbModule)
     )]
     public class BloggingMongoDbModule : AbpModule

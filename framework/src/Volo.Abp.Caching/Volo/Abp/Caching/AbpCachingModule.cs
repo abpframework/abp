@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Serialization;
@@ -7,9 +8,11 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Caching
 {
-    [DependsOn(typeof(AbpThreadingModule))]
-    [DependsOn(typeof(AbpSerializationModule))]
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(
+        typeof(AbpThreadingModule),
+        typeof(AbpSerializationModule),
+        typeof(AbpMultiTenancyModule),
+        typeof(AbpJsonModule))]
     public class AbpCachingModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -18,8 +21,9 @@ namespace Volo.Abp.Caching
             context.Services.AddDistributedMemoryCache();
 
             context.Services.AddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
+            context.Services.AddSingleton(typeof(IDistributedCache<,>), typeof(DistributedCache<,>));
 
-            context.Services.Configure<CacheOptions>(cacheOptions =>
+            context.Services.Configure<AbpDistributedCacheOptions>(cacheOptions =>
             {
                 cacheOptions.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromMinutes(20);
             });

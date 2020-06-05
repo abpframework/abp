@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.IO
@@ -16,6 +17,30 @@ namespace Volo.Abp.IO
             }
         }
 
+        public static void DeleteIfExists(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory);
+            }
+        }
+
+        public static void DeleteIfExists(string directory, bool recursive)
+        {
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory, recursive);
+            }
+        }
+
+        public static void CreateIfNotExists(DirectoryInfo directory)
+        {
+            if (!directory.Exists)
+            {
+                directory.Create();
+            }
+        }
+
         public static bool IsSubDirectoryOf([NotNull] string parentDirectoryPath, [NotNull] string childDirectoryPath)
         {
             Check.NotNull(parentDirectoryPath, nameof(parentDirectoryPath));
@@ -27,7 +52,8 @@ namespace Volo.Abp.IO
             );
         }
 
-        public static bool IsSubDirectoryOf([NotNull] DirectoryInfo parentDirectory, [NotNull]  DirectoryInfo childDirectory)
+        public static bool IsSubDirectoryOf([NotNull] DirectoryInfo parentDirectory,
+            [NotNull] DirectoryInfo childDirectory)
         {
             Check.NotNull(parentDirectory, nameof(parentDirectory));
             Check.NotNull(childDirectory, nameof(childDirectory));
@@ -44,6 +70,20 @@ namespace Volo.Abp.IO
             }
 
             return IsSubDirectoryOf(parentDirectory, parentOfChild);
+        }
+
+        public static IDisposable ChangeCurrentDirectory(string targetDirectory)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+            if (currentDirectory.Equals(targetDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                return NullDisposable.Instance;
+            }
+
+            Directory.SetCurrentDirectory(targetDirectory);
+
+            return new DisposeAction(() => { Directory.SetCurrentDirectory(currentDirectory); });
         }
     }
 }

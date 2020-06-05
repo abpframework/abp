@@ -5,7 +5,7 @@ using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityUserAppService : IAsyncCrudAppService<IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+    public interface IIdentityUserAppService : ICrudAppService<IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
     {
         Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
 
@@ -14,7 +14,5 @@ namespace Volo.Abp.Identity
         Task<IdentityUserDto> FindByUsernameAsync(string username);
 
         Task<IdentityUserDto> FindByEmailAsync(string email);
-
-        Task ChangePasswordAsync(string currentPassword, string newPassword);
     }
 }

@@ -4,7 +4,7 @@ namespace Volo.Abp.Settings
 {
     public class GlobalSettingValueProvider : SettingValueProvider
     {
-        public const string ProviderName = "Global";
+        public const string ProviderName = "G";
 
         public override string Name => ProviderName;
 

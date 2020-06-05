@@ -1,0 +1,28 @@
+{
+  "parameters": [
+    {
+      "name": "UI",
+      "displayName": "UI",
+      "values": {
+        "MVC": "MVC / Razor Pages",
+        "NG": "Angular"
+      }
+    },
+    {
+      "name": "DB",
+      "displayName": "Database",
+      "values": {
+        "EF": "Entity Framework Core",
+        "Mongo": "MongoDB"
+      }
+    },
+    {
+      "name": "Tiered",
+      "displayName": "Tiered",
+      "values": {
+        "No": "Not Tiered",
+        "Yes": "Tiered"
+      }
+    }
+  ]
+}

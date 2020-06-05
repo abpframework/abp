@@ -12,23 +12,27 @@ namespace Volo.Abp.BackgroundWorkers
     {
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<BackgroundWorkerOptions>>().Value;
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
             if (options.IsEnabled)
             {
-                context.ServiceProvider
-                    .GetRequiredService<IBackgroundWorkerManager>()
-                    .Start();
+                AsyncHelper.RunSync(
+                    () => context.ServiceProvider
+                        .GetRequiredService<IBackgroundWorkerManager>()
+                        .StartAsync()
+                );
             }
         }
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<BackgroundWorkerOptions>>().Value;
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
             if (options.IsEnabled)
             {
-                context.ServiceProvider
-                    .GetRequiredService<IBackgroundWorkerManager>()
-                    .Stop();
+                AsyncHelper.RunSync(
+                    () => context.ServiceProvider
+                        .GetRequiredService<IBackgroundWorkerManager>()
+                        .StopAsync()
+                );
             }
         }
     }

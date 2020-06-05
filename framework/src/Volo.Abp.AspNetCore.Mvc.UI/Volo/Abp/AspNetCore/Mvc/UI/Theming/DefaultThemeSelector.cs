@@ -6,9 +6,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
 {
     public class DefaultThemeSelector : IThemeSelector, ITransientDependency
     {
-        protected ThemingOptions Options { get; }
+        protected AbpThemingOptions Options { get; }
 
-        public DefaultThemeSelector(IOptions<ThemingOptions> options)
+        public DefaultThemeSelector(IOptions<AbpThemingOptions> options)
         {
             Options = options.Value;
         }
@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theming
         {
             if (!Options.Themes.Any())
             {
-                throw new AbpException($"No theme registered! Use {nameof(ThemingOptions)} to register themes.");
+                throw new AbpException($"No theme registered! Use {nameof(AbpThemingOptions)} to register themes.");
             }
 
             if (Options.DefaultThemeName == null)

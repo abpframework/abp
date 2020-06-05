@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
@@ -22,6 +23,7 @@ namespace BloggingService.Host
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .Enrich.WithProperty("Application", "BloggingService")
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
@@ -36,13 +38,13 @@ namespace BloggingService.Host
 
             try
             {
-                Log.Information("Starting IdentityService.Host.");
-                BuildWebHostInternal(args).Run();
+                Log.Information("Starting BloggingService.Host.");
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "IdentityService.Host terminated unexpectedly!");
+                Log.Fatal(ex, "BloggingService.Host terminated unexpectedly!");
                 return 1;
             }
             finally
@@ -51,13 +53,13 @@ namespace BloggingService.Host
             }
         }
 
-        public static IWebHost BuildWebHostInternal(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .Build();
+        internal static IHostBuilder CreateHostBuilder(string[] args) =>
+            Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .UseAutofac()
+                .UseSerilog();
     }
 }

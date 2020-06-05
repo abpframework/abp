@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class ApiResource : AggregateRoot<Guid>
+    public class ApiResource : FullAuditedAggregateRoot<Guid>
     {
         [NotNull]
         public virtual string Name { get; protected set; }
@@ -23,6 +23,8 @@ namespace Volo.Abp.IdentityServer.ApiResources
         public virtual List<ApiScope> Scopes { get; protected set; }
 
         public virtual List<ApiResourceClaim> UserClaims { get; protected set; }
+
+        public virtual Dictionary<string, string> Properties { get; protected set; }
 
         protected ApiResource()
         {
@@ -45,6 +47,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
             Secrets = new List<ApiSecret>();
             Scopes = new List<ApiScope>();
             UserClaims = new List<ApiResourceClaim>();
+            Properties = new Dictionary<string, string>();
 
             Scopes.Add(new ApiScope(id, name, displayName, description));
         }

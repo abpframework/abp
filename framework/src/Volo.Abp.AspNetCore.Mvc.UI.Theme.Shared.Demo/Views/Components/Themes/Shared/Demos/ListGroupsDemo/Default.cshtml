@@ -1,0 +1,82 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.ListGroupsDemo
+
+<abp-component-demo-section title="Basic example" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group>
+        <abp-list-group-item>Cras justo odio</abp-list-group-item>
+        <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+        <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+        <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Active & disabled items" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group>
+        <abp-list-group-item>Cras justo odio</abp-list-group-item>
+        <abp-list-group-item active="true">Dapibus ac facilisis in</abp-list-group-item>
+        <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+        <abp-list-group-item disabled="true">Vestibulum at eros</abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Links" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group>
+        <abp-list-group-item href="#" active="true">Cras justo odio</abp-list-group-item>
+        <abp-list-group-item href="#">Dapibus ac facilisis in</abp-list-group-item>
+        <abp-list-group-item href="#">Morbi leo risus</abp-list-group-item>
+        <abp-list-group-item href="#" disabled="true">Vestibulum at eros</abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Buttons" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group>
+        <abp-list-group-item tag-type="Button" active="true">Cras justo odio</abp-list-group-item>
+        <abp-list-group-item tag-type="Button">Dapibus ac facilisis in</abp-list-group-item>
+        <abp-list-group-item tag-type="Button">Morbi leo risus</abp-list-group-item>
+        <abp-list-group-item tag-type="Button" disabled="true">Vestibulum at eros</abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Flush" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group flush="true">
+        <abp-list-group-item>Cras justo odio</abp-list-group-item>
+        <abp-list-group-item>Dapibus ac facilisis in</abp-list-group-item>
+        <abp-list-group-item>Morbi leo risus</abp-list-group-item>
+        <abp-list-group-item>Vestibulum at eros</abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Contextual classes" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group>
+        <abp-list-group-item>Cras justo odio</abp-list-group-item>
+        <abp-list-group-item type="Primary">A simple Primary list group item</abp-list-group-item>
+        <abp-list-group-item type="Secondary">A simple Secondary list group item</abp-list-group-item>
+        <abp-list-group-item type="Success">A simple Success list group item</abp-list-group-item>
+        <abp-list-group-item type="Danger">A simple Danger list group item</abp-list-group-item>
+        <abp-list-group-item type="Warning">A simple Warning list group item</abp-list-group-item>
+        <abp-list-group-item type="Info">A simple Info list group item</abp-list-group-item>
+        <abp-list-group-item type="Light">A simple Light list group item</abp-list-group-item>
+        <abp-list-group-item type="Dark">A simple Dark list group item</abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Contextual classes with link" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group>
+        <abp-list-group-item href="#">Cras justo odio</abp-list-group-item>
+        <abp-list-group-item href="#" type="Primary">A simple Primary list group item</abp-list-group-item>
+        <abp-list-group-item href="#" type="Secondary">A simple Secondary list group item</abp-list-group-item>
+        <abp-list-group-item href="#" type="Success">A simple Success list group item</abp-list-group-item>
+        <abp-list-group-item href="#" type="Danger">A simple Danger list group item</abp-list-group-item>
+        <abp-list-group-item href="#" type="Warning">A simple Warning list group item</abp-list-group-item>
+        <abp-list-group-item href="#" type="Info">A simple Info list group item</abp-list-group-item>
+        <abp-list-group-item href="#" type="Light">A simple Light list group item</abp-list-group-item>
+        <abp-list-group-item href="#" type="Dark">A simple Dark list group item</abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="With badges" view-path="@ListGroupsDemoViewComponent.ViewPath">
+    <abp-list-group>
+        <abp-list-group-item>Cras justo odio <span abp-badge-pill="Primary">14</span></abp-list-group-item>
+        <abp-list-group-item>Dapibus ac facilisis in <span abp-badge-pill="Primary">2</span></abp-list-group-item>
+        <abp-list-group-item>Morbi leo risus <span abp-badge-pill="Primary">1</span></abp-list-group-item>
+    </abp-list-group>
+</abp-component-demo-section>

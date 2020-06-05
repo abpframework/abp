@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Shouldly;
+using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {
@@ -34,15 +35,26 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetAllListAsync()
+        {
+            //Act
+
+            var result = await _roleAppService.GetAllListAsync();
+
+            //Assert
+
+            result.Items.Count.ShouldBeGreaterThan(0);
+        }
+        
+        [Fact]
         public async Task GetListAsync()
         {
             //Act
 
-            var result = await _roleAppService.GetListAsync(new GetIdentityRolesInput());
+            var result = await _roleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
 
             //Assert
 
-            result.TotalCount.ShouldBeGreaterThan(0);
             result.Items.Count.ShouldBeGreaterThan(0);
         }
 

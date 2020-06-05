@@ -1,7 +1,7 @@
 /*!
  * tui-editor
- * @version 1.3.0
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
+ * @version 1.4.7
+ * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -97,7 +97,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
 * @fileoverview Editor/Viewer proxy for extensions
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 /* eslint global-require: 0 no-empty: 0 */
 
@@ -158,7 +158,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
 * @fileoverview Implements tableDataHandler
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _parseCell(cell, rowIndex, colIndex) {
   var $cell = (0, _jquery2.default)(cell);
@@ -484,12 +484,14 @@ function findElementIndex(tableData, rowIndex, colIndex) {
 function stuffCellsIntoIncompleteRow(tableData, limitIndex) {
   tableData.forEach(function (rowData, rowIndex) {
     var startIndex = rowData.length;
-    var nodeName = rowData[0].nodeName;
+    if (startIndex) {
+      var nodeName = rowData[0].nodeName;
 
 
-    _tuiCodeSnippet2.default.range(startIndex, limitIndex).forEach(function (colIndex) {
-      rowData.push(createBasicCell(rowIndex, colIndex, nodeName));
-    });
+      _tuiCodeSnippet2.default.range(startIndex, limitIndex).forEach(function (colIndex) {
+        rowData.push(createBasicCell(rowIndex, colIndex, nodeName));
+      });
+    }
   });
 }
 
@@ -594,7 +596,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
 * @fileoverview Implements tableRenderer
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _createCellHtml(cell) {
   var attrs = cell.colspan > 1 ? ' colspan="' + cell.colspan + '"' : '';
@@ -633,13 +635,13 @@ function _createTheadOrTbodyHtml(trs, wrapperNodeName) {
  * @private
  */
 function createTableHtml(renderData) {
-  var thead = [renderData[0]];
+  var thead = renderData[0] ? [renderData[0]] : [];
   var tbody = renderData.slice(1);
   var theadHtml = _createTheadOrTbodyHtml(thead, 'THEAD');
   var tbodyHtml = _createTheadOrTbodyHtml(tbody, 'TBODY');
   var className = renderData.className ? ' class="' + renderData.className + '"' : '';
 
-  return '<table' + className + '>' + (theadHtml + tbodyHtml) + '</renderData>';
+  return '<table' + className + '>' + (theadHtml + tbodyHtml) + '</table>';
 }
 
 /**
@@ -763,7 +765,7 @@ function _findUnmergedRange(tableData, $start, $end) {
  */
 /**
 * @fileoverview Implements tableRangeHandler
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _expandRowMergedRange(tableData, tableRange, rangeType) {
   var rowIndex = tableRange[rangeType].rowIndex;
@@ -987,8 +989,6 @@ var _tableUnmergePreparer2 = _interopRequireDefault(_tableUnmergePreparer);
 
 var _toMarkRenderer = __webpack_require__(53);
 
-var _toMarkRenderer2 = _interopRequireDefault(_toMarkRenderer);
-
 var _wwMergedTableManager = __webpack_require__(55);
 
 var _wwMergedTableManager2 = _interopRequireDefault(_wwMergedTableManager);
@@ -1038,14 +1038,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
 * @fileoverview Implements table extension
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function tableExtension(editor) {
   var eventManager = editor.eventManager;
 
 
-  editor.toMarkOptions = editor.toMarkOptions || {};
-  editor.toMarkOptions.renderer = _toMarkRenderer2.default;
   _bindEvents(eventManager);
 
   if (editor.isViewer()) {
@@ -1058,9 +1056,20 @@ function tableExtension(editor) {
   _addCommands(editor);
   _changeWysiwygManagers(wwComponentManager);
 
+  editor.toMarkOptions = getExtendedToMarkOptions(editor.toMarkOptions);
+
   if (popupTableUtils) {
     _mergedTableUI2.default.updateContextMenu(popupTableUtils, eventManager, wwComponentManager.getManager('tableSelection'));
   }
+}
+
+function getExtendedToMarkOptions(toMarkOptions) {
+  var extendedOptions = toMarkOptions || {};
+  var baseRenderer = extendedOptions.renderer;
+
+  extendedOptions.renderer = (0, _toMarkRenderer.createToMarkRenderer)(baseRenderer);
+
+  return extendedOptions;
 }
 
 /**
@@ -1100,6 +1109,10 @@ function _changeHtml(html, onChangeTable) {
   if ($tables.length) {
     $tables.get().forEach(function (tableElement) {
       var changedTableElement = onChangeTable(tableElement);
+
+      if (tableElement.hasAttribute('data-tomark-pass')) {
+        changedTableElement.setAttribute('data-tomark-pass', '');
+      }
 
       (0, _jquery2.default)(tableElement).replaceWith(changedTableElement);
     });
@@ -1175,7 +1188,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var i18n = _editorProxy2.default.i18n; /**
                                        * @fileoverview i18n for table extension
-                                       * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                       * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                        */
 
 if (i18n) {
@@ -1208,10 +1221,10 @@ if (i18n) {
   });
 
   i18n.setLanguage(['nl', 'nl_NL'], {
-    'Merge cells': 'cellen samenvoegen',
-    'Unmerge cells': 'Samenvoegen cellen ongedaan maken',
-    'Cannot change part of merged cell': 'Kan geen deel uit van samengevoegde cel te veranderen.',
-    'Cannot paste row merged cells into the table header': 'Kan niet plakken rij samengevoegde cellen in de koptekst. '
+    'Merge cells': 'Cellen samenvoegen',
+    'Unmerge cells': 'Samengevoegde cellen ongedaan maken',
+    'Cannot change part of merged cell': 'Kan geen deel uit van een samengevoegde cel veranderen.',
+    'Cannot paste row merged cells into the table header': 'Kan geen rij met samengevoegde cellen in de koptekst plakken.'
   });
 
   i18n.setLanguage(['zh', 'zh_CN'], {
@@ -1282,6 +1295,34 @@ if (i18n) {
     'Unmerge cells': 'Rozłącz komórki',
     'Cannot change part of merged cell': 'Nie można zmienić części scalonej komórki.',
     'Cannot paste row merged cells into the table header': 'Nie można wkleić komórek o scalonym rzędzie w nagłówek tabeli.'
+  });
+
+  i18n.setLanguage(['zh', 'zh_TW'], {
+    'Merge cells': '合併儲存格',
+    'Unmerge cells': '取消合併儲存格',
+    'Cannot change part of merged cell': '無法變更儲存格的一部分。',
+    'Cannot paste row merged cells into the table header': '無法將合併的儲存格貼上至表格標題中。'
+  });
+
+  i18n.setLanguage(['gl', 'gl_ES'], {
+    'Merge cells': 'Combinar celas',
+    'Unmerge cells': 'Separar celas',
+    'Cannot change part of merged cell': 'Non se pode cambiar parte dunha cela combinada',
+    'Cannot paste row merged cells into the table header': 'Non se poden pegar celas no encabezado da táboa'
+  });
+
+  i18n.setLanguage(['sv', 'sv_SE'], {
+    'Merge cells': 'Sammanfoga celler',
+    'Unmerge cells': 'Dela celler',
+    'Cannot change part of merged cell': 'Ej möjligt att ändra en del av en sammanfogad cell',
+    'Cannot paste row merged cells into the table header': 'Ej möjligt att klistra in rad-sammanfogade celler i tabellens huvud'
+  });
+
+  i18n.setLanguage(['it', 'it_IT'], {
+    'Merge cells': 'Unisci celle',
+    'Unmerge cells': 'Separa celle',
+    'Cannot change part of merged cell': 'Non è possibile modificare parte di una cella unita',
+    'Cannot paste row merged cells into the table header': 'Non è possibile incollare celle unite per riga nell\'intestazione della tabella'
   });
 }
 
@@ -1354,7 +1395,7 @@ function _extractPropertiesForMerge(value, type, oppossitType) {
  */
 /**
 * @fileoverview Implements mergedTableCreator.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _parseTableCell(cell) {
   var nodeName = cell.nodeName;
@@ -1566,7 +1607,7 @@ function _prependMergeSyntaxToContent(cell) {
  */
 /**
 * @fileoverview Implements tableUnmergePreparer.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function prepareTableUnmerge(tableElement) {
   (0, _jquery2.default)(tableElement).find('td, th').get().forEach(_prependMergeSyntaxToContent);
@@ -1586,6 +1627,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports._getAdditionalThCount = _getAdditionalThCount;
 exports._createTheadMarkdown = _createTheadMarkdown;
+exports.createToMarkRenderer = createToMarkRenderer;
 
 var _jquery = __webpack_require__(0);
 
@@ -1612,7 +1654,7 @@ var RX_COLS = /@cols=[0-9]+:/g;
  */
 /**
 * @fileoverview Implements toMarkRendererCreator.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _createRepeatString(str, count) {
   return _tuiCodeSnippet2.default.range(0, count).map(function () {
@@ -1622,7 +1664,7 @@ function _createRepeatString(str, count) {
 
 /**
  * Make table head align text.
- * Copy from https://github.com/nhnent/to-mark/blob/develop/src/renderer.gfm.js
+ * Copy from https://github.com/nhn/to-mark/blob/develop/src/renderer.gfm.js
  * @param {HTMLElement} thElement - Table head cell element
  * @returns {string}
  * @private
@@ -1690,9 +1732,11 @@ function _createTheadMarkdown(theadElement, theadContentMarkdown) {
   return theadContentMarkdown ? theadContentMarkdown + '|' + align + '\n' : '';
 }
 
-exports.default = _toMark2.default.Renderer.factory(_toMark2.default.gfmRenderer, {
-  'THEAD': _createTheadMarkdown
-});
+function createToMarkRenderer(baseRenderer) {
+  return _toMark2.default.Renderer.factory(baseRenderer || _toMark2.default.gfmRenderer, {
+    'THEAD': _createTheadMarkdown
+  });
+}
 
 /***/ }),
 /* 54 */
@@ -1745,7 +1789,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Implements wysiwyg merged table manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 
@@ -1757,7 +1801,7 @@ var PASTE_TABLE_CELL_BOOKMARK = 'tui-paste-table-cell-bookmark';
 
 /**
  * Class WwMergedTableManager
- * @extends {WwTableManager}
+ * @ignore
  */
 
 var WwMergedTableManager = function (_WwTableManager) {
@@ -2351,12 +2395,13 @@ var WwMergedTableManager = function (_WwTableManager) {
 
     /**
      * Paste clibpard data.
-     * @param {jQuery} $clipboardTable - jQuery table element of clipboard
+     * @param {Node} clipboardTable - table element of clipboard
      */
 
   }, {
-    key: 'pasteClipboardData',
-    value: function pasteClipboardData($clipboardTable) {
+    key: 'pasteTableData',
+    value: function pasteTableData(clipboardTable) {
+      var $clipboardTable = (0, _jquery2.default)(clipboardTable);
       var clipboardTableData = _tableDataHandler2.default.createTableData($clipboardTable);
       var tableSelectionManager = this.wwe.componentManager.getManager('tableSelection');
       var $selectedCells = tableSelectionManager.getSelectedCells();
@@ -2442,7 +2487,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Implements wysiwyg merged table selection manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 
@@ -2453,16 +2498,13 @@ var TABLE_CELL_SELECTED_CLASS_NAME = 'te-cell-selected';
 
 /**
  * Class WwMergedTableSelectionManager
+ * @param {WysiwygEditor} wwe - WysiwygEditor instance
+ * @ignore
  */
 
 var WwMergedTableSelectionManager = function (_WwTableSelectionMana) {
   _inherits(WwMergedTableSelectionManager, _WwTableSelectionMana);
 
-  /**
-   * Creates an instance of WwMergedTableSelectionManager.
-   * @param {WysiwygEditor} wwe - WysiwygEditor instance
-   * @memberof WwMergedTableSelectionManager
-   */
   function WwMergedTableSelectionManager(wwe) {
     _classCallCheck(this, WwMergedTableSelectionManager);
 
@@ -2644,7 +2686,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableAddRow. Add Row to selected table
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -2821,7 +2863,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableAddCol. Add Row to selected table.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3021,7 +3063,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableRemoveRow
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3208,7 +3250,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableRemoveCol. Remove col to selected table
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3387,7 +3429,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableAlignCol. Align selected column's text content to given direction
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3503,7 +3545,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements MergeCell
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3726,7 +3768,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements UnmergeCell
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3888,7 +3930,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements table extension ui
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var i18n = _editorProxy2.default.i18n;
 

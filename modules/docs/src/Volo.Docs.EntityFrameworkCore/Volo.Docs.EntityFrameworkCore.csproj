@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -8,6 +9,12 @@
     <PackageId>Volo.Docs.EntityFrameworkCore</PackageId>
     <RootNamespace />
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Volo\Docs\NewFolder\**" />
+    <EmbeddedResource Remove="Volo\Docs\NewFolder\**" />
+    <None Remove="Volo\Docs\NewFolder\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Docs.Domain\Volo.Docs.Domain.csproj" />

@@ -1,12 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20181108103917_Identity_Changes.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Blogging.EntityFrameworkCore\Volo.Blogging.EntityFrameworkCore.csproj" />

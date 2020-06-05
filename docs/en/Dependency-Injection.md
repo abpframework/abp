@@ -96,7 +96,7 @@ public class TaxCalculator : ITransientDependency
 Another way of configuring a service for dependency injection is to use ``DependencyAttribute``. It has the following properties:
 
 * ``Lifetime``: Lifetime of the registration: ``Singleton``, ``Transient`` or ``Scoped``.
-* ``TryRegister``: Set ``true`` to register the service only it's not registered before. Uses TryAdd... extension methods of IServiceCollection.
+* ``TryRegister``: Set ``true`` to register the service only if it's not registered before. Uses TryAdd... extension methods of IServiceCollection.
 * ``ReplaceServices``: Set ``true`` to replace services if they are already registered before. Uses Replace extension method of IServiceCollection.
 
 Example:
@@ -162,6 +162,24 @@ public class BlogModule : AbpModule
         context.Services.AddScoped<ITaxCalculator>(
             sp => sp.GetRequiredService<TaxCalculator>()
         );
+    }
+}
+````
+
+### Replace a Service
+
+If you need to replace an existing service (defined by the ABP framework or another module dependency), you have two options;
+
+1. Use the `Dependency` attribute of the ABP framework as explained above.
+2. Use the `IServiceCollection.Replace` method of the Microsoft Dependency Injection library. Example:
+
+````csharp
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //Replacing the IConnectionStringResolver service
+        context.Services.Replace(ServiceDescriptor.Transient<IConnectionStringResolver, MyConnectionStringResolver>());
     }
 }
 ````

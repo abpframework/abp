@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IdentityModel;
 
 namespace Volo.Abp.IdentityModel
@@ -12,7 +13,7 @@ namespace Volo.Abp.IdentityModel
         public string GrantType
         {
             get => this.GetOrDefault(nameof(GrantType));
-            set => this[GrantType] = value;
+            set => this[nameof(GrantType)] = value;
         }
 
         /// <summary>
@@ -21,7 +22,7 @@ namespace Volo.Abp.IdentityModel
         public string ClientId
         {
             get => this.GetOrDefault(nameof(ClientId));
-            set => this[ClientId] = value;
+            set => this[nameof(ClientId)] = value;
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace Volo.Abp.IdentityModel
         public string ClientSecret
         {
             get => this.GetOrDefault(nameof(ClientSecret));
-            set => this[ClientSecret] = value;
+            set => this[nameof(ClientSecret)] = value;
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace Volo.Abp.IdentityModel
         public string UserName
         {
             get => this.GetOrDefault(nameof(UserName));
-            set => this[UserName] = value;
+            set => this[nameof(UserName)] = value;
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Volo.Abp.IdentityModel
         public string UserPassword
         {
             get => this.GetOrDefault(nameof(UserPassword));
-            set => this[UserPassword] = value;
+            set => this[nameof(UserPassword)] = value;
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace Volo.Abp.IdentityModel
         public string Authority
         {
             get => this.GetOrDefault(nameof(Authority));
-            set => this[Authority] = value;
+            set => this[nameof(Authority)] = value;
         }
 
         /// <summary>
@@ -68,26 +69,42 @@ namespace Volo.Abp.IdentityModel
         public string Scope
         {
             get => this.GetOrDefault(nameof(Scope));
-            set => this[Scope] = value;
+            set => this[nameof(Scope)] = value;
         }
 
+        /// <summary>
+        /// RequireHttps.
+        /// Default: true.
+        /// </summary>
+        public bool RequireHttps
+        {
+            get => this.GetOrDefault(nameof(RequireHttps))?.To<bool>() ?? true;
+            set => this[nameof(RequireHttps)] = value.ToString().ToLowerInvariant();
+        }
+        
         public IdentityClientConfiguration()
         {
             
         }
 
         public IdentityClientConfiguration(
+            string authority,
+            string scope,
             string clientId, 
             string clientSecret, 
             string grantType = OidcConstants.GrantTypes.ClientCredentials,
             string userName = null,
-            string userPassword = null)
+            string userPassword = null,
+            bool requireHttps = true)
         {
+            this[nameof(Authority)] = authority;
+            this[nameof(Scope)] = scope;
             this[nameof(ClientId)] = clientId;
             this[nameof(ClientSecret)] = clientSecret;
             this[nameof(GrantType)] = grantType;
             this[nameof(UserName)] = userName;
             this[nameof(UserPassword)] = userPassword;
+            this[nameof(RequireHttps)] = requireHttps.ToString().ToLowerInvariant();
         }
     }
 }

@@ -11,15 +11,18 @@ namespace Volo.Abp.Uow.MemoryDb
         
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IConnectionStringResolver _connectionStringResolver;
+        private readonly MemoryDatabaseManager _memoryDatabaseManager;
 
         public UnitOfWorkMemoryDatabaseProvider(
             IUnitOfWorkManager unitOfWorkManager,
             IConnectionStringResolver connectionStringResolver,
-            TMemoryDbContext dbContext)
+            TMemoryDbContext dbContext, 
+            MemoryDatabaseManager memoryDatabaseManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _connectionStringResolver = connectionStringResolver;
             DbContext = dbContext;
+            _memoryDatabaseManager = memoryDatabaseManager;
         }
 
         public IMemoryDatabase GetDatabase()
@@ -36,7 +39,7 @@ namespace Volo.Abp.Uow.MemoryDb
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
                 () => new MemoryDbDatabaseApi(
-                    MemoryDatabaseManager.Get(connectionString)
+                    _memoryDatabaseManager.Get(connectionString)
                 ));
 
             return ((MemoryDbDatabaseApi)databaseApi).Database;

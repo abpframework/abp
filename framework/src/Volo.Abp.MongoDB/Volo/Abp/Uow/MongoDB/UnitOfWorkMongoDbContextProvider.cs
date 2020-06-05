@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
@@ -30,14 +31,9 @@ namespace Volo.Abp.Uow.MongoDB
             var connectionString = _connectionStringResolver.Resolve<TMongoDbContext>();
             var dbContextKey = $"{typeof(TMongoDbContext).FullName}_{connectionString}";
 
-            string databaseName;
-            if (connectionString.Contains("|"))
-            {
-                var splitted = connectionString.Split('|');
-                connectionString = splitted[0];
-                databaseName = splitted[1];
-            }
-            else
+            var mongoUrl = new MongoUrl(connectionString);
+            var databaseName = mongoUrl.DatabaseName;
+            if (databaseName.IsNullOrWhiteSpace())
             {
                 databaseName = ConnectionStringNameAttribute.GetConnStringName<TMongoDbContext>();
             }
@@ -47,7 +43,7 @@ namespace Volo.Abp.Uow.MongoDB
                 dbContextKey,
                 () =>
                 {
-                    var database = new MongoClient(connectionString).GetDatabase(databaseName);
+                    var database = new MongoClient(mongoUrl).GetDatabase(databaseName);
 
                     var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 

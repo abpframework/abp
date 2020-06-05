@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers
+namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers //TODO: Move to AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers namespace
 {
     public static class AbpTagHelperAttributeListExtensions
     {
@@ -19,8 +21,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
             }
             else
             {
-                //TODO: Check if it's already added before!
-                attributes.SetAttribute("class", classAttribute.Value + " " + className);
+                var existingClasses = classAttribute.Value.ToString().Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                existingClasses.AddIfNotContains(className);
+                attributes.SetAttribute("class", string.Join(" ", existingClasses));
             }
         }
 
@@ -37,15 +40,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
                 return;
             }
 
-            //Can be optimized?
-            attributes.SetAttribute("class", classAttribute.Value.ToString().Split(' ').RemoveAll(c => c == className).JoinAsString(" "));
+            var classList = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            classList.RemoveAll(c => c == className);
+
+            attributes.SetAttribute("class", classList.JoinAsString(" "));
         }
 
         public static void AddIfNotContains(this TagHelperAttributeList attributes, string name, object value)
         {
-            if (!attributes.ContainsName("method"))
+            if (!attributes.ContainsName(name))
             {
-                attributes.Add("method", "post");
+                attributes.Add(name, value);
             }
         }
     }

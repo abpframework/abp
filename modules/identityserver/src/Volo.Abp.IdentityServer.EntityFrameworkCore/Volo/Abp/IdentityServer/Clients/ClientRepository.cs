@@ -19,7 +19,7 @@ namespace Volo.Abp.IdentityServer.Clients
         }
 
         public virtual async Task<Client> FindByCliendIdAsync(
-            string clientId, 
+            string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -28,22 +28,29 @@ namespace Volo.Abp.IdentityServer.Clients
                 .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<Client>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
+        public virtual async Task<List<Client>> GetListAsync(
+            string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
-                .IncludeDetails(includeDetails).OrderBy(sorting ?? nameof(Client.ClientName) + " desc")
+                .IncludeDetails(includeDetails)
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+                .OrderBy(sorting ?? nameof(Client.ClientName) + " desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
         {
-            return await DbSet
-                .AsNoTracking()
-                .SelectMany(x => x.AllowedCorsOrigins.Select(y => y.Origin))
+            return await DbContext.ClientCorsOrigins
+                .Select(x => x.Origin)
                 .Distinct()
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        {
+            return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
         }
 
         public override IQueryable<Client> WithDetails()

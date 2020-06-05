@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
+using MsDemo.Shared;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
@@ -14,14 +20,17 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace IdentityService.Host
 {
     [DependsOn(
         typeof(AbpAutofacModule),
+        typeof(AbpAspNetCoreMvcModule),
         typeof(AbpEventBusRabbitMqModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
@@ -29,7 +38,9 @@ namespace IdentityService.Host
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityApplicationModule)
+        typeof(AbpIdentityApplicationModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpTenantManagementEntityFrameworkCoreModule)
         )]
     public class IdentityServiceHostModule : AbpModule
     {
@@ -37,25 +48,22 @@ namespace IdentityService.Host
         {
             var configuration = context.Services.GetConfiguration();
 
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
+
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.ApiName = configuration["AuthServer:ApiName"];
                     options.RequireHttpsMetadata = false;
-                    //TODO: Should create an extension method for that (may require to create a new ABP package depending on the IdentityServer4.AccessTokenValidation)
-                    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
-                    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
-                    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
-                    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
-                    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
-                    options.InboundJwtClaimTypeMap["phone_number_verified"] = AbpClaimTypes.PhoneNumberVerified;
-                    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
                 });
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info {Title = "Identity Service API", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "Identity Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -70,7 +78,7 @@ namespace IdentityService.Host
                 options.UseSqlServer();
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -92,7 +100,15 @@ namespace IdentityService.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAbpClaimsMap();
+
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+
             app.UseAbpRequestLocalization(); //TODO: localization?
             app.UseSwagger();
             app.UseSwaggerUI(options =>
@@ -100,7 +116,7 @@ namespace IdentityService.Host
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity Service API");
             });
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

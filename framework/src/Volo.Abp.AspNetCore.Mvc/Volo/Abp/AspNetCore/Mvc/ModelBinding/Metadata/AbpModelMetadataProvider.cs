@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.ModelBinding.Metadata
@@ -14,14 +14,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding.Metadata
     [ExposeServices(typeof(IModelMetadataProvider))]
     public class AbpModelMetadataProvider : DefaultModelMetadataProvider
     {
-        private static readonly PropertyInfo ValidationAttributeErrorMessageStringProperty;
-
-        static AbpModelMetadataProvider()
-        {
-            ValidationAttributeErrorMessageStringProperty = typeof(ValidationAttribute)
-                .GetProperty("ErrorMessageString", BindingFlags.Instance | BindingFlags.NonPublic);
-        }
-
         public AbpModelMetadataProvider(ICompositeMetadataDetailsProvider detailsProvider)
             : base(detailsProvider)
         {
@@ -56,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding.Metadata
         {
             if (validationAttribute.ErrorMessage == null)
             {
-                validationAttribute.ErrorMessage = ValidationAttributeErrorMessageStringProperty.GetValue(validationAttribute) as string;
+                ValidationAttributeHelper.SetDefaultErrorMessage(validationAttribute);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Auditing;
 
 namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models
 {
@@ -12,6 +13,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers.Models
         [Required]
         [StringLength(32)]
         [DataType(DataType.Password)]
+        [DisableAuditing]
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }

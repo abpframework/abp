@@ -8,7 +8,7 @@ namespace Volo.Abp.Localization
     {
         public LocalizedString GetOrNull(string cultureName, string name)
         {
-            foreach (var contributor in this.AsQueryable().Reverse()) //TODO: Reverse?
+            foreach (var contributor in this.AsQueryable().Reverse())
             {
                 var localString = contributor.GetOrNull(cultureName, name);
                 if (localString != null)

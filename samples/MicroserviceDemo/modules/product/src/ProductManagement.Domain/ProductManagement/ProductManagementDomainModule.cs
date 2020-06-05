@@ -18,7 +18,7 @@ namespace ProductManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<ProductManagementDomainModule>();
             });
@@ -28,7 +28,7 @@ namespace ProductManagement
                 options.Resources.Get<ProductManagementResource>().AddVirtualJson("/ProductManagement/Localization/Domain");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("ProductManagement", typeof(ProductManagementResource));
             });

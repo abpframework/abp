@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -15,23 +16,20 @@ namespace Volo.Abp.PermissionManagement
     {
         protected PermissionManagementOptions Options { get; }
 
-        private readonly IPermissionManager _permissionManager;
-        private readonly IPermissionDefinitionManager _permissionDefinitionManager;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        protected IPermissionManager PermissionManager { get; }
+        protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
         public PermissionAppService(
             IPermissionManager permissionManager, 
             IPermissionDefinitionManager permissionDefinitionManager,
-            IStringLocalizerFactory stringLocalizerFactory,
             IOptions<PermissionManagementOptions> options)
         {
             Options = options.Value;
-            _permissionManager = permissionManager;
-            _permissionDefinitionManager = permissionDefinitionManager;
-            _stringLocalizerFactory = stringLocalizerFactory;
+            PermissionManager = permissionManager;
+            PermissionDefinitionManager = permissionDefinitionManager;
         }
 
-        public async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
+        public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
             await CheckProviderPolicy(providerName);
 
@@ -41,18 +39,30 @@ namespace Volo.Abp.PermissionManagement
                 Groups = new List<PermissionGroupDto>()
             };
 
-            foreach (var group in _permissionDefinitionManager.GetGroups())
+            var multiTenancySide = CurrentTenant.GetMultiTenancySide();
+
+            foreach (var group in PermissionDefinitionManager.GetGroups())
             {
                 var groupDto = new PermissionGroupDto
                 {
                     Name = group.Name,
-                    DisplayName = group.DisplayName.Localize(_stringLocalizerFactory),
+                    DisplayName = group.DisplayName.Localize(StringLocalizerFactory),
                     Permissions = new List<PermissionGrantInfoDto>()
                 };
 
                 foreach (var permission in group.GetPermissionsWithChildren())
                 {
+                    if (!permission.IsEnabled)
+                    {
+                        continue;
+                    }
+
                     if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+                    {
+                        continue;
+                    }
+
+                    if (!permission.MultiTenancySide.HasFlag(multiTenancySide))
                     {
                         continue;
                     }
@@ -60,13 +70,13 @@ namespace Volo.Abp.PermissionManagement
                     var grantInfoDto = new PermissionGrantInfoDto
                     {
                         Name = permission.Name,
-                        DisplayName = permission.DisplayName.Localize(_stringLocalizerFactory),
+                        DisplayName = permission.DisplayName.Localize(StringLocalizerFactory),
                         ParentName = permission.Parent?.Name,
                         AllowedProviders = permission.Providers,
                         GrantedProviders = new List<ProviderInfoDto>()
                     };
 
-                    var grantInfo = await _permissionManager.GetAsync(permission.Name, providerName, providerKey);
+                    var grantInfo = await PermissionManager.GetAsync(permission.Name, providerName, providerKey);
 
                     grantInfoDto.IsGranted = grantInfo.IsGranted;
 
@@ -91,20 +101,13 @@ namespace Volo.Abp.PermissionManagement
             return result;
         }
 
-        public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
+        public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
             await CheckProviderPolicy(providerName);
 
             foreach (var permissionDto in input.Permissions)
             {
-                var permissionDefinition = _permissionDefinitionManager.Get(permissionDto.Name);
-                if (permissionDefinition.Providers.Any() && 
-                    !permissionDefinition.Providers.Contains(providerName))
-                {
-                    throw new ApplicationException($"The permission named '{permissionDto.Name}' has not compatible with the provider named '{providerName}'");
-                }
-
-                await _permissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
+                await PermissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
             }
         }
 

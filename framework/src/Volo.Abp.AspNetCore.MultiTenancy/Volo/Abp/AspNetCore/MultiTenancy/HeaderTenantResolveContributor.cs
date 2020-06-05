@@ -9,6 +9,10 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public class HeaderTenantResolveContributor : HttpTenantResolveContributorBase
     {
+        public const string ContributorName = "Header";
+
+        public override string Name => ContributorName;
+
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
             if (httpContext.Request == null || httpContext.Request.Headers.IsNullOrEmpty())
@@ -16,7 +20,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 return null;
             }
 
-            var tenantIdKey = context.GetAspNetCoreMultiTenancyOptions().TenantKey;
+            var tenantIdKey = context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey;
 
             var tenantIdHeader = httpContext.Request.Headers[tenantIdKey];
             if (tenantIdHeader == string.Empty || tenantIdHeader.Count < 1)

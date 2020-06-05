@@ -2,6 +2,6 @@
 {
     public class UserClaimConsts
     {
-        public const int TypeMaxLength = 196;
+        public const int TypeMaxLength = 200;
     }
 }

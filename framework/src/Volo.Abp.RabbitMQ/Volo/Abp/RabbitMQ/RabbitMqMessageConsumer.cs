@@ -7,6 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.RabbitMQ
@@ -16,6 +17,8 @@ namespace Volo.Abp.RabbitMQ
         public ILogger<RabbitMqMessageConsumer> Logger { get; set; }
 
         protected IConnectionPool ConnectionPool { get; }
+
+        protected IExceptionNotifier ExceptionNotifier { get; }
 
         protected AbpTimer Timer { get; }
 
@@ -35,10 +38,12 @@ namespace Volo.Abp.RabbitMQ
 
         public RabbitMqMessageConsumer(
             IConnectionPool connectionPool,
-            AbpTimer timer)
+            AbpTimer timer, 
+            IExceptionNotifier exceptionNotifier)
         {
             ConnectionPool = connectionPool;
             Timer = timer;
+            ExceptionNotifier = exceptionNotifier;
             Logger = NullLogger<RabbitMqMessageConsumer>.Instance;
 
             QueueBindCommands = new ConcurrentQueue<QueueBindCommand>();
@@ -72,7 +77,7 @@ namespace Volo.Abp.RabbitMQ
             await TrySendQueueBindCommandsAsync();
         }
 
-        protected virtual Task TrySendQueueBindCommandsAsync()
+        protected virtual void TrySendQueueBindCommands()
         {
             try
             {
@@ -80,7 +85,7 @@ namespace Volo.Abp.RabbitMQ
                 {
                     if (Channel == null || Channel.IsClosed)
                     {
-                        return Task.CompletedTask;
+                        return;
                     }
 
                     lock (ChannelSendSyncLock)
@@ -114,8 +119,13 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
+                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
             }
+        }
 
+        protected virtual Task TrySendQueueBindCommandsAsync()
+        {
+            TrySendQueueBindCommands();
             return Task.CompletedTask;
         }
 
@@ -129,7 +139,7 @@ namespace Volo.Abp.RabbitMQ
             if (Channel == null || Channel.IsOpen == false)
             {
                 TryCreateChannel();
-                AsyncHelper.RunSync(TrySendQueueBindCommandsAsync);
+                TrySendQueueBindCommands();
             }
         }
 
@@ -176,6 +186,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
+                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
             }
         }
 
@@ -193,6 +204,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex);
+                await ExceptionNotifier.NotifyAsync(ex);
             }
         }
 
@@ -210,6 +222,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
+                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
             }
         }
 

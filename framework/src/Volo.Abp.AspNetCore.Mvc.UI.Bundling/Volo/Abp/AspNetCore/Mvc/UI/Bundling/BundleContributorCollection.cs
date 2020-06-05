@@ -9,14 +9,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
     public class BundleContributorCollection
     {
-        private readonly List<BundleContributor> _contributors;
+        private readonly List<IBundleContributor> _contributors;
 
         public BundleContributorCollection()
         {
-            _contributors = new List<BundleContributor>();
+            _contributors = new List<IBundleContributor>();
         }
 
-        public void Add(BundleContributor contributor)
+        public void Add(IBundleContributor contributor)
         {
             foreach (var dependedType in GetDirectDependencies(contributor.GetType()))
             {
@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         }
 
         public void Add<TContributor>()
-            where TContributor : BundleContributor, new()
+            where TContributor : IBundleContributor, new()
         {
             Add(typeof(TContributor));
         }
@@ -39,7 +39,44 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             AddWithDependencies(contributorType);
         }
 
-        public IReadOnlyList<BundleContributor> GetAll()
+        public void Replace<TSourceContributor, TDestContributorType>(bool includeDependencies = false)
+            where TSourceContributor : IBundleContributor, new()
+            where TDestContributorType : IBundleContributor, new()
+        {
+            Replace(typeof(TSourceContributor), typeof(TDestContributorType), includeDependencies);
+        }
+
+        public void Replace([NotNull] Type sourceContributorType, [NotNull] Type destContributorType, bool includeDependencies = false)
+        {
+            Check.NotNull(sourceContributorType, nameof(sourceContributorType));
+            Check.NotNull(destContributorType, nameof(destContributorType));
+
+            if (!includeDependencies)
+            {
+                _contributors.ReplaceOne(x => x.GetType() == sourceContributorType,
+                    contributor => (IBundleContributor) Activator.CreateInstance(destContributorType));
+            }
+            else
+            {
+                RemoveWithDependencies(sourceContributorType);
+                Add(destContributorType);
+            }
+        }
+        
+        public void Remove<TContributor>(bool includeDependencies = false)
+            where TContributor : IBundleContributor, new()
+        {
+            if (!includeDependencies)
+            {
+                _contributors.RemoveAll(x => x.GetType() == typeof(TContributor));
+            }
+            else
+            {
+                RemoveWithDependencies(typeof(TContributor));
+            }
+        }
+
+        public IReadOnlyList<IBundleContributor> GetAll()
         {
             return _contributors.ToImmutableList();
         }
@@ -57,6 +94,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             }
 
             AddInstanceToContributors(contributorType);
+        }
+        
+        private void RemoveWithDependencies(Type contributorType)
+        {
+            foreach (var dependedType in GetDirectDependencies(contributorType))
+            {
+                RemoveWithDependencies(dependedType); //Recursive call
+            }
+
+            _contributors.RemoveAll(x => x.GetType() == contributorType);
         }
 
         private IEnumerable<Type> GetDirectDependencies(Type contributorType)
@@ -77,14 +124,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         private void AddInstanceToContributors(Type contributorType)
         {
-            if (!typeof(BundleContributor).IsAssignableFrom(contributorType))
+            if (!typeof(IBundleContributor).IsAssignableFrom(contributorType))
             {
-                throw new AbpException($"Given {nameof(contributorType)} ({contributorType.AssemblyQualifiedName}) should implement the {typeof(BundleContributor).AssemblyQualifiedName} interface!");
+                throw new AbpException($"Given {nameof(contributorType)} ({contributorType.AssemblyQualifiedName}) should implement the {typeof(IBundleContributor).AssemblyQualifiedName} interface!");
             }
 
             try
             {
-                _contributors.Add((BundleContributor)Activator.CreateInstance(contributorType));
+                _contributors.Add((IBundleContributor)Activator.CreateInstance(contributorType));
             }
             catch (Exception ex)
             {

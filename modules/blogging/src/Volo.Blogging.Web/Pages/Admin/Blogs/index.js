@@ -9,6 +9,7 @@
         serverSide: true,
         paging: false,
         info: false,
+        scrollX: true,
         searching: false,
         autoWidth: false,
         scrollCollapse: true,
@@ -21,9 +22,7 @@
                         [
                             {
                                 text: l('Edit'),
-                                visible: function () {
-                                    return true; //TODO: Check permission
-                                },
+                                visible: abp.auth.isGranted('Blogging.Blog.Update'),
                                 action: function (data) {
                                     _editModal.open({
                                         blogId: data.record.id
@@ -32,9 +31,7 @@
                             },
                             {
                                 text: l('Delete'),
-                                visible: function () {
-                                    return true; //TODO: Check permission
-                                },
+                                visible: abp.auth.isGranted('Blogging.Blog.Delete'),
                                 confirmMessage: function (data) { return l('BlogDeletionWarningMessage') },
                                 action: function (data) {
                                     volo.blogging.blogs

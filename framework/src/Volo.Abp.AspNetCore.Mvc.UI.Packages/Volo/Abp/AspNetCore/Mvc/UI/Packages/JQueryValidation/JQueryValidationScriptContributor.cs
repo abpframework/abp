@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
 
             var cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Replace('-', '_');
 
-            if (TryAddCultureFile(context, cultureName))
+            if (TryAddCultureFile(context, MapCultureName(cultureName)))
             {
                 return;
             }
@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
                 return;
             }
 
-            TryAddCultureFile(context, cultureName.Substring(0, cultureName.IndexOf('_')));
+            TryAddCultureFile(context, MapCultureName(cultureName.Substring(0, cultureName.IndexOf('_'))));
         }
 
         protected virtual bool TryAddCultureFile(BundleConfigurationContext context, string cultureName)
@@ -50,6 +50,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
 
             context.Files.AddIfNotContains(filePath);
             return true;
+        }
+        
+        protected virtual string MapCultureName(string cultureName)
+        {
+            return cultureName;
         }
     }
 }

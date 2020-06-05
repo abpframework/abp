@@ -1,17 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Docs.Documents;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.EntityFrameworkCore
 {
-    [ConnectionStringName("Docs")]
+    [ConnectionStringName(DocsDbProperties.ConnectionStringName)]
     public class DocsDbContext: AbpDbContext<DocsDbContext>, IDocsDbContext
     {
-        public static string TablePrefix { get; set; } = DocsConsts.DefaultDbTablePrefix;
-        public static string Schema { get; set; } = DocsConsts.DefaultDbSchema;
-
         public DbSet<Project> Projects { get; set; }
+
+        public DbSet<Document> Documents { get; set; }
+
+        public DbSet<DocumentContributor> DocumentContributors { get; set; }
 
         public DocsDbContext(DbContextOptions<DocsDbContext> options) 
             : base(options)
@@ -23,11 +25,7 @@ namespace Volo.Docs.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureDocs(options =>
-            {
-                options.TablePrefix = TablePrefix;
-                options.Schema = Schema;
-            });
+            builder.ConfigureDocs();
         }
     }
 }

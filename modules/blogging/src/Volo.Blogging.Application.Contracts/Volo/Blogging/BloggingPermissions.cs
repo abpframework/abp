@@ -1,4 +1,6 @@
-﻿namespace Volo.Blogging
+﻿using Volo.Abp.Reflection;
+
+namespace Volo.Blogging
 {
     public class BloggingPermissions
     {
@@ -39,27 +41,7 @@
 
         public static string[] GetAll()
         {
-            return new[]
-            {
-                GroupName,
-                Blogs.Default,
-                Blogs.Management,
-                Blogs.Delete,
-                Blogs.Update,
-                Blogs.Create,
-                Posts.Default,
-                Posts.Delete,
-                Posts.Update,
-                Posts.Create,
-                Tags.Default,
-                Tags.Delete,
-                Tags.Update,
-                Tags.Create,
-                Comments.Default,
-                Comments.Delete,
-                Comments.Update,
-                Comments.Create
-            };
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(BloggingPermissions));
         }
     }
 }

@@ -1,12 +1,12 @@
 {
-  "version": "0.4.9",
+  "version": "2.9.0",
   "name": "@abp/datatables.net",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.4.9",
-    "datatables.net": "^1.10.16"
+    "@abp/jquery": "^2.9.0",
+    "datatables.net": "^1.10.20"
   },
-  "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
+  "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

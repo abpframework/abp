@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,19 +15,19 @@ using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Validation;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
+namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConverter, ITransientDependency
     {
         public bool SendAllExceptionsToClients { get; set; } = false;
 
-        protected ExceptionLocalizationOptions LocalizationOptions { get; }
+        protected AbpExceptionLocalizationOptions LocalizationOptions { get; }
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
         protected IStringLocalizer<AbpUiResource> L { get; }
         protected IServiceProvider ServiceProvider { get; }
 
         public DefaultExceptionToErrorInfoConverter(
-            IOptions<ExceptionLocalizationOptions> localizationOptions,
+            IOptions<AbpExceptionLocalizationOptions> localizationOptions,
             IStringLocalizerFactory stringLocalizerFactory,
             IStringLocalizer<AbpUiResource> abpUiStringLocalizer,
             IServiceProvider serviceProvider)
@@ -42,9 +42,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         {
             var errorInfo = CreateErrorInfoWithoutCode(exception);
 
-            if (exception is IHasErrorCode)
+            if (exception is IHasErrorCode hasErrorCodeException)
             {
-                errorInfo.Code = (exception as IHasErrorCode).Code;
+                errorInfo.Code = hasErrorCodeException.Code;
             }
 
             return errorInfo;

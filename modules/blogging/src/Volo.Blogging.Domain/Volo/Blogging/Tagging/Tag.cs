@@ -20,8 +20,9 @@ namespace Volo.Blogging.Tagging
 
         }
 
-        public Tag(Guid blogId, [NotNull] string name, int usageCount = 0, string description = null)
+        public Tag(Guid id, Guid blogId, [NotNull] string name, int usageCount = 0, string description = null)
         {
+            Id = id;
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             BlogId = blogId;
             Description = description;
@@ -44,6 +45,13 @@ namespace Volo.Blogging.Tagging
             {
                 return;
             }
+
+            if (UsageCount - number <= 0)
+            {
+                UsageCount = 0;
+                return;
+            }
+
             UsageCount -= number;
         }
 

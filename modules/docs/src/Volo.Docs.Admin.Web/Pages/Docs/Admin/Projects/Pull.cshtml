@@ -1,0 +1,22 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Docs.Admin.Pages.Docs.Admin.Projects
+@inherits Volo.Docs.Admin.Pages.Docs.Admin.DocsAdminPage
+@model Volo.Docs.Admin.Pages.Docs.Admin.Projects.PullModel
+@{
+    Layout = null;
+}
+
+@if (Model.PullDocument != null)
+{
+    <abp-dynamic-form submit-button="false" abp-model="@Model.PullDocument" asp-page="/Docs/Admin/Projects/Pull">
+        <abp-modal size="@(AbpModalSize.Default)">
+            <abp-modal-header title="@L["Pull"].Value"></abp-modal-header>
+            <abp-modal-body>
+                <abp-form-content />
+            </abp-modal-body>
+            <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+            </abp-modal-footer>
+        </abp-modal>
+    </abp-dynamic-form>
+}

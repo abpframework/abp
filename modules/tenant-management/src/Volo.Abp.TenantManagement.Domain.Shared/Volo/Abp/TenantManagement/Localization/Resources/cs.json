@@ -1,0 +1,22 @@
+{
+  "culture": "cs",
+  "texts": {
+    "Menu:TenantManagement": "Správa tenantů",
+    "Tenants": "Tenanty",
+    "NewTenant": "Nový tenant",
+    "TenantName": "Název tenantu",
+    "DisplayName:TenantName": "Název tenantu",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' bude smazán. Jste si jistí?",
+    "ConnectionStrings": "Connection stringy",
+    "DisplayName:DefaultConnectionString": "Výchozí connection string",
+    "DisplayName:UseSharedDatabase": "Použít sdílenou databázi",
+    "Permission:TenantManagement": "Správa tenantů",
+    "Permission:Create": "Vytvořit",
+    "Permission:Edit": "Upravit",
+    "Permission:Delete": "Smazat",
+    "Permission:ManageConnectionStrings": "Spravovat connection stringy",
+    "Permission:ManageFeatures": "Spravovat funkce",
+    "DisplayName:AdminEmailAddress": "Email adresa správce",
+    "DisplayName:AdminPassword": "Heslo správce"
+  }
+}

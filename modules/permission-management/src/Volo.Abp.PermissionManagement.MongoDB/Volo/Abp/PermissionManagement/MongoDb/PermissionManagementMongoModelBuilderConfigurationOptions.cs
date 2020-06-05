@@ -3,9 +3,10 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.PermissionManagement.MongoDB
 {
-    public class PermissionManagementMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
+    public class PermissionManagementMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
     {
-        public PermissionManagementMongoModelBuilderConfigurationOptions([NotNull] string tablePrefix = AbpPermissionManagementConsts.DefaultDbTablePrefix)
+        public PermissionManagementMongoModelBuilderConfigurationOptions(
+            [NotNull] string tablePrefix = "")
             : base(tablePrefix)
         {
         }

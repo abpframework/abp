@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
@@ -22,6 +23,7 @@ namespace BackendAdminApp.Host
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .Enrich.WithProperty("Application", "BackendAdminApp")
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
@@ -37,7 +39,7 @@ namespace BackendAdminApp.Host
             try
             {
                 Log.Information("Starting BackendAdminApp.Host.");
-                BuildWebHostInternal(args).Run();
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -51,13 +53,13 @@ namespace BackendAdminApp.Host
             }
         }
 
-        public static IWebHost BuildWebHostInternal(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .Build();
+        internal static IHostBuilder CreateHostBuilder(string[] args) =>
+            Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .UseAutofac()
+                .UseSerilog();
     }
 }

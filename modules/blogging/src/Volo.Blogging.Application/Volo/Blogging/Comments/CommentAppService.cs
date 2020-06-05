@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Guids;
 using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
@@ -11,7 +10,7 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.Comments
 {
-    public class CommentAppService : ApplicationService, ICommentAppService
+    public class CommentAppService : BloggingAppServiceBase, ICommentAppService
     {
         protected IBlogUserLookupService UserLookupService;
 
@@ -86,6 +85,8 @@ namespace Volo.Blogging.Comments
             var comment = new Comment(_guidGenerator.Create(), input.PostId, input.RepliedCommentId, input.Text);
 
             comment = await _commentRepository.InsertAsync(comment);
+
+            await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<Comment, CommentWithDetailsDto>(comment);
         }

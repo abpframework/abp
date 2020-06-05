@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Shouldly;
-using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -62,6 +62,15 @@ namespace Microsoft.Extensions.DependencyInjection
             GetRequiredService<ConcreteGenericServiceWithPropertyInject>().ProperyInjectedService.ShouldNotBeNull();
         }
 
+        [Fact]
+        public void Singletons_Exposing_Multiple_Services_Should_Returns_The_Same_Instance()
+        {
+            var objectByInterfaceRef = GetRequiredService<IMySingletonExposingMultipleServices>();
+            var objectByClassRef = GetRequiredService<MySingletonExposingMultipleServices>();
+
+            ReferenceEquals(objectByInterfaceRef, objectByClassRef).ShouldBeTrue();
+        }
+
         public class MySingletonService : ISingletonDependency
         {
             public List<MyEmptyTransientService> TransientInstances { get; }
@@ -115,6 +124,17 @@ namespace Microsoft.Extensions.DependencyInjection
             }
         }
 
+        public interface IMySingletonExposingMultipleServices
+        {
+
+        }
+
+        [ExposeServices(typeof(IMySingletonExposingMultipleServices), typeof(MySingletonExposingMultipleServices))]
+        public class MySingletonExposingMultipleServices : IMySingletonExposingMultipleServices, ISingletonDependency
+        {
+
+        }
+
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
@@ -123,6 +143,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 context.Services.AddType<MyTransientService1>();
                 context.Services.AddType<MyEmptyTransientService>();
                 context.Services.AddType<ServiceWithPropertyInject>();
+                context.Services.AddType<MySingletonExposingMultipleServices>();
                 context.Services.AddTransient(typeof(GenericServiceWithPropertyInject<>));
                 context.Services.AddTransient(typeof(ConcreteGenericServiceWithPropertyInject));
             }

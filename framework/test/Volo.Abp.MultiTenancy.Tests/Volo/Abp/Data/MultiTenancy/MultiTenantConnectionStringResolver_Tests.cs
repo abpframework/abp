@@ -25,17 +25,17 @@ namespace Volo.Abp.Data.MultiTenancy
 
         protected override void BeforeAddApplication(IServiceCollection services)
         {
-            services.Configure<DbConnectionOptions>(options =>
+            services.Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = "default-value";
                 options.ConnectionStrings["db1"] = "db1-default-value";
             });
 
-            services.Configure<ConfigurationTenantStoreOptions>(options =>
+            services.Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
-                    new TenantInfo(_tenant1Id, "tenant1")
+                    new TenantConfiguration(_tenant1Id, "tenant1")
                     {
                         ConnectionStrings =
                         {
@@ -43,7 +43,7 @@ namespace Volo.Abp.Data.MultiTenancy
                             {"db1", "tenant1-db1-value"}
 }
                     },
-                    new TenantInfo(_tenant2Id, "tenant2")
+                    new TenantConfiguration(_tenant2Id, "tenant2")
                 };
             });
         }

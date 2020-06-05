@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using MsDemo.Shared;
 using ProductManagement;
 using StackExchange.Redis;
 using Volo.Abp;
@@ -11,9 +12,10 @@ using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.UI.Navigation;
 using Volo.Blogging;
 
@@ -23,7 +25,7 @@ namespace PublicWebSite.Host
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreAuthenticationOAuthModule),
-        typeof(AbpHttpClientIdentityModelModule),
+        typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(BloggingHttpApiClientModule),
         typeof(BloggingWebModule),
@@ -40,7 +42,12 @@ namespace PublicWebSite.Host
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
             });
 
-            Configure<NavigationOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MsDemoConsts.IsMultiTenancyEnabled;
+            });
+
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new PublicWebSiteMenuContributor());
             });
@@ -52,7 +59,6 @@ namespace PublicWebSite.Host
                 })
                 .AddCookie("Cookies", options =>
                 {
-                    options.Cookie.Expiration = TimeSpan.FromDays(365);
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -73,7 +79,7 @@ namespace PublicWebSite.Host
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -89,9 +95,17 @@ namespace PublicWebSite.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            
+            if (MsDemoConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+
             app.UseAbpRequestLocalization();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseAuthorization();
+            app.UseConfiguredEndpoints();
         }
     }
 }

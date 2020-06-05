@@ -21,7 +21,7 @@ namespace Volo.Abp.EventBus.Local
                     return Task.CompletedTask;
                 });
 
-            await LocalEventBus.PublishAsync(new EntityUpdatedEventData<Person>(new Person { Id = 42 }));
+            await LocalEventBus.PublishAsync(new EntityUpdatedEventData<Person>(new Person(42)));
 
             triggeredEvent.ShouldBe(true);
         }
@@ -39,19 +39,37 @@ namespace Volo.Abp.EventBus.Local
                     return Task.CompletedTask;
                 });
 
-            await LocalEventBus.PublishAsync(new EntityChangedEventData<Student>(new Student { Id = 42 }));
+            await LocalEventBus.PublishAsync(new EntityChangedEventData<Student>(new Student(42)));
 
             triggeredEvent.ShouldBe(true);
         }
-        
+
         public class Person : Entity<int>
         {
-            
+            public Person()
+            {
+
+            }
+
+            public Person(int id)
+             : base(id)
+            {
+                
+            }
         }
 
         public class Student : Person
         {
-            
+            public Student()
+            {
+
+            }
+
+            public Student(int id)
+            : base(id)
+            {
+
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Volo.Docs.Admin.Web</AssemblyName>
     <PackageId>Volo.Docs.Admin.Web</PackageId>
     <OutputType>Library</OutputType>
@@ -21,41 +22,16 @@
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
   </ItemGroup>
 
-
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*.*" />
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <EmbeddedResource Include="Localization\Resources\**\*.json" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Content Remove="wwwroot\**\*.*" />
-    <Content Remove="Localization\Resources\Docs\Web\en.json" />
-    <Content Remove="Localization\Resources\Docs\Web\tr.json" />
-    <Content Remove="Pages\Docs\Admin\Projects\Create.cshtml" />
-    <Content Remove="Pages\Docs\Admin\Projects\Edit.cshtml" />
-    <Content Remove="Pages\Docs\Admin\Projects\Index.cshtml" />
+    <Content Remove="Pages\**\*.css" />
+    <Content Remove="Pages\**\*.js" />
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
-    <None Remove="Pages\Docs\Admin\Projects\create.js" />
-    <None Remove="Pages\Docs\Admin\Projects\edit.js" />
-    <None Remove="Pages\Docs\Admin\Projects\index.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Pages\Docs\Admin\Projects\Edit.cshtml.cs">
-      <DependentUpon>Edit.cshtml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

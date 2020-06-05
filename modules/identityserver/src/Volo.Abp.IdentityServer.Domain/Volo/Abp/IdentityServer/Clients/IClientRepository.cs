@@ -19,10 +19,17 @@ namespace Volo.Abp.IdentityServer.Clients
             string sorting,
             int skipCount,
             int maxResultCount,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
 
         Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default);
+
+        Task<bool> CheckClientIdExistAsync(
+            string clientId,
+            Guid? expectedId = null,
+            CancellationToken cancellationToken = default
+        );
     }
 }

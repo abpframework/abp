@@ -1,0 +1,108 @@
+﻿@page "{handler?}"
+@{
+    Layout = null;
+}
+@using Volo.ClientSimulation
+@using Volo.ClientSimulation.Clients
+@using Volo.ClientSimulation.Pages.ClientSimulation
+@model Volo.ClientSimulation.Pages.ClientSimulation.SimulationAreaModel
+<abp-alert alert-type="Primary">
+    <form class="d-inline" id="StartButtonForm" method="post" asp-page-handler="Start" data-ajaxForm="true">
+        <abp-button button-type="Primary" type="submit" disabled="@(Model.Snapshot.State != SimulationState.Stopped)">Start</abp-button>
+    </form>
+    <form class="d-inline" id="StopButtonForm" method="post" asp-page-handler="Stop" data-ajaxForm="true">
+        <abp-button button-type="Primary" type="submit" disabled="@(Model.Snapshot.State != SimulationState.Started)">Stop</abp-button>
+    </form>
+    <span class="ml-3">
+        @Model.Snapshot.State
+    </span>
+</abp-alert>
+<abp-card class="mt-3">
+    <abp-card-header>
+        Clients
+    </abp-card-header>
+    <abp-card-body>
+        @foreach (var client in Model.Snapshot.Clients)
+        {
+            <span class="simulation-client simulation-client-@client.State.ToString().ToLowerInvariant()">
+                <span class="simulation-client-icon">
+                    @if (client.State == ClientState.Running)
+                    {
+                        <i class="fa fa-play"></i>
+                    }
+                    else if (client.State == ClientState.Stopping)
+                    {
+                        <i class="fa fa-eject"></i>
+                    }
+                    else if (client.State == ClientState.Stopped)
+                    {
+                        <i class="fa fa-stop"></i>
+                    }
+                </span>
+                <span class="simulation-client-scenario">
+                    @client.Scenario.DisplayText
+                </span>
+                <span class="simulation-client-scenario-current-step">
+                    @if (client.State != ClientState.Stopped)
+                    {
+                        <text>| @client.Scenario.CurrentStep.DisplayText</text>
+                    }
+                </span>
+            </span>
+        }
+    </abp-card-body>
+</abp-card>
+<abp-card class="mt-3">
+    <abp-card-header>
+        Scenarios
+    </abp-card-header>
+    <abp-card-body>
+            @foreach (var scenario in Model.Snapshot.Scenarios)
+            {
+                    <abp-card class="simulation-scenario">
+                        <abp-card-header>
+                            @scenario.DisplayText
+                        </abp-card-header>
+                        <abp-card-body>
+                            <abp-table>
+                                <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>Execution</th>
+                                    <th>Success</th>
+                                    <th>Fail</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th>Avg</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var step in scenario.Steps)
+                                {
+                                    <tr>
+                                        <th>@step.DisplayText</th>
+                                        <th>@step.ExecutionCount</th>
+                                        <th>@step.SuccessCount</th>
+                                        <th>
+                                            @if (step.FailCount > 0)
+                                            {
+                                                <span class="step-positive-fail-count">@step.FailCount</span>
+                                            }
+                                            else
+                                            {
+                                                <text>@step.FailCount</text>
+                                            }
+                                        </th>
+                                        <th>@step.MinExecutionDuration.ToString("0.0") ms</th>
+                                        <th>@step.MaxExecutionDuration.ToString("0.0") ms</th>
+                                        <th>@step.AvgExecutionDuration.ToString("0.0") ms</th>
+                                    </tr>
+                                }
+                                </tbody>
+                            </abp-table>
+                    
+                        </abp-card-body>
+                    </abp-card>
+            }
+    </abp-card-body>
+</abp-card>

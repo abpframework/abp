@@ -9,13 +9,11 @@ namespace Volo.Abp.FeatureManagement
         typeof(AbpHttpClientModule))]
     public class AbpFeatureManagementHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "AbpFeatureManagement";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
                 typeof(AbpFeatureManagementApplicationContractsModule).Assembly,
-                RemoteServiceName
+                FeatureManagementRemoteServiceConsts.RemoteServiceName
             );
         }
     }

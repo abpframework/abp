@@ -11,7 +11,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
 {
     [DependsOn(
         typeof(DemoAppSharedModule),
-        typeof(BackgroundJobsEntityFrameworkCoreModule),
+        typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule)
         )]
@@ -27,7 +27,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
                 });
             });
 
-            Configure<BackgroundJobWorkerOptions>(options =>
+            Configure<AbpBackgroundJobWorkerOptions>(options =>
             {
                 //Configure for fast running
                 options.JobPollPeriod = 1000;
@@ -38,10 +38,11 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            context
-                .ServiceProvider
-                .GetRequiredService<ILoggerFactory>()
-                .AddConsole(LogLevel.Debug);
+            //TODO: Configure console logging
+            //context
+            //    .ServiceProvider
+            //    .GetRequiredService<ILoggerFactory>()
+            //    .AddConsole(LogLevel.Debug);
         }
     }
 }

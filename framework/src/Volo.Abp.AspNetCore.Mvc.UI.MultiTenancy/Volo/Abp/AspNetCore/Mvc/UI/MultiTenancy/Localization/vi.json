@@ -1,0 +1,11 @@
+{
+  "culture": "vi",
+  "texts": {
+    "GivenTenantIsNotAvailable": "Người thuê không có sẵn: {0}",
+    "Tenant": "Người thuê",
+    "Switch": "Chuyển đổi",
+    "Name": "Tên",
+    "SwitchTenantHint": "Để trống trường tên để chuyển sang phía máy chủ.",
+    "NotSelected": "Không được chọn"
+  }
+}

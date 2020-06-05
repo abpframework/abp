@@ -1,4 +1,7 @@
-﻿namespace System.IO
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace System.IO
 {
     public static class AbpStreamExtensions
     {
@@ -9,6 +12,24 @@
                 stream.CopyTo(memoryStream);
                 return memoryStream.ToArray();
             }
+        }
+
+        public static async Task<byte[]> GetAllBytesAsync(this Stream stream, CancellationToken cancellationToken = default)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await stream.CopyToAsync(memoryStream, cancellationToken);
+                return memoryStream.ToArray();
+            }
+        }
+
+        public static Task CopyToAsync(this Stream stream, Stream destination, CancellationToken cancellationToken)
+        {
+            return stream.CopyToAsync(
+                destination,
+                81920, //this is already the default value, but needed to set to be able to pass the cancellationToken
+                cancellationToken
+            );
         }
     }
 }

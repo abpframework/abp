@@ -17,7 +17,7 @@ namespace Volo.Abp.PermissionManagement
         public virtual string ProviderName { get; protected set; }
 
         [CanBeNull]
-        public virtual string ProviderKey { get; protected set; }
+        public virtual string ProviderKey { get; protected internal set; }
 
         protected PermissionGrant()
         {

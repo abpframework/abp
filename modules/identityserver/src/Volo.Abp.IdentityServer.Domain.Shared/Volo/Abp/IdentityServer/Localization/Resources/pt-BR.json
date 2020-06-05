@@ -1,0 +1,8 @@
+﻿{
+  "culture": "pt-BR",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "O nome da Identity Resource já existe: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "O nome da Api Resource já existe: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId já existe: {ClientId}"
+  }
+}

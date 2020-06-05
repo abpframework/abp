@@ -1,0 +1,11 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Hello <b>{0}</b>.": "Xin chào <b>{0}</b>.",
+    "Car": "Car",
+    "CarPlural": "Cars",
+    "MaxLenghtErrorMessage": "Kích thước trường này có tối đa '{0}' kí tự",
+    "Universe": "Vũ trụ",
+    "FortyTwo": "Bốn mươi hai"
+  }
+}

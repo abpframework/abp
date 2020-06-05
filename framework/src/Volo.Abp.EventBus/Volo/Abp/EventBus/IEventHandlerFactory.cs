@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Volo.Abp.EventBus
 {
     /// <summary>
@@ -10,5 +12,7 @@ namespace Volo.Abp.EventBus
         /// </summary>
         /// <returns>The event handler</returns>
         IEventHandlerDisposeWrapper GetHandler();
+
+        bool IsInFactories(List<IEventHandlerFactory> handlerFactories);
     }
 }

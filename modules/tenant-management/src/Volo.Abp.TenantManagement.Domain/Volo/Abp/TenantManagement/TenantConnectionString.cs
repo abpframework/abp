@@ -19,17 +19,19 @@ namespace Volo.Abp.TenantManagement
 
         public TenantConnectionString(Guid tenantId, [NotNull] string name, [NotNull] string value)
         {
-            Check.NotNull(name, nameof(name));
-            Check.NotNull(value, nameof(value));
-
             TenantId = tenantId;
-            Name = name;
-            Value = value;
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConnectionStringConsts.MaxNameLength);
+            SetValue(value);
+        }
+
+        public virtual void SetValue([NotNull] string value)
+        {
+            Value = Check.NotNullOrWhiteSpace(value, nameof(value), TenantConnectionStringConsts.MaxValueLength);
         }
 
         public override object[] GetKeys()
         {
-            return new object[] { TenantId, Name, Value };
+            return new object[] { TenantId, Name };
         }
     }
 }

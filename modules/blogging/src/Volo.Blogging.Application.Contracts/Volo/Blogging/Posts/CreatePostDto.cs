@@ -22,5 +22,9 @@ namespace Volo.Blogging.Posts
         public string Content { get; set; }
 
         public string Tags { get; set; }
+
+        [StringLength(PostConsts.MaxDescriptionLength)]
+        public string Description { get; set; }
+
     }
 }

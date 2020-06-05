@@ -1,7 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.Ui.Navigation
+namespace Volo.Abp.UI.Navigation
 {
     public static class HasMenuItemsExtensions
     {

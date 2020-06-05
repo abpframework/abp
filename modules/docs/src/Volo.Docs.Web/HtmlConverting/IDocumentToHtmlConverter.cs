@@ -5,6 +5,6 @@ namespace Volo.Docs.HtmlConverting
 {
     public interface IDocumentToHtmlConverter
     {
-        string Convert(ProjectDto project, DocumentWithDetailsDto document,string version);
+        string Convert(ProjectDto project, DocumentWithDetailsDto document, string version, string languageCode);
     }
 }

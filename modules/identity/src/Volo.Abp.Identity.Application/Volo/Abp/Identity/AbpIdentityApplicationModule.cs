@@ -6,7 +6,7 @@ using Volo.Abp.PermissionManagement;
 namespace Volo.Abp.Identity
 {
     [DependsOn(
-        typeof(AbpIdentityDomainModule), 
+        typeof(AbpIdentityDomainModule),
         typeof(AbpIdentityApplicationContractsModule), 
         typeof(AbpAutoMapperModule),
         typeof(AbpPermissionManagementApplicationModule)
@@ -15,9 +15,11 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityApplicationModule>();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>();
+                options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>(validate: true);
             });
         }
     }

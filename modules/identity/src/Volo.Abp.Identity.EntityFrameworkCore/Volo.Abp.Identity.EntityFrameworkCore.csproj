@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -14,9 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
-
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.EntityFrameworkCore\Volo.Abp.Users.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
   </ItemGroup>
   
 </Project>

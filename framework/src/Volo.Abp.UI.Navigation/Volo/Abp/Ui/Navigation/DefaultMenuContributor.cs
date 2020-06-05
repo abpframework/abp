@@ -1,10 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using System.Threading.Tasks;
-using Volo.Abp.Ui.Navigation.Localization.Resource;
-using Volo.Abp.UI.Navigation;
+﻿using System.Threading.Tasks;
+using Volo.Abp.UI.Navigation.Localization.Resource;
 
-namespace Volo.Abp.Ui.Navigation
+namespace Volo.Abp.UI.Navigation
 {
     public class DefaultMenuContributor : IMenuContributor
     {
@@ -16,8 +13,7 @@ namespace Volo.Abp.Ui.Navigation
 
         protected virtual void Configure(MenuConfigurationContext context)
         {
-            var l = context.ServiceProvider
-                .GetRequiredService<IStringLocalizer<AbpUiNavigationResource>>();
+            var l = context.GetLocalizer<AbpUiNavigationResource>();
 
             if (context.Menu.Name == StandardMenus.Main)
             {

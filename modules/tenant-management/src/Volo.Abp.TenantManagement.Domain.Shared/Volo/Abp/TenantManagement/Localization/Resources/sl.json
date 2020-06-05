@@ -1,0 +1,20 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Menu:TenantManagement": "Upravljanje najemnikov",
+    "Tenants": "Najemniki",
+    "NewTenant": "Nov najemnik",
+    "TenantName": "Naziv najemnika",
+    "DisplayName:TenantName": "Naziv najemnika",
+    "TenantDeletionConfirmationMessage": "Najemnik '{0}' bo izbrisan. Ali to potrjujete?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Privzeti Connection String",
+    "DisplayName:UseSharedDatabase": "Uporabi skupno bazo",
+    "Permission:TenantManagement": "Upravljanje najemnikov",
+    "Permission:Create": "Ustvarjanje",
+    "Permission:Edit": "Urejanje",
+    "Permission:Delete": "Brisanje",
+    "Permission:ManageConnectionStrings": "Upravljanje connection string-ov",
+    "Permission:ManageFeatures": "Upravljanje funkcionalnosti"
+  }
+}

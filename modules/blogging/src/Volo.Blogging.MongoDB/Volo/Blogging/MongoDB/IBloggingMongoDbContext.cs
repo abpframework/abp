@@ -8,7 +8,7 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.MongoDB
 {
-    [ConnectionStringName("Blogging")]
+    [ConnectionStringName(BloggingDbProperties.ConnectionStringName)]
     public interface IBloggingMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<BlogUser> Users { get; }

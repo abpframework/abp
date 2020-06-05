@@ -17,10 +17,5 @@ namespace Volo.Blogging.Blogs
         {
             return await GetMongoQueryable().FirstOrDefaultAsync(p => p.ShortName == shortName);
         }
-
-        public async Task<int> GetTotalCount()
-        {
-            return await GetMongoQueryable().CountAsync();
-        }
     }
 }

@@ -24,5 +24,16 @@ namespace Volo.Abp.Domain.Entities.Auditing
     {
         /// <inheritdoc />
         public virtual TUser Creator { get; set; }
+
+        protected CreationAuditedEntityWithUser()
+        {
+
+        }
+
+        protected CreationAuditedEntityWithUser(TKey id)
+            : base(id)
+        {
+
+        }
     }
 }

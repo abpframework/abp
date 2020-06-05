@@ -13,7 +13,7 @@ namespace Volo.Abp.Domain.Repositories
             return repository.ToMemoryDbRepository().Database;
         }
 
-        public static List<TEntity> GetCollection<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
+        public static IMemoryDatabaseCollection<TEntity> GetCollection<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
             where TEntity : class, IEntity<TKey>
         {
             return repository.ToMemoryDbRepository().Collection;

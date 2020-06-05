@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -9,14 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\FeatureManagement\Localization\ApplicationContracts\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Volo\Abp\FeatureManagement\Localization\ApplicationContracts\*.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,31 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Volo.AbpIo.Domain:010004": "超過最大成員數!",
+    "Volo.AbpIo.Domain:010005": "超過最大擁有者數!",
+    "Volo.AbpIo.Domain:010006": "使用者已經是該組織的擁有者!",
+    "Volo.AbpIo.Domain:010007": "該使用者已經是該組織的開發者!",
+    "Volo.AbpIo.Domain:010008": "允許的開發者數量不能低於當前開發者數量!",
+    "Volo.AbpIo.Domain:010009": "允許的開發者數量不能小於零!",
+    "Volo.AbpIo.Domain:010010": "超出了最大mac地址數!",
+    "Volo.AbpIo.Domain:010011": "個人許可不允許超過1個開發者!",
+    "Volo.AbpIo.Domain:010012": "許可過期後許可不可延長1個月!",
+    "Volo.AbpIo.Domain:020001": "不能刪除該NPM套件因為\"{NugetPackages}\"Nuget套件依賴此套件.",
+    "Volo.AbpIo.Domain:020002": "不能刪除該NPM套件因為\"{Modules}\"模組正在使用此套件.",
+    "Volo.AbpIo.Domain:020003": "不能刪除該NPM套件因為\"{Modules}\"模組正在使用此套件並且\"{NugetPackages}\"Nuget套件依賴此套件.",
+    "Volo.AbpIo.Domain:020004": "不能刪除該Nuget套件因為\"{Modules}\"模組正在使用此套件.",
+    "WantToLearn?": "想學習嗎?",
+    "ReadyToGetStarted?": "準備開始了嗎?",
+    "JoinOurCommunity": "加入我們的社群",
+    "GetStartedUpper": "開始",
+    "ForkMeOnGitHub": "Fork me on GitHub",
+    "Features": "功能",
+    "GetStarted": "開始",
+    "Documents": "文件",
+    "Community": "社群",
+    "ContributionGuide": "貢獻指南",
+    "Blog": "部落格",
+    "Commercial": "商業版",
+    "SeeDocuments": "查看文件"
+  }
+}

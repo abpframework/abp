@@ -1,0 +1,20 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Menu:TenantManagement": "Gerencimento de Inquilinos",
+    "Tenants": "Inquilinos",
+    "NewTenant": "Novo Inquilino",
+    "TenantName": "Inquilino",
+    "DisplayName:TenantName": "Inquilino",
+    "TenantDeletionConfirmationMessage": "Inquilino '{0}' será excluído. Tem certeza?",
+    "ConnectionStrings": "String de Conexão",
+    "DisplayName:DefaultConnectionString": "String de Conexão Padrão",
+    "DisplayName:UseSharedDatabase": "Use o banco de dados compartilhado",
+    "Permission:TenantManagement": "Inquilinos",
+    "Permission:Create": "Criar",
+    "Permission:Edit": "Editar",
+    "Permission:Delete": "Excluir",
+    "Permission:ManageConnectionStrings": "Gerenciar conexões (connection strings)",
+    "Permission:ManageFeatures": "Gerenciar Funcionalidades"
+  }
+}

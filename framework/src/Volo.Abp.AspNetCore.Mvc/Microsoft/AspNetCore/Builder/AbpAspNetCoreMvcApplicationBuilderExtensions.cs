@@ -15,22 +15,12 @@ namespace Microsoft.AspNetCore.Builder
         ///  <param name="app">The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder" />.</param>
         /// <param name="additionalConfigurationAction">Additional action to configure routes</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
+        [Obsolete("Use app.UseConfiguredEndpoints(...) extension method instead!")]
         public static IApplicationBuilder UseMvcWithDefaultRouteAndArea(
             this IApplicationBuilder app, 
-            Action<IRouteBuilder> additionalConfigurationAction = null)
+            Action<IEndpointRouteBuilder> additionalConfigurationAction = null)
         {
-            return app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "defaultWithArea",
-                    template: "{area}/{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                additionalConfigurationAction?.Invoke(routes);
-            });
+            return app.UseConfiguredEndpoints(additionalConfigurationAction);
         }
     }
 }

@@ -1,0 +1,31 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Volo.AbpIo.Domain:010004": "Número máximo de membros atingido!",
+    "Volo.AbpIo.Domain:010005": "Número máximo de proprietários atingido!",
+    "Volo.AbpIo.Domain:010006": "Este usuário já é proprietário desta organização!",
+    "Volo.AbpIo.Domain:010007": "Este usuário já é desenvolvedor desta organização!",
+    "Volo.AbpIo.Domain:010008": "A contagem permitida de desenvolvedores não pode ser inferior à contagem atual de desenvolvedores!",
+    "Volo.AbpIo.Domain:010009": "A contagem permitida de desenvolvedores não pode ser inferior a 0!",
+    "Volo.AbpIo.Domain:010010": "A contagem máxima de endereços mac foi excedida!",
+    "Volo.AbpIo.Domain:010011": "A licença pessoal não pode ter mais de um desenvolvedor!",
+    "Volo.AbpIo.Domain:010012": "A licença não pode ser estendida um mês após a expiração da licença!",
+    "Volo.AbpIo.Domain:020001": "Não foi possível excluir este pacote NPM porque \"{NugetPackages}\" Os pacotes Nuget dependem deste pacote.",
+    "Volo.AbpIo.Domain:020002": "Não foi possível excluir este pacote NPM porque \"{Modules}\" Módulos estão usando este pacote.",
+    "Volo.AbpIo.Domain:020003": "Não foi possível excluir este pacote NPM porque \"{Modules}\" Módulos estão usando este pacote e \"{NugetPackages}\" Os pacotes Nuget dependem deste pacote.",
+    "Volo.AbpIo.Domain:020004": "Não foi possível excluir este pacote Nuget porque \"{Modules}\" Módulos estão usando este pacote.",
+    "WantToLearn?": "Quer aprender?",
+    "ReadyToGetStarted?": "Pronto para começar?",
+    "JoinOurCommunity": "Participe da nossa comunidade",
+    "GetStartedUpper": "INICIAR",
+    "ForkMeOnGitHub": "Bifurque-me no GitHub",
+    "Features": "Recursos",
+    "GetStarted": "Introdução",
+    "Documents": "Documentos",
+    "Community": "Comunidade",
+    "ContributionGuide": "Guia de contribuição",
+    "Blog": "Blog",
+    "Commercial": "Comercial",
+    "SeeDocuments": "Ver documentos"
+  }
+}

@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.App
             services.AddApplication<AppModule>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.InitializeApplication();
         }

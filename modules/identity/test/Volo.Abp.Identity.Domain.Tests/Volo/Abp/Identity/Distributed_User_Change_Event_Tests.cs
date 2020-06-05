@@ -30,8 +30,8 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task Should_Register_Handler()
         {
-            var options = GetRequiredService<IOptions<DistributedEventBusOptions>>().Value;
-            options.EtoMappings.ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value == typeof(UserEto));
+            var options = GetRequiredService<IOptions<AbpDistributedEventBusOptions>>().Value;
+            options.EtoMappings.ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value.EtoType == typeof(UserEto));
             options.Handlers.ShouldContain(h => h == typeof(DistributedUserUpdateHandler));
         }
 
@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 await _userManager.SetEmailAsync(user, "john.nash_UPDATED@abp.io");
 
                 _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(0);

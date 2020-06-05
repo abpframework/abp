@@ -1,0 +1,63 @@
+<ng-container *ngIf="(currentTenant$ | async) || {} as currentTenant">
+  <div class="card shadow-sm rounded mb-3">
+    <div class="card-body px-5">
+      <div class="row">
+        <div class="col">
+          <span style="font-size: 0.8em;" class="text-uppercase text-muted">{{
+            'AbpUiMultiTenancy::Tenant' | abpLocalization
+          }}</span
+          ><br />
+          <h6 class="m-0 d-inline-block">
+            <i>{{ currentTenant.name || ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>
+          </h6>
+        </div>
+        <div class="col-auto">
+          <a
+            id="AbpTenantSwitchLink"
+            href="javascript:void(0);"
+            class="btn btn-sm mt-3 btn-outline-primary"
+            (click)="onSwitch()"
+            >{{ 'AbpUiMultiTenancy::Switch' | abpLocalization }}</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
+    <ng-template #abpHeader>
+      <h5>Switch Tenant</h5>
+    </ng-template>
+    <ng-template #abpBody>
+      <form (ngSubmit)="save()">
+        <div class="mt-2">
+          <div class="form-group">
+            <label for="name">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>
+            <input
+              [(ngModel)]="name"
+              type="text"
+              id="name"
+              name="tenant"
+              class="form-control"
+              autofocus
+            />
+          </div>
+          <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>
+        </div>
+      </form>
+    </ng-template>
+    <ng-template #abpFooter>
+      <button #abpClose type="button" class="btn btn-secondary">
+        {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
+      </button>
+      <abp-button
+        type="abp-button"
+        iconClass="fa fa-check"
+        (click)="save()"
+        [disabled]="currentTenant?.name === name"
+      >
+        <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>
+      </abp-button>
+    </ng-template>
+  </abp-modal>
+</ng-container>

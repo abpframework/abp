@@ -7,7 +7,5 @@ namespace Volo.Blogging.Blogs
     public interface IBlogRepository : IBasicRepository<Blog, Guid>
     {
         Task<Blog> FindByShortNameAsync(string shortName);
-
-        Task<int> GetTotalCount();
     }
 }

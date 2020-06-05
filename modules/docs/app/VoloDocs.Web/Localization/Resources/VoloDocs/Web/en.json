@@ -1,0 +1,10 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "Welcome to the VoloDocs!",
+    "NoProjectWarning": "There`s no defined project yet!",
+    "CreateYourFirstProject": "Click here to start your first project",
+    "NoProject": "No project!"
+  }
+}

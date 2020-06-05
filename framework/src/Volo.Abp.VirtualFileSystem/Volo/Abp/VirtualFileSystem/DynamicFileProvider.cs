@@ -21,18 +21,19 @@ namespace Volo.Abp.VirtualFileSystem
 
         protected ConcurrentDictionary<string, IFileInfo> DynamicFiles { get; }
 
-        private readonly ConcurrentDictionary<string, ChangeTokenInfo> _filePathTokenLookup =
-            new ConcurrentDictionary<string, ChangeTokenInfo>(StringComparer.OrdinalIgnoreCase);
+        protected ConcurrentDictionary<string, ChangeTokenInfo> FilePathTokenLookup { get; }
 
         public DynamicFileProvider()
         {
+            FilePathTokenLookup = new ConcurrentDictionary<string, ChangeTokenInfo>(StringComparer.OrdinalIgnoreCase);;
             DynamicFiles = new ConcurrentDictionary<string, IFileInfo>();
         }
 
         public void AddOrUpdate(IFileInfo fileInfo)
         {
-            DynamicFiles.AddOrUpdate(fileInfo.PhysicalPath, fileInfo, (key, value) => fileInfo);
-            ReportChange(fileInfo.PhysicalPath);
+            var filePath = fileInfo.GetVirtualOrPhysicalPathOrNull();
+            DynamicFiles.AddOrUpdate(filePath, fileInfo, (key, value) => fileInfo);
+            ReportChange(filePath);
         }
 
         public bool Delete(string filePath)
@@ -53,12 +54,12 @@ namespace Volo.Abp.VirtualFileSystem
 
         private IChangeToken GetOrAddChangeToken(string filePath)
         {
-            if (!_filePathTokenLookup.TryGetValue(filePath, out var tokenInfo))
+            if (!FilePathTokenLookup.TryGetValue(filePath, out var tokenInfo))
             {
                 var cancellationTokenSource = new CancellationTokenSource();
                 var cancellationChangeToken = new CancellationChangeToken(cancellationTokenSource.Token);
                 tokenInfo = new ChangeTokenInfo(cancellationTokenSource, cancellationChangeToken);
-                tokenInfo = _filePathTokenLookup.GetOrAdd(filePath, tokenInfo);
+                tokenInfo = FilePathTokenLookup.GetOrAdd(filePath, tokenInfo);
             }
 
             return tokenInfo.ChangeToken;
@@ -66,13 +67,13 @@ namespace Volo.Abp.VirtualFileSystem
 
         private void ReportChange(string filePath)
         {
-            if (_filePathTokenLookup.TryRemove(filePath, out var tokenInfo))
+            if (FilePathTokenLookup.TryRemove(filePath, out var tokenInfo))
             {
                 tokenInfo.TokenSource.Cancel();
             }
         }
 
-        private struct ChangeTokenInfo
+        protected struct ChangeTokenInfo
         {
             public ChangeTokenInfo(
                 CancellationTokenSource tokenSource,

@@ -1,5 +1,6 @@
-using Volo.Abp.AspNetCore.Mvc.UI.Minification.Scripts;
+using System;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
+using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts
 {
@@ -10,6 +11,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts
         public ScriptBundler(IWebContentFileProvider webContentFileProvider, IJavascriptMinifier minifier)
             : base(webContentFileProvider, minifier)
         {
+        }
+
+        protected override string ProcessBeforeAddingToTheBundle(IBundlerContext context, string filePath, string fileContent)
+        {
+            return fileContent.EnsureEndsWith(';') + Environment.NewLine;
         }
     }
 }

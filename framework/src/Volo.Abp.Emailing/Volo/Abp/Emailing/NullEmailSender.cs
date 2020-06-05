@@ -31,13 +31,6 @@ namespace Volo.Abp.Emailing
             return Task.FromResult(0);
         }
 
-        protected override void SendEmail(MailMessage mail)
-        {
-            Logger.LogWarning("USING NullEmailSender!");
-            Logger.LogWarning("SendEmail:");
-            LogEmail(mail);
-        }
-
         private void LogEmail(MailMessage mail)
         {
             Logger.LogDebug(mail.To.ToString());

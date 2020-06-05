@@ -7,6 +7,7 @@ using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Posts;
 using Volo.Blogging.Tagging;
 using Volo.Blogging.Tagging.Dtos;
+using Volo.Blogging.Users;
 
 namespace Volo.Blogging
 {
@@ -15,6 +16,7 @@ namespace Volo.Blogging
         public BloggingApplicationAutoMapperProfile()
         {
             CreateMap<Blog, BlogDto>();
+            CreateMap<BlogUser, BlogUserDto>();
             CreateMap<Post, PostWithDetailsDto>().Ignore(x=>x.Writer).Ignore(x=>x.CommentCount).Ignore(x=>x.Tags);
             CreateMap<Comment, CommentWithDetailsDto>().Ignore(x => x.Writer);
             CreateMap<Tag, TagDto>();

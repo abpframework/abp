@@ -3,6 +3,7 @@ using Shouldly;
 using System;
 using Volo.Abp.AutoMapper.SampleClasses;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.AutoMapper
@@ -19,7 +20,13 @@ namespace Volo.Abp.AutoMapper
         [Fact]
         public void Should_Map_Objects_With_AutoMap_Attributes()
         {
-            var dto = _objectMapper.Map(typeof(MyEntity), typeof(MyEntityDto), new MyEntity { Number = 42 });
+            var dto = _objectMapper.Map<MyEntity, MyEntityDto>(
+                new MyEntity
+                {
+                    Number = 42
+                }
+            );
+
             dto.As<MyEntityDto>().Number.ShouldBe(42);
         }
     }

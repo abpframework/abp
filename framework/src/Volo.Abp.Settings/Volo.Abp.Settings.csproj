@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -15,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Localization.Abstractions\Volo.Abp.Localization.Abstractions.csproj" />
-    <ProjectReference Include="..\Volo.Abp.MultiTenancy.Abstractions\Volo.Abp.MultiTenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
     <ProjectReference Include="..\Volo.Abp.Security\Volo.Abp.Security.csproj" />
   </ItemGroup>
 

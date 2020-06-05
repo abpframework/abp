@@ -100,6 +100,7 @@ namespace Volo.Abp.Identity
                 LockoutEnabled = true,
                 TwoFactorEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
+                Password = "123qwe4R*",
                 Email = CreateRandomEmail(),
                 RoleNames = new[] { "admin", "moderator" },
                 ConcurrencyStamp = johnNash.ConcurrencyStamp,
@@ -188,9 +189,10 @@ namespace Volo.Abp.Identity
 
             //Assert
 
-            result.Items.Count.ShouldBe(2);
+            result.Items.Count.ShouldBe(3);
             result.Items.ShouldContain(r => r.Name == "moderator");
             result.Items.ShouldContain(r => r.Name == "supporter");
+            result.Items.ShouldContain(r => r.Name == "manager");
         }
 
         [Fact]
@@ -213,9 +215,10 @@ namespace Volo.Abp.Identity
             //Assert
 
             var roleNames = await _userRepository.GetRoleNamesAsync(johnNash.Id);
-            roleNames.Count.ShouldBe(2);
+            roleNames.Count.ShouldBe(3);
             roleNames.ShouldContain("admin");
             roleNames.ShouldContain("moderator");
+            roleNames.ShouldContain("manager");
         }
 
         private static string CreateRandomEmail()

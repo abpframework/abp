@@ -1,19 +1,25 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Volo.Abp.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionConfigurationExtensions
     {
-        public static IServiceCollection SetConfiguration(this IServiceCollection services, IConfigurationRoot configurationRoot)
+        public static IServiceCollection ReplaceConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.Replace(ServiceDescriptor.Singleton<IConfigurationAccessor>(new DefaultConfigurationAccessor(configurationRoot)));
+            return services.Replace(ServiceDescriptor.Singleton<IConfiguration>(configuration));
         }
 
-        public static IConfigurationRoot GetConfiguration(this IServiceCollection services)
+        public static IConfiguration GetConfiguration(this IServiceCollection services)
         {
-            return services.GetSingletonInstance<IConfigurationAccessor>().Configuration;
+            var hostBuilderContext = services.GetSingletonInstanceOrNull<HostBuilderContext>();
+            if (hostBuilderContext?.Configuration != null)
+            {
+                return hostBuilderContext.Configuration as IConfigurationRoot;
+            }
+
+            return services.GetSingletonInstance<IConfiguration>();
         }
     }
 }

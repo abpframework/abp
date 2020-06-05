@@ -21,13 +21,13 @@ namespace Volo.Abp.FeatureManagement
             Cache = cache;
         }
 
-        public async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
+        public virtual async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
             var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
             return cacheItem.Value;
         }
 
-        public async Task SetAsync(string name, string value, string providerName, string providerKey)
+        public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
             var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
             if (featureValue == null)
@@ -42,7 +42,7 @@ namespace Volo.Abp.FeatureManagement
             }
         }
 
-        public async Task DeleteAsync(string name, string providerName, string providerKey)
+        public virtual async Task DeleteAsync(string name, string providerName, string providerKey)
         {
             var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
             if (featureValue != null)

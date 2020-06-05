@@ -1,0 +1,20 @@
+{
+  "name": "@abp/ng.theme.shared",
+  "version": "2.9.0",
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
+  "dependencies": {
+    "@abp/ng.core": "~2.9.0",
+    "@fortawesome/fontawesome-free": "^5.12.1",
+    "@ng-bootstrap/ng-bootstrap": "^5.3.0",
+    "@ngx-validate/core": "^0.0.7",
+    "bootstrap": "^4.4.1",
+    "chart.js": "^2.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

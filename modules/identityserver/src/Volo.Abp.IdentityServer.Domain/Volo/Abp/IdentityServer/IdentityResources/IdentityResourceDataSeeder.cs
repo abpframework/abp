@@ -46,7 +46,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         protected virtual async Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
         {
-            if (await IdentityResourceRepository.FindByNameAsync(resource.Name) != null)
+            if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name))
             {
                 return;
             }

@@ -17,6 +17,6 @@ namespace Volo.Abp.Identity
         /// </param>
         Task<bool> AnyAsync(string name, Guid? ignoredId = null);
 
-        Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount);
+        Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter);
     }
 }

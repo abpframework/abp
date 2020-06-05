@@ -1,31 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity
 {
-    [RemoteService]
+    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
     [Area("identity")]
     [ControllerName("Profile")]
+    [Route("/api/identity/my-profile")]
     public class ProfileController : AbpController, IProfileAppService
     {
-        private readonly IProfileAppService _profileAppService;
+        protected IProfileAppService ProfileAppService { get; }
 
         public ProfileController(IProfileAppService profileAppService)
         {
-            _profileAppService = profileAppService;
-        }
-        public Task<ProfileDto> GetAsync()
-        {
-            return _profileAppService.GetAsync();
+            ProfileAppService = profileAppService;
         }
 
-        public Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
+        [HttpGet]
+        public virtual Task<ProfileDto> GetAsync()
         {
-            return _profileAppService.UpdateAsync(input);
+            return ProfileAppService.GetAsync();
+        }
+
+        [HttpPut]
+        public virtual Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
+        {
+            return ProfileAppService.UpdateAsync(input);
+        }
+
+        [HttpPost]
+        [Route("change-password")]
+        public virtual Task ChangePasswordAsync(ChangePasswordInput input)
+        {
+            return ProfileAppService.ChangePasswordAsync(input);
         }
     }
 }

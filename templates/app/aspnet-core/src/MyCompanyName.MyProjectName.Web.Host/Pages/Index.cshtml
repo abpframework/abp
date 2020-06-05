@@ -1,0 +1,27 @@
+﻿@page
+@inherits MyCompanyName.MyProjectName.Web.Pages.MyProjectNamePage
+@model MyCompanyName.MyProjectName.Web.Pages.IndexModel
+@section styles {
+    <abp-style-bundle>
+        <abp-style src="/Pages/Index.css" />
+    </abp-style-bundle>
+}
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/Pages/Index.js" />
+    </abp-script-bundle>
+}
+<abp-card>
+    <abp-card-header>@L["Welcome"]</abp-card-header>
+    <abp-card-body>
+        <p>@L["LongWelcomeMessage"]</p>
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <form method="POST">
+                <input type="submit" asp-page-handler="Login" value="LOGIN" class="btn btn-login" />
+            </form>
+        }
+        <hr />
+        <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+    </abp-card-body>
+</abp-card>

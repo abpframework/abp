@@ -6,10 +6,11 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Pages.Blog;
 
 namespace Volo.Blogging.Pages.Admin.Blogs
 {
-    public class CreateModel : AbpPageModel
+    public class CreateModel : BloggingPageModel
     {
         private readonly IBlogAppService _blogAppService;
         private readonly IAuthorizationService _authorization;
@@ -23,7 +24,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
             _authorization = authorization;
         }
 
-        public async Task<ActionResult> OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Create))
             {
@@ -33,7 +34,7 @@ namespace Volo.Blogging.Pages.Admin.Blogs
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             var blogDto = ObjectMapper.Map<BlogCreateModalView, CreateBlogDto>(Blog);
 

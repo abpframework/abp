@@ -7,26 +7,28 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Guids;
+using Volo.Docs.Caching;
 using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
 {
-    public class ProjectAppService : ApplicationService, IProjectAppService
+    public class ProjectAppService : DocsAppServiceBase, IProjectAppService
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
-        private readonly IDocumentStoreFactory _documentStoreFactory;
-        private readonly IGuidGenerator _guidGenerator;
+        private readonly IDocumentSourceFactory _documentSource;
+        protected IDistributedCache<LanguageConfig> LanguageCache { get; }
 
         public ProjectAppService(
             IProjectRepository projectRepository,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDocumentStoreFactory documentStoreFactory, IGuidGenerator guidGenerator)
+            IDocumentSourceFactory documentSource,
+            IDistributedCache<LanguageConfig> languageCache)
         {
             _projectRepository = projectRepository;
             _versionCache = versionCache;
-            _documentStoreFactory = documentStoreFactory;
-            _guidGenerator = guidGenerator;
+            _documentSource = documentSource;
+            LanguageCache = languageCache;
         }
 
         public async Task<ListResultDto<ProjectDto>> GetListAsync()
@@ -50,7 +52,7 @@ namespace Volo.Docs.Projects
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             var versions = await _versionCache.GetOrAddAsync(
-                project.ShortName,
+                CacheKeyGenerator.GenerateProjectVersionsCacheKey(project),
                 () => GetVersionsAsync(project),
                 () => new DistributedCacheEntryOptions
                 {
@@ -67,7 +69,7 @@ namespace Volo.Docs.Projects
 
         protected virtual async Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
-            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+            var store = _documentSource.Create(project.DocumentStoreType);
             var versions = await store.GetVersionsAsync(project);
 
             if (!versions.Any())
@@ -90,6 +92,38 @@ namespace Volo.Docs.Projects
             }
 
             return versions;
+        }
+
+        public async Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
+        {
+            return await GetLanguageListInternalAsync(shortName, version);
+        }
+
+        public async Task<string> GetDefaultLanguageCode(string shortName, string version)
+        {
+            var languageList = await GetLanguageListInternalAsync(shortName, version);
+
+            return (languageList.Languages.FirstOrDefault(l => l.IsDefault) ?? languageList.Languages.First()).Code;
+        }
+
+        private async Task<LanguageConfig> GetLanguageListInternalAsync(string shortName, string version)
+        {
+            var project = await _projectRepository.GetByShortNameAsync(shortName);
+            var store = _documentSource.Create(project.DocumentStoreType);
+
+            async Task<LanguageConfig> GetLanguagesAsync()
+            {
+                return await store.GetLanguageListAsync(project, version);
+            }
+
+            return await LanguageCache.GetOrAddAsync(
+                CacheKeyGenerator.GenerateProjectLanguageCacheKey(project),
+                GetLanguagesAsync,
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+                }
+            );
         }
     }
 }

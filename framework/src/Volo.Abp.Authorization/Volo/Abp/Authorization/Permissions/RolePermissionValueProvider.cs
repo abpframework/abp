@@ -6,7 +6,7 @@ namespace Volo.Abp.Authorization.Permissions
 {
     public class RolePermissionValueProvider : PermissionValueProvider
     {
-        public const string ProviderName = "Role";
+        public const string ProviderName = "R";
 
         public override string Name => ProviderName;
 
@@ -19,6 +19,7 @@ namespace Volo.Abp.Authorization.Permissions
         public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
             var roles = context.Principal?.FindAll(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
+
             if (roles == null || !roles.Any())
             {
                 return PermissionGrantResult.Undefined;

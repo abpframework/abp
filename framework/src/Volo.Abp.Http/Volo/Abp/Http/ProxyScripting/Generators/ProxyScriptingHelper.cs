@@ -66,7 +66,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators
                 return null;
             }
 
-            return ProxyScriptingJsFuncHelper.CreateJsObjectLiteral(parameters, indent);
+            return ProxyScriptingJsFuncHelper.CreateJsFormPostData(parameters, indent);
         }
 
         private static string ReplacePathVariables(string url, IList<ParameterApiDescriptionModel> actionParameters)

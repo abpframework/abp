@@ -3,18 +3,15 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpIdentityServer")]
+    [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
     public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>, IIdentityServerDbContext
     {
-        public static string TablePrefix { get; set; } = AbpIdentityServerConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = AbpIdentityServerConsts.DefaultDbSchema;
-
         public DbSet<ApiResource> ApiResources { get; set; }
 
         public DbSet<ApiSecret> ApiSecrets { get; set; }
@@ -51,6 +48,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
         public DbSet<PersistedGrant> PersistedGrants { get; set; }
 
+        public DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
+
         public IdentityServerDbContext(DbContextOptions<IdentityServerDbContext> options)
             : base(options)
         {
@@ -60,7 +59,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.ConfigureIdentityServer(TablePrefix, Schema);
+
+            builder.ConfigureIdentityServer();
         }
     }
 }

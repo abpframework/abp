@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
+using System.Linq.Dynamic.Core;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -11,6 +12,9 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
+using Volo.Abp.DynamicProxy;
+using Volo.Abp.Localization;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 {
@@ -19,23 +23,29 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private readonly IHtmlGenerator _generator;
         private readonly HtmlEncoder _encoder;
         private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
+        private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
-        public AbpSelectTagHelperService(IHtmlGenerator generator, HtmlEncoder encoder, IAbpTagHelperLocalizer tagHelperLocalizer)
+        public AbpSelectTagHelperService(
+            IHtmlGenerator generator, 
+            HtmlEncoder encoder, 
+            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
             _encoder = encoder;
             _tagHelperLocalizer = tagHelperLocalizer;
+            _stringLocalizerFactory = stringLocalizerFactory;
         }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var innerHtml = GetFormInputGroupAsHtml(context, output);
+            var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output);
 
             var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
-            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(context, output, innerHtml), order, out var surpress);
+            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(context, output, innerHtml), order, out var suppress);
 
-            if (surpress)
+            if (suppress)
             {
                 output.SuppressOutput();
             }
@@ -49,12 +59,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
         }
 
-        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var selectTag = GetSelectTag(context, output);
+            var selectTag = await GetSelectTagAsync(context, output);
             var selectAsHtml = selectTag.Render(_encoder);
-            var label = GetLabelAsHtml(context, output, selectTag);
-            var validation = GetValidationAsHtml(context, output, selectTag);
+            var label = await GetLabelAsHtmlAsync(context, output, selectTag);
+            var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
             var infoText = GetInfoAsHtml(context, output, selectTag);
 
             return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
@@ -65,7 +75,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return "<div class=\"form-group\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
         }
 
-        protected virtual TagHelperOutput GetSelectTag(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<TagHelperOutput> GetSelectTagAsync(TagHelperContext context, TagHelperOutput output)
         {
             var selectTagHelper = new SelectTagHelper(_generator)
             {
@@ -74,7 +84,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var selectTagHelperOutput = selectTagHelper.ProcessAndGetOutput(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
+            var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
             selectTagHelperOutput.Attributes.AddClass("form-control");
             selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
@@ -101,7 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 return TagHelper.AspItems.ToList();
             }
 
-            if (TagHelper.AspFor.ModelExplorer.Metadata.IsEnum)
+            if (IsEnum())
             {
                 return GetSelectItemsFromEnum(context, output, TagHelper.AspFor.ModelExplorer);
             }
@@ -115,16 +125,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             throw new Exception("No items provided for select attribute.");
         }
 
-        protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
+        private bool IsEnum()
+        {
+            var value = TagHelper.AspFor.Model;
+            if (value != null && value.GetType().IsEnum)
+            {
+                return true;
+            }
+
+            return TagHelper.AspFor.ModelExplorer.Metadata.IsEnum;
+        }
+
+        protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
         {
             if (!string.IsNullOrEmpty(TagHelper.Label))
             {
                 return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>" + GetRequiredSymbol(context, output);
             }
 
-            return GetLabelAsHtmlUsingTagHelper(context, output) + GetRequiredSymbol(context, output);
+            return await GetLabelAsHtmlUsingTagHelperAsync(context, output) + GetRequiredSymbol(context, output);
         }
-
 
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
         {
@@ -186,28 +206,48 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
+            var selectItems = new List<SelectListItem>();
+            var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
+            var enumType = explorer.ModelType;
 
-            var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
+            if (isNullableType)
+            {
+                enumType = Nullable.GetUnderlyingType(explorer.ModelType);
+                selectItems.Add(new SelectListItem());
+            }
+
+            var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer.Container.ModelType.Assembly);
+
+            foreach (var enumValue in enumType.GetEnumValues())
+            {
+                var memberName = enumType.GetEnumName(enumValue);
+                var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
+                    new[]
+                    {
+                        containerLocalizer,
+                        _stringLocalizerFactory.CreateDefaultOrNull()
+                    },
+                    new[]
+                    {
+                        $"Enum:{enumType.Name}.{memberName}",
+                        $"{enumType.Name}.{memberName}",
+                        memberName
+                    },
+                    memberName
+                );
+
+                selectItems.Add(new SelectListItem
+                {
+                    Value = enumValue.ToString(),
+                    Text = localizedMemberName
+                });
+            }
 
             return selectItems;
         }
 
-        protected virtual string GetLocalizedPropertyName(IStringLocalizer localizer, Type enumType, string propertyName)
-        {
-            if (localizer == null)
-            {
-                return propertyName;
-            }
-
-            var localizedString = localizer[enumType.Name + "." + propertyName];
-
-            return !localizedString.ResourceNotFound ? localizedString.Value : localizer[propertyName].Value;
-        }
-
         protected virtual List<SelectListItem> GetSelectItemsFromAttribute(
-            SelectItems selectItemsAttribute, 
+            SelectItems selectItemsAttribute,
             ModelExplorer explorer)
         {
             var selectItems = selectItemsAttribute.GetItems(explorer)?.ToList();
@@ -220,7 +260,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return selectItems;
         }
 
-        protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output)
         {
             var labelTagHelper = new LabelTagHelper(_generator)
             {
@@ -228,10 +268,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            return labelTagHelper.Render(new TagHelperAttributeList(), context, _encoder, "label", TagMode.StartTagAndEndTag, true);
+            return await labelTagHelper.RenderAsync(new TagHelperAttributeList(), context, _encoder, "label", TagMode.StartTagAndEndTag);
         }
 
-        protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
+        protected virtual async Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
             var validationMessageTagHelper = new ValidationMessageTagHelper(_generator)
             {
@@ -241,7 +281,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
 
-            return validationMessageTagHelper.Render(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag, true);
+            return await validationMessageTagHelper.RenderAsync(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag);
         }
 
         protected virtual string GetSize(TagHelperContext context, TagHelperOutput output)
@@ -305,17 +345,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
         }
 
-        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
         {
             var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
-            surpress = list == null;
+            suppress = list == null;
 
             if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
             {
                 list.Add(new FormGroupItem
                 {
                     HtmlContent = html,
-                    Order = order
+                    Order = order,
+                    PropertyName = propertyName
                 });
             }
         }

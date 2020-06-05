@@ -34,13 +34,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
         [Fact]
         public async Task Should_Localize_Display_Attribute()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
                 var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
                 result.ShouldContain("<label for=\"BirthDate\">Birth date</label>");
             }
 
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
                 result.ShouldContain("<label for=\"BirthDate\">Dogum gunu</label>");

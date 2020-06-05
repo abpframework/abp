@@ -8,6 +8,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Data
 {
+    //TODO: Create a Volo.Abp.Data.Filtering namespace?
     public class DataFilter : IDataFilter, ISingletonDependency
     {
         private readonly ConcurrentDictionary<Type, object> _filters;
@@ -60,11 +61,11 @@ namespace Volo.Abp.Data
             }
         }
 
-        private readonly DataFilterOptions _options;
+        private readonly AbpDataFilterOptions _options;
 
         private readonly AsyncLocal<DataFilterState> _filter;
 
-        public DataFilter(IOptions<DataFilterOptions> options)
+        public DataFilter(IOptions<AbpDataFilterOptions> options)
         {
             _options = options.Value;
             _filter = new AsyncLocal<DataFilterState>();

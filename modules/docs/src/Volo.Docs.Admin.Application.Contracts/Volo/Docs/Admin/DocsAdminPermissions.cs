@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Volo.Abp.Reflection;
 
 namespace Volo.Docs.Admin
 {
@@ -16,16 +14,15 @@ namespace Volo.Docs.Admin
             public const string Create = Default + ".Create";
         }
 
+        public static class Documents
+        {
+            public const string Default = GroupName + ".Documents";
+        }
+
+
         public static string[] GetAll()
         {
-            return new[]
-            {
-                GroupName,
-                Projects.Default,
-                Projects.Delete,
-                Projects.Update,
-                Projects.Create,
-            };
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(DocsAdminPermissions));
         }
     }
 }

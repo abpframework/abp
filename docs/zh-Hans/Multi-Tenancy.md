@@ -6,17 +6,17 @@ ABP的多租户模块提供了创建多租户应用程序的基本功能.
 
 > 软件多租户技术指的是一种软件架构,这种架构可以使用软件的单实例运行并为多个租户提供服务.租户是通过软件实例的特定权限共享通用访问的一组用户.使用多租户架构,软件应用为每个租户提供实例的专用共享,包括实例的数据、配置、用户管理、租户的私有功能和非功能属性.多租户与多实例架构形成对比,将软件实例的行为根据不同的租户分割开来.
 
-### Volo.Abp.MultiTenancy.Abstractions
+### Volo.Abp.MultiTenancy
 
-Volo.Abp.MultiTenancy.Abstractions定义了一些基础接口让你的代码"multi-tenancy ready",使用包管理器控制台(PMC)将它安装到你的项目中:
+Volo.Abp.MultiTenancy"multi-tenancy ready",使用包管理器控制台(PMC)将它安装到你的项目中:
 
 ````
-Install-Package Volo.Abp.MultiTenancy.Abstractions
+Install-Package Volo.Abp.MultiTenancy
 ````
 
 > 这个包默认安装在了快速启动模板中.所以,大多数情况下,你不需要手动安装它.
 
-然后你可以添加 **AbpMultiTenancyAbstractionsModule** 依赖到你的模块:
+然后你可以添加 **AbpMultiTenancyModule** 依赖到你的模块:
 
 ````C#
 using Volo.Abp.Modularity;
@@ -24,7 +24,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpMultiTenancyModule))]
     public class MyModule : AbpModule
     {
         //...
@@ -90,32 +90,6 @@ namespace MyCompany.MyProject
 
 TODO: ...
 
-### Volo.Abp.MultiTenancy
-
-Volo.Abp.MultiTenancy 才是让你的程序实现多租户的真正的包.使用PMC将它安装到你的项目中:
-
-````
-Install-Package Volo.Abp.MultiTenancy
-````
-
-然后添加 **AbpMultiTenancyAbstractionsModule** 依赖到你的模块中:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-> 如果你添加了AbpMultiTenancyModule依赖,就不需要再另外添加AbpMultiTenancyAbstractionsModule依赖了,因为AbpMultiTenancyModule已经依赖它了.
-
 #### 确定当前租户
 
 多租户的应用程序运行的时候首先要做的就是确定当前租户.
@@ -125,7 +99,7 @@ Volo.Abp.MultiTenancy只提供了用于确定当前租户的抽象(称为租户�
 
 ##### 自定义租户解析器
 
-你可以像下面这样,在你模块的ConfigureServices方法中将自定义解析器并添加到 **TenantResolveOptions**中:
+你可以像下面这样,在你模块的ConfigureServices方法中将自定义解析器并添加到 **AbpTenantResolveOptions**中:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -139,9 +113,9 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new MyCustomTenantResolver());
+                options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
 
             //...
@@ -150,14 +124,14 @@ namespace MyCompany.MyProject
 }
 ````
 
-MyCustomTenantResolver必须像下面这样实现**ITenantResolver**接口:
+`MyCustomTenantResolveContributor`必须像下面这样实现**ITenantResolveContributor**接口:
 
 ````C#
 using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    public class MyCustomTenantResolver : ITenantResolver
+    public class MyCustomTenantResolveContributor : ITenantResolveContributor
     {
         public void Resolve(ITenantResolveContext context)
         {
@@ -194,15 +168,15 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ConfigurationTenantStoreOptions>(options =>
+            Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"), //Id
                         "tenant1" //Name
                     ),
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"), //Id
                         "tenant2" //Name
                     )
@@ -240,7 +214,7 @@ namespace MyCompany.MyProject
         {
             var configuration = BuildConfiguration();
 
-            Configure<ConfigurationTenantStoreOptions>(configuration);
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
@@ -278,7 +252,7 @@ TODO: This package implements ITenantStore using a real database...
 
 #### 租户信息
 
-ITenantStore跟 **TenantInformation**类一起工作,并且包含了几个租户属性:
+ITenantStore跟 **TenantConfiguration**类一起工作,并且包含了几个租户属性:
 
 * **Id**:租户的唯一Id.
 * **Name**: 租户的唯一名称.
@@ -329,15 +303,20 @@ TODO:...
 
 Volo.Abp.AspNetCore.MultiTenancy 添加了下面这些租户解析器,从当前Web请求(按优先级排序)中确定当前租户.
 
-* **QueryStringTenantResolver**: 尝试从query string参数中获取当前租户,默认参数名为"__tenant".
-* **RouteTenantResolver**:尝试从当前路由中获取(URL路径),默认是变量名是"__tenant".所以,如果你的路由中定义了这个变量,就可以从路由中确定当前租户.
-* **HeaderTenantResolver**: 尝试从HTTP header中获取当前租户,默认的header名称是"__tenant".
-* **CookieTenantResolver**: 尝试从当前cookie中获取当前租户.默认的Cookie名称是"__tenant".
+* **CurrentUserTenantResolveContributor**: 如果当前用户已登录,从当前用户的声明中获取租户Id. **出于安全考虑,应该始终将其做为第一个Contributor**.
+* **QueryStringTenantResolveContributor**: 尝试从query string参数中获取当前租户,默认参数名为"__tenant".
+* **RouteTenantResolveContributor**:尝试从当前路由中获取(URL路径),默认是变量名是"__tenant".所以,如果你的路由中定义了这个变量,就可以从路由中确定当前租户.
+* **HeaderTenantResolveContributor**: 尝试从HTTP header中获取当前租户,默认的header名称是"__tenant".
+* **CookieTenantResolveContributor**: 尝试从当前cookie中获取当前租户.默认的Cookie名称是"__tenant".
 
-可以使用AspNetCoreMultiTenancyOptions修改默认的参数名"__tenant".例如:
+> 如果你使用nginx作为反向代理服务器,请注意如果`TenantKey`包含下划线或其他特殊字符可能存在问题, 请参考: 
+http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
+http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
+
+可以使用AbpAspNetCoreMultiTenancyOptions修改默认的参数名"__tenant".例如:
 
 ````C#
-services.Configure<AspNetCoreMultiTenancyOptions>(options =>
+services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 {
     options.TenantKey = "MyTenantKey";
 });
@@ -345,7 +324,7 @@ services.Configure<AspNetCoreMultiTenancyOptions>(options =>
 
 ##### 域名租户解析器
 
-实际项目中,大多数情况下你想通过子域名(如mytenant1.mydomain.com)或全域名(如mytenant.com)中确定当前租户.如果是这样,你可以配置TenantResolveOptions添加一个域名租户解析器.
+实际项目中,大多数情况下你想通过子域名(如mytenant1.mydomain.com)或全域名(如mytenant.com)中确定当前租户.如果是这样,你可以配置AbpTenantResolveOptions添加一个域名租户解析器.
 
 ###### 例子:添加子域名解析器
 
@@ -362,10 +341,10 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
-                //子域名格式: {0}.mydomain.com (作为最高优先级解析器添加)
-                options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));
+                //子域名格式: {0}.mydomain.com (作为第二优先级解析器添加, 位于CurrentUserTenantResolveContributor之后)
+                options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));
             });
 
             //...
@@ -376,7 +355,7 @@ namespace MyCompany.MyProject
 
 {0}是用来确定当前租户唯一名称的占位符.
 
-你可以使用下面的方法,代替``options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));``:
+你可以使用下面的方法,代替``options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));``:
 
 ````C#
 options.AddDomainTenantResolver("{0}.mydomain.com");

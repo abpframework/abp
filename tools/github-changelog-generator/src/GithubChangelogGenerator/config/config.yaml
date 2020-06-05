@@ -1,0 +1,54 @@
+---
+repo: abpframework/abp
+# token:
+milestone: 0.17
+# since-tag: 0.15.0
+# until-tag: 0.16.0
+state: closed
+groups:
+  - labels:
+      - breaking change
+    title: "Breaking Changes"
+
+  - labels:
+      - feature
+    title: "Features"
+
+  - labels:
+      - enhancement
+    title: "Enhancements"
+
+  - labels:
+      - bug
+    title: "Bug Fixes"
+
+  - labels:
+    title: "Others"
+
+#template: |-
+#  {{if .Milestone}}## {{.Milestone.GetTitle}} ({{.Milestone.GetClosedAt.Format "2006-01-02"}}){{end -}}
+#  {{if .IssuesByMilestone}}
+#  {{range .IssuesByMilestone}}
+#  ### {{.Title}}
+#  {{range .Issues}}
+#  {{if .IsPullRequest -}}
+#  - PR [\#{{.GetNumber}}]({{.GetHTMLURL}}): {{.GetTitle}} (by [{{.GetUser.GetLogin}}]({{.GetUser.GetHTMLURL}}))
+#  {{- else -}}
+#  - ISSUE [\#{{.GetNumber}}]({{.GetHTMLURL}}): {{.GetTitle}}
+#  {{- end -}}
+#  {{end}}
+#  {{end}}
+#  {{end -}}
+#  {{if .SinceTagCommit}}## {{.SinceTag}}{{if .UntilTagCommit}} - {{.UntilTag}}{{end}}{{end -}}
+#  {{if .IssuesByTag}}
+#  {{range .IssuesByTag}}
+#  ### {{.Title}}
+#  {{range .Issues}}
+#  {{if .IsPullRequest -}}
+#  - PR [\#{{.GetNumber}}]({{.GetHTMLURL}}): {{.GetTitle}} (by [{{.GetUser.GetLogin}}]({{.GetUser.GetHTMLURL}}))
+#  {{- else -}}
+#  - ISSUE [\#{{.GetNumber}}]({{.GetHTMLURL}}): {{.GetTitle}}
+#  {{- end -}}
+#  {{end}}
+#  {{end}}
+#  {{- end -}}

@@ -1,0 +1,56 @@
+<nav
+  class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"
+  id="main-navbar"
+  style="min-height: 4rem;"
+>
+  <div class="container">
+    <abp-logo *abpReplaceableTemplate="{ componentKey: logoComponentKey }"></abp-logo>
+    <button
+      class="navbar-toggler"
+      type="button"
+      [attr.aria-expanded]="!isCollapsed"
+      (click)="isCollapsed = !isCollapsed"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse" [class.overflow-hidden]="smallScreen" id="main-navbar-collapse">
+      <ng-container *ngTemplateOutlet="!smallScreen ? navigations : null"></ng-container>
+
+      <div *ngIf="smallScreen" [@collapseWithMargin]="isCollapsed ? 'collapsed' : 'expanded'">
+        <ng-container *ngTemplateOutlet="navigations"></ng-container>
+      </div>
+
+      <ng-template #navigations>
+        <abp-routes
+          *abpReplaceableTemplate="{
+            componentKey: routesComponentKey,
+            inputs: {
+              smallScreen: { value: smallScreen }
+            }
+          }"
+          class="mx-auto"
+          [smallScreen]="smallScreen"
+        ></abp-routes>
+
+        <abp-nav-items
+          *abpReplaceableTemplate="{
+            componentKey: navItemsComponentKey,
+            inputs: {
+              smallScreen: { value: smallScreen }
+            }
+          }"
+          [smallScreen]="smallScreen"
+        ></abp-nav-items>
+      </ng-template>
+    </div>
+  </div>
+</nav>
+
+<div
+  [@slideFromBottom]="
+    outlet && outlet.isActivated && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path
+  "
+  class="container"
+>
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>

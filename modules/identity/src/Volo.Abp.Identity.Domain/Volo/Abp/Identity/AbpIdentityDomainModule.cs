@@ -2,42 +2,40 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Identity.Localization;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Users;
-using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity
 {
     [DependsOn(
         typeof(AbpDddDomainModule),
         typeof(AbpIdentityDomainSharedModule),
-        typeof(AbpUsersDomainModule)
+        typeof(AbpUsersDomainModule),
+        typeof(AbpAutoMapperModule)
         )]
     public class AbpIdentityDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityDomainModule>();
+
+            Configure<AbpAutoMapperOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpIdentityDomainModule>();
+                options.AddProfile<IdentityDomainMappingProfile>(validate: true);
             });
 
-            Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpDistributedEventBusOptions>(options =>
             {
-                options.Resources
-                    .Get<IdentityResource>()
-                    .AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
+                options.EtoMappings.Add<IdentityUser, UserEto>(typeof(AbpIdentityDomainModule));
+                options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
+                options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
             });
-
-            Configure<DistributedEventBusOptions>(options =>
-            {
-                options.EtoMappings.Add<IdentityUser, UserEto>();
-            });
-
+            
             var identityBuilder = context.Services.AddAbpIdentity(options =>
             {
                 options.User.RequireUniqueEmail = true;
@@ -47,6 +45,27 @@ namespace Volo.Abp.Identity
             context.Services.ExecutePreConfiguredActions(identityBuilder);
 
             AddAbpIdentityOptionsFactory(context.Services);
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.User,
+                typeof(IdentityUser)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.Role,
+                typeof(IdentityRole)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.ClaimType,
+                typeof(IdentityClaimType)
+            );
         }
 
         private static void AddAbpIdentityOptionsFactory(IServiceCollection services)

@@ -26,17 +26,19 @@ namespace Volo.Abp.BackgroundWorkers
             _backgroundWorkers = new List<IBackgroundWorker>();
         }
 
-        public void Add(IBackgroundWorker worker)
+        public virtual void Add(IBackgroundWorker worker)
         {
             _backgroundWorkers.Add(worker);
 
             if (IsRunning)
             {
-                worker.Start();
+                AsyncHelper.RunSync(
+                    () => worker.StartAsync()
+                );
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_isDisposed)
             {
@@ -48,7 +50,7 @@ namespace Volo.Abp.BackgroundWorkers
             //TODO: ???
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken = default)
+        public virtual async Task StartAsync(CancellationToken cancellationToken = default)
         {
             IsRunning = true;
 
@@ -58,7 +60,7 @@ namespace Volo.Abp.BackgroundWorkers
             }
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken = default)
+        public virtual async Task StopAsync(CancellationToken cancellationToken = default)
         {
             IsRunning = false;
 

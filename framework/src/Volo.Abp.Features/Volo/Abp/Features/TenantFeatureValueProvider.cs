@@ -5,7 +5,7 @@ namespace Volo.Abp.Features
 {
     public class TenantFeatureValueProvider : FeatureValueProvider
     {
-        public const string ProviderName = "Tenant";
+        public const string ProviderName = "T";
 
         public override string Name => ProviderName;
 
@@ -19,7 +19,7 @@ namespace Volo.Abp.Features
 
         public override async Task<string> GetOrNullAsync(FeatureDefinition feature)
         {
-            return await FeatureStore.GetOrNullAsync(feature.Name, Name, CurrentTenant.Id?.ToString("N"));
+            return await FeatureStore.GetOrNullAsync(feature.Name, Name, CurrentTenant.Id?.ToString());
         }
     }
 }

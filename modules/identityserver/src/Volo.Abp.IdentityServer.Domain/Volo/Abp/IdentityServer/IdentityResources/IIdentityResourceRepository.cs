@@ -18,6 +18,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             string sorting,
             int skipCount,
             int maxResultCount,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
@@ -27,5 +28,11 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             bool includeDetails = true,
             CancellationToken cancellationToken = default
         );
+
+        Task<bool> CheckNameExistAsync(
+            string name,
+            Guid? expectedId = null,
+            CancellationToken cancellationToken = default
+         );
     }
 }

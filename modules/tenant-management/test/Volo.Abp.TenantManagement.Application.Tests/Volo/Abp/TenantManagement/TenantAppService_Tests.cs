@@ -59,7 +59,7 @@ namespace Volo.Abp.TenantManagement
         public async Task CreateAsync()
         {
             var tenancyName = Guid.NewGuid().ToString("N").ToLowerInvariant();
-            var tenant = await _tenantAppService.CreateAsync(new TenantCreateDto { Name = tenancyName });
+            var tenant = await _tenantAppService.CreateAsync(new TenantCreateDto { Name = tenancyName , AdminEmailAddress = "admin@admin.com", AdminPassword = "123456"});
             tenant.Name.ShouldBe(tenancyName);
             tenant.Id.ShouldNotBe(default(Guid));
         }
@@ -69,7 +69,7 @@ namespace Volo.Abp.TenantManagement
         {
             await Assert.ThrowsAsync<UserFriendlyException>(async () =>
             {
-                await _tenantAppService.CreateAsync(new TenantCreateDto { Name = "acme" });
+                await _tenantAppService.CreateAsync(new TenantCreateDto { Name = "acme", AdminEmailAddress = "admin@admin.com", AdminPassword = "123456" });
             });
         }
 

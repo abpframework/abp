@@ -1,6 +1,6 @@
 ﻿// This software is part of the Autofac IoC container
 // Copyright © 2015 Autofac Contributors
-// http://autofac.org
+// https://autofac.org
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -33,19 +33,21 @@ namespace Autofac.Extensions.DependencyInjection
     /// </summary>
     /// <seealso cref="System.IServiceProvider" />
     /// <seealso cref="Microsoft.Extensions.DependencyInjection.ISupportRequiredService" />
-    public class AutofacServiceProvider : IServiceProvider, ISupportRequiredService
+    public class AutofacServiceProvider : IServiceProvider, ISupportRequiredService, IDisposable
     {
-        private readonly IComponentContext _componentContext;
+        private readonly ILifetimeScope _lifetimeScope;
+
+        private bool _disposed = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacServiceProvider"/> class.
         /// </summary>
-        /// <param name="componentContext">
-        /// The component context from which services should be resolved.
+        /// <param name="lifetimeScope">
+        /// The lifetime scope from which services will be resolved.
         /// </param>
-        public AutofacServiceProvider(IComponentContext componentContext)
+        public AutofacServiceProvider(ILifetimeScope lifetimeScope)
         {
-            this._componentContext = componentContext;
+            this._lifetimeScope = lifetimeScope;
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace Autofac.Extensions.DependencyInjection
         /// </exception>
         public object GetRequiredService(Type serviceType)
         {
-            return this._componentContext.Resolve(serviceType);
+            return this._lifetimeScope.Resolve(serviceType);
         }
 
         /// <summary>
@@ -81,7 +83,40 @@ namespace Autofac.Extensions.DependencyInjection
         /// </returns>
         public object GetService(Type serviceType)
         {
-            return this._componentContext.ResolveOptional(serviceType);
+            return this._lifetimeScope.ResolveOptional(serviceType);
+        }
+
+        /// <summary>
+        /// Gets the underlying instance of <see cref="ILifetimeScope" />.
+        /// </summary>
+        public ILifetimeScope LifetimeScope => _lifetimeScope;
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// <see langword="true" /> to release both managed and unmanaged resources;
+        /// <see langword="false" /> to release only unmanaged resources.
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._disposed)
+            {
+                this._disposed = true;
+                if (disposing)
+                {
+                    this._lifetimeScope.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

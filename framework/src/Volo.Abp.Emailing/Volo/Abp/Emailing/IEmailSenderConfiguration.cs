@@ -1,18 +1,14 @@
-﻿namespace Volo.Abp.Emailing
+﻿using System.Threading.Tasks;
+
+namespace Volo.Abp.Emailing
 {
     /// <summary>
     /// Defines configurations used while sending emails.
     /// </summary>
     public interface IEmailSenderConfiguration
     {
-        /// <summary>
-        /// Default from address.
-        /// </summary>
-        string DefaultFromAddress { get; }
-        
-        /// <summary>
-        /// Default display name.
-        /// </summary>
-        string DefaultFromDisplayName { get; }
+        Task<string> GetDefaultFromAddressAsync();
+
+        Task<string> GetDefaultFromDisplayNameAsync();
     }
 }

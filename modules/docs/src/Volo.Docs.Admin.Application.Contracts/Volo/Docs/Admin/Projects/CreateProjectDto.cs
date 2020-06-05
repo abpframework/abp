@@ -14,6 +14,8 @@ namespace Volo.Docs.Admin.Projects
 
         public string NavigationDocumentName { get; set; }
 
+        public string ParametersDocumentName { get; set; }
+
         public string MinimumVersion { get; set; }
 
         public string MainWebsiteUrl { get; set; }

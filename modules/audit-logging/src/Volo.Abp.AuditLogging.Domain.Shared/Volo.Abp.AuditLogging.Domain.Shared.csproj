@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -8,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>
 

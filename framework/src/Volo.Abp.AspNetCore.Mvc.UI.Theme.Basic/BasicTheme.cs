@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
     {
         public const string Name = "Basic";
 
-        public string GetLayout(string name, bool fallbackToDefault = true)
+        public virtual string GetLayout(string name, bool fallbackToDefault = true)
         {
             switch (name)
             {

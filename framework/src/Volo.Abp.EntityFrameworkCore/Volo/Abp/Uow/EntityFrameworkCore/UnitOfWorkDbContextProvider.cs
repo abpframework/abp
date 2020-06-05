@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
@@ -53,11 +54,13 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             {
                 var dbContext = CreateDbContext(unitOfWork);
 
-                if (unitOfWork.Options.Timeout.HasValue &&
-                    dbContext.Database.IsRelational() &&
-                    !dbContext.Database.GetCommandTimeout().HasValue)
+                if (dbContext is IAbpEfCoreDbContext abpEfCoreDbContext)
                 {
-                    dbContext.Database.SetCommandTimeout(unitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
+                    abpEfCoreDbContext.Initialize(
+                        new AbpEfCoreDbContextInitializationContext(
+                            unitOfWork
+                        )
+                    );
                 }
 
                 return dbContext;

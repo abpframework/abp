@@ -1,0 +1,22 @@
+﻿@page
+
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Menus
+@using Volo.Abp.UI.Navigation
+@model Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Demo.Pages.Components.IndexModel
+
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = "Components";
+}
+
+<h1>Components</h1>
+
+Here is the ABP Component List
+
+<ul>
+    @foreach (var menu in (await Model._menuManager.GetAsync(StandardMenus.Main)).Items.First(x => x.Name == BasicThemeDemoMenus.Components.Root).Items)
+    {
+        <li><a href="@menu.Url">@menu.DisplayName</a></li>
+    }
+</ul>

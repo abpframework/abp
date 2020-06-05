@@ -11,7 +11,7 @@ namespace Volo.Abp.VirtualFileSystem
 
         public virtual IFileInfo GetFileInfo(string subpath)
         {
-            if (string.IsNullOrEmpty(subpath))
+            if (subpath == null)
             {
                 return new NotFoundFileInfo(subpath);
             }
@@ -39,12 +39,13 @@ namespace Volo.Abp.VirtualFileSystem
             var directoryPath = subpath.EnsureEndsWith('/');
             foreach (var fileInfo in Files.Values)
             {
-                if (!fileInfo.PhysicalPath.StartsWith(directoryPath))
+                var fullPath = fileInfo.GetVirtualOrPhysicalPathOrNull();
+                if (!fullPath.StartsWith(directoryPath))
                 {
                     continue;
                 }
 
-                var relativePath = fileInfo.PhysicalPath.Substring(directoryPath.Length);
+                var relativePath = fullPath.Substring(directoryPath.Length);
                 if (relativePath.Contains("/"))
                 {
                     continue;

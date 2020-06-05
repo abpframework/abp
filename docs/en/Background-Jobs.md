@@ -11,7 +11,7 @@ Background jobs are **persistent** that means they will be **re-tried** and **ex
 
 ## Abstraction Package
 
-ABP provides an **abstraction** module and **several implementations** for background jobs. It has a built-in/default implementation as well as Hangfire and RabbitMQ integrations.
+ABP provides an **abstraction** module and **several implementations** for background jobs. It has a built-in/default implementation as well as Hangfire, RabbitMQ and Quartz integrations.
 
 `Volo.Abp.BackgroundJobs.Abstractions` nuget package provides needed services to create background jobs and queue background job items. If your module only depend on this package, it can be independent from the actual implementation/integration.
 
@@ -40,7 +40,7 @@ using Volo.Abp.Emailing;
 
 namespace MyProject
 {
-    public class EmailSendingJob : BackgroundJob<EmailSendingArgs>
+    public class EmailSendingJob : BackgroundJob<EmailSendingArgs>, ITransientDependency
     {
         private readonly IEmailSender _emailSender;
 
@@ -108,7 +108,7 @@ Enqueue method gets some optional arguments to control the background job:
 
 You may want to disable background job execution for your application. This is generally needed if you want to execute background jobs in another process and disable it for the current process.
 
-Use `BackgroundJobOptions` to configure the job execution:
+Use `AbpBackgroundJobOptions` to configure the job execution:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -116,7 +116,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobOptions>(options =>
+        Configure<AbpBackgroundJobOptions>(options =>
         {
             options.IsJobExecutionEnabled = false; //Disables job execution
         });
@@ -140,7 +140,7 @@ ABP framework includes a simple `IBackgroundJobManager` implementation that;
 
 ### Configuration
 
-Use `BackgroundJobWorkerOptions` in your [module class](Module-Development-Basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
+Use `AbpBackgroundJobWorkerOptions` in your [module class](Module-Development-Basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -148,7 +148,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobWorkerOptions>(options =>
+        Configure<AbpBackgroundJobWorkerOptions>(options =>
         {
             options.DefaultTimeout = 864000; //10 days (as seconds)
         });
@@ -172,3 +172,7 @@ See pre-built job manager alternatives:
 
 * [Hangfire Background Job Manager](Background-Jobs-Hangfire.md)
 * [RabbitMQ Background Job Manager](Background-Jobs-RabbitMq.md)
+* [Quartz Background Job Manager](Background-Jobs-Quartz.md)
+
+## See Also
+* [Background Workers](Background-Workers.md)

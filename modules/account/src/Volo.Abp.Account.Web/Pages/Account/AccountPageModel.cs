@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using Volo.Abp.Account.Web.Localization;
+using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Identity;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -14,14 +15,19 @@ namespace Volo.Abp.Account.Web.Pages.Account
     {
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
-        public IStringLocalizer<AccountResource> L { get; set; }
 
-        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+        protected AccountPageModel()
+        {
+            LocalizationResourceType = typeof(AccountResource);
+            ObjectMapperContext = typeof(AbpAccountWebModule);
+        }
+
+        protected virtual RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
         {
             return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
         }
 
-        protected void CheckIdentityErrors(IdentityResult identityResult)
+        protected virtual void CheckIdentityErrors(IdentityResult identityResult)
         {
             if (!identityResult.Succeeded)
             {
@@ -31,7 +37,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
         }
 
-        private string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+        protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
         {
             returnUrl = NormalizeReturnUrl(returnUrl);
 
@@ -43,7 +49,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return returnUrl;
         }
 
-        private string NormalizeReturnUrl(string returnUrl)
+        protected virtual string NormalizeReturnUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {
@@ -68,7 +74,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual string GetAppHomeUrl()
         {
-            return "/"; //TODO: ???
+            return "~/"; //TODO: ???
         }
     }
 }

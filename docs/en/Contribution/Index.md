@@ -29,17 +29,29 @@ You may want to translate the complete [documentation](https://abp.io/documents/
 * Get the ["en" folder](https://github.com/abpframework/abp/tree/master/docs/en) as a reference for the file names and folder structure. Keep the same naming if you are translating the same documentation.
 * Send a pull request (PR) once you translate any document. Please translate documents & send PRs one by one. Don't wait to finish translations for all documents.
 
+There are some fundamental documents need to be translated before publishing a language on the [ABP documentation web site](https://docs.abp.io):
+
+* Getting Started documents
+* Tutorials
+* CLI
+
+A new language is published after these minimum translations have been completed.
+
 ### Resource Localization
 
-ABP framework has a flexible [localization system](https://abp.io/documents/abp/latest/Localization). You can create localized user interfaces for your own application.
+ABP framework has a flexible [localization system](../Localization.md). You can create localized user interfaces for your own application.
 
-In addition to that, the framework and pre-build modules have already localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). You can create a new file in the [same folder](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) to translate it.
+In addition to that, the framework and pre-build modules have already localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). 
+
+You can create a new file in the [same folder](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) to translate it.
 
 * Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
 * Create a new file for the target language for a localization text (json) file (near to the en.json file).
 * Copy all texts from the en.json file.
 * Translate the texts.
 * Send pull request on Github.
+
+You can also use the `abp translate` command of [ABP CLI](CLI.md) to translate localized texts.
 
 ABP is a modular framework. So there are many localization text resource, one per module. To find all .json files, you can search for "en.json" after cloning the repository. You can also check [this list](Localization-Text-Files.md) for a list of localization text files.
 

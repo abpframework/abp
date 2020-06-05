@@ -13,7 +13,7 @@ namespace Volo.Abp.SettingManagement
             ManagementStore = managementStore;
         }
 
-        public Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
+        public virtual Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
             return ManagementStore.GetOrNullAsync(name, providerName, providerKey);
         }

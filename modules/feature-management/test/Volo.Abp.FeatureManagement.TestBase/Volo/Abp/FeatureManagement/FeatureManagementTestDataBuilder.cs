@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
 
@@ -20,40 +21,40 @@ namespace Volo.Abp.FeatureManagement
             _featureValueRepository = featureValueRepository;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
             #region "Regular" edition features
 
             //SocialLogins
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Regular.ToString("N")
+                    TestEditionIds.Regular.ToString()
                 )
             );
 
             //UserCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
                     "10",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Regular.ToString("N")
+                    TestEditionIds.Regular.ToString()
                 )
             );
 
             //ProjectCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
                     "1",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Regular.ToString("N")
+                    TestEditionIds.Regular.ToString()
                 )
             );
 
@@ -62,57 +63,57 @@ namespace Volo.Abp.FeatureManagement
             #region "Enterprise" edition features
 
             //SocialLogins
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Enterprise.ToString("N")
+                    TestEditionIds.Enterprise.ToString()
                 )
             );
 
             //EmailSupport
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.EmailSupport,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Enterprise.ToString("N")
+                    TestEditionIds.Enterprise.ToString()
                 )
             );
 
             //UserCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
                     "20",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Enterprise.ToString("N")
+                    TestEditionIds.Enterprise.ToString()
                 )
             );
 
             //ProjectCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
                     "3",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Enterprise.ToString("N")
+                    TestEditionIds.Enterprise.ToString()
                 )
             );
 
             //BackupCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.BackupCount,
                     "5",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Enterprise.ToString("N")
+                    TestEditionIds.Enterprise.ToString()
                 )
             );
 
@@ -121,68 +122,68 @@ namespace Volo.Abp.FeatureManagement
             #region "Ultimate" edition features
 
             //SocialLogins
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Ultimate.ToString("N")
+                    TestEditionIds.Ultimate.ToString()
                 )
             );
 
             //EmailSupport
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.EmailSupport,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Ultimate.ToString("N")
+                    TestEditionIds.Ultimate.ToString()
                 )
             );
 
             //EmailSupport
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.DailyAnalysis,
                     true.ToString().ToLowerInvariant(),
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Ultimate.ToString("N")
+                    TestEditionIds.Ultimate.ToString()
                 )
             );
 
             //UserCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
                     "100",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Ultimate.ToString("N")
+                    TestEditionIds.Ultimate.ToString()
                 )
             );
 
             //ProjectCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
                     "10",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Ultimate.ToString("N")
+                    TestEditionIds.Ultimate.ToString()
                 )
             );
 
             //BackupCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.BackupCount,
                     "10",
                     EditionFeatureValueProvider.ProviderName,
-                    TestEditionIds.Ultimate.ToString("N")
+                    TestEditionIds.Ultimate.ToString()
                 )
             );
 
