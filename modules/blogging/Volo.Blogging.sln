@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Admin.Applica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Admin.HttpApi", "src\Volo.Blogging.Admin.HttpApi\Volo.Blogging.Admin.HttpApi.csproj", "{59BBAF94-CC8E-4313-9143-F2F5C36A7C45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Admin.HttpApi.Client", "src\Volo.Blogging.Admin.HttpApi.Client\Volo.Blogging.Admin.HttpApi.Client.csproj", "{58A63CC9-C886-448B-AB4E-068600294D86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{59BBAF94-CC8E-4313-9143-F2F5C36A7C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59BBAF94-CC8E-4313-9143-F2F5C36A7C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59BBAF94-CC8E-4313-9143-F2F5C36A7C45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58A63CC9-C886-448B-AB4E-068600294D86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58A63CC9-C886-448B-AB4E-068600294D86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58A63CC9-C886-448B-AB4E-068600294D86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58A63CC9-C886-448B-AB4E-068600294D86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,6 +175,7 @@ Global
 		{D8DF4D56-644E-4ADF-9DB9-712DDA62B129} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
 		{CB5DEBB3-5C2E-48E9-AA42-497575BCC7A4} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
 		{59BBAF94-CC8E-4313-9143-F2F5C36A7C45} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
+		{58A63CC9-C886-448B-AB4E-068600294D86} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2BAE819-78D4-407A-9201-22473B2850B0}
