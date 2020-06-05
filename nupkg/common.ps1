@@ -147,6 +147,11 @@ $projects = (
     "modules/blogging/src/Volo.Blogging.HttpApi",
     "modules/blogging/src/Volo.Blogging.MongoDB",
     "modules/blogging/src/Volo.Blogging.Web",
+    "modules/blogging/src/Volo.Blogging.Admin.Application",
+    "modules/blogging/src/Volo.Blogging.Admin.Application.Contracts",
+    "modules/blogging/src/Volo.Blogging.Admin.HttpApi",
+    "modules/blogging/src/Volo.Blogging.Admin.HttpApi.Client",
+    "modules/blogging/src/Volo.Blogging.Admin.Web",
 
     # modules/client-simulation
     "modules/client-simulation/src/Volo.ClientSimulation",
