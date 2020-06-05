@@ -28,6 +28,8 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
 
   private _page = 0;
   set page(value: number) {
+    if (value === this._page) return;
+
     this._page = value;
     this.get();
   }
