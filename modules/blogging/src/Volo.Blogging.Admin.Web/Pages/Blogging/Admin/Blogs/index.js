@@ -22,7 +22,7 @@
                         [
                             {
                                 text: l('Edit'),
-                                visible: abp.auth.isGranted('Blogging.Blog.Update'),
+                                visible: abp.auth.isGranted('Blogging.Admin.Blog.Update'),
                                 action: function (data) {
                                     _editModal.open({
                                         blogId: data.record.id
@@ -31,10 +31,10 @@
                             },
                             {
                                 text: l('Delete'),
-                                visible: abp.auth.isGranted('Blogging.Blog.Delete'),
+                                visible: abp.auth.isGranted('Blogging.Admin.Blog.Delete'),
                                 confirmMessage: function (data) { return l('BlogDeletionWarningMessage') },
                                 action: function (data) {
-                                    volo.blogging.blogs
+                                    volo.blogging.admin.blogManagement
                                         .delete(data.record.id)
                                         .then(function () {
                                             _dataTable.ajax.reload();

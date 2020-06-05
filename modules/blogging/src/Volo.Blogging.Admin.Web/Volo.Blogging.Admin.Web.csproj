@@ -29,57 +29,6 @@
         <Content Remove="Pages\**\*.css" />
         <Content Remove="compilerconfig.json" />
         <Content Remove="Properties\launchSettings.json" />
-        <Content Update="Pages\Admin\Blogs\Create.cshtml">
-          <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Update="Pages\Admin\Blogs\Edit.cshtml">
-          <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Update="Pages\Admin\Blogs\Index.cshtml">
-          <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <EmbeddedResource Update="Pages\Blogs\Posts\Index.min.css">
-          <DependentUpon>Index.css</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Update="Pages\Blogs\Posts\new.min.css">
-          <DependentUpon>new.css</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Update="Pages\Blogs\Shared\Styles\blog.min.css">
-          <DependentUpon>blog.css</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Update="Pages\Blogs\Shared\Styles\_home.min.css">
-          <DependentUpon>_home.css</DependentUpon>
-        </EmbeddedResource>
-        <Content Update="Pages\_ViewImports.cshtml">
-          <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="compilerconfig.json" />
-      <None Include="Properties\launchSettings.json" />
-      <None Update="Pages\Blogs\Posts\new.css.map">
-        <DependentUpon>new.css</DependentUpon>
-      </None>
-      <None Update="Pages\Blogs\Shared\Styles\blog.css.map">
-        <DependentUpon>blog.css</DependentUpon>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Pages\Admin\Blogs\Create.cshtml.cs">
-        <DependentUpon>Create.cshtml</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Admin\Blogs\Edit.cshtml.cs">
-        <DependentUpon>Edit.cshtml</DependentUpon>
-      </Compile>
-      <Compile Update="Pages\Admin\Blogs\Index.cshtml.cs">
-        <DependentUpon>Index.cshtml</DependentUpon>
-      </Compile>
     </ItemGroup>
 
 </Project>

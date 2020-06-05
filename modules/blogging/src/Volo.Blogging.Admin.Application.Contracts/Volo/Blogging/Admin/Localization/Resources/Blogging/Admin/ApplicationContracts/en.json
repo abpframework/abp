@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "Permission:BloggingAdmin": "Blog",
+    "Permission:BloggingAdmin": "Blogging",
     "Permission:Blogs": "Blogs",
     "Permission:Management": "Management",
     "Permission:Edit": "Edit",

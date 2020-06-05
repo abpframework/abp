@@ -18,7 +18,7 @@ namespace Volo.Blogging.Admin
             {
                 options.Resources
                     .Get<BloggingResource>()
-                    .AddVirtualJson("Volo/Blogging/Localization/Resources/Blogging/Admin/ApplicationContracts");
+                    .AddVirtualJson("Volo/Blogging/Admin/Localization/Resources/Blogging/Admin/ApplicationContracts");
             });
         }
     }

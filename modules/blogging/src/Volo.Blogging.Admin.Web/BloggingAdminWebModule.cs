@@ -40,7 +40,7 @@ namespace Volo.Blogging.Admin
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BloggingAdminWebModule>("Volo.Blogging");
+                options.FileSets.AddEmbedded<BloggingAdminWebModule>("Volo.Blogging.Admin");
             });
 
             context.Services.AddAutoMapperObjectMapper<BloggingAdminWebModule>();

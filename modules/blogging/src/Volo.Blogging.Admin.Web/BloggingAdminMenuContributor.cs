@@ -28,7 +28,7 @@ namespace Volo.Blogging.Admin
                     managementRootMenuItem.AddItem(new ApplicationMenuItem("BlogManagement.Blogs", l["Menu:Blogs"], "~/Blogging/Admin/Blogs"));
                 }
 
-                context.Menu.AddItem(managementRootMenuItem);
+                context.Menu.GetAdministration().AddItem(managementRootMenuItem);
             }
         }
     }
