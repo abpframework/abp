@@ -10,7 +10,7 @@
 
 在之前的版本, 预构建的页面(为[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index))和视图组件是在运行时编译. 现在,它们使用了预编译. 我们测量的应用程序启动时间(尤其是MVC UI)已经减少了50%以上.换句话说,它比之前的版本快**两倍**.速度变化也影响你第一次访问某一个页面时.
 
-这是一个v2.8和v2.9启动应用程序模板的对比结果：
+这是一个v2.8和v2.9启动应用程序模板的对比结果:
 
 ````
 ### v2.8
@@ -44,7 +44,7 @@ Total: 5.24s
 
 我们创建了一个新的[Blob存储包](https://www.nuget.org/packages/Volo.Abp.BlobStoring)用来存储任意二进制对象.它一般用于在应用程序中存储文件.这个包提供了一个抽象,因此任何应用程序或[模块](https://docs.abp.io/en/abp/latest/Module-Development-Basics)都能以存储提供器无关的方式来保存和获取文件.
 
-目前实现了两个存储提供器：
+目前实现了两个存储提供器:
 
 * [Volo.Abp.BlobStoring.FileSystem](https://www.nuget.org/packages/Volo.Abp.BlobStoring.FileSystem)包, 在本地文件系统中存储对象/文件.
 * [Volo.Abp.BlobStoring.Database](https://github.com/abpframework/abp/tree/dev/modules/blob-storing-database)模块, 在数据库中存储对象/文件.目前支持[Entity Framework Core](https://docs.abp.io/en/abp/latest/Entity-Framework-Core)(因此,你可以使用[任何关系数据库](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS)和[MongoDB](https://docs.abp.io/en/abp/latest/MongoDB)).
@@ -53,7 +53,7 @@ Total: 5.24s
 
 Blob存储系统的一个好处是,它允许你创建多个容器(每个容器是一个Blob存储),并为每个容器使用不同的存储提供器.
 
-**示例：使用默认的容器保存和取得一个字节数组**
+**示例:使用默认的容器保存和取得一个字节数组**
 
 ````csharp
 public class MyService : ITransientDependency
@@ -79,7 +79,7 @@ public class MyService : ITransientDependency
 
 它可以使用`byte[]`和`Stream`对象.
 
-**示例：使用类型化(命名)容器来保存和获取stream**
+**示例:使用类型化(命名)容器来保存和获取stream**
 
 ````csharp
 public class MyService : ITransientDependency
@@ -115,7 +115,7 @@ public class TestContainer
 
 类型化(命名)容器可被配置为使用不同的存储提供器而不是默认的.在开发可复用的模块时, 始终使用类型化的容器是一个很好的做法,这样最终应用程序可以为这个容器配置提供器,而不影响其他容器.
 
-**示例：为`TestContainer`配置文件系统提供器**
+**示例:为`TestContainer`配置文件系统提供器**
 
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
@@ -140,7 +140,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 ### 自动判断数据库提供器
 
-当你用EF Core开发一个**可复用的应用程序模块**时,你通常要将你的模块开发为**DBMS无关**的.但是,不同的DBMS有一些微小的(有时是很大的)区别.现在如何你执行基于DBMS的自定义映射,可以使用`ModelBuilder.IsUsingXXX()`扩展方法：
+当你用EF Core开发一个**可复用的应用程序模块**时,你通常要将你的模块开发为**DBMS无关**的.但是,不同的DBMS有一些微小的(有时是很大的)区别.现在如何你执行基于DBMS的自定义映射,可以使用`ModelBuilder.IsUsingXXX()`扩展方法:
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -164,7 +164,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 除了上面这种的傻傻的例子,你可以任意配置你的映射!
 
-### ABP CLI：翻译命令
+### ABP CLI:翻译命令
 
 `abp translate`是一个新的命令,当你的源代码库中包含多个JSON本地化文件时, 它可用来简化翻译[本地化](https://docs.abp.io/en/abp/latest/Localization)文件,
 
@@ -176,7 +176,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ### 新的虚拟文件系统浏览器模块
 
-感谢[@liangshiw](https://github.com/liangshiw)创建并贡献了一个新的模块用来浏览[虚拟文件系统](https://docs.abp.io/en/abp/latest/Virtual-File-System)中的文件.它适用于MVC UI并显示所有应用程序中的虚拟文件.示例截图：
+感谢[@liangshiw](https://github.com/liangshiw)创建并贡献了一个新的模块用来浏览[虚拟文件系统](https://docs.abp.io/en/abp/latest/Virtual-File-System)中的文件.它适用于MVC UI并显示所有应用程序中的虚拟文件.示例截图:
 
 ![virtual-file-explorer-1](virtual-file-explorer-1.png)
 
@@ -184,7 +184,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 [查看文档](https://docs.abp.io/en/abp/latest/Modules/Virtual-File-Explorer)学习如何使用它.
 
-### 示例应用程序：SignalR与分层架构
+### 示例应用程序:SignalR与分层架构
 
 在分布式/分层架构中实施SignalR是具有挑战性的.我们创建了一个示例应用程序演示如何轻松地使用[SignalR集成](https://docs.abp.io/en/abp/latest/SignalR-Integration)和[分布式事件总线](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus)系统
 
@@ -218,7 +218,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ### 组织单元管理UI
 
-我们为组织单元创建了UI,管理ABP商业版[Identity模块](https://commercial.abp.io/modules/Volo.Identity.Pro)的成员和角色：
+我们为组织单元创建了UI,管理ABP商业版[Identity模块](https://commercial.abp.io/modules/Volo.Identity.Pro)的成员和角色:
 
 ![organization-units](organization-units.png)
 
@@ -254,7 +254,7 @@ Easy CRM是建立在ABP商业版上的一个示例应用程序, 用来为ABP商�
 
 除了这个主要功能,我们在这个版本中向ABP Suite添加了许多细微的改进.
 
->注意：模块模板代码生成目前处于测试阶段.如果你发现任何bug,请告知我们.
+>注意:模块模板代码生成目前处于测试阶段.如果你发现任何bug,请告知我们.
 
 ### Lepton主题
 
@@ -266,7 +266,7 @@ Easy CRM是建立在ABP商业版上的一个示例应用程序, 用来为ABP商�
 * 轻量化,响应式和现代化.
 * 还有...它是可升级的,没有成本!你只需更新NuGet / NPM包来获得新的功能.
 
-我们创建了它的专属网站：[http://leptontheme.com/](http://leptontheme.com/)
+我们创建了它的专属网站:[http://leptontheme.com/](http://leptontheme.com/)
 
 在这里你可以查看所有的组件, 无需单独的应用程序.
 
@@ -274,21 +274,21 @@ Easy CRM是建立在ABP商业版上的一个示例应用程序, 用来为ABP商�
 
 这个网站目前正处于一个非常早期的阶段.我们将创建文档和和改进网站, 来为你的开发提供参考和探索主题的功能.
 
-### 即将推出：文件管理模块
+### 即将推出:文件管理模块
 
 基于新的blob存储系统(上面介绍的),我们已经开始构建一个文件管理模块用来管理(浏览/上传/下载)你应用程序中分层文件系统并在用户与客户之间分享文件.
 
 我们计划在ABP商业版v3.0中发行最初版本,并继续进行后续版本的改进.
 
-## 关于下一个版本：3.0
+## 关于下一个版本:3.0
 
 我们在[v2.8](https://blog.abp.io/abp/ABP-v2.8.0-Releases-%26-Road-Map)和v2.9中增加了许多新的功能.在下一个版本中,我们将完全专注于**文档,性能优化**和其它改进,如bug修复.
 
 长期以来,我们每2周发布一个新功能版本.我们在v3.0以后继续这种方式.但是,v3.0是一个例外,开发周期大概为4周.**v3.0的计划发布日期是2020年7月1日**.
 
-## 彩蛋：文章!
+## 彩蛋:文章!
 
-除了开发我们的产品,我们的团队都在不断地撰写各种主题的文章/教程.你可以看一下最新的文章：
+除了开发我们的产品,我们的团队都在不断地撰写各种主题的文章/教程.你可以看一下最新的文章:
 
 * [ASP.NET Core 3.1使用Pub/Sub实现WebHook](https://volosoft.com/blog/ASP.NET-CORE-3.1-Webhook-Implementation-Using-Pub-Sub)
 * [ASP.NET Core使用Azure Key Vault](https://volosoft.com/blog/Using-Azure-Key-Vault-with-ASP.NET-Core)
