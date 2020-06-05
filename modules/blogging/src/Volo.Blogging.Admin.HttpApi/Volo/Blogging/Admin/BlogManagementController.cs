@@ -34,23 +34,23 @@ namespace Volo.Blogging.Admin
         }
 
         [HttpPost]
-        public async Task<BlogDto> Create(CreateBlogDto input)
+        public async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
-            return await _blogManagementAppService.Create(input);
+            return await _blogManagementAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
+        public async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
-            return await _blogManagementAppService.Update(id, input);
+            return await _blogManagementAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            await _blogManagementAppService.Delete(id);
+            await _blogManagementAppService.DeleteAsync(id);
         }
     }
 }

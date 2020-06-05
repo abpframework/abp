@@ -11,10 +11,10 @@ namespace Volo.Blogging.Admin.Blogs
 
         Task<BlogDto> GetAsync(Guid id);
 
-        Task<BlogDto> Create(CreateBlogDto input);
+        Task<BlogDto> CreateAsync(CreateBlogDto input);
 
-        Task<BlogDto> Update(Guid id, UpdateBlogDto input);
+        Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input);
 
-        Task Delete(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

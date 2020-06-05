@@ -33,7 +33,7 @@ namespace Volo.Blogging.Admin.Blogs
         }
 
         [Authorize(BloggingAdminPermissions.Blogs.Create)]
-        public async Task<BlogDto> Create(CreateBlogDto input)
+        public async Task<BlogDto> CreateAsync(CreateBlogDto input)
         {
             var newBlog = await _blogRepository.InsertAsync(new Blog(GuidGenerator.Create(), input.Name, input.ShortName)
             {
@@ -44,7 +44,7 @@ namespace Volo.Blogging.Admin.Blogs
         }
 
         [Authorize(BloggingAdminPermissions.Blogs.Update)]
-        public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
+        public async Task<BlogDto> UpdateAsync(Guid id, UpdateBlogDto input)
         {
             var blog = await _blogRepository.GetAsync(id);
 
@@ -56,7 +56,7 @@ namespace Volo.Blogging.Admin.Blogs
         }
 
         [Authorize(BloggingAdminPermissions.Blogs.Delete)]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await _blogRepository.DeleteAsync(id);
         }

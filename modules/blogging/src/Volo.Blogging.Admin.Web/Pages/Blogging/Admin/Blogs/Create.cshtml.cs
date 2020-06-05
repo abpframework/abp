@@ -35,7 +35,7 @@ namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
         {
             var blogDto = ObjectMapper.Map<BlogCreateModalView, CreateBlogDto>(Blog);
 
-            await _blogAppService.Create(blogDto);
+            await _blogAppService.CreateAsync(blogDto);
 
             return NoContent();
         }

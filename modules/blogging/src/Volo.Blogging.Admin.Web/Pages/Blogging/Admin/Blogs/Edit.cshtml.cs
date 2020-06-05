@@ -41,7 +41,7 @@ namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
-            await _blogAppService.Update(Blog.Id, new UpdateBlogDto()
+            await _blogAppService.UpdateAsync(Blog.Id, new UpdateBlogDto()
             {
                 Name = Blog.Name,
                 ShortName = Blog.ShortName,
