@@ -3,12 +3,8 @@
   "texts": {
     "Permission:Blogging": "Blog",
     "Permission:Blogs": "Blogs",
-    "Permission:Posts": "Beiträge",
+    "Permission:Posts": "Beitrï¿½ge",
     "Permission:Tags": "Tags",
-    "Permission:Comments": "Kommentare",
-    "Permission:Management": "Verwaltung",
-    "Permission:Edit": "Bearbeiten",
-    "Permission:Create": "Erstellen",
-    "Permission:Delete": "Löschen"
+    "Permission:Comments": "Kommentare"
   }
 }

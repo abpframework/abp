@@ -1,0 +1,11 @@
+{
+    "culture": "zh-Hans",
+    "texts": {
+      "Permission:BloggingAdmin": "博客",
+      "Permission:Blogs": "博客",
+      "Permission:Management": "管理",
+      "Permission:Edit": "编辑",
+      "Permission:Create": "创建",
+      "Permission:Delete": "删除"
+    }
+  }

@@ -1,6 +1,9 @@
-﻿namespace Volo.Blogging.Blogs.Dtos
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace Volo.Blogging.Admin.Blogs
 {
-    public class UpdateBlogDto
+    public class BlogDto : FullAuditedEntityDto<Guid>
     {
         public string Name { get; set; }
 

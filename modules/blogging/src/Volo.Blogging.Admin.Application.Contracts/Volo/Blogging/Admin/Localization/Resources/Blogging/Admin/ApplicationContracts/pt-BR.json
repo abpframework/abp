@@ -1,0 +1,11 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Permission:BloggingAdmin": "Blog",
+    "Permission:Blogs": "Blogs",
+    "Permission:Management": "Gerenciamento",
+    "Permission:Edit": "Editar",
+    "Permission:Create": "Criar",
+    "Permission:Delete": "Excluir"
+  }
+}

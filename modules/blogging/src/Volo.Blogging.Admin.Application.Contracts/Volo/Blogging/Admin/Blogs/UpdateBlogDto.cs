@@ -1,6 +1,6 @@
-namespace Volo.Blogging.Blogs.Dtos
+﻿namespace Volo.Blogging.Admin.Blogs
 {
-    public class CreateBlogDto
+    public class UpdateBlogDto
     {
         public string Name { get; set; }
 
