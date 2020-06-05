@@ -38,11 +38,7 @@ namespace Volo.Abp.BlobStoring.Azure
             }));
 
             var configuration = context.Services.GetConfiguration();
-
             _connectionString = configuration["Azure:ConnectionString"];
-
-            var blobServiceClient = new BlobServiceClient(_connectionString);
-            blobServiceClient.CreateBlobContainer(_randomContainerName);
 
             Configure<AbpBlobStoringOptions>(options =>
             {
@@ -52,6 +48,7 @@ namespace Volo.Abp.BlobStoring.Azure
                     {
                         azure.ConnectionString = _connectionString;
                         azure.ContainerName = _randomContainerName;
+                        azure.CreateContainerIfNotExists = true;
                     });
                 });
             });
@@ -60,7 +57,7 @@ namespace Volo.Abp.BlobStoring.Azure
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             var blobServiceClient = new BlobServiceClient(_connectionString);
-            blobServiceClient.DeleteBlobContainer(_randomContainerName);
+            blobServiceClient.GetBlobContainerClient(_randomContainerName).DeleteIfExists();
         }
     }
 

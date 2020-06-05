@@ -14,6 +14,15 @@
             set => _containerConfiguration.SetConfiguration(AzureBlobProviderConfigurationNames.ContainerName, Check.NotNullOrWhiteSpace(value, nameof(value)));
         }
 
+        /// <summary>
+        /// Default value: false.
+        /// </summary>
+        public bool CreateContainerIfNotExists
+        {
+            get => _containerConfiguration.GetConfigurationOrDefault(AzureBlobProviderConfigurationNames.CreateContainerIfNotExists, false);
+            set => _containerConfiguration.SetConfiguration(AzureBlobProviderConfigurationNames.CreateContainerIfNotExists, value);
+        }
+
         private readonly BlobContainerConfiguration _containerConfiguration;
 
         public AzureBlobProviderConfiguration(BlobContainerConfiguration containerConfiguration)

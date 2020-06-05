@@ -18,39 +18,49 @@ namespace Volo.Abp.BlobStoring.Azure
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
-            var blobClient = GetBlobClient(args.Configuration.GetAzureConfiguration(), blobName);
+            var configuration = args.Configuration.GetAzureConfiguration();
 
-            if (!args.OverrideExisting && await BlobExistsAsync(blobClient))
+            if (!args.OverrideExisting && await BlobExistsAsync(configuration, blobName))
             {
                 throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{args.ContainerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
             }
 
-            await blobClient.UploadAsync(args.BlobStream, true);
+            if (configuration.CreateContainerIfNotExists)
+            {
+                await CreateContainerIfNotExists(args.Configuration.GetAzureConfiguration());
+            }
+
+            await GetBlobClient(configuration, blobName).UploadAsync(args.BlobStream, true);
         }
 
         public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
-            var blobClient = GetBlobClient(args.Configuration.GetAzureConfiguration(), blobName);
-            return await blobClient.DeleteIfExistsAsync();
+
+            if (await BlobExistsAsync(args.Configuration.GetAzureConfiguration(), blobName))
+            {
+                return await GetBlobClient(args.Configuration.GetAzureConfiguration(), blobName).DeleteIfExistsAsync();
+            }
+
+            return false;
         }
 
         public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
-            var blobClient = GetBlobClient(args.Configuration.GetAzureConfiguration(), blobName);
-            return await BlobExistsAsync(blobClient);
+            return await BlobExistsAsync(args.Configuration.GetAzureConfiguration(), blobName);
         }
 
         public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
-            var blobClient = GetBlobClient(args.Configuration.GetAzureConfiguration(), blobName);
-            if (!await BlobExistsAsync(blobClient))
+
+            if (!await BlobExistsAsync(args.Configuration.GetAzureConfiguration(), blobName))
             {
                 return null;
             }
 
+            var blobClient = GetBlobClient(args.Configuration.GetAzureConfiguration(), blobName);
             var download = await blobClient.DownloadAsync();
             var memoryStream = new MemoryStream();
             await download.Value.Content.CopyToAsync(memoryStream);
@@ -69,9 +79,22 @@ namespace Volo.Abp.BlobStoring.Azure
             return blobServiceClient.GetBlobContainerClient(configuration.ContainerName);
         }
 
-        private static async Task<bool> BlobExistsAsync(BlobBaseClient blobClient)
+        protected virtual async Task CreateContainerIfNotExists(AzureBlobProviderConfiguration configuration)
         {
-            return (await blobClient.ExistsAsync()).Value;
+            var blobContainerClient = GetBlobContainerClient(configuration);
+            await blobContainerClient.CreateIfNotExistsAsync();
+        }
+
+        private async Task<bool> BlobExistsAsync(AzureBlobProviderConfiguration configuration, string blobName)
+        {
+            // Make sure Blob Container exists.
+            return await ContainerExistsAsync(GetBlobContainerClient(configuration)) &&
+                   (await GetBlobClient(configuration, blobName).ExistsAsync()).Value;
+        }
+
+        private static async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)
+        {
+            return (await blobContainerClient.ExistsAsync()).Value;
         }
     }
 }
