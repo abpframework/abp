@@ -162,6 +162,61 @@ public class MyProfile : Profile
 
 如果两个类都是可扩展对象(实现了 `IHasExtraProperties` 接口),建议使用 `MapExtraProperties` 方法. 更多信息请参阅[对象扩展文档](Object-Extensions.md).
 
+### 其他有用的扩展方法
+
+有一些扩展方法可以简化映射代码.
+
+#### 忽视审计属性
+
+当你将一个对象映射到另一个对象时,通常会忽略审核属性.
+
+假设你需要将 `ProductDto` ([DTO](Data-Transfer-Objects.md))映射到Product[实体](Entities.md),该实体是从 `AuditedEntity` 类继承的(该类提供了 `CreationTime`, `CreatorId`, `IHasModificationTime` 等属性).
+
+从DTO映射时你可能想忽略这些基本属性,可以使用 `IgnoreAuditedObjectPropertie()` 方法忽略所有审计属性(而不是手动逐个忽略它们):
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<ProductDto, Product>()
+            .IgnoreAuditedObjectProperties();
+    }
+}
+````
+
+还有更多扩展方法, 如 `IgnoreFullAuditedObjectProperties()` 和 `IgnoreCreationAuditedObjectProperties()`,你可以根据实体类型使用.
+
+> 请参阅[实体文档](Entities.md)中的"*基类和接口的审计属性*"部分了解有关审计属性的更多信息。
+
+#### 忽视其他属性
+
+在AutoMapper中,通常可以编写这样的映射代码来忽略属性:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .ForMember(x => x.CreationTime, map => map.Ignore());
+    }
+}
+````
+
+我们发现它的长度是不必要的并且创建了 `Ignore()` 扩展方法:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .Ignore(x => x.CreationTime);
+    }
+}
+````
+
 ## 高级主题
 
 ### IObjectMapper<TContext> 接口
