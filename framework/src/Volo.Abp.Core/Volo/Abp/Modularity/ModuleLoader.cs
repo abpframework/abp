@@ -20,7 +20,6 @@ namespace Volo.Abp.Modularity
             var modules = GetDescriptors(services, startupModuleType, plugInSources);
 
             modules = SortByDependency(modules, startupModuleType);
-            ConfigureServices(modules, services);
 
             return modules.ToArray();
         }
@@ -87,75 +86,6 @@ namespace Volo.Abp.Modularity
             var module = (IAbpModule)Activator.CreateInstance(moduleType);
             services.AddSingleton(moduleType, module);
             return module;
-        }
-
-        protected virtual void ConfigureServices(List<IAbpModuleDescriptor> modules, IServiceCollection services)
-        {
-            var context = new ServiceConfigurationContext(services);
-            services.AddSingleton(context);
-
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    abpModule.ServiceConfigurationContext = context;
-                }
-            }
-
-            //PreConfigureServices
-            foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
-            {
-                try
-                {
-                    ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
-                }
-                catch (Exception ex)
-                {
-                    throw new AbpInitializationException($"An error occurred during {nameof(IPreConfigureServices.PreConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
-                }
-            }
-
-            //ConfigureServices
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    if (!abpModule.SkipAutoServiceRegistration)
-                    {
-                        services.AddAssembly(module.Type.Assembly);
-                    }
-                }
-
-                try
-                {
-                    module.Instance.ConfigureServices(context);
-                }
-                catch (Exception ex)
-                {
-                    throw new AbpInitializationException($"An error occurred during {nameof(IAbpModule.ConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
-                }
-            }
-
-            //PostConfigureServices
-            foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
-            {
-                try
-                {
-                    ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
-                }
-                catch (Exception ex)
-                {
-                    throw new AbpInitializationException($"An error occurred during {nameof(IPostConfigureServices.PostConfigureServices)} phase of the module {module.Type.AssemblyQualifiedName}. See the inner exception for details.", ex);
-                }
-            }
-
-            foreach (var module in modules)
-            {
-                if (module.Instance is AbpModule abpModule)
-                {
-                    abpModule.ServiceConfigurationContext = null;
-                }
-            }
         }
 
         protected virtual void SetDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)

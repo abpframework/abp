@@ -27,6 +27,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 
                 b.Property(p => p.Name).IsRequired().HasMaxLength(DatabaseContainerConsts.MaxNameLength);
 
+                b.HasMany<DatabaseBlob>().WithOne().HasForeignKey(p => p.ContainerId);
+
                 b.HasIndex(x => new {x.TenantId, x.Name});
             });
 
@@ -39,6 +41,8 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
                 b.Property(p => p.ContainerId).IsRequired(); //TODO: Foreign key!
                 b.Property(p => p.Name).IsRequired().HasMaxLength(DatabaseBlobConsts.MaxNameLength);
                 b.Property(p => p.Content).HasMaxLength(DatabaseBlobConsts.MaxContentLength);
+
+                b.HasOne<DatabaseBlobContainer>().WithMany().HasForeignKey(p => p.ContainerId);
 
                 b.HasIndex(x => new {x.TenantId, x.ContainerId, x.Name});
             });

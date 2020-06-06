@@ -59,7 +59,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             await SignInManager.SignInAsync(user, isPersistent: false);
 
-            return Redirect(ReturnUrl ?? "/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+            return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()

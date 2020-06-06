@@ -77,9 +77,15 @@ namespace Volo.Abp.Identity
 
             foreach (var child in children)
             {
+                await OrganizationUnitRepository.RemoveAllMembersAsync(child);
+                await OrganizationUnitRepository.RemoveAllRolesAsync(child);
                 await OrganizationUnitRepository.DeleteAsync(child);
             }
 
+            var organizationUnit = await OrganizationUnitRepository.GetAsync(id);
+
+            await OrganizationUnitRepository.RemoveAllMembersAsync(organizationUnit);
+            await OrganizationUnitRepository.RemoveAllRolesAsync(organizationUnit);
             await OrganizationUnitRepository.DeleteAsync(id);
         }
 
@@ -133,7 +139,7 @@ namespace Volo.Abp.Identity
         {
             if (!recursive)
             {
-                return await OrganizationUnitRepository.GetChildrenAsync(parentId);
+                return await OrganizationUnitRepository.GetChildrenAsync(parentId, includeDetails: true);
             }
 
             if (!parentId.HasValue)
@@ -143,7 +149,7 @@ namespace Volo.Abp.Identity
 
             var code = await GetCodeOrDefaultAsync(parentId.Value);
 
-            return await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId);
+            return await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId, includeDetails: true);
         }
 
         public virtual Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)

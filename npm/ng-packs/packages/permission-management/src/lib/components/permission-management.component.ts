@@ -14,6 +14,14 @@ type PermissionWithMargin = PermissionManagement.Permission & {
   selector: 'abp-permission-management',
   templateUrl: './permission-management.component.html',
   exportAs: 'abpPermissionManagement',
+  styles: [
+    `
+      .overflow-scroll {
+        max-height: 70vh;
+        overflow-y: scroll;
+      }
+    `,
+  ],
 })
 export class PermissionManagementComponent
   implements

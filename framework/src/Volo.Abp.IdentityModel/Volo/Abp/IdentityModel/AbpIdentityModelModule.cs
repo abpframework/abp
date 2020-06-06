@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityModel
 {
     [DependsOn(
-        typeof(AbpThreadingModule)
+        typeof(AbpThreadingModule),
+        typeof(AbpMultiTenancyModule)
         )]
     public class AbpIdentityModelModule : AbpModule
     {
@@ -13,7 +15,7 @@ namespace Volo.Abp.IdentityModel
         {
             var configuration = context.Services.GetConfiguration();
 
-            context.Services.AddHttpClient();
+            context.Services.AddHttpClient(IdentityModelAuthenticationService.HttpClientName);
 
             Configure<AbpIdentityClientOptions>(configuration);
         }

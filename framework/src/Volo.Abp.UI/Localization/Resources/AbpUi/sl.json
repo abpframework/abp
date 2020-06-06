@@ -58,6 +58,7 @@
     "404Message": "Strani ni mogoče najti",
     "500Message": "Napaka na strani strežnika",
     "GoHomePage": "Pojdi na osnovno stran",
-    "GoBack": "Nazaj"
+    "GoBack": "Nazaj",
+    "Search": "Iskanje"
   }
 }

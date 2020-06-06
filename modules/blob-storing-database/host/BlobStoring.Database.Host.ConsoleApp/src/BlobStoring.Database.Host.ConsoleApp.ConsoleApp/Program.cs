@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace MyCompanyName.MyProjectName.ConsoleApp
+namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp
 {
     public class Program
     {
@@ -42,10 +42,10 @@ namespace MyCompanyName.MyProjectName.ConsoleApp
         }
 
         internal static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+            Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<MyProjectNameConsoleAppHostedService>();
+                    services.AddHostedService<ConsoleAppConsoleAppHostedService>();
                 });
     }
 }

@@ -2,7 +2,7 @@
 
 ABP Framework provides an **object extension system** to allow you to **add extra properties** to an existing object **without modifying** the related class. This allows to extend functionalities implemented by a depended [application module](Modules/Index.md), especially when you want to [extend entities](Customizing-Application-Modules-Extending-Entities.md) and [DTOs](Customizing-Application-Modules-Overriding-Services.md) defined by the module.
 
-> Object extension system is not normally not needed for your own objects since you can easily add regular properties to your own classes.
+> Object extension system normally is not needed for your own objects since you can easily add regular properties to your own classes.
 
 ## IHasExtraProperties Interface
 

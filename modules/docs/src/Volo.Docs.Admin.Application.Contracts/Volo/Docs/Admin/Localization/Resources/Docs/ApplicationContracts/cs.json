@@ -6,11 +6,13 @@
     "Permission:Edit": "Upravit",
     "Permission:Delete": "Smazat",
     "Permission:Create": "Vytvořit",
+    "Permission:Documents": "Dokumenty",
     "Menu:DocumentManagement": "Dokumenty",
     "Menu:ProjectManagement": "Projekty",
     "CreateANewProject": "Vytvořit nový projekt",
     "Edit": "Upravit",
     "Create": "Vytvořit",
+    "Pull": "Pull",
     "Projects": "Projekty",
     "Name": "Název",
     "ShortName": "Krátký název",
@@ -27,6 +29,9 @@
     "DisplayName:LatestVersionBranchName": "Název poslední verze odvětví",
     "DisplayName:GitHubRootUrl": "GitHub kořenové URL",
     "DisplayName:GitHubAccessToken": "GitHub přístupový token",
-    "DisplayName:GitHubUserAgent": "GitHub user agent"
+    "DisplayName:GitHubUserAgent": "GitHub user agent",
+    "DisplayName:All": "Pull všeho",
+    "DisplayName:LanguageCode": "Kód jazyka",
+    "DisplayName:Version": "Verze"
   }
 }
