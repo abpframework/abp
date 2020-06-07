@@ -224,6 +224,8 @@ We've created the UI for manage organization units, their members and roles for 
 
 OU management is available for both of the MVC (Razor Pages) and the Angular user interfaces.
 
+> If you are using the MVC / Razor Pages UI and upgrading from an earlier version, you need to add `@volo/identity` (version 2.9.0) NPM package to your `package.json` of the web project.
+
 ### Chat Module Angular UI
 
 We had introduced a new [chat module](https://commercial.abp.io/modules/Volo.Chat) in the previous version, which was only supporting the ASP.NET Core MVC / Razor Pages UI. Now, it has also an Angular UI option.
