@@ -89,7 +89,6 @@ namespace MyCompanyName.MyProjectName
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
                 });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -136,7 +135,7 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAbpRequestLocalization();
             app.UseAuthorization();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

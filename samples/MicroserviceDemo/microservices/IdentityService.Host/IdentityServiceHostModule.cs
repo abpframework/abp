@@ -65,7 +65,6 @@ namespace IdentityService.Host
             {
                 options.SwaggerDoc("v1", new OpenApiInfo {Title = "Identity Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
             });
 
             Configure<AbpLocalizationOptions>(options =>

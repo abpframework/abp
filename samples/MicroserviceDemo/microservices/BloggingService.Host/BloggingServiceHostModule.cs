@@ -79,7 +79,6 @@ namespace BloggingService.Host
             {
                 options.SwaggerDoc("v1", new OpenApiInfo {Title = "Blogging Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -122,7 +121,7 @@ namespace BloggingService.Host
             app.UseRouting();
             app.UseAuthentication();
             app.UseAbpClaimsMap();
-            
+
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();

@@ -111,9 +111,8 @@ namespace VoloDocs.Web
                         Version = "v1"
                     });
                     options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
                 });
-            
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<VoloDocsWebModule>("VoloDocs.Web");
@@ -164,7 +163,7 @@ namespace VoloDocs.Web
             });
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
-           
+
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseConfiguredEndpoints();

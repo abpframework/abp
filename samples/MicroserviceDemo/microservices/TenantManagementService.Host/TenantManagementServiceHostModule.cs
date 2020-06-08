@@ -69,7 +69,6 @@ namespace TenantManagementService.Host
             {
                 options.SwaggerDoc("v1", new OpenApiInfo {Title = "Tenant Management Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
             });
 
             Configure<AbpLocalizationOptions>(options =>
@@ -107,7 +106,7 @@ namespace TenantManagementService.Host
             app.UseRouting();
             app.UseAuthentication();
             app.UseAbpClaimsMap();
-            
+
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();

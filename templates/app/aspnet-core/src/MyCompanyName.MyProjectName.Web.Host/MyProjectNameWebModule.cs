@@ -184,7 +184,6 @@ namespace MyCompanyName.MyProjectName.Web
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
-                    options.CustomSchemaIds(type => type.FullName);
                 }
             );
         }
