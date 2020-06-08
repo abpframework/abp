@@ -20,22 +20,7 @@
   </div>
 
   <div class="card-body">
-    <ngx-datatable
-      [rows]="data$ | async"
-      [loadingIndicator]="list.isLoading$ | async"
-      [externalSorting]="true"
-      (sort)="sort($event)"
-      [externalPaging]="true"
-      [count]="totalCount$ | async"
-      [offset]="list.page"
-      [limit]="list.maxResultCount"
-      (page)="list.page = $event.offset"
-      [headerHeight]="50"
-      [footerHeight]="50"
-      columnMode="force"
-      rowHeight="auto"
-      class="material"
-    >
+    <ngx-datatable [rows]="data$ | async" [count]="totalCount$ | async" [abpList]="list">
       <ngx-datatable-column
         [name]="'AbpIdentity::Actions' | abpLocalization"
         [maxWidth]="150"
