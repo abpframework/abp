@@ -1,0 +1,31 @@
+﻿{
+  "culture": "nl",
+  "texts": {
+    "Documents": "Documenten",
+    "BackToWebsite": "Terug naar website",
+    "Contributors": "Bijdragers",
+    "ShareOn": "Delen op",
+    "Version": "Versie",
+    "Edit": "Bewerk",
+    "LastEditTime": "Laatste bewerking",
+    "Delete": "Verwijder",
+    "ClearCache": "Cache wissen",
+    "ClearCacheConfirmationMessage": "Weet u zeker dat u alle caches voor het project \"{0}\" wilt wissen?",
+    "InThisDocument": "In dit document",
+    "GoToTop": "Ga naar boven",
+    "Projects": "Project (en)",
+    "NoProjectWarning": "Er zijn nog geen projecten!",
+    "DocumentNotFound": "Oeps, het opgevraagde document is niet gevonden!",
+    "NavigationDocumentNotFound": "Deze versie heeft geen navigatiedocument!",
+    "DocumentNotFoundInSelectedLanguage": "Document in de gewenste taal is niet gevonden. Document in de standaardtaal wordt weergegeven.",
+    "FilterTopics": "Filter onderwerpen",
+    "FullSearch": "Zoek in documenten",
+    "Volo.Docs.Domain:010001": "Elastisch zoeken is niet ingeschakeld.",
+    "MultipleVersionDocumentInfo": "Dit document heeft meerdere versies. Selecteer de opties die het beste bij u passen.",
+    "New": "Nieuw",
+    "Upd": "Bew",
+    "NewExplanation": "Gemaakt in de afgelopen twee weken.",
+    "UpdatedExplanation": "Bewerkt in de afgelopen twee weken.",
+    "Volo.Docs.Domain:010002": "KorteNaam {ShortName} bestaat al."
+  }
+}

@@ -20,6 +20,13 @@ namespace Volo.Docs.Admin
         }
 
         [HttpPost]
+        [Route("ClearCache")]
+        public Task ClearCacheAsync(ClearCacheInput input)
+        {
+            return _documentAdminAppService.ClearCacheAsync(input);
+        }
+
+        [HttpPost]
         [Route("PullAll")]
         public Task PullAllAsync(PullAllDocumentInput input)
         {
@@ -31,13 +38,6 @@ namespace Volo.Docs.Admin
         public Task PullAsync(PullDocumentInput input)
         {
              return _documentAdminAppService.PullAsync(input);
-        }
-
-        [HttpPost]
-        [Route("Reindex")]
-        public Task ReindexAsync()
-        {
-            return _documentAdminAppService.ReindexAsync();
         }
     }
 }

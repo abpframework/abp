@@ -22,13 +22,14 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext, ITransientDependency
+    public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
         where TDbContext : DbContext
     {
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
@@ -91,6 +92,8 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
+            TrySetDatabaseProvider(modelBuilder);
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 ConfigureBasePropertiesMethodInfo
@@ -104,6 +107,40 @@ namespace Volo.Abp.EntityFrameworkCore
                 ConfigureValueGeneratedMethodInfo
                     .MakeGenericMethod(entityType.ClrType)
                     .Invoke(this, new object[] { modelBuilder, entityType });
+            }
+        }
+
+        protected virtual void TrySetDatabaseProvider(ModelBuilder modelBuilder)
+        {
+            var provider = GetDatabaseProviderOrNull(modelBuilder);
+            if (provider != null)
+            {
+                modelBuilder.SetDatabaseProvider(provider.Value);
+            }
+        }
+        
+        protected virtual EfCoreDatabaseProvider? GetDatabaseProviderOrNull(ModelBuilder modelBuilder)
+        {
+            switch (Database.ProviderName)
+            {
+                case "Microsoft.EntityFrameworkCore.SqlServer":
+                    return EfCoreDatabaseProvider.SqlServer;
+                case "Npgsql.EntityFrameworkCore.PostgreSQL":
+                    return EfCoreDatabaseProvider.PostgreSql;
+                case "Pomelo.EntityFrameworkCore.MySql":
+                    return EfCoreDatabaseProvider.MySql;
+                case "Devart.Data.Oracle.Entity.EFCore":
+                    return EfCoreDatabaseProvider.Oracle;
+                case "Microsoft.EntityFrameworkCore.Sqlite":
+                    return EfCoreDatabaseProvider.Sqlite;
+                case "Microsoft.EntityFrameworkCore.InMemory":
+                    return EfCoreDatabaseProvider.InMemory;
+                case "FirebirdSql.EntityFrameworkCore.Firebird":
+                    return EfCoreDatabaseProvider.Firebird;
+                case "Microsoft.EntityFrameworkCore.Cosmos":
+                    return EfCoreDatabaseProvider.Cosmos;
+                default:
+                    return null;
             }
         }
 
@@ -144,6 +181,71 @@ namespace Volo.Abp.EntityFrameworkCore
             }
         }
 
+        public virtual void Initialize(AbpEfCoreDbContextInitializationContext initializationContext)
+        {
+            if (initializationContext.UnitOfWork.Options.Timeout.HasValue &&
+                Database.IsRelational() &&
+                !Database.GetCommandTimeout().HasValue)
+            {
+                Database.SetCommandTimeout(initializationContext.UnitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
+            }
+
+            ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
+
+            ChangeTracker.Tracked += ChangeTracker_Tracked;
+        }
+
+        protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
+        {
+            FillExtraPropertiesForTrackedEntities(e);
+        }
+
+        protected virtual void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
+        {
+            var entityType = e.Entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(e.Entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+
+            if (!e.FromQuery)
+            {
+                return;
+            }
+
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            foreach (var property in objectExtension.GetProperties())
+            {
+                if (!property.IsMappedToFieldForEfCore())
+                {
+                    continue;
+                }
+
+                /* Checking "currentValue != null" has a good advantage:
+                 * Assume that you we already using a named extra property,
+                 * then decided to create a field (entity extension) for it.
+                 * In this way, it prevents to delete old value in the JSON and
+                 * updates the field on the next save!
+                 */
+
+                var currentValue = e.Entry.CurrentValues[property.Name];
+                if (currentValue != null)
+                {
+                    entity.ExtraProperties[property.Name] = currentValue;
+                }
+            }
+        }
+
         protected virtual EntityChangeReport ApplyAbpConcepts()
         {
             var changeReport = new EntityChangeReport();
@@ -171,7 +273,48 @@ namespace Volo.Abp.EntityFrameworkCore
                     break;
             }
 
+            HandleExtraPropertiesOnSave(entry);
+
             AddDomainEvents(changeReport, entry.Entity);
+        }
+
+        protected virtual void HandleExtraPropertiesOnSave(EntityEntry entry)
+        {
+            if (entry.State.IsIn(EntityState.Deleted, EntityState.Unchanged))
+            {
+                return;
+            }
+
+            var entityType = entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            var efMappedProperties = ObjectExtensionManager.Instance
+                .GetProperties(entityType)
+                .Where(p => p.IsMappedToFieldForEfCore());
+
+            foreach (var property in efMappedProperties)
+            {
+                if (!entity.HasProperty(property.Name))
+                {
+                    continue;
+                }
+
+                entry.Property(property.Name).CurrentValue = entity.GetProperty(property.Name);
+            }
         }
 
         protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)

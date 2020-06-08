@@ -4,7 +4,7 @@ import { LayoutState } from '../states/layout.state';
 import { AddNavigationElement, RemoveNavigationElementByName } from '../actions';
 import { Layout } from '../models/layout';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LayoutStateService {
   constructor(private store: Store) {}
 

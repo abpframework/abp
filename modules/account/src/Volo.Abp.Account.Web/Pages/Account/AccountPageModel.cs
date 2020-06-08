@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Localization;
@@ -21,12 +22,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ObjectMapperContext = typeof(AbpAccountWebModule);
         }
 
-        protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
+        protected virtual RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
         {
             return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));
         }
 
-        protected void CheckIdentityErrors(IdentityResult identityResult)
+        protected virtual void CheckIdentityErrors(IdentityResult identityResult)
         {
             if (!identityResult.Succeeded)
             {
@@ -36,7 +37,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
         }
 
-        private string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
+        protected virtual string GetRedirectUrl(string returnUrl, string returnUrlHash = null)
         {
             returnUrl = NormalizeReturnUrl(returnUrl);
 
@@ -48,7 +49,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return returnUrl;
         }
 
-        private string NormalizeReturnUrl(string returnUrl)
+        protected virtual string NormalizeReturnUrl(string returnUrl)
         {
             if (returnUrl.IsNullOrEmpty())
             {
@@ -73,7 +74,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual string GetAppHomeUrl()
         {
-            return "/"; //TODO: ???
+            return "~/"; //TODO: ???
         }
     }
 }

@@ -10,14 +10,14 @@ namespace Volo.Abp.Account
 {
     public class AccountAppService : ApplicationService, IAccountAppService
     {
-        private readonly IIdentityRoleRepository _roleRepository;
+        protected IIdentityRoleRepository RoleRepository { get; }
         protected IdentityUserManager UserManager { get; }
 
         public AccountAppService(
             IdentityUserManager userManager,
             IIdentityRoleRepository roleRepository)
         {
-            _roleRepository = roleRepository;
+            RoleRepository = roleRepository;
             UserManager = userManager;
         }
 
@@ -30,17 +30,9 @@ namespace Volo.Abp.Account
             (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
             await UserManager.SetEmailAsync(user,input.EmailAddress);
-
-            await SetDefaultRolesAsync(user);
+            await UserManager.AddDefaultRolesAsync(user);
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
-        }
-
-        protected virtual async Task SetDefaultRolesAsync(IdentityUser user)
-        {
-            var defaultRoles = await _roleRepository.GetDefaultOnesAsync();
-
-            await UserManager.SetRolesAsync(user, defaultRoles.Select(r => r.Name));
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()

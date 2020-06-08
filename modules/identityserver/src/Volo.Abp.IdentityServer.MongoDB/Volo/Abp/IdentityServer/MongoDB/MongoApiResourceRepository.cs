@@ -33,10 +33,14 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<ApiResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
+        public virtual async Task<List<ApiResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                         x => x.Name.Contains(filter) ||
+                         x.Description.Contains(filter) ||
+                         x.DisplayName.Contains(filter))
                 .OrderBy(sorting ?? nameof(ApiResource.Name))
                 .As<IMongoQueryable<ApiResource>>()
                 .PageBy<ApiResource, IMongoQueryable<ApiResource>>(skipCount, maxResultCount)
@@ -48,7 +52,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             return await GetCountAsync();
         }
 
-        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
         }

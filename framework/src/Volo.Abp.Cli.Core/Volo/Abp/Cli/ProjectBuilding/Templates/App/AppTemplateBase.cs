@@ -77,7 +77,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 
             if (context.BuildArgs.MobileApp != MobileApp.ReactNative)
             {
-                steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName()?.EnsureStartsWith('/')));
+                steps.Add(new RemoveFolderStep(MobileApp.ReactNative.GetFolderName().EnsureStartsWith('/')));
             }
         }
 

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
@@ -35,11 +36,15 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _blogOptions = blogOptions.Value;
         }
 
-        public async Task<ActionResult> OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
             {
                 return Redirect("/");
+            }
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
+            {
+                return NotFound();
             }
 
             Blog = await _blogAppService.GetByShortNameAsync(BlogShortName);
@@ -51,10 +56,16 @@ namespace Volo.Blogging.Pages.Blog.Posts
             return Page();
         }
 
-        public async Task<ActionResult> OnPost()
+        public virtual async Task<ActionResult> OnPost()
         {
             var blog = await _blogAppService.GetAsync(Post.BlogId);
-            var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel,CreatePostDto>(Post));
+
+            if (string.IsNullOrEmpty(Post.Description))
+            {
+                Post.Description = Post.Content.Truncate(PostConsts.MaxSeoFriendlyDescriptionLength);
+            }
+
+            var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel, CreatePostDto>(Post));
 
             //TODO: Try Url.Page(...)
             var urlPrefix = _blogOptions.RoutePrefix;
@@ -84,6 +95,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
             public string Content { get; set; }
 
             public string Tags { get; set; }
+
+            [StringLength(PostConsts.MaxDescriptionLength)]
+            public string Description { get; set; }
+
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Localization.Resources.AbpUi;
@@ -59,6 +59,7 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
@@ -134,26 +135,38 @@ namespace MyCompanyName.MyProjectName
                 });
             });
         }
-        
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseErrorPage();
+            }
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+            
+            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

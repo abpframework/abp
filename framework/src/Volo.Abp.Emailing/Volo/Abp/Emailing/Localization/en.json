@@ -18,6 +18,8 @@
     "Description:Abp.Mailing.Smtp.Password": "The password for the user name associated with the credentials.",
     "Description:Abp.Mailing.Smtp.Domain": "The domain or computer name that verifies the credentials.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "Whether the SmtpClient uses Secure Sockets Layer (SSL) to encrypt the connection.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Whether the DefaultCredentials are sent with requests."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Whether the DefaultCredentials are sent with requests.",
+    "TextTemplate:StandardEmailTemplates.Layout": "Default email layout template",
+    "TextTemplate:StandardEmailTemplates.Message": "Simple message template for emails"
   }
 }

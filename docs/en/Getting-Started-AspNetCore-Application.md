@@ -57,7 +57,7 @@ namespace BasicAspNetCoreApplication
 
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }
@@ -153,5 +153,5 @@ namespace BasicAspNetCoreApplication
 
 ## Source Code
 
-Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicAspNetCoreApplication).
+Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication).
 

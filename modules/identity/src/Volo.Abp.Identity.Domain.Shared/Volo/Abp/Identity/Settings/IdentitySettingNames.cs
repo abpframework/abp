@@ -30,6 +30,7 @@
             private const string SignInPrefix = Prefix + ".SignIn";
 
             public const string RequireConfirmedEmail = SignInPrefix + ".RequireConfirmedEmail";
+            public const string EnablePhoneNumberConfirmation = SignInPrefix + ".EnablePhoneNumberConfirmation";
             public const string RequireConfirmedPhoneNumber = SignInPrefix + ".RequireConfirmedPhoneNumber";
         }
 
@@ -39,6 +40,13 @@
 
             public const string IsUserNameUpdateEnabled = UserPrefix + ".IsUserNameUpdateEnabled";
             public const string IsEmailUpdateEnabled = UserPrefix + ".IsEmailUpdateEnabled";
+        }
+
+        public static class OrganizationUnit
+        {
+            private const string OrganizationUnitPrefix = Prefix + ".OrganizationUnit";
+
+            public const string MaxUserMembershipCount = OrganizationUnitPrefix + ".MaxUserMembershipCount";
         }
     }
 }

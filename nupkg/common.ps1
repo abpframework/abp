@@ -17,7 +17,9 @@ $solutions = (
     "modules/permission-management",
     "modules/setting-management",
     "modules/tenant-management",
-    "modules/users"
+    "modules/users",
+    "modules/virtual-file-explorer",
+	"modules/blob-storing-database"
 )
 
 # List of projects
@@ -41,6 +43,7 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Widgets",
     "framework/src/Volo.Abp.AspNetCore.Serilog",
+    "framework/src/Volo.Abp.AspNetCore.SignalR",
     "framework/src/Volo.Abp.AspNetCore.TestBase",
     "framework/src/Volo.Abp.Auditing",
     "framework/src/Volo.Abp.Authorization",
@@ -53,6 +56,8 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundJobs.Quartz",
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.BackgroundWorkers.Quartz",
+    "framework/src/Volo.Abp.BlobStoring",
+    "framework/src/Volo.Abp.BlobStoring.FileSystem",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Castle.Core",
     "framework/src/Volo.Abp.Cli.Core",
@@ -67,6 +72,7 @@ $projects = (
     "framework/src/Volo.Abp.Emailing",
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
+    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
     "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EntityFrameworkCore.Sqlite",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
@@ -91,7 +97,9 @@ $projects = (
     "framework/src/Volo.Abp.MongoDB",
     "framework/src/Volo.Abp.MultiTenancy",
     "framework/src/Volo.Abp.Minify",
+    "framework/src/Volo.Abp.ObjectExtending",
     "framework/src/Volo.Abp.ObjectMapping",
+    "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.RabbitMQ",
     "framework/src/Volo.Abp.Security",
     "framework/src/Volo.Abp.Serialization",
@@ -99,11 +107,13 @@ $projects = (
     "framework/src/Volo.Abp.Sms",
     "framework/src/Volo.Abp.Specifications",
     "framework/src/Volo.Abp.TestBase",
+    "framework/src/Volo.Abp.TextTemplating",
     "framework/src/Volo.Abp.Threading",
     "framework/src/Volo.Abp.Timing",
     "framework/src/Volo.Abp.UI",
     "framework/src/Volo.Abp.UI.Navigation",
     "framework/src/Volo.Abp.Uow",
+    "framework/src/Volo.Abp.Validation.Abstractions",
     "framework/src/Volo.Abp.Validation",
     "framework/src/Volo.Abp.VirtualFileSystem",
 
@@ -223,5 +233,14 @@ $projects = (
     "modules/users/src/Volo.Abp.Users.Domain",
     "modules/users/src/Volo.Abp.Users.Domain.Shared",
     "modules/users/src/Volo.Abp.Users.EntityFrameworkCore",
-    "modules/users/src/Volo.Abp.Users.MongoDB"
+    "modules/users/src/Volo.Abp.Users.MongoDB",
+
+    # modules/virtual-file-explorer
+    "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Web",
+	
+    # modules/blob-storing-database
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain",
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain.Shared",
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.MongoDB"
 )

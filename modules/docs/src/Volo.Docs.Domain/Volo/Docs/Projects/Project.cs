@@ -76,6 +76,8 @@ namespace Volo.Docs.Projects
             ParametersDocumentName = Check.NotNullOrWhiteSpace(parametersDocumentName, nameof(parametersDocumentName));
 
             ExtraProperties = new Dictionary<string, object>();
+
+            NormalizeShortName();
         }
 
         public void SetName(string name)
@@ -101,6 +103,11 @@ namespace Volo.Docs.Projects
         public void SetDefaultDocumentName(string defaultDocumentName)
         {
             DefaultDocumentName = Check.NotNullOrWhiteSpace(defaultDocumentName, nameof(defaultDocumentName));
+        }
+
+        private void NormalizeShortName()
+        {
+            ShortName = ShortName.ToLower();
         }
     }
 }

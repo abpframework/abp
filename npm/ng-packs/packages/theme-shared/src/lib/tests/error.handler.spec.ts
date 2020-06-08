@@ -1,121 +1,219 @@
-import { CoreModule, RestOccurError, RouterOutletComponent } from '@abp/ng.core';
-import { Location } from '@angular/common';
+import { CoreModule, RestOccurError } from '@abp/ng.core';
+import { APP_BASE_HREF } from '@angular/common';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
-import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
+import { NavigationError, ResolveEnd, RouterModule } from '@angular/router';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { Navigate, RouterDataResolved, RouterError } from '@ngxs/router-plugin';
+import { Actions, NgxsModule, ofActionDispatched, Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { of } from 'rxjs';
+import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
-import { ThemeSharedModule } from '../theme-shared.module';
-import { RouterError, RouterDataResolved } from '@ngxs/router-plugin';
-import { NavigationError, ResolveEnd } from '@angular/router';
-import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
+import { ConfirmationService } from '../services';
+import { httpErrorConfigFactory } from '../tokens/http-error.token';
 
-@Component({
-  selector: 'abp-dummy',
-  template: 'dummy works! <abp-confirmation></abp-confirmation>',
+@NgModule({
+  exports: [HttpErrorWrapperComponent],
+  declarations: [HttpErrorWrapperComponent],
+  entryComponents: [HttpErrorWrapperComponent],
+  imports: [CoreModule],
 })
-class DummyComponent {
-  constructor(public errorHandler: ErrorHandler) {}
-}
+class MockModule {}
 
-let spectator: SpectatorRouting<DummyComponent>;
+let spectator: SpectatorService<ErrorHandler>;
+let service: ErrorHandler;
 let store: Store;
+const errorConfirmation: jest.Mock = jest.fn(() => of(null));
+const CONFIRMATION_BUTTONS = {
+  hideCancelBtn: true,
+  yesText: 'AbpAccount::Close',
+};
 describe('ErrorHandler', () => {
-  const createComponent = createRoutingFactory({
-    component: DummyComponent,
-    imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot([])],
+  const createService = createServiceFactory({
+    service: ErrorHandler,
+    imports: [RouterModule.forRoot([]), NgxsModule.forRoot([]), CoreModule, MockModule],
     mocks: [OAuthService],
-    stubsEnabled: false,
-    routes: [
-      { path: '', component: DummyComponent },
-      { path: 'account/login', component: RouterOutletComponent },
+    providers: [
+      { provide: APP_BASE_HREF, useValue: '/' },
+      {
+        provide: 'HTTP_ERROR_CONFIG',
+        useFactory: httpErrorConfigFactory,
+      },
+      {
+        provide: ConfirmationService,
+        useValue: {
+          error: errorConfirmation,
+        },
+      },
     ],
   });
 
   beforeEach(() => {
-    spectator = createComponent();
+    spectator = createService();
+    service = spectator.service;
     store = spectator.get(Store);
-
-    const abpError = document.querySelector('abp-http-error-wrapper');
-    if (abpError) document.body.removeChild(abpError);
+    store.selectSnapshot = jest.fn(() => '/x');
   });
 
-  it('should display the error component when server error occurs', () => {
-    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 500 })));
-    expect(document.querySelector('.error-template')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError500.title,
-    );
-    expect(document.querySelector('.error-details')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError500.details,
-    );
+  afterEach(() => {
+    errorConfirmation.mockClear();
+    removeIfExistsInDom(selectHtmlErrorWrapper);
   });
 
-  it('should display the error component when authorize error occurs', () => {
-    store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 403 })));
-    expect(document.querySelector('.error-template')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError403.title,
-    );
-    expect(document.querySelector('.error-details')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError403.details,
-    );
+  test('should display HttpErrorWrapperComponent when server error occurs', () => {
+    const createComponent = jest.spyOn(service, 'createErrorComponent');
+    const error = new HttpErrorResponse({ status: 500 });
+    const params = {
+      title: {
+        key: 'AbpAccount::500Message',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
+      },
+      details: {
+        key: 'AbpAccount::InternalServerErrorMessage',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
+      },
+      status: 500,
+    };
+
+    expect(selectHtmlErrorWrapper()).toBeNull();
+
+    store.dispatch(new RestOccurError(error));
+
+    expect(createComponent).toHaveBeenCalledWith(params);
+
+    const wrapper = service.componentRef.instance;
+    expect(wrapper.title).toEqual(params.title);
+    expect(wrapper.details).toEqual(params.details);
+    expect(wrapper.status).toBe(params.status);
+
+    expect(selectHtmlErrorWrapper()).not.toBeNull();
   });
 
-  it('should display the error component when unknown error occurs', () => {
-    store.dispatch(
-      new RestOccurError(new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' })),
-    );
-    expect(document.querySelector('.error-template')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError.title,
-    );
+  test('should display HttpErrorWrapperComponent when authorize error occurs', () => {
+    const createComponent = jest.spyOn(service, 'createErrorComponent');
+    const error = new HttpErrorResponse({ status: 403 });
+    const params = {
+      title: {
+        key: 'AbpAccount::DefaultErrorMessage403',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
+      },
+      details: {
+        key: 'AbpAccount::DefaultErrorMessage403Detail',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
+      },
+      status: 403,
+    };
+
+    expect(selectHtmlErrorWrapper()).toBeNull();
+
+    store.dispatch(new RestOccurError(error));
+
+    expect(createComponent).toHaveBeenCalledWith(params);
+
+    const wrapper = service.componentRef.instance;
+    expect(wrapper.title).toEqual(params.title);
+    expect(wrapper.details).toEqual(params.details);
+    expect(wrapper.status).toBe(params.status);
+
+    expect(selectHtmlErrorWrapper()).not.toBeNull();
   });
 
-  it('should display the confirmation when not found error occurs', () => {
+  test('should display HttpErrorWrapperComponent when unknown error occurs', () => {
+    const createComponent = jest.spyOn(service, 'createErrorComponent');
+    const error = new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' });
+    const params = {
+      title: {
+        key: 'AbpAccount::DefaultErrorMessage',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+      },
+      details: error.message,
+      isHomeShow: false,
+    };
+
+    expect(selectHtmlErrorWrapper()).toBeNull();
+
+    store.dispatch(new RestOccurError(error));
+
+    expect(createComponent).toHaveBeenCalledWith(params);
+
+    const wrapper = service.componentRef.instance;
+    expect(wrapper.title).toEqual(params.title);
+    expect(wrapper.details).toEqual(params.details);
+    expect(wrapper.isHomeShow).toBe(params.isHomeShow);
+
+    expect(selectHtmlErrorWrapper()).not.toBeNull();
+  });
+
+  test('should call error method of ConfirmationService when not found error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 404 })));
-    spectator.detectChanges();
-    expect(spectator.query('.confirmation .title')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError404.title,
-    );
-    expect(spectator.query('.confirmation .message')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError404.details,
+
+    expect(errorConfirmation).toHaveBeenCalledWith(
+      {
+        key: 'AbpAccount::DefaultErrorMessage404',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
+      },
+      {
+        key: 'AbpAccount::DefaultErrorMessage404Detail',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
+      },
+      CONFIRMATION_BUTTONS,
     );
   });
 
-  it('should display the confirmation when default error occurs', () => {
+  test('should call error method of ConfirmationService when default error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 412 })));
-    spectator.detectChanges();
-    expect(spectator.query('.confirmation .title')).toHaveText(
-      DEFAULT_ERROR_MESSAGES.defaultError.title,
-    );
-    expect(spectator.query('.confirmation .message')).toHaveText(
+
+    expect(errorConfirmation).toHaveBeenCalledWith(
       DEFAULT_ERROR_MESSAGES.defaultError.details,
+      DEFAULT_ERROR_MESSAGES.defaultError.title,
+      CONFIRMATION_BUTTONS,
     );
   });
 
-  it('should display the confirmation when authenticated error occurs', async () => {
+  test('should call error method of ConfirmationService when authenticated error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401 })));
-    spectator.detectChanges();
 
-    spectator.click('#confirm');
-    await spectator.fixture.whenStable();
-    expect(spectator.get(Location).path()).toBe('/account/login');
+    expect(errorConfirmation).toHaveBeenCalledWith(
+      {
+        key: 'AbpAccount::DefaultErrorMessage401',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
+      },
+      {
+        key: 'AbpAccount::DefaultErrorMessage401Detail',
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
+      },
+      CONFIRMATION_BUTTONS,
+    );
   });
 
-  it('should display the confirmation when authenticated error occurs with _AbpErrorFormat header', async () => {
-    let headers: HttpHeaders = new HttpHeaders();
-    headers = headers.append('_AbpErrorFormat', '_AbpErrorFormat');
+  test('should call error method of ConfirmationService when authenticated error occurs with _AbpErrorFormat header', done => {
+    spectator
+      .get(Actions)
+      .pipe(ofActionDispatched(Navigate))
+      .subscribe(({ path, queryParams, extras }) => {
+        expect(path).toEqual(['/account/login']);
+        expect(queryParams).toBeNull();
+        expect(extras).toEqual({ state: { redirectUrl: '/x' } });
 
+        done();
+      });
+
+    const headers: HttpHeaders = new HttpHeaders({
+      _AbpErrorFormat: '_AbpErrorFormat',
+    });
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401, headers })));
-    spectator.detectChanges();
 
-    spectator.click('#confirm');
-    await spectator.fixture.whenStable();
-    expect(spectator.get(Location).path()).toBe('/account/login');
+    expect(errorConfirmation).toHaveBeenCalledWith(
+      DEFAULT_ERROR_MESSAGES.defaultError.title,
+      null,
+      CONFIRMATION_BUTTONS,
+    );
   });
 
-  it('should display the confirmation when error occurs with _AbpErrorFormat header', () => {
+  test('should call error method of ConfirmationService when error occurs with _AbpErrorFormat header', () => {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('_AbpErrorFormat', '_AbpErrorFormat');
-
     store.dispatch(
       new RestOccurError(
         new HttpErrorResponse({
@@ -125,17 +223,28 @@ describe('ErrorHandler', () => {
         }),
       ),
     );
-    spectator.detectChanges();
 
-    expect(spectator.query('.title')).toHaveText('test message');
-    expect(spectator.query('.confirmation .message')).toHaveText('test detail');
+    expect(errorConfirmation).toHaveBeenCalledWith(
+      'test detail',
+      'test message',
+      CONFIRMATION_BUTTONS,
+    );
+  });
+
+  test('should call destroy method of componentRef when ResolveEnd is dispatched', () => {
+    store.dispatch(new RouterError(null, null, new NavigationError(1, 'test', 'Cannot match')));
+
+    const destroyComponent = jest.spyOn(service.componentRef, 'destroy');
+
+    store.dispatch(new RouterDataResolved(null, new ResolveEnd(1, 'test', 'test', null)));
+
+    expect(destroyComponent).toHaveBeenCalledTimes(1);
   });
 });
 
 @Component({
   selector: 'abp-dummy-error',
-  template:
-    '<p>{{errorStatus}}</p><button id="close-dummy" (click)="destroy$.next()">Close</button>',
+  template: '<p>{{errorStatus}}</p>',
 })
 class DummyErrorComponent {
   errorStatus;
@@ -150,68 +259,103 @@ class DummyErrorComponent {
 class ErrorModule {}
 
 describe('ErrorHandler with custom error component', () => {
-  const createComponent = createRoutingFactory({
-    component: DummyComponent,
+  const createService = createServiceFactory({
+    service: ErrorHandler,
     imports: [
-      CoreModule,
-      ThemeSharedModule.forRoot({
-        httpErrorConfig: {
-          errorScreen: { component: DummyErrorComponent, forWhichErrors: [401, 403, 404, 500] },
-        },
-      }),
+      RouterModule.forRoot([]),
       NgxsModule.forRoot([]),
+      CoreModule,
+      MockModule,
       ErrorModule,
     ],
-    mocks: [OAuthService],
-    stubsEnabled: false,
-
-    routes: [
-      { path: '', component: DummyComponent },
-      { path: 'account/login', component: RouterOutletComponent },
+    mocks: [OAuthService, ConfirmationService],
+    providers: [
+      { provide: APP_BASE_HREF, useValue: '/' },
+      {
+        provide: 'HTTP_ERROR_CONFIG',
+        useFactory: customHttpErrorConfigFactory,
+      },
     ],
   });
 
   beforeEach(() => {
-    spectator = createComponent();
+    spectator = createService();
+    service = spectator.service;
     store = spectator.get(Store);
+    store.selectSnapshot = jest.fn(() => '/x');
+  });
 
-    const abpError = document.querySelector('abp-http-error-wrapper');
-    if (abpError) document.body.removeChild(abpError);
+  afterEach(() => {
+    removeIfExistsInDom(selectCustomError);
   });
 
   describe('Custom error component', () => {
-    it('should create when occur 401', () => {
+    test('should be created when 401 error is dispatched', () => {
       store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401 })));
-      expect(document.querySelector('abp-dummy-error')).toBeTruthy();
-      expect(document.querySelector('p')).toHaveExactText('401');
+
+      expect(selectCustomErrorText()).toBe('401');
     });
 
-    it('should create when occur 403', () => {
+    test('should be created when 403 error is dispatched', () => {
       store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 403 })));
-      expect(document.querySelector('p')).toHaveExactText('403');
+
+      expect(selectCustomErrorText()).toBe('403');
     });
 
-    it('should create when occur 404', () => {
+    test('should be created when 404 error is dispatched', () => {
       store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 404 })));
-      expect(document.querySelector('p')).toHaveExactText('404');
+
+      expect(selectCustomErrorText()).toBe('404');
     });
 
-    it('should create when dispatched the RouterError', () => {
+    test('should be created when RouterError is dispatched', () => {
       store.dispatch(new RouterError(null, null, new NavigationError(1, 'test', 'Cannot match')));
-      expect(document.querySelector('p')).toHaveExactText('404');
-      store.dispatch(new RouterDataResolved(null, new ResolveEnd(1, 'test', 'test', null)));
+
+      expect(selectCustomErrorText()).toBe('404');
     });
 
-    it('should create when occur 500', () => {
+    test('should be created when 500 error is dispatched', () => {
       store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 500 })));
-      expect(document.querySelector('p')).toHaveExactText('500');
+
+      expect(selectCustomErrorText()).toBe('500');
     });
 
-    it('should be destroyed when click the close button', () => {
-      store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 500 })));
-      document.querySelector<HTMLButtonElement>('#close-dummy').click();
-      spectator.detectChanges();
-      expect(document.querySelector('abp-dummy-error')).toBeFalsy();
+    test('should call destroy method of componentRef when destroy$ emits', () => {
+      store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401 })));
+
+      expect(selectCustomErrorText()).toBe('401');
+
+      const destroyComponent = jest.spyOn(service.componentRef, 'destroy');
+
+      service.componentRef.instance.destroy$.next();
+
+      expect(destroyComponent).toHaveBeenCalledTimes(1);
     });
   });
 });
+
+export function customHttpErrorConfigFactory() {
+  return httpErrorConfigFactory({
+    errorScreen: {
+      component: DummyErrorComponent,
+      forWhichErrors: [401, 403, 404, 500],
+    },
+  });
+}
+
+function removeIfExistsInDom(errorSelector: () => HTMLDivElement | null) {
+  const abpError = errorSelector();
+  if (abpError) abpError.parentNode.removeChild(abpError);
+}
+
+function selectHtmlErrorWrapper(): HTMLDivElement | null {
+  return document.querySelector('abp-http-error-wrapper');
+}
+
+function selectCustomError(): HTMLDivElement | null {
+  return document.querySelector('abp-dummy-error');
+}
+
+function selectCustomErrorText(): string {
+  return selectCustomError().querySelector('p').textContent;
+}

@@ -11,7 +11,7 @@ namespace Volo.Abp.VirtualFileSystem
 
         public virtual IFileInfo GetFileInfo(string subpath)
         {
-            if (string.IsNullOrEmpty(subpath))
+            if (subpath == null)
             {
                 return new NotFoundFileInfo(subpath);
             }

@@ -1,0 +1,30 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
+@using Volo.Abp.VirtualFileExplorer.Web.Localization
+@model Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer.FileContentModal
+@inject IHtmlLocalizer<VirtualFileExplorerResource> L
+@{
+    Layout = null;
+}
+
+<abp-style-bundle name="@typeof(VirtualFileExplorerResource).FullName">
+    <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
+</abp-style-bundle>
+
+<abp-script-bundle name="@typeof(VirtualFileExplorerResource).FullName">
+    <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
+</abp-script-bundle>
+
+<abp-modal size="ExtraLarge">
+    <abp-modal-header title="@L["FileContent"].Value"></abp-modal-header>
+    <abp-modal-body>
+        <pre class="language-markup">
+            <code class="language-markup">
+@Model.Content.Trim()
+		   </code>
+    </pre>
+    </abp-modal-body>
+    <abp-modal-footer buttons="@(AbpModalButtons.Close)"></abp-modal-footer>
+</abp-modal>

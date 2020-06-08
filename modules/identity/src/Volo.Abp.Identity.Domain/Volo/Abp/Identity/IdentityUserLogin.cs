@@ -68,7 +68,7 @@ namespace Volo.Abp.Identity
         {
         }
 
-        public UserLoginInfo ToUserLoginInfo()
+        public virtual UserLoginInfo ToUserLoginInfo()
         {
             return new UserLoginInfo(LoginProvider, ProviderKey, ProviderDisplayName);
         }

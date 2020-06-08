@@ -9,7 +9,7 @@ using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging
 {
-    [RemoteService]
+    [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
     [Area("blogging")]
     [Route("api/blogging/blogs")]
     public class BlogsController : AbpController, IBlogAppService

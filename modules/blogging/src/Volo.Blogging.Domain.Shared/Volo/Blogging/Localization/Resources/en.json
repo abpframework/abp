@@ -43,6 +43,7 @@
     "Description": "Description",
     "Blogs": "Blogs",
     "Tags": "Tags",
-    "ShareOn": "Share on"
+    "ShareOn": "Share on",
+    "TitleLengthWarning": "Keep your title size under 60 characters to be SEO friendly!"
   }
 }

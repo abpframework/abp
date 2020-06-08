@@ -9,6 +9,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.Validation
 {
     [DependsOn(
+        typeof(AbpValidationAbstractionsModule),
         typeof(AbpLocalizationModule)
         )]
     public class AbpValidationModule : AbpModule
@@ -18,6 +19,7 @@ namespace Volo.Abp.Validation
             context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
             AutoAddObjectValidationContributors(context.Services);
         }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>

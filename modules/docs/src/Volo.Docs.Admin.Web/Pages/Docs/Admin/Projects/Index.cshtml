@@ -39,6 +39,10 @@
                         </abp-dropdown-menu>
                     </abp-dropdown>
                 }
+                @if (await Authorization.IsGrantedAsync(DocsAdminPermissions.Projects.Default))
+                {
+                    <abp-button button-type="Primary" icon="plus" text="@L["ReIndexAllProjects"].Value" id="ReIndexAllProjects" />
+                }
             </abp-column>
         </abp-row>
     </abp-card-header>

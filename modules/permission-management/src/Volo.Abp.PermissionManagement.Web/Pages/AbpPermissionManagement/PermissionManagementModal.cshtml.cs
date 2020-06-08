@@ -29,20 +29,20 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 
         public bool SelectAllInAllTabs { get; set; }
 
-        private readonly IPermissionAppService _permissionAppService;
+        protected IPermissionAppService PermissionAppService { get; }
 
         public PermissionManagementModal(IPermissionAppService permissionAppService)
         {
             ObjectMapperContext = typeof(AbpPermissionManagementWebModule);
 
-            _permissionAppService = permissionAppService;
+            PermissionAppService = permissionAppService;
         }
 
-        public async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             ValidateModel();
 
-            var result = await _permissionAppService.GetAsync(ProviderName, ProviderKey);
+            var result = await PermissionAppService.GetAsync(ProviderName, ProviderKey);
 
             EntityDisplayName = result.EntityDisplayName;
 
@@ -62,9 +62,11 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
             }
 
             SelectAllInAllTabs = Groups.All(g => g.IsAllPermissionsGranted);
+
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
 
@@ -77,7 +79,7 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
                 })
                 .ToArray();
 
-            await _permissionAppService.UpdateAsync(
+            await PermissionAppService.UpdateAsync(
                 ProviderName,
                 ProviderKey,
                 new UpdatePermissionsDto

@@ -41,15 +41,22 @@ A new language is published after these minimum translations have been completed
 
 ABP framework has a flexible [localization system](../Localization.md). You can create localized user interfaces for your own application.
 
-In addition to that, the framework and pre-build modules have already localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). You can create a new file in the [same folder](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) to translate it.
+In addition to that, the framework and the [pre-build modules](https://docs.abp.io/en/abp/latest/Modules/Index) have localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). 
+
+#### Using the "abp translate" command
+
+This is the recommended approach, since it automatically finds all missing texts for a specific culture and lets you to translate in one place.
 
 * Clone the [ABP repository](https://github.com/abpframework/abp/) from Github.
-* Create a new file for the target language for a localization text (json) file (near to the en.json file).
-* Copy all texts from the en.json file.
-* Translate the texts.
-* Send pull request on Github.
+* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Run `abp translate -c <culture-name>` command for your language in the root folder of the abp repository. For example, use `abp translate -c fr` for French. Check [this document](https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/supported-culture-codes) to find the culture code for your language.
+* This command creates a file in the same folder, named `abp-translation.json`. Open this file in your favorite editor and fill the missing text values.
+* Once you done the translation, use `abp translate -a` command to apply changes to the related files.
+* Send a pull request on GitHub.
 
-ABP is a modular framework. So there are many localization text resource, one per module. To find all .json files, you can search for "en.json" after cloning the repository. You can also check [this list](Localization-Text-Files.md) for a list of localization text files.
+#### Manual Translation
+
+If you want to make a change on a specific resource file, you can find the file yourself, make the necessary change (or create a new file for your language) and send a pull request on GitHub.
 
 ### Blog Posts & Tutorials
 

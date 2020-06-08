@@ -3,7 +3,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.BackgroundJobs
 {
@@ -50,6 +52,10 @@ namespace Volo.Abp.BackgroundJobs
             catch (Exception ex)
             {
                 Logger.LogException(ex);
+
+                await context.ServiceProvider
+                    .GetRequiredService<IExceptionNotifier>()
+                    .NotifyAsync(new ExceptionNotificationContext(ex));
 
                 throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
                 {

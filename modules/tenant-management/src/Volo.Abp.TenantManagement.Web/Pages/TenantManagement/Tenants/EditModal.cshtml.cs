@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
@@ -11,26 +10,28 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
         [BindProperty]
         public TenantInfoModel Tenant { get; set; }
 
-        private readonly ITenantAppService _tenantAppService;
+        protected ITenantAppService TenantAppService { get; }
 
         public EditModalModel(ITenantAppService tenantAppService)
         {
-            _tenantAppService = tenantAppService;
+            TenantAppService = tenantAppService;
         }
 
-        public async Task OnGetAsync(Guid id)
+        public virtual async Task<IActionResult> OnGetAsync(Guid id)
         {
             Tenant = ObjectMapper.Map<TenantDto, TenantInfoModel>(
-                await _tenantAppService.GetAsync(id)
+                await TenantAppService.GetAsync(id)
             );
+
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
 
             var input = ObjectMapper.Map<TenantInfoModel, TenantUpdateDto>(Tenant);
-            await _tenantAppService.UpdateAsync(Tenant.Id, input);
+            await TenantAppService.UpdateAsync(Tenant.Id, input);
 
             return NoContent();
         }

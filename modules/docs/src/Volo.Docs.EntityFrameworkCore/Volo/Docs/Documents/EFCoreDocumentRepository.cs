@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,12 @@ namespace Volo.Docs.Documents
         public EFCoreDocumentRepository(IDbContextProvider<IDocsDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
+        }
+
+        public async Task<List<Document>> GetListByProjectId(Guid projectId,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet.Where(d => d.ProjectId == projectId).ToListAsync(cancellationToken: cancellationToken);
         }
 
         public async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version,

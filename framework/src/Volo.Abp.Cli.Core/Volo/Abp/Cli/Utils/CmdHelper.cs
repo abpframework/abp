@@ -65,6 +65,8 @@ namespace Volo.Abp.Cli.Utils
                     }
                 }
 
+                process.WaitForExit();
+
                 exitCode = process.ExitCode;
             }
 

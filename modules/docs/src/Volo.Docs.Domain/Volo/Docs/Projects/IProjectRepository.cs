@@ -10,5 +10,7 @@ namespace Volo.Docs.Projects
         Task<List<Project>> GetListAsync(string sorting, int maxResultCount, int skipCount);
 
         Task<Project> GetByShortNameAsync(string shortName);
+
+        Task<bool> ShortNameExistsAsync(string shortName);
     }
 }

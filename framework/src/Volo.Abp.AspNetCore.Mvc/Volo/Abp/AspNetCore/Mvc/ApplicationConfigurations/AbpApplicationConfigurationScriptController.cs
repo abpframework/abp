@@ -12,6 +12,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
     [Area("Abp")]
     [Route("Abp/ApplicationConfigurationScript")]
     [DisableAuditing]
+    [RemoteService(false)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AbpApplicationConfigurationScriptController : AbpController
     {
         private readonly IAbpApplicationConfigurationAppService _configurationAppService;

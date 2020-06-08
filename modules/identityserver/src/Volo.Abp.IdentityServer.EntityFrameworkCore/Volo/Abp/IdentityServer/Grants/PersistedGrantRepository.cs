@@ -18,7 +18,7 @@ namespace Volo.Abp.IdentityServer.Grants
 
         }
 
-        public async Task<PersistedGrant> FindByKeyAsync(
+        public virtual async Task<PersistedGrant> FindByKeyAsync(
             string key,
             CancellationToken cancellationToken = default)
         {
@@ -27,7 +27,7 @@ namespace Volo.Abp.IdentityServer.Grants
                 ;
         }
 
-        public async Task<List<PersistedGrant>> GetListBySubjectIdAsync(
+        public virtual async Task<List<PersistedGrant>> GetListBySubjectIdAsync(
             string subjectId,
             CancellationToken cancellationToken = default)
         {
@@ -36,7 +36,7 @@ namespace Volo.Abp.IdentityServer.Grants
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<PersistedGrant>> GetListByExpirationAsync(
+        public virtual async Task<List<PersistedGrant>> GetListByExpirationAsync(
             DateTime maxExpirationDate, 
             int maxResultCount,
             CancellationToken cancellationToken = default)
@@ -48,7 +48,7 @@ namespace Volo.Abp.IdentityServer.Grants
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task DeleteAsync(
+        public virtual async Task DeleteAsync(
             string subjectId, 
             string clientId,
             CancellationToken cancellationToken = default)
@@ -59,7 +59,7 @@ namespace Volo.Abp.IdentityServer.Grants
             );
         }
 
-        public async Task DeleteAsync(
+        public virtual async Task DeleteAsync(
             string subjectId, 
             string clientId, 
             string type,

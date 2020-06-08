@@ -1,17 +1,12 @@
 import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { eFeatureManagementComponents } from '@abp/ng.feature-management';
+import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
-import {
-  CreateTenant,
-  DeleteTenant,
-  GetTenantById,
-  GetTenants,
-  UpdateTenant,
-} from '../../actions/tenant-management.actions';
+import { CreateTenant, DeleteTenant, GetTenantById, GetTenants, UpdateTenant } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
 
@@ -59,6 +54,12 @@ export class TenantsComponent implements OnInit {
   sortOrder = '';
 
   sortKey = '';
+
+  featureManagementKey = eFeatureManagementComponents.FeatureManagement;
+
+  get hasSelectedTenant(): boolean {
+    return Boolean(this.selected.id);
+  }
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -115,9 +116,18 @@ export class TenantsComponent implements OnInit {
   }
 
   private createTenantForm() {
-    this.tenantForm = this.fb.group({
+    const tenantForm = this.fb.group({
       name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
+      adminEmailAddress: [null, [Validators.required, Validators.maxLength(256), Validators.email]],
+      adminPassword: [null, [Validators.required, ...getPasswordValidators(this.store)]],
     });
+
+    if (this.hasSelectedTenant) {
+      tenantForm.removeControl('adminEmailAddress');
+      tenantForm.removeControl('adminPassword');
+    }
+
+    this.tenantForm = tenantForm;
   }
 
   private createDefaultConnectionStringForm() {

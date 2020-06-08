@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using JetBrains.Annotations;
 
@@ -10,7 +10,12 @@ namespace Volo.Abp.Localization
         {
             Check.NotNull(culture, nameof(culture));
 
-            return Use(new CultureInfo(culture), uiCulture == null ? null : new CultureInfo(uiCulture));
+            return Use(
+                new CultureInfo(culture),
+                uiCulture == null
+                    ? null
+                    : new CultureInfo(uiCulture)
+            );
         }
 
         public static IDisposable Use([NotNull] CultureInfo culture, CultureInfo uiCulture = null)
@@ -28,6 +33,33 @@ namespace Volo.Abp.Localization
                 CultureInfo.CurrentCulture = currentCulture;
                 CultureInfo.CurrentUICulture = currentUiCulture;
             });
+        }
+
+        public static bool IsRtl => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+
+        public static bool IsValidCultureCode(string cultureCode)
+        {
+            if (cultureCode.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            try
+            {
+                CultureInfo.GetCultureInfo(cultureCode);
+                return true;
+            }
+            catch (CultureNotFoundException)
+            {
+                return false;
+            }
+        }
+
+        public static string GetBaseCultureName(string cultureName)
+        {
+            return cultureName.Contains("-")
+                ? cultureName.Left(cultureName.IndexOf("-", StringComparison.Ordinal))
+                : cultureName;
         }
     }
 }

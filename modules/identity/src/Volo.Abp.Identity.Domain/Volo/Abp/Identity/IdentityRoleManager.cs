@@ -15,10 +15,10 @@ namespace Volo.Abp.Identity
 {
     public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     {
-        protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
+        protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
-        private readonly IStringLocalizer<IdentityResource> _localizer;
-        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        protected IStringLocalizer<IdentityResource> Localizer { get; }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public IdentityRoleManager(
             IdentityRoleStore store,
@@ -35,8 +35,8 @@ namespace Volo.Abp.Identity
                   errors, 
                   logger)
         {
-            _localizer = localizer;
-            _cancellationTokenProvider = cancellationTokenProvider;
+            Localizer = localizer;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
         public virtual async Task<IdentityRole> GetByIdAsync(Guid id)
@@ -54,7 +54,7 @@ namespace Volo.Abp.Identity
         {
             if (role.IsStatic && role.Name != name)
             {
-                throw new BusinessException(_localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
+                throw new BusinessException(Localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
             }
 
             return await base.SetRoleNameAsync(role, name);
@@ -64,7 +64,7 @@ namespace Volo.Abp.Identity
         {
             if (role.IsStatic)
             {
-                throw new BusinessException(_localizer["Identity.StaticRoleDeletionErrorMessage"]); // TODO: localize & change exception type
+                throw new BusinessException(Localizer["Identity.StaticRoleDeletionErrorMessage"]); // TODO: localize & change exception type
             }
 
             return await base.DeleteAsync(role);

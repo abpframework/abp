@@ -48,7 +48,15 @@
     }
 
 }
-
+.read-more-btn {
+    display: inline-block;
+    font-size: .9em;
+    margin: 0 0 1em 0;
+    background: #eee; 
+    color: blue;
+    padding: .25em 1em;
+    border-radius: 20px; 
+}
 .comment-area {
     background: #f5f5f5;
     margin: 1.5rem 0;

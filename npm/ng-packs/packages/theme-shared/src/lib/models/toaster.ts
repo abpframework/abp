@@ -22,7 +22,7 @@ export namespace Toaster {
   export type Severity = 'neutral' | 'success' | 'info' | 'warning' | 'error';
 
   /**
-   * @deprecated Status will be removed from toaster model in v2.2
+   * @deprecated Status will be removed from toaster model in v3.0
    */
   export enum Status {
     confirm = 'confirm',

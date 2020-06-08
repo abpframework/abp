@@ -76,10 +76,17 @@ var abp = abp || {};
     abp.localization.values = {};
 
     abp.localization.localize = function (key, sourceName) {
+        if (sourceName === '_') { //A convention to suppress the localization
+            return key;
+        }
+
         sourceName = sourceName || abp.localization.defaultResourceName;
+        if (!sourceName) {
+            abp.log.warn('Localization source name is not specified and the defaultResourceName was not defined!');
+            return key;
+        }
 
         var source = abp.localization.values[sourceName];
-
         if (!source) {
             abp.log.warn('Could not find localization source: ' + sourceName);
             return key;
@@ -95,6 +102,29 @@ var abp = abp || {};
         copiedArguments[0] = value;
 
         return abp.utils.formatString.apply(this, copiedArguments);
+    };
+
+    abp.localization.isLocalized = function (key, sourceName) {
+        if (sourceName === '_') { //A convention to suppress the localization
+            return true;
+        }
+
+        sourceName = sourceName || abp.localization.defaultResourceName;
+        if (!sourceName) {
+            return false;
+        }
+
+        var source = abp.localization.values[sourceName];
+        if (!source) {
+            return false;
+        }
+
+        var value = source[key];
+        if (value === undefined) {
+            return false;
+        }
+
+        return true;
     };
 
     abp.localization.getResource = function (name) {
@@ -631,6 +661,62 @@ var abp = abp || {};
 
     abp.security.antiForgery.getToken = function () {
         return abp.utils.getCookieValue(abp.security.antiForgery.tokenCookieName);
+    };
+
+    /* CLOCK *****************************************/
+    abp.clock = abp.clock || {};
+
+    abp.clock.kind = 'Unspecified';
+
+    abp.clock.supportsMultipleTimezone = function () {
+        return abp.clock.kind === 'Utc';
+    };
+
+    var toLocal = function (date) {
+        return new Date(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes(),
+            date.getUTCSeconds(),
+            date.getUTCMilliseconds()
+        );
+    };
+
+    var toUtc = function (date) {
+        Date.UTC(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes(),
+            date.getUTCSeconds(),
+            date.getUTCMilliseconds()
+        );
+    };
+
+    abp.clock.now = function () {
+        if (abp.clock.kind === 'Utc') {
+            return toUtc(new Date());
+        }
+        return new Date();
+    };
+
+    abp.clock.normalize = function (date) {
+        var kind = abp.clock.kind;
+
+        if (kind === 'Unspecified') {
+            return date;
+        }
+
+        if (kind === 'Local') {
+            return toLocal(date);
+        }
+
+        if (kind === 'Utc') {
+            return toUtc(date);
+        }
     };
 
 })();

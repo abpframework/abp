@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -32,26 +33,35 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
         public async Task CollectAsync(CliAnalyticsCollectInputDto input)
         {
             var postData = _jsonSerializer.Serialize(input);
-            using (var client = new CliHttpClient())
+            var url = $"{CliUrls.WwwAbpIo}api/clianalytics/collect";
+            
+            try
             {
-                var responseMessage = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/clianalytics/collect",
-                    new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
-                    _cancellationTokenProvider.Token
-                );
-
-                if (!responseMessage.IsSuccessStatusCode)
+                using (var client = new CliHttpClient())
                 {
-                    var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-                    var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+                    var responseMessage = await client.PostAsync(
+                        url,
+                        new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
+                        _cancellationTokenProvider.Token
+                    );
 
-                    if (remoteServiceErrorMessage != null)
+                    if (!responseMessage.IsSuccessStatusCode)
                     {
-                        exceptionMessage += remoteServiceErrorMessage;
-                    }
+                        var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+                        var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
 
-                    _logger.LogInformation(exceptionMessage);
+                        if (remoteServiceErrorMessage != null)
+                        {
+                            exceptionMessage += remoteServiceErrorMessage;
+                        }
+
+                        _logger.LogInformation(exceptionMessage);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                // ignored
             }
         }
     }

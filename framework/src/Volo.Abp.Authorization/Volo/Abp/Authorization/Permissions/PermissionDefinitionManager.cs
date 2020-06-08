@@ -83,7 +83,7 @@ namespace Volo.Abp.Authorization.Permissions
         }
 
         protected virtual void AddPermissionToDictionaryRecursively(
-            Dictionary<string, PermissionDefinition> permissions, 
+            Dictionary<string, PermissionDefinition> permissions,
             PermissionDefinition permission)
         {
             if (permissions.ContainsKey(permission.Name))
@@ -101,22 +101,32 @@ namespace Volo.Abp.Authorization.Permissions
 
         protected virtual Dictionary<string, PermissionGroupDefinition> CreatePermissionGroupDefinitions()
         {
-            var context = new PermissionDefinitionContext();
-
             using (var scope = _serviceProvider.CreateScope())
             {
+                var context = new PermissionDefinitionContext(scope.ServiceProvider);
+
                 var providers = Options
-                    .DefinitionProviders
-                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
-                    .ToList();
+                        .DefinitionProviders
+                        .Select(p => scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
+                        .ToList();
+
+                foreach (var provider in providers)
+                {
+                    provider.PreDefine(context);
+                }
 
                 foreach (var provider in providers)
                 {
                     provider.Define(context);
                 }
-            }
 
-            return context.Groups;
+                foreach (var provider in providers)
+                {
+                    provider.PostDefine(context);
+                }
+
+                return context.Groups;
+            }
         }
     }
 }

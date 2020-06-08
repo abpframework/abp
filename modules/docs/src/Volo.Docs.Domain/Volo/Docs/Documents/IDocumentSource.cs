@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
@@ -8,7 +9,7 @@ namespace Volo.Docs.Documents
 {
     public interface IDocumentSource : IDomainService
     {
-        Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version);
+        Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version, DateTime? lastKnownSignificantUpdateTime = null);
 
         Task<List<VersionInfo>> GetVersionsAsync(Project project);
 

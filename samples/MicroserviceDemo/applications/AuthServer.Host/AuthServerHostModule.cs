@@ -95,14 +95,14 @@ namespace AuthServer.Host
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseAbpRequestLocalization();
             if (MsDemoConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }
             app.UseIdentityServer();
-            app.UseAbpRequestLocalization();
             app.UseAuditing();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             //TODO: Problem on a clustered environment
             AsyncHelper.RunSync(async () =>

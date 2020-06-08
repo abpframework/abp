@@ -2,6 +2,6 @@ namespace Volo.Abp.Http.Modeling
 {
     public interface IApiDescriptionModelProvider
     {
-        ApplicationApiDescriptionModel CreateApiModel();
+        ApplicationApiDescriptionModel CreateApiModel(ApplicationApiDescriptionModelRequestDto input);
     }
 }

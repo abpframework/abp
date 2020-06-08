@@ -373,16 +373,19 @@ So, you can directly use the `ExtraProperties` property to use  the dictionary A
 
 The way to store this dictionary in the database depends on the database provider you're using.
 
-* For [Entity Framework Core](Entity-Framework-Core.md), it is stored in a single `ExtraProperties` field as a `JSON` string. Serializing to `JSON` and deserializing from the `JSON` are automatically done by the ABP Framework using the [value conversions](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions) system of the EF Core.
+* For [Entity Framework Core](Entity-Framework-Core.md), here are two type of configurations;
+  * By default, it is stored in a single `ExtraProperties` field as a `JSON` string (that means all extra properties stored in a single database table field). Serializing to `JSON` and deserializing from the `JSON` are automatically done by the ABP Framework using the [value conversions](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions) system of the EF Core.
+  * If you want, you can use the `ObjectExtensionManager` to define a separate table field for a desired extra property. Properties those are not configured through the `ObjectExtensionManager` will continue to use a single `JSON` field as described above. This feature is especially useful when you are using a pre-built [application module](Modules/Index.md) and want to [extend its entities](Customizing-Application-Modules-Extending-Entities.md). See the [EF Core integration document](Entity-Framework-Core.md) to learn how to use the `ObjectExtensionManager`.
 * For [MongoDB](MongoDB.md), it is stored as a **regular field**, since MongoDB naturally supports this kind of [extra elements](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) system.
 
 ### Discussion for the Extra Properties
 
-Extra Properties system is especially useful if you are using a **re-usable module** that defines an entity inside and you want to get/set some data related to this entity in an easy way. You normally **don't need** to this system for your own entities, because it has the following drawbacks:
+Extra Properties system is especially useful if you are using a **re-usable module** that defines an entity inside and you want to get/set some data related to this entity in an easy way.
 
-* It is **not fully type safe**.
+You normally **don't need** to this system for your own entities, because it has the following drawbacks:
+
+* It is **not fully type safe** since it works with strings as property names.
 * It is **not easy to [auto map](Object-To-Object-Mapping.md)** these properties from/to other objects.
-* It **doesn't create fields** in the database table for EF Core, so it will not be easy to create indexes or search/order by this field in the database side.
 
 ### Extra Properties Behind Entities
 

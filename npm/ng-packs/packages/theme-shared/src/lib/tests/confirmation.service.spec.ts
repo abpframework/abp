@@ -1,74 +1,135 @@
 import { CoreModule } from '@abp/ng.core';
-import { Component } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { NgModule } from '@angular/core';
+import { fakeAsync, tick } from '@angular/core/testing';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { NgxsModule } from '@ngxs/store';
-import { ConfirmationService } from '../services/confirmation.service';
-import { ThemeSharedModule } from '../theme-shared.module';
-import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
+import { timer } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ConfirmationComponent } from '../components';
+import { Confirmation } from '../models';
+import { ConfirmationService } from '../services';
 
-@Component({
-  selector: 'abp-dummy',
-  template: `
-    <abp-confirmation></abp-confirmation>
-  `,
+@NgModule({
+  exports: [ConfirmationComponent],
+  entryComponents: [ConfirmationComponent],
+  declarations: [ConfirmationComponent],
+  imports: [CoreModule.forTest()],
 })
-class DummyComponent {
-  constructor(public confirmation: ConfirmationService) {}
-}
+export class MockModule {}
 
 describe('ConfirmationService', () => {
-  let spectator: Spectator<DummyComponent>;
+  let spectator: SpectatorService<ConfirmationService>;
   let service: ConfirmationService;
-  const createComponent = createComponentFactory({
-    component: DummyComponent,
-    imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
-    mocks: [OAuthService],
+  const createService = createServiceFactory({
+    service: ConfirmationService,
+    imports: [NgxsModule.forRoot(), CoreModule.forTest(), MockModule],
   });
 
   beforeEach(() => {
-    spectator = createComponent();
-    service = spectator.get(ConfirmationService);
+    spectator = createService();
+    service = spectator.service;
   });
 
-  test('should display a confirmation popup', () => {
-    service.info('test', 'title');
+  afterEach(() => {
+    clearElements();
+  });
 
-    spectator.detectChanges();
+  test('should display a confirmation popup', fakeAsync(() => {
+    service.show('MESSAGE', 'TITLE');
 
-    expect(spectator.query('div.confirmation .title')).toHaveText('title');
-    expect(spectator.query('div.confirmation .message')).toHaveText('test');
+    tick();
+
+    expect(selectConfirmationContent('.title')).toBe('TITLE');
+    expect(selectConfirmationContent('.message')).toBe('MESSAGE');
+  }));
+
+  test('should display HTML string in title, message, and buttons', fakeAsync(() => {
+    service.show(
+      '<span class="custom-message">MESSAGE<span>',
+      '<span class="custom-title">TITLE<span>',
+      'neutral',
+      {
+        cancelText: '<span class="custom-cancel">CANCEL</span>',
+        yesText: '<span class="custom-yes">YES</span>',
+      },
+    );
+
+    tick();
+
+    expect(selectConfirmationContent('.custom-title')).toBe('TITLE');
+    expect(selectConfirmationContent('.custom-message')).toBe('MESSAGE');
+    expect(selectConfirmationContent('.custom-cancel')).toBe('CANCEL');
+    expect(selectConfirmationContent('.custom-yes')).toBe('YES');
+  }));
+
+  test.each`
+    type         | selector      | icon
+    ${'info'}    | ${'.info'}    | ${'.fa-info-circle'}
+    ${'success'} | ${'.success'} | ${'.fa-check-circle'}
+    ${'warn'}    | ${'.warning'} | ${'.fa-exclamation-triangle'}
+    ${'error'}   | ${'.error'}   | ${'.fa-times-circle'}
+  `('should display $type confirmation popup', async ({ type, selector, icon }) => {
+    service[type]('MESSAGE', 'TITLE');
+
+    await timer(0).toPromise();
+
+    expect(selectConfirmationContent('.title')).toBe('TITLE');
+    expect(selectConfirmationContent('.message')).toBe('MESSAGE');
+    expect(selectConfirmationElement(selector)).toBeTruthy();
+    expect(selectConfirmationElement(icon)).toBeTruthy();
   });
 
   test('should close with ESC key', done => {
-    service.info('test', 'title').subscribe(() => {
-      setTimeout(() => {
-        spectator.detectComponentChanges();
-        expect(spectator.query('div.confirmation')).toBeFalsy();
+    service
+      .info('', '')
+      .pipe(take(1))
+      .subscribe(status => {
+        expect(status).toBe(Confirmation.Status.dismiss);
         done();
-      }, 0);
-    });
+      });
 
-    spectator.detectChanges();
-    expect(spectator.query('div.confirmation')).toBeTruthy();
-    spectator.dispatchKeyboardEvent('div.confirmation', 'keyup', 'Escape');
+    const escape = new KeyboardEvent('keyup', { key: 'Escape' });
+    document.dispatchEvent(escape);
   });
 
-  test('should close when click cancel button', done => {
-    service.info('test', 'title', { yesText: 'Sure', cancelText: 'Exit' }).subscribe(() => {
-      spectator.detectComponentChanges();
-      setTimeout(() => {
-        expect(spectator.query('div.confirmation')).toBeFalsy();
-        done();
-      }, 0);
+  test('should close when click cancel button', async done => {
+    service.info('', '', { yesText: 'Sure', cancelText: 'Exit' }).subscribe(status => {
+      expect(status).toBe(Confirmation.Status.reject);
+      done();
     });
 
-    spectator.detectChanges();
+    await timer(0).toPromise();
 
-    expect(spectator.query('div.confirmation')).toBeTruthy();
-    expect(spectator.query('button#cancel')).toHaveText('Exit');
-    expect(spectator.query('button#confirm')).toHaveText('Sure');
+    expect(selectConfirmationContent('button#cancel')).toBe('Exit');
+    expect(selectConfirmationContent('button#confirm')).toBe('Sure');
 
-    spectator.click('button#cancel');
+    selectConfirmationElement<HTMLButtonElement>('button#cancel').click();
   });
+
+  test.each`
+    dismissible | count
+    ${true}     | ${1}
+    ${false}    | ${0}
+  `(
+    'should call the listenToEscape method $count times when dismissible is $dismissible',
+    ({ dismissible, count }) => {
+      const spy = spyOn(service as any, 'listenToEscape');
+
+      service.info('', '', { dismissible });
+
+      expect(spy).toHaveBeenCalledTimes(count);
+    },
+  );
 });
+
+function clearElements(selector = '.confirmation') {
+  document.querySelectorAll(selector).forEach(element => element.parentNode.removeChild(element));
+}
+
+function selectConfirmationContent(selector = '.confirmation'): string {
+  return selectConfirmationElement(selector).textContent.trim();
+}
+
+function selectConfirmationElement<T extends HTMLElement>(selector = '.confirmation'): T {
+  return document.querySelector(selector);
+}

@@ -1,14 +1,14 @@
 import { createHttpFactory, HttpMethod, SpectatorHttp } from '@ngneat/spectator/jest';
 import { AccountService } from '../services/account.service';
 import { Store } from '@ngxs/store';
-import { RestService } from '@abp/ng.core';
+import { RestService, CORE_OPTIONS } from '@abp/ng.core';
 import { RegisterRequest } from '../models/user';
 
 describe('AccountService', () => {
   let spectator: SpectatorHttp<AccountService>;
   const createHttp = createHttpFactory({
     dataService: AccountService,
-    providers: [RestService],
+    providers: [RestService, { provide: CORE_OPTIONS, useValue: { environment: {} } }],
     mocks: [Store],
   });
 
@@ -17,7 +17,10 @@ describe('AccountService', () => {
   it('should send a GET to find tenant', () => {
     spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.findTenant('test').subscribe();
-    spectator.expectOne('https://abp.io/api/abp/multi-tenancy/tenants/by-name/test', HttpMethod.GET);
+    spectator.expectOne(
+      'https://abp.io/api/abp/multi-tenancy/tenants/by-name/test',
+      HttpMethod.GET,
+    );
   });
 
   it('should send a POST to register API', () => {

@@ -29,7 +29,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             _projectAppService = projectAppService;
         }
 
-        public async Task<ActionResult> OnGetAsync(Guid id)
+        public virtual async Task<ActionResult> OnGetAsync(Guid id)
         {
             var project = await _projectAppService.GetAsync(id);
 
@@ -42,7 +42,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             throw new BusinessException("UnknowDocumentSourceExceptionMessage");
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             if (GithubProject != null)
             {

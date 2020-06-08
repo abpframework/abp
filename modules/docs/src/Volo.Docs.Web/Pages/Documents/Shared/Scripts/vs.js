@@ -47,7 +47,7 @@
                 return;
             }
 
-            var $targetElement = $(hash);
+            var $targetElement = $(decodeURIComponent(hash));
 
             $targetElement = $targetElement.length ? $targetElement : $('[name=' + this.hash.slice(1) + ']');
 
@@ -77,7 +77,7 @@
                     event.preventDefault();
                     var hash = this.hash;
                     $('html, body').animate({
-                        scrollTop: $(hash).offset().top
+                        scrollTop: $(decodeURIComponent(hash)).offset().top
                     }, 500, function () {
                         window.location.hash = hash;
                     });

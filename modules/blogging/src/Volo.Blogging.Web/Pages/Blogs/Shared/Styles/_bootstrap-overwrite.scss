@@ -1,7 +1,15 @@
-a, a:hover {
-    text-decoration: none;
-    color: #000000;
-} 
+.post-content {
+    color: #555; 
+    a {
+        text-decoration: underline !important;
+        color: #555;
+    }
+
+    a:hover {
+        text-decoration: underline !important;
+        color: #000000;
+    }
+}
 p { 
     color: #444;
     a {
@@ -13,19 +21,20 @@ h1, h2, h3, h4, h5, h6, .tab-title {
     font-weight: 700;
 }
 h1 {
-    font-size: 2.25em;
+    font-size: 2em;
     margin: 1rem 0 1.5rem;
+    line-height: 1.25;
 }
 h2, .tab-title {
     font-size: 1.5em;
     margin: 1.5rem 0 .75rem;
 }
 h3 {
-    font-size: 1.5em;
+    font-size: 1.25em;
     margin: 1.5rem 0 .75rem;
 }
 h4 {
-    font-size: 1.25em;
+    font-size: 1.125em;
     margin: 1.5rem 0 .75rem;
 }
 h5 {
@@ -40,9 +49,10 @@ h6 {
 }
 img {
     max-width: 100%;
-} 
-input, select, textarea, .form-control , .btn  {
+}
+input, select, textarea, .form-control, .btn {
     border-radius: 0;
+    border-width: 1px 1px 2px 1px;
 }
 .navbar-toggler { 
     background: aqua;
@@ -58,7 +68,7 @@ input, select, textarea, .form-control , .btn  {
     .list-group-item {
         position: relative;
         display: block;
-        padding: 0 0 20px 0;
+        padding: 30px 0 30px;
         background: none;
         border-radius: 0;
         border: 0;
@@ -69,7 +79,7 @@ input, select, textarea, .form-control , .btn  {
 
         & + .list-group-item {
             border-top: 1px solid #f5f5f5;
-            padding: 20px 0;
+            padding: 35px 0 30px;
         }
 
         h3 {
@@ -79,8 +89,9 @@ input, select, textarea, .form-control , .btn  {
 
     &.small-list {
         .list-group-item {
-            padding: 10px 0; 
-            & + .list-group-item { 
+            padding: 10px 0;
+
+            & + .list-group-item {
                 padding: 10px 0;
             }
         }
@@ -100,6 +111,10 @@ input, select, textarea, .form-control , .btn  {
     font-size: 1em;
 }
 .font-125 {
-    font-size: 1.25em;
-} 
- 
+    font-size: 1.125em;
+}
+pre {
+    background: #131323;
+    padding: 25px 30px;
+    margin: 1em 0 2em 0;
+}

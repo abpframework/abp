@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
-    public class AbpExceptionFilter : IExceptionFilter, ITransientDependency
+    public class AbpExceptionFilter : IAsyncExceptionFilter, ITransientDependency
     {
         public ILogger<AbpExceptionFilter> Logger { get; set; }
 
@@ -32,14 +35,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             Logger = NullLogger<AbpExceptionFilter>.Instance;
         }
 
-        public virtual void OnException(ExceptionContext context)
+        public async Task OnExceptionAsync(ExceptionContext context)
         {
             if (!ShouldHandleException(context))
             {
                 return;
             }
 
-            HandleAndWrapException(context);
+            await HandleAndWrapException(context);
         }
 
         protected virtual bool ShouldHandleException(ExceptionContext context)
@@ -65,7 +68,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             return false;
         }
 
-        protected virtual void HandleAndWrapException(ExceptionContext context)
+        protected virtual async Task HandleAndWrapException(ExceptionContext context)
         {
             //TODO: Trigger an AbpExceptionHandled event or something like that.
 
@@ -81,6 +84,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             Logger.LogWithLevel(logLevel, $"---------- {nameof(RemoteServiceErrorInfo)} ----------");
             Logger.LogWithLevel(logLevel, _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
             Logger.LogException(context.Exception, logLevel);
+
+            await context.HttpContext
+                .RequestServices
+                .GetRequiredService<IExceptionNotifier>()
+                .NotifyAsync(
+                    new ExceptionNotificationContext(context.Exception)
+                );
 
             context.Exception = null; //Handled!
         }

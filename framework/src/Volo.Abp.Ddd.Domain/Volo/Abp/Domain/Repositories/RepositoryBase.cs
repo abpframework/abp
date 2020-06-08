@@ -49,6 +49,26 @@ namespace Volo.Abp.Domain.Repositories
 
         protected abstract IQueryable<TEntity> GetQueryable();
 
+        public abstract Task<TEntity> FindAsync(
+            Expression<Func<TEntity, bool>> predicate, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default);
+
+        public async Task<TEntity> GetAsync(
+            Expression<Func<TEntity, bool>> predicate, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            var entity = await FindAsync(predicate, includeDetails, cancellationToken);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity));
+            }
+
+            return entity;
+        }
+
         public abstract Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
 
         protected virtual TQueryable ApplyDataFilters<TQueryable>(TQueryable query)

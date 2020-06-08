@@ -9,11 +9,10 @@ namespace Volo.Blogging
         typeof(AbpHttpClientModule))]
     public class BloggingHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "Blogging";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddHttpClientProxies(typeof(BloggingApplicationContractsModule).Assembly, RemoteServiceName);
+            context.Services.AddHttpClientProxies(typeof(BloggingApplicationContractsModule).Assembly, 
+                BloggingRemoteServiceConsts.RemoteServiceName);
         }
 
     }

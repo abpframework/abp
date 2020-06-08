@@ -1,5 +1,16 @@
-<div #container id="abp-http-error-container" class="error" [style.backgroundColor]="backgroundColor">
-  <button *ngIf="!hideCloseIcon" id="abp-close-button" type="button" class="close mr-2" (click)="destroy()">
+<div
+  #container
+  id="abp-http-error-container"
+  class="error"
+  [style.backgroundColor]="backgroundColor"
+>
+  <button
+    *ngIf="!hideCloseIcon"
+    id="abp-close-button"
+    type="button"
+    class="close mr-2"
+    (click)="destroy()"
+  >
     <span aria-hidden="true">&times;</span>
   </button>
 
@@ -11,7 +22,11 @@
           {{ details | abpLocalization }}
         </div>
         <div class="error-actions">
-          <a (click)="destroy()" routerLink="/" class="btn btn-primary btn-md mt-2"
+          <a
+            *ngIf="isHomeShow"
+            (click)="destroy()"
+            routerLink="/"
+            class="btn btn-primary btn-md mt-2"
             ><span class="glyphicon glyphicon-home"></span>
             {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}
           </a>

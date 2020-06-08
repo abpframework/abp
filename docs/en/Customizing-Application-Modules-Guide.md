@@ -1,6 +1,6 @@
 # Customizing the Existing Modules
 
-ABP Framework provides was designed to support to build fully [modular applications](Module-Development-Basics.md) and systems. It also provides some [pre-built application modules](Modules/Index.md) those are **ready to use** in any kind of application.
+ABP Framework has been designed to support to build fully [modular applications](Module-Development-Basics.md) and systems. It also provides some [pre-built application modules](Modules/Index.md) those are **ready to use** in any kind of application.
 
 For example, you can **re-use** the [Identity Management Module](Modules/Identity.md) to add user, role and permission management to your application. The [application startup template](Startup-Templates/Application.md) already comes with Identity and some other modules **pre-installed**.
 
@@ -21,7 +21,7 @@ This approach has the following benefits:
 
 However, there is a drawback:
 
-* You may not able to **customize** the module source code as it is in your own solution.
+* You may not able to **customize** the module because the module source is not in your solution.
 
 This document explains **how to customize or extend** a depended module without need to change its source code. While it is limited compared to a full source code change opportunity, there are still some good ways to make some customizations.
 

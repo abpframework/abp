@@ -58,6 +58,53 @@ namespace MyCompany.MyProject
 }
 ````
 
+### About the EF Core Fluent Mapping
+
+The [application startup template](Startup-Templates/Application.md) has been configured to use the [EF Core fluent configuration API](https://docs.microsoft.com/en-us/ef/core/modeling/) to map your entities to your database tables.
+
+You can still use the **data annotation attributes** (like `[Required]`) on the properties of your entity while the ABP documentation generally follows the **fluent mapping API** approach. It is up to you.
+
+ABP Framework has some **base entity classes** and **conventions** (see the [entities document](Entities.md)) and it provides some useful **extension methods** to configure the properties inherited from the base entity classes.
+
+#### ConfigureByConvention Method
+
+`ConfigureByConvention()` is the main extension method that **configures all the base properties** and conventions for your entities. So, it is a **best practice** to call this method for all your entities, in your fluent mapping code.
+
+**Example**: Assume that you've a `Book` entity derived from `AggregateRoot<Guid>` base class:
+
+````csharp
+public class Book : AuditedAggregateRoot<Guid>
+{
+    public string Name { get; set; }
+}
+````
+
+You can override the `OnModelCreating` method in your `DbContext` and configure the mapping as shown below:
+
+````csharp
+protected override void OnModelCreating(ModelBuilder builder)
+{
+    //Always call the base method
+    base.OnModelCreating(builder);
+
+    builder.Entity<Book>(b =>
+    {
+        b.ToTable("Books");
+
+        //Configure the base properties
+        b.ConfigureByConvention(); 
+
+        //Configure other properties (if you are using the fluent API)
+        b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+    });
+}
+````
+
+* Calling `b.ConfigureByConvention()` is important here to properly **configure the base properties**.
+* You can configure the `Name` property here or you can use the **data annotation attributes** (see the [EF Core document](https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties)).
+
+> While there are many extension methods to configure your base properties, `ConfigureByConvention()` internally calls them if necessary. So, it is enough to call it.
+
 ### Configure the Connection String Selection
 
 If you have multiple databases in your application, you can configure the connection string name for your DbContext using the `[ConnectionStringName]` attribute. Example:
@@ -225,7 +272,7 @@ public override async Task DeleteAsync(
 }
 ````
 
-### Access to the EF Core API
+## Access to the EF Core API
 
 In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository pattern). However, if you want to access the `DbContext` instance over the repository, you can use `GetDbContext()` or `GetDbSet()` extension methods. Example:
 
@@ -251,9 +298,60 @@ public class BookService
 
 > Important: You must reference to the `Volo.Abp.EntityFrameworkCore` package from the project you want to access to the DbContext. This breaks encapsulation, but this is what you want in that case.
 
-### Advanced Topics
+## Extra Properties & Object Extension Manager
 
-#### Set Default Repository Classes
+Extra Properties system allows you to set/get dynamic properties to entities those implement the `IHasExtraProperties` interface. It is especially useful when you want to add custom properties to the entities defined in an [application module](Modules/Index.md), when you use the module as package reference.
+
+By default, all the extra properties of an entity are stored as a single `JSON` object in the database.
+
+Entity extension system allows you to to store desired extra properties in separate fields in the related database table. For more information about the extra properties & the entity extension system, see the following documents:
+
+* [Customizing the Application Modules: Extending Entities](Customizing-Application-Modules-Extending-Entities.md)
+* [Entities](Entities.md)
+
+This section only explains the EF Core related usage of the `ObjectExtensionManager`.
+
+### ObjectExtensionManager.Instance
+
+`ObjectExtensionManager` implements the singleton pattern, so you need to use the static `ObjectExtensionManager.Instance` to perform all the operations.
+
+### MapEfCoreProperty
+
+`MapEfCoreProperty` is a shortcut extension method to define an extension property for an entity and map to the database.
+
+**Example**: Add `Title` property (database field) to the `IdentityRole` entity:
+
+````csharp
+ObjectExtensionManager.Instance
+    .MapEfCoreProperty<IdentityRole, string>(
+        "Title",
+        builder => { builder.HasMaxLength(64); }
+    );
+````
+
+If the related module has implemented this feature (by using the `ConfigureEfCoreEntity` explained below), then the new property is added to the model. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
+
+>`MapEfCoreProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEntityExtensions` class that is safe to use this method inside.
+
+### ConfigureEfCoreEntity
+
+If you are building a reusable module and want to allow application developers to add properties to your entities, you can use the `ConfigureEfCoreEntity` extension method in your entity mapping. However, there is a shortcut extension method `ConfigureObjectExtensions` that can be used while configuring the entity mapping:
+
+````csharp
+builder.Entity<YourEntity>(b =>
+{
+    b.ConfigureObjectExtensions();
+    //...
+});
+````
+
+> If you call `ConfigureByConvention()` extension method (like `b.ConfigureByConvention()` for this example), ABP Framework internally calls the `ConfigureObjectExtensions` method. It is a **best practice** to use the `ConfigureByConvention()` method since it also configures database mapping for base properties by convention.
+
+See the "*ConfigureByConvention Method*" section above for more information.
+
+## Advanced Topics
+
+### Set Default Repository Classes
 
 Default generic repositories are implemented by `EfCoreRepository` class by default. You can create your own implementation and use it for all the default repository implementations.
 
@@ -299,7 +397,7 @@ context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
 });
 ```
 
-#### Set Base DbContext Class or Interface for Default Repositories
+### Set Base DbContext Class or Interface for Default Repositories
 
 If your DbContext inherits from another DbContext or implements an interface, you can use that base class or interface as DbContext for default repositories. Example:
 
@@ -331,7 +429,7 @@ public class BookRepository : EfCoreRepository<IBookStoreDbContext, Book, Guid>,
 
 One advantage of using an interface for a DbContext is then it will be replaceable by another implementation.
 
-#### Replace Other DbContextes
+### Replace Other DbContextes
 
 Once you properly define and use an interface for DbContext, then any other implementation can replace it using the `ReplaceDbContext` option:
 
@@ -344,3 +442,7 @@ context.Services.AddAbpDbContext<OtherDbContext>(options =>
 ````
 
 In this example, `OtherDbContext` implements `IBookStoreDbContext`. This feature allows you to have multiple DbContext (one per module) on development, but single DbContext (implements all interfaces of all DbContexts) on runtime.
+
+## See Also
+
+* [Entities](Entities.md)

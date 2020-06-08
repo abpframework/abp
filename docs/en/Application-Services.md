@@ -132,6 +132,8 @@ The `CreateAsync` method above manually creates a `Book` entity from given `Crea
 
 However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](Object-To-Object-Mapping.md) infrastructure to make this even easier.
 
+Object to object mapping provides abstractions and it is implemented by the [AutoMapper](https://automapper.org/) library by default.
+
 Let's create another method to get a book. First, define the method in the `IBookAppService` interface:
 
 ````csharp
@@ -146,7 +148,6 @@ public interface IBookAppService : IApplicationService
 `BookDto` is a simple [DTO](Data-Transfer-Objects.md) class defined as below:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))] //Defines the mapping
 public class BookDto
 {
     public Guid Id { get; set; }
@@ -159,21 +160,38 @@ public class BookDto
 }
 ````
 
-* `BookDto` defines `[AbpAutoMapFrom(typeof(Book))]` attribute to create the object mapping from `Book` to `BookDto`.
-
-Then you can implement the `GetAsync` method as shown below:
+AutoMapper requires to create a mapping [profile class](https://docs.automapper.org/en/stable/Configuration.html#profile-instances). Example:
 
 ````csharp
-public async Task<BookDto> GetAsync(Guid id)
+public class MyProfile : Profile
 {
-    var book = await _bookRepository.GetAsync(id);
-    return book.MapTo<BookDto>();
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+    }
 }
 ````
 
-`MapTo` extension method converts `Book` object to `BookDto` object by copying all properties with the same naming.
+You should then register profiles using the `AbpAutoMapperOptions`:
 
-An alternative to the `MapTo` is using the `IObjectMapper` service:
+````csharp
+[DependsOn(typeof(AbpAutoMapperModule))]
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            //Add all mappings defined in the assembly of the MyModule class
+            options.AddMaps<MyModule>();
+        });
+    }
+}
+````
+
+`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html).
+
+Then you can implement the `GetAsync` method as shown below:
 
 ````csharp
 public async Task<BookDto> GetAsync(Guid id)
@@ -182,8 +200,6 @@ public async Task<BookDto> GetAsync(Guid id)
     return ObjectMapper.Map<Book, BookDto>(book);
 }
 ````
-
-While the second syntax is a bit harder to write, it better works if you write unit tests.
 
 See the [object to object mapping document](Object-To-Object-Mapping.md) for more.
 
@@ -201,7 +217,7 @@ See the [authorization document](Authorization.md) for more.
 
 ## CRUD Application Services
 
-If you need to create a simple **CRUD application service** which has Create, Update, Delete and Get methods, you can use ABP's **base classes** to easily build your services. You can inherit from `CrudAppService`.
+If you need to create a simple **CRUD application service** which has Create, Update, Delete and Get methods, you can use ABP's **base classes** to easily build your services. You can inherit from the `CrudAppService`.
 
 ### Example
 
@@ -219,7 +235,9 @@ public interface IBookAppService :
 }
 ````
 
-* `ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
+`ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
+
+> Creating interface for an application service is a good practice, but not required by the ABP Framework. You can skip the interface part.
 
 `ICrudAppService` declares the following methods:
 
@@ -248,7 +266,6 @@ public interface ICrudAppService<
 DTO classes used in this example are `BookDto` and `CreateUpdateBookDto`:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))]
 public class BookDto : AuditedEntityDto<Guid>
 {
     public string Name { get; set; }
@@ -258,7 +275,6 @@ public class BookDto : AuditedEntityDto<Guid>
     public float Price { get; set; }
 }
 
-[AbpAutoMapTo(typeof(Book))]
 public class CreateUpdateBookDto
 {
     [Required]
@@ -272,6 +288,19 @@ public class CreateUpdateBookDto
     public float Price { get; set; }
 }
 ````
+
+[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class of DTO class.
+
+```csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+        CreateMap<CreateUpdateBookDto, Book>();
+    }
+}
+```
 
 * `CreateUpdateBookDto` is shared by create and update operations, but you could use separated DTO classes as well.
 
@@ -291,6 +320,52 @@ public class BookAppService :
 ````
 
 `CrudAppService` implements all methods declared in the `ICrudAppService` interface. You can then add your own custom methods or override and customize base methods.
+
+> `CrudAppService` has different versions gets different number of generic arguments. Use the one suitable for you.
+
+### AbstractKeyCrudAppService
+
+`CrudAppService` requires to have an Id property as the primary key of your entity. If you are using composite keys then you can not utilize it.
+
+`AbstractKeyCrudAppService` implements the same `ICrudAppService` interface, but this time without making assumption about your primary key.
+
+#### Example
+
+Assume that you have a `District` entity with `CityId` and `Name` as a composite primary key. Using `AbstractKeyCrudAppService` requires to implement `DeleteByIdAsync` and `GetEntityByIdAsync` methods yourself:
+
+````csharp
+public class DistrictAppService
+    : AbstractKeyCrudAppService<District, DistrictDto, DistrictKey>
+{
+    public DistrictAppService(IRepository<District> repository) 
+        : base(repository)
+    {
+    }
+
+    protected override async Task DeleteByIdAsync(DistrictKey id)
+    {
+        await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
+    }
+
+    protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
+    {
+        return await AsyncQueryableExecuter.FirstOrDefaultAsync(
+            Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
+        );
+    }
+}
+````
+
+This implementation requires you to create a class represents your composite key:
+
+````csharp
+public class DistrictKey
+{
+    public Guid CityId { get; set; }
+
+    public string Name { get; set; }
+}
+````
 
 ## Lifetime
 

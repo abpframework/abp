@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using Volo.Abp;
 using Volo.Abp.Caching;
+using Volo.Docs.Caching;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Projects;
+using Volo.Extensions;
 
 namespace Volo.Docs.Documents
 {
@@ -18,33 +21,39 @@ namespace Volo.Docs.Documents
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentSourceFactory _documentStoreFactory;
-        protected IDistributedCache<LanguageConfig> LanguageCache { get; }
-        protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
+        protected IDistributedCache<DocumentResource> ResourceCache { get; }
         protected IDistributedCache<DocumentUpdateInfo> DocumentUpdateCache { get; }
         protected IHostEnvironment HostEnvironment { get; }
         private readonly IDocumentFullSearch _documentFullSearch;
         private readonly DocsElasticSearchOptions _docsElasticSearchOptions;
+        private readonly IConfiguration _configuration;
+        private readonly TimeSpan _cacheTimeout;
+        private readonly TimeSpan _documentResourceAbsoluteExpiration;
+        private readonly TimeSpan _documentResourceSlidingExpiration;
 
         public DocumentAppService(
             IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentSourceFactory documentStoreFactory,
-            IDistributedCache<LanguageConfig> languageCache,
-            IDistributedCache<DocumentResourceDto> resourceCache,
+            IDistributedCache<DocumentResource> resourceCache,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
-            IHostEnvironment hostEnvironment, 
-            IDocumentFullSearch documentFullSearch, 
-            IOptions<DocsElasticSearchOptions> docsElasticSearchOptions)
+            IHostEnvironment hostEnvironment,
+            IDocumentFullSearch documentFullSearch,
+            IOptions<DocsElasticSearchOptions> docsElasticSearchOptions,
+            IConfiguration configuration)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
             _documentStoreFactory = documentStoreFactory;
-            LanguageCache = languageCache;
             ResourceCache = resourceCache;
             DocumentUpdateCache = documentUpdateCache;
             HostEnvironment = hostEnvironment;
             _documentFullSearch = documentFullSearch;
+            _configuration = configuration;
             _docsElasticSearchOptions = docsElasticSearchOptions.Value;
+            _cacheTimeout = GetCacheTimeout();
+            _documentResourceAbsoluteExpiration = GetDocumentResourceAbsoluteExpirationTimeout();
+            _documentResourceSlidingExpiration = GetDocumentResourceSlidingExpirationTimeout();
         }
 
         public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
@@ -82,7 +91,10 @@ namespace Volo.Docs.Documents
                 input.Version
             );
 
-            var navigationNode = JsonConvert.DeserializeObject<NavigationNode>(navigationDocument.Content);
+            if (!JsonConvertExtensions.TryDeserializeObject<NavigationNode>(navigationDocument.Content, out var navigationNode))
+            {
+                throw new UserFriendlyException($"Cannot validate navigation file '{project.NavigationDocumentName}' for the project {project.Name}.");
+            }
 
             var leafs = navigationNode.Items.GetAllNodes(x => x.Items)
                 .Where(x => !x.Path.IsNullOrWhiteSpace())
@@ -90,12 +102,13 @@ namespace Volo.Docs.Documents
 
             foreach (var leaf in leafs)
             {
-                var cacheKey = $"DocumentUpdateInfo{project.Id}#{leaf.Path}#{input.LanguageCode}#{input.Version}";
+                var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, leaf.Path, input.LanguageCode, input.Version);
                 var documentUpdateInfo = await DocumentUpdateCache.GetAsync(cacheKey);
                 if (documentUpdateInfo != null)
                 {
                     leaf.CreationTime = documentUpdateInfo.CreationTime;
                     leaf.LastUpdatedTime = documentUpdateInfo.LastUpdatedTime;
+                    leaf.LastSignificantUpdateTime = documentUpdateInfo.LastSignificantUpdateTime;
                 }
             }
 
@@ -105,32 +118,31 @@ namespace Volo.Docs.Documents
         public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
-            var cacheKey = $"Resource@{project.ShortName}#{input.LanguageCode}#{input.Name}#{input.Version}";
+            var cacheKey = CacheKeyGenerator.GenerateDocumentResourceCacheKey(project, input.Name, input.LanguageCode, input.Version);
             input.Version = string.IsNullOrWhiteSpace(input.Version) ? project.LatestVersionBranchName : input.Version;
 
-            async Task<DocumentResourceDto> GetResourceAsync()
+            async Task<DocumentResource> GetResourceAsync()
             {
                 var source = _documentStoreFactory.Create(project.DocumentStoreType);
-                var documentResource = await source.GetResource(project, input.Name, input.LanguageCode, input.Version);
-
-                return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
+                return await source.GetResource(project, input.Name, input.LanguageCode, input.Version);
             }
 
             if (HostEnvironment.IsDevelopment())
             {
-                return await GetResourceAsync();
+                return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(await GetResourceAsync());
             }
 
-            return await ResourceCache.GetOrAddAsync(
-                cacheKey,
-                GetResourceAsync,
-                () => new DistributedCacheEntryOptions
-                {
-                    //TODO: Configurable?
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
-                    SlidingExpiration = TimeSpan.FromMinutes(30)
-                }
-            );
+            return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(
+                    await ResourceCache.GetOrAddAsync(
+                        cacheKey,
+                        GetResourceAsync,
+                        () => new DistributedCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = _documentResourceAbsoluteExpiration,
+                            SlidingExpiration = _documentResourceSlidingExpiration
+                        }
+                    )
+                );
         }
 
         public async Task<List<DocumentSearchOutput>> SearchAsync(DocumentSearchInput input)
@@ -172,11 +184,16 @@ namespace Volo.Docs.Documents
                     input.Version
                 );
 
-                return JsonConvert.DeserializeObject<DocumentParametersDto>(document.Content);
+                if (!JsonConvertExtensions.TryDeserializeObject<DocumentParametersDto>(document.Content, out var documentParameters))
+                {
+                    throw new UserFriendlyException($"Cannot validate document parameters file '{project.ParametersDocumentName}' for the project {project.Name}.");
+                }
+
+                return documentParameters;
             }
             catch (DocumentNotFoundException)
             {
-                Logger.LogWarning($"Parameter file ({project.ParametersDocumentName}) not found.");
+                Logger.LogWarning($"Parameter file ({project.ParametersDocumentName}) not found!");
                 return new DocumentParametersDto();
             }
         }
@@ -189,55 +206,32 @@ namespace Volo.Docs.Documents
         {
             version = string.IsNullOrWhiteSpace(version) ? project.LatestVersionBranchName : version;
 
-            async Task<DocumentWithDetailsDto> GetDocumentAsync()
-            {
-                Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
-
-                var source = _documentStoreFactory.Create(project.DocumentStoreType);
-                var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version);
-
-                await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version);
-                await _documentRepository.InsertAsync(sourceDocument, true);
-
-                Logger.LogInformation($"Document retrieved: {documentName}");
-
-                var cacheKey = $"DocumentUpdateInfo{sourceDocument.ProjectId}#{sourceDocument.Name}#{sourceDocument.LanguageCode}#{sourceDocument.Version}";
-                await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
-                {
-                    Name = sourceDocument.Name,
-                    CreationTime = sourceDocument.CreationTime,
-                    LastUpdatedTime = sourceDocument.LastUpdatedTime
-                });
-
-                return CreateDocumentWithDetailsDto(project, sourceDocument);
-            }
-
             if (HostEnvironment.IsDevelopment())
             {
-                return await GetDocumentAsync();
+                return await GetDocumentAsync(documentName, project, languageCode, version);
             }
 
             var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
             if (document == null)
             {
-                return await GetDocumentAsync();
+                return await GetDocumentAsync(documentName, project, languageCode, version);
             }
 
             //Only the latest version (dev) of the document needs to update the cache.
             if (!project.LatestVersionBranchName.IsNullOrWhiteSpace() &&
                 document.Version == project.LatestVersionBranchName &&
-                //TODO: Configurable cache time?
-                document.LastCachedTime + TimeSpan.FromHours(2) < DateTime.Now)
+                document.LastCachedTime + _cacheTimeout < DateTime.Now)
             {
-                return await GetDocumentAsync();
+                return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }
 
-            var cacheKey = $"DocumentUpdateInfo{document.ProjectId}#{document.Name}#{document.LanguageCode}#{document.Version}";
+            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, document.Name, document.LanguageCode, document.Version);
             await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
             {
                 Name = document.Name,
                 CreationTime = document.CreationTime,
                 LastUpdatedTime = document.LastUpdatedTime,
+                LastSignificantUpdateTime = document.LastSignificantUpdateTime
             });
 
             return CreateDocumentWithDetailsDto(project, document);
@@ -249,6 +243,63 @@ namespace Volo.Docs.Documents
             documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
             documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
             return documentDto;
+        }
+
+        private async Task<DocumentWithDetailsDto> GetDocumentAsync(string documentName, Project project, string languageCode, string version, Document oldDocument = null)
+        {
+            Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
+
+            var source = _documentStoreFactory.Create(project.DocumentStoreType);
+            var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version, oldDocument?.LastSignificantUpdateTime);
+
+            await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version);
+            await _documentRepository.InsertAsync(sourceDocument, true);
+
+            Logger.LogInformation($"Document retrieved: {documentName}");
+
+            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version);
+            await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
+            {
+                Name = sourceDocument.Name,
+                CreationTime = sourceDocument.CreationTime,
+                LastUpdatedTime = sourceDocument.LastUpdatedTime,
+                LastSignificantUpdateTime = sourceDocument.LastSignificantUpdateTime
+            });
+
+            return CreateDocumentWithDetailsDto(project, sourceDocument);
+        }
+
+        private TimeSpan GetCacheTimeout()
+        {
+            var value = _configuration["Volo.Docs:DocumentCacheTimeoutInterval"];
+            if (value.IsNullOrEmpty())
+            {
+                return TimeSpan.FromHours(6);
+            }
+
+            return TimeSpan.Parse(value);
+        }
+
+        private TimeSpan GetDocumentResourceAbsoluteExpirationTimeout()
+        {
+            var value = _configuration["Volo.Docs:DocumentResource.AbsoluteExpirationRelativeToNow"];
+            if (value.IsNullOrEmpty())
+            {
+                return TimeSpan.FromHours(6);
+            }
+
+            return TimeSpan.Parse(value);
+        }
+
+        private TimeSpan GetDocumentResourceSlidingExpirationTimeout()
+        {
+            var value = _configuration["Volo.Docs:DocumentResource.SlidingExpiration"];
+            if (value.IsNullOrEmpty())
+            {
+                return TimeSpan.FromMinutes(30);
+            }
+
+            return TimeSpan.Parse(value);
         }
     }
 }

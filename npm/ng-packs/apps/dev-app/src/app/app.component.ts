@@ -1,5 +1,4 @@
-import { LazyLoadService } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,18 +7,4 @@ import { Component, OnInit } from '@angular/core';
     <router-outlet></router-outlet>
   `,
 })
-export class AppComponent implements OnInit {
-  constructor(private lazyLoadService: LazyLoadService) {}
-
-  ngOnInit() {
-    this.lazyLoadService
-      .load(
-        ['fontawesome-all.min.css', 'fontawesome-v4-shims.min.css'],
-        'style',
-        null,
-        'head',
-        'afterbegin',
-      )
-      .subscribe();
-  }
-}
+export class AppComponent {}

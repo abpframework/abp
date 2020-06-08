@@ -29,7 +29,7 @@
     "ApiKey": "API key",
     "UserNameNotFound": "There is no user with username {0}",
     "SuccessfullyAddedToNewsletter": "Thanks you for subscribing to our newsletter!",
-    "ManageProfile": "Manage your profile",
+    "MyProfile": "My profile",
     "EmailNotValid": "Please enter a valid email address."
    }
 }

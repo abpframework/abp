@@ -42,7 +42,9 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   backgroundColor: string;
 
-  @ViewChild('container')
+  isHomeShow = true;
+
+  @ViewChild('container', { static: false })
   containerRef: ElementRef<HTMLDivElement>;
 
   get statusText(): string {
@@ -51,16 +53,21 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   ngOnInit() {
     this.backgroundColor =
-      snq(() => window.getComputedStyle(document.body).getPropertyValue('background-color')) || '#fff';
+      snq(() => window.getComputedStyle(document.body).getPropertyValue('background-color')) ||
+      '#fff';
   }
 
   ngAfterViewInit() {
     if (this.customComponent) {
-      const customComponentRef = this.cfRes.resolveComponentFactory(this.customComponent).create(this.injector);
+      const customComponentRef = this.cfRes
+        .resolveComponentFactory(this.customComponent)
+        .create(this.injector);
       customComponentRef.instance.errorStatus = this.status;
       customComponentRef.instance.destroy$ = this.destroy$;
       this.appRef.attachView(customComponentRef.hostView);
-      this.containerRef.nativeElement.appendChild((customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
+      this.containerRef.nativeElement.appendChild(
+        (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
+      );
       customComponentRef.changeDetectorRef.detectChanges();
     }
 

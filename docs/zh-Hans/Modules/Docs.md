@@ -326,7 +326,7 @@ There are no projects yet!
   {"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs/zh-Hans/","GitHubAccessToken":"***","GitHubUserAgent":""}
   ```
 
-  注意 `GitHubAccessToken` 用 `***` 掩盖. 这是一个私人令牌，你必须从GitHub获取它. 请参阅 https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
+  注意 `GitHubAccessToken` 用 `***` 掩盖. 这是一个私人令牌,你必须从GitHub获取它. 请参阅 https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
 
 - MainWebsiteUrl: `/` 
 
@@ -338,7 +338,7 @@ There are no projects yet!
 INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939658', N'ABP framework (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}', N'/', N'master', N'')
 ```
 
-请注意，`GitHubAccessToken` 被屏蔽了.它是一个私人令牌,你必须获得自己的令牌并替换 `***` 字符串.
+请注意,`GitHubAccessToken` 被屏蔽了.它是一个私人令牌,你必须获得自己的令牌并替换 `***` 字符串.
 
 现在你可以运行应用程序并导航到 `/Documents`.
 
@@ -378,9 +378,9 @@ INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocume
 INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP framework (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'')
 ```
 
-添加上面的一个示例项目后运行该应用程序. 在菜单中你会看到`文档` 链接，点击菜单链接打开文档页面.
+添加上面的一个示例项目后运行该应用程序. 在菜单中你会看到`文档` 链接,点击菜单链接打开文档页面.
 
-到目前为止, 我们已经从abp.io网站创建了一个新的应用程序，并为Docs模块做好准备.
+到目前为止, 我们已经从abp.io网站创建了一个新的应用程序,并为Docs模块做好准备.
 
 ### 7- 添加一个新文档
 
@@ -454,7 +454,7 @@ public class Person
 }
 ```
 
-因为并不是项目中的每个文档都有章节或者不需要所有的参数,你必须声明哪些参数将用于对文档进行分段，在文档的任何地方都可以使用JSON块.
+因为并不是项目中的每个文档都有章节或者不需要所有的参数,你必须声明哪些参数将用于对文档进行分段,在文档的任何地方都可以使用JSON块.
 
 例如 [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/blob/master/en/getting-started.md):
 
@@ -570,7 +570,7 @@ This document assumes that you prefer to use **{{ UI_Value }}** as the UI framew
 
 ![Navigation menu](../images/docs-module_download-sample-navigation-menu.png)
 
-最后，为您的项目添加了一个新的Docs模块, 该模块由GitHub提供.
+最后,为你的项目添加了一个新的Docs模块, 该模块由GitHub提供.
 
 ## 全文搜索(Elastic Search)
 

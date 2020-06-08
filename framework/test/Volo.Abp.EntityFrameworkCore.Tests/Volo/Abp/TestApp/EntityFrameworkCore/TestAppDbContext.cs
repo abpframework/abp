@@ -17,6 +17,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
         public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
         
+        public DbSet<Author> Author { get; set; }
+
         public TestAppDbContext(DbContextOptions<TestAppDbContext> options) 
             : base(options)
         {

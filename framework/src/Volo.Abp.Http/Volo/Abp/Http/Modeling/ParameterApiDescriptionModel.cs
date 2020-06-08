@@ -1,4 +1,5 @@
 using System;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -9,7 +10,9 @@ namespace Volo.Abp.Http.Modeling
 
         public string Name { get; set; }
 
-        public string TypeAsString { get; set; }
+        public string Type { get; set; }
+
+        public string TypeSimple { get; set; }
 
         public bool IsOptional { get; set; }
 
@@ -32,7 +35,8 @@ namespace Volo.Abp.Http.Modeling
             {
                 Name = name,
                 NameOnMethod = nameOnMethod,
-                TypeAsString = type?.GetFullNameWithAssemblyName(),
+                Type = type != null ? TypeHelper.GetFullNameHandlingNullableAndGenerics(type) : null,
+                TypeSimple = type != null ? TypeHelper.GetSimplifiedName(type) : null,
                 IsOptional = isOptional,
                 DefaultValue = defaultValue,
                 ConstraintTypes = constraintTypes,

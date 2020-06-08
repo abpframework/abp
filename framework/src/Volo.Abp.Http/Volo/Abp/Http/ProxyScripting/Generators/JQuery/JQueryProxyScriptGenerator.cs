@@ -32,6 +32,8 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
                 AddModuleScript(script, module);
             }
 
+            AddInitializedEventTrigger(script);
+
             return script.ToString();
         }
 
@@ -56,7 +58,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
 
         private static void AddControllerScript(StringBuilder script, ControllerApiDescriptionModel controller)
         {
-            var controllerName = GetNormalizedTypeName(controller.TypeAsString);
+            var controllerName = GetNormalizedTypeName(controller.Type);
 
             script.AppendLine($"  // controller {controllerName}");
             script.AppendLine();
@@ -129,7 +131,7 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             script.AppendLine("        url: abp.appPath + '" + ProxyScriptingHelper.GenerateUrlWithParameters(action) + "',");
             script.Append("        type: '" + httpMethod + "'");
 
-            if (action.ReturnValue.TypeAsString == typeof(void).GetFullNameWithAssemblyName())
+            if (action.ReturnValue.Type == typeof(void).FullName)
             {
                 script.AppendLine(",");
                 script.Append("        dataType: null");
@@ -188,6 +190,12 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             }
 
             return result;
+        }
+        
+        private static void AddInitializedEventTrigger(StringBuilder script)
+        {
+            script.AppendLine();
+            script.AppendLine("abp.event.trigger('abp.serviceProxyScriptInitialized');");
         }
 
         private static string GetNormalizedTypeName(string typeWithAssemblyName)

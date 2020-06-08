@@ -25,7 +25,13 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public string AbpGitHubLocalRepositoryPath { get; set; }
 
         [CanBeNull]
+        public string VoloGitHubLocalRepositoryPath { get; set; }
+
+        [CanBeNull]
         public string TemplateSource { get; set; }
+
+        [CanBeNull]
+        public string ConnectionString { get; set; }
 
         [NotNull]
         public Dictionary<string, string> ExtraProperties { get; set; }
@@ -38,8 +44,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
             UiFramework uiFramework = UiFramework.NotSpecified,
             MobileApp? mobileApp = null,
             [CanBeNull] string abpGitHubLocalRepositoryPath = null,
+            [CanBeNull] string voloGitHubLocalRepositoryPath = null,
             [CanBeNull] string templateSource = null,
-            Dictionary<string, string> extraProperties = null)
+            Dictionary<string, string> extraProperties = null,
+            [CanBeNull] string connectionString = null)
         {
             SolutionName = Check.NotNull(solutionName, nameof(solutionName));
             TemplateName = templateName;
@@ -48,8 +56,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
             UiFramework = uiFramework;
             MobileApp = mobileApp;
             AbpGitHubLocalRepositoryPath = abpGitHubLocalRepositoryPath;
+            VoloGitHubLocalRepositoryPath = voloGitHubLocalRepositoryPath;
             TemplateSource = templateSource;
             ExtraProperties = extraProperties ?? new Dictionary<string, string>();
+            ConnectionString = connectionString;
         }
     }
 }

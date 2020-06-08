@@ -1,30 +1,26 @@
 # 按钮
 
-ABP框架定义了Tag Helper用于简单的创建bootstrap按钮.
+## 介绍
 
-`<abp-button>`
+`abp-button` 是创建按钮的主要元素.
 
-## 属性
+基本用法:
 
-`<abp-button>` 有7个不同的属性.
+````xml
+<abp-button button-type="Primary">Click Me</abp-button>
+````
 
-* [`button-type`](#button-type)
-* [`size`](#size)
-* [`busy-text`](#busy-text)
-* [`text`](#text)
-* [`icon`](#icon)
-* [`disabled`](#disabled)
-* [`icon-type`](#icon-type)
+## Demo
+
+参阅[按钮Demo页面](https://bootstrap-taghelpers.abp.io/Components/Buttons)查看示例.
+
+## Attributes
 
 ### `button-type`
 
-`button-type` 是一个可选参数. 它的默认值是 `Default`.
+指定按钮的主样式/类型. 应为以下值之一:
 
-`<abp-button button-type="Primary">Button</abp-button>`
-
-你可以为按钮选择以下按钮类型:
-
-* `Default`
+* `Default` (默认值)
 * `Primary`
 * `Secondary`
 * `Success`
@@ -45,11 +41,7 @@ ABP框架定义了Tag Helper用于简单的创建bootstrap按钮.
 
 ### `size`
 
-`size` 是一个可选参数. 它的默认值是 `Default`.
-
-`<abp-button size="Default">Button</abp-button>`
-
-你可以为按钮选择以下size类型:
+指定按钮的大小. 应为以下值之一:
 
 * `Default`
 * `Small`
@@ -62,33 +54,33 @@ ABP框架定义了Tag Helper用于简单的创建bootstrap按钮.
 
 ### `busy-text`
 
-`busy-text` 是一个字符串类型参数. 当按钮繁忙时设置该文本.
+当按钮busy时显示的文本.
 
 ### `text`
 
-`text` 是一个字符串类型参数,显示在按钮上.
+按钮的文本. 如果你只想为为按钮设置文本,这是一种快捷方式. 例:
+
+````xml
+<abp-button button-type="Primary" text="Click Me" />
+````
+
+在这个示例中,你可以使用 self-closing 标签将其缩短.
 
 ### `icon`
 
-`icon` 是一个字符串类型参数. 它的值取决于[`icon-type`](#`icon-type`). 默认情况下,我们对图标使用[Font Awesome](https://fontawesome.com/). 要使用它,你需要将 `icon` 参数设置为图标名称. 
+设置按钮的图标.  默认情况下它使用[Font Awesome](https://fontawesome.com/)图标库. 例:
 
-##### 示例
-
-[fa-address-card](https://fontawesome.com/icons/address-card): ![fa-address-card](fa-address-card.png "Address Card")
-
-`<abp-button icon="address-card" text="Address" />`
-
-> 不要忘记: 你不需要写前缀,如果你没有更改 `icon-type` ,它会为[Font Awesome](https://fontawesome.com/)图标自动添加 `fa` 前缀.
-
-### `disabled`
-
-`disabled` 是一个布尔类型参数. 如果你设值为 `true`, 按钮会被禁用.
+````xml
+<abp-button icon="address-card" text="Address" />
+````
 
 ### `icon-type`
 
-`icon-type` 是一个可选参数。它的默认值是 `FontAwesome`. 你可以创建自己的图标类型提供程序并更改它.
+如果你不想使用font-awesome,你有两个选项:
 
-你可以为按钮选择以下图标类型:
+1. 设置 `icon-type` 为 `Other`,并为你的按钮编写图标样式.
+2. 如果你不使用图标,请手动使用opening和closing标签,并在标签内写任何代码.
 
-* `FontAwesome`
-* `Other`
+### `disabled`
+
+设置为 `true` 禁用按钮.

@@ -438,20 +438,31 @@
             "index": "apps/dev-app/src/index.html",
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
-            "tsConfig": "apps/dev-app/tsconfig.app.json",
+            "tsConfig": "apps/dev-app/tsconfig.prod.json",
             "aot": false,
             "extractCss": true,
             "styles": [
-              "apps/dev-app/src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
+              },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": true,
                 "bundleName": "fontawesome-all.min"
               },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
-              }
+              },
+              "apps/dev-app/src/styles.scss"
             ],
             "scripts": []
           },
@@ -484,6 +495,15 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "internal": {
+              "tsConfig": "apps/dev-app/tsconfig.dev.json",
+              "fileReplacements": [
+                {
+                  "replace": "apps/dev-app/src/environments/environment.ts",
+                  "with": "apps/dev-app/src/environments/environment.internal.ts"
+                }
+              ]
             }
           }
         },
@@ -495,6 +515,9 @@
           "configurations": {
             "production": {
               "browserTarget": "dev-app:build:production"
+            },
+            "internal": {
+              "browserTarget": "dev-app:build:internal"
             }
           }
         },
@@ -506,12 +529,20 @@
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
-          "options": {}
+          "options": {
+            "tsConfig": [
+              "apps/dev-app/tsconfig.dev.json",
+              "apps/dev-app/tsconfig.prod.json",
+              "apps/dev-app/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
         }
       }
     }
   },
   "cli": {
     "analytics": false
-  }
+  },
+  "defaultProject": "dev-app"
 }

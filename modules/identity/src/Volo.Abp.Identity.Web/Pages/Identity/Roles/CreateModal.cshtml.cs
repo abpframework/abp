@@ -9,19 +9,24 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
         [BindProperty]
         public RoleInfoModel Role { get; set; }
 
-        private readonly IIdentityRoleAppService _identityRoleAppService;
+        protected IIdentityRoleAppService IdentityRoleAppService { get; }
 
         public CreateModalModel(IIdentityRoleAppService identityRoleAppService)
         {
-            _identityRoleAppService = identityRoleAppService;
+            IdentityRoleAppService = identityRoleAppService;
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual Task<IActionResult> OnGetAsync()
+        {
+            return Task.FromResult<IActionResult>(Page());
+        }
+
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
 
             var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleCreateDto>(Role);
-            await _identityRoleAppService.CreateAsync(input);
+            await IdentityRoleAppService.CreateAsync(input);
 
             return NoContent();
         }

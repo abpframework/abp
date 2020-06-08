@@ -29,7 +29,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             _projectAppService = projectAppService;
         }
 
-        public async Task<ActionResult> OnGetAsync(string source)
+        public virtual async Task<ActionResult> OnGetAsync(string source)
         {
             if (source != null && source.ToLowerInvariant() == "github")
             {
@@ -42,7 +42,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             if (GithubProject != null)
             {

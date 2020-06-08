@@ -15,7 +15,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 {
     public class RegisterModel : AccountPageModel
     {
-        private readonly IAccountAppService _accountAppService;
+        protected IAccountAppService AccountAppService { get; }
 
         [BindProperty(SupportsGet = true)]
         public string ReturnUrl { get; set; }
@@ -28,15 +28,16 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public RegisterModel(IAccountAppService accountAppService)
         {
-            _accountAppService = accountAppService;
+            AccountAppService = accountAppService;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             await CheckSelfRegistrationAsync();
+
+            return Page();
         }
 
-        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
@@ -51,14 +52,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 UserName = Input.UserName
             };
 
-            var userDto = await _accountAppService.RegisterAsync(registerDto);
+            var userDto = await AccountAppService.RegisterAsync(registerDto);
             var user = await UserManager.GetByIdAsync(userDto.Id);
 
             await UserManager.SetEmailAsync(user, Input.EmailAddress);
 
             await SignInManager.SignInAsync(user, isPersistent: false);
 
-            return Redirect(ReturnUrl ?? "/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+            return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()

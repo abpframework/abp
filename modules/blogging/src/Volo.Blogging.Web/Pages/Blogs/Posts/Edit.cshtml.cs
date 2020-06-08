@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
+using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
@@ -33,21 +34,25 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _authorization = authorization;
         }
 
-        public async Task<ActionResult> OnGetAsync()
+        public virtual async Task<ActionResult> OnGetAsync()
         {
             if (!await _authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
             {
                 return Redirect("/");
             }
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
+            {
+                return NotFound();
+            }
 
             var postDto = await _postAppService.GetAsync(new Guid(PostId));
             Post = ObjectMapper.Map<PostWithDetailsDto, EditPostViewModel>(postDto);
-            Post.Tags = String.Join(", ", postDto.Tags.Select(p=>p.Name).ToArray());
+            Post.Tags = String.Join(", ", postDto.Tags.Select(p => p.Name).ToArray());
 
             return Page();
         }
 
-        public async Task<ActionResult> OnPostAsync()
+        public virtual async Task<ActionResult> OnPostAsync()
         {
             var post = new UpdatePostDto
             {
@@ -56,7 +61,10 @@ namespace Volo.Blogging.Pages.Blog.Posts
                 Url = Post.Url,
                 CoverImage = Post.CoverImage,
                 Content = Post.Content,
-                Tags = Post.Tags
+                Tags = Post.Tags,
+                Description = Post.Description.IsNullOrEmpty() ?
+                    Post.Content.Truncate(PostConsts.MaxSeoFriendlyDescriptionLength) :
+                    Post.Description
             };
 
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
@@ -91,6 +99,9 @@ namespace Volo.Blogging.Pages.Blog.Posts
         [HiddenInput]
         [StringLength(PostConsts.MaxContentLength)]
         public string Content { get; set; }
+
+        [StringLength(PostConsts.MaxDescriptionLength)]
+        public string Description { get; set; }
 
         public string Tags { get; set; }
     }

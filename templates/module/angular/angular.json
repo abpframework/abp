@@ -22,16 +22,29 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "extractCss": true,
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap.min"
+              },
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-v4-shims.min"
+              }
             ],
             "scripts": []
           },
@@ -48,7 +61,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -57,14 +69,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
-                }
-              ]
-            },
-            "hmr": {
-              "fileReplacements": [
+                },
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hmr.ts"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -78,10 +86,6 @@
           "configurations": {
             "production": {
               "browserTarget": "myProjectName:build:production"
-            },
-            "hmr": {
-              "hmr": true,
-              "browserTarget": "myProjectName:build:hmr"
             }
           }
         },
@@ -98,14 +102,27 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap.min"
+              },
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-v4-shims.min"
+              }
             ],
             "scripts": []
           }
@@ -113,8 +130,14 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"],
-            "exclude": ["**/node_modules/**"]
+            "tsConfig": [
+              "tsconfig.app.json",
+              "tsconfig.spec.json",
+              "e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
@@ -142,6 +165,11 @@
           "options": {
             "tsConfig": "projects/my-project-name/tsconfig.lib.json",
             "project": "projects/my-project-name/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-project-name/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -177,6 +205,11 @@
           "options": {
             "tsConfig": "projects/my-project-name-config/tsconfig.lib.json",
             "project": "projects/my-project-name-config/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/my-project-name-config/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -202,5 +235,8 @@
       }
     }
   },
-  "defaultProject": "myProjectName"
+  "defaultProject": "myProjectName",
+  "cli": {
+    "analytics": false
+  }
 }

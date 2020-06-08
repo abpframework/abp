@@ -19,12 +19,12 @@ namespace Volo.Abp.IdentityServer
             Cache = cache;
         }
         
-        public async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
+        public virtual async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
         {
             await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
         }
 
-        public async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
+        public virtual async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
         {
             await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
         }

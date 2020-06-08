@@ -43,7 +43,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private string ProcessReferenceNodes(string folder, XmlDocument doc, List<NugetPackageInfoWithModuleName> nugetPackageList, string localPathPrefix, string sourceFile = "src")
         {
-            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.Abp')]");
+            var nodes = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]");
 
             if (nodes == null)
             {
@@ -66,7 +66,8 @@ namespace Volo.Abp.Cli.ProjectModification
                         moduleName = Directory.GetParent(Directory.GetParent(Path.GetDirectoryName(localProject)).FullName).Name;
 
                         if (oldNodeIncludeValue.EndsWith(".test", StringComparison.InvariantCultureIgnoreCase) ||
-                            oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase))
+                            oldNodeIncludeValue.EndsWith(".tests", StringComparison.InvariantCultureIgnoreCase) ||
+                            oldNodeIncludeValue.EndsWith(".testbase", StringComparison.InvariantCultureIgnoreCase))
                         {
                             tempSourceFile = "test";
                         }

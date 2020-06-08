@@ -9,6 +9,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { ManageProfileComponent } from './components/manage-profile/manage-profile.component';
 import { RegisterComponent } from './components/register/register.component';
+import { eAccountComponents } from './enums/components';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -21,7 +22,7 @@ const routes: Routes = [
         component: ReplaceableRouteContainerComponent,
         data: {
           replaceableComponent: {
-            key: 'Account.LoginComponent',
+            key: eAccountComponents.Login,
             defaultComponent: LoginComponent,
           } as ReplaceableComponents.RouteData<LoginComponent>,
         },
@@ -31,7 +32,7 @@ const routes: Routes = [
         component: ReplaceableRouteContainerComponent,
         data: {
           replaceableComponent: {
-            key: 'Account.RegisterComponent',
+            key: eAccountComponents.Register,
             defaultComponent: RegisterComponent,
           } as ReplaceableComponents.RouteData<RegisterComponent>,
         },
@@ -42,7 +43,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: {
           replaceableComponent: {
-            key: 'Account.ManageProfileComponent',
+            key: eAccountComponents.ManageProfile,
             defaultComponent: ManageProfileComponent,
           } as ReplaceableComponents.RouteData<ManageProfileComponent>,
         },

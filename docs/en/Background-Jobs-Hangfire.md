@@ -40,4 +40,45 @@ public class YourModule : AbpModule
 
 ## Configuration
 
-TODO...
+You can install any storage for Hangfire. The most common one is SQL Server (see the [Hangfire.SqlServer](https://www.nuget.org/packages/Hangfire.SqlServer) NuGet package).
+
+After you have installed these NuGet packages, you need to configure your project to use Hangfire.
+
+1.First, we change the `Module` class (example: `<YourProjectName>HttpApiHostModule`) to add Hangfire configuration of the storage and connection string in the `ConfigureServices` method:
+
+````csharp
+  public override void ConfigureServices(ServiceConfigurationContext context)
+  {
+      var configuration = context.Services.GetConfiguration();
+      var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+      //... other configarations.
+
+      ConfigureHangfire(context, configuration);
+  }
+
+  private void ConfigureHangfire(ServiceConfigurationContext context, IConfiguration configuration)
+  {
+      context.Services.AddHangfire(config =>
+      {
+          config.UseSqlServerStorage(configuration.GetConnectionString("Default"));
+      });
+  }
+````
+
+2. We need to add `UseHangfireServer` call in the `OnApplicationInitialization` method in `Module` class
+
+If you want to use hangfire's dashboard, you can add it, too: by `UseHangfireDashboard`
+
+````csharp
+ public override void OnApplicationInitialization(ApplicationInitializationContext context)
+ {
+    var app = context.GetApplicationBuilder();
+            
+    // ... others
+    
+    app.UseHangfireServer();
+    app.UseHangfireDashboard();
+ 
+ }
+````

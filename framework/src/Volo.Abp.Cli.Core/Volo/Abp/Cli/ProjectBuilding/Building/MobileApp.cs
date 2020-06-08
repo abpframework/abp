@@ -17,9 +17,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             {
                 case MobileApp.ReactNative:
                     return "react-native";
-                default:
-                    return null;
             }
+
+            throw new Exception("Mobile app folder name is not set!");
         }
     }
 }

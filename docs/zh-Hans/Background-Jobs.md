@@ -176,3 +176,6 @@ public class MyModule : AbpModule
 * [Hangfire 后台作业管理器](Background-Jobs-Hangfire.md)
 * [RabbitMQ 后台作业管理器](Background-Jobs-RabbitMq.md)
 * [Quartz 后台作业管理器](Background-Jobs-Quartz.md)
+
+## 另请参阅
+* [后台工作者](Background-Workers.md)

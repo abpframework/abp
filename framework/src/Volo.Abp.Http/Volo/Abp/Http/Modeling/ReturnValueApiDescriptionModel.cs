@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Modeling
@@ -6,7 +7,9 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ReturnValueApiDescriptionModel
     {
-        public string TypeAsString { get; set; }
+        public string Type { get; set; }
+
+        public string TypeSimple { get; set; }
 
         private ReturnValueApiDescriptionModel()
         {
@@ -15,9 +18,12 @@ namespace Volo.Abp.Http.Modeling
 
         public static ReturnValueApiDescriptionModel Create(Type type)
         {
+            var unwrappedType = AsyncHelper.UnwrapTask(type);
+
             return new ReturnValueApiDescriptionModel
             {
-                TypeAsString = AsyncHelper.UnwrapTask(type).GetFullNameWithAssemblyName()
+                Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(unwrappedType),
+                TypeSimple = TypeHelper.GetSimplifiedName(unwrappedType)
             };
         }
     }

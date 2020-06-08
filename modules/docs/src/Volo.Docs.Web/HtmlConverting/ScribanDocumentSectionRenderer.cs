@@ -7,16 +7,17 @@ using Newtonsoft.Json;
 using Scriban;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Volo.Docs.Documents;
+using Volo.Abp;
+using Volo.Extensions;
 
 namespace Volo.Docs.HtmlConverting
 {
     public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
     {
-        private const string jsonOpener = "````json";
-        private const string jsonCloser = "````";
-        private const string docs_param = "//[doc-params]";
-        private const string docs_templates = "//[doc-template]";
+        private const string JsonOpener = "````json";
+        private const string JsonCloser = "````";
+        private const string DocsParam = "//[doc-params]";
+        private const string DocsTemplates = "//[doc-template]";
 
         public ILogger<ScribanDocumentSectionRenderer> Logger { get; set; }
 
@@ -40,6 +41,7 @@ namespace Volo.Docs.HtmlConverting
             }
 
             var result = await scribanTemplate.RenderAsync(parameters);
+
             return RemoveOptionsJson(result);
         }
 
@@ -47,7 +49,7 @@ namespace Volo.Docs.HtmlConverting
         {
             try
             {
-                if (!document.Contains(jsonOpener) || !document.Contains(docs_param))
+                if (!document.Contains(JsonOpener) || !document.Contains(DocsParam))
                 {
                     return new Dictionary<string, List<string>>();
                 }
@@ -59,9 +61,14 @@ namespace Volo.Docs.HtmlConverting
                     return new Dictionary<string, List<string>>();
                 }
 
-                var pureJson = insideJsonSection.Replace(docs_param, "").Trim();
+                var pureJson = insideJsonSection.Replace(DocsParam, "").Trim();
 
-                return JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(pureJson);
+                if (!JsonConvertExtensions.TryDeserializeObject<Dictionary<string, List<string>>>(pureJson, out var availableParameters))
+                {
+                    throw new UserFriendlyException("ERROR-20200327: Cannot validate JSON content for `AvailableParameters`!");
+                }
+
+                return await Task.FromResult(availableParameters);
             }
             catch (Exception)
             {
@@ -70,12 +77,13 @@ namespace Volo.Docs.HtmlConverting
             }
         }
 
-        private string RemoveOptionsJson(string document)
+        private static string RemoveOptionsJson(string document)
         {
             var orgDocument = document;
+
             try
             {
-                if (!document.Contains(jsonOpener) || !document.Contains(docs_param))
+                if (!document.Contains(JsonOpener) || !document.Contains(DocsParam))
                 {
                     return orgDocument;
                 }
@@ -88,8 +96,9 @@ namespace Volo.Docs.HtmlConverting
                 }
 
                 return document.Remove(
-                            jsonBeginningIndex - jsonOpener.Length, (jsonEndingIndex + jsonCloser.Length) - (jsonBeginningIndex - jsonOpener.Length)
-                        );
+                    jsonBeginningIndex - JsonOpener.Length,
+                    (jsonEndingIndex + JsonCloser.Length) - (jsonBeginningIndex - JsonOpener.Length)
+                );
             }
             catch (Exception)
             {
@@ -97,25 +106,25 @@ namespace Volo.Docs.HtmlConverting
             }
         }
 
-        private (int, int, string) GetJsonBeginEndIndexesAndPureJson(string document)
+        private static (int, int, string) GetJsonBeginEndIndexesAndPureJson(string document)
         {
             var searchedIndex = 0;
 
             while (searchedIndex < document.Length)
             {
-                var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length + searchedIndex;
+                var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length + searchedIndex;
 
                 if (jsonBeginningIndex < 0)
                 {
                     return (-1, -1, "");
                 }
 
-                var jsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(jsonCloser, StringComparison.Ordinal) + jsonBeginningIndex;
+                var jsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(JsonCloser, StringComparison.Ordinal) + jsonBeginningIndex;
                 var insideJsonSection = document[jsonBeginningIndex..jsonEndingIndex];
 
-                if (insideJsonSection.IndexOf(docs_param) < 0)
+                if (insideJsonSection.IndexOf(DocsParam, StringComparison.Ordinal) < 0)
                 {
-                    searchedIndex = jsonEndingIndex + jsonCloser.Length;
+                    searchedIndex = jsonEndingIndex + JsonCloser.Length;
                     continue;
                 }
 
@@ -129,68 +138,84 @@ namespace Volo.Docs.HtmlConverting
         {
             var templates = new List<DocumentPartialTemplateWithValuesDto>();
 
-            while (documentContent.Contains(jsonOpener))
+            while (documentContent.Contains(JsonOpener))
             {
                 var afterJsonOpener = documentContent.Substring(
-                    documentContent.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
+                    documentContent.IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length
+                );
 
                 var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal));
+                    afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal)
+                );
 
                 documentContent = afterJsonOpener.Substring(
-                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
+                    afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal) + JsonCloser.Length
+                );
 
-                if (!betweenJsonOpenerAndCloser.Contains(docs_templates))
+                if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
                 {
                     continue;
                 }
 
-                var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
+                var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) + DocsTemplates.Length);
 
-                var template = JsonConvert.DeserializeObject<DocumentPartialTemplateWithValuesDto>(json);
+                if (!JsonConvertExtensions.TryDeserializeObject<DocumentPartialTemplateWithValuesDto>(json, out var template))
+                {
+                    throw new UserFriendlyException($"ERROR-20200327: Cannot validate JSON content for `AvailableParameters`!");
+                }
 
                 templates.Add(template);
             }
 
-            return templates;
+            return await Task.FromResult(templates);
         }
 
-        private string SetPartialTemplates(string document, List<DocumentPartialTemplateContent> templates)
+        private static string SetPartialTemplates(string document, IReadOnlyCollection<DocumentPartialTemplateContent> templates)
         {
             var newDocument = new StringBuilder();
 
-            while (document.Contains(jsonOpener))
+            while (document.Contains(JsonOpener))
             {
                 var beforeJson = document.Substring(0,
-                    document.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
+                    document.IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length
+                );
 
                 var afterJsonOpener = document.Substring(
-                    document.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
+                    document.IndexOf(JsonOpener, StringComparison.Ordinal) + JsonOpener.Length
+                );
 
                 var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal));
+                    afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal)
+                );
 
-                if (!betweenJsonOpenerAndCloser.Contains(docs_templates))
+                if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
                 {
                     document = afterJsonOpener.Substring(
-                        afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
-                    newDocument.Append(beforeJson + betweenJsonOpenerAndCloser + jsonCloser);
+                        afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal) + JsonCloser.Length
+                    );
+
+                    newDocument.Append(beforeJson + betweenJsonOpenerAndCloser + JsonCloser);
                     continue;
                 }
 
-                var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
+                var json = betweenJsonOpenerAndCloser.Substring(
+                    betweenJsonOpenerAndCloser.IndexOf(DocsTemplates, StringComparison.Ordinal) + DocsTemplates.Length
+                );
 
-                var templatePath = JsonConvert.DeserializeObject<DocumentPartialTemplateWithValuesDto>(json)?.Path;
+                if (JsonConvertExtensions.TryDeserializeObject<DocumentPartialTemplateWithValuesDto>(json, out var documentPartialTemplateWithValuesDto))
+                {
+                    var template = templates.FirstOrDefault(t => t.Path == documentPartialTemplateWithValuesDto.Path);
 
-                var template = templates.FirstOrDefault(t => t.Path == templatePath);
+                    var beforeTemplate = document.Substring(0,
+                        document.IndexOf(JsonOpener, StringComparison.Ordinal)
+                    );
 
-                var beforeTemplate = document.Substring(0,
-                    document.IndexOf(jsonOpener, StringComparison.Ordinal));
+                    newDocument.Append(beforeTemplate + template?.Content + JsonCloser);
 
-                newDocument.Append(beforeTemplate + template?.Content + jsonCloser);
-
-                document = afterJsonOpener.Substring(
-                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
+                    document = afterJsonOpener.Substring(
+                        afterJsonOpener.IndexOf(JsonCloser, StringComparison.Ordinal) + JsonCloser.Length
+                    );
+                }
             }
 
             newDocument.Append(document);

@@ -3,3 +3,7 @@ export function noop() {
   const fn = function() {};
   return fn;
 }
+
+export function isUndefinedOrEmptyString(value: unknown): boolean {
+  return value === undefined || value === '';
+}

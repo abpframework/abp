@@ -40,13 +40,6 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             builder.ConfigureFeatureManagement();
             builder.ConfigureTenantManagement();
 
-            /* Configure customizations for entities from the modules included  */
-
-            builder.Entity<IdentityUser>(b =>
-            {
-                b.ConfigureCustomUserProperties();
-            });
-
             /* Configure your own tables/entities inside the ConfigureMyProjectName method */
 
             builder.ConfigureMyProjectName();

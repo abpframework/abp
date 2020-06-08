@@ -119,15 +119,16 @@
             };
 
             var setQueryString = function () {
-                clearQueryString();
-
-                var uri = window.location.href.toString();
-
                 var comboboxes = $(".doc-section-combobox");
-
                 if (comboboxes.length < 1) {
                     return;
                 }
+
+                var hash = document.location.hash;
+
+                clearQueryString();
+
+                var uri = window.location.href.toString();
 
                 var new_uri = uri + "?";
 
@@ -142,7 +143,7 @@
                     }
                 }
 
-                window.history.replaceState({}, document.title, new_uri);
+                window.history.replaceState({}, document.title, new_uri + hash);
             };
 
             var getTenYearsLater = function () {
@@ -202,31 +203,31 @@
                     'YandexBot',
                     'msnbot',
                     'Rambler',
-                    'Yahoo', 
-                    'AbachoBOT', 
-                    'accoona', 
+                    'Yahoo',
+                    'AbachoBOT',
+                    'accoona',
                     'AcoiRobot',
                     'ASPSeek',
-                    'CrocCrawler', 
+                    'CrocCrawler',
                     'Dumbot',
-                    'FAST-WebCrawler', 
-                    'GeonaBot', 
+                    'FAST-WebCrawler',
+                    'GeonaBot',
                     'Gigabot',
-                    'Lycos', 
-                    'MSRBOT', 
+                    'Lycos',
+                    'MSRBOT',
                     'Scooter',
                     'AltaVista',
-                    'IDBot', 
-                    'eStyle', 
-                    'Scrubby', 
-                    'Slurp', 
-                    'DuckDuckBot', 
-                    'Baiduspider', 
-                    'VoilaBot', 
-                    'ExaLead', 
-                    'Search Dog', 
-                    'MSN Bot' , 
-                    'BingBot' 
+                    'IDBot',
+                    'eStyle',
+                    'Scrubby',
+                    'Slurp',
+                    'DuckDuckBot',
+                    'Baiduspider',
+                    'VoilaBot',
+                    'ExaLead',
+                    'Search Dog',
+                    'MSN Bot',
+                    'BingBot'
                 ];
 
                 var agent = navigator.userAgent;
@@ -275,9 +276,8 @@
 
                     if (queryStrings.length <= 0) {
                         returnList.push(key + "=" + $(this).val());
-                        
-                    }
-                    else {
+
+                    } else {
                         for (var k = 0; k < queryStrings.length; k++) {
                             returnList.push(key + "=" + $(this).val() + "&" + queryStrings[k]);
                         }
@@ -290,12 +290,12 @@
             var queryStrings = getQueryStringsFromComboboxes(0);
 
             for (var i = 0; i < queryStrings.length; i++) {
-                html += "<a href=\"" + currentUrl + "?" + queryStrings[i] +"\">" + queryStrings[i]+"</a> "
+                html += "<a href=\"" + currentUrl + "?" + queryStrings[i] + "\">" + queryStrings[i] + "</a> "
             }
 
             $("#crawler_link").html(html);
         };
-
+        
         initNavigationFilter("sidebar-scroll");
 
         initAnchorTags(".docs-page .docs-body");
@@ -309,4 +309,3 @@
     });
 
 })(jQuery);
-

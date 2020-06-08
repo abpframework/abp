@@ -32,17 +32,17 @@ namespace MyCompanyName.MyProjectName
         private void AddLogoutItemToMenu(MenuConfigurationContext context)
         {
             var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
-            var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<MyProjectNameResource>>();
+            var l = context.GetLocalizer<MyProjectNameResource>();
 
             if (currentUser.IsAuthenticated)
             {
                 context.Menu.Items.Add(new ApplicationMenuItem(
-                    "Account.Manage", 
-                    l["ManageYourProfile"], 
+                    "Account.Manage",
+                    l["ManageYourProfile"],
                     $"{_configuration["AuthServer:Authority"].EnsureEndsWith('/')}Account/Manage",
                     icon: "fa fa-cog",
                     order: int.MaxValue - 1001,
-                    null, 
+                    null,
                     "_blank")
                     );
 
@@ -50,7 +50,7 @@ namespace MyCompanyName.MyProjectName
                 context.Menu.Items.Add(new ApplicationMenuItem(
                     "Account.Logout",
                     l["Logout"],
-                    "/Account/Logout",
+                    "~/Account/Logout",
                     "fas fa-power-off",
                     order: int.MaxValue - 1000
                 ));

@@ -7,6 +7,7 @@ using Volo.Abp.Auditing.App.Entities;
 using Volo.Abp.Auditing.App.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Auditing
@@ -14,7 +15,7 @@ namespace Volo.Abp.Auditing
     [DependsOn(
         typeof(AbpTestBaseModule),
         typeof(AbpAutofacModule),
-        typeof(AbpEntityFrameworkCoreModule)
+        typeof(AbpEntityFrameworkCoreSqliteModule)
     )]
     public class AbpAuditingTestModule : AbpModule
     {

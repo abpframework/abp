@@ -7,6 +7,7 @@ using Microsoft.Net.Http.Headers;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
@@ -73,6 +74,13 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                     )
                 )
             );
+
+            await httpContext
+                .RequestServices
+                .GetRequiredService<IExceptionNotifier>()
+                .NotifyAsync(
+                    new ExceptionNotificationContext(exception)
+                );
         }
 
         private Task ClearCacheHeaders(object state)

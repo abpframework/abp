@@ -39,6 +39,43 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             AddWithDependencies(contributorType);
         }
 
+        public void Replace<TSourceContributor, TDestContributorType>(bool includeDependencies = false)
+            where TSourceContributor : IBundleContributor, new()
+            where TDestContributorType : IBundleContributor, new()
+        {
+            Replace(typeof(TSourceContributor), typeof(TDestContributorType), includeDependencies);
+        }
+
+        public void Replace([NotNull] Type sourceContributorType, [NotNull] Type destContributorType, bool includeDependencies = false)
+        {
+            Check.NotNull(sourceContributorType, nameof(sourceContributorType));
+            Check.NotNull(destContributorType, nameof(destContributorType));
+
+            if (!includeDependencies)
+            {
+                _contributors.ReplaceOne(x => x.GetType() == sourceContributorType,
+                    contributor => (IBundleContributor) Activator.CreateInstance(destContributorType));
+            }
+            else
+            {
+                RemoveWithDependencies(sourceContributorType);
+                Add(destContributorType);
+            }
+        }
+        
+        public void Remove<TContributor>(bool includeDependencies = false)
+            where TContributor : IBundleContributor, new()
+        {
+            if (!includeDependencies)
+            {
+                _contributors.RemoveAll(x => x.GetType() == typeof(TContributor));
+            }
+            else
+            {
+                RemoveWithDependencies(typeof(TContributor));
+            }
+        }
+
         public IReadOnlyList<IBundleContributor> GetAll()
         {
             return _contributors.ToImmutableList();
@@ -57,6 +94,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             }
 
             AddInstanceToContributors(contributorType);
+        }
+        
+        private void RemoveWithDependencies(Type contributorType)
+        {
+            foreach (var dependedType in GetDirectDependencies(contributorType))
+            {
+                RemoveWithDependencies(dependedType); //Recursive call
+            }
+
+            _contributors.RemoveAll(x => x.GetType() == contributorType);
         }
 
         private IEnumerable<Type> GetDirectDependencies(Type contributorType)

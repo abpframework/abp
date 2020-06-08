@@ -32,11 +32,18 @@ namespace Volo.Abp.Authorization.Permissions
             return await IsGrantedAsync(PrincipalAccessor.Principal, name);
         }
 
-        public virtual async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
+        public virtual async Task<bool> IsGrantedAsync(
+            ClaimsPrincipal claimsPrincipal, 
+            string name)
         {
             Check.NotNull(name, nameof(name));
 
             var permission = PermissionDefinitionManager.Get(name);
+
+            if (!permission.IsEnabled)
+            {
+                return false;
+            }
 
             var multiTenancySide = claimsPrincipal?.GetMultiTenancySide()
                                    ?? CurrentTenant.GetMultiTenancySide();

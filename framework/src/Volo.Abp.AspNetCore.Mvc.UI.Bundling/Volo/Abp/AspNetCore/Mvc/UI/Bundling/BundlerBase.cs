@@ -46,38 +46,54 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         private void AddFileToBundle(IBundlerContext context, StringBuilder bundleContentBuilder, string fileName)
         {
-            string fileContent = null;
-
-            if (context.IsMinificationEnabled && !IsMinFile(fileName))
-            {
-                var minFileInfo = GetMinFileInfoOrNull(fileName);
-                if (minFileInfo != null)
-                {
-                    Logger.LogDebug($"- {fileName} ({minFileInfo.Length} bytes) - already minified");
-                    fileContent = minFileInfo.ReadAsString();
-                }
-            }
-
-            if (fileContent == null)
-            {
-                fileContent = GetFileContent(context, fileName);
-                Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes) - non minified");
-
-                if (context.IsMinificationEnabled)
-                {
-                    var nonMinifiedSize = fileContent.Length;
-                    fileContent = Minifier.Minify(fileContent, context.BundleRelativePath);
-                    Logger.LogInformation($"  > Minified {fileName} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
-                }
-            }
-
+            var fileContent = GetFileContentConsideringMinification(context, fileName);
             fileContent = ProcessBeforeAddingToTheBundle(context, fileName, fileContent);
             bundleContentBuilder.Append(fileContent);
         }
 
-        protected virtual string GetFileContent(IBundlerContext context, string file)
+        private string GetFileContentConsideringMinification(IBundlerContext context, string fileName)
         {
-            return GetFileInfo(context, file).ReadAsString();
+            var isMinFile = IsMinFile(fileName);
+            if (!context.IsMinificationEnabled || isMinFile)
+            {
+                var fileContent = GetFileInfo(context, fileName).ReadAsString();
+                Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes)");
+                if (context.IsMinificationEnabled && isMinFile)
+                {
+                    Logger.LogDebug("  > Already minified");
+                }
+
+                return fileContent;
+            }
+
+            var minFileInfo = GetMinFileInfoOrNull(fileName);
+            if (minFileInfo != null)
+            {
+                var fileContent = minFileInfo.ReadAsString();
+                Logger.LogDebug($"- {fileName}");
+                Logger.LogDebug($"  > Using the pre-minified file: {minFileInfo.Name} ({fileContent.Length} bytes)");
+                return fileContent;
+            }
+
+            return GetAndMinifyFileContent(context, fileName);
+        }
+
+        private string GetAndMinifyFileContent(IBundlerContext context, string fileName)
+        {
+            var fileContent = GetFileInfo(context, fileName).ReadAsString();
+            var nonMinifiedSize = fileContent.Length;
+            
+            Logger.LogDebug($"- {fileName} ({nonMinifiedSize} bytes) - non minified, minifying...");
+
+            fileContent = Minifier.Minify(
+                fileContent,
+                context.BundleRelativePath,
+                fileName
+            );
+
+            Logger.LogInformation($"  > Minified {fileName} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
+
+            return fileContent;
         }
 
         protected virtual IFileInfo GetFileInfo(IBundlerContext context, string file)

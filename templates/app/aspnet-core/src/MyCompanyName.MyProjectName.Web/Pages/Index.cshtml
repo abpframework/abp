@@ -1,6 +1,10 @@
 ﻿@page
-@inherits MyCompanyName.MyProjectName.Web.Pages.MyProjectNamePage
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MyCompanyName.MyProjectName.Localization
+@using Volo.Abp.Users
 @model MyCompanyName.MyProjectName.Web.Pages.IndexModel
+@inject IHtmlLocalizer<MyProjectNameResource> L
+@inject ICurrentUser CurrentUser
 @section styles {
     <abp-style-bundle>
         <abp-style src="/Pages/Index.css" />
@@ -22,6 +26,6 @@
     <a href="https://abp.io?ref=tmpl" target="_blank" class="btn btn-primary px-4">abp.io</a>
     @if (!CurrentUser.IsAuthenticated)
     {
-        <a abp-button="Primary" href="/Account/Login" class="px-4"><i class="fa fa-sign-in"></i> @L["Login"]</a>
+        <a abp-button="Primary" href="~/Account/Login" class="px-4"><i class="fa fa-sign-in"></i> @L["Login"]</a>
     }
 </div>

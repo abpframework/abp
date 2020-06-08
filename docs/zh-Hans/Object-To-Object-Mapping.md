@@ -145,13 +145,85 @@ options.AddProfile<MyProfile>(validate: true);
 
 > 如果你有多个配置文件,并且只需要为其中几个启用验证,那么首先使用`AddMaps`而不进行验证,然后为你想要验证的每个配置文件使用`AddProfile`.
 
+### 映射对象扩展
+
+[对象扩展系统](Object-Extensions.md) 允许为已存在的类定义额外属性. ABP 框架提供了一个映射定义扩展可以正确的映射两个对象的额外属性.
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<User, UserDto>()
+            .MapExtraProperties();
+    }
+}
+````
+
+如果两个类都是可扩展对象(实现了 `IHasExtraProperties` 接口),建议使用 `MapExtraProperties` 方法. 更多信息请参阅[对象扩展文档](Object-Extensions.md).
+
+### 其他有用的扩展方法
+
+有一些扩展方法可以简化映射代码.
+
+#### 忽视审计属性
+
+当你将一个对象映射到另一个对象时,通常会忽略审核属性.
+
+假设你需要将 `ProductDto` ([DTO](Data-Transfer-Objects.md))映射到Product[实体](Entities.md),该实体是从 `AuditedEntity` 类继承的(该类提供了 `CreationTime`, `CreatorId`, `IHasModificationTime` 等属性).
+
+从DTO映射时你可能想忽略这些基本属性,可以使用 `IgnoreAuditedObjectPropertie()` 方法忽略所有审计属性(而不是手动逐个忽略它们):
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<ProductDto, Product>()
+            .IgnoreAuditedObjectProperties();
+    }
+}
+````
+
+还有更多扩展方法, 如 `IgnoreFullAuditedObjectProperties()` 和 `IgnoreCreationAuditedObjectProperties()`,你可以根据实体类型使用.
+
+> 请参阅[实体文档](Entities.md)中的"*基类和接口的审计属性*"部分了解有关审计属性的更多信息。
+
+#### 忽视其他属性
+
+在AutoMapper中,通常可以编写这样的映射代码来忽略属性:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .ForMember(x => x.CreationTime, map => map.Ignore());
+    }
+}
+````
+
+我们发现它的长度是不必要的并且创建了 `Ignore()` 扩展方法:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .Ignore(x => x.CreationTime);
+    }
+}
+````
+
 ## 高级主题
 
 ### IObjectMapper<TContext> 接口
 
 假设你已经创建了一个**可重用的模块**,其中定义了AutoMapper配置文件,并在需要映射对象时使用 `IObjectMapper`. 根据[模块化](Module-Development-Basics.md)的性质,你的模块可以用于不同的应用程序.
 
-`IObjectMapper` 是一个抽象,可以由最终应用程序替换使用另一个映射库. 这里的问题是你的可重用模块设计为使用AutoMapper，因为它为其定义映射配置文件. 这种情况下即使最终应用程序使用另一个默认对象映射库,你也要保证模块始终使用AutoMapper.
+`IObjectMapper` 是一个抽象,可以由最终应用程序替换使用另一个映射库. 这里的问题是你的可重用模块设计为使用AutoMapper,因为它为其定义映射配置文件. 这种情况下即使最终应用程序使用另一个默认对象映射库,你也要保证模块始终使用AutoMapper.
 
 `IObjectMapper<TContext>`将对象映射器上下文化,你可以为不同的 模块/上下文 使用不同的库.
 
@@ -184,7 +256,7 @@ public class UserAppService : ApplicationService
 
 `UserAppService` 注入 `IObjectMapper<MyModule>`, 它是模块的特定对象映射器,用法与 `IObjectMapper` 完全相同.
 
-上面的示例代码未使用 `ApplicationService` 中定义的 `ObjectMapper` 属性，而是注入了 `IObjectMapper<MyModule>`. 但是 `ApplicationService` 定义了可以在类构造函数中设置的 `ObjectMapperContext` 属性, 因此仍然可以使用基类属性. 示例可以进行以下重写:
+上面的示例代码未使用 `ApplicationService` 中定义的 `ObjectMapper` 属性,而是注入了 `IObjectMapper<MyModule>`. 但是 `ApplicationService` 定义了可以在类构造函数中设置的 `ObjectMapperContext` 属性, 因此仍然可以使用基类属性. 示例可以进行以下重写:
 
 ````csharp
 public class UserAppService : ApplicationService

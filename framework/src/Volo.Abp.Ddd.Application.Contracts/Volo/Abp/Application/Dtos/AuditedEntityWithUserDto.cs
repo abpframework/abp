@@ -5,6 +5,7 @@ namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
     /// This class can be inherited by DTO classes to implement <see cref="IAuditedObject"/> interface.
+    /// It has the <see cref="Creator"/> and <see cref="LastModifier"/> objects as a DTOs represent the related user.
     /// </summary>
     /// <typeparam name="TUserDto">Type of the User DTO</typeparam>
     [Serializable]
@@ -19,6 +20,7 @@ namespace Volo.Abp.Application.Dtos
 
     /// <summary>
     /// This class can be inherited by DTO classes to implement <see cref="IAuditedObject"/> interface.
+    /// It has the <see cref="Creator"/> and <see cref="LastModifier"/> objects as a DTOs represent the related user.
     /// </summary>
     /// <typeparam name="TPrimaryKey">Type of primary key</typeparam>
     /// <typeparam name="TUserDto">Type of the User DTO</typeparam>

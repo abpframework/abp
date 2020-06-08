@@ -6,9 +6,16 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
+using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
+using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.IdentityServer.Tokens;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Validation;
 
@@ -32,6 +39,14 @@ namespace Volo.Abp.IdentityServer
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<IdentityServerAutoMapperProfile>(validate: true);
+            });
+
+            Configure<AbpDistributedEventBusOptions>(options =>
+            {
+                options.EtoMappings.Add<ApiResource, ApiResourceEto>(typeof(AbpIdentityServerDomainModule));
+                options.EtoMappings.Add<Client, ClientEto>(typeof(AbpIdentityServerDomainModule));
+                options.EtoMappings.Add<DeviceFlowCodes, DeviceFlowCodesEto>(typeof(AbpIdentityServerDomainModule));
+                options.EtoMappings.Add<IdentityResource, IdentityResourceEto>(typeof(AbpIdentityServerDomainModule));
             });
 
             AddIdentityServer(context.Services);
@@ -79,6 +94,27 @@ namespace Volo.Abp.IdentityServer
                 identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
                 identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
             }
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityServerModuleExtensionConsts.ModuleName,
+                IdentityServerModuleExtensionConsts.EntityNames.Client,
+                typeof(Client)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityServerModuleExtensionConsts.ModuleName,
+                IdentityServerModuleExtensionConsts.EntityNames.IdentityResource,
+                typeof(IdentityResource)
+            );
+
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityServerModuleExtensionConsts.ModuleName,
+                IdentityServerModuleExtensionConsts.EntityNames.ApiResource,
+                typeof(ApiResource)
+            );
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

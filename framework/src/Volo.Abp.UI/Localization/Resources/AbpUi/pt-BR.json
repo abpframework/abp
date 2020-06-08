@@ -39,6 +39,7 @@
     "PagerFirst": "Primeira",
     "PagerLast": "Última",
     "PagerInfo": "Mostrando _START_ até _END_ de _TOTAL_ registros",
+    "PagerInfo{0}{1}{2}": "Mostrando {0} até {1} de {2} registros",
     "PagerInfoEmpty": "Mostrando 0 até 0 de 0 registros",
     "PagerInfoFiltered": "(filtrado de um total de _MAX_ registros)",
     "NoDataAvailableInDatatable": "Nenhum dado disponível",
@@ -53,6 +54,7 @@
     "404Message": "Página não encontrada",
     "500Message": "Erro interno do servidor",
     "GoHomePage": "Voltar à página principal",
-    "GoBack": "Voltar"
+    "GoBack": "Voltar",
+    "Search": "Procurar"
   }
 }

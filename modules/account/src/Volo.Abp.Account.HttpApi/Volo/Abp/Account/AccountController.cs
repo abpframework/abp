@@ -5,23 +5,23 @@ using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account
 {
-    [RemoteService]
+    [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
     [Area("account")]
     [Route("api/account")]
     public class AccountController : AbpController, IAccountAppService
     {
-        private readonly IAccountAppService _accountAppService;
+        protected IAccountAppService AccountAppService { get; }
 
         public AccountController(IAccountAppService accountAppService)
         {
-            _accountAppService = accountAppService;
+            AccountAppService = accountAppService;
         }
 
         [HttpPost]
         [Route("register")]
-        public Task<IdentityUserDto> RegisterAsync(RegisterDto input)
+        public virtual Task<IdentityUserDto> RegisterAsync(RegisterDto input)
         {
-            return _accountAppService.RegisterAsync(input);
+            return AccountAppService.RegisterAsync(input);
         }
     }
 }

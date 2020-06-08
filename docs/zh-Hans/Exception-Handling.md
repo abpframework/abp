@@ -295,8 +295,8 @@ services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 
 框架会自动抛出以下异常类型:
 
-- 当用户没有权限执行操作时,会抛出 `AbpAuthorizationException` 异常. 有关更多信息,请参阅授权文档(TODO:link).
-- 如果当前请求的输入无效,则抛出`AbpValidationException 异常`. 有关更多信息,请参阅授权文档(TODO:link).
+- 当用户没有权限执行操作时,会抛出 `AbpAuthorizationException` 异常. 有关更多信息,请参阅授权文档[authorization](Authorization.md).
+- 如果当前请求的输入无效,则抛出`AbpValidationException 异常`. 有关更多信息,请参阅[验证文档](Validation.md).
 - 如果请求的实体不存在,则抛出`EntityNotFoundException` 异常. 此异常大多数由 [repositories](Repositories.md) 抛出.
 
 你同样可以在代码中抛出这些类型的异常(虽然很少需要这样做)

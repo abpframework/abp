@@ -14,6 +14,7 @@ import {
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 
 @Component({
   selector: 'abp-roles',
@@ -46,7 +47,9 @@ export class RolesComponent implements OnInit {
 
   sortKey = '';
 
-  @ViewChild('formRef', { read: ElementRef })
+  permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
+
+  @ViewChild('formRef', { static: false, read: ElementRef })
   formRef: ElementRef<HTMLFormElement>;
 
   onVisiblePermissionChange = event => {

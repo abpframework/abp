@@ -3,6 +3,7 @@ using System.Security.Claims;
 using AutoMapper;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 
@@ -82,6 +83,12 @@ namespace Volo.Abp.IdentityServer
             CreateMap<ClientSecret, IdentityServer4.Models.Secret>(MemberList.Destination)
                 .ForMember(dest => dest.Type, opt => opt.Condition(srs => srs != null))
                 .ReverseMap();
+
+            CreateMap<ApiResource, ApiResourceEto>();
+            CreateMap<Client, ClientEto>();
+            CreateMap<DeviceFlowCodes, DeviceFlowCodesEto>();
+            CreateMap<PersistedGrant, PersistedGrantEto>();
+            CreateMap<IdentityResource, IdentityResourceEto>();
         }
     }
 }

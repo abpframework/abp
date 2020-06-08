@@ -1,6 +1,5 @@
 export const environment = {
   production: false,
-  hmr: false,
   application: {
     name: 'MyProjectName',
     logoUrl: '',
@@ -18,8 +17,5 @@ export const environment = {
     default: {
       url: 'https://localhost:44300',
     },
-  },
-  localization: {
-    defaultResourceName: 'MyProjectName',
   },
 };
