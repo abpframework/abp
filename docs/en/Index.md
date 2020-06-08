@@ -8,8 +8,8 @@ Explore the left navigation menu to deep dive in the documentation.
 
 Easiest way to start a new project with ABP is to use the startup templates:
 
-* [ASP.NET Core MVC (Razor Pages) UI Startup Template](Getting-Started?UI=MVC&DB=EF&Tiered=No)
-* [Angular UI Startup Template](Getting-Started?UI=NG&DB=EF&Tiered=No)
+* [ASP.NET Core MVC (Razor Pages) UI Startup Template](Getting-Started.md?UI=MVC&DB=EF&Tiered=No)
+* [Angular UI Startup Template](Getting-Started.md?UI=NG&DB=EF&Tiered=No)
 
 If you want to start from scratch (with an empty project) then manually install the ABP Framework and use the following tutorials:
 
