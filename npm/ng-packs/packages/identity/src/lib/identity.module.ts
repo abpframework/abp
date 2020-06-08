@@ -12,6 +12,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @NgModule({
   declarations: [RolesComponent, UsersComponent],
+  exports: [RolesComponent, UsersComponent],
   imports: [
     NgxsModule.forFeature([IdentityState]),
     CoreModule,

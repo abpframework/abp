@@ -52,7 +52,13 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       errorTemplate: ValidationErrorComponent,
     }),
   ],
-  exports: [...LAYOUTS, LogoComponent, ValidationErrorComponent],
+  exports: [
+    ...LAYOUTS,
+    ValidationErrorComponent,
+    LogoComponent,
+    NavItemsComponent,
+    RoutesComponent,
+  ],
   entryComponents: [...LAYOUTS, ValidationErrorComponent],
 })
 export class ThemeBasicModule {
