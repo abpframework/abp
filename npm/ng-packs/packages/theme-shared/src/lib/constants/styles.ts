@@ -45,6 +45,11 @@ export default `
   background: #8a8686;
 }
 
+.bordered .datatable-body-row {
+  border-top: 1px solid #eee;
+  margin-top: -1px;
+}
+
 .abp-ellipsis-inline {
   display: inline-block;
   overflow: hidden;
