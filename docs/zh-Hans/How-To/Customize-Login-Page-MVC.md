@@ -35,7 +35,6 @@ public class CustomLoginModel : LoginModel
 @using Volo.Abp.Account.Settings
 @using Volo.Abp.Settings
 @model Acme.BookStore.Web.Pages.Account.CustomLoginModel
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 @if (Model.EnableLocalLogin)
 {

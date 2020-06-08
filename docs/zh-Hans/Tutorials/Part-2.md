@@ -15,7 +15,7 @@ else if UI == "NG"
   DB="mongodb"
   DB_Text="MongoDB"
   UI_Text="angular"
-else 
+else
   DB ="?"
   UI_Text="?"
 end
@@ -86,7 +86,6 @@ namespace Acme.BookStore.Web.Pages.Books
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
@@ -230,7 +229,6 @@ namespace Acme.BookStore.Web
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Acme.BookStore.Web.Pages.Books
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel
@@ -866,7 +864,7 @@ export class BookListComponent implements OnInit {
 }
 ```
 
-* 我们导入了 ` NgbDateNativeAdapter, NgbDateAdapter` 
+* 我们导入了 ` NgbDateNativeAdapter, NgbDateAdapter`
 
 * 我们添加了一个新的 `NgbDateAdapter` 提供程序,它将Datepicker值转换为Date类型. 有关更多详细信息,请参见[datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview).
 
@@ -972,7 +970,7 @@ export class BookListComponent implements OnInit {
   <button type="button" class="btn btn-secondary" #abpClose>
       {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
   </button>
-    
+
   <!--added save button-->
   <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
         <i class="fa fa-check mr-1"></i>
@@ -1290,7 +1288,7 @@ import { ConfirmationService } from '@abp/ng.theme.shared';
 //...
 
 constructor(
-    private store: Store, 
+    private store: Store,
     private fb: FormBuilder,
     private bookService: BookService,
     private confirmation: ConfirmationService // <== added this line ==>

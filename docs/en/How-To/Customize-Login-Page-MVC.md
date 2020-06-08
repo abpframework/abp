@@ -35,7 +35,6 @@ A good way to customize a page is to copy its source code. [Click here](https://
 @using Volo.Abp.Account.Settings
 @using Volo.Abp.Settings
 @model Acme.BookStore.Web.Pages.Account.CustomLoginModel
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 @if (Model.EnableLocalLogin)
 {

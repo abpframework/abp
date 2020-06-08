@@ -1,5 +1,4 @@
 ﻿@page
-@inherits Volo.Blogging.Pages.Blog.BloggingPage
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.Extensions.Options
@@ -11,6 +10,12 @@
 @using Volo.Blogging.SocialMedia
 @inject IAuthorizationService Authorization
 @inject IOptionsSnapshot<BloggingTwitterOptions> twitterOptions
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@using Volo.Blogging.Pages.Blog
+@inject IHtmlLocalizer<BloggingResource> L
+@inject BloggingPageHelper BloggingPageHelper
+@inject ICurrentUser CurrentUser
 @model DetailModel
 @{
     ViewBag.Title = Model.Post.Title;
@@ -67,7 +72,7 @@
                                             <div class="col pl-1">
                                                 @if (Model.Post.Writer != null)
                                                 {
-                                                    <h5 class="mt-2 mb-1">@(Model.Post.Writer.UserName) <span>@ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span></h5>
+                                                    <h5 class="mt-2 mb-1">@(Model.Post.Writer.UserName) <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span></h5>
 
                                                 }
 
@@ -108,7 +113,7 @@
             <div class="col-12 col-md-8 col-lg-7 mx-auto">
                 <section class="post-content">
                     <p>
-                        @Html.Raw(RenderMarkdownToHtml(Model.Post.Content))
+                        @Html.Raw(BloggingPageHelper.RenderMarkdownToHtml(Model.Post.Content))
                     </p>
                 </section>
             </div>
@@ -164,7 +169,7 @@
                                 <div class="media-body">
                                     <h5 class="comment-owner">
                                         @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
-                                        <span>@ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
+                                        <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
                                     </h5>
                                     <p id="@commentWithRepliesDto.Comment.Id">
                                         @commentWithRepliesDto.Comment.Text
@@ -243,7 +248,7 @@
                                             <div class="media-body">
                                                 <h5 class="comment-owner">
                                                     @(reply.Writer == null ? "" : reply.Writer.UserName)
-                                                    <span>@ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
+                                                    <span>@BloggingPageHelper.ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
                                                 </h5>
                                                 <p id="@reply.Id">
                                                     @reply.Text

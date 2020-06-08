@@ -1,8 +1,10 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Docs.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Docs.Admin.Pages.Docs.Admin.Projects
-@inherits Volo.Docs.Admin.Pages.Docs.Admin.DocsAdminPage
 @model Volo.Docs.Admin.Pages.Docs.Admin.Projects.CreateModel
+@inject IHtmlLocalizer<DocsResource> L
 @{
     Layout = null;
 }
