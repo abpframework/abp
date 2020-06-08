@@ -1,9 +1,10 @@
-import { CoreModule, LazyLoadService, noop, ConfigState } from '@abp/ng.core';
+import { ConfigState, CoreModule, noop } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgxDatatableModule, INgxDatatableConfig } from '@swimlane/ngx-datatable';
+import { Store } from '@ngxs/store';
+import { INgxDatatableConfig, NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -19,8 +20,8 @@ import { TableEmptyMessageComponent } from './components/table-empty-message/tab
 import { TableComponent } from './components/table/table.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
-import styles from './constants/styles';
 import { LoadingDirective } from './directives/loading.directive';
+import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { initLazyStyleHandler } from './handlers/lazy-style.handler';
@@ -28,8 +29,6 @@ import { RootParams } from './models/common';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
-import { chartJsLoaded$ } from './utils/widget-utils';
-import { Store } from '@ngxs/store';
 
 export function ngxDatatableMessageFactory(store: Store) {
   const emptyMessage = store.selectSnapshot(
@@ -65,6 +64,7 @@ export function ngxDatatableMessageFactory(store: Store) {
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
   ],
@@ -83,6 +83,7 @@ export function ngxDatatableMessageFactory(store: Store) {
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
   ],
