@@ -10,7 +10,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { DatatableComponent } from '@swimlane/ngx-datatable';
+import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
 
 @Directive({
@@ -22,26 +22,25 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
 
   /* tslint:disable-next-line:no-input-rename */
   @Input('abpList') list: ListService;
-  @Input() columnMode: 'standard' | 'flex' | 'force' = 'force';
-  @Input() externalPaging = true;
-  @Input() externalSorting = true;
-  @Input() footerHeight = 50;
-  @Input() headerHeight = 50;
-  @Input() rowHeight: Function | number | 'auto' | undefined = 'auto';
 
-  @HostBinding() @Input() class = 'ngx-datatable material bordered';
+  @Input() class = 'material bordered';
 
-  constructor(
-    @Host() private cdRef: ChangeDetectorRef,
-    @Host() private table: DatatableComponent,
-  ) {}
+  @HostBinding('class')
+  get classes(): string {
+    return `ngx-datatable ${this.class}`;
+  }
 
-  ngOnChanges({ list, ...changes }: SimpleChanges) {
+  constructor(@Host() private cdRef: ChangeDetectorRef, @Host() private table: DatatableComponent) {
+    this.table.columnMode = ColumnMode.force;
+    this.table.externalPaging = true;
+    this.table.externalSorting = true;
+    this.table.footerHeight = 50;
+    this.table.headerHeight = 50;
+    this.table.rowHeight = 'auto';
+  }
+
+  ngOnChanges({ list }: SimpleChanges) {
     if (!(list && list.firstChange)) return;
-
-    ['columnMode', 'externalPaging', 'externalSorting', 'footerHeight', 'headerHeight', 'rowHeight']
-      .filter(key => Object.keys(changes).indexOf(key) < 0)
-      .forEach(key => (this.table[key] = this[key]));
 
     const { maxResultCount, page } = list.currentValue;
     this.table.limit = maxResultCount;
