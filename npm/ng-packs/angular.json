@@ -494,8 +494,9 @@
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
             "tsConfig": "apps/dev-app/tsconfig.prod.json",
-            "aot": false,
+            "aot": true,
             "extractCss": true,
+            "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "styles": [
               {
                 "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
@@ -534,7 +535,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
