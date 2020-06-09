@@ -1,9 +1,11 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
 @using ProductManagement
-@inherits ProductManagement.Pages.ProductManagement.ProductManagementPage
+@using ProductManagement.Localization
 @model ProductManagement.Pages.ProductManagement.Products.IndexModel
 @inject IAuthorizationService Authorization
+@inject IHtmlLocalizer<ProductManagementResource> L
 @{
     ViewBag.PageTitle = "Products";
 }
