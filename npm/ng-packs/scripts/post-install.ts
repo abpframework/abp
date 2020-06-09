@@ -11,6 +11,7 @@ import fse from 'fs-extra';
     });
   } catch (error) {
     rename(false);
+    console.error(error);
     process.exit(1);
   }
 
@@ -18,6 +19,11 @@ import fse from 'fs-extra';
 })();
 
 async function rename(prodToMain: boolean) {
-  await fse.rename('../tsconfig.json', `../tsconfig.${prodToMain ? 'temp' : 'prod'}.json`);
-  await fse.rename(`../tsconfig.${prodToMain ? 'prod' : 'temp'}.json`, '../tsconfig.json');
+  try {
+    await fse.rename('../tsconfig.json', `../tsconfig.${prodToMain ? 'temp' : 'prod'}.json`);
+    await fse.rename(`../tsconfig.${prodToMain ? 'prod' : 'temp'}.json`, '../tsconfig.json');
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
 }
