@@ -159,9 +159,53 @@ public class ProfileAppService : ApplicationService
 
 `IBlobContainer<T>` has the same methods with the `IBlobContainer`.
 
+> It is a good practice to **always use a typed container while developing re-usable modules**, so the final application can configure the provider for your container without effecting the other containers.
+
+#### The Default Container
+
+If you don't use the generic argument and directly inject the `IBlobContainer` (as explained before), you get the default container. Another way of injecting the default container is like `IBlobContainer<DefaultContainer>`, which returns exactly the same container.
+
+The name of the default container is `Default`.
+
+#### Named Containers
+
+Actually, types containers are just a shortcut for named containers. You can inject and use the `IBlobContainerFactory` to get a BLOB container by its name:
+
+````csharp
+public class ProfileAppService : ApplicationService
+{
+    private readonly IBlobContainer _blobContainer;
+
+    public ProfileAppService(IBlobContainerFactory blobContainerFactory)
+    {
+        _blobContainer = blobContainerFactory.Create("profile-pictures");
+    }
+
+    //...
+}
+````
+
+### IBlobContainerFactory
+
+`IBlobContainerFactory` is the service that is used to create the BLOB containers. One example was shown above.
+
+**Example: Create a container by name**
+
+````csharp
+var blobContainer = blobContainerFactory.Create("profile-pictures");
+````
+
+**Example: Create a container by type**
+
+````csharp
+var blobContainer = blobContainerFactory.Create<ProfilePictureContainer>();
+````
+
+> You generally don't need to use the `IBlobContainerFactory` since it is used internally when you inject a `IBlobContainer` (or `IBlobContainer<T>`).
+
 ### About Naming the BLOBs
 
-TODO
+Naming BLOBs has not a forcing rule. A BLOB name is just a string. However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separator (`/`) and file extensions in your BLOB name (if your blob name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder of the root container folder).
 
 ## Configuring the Containers
 
