@@ -209,6 +209,62 @@ Naming BLOBs has not a forcing rule. A BLOB name is just a string. However, diff
 
 ## Configuring the Containers
 
+Containers should be configured before using them. The most fundamental configuration is to select a BLOB storage provider (see the "*BLOB Storage Providers*" section above).
+
+`AbpBlobStoringOptions` is the [options class](Options.md) to configure the containers.
+
+### Configure a Single Container
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        //TODO...
+    });
+});
+````
+
+This example configures the `ProfilePictureContainer`. You can also configure by the container name:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure("profile-pictures", container =>
+    {
+        //TODO...
+    });
+});
+````
+
+### Configure the Default Container
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.ConfigureDefault(container =>
+    {
+        //TODO...
+    });
+});
+````
+
+> There is a special case about the default container; If you don't specify a configuration for a container, it **fallbacks to the default container configuration**. This is a good way to configure defaults for all containers and specialize configuration for a specific container when needed.
+
+### Configure All Containers
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.ConfigureAll((containerName, containerConfiguration) =>
+    {
+        //TODO...
+    });
+});
+````
+
+This is a way to configure all the containers. The main difference from configuring the default container is that you override the configuration even if it was specialized for a specific container.
+
 ## Implementing Your Own BLOB Storage Provider
 
 TODO
