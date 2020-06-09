@@ -27,7 +27,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnChanges({ list }: SimpleChanges) {
-    if (!(list && list.firstChange)) return;
+    if (!list.firstChange) return;
 
     const { maxResultCount, page } = list.currentValue;
     this.table.limit = maxResultCount;
