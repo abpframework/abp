@@ -181,7 +181,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 var context = new JobExecutionContext(
                     scope.ServiceProvider,
                     JobConfiguration.JobType,
-                    Serializer.Deserialize(ea.Body, typeof(TArgs))
+                    Serializer.Deserialize(ea.Body.ToArray(), typeof(TArgs))
                 );
 
                 try
