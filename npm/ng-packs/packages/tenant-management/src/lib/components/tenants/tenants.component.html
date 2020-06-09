@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <ngx-datatable [rows]="data$ | async" [count]="totalCount$ | async" [abpList]="list">
+    <ngx-datatable [rows]="data$ | async" [count]="totalCount$ | async" [list]="list" default>
       <ngx-datatable-column
         [name]="'AbpTenantManagement::Actions' | abpLocalization"
         [maxWidth]="150"

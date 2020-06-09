@@ -21,6 +21,7 @@ import { TableComponent } from './components/table/table.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { LoadingDirective } from './directives/loading.directive';
+import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
 import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
@@ -64,6 +65,7 @@ export function ngxDatatableMessageFactory(store: Store) {
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    NgxDatatableDefaultDirective,
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
@@ -83,6 +85,7 @@ export function ngxDatatableMessageFactory(store: Store) {
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    NgxDatatableDefaultDirective,
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,

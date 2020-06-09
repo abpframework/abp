@@ -3,40 +3,28 @@ import {
   ChangeDetectorRef,
   Directive,
   Host,
-  HostBinding,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
+import { DatatableComponent } from '@swimlane/ngx-datatable';
 import { Subscription } from 'rxjs';
 
 @Directive({
-  exportAs: 'abpList',
-  selector: 'ngx-datatable[abpList]',
+  // tslint:disable-next-line
+  selector: 'ngx-datatable[list]',
+  exportAs: 'ngxDatatableList',
 })
 export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private subscription = new Subscription();
 
-  /* tslint:disable-next-line:no-input-rename */
-  @Input('abpList') list: ListService;
-
-  @Input() class = 'material bordered';
-
-  @HostBinding('class')
-  get classes(): string {
-    return `ngx-datatable ${this.class}`;
-  }
+  @Input() list: ListService;
 
   constructor(@Host() private cdRef: ChangeDetectorRef, @Host() private table: DatatableComponent) {
-    this.table.columnMode = ColumnMode.force;
     this.table.externalPaging = true;
     this.table.externalSorting = true;
-    this.table.footerHeight = 50;
-    this.table.headerHeight = 50;
-    this.table.rowHeight = 'auto';
   }
 
   ngOnChanges({ list }: SimpleChanges) {
