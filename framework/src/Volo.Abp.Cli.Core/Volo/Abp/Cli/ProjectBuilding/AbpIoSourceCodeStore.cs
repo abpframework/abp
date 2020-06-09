@@ -55,7 +55,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string templateSource = null)
         {
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
-            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
+            var latestVersion = version ?? await GetLatestSourceCodeVersionAsync(name, type);
 
             if (version == null)
             {
