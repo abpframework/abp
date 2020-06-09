@@ -65,7 +65,7 @@ namespace AbpDemo
             await _blobContainer.SaveAsync("my-blob-1", bytes);
         }
         
-        public async Task<byte[]> GetBytesAsync(byte[] bytes)
+        public async Task<byte[]> GetBytesAsync()
         {
             return await _blobContainer.GetAllBytesOrNullAsync("my-blob-1");
         }
@@ -77,15 +77,93 @@ This service saves given bytes with the `my-blob-1` name and then reads the prev
 
 > A BLOB is a named object and **each BLOB should have a unique name**, which is an arbitrary string.
 
+`IBlobContainer` can work with `Stream` and `byte[]` objects, which will be detailed in the next sections.
+
 #### Saving BLOBs
 
-TODO
+`SaveAsync` method is used to save a new BLOB or replace an existing BLOB. It can save a `Stream` by default, but there is a shortcut extension method to save byte arrays.
+
+`SaveAsync` gets the following parameters:
+
+* **name** (string): Unique name of the BLOB.
+* **stream** (Stream) or **bytes** (byte[]): The stream to read the BLOB content or a byte array.
+* **overrideExisting** (bool): Set `true` to replace the BLOB content if it does already exists. Default value is `false` and throws `BlobAlreadyExistsException` if there is already a BLOB in the container with the same name.
 
 #### Reading/Getting BLOBs
 
+* `GetAsync`: Only gets a BLOB name and returns a `Stream` object that can be used to read the BLOB content. Always **dispose the stream** after using it. This method throws exception if can not find the BLOB with the given name.
+* `GetOrNullAsync`: In opposite to the `GetAsync` method, this one returns `null` if there is no BLOB found with the given name.
+* `GetAllBytesAsync`: Returns a `byte[]` instead of a `Stream`. Still throws exception if can not find the BLOB with the given name.
+* `GetAllBytesOrNullAsync`: In opposite to the `GetAllBytesAsync` method, this one returns `null` if there is no BLOB found with the given name.
+
 #### Deleting BLOBs
 
+`DeleteAsync` method gets a BLOB name and deletes the BLOB data. It doesn't throw any exception if given BLOB was not found, instead it returns a `bool` indicates that the BLOB was actually deleted or not.
+
 #### Other Methods
+
+* `ExistsAsync` method simply checks if there is a saved BLOB with the given name.
+
+### Typed IBlobContainer
+
+Typed BLOB container is a way of creating and managing **multiple containers** in an application;
+
+* **Each container is separately stored**. That means BLOB names should be unique in a container and two BLOBs with the same name can live in different containers without effecting each other.
+* **Each container can be separately configured**, so each container can use a different storage provider based on your configuration.
+
+To create a typed container, you need to create a simple class decorated with the `BlobContainerName` attribute:
+
+````csharp
+using Volo.Abp.BlobStoring;
+
+namespace AbpDemo
+{
+    [BlobContainerName("profile-pictures")]
+    public class ProfilePictureContainer
+    {
+        
+    }
+}
+````
+
+> If you don't use the `BlobContainerName` attribute, ABP Framework uses the full name of the class (with namespace), but it is always recommended to use a container name which is not changed even if you rename the class.
+
+Once you create the container class, you can inject `IBlobContainer<T>` for your container type.
+
+**Example: An [application service](Application-Services.md) to save and read profile picture of the current user**
+
+````csharp
+[Authorize]
+public class ProfileAppService : ApplicationService
+{
+    private readonly IBlobContainer<ProfilePictureContainer> _blobContainer;
+
+    public ProfileAppService(IBlobContainer<ProfilePictureContainer> blobContainer)
+    {
+        _blobContainer = blobContainer;
+    }
+
+    public async Task SaveProfilePictureAsync(byte[] bytes)
+    {
+        var blobName = CurrentUser.GetId().ToString();
+        await _blobContainer.SaveAsync(blobName, bytes);
+    }
+    
+    public async Task<byte[]> GetProfilePictureAsync()
+    {
+        var blobName = CurrentUser.GetId().ToString();
+        return await _blobContainer.GetAllBytesOrNullAsync(blobName);
+    }
+}
+````
+
+`IBlobContainer<T>` has the same methods with the `IBlobContainer`.
+
+### About Naming the BLOBs
+
+TODO
+
+## Configuring the Containers
 
 ## Implementing Your Own BLOB Storage Provider
 
