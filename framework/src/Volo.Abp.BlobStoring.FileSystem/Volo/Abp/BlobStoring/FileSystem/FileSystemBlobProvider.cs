@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
+using Polly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
 
@@ -8,12 +10,12 @@ namespace Volo.Abp.BlobStoring.FileSystem
     public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
     {
         protected IBlobFilePathCalculator FilePathCalculator { get; }
-        
+
         public FileSystemBlobProvider(IBlobFilePathCalculator filePathCalculator)
         {
             FilePathCalculator = filePathCalculator;
         }
-        
+
         public override async Task SaveAsync(BlobProviderSaveArgs args)
         {
             var filePath = FilePathCalculator.Calculate(args);
@@ -22,22 +24,27 @@ namespace Volo.Abp.BlobStoring.FileSystem
             {
                 throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{args.ContainerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
             }
-            
+
             DirectoryHelper.CreateIfNotExists(Path.GetDirectoryName(filePath));
 
             var fileMode = args.OverrideExisting
                 ? FileMode.Create
                 : FileMode.CreateNew;
-            
-            using (var fileStream = File.Open(filePath, fileMode, FileAccess.Write))
-            {
-                await args.BlobStream.CopyToAsync(
-                    fileStream,
-                    args.CancellationToken
-                );
 
-                await fileStream.FlushAsync();
-            }
+            await Policy.Handle<IOException>()
+                .WaitAndRetryAsync(2, retryCount => TimeSpan.FromSeconds(retryCount))
+                .ExecuteAsync(async () =>
+                {
+                    using (var fileStream = File.Open(filePath, fileMode, FileAccess.Write))
+                    {
+                        await args.BlobStream.CopyToAsync(
+                            fileStream,
+                            args.CancellationToken
+                        );
+
+                        await fileStream.FlushAsync();
+                    }
+                });
         }
 
         public override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
@@ -52,18 +59,28 @@ namespace Volo.Abp.BlobStoring.FileSystem
             return ExistsAsync(filePath);
         }
 
-        public override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var filePath = FilePathCalculator.Calculate(args);
 
             if (!File.Exists(filePath))
             {
-                return Task.FromResult<Stream>(null);
+                return null;
             }
 
-            return Task.FromResult<Stream>(File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read));
+            return await Policy.Handle<IOException>()
+                .WaitAndRetryAsync(2, retryCount => TimeSpan.FromSeconds(retryCount))
+                .ExecuteAsync(async () =>
+                {
+                    using (var fileStream = File.OpenRead(filePath))
+                    {
+                        var memoryStream = new MemoryStream();
+                        await fileStream.CopyToAsync(memoryStream, args.CancellationToken);
+                        return memoryStream;
+                    }
+                });
         }
-        
+
         protected virtual Task<bool> ExistsAsync(string filePath)
         {
             return Task.FromResult(File.Exists(filePath));
