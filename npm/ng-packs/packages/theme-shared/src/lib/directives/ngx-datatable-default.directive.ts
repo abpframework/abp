@@ -1,4 +1,4 @@
-import { Directive, Host, HostBinding, Input } from '@angular/core';
+import { Directive, HostBinding, Input } from '@angular/core';
 import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 
 @Directive({
@@ -14,7 +14,7 @@ export class NgxDatatableDefaultDirective {
     return `ngx-datatable ${this.class}`;
   }
 
-  constructor(@Host() private table: DatatableComponent) {
+  constructor(private table: DatatableComponent) {
     this.table.columnMode = ColumnMode.force;
     this.table.footerHeight = 50;
     this.table.headerHeight = 50;

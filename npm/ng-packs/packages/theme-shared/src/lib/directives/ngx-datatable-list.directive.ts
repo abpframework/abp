@@ -2,7 +2,6 @@ import { ListService } from '@abp/ng.core';
 import {
   ChangeDetectorRef,
   Directive,
-  Host,
   Input,
   OnChanges,
   OnDestroy,
@@ -22,7 +21,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
 
   @Input() list: ListService;
 
-  constructor(@Host() private cdRef: ChangeDetectorRef, @Host() private table: DatatableComponent) {
+  constructor(private table: DatatableComponent, private cdRef: ChangeDetectorRef) {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
   }
