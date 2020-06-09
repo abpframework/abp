@@ -495,6 +495,6 @@ export class AppComponent implements OnInit {
 }
 ```
 
-## See Also
+## See Also
 
 - [Component Replacement](./Component-Replacement.md)
