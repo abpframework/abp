@@ -24,7 +24,7 @@ More providers will be implemented by the time. You can [request](https://github
 
 Multiple providers **can be used together** by the help of the **container system**, where each container can use a different provider (will be explained below).
 
-> BLOB storing system can not work unless you **configure a storage provider**. Refer to the linked documents for the storage providers.
+> BLOB storing system can not work unless you **configure a storage provider**. Refer to the linked documents for the storage provider configurations.
 
 ## Volo.Abp.BlobStoring Package
 
@@ -203,7 +203,7 @@ var blobContainer = blobContainerFactory.Create("profile-pictures");
 var blobContainer = blobContainerFactory.Create<ProfilePictureContainer>();
 ````
 
-> You generally don't need to use the `IBlobContainerFactory` since it is used internally when you inject a `IBlobContainer` (or `IBlobContainer<T>`).
+> You generally don't need to use the `IBlobContainerFactory` since it is used internally when you inject a `IBlobContainer` or `IBlobContainer<T>`.
 
 ### About Naming the BLOBs
 
@@ -287,10 +287,10 @@ Configure<AbpBlobStoringOptions>(options =>
 
 > If your application is not multi-tenant, no worry, it works as expected. You don't need to configure anything.
 
-## Implementing Your Own BLOB Storage Provider
-
-TODO
-
 ## Extending the BLOB Storing System
 
 TODO
+
+## See Also
+
+* [Creating a custom BLOB storage provider](Blob-Storing-Custom-Provider.md)
