@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         }
 
         protected Type ObjectMapperContext { get; set; }
-        public IObjectMapper ObjectMapper
+        protected IObjectMapper ObjectMapper
         {
             get
             {
