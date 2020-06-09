@@ -1,5 +1,21 @@
-# Console Startup Template
+# Console Application Startup Template
 
-## Introduction
+This template is used to create a minimalist console application project.
 
-This template implements [how to start ABP from scratch with minimal dependencies](../Getting-Started-Console-Application.md).
+## How to Start With?
+
+First, install the [ABP CLI](../CLI.md) if you haven't installed before:
+
+````bash
+dotnet tool install -g Volo.Abp.Cli
+````
+
+Then use the `abp new` command in an empty folder to create a new solution:
+
+````bash
+abp new Acme.MyConsoleApp -t console
+````
+
+`Acme.MyConsoleApp` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
+
+### 

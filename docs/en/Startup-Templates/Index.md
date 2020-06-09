@@ -5,6 +5,3 @@ While you can start with an empty project and add needed packages manually, star
 * [**app**](Application.md): Application template.
 * [**module**](Module.md): Module/service template.
 * [**console**](Console.md): Console template.
-
-
-
