@@ -289,7 +289,10 @@ Configure<AbpBlobStoringOptions>(options =>
 
 ## Extending the BLOB Storing System
 
-TODO
+Most of the times, you won't need to customize the BLOB storage system except [creating a custom BLOB storage provider](Blob-Storing-Custom-Provider.md). However, you can replace any service introduced above (via [dependency injection](Dependency-Injection.md)), if you need. Here, some other services not mentioned above, but you may want to know:
+
+* `IBlobProviderSelector` is used to get a `IBlobProvider` instance by a container name. Default implementation (`DefaultBlobProviderSelector`) selects the provider using the configuration.
+* `IBlobContainerConfigurationProvider` is used to get the `BlobContainerConfiguration` for a given container name. Default implementation (`DefaultBlobContainerConfigurationProvider`) gets the configuration from the `AbpBlobStoringOptions` explained above.
 
 ## See Also
 
