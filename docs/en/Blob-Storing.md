@@ -12,7 +12,7 @@ ABP Framework provides an abstraction to work with BLOBs and provides some pre-b
 
 ABP BLOB Storage system is also compatible to other ABP Framework features like [multi-tenancy](Multi-Tenancy.md).
 
-### BLOB Storage Providers
+## BLOB Storage Providers
 
 ABP Framework has the following storage provider implementations;
 
@@ -207,7 +207,7 @@ var blobContainer = blobContainerFactory.Create<ProfilePictureContainer>();
 
 ### About Naming the BLOBs
 
-Naming BLOBs has not a forcing rule. A BLOB name is just a string that is unique per container. However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separator (`/`) and file extensions in your BLOB name (if your blob name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder of the root container folder).
+Naming BLOBs has not a forcing rule. A BLOB name is just a string that is unique per container. However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separators (`/`) and file extensions in your BLOB name (if your BLOB name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder of the root container folder).
 
 ## Configuring the Containers
 
@@ -293,6 +293,12 @@ Most of the times, you won't need to customize the BLOB storage system except [c
 
 * `IBlobProviderSelector` is used to get a `IBlobProvider` instance by a container name. Default implementation (`DefaultBlobProviderSelector`) selects the provider using the configuration.
 * `IBlobContainerConfigurationProvider` is used to get the `BlobContainerConfiguration` for a given container name. Default implementation (`DefaultBlobContainerConfigurationProvider`) gets the configuration from the `AbpBlobStoringOptions` explained above.
+
+## BLOB Storing vs File Management System
+
+Notice that BLOB storing is not a file management system. It is used to save, get and delete named BLOBs. It doesn't provide a hierarchical structure like directories, you may expect from a typical file system. BLOB Storing is a low level system.
+
+If you want to create folders and move files between folders, assign permissions to files and share files between users then you need to implement your own application on top of the BLOB Storing system.
 
 ## See Also
 
