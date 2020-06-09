@@ -11,16 +11,13 @@ import fse from 'fs-extra';
     });
   } catch (error) {
     rename(false);
+    process.exit(1);
   }
 
   rename(false);
 })();
 
 async function rename(prodToMain: boolean) {
-  try {
-    await fse.rename('../tsconfig.json', `../tsconfig.${prodToMain ? 'temp' : 'prod'}.json`);
-    await fse.rename(`../tsconfig.${prodToMain ? 'prod' : 'temp'}.json`, '../tsconfig.json');
-  } catch (error) {
-    rename(!prodToMain);
-  }
+  await fse.rename('../tsconfig.json', `../tsconfig.${prodToMain ? 'temp' : 'prod'}.json`);
+  await fse.rename(`../tsconfig.${prodToMain ? 'prod' : 'temp'}.json`, '../tsconfig.json');
 }
