@@ -1,6 +1,6 @@
 # BLOB Storing
 
-It is typical to **store file contents** in an application and read these file contents on need. Not only files, but you may also need to save various types of **large binary objects**, a.k.a. **[BLOB](https://en.wikipedia.org/wiki/Binary_large_object)** into a **storage**. For example, you may want to save user profile pictures.
+It is typical to **store file contents** in an application and read these file contents on need. Not only files, but you may also need to save various types of **large binary objects**, a.k.a. **[BLOB](https://en.wikipedia.org/wiki/Binary_large_object)**s, into a **storage**. For example, you may want to save user profile pictures.
 
 A BLOB is typically a **byte array**. Storing a BLOB in the local file system, in a shared database or on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/) can be an option.
 
@@ -9,6 +9,8 @@ ABP Framework provides an abstraction to work with BLOBs and provides some pre-b
 * You can **easily integrate** to your favorite BLOB storage provides with a few lines of configuration.
 * You can then **easily change** your BLOB storage without changing your application code.
 * If you want to create **reusable application modules**, you don't need to make assumption about how the BLOBs are stored.
+
+ABP BLOB Storage system is also compatible to other ABP Framework features like [multi-tenancy](Multi-Tenancy.md).
 
 ### BLOB Storage Providers
 
@@ -205,13 +207,13 @@ var blobContainer = blobContainerFactory.Create<ProfilePictureContainer>();
 
 ### About Naming the BLOBs
 
-Naming BLOBs has not a forcing rule. A BLOB name is just a string. However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separator (`/`) and file extensions in your BLOB name (if your blob name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder of the root container folder).
+Naming BLOBs has not a forcing rule. A BLOB name is just a string that is unique per container. However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separator (`/`) and file extensions in your BLOB name (if your blob name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder of the root container folder).
 
 ## Configuring the Containers
 
-Containers should be configured before using them. The most fundamental configuration is to select a BLOB storage provider (see the "*BLOB Storage Providers*" section above).
+Containers should be configured before using them. The most fundamental configuration is to **select a BLOB storage provider** (see the "*BLOB Storage Providers*" section above).
 
-`AbpBlobStoringOptions` is the [options class](Options.md) to configure the containers.
+`AbpBlobStoringOptions` is the [options class](Options.md) to configure the containers. You can configure the options inside the `ConfigureServices` method of your [module](Module-Development-Basics.md).
 
 ### Configure a Single Container
 
@@ -265,6 +267,30 @@ Configure<AbpBlobStoringOptions>(options =>
 
 This is a way to configure all the containers. The main difference from configuring the default container is that you override the configuration even if it was specialized for a specific container.
 
+## Multi-Tenancy
+
+ABP BLOB Storing system **works silently with the [multi-tenancy](Multi-Tenancy.md)** if your application is multi-tenant. All the providers implement multi-tenancy as a standard feature. They **isolate BLOBs** of different tenants from each other, so they can only access to their own BLOBs. That also means you can use the **same BLOB name** for different tenants.
+
+If your application is multi-tenant, you may want to control **multi-tenancy behavior** of the containers individually. For example, you may want to **disable multi-tenancy** for a specific container, so the BLOBs inside it will be **available to all the tenants**. This is a way to share BLOBs among tenants.
+
+**Example: Disable multi-tenancy for a specific container**
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        container.IsMultiTenant = false;
+    });
+});
+````
+
+> If your application is not multi-tenant, no worry, it works as expected. You don't need to configure anything.
+
 ## Implementing Your Own BLOB Storage Provider
+
+TODO
+
+## Extending the BLOB Storing System
 
 TODO
