@@ -26,6 +26,30 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
     this.table.externalSorting = true;
   }
 
+  private subscribeToPage() {
+    const sub = this.table.page.subscribe(({ offset }) => {
+      this.list.page = offset;
+      this.table.offset = offset;
+    });
+    this.subscription.add(sub);
+  }
+
+  private subscribeToSort() {
+    const sub = this.table.sort.subscribe(({ sorts: [{ prop, dir }] }) => {
+      this.list.sortKey = prop;
+      this.list.sortOrder = dir;
+    });
+    this.subscription.add(sub);
+  }
+
+  private subscribeToIsLoading() {
+    const sub = this.list.isLoading$.subscribe(loading => {
+      this.table.loadingIndicator = loading;
+      this.cdRef.markForCheck();
+    });
+    this.subscription.add(sub);
+  }
+
   ngOnChanges({ list }: SimpleChanges) {
     if (!list.firstChange) return;
 
@@ -39,22 +63,8 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    const subPage = this.table.page.subscribe(({ offset }) => {
-      this.list.page = offset;
-      this.table.offset = offset;
-    });
-    this.subscription.add(subPage);
-
-    const subSort = this.table.sort.subscribe(({ sorts: [{ prop, dir }] }) => {
-      this.list.sortKey = prop;
-      this.list.sortOrder = dir;
-    });
-    this.subscription.add(subSort);
-
-    const subIsLoading = this.list.isLoading$.subscribe(loading => {
-      this.table.loadingIndicator = loading;
-      this.cdRef.markForCheck();
-    });
-    this.subscription.add(subIsLoading);
+    this.subscribeToPage();
+    this.subscribeToSort();
+    this.subscribeToIsLoading();
   }
 }
