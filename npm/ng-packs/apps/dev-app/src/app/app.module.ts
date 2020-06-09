@@ -23,6 +23,8 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     AppRoutingModule,
     CoreModule.forRoot({
       environment,
+      sendNullsAsQueryParam: false,
+      skipGetAppConfiguration: false,
     }),
     ThemeSharedModule.forRoot(),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),

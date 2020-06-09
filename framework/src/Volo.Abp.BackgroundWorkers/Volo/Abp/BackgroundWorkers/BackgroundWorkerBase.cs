@@ -35,7 +35,7 @@ namespace Volo.Abp.BackgroundWorkers
             return reference;
         }
 
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
         private ILoggerFactory _loggerFactory;
 
         protected ILogger Logger => _lazyLogger.Value;

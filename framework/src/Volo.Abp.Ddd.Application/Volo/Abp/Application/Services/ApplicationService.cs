@@ -57,11 +57,11 @@ namespace Volo.Abp.Application.Services
 
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
-        public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
+        protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
         private IUnitOfWorkManager _unitOfWorkManager;
 
         protected Type ObjectMapperContext { get; set; }
-        public IObjectMapper ObjectMapper
+        protected IObjectMapper ObjectMapper
         {
             get
             {
@@ -85,31 +85,31 @@ namespace Volo.Abp.Application.Services
 
         public IGuidGenerator GuidGenerator { get; set; }
 
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
         private ILoggerFactory _loggerFactory;
 
-        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+        protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
         private ICurrentTenant _currentTenant;
 
-        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
+        protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
 
-        public ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
+        protected ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
         private ISettingProvider _settingProvider;
 
-        public IClock Clock => LazyGetRequiredService(ref _clock);
+        protected IClock Clock => LazyGetRequiredService(ref _clock);
         private IClock _clock;
 
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
+        protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
         private IAuthorizationService _authorizationService;
 
-        public IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
+        protected IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
         private IFeatureChecker _featureChecker;
 
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
 
-        public IStringLocalizer L
+        protected IStringLocalizer L
         {
             get
             {

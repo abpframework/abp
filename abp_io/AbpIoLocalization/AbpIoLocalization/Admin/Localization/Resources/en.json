@@ -148,11 +148,12 @@
     "EmailSent": "Email Sent",
     "SuccessfullySent": "Successfully Sent",
     "SuccessfullyDeleted": "Successfully Deleted",
-    "DiscountRequestDeletionWarningMessage": "Discount request will be deleted" ,
-	"BusinessType": "Business Type",
-	"TotalQuestionCount": "Total question count",
-	"RemainingQuestionCount": "Remaining question count",
+    "DiscountRequestDeletionWarningMessage": "Discount request will be deleted",
+    "BusinessType": "Business Type",
+    "TotalQuestionCount": "Total question count",
+    "RemainingQuestionCount": "Remaining question count",
     "TotalQuestionMustBeGreaterWarningMessage": "TotalQuestionCount must be greater than RemainingQuestionCount !",
-    "QuestionCountsMustBeGreaterThanZero": "TotalQuestionCount and RemainingQuestionCount must be zero or greater than zero !"
+    "QuestionCountsMustBeGreaterThanZero": "TotalQuestionCount and RemainingQuestionCount must be zero or greater than zero !",
+    "UnlimitedQuestionCount": "Unlimited question count"
   }
 }

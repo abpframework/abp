@@ -64,7 +64,18 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+
         Task<int> GetMembersCountAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default
+        );
+
+        Task RemoveAllRolesAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default
+        );
+
+        Task RemoveAllMembersAsync(
             OrganizationUnit organizationUnit,
             CancellationToken cancellationToken = default
         );

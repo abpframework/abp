@@ -58,6 +58,7 @@
     "404Message": "Sayfa bulunamadı",
     "500Message": "Sunucu tarafında hata",
     "GoHomePage": "Ana sayfaya git",
-    "GoBack": "Geri dön"
+    "GoBack": "Geri dön",
+    "Search": "Arama"
   }
 }

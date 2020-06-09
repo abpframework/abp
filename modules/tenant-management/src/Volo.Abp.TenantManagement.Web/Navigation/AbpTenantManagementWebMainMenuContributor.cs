@@ -25,7 +25,7 @@ namespace Volo.Abp.TenantManagement.Web.Navigation
 
             if (await context.IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
             {
-                tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "/TenantManagement/Tenants"));
+                tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "~/TenantManagement/Tenants"));
             }
         }
     }

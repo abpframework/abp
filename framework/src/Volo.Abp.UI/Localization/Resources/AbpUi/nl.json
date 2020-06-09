@@ -58,6 +58,7 @@
     "404Message": "Pagina niet gevonden",
     "500Message": "Interne Server Fout",
     "GoHomePage": "Ga naar de homepage",
-    "GoBack": "Ga terug"
+    "GoBack": "Ga terug",
+    "Search": "Zoeken"
   }
 }

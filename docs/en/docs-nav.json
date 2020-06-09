@@ -520,6 +520,10 @@
         {
           "text": "Module",
           "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "Console",
+          "path": "Startup-Templates/Console.md"
         }
       ]
     },
@@ -555,6 +559,10 @@
     {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
+    },
+    {
+      "text": "API Documentation",
+      "path": "{ApiDocumentationUrl}"
     }
   ]
 }

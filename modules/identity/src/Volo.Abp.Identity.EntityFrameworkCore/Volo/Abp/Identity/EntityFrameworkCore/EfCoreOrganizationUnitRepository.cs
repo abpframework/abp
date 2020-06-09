@@ -156,5 +156,24 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return GetQueryable().IncludeDetails();
         }
+
+        public virtual Task RemoveAllRolesAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default)
+        {
+            organizationUnit.Roles.Clear();
+            return Task.CompletedTask;
+        }
+
+        public virtual async Task RemoveAllMembersAsync(
+            OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default)
+        {
+            var ouMembersQuery = await DbContext.Set<IdentityUserOrganizationUnit>()
+                .Where(q => q.OrganizationUnitId == organizationUnit.Id)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            DbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
+        }
     }
 }

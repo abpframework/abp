@@ -51,15 +51,13 @@ namespace Acme.BookStore.Web.Pages.Identity.Users
 
 ### 重写Razor页面 (.CSHTML)
 
-使用[虚拟文件系统](../../Virtual-File-System.md)可以重写 `.cshtml` 文件(razor page, razor view, view component... 等.)
-
-虚拟文件系统允许我们将**资源嵌入到程序集中**. 通过这个方式,预构建的模块在Nuget包中定义了Razor页面. 当你依赖模块时,可以覆盖这个模块向虚拟文件系统添加的任何文件,包括页面/视图.
+同一路径下创建相同的`.cshtml`文件可以实现重写功能(razor page, razor view, view component... 等.)
 
 #### 示例
 
 这个示例重写了[账户模块](../../Modules/Account.md)定义的**登录页面**UI
 
-物理文件可以覆盖相同位置的嵌入文件. 账户模块在 `Pages/Account` 文件夹下定义了 `Login.cshtml` 文件. 所以你可以在同一路径下创建文件覆盖它:
+账户模块在 `Pages/Account` 文件夹下定义了 `Login.cshtml` 文件. 所以你可以在同一路径下创建文件覆盖它:
 ![overriding-login-cshtml](../../images/overriding-login-cshtml.png)
 
 通常你想要拷贝模块的 `.cshtml` 原文件,然后进行需要的更改. 你可以在[这里](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml)找到源文件. 不要拷贝 `Login.cshtml.cs` 文件,它是隐藏razor页面的代码,我们不希望覆盖它(见下节).
