@@ -44,6 +44,8 @@ namespace AbpDemo
 * `MyCustomBlobProvider` inherits from the `BlobProviderBase` and overrides the `abstract` methods. The actual implementation is up to you.
 * Implementing `ITransientDependency` registers this class to the [Dependency Injection](Dependency-Injection.md) system as a transient service.
 
+> **Notice: Naming conventions are important**. If your class name doesn't end with `BlobProvider`, you must manually register/expose your service for the `IBlobProvider`.
+
 That's all. Now, you can configure containers (inside the `ConfigureServices` method of your [module](Module-Development-Basics.md)) to use the `MyCustomBlobProvider` class:
 
 ````csharp
