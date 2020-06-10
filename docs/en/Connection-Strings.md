@@ -72,7 +72,7 @@ Relational databases require to create the database and the database schema (tab
 
 The startup template (with EF Core ORM) comes with a single database and a `.EntityFrameworkCore.DbMigrations` project that contains the migration files for that database. This project mainly defines a *YourProjectName*MigrationsDbContext that calls the `Configure...()` methods of the used modules, like `builder.ConfigurePermissionManagement()`.
 
-Once you want to separate a module's database, you typically will need to create a second migration path. The easiest way to create a copy of the `.EntityFrameworkCore.DbMigrations` project with the `DbContext` inside it, change its content to only call the `Configure...()` methods of the modules needs to be stored in the second database and re-create the initial migration. In this case, you also need to change the `.DbMigrator` application to be able to work with these second database too. In this way, you will have a separate migrations DbContext per database.
+Once you want to separate a module's database, you typically will need to create a second migration path. See the [EF Core Migrations](Entity-Framework-Core-Migrations.md) document to learn how to create and use a different database for a desired module.
 
 ## Multi-Tenancy
 
