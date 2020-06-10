@@ -1,0 +1,96 @@
+{
+  "yarn": true,
+  "packages": [
+    {
+      "libraryFolderPath": "packages/core",
+      "linkFolderPath": "dist/core",
+      "buildCommand": "yarn ng build core --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/theme-shared",
+      "linkFolderPath": "dist/theme-shared",
+      "buildCommand": "yarn ng build theme-shared --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/theme-basic",
+      "linkFolderPath": "dist/theme-basic",
+      "buildCommand": "yarn ng build theme-basic --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/account",
+      "linkFolderPath": "dist/account",
+      "buildCommand": "yarn ng build account --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/permission-management",
+      "linkFolderPath": "dist/permission-management",
+      "buildCommand": "yarn ng build permission-management --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/identity",
+      "linkFolderPath": "dist/identity",
+      "buildCommand": "yarn ng build identity --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/feature-management",
+      "linkFolderPath": "dist/feature-management",
+      "buildCommand": "yarn ng build feature-management --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/tenant-management",
+      "linkFolderPath": "dist/tenant-management",
+      "buildCommand": "yarn ng build tenant-management --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/setting-management",
+      "linkFolderPath": "dist/setting-management",
+      "buildCommand": "yarn ng build setting-management --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/setting-management-config",
+      "linkFolderPath": "dist/setting-management-config",
+      "buildCommand": "yarn ng build setting-management-config --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/identity-config",
+      "linkFolderPath": "dist/identity-config",
+      "buildCommand": "yarn ng build identity-config --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/account-config",
+      "linkFolderPath": "dist/account-config",
+      "buildCommand": "yarn ng build account-config --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "packages/tenant-management-config",
+      "linkFolderPath": "dist/tenant-management-config",
+      "buildCommand": "yarn ng build tenant-management-config --prod",
+      "buildCommandRunPath": "./",
+      "exclude": ["node_modules", "dist"]
+    }
+  ]
+}
