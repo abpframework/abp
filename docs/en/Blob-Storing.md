@@ -26,11 +26,9 @@ Multiple providers **can be used together** by the help of the **container syste
 
 > BLOB storing system can not work unless you **configure a storage provider**. Refer to the linked documents for the storage provider configurations.
 
-## Volo.Abp.BlobStoring Package
+## Installation
 
 [Volo.Abp.BlobStoring](https://www.nuget.org/packages/Volo.Abp.BlobStoring) is the main package defines the BLOB storing services. You can use this package to use the BLOB Storing system without depending a specific storage provider.
-
-### Installation
 
 Use the ABP CLI to add this package to your project:
 
@@ -40,7 +38,7 @@ Use the ABP CLI to add this package to your project:
 
 If you want to do it manually, install the [Volo.Abp.BlobStoring](https://www.nuget.org/packages/Volo.Abp.BlobStoring) NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
 
-### The IBlobContainer
+## The IBlobContainer
 
 `IBlobContainer` is the main interface to store and read BLOBs. Your application may have multiple containers and each container can be separately configured. But, there is a **default container** that can be simply used by [injecting](Dependency-Injection.md) the `IBlobContainer`.
 
@@ -81,7 +79,7 @@ This service saves given bytes with the `my-blob-1` name and then reads the prev
 
 `IBlobContainer` can work with `Stream` and `byte[]` objects, which will be detailed in the next sections.
 
-#### Saving BLOBs
+### Saving BLOBs
 
 `SaveAsync` method is used to save a new BLOB or replace an existing BLOB. It can save a `Stream` by default, but there is a shortcut extension method to save byte arrays.
 
@@ -91,22 +89,26 @@ This service saves given bytes with the `my-blob-1` name and then reads the prev
 * **stream** (Stream) or **bytes** (byte[]): The stream to read the BLOB content or a byte array.
 * **overrideExisting** (bool): Set `true` to replace the BLOB content if it does already exists. Default value is `false` and throws `BlobAlreadyExistsException` if there is already a BLOB in the container with the same name.
 
-#### Reading/Getting BLOBs
+### Reading/Getting BLOBs
 
 * `GetAsync`: Only gets a BLOB name and returns a `Stream` object that can be used to read the BLOB content. Always **dispose the stream** after using it. This method throws exception if can not find the BLOB with the given name.
 * `GetOrNullAsync`: In opposite to the `GetAsync` method, this one returns `null` if there is no BLOB found with the given name.
 * `GetAllBytesAsync`: Returns a `byte[]` instead of a `Stream`. Still throws exception if can not find the BLOB with the given name.
 * `GetAllBytesOrNullAsync`: In opposite to the `GetAllBytesAsync` method, this one returns `null` if there is no BLOB found with the given name.
 
-#### Deleting BLOBs
+### Deleting BLOBs
 
 `DeleteAsync` method gets a BLOB name and deletes the BLOB data. It doesn't throw any exception if given BLOB was not found. Instead, it returns a `bool` indicating that the BLOB was actually deleted or not, if you care about it.
 
-#### Other Methods
+### Other Methods
 
 * `ExistsAsync` method simply checks if there is a BLOB in the container with the given name.
 
-### Typed IBlobContainer
+### About Naming the BLOBs
+
+There is not a rule for naming the BLOBs. A BLOB name is just a string that is unique per container (and per tenant - see the "*Multi-Tenancy*" section). However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separators (`/`) and file extensions in your BLOB name (if your BLOB name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder inside the root container folder).
+
+## Typed IBlobContainer
 
 Typed BLOB container system is a way of creating and managing **multiple containers** in an application;
 
@@ -163,13 +165,13 @@ public class ProfileAppService : ApplicationService
 
 > It is a good practice to **always use a typed container while developing re-usable modules**, so the final application can configure the provider for your container without effecting the other containers.
 
-#### The Default Container
+### The Default Container
 
 If you don't use the generic argument and directly inject the `IBlobContainer` (as explained before), you get the default container. Another way of injecting the default container is like `IBlobContainer<DefaultContainer>`, which returns exactly the same container.
 
 The name of the default container is `Default`.
 
-#### Named Containers
+### Named Containers
 
 Actually, typed containers are just a shortcut for named containers. You can inject and use the `IBlobContainerFactory` to get a BLOB container by its name:
 
@@ -187,7 +189,7 @@ public class ProfileAppService : ApplicationService
 }
 ````
 
-### IBlobContainerFactory
+## IBlobContainerFactory
 
 `IBlobContainerFactory` is the service that is used to create the BLOB containers. One example was shown above.
 
@@ -204,10 +206,6 @@ var blobContainer = blobContainerFactory.Create<ProfilePictureContainer>();
 ````
 
 > You generally don't need to use the `IBlobContainerFactory` since it is used internally when you inject a `IBlobContainer` or `IBlobContainer<T>`.
-
-### About Naming the BLOBs
-
-There is not a rule for naming the BLOBs. A BLOB name is just a string that is unique per container (and per tenant - see the "*Multi-Tenancy*" section). However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separators (`/`) and file extensions in your BLOB name (if your BLOB name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder inside the root container folder).
 
 ## Configuring the Containers
 
