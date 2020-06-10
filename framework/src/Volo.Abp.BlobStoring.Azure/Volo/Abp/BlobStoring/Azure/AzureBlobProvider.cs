@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Specialized;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlobStoring.Azure
@@ -20,27 +20,26 @@ namespace Volo.Abp.BlobStoring.Azure
             var blobName = AzureBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetAzureConfiguration();
 
-            if (!args.OverrideExisting && await BlobExistsAsync(configuration, blobName))
+            if (!args.OverrideExisting && await BlobExistsAsync(args, blobName))
             {
-                throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{configuration.ContainerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
+                throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{GetContainerName(args)}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
             }
 
             if (configuration.CreateContainerIfNotExists)
             {
-                await CreateContainerIfNotExists(configuration);
+                await CreateContainerIfNotExists(args);
             }
 
-            await GetBlobClient(configuration, blobName).UploadAsync(args.BlobStream, true);
+            await GetBlobClient(args, blobName).UploadAsync(args.BlobStream, true);
         }
 
         public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
-            var configuration = args.Configuration.GetAzureConfiguration();
 
-            if (await BlobExistsAsync(configuration, blobName))
+            if (await BlobExistsAsync(args, blobName))
             {
-                return await GetBlobClient(configuration, blobName).DeleteIfExistsAsync();
+                return await GetBlobClient(args, blobName).DeleteIfExistsAsync();
             }
 
             return false;
@@ -49,51 +48,58 @@ namespace Volo.Abp.BlobStoring.Azure
         public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
-            var configuration = args.Configuration.GetAzureConfiguration();
 
-            return await BlobExistsAsync(configuration, blobName);
+            return await BlobExistsAsync(args, blobName);
         }
 
         public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = AzureBlobNameCalculator.Calculate(args);
-            var configuration = args.Configuration.GetAzureConfiguration();
 
-            if (!await BlobExistsAsync(configuration, blobName))
+            if (!await BlobExistsAsync(args, blobName))
             {
                 return null;
             }
 
-            var blobClient = GetBlobClient(configuration, blobName);
+            var blobClient = GetBlobClient(args, blobName);
             var download = await blobClient.DownloadAsync();
             var memoryStream = new MemoryStream();
             await download.Value.Content.CopyToAsync(memoryStream);
             return memoryStream;
         }
 
-        protected virtual BlobClient GetBlobClient(AzureBlobProviderConfiguration configuration, string blobName)
+        protected virtual BlobClient GetBlobClient(BlobProviderArgs args, string blobName)
         {
-            var blobContainerClient = GetBlobContainerClient(configuration);
+            var blobContainerClient = GetBlobContainerClient(args);
             return blobContainerClient.GetBlobClient(blobName);
         }
 
-        protected virtual BlobContainerClient GetBlobContainerClient(AzureBlobProviderConfiguration configuration)
+        protected virtual BlobContainerClient GetBlobContainerClient(BlobProviderArgs args)
         {
+            var configuration = args.Configuration.GetAzureConfiguration();
             var blobServiceClient = new BlobServiceClient(configuration.ConnectionString);
-            return blobServiceClient.GetBlobContainerClient(configuration.ContainerName);
+            return blobServiceClient.GetBlobContainerClient(GetContainerName(args));
         }
 
-        protected virtual async Task CreateContainerIfNotExists(AzureBlobProviderConfiguration configuration)
+        protected virtual async Task CreateContainerIfNotExists(BlobProviderArgs args)
         {
-            var blobContainerClient = GetBlobContainerClient(configuration);
+            var blobContainerClient = GetBlobContainerClient(args);
             await blobContainerClient.CreateIfNotExistsAsync();
         }
 
-        private async Task<bool> BlobExistsAsync(AzureBlobProviderConfiguration configuration, string blobName)
+        private async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
         {
             // Make sure Blob Container exists.
-            return await ContainerExistsAsync(GetBlobContainerClient(configuration)) &&
-                   (await GetBlobClient(configuration, blobName).ExistsAsync()).Value;
+            return await ContainerExistsAsync(GetBlobContainerClient(args)) &&
+                   (await GetBlobClient(args, blobName).ExistsAsync()).Value;
+        }
+
+        private static string GetContainerName(BlobProviderArgs args)
+        {
+            var configuration = args.Configuration.GetAzureConfiguration();
+            return configuration.ContainerName.IsNullOrWhiteSpace()
+                ? args.ContainerName
+                : configuration.ContainerName;
         }
 
         private static async Task<bool> ContainerExistsAsync(BlobContainerClient blobContainerClient)

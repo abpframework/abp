@@ -12,6 +12,7 @@
         /// This name may only contain lowercase letters, numbers, and hyphens, and must begin with a letter or a number.
         /// Each hyphen must be preceded and followed by a non-hyphen character.
         /// The name must also be between 3 and 63 characters long.
+        /// If this parameter is not specified, the ContainerName of the <see cref="BlobProviderArgs"/> will be used.
         /// </summary>
         public string ContainerName
         {
