@@ -8,6 +8,8 @@ Basic usage:
 
 ````csharp
 <span abp-badge="Primary">Primary</span>
+<a abp-badge="Info" href="#">Info</a>
+<a abp-badge-pill="Danger" href="#">Danger</a>
 ````
 
 
