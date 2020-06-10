@@ -1,6 +1,6 @@
 # BLOB Storing
 
-It is typical to **store file contents** in an application and read these file contents on need. Not only files, but you may also need to save various types of **large binary objects**, a.k.a. **[BLOB](https://en.wikipedia.org/wiki/Binary_large_object)**s, into a **storage**. For example, you may want to save user profile pictures.
+It is typical to **store file contents** in an application and read these file contents on need. Not only files, but you may also need to save various types of **large binary objects**, a.k.a. [BLOB](https://en.wikipedia.org/wiki/Binary_large_object)s, into a **storage**. For example, you may want to save user profile pictures.
 
 A BLOB is typically a **byte array**. Storing a BLOB in the local file system, in a shared database or on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/) can be an option.
 
