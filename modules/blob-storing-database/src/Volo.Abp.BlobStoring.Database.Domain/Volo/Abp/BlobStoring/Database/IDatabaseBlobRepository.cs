@@ -12,6 +12,6 @@ namespace Volo.Abp.BlobStoring.Database
 
         Task<bool> ExistsAsync(Guid containerId, [NotNull] string name, CancellationToken cancellationToken = default);
 
-        Task<bool> DeleteAsync(Guid containerId, [NotNull] string name, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(Guid containerId, [NotNull] string name, bool autoSave = false, CancellationToken cancellationToken = default);
     }
 }

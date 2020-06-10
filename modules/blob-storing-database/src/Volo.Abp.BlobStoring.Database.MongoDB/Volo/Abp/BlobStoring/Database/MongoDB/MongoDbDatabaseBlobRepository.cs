@@ -29,7 +29,11 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
                 GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<bool> DeleteAsync(Guid containerId, string name, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> DeleteAsync(
+            Guid containerId, 
+            string name,
+            bool autoSave = false,
+            CancellationToken cancellationToken = default)
         {
             var blob = await FindAsync(containerId, name, cancellationToken);
 
@@ -38,7 +42,7 @@ namespace Volo.Abp.BlobStoring.Database.MongoDB
                 return false;
             }
 
-            await base.DeleteAsync(blob, cancellationToken: GetCancellationToken(cancellationToken));
+            await base.DeleteAsync(blob, autoSave, cancellationToken: GetCancellationToken(cancellationToken));
             return true;
         }
     }
