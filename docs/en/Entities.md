@@ -382,7 +382,7 @@ The way to store this dictionary in the database depends on the database provide
 
 Extra Properties system is especially useful if you are using a **re-usable module** that defines an entity inside and you want to get/set some data related to this entity in an easy way.
 
-You normally **don't need** to this system for your own entities, because it has the following drawbacks:
+You typically **don't need** to use this system for your own entities, because it has the following drawbacks:
 
 * It is **not fully type safe** since it works with strings as property names.
 * It is **not easy to [auto map](Object-To-Object-Mapping.md)** these properties from/to other objects.
