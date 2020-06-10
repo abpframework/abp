@@ -214,22 +214,8 @@
           "path": "Text-Templating.md"
         },
         {
-          "text": "Object Serialization"
-        },
-        {
-          "text": "JSON Serialization"
-        },
-        {
-          "text": "Emailing"
-        },
-        {
-          "text": "GUIDs"
-        },
-        {
-          "text": "Threading"
-        },
-        {
-          "text": "Timing"
+          "text": "GUID Generation",
+          "path": "Guid-Generation.md"
         }
       ]
     },
