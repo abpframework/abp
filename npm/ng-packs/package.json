@@ -83,7 +83,7 @@
     "protractor": "~5.4.0",
     "rxjs": "~6.5.4",
     "snq": "^1.0.3",
-    "symlink-manager": "^1.4.3",
+    "symlink-manager": "^1.5.0",
     "ts-node": "~7.0.0",
     "ts-toolbelt": "^6.3.6",
     "tsickle": "^0.37.0",
