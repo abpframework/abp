@@ -1,10 +1,10 @@
 ﻿# Current User
 
-It is common to obtain information about the current user in an application. Current user is generally the user related to the current request in a web application.
+It is very common to retrieve the information about the logged in user in a web application. The current user is the active user related to the current request in a web application.
 
 ## ICurrentUser
 
-`ICurrentUser` is the main service to get info about the current user.
+`ICurrentUser` is the main service to get info about the current active user.
 
 Example: [Injecting](Dependency-Injection.md) the `ICurrentUser` into a service:
 
@@ -52,37 +52,37 @@ namespace AbpDemo
 
 ### Properties
 
-Here, the fundamental properties of the `ICurrentUser` interface:
+Here are the fundamental properties of the `ICurrentUser` interface:
 
-* **IsAuthenticated** (bool): Return `true` if current user has logged in (authenticated). `Id` and `UserName` returns `null` if the user has not logged in.
-* **Id** (Guid?): Id of the current user or `null` if the current user has not logged in.
-* **UserName** (string): User name of the current user or `null` if the current user has not logged in.
-* **TenantId** (Guid?): Tenant Id of the current user, which can be useful for a [multi-tenant](Multi-Tenancy.md) application.
-* **Email** (string): Email address of the current user or `null` if the current user has not logged in or not set an email address.
-* **EmailVerified** (bool): True, if the phone number of the current user has been verified.
-* **PhoneNumber** (string): Phone number of the current user or `null` if the current user has not logged in or not set a phone number.
-* **PhoneNumberVerified** (bool): True, if the phone number of the current user has been verified.
-* **Roles** (string[]): A string array of the role names of the current user.
+* **IsAuthenticated** (bool): Returns `true` if the current user has logged in (authenticated). If the user has not logged in then `Id` and `UserName` returns `null`.
+* **Id** (Guid?): Id of the current user. Returns `null`, if the current user has not logged in.
+* **UserName** (string): User name of the current user. Returns `null`, if the current user has not logged in.
+* **TenantId** (Guid?): Tenant Id of the current user, which can be useful for a [multi-tenant](Multi-Tenancy.md) application. Returns `null`, if the current user is not assigned to a tenant.
+* **Email** (string): Email address of the current user.Returns `null`, if the current user has not logged in or not set an email address.
+* **EmailVerified** (bool): Returns `true`, if the phone number of the current user has been verified.
+* **PhoneNumber** (string): Phone number of the current user. Returns `null`, if the current user has not logged in or not set a phone number.
+* **PhoneNumberVerified** (bool): Returns `true`, if the phone number of the current user has been verified.
+* **Roles** (string[]): Roles of the current user. Returns a string array of the role names of the current user.
 
 ### Methods
 
-`ICurrentUser` is implemented on the `ICurrentPrincipalAccessor` (see the section below) and works with the claims. So, all of the above properties are actually retrieved from claims of the currently authenticated user.
+`ICurrentUser` is implemented on the `ICurrentPrincipalAccessor` (see the section below) and works with the claims. So, all of the above properties are actually retrieved from the claims of the current authenticated user.
 
-`ICurrentUser` has some methods to directly work with the claims if you have custom claims or get other non-common claim types.
+`ICurrentUser` has some methods to directly work with the claims, if you have custom claims or get other non-common claim types.
 
-* **FindClaim**: Gets a claim with the given name or returns `null` if not found.
+* **FindClaim**: Gets a claim with the given name. Returns `null` if not found.
 * **FindClaims**: Gets all the claims with the given name (it is allowed to have multiple claim values with the same name).
 * **GetAllClaims**: Gets all the claims.
-* **IsInRole**: A shortcut method to check if the current user has a role.
+* **IsInRole**: A shortcut method to check if the current user is in the specified role.
 
-Beside these standard methods, there are extension methods as shortcuts:
+Beside these standard methods, there are some extension methods:
 
 * **FindClaimValue**: Gets the value of the claim with the given name, or `null` if not found. It has a generic overload that also casts the value to a specific type.
-* **GetId**: Returns `Id` of the current user but throws an exception (instead of returning `null`) if the current user has not logged in. Use this only if you are sure that the user has already authenticated in your code context.
+* **GetId**: Returns `Id` of the current user. If the current user has not logged in, it throws an exception (instead of returning `null`) . Use this only if you are sure that the user has already authenticated in your code context.
 
 ### Authentication & Authorization
 
-`ICurrentUser` works independent of how user is authenticated or authorized. It silently works with any authentication system that works with the current principal (see the section below).
+`ICurrentUser` works independently of how the user is authenticated or authorized. It seamlessly works with any authentication system that works with the current principal (see the section below).
 
 ## ICurrentPrincipalAccessor
 
@@ -116,7 +116,7 @@ public class MyService : ITransientDependency
 
 ### Changing the Current Principle
 
-Current principle is not something you want to set/change, except some advanced scenarios. If you need it, use the `Change` method of the `ICurrentPrincipalAccessor`. It takes a `ClaimsPrinciple` object and makes it "current" for a scope.
+Current principle is not something you want to set or change, except at some advanced scenarios. If you need it, use the `Change` method of the `ICurrentPrincipalAccessor`. It takes a `ClaimsPrinciple` object and makes it "current" for a scope.
 
 Example:
 
@@ -152,9 +152,9 @@ public class MyAppService : ApplicationService
 }
 ````
 
-Use the `Change` method always in a `using` statement, so it is restored to the previous value after the `using` scope ends.
+Use the `Change` method always in a `using` statement, so it will be restored to the original value after the `using` scope ends.
 
-This can be a way to simulate a user login for a scope of the application code, however use it by care.
+This can be a way to simulate a user login for a scope of the application code, however try to use it carefully.
 
 ## AbpClaimTypes
 
