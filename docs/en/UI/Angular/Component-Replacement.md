@@ -543,6 +543,10 @@ The final UI looks like below:
 
 ![New nav-items](./images/replaced-nav-items-component.png)
 
+## See Also
+
+- [How to Replace PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
+
 ## What's Next?
 
 - [Custom Setting Page](./Custom-Setting-Page.md)

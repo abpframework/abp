@@ -18,6 +18,8 @@ export class LazyStyleHandler {
   private styles: string[];
   private _dir: LocaleDirection = 'ltr';
 
+  readonly loaded = new Map<string, HTMLLinkElement>();
+
   set dir(dir: LocaleDirection) {
     if (dir === this._dir) return;
 
@@ -36,9 +38,17 @@ export class LazyStyleHandler {
     this.listenToLanguageChanges(injector);
   }
 
+  private getHrefFromLink(link: HTMLLinkElement | null): string {
+    if (!link) return '';
+
+    const a = document.createElement('a');
+    a.href = link.href;
+    return a.pathname.replace(/^\//, '');
+  }
+
   private getLoadedBootstrap(): LoadedStyle {
     const href = createLazyStyleHref(BOOTSTRAP, this.dir);
-    const selector = `[href$="${href}"]`;
+    const selector = `[href*="${href.replace(/\.css$/, '')}"]`;
     const link = document.querySelector<HTMLLinkElement>(selector);
     return { href, link };
   }
@@ -75,9 +85,19 @@ export class LazyStyleHandler {
     this.styles.forEach(style => {
       const oldHref = createLazyStyleHref(style, this.dir);
       const newHref = createLazyStyleHref(style, dir);
+      const link = this.loaded.get(newHref);
+      const href = this.getHrefFromLink(link) || newHref;
 
-      const strategy = LOADING_STRATEGY.PrependAnonymousStyleToHead(newHref);
-      this.lazyLoad.load(strategy).subscribe(() => this.lazyLoad.remove(oldHref));
+      const strategy = LOADING_STRATEGY.PrependAnonymousStyleToHead(href);
+      this.lazyLoad.load(strategy).subscribe(() => {
+        const oldLink = this.lazyLoad.loaded.get(oldHref) as HTMLLinkElement;
+        this.loaded.delete(newHref);
+        this.loaded.set(oldHref, oldLink);
+        const newLink = this.lazyLoad.loaded.get(href) as HTMLLinkElement;
+        this.lazyLoad.loaded.delete(href);
+        this.lazyLoad.loaded.set(newHref, newLink);
+        this.lazyLoad.remove(oldHref);
+      });
     });
   }
 }

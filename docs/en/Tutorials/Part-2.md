@@ -15,7 +15,7 @@ else if UI == "NG"
   DB="mongodb"
   DB_Text="MongoDB"
   UI_Text="angular"
-else 
+else
   DB ="?"
   UI_Text="?"
 end
@@ -86,7 +86,6 @@ Open the `CreateModal.cshtml` file and paste the code below:
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
@@ -203,7 +202,7 @@ namespace Acme.BookStore.Web.Pages.Books
 * In the `GetAsync` method, we get `BookDto `from `BookAppService` and this is being mapped to the DTO object `CreateUpdateBookDto`.
 * The `OnPostAsync` uses `BookAppService.UpdateAsync()` to update the entity.
 
-#### Mapping from BookDto to CreateUpdateBookDto 
+#### Mapping from BookDto to CreateUpdateBookDto
 
 To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and change it as shown below:
 
@@ -230,7 +229,6 @@ Replace `EditModal.cshtml` content with the following content:
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Acme.BookStore.Web.Pages.Books
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel
@@ -256,7 +254,7 @@ This page is very similar to the `CreateModal.cshtml`, except:
 
 #### Add "Actions" dropdown to the table
 
-We will add a dropdown button to the table named *Actions*. 
+We will add a dropdown button to the table named *Actions*.
 
 Open the `Pages/Books/Index.cshtml` page and change the `<abp-table>` section as shown below:
 
@@ -525,7 +523,7 @@ export class BookState {
 
 * We imported `CreateUpdateBook` action and defined the `save` method that will listen to a `CreateUpdateBook` action to create a book.
 
-When the `SaveBook` action dispatched, the save method is being executed. It calls `createByInput` method of the `BookService`. 
+When the `SaveBook` action dispatched, the save method is being executed. It calls `createByInput` method of the `BookService`.
 
 #### Add a modal to BookListComponent
 
@@ -601,7 +599,7 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
 </abp-modal>
 ```
 
-* We added the `abp-modal` which renders a modal to allow user to create a new book. 
+* We added the `abp-modal` which renders a modal to allow user to create a new book.
 * `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
 * We added `New book` button to the `AbpContentToolbar`.
 
@@ -864,7 +862,7 @@ export class BookListComponent implements OnInit {
 }
 ```
 
-* We imported ` NgbDateNativeAdapter, NgbDateAdapter` 
+* We imported ` NgbDateNativeAdapter, NgbDateAdapter`
 
 * We added a new provider `NgbDateAdapter` that converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
@@ -971,7 +969,7 @@ Open `book-list.component.html` in `app\book\book-list` folder and add the follo
   <button type="button" class="btn btn-secondary" #abpClose>
       {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
   </button>
-    
+
   <!--added save button-->
   <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
         <i class="fa fa-check mr-1"></i>
@@ -986,7 +984,7 @@ Find the `<form [formGroup]="form">` tag and replace below content:
 <form [formGroup]="form" (ngSubmit)="save()"> <!-- added the ngSubmit -->
 ```
 
-  
+
 * We added the `(ngSubmit)="save()"` to `<form>` element to save a new book by pressing the enter.
 * We added `abp-button` to the bottom area of the modal to save a new book.
 
@@ -1131,7 +1129,7 @@ export class BookListComponent implements OnInit {
 * We imported `BookService`.
 * We declared a variable named `selectedBook` as `BookDto`.
 * We injected  `BookService` to the constructor. `BookService` is being used to retrieve the book data which is being edited.
-* We added `editBook`  method. This method fetches the book with the given `Id` and sets it to `selectedBook` object. 
+* We added `editBook`  method. This method fetches the book with the given `Id` and sets it to `selectedBook` object.
 * We replaced the `buildForm` method so that it creates the form with the `selectedBook` data.
 * We replaced the `createBook` method so it sets `selectedBook` to an empty object.
 * We added `selectedBook.id` to the constructor of the new `CreateUpdateBook`.
@@ -1291,7 +1289,7 @@ import { ConfirmationService } from '@abp/ng.theme.shared';
 //...
 
 constructor(
-    private store: Store, 
+    private store: Store,
     private fb: FormBuilder,
     private bookService: BookService,
     private confirmation: ConfirmationService // <== added this line ==>

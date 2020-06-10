@@ -139,7 +139,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         u.UserName.Contains(filter) ||
                         u.Email.Contains(filter) ||
                         (u.Name != null && u.Name.Contains(filter)) ||
-                        (u.Surname != null && u.Surname.Contains(filter))
+                        (u.Surname != null && u.Surname.Contains(filter)) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .PageBy(skipCount, maxResultCount)
@@ -184,7 +185,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         u.UserName.Contains(filter) ||
                         u.Email.Contains(filter) ||
                         (u.Name != null && u.Name.Contains(filter)) ||
-                        (u.Surname != null && u.Surname.Contains(filter))
+                        (u.Surname != null && u.Surname.Contains(filter)) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
