@@ -88,3 +88,90 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ````
 
+### Extra Configuration Options
+
+`BlobContainerConfiguration` allows to add/remove provider specific configuration objects. If your provider needs to additional configuration, you can create a wrapper class to the `BlobContainerConfiguration` for a type-safe configuration option:
+
+````csharp
+    public class MyCustomBlobProviderConfiguration
+    {
+        public string MyOption1
+        {
+            get => _containerConfiguration
+                .GetConfiguration<string>("MyCustomBlobProvider.MyOption1");
+            set => _containerConfiguration
+                .SetConfiguration("MyCustomBlobProvider.MyOption1", value);
+        }
+
+        private readonly BlobContainerConfiguration _containerConfiguration;
+
+        public MyCustomBlobProviderConfiguration(
+            BlobContainerConfiguration containerConfiguration)
+        {
+            _containerConfiguration = containerConfiguration;
+        }
+    }
+````
+
+Then you can change the `MyBlobContainerConfigurationExtensions` class like that:
+
+````
+public static class MyBlobContainerConfigurationExtensions
+{
+    public static BlobContainerConfiguration UseMyCustomBlobProvider(
+        this BlobContainerConfiguration containerConfiguration,
+        Action<MyCustomBlobProviderConfiguration> configureAction)
+    {
+        containerConfiguration.ProviderType = typeof(MyCustomBlobProvider);
+        
+        configureAction.Invoke(
+            new MyCustomBlobProviderConfiguration(containerConfiguration)
+        );
+        
+        return containerConfiguration;
+    }
+    
+    public static MyCustomBlobProviderConfiguration GetMyCustomBlobProviderConfiguration(
+        this BlobContainerConfiguration containerConfiguration)
+    {
+        return new MyCustomBlobProviderConfiguration(containerConfiguration);
+    }
+}
+````
+
+* Added an action parameter to the `UseMyCustomBlobProvider` method to allow developers to set the additional options.
+* Added a new `GetMyCustomBlobProviderConfiguration` method to be used inside `MyCustomBlobProvider` class to obtain the configured values.
+
+Then anyone can set the `MyOption1` as shown below:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.ConfigureDefault(container =>
+    {
+        container.UseMyCustomBlobProvider(provider =>
+        {
+            provider.MyOption1 = "my value";
+        });
+    });
+});
+````
+
+Finally, you can access to the extra options using the `GetMyCustomBlobProviderConfiguration` method:
+
+````csharp
+public class MyCustomBlobProvider : BlobProviderBase, ITransientDependency
+{
+    public override Task SaveAsync(BlobProviderSaveArgs args)
+    {
+        var config = args.Configuration.GetMyCustomBlobProviderConfiguration();
+        var value = config.MyOption1;
+        
+        //...
+    }
+}
+````
+
+## Contribute?
+
+If you create a new provider and you think it can be useful for other developers, please consider to [contribute](Contribution/Index.md) to the ABP Framework on GitHub.
