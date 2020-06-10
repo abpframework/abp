@@ -1,10 +1,10 @@
 # BLOB Storing
 
-It is typical to **store file contents** in an application and read these file contents on need. Not only files, but you may also need to save various types of **large binary objects**, a.k.a. **[BLOB](https://en.wikipedia.org/wiki/Binary_large_object)**s, into a **storage**. For example, you may want to save user profile pictures.
+It is typical to **store file contents** in an application and read these file contents whenever we need. Not only the files, but you may also need to save various types of **large binary objects**, a.k.a. **[BLOB](https://en.wikipedia.org/wiki/Binary_large_object)**, into a **storage**. For example, you can save the user profile pictures.
 
-A BLOB is typically a **byte array**. Storing a BLOB in the local file system, in a shared database or on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/) can be an option.
+A BLOB is a typically **byte array**. There are various places to store a BLOB item; storing in the local file system, in a shared database or on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/) can be options.
 
-ABP Framework provides an abstraction to work with BLOBs and provides some pre-built storage providers that you can easily integrate to. Having such an abstraction has some benefits;
+The ABP Framework provides an abstraction to work with BLOBs and provides some pre-built storage providers that you can easily integrate to. Having such an abstraction has some benefits;
 
 * You can **easily integrate** to your favorite BLOB storage provides with a few lines of configuration.
 * You can then **easily change** your BLOB storage without changing your application code.
@@ -14,7 +14,7 @@ ABP BLOB Storage system is also compatible to other ABP Framework features like 
 
 ## BLOB Storage Providers
 
-ABP Framework has the following storage provider implementations;
+The ABP Framework has already the following storage provider implementations;
 
 * [File System](Blob-Storing-File-System.md): Stores BLOBs in a folder of the local file system, as standard files.
 * [Database](Blob-Storing-Database.md): Stores BLOBs in a database.
@@ -28,13 +28,13 @@ Multiple providers **can be used together** by the help of the **container syste
 
 ## Volo.Abp.BlobStoring Package
 
-[Volo.Abp.BlobStoring](https://www.nuget.org/packages/Volo.Abp.BlobStoring) is the main package defines the BLOB storing services. You can use this package to use the BLOB Storing system without depending a specific storage provider.
+[Volo.Abp.BlobStoring](https://www.nuget.org/packages/Volo.Abp.BlobStoring) is the main package that defines the BLOB storing services. You can use this package to use the BLOB Storing system without depending a specific storage provider.
 
 ### Installation
 
 Use the ABP CLI to add this package to your project:
 
-* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) if you haven't installed before.
+* Install the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI), if you haven't installed it.
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring` package.
 * Run `abp add-package Volo.Abp.BlobStoring` command.
 
@@ -75,7 +75,7 @@ namespace AbpDemo
 }
 ````
 
-This service saves given bytes with the `my-blob-1` name and then reads the previously saved bytes with the same name.
+This service saves the given bytes with the `my-blob-1` name and then gets the previously saved bytes with the same name.
 
 > A BLOB is a named object and **each BLOB should have a unique name**, which is an arbitrary string.
 
@@ -89,18 +89,18 @@ This service saves given bytes with the `my-blob-1` name and then reads the prev
 
 * **name** (string): Unique name of the BLOB.
 * **stream** (Stream) or **bytes** (byte[]): The stream to read the BLOB content or a byte array.
-* **overrideExisting** (bool): Set `true` to replace the BLOB content if it does already exists. Default value is `false` and throws `BlobAlreadyExistsException` if there is already a BLOB in the container with the same name.
+* **overrideExisting** (bool): Set `true` to replace the BLOB content, if it already exists. Default value is `false` and throws `BlobAlreadyExistsException` if there is already a BLOB in the container with the same name.
 
 #### Reading/Getting BLOBs
 
-* `GetAsync`: Only gets a BLOB name and returns a `Stream` object that can be used to read the BLOB content. Always **dispose the stream** after using it. This method throws exception if can not find the BLOB with the given name.
+* `GetAsync`: Only gets a BLOB name and returns a `Stream` object that can be used to read the BLOB content. Always **dispose the stream** after using it. This method throws exception, if it can not find the BLOB with the given name.
 * `GetOrNullAsync`: In opposite to the `GetAsync` method, this one returns `null` if there is no BLOB found with the given name.
 * `GetAllBytesAsync`: Returns a `byte[]` instead of a `Stream`. Still throws exception if can not find the BLOB with the given name.
 * `GetAllBytesOrNullAsync`: In opposite to the `GetAllBytesAsync` method, this one returns `null` if there is no BLOB found with the given name.
 
 #### Deleting BLOBs
 
-`DeleteAsync` method gets a BLOB name and deletes the BLOB data. It doesn't throw any exception if given BLOB was not found, instead it returns a `bool` indicates that the BLOB was actually deleted or not.
+`DeleteAsync` method gets a BLOB name and deletes the BLOB data. It doesn't throw any exception if the given BLOB was not found, instead it returns a `bool` indicates that the BLOB was actually deleted or not.
 
 #### Other Methods
 
@@ -110,7 +110,7 @@ This service saves given bytes with the `my-blob-1` name and then reads the prev
 
 Typed BLOB container is a way of creating and managing **multiple containers** in an application;
 
-* **Each container is separately stored**. That means BLOB names should be unique in a container and two BLOBs with the same name can live in different containers without effecting each other.
+* **Each container is separately stored**. That means the BLOB names should be unique in a container and two BLOBs with the same name can live in different containers without effecting each other.
 * **Each container can be separately configured**, so each container can use a different storage provider based on your configuration.
 
 To create a typed container, you need to create a simple class decorated with the `BlobContainerName` attribute:
@@ -128,7 +128,7 @@ namespace AbpDemo
 }
 ````
 
-> If you don't use the `BlobContainerName` attribute, ABP Framework uses the full name of the class (with namespace), but it is always recommended to use a container name which is not changed even if you rename the class.
+> If you don't use the `BlobContainerName` attribute, ABP Framework uses the full name of the class (with namespace), but it is always recommended to use a container name which is stable and does not change even if you rename the class.
 
 Once you create the container class, you can inject `IBlobContainer<T>` for your container type.
 
@@ -165,13 +165,13 @@ public class ProfileAppService : ApplicationService
 
 #### The Default Container
 
-If you don't use the generic argument and directly inject the `IBlobContainer` (as explained before), you get the default container. Another way of injecting the default container is like `IBlobContainer<DefaultContainer>`, which returns exactly the same container.
+If you don't use the generic argument and directly inject the `IBlobContainer` (as explained before), you get the default container. Another way of injecting the default container is using `IBlobContainer<DefaultContainer>`, which returns exactly the same container.
 
 The name of the default container is `Default`.
 
 #### Named Containers
 
-Actually, types containers are just a shortcut for named containers. You can inject and use the `IBlobContainerFactory` to get a BLOB container by its name:
+Typed containers are just shortcuts for named containers. You can inject and use the `IBlobContainerFactory` to get a BLOB container by its name:
 
 ````csharp
 public class ProfileAppService : ApplicationService
@@ -203,11 +203,11 @@ var blobContainer = blobContainerFactory.Create("profile-pictures");
 var blobContainer = blobContainerFactory.Create<ProfilePictureContainer>();
 ````
 
-> You generally don't need to use the `IBlobContainerFactory` since it is used internally when you inject a `IBlobContainer` or `IBlobContainer<T>`.
+> You generally don't need to use the `IBlobContainerFactory` since it is used internally, when you inject a `IBlobContainer` or `IBlobContainer<T>`.
 
 ### About Naming the BLOBs
 
-Naming BLOBs has not a forcing rule. A BLOB name is just a string that is unique per container. However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separators (`/`) and file extensions in your BLOB name (if your BLOB name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder of the root container folder).
+Naming BLOBs is not a compelling rule! A BLOB name is just a string that is unique per container. However, different storage providers may conventionally implement some practices. For example, the [File System Provider](Blob-Storing-File-System.md) use directory separators (`/`) and file extensions in your BLOB name. For example, if your BLOB name is `images/common/x.png` then it is saved as `x.png` in the `images/common` folder of the root container folder.
 
 ## Configuring the Containers
 
@@ -269,9 +269,9 @@ This is a way to configure all the containers. The main difference from configur
 
 ## Multi-Tenancy
 
-ABP BLOB Storing system **works silently with the [multi-tenancy](Multi-Tenancy.md)** if your application is multi-tenant. All the providers implement multi-tenancy as a standard feature. They **isolate BLOBs** of different tenants from each other, so they can only access to their own BLOBs. That also means you can use the **same BLOB name** for different tenants.
+If your application is set as multi-tenant, the BLOB Storage system **works seamlessly with the [multi-tenancy](Multi-Tenancy.md)**. All the providers implement multi-tenancy as a standard feature. They **isolate BLOBs** of different tenants from each other, so they can only access to their own BLOBs. It means you can use the **same BLOB name for different tenants**.
 
-If your application is multi-tenant, you may want to control **multi-tenancy behavior** of the containers individually. For example, you may want to **disable multi-tenancy** for a specific container, so the BLOBs inside it will be **available to all the tenants**. This is a way to share BLOBs among tenants.
+If your application is multi-tenant, you may want to control **multi-tenancy behavior** of the containers individually. For example, you may want to **disable multi-tenancy** for a specific container, this way the BLOB items will be **available to all the tenants**. This is a way to share the BLOB items among tenants.
 
 **Example: Disable multi-tenancy for a specific container**
 
@@ -285,11 +285,11 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ````
 
-> If your application is not multi-tenant, no worry, it works as expected. You don't need to configure anything.
+> No worries, if your application is not multi-tenant, it works as expected. You don't need to configure anything.
 
 ## Extending the BLOB Storing System
 
-Most of the times, you won't need to customize the BLOB storage system except [creating a custom BLOB storage provider](Blob-Storing-Custom-Provider.md). However, you can replace any service introduced above (via [dependency injection](Dependency-Injection.md)), if you need. Here, some other services not mentioned above, but you may want to know:
+Most of the times, you won't need to customize the BLOB storage system except [creating a custom BLOB storage provider](Blob-Storing-Custom-Provider.md). However, you can replace any service introduced above (via [dependency injection](Dependency-Injection.md)), if you need. Here are some other services related to the BLOB Storage system:
 
 * `IBlobProviderSelector` is used to get a `IBlobProvider` instance by a container name. Default implementation (`DefaultBlobProviderSelector`) selects the provider using the configuration.
 * `IBlobContainerConfigurationProvider` is used to get the `BlobContainerConfiguration` for a given container name. Default implementation (`DefaultBlobContainerConfigurationProvider`) gets the configuration from the `AbpBlobStoringOptions` explained above.
@@ -298,7 +298,7 @@ Most of the times, you won't need to customize the BLOB storage system except [c
 
 Notice that BLOB storing is not a file management system. It is used to save, get and delete named BLOBs. It doesn't provide a hierarchical structure like directories, you may expect from a typical file system. BLOB Storing is a low level system.
 
-If you want to create folders and move files between folders, assign permissions to files and share files between users then you need to implement your own application on top of the BLOB Storing system.
+If you want to create folders and move files between folders, assign permissions to files and share files between users then you need to implement your own application on top of the BLOB Storage system.
 
 ## See Also
 
