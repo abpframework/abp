@@ -89,8 +89,7 @@ This service saves the given bytes with the `my-blob-1` name and then gets the p
 
 * **name** (string): Unique name of the BLOB.
 * **stream** (Stream) or **bytes** (byte[]): The stream to read the BLOB content or a byte array.
-* **overrideExisting** (bool): Set `true` to replace the BLOB content, if it already exists. Default value is `false` and throws `BlobAlreadyExistsException` if there is already a BLOB in the container with the same name.
-
+* **overrideExisting** (bool): Set `true` to replace the BLOB content, if it already exists. The default value is `false`. If the container has a BLOB with the same name and you do not set `overrideExisting = true`, it throws `BlobAlreadyExistsException`.
 #### Reading/Getting BLOBs
 
 * `GetAsync`: Only gets a BLOB name and returns a `Stream` object that can be used to read the BLOB content. Always **dispose the stream** after using it. This method throws exception, if it can not find the BLOB with the given name.
