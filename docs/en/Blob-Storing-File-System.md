@@ -12,7 +12,7 @@ Use the ABP CLI to add [Volo.Abp.BlobStoring.FileSystem](https://www.nuget.org/p
 * Open a command line (terminal) in the directory of the `.csproj` file you want to add the `Volo.Abp.BlobStoring.FileSystem` package.
 * Run `abp add-package Volo.Abp.BlobStoring.FileSystem` command.
 
-If you want to do it manually, install the [Volo.Abp.BlobStoring](https://www.nuget.org/packages/Volo.Abp.BlobStoring) NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
+If you want to do it manually, install the [Volo.Abp.BlobStoring.FileSystem](https://www.nuget.org/packages/Volo.Abp.BlobStoring.FileSystem) NuGet package to your project and add `[DependsOn(typeof(AbpBlobStoringFileSystemModule))]` to the [ABP module](Module-Development-Basics.md) class inside your project.
 
 ## Configuration
 
