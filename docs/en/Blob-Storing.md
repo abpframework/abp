@@ -20,9 +20,9 @@ ABP Framework has the following storage provider implementations;
 * [Database](Blob-Storing-Database.md): Stores BLOBs in a database.
 * [Azure](Blob-Storing-Azure.md): Stores BLOBs on the [Azure BLOB storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 
-More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](Blob-Storing-Custom-Provider.md).
+More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](Blob-Storing-Custom-Provider.md) and [contribute](Contribution/Index.md) to the ABP Framework.
 
-Multiple providers **can be used together** by the help of the **container system**, where each container can use a different provider (will be explained below).
+Multiple providers **can be used together** by the help of the **container system**, where each container can uses a different provider.
 
 > BLOB storing system can not work unless you **configure a storage provider**. Refer to the linked documents for the storage provider configurations.
 

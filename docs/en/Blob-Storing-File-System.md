@@ -2,7 +2,7 @@
 
 File System Storage Provider is used to store BLOBs in the local file system as standard files inside a folder.
 
-> Read the BLOB Storing document to understand how to use the BLOB storing system. This document only covers how to configure containers to use the file system.
+> Read the [BLOB Storing document](Blob-Storing.md) to understand how to use the BLOB storing system. This document only covers how to configure containers to use the file system.
 
 ## Installation
 
