@@ -182,6 +182,36 @@
 
         },
         {
+          "text": "BLOB存储",
+          "items": [
+            {
+              "text": "BLOB存储系统",
+              "path": "Blob-Storing.md"
+            },
+            {
+              "text": "存储提供者",
+              "items": [
+                {
+                  "text": "文件系统提供者",
+                  "path": "Blob-Storing-File-System.md"
+                },
+                {
+                  "text": "数据库系统提供者",
+                  "path": "Blob-Storing-Database.md"
+                },
+                {
+                  "text": "Azure提供者",
+                  "path": "Blob-Storing-Azure.md"
+                },
+                {
+                  "text": "创建自定义提供者",
+                  "path": "Blob-Storing-Custom-Provider.md"
+                }
+              ]
+            }            
+          ]
+        },
+        {
           "text": "文本模板",
           "path": "Text-Templating.md"
         },
