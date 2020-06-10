@@ -22,19 +22,19 @@ Find `UseSqlServer()` calls in your solution, replace with `UseOracle()`. Check 
 
 In the `CreateDbContext()` method of the *YourProjectName*MigrationsDbContextFactory.cs, replace the following code block
 
-```
+```csharp
 var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 ```
 
 with this one
-```
+```csharp
 var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
 	new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>().UseOracle
 	(
 		configuration.GetConnectionString("Default")
 	);
-``` 
+```
 
 > Depending on your solution structure, you may find more code files need to be changed.
 
@@ -43,11 +43,6 @@ var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
 Oracle connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/oracle/ ) for details of Oracle connection string options.
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
-
-A sample connection string for Oracle:
-```
-Data Source=localhost;User Id=myuser;Password=mypassword;
-```
 
 ## Re-Generate the Migrations
 

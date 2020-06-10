@@ -1,4 +1,5 @@
-import { ABP, ListService } from '@abp/ng.core';
+import { ListService } from '@abp/ng.core';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
@@ -24,7 +25,7 @@ import {
 import { Identity } from '../../models/identity';
 import { IdentityService } from '../../services/identity.service';
 import { IdentityState } from '../../states/identity.state';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
+
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',

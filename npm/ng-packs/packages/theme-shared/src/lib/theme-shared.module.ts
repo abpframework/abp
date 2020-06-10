@@ -69,6 +69,7 @@ export function ngxDatatableMessageFactory(store: Store) {
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent,
   ],
   exports: [
     NgxDatatableModule,
@@ -89,6 +90,7 @@ export function ngxDatatableMessageFactory(store: Store) {
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent,
   ],
   providers: [DatePipe],
   entryComponents: [
@@ -102,7 +104,7 @@ export function ngxDatatableMessageFactory(store: Store) {
 export class ThemeSharedModule {
   constructor(private errorHandler: ErrorHandler) {}
 
-  static forRoot(options = {} as RootParams): ModuleWithProviders {
+  static forRoot(options = {} as RootParams): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
       providers: [

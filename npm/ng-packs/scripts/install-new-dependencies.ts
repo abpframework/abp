@@ -25,7 +25,8 @@ const updateAndInstall = async () => {
       .reduce((acc, key) => ({ ...acc, [key]: packageJson.devDependencies[key] }), {});
   });
 
-  console.warn('Searching the packages on NPM to check if it is exist. It takes a while.');
+  // tslint:disable-next-line: no-console
+  console.log('Searching the packages on NPM to check if it is exist. It takes a while.');
   Object.keys(packageJson.devDependencies).forEach(pkg => {
     const isPackageExistOnNPM = !(
       execa.sync('npm', ['search', pkg]).stdout.indexOf('No matches found for') > -1
@@ -40,6 +41,10 @@ const updateAndInstall = async () => {
     await execa('yarn', ['install', '--ignore-scripts'], {
       stdout: 'inherit',
       cwd: '../',
+    });
+
+    await execa('yarn', ['post-install'], {
+      stdout: 'inherit',
     });
   } catch (error) {
     console.error(error.stderr);

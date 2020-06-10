@@ -14,7 +14,7 @@ else if UI == "NG"
   DB="mongodb"
   DB_Text="MongoDB"
   UI_Text="angular"
-else 
+else
   DB ="?"
   UI_Text="?"
 end
@@ -444,7 +444,7 @@ using Volo.Abp.Application.Services;
 
 namespace Acme.BookStore
 {
-    public interface IBookAppService : 
+    public interface IBookAppService :
         ICrudAppService< //定义了CRUD方法
             BookDto, //用来展示书籍
             Guid, //Book实体的主键
@@ -473,12 +473,12 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Acme.BookStore
 {
-    public class BookAppService : 
+    public class BookAppService :
         CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                             CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
-        public BookAppService(IRepository<Book, Guid> repository) 
+        public BookAppService(IRepository<Book, Guid> repository)
             : base(repository)
         {
 
@@ -564,13 +564,11 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 ````html
 @page
 @using Acme.BookStore.Web.Pages.Book
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model IndexModel
 
 <h2>Book</h2>
 ````
 
-* 此代码更改了Razor View Page Model的默认继承,因此它从`BookStorePage`类(而不是`PageModel`)继承.启动模板附带的`BookStorePage`类,提供所有页面使用的一些共享属性/方法.
 * 确保`IndexModel`(Index.cshtml.cs)具有`Acme.BookStore.Web.Pages.Book`命名空间,或者在`Index.cshtml`中更新它.
 
 **Index.cshtml.cs:**
@@ -599,7 +597,7 @@ namespace Acme.BookStore.Web.Pages.Book
 namespace Acme.BookStore.Web.Menus
 {
     public class BookStoreMenuContributor : IMenuContributor
-    { 
+    {
         private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             //<-- added the below code
@@ -667,7 +665,6 @@ namespace Acme.BookStore.Web.Menus
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model Acme.BookStore.Web.Pages.Book.IndexModel
 @section scripts
 {

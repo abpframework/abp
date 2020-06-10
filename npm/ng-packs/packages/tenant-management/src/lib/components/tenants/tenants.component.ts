@@ -68,10 +68,10 @@ export class TenantsComponent implements OnInit {
     return this.defaultConnectionStringForm.get('defaultConnectionString').value;
   }
 
-  @ViewChild('tenantModalTemplate', { static: false })
+  @ViewChild('tenantModalTemplate')
   tenantModalTemplate: TemplateRef<any>;
 
-  @ViewChild('connectionStringModalTemplate', { static: false })
+  @ViewChild('connectionStringModalTemplate')
   connectionStringModalTemplate: TemplateRef<any>;
 
   get isDisabledSaveButton(): boolean {

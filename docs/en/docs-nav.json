@@ -180,6 +180,36 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "BLOB Storing",
+          "items": [
+            {
+              "text": "BLOB Storing System",
+              "path": "Blob-Storing.md"
+            },
+            {
+              "text": "Storage Providers",
+              "items": [
+                {
+                  "text": "File System Provider",
+                  "path": "Blob-Storing-File-System.md"
+                },
+                {
+                  "text": "Database Provider",
+                  "path": "Blob-Storing-Database.md"
+                },
+                {
+                  "text": "Azure Provider",
+                  "path": "Blob-Storing-Azure.md"
+                },
+                {
+                  "text": "Create a Custom Provider",
+                  "path": "Blob-Storing-Custom-Provider.md"
+                }
+              ]
+            }            
+          ]
+        },
+        {
           "text": "Text Templating",
           "path": "Text-Templating.md"
         },
@@ -520,6 +550,10 @@
         {
           "text": "Module",
           "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "Console",
+          "path": "Startup-Templates/Console.md"
         }
       ]
     },
@@ -555,6 +589,10 @@
     {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
+    },
+    {
+      "text": "API Documentation",
+      "path": "{ApiDocumentationUrl}"
     }
   ]
 }
