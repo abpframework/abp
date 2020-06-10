@@ -65,6 +65,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent,
   ],
   exports: [
     BreadcrumbComponent,
@@ -82,6 +83,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent,
   ],
   providers: [DatePipe],
   entryComponents: [
@@ -95,7 +97,7 @@ export function appendScript(injector: Injector) {
 export class ThemeSharedModule {
   constructor(private errorHandler: ErrorHandler) {}
 
-  static forRoot(options = {} as RootParams): ModuleWithProviders {
+  static forRoot(options = {} as RootParams): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
       providers: [

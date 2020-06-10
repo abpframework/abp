@@ -1,30 +1,17 @@
 import { ABP } from '@abp/ng.core';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import snq from 'snq';
-import {
-  CreateUser,
-  DeleteUser,
-  GetUserById,
-  GetUserRoles,
-  GetUsers,
-  UpdateUser,
-} from '../../actions/identity.actions';
+import { CreateUser, DeleteUser, GetUserById, GetUserRoles, GetUsers, UpdateUser } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityService } from '../../services/identity.service';
 import { IdentityState } from '../../states/identity.state';
-import { ePermissionManagementComponents } from '@abp/ng.permission-management';
+
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
@@ -36,7 +23,7 @@ export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsersTotalCount)
   totalCount$: Observable<number>;
 
-  @ViewChild('modalContent', { static: false })
+  @ViewChild('modalContent', {static: false})
   modalContent: TemplateRef<any>;
 
   form: FormGroup;

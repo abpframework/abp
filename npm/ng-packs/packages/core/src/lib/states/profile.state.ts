@@ -1,9 +1,9 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { ChangePassword, GetProfile, UpdateProfile } from '../actions/profile.actions';
 import { Profile } from '../models/profile';
 import { ProfileService } from '../services/profile.service';
-import { Injectable } from '@angular/core';
 
 @State<Profile.State>({
   name: 'ProfileState',

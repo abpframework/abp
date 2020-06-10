@@ -1,20 +1,14 @@
 import { ABP } from '@abp/ng.core';
-import { ConfirmationService, Confirmation, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { eFeatureManagementComponents } from '@abp/ng.feature-management';
+import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
-import {
-  CreateTenant,
-  DeleteTenant,
-  GetTenantById,
-  GetTenants,
-  UpdateTenant,
-} from '../../actions/tenant-management.actions';
+import { CreateTenant, DeleteTenant, GetTenantById, GetTenants, UpdateTenant } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
-import { eFeatureManagementComponents } from '@abp/ng.feature-management';
 
 interface SelectedModalContent {
   type: 'saveConnStr' | 'saveTenant';
@@ -75,10 +69,10 @@ export class TenantsComponent implements OnInit {
     return this.defaultConnectionStringForm.get('defaultConnectionString').value;
   }
 
-  @ViewChild('tenantModalTemplate', { static: false })
+  @ViewChild('tenantModalTemplate')
   tenantModalTemplate: TemplateRef<any>;
 
-  @ViewChild('connectionStringModalTemplate', { static: false })
+  @ViewChild('connectionStringModalTemplate')
   connectionStringModalTemplate: TemplateRef<any>;
 
   get isDisabledSaveButton(): boolean {
