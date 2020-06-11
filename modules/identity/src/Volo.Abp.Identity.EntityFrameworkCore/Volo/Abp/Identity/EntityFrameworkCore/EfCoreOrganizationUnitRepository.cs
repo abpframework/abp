@@ -121,33 +121,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default
             )
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbContext.Users.IncludeDetails(includeDetails) on userOu.UserId equals user.Id
-                        where userOu.OrganizationUnitId == organizationUnit.Id
-                        select user;
+            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
-            if (!filter.IsNullOrWhiteSpace())
-            {
-                query = query.Where(u =>
-                    u.UserName.Contains(filter) ||
-                    u.Email.Contains(filter) ||
-                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
-                    );
-            }
-
-            return await query.OrderBy(sorting ?? nameof(IdentityUser.UserName))
+            return await query.IncludeDetails(includeDetails).OrderBy(sorting ?? nameof(IdentityUser.UserName))
                         .PageBy(skipCount, maxResultCount)
                         .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<int> GetMembersCountAsync(
             OrganizationUnit organizationUnit,
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
-            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
-                        join user in DbContext.Users on userOu.UserId equals user.Id
-                        where userOu.OrganizationUnitId == organizationUnit.Id
-                        select user;
+            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
@@ -174,6 +160,25 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
             DbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
+        }
+
+        protected virtual IQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit, string filter = null)
+        {
+            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
+                join user in DbContext.Users on userOu.UserId equals user.Id
+                where userOu.OrganizationUnitId == organizationUnit.Id
+                select user;
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                query = query.Where(u =>
+                    u.UserName.Contains(filter) ||
+                    u.Email.Contains(filter) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                );
+            }
+
+            return query;
         }
     }
 }
