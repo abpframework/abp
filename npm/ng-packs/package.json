@@ -61,6 +61,7 @@
     "@ngxs/router-plugin": "^3.6.2",
     "@ngxs/storage-plugin": "^3.6.2",
     "@ngxs/store": "^3.6.2",
+    "@swimlane/ngx-datatable": "^16.0.0",
     "@types/jest": "^25.2.3",
     "@types/node": "^12.11.1",
     "angular-oauth2-oidc": "^8.0.4",

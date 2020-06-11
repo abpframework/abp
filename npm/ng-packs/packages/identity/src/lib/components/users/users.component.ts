@@ -1,13 +1,27 @@
-import { ABP } from '@abp/ng.core';
+import { ListService } from '@abp/ng.core';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
 import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import snq from 'snq';
-import { CreateUser, DeleteUser, GetUserById, GetUserRoles, GetUsers, UpdateUser } from '../../actions/identity.actions';
+import {
+  CreateUser,
+  DeleteUser,
+  GetUserById,
+  GetUserRoles,
+  GetUsers,
+  UpdateUser,
+} from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityService } from '../../services/identity.service';
 import { IdentityState } from '../../states/identity.state';
@@ -15,6 +29,7 @@ import { IdentityState } from '../../states/identity.state';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
+  providers: [ListService],
 })
 export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsers)
@@ -23,7 +38,7 @@ export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsersTotalCount)
   totalCount$: Observable<number>;
 
-  @ViewChild('modalContent', {static: false})
+  @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
   form: FormGroup;
@@ -38,17 +53,9 @@ export class UsersComponent implements OnInit {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
-
   isModalVisible: boolean;
 
-  loading = false;
-
   modalBusy = false;
-
-  sortOrder = '';
-
-  sortKey = '';
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
@@ -63,6 +70,7 @@ export class UsersComponent implements OnInit {
   }
 
   constructor(
+    public readonly list: ListService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
@@ -70,12 +78,7 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.get();
-  }
-
-  onSearch(value: string) {
-    this.pageQuery.filter = value;
-    this.get();
+    this.hookToQuery();
   }
 
   buildForm() {
@@ -170,7 +173,7 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
-        this.get();
+        this.list.get();
       });
   }
 
@@ -181,23 +184,19 @@ export class UsersComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.get());
+          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.list.get());
         }
       });
   }
 
-  onPageChange(page: number) {
-    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
-
-    this.get();
+  sort(data) {
+    const { prop, dir } = data.sorts[0];
+    this.list.sortKey = prop;
+    this.list.sortOrder = dir;
   }
 
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetUsers(this.pageQuery))
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe();
+  private hookToQuery() {
+    this.list.hookToQuery(query => this.store.dispatch(new GetUsers(query))).subscribe();
   }
 
   openPermissionsModal(providerKey: string) {
