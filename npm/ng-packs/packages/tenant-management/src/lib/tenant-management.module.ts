@@ -11,6 +11,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @NgModule({
   declarations: [TenantsComponent],
+  exports: [TenantsComponent],
   imports: [
     TenantManagementRoutingModule,
     NgxsModule.forFeature([TenantManagementState]),
