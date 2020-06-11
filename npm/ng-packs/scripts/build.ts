@@ -8,7 +8,7 @@ import program from 'commander';
 
   try {
     if (!program.noInstall) {
-      await execa('yarn', ['install-new-dependencies'], { stdout: 'inherit' });
+      await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
     }
 
     await execa(
@@ -54,6 +54,8 @@ import program from 'commander';
       ],
       { stdout: 'inherit', cwd: '../' },
     );
+
+    await execa('yarn', ['compile:ivy'], { stdout: 'inherit', cwd: '../' });
   } catch (error) {
     console.error(error.stderr);
     process.exit(1);

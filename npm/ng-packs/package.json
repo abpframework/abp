@@ -14,13 +14,13 @@
     "commit": "git-cz",
     "lint": "ng lint",
     "scripts:build": "cd scripts && yarn && yarn build",
-    "prepare:workspace": "yarn scripts:build",
+    "prepare:workspace": "yarn scripts:build --noInstall",
     "ci": "yarn ng lint && yarn prepare:workspace && yarn ci:test && yarn ci:build",
     "ci:test": "ng test --coverage=false",
     "ci:build": "cd scripts && yarn build:prod",
     "lerna": "lerna",
-    "postinstall": "cd scripts && npm install && npm run post-install",
-    "generate:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "compile:ivy": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json'",
+    "postinstall": "npm run compile:ivy"
   },
   "devDependencies": {
     "@abp/ng.account": "~2.9.0",
