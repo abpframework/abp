@@ -73,7 +73,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
                     throw new AbpException($"Could not find the bundle file '{bundleFile}' from {nameof(IWebContentFileProvider)}");
                 }
 
-                AddHtmlTag(viewContext, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                if (file.Length > 0)
+                {
+                    AddHtmlTag(viewContext, context, output, bundleFile + "?_v=" + file.LastModified.UtcTicks);
+                }
             }
 
             stopwatch.Stop();
