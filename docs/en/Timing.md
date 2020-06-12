@@ -96,4 +96,18 @@ In addition to the `Now`, `IClock` service has the following properties:
 * `Kind`: Returns a `DateTimeKind` for the currently used clock type (`DateTimeKind.Utc`, `DateTimeKind.Local` or `DateTimeKind.Unspecified`).
 * `SupportsMultipleTimezone`: Returns `true` if currently used clock is UTC.
 
-### 
+## Time Zones
+
+This section covers the ABP Framework infrastructure related to managing time zones.
+
+### TimeZone Setting
+
+ABP Framework defines a setting, named `Abp.Timing.Timezone`, that can be used to set and get the time zone for a user, [tenant](Multi-Tenancy.md) or globally for the application. The default value is `UTC`.
+
+See the [setting documentation](Settings.md) to learn more about the setting system.
+
+### ITimezoneProvider
+
+`ITimezoneProvider` is a service to simple convert [Windows Time Zone Id](https://support.microsoft.com/en-us/help/973627/microsoft-time-zone-index-values) values to [Iana Time Zone Name](https://www.iana.org/time-zones) values and vice verse. It also provides methods to get list of these time zones and get a `TimeZoneInfo` with a given name.
+
+It has been implemented using the [TimeZoneConverter](https://github.com/mj1856/TimeZoneConverter) library.
