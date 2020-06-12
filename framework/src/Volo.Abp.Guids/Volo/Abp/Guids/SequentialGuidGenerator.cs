@@ -24,7 +24,7 @@ namespace Volo.Abp.Guids
 
         public Guid Create()
         {
-            return Create(Options.DefaultSequentialGuidType);
+            return Create(Options.GetDefaultSequentialGuidType());
         }
 
         public Guid Create(SequentialGuidType guidType)
