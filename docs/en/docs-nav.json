@@ -300,6 +300,15 @@
         {
           "text": "Dynamic C# API Clients",
           "path": "API/Dynamic-CSharp-API-Clients.md"
+        },
+        {
+          "text": "ABP Endpoints",
+          "items": [
+            {
+              "text": "Application Configuration",
+              "path": "API/Application-Configuration.md"
+            }
+          ]
         }
       ]
     },
