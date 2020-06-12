@@ -216,6 +216,10 @@
         {
           "text": "GUID Generation",
           "path": "Guid-Generation.md"
+        },
+        {
+          "text": "Timing",
+          "path": "Timing.md"
         }
       ]
     },
