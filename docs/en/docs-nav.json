@@ -281,7 +281,8 @@
               "path": "Application-Services.md"
             },
             {
-              "text": "Data Transfer Objects"
+              "text": "Data Transfer Objects",
+              "path": "Data-Transfer-Objects.md"
             },
             {
               "text": "Unit Of Work"

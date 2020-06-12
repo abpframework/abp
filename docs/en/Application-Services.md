@@ -2,7 +2,7 @@
 
 Application services are used to implement the **use cases** of an application. They are used to **expose domain logic to the presentation layer**.
 
-An Application Service is called from the presentation layer (optionally) with a **DTO (Data Transfer Object)** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
+An Application Service is called from the presentation layer (optionally) with a **DTO ([Data Transfer Object](Data-Transfer-Objects.md))** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
 
 ## Example
 
@@ -205,7 +205,7 @@ See the [object to object mapping document](Object-To-Object-Mapping.md) for mor
 
 ## Validation
 
-Inputs of application service methods are automatically validated (like ASP.NET Core controller actions). You can use the standard data annotation attributes or custom validation method to perform the validation. ABP also ensures that the input is not null.
+Inputs of application service methods are automatically validated (like ASP.NET Core controller actions). You can use the standard data annotation attributes or a custom validation method to perform the validation. ABP also ensures that the input is not null.
 
 See the [validation document](Validation.md) for more.
 
