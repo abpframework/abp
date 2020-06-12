@@ -107,3 +107,5 @@ Configure<AbpSequentialGuidGeneratorOptions>(options =>
     options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsBinary;
 });
 ````
+
+> EF Core [integration packages](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-Other-DBMS) sets this option to a proper value for the related DBMS. So, most of the times, you don't need to set this option if you are using these integration packages.
