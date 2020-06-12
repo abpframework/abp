@@ -493,7 +493,7 @@
             "index": "apps/dev-app/src/index.html",
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
-            "tsConfig": "apps/dev-app/tsconfig.prod.json",
+            "tsConfig": "apps/dev-app/tsconfig.dev.json",
             "aot": true,
             "extractCss": true,
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
@@ -538,6 +538,7 @@
             "scripts": []
           },
           "configurations": {
+            "tsConfig": "apps/dev-app/tsconfig.prod.json",
             "production": {
               "fileReplacements": [
                 {
