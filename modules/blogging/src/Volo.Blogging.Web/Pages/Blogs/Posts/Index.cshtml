@@ -92,7 +92,7 @@
                     }
 
                     <div class="list-group">
-                        @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
+                        @for (var index = 1; index < Model.Posts.Count && index < 4; index++)
                         {
                             var post = Model.Posts[index];
                             <div class="list-group-item list-group-item-action flex-column align-items-start">
@@ -140,16 +140,16 @@
         <div class="pb-5">
             <div class="row">
                 <div class="col-md-8 box-articles">
-                    @if (Model.Posts.Count > 3)
+                    @if (Model.Posts.Count > 4)
                     {
                         <div class="vs-blog-title">
                             <h2>@L["LastPosts"]</h2>
                         </div>
                         <div class="list-group">
-                            @for (var index = 3; index < Model.Posts.Count; index++)
+                            @for (var index = 4; index < Model.Posts.Count; index++)
                             {
                                 var post = Model.Posts[index];
-                                var oddPost = index % 2 == 1;
+                                var oddPost = index % 2 == 0;
 
                                 <div class="list-group-item">
                                     <div class="row">
