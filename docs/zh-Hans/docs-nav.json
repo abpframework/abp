@@ -189,22 +189,22 @@
               "path": "Blob-Storing.md"
             },
             {
-              "text": "存储提供者",
+              "text": "存储提供程序",
               "items": [
                 {
-                  "text": "文件系统提供者",
+                  "text": "文件系统提供程序",
                   "path": "Blob-Storing-File-System.md"
                 },
                 {
-                  "text": "数据库系统提供者",
+                  "text": "数据库系统提供程序",
                   "path": "Blob-Storing-Database.md"
                 },
                 {
-                  "text": "Azure提供者",
+                  "text": "Azure提供程序",
                   "path": "Blob-Storing-Azure.md"
                 },
                 {
-                  "text": "创建自定义提供者",
+                  "text": "创建自定义提供程序",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }
               ]
