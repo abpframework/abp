@@ -70,7 +70,7 @@ namespace Acme.BookStore
 
 * `IDataSeedContributor` defines the `SeedAsync` method to execute the **data seed logic**.
 * It is typical to **check database** if the seeding data is already present.
-* You can **inject** and service and perform any logic needed to seed the data.
+* You can **inject** service and perform any logic needed to seed the data.
 
 > Data seed contributors are automatically discovered by the ABP Framework and executed as a part of the data seed process.
 
