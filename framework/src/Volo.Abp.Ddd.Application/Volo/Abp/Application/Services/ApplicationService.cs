@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Aspects;
 using Volo.Abp.Auditing;
+using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
+using Volo.Abp.Linq;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
@@ -59,6 +61,9 @@ namespace Volo.Abp.Application.Services
 
         protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
         private IUnitOfWorkManager _unitOfWorkManager;
+        
+        protected IAsyncQueryableExecuter AsyncExecuter => LazyGetRequiredService(ref _asyncExecuter);
+        private IAsyncQueryableExecuter _asyncExecuter;
 
         protected Type ObjectMapperContext { get; set; }
         protected IObjectMapper ObjectMapper
