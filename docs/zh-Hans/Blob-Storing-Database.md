@@ -53,6 +53,8 @@ abp add-module Volo.Abp.BlobStoring.Database
 
 ### 配置容器
 
+如果只使用数据库存储提供程序,则不需要手动配置,因为它是自动完成的. 如果使用多个存储提供程序,可能需要对其进行配置.
+
 如同[BLOB存储文档](Blob-Storing.md)所述,配置是在[模块](Module-Development-Basics.md)类的 `ConfigureServices` 方法完成的.
 
 **示例: 配置为默认使用数据库系统存储提供程序**

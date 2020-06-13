@@ -216,19 +216,12 @@
           "path": "Text-Templating.md"
         },
         {
-          "text": "JSON序列化"
+          "text": "GUID 生成",
+          "path": "Guid-Generation.md"
         },
         {
-          "text": "邮件"
-        },
-        {
-          "text": "GUIDs"
-        },
-        {
-          "text": "线程"
-        },
-        {
-          "text": "定时"
+          "text": "时钟",
+          "path": "Timing.md"
         }
       ]
     },
@@ -309,6 +302,15 @@
         {
           "text": "动态C# API客户端",
           "path": "API/Dynamic-CSharp-API-Clients.md"
+        },
+        {
+          "text": "ABP端点",
+          "items": [
+            {
+              "text": "应用程序配置",
+              "path": "API/Application-Configuration.md"
+            }
+          ]
         }
       ]
     },
@@ -481,6 +483,10 @@
               "path": "Dapper.md"
             }
           ]
+        },
+        {
+          "text": "种子数据",
+          "path": "Data-Seeding.md"
         }
       ]
     },
