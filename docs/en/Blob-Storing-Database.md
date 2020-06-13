@@ -55,6 +55,8 @@ If you want to use a separate database for BLOB storage, use the `AbpBlobStoring
 
 ### Configuring the Containers
 
+If you are using only the database storage provider, you don't need to manually configure it, since it is automatically done. If you are using multiple storage providers, you may want to configure it.
+
 Configuration is done in the `ConfigureServices` method of your [module](Module-Development-Basics.md) class, as explained in the [BLOB Storing document](Blob-Storing.md).
 
 **Example: Configure to use the database storage provider by default**

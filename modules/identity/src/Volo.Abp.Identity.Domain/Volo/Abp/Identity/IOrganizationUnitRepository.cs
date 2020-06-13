@@ -67,6 +67,7 @@ namespace Volo.Abp.Identity
 
         Task<int> GetMembersCountAsync(
             OrganizationUnit organizationUnit,
+            string filter = null,
             CancellationToken cancellationToken = default
         );
 

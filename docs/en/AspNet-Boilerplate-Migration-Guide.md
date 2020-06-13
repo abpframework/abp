@@ -595,7 +595,7 @@ ABP Framework separates it and provides the setting management module (pre-added
 
 ASP.NET Boilerplate has a static `Clock` service ([see](https://aspnetboilerplate.com/Pages/Documents/Timing)) which is used to abstract the `DateTime` kind, so you can easily switch between Local and UTC times. You don't inject it, but just use the `Clock.Now` static method to obtain the current time.
 
-ABP Framework has the `IClock` service ([see](Clock.md)) which has a similar goal, but now you need to inject it whenever you need it.
+ABP Framework has the `IClock` service ([see](Timing.md)) which has a similar goal, but now you need to inject it whenever you need it.
 
 ### Event Bus
 

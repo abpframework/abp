@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.Guids;
+using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.Oracle.Devart
 {
@@ -7,6 +8,15 @@ namespace Volo.Abp.EntityFrameworkCore.Oracle.Devart
         )]
     public class AbpEntityFrameworkCoreOracleDevartModule : AbpModule
     {
-        
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpSequentialGuidGeneratorOptions>(options =>
+            {
+                if (options.DefaultSequentialGuidType == null)
+                {
+                    options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsBinary;
+                }
+            });
+        }
     }
 }
