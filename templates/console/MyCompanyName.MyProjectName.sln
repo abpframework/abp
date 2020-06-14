@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName.ConsoleApp", "src\MyCompanyName.MyProjectName.ConsoleApp\MyCompanyName.MyProjectName.ConsoleApp.csproj", "{00A2F7A3-BEC3-48F4-A91C-5A336C32A5D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCompanyName.MyProjectName", "src\MyCompanyName.MyProjectName\MyCompanyName.MyProjectName.csproj", "{00A2F7A3-BEC3-48F4-A91C-5A336C32A5D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E8067AED-2B6E-4134-AAF8-9101457D709A}"
 EndProject

@@ -1,11 +1,13 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Web.Pages.Account
 @using Volo.Abp.Identity.Settings
 @using Volo.Abp.Settings
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @inject ISettingProvider SettingManager
 @inject IThemeManager ThemeManager
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
+@inject IHtmlLocalizer<AccountResource> L
 @model ManageModel
 @{
     Layout = ThemeManager.CurrentTheme.GetApplicationLayout();

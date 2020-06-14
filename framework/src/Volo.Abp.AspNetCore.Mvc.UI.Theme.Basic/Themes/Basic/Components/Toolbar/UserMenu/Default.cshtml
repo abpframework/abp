@@ -27,8 +27,9 @@
                 var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
                 var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
                 var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
+                var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.Content(menuItem.Url);
 
-                <a class="dropdown-item @cssClass @disabled" href="@(menuItem.Url ?? "#")" target="@menuItem.Target" @Html.Raw(elementId)>
+                <a class="dropdown-item @cssClass @disabled" href="@url" target="@menuItem.Target" @Html.Raw(elementId)>
                     @if (menuItem.Icon != null)
                     {
                         if (menuItem.Icon.StartsWith("fa"))

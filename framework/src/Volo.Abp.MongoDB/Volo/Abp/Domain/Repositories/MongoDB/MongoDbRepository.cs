@@ -15,8 +15,6 @@ using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Reflection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
 {

@@ -22,7 +22,7 @@ namespace Volo.Abp.TestApp.Application
 
         protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
         {
-            return await AsyncQueryableExecuter.FirstOrDefaultAsync(
+            return await AsyncExecuter.FirstOrDefaultAsync(
                 Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
             );
         }

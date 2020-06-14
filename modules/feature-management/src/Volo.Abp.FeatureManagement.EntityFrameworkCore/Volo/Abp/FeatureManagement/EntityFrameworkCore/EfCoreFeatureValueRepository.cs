@@ -23,6 +23,14 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
                 );
         }
 
+        public async Task<List<FeatureValue>> FindAllAsync(string name, string providerName, string providerKey)
+        {
+            return await DbSet
+                .Where(
+                    s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey
+                ).ToListAsync();
+        }
+
         public virtual async Task<List<FeatureValue>> GetListAsync(string providerName, string providerKey)
         {
             return await DbSet

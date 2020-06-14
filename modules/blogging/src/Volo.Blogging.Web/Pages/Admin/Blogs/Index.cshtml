@@ -2,8 +2,10 @@
 @using Microsoft.AspNetCore.Authorization
 @using Volo.Blogging
 @using Volo.Blogging.Pages.Blog
-@inherits BloggingPage
 @model Volo.Blogging.Pages.Admin.Blogs.IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inject IHtmlLocalizer<BloggingResource> L
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Blogs";

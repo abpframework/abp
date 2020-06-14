@@ -14,3 +14,5 @@ export interface HttpErrorConfig {
     hideCloseIcon?: boolean;
   };
 }
+
+export type LocaleDirection = 'ltr' | 'rtl';

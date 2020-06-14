@@ -36,28 +36,28 @@ namespace Volo.Abp.AspNetCore.SignalR
             return reference;
         }
 
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
         private ILoggerFactory _loggerFactory;
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 
-        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
+        protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
 
-        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+        protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
         private ICurrentTenant _currentTenant;
 
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
+        protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
         private IAuthorizationService _authorizationService;
 
-        public IClock Clock => LazyGetRequiredService(ref _clock);
+        protected IClock Clock => LazyGetRequiredService(ref _clock);
         private IClock _clock;
 
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
 
-        public IStringLocalizer L
+        protected IStringLocalizer L
         {
             get
             {
@@ -99,7 +99,7 @@ namespace Volo.Abp.AspNetCore.SignalR
         }
     }
 
-    public abstract class AbpHub<T> : Hub<T> 
+    public abstract class AbpHub<T> : Hub<T>
         where T : class
     {
         public IServiceProvider ServiceProvider { get; set; }
@@ -124,28 +124,28 @@ namespace Volo.Abp.AspNetCore.SignalR
             return reference;
         }
 
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
         private ILoggerFactory _loggerFactory;
 
         protected ILogger Logger => _lazyLogger.Value;
         private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
 
-        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
+        protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
 
-        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+        protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
         private ICurrentTenant _currentTenant;
 
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
+        protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
         private IAuthorizationService _authorizationService;
 
-        public IClock Clock => LazyGetRequiredService(ref _clock);
+        protected IClock Clock => LazyGetRequiredService(ref _clock);
         private IClock _clock;
 
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
 
-        public IStringLocalizer L
+        protected IStringLocalizer L
         {
             get
             {

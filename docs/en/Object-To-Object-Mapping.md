@@ -162,6 +162,61 @@ public class MyProfile : Profile
 
 It is suggested to use the `MapExtraProperties()` method if both classes are extensible objects (implement the `IHasExtraProperties` interface). See the [object extension document](Object-Extensions.md) for more.
 
+### Other Useful Extension Methods
+
+There are some more extension methods those can simplify your mapping code.
+
+#### Ignoring Audit Properties
+
+It is common to ignore audit properties when you map an object to another.
+
+Assume that you need to map a `ProductDto` ([DTO](Data-Transfer-Objects.md)) to a `Product` [entity](Entities.md) and the entity is inheriting from the `AuditedEntity` class (which provides properties like `CreationTime`, `CreatorId`, `IHasModificationTime`... etc).
+
+You probably want to ignore these base properties while mapping from the DTO. You can use `IgnoreAuditedObjectProperties()` method to ignore all audit properties (instead of manually ignoring them one by one):
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<ProductDto, Product>()
+            .IgnoreAuditedObjectProperties();
+    }
+}
+````
+
+There are more extension methods like `IgnoreFullAuditedObjectProperties()` and `IgnoreCreationAuditedObjectProperties()` those can be used based on your entity type.
+
+> See the "*Base Classes & Interfaces for Audit Properties*" section in the [entities document](Entities.md) to know more about auditing properties.
+
+#### Ignoring Other Properties
+
+In AutoMapper, you typically write such a mapping code to ignore a property:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .ForMember(x => x.CreationTime, map => map.Ignore());
+    }
+}
+````
+
+We found it unnecessarily long and created the `Ignore()` extension method:
+
+````csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<SimpleClass1, SimpleClass2>()
+            .Ignore(x => x.CreationTime);
+    }
+}
+````
+
 ## Advanced Topics
 
 ### IObjectMapper<TContext> Interface

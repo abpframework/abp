@@ -18,6 +18,37 @@ dotnet tool update -g Volo.Abp.Cli
 
 ## Commands
 
+这里是所有可用的命令列表:
+
+* **`help`**: 展示ABP CLI的用法帮助信息.
+* **`new`**：生成基于ABP的[启动模板](Startup-Templates/Index.md).
+* **`update`**：自动更新的ABP解决方案ABP相关的NuGet和NPM包.
+* **`add-package`**: 添加ABP包到项目.
+* **`add-module`**: 添加[应用模块](https://docs.abp.io/en/abp/latest/Modules/Index)到解决方案.
+* **`generate-proxy`**: 生成客户端代理以使用服务器上的HTTP API端点.
+* **`switch-to-preview`**: 切换解决方案所有ABP相关包为[夜间构建](Nightly-Builds.md)版本.
+* **`switch-to-stable`**: 切换解决方案所有ABP相关包为最新的稳定版本.
+* **`translate`**: 当源代码控制存储库中有多个JSON[本地化]（Localization.md文件时,可简化翻译本地化文件的过程.
+* **`login`**: 使用你在[abp.io](https://abp.io/)的用户名和密码在你的计算机上认证.
+* **`logout`**: 在你的计算机注销认证.
+
+### help
+
+展示ABP CLI的基本用法:
+
+用法:
+
+````bash
+abp help [command-name]
+````
+
+示例:
+
+````bash
+abp help        # Shows a general help.
+abp help new    # Shows help about the "new" command.
+````
+
 ### new
 
 生成基于ABP[启动模板](Startup-Templates/Index.md)的新解决方案.
@@ -56,6 +87,7 @@ abp new Acme.BookStore
       * `mongodb`: MongoDB.
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
+  * **`console`**: [Console template](Startup-Templates/Console.md).
 * `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
 * `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,你会希望使用最新的版本.
 * `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D\localTemplate` 或 `https://<your url>.zip`).

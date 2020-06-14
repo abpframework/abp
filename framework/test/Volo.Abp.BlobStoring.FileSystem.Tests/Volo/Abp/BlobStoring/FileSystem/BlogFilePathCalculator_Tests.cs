@@ -1,17 +1,20 @@
 ﻿using System;
 using System.IO;
 using Shouldly;
+using Volo.Abp.MultiTenancy;
 using Xunit;
 
 namespace Volo.Abp.BlobStoring.FileSystem
 {
     public class BlogFilePathCalculator_Tests : AbpBlobStoringFileSystemTestBase
     {
-        private readonly IBlogFilePathCalculator _calculator;
+        private readonly IBlobFilePathCalculator _calculator;
+        private readonly ICurrentTenant _currentTenant;
 
         public BlogFilePathCalculator_Tests()
         {
-            _calculator = GetRequiredService<IBlogFilePathCalculator>();
+            _calculator = GetRequiredService<IBlobFilePathCalculator>();
+            _currentTenant = GetRequiredService<ICurrentTenant>();
         }
 
         [Fact]
@@ -30,9 +33,12 @@ namespace Volo.Abp.BlobStoring.FileSystem
             var separator = Path.DirectorySeparatorChar;
             var tenantId = Guid.NewGuid();
 
-            _calculator.Calculate(
-                GetArgs($"C:{separator}my-files", "my-container", "my-blob", tenantId: tenantId)
-            ).ShouldBe($"C:{separator}my-files{separator}tenants{separator}{tenantId:D}{separator}my-container{separator}my-blob");
+            using (_currentTenant.Change(tenantId))
+            {
+                _calculator.Calculate(
+                    GetArgs($"C:{separator}my-files", "my-container", "my-blob")
+                ).ShouldBe($"C:{separator}my-files{separator}tenants{separator}{tenantId:D}{separator}my-container{separator}my-blob");
+            }
         }
 
         [Fact]
@@ -45,11 +51,10 @@ namespace Volo.Abp.BlobStoring.FileSystem
             ).ShouldBe($"C:{separator}my-files{separator}host{separator}my-blob");
         }
 
-        private BlobProviderArgs GetArgs(
+        private static BlobProviderArgs GetArgs(
             string basePath,
             string containerName,
             string blobName,
-            Guid? tenantId = null,
             bool? appendContainerNameToBasePath = null)
         {
             return new BlobProviderGetArgs(
@@ -63,8 +68,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
                             fs.AppendContainerNameToBasePath = appendContainerNameToBasePath.Value;
                         }
                     }),
-                blobName,
-                tenantId
+                blobName
             );
         }
     }

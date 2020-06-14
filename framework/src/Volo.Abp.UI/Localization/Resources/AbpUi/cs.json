@@ -13,11 +13,13 @@
     "DefaultErrorMessage404": "Prostředek nenalezen!",
     "DefaultErrorMessage404Detail": "Vyžádaný prostředek nebyl na serveru nalezen!",
     "EntityNotFoundErrorMessage": "Neexistující entita {0} s id = {1}!",
+    "Languages": "Jazyky",
     "Error": "Chyba",
     "AreYouSure": "Jste si jisti?",
     "Cancel": "Zrušit",
     "Yes": "Ano",
     "No": "Ne",
+    "Ok": "Ok",
     "Close": "Zavřít",
     "Save": "Uložit",
     "SavingWithThreeDot": "Ukládám...",
@@ -25,6 +27,8 @@
     "Delete": "Smazat",
     "Edit": "Upravit",
     "Refresh": "Obnovit",
+    "Language": "Jazyk",
+    "LoadMore": "Načíst více",
     "ProcessingWithThreeDot": "Zpracovávám...",
     "LoadingWithThreeDot": "Nahrávám...",
     "Welcome": "Vítejte",
@@ -42,7 +46,7 @@
     "PagerInfo{0}{1}{2}": "Zobrazeno od {0} do {1} z celkem {2} záznamů",
     "PagerInfoEmpty": "Zobrazeno od 0 do 0 z celkem 0 záznamů",
     "PagerInfoFiltered": "(filtrováno ze všech _MAX_ záznamů)",
-    "NoDataAvailableInDatatable": "V tabulce nejsou žádná data",
+    "NoDataAvailableInDatatable": "Nejsou žádná data",
     "PagerShowMenuEntries": "Zobrazit _MENU_ záznamů",
     "DatatableActionDropdownDefaultText": "Akce",
     "ChangePassword": "Změnit heslo",
@@ -54,6 +58,7 @@
     "404Message": "Stránka nenalezena",
     "500Message": "Interní chyba serveru",
     "GoHomePage": "Přejít na domovskou stránku",
-    "GoBack": "Jít zpět"
+    "GoBack": "Jít zpět",
+    "Search": "Vyhledávání"
   }
 }

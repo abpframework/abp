@@ -1,8 +1,8 @@
-import { Component, OnInit, TrackByFunction, Input, Renderer2 } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ABP, ConfigState } from '@abp/ng.core';
-import { map } from 'rxjs/operators';
+import { Component, Input, Renderer2, TrackByFunction } from '@angular/core';
 import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-routes',
@@ -15,9 +15,6 @@ export class RoutesComponent {
   @Input()
   smallScreen: boolean;
 
-  @Input()
-  isDropdownChildDynamic: boolean;
-
   get visibleRoutes$(): Observable<ABP.FullRoute[]> {
     return this.routes$.pipe(map(routes => getVisibleRoutes(routes)));
   }
@@ -25,17 +22,6 @@ export class RoutesComponent {
   trackByFn: TrackByFunction<ABP.FullRoute> = (_, item) => item.name;
 
   constructor(private renderer: Renderer2) {}
-
-  openChange(event: boolean, childrenContainer: HTMLDivElement) {
-    if (!event) {
-      Object.keys(childrenContainer.style)
-        .filter(key => Number.isInteger(+key))
-        .forEach(key => {
-          this.renderer.removeStyle(childrenContainer, childrenContainer.style[key]);
-        });
-      this.renderer.removeStyle(childrenContainer, 'left');
-    }
-  }
 }
 
 function getVisibleRoutes(routes: ABP.FullRoute[]) {

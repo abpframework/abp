@@ -35,18 +35,44 @@
                 });
         }
 
+        function handleTabCheckedCheckboxCount($tab) {
+            var newCount = 0;
+            $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
+                if ($(this).is(':checked') === true) {
+                    newCount++;
+                }
+            });
+
+            var $tabTitle = $('#' + $tab.attr('id') + '-tab');
+            var title = $tabTitle.html()
+                .replace('<b>','').replace('</b>','')
+                .replace('<small>','').replace('</small>','');
+
+            var titleSplitted = title.split(' ');
+            if (titleSplitted[titleSplitted.length-1].startsWith('(')){
+                titleSplitted.pop();
+            }
+            var titleWithoutCount = titleSplitted.join(' ');
+            var newTitle = titleWithoutCount + ' (' + (newCount) + ')';
+            if (newCount > 0){
+                newTitle = '<b>' + newTitle + '</b>'
+            }
+            else {
+                newTitle = '<small>' + newTitle + '</small>'
+            }
+            $tabTitle.html(newTitle)
+        };
+
         function handleUncheck($tab) {
             var $checkBox = $tab.find('input[name="SelectAllInThisTab"]');
 
             if ($checkBox.is(':checked')) {
                 if ($tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').length > 1) {
                     $($checkBox).prop('indeterminate', true);
-                }
-                else {
+                } else {
                     $checkBox.prop('checked', false);
                 }
-            }
-            else if ($checkBox.is(':indeterminate')) {
+            } else if ($checkBox.is(':indeterminate')) {
                 var allUnchecked = true;
 
                 $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
@@ -76,11 +102,11 @@
             if (allChecked) {
                 $($checkBox).prop('indeterminate', false);
                 $checkBox.prop('checked', true);
-            }
-            else {
+            } else {
                 $($checkBox).prop('indeterminate', true);
             }
         }
+
 
         function initSelectAllInThisTab() {
             var tabs = $('.tab-pane');
@@ -101,11 +127,9 @@
 
                 if (allChecked) {
                     $($checkBox).prop('checked', true);
-                }
-                else if (allUnChecked) {
+                } else if (allUnChecked) {
                     $($checkBox).prop('checked', false);
-                }
-                else {
+                } else {
                     $($checkBox).prop('indeterminate', true);
                 }
             }
@@ -139,11 +163,9 @@
 
             if (allChecked) {
                 $($checkBox).prop('checked', true);
-            }
-            else if (allUnChecked) {
+            } else if (allUnChecked) {
                 $($checkBox).prop('checked', false);
-            }
-            else {
+            } else {
                 $($checkBox).prop('indeterminate', true);
             }
         }
@@ -151,6 +173,7 @@
         this.initDom = function ($el) {
             $el.find('.tab-pane').each(function () {
                 var $tab = $(this);
+                handleTabCheckedCheckboxCount($tab);
                 $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
                     var $checkBox = $(this);
                     $checkBox.change(function () {
@@ -162,6 +185,7 @@
                             handleUncheck($tab);
                         }
                         setSelectAllInAllTabs();
+                        handleTabCheckedCheckboxCount($tab);
                     });
                 });
             });
@@ -176,6 +200,7 @@
                 }
                 $($checkBox).prop('indeterminate', false);
                 setSelectAllInAllTabs();
+                handleTabCheckedCheckboxCount($tab)
             });
 
             $('input[name="SelectAllInAllTabs"]').change(function () {
@@ -186,6 +211,10 @@
                     $('.tab-pane input[type="checkbox"]').not(':disabled').prop('checked', false);
                 }
                 $($checkBox).prop('indeterminate', false);
+
+                $el.find('.tab-pane').each(function () {
+                    handleTabCheckedCheckboxCount($(this))
+                });
             });
 
             $(function () {

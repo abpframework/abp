@@ -86,10 +86,16 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Mobile App: " + mobileApp);
             }
 
-            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
-            if (gitHubLocalRepositoryPath != null)
+            var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
+            if (gitHubAbpLocalRepositoryPath != null)
             {
-                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+                Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
+            }
+
+            var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
+            if (gitHubVoloLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
             }
 
             var templateSource = commandLineArgs.Options.GetOrNull(Options.TemplateSource.Short, Options.TemplateSource.Long);
@@ -127,7 +133,8 @@ namespace Volo.Abp.Cli.Commands
                     databaseProvider,
                     uiFramework,
                     mobileApp,
-                    gitHubLocalRepositoryPath,
+                    gitHubAbpLocalRepositoryPath,
+                    gitHubVoloLocalRepositoryPath,
                     templateSource,
                     commandLineArgs.Options,
                     connectionString
@@ -219,6 +226,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");
             sb.AppendLine("  abp new Acme.BookStore -t module --no-ui");
+            sb.AppendLine("  abp new Acme.BookStore -t console");
             sb.AppendLine("  abp new Acme.BookStore -ts \"D:\\localTemplate\\abp\"");
             sb.AppendLine("  abp new Acme.BookStore -csf false");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
@@ -299,9 +307,14 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "output-folder";
             }
 
-            public static class GitHubLocalRepositoryPath
+            public static class GitHubAbpLocalRepositoryPath
             {
                 public const string Long = "abp-path";
+            }
+
+            public static class GitHubVoloLocalRepositoryPath
+            {
+                public const string Long = "volo-path";
             }
 
             public static class Version

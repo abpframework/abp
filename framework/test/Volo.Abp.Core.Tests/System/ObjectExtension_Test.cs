@@ -52,5 +52,22 @@ namespace System
             str = null;
             str.IsIn("a", "b", "c").ShouldBe(false);
         }
+
+        [Fact]
+        public void If_Tests()
+        {
+            var value = 0;
+            
+            value = value.If(true, v => v + 1);
+            value.ShouldBe(1);
+            
+            value = value.If(false, v => v + 1);
+            value.ShouldBe(1);
+
+            value = value
+                .If(true, v => v + 3)
+                .If(false, v => v + 5);
+            value.ShouldBe(4);
+        }
     }
 }

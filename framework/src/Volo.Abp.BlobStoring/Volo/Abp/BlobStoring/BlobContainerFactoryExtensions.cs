@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace Volo.Abp.BlobStoring
+﻿namespace Volo.Abp.BlobStoring
 {
     public static class BlobContainerFactoryExtensions
     {
@@ -13,13 +11,11 @@ namespace Volo.Abp.BlobStoring
         /// The container object.
         /// </returns>
         public static IBlobContainer Create<TContainer>(
-            this IBlobContainerFactory blobContainerFactory,
-            CancellationToken cancellationToken = default
+            this IBlobContainerFactory blobContainerFactory
         )
         {
             return blobContainerFactory.Create(
-                BlobContainerNameAttribute.GetContainerName<TContainer>(),
-                cancellationToken
+                BlobContainerNameAttribute.GetContainerName<TContainer>()
             );
         }
     }

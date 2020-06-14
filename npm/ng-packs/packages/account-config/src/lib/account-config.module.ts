@@ -21,7 +21,7 @@ export const ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');
   providers: [{ provide: APP_INITIALIZER, multi: true, deps: [AccountConfigService], useFactory: noop }],
 })
 export class AccountConfigModule {
-  static forRoot(options = {} as AccountConfigOptions): ModuleWithProviders {
+  static forRoot(options = {} as AccountConfigOptions): ModuleWithProviders<AccountConfigModule> {
     return {
       ngModule: AccountConfigModule,
       providers: [

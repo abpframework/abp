@@ -25,23 +25,6 @@ MySQL连接字符串与SQL Server连接字符串不同. 所以检查你的解决
 
 通常需要更改 `.DbMigrator` 和 `.Web` 项目里面的 `appsettings.json` ,但它取决于你的解决方案结构.
 
-## 更改迁移DbContext
-
-MySQL DBMS与SQL Server有一些细微的差异. 某些模块数据库映射配置(尤其是字段长度)会导致MySQL出现问题. 例如某些[IdentityServer模块](Modules/IdentityServer.md)表就存在这样的问题,它提供了一个选项可以根据你的DBMS配置字段.
-
-启动模板包含*YourProjectName*MigrationsDbContext,它负责维护和迁移数据库架构. 此DbContext基本上调用依赖模块的扩展方法来配置其数据库表.
-
-打开 *YourProjectName*MigrationsDbContext 更改 `builder.ConfigureIdentityServer();` 行,如下所示:
-
-````csharp
-builder.ConfigureIdentityServer(options =>
-{
-    options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
-});
-````
-
-然后 `ConfigureIdentityServer()` 方法会将字段长度设置为不超过MySQL的限制. 如果在创建或执行数据库迁移时遇到任何问题请参考相关的模块文档.
-
 ## 重新生成迁移
 
 启动模板使用[Entity Framework Core的Code First迁移](https://docs.microsoft.com/zh-cn/ef/core/managing-schemas/migrations/). EF Core迁移取决于所选的DBMS提供程序. 因此更改DBMS提供程序会导致迁移失败.

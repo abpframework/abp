@@ -1,8 +1,8 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import snq from 'snq';
 import { AddNavigationElement, RemoveNavigationElementByName } from '../actions/layout.actions';
 import { Layout } from '../models/layout';
-import { Injectable } from '@angular/core';
 
 @State<Layout.State>({
   name: 'LayoutState',
