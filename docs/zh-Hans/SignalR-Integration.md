@@ -225,3 +225,13 @@ ABP实现 `SignalR` 的 `IUserIdProvider` 接口,从ABP框架的 `ICurrentUser` 
 参阅 [SignalR集成Demo](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo),它有一个简单的聊天页面,可以在(经过身份验证的)用户之间发送消息.
 
 ![signalr-demo-chat](images/signalr-demo-chat.png)
+
+## 备注
+
+ABP框架不会更改SignalR. 就像在其他ASP.NET Core应用程序中一样,它也可以在基于ABP框架的应用程序中工作.
+
+参考[微软文档](https://docs.microsoft.com/zh-cn/aspnet/core/signalr/scale)托管和扩展您的应用程序,集成[Azure](https://docs.microsoft.com/zh-cn/aspnet/core/signalr/publish-to-azure-web-app)或[Redis底版](https://docs.microsoft.com/zh-cn/aspnet/core/signalr/redis-backplane)...等.
+
+## 另请参阅
+
+* [微软SignalR文档](https://docs.microsoft.com/zh-cn/aspnet/core/signalr/introduction)

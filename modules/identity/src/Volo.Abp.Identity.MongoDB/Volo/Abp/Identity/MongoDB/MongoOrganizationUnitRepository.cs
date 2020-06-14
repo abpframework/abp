@@ -1,17 +1,22 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity.MongoDB
 {
-    public class MongoOrganizationUnitRepository : MongoDbRepository<IAbpIdentityMongoDbContext, OrganizationUnit, Guid>, IOrganizationUnitRepository
+    public class MongoOrganizationUnitRepository
+        : MongoDbRepository<IAbpIdentityMongoDbContext, OrganizationUnit, Guid>,
+        IOrganizationUnitRepository
     {
         public MongoOrganizationUnitRepository(
             IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
@@ -111,14 +116,9 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Users.AsQueryable()
-                    .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
-                    .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
-                    !filter.IsNullOrWhiteSpace(),
-                    u =>
-                        u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
-                )
+            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
+
+            return await query
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .As<IMongoQueryable<IdentityUser>>()
                 .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
@@ -127,12 +127,45 @@ namespace Volo.Abp.Identity.MongoDB
 
         public virtual async Task<int> GetMembersCountAsync(
             OrganizationUnit organizationUnit,
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Users.AsQueryable()
+            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
+
+            return await query.CountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual Task RemoveAllRolesAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        {
+            organizationUnit.Roles.Clear();
+            return Task.FromResult(0);
+        }
+
+        public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        {
+            var users = await DbContext.Users.AsQueryable()
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
                 .As<IMongoQueryable<IdentityUser>>()
-                .CountAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            foreach (var user in users)
+            {
+                user.RemoveOrganizationUnit(organizationUnit.Id);
+                DbContext.Users.ReplaceOne(u => u.Id == user.Id, user);
+            }
+        }
+
+        protected virtual IMongoQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit, string filter = null)
+        {
+            return DbContext.Users.AsQueryable()
+                .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                );
         }
     }
 }

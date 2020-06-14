@@ -90,6 +90,12 @@ namespace Volo.Docs.Admin.Documents
             var documents = new List<Document>();
             foreach (var leaf in leafs)
             {
+                if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                    leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 var sourceDocument =
                     await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
                 documents.Add(sourceDocument);

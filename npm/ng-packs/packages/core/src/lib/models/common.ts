@@ -13,6 +13,7 @@ export namespace ABP {
      */
     requirements?: Config.Requirements;
     skipGetAppConfiguration?: boolean;
+    sendNullsAsQueryParam?: boolean;
   }
 
   export interface Test {

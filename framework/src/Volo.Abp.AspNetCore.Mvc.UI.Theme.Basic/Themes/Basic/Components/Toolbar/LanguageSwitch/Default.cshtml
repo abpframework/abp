@@ -12,7 +12,7 @@
         <div class="dropdown-menu dropdown-menu-right border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
             @foreach (var language in Model.OtherLanguages)
             {
-                <a class="dropdown-item" href="/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">@language.DisplayName</a>
+                <a class="dropdown-item" href="~/Abp/Languages/Switch?culture=@(language.CultureName)&uiCulture=@(language.UiCultureName)&returnUrl=@(System.Net.WebUtility.UrlEncode(Context.Request.GetEncodedPathAndQuery()))">@language.DisplayName</a>
             }
         </div>
     </div> 

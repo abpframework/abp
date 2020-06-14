@@ -6,3 +6,4 @@
 
 * [**app**](Application.md): 应用程序模板.
 * [**module**](Module.md): 模块/服务模板.
+* [**console**](Console.md): 控制台模板.

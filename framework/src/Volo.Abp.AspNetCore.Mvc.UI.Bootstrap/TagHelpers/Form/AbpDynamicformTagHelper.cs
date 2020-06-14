@@ -12,10 +12,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         [HtmlAttributeName("abp-model")]
         public ModelExpression Model { get; set; }
 
-        [HtmlAttributeNotBound]
-        [ViewContext]
-        public ViewContext ViewContext { get; set; }
-        
         public bool? SubmitButton { get; set; }
 
         public bool? RequiredSymbols { get; set; } = true;

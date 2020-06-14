@@ -36,6 +36,7 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       blueprints: {
         creditCard: 'AbpValidation::ThisFieldIsNotAValidCreditCardNumber.',
         email: 'AbpValidation::ThisFieldIsNotAValidEmailAddress.',
+        invalid: 'AbpValidation::ThisFieldIsNotValid.',
         max: 'AbpValidation::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
         maxlength:
           'AbpValidation::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}[{{ requiredLength }}]',
@@ -51,7 +52,13 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       errorTemplate: ValidationErrorComponent,
     }),
   ],
-  exports: [...LAYOUTS, LogoComponent, ValidationErrorComponent],
+  exports: [
+    ...LAYOUTS,
+    ValidationErrorComponent,
+    LogoComponent,
+    NavItemsComponent,
+    RoutesComponent,
+  ],
   entryComponents: [...LAYOUTS, ValidationErrorComponent],
 })
 export class ThemeBasicModule {

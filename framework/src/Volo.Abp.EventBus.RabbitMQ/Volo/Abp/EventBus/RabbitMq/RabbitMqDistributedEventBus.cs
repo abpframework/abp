@@ -83,7 +83,7 @@ namespace Volo.Abp.EventBus.RabbitMq
                 return;
             }
 
-            var eventData = Serializer.Deserialize(ea.Body, eventType);
+            var eventData = Serializer.Deserialize(ea.Body.ToArray(), eventType);
 
             await TriggerHandlersAsync(eventType, eventData);
         }

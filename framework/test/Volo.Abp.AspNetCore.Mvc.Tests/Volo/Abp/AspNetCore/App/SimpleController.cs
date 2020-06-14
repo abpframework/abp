@@ -12,11 +12,13 @@ namespace Volo.Abp.AspNetCore.App
 
         public ActionResult About()
         {
+            // ReSharper disable once Mvc.ViewNotResolved
             return View();
         }
 
         public ActionResult ExceptionOnRazor()
         {
+            // ReSharper disable once Mvc.ViewNotResolved
             return View();
         }
     }

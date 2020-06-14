@@ -1,8 +1,10 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Blogging.Pages.Blog
-@inherits BloggingPage
 @model Volo.Blogging.Pages.Admin.Blogs.EditModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inject IHtmlLocalizer<BloggingResource> L
 @{
     Layout = null;
 }

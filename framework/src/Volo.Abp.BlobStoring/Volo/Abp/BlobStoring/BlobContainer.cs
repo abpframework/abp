@@ -79,9 +79,9 @@ namespace Volo.Abp.BlobStoring
         protected BlobContainerConfiguration Configuration { get; }
 
         protected IBlobProvider Provider { get; }
-        
+
         protected ICurrentTenant CurrentTenant { get; }
-        
+
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public BlobContainer(
@@ -98,100 +98,101 @@ namespace Volo.Abp.BlobStoring
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public virtual Task SaveAsync(
+        public virtual async Task SaveAsync(
             string name,
             Stream stream,
             bool overrideExisting = false,
             CancellationToken cancellationToken = default)
         {
-            return Provider.SaveAsync(
-                new BlobProviderSaveArgs(
-                    ContainerName,
-                    Configuration,
-                    name,
-                    stream,
-                    overrideExisting,
-                    GetTenantIdOrNull(),
-                    CancellationTokenProvider.FallbackToProvider(cancellationToken)
-                )
-            );
+            using (CurrentTenant.Change(GetTenantIdOrNull()))
+            {
+                await Provider.SaveAsync(
+                    new BlobProviderSaveArgs(
+                        ContainerName,
+                        Configuration,
+                        name,
+                        stream,
+                        overrideExisting,
+                        CancellationTokenProvider.FallbackToProvider(cancellationToken)
+                    )
+                );
+            }
         }
 
-        public virtual Task<bool> DeleteAsync(
+        public virtual async Task<bool> DeleteAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
-            return Provider.DeleteAsync(
-                new BlobProviderDeleteArgs(
-                    ContainerName,
-                    Configuration,
-                    name,
-                    GetTenantIdOrNull(),
-                    CancellationTokenProvider.FallbackToProvider(cancellationToken)
-                )
-            );
+            using (CurrentTenant.Change(GetTenantIdOrNull()))
+            {
+                return await Provider.DeleteAsync(
+                    new BlobProviderDeleteArgs(
+                        ContainerName,
+                        Configuration,
+                        name,
+                        CancellationTokenProvider.FallbackToProvider(cancellationToken)
+                    )
+                );
+            }
         }
 
-        public virtual Task<bool> ExistsAsync(
+        public virtual async Task<bool> ExistsAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
-            return Provider.ExistsAsync(
-                new BlobProviderExistsArgs(
-                    ContainerName,
-                    Configuration,
-                    name,
-                    GetTenantIdOrNull(),
-                    CancellationTokenProvider.FallbackToProvider(cancellationToken)
-                )
-            );
+            using (CurrentTenant.Change(GetTenantIdOrNull()))
+            {
+                return await Provider.ExistsAsync(
+                    new BlobProviderExistsArgs(
+                        ContainerName,
+                        Configuration,
+                        name,
+                        CancellationTokenProvider.FallbackToProvider(cancellationToken)
+                    )
+                );
+            }
         }
 
-        public virtual Task<Stream> GetAsync(
+        public virtual async Task<Stream> GetAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
-            var stream = Provider.GetOrNullAsync(
-                new BlobProviderGetArgs(
-                    ContainerName,
-                    Configuration,
-                    name,
-                    GetTenantIdOrNull(),
-                    CancellationTokenProvider.FallbackToProvider(cancellationToken)
-                )
-            );
+            var stream = await GetOrNullAsync(name, cancellationToken);
             
             if (stream == null)
             {
                 //TODO: Consider to throw some type of "not found" exception and handle on the HTTP status side
-                throw new AbpException($"Could not found the requested BLOB '{name}' in the container '{ContainerName}'!");
+                throw new AbpException(
+                    $"Could not found the requested BLOB '{name}' in the container '{ContainerName}'!");
             }
 
             return stream;
         }
 
-        public virtual Task<Stream> GetOrNullAsync(
+        public virtual async Task<Stream> GetOrNullAsync(
             string name,
             CancellationToken cancellationToken = default)
         {
-            return Provider.GetOrNullAsync(
-                new BlobProviderGetArgs(
-                    ContainerName,
-                    Configuration,
-                    name,
-                    GetTenantIdOrNull(),
-                    CancellationTokenProvider.FallbackToProvider(cancellationToken)
-                )
-            );
+            using (CurrentTenant.Change(GetTenantIdOrNull()))
+            {
+                return await Provider.GetOrNullAsync(
+                    new BlobProviderGetArgs(
+                        ContainerName,
+                        Configuration,
+                        name,
+                        CancellationTokenProvider.FallbackToProvider(cancellationToken)
+                    )
+                );
+            }
         }
-        
+
         protected virtual Guid? GetTenantIdOrNull()
         {
             if (!Configuration.IsMultiTenant)
             {
                 return null;
             }
-            
+
             return CurrentTenant.Id;
         }
     }

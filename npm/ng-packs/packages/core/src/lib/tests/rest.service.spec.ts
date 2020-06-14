@@ -5,6 +5,7 @@ import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Rest } from '../models';
 import { RestService } from '../services/rest.service';
+import { CORE_OPTIONS } from '../tokens';
 
 describe('HttpClient testing', () => {
   let spectator: SpectatorHttp<RestService>;
@@ -14,6 +15,7 @@ describe('HttpClient testing', () => {
   const createHttp = createHttpFactory({
     dataService: RestService,
     imports: [NgxsModule.forRoot([ConfigState])],
+    providers: [{ provide: CORE_OPTIONS, useValue: { environment: {} } }],
   });
 
   beforeEach(() => {

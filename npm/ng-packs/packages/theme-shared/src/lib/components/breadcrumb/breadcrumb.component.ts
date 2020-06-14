@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { ABP, ConfigState } from '@abp/ng.core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { ConfigState, ABP } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-breadcrumb',
@@ -41,7 +41,9 @@ export class BreadcrumbComponent implements OnInit {
 
         let childRoute: ABP.FullRoute = currentUrl;
         for (let i = 0; i < arr.length; i++) {
-          const element = arr[i];
+          const element = String(arr[i])
+            .split(/[?#(]/)
+            .shift();
           if (!childRoute.children || !childRoute.children.length) return;
 
           childRoute = childRoute.children.find(child => child.path === element);

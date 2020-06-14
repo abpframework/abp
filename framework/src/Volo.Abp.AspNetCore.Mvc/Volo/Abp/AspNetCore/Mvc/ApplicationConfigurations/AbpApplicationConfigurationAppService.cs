@@ -15,6 +15,7 @@ using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
+using Volo.Abp.Timing;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
@@ -31,6 +32,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         private readonly ISettingDefinitionManager _settingDefinitionManager;
         private readonly IFeatureDefinitionManager _featureDefinitionManager;
         private readonly ILanguageProvider _languageProvider;
+        private readonly ITimezoneProvider _timezoneProvider;
+        private readonly AbpClockOptions _abpClockOptions;
         private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
 
         public AbpApplicationConfigurationAppService(
@@ -44,6 +47,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             ISettingDefinitionManager settingDefinitionManager,
             IFeatureDefinitionManager featureDefinitionManager,
             ILanguageProvider languageProvider,
+            ITimezoneProvider timezoneProvider,
+            IOptions<AbpClockOptions> abpClockOptions,
             ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService)
         {
             _serviceProvider = serviceProvider;
@@ -54,6 +59,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             _settingDefinitionManager = settingDefinitionManager;
             _featureDefinitionManager = featureDefinitionManager;
             _languageProvider = languageProvider;
+            _timezoneProvider = timezoneProvider;
+            _abpClockOptions = abpClockOptions.Value;
             _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
             _localizationOptions = localizationOptions.Value;
             _multiTenancyOptions = multiTenancyOptions.Value;
@@ -74,6 +81,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Setting = await GetSettingConfigAsync(),
                 MultiTenancy = GetMultiTenancy(),
                 CurrentTenant = GetCurrentTenant(),
+                Timing = await GetTimingConfigAsync(),
+                Clock = GetClockConfig(),
                 ObjectExtensions = _cachedObjectExtensionsDtoService.Get()
             };
 
@@ -179,7 +188,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 ThreeLetterIsoLanguageName = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName,
                 DateTimeFormat = new DateTimeFormatDto
                 {
-                    CalendarAlgorithmType = CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
+                    CalendarAlgorithmType =
+                        CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
                     DateTimeFormatLong = CultureInfo.CurrentUICulture.DateTimeFormat.LongDatePattern,
                     ShortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern,
                     FullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern,
@@ -225,6 +235,36 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             }
 
             return result;
+        }
+
+        protected virtual async Task<TimingDto> GetTimingConfigAsync()
+        {
+            var windowsTimeZoneId = await _settingProvider.GetOrNullAsync(TimingSettingNames.TimeZone);
+
+            return new TimingDto
+            {
+                TimeZone = new TimeZone
+                {
+                    Windows = new WindowsTimeZone
+                    {
+                        TimeZoneId = windowsTimeZoneId
+                    },
+                    Iana = new IanaTimeZone
+                    {
+                        TimeZoneName = windowsTimeZoneId.IsNullOrWhiteSpace()
+                            ? null
+                            : _timezoneProvider.WindowsToIana(windowsTimeZoneId)
+                    }
+                }
+            };
+        }
+
+        protected virtual ClockDto GetClockConfig()
+        {
+            return new ClockDto
+            {
+                Kind = Enum.GetName(typeof(DateTimeKind), _abpClockOptions.Kind)
+            };
         }
     }
 }

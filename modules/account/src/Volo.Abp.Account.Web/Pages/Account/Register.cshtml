@@ -1,6 +1,8 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
 @model Volo.Abp.Account.Web.Pages.Account.RegisterModel
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
+@inject IHtmlLocalizer<AccountResource> L
 
     <div class="card mt-3 shadow-sm rounded">
         <div class="card-body p-5">

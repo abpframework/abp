@@ -23,6 +23,7 @@ ABP是一个 **模块化的应用程序框架** 由十多个 **nuget packages** 
 * **Setting Management**: 用于保存设置.
 * **Tenant Management**: 管理[多租户](../Multi-Tenancy.md)应用程序的租户.
 * **Users**: 抽象用户, 因此其他模块可以依赖此模块而不是Identity模块.
+* [**Virtual File Explorer**](Virtual-File-Explorer.md): 提供简单的UI查看[虚拟文件系统](../Virtual-File-System.md)中的文件.
 
 模块化文档正在编写中. 请参阅[这个仓库](https://github.com/abpframework/abp/tree/master/modules)获取所有模块的源代码.
 

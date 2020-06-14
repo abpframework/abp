@@ -1,7 +1,9 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@inherits ProductManagement.Pages.ProductManagement.ProductManagementPage
+@using Microsoft.AspNetCore.Mvc.Localization
+@using ProductManagement.Localization
 @model ProductManagement.Pages.ProductManagement.Products.EditModel
+@inject IHtmlLocalizer<ProductManagementResource> L
 @{
     Layout = null;
 }

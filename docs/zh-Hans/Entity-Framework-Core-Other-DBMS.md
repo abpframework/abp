@@ -6,6 +6,7 @@ ABP框架为一些常见的DMBS提供了简化配置的**集成包**,你可以�
 
 * [MySQL](Entity-Framework-Core-MySQL.md)
 * [PostgreSQL](Entity-Framework-Core-PostgreSQL.md)
+* [Oracle](Entity-Framework-Core-Oracle.md)
 * [SQLite](Entity-Framework-Core-SQLite.md)
 
 你也可以不使用集成包配置DBMS提供程序,虽然总是建议使用集成包(它也使不同模块之间的依赖版本成为标准版本),但是如果没有用于DBMS提供程序的集成包,也可以手动集成.

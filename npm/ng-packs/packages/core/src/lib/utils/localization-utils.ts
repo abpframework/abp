@@ -1,5 +1,14 @@
 import { ApplicationConfiguration } from '../models/application-configuration';
 
+// This will not be necessary when only Angukar 9.1+ is supported
+export function getLocaleDirection(locale: string): 'ltr' | 'rtl' {
+  return /^(ar(-[A-Z]{2})?|ckb(-IR)?|fa(-AF)?|he|ks|lrc(-IQ)?|mzn|pa-Arab|ps(-PK)?|sd|ug|ur(-IN)?|uz-Arab|yi)$/.test(
+    locale,
+  )
+    ? 'rtl'
+    : 'ltr';
+}
+
 export function createLocalizer(localization: ApplicationConfiguration.Localization) {
   return (resourceName: string, key: string, defaultValue: string) => {
     if (resourceName === '_') return key;
