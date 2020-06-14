@@ -11,6 +11,26 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Application.Services
 {
+    public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey>
+        : ReadOnlyAppService<TEntity, TEntityDto, TEntityDto, TKey, PagedAndSortedResultRequestDto>
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
+    {
+        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository) : base(repository)
+        {
+        }
+    }
+
+    public abstract class ReadOnlyAppService<TEntity, TEntityDto, TKey, TGetListInput>
+        : ReadOnlyAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput>
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
+    {
+        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository) : base(repository)
+        {
+        }
+    }
+
     public abstract class ReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
         : AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
         where TEntity : class, IEntity<TKey>
