@@ -6,7 +6,6 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Linq;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 
@@ -66,7 +65,6 @@ namespace Volo.Abp.Application.Services
             ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity
     {
-        public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
         protected IRepository<TEntity> Repository { get; }
 
@@ -83,7 +81,6 @@ namespace Volo.Abp.Application.Services
         protected AbstractKeyCrudAppService(IRepository<TEntity> repository)
         {
             Repository = repository;
-            AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;
         }
 
         public virtual async Task<TGetOutputDto> GetAsync(TKey id)
@@ -100,12 +97,12 @@ namespace Volo.Abp.Application.Services
 
             var query = CreateFilteredQuery(input);
 
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
+            var totalCount = await AsyncExecuter.CountAsync(query);
 
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
+            var entities = await AsyncExecuter.ToListAsync(query);
 
             return new PagedResultDto<TGetListOutputDto>(
                 totalCount,
