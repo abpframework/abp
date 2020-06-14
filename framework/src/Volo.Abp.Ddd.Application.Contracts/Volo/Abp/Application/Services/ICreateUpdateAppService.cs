@@ -17,9 +17,9 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface ICreateUpdateAppService<TGetOutputDto, in TKey, in TCreateUpdateInput, in TUpdateInput>
-        : ICreateAppService<TGetOutputDto, TCreateUpdateInput>
-        , IUpdateAppService<TGetOutputDto, TKey, TUpdateInput>
-        , IApplicationService
+        : ICreateAppService<TGetOutputDto, TCreateUpdateInput>,
+            IUpdateAppService<TGetOutputDto, TKey, TUpdateInput>,
+            IApplicationService
     {
 
     }
