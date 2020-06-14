@@ -1,6 +1,6 @@
 ## Virtual File System
 
-The Virtual File System makes it possible to manage files that do not physically exist on the file system (disk). It's mainly used to embed (js, css, image, cshtml...) files into assemblies and use them like physical files at runtime.
+The Virtual File System makes it possible to manage files that do not physically exist on the file system (disk). It's mainly used to embed (js, css, image..) files into assemblies and use them like physical files at runtime.
 
 ### Volo.Abp.VirtualFileSystem Package
 
@@ -147,7 +147,7 @@ The code above assumes that `MyWebAppModule` and `MyModule` are two different pr
 The Virtual File System is well integrated to ASP.NET Core:
 
 * Virtual files can be used just like physical (static) files in a web application.
-* Razor Views, Razor Pages, js, css, image files and all other web content types can be embedded into assemblies and used just like the physical files.
+* Js, css, image files and all other web content types can be embedded into assemblies and used just like the physical files.
 * An application (or another module) can override a virtual file of a module just like placing a file with the same name and extension into the same folder of the virtual file.
 
 #### Virtual Files Middleware
@@ -161,9 +161,3 @@ app.UseVirtualFiles();
 Adding virtual files middleware after the static files middleware makes it possible to override a virtual file with a real physical file simply by placing it in the same location as the virtual file.
 
 >The Virtual File Middleware only serves the virtual wwwroot folder contents - just like the other static files.
-
-#### Views & Pages
-
-Embedded razor views/pages are available in the application without any configuration. Simply place them into the standard Views/Pages virtual folders of the module being developed.
-
-An embedded view/page can be overrided if a module/application locates a new file into the same location as mentioned above.

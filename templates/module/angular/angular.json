@@ -24,27 +24,44 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "extractCss": true,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
               {
                 "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
                 "inject": true,
-                "bundleName": "bootstrap.min"
+                "bundleName": "bootstrap-ltr.min"
               },
-              "src/styles.scss",
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-                "inject": false,
+                "inject": true,
                 "bundleName": "fontawesome-all.min"
               },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
-                "inject": false,
+                "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
-              }
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/index.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-index"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/assets/icons.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-icons"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-material"
+              },
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -102,10 +119,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               {
                 "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -130,14 +144,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"],
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -187,9 +195,7 @@
               "projects/my-project-name/tsconfig.lib.json",
               "projects/my-project-name/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -227,9 +233,7 @@
               "projects/my-project-name-config/tsconfig.lib.json",
               "projects/my-project-name-config/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

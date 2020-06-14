@@ -4,7 +4,7 @@
     <div id="AbpPageAlerts">
         @foreach (var alertMessage in Model)
         {
-            <abp-alert alert-type="@alertMessage.Type" dismissible="@alertMessage.Dismissible">
+            <abp-alert alert-type="@(alertMessage.Type)" dismissible="@alertMessage.Dismissible">
                 @if (alertMessage.Title != null)
                 {
                     <h4>@alertMessage.Title</h4>

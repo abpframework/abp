@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Shouldly;
+using Volo.Abp;
 using Xunit;
 
 namespace System.Collections.Generic
@@ -170,6 +171,37 @@ namespace System.Collections.Generic
             list[0].ShouldBe(1);
             list[1].ShouldBe(42);
             list[2].ShouldBe(3);
+        }
+
+        [Fact]
+        public void SortByDependencies()
+        {
+            var dependencies = new Dictionary<char, char[]>
+            {
+                {'A', new[] {'B', 'G'}},
+                {'B', new[] {'C', 'E'}},
+                {'C', new[] {'D'}},
+                {'D', new char[0]},
+                {'E', new[] {'C', 'F'}},
+                {'F', new[] {'C'}},
+                {'G', new[] {'F'}}
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                var list = RandomHelper
+                    .GenerateRandomizedList(new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G'});
+                
+                list = list.SortByDependencies(c => dependencies[c]);
+
+                foreach (var dependency in dependencies)
+                {
+                    foreach (var dependedValue in dependency.Value)
+                    {
+                        list.IndexOf(dependency.Key).ShouldBeGreaterThan(list.IndexOf(dependedValue));
+                    }
+                }
+            }
         }
     }
 }

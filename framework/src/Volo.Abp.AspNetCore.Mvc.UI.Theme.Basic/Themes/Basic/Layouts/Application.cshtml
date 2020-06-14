@@ -28,11 +28,13 @@
 
         pageTitle = PageLayout.Content.Title + pageTitle;
     }
+
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
 }
 
 <!DOCTYPE html>
 
-<html lang="@CultureInfo.CurrentCulture.Name" dir=@(CultureHelper.IsRtl ? "rtl" : "")>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
 <head>
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Application)
 
@@ -50,7 +52,7 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
 </head>
-<body class="abp-application-layout bg-light">
+<body class="abp-application-layout bg-light @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())

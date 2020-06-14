@@ -18,7 +18,8 @@ $solutions = (
     "modules/setting-management",
     "modules/tenant-management",
     "modules/users",
-    "modules/virtual-file-explorer"
+    "modules/virtual-file-explorer",
+	"modules/blob-storing-database"
 )
 
 # List of projects
@@ -71,6 +72,7 @@ $projects = (
     "framework/src/Volo.Abp.Emailing",
     "framework/src/Volo.Abp.EntityFrameworkCore",
     "framework/src/Volo.Abp.EntityFrameworkCore.MySQL",
+    "framework/src/Volo.Abp.EntityFrameworkCore.Oracle.Devart",
     "framework/src/Volo.Abp.EntityFrameworkCore.PostgreSql",
     "framework/src/Volo.Abp.EntityFrameworkCore.Sqlite",
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
@@ -234,5 +236,11 @@ $projects = (
     "modules/users/src/Volo.Abp.Users.MongoDB",
 
     # modules/virtual-file-explorer
-    "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Web
+    "modules/virtual-file-explorer/src/Volo.Abp.VirtualFileExplorer.Web",
+	
+    # modules/blob-storing-database
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain",
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.Domain.Shared",
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
+    "modules/blob-storing-database/src/Volo.Abp.BlobStoring.Database.MongoDB"
 )

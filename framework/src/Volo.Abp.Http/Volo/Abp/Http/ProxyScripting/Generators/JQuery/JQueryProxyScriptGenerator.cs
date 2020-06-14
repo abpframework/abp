@@ -32,6 +32,8 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
                 AddModuleScript(script, module);
             }
 
+            AddInitializedEventTrigger(script);
+
             return script.ToString();
         }
 
@@ -188,6 +190,12 @@ namespace Volo.Abp.Http.ProxyScripting.Generators.JQuery
             }
 
             return result;
+        }
+        
+        private static void AddInitializedEventTrigger(StringBuilder script)
+        {
+            script.AppendLine();
+            script.AppendLine("abp.event.trigger('abp.serviceProxyScriptInitialized');");
         }
 
         private static string GetNormalizedTypeName(string typeWithAssemblyName)

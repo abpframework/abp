@@ -1,0 +1,6 @@
+{
+  "culture": "cs",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} nemůže být více než {1}! Navyšte {2}.{3} na straně serveru pro více výsledků."
+  }
+}

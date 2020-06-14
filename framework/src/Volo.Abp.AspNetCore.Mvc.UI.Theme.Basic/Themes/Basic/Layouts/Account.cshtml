@@ -24,11 +24,12 @@
     Layout = null;
     AbpAntiForgeryManager.SetCookie();
     var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
+    var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
 }
 
 <!DOCTYPE html>
 
-<html lang="@CultureInfo.CurrentCulture.Name" dir=@(CultureHelper.IsRtl ? "rtl" : "")>
+<html lang="@CultureInfo.CurrentCulture.Name" dir="@rtl">
 <head>
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Account)
 
@@ -48,14 +49,14 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
-<body class="abp-account-layout bg-light">
+<body class="abp-account-layout bg-light @rtl">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="@containerClass">
         <abp-row>
-            <abp-column size-md="_5" class="mx-auto">
+            <abp-column class="col mx-auto" style="max-width: 440px">
                 @if (MultiTenancyOptions.Value.IsEnabled &&
                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
                 {

@@ -15,11 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\**\*.cshtml" />
-    <Content Remove="Volo\**\*.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="NUglify" Version="1.5.13" />
   </ItemGroup>
 

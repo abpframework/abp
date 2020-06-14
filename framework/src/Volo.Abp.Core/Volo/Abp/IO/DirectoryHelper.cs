@@ -16,7 +16,23 @@ namespace Volo.Abp.IO
                 Directory.CreateDirectory(directory);
             }
         }
-        
+
+        public static void DeleteIfExists(string directory)
+        {
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory);
+            }
+        }
+
+        public static void DeleteIfExists(string directory, bool recursive)
+        {
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory, recursive);
+            }
+        }
+
         public static void CreateIfNotExists(DirectoryInfo directory)
         {
             if (!directory.Exists)
@@ -36,7 +52,8 @@ namespace Volo.Abp.IO
             );
         }
 
-        public static bool IsSubDirectoryOf([NotNull] DirectoryInfo parentDirectory, [NotNull]  DirectoryInfo childDirectory)
+        public static bool IsSubDirectoryOf([NotNull] DirectoryInfo parentDirectory,
+            [NotNull] DirectoryInfo childDirectory)
         {
             Check.NotNull(parentDirectory, nameof(parentDirectory));
             Check.NotNull(childDirectory, nameof(childDirectory));
@@ -66,10 +83,7 @@ namespace Volo.Abp.IO
 
             Directory.SetCurrentDirectory(targetDirectory);
 
-            return new DisposeAction(() =>
-            {
-                Directory.SetCurrentDirectory(currentDirectory);
-            });
+            return new DisposeAction(() => { Directory.SetCurrentDirectory(currentDirectory); });
         }
     }
 }

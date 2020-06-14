@@ -118,6 +118,9 @@
             $titleLengthWarning.hide();
         }
 
+        title = title.replace(' &', ' ');
+        title = title.replace('& ', ' ');
+        title = title.replace('&', '');
         title = title.replace(' ', '-');
         title = title.replace(new RegExp(' ', 'g'), '-');
         reflectedChange = true;

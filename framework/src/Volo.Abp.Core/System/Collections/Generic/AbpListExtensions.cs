@@ -180,7 +180,10 @@ namespace System.Collections.Generic
         /// <typeparam name="T">The type of the members of values.</typeparam>
         /// <param name="source">A list of objects to sort</param>
         /// <param name="getDependencies">Function to resolve the dependencies</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a new list ordered by dependencies.
+        /// If A depends on B, then B will come before than A in the resulting list. 
+        /// </returns>
         public static List<T> SortByDependencies<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> getDependencies)
         {
             /* See: http://www.codeproject.com/Articles/869059/Topological-sorting-in-Csharp

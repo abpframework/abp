@@ -14,7 +14,7 @@ else if UI == "NG"
   DB="mongodb"
   DB_Text="MongoDB"
   UI_Text="angular"
-else 
+else
   DB ="?"
   UI_Text="?"
 end
@@ -26,7 +26,7 @@ In this tutorial series, you will build an ABP application named `Acme.BookStore
 
 The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
 
-- **Part-1: Creating the project and book list page (this tutorial)** 
+- **Part-1: Creating the project and book list page (this tutorial)**
 - [Part-2: Creating, updating and deleting books](part-2.md)
 - [Part-3: Integration tests](part-3.md)
 
@@ -106,7 +106,7 @@ This is how the layered solution structure looks like:
 
 ![bookstore-visual-studio-solution](./images/bookstore-solution-structure-{{UI_Text}}.png)
 
-Check out the [solution structure](../startup-templates/application#solution-structure) section to understand the structure in details. 
+Check out the [solution structure](../startup-templates/application#solution-structure) section to understand the structure in details.
 
 ### Create the book entity
 
@@ -444,7 +444,7 @@ using Volo.Abp.Application.Services;
 
 namespace Acme.BookStore
 {
-    public interface IBookAppService : 
+    public interface IBookAppService :
         ICrudAppService< //Defines CRUD methods
             BookDto, //Used to show books
             Guid, //Primary key of the book entity
@@ -473,12 +473,12 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Acme.BookStore
 {
-    public class BookAppService : 
+    public class BookAppService :
         CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                        CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
-        public BookAppService(IRepository<Book, Guid> repository) 
+        public BookAppService(IRepository<Book, Guid> repository)
             : base(repository)
         {
 
@@ -564,17 +564,15 @@ Open the `Index.cshtml` and change the whole content as shown below:
 ````html
 @page
 @using Acme.BookStore.Web.Pages.Books
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model IndexModel
 
 <h2>Books</h2>
 ````
 
-* This code changes the default inheritance of the Razor View Page Model so it **inherits** from the `BookStorePage` class (instead of `PageModel`).  The `BookStorePage` class which comes with the startup template, provides some shared properties/methods used by all pages.
 
 * Set the `IndexModel`'s namespace to `Acme.BookStore.Pages.Books`  in `Index.cshtml.cs`.
 
-  
+
 
 **Index.cshtml.cs:**
 
@@ -602,12 +600,12 @@ Open the `BookStoreMenuContributor` class in the `Menus` folder and add the foll
 namespace Acme.BookStore.Web.Menus
 {
     public class BookStoreMenuContributor : IMenuContributor
-    { 
+    {
         private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             //<-- added the below code
             context.Menu.AddItem(
-                new ApplicationMenuItem("BooksStore", l["Menu:BookStore"])
+                new ApplicationMenuItem("BooksStore", l["Menu:BookStore"], icon: "fa fa-book")
                     .AddItem(
                         new ApplicationMenuItem("BooksStore.Books", l["Menu:Books"], url: "/Books")
                     )
@@ -646,7 +644,16 @@ Open the `en.json` (*English translations*) file and add the below localization 
     "Type": "Type",
     "Price": "Price",
     "CreationTime": "Creation time",
-    "AreYouSureToDelete": "Are you sure you want to delete this item?"
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "Enum:BookType:0": "Undefined",
+    "Enum:BookType:1": "Adventure",
+    "Enum:BookType:2": "Biography",
+    "Enum:BookType:3": "Dystopia",
+    "Enum:BookType:4": "Fantastic",
+    "Enum:BookType:5": "Horror",
+    "Enum:BookType:6": "Science",
+    "Enum:BookType:7": "ScienceFiction",
+    "Enum:BookType:8": "Poetry"
   }
 }
 ````
@@ -672,7 +679,6 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model Acme.BookStore.Web.Pages.Books.IndexModel
 @section scripts
 {
@@ -716,7 +722,11 @@ $(function () {
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
             { data: "name" },
-            { data: "type" },
+            { data: "type",
+              render: function(data){
+                return l('Enum:BookType:' + data);
+              }
+            },
             { data: "publishDate" },
             { data: "price" },
             { data: "creationTime" }
@@ -736,7 +746,7 @@ It's end of this part. The final UI of this work is shown as below:
 
 {{end}}
 
-{{if UI == "NG"}} 
+{{if UI == "NG"}}
 
 ### Angular development
 #### Create the books page

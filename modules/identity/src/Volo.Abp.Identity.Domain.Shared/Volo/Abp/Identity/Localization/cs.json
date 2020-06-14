@@ -63,6 +63,8 @@
     "Identity.PasswordConfirmationFailed": "Heslo nesouhlasí s potvrzovacím heslem.",
     "Identity.StaticRoleRenamingErrorMessage": "Statické role nemohou být přejmenovány.",
     "Identity.StaticRoleDeletionErrorMessage": "Statické role nemohou být smazány.",
+    "Identity.OrganizationUnit.DuplicateDisplayNameWarning": "Organizační jednotka s názvem {0} již existuje. Na stejné úrovni nelze vytvořit více jednotek se stejným názvem.",
+    "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximální povolený počet členů organizační jednotky pro uživatele",
     "Volo.Abp.Identity:010001": "Nemůžete smazat svůj vlastní účet!",
     "Permission:IdentityManagement": "Správa identit",
     "Permission:RoleManagement": "Správa rolí",
@@ -82,6 +84,7 @@
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Délka blokování (sekundy)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Maximální počet neúspěšných pokusů o přístup",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Požadovat potvrzený email",
+    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Povolit potvrzování telefonního čísla",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Požadovat potvrzené telefonní číslo",
     "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "Je povolena změna uživatelského jména",
     "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "Je povolena změna emailu",
@@ -95,8 +98,10 @@
     "Description:Abp.Identity.Lockout.LockoutDuration": "Doba, po kterou je uživatel zablokován, když dojde k zablokování.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Počet neúspěšných pokusů o přístup než je uživatel uzamčen, za předpokladu, že je uzamčení povoleno.",
     "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "Zda je k přihlášení vyžadována potvrzená emailová adresa.",
+    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Zda telefonní číslo může být potvrzeno uživatelem.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Zda je pro přihlášení vyžadováno potvrzené telefonní číslo.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Zda může uživatel změnit uživatelské jméno.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Zda může uživatel změnit email."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Zda může uživatel změnit email.",
+    "Volo.Abp.Identity:010002": "Nelze nastavit více než {MaxUserMembershipCount} organizačních jednotek na uživatele!"
   }
 }

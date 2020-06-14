@@ -22,10 +22,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     return;
                 }
 
+                var localVoloRepoPath = context.BuildArgs.VoloGitHubLocalRepositoryPath;
+
                 new ProjectReferenceReplacer.LocalProjectPathReferenceReplacer(
                     context.Files,
                     context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
-                    localAbpRepoPath
+                    localAbpRepoPath,
+                    localVoloRepoPath
                 ).Run();
             }
             else
@@ -177,12 +180,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
             public class LocalProjectPathReferenceReplacer : ProjectReferenceReplacer
             {
-                private readonly string _gitHubLocalRepositoryPath;
+                private readonly string _gitHubAbpLocalRepositoryPath;
+                private readonly string _gitHubVoloLocalRepositoryPath;
 
-                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string projectName, string gitHubLocalRepositoryPath)
+                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string projectName, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath)
                     : base(entries, projectName)
                 {
-                    _gitHubLocalRepositoryPath = gitHubLocalRepositoryPath;
+                    _gitHubAbpLocalRepositoryPath = gitHubAbpLocalRepositoryPath;
+                    _gitHubVoloLocalRepositoryPath = gitHubVoloLocalRepositoryPath;
                 }
 
                 protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
@@ -204,9 +209,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                         includeValue = includeValue.TrimStart('\\');
                     }
 
-                    includeValue = _gitHubLocalRepositoryPath.EnsureEndsWith('\\') + includeValue;
+                    if (!string.IsNullOrWhiteSpace(_gitHubVoloLocalRepositoryPath))
+                    {
+                        if (includeValue.StartsWith("abp\\", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue.Substring("abp\\".Length);
+                        }
 
-                    return includeValue;
+                        return _gitHubVoloLocalRepositoryPath.EnsureEndsWith('\\') + "abp\\" + includeValue;
+                    }
+
+                    return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue;
                 }
             }
         }

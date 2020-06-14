@@ -13,6 +13,10 @@ export default `
   text-align: right;
 }
 
+[dir=rtl] .data-tables-filter {
+  text-align: left;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -39,6 +43,11 @@ export default `
 
 .ui-table-scrollable-body::-webkit-scrollbar-thumb {
   background: #8a8686;
+}
+
+.bordered .datatable-body-row {
+  border-top: 1px solid #eee;
+  margin-top: -1px;
 }
 
 .abp-ellipsis-inline {
@@ -132,6 +141,9 @@ export default `
 .sorting_asc:after {
   opacity: .3;
 }
+.ngx-datatable.material {
+  box-shadow: none;
+}
 
 @keyframes fadeInTop {
   from {
@@ -155,3 +167,5 @@ export default `
 /* </animations */
 
 `;
+
+export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';
