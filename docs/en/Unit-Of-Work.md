@@ -156,7 +156,7 @@ Again, the **same rules** are valid here:
 
 * `IsTransactional` (`bool?`): Used to set whether the UOW should be transactional or not. **Default value is `null`**. if you leave it `null`, it is determined automatically based on the conventions and the configuration.
 * `TimeOut` (`int?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
-* `IsolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional.
+* `IsolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional. If not set, uses the default configured value.
 * `IsDisabled` (`bool`): Used to disable the UOW for the current method/class.
 
 > If a method is called in an ambient UOW scope, then the `UnitOfWork` attribute is ignored and the method participates to the surrounding transaction in any way.
@@ -184,6 +184,50 @@ namespace AbpDemo.Web
 ## IUnitOfWorkManager
 
 `IUnitOfWorkManager` is the main service that is used to control the unit of work system. The following sections explains how to directly work with this service (while most of the times you won't need).
+
+### Begin a New Unit Of Work
+
+`IUnitOfWorkManager.Begin` method is used to create a new UOW scope.
+
+**Example: Create a new non-transactional UOW scope**
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Uow;
+
+namespace AbpDemo
+{
+    public class MyService : ITransientDependency
+    {
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+        public MyService(IUnitOfWorkManager unitOfWorkManager)
+        {
+            _unitOfWorkManager = unitOfWorkManager;
+        }
+        
+        public virtual async Task FooAsync()
+        {
+            using (var uow = _unitOfWorkManager.Begin(
+                requiresNew: true, isTransactional: false
+            ))
+            {
+                //...
+                
+                await uow.CompleteAsync();
+            }
+        }
+    }
+}
+````
+
+`Begin` method gets the following optional parameters:
+
+* `requiresNew` (`bool`): Set `true` to ignore the surrounding unit of work and start a new UOW with the provided options. **Default value is `false`. If it is `false` and there is a surrounding UOW, `Begin` method doesn't actually begin a new UOW, but silently participates to the existing UOW.**
+* `isTransactional` (`bool`). Default value is `false`.
+* `isolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional. If not set, uses the default configured value.
+* `TimeOut` (`TimeSpan?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
 
 ### The Current Unit Of Work
 
@@ -284,3 +328,29 @@ If your intent is just to save the changes after creating/updating/deleting an e
 > **Note-1**: All changes are automatically saved when a unit of work ends without any error. So, don't call `SaveChangesAsync()` unless you really need it.
 >
 > **Note-2**: If you use `Guid` as the primary key, you never need to save changes on insert to just get the generated id, because `Guid` keys are set in the application and are immediately available once you create a new entity.
+
+#### Other IUnitOfWork Properties/Methods
+
+* `OnCompleted` method gets a callback action which is called when the unit of work successfully completed (where you can be sure that all changes are saved).
+* `Failed` and `Disposed` events can be used to be notified if the UOW fails or when it is disposed.
+* `Complete` and `Rollback` methods are used to complete (commit) or roll backs the current UOW, which are normally used internally by the ABP Framework but can be used if you manually start a transaction using the `IUnitOfWorkManager.Begin` method.
+* `Options` can be used to get options that was used while starting the UOW.
+* `Items` dictionary can be used to store and get arbitrary objects inside the same unit of work, which can be a point to implement custom logics.
+
+## ASP.NET Core Integration
+
+Unit of work system is fully integrated to the ASP.NET Core. It properly works when you use ASP.NET Core MVC Controllers or Razor Pages. It defines action filters and page filters for the UOW system.
+
+> You typically do nothing to configure the UOW when you use ASP.NET Core.
+
+### Unit Of Work Middleware
+
+`AbpUnitOfWorkMiddleware` is a middleware that can enable UOW in the ASP.NET Core request pipeline. This might be needed if you need to enlarge the UOW scope to cover some other middleware(s).
+
+**Example:**
+
+````csharp
+app.UseUnitOfWork();
+app.UseConfiguredEndpoints();
+````
+
