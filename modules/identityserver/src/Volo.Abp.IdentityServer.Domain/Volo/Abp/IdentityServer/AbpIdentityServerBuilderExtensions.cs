@@ -112,6 +112,7 @@ namespace Volo.Abp.IdentityServer
                             {"DP", Convert.ToBase64String(parameters.DP)},
                             {"DQ", Convert.ToBase64String(parameters.DQ)},
                             {"Exponent", Convert.ToBase64String(parameters.Exponent)},
+                            {"InverseQ", Convert.ToBase64String(parameters.InverseQ)},
                             {"Modulus", Convert.ToBase64String(parameters.Modulus)},
                             {"P", Convert.ToBase64String(parameters.P)},
                             {"Q", Convert.ToBase64String(parameters.Q)}

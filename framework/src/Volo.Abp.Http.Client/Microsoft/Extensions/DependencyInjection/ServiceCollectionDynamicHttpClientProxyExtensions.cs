@@ -201,7 +201,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return type.IsInterface
                 && type.IsPublic
-                && type.IsGenericType
+                && !type.IsGenericType
                 && typeof(IRemoteService).IsAssignableFrom(type);
         }
     }
