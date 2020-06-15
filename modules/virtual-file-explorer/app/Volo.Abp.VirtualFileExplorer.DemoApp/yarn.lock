@@ -56,12 +56,12 @@
     "@abp/core" "^2.7.0"
     bootstrap "^4.3.1"
 
-"@abp/clipboard@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-2.7.0.tgz#8f4b7aafae369759315481e5a331a832e61cc602"
-  integrity sha512-kPIASn3WPlpIUiluWPy1eIGKRZcueDGBz9K6houqyvPwspMpc0C+LtqN917svsYq4sAsaPFyGi3VfJE5lm4KZw==
+"@abp/clipboard@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-2.9.0.tgz#b6d7180fbe3d8043e71b182ee620efa4877b8cf6"
+  integrity sha512-1rGd0PTQRWUUn2KkfOZF+2pp7rw7iSV5nUGOJ3sdTc/rLiH8tKv8FL4Sdj9EfaCiU8QVwDVmLtd5Kt6fLxeKDg==
   dependencies:
-    "@abp/core" "^2.7.0"
+    "@abp/core" "^2.9.0"
     clipboard "^2.0.4"
 
 "@abp/core@^2.7.0":
@@ -70,6 +70,13 @@
   integrity sha512-DpMPddtPtDVjWgEwTLdX6bjcKYAH/mK3hn1k/j5t+EKlLvZiy1w4GrK8tRpw0p+Aq2O61sI8EtaZeqrV71qN3A==
   dependencies:
     "@abp/utils" "^2.7.0"
+
+"@abp/core@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-2.9.0.tgz#5460925a121c88f8afb69dbce65da1cd4257b024"
+  integrity sha512-6Hn6dPN47kqmJF0VbxNcDu370oNZPTlEGMm1dQcgM31DvOMS8ICy/4thxNYTTEr0DN9chujkw38aHFd2XqyBnw==
+  dependencies:
+    "@abp/utils" "^2.9.0"
 
 "@abp/datatables.net-bs4@^2.7.0":
   version "2.7.0"
@@ -150,12 +157,13 @@
     "@abp/core" "^2.7.0"
     malihu-custom-scrollbar-plugin "^3.1.5"
 
-"@abp/prismjs@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-2.7.0.tgz#32794af1d83b19dd49b62f41cd2414fe021be70a"
-  integrity sha512-RIe+Q39R0kNInkmE7TrqyCVqk+SWFQNyjHRVkqJkdj2lqfs3mIg10EwRQxDLg2KdOutEaSaK05TEEwwFSjGx8A==
+"@abp/prismjs@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-2.9.0.tgz#d82ba6a5f03a09c4cc6697b3ae47955d3b4bbc20"
+  integrity sha512-WErltCoD6N1NTUTY9936OKzLjM/5lUJlB/utFs4gxR7yrtImW9ryUsjkRbIy42taZ+FkkB+suDDwa5g/9hujBA==
   dependencies:
-    "@abp/core" "^2.7.0"
+    "@abp/clipboard" "^2.9.0"
+    "@abp/core" "^2.9.0"
     prismjs "^1.17.1"
 
 "@abp/select2@^2.7.0":
@@ -196,6 +204,21 @@
   integrity sha512-pYU4rXgDVef+osba2TXjmBTzB9B9+aXY6vssf9+9DONZWyBDLAiK+UrV89X2SbRPaAxD9N0CRWHD3EAVPnqXiA==
   dependencies:
     just-compare "^1.3.0"
+
+"@abp/utils@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-2.9.0.tgz#8a66b7e1d422eae5898d32af7810d6bd625276f2"
+  integrity sha512-0gvWUH3jT7YE4ym2C45uKDzHs/oOdMW5lPq9ncCZ58wMxTrgPvxXNuMmRW0P259OcXYiRwmsNtb09/WlTQQbKA==
+  dependencies:
+    just-compare "^1.3.0"
+
+"@abp/virtual-file-explorer@^2.7.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@abp/virtual-file-explorer/-/virtual-file-explorer-2.9.0.tgz#a55b94c8beafbb8757ca0b9794e3fa957e61221d"
+  integrity sha512-/CWxu3q5QF5jshLX3lw4XNWxTBBOGvZDSkuCM/pE9XNPXjIu6G3YB9XCBmqvk8toSp0d6QjShwzPcjAKPCQcpA==
+  dependencies:
+    "@abp/clipboard" "^2.9.0"
+    "@abp/prismjs" "^2.9.0"
 
 "@fortawesome/fontawesome-free@^5.11.2":
   version "5.13.0"
