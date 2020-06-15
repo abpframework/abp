@@ -1,4 +1,5 @@
 export * from './common-utils';
+export * from './factory-utils';
 export * from './form-utils';
 export * from './generator-utils';
 export * from './initial-utils';
