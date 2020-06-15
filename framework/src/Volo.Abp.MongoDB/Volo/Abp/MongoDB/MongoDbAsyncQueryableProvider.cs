@@ -346,9 +346,9 @@ namespace Volo.Abp.MongoDB
             return GetMongoQueryable(queryable).ToListAsync(cancellationToken);
         }
 
-        public Task<T[]> ToArrayAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
+        public async Task<T[]> ToArrayAsync<T>(IQueryable<T> queryable, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(GetMongoQueryable(queryable).ToArray());
+            return (await GetMongoQueryable(queryable).ToListAsync(cancellationToken)).ToArray();
         }
     }
 }
