@@ -180,3 +180,107 @@ namespace AbpDemo.Web
     }
 }
 ````
+
+## IUnitOfWorkManager
+
+`IUnitOfWorkManager` is the main service that is used to control the unit of work system. The following sections explains how to directly work with this service (while most of the times you won't need).
+
+### The Current Unit Of Work
+
+UOW is ambient, as explained before. If you need to access to the current unit of work, you can use the `IUnitOfWorkManager.Current` property.
+
+**Example: Get the current UOW**
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Uow;
+
+namespace AbpDemo
+{
+    public class MyProductService : ITransientDependency
+    {
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+        public MyProductService(IUnitOfWorkManager unitOfWorkManager)
+        {
+            _unitOfWorkManager = unitOfWorkManager;
+        }
+        
+        public async Task FooAsync()
+        {
+            var uow = _unitOfWorkManager.Current;
+            //...
+        }
+    }
+}
+````
+
+`Current` property returns a `IUnitOfWork` object.
+
+> **Current Unit Of Work can be `null`** if there is no surrounding unit of work. It won't be `null` if your class is a conventional UOW class, you manually made it UOW or it was called inside a UOW scope, as explained before.
+
+#### SaveChangesAsync
+
+`IUnitOfWork.SaveChangesAsync()` method can be needed to save all the changes until now to the database. If you are using EF Core, it behaves exactly same. If the current UOW is transactional, even saved changes can be rolled back on an error (for the supporting database providers).
+
+**Example: Save changes after inserting an entity to get its auto-increment id**
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace AbpDemo
+{
+    public class CategoryAppService : ApplicationService, ICategoryAppService
+    {
+        private readonly IRepository<Category, int> _categoryRepository;
+
+        public CategoryAppService(IRepository<Category, int> categoryRepository)
+        {
+            _categoryRepository = categoryRepository;
+        }
+
+        public async Task<int> CreateAsync(string name)
+        {
+            var category = new Category {Name = name};
+            await _categoryRepository.InsertAsync(category);
+            
+            //Saving changes to be able to get the auto increment id
+            await UnitOfWorkManager.Current.SaveChangesAsync();
+            
+            return category.Id;
+        }
+    }
+}
+````
+
+This example uses auto-increment `int` primary key for the `Category` [entity](Entities.md). Auto-increment PKs require to save the entity to the database to get the id of the new entity.
+
+This example is an [application service](Application-Services.md) derived from the base `ApplicationService` class, which already has the `IUnitOfWorkManager` service injected as the `UnitOfWorkManager` property. So, no need to inject it manually.
+
+Since getting the current UOW is pretty common, there is also a `CurrentUnitOfWork` property as a shortcut to the `UnitOfWorkManager.Current`. So, the example above can be changed to use it:
+
+````csharp
+await CurrentUnitOfWork.SaveChangesAsync();
+````
+
+##### Alternative to the SaveChanges()
+
+Since saving changes after inserting, updating or deleting an entity can be frequently needed, corresponding [repository](Repositories.md) methods has an optional `autoSave` parameter. So, the `CreateAsync` method above could be re-written as shown below:
+
+````csharp
+public async Task<int> CreateAsync(string name)
+{
+    var category = new Category {Name = name};
+    await _categoryRepository.InsertAsync(category, autoSave: true);
+    return category.Id;
+}
+````
+
+If your intent is just to save the changes after creating/updating/deleting an entity, it is suggested to use the `autoSave` option instead of manually using the `CurrentUnitOfWork.SaveChangesAsync()`.
+
+> **Note-1**: All changes are automatically saved when a unit of work ends without any error. So, don't call `SaveChangesAsync()` unless you really need it.
+>
+> **Note-2**: If you use `Guid` as the primary key, you never need to save changes on insert to just get the generated id, because `Guid` keys are set in the application and are immediately available once you create a new entity.
