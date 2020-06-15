@@ -38,7 +38,22 @@ This is because an HTTP GET request doesn't (and shouldn't) make any change in t
 
 ## Default Options
 
-...
+`AbpUnitOfWorkDefaultOptions` is used to configure the default options for the unit of work system. Configure the options in the `ConfigureServices` method of your [module](Module-Development-Basics.md).
+
+**Example: Completely disable the database transactions**
+
+````csharp
+Configure<AbpUnitOfWorkDefaultOptions>(options =>
+{
+    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+});
+````
+
+### Option Properties
+
+* `TransactionBehavior` (`enum`: `UnitOfWorkTransactionBehavior`). A global point to configure the transaction behavior. Default value is `Auto` and work as explained in the "*Database Transaction Behavior*" section above. You can enable (even for HTTP GET requests) or disable transactions with this option.
+* `TimeOut` (`TimeSpan?`): Used to set the timeout value for UOWs. **Default value is `null`** and uses to the default of the underlying database provider.
+* `IsolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional.
 
 ## Controlling the Unit Of Work
 
