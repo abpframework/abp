@@ -10,6 +10,18 @@ namespace Volo.Abp.BlobStoring.Database
         )]
     public class BlobStoringDatabaseDomainModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpBlobStoringOptions>(options =>
+            {
+                options.Containers.ConfigureDefault(container =>
+                {
+                    if (container.ProviderType == null)
+                    {
+                        container.UseDatabase();
+                    }
+                });
+            });
+        }
     }
 }

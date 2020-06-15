@@ -493,7 +493,7 @@
             "index": "apps/dev-app/src/index.html",
             "main": "apps/dev-app/src/main.ts",
             "polyfills": "apps/dev-app/src/polyfills.ts",
-            "tsConfig": "apps/dev-app/tsconfig.prod.json",
+            "tsConfig": "apps/dev-app/tsconfig.dev.json",
             "aot": true,
             "extractCss": true,
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
@@ -518,11 +518,27 @@
                 "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
               },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/index.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-index"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/assets/icons.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-icons"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-material"
+              },
               "apps/dev-app/src/styles.scss"
             ],
             "scripts": []
           },
           "configurations": {
+            "tsConfig": "apps/dev-app/tsconfig.prod.json",
             "production": {
               "fileReplacements": [
                 {

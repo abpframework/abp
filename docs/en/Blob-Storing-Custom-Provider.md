@@ -64,7 +64,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 If you want to provide a simpler configuration, create an extension method for the `BlobContainerConfiguration` class:
 
-````
+````csharp
 public static class MyBlobContainerConfigurationExtensions
 {
     public static BlobContainerConfiguration UseMyCustomBlobProvider(

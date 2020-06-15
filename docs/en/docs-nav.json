@@ -216,6 +216,10 @@
         {
           "text": "GUID Generation",
           "path": "Guid-Generation.md"
+        },
+        {
+          "text": "Timing",
+          "path": "Timing.md"
         }
       ]
     },
@@ -277,7 +281,8 @@
               "path": "Application-Services.md"
             },
             {
-              "text": "Data Transfer Objects"
+              "text": "Data Transfer Objects",
+              "path": "Data-Transfer-Objects.md"
             },
             {
               "text": "Unit Of Work"
@@ -296,6 +301,15 @@
         {
           "text": "Dynamic C# API Clients",
           "path": "API/Dynamic-CSharp-API-Clients.md"
+        },
+        {
+          "text": "ABP Endpoints",
+          "items": [
+            {
+              "text": "Application Configuration",
+              "path": "API/Application-Configuration.md"
+            }
+          ]
         }
       ]
     },
@@ -477,6 +491,10 @@
               "path": "Dapper.md"
             }
           ]
+        },
+        {
+          "text": "Data Seeding",
+          "path": "Data-Seeding.md"
         }
       ]
     },
