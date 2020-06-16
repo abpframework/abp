@@ -1,0 +1,11 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Permission:BloggingAdmin": "Blog",
+    "Permission:Blogs": "Blogi",
+    "Permission:Management": "Upravljanje",
+    "Permission:Edit": "Urejanje",
+    "Permission:Create": "Ustvarjanje",
+    "Permission:Delete": "Brisanje"
+  }
+}

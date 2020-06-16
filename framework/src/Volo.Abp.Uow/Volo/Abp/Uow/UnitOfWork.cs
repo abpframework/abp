@@ -302,15 +302,7 @@ namespace Volo.Abp.Uow
                 }
             }
         }
-
-        protected virtual void CommitTransactions()
-        {
-            foreach (var transaction in GetAllActiveTransactionApis())
-            {
-                transaction.Commit();
-            }
-        }
-
+        
         protected virtual async Task CommitTransactionsAsync()
         {
             foreach (var transaction in GetAllActiveTransactionApis())

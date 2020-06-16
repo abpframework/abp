@@ -118,7 +118,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 modelBuilder.SetDatabaseProvider(provider.Value);
             }
         }
-        
+
         protected virtual EfCoreDatabaseProvider? GetDatabaseProviderOrNull(ModelBuilder modelBuilder)
         {
             switch (Database.ProviderName)
@@ -187,7 +187,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 Database.IsRelational() &&
                 !Database.GetCommandTimeout().HasValue)
             {
-                Database.SetCommandTimeout(initializationContext.UnitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
+                Database.SetCommandTimeout(TimeSpan.FromMilliseconds(initializationContext.UnitOfWork.Options.Timeout.Value));
             }
 
             ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;

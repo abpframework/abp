@@ -19,10 +19,6 @@ namespace Volo.Abp.ObjectExtending
         public Type Type { get; }
 
         [NotNull]
-        [Obsolete("Add validation attributes to the Attributes list instead! ValidationAttributes property will be removed in future versions.")]
-        public List<ValidationAttribute> ValidationAttributes { get; }
-
-        [NotNull]
         public List<Attribute> Attributes { get; }
 
         [NotNull]
@@ -71,7 +67,6 @@ namespace Volo.Abp.ObjectExtending
             Name = Check.NotNull(name, nameof(name));
 
             Configuration = new Dictionary<object, object>();
-            ValidationAttributes = new List<ValidationAttribute>();
             Attributes = new List<Attribute>();
             Validators = new List<Action<ObjectExtensionPropertyValidationContext>>();
 

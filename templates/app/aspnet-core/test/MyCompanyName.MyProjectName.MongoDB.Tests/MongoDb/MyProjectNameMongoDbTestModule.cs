@@ -12,9 +12,9 @@ namespace MyCompanyName.MyProjectName.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var connectionString = MongoDbFixture.ConnectionString.EnsureEndsWith('/') +
-                                    "Db_" +		
-                                    Guid.NewGuid().ToString("N");
+            var connectionString = MyProjectNameMongoDbFixture.ConnectionString.EnsureEndsWith('/') +
+                                   "Db_" +
+                                   Guid.NewGuid().ToString("N");
 
             Configure<AbpDbConnectionOptions>(options =>
             {

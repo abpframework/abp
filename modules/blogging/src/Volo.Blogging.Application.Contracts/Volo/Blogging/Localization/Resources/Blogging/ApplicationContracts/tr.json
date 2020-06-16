@@ -5,10 +5,6 @@
     "Permission:Blogs": "Bloglar",
     "Permission:Posts": "Yazılar",
     "Permission:Tags": "Etiketler",
-    "Permission:Comments": "Yorumlar",
-    "Permission:Management": "Yönetme",
-    "Permission:Edit": "Düzenle",
-    "Permission:Create": "Ekle",
-    "Permission:Delete": "Sil"
+    "Permission:Comments": "Yorumlar"
   }
 }

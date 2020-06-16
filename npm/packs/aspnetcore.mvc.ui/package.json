@@ -10,7 +10,7 @@
     "gulp": "^4.0.2",
     "merge-stream": "^2.0.0",
     "path": "^0.12.7",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.2"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }
