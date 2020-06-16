@@ -9,3 +9,4 @@ export * from './localization-utils';
 export * from './number-utils';
 export * from './route-utils';
 export * from './rxjs-utils';
+export * from './tree-utils';
