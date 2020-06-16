@@ -8,11 +8,11 @@ namespace Volo.Abp.Uow
     {
         [NotNull]
         public static IUnitOfWork Begin(
-            [NotNull] this IUnitOfWorkManager unitOfWorkManager, 
+            [NotNull] this IUnitOfWorkManager unitOfWorkManager,
             bool requiresNew = false,
             bool isTransactional = false,
-            IsolationLevel? isolationLevel = null, 
-            TimeSpan? timeout = null)
+            IsolationLevel? isolationLevel = null,
+            int? timeout = null)
         {
             Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
 
