@@ -117,6 +117,7 @@ export class BaseCoreModule {}
     NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
+    OAuthModule.forRoot(),
   ],
 })
 export class RootCoreModule {}
@@ -195,7 +196,6 @@ export class CoreModule {
           deps: [LocalizationService],
           useFactory: noop,
         },
-        ...OAuthModule.forRoot().providers,
         { provide: OAuthStorage, useFactory: storageFactory },
       ],
     };
