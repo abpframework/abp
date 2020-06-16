@@ -5,10 +5,6 @@
     "Permission:Blogs": "Blogi",
     "Permission:Posts": "Objave",
     "Permission:Tags": "Oznake",
-    "Permission:Comments": "Komentarji",
-    "Permission:Management": "Upravljanje",
-    "Permission:Edit": "Urejanje",
-    "Permission:Create": "Ustvarjanje",
-    "Permission:Delete": "Brisanje"
+    "Permission:Comments": "Komentarji"
   }
 }
