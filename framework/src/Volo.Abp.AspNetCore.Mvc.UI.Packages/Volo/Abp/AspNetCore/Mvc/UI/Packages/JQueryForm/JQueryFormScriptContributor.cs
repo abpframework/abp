@@ -11,6 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
             context.Files.AddIfNotContains("/libs/jquery-form/jquery.form.min.js");
+            context.Files.AddIfNotContains("/libs/jquery-form/jquery.form.min.js.map");
         }
     }
 }
