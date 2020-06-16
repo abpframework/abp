@@ -45,11 +45,8 @@ namespace Microsoft.Extensions.DependencyInjection
             AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName, configureHttpClientBuilder);
 
             //TODO: Make a configuration option and add remoteServiceName inside it!
-            //TODO: Add option to change type filter
 
-            var serviceTypes = assembly.GetTypes().Where(t =>
-                t.IsInterface && t.IsPublic && typeof(IRemoteService).IsAssignableFrom(t)
-            );
+            var serviceTypes = assembly.GetTypes().Where(IsSuitableForDynamicClientProxying);
 
             foreach (var serviceType in serviceTypes)
             {
@@ -155,7 +152,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient(interceptorType);
 
             var interceptorAdapterType = typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(interceptorType);
-            
+
             var validationInterceptorAdapterType =
                 typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(typeof(ValidationInterceptor));
 
@@ -190,6 +187,22 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             return services;
+        }
+
+        /// <summary>
+        /// Checks wether the type is suitable to use with the dynamic proxying.
+        /// Currently the type is checked statically against some fixed conditions.
+        /// </summary>
+        /// <param name="type">Type to check</param>
+        /// <returns>True, if the type is suitable for dynamic proxying. Otherwise false.</returns>
+        static bool IsSuitableForDynamicClientProxying(Type type)
+        {
+            //TODO: Add option to change type filter
+
+            return type.IsInterface
+                && type.IsPublic
+                && !type.IsGenericType
+                && typeof(IRemoteService).IsAssignableFrom(type);
         }
     }
 }
