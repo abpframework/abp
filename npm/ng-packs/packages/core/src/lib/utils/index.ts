@@ -1,3 +1,4 @@
+export * from './array-utils';
 export * from './common-utils';
 export * from './factory-utils';
 export * from './form-utils';
