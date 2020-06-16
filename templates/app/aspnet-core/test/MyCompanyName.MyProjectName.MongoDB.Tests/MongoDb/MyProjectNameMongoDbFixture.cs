@@ -3,12 +3,12 @@ using Mongo2Go;
 
 namespace MyCompanyName.MyProjectName.MongoDB
 {
-    public class MongoDbFixture : IDisposable
+    public class MyProjectNameMongoDbFixture : IDisposable
     {
         private static readonly MongoDbRunner MongoDbRunner;
         public static readonly string ConnectionString;
 
-        static MongoDbFixture()
+        static MyProjectNameMongoDbFixture()
         {
             MongoDbRunner = MongoDbRunner.Start();
             ConnectionString = MongoDbRunner.ConnectionString;
