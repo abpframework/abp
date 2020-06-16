@@ -141,7 +141,7 @@ var abp = abp || {};
     };
 
     var getMapValue = function (packageMaps, packageName, language) {
-        language = language || abp.localization.currentCulture.cultureName;
+        language = language || abp.localization.currentCulture.name;
         if (!packageMaps || !packageName || !language) {
             return language;
         }
