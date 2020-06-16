@@ -12,6 +12,9 @@ namespace Volo.Abp.Uow
 
         public IsolationLevel? IsolationLevel { get; set; }
 
+        /// <summary>
+        /// Milliseconds
+        /// </summary>
         public int? Timeout { get; set; }
 
         public AbpUnitOfWorkOptions()
