@@ -14,7 +14,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             //builder.Entity<YourEntity>(b =>
             //{
             //    b.ToTable(MyProjectNameConsts.DbTablePrefix + "YourEntities", MyProjectNameConsts.DbSchema);
-
+            //    b.ConfigureByConvention(); //auto configure for the base class props
             //    //...
             //});
         }

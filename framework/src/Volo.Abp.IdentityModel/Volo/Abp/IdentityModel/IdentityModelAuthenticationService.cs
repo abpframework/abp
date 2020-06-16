@@ -25,17 +25,20 @@ namespace Volo.Abp.IdentityModel
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected ICurrentTenant CurrentTenant { get; }
+        protected IdentityModelHttpRequestMessageOptions IdentityModelHttpRequestMessageOptions { get; }
 
         public IdentityModelAuthenticationService(
             IOptions<AbpIdentityClientOptions> options,
             ICancellationTokenProvider cancellationTokenProvider,
             IHttpClientFactory httpClientFactory,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant,
+            IOptions<IdentityModelHttpRequestMessageOptions> identityModelHttpRequestMessageOptions)
         {
             ClientOptions = options.Value;
             CancellationTokenProvider = cancellationTokenProvider;
             HttpClientFactory = httpClientFactory;
             CurrentTenant = currentTenant;
+            IdentityModelHttpRequestMessageOptions = identityModelHttpRequestMessageOptions.Value;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
 
@@ -74,7 +77,7 @@ namespace Volo.Abp.IdentityModel
             }
 
             var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
-           
+
             if (tokenResponse.IsError)
             {
                 if (tokenResponse.ErrorDescription != null)
@@ -112,14 +115,16 @@ namespace Volo.Abp.IdentityModel
         {
             using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
-                return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                var request = new DiscoveryDocumentRequest
                 {
                     Address = configuration.Authority,
                     Policy =
                     {
                         RequireHttps = configuration.RequireHttps
                     }
-                });
+                };
+                IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
+                return await httpClient.GetDiscoveryDocumentAsync(request);
             }
         }
 
@@ -160,6 +165,7 @@ namespace Volo.Abp.IdentityModel
                 UserName = configuration.UserName,
                 Password = configuration.UserPassword
             };
+            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
 
             AddParametersToRequestAsync(configuration, request);
 
@@ -177,6 +183,7 @@ namespace Volo.Abp.IdentityModel
                 ClientId = configuration.ClientId,
                 ClientSecret = configuration.ClientSecret
             };
+            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
 
             AddParametersToRequestAsync(configuration, request);
 

@@ -1,0 +1,11 @@
+{
+    "culture": "zh-Hant",
+    "texts": {
+      "Permission:BloggingAdmin": "部落格",
+      "Permission:Blogs": "部落格",
+      "Permission:Management": "管理",
+      "Permission:Edit": "標及",
+      "Permission:Create": "新增",
+      "Permission:Delete": "刪除"
+    }
+  }

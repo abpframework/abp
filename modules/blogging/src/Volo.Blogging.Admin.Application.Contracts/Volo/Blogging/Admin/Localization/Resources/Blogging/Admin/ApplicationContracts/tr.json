@@ -1,0 +1,11 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Permission:BloggingAdmin": "Blog",
+    "Permission:Blogs": "Bloglar",
+    "Permission:Management": "Yönetme",
+    "Permission:Edit": "Düzenle",
+    "Permission:Create": "Ekle",
+    "Permission:Delete": "Sil"
+  }
+}

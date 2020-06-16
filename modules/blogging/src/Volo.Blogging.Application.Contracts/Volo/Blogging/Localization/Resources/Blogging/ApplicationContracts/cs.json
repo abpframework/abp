@@ -5,10 +5,6 @@
     "Permission:Blogs": "Blogy",
     "Permission:Posts": "Příspěvky",
     "Permission:Tags": "Tagy",
-    "Permission:Comments": "Komentáře",
-    "Permission:Management": "Správa",
-    "Permission:Edit": "Upravit",
-    "Permission:Create": "Vytvořit",
-    "Permission:Delete": "Smazat"
+    "Permission:Comments": "Komentáře"
   }
 }
