@@ -12,13 +12,16 @@ namespace Volo.Abp.Identity
     {
         protected IdentityUserManager UserManager { get; }
         protected IIdentityUserRepository UserRepository { get; }
+        public IIdentityRoleRepository RoleRepository { get; }
 
         public IdentityUserAppService(
             IdentityUserManager userManager,
-            IIdentityUserRepository userRepository)
+            IIdentityUserRepository userRepository,
+            IIdentityRoleRepository roleRepository)
         {
             UserManager = userManager;
             UserRepository = userRepository;
+            RoleRepository = roleRepository;
         }
 
         //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
@@ -52,6 +55,14 @@ namespace Volo.Abp.Identity
             return new ListResultDto<IdentityRoleDto>(
                 ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
             );
+        }
+
+        [Authorize(IdentityPermissions.Users.Default)]
+        public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
+        {
+            var list = await RoleRepository.GetListAsync();
+            return new ListResultDto<IdentityRoleDto>(
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
         }
 
         [Authorize(IdentityPermissions.Users.Create)]
@@ -92,7 +103,7 @@ namespace Volo.Abp.Identity
                 (await UserManager.RemovePasswordAsync(user)).CheckErrors();
                 (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
             }
-            
+
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);

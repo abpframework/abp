@@ -19,19 +19,17 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         public AssignedRoleViewModel[] Roles { get; set; }
 
         protected IIdentityUserAppService IdentityUserAppService { get; }
-        protected IIdentityRoleAppService IdentityRoleAppService { get; }
 
-        public EditModalModel(IIdentityUserAppService identityUserAppService, IIdentityRoleAppService identityRoleAppService)
+        public EditModalModel(IIdentityUserAppService identityUserAppService)
         {
             IdentityUserAppService = identityUserAppService;
-            IdentityRoleAppService = identityRoleAppService;
         }
 
         public virtual async Task<IActionResult> OnGetAsync(Guid id)
         {
             UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await IdentityUserAppService.GetAsync(id));
 
-            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityRoleAppService.GetAllListAsync()).Items);
+            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
 
             var userRoleNames = (await IdentityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();
             foreach (var role in Roles)
