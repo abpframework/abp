@@ -1,20 +1,24 @@
-export class TreeNode<T extends any> {
+export class TreeNodeFactory<T extends object> {
   children: TreeNode<T>[] = [];
   isLeaf = true;
 
   constructor(props: T) {
     Object.assign(this, props);
   }
+
+  static create<T extends object>(props: T) {
+    return new TreeNodeFactory<T>(props) as TreeNode<T>;
+  }
 }
 
-export function createTreeFromList<T extends object, R extends BranchOrLeaf<T>>(
+export function createTreeFromList<T extends object, R extends unknown>(
   list: T[],
-  keySelector: (item: T) => NodeKey,
-  parentKeySelector: (item: T) => NodeKey,
-  valueMapper = (item: T) => new TreeNode(item) as R,
+  keySelector: (item: T) => number | string | Symbol,
+  parentKeySelector: typeof keySelector,
+  valueMapper: (item: T) => R,
 ) {
   const map = createMapFromList(list, keySelector, valueMapper);
-  const tree: ReturnType<typeof valueMapper>[] = [];
+  const tree: NodeValue<T, typeof valueMapper>[] = [];
 
   list.forEach(row => {
     const id = keySelector(row);
@@ -23,8 +27,8 @@ export function createTreeFromList<T extends object, R extends BranchOrLeaf<T>>(
 
     if (parentId) {
       const parent = map.get(parentId);
-      parent.children.push(node);
-      parent.isLeaf = false;
+      (parent as any).children.push(node);
+      (parent as any).isLeaf = false;
     } else {
       tree.push(node);
     }
@@ -33,19 +37,25 @@ export function createTreeFromList<T extends object, R extends BranchOrLeaf<T>>(
   return tree;
 }
 
-export function createMapFromList<T extends object, R extends BranchOrLeaf<T>>(
+export function createMapFromList<T extends object, R extends unknown>(
   list: T[],
-  keySelector: (item: T) => NodeKey,
-  valueMapper = (item: T) => new TreeNode(item) as R,
+  keySelector: (item: T) => number | string | Symbol,
+  valueMapper: (item: T) => R,
 ) {
-  const map = new Map<ReturnType<typeof keySelector>, ReturnType<typeof valueMapper>>();
+  type Key = ReturnType<typeof keySelector>;
+  type Value = NodeValue<T, typeof valueMapper>;
+  const map = new Map<Key, Value>();
   list.forEach(row => map.set(keySelector(row), valueMapper(row)));
   return map;
 }
 
-type NodeKey = number | string | Symbol;
-
-interface BranchOrLeaf<T> {
-  children: BranchOrLeaf<T>[];
+export type TreeNode<T extends object> = {
+  [K in keyof T]: T[K];
+} & {
+  children: TreeNode<T>[];
   isLeaf: boolean;
-}
+};
+
+type NodeValue<T extends object, F extends (...args: any) => any> = F extends undefined
+  ? TreeNode<T>
+  : ReturnType<F>;
