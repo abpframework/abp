@@ -52,7 +52,7 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 ### Option Properties
 
 * `TransactionBehavior` (`enum`: `UnitOfWorkTransactionBehavior`). A global point to configure the transaction behavior. Default value is `Auto` and work as explained in the "*Database Transaction Behavior*" section above. You can enable (even for HTTP GET requests) or disable transactions with this option.
-* `TimeOut` (`TimeSpan?`): Used to set the timeout value for UOWs. **Default value is `null`** and uses to the default of the underlying database provider.
+* `TimeOut` (`int?`): Used to set the timeout value for UOWs. **Default value is `null`** and uses to the default of the underlying database provider.
 * `IsolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional.
 
 ## Controlling the Unit Of Work
@@ -227,7 +227,7 @@ namespace AbpDemo
 * `requiresNew` (`bool`): Set `true` to ignore the surrounding unit of work and start a new UOW with the provided options. **Default value is `false`. If it is `false` and there is a surrounding UOW, `Begin` method doesn't actually begin a new UOW, but silently participates to the existing UOW.**
 * `isTransactional` (`bool`). Default value is `false`.
 * `isolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional. If not set, uses the default configured value.
-* `TimeOut` (`TimeSpan?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
+* `TimeOut` (`int?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
 
 ### The Current Unit Of Work
 
