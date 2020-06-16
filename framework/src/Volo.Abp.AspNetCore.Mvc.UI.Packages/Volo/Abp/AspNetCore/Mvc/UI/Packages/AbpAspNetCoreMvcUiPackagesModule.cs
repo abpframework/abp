@@ -12,11 +12,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages
         {
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.AddLanguagesMap(BootstrapDatepickerScriptContributor.PackageName,
+                options.AddLanguagesMapOrUpdate(BootstrapDatepickerScriptContributor.PackageName,
                     new NameValue("zh-Hans", "zh-CN"),
                     new NameValue("zh-Hant", "zh-TW"));
 
-                options.AddLanguageFilesMap(BootstrapDatepickerScriptContributor.PackageName,
+                options.AddLanguageFilesMapOrUpdate(BootstrapDatepickerScriptContributor.PackageName,
                     new NameValue("zh-Hans", "zh-CN"),
                     new NameValue("zh-Hant", "zh-TW"));
             });
