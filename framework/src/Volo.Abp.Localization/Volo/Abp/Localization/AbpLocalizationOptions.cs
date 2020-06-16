@@ -17,11 +17,17 @@ namespace Volo.Abp.Localization
 
         public List<LanguageInfo> Languages { get; }
 
+        public Dictionary<string, List<NameValue>> LanguagesMap  { get; }
+
+        public Dictionary<string, List<NameValue>> LanguageFilesMap { get; }
+
         public AbpLocalizationOptions()
         {
             Resources = new LocalizationResourceDictionary();
             GlobalContributors = new TypeList<ILocalizationResourceContributor>();
             Languages = new List<LanguageInfo>();
+            LanguagesMap = new Dictionary<string, List<NameValue>>();
+            LanguageFilesMap = new Dictionary<string, List<NameValue>>();
         }
     }
 }

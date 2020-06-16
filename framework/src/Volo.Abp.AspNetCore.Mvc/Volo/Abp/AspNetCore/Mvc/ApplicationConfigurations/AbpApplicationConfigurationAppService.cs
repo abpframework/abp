@@ -171,6 +171,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 );
             }
 
+            localizationConfig.LanguagesMap = _localizationOptions.LanguagesMap;
+            localizationConfig.LanguageFilesMap = _localizationOptions.LanguageFilesMap;
+
             return localizationConfig;
         }
 
