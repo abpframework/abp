@@ -1,8 +1,10 @@
-import { CoreModule, LazyLoadService, noop } from '@abp/ng.core';
+import { ConfigState, CoreModule, noop } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { Store } from '@ngxs/store';
+import { INgxDatatableConfig, NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -18,8 +20,9 @@ import { TableEmptyMessageComponent } from './components/table-empty-message/tab
 import { TableComponent } from './components/table/table.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { ToastComponent } from './components/toast/toast.component';
-import styles from './constants/styles';
 import { LoadingDirective } from './directives/loading.directive';
+import { NgxDatatableDefaultDirective } from './directives/ngx-datatable-default.directive';
+import { NgxDatatableListDirective } from './directives/ngx-datatable-list.directive';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { initLazyStyleHandler } from './handlers/lazy-style.handler';
@@ -27,26 +30,25 @@ import { RootParams } from './models/common';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
-import { chartJsLoaded$ } from './utils/widget-utils';
 
-/**
- *
- * @deprecated To be deleted in v2.6
- *
- */
-export function appendScript(injector: Injector) {
-  const fn = () => {
-    import('chart.js').then(() => chartJsLoaded$.next(true));
+export function ngxDatatableMessageFactory(store: Store) {
+  const emptyMessage = store.selectSnapshot(
+    ConfigState.getLocalization('AbpUi::NoDataAvailableInDatatable'),
+  );
+  const totalMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Total'));
+  const selectedMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Selected'));
 
-    const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
-    return lazyLoadService.load(null, 'style', styles, 'head', 'beforeend').toPromise();
-  };
-
-  return fn;
+  return {
+    messages: {
+      emptyMessage,
+      totalMessage,
+      selectedMessage,
+    },
+  } as INgxDatatableConfig;
 }
 
 @NgModule({
-  imports: [CoreModule, NgxValidateCoreModule, NgbPaginationModule],
+  imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
   declarations: [
     BreadcrumbComponent,
     ButtonComponent,
@@ -63,10 +65,14 @@ export function appendScript(injector: Injector) {
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent,
   ],
   exports: [
+    NgxDatatableModule,
     BreadcrumbComponent,
     ButtonComponent,
     ChartComponent,
@@ -80,8 +86,11 @@ export function appendScript(injector: Injector) {
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    NgxDatatableDefaultDirective,
+    NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent,
   ],
   providers: [DatePipe],
   entryComponents: [
@@ -95,7 +104,7 @@ export function appendScript(injector: Injector) {
 export class ThemeSharedModule {
   constructor(private errorHandler: ErrorHandler) {}
 
-  static forRoot(options = {} as RootParams): ModuleWithProviders {
+  static forRoot(options = {} as RootParams): ModuleWithProviders<ThemeSharedModule> {
     return {
       ngModule: ThemeSharedModule,
       providers: [
@@ -118,6 +127,11 @@ export class ThemeSharedModule {
           deps: [HTTP_ERROR_CONFIG],
         },
         { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
+        {
+          provide: 'configuration',
+          useFactory: ngxDatatableMessageFactory,
+          deps: [Store],
+        },
       ],
     };
   }

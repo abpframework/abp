@@ -8,11 +8,13 @@ Virtual File Explorer Module provided a simple UI to view all files in [virtual 
 
 ### Installation
 
-#### 1- Referencing Virtual File Explorer Module Packages
+#### 1- Use ABP CLI
 
 It is recommended to use the ABP CLI to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
 
 `abp add-module Volo.VirtualFileExplorer`
+
+#### 2- Manually install
 
 Or you can also manually install nuget package to `Acme.MyProject.Web` project:
 
@@ -20,7 +22,7 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
 
   `Install-Package Volo.Abp.VirtualFileExplorer.Web`
 
-#### 2- Adding Module Dependencies
+##### 2.1- Adding Module Dependencies
 
   * Open `MyProjectWebModule.cs`and add `typeof(AbpVirtualFileExplorerWebModule)` as shown below;
 
@@ -40,7 +42,7 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
       }
   ```
 
-#### 3- Adding NPM Package
+##### 2.2- Adding NPM Package
 
  * Open `package.json` and add `@abp/virtual-file-explorer": "^2.9.0` as shown below:
 

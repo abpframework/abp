@@ -2,8 +2,12 @@
 @using Microsoft.AspNetCore.Authorization
 @using Volo.Blogging.Admin
 @using Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
+@using Volo.Blogging
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
 @inherits Volo.Blogging.Admin.Pages.Blogging.BloggingAdminPage
 @model IndexModel
+@inject IHtmlLocalizer<BloggingResource> L
 @inject IAuthorizationService Authorization
 @{
     ViewBag.PageTitle = "Blogs";
@@ -11,9 +15,9 @@
 
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script src="/Pages/Blogging/Admin/Blogs/index.js"/>
-        <abp-script src="/Pages/Blogging/Admin/Blogs/create.js"/>
-        <abp-script src="/Pages/Blogging/Admin/Blogs/edit.js"/>
+        <abp-script src="/Pages/Blogging/Admin/Blogs/index.js" />
+        <abp-script src="/Pages/Blogging/Admin/Blogs/create.js" />
+        <abp-script src="/Pages/Blogging/Admin/Blogs/edit.js" />
     </abp-script-bundle>
 }
 
@@ -34,13 +38,13 @@
     <abp-card-body>
         <abp-table striped-rows="true" id="BlogsTable" class="nowrap">
             <thead>
-            <tr>
-                <th>@L["Actions"]</th>
-                <th>@L["Name"]</th>
-                <th>@L["ShortName"]</th>
-                <th>@L["CreationTime"]</th>
-                <th>@L["Description"]</th>
-            </tr>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["Name"]</th>
+                    <th>@L["ShortName"]</th>
+                    <th>@L["CreationTime"]</th>
+                    <th>@L["Description"]</th>
+                </tr>
             </thead>
         </abp-table>
     </abp-card-body>

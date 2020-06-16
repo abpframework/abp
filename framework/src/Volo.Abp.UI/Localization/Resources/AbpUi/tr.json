@@ -47,6 +47,8 @@
     "PagerInfoEmpty": "0 kayıttan 0 ile 0 arası gösteriliyor.",
     "PagerInfoFiltered": "(_MAX_ kayıt arasından filtrelendi)",
     "NoDataAvailableInDatatable": "Tabloda kayıt mevcut değil.",
+    "Total": "toplam",
+    "Selected": "seçilen",
     "PagerShowMenuEntries": "Sayfada _MENU_ kayıt göster.",
     "DatatableActionDropdownDefaultText": "İşlemler",
     "ChangePassword": "Şifre değiştir",

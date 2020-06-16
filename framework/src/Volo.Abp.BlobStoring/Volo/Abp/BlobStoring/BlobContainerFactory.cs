@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Volo.Abp.DependencyInjection;
+﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -27,7 +26,7 @@ namespace Volo.Abp.BlobStoring
             ProviderSelector = providerSelector;
         }
         
-        public virtual IBlobContainer Create(string name, CancellationToken cancellationToken = default)
+        public virtual IBlobContainer Create(string name)
         {
             var configuration = ConfigurationProvider.Get(name);
             

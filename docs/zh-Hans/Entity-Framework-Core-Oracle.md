@@ -28,14 +28,14 @@ In the `CreateDbContext()` method of the *YourProjectName*MigrationsDbContextFac
 
 使用以下代码替换*YourProjectName*MigrationsDbContextFactory.cs中的  `CreateDbContext()` 方法:
 
-```
+```csharp
 var builder = new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 ```
 
 与这个
 
-```
+```csharp
 var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
 	new DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>().UseOracle
 	(
@@ -50,12 +50,6 @@ var builder = (DbContextOptionsBuilder<YourProjectNameMigrationsDbContext>)
 Oracle连接字符串与SQL Server连接字符串不同. 所以检查你的解决方案中所有的 `appsettings.json` 文件,更改其中的连接字符串. 有关oracle连接字符串选项的详细内容请参见[connectionstrings.com](https://www.connectionstrings.com/oracle/).
 
 通常需要更改 `.DbMigrator` 和 `.Web` 项目里面的 `appsettings.json` ,但它取决于你的解决方案结构.
-
-Oracle连接字符串示例:
-
-```
-Data Source=localhost;User Id=myuser;Password=mypassword;
-```
 
 ## 重新生成迁移
 

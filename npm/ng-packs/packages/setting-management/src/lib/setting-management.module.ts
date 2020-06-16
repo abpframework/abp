@@ -8,6 +8,7 @@ import { SettingManagementState } from './states/setting-management.state';
 
 @NgModule({
   declarations: [SettingManagementComponent],
+  exports: [SettingManagementComponent],
   imports: [
     SettingManagementRoutingModule,
     CoreModule,

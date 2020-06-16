@@ -10,6 +10,7 @@
     "@fortawesome/fontawesome-free",
     "@ng-bootstrap/ng-bootstrap",
     "@ngx-validate/core",
+    "@swimlane/ngx-datatable",
     "bootstrap",
     "font-awesome",
     "chart.js"

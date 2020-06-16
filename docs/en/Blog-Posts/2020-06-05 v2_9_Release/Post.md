@@ -224,6 +224,8 @@ We've created the UI for manage organization units, their members and roles for 
 
 OU management is available for both of the MVC (Razor Pages) and the Angular user interfaces.
 
+> See [this entry](https://support.abp.io/QA/Questions/222/Bugs--Problems-v290#answer-3cf5eba3-0bf1-2aa1-cc5e-39f5a0750329) if you're upgrading your solution from an earlier version.
+
 ### Chat Module Angular UI
 
 We had introduced a new [chat module](https://commercial.abp.io/modules/Volo.Chat) in the previous version, which was only supporting the ASP.NET Core MVC / Razor Pages UI. Now, it has also an Angular UI option.

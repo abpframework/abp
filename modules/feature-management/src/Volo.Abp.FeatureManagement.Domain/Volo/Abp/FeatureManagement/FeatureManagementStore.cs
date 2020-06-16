@@ -44,8 +44,8 @@ namespace Volo.Abp.FeatureManagement
 
         public virtual async Task DeleteAsync(string name, string providerName, string providerKey)
         {
-            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
-            if (featureValue != null)
+            var featureValues = await FeatureValueRepository.FindAllAsync(name, providerName, providerKey);
+            foreach (var featureValue in featureValues)
             {
                 await FeatureValueRepository.DeleteAsync(featureValue);
             }

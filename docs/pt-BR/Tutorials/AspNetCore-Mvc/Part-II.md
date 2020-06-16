@@ -67,7 +67,6 @@ Abra o `CreateModal.cshtml`arquivo e cole o código abaixo:
 
 ```html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
@@ -86,13 +85,13 @@ Abra o `CreateModal.cshtml`arquivo e cole o código abaixo:
 
 
 
-- Este modal usa o 
+- Este modal usa o
 
   ```
   abp-dynamic-form
   ```
 
-  auxiliar de marca para criar automaticamente o formulário a partir da 
+  auxiliar de marca para criar automaticamente o formulário a partir da
 
   ```
   CreateBookViewModel
@@ -234,7 +233,6 @@ Substitua o `EditModal.cshtml`conteúdo pelo seguinte:
 
 ```html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Acme.BookStore.Web.Pages.Books
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel

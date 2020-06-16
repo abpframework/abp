@@ -47,6 +47,8 @@
     "PagerInfoEmpty": "Showing 0 to 0 of 0 entries",
     "PagerInfoFiltered": "(filtered from _MAX_ total entries)",
     "NoDataAvailableInDatatable": "No data available",
+    "Total": "total",
+    "Selected": "selected",
     "PagerShowMenuEntries": "Show _MENU_ entries",
     "DatatableActionDropdownDefaultText": "Actions",
     "ChangePassword": "Change password",
@@ -59,6 +61,6 @@
     "500Message": "Internal Server Error",
     "GoHomePage": "Go to the homepage",
     "GoBack": "Go back",
-    "Search" : "Search"
+    "Search": "Search"
   }
 }
