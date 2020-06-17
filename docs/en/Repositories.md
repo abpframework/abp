@@ -126,7 +126,7 @@ You can directly access the data access provider (`DbContext` in this case) to p
 
 `IRepository` inherits from `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Generic Repositories*" section above.
 
-**Example: Using the `Where(...)` &and the`ToList()` extension methods**
+**Example: Using the `Where(...)` &and the `ToList()` extension methods**
 
 ````csharp
 var people = _personRepository
@@ -138,7 +138,7 @@ var people = _personRepository
 
 You normally want to use `.ToListAsync()`, `.CountAsync()`... instead, to be able to write a **truly async code**.
 
-However, you see that can't use these async extension methods in your application or domain layer when you create a new project using the standard [application startup template](Startup-Templates/Application.md), because;
+However, you see that you can't use these async extension methods in your application or domain layer when you create a new project using the standard [application startup template](Startup-Templates/Application.md), because;
 
 * These async methods **are not standard LINQ methods** and they are defined in the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) NuGet package.
 * The standard template **doesn't have a reference** to the EF Core package from the domain and application layers, to be independent from the database provider.
@@ -185,8 +185,8 @@ You can always create custom repository methods and use the database provider sp
 
 This method is suggested;
 
-* If you want to **completely isolate** your domain & application layers completely from the database provider.
-* If you develop a **reusable [application module](Modules/Index.md)** and don't want to depend on a specific database provider.
+* If you want to **completely isolate** your domain & application layers from the database provider.
+* If you develop a **reusable [application module](Modules/Index.md)** and don't want to force to a specific database provider, which should be done as a [best practice](Best-Practices/Index.md).
 
 ### Option-3: IAsyncQueryableExecuter
 
