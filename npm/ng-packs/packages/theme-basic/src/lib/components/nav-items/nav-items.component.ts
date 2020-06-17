@@ -1,31 +1,31 @@
 import {
-  Component,
-  AfterViewInit,
-  TrackByFunction,
-  TemplateRef,
-  ViewChild,
-  OnDestroy,
-  Input,
-} from '@angular/core';
-import {
   ABP,
-  takeUntilDestroy,
-  SetLanguage,
+  ApplicationConfiguration,
   AuthService,
   ConfigState,
-  ApplicationConfiguration,
   SessionState,
+  SetLanguage,
+  takeUntilDestroy,
 } from '@abp/ng.core';
-import { LayoutState } from '../../states/layout.state';
-import { Store, Select } from '@ngxs/store';
-import { eNavigationElementNames } from '../../enums/navigation-element-names';
-import { AddNavigationElement } from '../../actions/layout.actions';
-import { map, filter } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { Layout } from '../../models/layout';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnDestroy,
+  TemplateRef,
+  TrackByFunction,
+  ViewChild,
+} from '@angular/core';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
-import snq from 'snq';
+import { Select, Store } from '@ngxs/store';
 import compare from 'just-compare';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import snq from 'snq';
+import { AddNavigationElement } from '../../actions/layout.actions';
+import { eNavigationElementNames } from '../../enums/navigation-element-names';
+import { Layout } from '../../models/layout';
+import { LayoutState } from '../../states/layout.state';
 
 @Component({
   selector: 'abp-nav-items',
@@ -52,7 +52,7 @@ export class NavItemsComponent implements AfterViewInit, OnDestroy {
 
   rightPartElements: TemplateRef<any>[] = [];
 
-  trackByFn: TrackByFunction<ABP.FullRoute> = (_, element) => element;
+  trackByFn: TrackByFunction<ABP.Route> = (_, element) => element.name;
 
   get defaultLanguage$(): Observable<string> {
     return this.languages$.pipe(
