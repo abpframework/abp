@@ -1,4 +1,4 @@
-import { createTreeFromList, TreeNode } from '../utils/tree-utils';
+import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
 
 const LIST_1 = [
   { id: 1, pid: null },
@@ -46,23 +46,32 @@ describe('Tree Utils', () => {
       ${LIST_2} | ${TREE_2}
       ${LIST_3} | ${TREE_3}
     `('should return $expected when given $list', ({ list, expected }: TestCreateTreeFromList) => {
-      expect(
-        createTreeFromList(
-          list,
-          x => x.id,
-          x => x.pid,
-        ),
-      ).toEqual(expected);
+      const tree = createTreeFromList(
+        list,
+        x => x.id,
+        x => x.pid,
+        x => BaseTreeNode.create(x),
+      );
+
+      expect(removeParents(tree)).toEqual(expected);
     });
   });
 });
 
-interface TestCreateTreeFromList {
-  list: ModelA[];
-  expected: TreeNode<ModelA>[];
+function removeParents(tree: TreeNode<Model>[]) {
+  return tree.map(v => {
+    const { parent, ...node } = v;
+    node.children = removeParents(node.children);
+    return node;
+  });
 }
 
-interface ModelA {
+interface TestCreateTreeFromList {
+  list: Model[];
+  expected: TreeNode<Model>[];
+}
+
+interface Model {
   id: 1;
   pid: null;
 }
