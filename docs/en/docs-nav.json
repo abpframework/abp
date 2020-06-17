@@ -153,16 +153,23 @@
       ]
     },
     {
-      "text": "Events",
+      "text": "Event Bus",
       "items": [
         {
-          "text": "Event Bus (local)"
+          "text": "Overall",
+          "path": "Event-Bus.md"
+        },
+        {
+          "text": "Local Event Bus",
+          "path": "Local-Event-Bus.md"
         },
         {
           "text": "Distributed Event Bus",
+          "path": "Distributed-Event-Bus.md",
           "items": [
             {
-              "text": "RabbitMQ Integration"
+              "text": "RabbitMQ Integration",
+              "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
             }
           ]
         }
