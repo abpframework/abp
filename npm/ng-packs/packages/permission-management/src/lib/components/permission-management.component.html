@@ -26,11 +26,16 @@
           <ul class="nav nav-pills flex-column">
             <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
               <a
+                *ngIf="{ assignedCount: getAssignedCount(group.name) } as data"
                 class="nav-link pointer"
                 [class.active]="selectedGroup?.name === group?.name"
                 (click)="onChangeGroup(group)"
-                >{{ group?.displayName }}</a
               >
+                <div [class.font-weight-bold]="data.assignedCount">
+                  {{ group?.displayName }}
+                  <span>({{ data.assignedCount }})</span>
+                </div>
+              </a>
             </li>
           </ul>
         </div>
