@@ -10,7 +10,7 @@ class DummyComponent {}
 
 describe('Route Utils', () => {
   describe('#getRoutePath', () => {
-    let spectator: SpectatorRouting<DummyComponent>;
+    let spectator: SpectatorRouting<RouterOutletComponent>;
     const createRouting = createRoutingFactory({
       component: RouterOutletComponent,
       stubsEnabled: false,
