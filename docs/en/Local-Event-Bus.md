@@ -122,7 +122,7 @@ Actually, adding local events are not unique to the `AggregateRoot` class. You c
 Calling the `AddLocalEvent` doesn't immediately publish the event. The event is published when you save changes to the database;
 
 * For EF Core, it is published on `DbContext.SaveChanges`.
-* For MongoDB, it is published when you call repository's `InsertAsync` or `UpdateAsync` methods (since MongoDB has no such a change tracking system).
+* For MongoDB, it is published when you call repository's `InsertAsync`, `UpdateAsync` or `DeleteAsync` methods (since MongoDB has not a change tracking system).
 
 ## Subscribing to Events
 
@@ -151,7 +151,8 @@ namespace AbpDemo
 
 That's all. `MyHandler` is **automatically discovered** by the ABP Framework and `HandleEventAsync` is called whenever a `StockCountChangedEvent` occurs.  You can inject any service and perform any required logic here.
 
-There can be zero or more handlers subscribed to the same event.
+* **Zero or more handlers** can subscribe to the same event.
+* A single event handler class can **subscribe to multiple events** but implementing the `ILocalEventHandler<TEvent>` interface for each event type.
 
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
 
@@ -164,4 +165,63 @@ When an event published, subscribed event handlers are immediately executed. So;
 
 ## Pre-Built Events
 
-TODO
+It is very common to **publish events on entity create, update and delete** operations. ABP Framework **automatically** publish these events for all entities. You can just subscribe to the related event.
+
+**Example: Subscribe to an event that published when a user was created**
+
+````csharp
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.EventBus;
+
+namespace AbpDemo
+{
+    public class MyHandler
+        : ILocalEventHandler<EntityCreatedEventData<IdentityUser>>,
+          ITransientDependency
+    {
+        public async Task HandleEventAsync(
+            EntityCreatedEventData<IdentityUser> eventData)
+        {
+            var userName = eventData.Entity.UserName;
+            var email = eventData.Entity.Email;
+            //...
+        }
+    }
+}
+````
+
+This class subscribes to the `EntityCreatedEventData<IdentityUser>`, which is published just after a user was created. You may want to send a "Welcome" email to the new user.
+
+There are two types of these events: events with past tense and events with continuous tense.
+
+### Events with Past Tense
+
+Events with past tense are published when the related unit of work completed and the entity change successfully saved to the database. If you throw an exception on these event handlers, it **can not rollback** the transaction since it was already committed.
+
+The event types are;
+
+* `EntityCreatedEventData<T>` is published just after an entity was successfully created.
+* `EntityUpdatedEventData<T>` is published just after an entity was successfully updated.
+* `EntityDeletedEventData<T>` is published just after an entity was successfully deleted.
+* `EntityChangedEventData<T>` is published just after an entity was successfully created, updated or deleted. It can be a shortcut if you need to listen any type of change - instead of subscribing to the individual events.
+
+### Events with Continuous Tense
+
+Events with continuous tense are published before completing the transaction (if database transaction is supported by the database provider being used). If you throw an exception on these event handlers, it **can rollback** the transaction since it is not completed yet and the change is not saved to the database.
+
+The event types are;
+
+* `EntityCreatingEventData<T>` is published just before saving a new entity to the database.
+* `EntityUpdatingEventData<T>` is published just before an existing entity is being updated.
+* `EntityDeletingEventData<T>` is published just before an entity is being deleted.
+* `EntityChangingEventData<T>` is published just before an entity is being created, updated or deleted. It can be a shortcut if you need to listen any type of change - instead of subscribing to the individual events.
+
+#### How It Was Implemented?
+
+Pre-build events are published when you save changes to the database;
+
+* For EF Core, they are published on `DbContext.SaveChanges`.
+* For MongoDB, they are published when you call repository's `InsertAsync`, `UpdateAsync` or `DeleteAsync` methods (since MongoDB has not a change tracking system).
