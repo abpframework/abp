@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Settings;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.SettingManagement
@@ -12,12 +13,14 @@ namespace Volo.Abp.SettingManagement
     {
         private readonly ISettingManagementStore _settingManagementStore;
         private readonly ISettingRepository _settingRepository;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly SettingTestData _testData;
 
         public SettingManagementStore_Tests()
         {
             _settingManagementStore = GetRequiredService<ISettingManagementStore>();
             _settingRepository = GetRequiredService<ISettingRepository>();
+            _unitOfWorkManager= GetRequiredService<IUnitOfWorkManager>();
             _testData = GetRequiredService<SettingTestData>();
         }
 
@@ -50,6 +53,22 @@ namespace Volo.Abp.SettingManagement
             (await _settingRepository.FindAsync(_testData.SettingId)).Value.ShouldBe("43");
         }
 
+
+        [Fact]
+        public async Task Set_In_UnitOfWork_Should_Be_Consistent()
+        {
+            using (_unitOfWorkManager.Begin())
+            {
+                var value = await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
+                value.ShouldBe("42");
+
+                await _settingManagementStore.SetAsync("MySetting1", "43", GlobalSettingValueProvider.ProviderName, null);
+
+                var valueAfterSet = await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
+                valueAfterSet.ShouldBe("43");
+            }
+        }
+
         [Fact]
         public async Task DeleteAsync()
         {
@@ -60,5 +79,20 @@ namespace Volo.Abp.SettingManagement
             (await _settingRepository.FindAsync(_testData.SettingId)).ShouldBeNull();
         }
 
+        [Fact]
+        public async Task Delete_In_UnitOfWork_Should_Be_Consistent()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                (await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null)).ShouldNotBeNull();
+
+                await _settingManagementStore.DeleteAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
+
+                await uow.SaveChangesAsync();
+
+                var value = await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
+                value.ShouldBeNull();
+            }
+        }
     }
 }

@@ -2,31 +2,35 @@
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.FeatureManagement
 {
     public class FeatureManagementStore : IFeatureManagementStore, ITransientDependency
     {
-        protected IDistributedCache<FeatureValueCacheItem> Cache { get; }
         protected IFeatureValueRepository FeatureValueRepository { get; }
+        protected FeatureManagementStoreCache Cache { get; }
         protected IGuidGenerator GuidGenerator { get; }
 
         public FeatureManagementStore(
             IFeatureValueRepository featureValueRepository,
-            IGuidGenerator guidGenerator,
-            IDistributedCache<FeatureValueCacheItem> cache)
+            FeatureManagementStoreCache featureManagementStoreCache,
+            IGuidGenerator guidGenerator)
         {
             FeatureValueRepository = featureValueRepository;
+            Cache = featureManagementStoreCache;
             GuidGenerator = guidGenerator;
-            Cache = cache;
         }
 
+        [UnitOfWork]
         public virtual async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
-            var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
+            var cacheItem = await Cache.GetOrAddAsync(CalculateCacheKey(name, providerName, providerKey),
+                async () => new FeatureValueCacheItem((await FeatureValueRepository.FindAsync(name, providerName, providerKey))?.Value));
             return cacheItem.Value;
         }
 
+        [UnitOfWork]
         public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
             var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
@@ -40,37 +44,19 @@ namespace Volo.Abp.FeatureManagement
                 featureValue.Value = value;
                 await FeatureValueRepository.UpdateAsync(featureValue);
             }
+
+            await Cache.SetAsync(CalculateCacheKey(name, providerName, providerKey), new FeatureValueCacheItem(featureValue.Value));
         }
 
+        [UnitOfWork]
         public virtual async Task DeleteAsync(string name, string providerName, string providerKey)
         {
             var featureValues = await FeatureValueRepository.FindAllAsync(name, providerName, providerKey);
             foreach (var featureValue in featureValues)
             {
                 await FeatureValueRepository.DeleteAsync(featureValue);
+                await Cache.RemoveAsync(CalculateCacheKey(name, providerName, providerKey));
             }
-        }
-
-        protected virtual async Task<FeatureValueCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
-        {
-            var cacheKey = CalculateCacheKey(name, providerName, providerKey);
-            var cacheItem = await Cache.GetAsync(cacheKey);
-
-            if (cacheItem != null)
-            {
-                return cacheItem;
-            }
-
-            var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
-
-            cacheItem = new FeatureValueCacheItem(featureValue?.Value);
-
-            await Cache.SetAsync(
-                cacheKey,
-                cacheItem
-            );
-
-            return cacheItem;
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
