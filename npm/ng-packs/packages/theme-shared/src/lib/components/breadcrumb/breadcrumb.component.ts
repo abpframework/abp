@@ -41,7 +41,7 @@ export class BreadcrumbComponent implements OnDestroy, OnInit {
 
           while (node.parent) {
             node = node.parent;
-            const { parent, children, ...segment } = node;
+            const { parent, children, isLeaf, ...segment } = node;
             this.segments.unshift(segment);
           }
 
