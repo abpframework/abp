@@ -46,6 +46,7 @@ namespace Volo.Abp.Uow
             return Task.FromResult(value != null && !value.IsRemoved ? value.Value: null);
         }
 
+        [UnitOfWork]
         public virtual Task<TCacheItem> SetAsync(string key, TCacheItem item)
         {
             var cache = GetUnitOfWorkCache();
@@ -62,6 +63,7 @@ namespace Volo.Abp.Uow
             return Task.FromResult(item);
         }
 
+        [UnitOfWork]
         public virtual Task RemoveAsync(string key)
         {
             var cache = GetUnitOfWorkCache();
@@ -73,7 +75,7 @@ namespace Volo.Abp.Uow
             return Task.CompletedTask;
         }
 
-        protected Dictionary<string, UnitOfWorkCacheItem<TCacheItem>> GetUnitOfWorkCache()
+        protected virtual Dictionary<string, UnitOfWorkCacheItem<TCacheItem>> GetUnitOfWorkCache()
         {
             if (UnitOfWorkManager.Current == null)
             {
