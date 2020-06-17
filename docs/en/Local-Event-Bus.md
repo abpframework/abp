@@ -109,7 +109,7 @@ namespace AbpDemo
 
 `AggregateRoot` class defines the `AddLocalEvent` to add a new local event, that is published when the aggregate root object is saved (created or updated) into the database.
 
-> If an entity publishes such an event, it is a good practice to change the related properties in a controlled manner, just like the example above - `StockCount` can only be changed by the `ChangeStockCount` which guarantees publishing the event.
+> If an entity publishes such an event, it is a good practice to change the related properties in a controlled manner, just like the example above - `StockCount` can only be changed by the `ChangeStockCount` method which guarantees publishing the event.
 
 #### IGeneratesDomainEvents Interface
 
