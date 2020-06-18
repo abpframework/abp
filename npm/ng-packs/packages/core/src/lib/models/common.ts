@@ -7,11 +7,6 @@ import { Config } from './config';
 export namespace ABP {
   export interface Root {
     environment: Partial<Config.Environment>;
-    /**
-     *
-     * @deprecated To be deleted in v3.0
-     */
-    requirements?: Config.Requirements;
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
   }

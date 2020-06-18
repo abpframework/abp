@@ -5,7 +5,6 @@ export * from './confirmation/confirmation.component';
 export * from './loading/loading.component';
 export * from './loader-bar/loader-bar.component';
 export * from './modal/modal.component';
-export * from './pagination/pagination.component';
 export * from './sort-order-icon/sort-order-icon.component';
 export * from './table-empty-message/table-empty-message.component';
 export * from './table/table.component';

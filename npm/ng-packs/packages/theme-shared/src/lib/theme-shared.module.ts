@@ -14,7 +14,6 @@ import { LoaderBarComponent } from './components/loader-bar/loader-bar.component
 import { LoadingComponent } from './components/loading/loading.component';
 import { ModalContainerComponent } from './components/modal/modal-container.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { PaginationComponent } from './components/pagination/pagination.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
 import { TableComponent } from './components/table/table.component';
@@ -59,7 +58,6 @@ export function ngxDatatableMessageFactory(store: Store) {
     LoadingComponent,
     ModalComponent,
     ModalContainerComponent,
-    PaginationComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
@@ -80,7 +78,6 @@ export function ngxDatatableMessageFactory(store: Store) {
     LoaderBarComponent,
     LoadingComponent,
     ModalComponent,
-    PaginationComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
