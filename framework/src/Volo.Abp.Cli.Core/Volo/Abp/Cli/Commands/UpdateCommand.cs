@@ -109,6 +109,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("--nuget                                     (Only updates Nuget packages)");
             sb.AppendLine("-sp|--solution-path                         (Specify the solution path)");
             sb.AppendLine("-sn|--solution-name                         (Specify the solution name)");
+            sb.AppendLine("--check-all                                 (Check the new version of each package separately)");
             sb.AppendLine("");
             sb.AppendLine("Some examples:");
             sb.AppendLine("");
