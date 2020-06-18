@@ -7,7 +7,6 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.setting-management.config": "~2.9.0",
     "@abp/ng.theme.shared": "~2.9.0"
   },
   "publishConfig": {

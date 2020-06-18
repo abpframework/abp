@@ -1,5 +1,5 @@
-import execa from 'execa';
 import program from 'commander';
+import execa from 'execa';
 
 (async () => {
   program.option('-i, --noInstall', 'skip updating package.json and installation', false);
@@ -37,7 +37,7 @@ import program from 'commander';
         '--no-watch',
         '--all-packages',
         '--excluded-packages',
-        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
+        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management',
       ],
       { stdout: 'inherit', cwd: '../' },
     );
@@ -51,7 +51,7 @@ import program from 'commander';
         '--prod',
         '--no-watch',
         '--packages',
-        '@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
+        '@abp/ng.feature-management,@abp/ng.permission-management',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

@@ -1,4 +1,4 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
@@ -30,21 +30,25 @@ export namespace ABP {
     maxResultCount?: number;
   }
 
-  export interface Route {
-    children?: Route[];
-    invisible?: boolean;
-    layout?: eLayoutType;
+  export interface Node {
     name: string;
-    order?: number;
     parentName?: string;
+    order?: number;
+    invisible?: boolean;
+  }
+
+  export interface Nav extends Node {
     path: string;
     requiredPolicy?: string;
+  }
+
+  export interface Route extends Nav {
+    layout?: eLayoutType;
     iconClass?: string;
   }
 
-  export interface FullRoute extends Route {
-    url?: string;
-    wrapper?: boolean;
+  export interface Tab extends Nav {
+    component: Type<any>;
   }
 
   export interface BasicItem {
