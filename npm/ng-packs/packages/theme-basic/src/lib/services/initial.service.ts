@@ -6,10 +6,17 @@ import { ApplicationLayoutComponent } from '../components/application-layout/app
 import { AccountLayoutComponent } from '../components/account-layout/account-layout.component';
 import { EmptyLayoutComponent } from '../components/empty-layout/empty-layout.component';
 import { eThemeBasicComponents } from '../enums/components';
+import { NavItemsService } from '@abp/ng.theme.shared';
+import { LanguagesComponent } from '../components/nav-items/languages.component';
+import { CurrentUserComponent } from '../components/nav-items/current-user.component';
 
 @Injectable({ providedIn: 'root' })
 export class InitialService {
-  constructor(private domInsertion: DomInsertionService, private store: Store) {
+  constructor(
+    private domInsertion: DomInsertionService,
+    private navItemsService: NavItemsService,
+    private store: Store,
+  ) {
     this.appendStyle();
 
     this.store.dispatch([
@@ -25,6 +32,11 @@ export class InitialService {
         key: eThemeBasicComponents.EmptyLayout,
         component: EmptyLayoutComponent,
       }),
+    ]);
+
+    this.navItemsService.addItems([
+      { id: eThemeBasicComponents.CurrentUser, component: CurrentUserComponent },
+      { id: eThemeBasicComponents.Languages, component: LanguagesComponent },
     ]);
   }
 
