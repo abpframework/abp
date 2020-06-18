@@ -63,11 +63,13 @@ namespace Volo.Abp.Cli.Commands
                 solution = Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories).FirstOrDefault();
             }
 
+            var checkAll = commandLineArgs.Options.ContainsKey(Options.CheckAll.Long);
+
             if (solution != null)
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews, checkAll: checkAll);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -79,7 +81,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews, checkAll: checkAll);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
@@ -148,6 +150,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Npm = "npm";
                 public const string NuGet = "nuget";
+            }
+
+            public static class CheckAll
+            {
+                public const string Long = "check-all";
             }
         }
     }
