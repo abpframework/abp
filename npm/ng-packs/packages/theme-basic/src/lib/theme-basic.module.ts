@@ -3,7 +3,6 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
 import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgxsModule } from '@ngxs/store';
 import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
 import { ApplicationLayoutComponent } from './components/application-layout/application-layout.component';
 import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.component';
@@ -12,7 +11,8 @@ import { NavItemsComponent } from './components/nav-items/nav-items.component';
 import { RoutesComponent } from './components/routes/routes.component';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
 import { InitialService } from './services/initial.service';
-import { LayoutState } from './states/layout.state';
+import { CurrentUserComponent } from './components/nav-items/current-user.component';
+import { LanguagesComponent } from './components/nav-items/languages.component';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -23,6 +23,17 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     LogoComponent,
     NavItemsComponent,
     RoutesComponent,
+    CurrentUserComponent,
+    LanguagesComponent,
+  ],
+  exports: [
+    ...LAYOUTS,
+    ValidationErrorComponent,
+    LogoComponent,
+    NavItemsComponent,
+    RoutesComponent,
+    CurrentUserComponent,
+    LanguagesComponent,
   ],
   imports: [
     CoreModule,
@@ -30,7 +41,6 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     NgbCollapseModule,
     NgbDropdownModule,
     NgxValidateCoreModule,
-    NgxsModule.forFeature([LayoutState]),
     NgxValidateCoreModule.forRoot({
       targetSelector: '.form-group',
       blueprints: {
@@ -51,13 +61,6 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       },
       errorTemplate: ValidationErrorComponent,
     }),
-  ],
-  exports: [
-    ...LAYOUTS,
-    ValidationErrorComponent,
-    LogoComponent,
-    NavItemsComponent,
-    RoutesComponent,
   ],
   entryComponents: [...LAYOUTS, ValidationErrorComponent],
 })
