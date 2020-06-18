@@ -130,7 +130,7 @@
 		},
 		punctuation: [
 			// open paren, brackets, and close paren
-			/(['`,]?\(|[)\[\]])/,
+			/(?:['`,]?\(|[)\[\]])/,
 			// cons
 			{
 				pattern: /(\s)\.(?=\s)/,

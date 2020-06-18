@@ -61,10 +61,8 @@
 	Prism.languages.xquery['tag'].inside['attr-value'].inside['expression'] = {
 		// Allow for two levels of nesting
 		pattern: /{(?!{)(?:{(?:{[^}]*}|[^}])*}|[^}])+}/,
-		inside: {
-			rest: Prism.languages.xquery
-		},
-		'alias': 'language-xquery'
+		inside: Prism.languages.xquery,
+		alias: 'language-xquery'
 	};
 
 	// The following will handle plain text inside tags

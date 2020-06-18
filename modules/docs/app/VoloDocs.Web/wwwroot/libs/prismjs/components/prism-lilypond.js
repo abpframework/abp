@@ -5,7 +5,7 @@
 	// For some reason, this can't be 4
 	var recursivenessLog2 = 5;
 	for (var i = 0; i < recursivenessLog2; i++) {
-		schemeExpression = schemeExpression.replace(/<expr>/g, schemeExpression);
+		schemeExpression = schemeExpression.replace(/<expr>/g, function () { return schemeExpression; });
 	}
 	schemeExpression = schemeExpression.replace(/<expr>/g, /[^\s\S]/.source);
 
@@ -13,7 +13,7 @@
 	var lilypond = Prism.languages.lilypond = {
 		'comment': /%(?:(?!\{).*|\{[\s\S]*?%\})/,
 		'embedded-scheme': {
-			pattern: RegExp(/(^|[=\s])#(?:"(?:[^"\\]|\\.)*"|[^\s()"]*(?:[^\s()]|<expr>))/.source.replace(/<expr>/g, schemeExpression), 'm'),
+			pattern: RegExp(/(^|[=\s])#(?:"(?:[^"\\]|\\.)*"|[^\s()"]*(?:[^\s()]|<expr>))/.source.replace(/<expr>/g, function () { return schemeExpression; }), 'm'),
 			lookbehind: true,
 			greedy: true,
 			inside: {
