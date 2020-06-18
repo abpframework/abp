@@ -304,7 +304,7 @@
                 }
             }
 
-            configuration.language = datatables.defaultConfigurations.language;
+            configuration.language = datatables.defaultConfigurations.language();
 
             if(configuration.dom){
                 configuration.dom += datatables.defaultConfigurations.dom;
@@ -352,21 +352,23 @@
 
     datatables.defaultConfigurations.scrollX = true;
 
-    datatables.defaultConfigurations.language = {
-        info: localize("PagerInfo"),
-        infoFiltered: localize("PagerInfoFiltered"),
-        infoEmpty: localize("PagerInfoEmpty"),
-        search: localize("PagerSearch"),
-        processing: localize("ProcessingWithThreeDot"),
-        loadingRecords: localize("LoadingWithThreeDot"),
-        lengthMenu: localize("PagerShowMenuEntries"),
-        emptyTable: localize("NoDataAvailableInDatatable"),
-        paginate: {
-            first: localize("PagerFirst"),
-            last: localize("PagerLast"),
-            previous: localize("PagerPrevious"),
-            next: localize("PagerNext")
-        }
+    datatables.defaultConfigurations.language = function () {
+        return {
+            info: localize("PagerInfo"),
+            infoFiltered: localize("PagerInfoFiltered"),
+            infoEmpty: localize("PagerInfoEmpty"),
+            search: localize("PagerSearch"),
+            processing: localize("ProcessingWithThreeDot"),
+            loadingRecords: localize("LoadingWithThreeDot"),
+            lengthMenu: localize("PagerShowMenuEntries"),
+            emptyTable: localize("NoDataAvailableInDatatable"),
+            paginate: {
+                first: localize("PagerFirst"),
+                last: localize("PagerLast"),
+                previous: localize("PagerPrevious"),
+                next: localize("PagerNext")
+            }
+        };
     };
 
     datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>';
