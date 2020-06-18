@@ -5,4 +5,6 @@ export const enum eThemeBasicComponents {
   Logo = 'Theme.LogoComponent',
   Routes = 'Theme.RoutesComponent',
   NavItems = 'Theme.NavItemsComponent',
+  CurrentUser = 'Theme.CurrentUserComponent',
+  Languages = 'Theme.LanguagesComponent',
 }
