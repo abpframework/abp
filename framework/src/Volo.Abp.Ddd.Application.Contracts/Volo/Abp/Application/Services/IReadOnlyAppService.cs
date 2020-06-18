@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Volo.Abp.Application.Dtos;
 
@@ -20,6 +17,7 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface IReadOnlyAppService<TGetOutputDto, TGetListOutputDto, in TKey, in TGetListInput>
+        : IApplicationService
     {
         Task<TGetOutputDto> GetAsync(TKey id);
 
