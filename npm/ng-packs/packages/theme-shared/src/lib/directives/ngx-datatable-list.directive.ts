@@ -52,7 +52,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private subscribeToIsLoading() {
     const sub = this.list.isLoading$.subscribe(loading => {
       this.table.loadingIndicator = loading;
-      this.cdRef.markForCheck();
+      this.cdRef.detectChanges();
     });
     this.subscription.add(sub);
   }
