@@ -37,7 +37,7 @@
     "import-blacklist": [true, "rxjs/Rx"],
     "interface-over-type-literal": true,
     "interface-name": [true, "never-prefix"],
-    "member-access": [true, "no-public"],
+    "member-access": [false],
     "member-ordering": [
       true,
       {

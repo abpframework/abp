@@ -67,7 +67,7 @@ namespace Volo.Abp.IdentityServer
 
             if (builderOptions.AddDeveloperSigningCredential)
             {
-                identityServerBuilder = identityServerBuilder.AddDeveloperSigningCredential();
+                identityServerBuilder = identityServerBuilder.AddAbpDeveloperSigningCredential();
             }
 
             identityServerBuilder.AddAbpIdentityServer(builderOptions);

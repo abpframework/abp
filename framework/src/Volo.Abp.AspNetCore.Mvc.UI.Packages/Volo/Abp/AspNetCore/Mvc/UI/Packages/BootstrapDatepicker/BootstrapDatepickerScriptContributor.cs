@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Globalization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
@@ -9,11 +10,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
     [DependsOn(typeof(JQueryScriptContributor))]
     public class BootstrapDatepickerScriptContributor : BundleContributor
     {
-        public static readonly Dictionary<string, string> CultureMap = new Dictionary<string, string>
-        {
-            {"zh-Hans", "zh-CN"}
-        };
-    
+        public const string PackageName = "bootstrap-datepicker";
+
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
             context.Files.AddIfNotContains("/libs/bootstrap-datepicker/bootstrap-datepicker.min.js");
@@ -26,12 +24,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
                 ? "en"
                 : CultureInfo.CurrentUICulture.Name;
 
-            TryAddCultureFile(context, MapCultureName(cultureName));
+            TryAddCultureFile(context, cultureName);
         }
 
         protected virtual bool TryAddCultureFile(BundleConfigurationContext context, string cultureName)
         {
-            var filePath = $"/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{cultureName}.min.js";
+            var fileName = context.LocalizationOptions.GetLanguageFilesMap(PackageName, cultureName);
+            var filePath = $"/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{fileName}.min.js";
 
             if (!context.FileProvider.GetFileInfo(filePath).Exists)
             {
@@ -40,12 +39,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
 
             context.Files.AddIfNotContains(filePath);
             return true;
-        }
-        
-        protected virtual string MapCultureName(string cultureName)
-        {
-            return CultureMap.GetOrDefault(cultureName) ??
-                   cultureName;
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2
         {
             //TODO: Add select2.full.min.js or localize!
             context.Files.AddIfNotContains("/libs/select2/js/select2.min.js");
-            context.Files.AddIfNotContains("/libs/select2/js/select2-bootstrap-modal-patch.js");
         }
     }
 }

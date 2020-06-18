@@ -4,7 +4,7 @@ using System.Data;
 namespace Volo.Abp.Uow
 {
     //TODO: Implement default options!
-    
+
     /// <summary>
     /// Global (default) unit of work options
     /// </summary>
@@ -17,7 +17,7 @@ namespace Volo.Abp.Uow
 
         public IsolationLevel? IsolationLevel { get; set; }
 
-        public TimeSpan? Timeout { get; set; }
+        public int? Timeout { get; set; }
 
         internal AbpUnitOfWorkOptions Normalize(AbpUnitOfWorkOptions options)
         {

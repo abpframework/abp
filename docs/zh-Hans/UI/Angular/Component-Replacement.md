@@ -543,6 +543,10 @@ export class AppComponent implements OnInit {
 
 ![New nav-items](./images/replaced-nav-items-component.png)
 
+## 另请参阅
+
+- [如何替换PermissionManagementComponent](./Permission-Management-Component-Replacement.md)
+
 ## 下一步是什么?
 
 - [自定义设置页面](./Custom-Setting-Page.md)

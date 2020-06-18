@@ -5,10 +5,6 @@
     "Permission:Blogs": "Blogs",
     "Permission:Posts": "Bài viết",
     "Permission:Tags": "Thẻ",
-    "Permission:Comments": "Bình luận",
-    "Permission:Management": "Quản lý",
-    "Permission:Edit": "Sửa",
-    "Permission:Create": "Tạo",
-    "Permission:Delete": "Xóa"
+    "Permission:Comments": "Bình luận"
   }
 }

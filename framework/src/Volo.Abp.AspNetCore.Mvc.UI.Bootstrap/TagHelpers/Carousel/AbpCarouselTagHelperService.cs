@@ -38,6 +38,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
         protected virtual void SetItems(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
             var itemsHtml = new StringBuilder("");
+            itemsHtml.Append("<div class= \"carousel-inner\">");
 
             foreach (var carouselItem in itemList)
             {
@@ -46,6 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
                 itemsHtml.AppendLine(carouselItem.Html);
             }
 
+            itemsHtml.Append("</div>");
             output.Content.SetHtmlContent(itemsHtml.ToString());
         }
 

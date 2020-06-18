@@ -21,7 +21,13 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
             AttendedDbContexts = new List<IEfCoreDbContext>();
         }
 
-        public void Commit()
+        public Task CommitAsync()
+        {
+            Commit();
+            return Task.CompletedTask;
+        }
+        
+        protected void Commit()
         {
             DbContextTransaction.Commit();
 
@@ -34,12 +40,6 @@ namespace Volo.Abp.Uow.EntityFrameworkCore
 
                 dbContext.Database.CommitTransaction();
             }
-        }
-
-        public Task CommitAsync()
-        {
-            Commit();
-            return Task.CompletedTask;
         }
 
         public void Dispose()

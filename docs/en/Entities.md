@@ -26,9 +26,9 @@ public class Book : Entity<Guid>
 If your entity's Id type is `Guid`, there are some good practices to implement:
 
 * Create a constructor that gets the Id as a parameter and passes to the base class.
-  * If you don't set a GUID Id, ABP Framework sets it on save, but it is good to have a valid Id on the entity even before saving it to the database.
-* If you create an entity with a constructor that takes parameters, also create a `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
-* Don't use the `Guid.NewGuid()` to set the Id! Use [the `IGuidGenerator` service](Guid-Generation.md) while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
+  * If you don't set a GUID Id, **ABP Framework sets it on save**, but it is good to have a valid Id on the entity even before saving it to the database.
+* If you create an entity with a constructor that takes parameters, also create a `private` or `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
+* Don't use the `Guid.NewGuid()` to set the Id! **Use [the `IGuidGenerator` service](Guid-Generation.md)** while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
 
 An example entity:
 
@@ -382,7 +382,7 @@ The way to store this dictionary in the database depends on the database provide
 
 Extra Properties system is especially useful if you are using a **re-usable module** that defines an entity inside and you want to get/set some data related to this entity in an easy way.
 
-You normally **don't need** to this system for your own entities, because it has the following drawbacks:
+You typically **don't need** to use this system for your own entities, because it has the following drawbacks:
 
 * It is **not fully type safe** since it works with strings as property names.
 * It is **not easy to [auto map](Object-To-Object-Mapping.md)** these properties from/to other objects.

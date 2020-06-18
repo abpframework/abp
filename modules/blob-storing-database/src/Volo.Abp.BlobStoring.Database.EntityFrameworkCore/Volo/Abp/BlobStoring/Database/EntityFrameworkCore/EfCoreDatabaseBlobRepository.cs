@@ -7,9 +7,10 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
 {
-    public class EfCoreDatabaseBlobRepository : EfCoreRepository<IBlobStoringDbContext, DatabaseBlob, Guid>, IDatabaseBlobRepository
+    public class EfCoreDatabaseBlobRepository : EfCoreRepository<IBlobStoringDbContext, DatabaseBlob, Guid>,
+        IDatabaseBlobRepository
     {
-        public EfCoreDatabaseBlobRepository(IDbContextProvider<IBlobStoringDbContext> dbContextProvider) 
+        public EfCoreDatabaseBlobRepository(IDbContextProvider<IBlobStoringDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
@@ -38,15 +39,18 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore
         public virtual async Task<bool> DeleteAsync(
             Guid containerId,
             string name,
+            bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
+            //TODO: Should extract this logic to out of the repository and remove this method completely
+
             var blob = await FindAsync(containerId, name, cancellationToken);
             if (blob == null)
             {
                 return false;
             }
 
-            await base.DeleteAsync(blob.Id, cancellationToken: GetCancellationToken(cancellationToken));
+            await base.DeleteAsync(blob, autoSave, cancellationToken: GetCancellationToken(cancellationToken));
             return true;
         }
     }

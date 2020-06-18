@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Security.Claims
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public override ClaimsPrincipal GetClaimsPrincipal()
+        protected override ClaimsPrincipal GetClaimsPrincipal()
         {
             return _httpContextAccessor.HttpContext?.User ?? base.GetClaimsPrincipal();
         }

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Blogging.Blogs;
-using Volo.Blogging.Blogs.Dtos;
-using Volo.Blogging.Comments;
-using Volo.Blogging.Comments.Dtos;
 using Volo.Blogging.Pages.Blogs.Shared.Helpers;
-using Volo.Blogging.Posts;
+using Volo.Blogging.Admin.Blogs;
 using Xunit;
 
 namespace Volo.Blogging
@@ -15,11 +11,13 @@ namespace Volo.Blogging
     public class BlogAppService_Tests : BloggingApplicationTestBase
     {
         private readonly IBlogAppService _blogAppService;
+        private readonly IBlogManagementAppService _blogManagementAppService;
         private readonly IBlogRepository _blogRepository;
 
         public BlogAppService_Tests()
         {
             _blogAppService = GetRequiredService<IBlogAppService>();
+            _blogManagementAppService = GetRequiredService<IBlogManagementAppService>();
             _blogRepository = GetRequiredService<IBlogRepository>();
         }
 
@@ -68,7 +66,7 @@ namespace Volo.Blogging
             var shortName = "test shortName";
             var description = "test description";
 
-            var blogDto = await _blogAppService.Create(new CreateBlogDto() { Name = name, ShortName = name, Description = description });
+            var blogDto = await _blogManagementAppService.CreateAsync(new CreateBlogDto() { Name = name, ShortName = name, Description = description });
 
             UsingDbContext(context =>
             {
@@ -85,9 +83,9 @@ namespace Volo.Blogging
         {
             var newDescription = "new description";
 
-            var oldBlog = (await _blogRepository.GetListAsync()).FirstOrDefault(); ;
+            var oldBlog = (await _blogManagementAppService.GetListAsync()).Items.FirstOrDefault(); ;
 
-            await _blogAppService.Update(oldBlog.Id, new UpdateBlogDto()
+            await _blogManagementAppService.UpdateAsync(oldBlog.Id, new UpdateBlogDto()
             { Description = newDescription, Name = oldBlog.Name, ShortName = oldBlog.ShortName });
 
             UsingDbContext(context =>
@@ -102,7 +100,7 @@ namespace Volo.Blogging
         {
             var blog = (await _blogRepository.GetListAsync()).First();
 
-            await _blogAppService.Delete(blog.Id);
+            await _blogManagementAppService.DeleteAsync(blog.Id);
         }
     }
 }

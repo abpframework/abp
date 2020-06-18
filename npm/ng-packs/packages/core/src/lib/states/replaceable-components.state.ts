@@ -1,8 +1,8 @@
+import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import snq from 'snq';
-import { Injectable } from '@angular/core';
 
 @State<ReplaceableComponents.State>({
   name: 'ReplaceableComponentsState',

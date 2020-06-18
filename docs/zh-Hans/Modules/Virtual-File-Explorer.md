@@ -8,11 +8,13 @@
 
 ### 安装
 
-#### 1- 引用虚拟文件浏览器模块包
+#### 1- 使用ABP CLI
 
 建议使用ABP CLI安装模块,在解决方案文件 (`.sln`) 目录打开 `CMD` 窗口,运行以下命令:
 
 `abp add-module Volo.VirtualFileExplorer`
+
+#### 2- 手动安装
 
 或者你也可以手动安装nuget包到 `Acme.MyProject.Web` 项目:
 
@@ -20,7 +22,7 @@
 
   `Install-Package Volo.Abp.VirtualFileExplorer.Web`
 
-#### 2- 添加模块依赖
+##### 2.1- 添加模块依赖
 
 * 打开 `MyProjectWebModule.cs` 并且添加 `typeof(AbpVirtualFileExplorerWebModule)` 如下所示;
 
@@ -40,7 +42,7 @@
       }
   ```
 
-#### 3- 添加NPM包
+##### 2.2- 添加NPM包
 
  * 打开 `package.json` 添加 `@abp/virtual-file-explorer": "^2.9.0` 如下所示:
   

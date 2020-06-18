@@ -116,14 +116,9 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Users.AsQueryable()
-                    .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
-                    .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
-                    !filter.IsNullOrWhiteSpace(),
-                    u =>
-                        u.UserName.Contains(filter) ||
-                        u.Email.Contains(filter)
-                )
+            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
+
+            return await query
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .As<IMongoQueryable<IdentityUser>>()
                 .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
@@ -132,12 +127,12 @@ namespace Volo.Abp.Identity.MongoDB
 
         public virtual async Task<int> GetMembersCountAsync(
             OrganizationUnit organizationUnit,
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
-            return await DbContext.Users.AsQueryable()
-                .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
-                .As<IMongoQueryable<IdentityUser>>()
-                .CountAsync(GetCancellationToken(cancellationToken));
+            var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
+
+            return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual Task RemoveAllRolesAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
@@ -158,6 +153,19 @@ namespace Volo.Abp.Identity.MongoDB
                 user.RemoveOrganizationUnit(organizationUnit.Id);
                 DbContext.Users.ReplaceOne(u => u.Id == user.Id, user);
             }
+        }
+
+        protected virtual IMongoQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit, string filter = null)
+        {
+            return DbContext.Users.AsQueryable()
+                .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                );
         }
     }
 }

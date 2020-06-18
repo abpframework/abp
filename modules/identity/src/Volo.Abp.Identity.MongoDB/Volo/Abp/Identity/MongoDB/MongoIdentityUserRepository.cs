@@ -134,7 +134,8 @@ namespace Volo.Abp.Identity.MongoDB
                         u.UserName.Contains(filter) ||
                         u.Email.Contains(filter) ||
                         (u.Name != null && u.Name.Contains(filter)) ||
-                        (u.Surname != null && u.Surname.Contains(filter))
+                        (u.Surname != null && u.Surname.Contains(filter)) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .As<IMongoQueryable<IdentityUser>>()
@@ -185,7 +186,8 @@ namespace Volo.Abp.Identity.MongoDB
                         u.UserName.Contains(filter) ||
                         u.Email.Contains(filter) ||
                         (u.Name != null && u.Name.Contains(filter)) ||
-                        (u.Surname != null && u.Surname.Contains(filter))
+                        (u.Surname != null && u.Surname.Contains(filter)) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
                 )
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }

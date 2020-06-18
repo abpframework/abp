@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+    
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>Volo.Blogging.Admin.Application.Contracts</AssemblyName>
+        <PackageId>Volo.Blogging.Admin.Application.Contracts</PackageId>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Blogging.Domain.Shared\Volo.Blogging.Domain.Shared.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\cs.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\de.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\en.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\nl.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\pl-PL.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\pt-BR.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\sl.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\tr.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\vi.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\zh-Hans.json" />
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\zh-Hant.json" />
+    </ItemGroup>
+</Project>
