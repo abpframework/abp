@@ -56,7 +56,8 @@ namespace Volo.Abp.Validation
             {
                 foreach (var contributorType in Options.ObjectValidationContributors)
                 {
-                    var contributor = (IObjectValidationContributor) scope.ServiceProvider.GetRequiredService(contributorType);
+                    var contributor = (IObjectValidationContributor) 
+                        scope.ServiceProvider.GetRequiredService(contributorType);
                     contributor.AddErrors(context);
                 }
             }

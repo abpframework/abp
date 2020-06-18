@@ -10,7 +10,7 @@ namespace Volo.Abp.Http.Modeling
     {
         public string ControllerName { get; set; }
 
-        public string TypeAsString { get; set; }
+        public string Type { get; set; }
 
         public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; }
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.Http.Modeling
             return new ControllerApiDescriptionModel
             {
                 ControllerName = controllerName,
-                TypeAsString = type.GetFullNameWithAssemblyName(),
+                Type = type.FullName,
                 Actions = new Dictionary<string, ActionApiDescriptionModel>(),
                 Interfaces = type
                     .GetInterfaces()
@@ -52,7 +52,7 @@ namespace Volo.Abp.Http.Modeling
         {
             var subModel = new ControllerApiDescriptionModel
             {
-                TypeAsString = TypeAsString,
+                Type = Type,
                 Interfaces = Interfaces,
                 ControllerName = ControllerName,
                 Actions = new Dictionary<string, ActionApiDescriptionModel>()
@@ -71,7 +71,7 @@ namespace Volo.Abp.Http.Modeling
 
         public bool Implements(Type interfaceType)
         {
-            return Interfaces.Any(i => i.TypeAsString == interfaceType.GetFullNameWithAssemblyName());
+            return Interfaces.Any(i => i.Type == interfaceType.FullName);
         }
 
         public override string ToString()

@@ -1,6 +1,9 @@
-﻿using Volo.Abp.AutoMapper;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
+using Volo.Docs.Documents;
 
 namespace Volo.Docs
 {
@@ -13,10 +16,14 @@ namespace Volo.Docs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<DocsApplicationModule>();
+            
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsApplicationAutoMapperProfile>(validate: true);
             });
+            
+            context.Services.TryAddSingleton<INavigationTreePostProcessor>(NullNavigationTreePostProcessor.Instance);
         }
     }
 }

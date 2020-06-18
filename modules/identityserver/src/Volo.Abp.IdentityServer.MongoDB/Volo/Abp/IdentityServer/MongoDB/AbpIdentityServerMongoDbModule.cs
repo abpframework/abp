@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
@@ -32,6 +33,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 options.AddRepository<IdentityResource, MongoIdentityResourceRepository>();
                 options.AddRepository<Client, MongoClientRepository>();
                 options.AddRepository<PersistedGrant, MongoPersistentGrantRepository>();
+                options.AddRepository<DeviceFlowCodes, MongoDeviceFlowCodesRepository>();
             });
         }
     }

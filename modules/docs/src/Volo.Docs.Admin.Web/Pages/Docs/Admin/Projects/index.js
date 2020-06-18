@@ -12,10 +12,16 @@
         modalClass: 'projectEdit'
     });
 
+    var _pullModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Docs/Admin/Projects/Pull',
+        modalClass: 'projectPull'
+    });
+
 
     var _dataTable = $('#ProjectsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
+        scrollX: true,
         paging: true,
         searching: false,
         autoWidth: false,
@@ -45,6 +51,39 @@
                                         .delete(data.record.id)
                                         .then(function () {
                                             _dataTable.ajax.reload();
+                                        });
+                                }
+                            },
+                            {
+                                text: l('Pull'),
+                                visible: abp.auth.isGranted('Docs.Admin.Documents'),
+                                action: function (data) {
+                                    _pullModal.open({
+                                        Id: data.record.id
+                                    });
+                                }
+                            },
+                            {
+                                text: l('ClearCache'),
+                                visible: abp.auth.isGranted('Docs.Admin.Documents'),
+                                confirmMessage: function (data) { return l('ClearCacheConfirmationMessage', data.record.name); },
+                                action: function (data) {
+                                    volo.docs.admin.documentsAdmin
+                                        .clearCache({ projectId: data.record.id})
+                                        .then(function () {
+                                            _dataTable.ajax.reload();
+                                        });
+                                }
+                            },
+                            {
+                                text: l('ReIndexProject'),
+                                visible: abp.auth.isGranted('Docs.Admin.Documents'),
+                                confirmMessage: function (data) { return l('ReIndexProjectConfirmationMessage', data.record.name); },
+                                action: function (data) {
+                                    volo.docs.admin.projectsAdmin
+                                        .reindex({ projectId: data.record.id})
+                                        .then(function () {
+                                            abp.message.success(l('SuccessfullyReIndexProject', data.record.name));
                                         });
                                 }
                             }
@@ -81,6 +120,19 @@
     $("#CreateNewGithubProjectButtonId").click(function (event) {
         event.preventDefault();
         _createModal.open({source:"GitHub"});
+    });
+
+    $("#ReIndexAllProjects").click(function (event) {
+        abp.message.confirm(l('ReIndexAllProjectConfirmationMessage'))
+            .done(function (accepted) {
+                if (accepted) {
+                    volo.docs.admin.projectsAdmin
+                    .reindexAll()
+                    .then(function () {
+                        abp.message.success(l('SuccessfullyReIndexAllProject'));
+                    });
+                }
+            });
     });
 
     _createModal.onClose(function () {

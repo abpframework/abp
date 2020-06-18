@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.EntityFrameworkCore.ValueComparers;
+using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
@@ -17,6 +18,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         {
             b.TryConfigureConcurrencyStamp();
             b.TryConfigureExtraProperties();
+            b.TryConfigureObjectExtensions();
             b.TryConfigureMayHaveCreator();
             b.TryConfigureMustHaveCreator();
             b.TryConfigureSoftDelete();
@@ -25,7 +27,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             b.TryConfigureCreationTime();
             b.TryConfigureLastModificationTime();
             b.TryConfigureModificationAudited();
-            b.TryConfigureMultiTenant(); 
+            b.TryConfigureMultiTenant();
         }
 
         public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
@@ -53,15 +55,30 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
 
         public static void TryConfigureExtraProperties(this EntityTypeBuilder b)
         {
-            //TODO: Max length?
+            if (!b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
+            {
+                return;
+            }
+
+            b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
+                .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
+                .HasConversion(new ExtraPropertiesValueConverter(b.Metadata.ClrType))
+                .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, object>());
+
+            b.TryConfigureObjectExtensions();
+        }
+
+        public static void ConfigureObjectExtensions<T>(this EntityTypeBuilder<T> b)
+            where T : class, IHasExtraProperties
+        {
+            b.As<EntityTypeBuilder>().TryConfigureObjectExtensions();
+        }
+
+        public static void TryConfigureObjectExtensions(this EntityTypeBuilder b)
+        {
             if (b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
             {
-                b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
-                    .HasConversion(
-                        d => JsonConvert.SerializeObject(d, Formatting.None),
-                        s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
-                    )
-                    .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
+                ObjectExtensionManager.Instance.ConfigureEfCoreEntity(b);
             }
         }
 
@@ -278,13 +295,12 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureFullAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
-            where T : class 
+            where T : class
         {
             b.As<EntityTypeBuilder>().TryConfigureFullAudited();
             b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
             b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
         }
-
 
         //TODO: Add other interfaces (IAuditedObject<TUser>...)
     }

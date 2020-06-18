@@ -32,7 +32,7 @@ namespace Volo.Abp.FluentValidation
                 context.Errors.AddRange(
                     result.Errors.Select(
                         error =>
-                            new ValidationResult(error.ErrorMessage)
+                            new ValidationResult(error.ErrorMessage, new[] { error.PropertyName })
                     )
                 );
             }

@@ -47,6 +47,19 @@ namespace Volo.Abp.Authorization.Permissions
         public Dictionary<string, object> Properties { get; }
 
         /// <summary>
+        /// Indicates whether this permission is enabled or disabled.
+        /// A permission is normally enabled.
+        /// A disabled permission can not be granted to anyone, but it is still
+        /// will be available to check its value (while it will always be false).
+        ///
+        /// Disabling a permission would be helpful to hide a related application
+        /// functionality from users/clients.
+        /// 
+        /// Default: true.
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
+        /// <summary>
         /// Gets/sets a key-value on the <see cref="Properties"/>.
         /// </summary>
         /// <param name="name">Name of the property</param>
@@ -63,11 +76,13 @@ namespace Volo.Abp.Authorization.Permissions
         protected internal PermissionDefinition(
             [NotNull] string name, 
             ILocalizableString displayName = null,
-            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+            bool isEnabled = true)
         {
             Name = Check.NotNull(name, nameof(name));
             DisplayName = displayName ?? new FixedLocalizableString(name);
             MultiTenancySide = multiTenancySide;
+            IsEnabled = isEnabled;
 
             Properties = new Dictionary<string, object>();
             Providers = new List<string>();
@@ -77,12 +92,14 @@ namespace Volo.Abp.Authorization.Permissions
         public virtual PermissionDefinition AddChild(
             [NotNull] string name, 
             ILocalizableString displayName = null,
-            MultiTenancySides multiTenancySide = MultiTenancySides.Both)
+            MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+            bool isEnabled = true)
         {
             var child = new PermissionDefinition(
                 name, 
                 displayName, 
-                multiTenancySide)
+                multiTenancySide,
+                isEnabled)
             {
                 Parent = this
             };

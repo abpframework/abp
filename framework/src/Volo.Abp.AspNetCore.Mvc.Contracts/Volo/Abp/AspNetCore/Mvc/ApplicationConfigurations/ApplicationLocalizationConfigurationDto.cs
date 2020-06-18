@@ -12,6 +12,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         public List<LanguageInfo> Languages { get; set; }
 
+        public CurrentCultureDto CurrentCulture { get; set; }
+
+        public string DefaultResourceName { get; set; }
+
+        public Dictionary<string, List<NameValue>> LanguagesMap  { get; set; }
+
+        public Dictionary<string, List<NameValue>> LanguageFilesMap { get; set; }
+
         public ApplicationLocalizationConfigurationDto()
         {
             Values = new Dictionary<string, Dictionary<string, string>>();

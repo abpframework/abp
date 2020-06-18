@@ -89,13 +89,15 @@ public static class IdentityDbContextModelBuilderExtensions
 
         builder.Entity<IdentityUser>(b =>
         {
-            b.ToTable(options.TablePrefix + "Users", options.Schema);            
+            b.ToTable(options.TablePrefix + "Users", options.Schema);
+            b.ConfigureByConvention();
             //code omitted for brevity
         });
 
         builder.Entity<IdentityUserClaim>(b =>
         {
             b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
+            b.ConfigureByConvention();
             //code omitted for brevity
         });
         
@@ -104,10 +106,11 @@ public static class IdentityDbContextModelBuilderExtensions
 }
 ````
 
-* **Do** create a **configuration options** class by inheriting from the `ModelBuilderConfigurationOptions`. Example:
+* **Do** call `b.ConfigureByConvention();` for each entity mapping (as shown above).
+* **Do** create a **configuration options** class by inheriting from the `AbpModelBuilderConfigurationOptions`. Example:
 
 ````C#
-public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+public class IdentityModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
 {
     public IdentityModelBuilderConfigurationOptions()
         : base(AbpIdentityConsts.DefaultDbTablePrefix, AbpIdentityConsts.DefaultDbSchema)
@@ -174,12 +177,12 @@ public static IQueryable<IdentityUser> IncludeDetails(
 
 * **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see FindByNormalizedUserNameAsync).
 
-- **Do** override `IncludeDetails` method of the repository for aggregates root which have **sub collections**. Example:
+- **Do** override `WithDetails` method of the repository for aggregates root which have **sub collections**. Example:
 
 ````C#
-protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUser> queryable)
+public override IQueryable<IdentityUser> WithDetails()
 {
-    return queryable.IncludeDetails(); //uses the extension method defined above
+    return GetQueryable().IncludeDetails(); // Uses the extension method defined above
 }
 ````
 
@@ -206,4 +209,3 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
     }
 }
 ````
-

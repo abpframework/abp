@@ -19,11 +19,16 @@ namespace Volo.Abp.Account.Web
             {
                 options.ConfigureAuthentication = false;
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountWebIdentityServerModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountWebIdentityServerModule>("Volo.Abp.Account.Web");
             });

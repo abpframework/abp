@@ -1,12 +1,31 @@
-﻿{
+{
   "culture": "zh-Hans",
   "texts": {
     "Volo.AbpIo.Domain:010004": "超过最大成员数!",
     "Volo.AbpIo.Domain:010005": "超过最大所有者数!",
-    "Volo.AbpIo.Domain:010006": "T用户已经是该组织的所有者!",
+    "Volo.AbpIo.Domain:010006": "用户已经是该组织的所有者!",
     "Volo.AbpIo.Domain:010007": "该用户已经是该组织的开发者!",
     "Volo.AbpIo.Domain:010008": "允许的开发者数量不能低于当前开发者数量!",
     "Volo.AbpIo.Domain:010009": "允许的开发者数量不能小于零!",
-    "Volo.AbpIo.Domain:010010": "超出了最大mac地址数!"
+    "Volo.AbpIo.Domain:010010": "超出了最大mac地址数!",
+    "Volo.AbpIo.Domain:010011": "个人许可不允许超过1个开发者!",
+    "Volo.AbpIo.Domain:010012": "许可过期后许可不可延长1个月!",
+    "Volo.AbpIo.Domain:020001": "不能删除该NPM包因为\"{NugetPackages}\"Nuget包依赖此包.",
+    "Volo.AbpIo.Domain:020002": "不能删除该NPM包因为\"{Modules}\"模块正在使用此包.",
+    "Volo.AbpIo.Domain:020003": "不能删除该NPM包因为\"{Modules}\"模块正在使用此包并且\"{NugetPackages}\"Nuget包依赖此包.",
+    "Volo.AbpIo.Domain:020004": "不能删除该Nuget包因为\"{Modules}\"模块正在使用此包.",
+    "WantToLearn?": "想学习吗?",
+    "ReadyToGetStarted?": "准备开始了吗?",
+    "JoinOurCommunity": "加入我们的社区",
+    "GetStartedUpper": "开始",
+    "ForkMeOnGitHub": "Fork me on GitHub",
+    "Features": "功能",
+    "GetStarted": "开始",
+    "Documents": "文档",
+    "Community": "社区",
+    "ContributionGuide": "贡献指南",
+    "Blog": "博客",
+    "Commercial": "商业版",
+    "SeeDocuments": "查看文档"
   }
 }

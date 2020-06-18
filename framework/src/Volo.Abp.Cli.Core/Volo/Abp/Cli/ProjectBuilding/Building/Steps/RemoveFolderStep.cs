@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -14,7 +15,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         public override void Execute(ProjectBuildContext context)
         {
             //Remove the folder content
-            var folderPathWithSlash = _folderPath + "/";
+            var folderPathWithSlash = _folderPath.EnsureEndsWith('/');
             context.Files.RemoveAll(file => file.Name.StartsWith(folderPathWithSlash));
 
             //Remove the folder

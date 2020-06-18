@@ -9,9 +9,9 @@ namespace Volo.Abp.MultiTenancy.ConfigurationStore
     [Dependency(TryRegister = true)]
     public class DefaultTenantStore : ITenantStore, ITransientDependency
     {
-        private readonly DefaultTenantStoreOptions _options;
+        private readonly AbpDefaultTenantStoreOptions _options;
 
-        public DefaultTenantStore(IOptionsSnapshot<DefaultTenantStoreOptions> options)
+        public DefaultTenantStore(IOptionsSnapshot<AbpDefaultTenantStoreOptions> options)
         {
             _options = options.Value;
         }

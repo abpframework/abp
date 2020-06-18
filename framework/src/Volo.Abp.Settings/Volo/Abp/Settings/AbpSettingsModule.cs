@@ -22,9 +22,10 @@ namespace Volo.Abp.Settings
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<SettingOptions>(options =>
+            Configure<AbpSettingOptions>(options =>
             {
                 options.ValueProviders.Add<DefaultValueSettingValueProvider>();
+                options.ValueProviders.Add<ConfigurationSettingValueProvider>();
                 options.ValueProviders.Add<GlobalSettingValueProvider>();
                 options.ValueProviders.Add<TenantSettingValueProvider>();
                 options.ValueProviders.Add<UserSettingValueProvider>();
@@ -43,7 +44,7 @@ namespace Volo.Abp.Settings
                 }
             });
 
-            services.Configure<SettingOptions>(options =>
+            services.Configure<AbpSettingOptions>(options =>
             {
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });

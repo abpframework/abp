@@ -14,7 +14,7 @@ namespace Volo.Abp.MultiTenancy
         private readonly IServiceProvider _serviceProvider;
 
         public MultiTenantConnectionStringResolver(
-            IOptionsSnapshot<DbConnectionOptions> options,
+            IOptionsSnapshot<AbpDbConnectionOptions> options,
             ICurrentTenant currentTenant,
             IServiceProvider serviceProvider)
             : base(options)

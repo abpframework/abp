@@ -1,0 +1,14 @@
+ 
+
+.box-articles {
+    h3 {  
+        a {
+            color: #000;
+            font-weight: 700;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+} 

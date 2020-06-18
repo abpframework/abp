@@ -2,6 +2,7 @@
 using System.Globalization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
@@ -10,6 +11,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
     public class JQueryValidationScriptContributor : BundleContributor
     {
         public const string DefaultLocalizationFolder = "/libs/jquery-validation/localization/";
+
+        public const string PackageName = "jquery-validation";
 
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
@@ -25,7 +28,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
 
             var cultureName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Replace('-', '_');
 
-            if (TryAddCultureFile(context, cultureName))
+            var fileName = context.LocalizationOptions.GetLanguageFilesMap(PackageName, cultureName);
+            if (TryAddCultureFile(context, fileName))
             {
                 return;
             }
@@ -35,7 +39,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation
                 return;
             }
 
-            TryAddCultureFile(context, cultureName.Substring(0, cultureName.IndexOf('_')));
+            fileName = context.LocalizationOptions.GetLanguageFilesMap(PackageName,
+                cultureName.Substring(0, cultureName.IndexOf('_')));
+            TryAddCultureFile(context, fileName);
         }
 
         protected virtual bool TryAddCultureFile(BundleConfigurationContext context, string cultureName)

@@ -1,0 +1,40 @@
+﻿@using System.Linq
+@using System.Collections.Generic
+@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error
+@model AbpErrorViewModel
+@inject IHtmlLocalizer<AbpUiResource> L
+    @{
+        var errorMessage = Model.ErrorInfo.Message;
+        var errorDetails = Model.ErrorInfo.Details;
+        if (errorDetails.IsNullOrEmpty())
+        {
+            errorDetails = errorMessage;
+            errorMessage = L["Error"].Value + "!";
+        }
+    }
+
+    <h1>
+        [@Model.HttpStatusCode] @errorMessage
+    </h1>
+
+    <div>
+        <p>
+            @errorDetails
+        </p>
+        <p>
+            @if (!Model.ErrorInfo.ValidationErrors.IsNullOrEmpty())
+            {
+                foreach (var validationError in Model.ErrorInfo.ValidationErrors)
+                {
+                    <text>* </text>@(validationError.Message)
+                    if (validationError.Members != null && validationError.Members.Any())
+                    {
+                        <text>(@string.Join(", ", validationError.Members))</text>
+                    }
+                    <br />
+                }
+            }
+        </p>
+    </div>

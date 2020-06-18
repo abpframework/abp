@@ -2,5 +2,5 @@
 @model Toolbar
 @foreach (var toolbarItem in Model.Items.OrderBy(i => i.Order))
 {
-    <span>@(await Component.InvokeAsync(toolbarItem.ComponentType))</span>
+    <li class="nav-item">@(await Component.InvokeAsync(toolbarItem.ComponentType))</li>
 }

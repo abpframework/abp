@@ -1,0 +1,11 @@
+<div
+  class="toast-container"
+  [style.top]="top || 'auto'"
+  [style.right]="right || 'auto'"
+  [style.bottom]="bottom || 'auto'"
+  [style.left]="left || 'auto'"
+  [style.display]="toasts.length ? 'flex' : 'none'"
+  [@toastInOut]="toasts.length"
+>
+  <abp-toast [toast]="toast" *ngFor="let toast of toasts; trackBy: trackByFunc"></abp-toast>
+</div>

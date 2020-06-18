@@ -10,7 +10,7 @@ namespace Volo.Blogging.Areas.Blog.Controllers
 
     [Area("Blog")]
     [Route("Blog/[controller]/[action]")]
-    public class PostsController : AbpController
+    public class PostsController : BloggingControllerBase
     {
         private readonly IPostAppService _postAppService;
 

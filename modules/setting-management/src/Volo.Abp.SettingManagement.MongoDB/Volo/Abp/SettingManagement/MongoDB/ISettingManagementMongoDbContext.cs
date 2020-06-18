@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.SettingManagement.MongoDB
 {
-    [ConnectionStringName(AbpSettingManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpSettingManagementDbProperties.ConnectionStringName)]
     public interface ISettingManagementMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<Setting> Settings { get; }

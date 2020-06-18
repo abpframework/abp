@@ -1,58 +1,37 @@
-import { Inject, Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
-import { uuid } from '../utils';
+import { Injectable } from '@angular/core';
+import { concat, Observable, of, throwError } from 'rxjs';
+import { delay, retryWhen, shareReplay, take, tap } from 'rxjs/operators';
+import { LoadingStrategy } from '../strategies';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LazyLoadService {
-  loadedLibraries: { [url: string]: ReplaySubject<void> } = {};
+  readonly loaded = new Map<string, HTMLScriptElement | HTMLLinkElement>();
 
-  load(
-    url: string,
-    type: 'script' | 'style',
-    content: string = '',
-    targetQuery: string = 'body',
-    position: InsertPosition = 'afterend',
-  ): Observable<void> {
-    if (!url && !content) return;
-    const key = url ? url.slice(url.lastIndexOf('/') + 1) : uuid();
+  load(strategy: LoadingStrategy, retryTimes?: number, retryDelay?: number): Observable<Event> {
+    if (this.loaded.has(strategy.path)) return of(new CustomEvent('load'));
 
-    if (this.loadedLibraries[key]) {
-      return this.loadedLibraries[key].asObservable();
-    }
+    return strategy.createStream().pipe(
+      retryWhen(error$ =>
+        concat(
+          error$.pipe(delay(retryDelay), take(retryTimes)),
+          throwError(new CustomEvent('error')),
+        ),
+      ),
+      tap(() => this.loaded.set(strategy.path, strategy.element)),
+      delay(100),
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+  }
 
-    this.loadedLibraries[key] = new ReplaySubject();
+  remove(path: string): boolean {
+    const element = this.loaded.get(path);
 
-    let library;
-    if (type === 'script') {
-      library = document.createElement('script');
-      library.type = 'text/javascript';
-      if (url) {
-        (library as HTMLScriptElement).src = url;
-      }
+    if (!element) return false;
 
-      (library as HTMLScriptElement).text = content;
-    } else if (url) {
-      library = document.createElement('link');
-      library.type = 'text/css';
-      (library as HTMLLinkElement).rel = 'stylesheet';
-
-      if (url) {
-        (library as HTMLLinkElement).href = url;
-      }
-    } else {
-      library = document.createElement('style');
-      (library as HTMLStyleElement).textContent = content;
-    }
-
-    library.onload = () => {
-      this.loadedLibraries[key].next();
-      this.loadedLibraries[key].complete();
-    };
-
-    document.querySelector(targetQuery).insertAdjacentElement(position, library);
-
-    return this.loadedLibraries[key].asObservable();
+    element.parentNode.removeChild(element);
+    this.loaded.delete(path);
+    return true;
   }
 }

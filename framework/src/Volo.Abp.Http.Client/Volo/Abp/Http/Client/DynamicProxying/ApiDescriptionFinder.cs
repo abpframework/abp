@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -14,8 +15,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     {
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
 
-        protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
-
         protected IApiDescriptionCache Cache { get; }
 
         private static readonly JsonSerializerSettings SharedJsonSerializerSettings = new JsonSerializerSettings
@@ -23,18 +22,15 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public ApiDescriptionFinder(
-            IApiDescriptionCache cache, 
-            IDynamicProxyHttpClientFactory httpClientFactory)
+        public ApiDescriptionFinder(IApiDescriptionCache cache)
         {
             Cache = cache;
-            HttpClientFactory = httpClientFactory;
             CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
-        public async Task<ActionApiDescriptionModel> FindActionAsync(string baseUrl, Type serviceType, MethodInfo method)
+        public async Task<ActionApiDescriptionModel> FindActionAsync(HttpClient client, string baseUrl, Type serviceType, MethodInfo method)
         {
-            var apiDescription = await GetApiDescriptionAsync(baseUrl);
+            var apiDescription = await GetApiDescriptionAsync(client, baseUrl);
 
             //TODO: Cache finding?
 
@@ -57,7 +53,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                             for (int i = 0; i < methodParameters.Length; i++)
                             {
-                                if (action.ParametersOnMethod[i].TypeAsString != methodParameters[i].ParameterType.GetFullNameWithAssemblyName())
+                                if (!TypeMatches(action.ParametersOnMethod[i], methodParameters[i]))
                                 {
                                     found = false;
                                     break;
@@ -76,33 +72,45 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             throw new AbpException($"Could not found remote action for method: {method} on the URL: {baseUrl}");
         }
 
-        public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(string baseUrl)
+        public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(HttpClient client, string baseUrl)
         {
-            return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(baseUrl));
+            return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(client, baseUrl));
         }
 
-        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(string baseUrl)
+        protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(HttpClient client, string baseUrl)
         {
-            using (var client = HttpClientFactory.Create())
+            var response = await client.GetAsync(
+                baseUrl.EnsureEndsWith('/') + "api/abp/api-definition",
+                CancellationTokenProvider.Token
+            );
+
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await client.GetAsync(
-                    baseUrl.EnsureEndsWith('/') + "api/abp/api-definition",
-                    CancellationTokenProvider.Token
-                );
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new AbpException("Remote service returns error! StatusCode = " + response.StatusCode);
-                }
-
-                var content = await response.Content.ReadAsStringAsync();
-
-                var result = JsonConvert.DeserializeObject(
-                    content,
-                    typeof(ApplicationApiDescriptionModel), SharedJsonSerializerSettings);
-
-                return (ApplicationApiDescriptionModel)result;
+                throw new AbpException("Remote service returns error! StatusCode = " + response.StatusCode);
             }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject(
+                content,
+                typeof(ApplicationApiDescriptionModel), SharedJsonSerializerSettings);
+
+            return (ApplicationApiDescriptionModel)result;
+        }
+
+        protected virtual bool TypeMatches(MethodParameterApiDescriptionModel actionParameter, ParameterInfo methodParameter)
+        {
+            return NormalizeTypeName(actionParameter.TypeAsString) ==
+                   NormalizeTypeName(methodParameter.ParameterType.GetFullNameWithAssemblyName());
+        }
+
+        protected virtual string NormalizeTypeName(string typeName)
+        {
+            const string placeholder = "%COREFX%";
+            const string netCoreLib = "System.Private.CoreLib";
+            const string netFxLib = "mscorlib";
+
+            return typeName.Replace(netCoreLib, placeholder).Replace(netFxLib, placeholder);
         }
     }
 }

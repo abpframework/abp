@@ -5,21 +5,43 @@ namespace Volo.Abp.Cli.Utils
 {
     public static class CmdHelper
     {
+        public static int SuccessfulExitCode = 0;
+
         public static void Run(string file, string arguments)
         {
             var procStartInfo = new ProcessStartInfo(file, arguments);
-            Process.Start(procStartInfo).WaitForExit();
+            Process.Start(procStartInfo)?.WaitForExit();
         }
 
-        public static void RunCmd(string command)
+        public static int RunCmd(string command)
         {
-            var procStartInfo = new ProcessStartInfo(GetFileName(), GetArguments(command));
-            Process.Start(procStartInfo).WaitForExit();
+            var procStartInfo = new ProcessStartInfo(
+                GetFileName(),
+                GetArguments(command)
+            );
+
+            using (var process = Process.Start(procStartInfo))
+            {
+                process?.WaitForExit();
+                return process?.ExitCode ?? 0;
+            }
         }
 
         public static string RunCmdAndGetOutput(string command)
         {
-            var output = "";
+            return RunCmdAndGetOutput(command, out int _);
+        }
+
+        public static string RunCmdAndGetOutput(string command, out bool isExitCodeSuccessful)
+        {
+            var output = RunCmdAndGetOutput(command, out int exitCode);
+            isExitCodeSuccessful = exitCode == SuccessfulExitCode;
+            return output;
+        }
+
+        public static string RunCmdAndGetOutput(string command, out int exitCode)
+        {
+            string output;
 
             using (var process = new Process())
             {
@@ -31,16 +53,21 @@ namespace Volo.Abp.Cli.Utils
                     RedirectStandardOutput = true,
                     RedirectStandardError = true
                 };
+
                 process.Start();
 
-                using (var stdOut = process.StandardOutput)
+                using (var standardOutput = process.StandardOutput)
                 {
-                    using (var stdErr = process.StandardError)
+                    using (var standardError = process.StandardError)
                     {
-                        output = stdOut.ReadToEnd();
-                        output += stdErr.ReadToEnd();
+                        output = standardOutput.ReadToEnd();
+                        output += standardError.ReadToEnd();
                     }
                 }
+
+                process.WaitForExit();
+
+                exitCode = process.ExitCode;
             }
 
             return output.Trim();
@@ -66,7 +93,7 @@ namespace Volo.Abp.Cli.Utils
             }
 
             //Windows default.
-            return "cmd.exe"; 
+            return "cmd.exe";
         }
     }
 }

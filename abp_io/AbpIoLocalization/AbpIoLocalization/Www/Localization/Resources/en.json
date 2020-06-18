@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "GetStarted": "Get Started",
+    "GetStarted": "Get Started - Startup Templates",
     "Create": "Create",
     "NewProject": "New Project",
     "DirectDownload": "Direct Download",
@@ -29,17 +29,17 @@
     "Authorization": "Authorization",
     "AuthorizationExplanation": "Advanced authorization with user, role and fine-grained permission system. Built on the Microsoft Identity library.",
     "MultiTenancy": "Multi-Tenancy",
-    "MultiTenancyExplanation": "SaaS applications made easy! Integrated multi-tenancy from database to UI.",
+    "MultiTenancyExplanationShort": "SaaS applications made easy! Integrated multi-tenancy from database to UI.",
     "CrossCuttingConcerns": "Cross Cutting Concerns",
-    "CrossCuttingConcernsExplanation": "Complete infrastructure for authorization, validation, exception handling, caching, audit logging, transaction management and so on.",
+    "CrossCuttingConcernsExplanationShort": "Complete infrastructure for authorization, validation, exception handling, caching, audit logging, transaction management and so on.",
     "BuiltInBundlingMinification": "Built-In Bundling & Minification",
     "BuiltInBundlingMinificationExplanation": "Stop to use external tools for bundling & minification. ABP offers a simpler, dynamic, powerful, modular and built-in way!",
     "VirtualFileSystem": "Virtual File System",
     "VirtualFileSystemExplanation": "Embed views, scripts, styles, images... into packages/libraries and reuse in different applications.",
     "Theming": "Theming",
-    "ThemingExplanation": "Use and customize the bootstrap-based standard UI theme or create your own one.",
+    "ThemingExplanationShort": "Use and customize the bootstrap-based standard UI theme or create your own one.",
     "BootstrapTagHelpersDynamicForms": "Bootstrap Tag Helpers & Dynamic Forms",
-    "BootstrapTagHelpersDynamicFormsExplanation": "Built-in background job system that can be integrated to Hangfire, RabbitMQ or any tool you like.", //TODO explanation doesn't match.
+    "BootstrapTagHelpersDynamicFormsExplanation": "Instead of manually writing the repeating details of bootstrap components, Use ABP's tag helpers to simplify it and take advantage of intellisense. Dynamic form can create the complete form from a C# class as the model.",
     "HTTPAPIsDynamicProxies": "HTTP APIs & Dynamic Proxies",
     "HTTPAPIsDynamicProxiesExplanation": "Automatically expose application services as REST style HTTP APIs and consume with dynamic JavaScript & C# proxies.",
     "CompleteArchitectureInfo": "Modern architecture to create maintainable software solutions.",
@@ -86,7 +86,7 @@
     "BasedOnFamiliarToolsExplanation": "Built on and integrated to popular tools you already know. Low learning curve, easy adaptation, comfortable development.",
     "ORMIndependent": "ORM Independent",
     "ORMIndependentExplanation": "The core framework is ORM/database independent and can work with any data source. Entity Framework Core and MongoDB providers are already available.",
-    "Features": "Features",
+    "Features": "Explore the ABP Framework Features",
     "ABPCLI": "ABP CLI",
     "Modularity": "Modularity",
     "BootstrapTagHelpers": "Bootstrap Tag Helpers",
@@ -100,7 +100,6 @@
     "DistributedEventBus": "Distributed Event Bus",
     "DistributedEventBusWithRabbitMQIntegration": "Distributed Event Bus with RabbitMQ Integration",
     "TestInfrastructure": "Test Infrastructure",
-    "AuditLogging": "Audit Logging",
     "AuditLoggingEntityHistories": "Audit Logging & Entity Histories",
     "ObjectToObjectMapping": "Object to Object Mapping",
     "EmailSMSAbstractions": "Email & SMS Abstractions",
@@ -155,6 +154,8 @@
     "SeeTheDocumentForMoreInformation": "See the <a href=\"{1}\">{0} document</a> for more information",
     "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>open source</strong></span><span class=\"second-line text-uppercase\">Web Application<br />Framework </span><span class=\"third-line shine2\"><strong>for asp.net core</strong></span>",
     "UiFramework": "UI Framework",
-	"EmailAddress": "Email address"
+    "EmailAddress": "Email address",
+    "Mobile": "Mobile",
+    "ReactNative": "React Native"
   }
 }

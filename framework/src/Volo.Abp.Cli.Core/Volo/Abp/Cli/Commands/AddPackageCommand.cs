@@ -68,9 +68,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Adds a new ABP package to a project by adding related nuget package" +
-                   " as a dependency to the project and adding [DependsOn(...)] attribute to" +
-                   " the module class in the project.";
+            return "Add a new ABP package to a project by adding related NuGet package dependencies and [DependsOn(...)] attributes.";
         }
 
         protected virtual string GetProjectFile(CommandLineArgs commandLineArgs)

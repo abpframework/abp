@@ -22,7 +22,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         }
 
         public virtual async Task<Client> FindByCliendIdAsync(
-            string clientId, 
+            string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -30,20 +30,22 @@ namespace Volo.Abp.IdentityServer.MongoDB
         }
 
         public virtual async Task<List<Client>> GetListAsync(
-            string sorting, 
-            int skipCount, 
-            int maxResultCount, 
+            string sorting,
+            int skipCount,
+            int maxResultCount,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x=>x.ClientId.Contains(filter))
                 .OrderBy(sorting ?? nameof(Client.ClientName))
                 .As<IMongoQueryable<Client>>()
                 .PageBy<Client, IMongoQueryable<Client>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(
+        public virtual async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
@@ -53,7 +55,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
         }

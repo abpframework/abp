@@ -14,9 +14,11 @@
 
         var _dataTable = _$table.DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
-            searching:false,
-            paging:false,
-            info:false,
+            searching: false,
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            paging: true,
             ajax: abp.libs.datatables.createAjax(_identityRoleAppService.getList),
             columnDefs: [
                 {
@@ -37,7 +39,7 @@
                                     visible: abp.auth.isGranted('AbpIdentity.Roles.ManagePermissions'),
                                     action: function (data) {
                                         _permissionsModal.open({
-                                            providerName: 'Role',
+                                            providerName: 'R',
                                             providerKey: data.record.name
                                         });
                                     }

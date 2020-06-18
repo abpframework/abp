@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 
@@ -36,6 +37,11 @@ namespace Microsoft.AspNetCore.Mvc.Abstractions
         public static bool IsControllerAction(this ActionDescriptor actionDescriptor)
         {
             return actionDescriptor is ControllerActionDescriptor;
+        }
+
+        public static bool IsPageAction(this ActionDescriptor actionDescriptor)
+        {
+            return actionDescriptor is PageActionDescriptor;
         }
     }
 }

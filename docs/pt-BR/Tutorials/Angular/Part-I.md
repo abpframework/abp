@@ -10,7 +10,7 @@ Esta é a primeira parte da série de tutoriais angulares. Veja todas as peças:
 - [Parte II: Criar, atualizar e excluir livros](Part-II)
 - [Parte III: Testes de Integração](Part-III)
 
-Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb) .
+Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb) .
 
 ### Criando o projeto
 
@@ -537,11 +537,13 @@ import { GetBooks } from '../actions/books.actions';
 import { Books } from '../models/books';
 import { BooksService } from '../../books/shared/books.service';
 import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @State<Books.State>({
   name: 'BooksState',
   defaults: { books: {} } as Books.State,
 })
+@Injectable()
 export class BooksState {
   @Selector()
   static getBooks(state: Books.State) {
@@ -630,10 +632,10 @@ Substitua o `book-list.component.html`conteúdo conforme mostrado abaixo:
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
-          <td>{{ data.name }}</td>
-          <td>{{ booksType[data.type] }}</td>
-          <td>{{ data.publishDate | date }}</td>
-          <td>{{ data.price }}</td>
+          <td>{%{{{ data.name }}}%}</td>
+          <td>{%{{{ booksType[data.type] }}}%}</td>
+          <td>{%{{{ data.publishDate | date }}}%}</td>
+          <td>{%{{{ data.price }}}%}</td>
         </tr>
       </ng-template>
     </p-table>

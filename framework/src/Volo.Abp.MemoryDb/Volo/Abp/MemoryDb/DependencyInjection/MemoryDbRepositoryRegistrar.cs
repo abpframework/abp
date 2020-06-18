@@ -5,9 +5,9 @@ using Volo.Abp.Domain.Repositories.MemoryDb;
 
 namespace Volo.Abp.MemoryDb.DependencyInjection
 {
-    public class MemoryDbRepositoryRegistrar : RepositoryRegistrarBase<MemoryDbContextRegistrationOptions>
+    public class MemoryDbRepositoryRegistrar : RepositoryRegistrarBase<AbpMemoryDbContextRegistrationOptions>
     {
-        public MemoryDbRepositoryRegistrar(MemoryDbContextRegistrationOptions options)
+        public MemoryDbRepositoryRegistrar(AbpMemoryDbContextRegistrationOptions options)
             : base(options)
         {
         }

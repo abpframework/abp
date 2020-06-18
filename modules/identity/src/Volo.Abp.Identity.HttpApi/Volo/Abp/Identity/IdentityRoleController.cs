@@ -6,50 +6,57 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace Volo.Abp.Identity
 {
-    [RemoteService]
+    [RemoteService(Name = IdentityRemoteServiceConsts.RemoteServiceName)]
     [Area("identity")]
     [ControllerName("Role")]
     [Route("api/identity/roles")]
     public class IdentityRoleController : AbpController, IIdentityRoleAppService
     {
-        private readonly IIdentityRoleAppService _roleAppService;
+        protected IIdentityRoleAppService RoleAppService { get; }
 
         public IdentityRoleController(IIdentityRoleAppService roleAppService)
         {
-            _roleAppService = roleAppService;
+            RoleAppService = roleAppService;
         }
 
         [HttpGet]
-        public virtual Task<ListResultDto<IdentityRoleDto>> GetListAsync()
+        [Route("all")]
+        public virtual Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
         {
-            return _roleAppService.GetListAsync();
+            return RoleAppService.GetAllListAsync();
+        }
+
+        [HttpGet]
+        public virtual Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        {
+            return RoleAppService.GetListAsync(input);
         }
 
         [HttpGet]
         [Route("{id}")]
         public virtual Task<IdentityRoleDto> GetAsync(Guid id)
         {
-            return _roleAppService.GetAsync(id);
+            return RoleAppService.GetAsync(id);
         }
 
         [HttpPost]
         public virtual Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
-            return _roleAppService.CreateAsync(input);
+            return RoleAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
         public virtual Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
-            return _roleAppService.UpdateAsync(id, input);
+            return RoleAppService.UpdateAsync(id, input);
         }
 
         [HttpDelete]
         [Route("{id}")]
         public virtual Task DeleteAsync(Guid id)
         {
-            return _roleAppService.DeleteAsync(id);
+            return RoleAppService.DeleteAsync(id);
         }
     }
 }

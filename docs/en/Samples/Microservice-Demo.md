@@ -24,82 +24,15 @@ This sample aims to demonstrate a simple yet complete microservice solution;
 
 The diagram below shows the system:
 
-![microservice-sample-diagram-2](../images/microservice-sample-diagram-2.png)
+![microservice-sample-diagram-2](../images/microservice-sample-diagram-3.png)
 
 ### Source Code
 
 You can get the source code from [the GitHub repository](https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo).
 
-### Status
-
-Initial version of this sample has been completed. Additional improvement are still in development.
-
 ## Running the Solution
 
-You can either run from the **source code** or from the pre-configured **docker-compose** file.
-
-### Using the Docker Containers
-
-#### Pre Requirements
-
-Running as docker containers is easier since all dependencies are pre-configured. You only need to install the [latest docker](https://docs.docker.com/compose/install/).
-
-#### Running Containers
-
-- Clone or download the [ABP repository](https://github.com/abpframework/abp).
-
-- Open a command line in the `samples/MicroserviceDemo` folder of the repository.
-
-- Pull images from Docker Hub:
-
-  ```
-  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml pull
-  ```
-
-- If you want to build images locally you may skip the above step and instead use build command:
-
-  ```
-  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml build
-  ```
-
-  Building images may take a **long time** depending on your machine.
-
-- Restore SQL Server databases:
-
-  ```
-  docker-compose -f docker-compose.yml -f docker-compose.migrations.yml run restore-database
-  ```
-
-- Start the containers:
-
-  ```
-  docker-compose up -d
-  ```
-
-- Add this line to the end of your `hosts` file:
-
-  ```
-  127.0.0.1	auth-server
-  ```
-
-  hosts file is located inside the `C:\Windows\System32\Drivers\etc\hosts` folder on Windows and `/etc/hosts` for Linux/MacOS.
-
-#### Run the Applications
-
-There are a few applications running in the containers you may want to explore:
-
-* Backend Admin Application (BackendAdminApp.Host): `http://localhost:51512`
-  *(Used to manage users & products in the system)*
-* Public Web Site (PublicWebsite.Host): `http://localhost:51513`
-  *(Used to list products and run/manage the blog module)*
-* Authentication Server (AuthServer.Host): `http://auth-server:51511/`
-  *(Used as a single sign on and authentication server built with IdentityServer4)*
-* Kibana UI: `http://localhost:51510`
-  *(Use to show/trace logs written by all services/applications/gateways)*
-
-### Running From the Source Code
-
-#### Pre Requirements
+### Pre Requirements
 
 To be able to run the solution from source code, following tools should be installed and running on your computer:
 
@@ -110,19 +43,19 @@ To be able to run the solution from source code, following tools should be insta
 * [ElasticSearch](https://www.elastic.co/downloads/elasticsearch) 6.6+
 * [Kibana](https://www.elastic.co/downloads/kibana) 6.6+ (optional, recommended to show logs)
 
-#### Open & Build the Visual Studio Solution
+### Open & Build the Visual Studio Solution
 
 * Open the `samples\MicroserviceDemo\MicroserviceDemo.sln` in Visual Studio 2017 (15.9.0+).
 * Run `dotnet restore` from the command line inside the `samples\MicroserviceDemo` folder.
 * Build the solution in Visual Studio.
 
-#### Create Databases
+### Create Databases
 
 MongoDB database is created dynamically, however you need to create database schemas for SQL server databases. The solution is configured to use Entity Core Code First migrations, so you can easily create databases.
 
 There are two SQL server databases in this solution.
 
-##### MsDemo_Identity Database
+#### MsDemo_Identity Database
 
 * Right click to the `AuthServer.Host` project and click to the `Set as startup project`.
 * Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console)
@@ -131,7 +64,7 @@ There are two SQL server databases in this solution.
 
 ![microservice-sample-update-database-authserver](../images/microservice-sample-update-database-authserver.png)
 
-##### MsDemo_ProductManagement
+#### MsDemo_ProductManagement
 
 - Right click to the `ProductService.Host` project and click to the `Set as startup project`.
 - Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console)
@@ -140,12 +73,13 @@ There are two SQL server databases in this solution.
 
 ![microservice-sample-update-database-products](../images/microservice-sample-update-database-products.png)
 
-#### Run Projects
+### Run Projects
 
 Run the projects with the following order (right click to each project, set as startup project an press Ctrl+F5 to run without debug):
 
 * AuthServer.Host
 * IdentityService.Host
+* TenantManagementService.Host
 * BloggingService.Host
 * ProductService.Host
 * InternalGateway.Host
@@ -160,7 +94,7 @@ When you run projects, they will add some initial demo data to their databases.
 
 The Visual Studio solution consists of multiple projects each have different roles in the system:
 
-![microservice-sample-solution](../images/microservice-sample-solution.png)
+![microservice-sample-solution](../images/microservice-sample-solution-2.png)
 
 ### Applications
 
@@ -183,8 +117,9 @@ Gateways are used to provide a single entry point to the applications. It can al
 
 Microservices have no UI, but exposes some REST APIs.
 
-- **IdentityService.Host**: Host the ABP Identity module which is used to manage users & roles. It has no additional service, but only hosts the Identity module's API.
-- **BloggingService.Host**: Host the ABP Blogging module which is used to manage blog & posts (a typical blog application). It has no additional service, but only hosts the Blogging module's API.
+- **IdentityService.Host**: Hosts the ABP Identity module which is used to manage users & roles. It has no additional service, but only hosts the Identity module's API.
+- **TenantManagementService.Host**: Hosts the ABP Tenant Management module which is used to manage roles. It has no additional service, but only hosts the Tenant Management module's API.
+- **BloggingService.Host**: Hosts the ABP Blogging module which is used to manage blog & posts (a typical blog application). It has no additional service, but only hosts the Blogging module's API.
 - **ProductService.Host**: Hosts the Product module (that is inside the solution) which is used to manage products. It also contains the EF Core migrations to create/update the Product Management database schema.
 
 ### Modules
@@ -195,7 +130,7 @@ Microservices have no UI, but exposes some REST APIs.
 
 This solution is using multiple databases:
 
-* **MsDemo_Identity**: An SQL database. Used **SQL Server** by default, but can be any DBMS supported by the EF Core. Shared by AuthServer and IdentityService. Also audit logs, permissions and settings are stored in this database (while they could easily have their own databases, shared the same database to keep it simple).
+* **MsDemo_Identity**: An SQL database. Used **SQL Server** by default, but can be any DBMS supported by the EF Core. Shared by AuthServer, IdentityService and the TenantManagementService. Also audit logs, permissions and settings are stored in this database (while they could have their own databases, shared the same database to keep it simple).
 * **MsDemo_ProductManagement**: An SQL database. Again, used **SQL Server** by default, but can be any DBMS supported by the EF Core. Used by the ProductService as a dedicated database.
 * **MsDemo_Blogging**: A **MongoDB** database. Used by the BloggingService.
 * **Elasticsearch**: Used to write logs over Serilog.
@@ -341,7 +276,7 @@ Backend admin application uses the Identity and Product microservices for all op
 
 ##### HTTP Clients
 
-ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
+ABP application modules generally provides C# client libraries to consume services (APIs) easily (they generally uses the [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature of the ABP framework). That means if you need to consume Identity service API, you can reference to its client package and easily use the APIs by provided interfaces.
 
 For that purpose, `BackendAdminAppHostModule` class declares dependencies for `AbpIdentityHttpApiClientModule` and `ProductManagementHttpApiClientModule`.
 
@@ -419,7 +354,7 @@ A screenshot from the Products page:
 
 #### Using Microservices
 
-Publc web site application uses the Blogging and Product microservices for all operations, over the Public  Web Site Gateway (PublicWebSiteGateway.Host).
+Public web site application uses the Blogging and Product microservices for all operations, over the Public  Web Site Gateway (PublicWebSiteGateway.Host).
 
 ##### Remote End Point
 
@@ -617,7 +552,7 @@ app.MapWhen(ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                    ctx.Request.Path.ToString().StartsWith("/Abp/"),
     app2 =>
     {
-        app2.UseMvcWithDefaultRouteAndArea();
+        app2.UseConfiguredEndpoints();
     });
 
 app.UseOcelot().Wait();
@@ -1103,7 +1038,7 @@ Product Management is a module that consists of several layers and packages/proj
 * `ProductManagement.Application` contains the implementation of application services.
 * `ProductManagement.EntityFrameworkCore` contains DbConext and other EF Core related classes and configuration.
 * `ProductManagement.HttpApi` contains API Controllers.
-* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature of the ABP framework.
+* `ProductManagement.HttpApi.Client` contains C# proxies to directly use the HTTP API remotely. Uses [Dynamic C# API Clients](../API/Dynamic-CSharp-API-Clients.md) feature of the ABP framework.
 * `ProductManagement.Web` contains the UI elements (pages, scripts, styles... etc).
 
 By the help of this layering, it is possible to use the same module as a package reference in a monolithic application or use as a service that runs in another server. It is possible to separate UI (Web) and API layers, so they run in different servers.
@@ -1472,3 +1407,7 @@ ABP provides automatic audit logging which saves every request in detail (who is
 All of the services and applications are configured to write audit logs. Audit logs are saved to the MsDemo_Identity SQL database. So, you can query all audit logs of all applications from a single point.
 
 An Audit Log record has a `CorrelationId` property that can be used to track a request. When a service calls another service in a single web request, they both save audit logs with the same `CorrelationId`. See the `AbpAuditLogs` table in the database.
+
+### Multi-Tenancy
+
+The solution has been configured to provide a [multi-tenant](../Multi-Tenancy.md) system, where each tenant can have their isolated users, roles, permissions and other data.

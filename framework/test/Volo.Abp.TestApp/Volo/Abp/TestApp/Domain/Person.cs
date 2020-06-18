@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.TestApp.Domain
 {
@@ -14,6 +15,11 @@ namespace Volo.Abp.TestApp.Domain
         public virtual string Name { get; private set; }
 
         public virtual int Age { get; set; }
+
+        public virtual DateTime? Birthday { get; set; }
+
+        [DisableDateTimeNormalization]
+        public virtual DateTime? LastActive { get; set; }
 
         public virtual Collection<Phone> Phones { get; set; }
 

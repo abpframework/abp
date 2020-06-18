@@ -1,17 +1,17 @@
-﻿using Volo.Abp.Localization;
+﻿using Volo.Abp.Authorization;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Localization.Resource;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.UI.Navigation
 {
-    [DependsOn(typeof(AbpUiModule))]
+    [DependsOn(typeof(AbpUiModule), typeof(AbpAuthorizationModule))]
     public class AbpUiNavigationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpUiNavigationModule>();
             });
@@ -23,7 +23,7 @@ namespace Volo.Abp.UI.Navigation
                     .AddVirtualJson("/Volo/Abp/Ui/Navigation/Localization/Resource");
             });
 
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DefaultMenuContributor());
             });

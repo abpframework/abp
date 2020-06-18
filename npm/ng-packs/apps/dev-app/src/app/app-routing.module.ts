@@ -9,21 +9,28 @@ const routes: Routes = [
     data: {
       routes: {
         name: '::Menu:Home',
+        order: 1,
       } as ABP.Route,
     },
   },
   {
     path: 'account',
-    loadChildren: () => import('./lazy-libs/account-wrapper.module').then(m => m.AccountWrapperModule),
+    loadChildren: () =>
+      import('@abp/ng.account').then(m => m.AccountModule.forLazy({ redirectUrl: '/' })),
   },
   {
     path: 'identity',
-    loadChildren: () => import('./lazy-libs/identity-wrapper.module').then(m => m.IdentityWrapperModule),
+    loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule.forLazy()),
   },
   {
     path: 'tenant-management',
     loadChildren: () =>
-      import('./lazy-libs/tenant-management-wrapper.module').then(m => m.TenantManagementWrapperModule),
+      import('@abp/ng.tenant-management').then(m => m.TenantManagementModule.forLazy()),
+  },
+  {
+    path: 'setting-management',
+    loadChildren: () =>
+      import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
   },
 ];
 

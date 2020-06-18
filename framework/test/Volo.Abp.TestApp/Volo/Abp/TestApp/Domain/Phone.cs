@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.Abp.TestApp.Domain
 {
     [Table("AppPhones")]
-    public class Phone : Entity
+    public class Phone : Entity<Guid>
     {
         public virtual Guid PersonId { get; set; }
 
@@ -17,11 +17,12 @@ namespace Volo.Abp.TestApp.Domain
 
         private Phone()
         {
-            
+
         }
 
         public Phone(Guid personId, string number, PhoneType type = PhoneType.Mobile)
         {
+            Id = Guid.NewGuid();
             PersonId = personId;
             Number = number;
             Type = type;
@@ -29,7 +30,7 @@ namespace Volo.Abp.TestApp.Domain
 
         public override object[] GetKeys()
         {
-            return new object[] {PersonId, Number};
+            return new object[] { PersonId, Number };
         }
     }
 
@@ -45,7 +46,7 @@ namespace Volo.Abp.TestApp.Domain
 
         protected Order()
         {
-            
+
         }
 
         public Order(Guid id, string referenceNo)
@@ -104,7 +105,7 @@ namespace Volo.Abp.TestApp.Domain
 
         public override object[] GetKeys()
         {
-            return new object[] {OrderId, ProductId};
+            return new object[] { OrderId, ProductId };
         }
     }
 }

@@ -37,9 +37,26 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetDefaultOnesAsync()
+        {
+            var roles = await RoleRepository.GetDefaultOnesAsync();
+
+            foreach (var role in roles)
+            {
+                role.IsDefault.ShouldBe(true);
+            }
+        }
+
+        [Fact]
         public async Task GetCountAsync()
         {
             (await RoleRepository.GetCountAsync()).ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetCountAsync_With_Filter()
+        {
+            (await RoleRepository.GetCountAsync("admin")).ShouldBe(1);
         }
 
         [Fact]

@@ -1,8 +1,10 @@
 ﻿using System;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.FeatureManagement
 {
     [Serializable]
+    [IgnoreMultiTenancy]
     public class FeatureValueCacheItem
     {
         public string Value { get; set; }

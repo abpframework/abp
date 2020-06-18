@@ -8,15 +8,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpAspNetCoreMvcUiTestModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            //TODO: This is needed because ASP.NET Core does not use IServiceProviderFactory!
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<AbpAspNetCoreMvcUiTestModule>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

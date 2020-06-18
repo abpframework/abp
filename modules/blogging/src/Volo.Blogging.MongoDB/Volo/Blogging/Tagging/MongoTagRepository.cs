@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -19,7 +20,7 @@ namespace Volo.Blogging.Tagging
 
         public async Task<List<Tag>> GetListAsync(Guid blogId)
         {
-            return await GetMongoQueryable().Where(t=>t.BlogId == blogId).ToListAsync();
+            return await GetMongoQueryable().Where(t => t.BlogId == blogId).ToListAsync();
         }
 
         public async Task<Tag> GetByNameAsync(Guid blogId, string name)
@@ -37,14 +38,16 @@ namespace Volo.Blogging.Tagging
             return await GetMongoQueryable().Where(t => ids.Contains(t.Id)).ToListAsync();
         }
 
-        public void DecreaseUsageCountOfTags(List<Guid> ids)
+        public async Task DecreaseUsageCountOfTagsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
         {
-            var tags = GetMongoQueryable().Where(t => ids.Contains(t.Id));
+            var tags = await GetMongoQueryable()
+                .Where(t => ids.Contains(t.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             foreach (var tag in tags)
             {
                 tag.DecreaseUsageCount();
-                Update(tag);
+                await UpdateAsync(tag, cancellationToken: GetCancellationToken(cancellationToken));
             }
         }
     }

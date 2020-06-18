@@ -11,7 +11,7 @@ namespace Volo.Abp.MultiTenancy
 
         public string Name { get; set; }
 
-        public ConnectionStrings ConnectionStrings { get; }
+        public ConnectionStrings ConnectionStrings { get; set; }
 
         public TenantConfiguration()
         {

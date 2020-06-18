@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -14,7 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <None Remove="Volo\Abp\Validation\Localization\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Validation\Localization\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Validation.Abstractions\Volo.Abp.Validation.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,6 +7,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Configuration;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.Http.ProxyScripting
 {
@@ -48,7 +49,7 @@ namespace Volo.Abp.Http.ProxyScripting
 
         private string CreateScript(ProxyScriptingModel scriptingModel)
         {
-            var apiModel = _modelProvider.CreateApiModel();
+            var apiModel = _modelProvider.CreateApiModel(new ApplicationApiDescriptionModelRequestDto {IncludeTypes = false});
 
             if (scriptingModel.IsPartialRequest())
             {

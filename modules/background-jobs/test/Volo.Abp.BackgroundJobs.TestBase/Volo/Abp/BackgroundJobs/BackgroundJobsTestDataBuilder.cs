@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
@@ -20,9 +21,9 @@ namespace Volo.Abp.BackgroundJobs
             _clock = clock;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            _backgroundJobRepository.Insert(
+            await _backgroundJobRepository.InsertAsync(
                 new BackgroundJobRecord(_testData.JobId1)
                 {
                     JobName = "TestJobName",
@@ -36,7 +37,7 @@ namespace Volo.Abp.BackgroundJobs
                 }
             );
 
-            _backgroundJobRepository.Insert(
+            await _backgroundJobRepository.InsertAsync(
                 new BackgroundJobRecord(_testData.JobId2)
                 {
                     JobName = "TestJobName",
@@ -50,7 +51,7 @@ namespace Volo.Abp.BackgroundJobs
                 }
             );
 
-            _backgroundJobRepository.Insert(
+            await _backgroundJobRepository.InsertAsync(
                 new BackgroundJobRecord(_testData.JobId3)
                 {
                     JobName = "TestJobName",

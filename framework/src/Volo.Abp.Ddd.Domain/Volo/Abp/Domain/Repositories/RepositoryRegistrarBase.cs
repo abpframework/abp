@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.Abp.Domain.Repositories
 {
     public abstract class RepositoryRegistrarBase<TOptions>
-        where TOptions: CommonDbContextRegistrationOptions
+        where TOptions: AbpCommonDbContextRegistrationOptions
     {
         public TOptions Options { get; }
 

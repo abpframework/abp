@@ -9,7 +9,7 @@ import {
   OnChanges,
   TemplateRef,
   TrackByFunction,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import compare from 'just-compare';
 import clone from 'just-clone';
@@ -25,7 +25,7 @@ class RecordView {
 }
 
 @Directive({
-  selector: '[abpFor]'
+  selector: '[abpFor]',
 })
 export class ForDirective implements OnChanges {
   @Input('abpForOf')
@@ -67,7 +67,7 @@ export class ForDirective implements OnChanges {
   constructor(
     private tempRef: TemplateRef<AbpForContext>,
     private vcRef: ViewContainerRef,
-    private differs: IterableDiffers
+    private differs: IterableDiffers,
   ) {}
 
   private iterateOverAppliedOperations(changes: IterableChanges<any>) {
@@ -78,7 +78,7 @@ export class ForDirective implements OnChanges {
         const view = this.vcRef.createEmbeddedView(
           this.tempRef,
           new AbpForContext(null, -1, -1, this.items),
-          currentIndex
+          currentIndex,
         );
 
         rw.push(new RecordView(record, view));
@@ -155,7 +155,7 @@ export class ForDirective implements OnChanges {
 
     const compareFn = this.compareFn;
 
-    if (typeof this.filterBy !== 'undefined') {
+    if (typeof this.filterBy !== 'undefined' && typeof this.filterVal !== 'undefined' && this.filterVal !== '') {
       items = items.filter(item => compareFn(item[this.filterBy], this.filterVal));
     }
 

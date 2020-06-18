@@ -15,5 +15,8 @@ namespace Volo.Docs.GitHub.Documents
 
         Task<IReadOnlyList<Release>> GetReleasesAsync(string name, string repositoryName, string token);
 
+        Task<IReadOnlyList<GitHubCommit>> GetFileCommitsAsync(string name, string repositoryName, string version, string filename, string token);
+
+        Task<GitHubCommit> GetSingleCommitsAsync(string name, string repositoryName, string sha, string token);
     }
 }

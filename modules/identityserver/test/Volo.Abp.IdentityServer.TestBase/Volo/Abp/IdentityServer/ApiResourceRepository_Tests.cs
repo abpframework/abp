@@ -26,7 +26,7 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task GetListByScopesAsync()
         {
-            (await apiResourceRepository.GetListByScopesAsync(new []{ "NewApiResource2", "NewApiResource3"})).Count.ShouldBe(2);
+            (await apiResourceRepository.GetListByScopesAsync(new[] { "NewApiResource2", "NewApiResource3" })).Count.ShouldBe(2);
         }
     }
 }

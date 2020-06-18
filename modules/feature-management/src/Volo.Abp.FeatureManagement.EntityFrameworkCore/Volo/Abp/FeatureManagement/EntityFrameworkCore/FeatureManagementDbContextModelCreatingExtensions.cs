@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
@@ -11,13 +12,18 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new FeatureManagementModelBuilderConfigurationOptions();
+            var options = new FeatureManagementModelBuilderConfigurationOptions(
+                FeatureManagementDbProperties.DbTablePrefix,
+                FeatureManagementDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
 
             builder.Entity<FeatureValue>(b =>
             {
                 b.ToTable(options.TablePrefix + "FeatureValues", options.Schema);
+
+                b.ConfigureByConvention();
 
                 b.Property(x => x.Name).HasMaxLength(FeatureValueConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.Value).HasMaxLength(FeatureValueConsts.MaxValueLength).IsRequired();

@@ -4,36 +4,40 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Identity
 {
     public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
     {
-        private readonly IdentityUserManager _userManager;
-        private readonly IIdentityUserRepository _userRepository;
+        protected IdentityUserManager UserManager { get; }
+        protected IIdentityUserRepository UserRepository { get; }
+        public IIdentityRoleRepository RoleRepository { get; }
 
         public IdentityUserAppService(
             IdentityUserManager userManager,
-            IIdentityUserRepository userRepository)
+            IIdentityUserRepository userRepository,
+            IIdentityRoleRepository roleRepository)
         {
-            _userManager = userManager;
-            _userRepository = userRepository;
+            UserManager = userManager;
+            UserRepository = userRepository;
+            RoleRepository = roleRepository;
         }
 
         //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<IdentityUserDto> GetAsync(Guid id)
+        public virtual async Task<IdentityUserDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-                await _userManager.GetByIdAsync(id)
+                await UserManager.GetByIdAsync(id)
             );
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
+        public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
-            var count = await _userRepository.GetCountAsync(input.Filter);
-            var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+            var count = await UserRepository.GetCountAsync(input.Filter);
+            var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<IdentityUserDto>(
                 count,
@@ -42,20 +46,38 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+        public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
         {
-            var roles = await _userRepository.GetRolesAsync(id);
+            //TODO: Should also include roles of the related OUs.
+
+            var roles = await UserRepository.GetRolesAsync(id);
+
             return new ListResultDto<IdentityRoleDto>(
                 ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
             );
         }
 
-        [Authorize(IdentityPermissions.Users.Create)]
-        public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+        [Authorize(IdentityPermissions.Users.Default)]
+        public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
         {
-            var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.Email, CurrentTenant.Id);
+            var list = await RoleRepository.GetListAsync();
+            return new ListResultDto<IdentityRoleDto>(
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
+        }
 
-            (await _userManager.CreateAsync(user, input.Password)).CheckErrors();
+        [Authorize(IdentityPermissions.Users.Create)]
+        public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+        {
+            var user = new IdentityUser(
+                GuidGenerator.Create(),
+                input.UserName,
+                input.Email,
+                CurrentTenant.Id
+            );
+
+            input.MapExtraPropertiesTo(user);
+
+            (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
             await UpdateUserByInput(user, input);
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -64,73 +86,91 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
-        public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
+        public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
-            var user = await _userManager.GetByIdAsync(id);
+            var user = await UserManager.GetByIdAsync(id);
             user.ConcurrencyStamp = input.ConcurrencyStamp;
 
-            (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+            (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+
             await UpdateUserByInput(user, input);
-            (await _userManager.UpdateAsync(user)).CheckErrors();
+            input.MapExtraPropertiesTo(user);
+
+            (await UserManager.UpdateAsync(user)).CheckErrors();
+
+            if (!input.Password.IsNullOrEmpty())
+            {
+                (await UserManager.RemovePasswordAsync(user)).CheckErrors();
+                (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
+            }
+
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
         [Authorize(IdentityPermissions.Users.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             if (CurrentUser.Id == id)
             {
                 throw new BusinessException(code: IdentityErrorCodes.UserSelfDeletion);
             }
 
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await UserManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
                 return;
             }
 
-            (await _userManager.DeleteAsync(user)).CheckErrors();
+            (await UserManager.DeleteAsync(user)).CheckErrors();
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
-        public async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
+        public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
         {
-            var user = await _userManager.GetByIdAsync(id);
-            (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
-            await _userRepository.UpdateAsync(user);
+            var user = await UserManager.GetByIdAsync(id);
+            (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
+            await UserRepository.UpdateAsync(user);
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<IdentityUserDto> FindByUsernameAsync(string username)
+        public virtual async Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-                await _userManager.FindByNameAsync(username)
+                await UserManager.FindByNameAsync(username)
             );
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<IdentityUserDto> FindByEmailAsync(string email)
+        public virtual async Task<IdentityUserDto> FindByEmailAsync(string email)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
-                await _userManager.FindByEmailAsync(email)
+                await UserManager.FindByEmailAsync(email)
             );
         }
 
-        private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
+        protected virtual async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
-            (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
-            (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
-            (await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
-            (await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
+            if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
+            {
+                (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
+            }
+
+            if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
+            {
+                (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            }
+
+            (await UserManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
+            (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 
             user.Name = input.Name;
             user.Surname = input.Surname;
 
             if (input.RoleNames != null)
             {
-                (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
+                (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
             }
         }
     }

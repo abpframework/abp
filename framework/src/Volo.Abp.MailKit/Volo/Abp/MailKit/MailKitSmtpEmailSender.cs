@@ -60,7 +60,7 @@ namespace Volo.Abp.MailKit
                 await SmtpConfiguration.GetHostAsync(),
                 await SmtpConfiguration.GetPortAsync(),
                 await GetSecureSocketOption()
-            );
+        );
 
             if (await SmtpConfiguration.GetUseDefaultCredentialsAsync())
             {
@@ -70,7 +70,7 @@ namespace Volo.Abp.MailKit
             client.Authenticate(
                 await SmtpConfiguration.GetUserNameAsync(),
                 await SmtpConfiguration.GetPasswordAsync()
-            );
+        );
         }
 
         protected virtual async Task<SecureSocketOptions> GetSecureSocketOption()

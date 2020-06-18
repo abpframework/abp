@@ -2,6 +2,8 @@
 using System.Data.Common;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
@@ -29,7 +31,8 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             ConnectionStringName = connectionStringName;
             ExistingConnection = existingConnection;
 
-            DbContextOptions = new DbContextOptionsBuilder();
+            DbContextOptions = new DbContextOptionsBuilder()
+                .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>());
         }
     }
 
@@ -49,7 +52,8 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
                   connectionStringName, 
                   existingConnection)
         {
-            base.DbContextOptions = new DbContextOptionsBuilder<TDbContext>();
+            base.DbContextOptions = new DbContextOptionsBuilder<TDbContext>()
+                .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>());
         }
     }
 }

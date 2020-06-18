@@ -4,16 +4,19 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityServer
 {
     [DependsOn(
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpIdentityServerTestBaseModule)
+        typeof(AbpIdentityServerTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
     {
@@ -55,9 +58,9 @@ namespace Volo.Abp.IdentityServer
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<AbpIdentityServerTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

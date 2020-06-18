@@ -7,9 +7,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 {
     public class LayoutHookViewComponent : AbpViewComponent
     {
-        protected LayoutHookOptions Options { get; }
+        protected AbpLayoutHookOptions Options { get; }
 
-        public LayoutHookViewComponent(IOptions<LayoutHookOptions> options)
+        public LayoutHookViewComponent(IOptions<AbpLayoutHookOptions> options)
         {
             Options = options.Value;
         }

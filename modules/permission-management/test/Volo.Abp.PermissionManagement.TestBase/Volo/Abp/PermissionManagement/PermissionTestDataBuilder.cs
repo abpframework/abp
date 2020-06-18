@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -19,9 +20,9 @@ namespace Volo.Abp.PermissionManagement
             _permissionGrantRepository = permissionGrantRepository;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
                     _guidGenerator.Create(),
                     "MyPermission1",
@@ -30,7 +31,16 @@ namespace Volo.Abp.PermissionManagement
                 )
             );
 
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
+                new PermissionGrant(
+                    _guidGenerator.Create(),
+                    "MyDisabledPermission1",
+                    UserPermissionValueProvider.ProviderName,
+                    User1Id.ToString()
+                )
+            );
+
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
                     _guidGenerator.Create(),
                     "MyPermission3",

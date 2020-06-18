@@ -1,3 +1,4 @@
+import { takeUntilDestroy } from '@abp/ng.core';
 import {
   Component,
   ContentChild,
@@ -9,21 +10,24 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, filter, takeUntil } from 'rxjs/operators';
-import { Toaster } from '../../models/toaster';
-import { ConfirmationService } from '../../services';
+import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { fadeAnimation } from '../../animations/modal.animations';
+import { Confirmation } from '../../models/confirmation';
+import { ConfirmationService } from '../../services/confirmation.service';
+import { ModalService } from '../../services/modal.service';
 import { ButtonComponent } from '../button/button.component';
-import { backdropAnimation, dialogAnimation } from './modal.animations';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
-  animations: [backdropAnimation, dialogAnimation]
+  animations: [fadeAnimation],
+  styleUrls: ['./modal.component.scss'],
+  providers: [ModalService],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -32,15 +36,7 @@ export class ModalComponent implements OnDestroy {
   }
   set visible(value: boolean) {
     if (typeof value !== 'boolean') return;
-    this._visible = value;
-    if (value) {
-      this.listen();
-      this.renderer.addClass(document.body, 'modal-open');
-      this.appear.emit();
-    } else {
-      this.renderer.removeClass(document.body, 'modal-open');
-      this.disappear.emit();
-    }
+    this.toggle$.next(value);
   }
 
   @Input()
@@ -64,14 +60,16 @@ export class ModalComponent implements OnDestroy {
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
 
-  @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
+  @ContentChild('abpHeader', {static: false}) abpHeader: TemplateRef<any>;
 
-  @ContentChild('abpBody', { static: false }) abpBody: TemplateRef<any>;
+  @ContentChild('abpBody', {static: false}) abpBody: TemplateRef<any>;
 
-  @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
+  @ContentChild('abpFooter', {static: false}) abpFooter: TemplateRef<any>;
 
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;
+
+  @ViewChild('template', { static: false }) template: TemplateRef<any>;
 
   @ViewChild('abpModalContent', { static: false }) modalContent: ElementRef;
 
@@ -89,11 +87,49 @@ export class ModalComponent implements OnDestroy {
 
   _busy = false;
 
+  isModalOpen = false;
+
   isConfirmationOpen = false;
 
   destroy$ = new Subject<void>();
 
-  constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
+  private toggle$ = new Subject<boolean>();
+
+  get isFormDirty(): boolean {
+    return Boolean(document.querySelector('.modal-dialog .ng-dirty'));
+  }
+
+  constructor(
+    private renderer: Renderer2,
+    private confirmationService: ConfirmationService,
+    private modalService: ModalService,
+  ) {
+    this.initToggleStream();
+  }
+
+  private initToggleStream() {
+    this.toggle$
+      .pipe(takeUntilDestroy(this), debounceTime(0), distinctUntilChanged())
+      .subscribe(value => this.toggle(value));
+  }
+
+  private toggle(value: boolean) {
+    this.isModalOpen = value;
+    this._visible = value;
+    this.visibleChange.emit(value);
+
+    if (value) {
+      this.modalService.renderTemplate(this.template);
+      setTimeout(() => this.listen(), 0);
+      this.renderer.addClass(document.body, 'modal-open');
+      this.appear.emit();
+    } else {
+      this.modalService.clearModal();
+      this.renderer.removeClass(document.body, 'modal-open');
+      this.disappear.emit();
+      this.destroy$.next();
+    }
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -102,19 +138,18 @@ export class ModalComponent implements OnDestroy {
   close() {
     if (this.busy) return;
 
-    const nodes = getFlatNodes(
-      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes
-    );
-
-    if (hasNgDirty(nodes)) {
+    if (this.isFormDirty) {
       if (this.isConfirmationOpen) return;
 
       this.isConfirmationOpen = true;
       this.confirmationService
-        .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
-        .subscribe((status: Toaster.Status) => {
+        .warn(
+          'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
+          'AbpAccount::AreYouSure',
+        )
+        .subscribe((status: Confirmation.Status) => {
           this.isConfirmationOpen = false;
-          if (status === Toaster.Status.confirm) {
+          if (status === Confirmation.Status.confirm) {
             this.visible = false;
           }
         });
@@ -128,10 +163,19 @@ export class ModalComponent implements OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.code === 'Escape')
+        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
       )
-      .subscribe(_ => {
-        this.close();
+      .subscribe(() => this.close());
+
+    fromEvent(window, 'beforeunload')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (this.isFormDirty) {
+          event.returnValue = true;
+        } else {
+          event.returnValue = false;
+          delete event.returnValue;
+        }
       });
 
     setTimeout(() => {
@@ -139,22 +183,11 @@ export class ModalComponent implements OnDestroy {
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(
           takeUntil(this.destroy$),
-          filter(() => !!this.modalContent)
+          filter(() => !!this.modalContent),
         )
         .subscribe(() => this.close());
     }, 0);
 
     this.init.emit();
   }
-}
-
-function getFlatNodes(nodes: NodeList): HTMLElement[] {
-  return Array.from(nodes).reduce(
-    (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])],
-    []
-  );
-}
-
-function hasNgDirty(nodes: HTMLElement[]) {
-  return nodes.findIndex(node => (node.className || '').indexOf('ng-dirty') > -1) > -1;
 }

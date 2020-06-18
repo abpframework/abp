@@ -2,36 +2,35 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 {
-    public class EditModalModel : AbpPageModel
+    public class EditModalModel : IdentityPageModel
     {
         [BindProperty]
         public RoleInfoModel Role { get; set; }
 
-        private readonly IIdentityRoleAppService _identityRoleAppService;
+        protected IIdentityRoleAppService IdentityRoleAppService { get; }
 
         public EditModalModel(IIdentityRoleAppService identityRoleAppService)
         {
-            _identityRoleAppService = identityRoleAppService;
+            IdentityRoleAppService = identityRoleAppService;
         }
 
-        public async Task OnGetAsync(Guid id)
+        public virtual async Task OnGetAsync(Guid id)
         {
             Role = ObjectMapper.Map<IdentityRoleDto, RoleInfoModel>(
-                await _identityRoleAppService.GetAsync(id)
+                await IdentityRoleAppService.GetAsync(id)
             );
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             ValidateModel();
 
             var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleUpdateDto>(Role);
-            await _identityRoleAppService.UpdateAsync(Role.Id, input);
+            await IdentityRoleAppService.UpdateAsync(Role.Id, input);
 
             return NoContent();
         }

@@ -133,7 +133,7 @@ For the `.Web.Unified` application, there is a single database, named `YourProje
 
 ##### How to Run?
 
-Set it as the startup project, run `Update-Database` command for the EF Core from Package Manager Console and run your application. Default username is `admin` and password is `1q2w3E*`.
+Set `host/YourProjectName.Web.Unified` as the startup project, run `Update-Database` command for the EF Core from Package Manager Console and run your application. Default username is `admin` and password is `1q2w3E*`.
 
 #### Separated Deployment & Databases Scenario
 

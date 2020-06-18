@@ -32,12 +32,12 @@ namespace Volo.Abp.EventBus
                 }
             });
 
-            services.Configure<LocalEventBusOptions>(options =>
+            services.Configure<AbpLocalEventBusOptions>(options =>
             {
                 options.Handlers.AddIfNotContains(localHandlers);
             });
 
-            services.Configure<DistributedEventBusOptions>(options =>
+            services.Configure<AbpDistributedEventBusOptions>(options =>
             {
                 options.Handlers.AddIfNotContains(distributedHandlers);
             });

@@ -12,7 +12,10 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new MyProjectNameModelBuilderConfigurationOptions();
+            var options = new MyProjectNameModelBuilderConfigurationOptions(
+                MyProjectNameDbProperties.DbTablePrefix,
+                MyProjectNameDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
 
@@ -23,7 +26,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                 //Configure table & schema name
                 b.ToTable(options.TablePrefix + "Questions", options.Schema);
             
-                b.ConfigureFullAuditedAggregateRoot();
+                b.ConfigureByConvention();
             
                 //Properties
                 b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);

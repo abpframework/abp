@@ -1,30 +1,63 @@
-<div class="row">
-  <div class="col col-md-4 offset-md-4">
-    <abp-tenant-box></abp-tenant-box>
-
-    <div class="abp-account-container">
-      <h2>{{ 'AbpAccount::Register' | abpLocalization }}</h2>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-        <div class="form-group">
-          <label for="input-user-name">{{ 'AbpAccount::UserName' | abpLocalization }}</label
-          ><span> * </span
-          ><input autofocus type="text" id="input-user-name" class="form-control" formControlName="username" />
-        </div>
-        <div class="form-group">
-          <label for="input-email-address">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label
-          ><span> * </span><input type="email" id="input-email-address" class="form-control" formControlName="email" />
-        </div>
-        <div class="form-group">
-          <label for="input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label
-          ><span> * </span><input type="password" id="input-password" class="form-control" formControlName="password" />
-        </div>
-        <abp-button [loading]="inProgress" type="submit">
-          {{ 'AbpAccount::Register' | abpLocalization }}
-        </abp-button>
-      </form>
-      <div style="padding-top: 20px">
-        <a routerLink="/account/login">{{ 'AbpAccount::Login' | abpLocalization }}</a>
-      </div>
+<abp-auth-wrapper
+  *abpReplaceableTemplate="{
+    componentKey: authWrapperKey,
+    inputs: {
+      mainContentRef: { value: mainContentRef }
+    }
+  }"
+  [mainContentRef]="mainContentRef"
+>
+</abp-auth-wrapper>
+<ng-template #mainContentRef>
+  <h4>{{ 'AbpAccount::Register' | abpLocalization }}</h4>
+  <strong>
+    {{ 'AbpAccount::AlreadyRegistered' | abpLocalization }}
+    <a class="text-decoration-none" routerLink="/account/login">{{
+      'AbpAccount::Login' | abpLocalization
+    }}</a>
+  </strong>
+  <form
+    *ngIf="isSelfRegistrationEnabled"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    validateOnSubmit
+    class="mt-4"
+  >
+    <div class="form-group">
+      <label for="input-user-name">{{ 'AbpAccount::UserName' | abpLocalization }}</label
+      ><span> * </span
+      ><input
+        autofocus
+        type="text"
+        id="input-user-name"
+        class="form-control"
+        formControlName="username"
+        autocomplete="username"
+      />
     </div>
-  </div>
-</div>
+    <div class="form-group">
+      <label for="input-email-address">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label
+      ><span> * </span
+      ><input type="email" id="input-email-address" class="form-control" formControlName="email" />
+    </div>
+    <div class="form-group">
+      <label for="input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label
+      ><span> * </span
+      ><input
+        type="password"
+        id="input-password"
+        class="form-control"
+        formControlName="password"
+        autocomplete="current-password"
+      />
+    </div>
+    <abp-button
+      [loading]="inProgress"
+      buttonType="submit"
+      name="Action"
+      buttonClass="btn-block btn-lg mt-3 btn btn-primary"
+    >
+      {{ 'AbpAccount::Register' | abpLocalization }}
+    </abp-button>
+  </form>
+</ng-template>

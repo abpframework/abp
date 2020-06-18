@@ -5,7 +5,7 @@ namespace Volo.Abp.Account.Web.Modules.Account.Components.Toolbar.UserLoginLink
 {
     public class UserLoginLinkViewComponent : AbpViewComponent
     {
-        public IViewComponentResult Invoke()
+        public virtual IViewComponentResult Invoke()
         {
             return View("~/Modules/Account/Components/Toolbar/UserLoginLink/Default.cshtml");
         }

@@ -1,0 +1,12 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resource adı zaten mevcut: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api Resource adı zaten mevcut: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId already zaten mevcut: {ClientId}",
+    "UserLockedOut": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
+    "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
+    "LoginIsNotAllowed": "Giriş yapamazsınız! E-posta adresinizi ya da telefon numaranızı doğrulamanız gerekiyor.",
+    "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!"
+  }
+}

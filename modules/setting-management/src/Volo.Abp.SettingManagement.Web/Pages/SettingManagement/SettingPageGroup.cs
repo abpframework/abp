@@ -26,11 +26,14 @@ namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
         }
         private Type _componentType;
 
-        public SettingPageGroup([NotNull] string id, [NotNull] string displayName, [NotNull] Type componentType)
+        public object Parameter { get; set; }
+
+        public SettingPageGroup([NotNull] string id, [NotNull] string displayName, [NotNull] Type componentType, object parameter = null)
         {
             Id = id;
             DisplayName = displayName;
             ComponentType = componentType;
+            Parameter = parameter;
         }
     }
 }

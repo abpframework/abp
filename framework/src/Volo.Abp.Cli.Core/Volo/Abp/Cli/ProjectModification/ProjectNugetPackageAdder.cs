@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
@@ -22,17 +23,20 @@ namespace Volo.Abp.Cli.ProjectModification
         protected ProjectNpmPackageAdder NpmPackageAdder { get; }
         protected DerivedClassFinder ModuleClassFinder { get; }
         protected ModuleClassDependcyAdder ModuleClassDependcyAdder { get; }
+        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
         public ProjectNugetPackageAdder(
             IJsonSerializer jsonSerializer,
             ProjectNpmPackageAdder npmPackageAdder,
             DerivedClassFinder moduleClassFinder,
-            ModuleClassDependcyAdder moduleClassDependcyAdder)
+            ModuleClassDependcyAdder moduleClassDependcyAdder,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
         {
             JsonSerializer = jsonSerializer;
             NpmPackageAdder = npmPackageAdder;
             ModuleClassFinder = moduleClassFinder;
             ModuleClassDependcyAdder = moduleClassDependcyAdder;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             Logger = NullLogger<ProjectNugetPackageAdder>.Instance;
         }
 
@@ -44,8 +48,13 @@ namespace Volo.Abp.Cli.ProjectModification
             );
         }
 
-        public async Task AddAsync(string projectFile, NugetPackageInfo package)
+        public Task AddAsync(string projectFile, NugetPackageInfo package)
         {
+            if (File.ReadAllText(projectFile).Contains($"\"{package.Name}\""))
+            {
+                return Task.CompletedTask;
+            }
+
             using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
             {
                 Logger.LogInformation($"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
@@ -67,6 +76,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 Logger.LogInformation("Successfully installed.");
             }
+
+            return Task.CompletedTask;
         }
 
         protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string moduleName)
@@ -84,7 +95,7 @@ namespace Volo.Abp.Cli.ProjectModification
                         throw new CliUsageException($"'{moduleName}' nuget package could not be found!");
                     }
 
-                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();

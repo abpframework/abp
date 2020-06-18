@@ -108,10 +108,10 @@ namespace Volo.Abp.IdentityServer.Clients
         }
 
         public Client(Guid id, [NotNull] string clientId)
+        : base(id)
         {
             Check.NotNull(clientId, nameof(clientId));
 
-            Id = id;
             ClientId = clientId;
 
             //TODO: Replace magics with constants?

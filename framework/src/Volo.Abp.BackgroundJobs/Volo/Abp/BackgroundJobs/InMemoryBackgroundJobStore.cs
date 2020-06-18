@@ -23,19 +23,9 @@ namespace Volo.Abp.BackgroundJobs
             _jobs = new ConcurrentDictionary<Guid, BackgroundJobInfo>();
         }
 
-        public BackgroundJobInfo Find(Guid jobId)
-        {
-            return _jobs.GetOrDefault(jobId);
-        }
-
         public virtual Task<BackgroundJobInfo> FindAsync(Guid jobId)
         {
             return Task.FromResult(_jobs.GetOrDefault(jobId));
-        }
-
-        public void Insert(BackgroundJobInfo jobInfo)
-        {
-            _jobs[jobInfo.Id] = jobInfo;
         }
 
         public virtual Task InsertAsync(BackgroundJobInfo jobInfo)
@@ -43,17 +33,6 @@ namespace Volo.Abp.BackgroundJobs
             _jobs[jobInfo.Id] = jobInfo;
 
             return Task.FromResult(0);
-        }
-
-        public List<BackgroundJobInfo> GetWaitingJobs(int maxResultCount)
-        {
-            return _jobs.Values
-                .Where(t => !t.IsAbandoned && t.NextTryTime <= Clock.Now)
-                .OrderByDescending(t => t.Priority)
-                .ThenBy(t => t.TryCount)
-                .ThenBy(t => t.NextTryTime)
-                .Take(maxResultCount)
-                .ToList();
         }
 
         public virtual Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount)
@@ -69,10 +48,6 @@ namespace Volo.Abp.BackgroundJobs
             return Task.FromResult(waitingJobs);
         }
 
-        public void Delete(Guid jobId)
-        {
-            _jobs.TryRemove(jobId, out _);
-        }
 
         public virtual Task DeleteAsync(Guid jobId)
         {
@@ -80,15 +55,7 @@ namespace Volo.Abp.BackgroundJobs
 
             return Task.FromResult(0);
         }
-
-        public void Update(BackgroundJobInfo jobInfo)
-        {
-            if (jobInfo.IsAbandoned)
-            {
-                DeleteAsync(jobInfo.Id);
-            }
-        }
-
+        
         public virtual Task UpdateAsync(BackgroundJobInfo jobInfo)
         {
             if (jobInfo.IsAbandoned)

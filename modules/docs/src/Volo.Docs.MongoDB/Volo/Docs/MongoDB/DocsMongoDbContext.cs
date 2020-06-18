@@ -2,24 +2,21 @@
 using Volo.Abp.Data;
 using Volo.Docs.Projects;
 using Volo.Abp.MongoDB;
+using Volo.Docs.Documents;
 
 namespace Volo.Docs.MongoDB
 {
-    [ConnectionStringName(DocsConsts.ConnectionStringName)]
+    [ConnectionStringName(DocsDbProperties.ConnectionStringName)]
     public class DocsMongoDbContext : AbpMongoDbContext, IDocsMongoDbContext
     {
-        public static string CollectionPrefix { get; set; } = DocsConsts.DefaultDbTablePrefix;
-
         public IMongoCollection<Project> Projects => Collection<Project>();
+        public IMongoCollection<Document> Documents => Collection<Document>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureDocs(options =>
-            {
-                options.CollectionPrefix = CollectionPrefix;
-            });
+            modelBuilder.ConfigureDocs();
         }
     }
 }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Configuration;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -24,7 +24,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IPermissionDataSeeder _permissionDataSeeder;
-        private readonly IConfigurationAccessor _configurationAccessor;
+        private readonly IConfiguration _configuration;
 
         public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
@@ -32,14 +32,14 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             IIdentityResourceDataSeeder identityResourceDataSeeder,
             IGuidGenerator guidGenerator,
             IPermissionDataSeeder permissionDataSeeder,
-            IConfigurationAccessor configurationAccessor)
+            IConfiguration configuration)
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
             _permissionDataSeeder = permissionDataSeeder;
-            _configurationAccessor = configurationAccessor;
+            _configuration = configuration;
         }
 
         [UnitOfWork]
@@ -104,7 +104,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 "MyProjectName"
             };
 
-            var configurationSection = _configurationAccessor.Configuration.GetSection("IdentityServer:Clients");
+            var configurationSection = _configuration.GetSection("IdentityServer:Clients");
 
             //Web Client
             var webClientId = configurationSection["MyProjectName_Web:ClientId"];

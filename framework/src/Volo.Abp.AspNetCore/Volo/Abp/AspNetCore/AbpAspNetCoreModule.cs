@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
@@ -29,11 +32,6 @@ namespace Volo.Abp.AspNetCore
         )]
     public class AbpAspNetCoreModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddConfiguration();
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpAuditingOptions>(options =>
@@ -43,6 +41,8 @@ namespace Volo.Abp.AspNetCore
 
             AddAspNetServices(context.Services);
             context.Services.AddObjectAccessor<IApplicationBuilder>();
+
+            context.Services.Replace(ServiceDescriptor.Transient<IOptionsFactory<RequestLocalizationOptions>, AbpRequestLocalizationOptionsFactory>());
         }
 
         private static void AddAspNetServices(IServiceCollection services)

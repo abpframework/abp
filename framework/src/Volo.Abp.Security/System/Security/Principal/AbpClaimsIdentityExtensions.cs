@@ -17,8 +17,11 @@ namespace System.Security.Principal
             {
                 return null;
             }
-
-            return Guid.Parse(userIdOrNull.Value);
+            if (Guid.TryParse(userIdOrNull.Value, out Guid result))
+            {
+                return result;
+            }
+            return null;
         }
 
         public static Guid? FindUserId([NotNull] this IIdentity identity)

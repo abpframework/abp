@@ -46,7 +46,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<VirtualFileSystemOptions>(options =>
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<MyModule>();
         });
@@ -66,7 +66,7 @@ Neste exemplo;
 
 - Adicionado um novo recurso de localização com "en" (inglês) como a cultura padrão.
 - Arquivos JSON usados para armazenar as sequências de localização.
-- Os arquivos JSON são incorporados ao assembly usando `VirtualFileSystemOptions`(consulte [sistema de arquivos virtual](Virtual-File-System.md) ).
+- Os arquivos JSON são incorporados ao assembly usando `AbpVirtualFileSystemOptions`(consulte [sistema de arquivos virtual](Virtual-File-System.md) ).
 
 Os arquivos JSON estão localizados na pasta do projeto "/ Localização / Recursos / Teste", como mostrado abaixo:
 

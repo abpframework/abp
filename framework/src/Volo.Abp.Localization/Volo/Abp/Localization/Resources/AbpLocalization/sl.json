@@ -1,0 +1,7 @@
+{
+  "culture": "sl",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Privzeti jezik",
+    "Description:Abp.Localization.DefaultLanguage": "Privzeti jezik aplikacije."
+  }
+}

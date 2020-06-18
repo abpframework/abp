@@ -8,14 +8,9 @@ namespace MyCompanyName.MyProjectName
 {
     public class MyProjectNameWebTestStartup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<MyProjectNameWebTestModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<MyProjectNameWebTestModule>();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

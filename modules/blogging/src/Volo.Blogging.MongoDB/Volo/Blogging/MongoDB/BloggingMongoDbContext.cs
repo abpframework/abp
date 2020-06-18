@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 using Volo.Blogging.Blogs;
@@ -11,11 +8,9 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.MongoDB
 {
-    [ConnectionStringName(BloggingConsts.ConnectionStringName)]
+    [ConnectionStringName(BloggingDbProperties.ConnectionStringName)]
     public class BloggingMongoDbContext : AbpMongoDbContext, IBloggingMongoDbContext
     {
-        public static string CollectionPrefix { get; set; } = BloggingConsts.DefaultDbTablePrefix;
-
         public IMongoCollection<BlogUser> Users => Collection<BlogUser>();
 
         public IMongoCollection<Blog> Blogs => Collection<Blog>();
@@ -30,10 +25,7 @@ namespace Volo.Blogging.MongoDB
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureBlogging(options =>
-            {
-                options.CollectionPrefix = CollectionPrefix;
-            });
+            modelBuilder.ConfigureBlogging();
         }
     }
 }

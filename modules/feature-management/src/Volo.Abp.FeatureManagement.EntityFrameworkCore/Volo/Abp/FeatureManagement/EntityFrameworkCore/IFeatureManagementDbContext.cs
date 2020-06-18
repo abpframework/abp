@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
-    [ConnectionStringName(FeatureManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
     public interface IFeatureManagementDbContext : IEfCoreDbContext
     {
         DbSet<FeatureValue> FeatureValues { get; set; }

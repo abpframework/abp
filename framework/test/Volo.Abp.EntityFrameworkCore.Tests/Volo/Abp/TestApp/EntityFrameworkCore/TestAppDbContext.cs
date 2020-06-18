@@ -11,10 +11,14 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
         public DbSet<City> Cities { get; set; }
 
+        public DbSet<PersonView> PersonView { get; set; }
+
         public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
         public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
         
+        public DbSet<Author> Author { get; set; }
+
         public TestAppDbContext(DbContextOptions<TestAppDbContext> options) 
             : base(options)
         {
@@ -23,11 +27,29 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Owned<District>();
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Phone>(b =>
             {
                 b.HasKey(p => new {p.PersonId, p.Number});
+            });
+
+            modelBuilder
+                .Entity<PersonView>(p =>
+                {
+                    p.HasNoKey();
+                    p.ToView("View_PersonView");
+                });
+
+            modelBuilder.Entity<City>(b =>
+            {
+                b.OwnsMany(c => c.Districts, d =>
+                {
+                    d.WithOwner().HasForeignKey(x => x.CityId);
+                    d.HasKey(x => new {x.CityId, x.Name});
+                });
             });
         }
     }

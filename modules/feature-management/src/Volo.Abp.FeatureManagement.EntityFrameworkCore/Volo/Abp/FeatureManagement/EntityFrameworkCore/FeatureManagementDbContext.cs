@@ -4,13 +4,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
-    [ConnectionStringName(FeatureManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
     public class FeatureManagementDbContext : AbpDbContext<FeatureManagementDbContext>, IFeatureManagementDbContext
     {
-        public static string TablePrefix { get; set; } = FeatureManagementConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = FeatureManagementConsts.DefaultDbSchema;
-
         public DbSet<FeatureValue> FeatureValues { get; set; }
 
         public FeatureManagementDbContext(DbContextOptions<FeatureManagementDbContext> options) 
@@ -23,11 +19,7 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureFeatureManagement(options =>
-            {
-                options.TablePrefix = TablePrefix;
-                options.Schema = Schema;
-            });
+            builder.ConfigureFeatureManagement();
         }
     }
 }

@@ -1,5 +1,5 @@
 {
-    "culture": "zh-Hans",
+  "culture": "zh-Hans",
   "texts": {
     "Menu:IdentityManagement": "身份认证管理",
     "Users": "用户",
@@ -63,6 +63,7 @@
     "Identity.PasswordConfirmationFailed": "密码或确认密码不一致.",
     "Identity.StaticRoleRenamingErrorMessage": "无法重命名静态角色.",
     "Identity.StaticRoleDeletionErrorMessage": "无法删除静态角色.",
+    "Identity.OrganizationUnit.DuplicateDisplayNameWarning": "已存在名为 {0} 的组织单位. 无法在同一级别创建相同名称的组织单位.",
     "Volo.Abp.Identity:010001": "您无法删除自己的帐户!",
     "Permission:IdentityManagement": "身份标识管理",
     "Permission:RoleManagement": "角色管理",
@@ -71,6 +72,33 @@
     "Permission:Delete": "删除",
     "Permission:ChangePermissions": "更改权限",
     "Permission:UserManagement": "用户管理",
-    "Permission:UserLookup": "用户查询"
+    "Permission:UserLookup": "用户查询",
+    "DisplayName:Abp.Identity.Password.RequiredLength": "要求长度",
+    "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "要求唯一字符数量",
+    "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "要求非字母数字",
+    "DisplayName:Abp.Identity.Password.RequireLowercase": "要求小写字母",
+    "DisplayName:Abp.Identity.Password.RequireUppercase": "要求大写字母",
+    "DisplayName:Abp.Identity.Password.RequireDigit": "要求数字",
+    "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "允许新用户",
+    "DisplayName:Abp.Identity.Lockout.LockoutDuration": "锁定时间(秒)",
+    "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "最大失败访问尝试次数",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "要求验证的电子邮箱",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "要求验证的手机号码",
+    "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "启用用户名更新",
+    "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "启用电子邮箱更新",
+    "Description:Abp.Identity.Password.RequiredLength": "密码的最小长度.",
+    "Description:Abp.Identity.Password.RequiredUniqueChars": "密码必须包含唯一字符的数量.",
+    "Description:Abp.Identity.Password.RequireNonAlphanumeric": "密码是否必须包含非字母数字.",
+    "Description:Abp.Identity.Password.RequireLowercase": "密码是否必须包含小写字母.",
+    "Description:Abp.Identity.Password.RequireUppercase": "密码是否必须包含大写字母.",
+    "Description:Abp.Identity.Password.RequireDigit": "密码是否必须包含数字.",
+    "Description:Abp.Identity.Lockout.AllowedForNewUsers": "允许新用户被锁定.",
+    "Description:Abp.Identity.Lockout.LockoutDuration": "当锁定发生时用户被的锁定的时间(秒).",
+    "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "如果启用锁定, 当用户被锁定前失败的访问尝试次数.",
+    "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "登录时是否需要验证的电子邮箱.",
+    "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "登录时是否需要验证的手机号码.",
+    "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "是否允许用户更新用户名.",
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "是否允许用户更新电子邮箱."
+
   }
-  }
+}

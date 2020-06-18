@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
+namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
     {
@@ -72,6 +74,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                     )
                 )
             );
+
+            await httpContext
+                .RequestServices
+                .GetRequiredService<IExceptionNotifier>()
+                .NotifyAsync(
+                    new ExceptionNotificationContext(exception)
+                );
         }
 
         private Task ClearCacheHeaders(object state)

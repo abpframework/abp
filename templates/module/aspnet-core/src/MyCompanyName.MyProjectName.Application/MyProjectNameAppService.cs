@@ -8,6 +8,7 @@ namespace MyCompanyName.MyProjectName
         protected MyProjectNameAppService()
         {
             LocalizationResource = typeof(MyProjectNameResource);
+            ObjectMapperContext = typeof(MyProjectNameApplicationModule);
         }
     }
 }

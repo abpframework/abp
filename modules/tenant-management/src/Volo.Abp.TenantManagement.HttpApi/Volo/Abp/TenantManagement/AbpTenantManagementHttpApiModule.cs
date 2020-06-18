@@ -5,6 +5,7 @@ using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Localization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.TenantManagement
 {
@@ -15,6 +16,14 @@ namespace Volo.Abp.TenantManagement
         )]
     public class AbpTenantManagementHttpApiModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpTenantManagementHttpApiModule).Assembly);
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpLocalizationOptions>(options =>

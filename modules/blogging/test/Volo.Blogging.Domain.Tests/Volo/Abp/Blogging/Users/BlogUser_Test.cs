@@ -23,7 +23,7 @@ namespace Volo.Blogging
 
             blogUser.Update(userData);
 
-            blogUser.Equals(new BlogUser(userData)).ShouldBeTrue();
+            blogUser.EntityEquals(new BlogUser(userData)).ShouldBeTrue();
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Volo.Blogging
             var blogUser2= new BlogUser(new UserData(userId, "bob lee", "john@volosoft.com", "lee", "bob", true,
                 "123456", true, tenantId));
 
-            blogUser.Equals(blogUser2).ShouldBeTrue();
+            blogUser.EntityEquals(blogUser2).ShouldBeTrue();
         }
     }
 }

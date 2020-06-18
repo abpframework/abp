@@ -1,6 +1,7 @@
 {
-    "culture": "zh-Hans",
-    "texts": {
-      "Settings": "设置"
-    }
+  "culture": "zh-Hans",
+  "texts": {
+    "Settings": "设置",
+    "SuccessfullySaved": "保存成功"
   }
+}

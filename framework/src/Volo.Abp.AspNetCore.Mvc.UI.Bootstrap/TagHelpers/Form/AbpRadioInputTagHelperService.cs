@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -90,7 +90,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
         {
-            var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
+            var localizer = _tagHelperLocalizer.GetLocalizerOrNull(explorer);
 
             var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
                 .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
@@ -130,7 +130,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (!selectItems.Any(si => si.Selected))
             {
-                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
+                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value == selectedValue);
 
                 if (itemToBeSelected != null)
                 {
@@ -167,7 +167,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 list.Add(new FormGroupItem
                 {
                     HtmlContent = html,
-                    Order = order
+                    Order = order,
+                    PropertyName = propertyName
                 });
             }
         }

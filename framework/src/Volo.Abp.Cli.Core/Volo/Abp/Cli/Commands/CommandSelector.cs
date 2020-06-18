@@ -8,9 +8,9 @@ namespace Volo.Abp.Cli.Commands
 {
     public class CommandSelector : ICommandSelector, ITransientDependency
     {
-        protected CliOptions Options { get; }
+        protected AbpCliOptions Options { get; }
 
-        public CommandSelector(IOptions<CliOptions> options)
+        public CommandSelector(IOptions<AbpCliOptions> options)
         {
             Options = options.Value;
         }

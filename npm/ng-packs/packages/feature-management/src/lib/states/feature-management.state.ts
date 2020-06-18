@@ -3,15 +3,17 @@ import { tap } from 'rxjs/operators';
 import { GetFeatures, UpdateFeatures } from '../actions/feature-management.actions';
 import { FeatureManagement } from '../models/feature-management';
 import { FeatureManagementService } from '../services/feature-management.service';
+import { Injectable } from '@angular/core';
 
 @State<FeatureManagement.State>({
   name: 'FeatureManagementState',
   defaults: { features: {} } as FeatureManagement.State,
 })
+@Injectable()
 export class FeatureManagementState {
   @Selector()
   static getFeatures({ features }: FeatureManagement.State) {
-    return features;
+    return features || [];
   }
 
   constructor(private featureManagementService: FeatureManagementService) {}

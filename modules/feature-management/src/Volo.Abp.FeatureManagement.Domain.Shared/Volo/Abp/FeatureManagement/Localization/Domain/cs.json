@@ -1,6 +1,7 @@
 {
   "culture": "cs",
   "texts": {
-    "Features": "Funkce" 
+    "Features": "Funkce",
+    "NoFeatureFoundMessage": "Nejsou zde dostupné žádné funkce."
   }
 }

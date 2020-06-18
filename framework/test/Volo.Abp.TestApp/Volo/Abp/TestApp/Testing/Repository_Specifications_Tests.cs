@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
@@ -21,11 +22,12 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void SpecificationWithRepository_Test()
+        public async Task SpecificationWithRepository_Test()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 CityRepository.Count(new CitySpecification().ToExpression()).ShouldBe(1);
+                return Task.CompletedTask;
             });
         }
     }

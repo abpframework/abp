@@ -20,13 +20,18 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(BackgroundJobsEntityFrameworkCoreModule),
+        typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule)
         )]
     public class MyProjectNameEntityFrameworkCoreModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            MyProjectNameEfCoreEntityExtensionMappings.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAbpDbContext<MyProjectNameDbContext>(options =>

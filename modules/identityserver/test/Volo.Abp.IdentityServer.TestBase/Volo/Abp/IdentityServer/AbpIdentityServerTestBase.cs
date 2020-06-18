@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 
 namespace Volo.Abp.IdentityServer
 {

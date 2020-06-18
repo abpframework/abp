@@ -1,37 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
-import { ConfigState, ABP } from '@abp/ng.core';
+import { ABP, getRoutePath, RoutesService, takeUntilDestroy, TreeNode } from '@abp/ng.core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-breadcrumb',
-  templateUrl: './breadcrumb.component.html'
+  templateUrl: './breadcrumb.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BreadcrumbComponent implements OnInit {
-  show: boolean;
+export class BreadcrumbComponent implements OnDestroy, OnInit {
+  segments: Partial<ABP.Route>[] = [];
 
-  segments: string[] = [];
+  constructor(
+    public readonly cdRef: ChangeDetectorRef,
+    private router: Router,
+    private routes: RoutesService,
+  ) {}
 
-  constructor(private router: Router, private store: Store) {
-    this.show = !!this.store.selectSnapshot(state => state.LeptonLayoutState);
-  }
+  ngOnDestroy() {}
 
   ngOnInit(): void {
-    const splittedUrl = this.router.url.split('/').filter(chunk => chunk);
+    this.router.events
+      .pipe(
+        takeUntilDestroy(this),
+        filter<NavigationEnd>(event => event instanceof NavigationEnd),
+        // tslint:disable-next-line:deprecation
+        startWith(null),
+        map(() => this.routes.search({ path: getRoutePath(this.router) })),
+      )
+      .subscribe(route => {
+        this.segments = [];
+        if (route) {
+          let node = { parent: route } as TreeNode<ABP.Route>;
 
-    const currentUrl: ABP.FullRoute = this.store.selectSnapshot(ConfigState.getRoute(splittedUrl[0]));
-    this.segments.push(currentUrl.name);
+          while (node.parent) {
+            node = node.parent;
+            const { parent, children, isLeaf, ...segment } = node;
+            this.segments.unshift(segment);
+          }
 
-    if (splittedUrl.length > 1) {
-      const [, ...arr] = splittedUrl;
-
-      let childRoute: ABP.FullRoute = currentUrl;
-      for (let i = 0; i < arr.length; i++) {
-        const element = arr[i];
-        childRoute = childRoute.children.find(child => child.path === element);
-
-        this.segments.push(childRoute.name);
-      }
-    }
+          this.cdRef.detectChanges();
+        }
+      });
   }
 }

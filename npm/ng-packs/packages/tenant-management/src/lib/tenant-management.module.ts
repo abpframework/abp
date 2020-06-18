@@ -1,34 +1,36 @@
-import { CoreModule } from '@abp/ng.core';
+import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
+import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { NgModule, Provider } from '@angular/core';
+import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { NgxsModule } from '@ngxs/store';
-import { TableModule } from 'primeng/table';
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { TenantManagementState } from './states/tenant-management.state';
 import { TenantManagementRoutingModule } from './tenant-management-routing.module';
-import { FeatureManagementModule } from '@abp/ng.feature-management';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @NgModule({
   declarations: [TenantsComponent],
+  exports: [TenantsComponent],
   imports: [
     TenantManagementRoutingModule,
     NgxsModule.forFeature([TenantManagementState]),
     NgxValidateCoreModule,
     CoreModule,
-    TableModule,
     ThemeSharedModule,
     NgbDropdownModule,
     FeatureManagementModule,
   ],
 })
-export class TenantManagementModule {}
+export class TenantManagementModule {
+  static forChild(): ModuleWithProviders<TenantManagementModule> {
+    return {
+      ngModule: TenantManagementModule,
+      providers: [],
+    };
+  }
 
-/**
- *
- * @deprecated since version 0.9.0
- */
-export function TenantManagementProviders(): Provider[] {
-  return [];
+  static forLazy(): NgModuleFactory<TenantManagementModule> {
+    return new LazyModuleFactory(TenantManagementModule.forChild());
+  }
 }

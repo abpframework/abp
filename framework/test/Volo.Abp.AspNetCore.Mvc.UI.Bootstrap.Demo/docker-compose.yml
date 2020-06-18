@@ -1,0 +1,9 @@
+--- 
+version: "3.4"
+services:
+  bootstrap-taghelpers: 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: "${REGISTRY:-}abpio-bootstrap-taghelpers:${TAG:-latest}"
+

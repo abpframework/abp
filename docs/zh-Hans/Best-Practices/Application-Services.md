@@ -17,7 +17,7 @@
 
 ##### 基础DTO
 
-**推荐** 为实体定义一个**基础**DTO.
+**推荐** 为聚合根定义一个**基础**DTO.
 
 - 直接包含实体中所有的**原始属性**.
   - 例外: 出于**安全**原因,可以**排除**某些属性(像 `User.Password`).
@@ -27,7 +27,7 @@
 
 ```c#
 [Serializable]
-public class IssueDto : FullAuditedEntityDto<Guid>
+public class IssueDto : ExtensibleFullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
     public string Text { get; set; }
@@ -45,7 +45,7 @@ public class IssueLabelDto
 
 ##### 详细DTO
 
-**Do** 如果实体持有对其他聚合根的引用,那么应该为其定义**详细**DTO.
+**推荐** 如果实体持有对其他聚合根的引用,那么应该为其定义**详细**DTO.
 
 * 直接包含实体中所有的 **原始属性**.
   - 例外-1: 出于**安全**原因,可以**排除**某些属性(像 `User.Password`).
@@ -57,7 +57,7 @@ public class IssueLabelDto
 
 ````C#
 [Serializable]
-public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
+public class IssueWithDetailsDto : ExtensibleFullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
     public string Text { get; set; }
@@ -66,14 +66,14 @@ public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
 }
 
 [Serializable]
-public class MilestoneDto : EntityDto<Guid>
+public class MilestoneDto : ExtensibleEntityDto<Guid>
 {
     public string Name { get; set; }
     public bool IsClosed { get; set; }
 }
 
 [Serializable]
-public class LabelDto : EntityDto<Guid>
+public class LabelDto : ExtensibleEntityDto<Guid>
 {
     public string Name { get; set; }
     public string Color { get; set; }
@@ -120,6 +120,7 @@ Task<List<QuestionWithDetailsDto>> GetListAsync(QuestionListQueryDto queryDto);
 
 * **推荐** 使用 `CreateAsync` 做为**方法名**.
 * **推荐** 使用**专门的输入DTO**来创建实体.
+* **推荐** DTO类从 `ExtensibleObject` 类继承(或任何实现 `ExtensibleObject`的类) 以允许在需要时传递额外的属性.
 * **推荐** 使用 **data annotations** 进行输入验证.
   * 尽可能在**领域**之间共享常量(通过**domain shared** package定义的常量).
 * **推荐** 只需要创建实体的**最少**信息, 但是提供了其他可选属性.
@@ -134,7 +135,7 @@ Task<QuestionWithDetailsDto> CreateAsync(CreateQuestionDto questionDto);
 
 ````C#
 [Serializable]
-public class CreateQuestionDto
+public class CreateQuestionDto : ExtensibleObject
 {
     [Required]
     [StringLength(QuestionConsts.MaxTitleLength, MinimumLength = QuestionConsts.MinTitleLength)]
@@ -151,6 +152,7 @@ public class CreateQuestionDto
 
 - **推荐** 使用 `UpdateAsync` 做为**方法名**.
 - **推荐** 使用**专门的输入DTO**来更新实体.
+- **推荐** DTO类从 `ExtensibleObject` 类继承(或任何实现 `ExtensibleObject`的类) 以允许在需要时传递额外的属性.
 - **推荐** 获取实体的id做为分离的原始参数. 不要包含更新DTO.
 - **推荐** 使用 **data annotations** 进行输入验证.
   - 尽可能在**领域**之间共享常量(通过**domain shared** package定义的常量).
@@ -198,6 +200,10 @@ Task<int> VoteAsync(Guid id, VoteType type);
 #### 查询数据
 
 * **不推荐** 在应用程序服务方法中使用linq/sql查询来自数据库的数据. 让仓储负责从数据源执行linq/sql查询.
+
+#### 额外的属性
+
+* **推荐** 使用 `MapExtraPropertiesTo` 扩展方法 ([参阅](Object-Extensions.md)) 或配置对象映射 (`MapExtraProperties`) 以允许应用开发人员能够扩展对象和服务.
 
 #### 操作/删除 实体
 

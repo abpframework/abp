@@ -42,7 +42,7 @@ public class BlogModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //为应用程序配置默认的连接字符串
-        Configure<DbConnectionOptions>(options =>
+        Configure<AbpDbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = "......";
         });

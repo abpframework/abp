@@ -6,6 +6,11 @@
     public interface IObjectMapper
     {
         /// <summary>
+        /// Gets the underlying <see cref="IAutoObjectMappingProvider"/> object that is used for auto object mapping.
+        /// </summary>
+        IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
+
+        /// <summary>
         /// Converts an object to another. Creates a new object of <see cref="TDestination"/>.
         /// </summary>
         /// <typeparam name="TDestination">Type of the destination object</typeparam>
@@ -22,6 +27,14 @@
         /// <param name="destination">Destination object</param>
         /// <returns>Returns the same <see cref="destination"/> object after mapping operation</returns>
         TDestination Map<TSource, TDestination>(TSource source, TDestination destination);
+    }
+
+    /// <summary>
+    /// Defines a simple interface to automatically map objects for a specific context.
+    /// </summary>
+    public interface IObjectMapper<TContext> : IObjectMapper
+    {
+
     }
 
     /// <summary>

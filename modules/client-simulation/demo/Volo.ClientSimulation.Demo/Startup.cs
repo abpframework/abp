@@ -7,14 +7,9 @@ namespace Volo.ClientSimulation.Demo
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<ClientSimulationDemoModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<ClientSimulationDemoModule>();
         }
 
         public void Configure(IApplicationBuilder app)

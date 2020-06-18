@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.InProcess;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
@@ -11,8 +11,6 @@ namespace Volo.ClientSimulation.Demo
     {
         public static int Main(string[] args)
         {
-            CurrentDirectoryHelpers.SetCurrentDirectory();
-
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -23,7 +21,7 @@ namespace Volo.ClientSimulation.Demo
             try
             {
                 Log.Information("Starting web host.");
-                BuildWebHostInternal(args).Run();
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -37,14 +35,13 @@ namespace Volo.ClientSimulation.Demo
             }
         }
 
-        public static IWebHost BuildWebHostInternal(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIIS()
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .Build();
+        internal static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .UseAutofac()
+                .UseSerilog();
     }
 }

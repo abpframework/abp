@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.IdentityServer
+﻿using Volo.Abp.Testing;
+
+namespace Volo.Abp.IdentityServer
 {
     public class AbpIdentityServerDomainTestBase : AbpIntegratedTest<AbpIdentityServerDomainTestModule>
     {

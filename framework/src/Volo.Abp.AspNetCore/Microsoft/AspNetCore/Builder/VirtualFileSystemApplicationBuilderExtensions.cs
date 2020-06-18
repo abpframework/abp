@@ -5,9 +5,9 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class VirtualFileSystemApplicationBuilderExtensions
     {
-        public static void UseVirtualFiles(this IApplicationBuilder app)
+        public static IApplicationBuilder UseVirtualFiles(this IApplicationBuilder app)
         {
-            app.UseStaticFiles(
+            return app.UseStaticFiles(
                 new StaticFileOptions
                 {
                     FileProvider = app.ApplicationServices.GetRequiredService<IWebContentFileProvider>()

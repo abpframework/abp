@@ -7,7 +7,7 @@
     factory(jQuery);
   }
 }(function (jQuery) {
-  ﻿// Persian
+  // Persian
   // Use DIR attribute for RTL text in Persian Language for ABBR tag .
   // By MB.seifollahi@gmail.com
   jQuery.timeago.settings.strings = {

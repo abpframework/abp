@@ -60,7 +60,7 @@ namespace Volo.Blogging.Tagging
             var tag = await TagRepository.FindByNameAsync(BloggingTestData.Blog1Id, BloggingTestData.Tag1Name);
             var usageCount = tag.UsageCount;
 
-            TagRepository.DecreaseUsageCountOfTags(new List<Guid>()
+            await TagRepository.DecreaseUsageCountOfTagsAsync(new List<Guid>()
             {
                 tag.Id
             });

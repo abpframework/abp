@@ -7,11 +7,13 @@ namespace Volo.Abp.AuditLogging.MongoDB
     {
         public static void ConfigureAuditLogging(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AuditLoggingMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new AuditLoggingMongoModelBuilderConfigurationOptions();
+            var options = new AuditLoggingMongoModelBuilderConfigurationOptions(
+                AbpAuditLoggingDbProperties.DbTablePrefix
+                );
 
             optionsAction?.Invoke(options);
 

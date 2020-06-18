@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -36,9 +37,11 @@ namespace Volo.Blogging.Tagging
             return await DbSet.Where(t => ids.Contains(t.Id)).ToListAsync();
         }
 
-        public void DecreaseUsageCountOfTags(List<Guid> ids)
+        public async Task DecreaseUsageCountOfTagsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
         {
-            var tags = DbSet.Where(t => ids.Any(id => id == t.Id));
+            var tags = await DbSet
+                .Where(t => ids.Any(id => id == t.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             foreach (var tag in tags)
             {

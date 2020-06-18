@@ -18,6 +18,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             string sorting,
             int skipCount,
             int maxResultCount,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );

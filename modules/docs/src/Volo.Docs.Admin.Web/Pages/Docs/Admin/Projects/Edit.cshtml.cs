@@ -14,7 +14,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 {
-    public class EditModel : AbpPageModel
+    public class EditModel : DocsAdminPageModel
     {
         [BindProperty]
         public EditGithubProjectViewModel GithubProject { get; set; }
@@ -29,7 +29,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             _projectAppService = projectAppService;
         }
 
-        public async Task<ActionResult> OnGetAsync(Guid id)
+        public virtual async Task<ActionResult> OnGetAsync(Guid id)
         {
             var project = await _projectAppService.GetAsync(id);
 
@@ -42,7 +42,7 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             throw new BusinessException("UnknowDocumentSourceExceptionMessage");
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             if (GithubProject != null)
             {
@@ -95,6 +95,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
             [StringLength(ProjectConsts.MaxNavigationDocumentNameLength)]
             public string NavigationDocumentName { get; set; }
+
+            [StringLength(ProjectConsts.MaxParametersDocumentNameLength)]
+            public string ParametersDocumentName { get; set; }
 
             [StringLength(ProjectConsts.MaxVersionNameLength)]
             public string MinimumVersion { get; set; }

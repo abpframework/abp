@@ -23,7 +23,11 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public IServiceProvider ServiceProvider { get; set; }
         protected readonly object ServiceProviderLock = new object();
+
         protected TService LazyGetRequiredService<TService>(ref TService reference)
+            => LazyGetRequiredService(typeof(TService), ref reference);
+
+        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
         {
             if (reference == null)
             {
@@ -31,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 {
                     if (reference == null)
                     {
-                        reference = ServiceProvider.GetRequiredService<TService>();
+                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
                     }
                 }
             }
@@ -39,42 +43,76 @@ namespace Volo.Abp.AspNetCore.Mvc
             return reference;
         }
 
-        public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
+        protected IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
         private IUnitOfWorkManager _unitOfWorkManager;
 
-        public IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
+        protected Type ObjectMapperContext { get; set; }
+        protected IObjectMapper ObjectMapper
+        {
+            get
+            {
+                if (_objectMapper != null)
+                {
+                    return _objectMapper;
+                }
+
+                if (ObjectMapperContext == null)
+                {
+                    return LazyGetRequiredService(ref _objectMapper);
+                }
+
+                return LazyGetRequiredService(
+                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
+                    ref _objectMapper
+                );
+            }
+        }
         private IObjectMapper _objectMapper;
 
-        public IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);
+        protected IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);
         private IGuidGenerator _guidGenerator;
 
-        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        protected ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
         private ILoggerFactory _loggerFactory;
 
-        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
+        protected ILogger Logger => _lazyLogger.Value;
+        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+
+        protected ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
         private ICurrentUser _currentUser;
 
-        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+        protected ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
         private ICurrentTenant _currentTenant;
 
-        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
+        protected IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
         private IAuthorizationService _authorizationService;
 
         protected IUnitOfWork CurrentUnitOfWork => UnitOfWorkManager?.Current;
 
-        public IClock Clock => LazyGetRequiredService(ref _clock);
+        protected IClock Clock => LazyGetRequiredService(ref _clock);
         private IClock _clock;
 
-        public IModelStateValidator ModelValidator => LazyGetRequiredService(ref _modelValidator);
+        protected IModelStateValidator ModelValidator => LazyGetRequiredService(ref _modelValidator);
         private IModelStateValidator _modelValidator;
 
-        public IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
+        protected IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
         private IFeatureChecker _featureChecker;
 
-        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        protected IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
         private IStringLocalizerFactory _stringLocalizerFactory;
 
-        public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
+        protected IStringLocalizer L
+        {
+            get
+            {
+                if (_localizer == null)
+                {
+                    _localizer = CreateLocalizer();
+                }
+
+                return _localizer;
+            }
+        }
         private IStringLocalizer _localizer;
 
         protected Type LocalizationResource
@@ -95,7 +133,20 @@ namespace Volo.Abp.AspNetCore.Mvc
             ModelValidator?.Validate(ModelState);
         }
 
-        protected ILogger Logger => _lazyLogger.Value;
-        private Lazy<ILogger> _lazyLogger => new Lazy<ILogger>(() => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance, true);
+        protected virtual IStringLocalizer CreateLocalizer()
+        {
+            if (LocalizationResource != null)
+            {
+                return StringLocalizerFactory.Create(LocalizationResource);
+            }
+
+            var localizer = StringLocalizerFactory.CreateDefaultOrNull();
+            if (localizer == null)
+            {
+                throw new AbpException($"Set {nameof(LocalizationResource)} or define the default localization resource type (by configuring the {nameof(AbpLocalizationOptions)}.{nameof(AbpLocalizationOptions.DefaultResourceType)}) to be able to use the {nameof(L)} object!");
+            }
+
+            return localizer;
+        }
     }
 }

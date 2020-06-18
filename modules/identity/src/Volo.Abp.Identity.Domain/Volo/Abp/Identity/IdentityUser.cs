@@ -8,12 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IMapTo<UserEto>
+    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -34,7 +33,7 @@ namespace Volo.Abp.Identity
         public virtual string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the Surame for the user.
+        /// Gets or sets the Surname for the user.
         /// </summary>
         public virtual string Surname { get; set; }
 
@@ -125,21 +124,26 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
+        /// <summary>
+        /// Navigation property for this organization units.
+        /// </summary>
+        public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; }
+
         protected IdentityUser()
         {
-            ExtraProperties = new Dictionary<string, object>();
         }
 
-        public IdentityUser(Guid id, [NotNull] string userName, string email = null, Guid? tenantId = null)
+        public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
         {
             Check.NotNull(userName, nameof(userName));
+            Check.NotNull(email, nameof(email));
 
             Id = id;
             TenantId = tenantId;
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
             Email = email;
-            NormalizedEmail = email?.ToUpperInvariant();
+            NormalizedEmail = email.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
             SecurityStamp = Guid.NewGuid().ToString();
 
@@ -147,6 +151,7 @@ namespace Volo.Abp.Identity
             Claims = new Collection<IdentityUserClaim>();
             Logins = new Collection<IdentityUserLogin>();
             Tokens = new Collection<IdentityUserToken>();
+            OrganizationUnits = new Collection<IdentityUserOrganizationUnit>();
 
             ExtraProperties = new Dictionary<string, object>();
         }
@@ -276,40 +281,44 @@ namespace Volo.Abp.Identity
             Tokens.RemoveAll(t => t.LoginProvider == loginProvider && t.Name == name);
         }
 
+        public virtual void AddOrganizationUnit(Guid organizationUnitId)
+        {
+            if (IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.Add(
+                new IdentityUserOrganizationUnit(
+                    Id,
+                    organizationUnitId,
+                    TenantId
+                )
+            );
+        }
+
+        public virtual void RemoveOrganizationUnit(Guid organizationUnitId)
+        {
+            if (!IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.RemoveAll(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
+        }
+
+        public virtual bool IsInOrganizationUnit(Guid organizationUnitId)
+        {
+            return OrganizationUnits.Any(
+                ou => ou.OrganizationUnitId == organizationUnitId
+            );
+        }
+
         public override string ToString()
         {
             return $"{base.ToString()}, UserName = {UserName}";
-        }
-
-        UserEto IMapTo<UserEto>.MapTo()
-        {
-            //TODO: Instead, consider to user automapper (but it makes dependency just for a small code part)??
-
-            return new UserEto
-            {
-                Name = Name,
-                Email = Email,
-                EmailConfirmed = EmailConfirmed,
-                Id = Id,
-                PhoneNumber = PhoneNumber,
-                PhoneNumberConfirmed = PhoneNumberConfirmed,
-                Surname = Surname,
-                TenantId = TenantId,
-                UserName = UserName
-            };
-        }
-
-        void IMapTo<UserEto>.MapTo(UserEto destination)
-        {
-            destination.Name = Name;
-            destination.Email = Email;
-            destination.EmailConfirmed = EmailConfirmed;
-            destination.Id = Id;
-            destination.PhoneNumber = PhoneNumber;
-            destination.PhoneNumberConfirmed = PhoneNumberConfirmed;
-            destination.Surname = Surname;
-            destination.TenantId = TenantId;
-            destination.UserName = UserName;
         }
     }
 }

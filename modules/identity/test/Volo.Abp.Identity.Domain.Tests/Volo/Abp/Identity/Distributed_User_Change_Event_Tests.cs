@@ -30,8 +30,8 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task Should_Register_Handler()
         {
-            var options = GetRequiredService<IOptions<DistributedEventBusOptions>>().Value;
-            options.EtoMappings.ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value == typeof(UserEto));
+            var options = GetRequiredService<IOptions<AbpDistributedEventBusOptions>>().Value;
+            options.EtoMappings.ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value.EtoType == typeof(UserEto));
             options.Handlers.ShouldContain(h => h == typeof(DistributedUserUpdateHandler));
         }
 

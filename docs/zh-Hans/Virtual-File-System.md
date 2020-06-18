@@ -1,6 +1,6 @@
 ## 虚拟文件系统
 
-虚拟文件系统使得管理物理上不存在于文件系统中(磁盘)的文件成为可能. 它主要用于将(js, css, image, cshtml ...)文件嵌入到程序集中, 并在运行时将它们象物理文件一样使用.
+虚拟文件系统使得管理物理上不存在于文件系统中(磁盘)的文件成为可能. 它主要用于将(js, css, image...)文件嵌入到程序集中, 并在运行时将它们象物理文件一样使用.
 
 ### Volo.Abp.VirtualFileSystem nuget包
 
@@ -35,17 +35,18 @@ namespace MyCompany.MyProject
 
 ![build-action-embedded-resource-sample](images/build-action-embedded-resource-sample.png)
 
-如果需要添加多个文件, 这样做会很乏味. 作为选择， 你可以直接编辑 **.csproj** 文件:
+如果需要添加多个文件, 这样做会很乏味. 作为选择, 你可以直接编辑 **.csproj** 文件:
 
 ````C#
 <ItemGroup>
-  <None Remove="MyResources\**\*.*" />
+  <EmbeddedResource Include="MyResources\**\*.*" />
+  <Content Remove="MyResources\**\*.*" />
 </ItemGroup>
 ````
 
 此配置以递归方式添加项目的 **MyResources** 文件夹下的所有文件(包括将来新添加的文件).
 
-然后需要使用 `VirtualFileSystemOptions` 来配置模块, 以便将嵌入式文件注册到虚拟文件系统.  例如:
+然后需要使用 `AbpVirtualFileSystemOptions` 来配置模块, 以便将嵌入式文件注册到虚拟文件系统.  例如:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -59,10 +60,10 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 //Register all embedded files of this assembly to the virtual file system
-                options.FileSets.AddEmbedded<MyModule>();
+                options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
             });
 
             //...
@@ -74,8 +75,10 @@ namespace MyCompany.MyProject
 `AddEmbedded` 扩展方法需要一个类, 从给定类的程序集中查找所有嵌入文件, 并将它们注册到虚拟文件系统. 它还有更简洁的写法:
 
 ````C#
-options.FileSets.Add(new EmbeddedFileSet(typeof(MyModule).Assembly));
+options.FileSets.Add(new EmbeddedFileSet(typeof(MyModule).Assembly), "YourRootNameSpace");
 ````
+
+> "YourRootNameSpace" 是项目的根命名空间名字. 如果你的项目的根命名空间名字为空,则无需传递此参数.
 
 #### 获取虚拟文件: IVirtualFileProvider
 
@@ -123,7 +126,7 @@ public class MyWebAppModule : AbpModule
 
         if (hostingEnvironment.IsDevelopment()) //only for development time
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 //ReplaceEmbeddedByPhysical gets the root folder of the MyModule project
                 options.FileSets.ReplaceEmbeddedByPhysical<MyModule>(
@@ -144,7 +147,7 @@ public class MyWebAppModule : AbpModule
 虚拟文件系统与 ASP.NET Core 无缝集成:
 
 * 虚拟文件可以像Web应用程序上的物理(静态)文件一样使用.
-* Razor Views, Razor Pages, js, css, 图像文件和所有其他Web内容可以嵌入到程序集中并像物理文件一样使用.
+* Js, css, 图像文件和所有其他Web内容可以嵌入到程序集中并像物理文件一样使用.
 * 应用程序(或其他模块)可以覆盖模块的虚拟文件, 就像将具有相同名称和扩展名的文件放入虚拟文件的同一文件夹中一样.
 
 #### 虚拟文件中间件
@@ -158,9 +161,3 @@ app.UseVirtualFiles();
 在静态文件中间件之后添加虚拟文件中间件, 使得通过在虚拟文件相同的位置放置物理文件, 从而用物理文件覆盖虚拟文件成为可能.
 
 > 虚拟文件中间件可以虚拟wwwroot文件夹中的内容 - 就像静态文件一样.
-
-#### Views & Pages
-
-无需任何配置即可在应用程序中使用嵌入式的 razor Views/pages. 只需要将它们放置在要开发的模块中的标准 Views/Pages 虚拟文件夹即可.
-
-如果模块/应用程序将新文件放置同一位置, 则会覆盖嵌入式的 Views/Pages.

@@ -14,7 +14,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 999999999;
+    z-index: 102;
     background-color: #fff;
     opacity: .8;
     transition: opacity .25s;

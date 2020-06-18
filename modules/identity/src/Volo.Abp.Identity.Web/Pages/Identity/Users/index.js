@@ -15,6 +15,7 @@
             order: [[1, "asc"]],
 			processing: true,
 			serverSide: true,
+            scrollX: true,
 			paging: true,
             ajax: abp.libs.datatables.createAjax(_identityUserAppService.getList),
             columnDefs: [
@@ -36,7 +37,7 @@
                                     visible: abp.auth.isGranted('AbpIdentity.Users.ManagePermissions'),
                                     action: function (data) {
                                         _permissionsModal.open({
-                                            providerName: 'User',
+                                            providerName: 'U',
                                             providerKey: data.record.id
                                         });
                                     }

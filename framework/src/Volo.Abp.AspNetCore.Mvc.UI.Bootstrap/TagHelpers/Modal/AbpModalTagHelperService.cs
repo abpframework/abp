@@ -18,9 +18,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             var sb = new StringBuilder();
 
             var attritubutes = output.Attributes.Select(a => " " + a.Name + "=\"" + a.Value + "\" ").ToList();
-            var attritubutesAsJoin = string.Join(" ", attritubutes.ToArray()); 
+            var attritubutesAsJoin = string.Join(" ", attritubutes.ToArray());
 
-            sb.AppendLine("<div class=\""+ GetModalClasses() + "\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" "+ attritubutesAsJoin + ">");
+            sb.AppendLine("<div class=\"" + GetModalClasses() + "\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" " + attritubutesAsJoin + GetDataAttributes() + ">");
             sb.AppendLine("    <div class=\"" + GetModalDialogClasses() + "\" role=\"document\">");
             sb.AppendLine("        <div class=\"" + GetModalContentClasses() + "\">");
 
@@ -54,6 +54,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         protected virtual string GetModalContentClasses()
         {
             return "modal-content";
+        }
+
+        protected virtual string GetDataAttributes()
+        {
+            if (TagHelper.Static == true)
+            {
+                return "data-backdrop=\"static\" ";
+            }
+            return string.Empty;
         }
 
         protected virtual string CreatePostContent()

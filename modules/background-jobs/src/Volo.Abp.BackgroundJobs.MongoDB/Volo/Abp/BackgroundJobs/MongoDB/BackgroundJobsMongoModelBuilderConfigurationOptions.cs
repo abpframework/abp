@@ -3,11 +3,11 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    public class BackgroundJobsMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
+    public class BackgroundJobsMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
     {
         public BackgroundJobsMongoModelBuilderConfigurationOptions(
-            [NotNull] string tablePrefix = BackgroundJobsConsts.DefaultDbTablePrefix)
-            : base(tablePrefix)
+            [NotNull] string collectionPrefix = "")
+            : base(collectionPrefix)
         {
         }
     }

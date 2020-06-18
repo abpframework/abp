@@ -17,16 +17,16 @@ namespace Volo.Abp.EventBus.Distributed
 
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        protected DistributedEventBusOptions DistributedEventBusOptions { get; }
+        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
 
         public LocalDistributedEventBus(
             ILocalEventBus localEventBus,
             IServiceScopeFactory serviceScopeFactory,
-            IOptions<DistributedEventBusOptions> distributedEventBusOptions)
+            IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions)
         {
             _localEventBus = localEventBus;
             ServiceScopeFactory = serviceScopeFactory;
-            DistributedEventBusOptions = distributedEventBusOptions.Value;
+            AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             Subscribe(distributedEventBusOptions.Value.Handlers);
         }
 

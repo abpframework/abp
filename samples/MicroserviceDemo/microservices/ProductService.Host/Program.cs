@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.InProcess;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
@@ -13,8 +13,6 @@ namespace ProductService.Host
     {
         public static int Main(string[] args)
         {
-            CurrentDirectoryHelpers.SetCurrentDirectory();
-
             //TODO: Temporary: it's not good to read appsettings.json here just to configure logging
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -25,6 +23,7 @@ namespace ProductService.Host
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
                 .Enrich.WithProperty("Application", "ProductService")
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
@@ -40,7 +39,7 @@ namespace ProductService.Host
             try
             {
                 Log.Information("Starting IdentityService.Host.");
-                BuildWebHostInternal(args).Run();
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -54,14 +53,13 @@ namespace ProductService.Host
             }
         }
 
-        public static IWebHost BuildWebHostInternal(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIIS()
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .Build();
+        internal static IHostBuilder CreateHostBuilder(string[] args) =>
+            Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .UseAutofac()
+                .UseSerilog();
     }
 }

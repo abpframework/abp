@@ -2,14 +2,15 @@
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
     public abstract class AbpAspNetCoreMvcUiBootstrapDemoTestBase : AbpAspNetCoreTestBase<TestStartup>
     {
-        protected override IWebHostBuilder CreateWebHostBuilder()
+        protected override IHostBuilder CreateHostBuilder()
         {
-            return base.CreateWebHostBuilder()
+            return base.CreateHostBuilder()
                 .UseContentRoot(CalculateContentRootPath());
         }
 

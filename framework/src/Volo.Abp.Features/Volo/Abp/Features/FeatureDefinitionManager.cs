@@ -16,12 +16,12 @@ namespace Volo.Abp.Features
         protected IDictionary<string, FeatureDefinition> FeatureDefinitions => _lazyFeatureDefinitions.Value;
         private readonly Lazy<Dictionary<string, FeatureDefinition>> _lazyFeatureDefinitions;
 
-        protected FeatureOptions Options { get; }
+        protected AbpFeatureOptions Options { get; }
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public FeatureDefinitionManager(
-            IOptions<FeatureOptions> options,
+            IOptions<AbpFeatureOptions> options,
             IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;

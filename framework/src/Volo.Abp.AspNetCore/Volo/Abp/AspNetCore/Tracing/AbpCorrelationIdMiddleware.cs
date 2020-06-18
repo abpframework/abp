@@ -8,10 +8,10 @@ namespace Volo.Abp.AspNetCore.Tracing
 {
     public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
     {
-        private readonly CorrelationIdOptions _options;
+        private readonly AbpCorrelationIdOptions _options;
         private readonly ICorrelationIdProvider _correlationIdProvider;
 
-        public AbpCorrelationIdMiddleware(IOptions<CorrelationIdOptions> options,
+        public AbpCorrelationIdMiddleware(IOptions<AbpCorrelationIdOptions> options,
             ICorrelationIdProvider correlationIdProvider)
         {
             _options = options.Value;
@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Tracing
 
         protected virtual void CheckAndSetCorrelationIdOnResponse(
             HttpContext httpContext,
-            CorrelationIdOptions options,
+            AbpCorrelationIdOptions options,
             string correlationId)
         {
             if (httpContext.Response.HasStarted)

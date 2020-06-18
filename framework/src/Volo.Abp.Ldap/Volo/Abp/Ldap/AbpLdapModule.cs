@@ -12,7 +12,7 @@ namespace Volo.Abp.Ldap
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
-            Configure<LdapOptions>(configuration.GetSection("LDAP"));
+            Configure<AbpLdapOptions>(configuration.GetSection("LDAP"));
         }
     }
 }

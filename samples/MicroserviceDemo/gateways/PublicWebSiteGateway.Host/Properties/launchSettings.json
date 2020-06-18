@@ -18,7 +18,7 @@
     "PublicWebSiteGateway.Host": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "http://localhost:64897",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

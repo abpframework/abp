@@ -13,32 +13,41 @@ namespace Volo.Abp.Cli.Commands
     public class HelpCommand : IConsoleCommand, ITransientDependency
     {
         public ILogger<HelpCommand> Logger { get; set; }
-        protected CliOptions CliOptions { get; }
+        protected AbpCliOptions AbpCliOptions { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
-        public HelpCommand(IOptions<CliOptions> cliOptions,
+        public HelpCommand(IOptions<AbpCliOptions> cliOptions,
             IHybridServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Logger = NullLogger<HelpCommand>.Instance;
-            CliOptions = cliOptions.Value;
+            AbpCliOptions = cliOptions.Value;
         }
 
-        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             if (string.IsNullOrWhiteSpace(commandLineArgs.Target))
             {
                 Logger.LogInformation(GetUsageInfo());
-                return;
+                return Task.CompletedTask;
             }
 
-            var commandType = CliOptions.Commands[commandLineArgs.Target];
+            if (!AbpCliOptions.Commands.ContainsKey(commandLineArgs.Target))
+            {
+                Logger.LogWarning($"There is no command named {commandLineArgs.Target}.");
+                Logger.LogInformation(GetUsageInfo());
+                return Task.CompletedTask;
+            }
+
+            var commandType = AbpCliOptions.Commands[commandLineArgs.Target];
 
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var command = (IConsoleCommand) scope.ServiceProvider.GetRequiredService(commandType);
                 Logger.LogInformation(command.GetUsageInfo());
             }
+
+            return Task.CompletedTask;
         }
 
         public string GetUsageInfo()
@@ -53,7 +62,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Command List:");
             sb.AppendLine("");
 
-            foreach (var command in CliOptions.Commands.ToArray())
+            foreach (var command in AbpCliOptions.Commands.ToArray())
             {
                 string shortDescription;
 
@@ -82,7 +91,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return string.Empty;
+            return "Show command line help. Write ` abp help <command> `";
         }
     }
 }

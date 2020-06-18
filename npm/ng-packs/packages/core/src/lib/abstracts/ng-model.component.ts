@@ -1,27 +1,48 @@
 import { ControlValueAccessor } from '@angular/forms';
-import { ChangeDetectorRef, Component, Injector, Input, Type } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, Input } from '@angular/core';
 
-@Component({ selector: 'abp-abstract-ng-model', template: '' })
-export class AbstractNgModelComponent<T = any> implements ControlValueAccessor {
-  @Input() disabled: boolean;
+// Not an abstract class on purpose. Do not change!
+// tslint:disable-next-line: use-component-selector
+@Component({ template: '' })
+export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAccessor {
+  protected _value: T;
+  protected cdRef: ChangeDetectorRef;
+  onChange: (value: T) => {};
+  onTouched: () => {};
 
-  @Input() set value(value: T) {
+  @Input()
+  disabled: boolean;
+
+  @Input()
+  readonly: boolean;
+
+  @Input()
+  valueFn: (value: U, previousValue?: T) => T = value => (value as any) as T;
+
+  @Input()
+  valueLimitFn: (value: T, previousValue?: T) => any = value => false;
+
+  @Input()
+  set value(value: T) {
+    value = this.valueFn((value as any) as U, this._value);
+
+    if (this.valueLimitFn(value, this._value) !== false || this.readonly) return;
+
     this._value = value;
     this.notifyValueChange();
   }
 
   get value(): T {
+    return this._value || this.defaultValue;
+  }
+
+  get defaultValue(): T {
     return this._value;
   }
 
-  onChange: (value: T) => {};
-  onTouched: () => {};
-
-  protected _value: T;
-  protected cdRef: ChangeDetectorRef;
-
   constructor(public injector: Injector) {
-    this.cdRef = injector.get<ChangeDetectorRef>(ChangeDetectorRef as Type<ChangeDetectorRef>);
+    // tslint:disable-next-line: deprecation
+    this.cdRef = injector.get(ChangeDetectorRef);
   }
 
   notifyValueChange(): void {
@@ -31,8 +52,8 @@ export class AbstractNgModelComponent<T = any> implements ControlValueAccessor {
   }
 
   writeValue(value: T): void {
-    this._value = value;
-    setTimeout(() => this.cdRef.detectChanges(), 0);
+    this._value = this.valueLimitFn(value, this._value) || value;
+    setTimeout(() => this.cdRef.markForCheck(), 0);
   }
 
   registerOnChange(fn: any): void {

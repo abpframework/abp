@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    [ConnectionStringName(AbpTenantManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
     public interface ITenantManagementDbContext : IEfCoreDbContext
     {
         DbSet<Tenant> Tenants { get; set; }

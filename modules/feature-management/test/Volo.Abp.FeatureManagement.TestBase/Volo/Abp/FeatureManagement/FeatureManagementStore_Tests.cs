@@ -25,13 +25,13 @@ namespace Volo.Abp.FeatureManagement
         public async Task GetOrNullAsync()
         {
             // Act
-            (await FeatureManagementStore.GetOrNullAsync(Guid.NewGuid().ToString("N"),
+            (await FeatureManagementStore.GetOrNullAsync(Guid.NewGuid().ToString(),
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).ShouldBeNull();
+                TestEditionIds.Regular.ToString())).ShouldBeNull();
 
             (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).ShouldNotBeNull();
+                TestEditionIds.Regular.ToString())).ShouldNotBeNull();
         }
 
         [Fact]
@@ -40,17 +40,17 @@ namespace Volo.Abp.FeatureManagement
             // Arrange
             (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).ShouldNotBeNull();
+                TestEditionIds.Regular.ToString())).ShouldNotBeNull();
 
             // Act
             await FeatureManagementStore.DeleteAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"));
+                TestEditionIds.Regular.ToString());
 
             // Assert
             (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).ShouldBeNull();
+                TestEditionIds.Regular.ToString())).ShouldBeNull();
         }
 
         [Fact]
@@ -59,18 +59,18 @@ namespace Volo.Abp.FeatureManagement
             // Arrange
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).Value.ShouldBe(true.ToString().ToLowerInvariant());
+                TestEditionIds.Regular.ToString())).Value.ShouldBe(true.ToString().ToLowerInvariant());
 
             // Act
             await FeatureManagementStore.SetAsync(TestFeatureDefinitionProvider.SocialLogins,
                 false.ToString().ToUpperInvariant(),
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"));
+                TestEditionIds.Regular.ToString());
 
             // Assert
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).Value.ShouldBe(false.ToString().ToUpperInvariant());
+                TestEditionIds.Regular.ToString())).Value.ShouldBe(false.ToString().ToUpperInvariant());
         }
 
         [Fact]
@@ -79,18 +79,18 @@ namespace Volo.Abp.FeatureManagement
             // Arrange
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).ShouldNotBeNull();
+                TestEditionIds.Regular.ToString())).ShouldNotBeNull();
 
             // Act
             await FeatureManagementStore.DeleteAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"));
+                TestEditionIds.Regular.ToString());
 
 
             // Assert
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"))).ShouldBeNull();
+                TestEditionIds.Regular.ToString())).ShouldBeNull();
 
 
         }

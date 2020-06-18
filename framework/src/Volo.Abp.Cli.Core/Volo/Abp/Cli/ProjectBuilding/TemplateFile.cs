@@ -6,13 +6,16 @@
 
         public string LatestVersion { get; }
 
+        public string RepositoryNugetVersion { get; }
+
         public byte[] FileBytes { get; }
 
-        public TemplateFile(byte[] fileBytes, string version, string latestVersion)
+        public TemplateFile(byte[] fileBytes, string version, string latestVersion, string repositoryNugetVersion)
         {
             FileBytes = fileBytes;
             Version = version;
             LatestVersion = latestVersion;
+            RepositoryNugetVersion = repositoryNugetVersion;
         }
     }
 }

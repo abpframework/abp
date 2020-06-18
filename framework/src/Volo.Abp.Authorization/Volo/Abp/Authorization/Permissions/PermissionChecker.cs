@@ -27,16 +27,23 @@ namespace Volo.Abp.Authorization.Permissions
             PermissionValueProviderManager = permissionValueProviderManager;
         }
 
-        public virtual Task<bool> IsGrantedAsync(string name)
+        public virtual async Task<bool> IsGrantedAsync(string name)
         {
-            return IsGrantedAsync(PrincipalAccessor.Principal, name);
+            return await IsGrantedAsync(PrincipalAccessor.Principal, name);
         }
 
-        public virtual async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
+        public virtual async Task<bool> IsGrantedAsync(
+            ClaimsPrincipal claimsPrincipal, 
+            string name)
         {
             Check.NotNull(name, nameof(name));
 
             var permission = PermissionDefinitionManager.Get(name);
+
+            if (!permission.IsEnabled)
+            {
+                return false;
+            }
 
             var multiTenancySide = claimsPrincipal?.GetMultiTenancySide()
                                    ?? CurrentTenant.GetMultiTenancySide();

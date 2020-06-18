@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Http;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
+namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     /// <summary>
     /// This interface can be implemented to convert an <see cref="Exception"/> object to an <see cref="RemoteServiceErrorInfo"/> object. 

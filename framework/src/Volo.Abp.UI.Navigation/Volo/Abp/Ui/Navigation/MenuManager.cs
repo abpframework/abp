@@ -9,11 +9,11 @@ namespace Volo.Abp.UI.Navigation
 {
     public class MenuManager : IMenuManager, ITransientDependency
     {
-        protected NavigationOptions Options { get; }
+        protected AbpNavigationOptions Options { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
         public MenuManager(
-            IOptions<NavigationOptions> options, 
+            IOptions<AbpNavigationOptions> options, 
             IHybridServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;

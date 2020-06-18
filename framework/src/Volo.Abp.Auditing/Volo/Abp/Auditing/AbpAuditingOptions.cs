@@ -31,6 +31,12 @@ namespace Volo.Abp.Auditing
         /// </summary>
         public bool IsEnabledForAnonymousUsers { get; set; }
 
+        /// <summary>
+        /// Audit log on exceptions.
+        /// Default: true.
+        /// </summary>
+        public bool AlwaysLogOnException { get; set; }
+
         public List<AuditLogContributor> Contributors { get; }
 
         public List<Type> IgnoredTypes { get; }
@@ -48,6 +54,7 @@ namespace Volo.Abp.Auditing
             IsEnabled = true;
             IsEnabledForAnonymousUsers = true;
             HideErrors = true;
+            AlwaysLogOnException = true;
 
             Contributors = new List<AuditLogContributor>();
 

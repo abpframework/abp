@@ -57,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
 
             context.Services.AddHttpClientProxies(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly);
 
-            Configure<RemoteServiceOptions>(options =>
+            Configure<AbpRemoteServiceOptions>(options =>
             {
                 options.RemoteServices.Default = new RemoteServiceConfiguration("/");
             });
@@ -67,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
         {
             var app = context.GetApplicationBuilder();
             app.UseRouting();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

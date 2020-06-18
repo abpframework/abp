@@ -2,16 +2,24 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Auditing;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.AutoMapper
 {
-    [DependsOn(typeof(AbpObjectMappingModule))]
+    [DependsOn(
+        typeof(AbpObjectMappingModule),
+        typeof(AbpObjectExtendingModule),
+        typeof(AbpAuditingModule)
+        )]
     public class AbpAutoMapperModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper();
+
             var mapperAccessor = new MapperAccessor();
             context.Services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
             context.Services.AddSingleton<MapperAccessor>(_ => mapperAccessor);

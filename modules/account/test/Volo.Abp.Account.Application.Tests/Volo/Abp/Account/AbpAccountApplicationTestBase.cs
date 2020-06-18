@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Account
+﻿using Volo.Abp.Testing;
+
+namespace Volo.Abp.Account
 {
     public class AbpAccountApplicationTestBase : AbpIntegratedTest<AbpAccountApplicationTestModule>
     {

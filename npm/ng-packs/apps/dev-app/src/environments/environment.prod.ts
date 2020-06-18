@@ -19,7 +19,4 @@ export const environment = {
       url: 'https://localhost:44305',
     },
   },
-  localization: {
-    defaultResourceName: 'MyProjectName',
-  },
 };

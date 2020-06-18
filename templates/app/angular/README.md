@@ -1,6 +1,6 @@
 # MyProjectName
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.3.
+This is a startup project based on the ABP framework. For more information, visit <a href="https://abp.io/" target="_blank">abp.io</a>
 
 ## Development server
 

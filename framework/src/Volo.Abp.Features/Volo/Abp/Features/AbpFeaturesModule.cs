@@ -23,7 +23,7 @@ namespace Volo.Abp.Features
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<FeatureOptions>(options =>
+            context.Services.Configure<AbpFeatureOptions>(options =>
             {
                 options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
                 options.ValueProviders.Add<EditionFeatureValueProvider>();
@@ -43,7 +43,7 @@ namespace Volo.Abp.Features
                 }
             });
 
-            services.Configure<FeatureOptions>(options =>
+            services.Configure<AbpFeatureOptions>(options =>
             {
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });

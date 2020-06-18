@@ -10,6 +10,7 @@ using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.Uow;
 
 namespace AuthServer.Host
@@ -57,6 +58,7 @@ namespace AuthServer.Host
             };
 
             await CreateApiResourceAsync("IdentityService", commonApiUserClaims);
+            await CreateApiResourceAsync("TenantManagementService", commonApiUserClaims);
             await CreateApiResourceAsync("BloggingService", commonApiUserClaims);
             await CreateApiResourceAsync("ProductService", commonApiUserClaims);
             await CreateApiResourceAsync("InternalGateway", commonApiUserClaims);
@@ -106,17 +108,18 @@ namespace AuthServer.Host
 
             await CreateClientAsync(
                 "console-client-demo",
-                new[] { "BloggingService", "IdentityService", "InternalGateway", "ProductService" },
+                new[] { "BloggingService", "IdentityService", "InternalGateway", "ProductService", "TenantManagementService" },
                 new[] { "client_credentials", "password" },
                 commonSecret,
-                permissions: new[] { IdentityPermissions.Users.Default, "ProductManagement.Product" }
+                permissions: new[] { IdentityPermissions.Users.Default, TenantManagementPermissions.Tenants.Default, "ProductManagement.Product" }
             );
             
             await CreateClientAsync(
                 "backend-admin-app-client",
-                commonScopes.Union(new[] { "BackendAdminAppGateway", "IdentityService", "ProductService" }),
+                commonScopes.Union(new[] { "BackendAdminAppGateway", "IdentityService", "ProductService", "TenantManagementService" }),
                 new[] { "hybrid" },
                 commonSecret,
+                permissions: new[] { IdentityPermissions.Users.Default, "ProductManagement.Product" },
                 redirectUri: "http://localhost:51954/signin-oidc",
                 postLogoutRedirectUri: "http://localhost:51954/signout-callback-oidc"
             );

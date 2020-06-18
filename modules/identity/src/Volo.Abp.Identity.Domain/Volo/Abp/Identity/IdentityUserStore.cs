@@ -50,22 +50,25 @@ namespace Volo.Abp.Identity
         /// </value>
         public bool AutoSaveChanges { get; set; } = true;
 
-        private readonly IIdentityRoleRepository _roleRepository;
-        private readonly IGuidGenerator _guidGenerator;
-        private readonly ILogger<IdentityRoleStore> _logger;
-        private readonly IIdentityUserRepository _userRepository;
+        protected IIdentityRoleRepository RoleRepository { get; }
+        protected IGuidGenerator GuidGenerator { get; }
+        protected ILogger<IdentityRoleStore> Logger { get; }
+        protected ILookupNormalizer LookupNormalizer { get; }
+        protected IIdentityUserRepository UserRepository { get; }
 
         public IdentityUserStore(
             IIdentityUserRepository userRepository,
             IIdentityRoleRepository roleRepository,
             IGuidGenerator guidGenerator,
             ILogger<IdentityRoleStore> logger,
+            ILookupNormalizer lookupNormalizer,
             IdentityErrorDescriber describer = null)
         {
-            _userRepository = userRepository;
-            _roleRepository = roleRepository;
-            _guidGenerator = guidGenerator;
-            _logger = logger;
+            UserRepository = userRepository;
+            RoleRepository = roleRepository;
+            GuidGenerator = guidGenerator;
+            Logger = logger;
+            LookupNormalizer = lookupNormalizer;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
@@ -163,7 +166,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.InsertAsync(user, AutoSaveChanges, cancellationToken);
+            await UserRepository.InsertAsync(user, AutoSaveChanges, cancellationToken);
 
             return IdentityResult.Success;
         }
@@ -182,11 +185,11 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _userRepository.UpdateAsync(user, AutoSaveChanges, cancellationToken);
+                await UserRepository.UpdateAsync(user, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
-                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
+                Logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
@@ -207,11 +210,11 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _userRepository.DeleteAsync(user, AutoSaveChanges, cancellationToken);
+                await UserRepository.DeleteAsync(user, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
-                _logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
+                Logger.LogWarning(ex.ToString()); //Trigger some AbpHandledException event
                 return IdentityResult.Failed(ErrorDescriber.ConcurrencyFailure());
             }
 
@@ -230,7 +233,7 @@ namespace Volo.Abp.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return _userRepository.FindAsync(Guid.Parse(userId), cancellationToken: cancellationToken);
+            return UserRepository.FindAsync(Guid.Parse(userId), cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -247,7 +250,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(normalizedUserName, nameof(normalizedUserName));
 
-            return _userRepository.FindByNormalizedUserNameAsync(normalizedUserName, includeDetails: false, cancellationToken: cancellationToken);
+            return UserRepository.FindByNormalizedUserNameAsync(normalizedUserName, includeDetails: false, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -313,14 +316,18 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(normalizedRoleName, nameof(normalizedRoleName));
 
-            var role = await _roleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
+            if (await IsInRoleAsync(user, normalizedRoleName, cancellationToken))
+            {
+                return;
+            }
 
+            var role = await RoleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
             if (role == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, "Role {0} does not exist!", normalizedRoleName));
             }
-
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
+            
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
 
             user.AddRole(role.Id);
         }
@@ -337,19 +344,15 @@ namespace Volo.Abp.Identity
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
+            Check.NotNullOrWhiteSpace(normalizedRoleName, nameof(normalizedRoleName));
 
-            if (string.IsNullOrWhiteSpace(normalizedRoleName))
-            {
-                throw new ArgumentException(nameof(normalizedRoleName) + " can not be null or whitespace");
-            }
-
-            var role = await _roleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
+            var role = await RoleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
             if (role == null)
             {
                 return;
             }
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
             
             user.RemoveRole(role.Id);
         }
@@ -366,7 +369,13 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            return await _userRepository.GetRoleNamesAsync(user.Id, cancellationToken: cancellationToken);
+            var userRoles = await UserRepository
+                .GetRoleNamesAsync(user.Id, cancellationToken: cancellationToken);
+
+            var userOrganizationUnitRoles = await UserRepository
+                .GetRoleNamesInOrganizationUnitAsync(user.Id, cancellationToken: cancellationToken);
+
+            return userRoles.Union(userOrganizationUnitRoles).ToList();
         }
 
         /// <summary>
@@ -377,26 +386,21 @@ namespace Volo.Abp.Identity
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user is a member of the given group. If the 
         /// user is a member of the group the returned value with be true, otherwise it will be false.</returns>
-        public virtual async Task<bool> IsInRoleAsync([NotNull] IdentityUser user, [NotNull] string normalizedRoleName, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> IsInRoleAsync(
+            [NotNull] IdentityUser user, 
+            [NotNull] string normalizedRoleName,
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            
             Check.NotNull(user, nameof(user));
+            Check.NotNullOrWhiteSpace(normalizedRoleName, nameof(normalizedRoleName));
 
-            if (string.IsNullOrWhiteSpace(normalizedRoleName))
-            {
-                throw new ArgumentException(nameof(normalizedRoleName) + " can not be null or whitespace");
-            }
+            var roles = await GetRolesAsync(user, cancellationToken);
 
-            var role = await _roleRepository.FindByNormalizedNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
-            if (role == null)
-            {
-                return false;
-            }
-
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, cancellationToken);
-
-            return user.IsInRole(role.Id);
+            return roles
+                .Select(r => LookupNormalizer.NormalizeName(r))
+                .Contains(normalizedRoleName);
         }
 
         /// <summary>
@@ -411,7 +415,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
 
             return user.Claims.Select(c => c.ToClaim()).ToList();
         }
@@ -430,9 +434,9 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(claims, nameof(claims));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
 
-            user.AddClaims(_guidGenerator, claims);
+            user.AddClaims(GuidGenerator, claims);
         }
 
         /// <summary>
@@ -451,7 +455,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(claim, nameof(claim));
             Check.NotNull(newClaim, nameof(newClaim));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
 
             user.ReplaceClaim(claim, newClaim);
         }
@@ -470,7 +474,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(claims, nameof(claims));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Claims, cancellationToken);
 
             user.RemoveClaims(claims);
         }
@@ -489,7 +493,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(login, nameof(login));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
 
             user.AddLogin(login);
         }
@@ -510,7 +514,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
 
             user.RemoveLogin(loginProvider, providerKey);
         }
@@ -529,7 +533,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Logins, cancellationToken);
 
             return user.Logins.Select(l => l.ToUserLoginInfo()).ToList();
         }
@@ -550,7 +554,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(loginProvider, nameof(loginProvider));
             Check.NotNull(providerKey, nameof(providerKey));
 
-            return _userRepository.FindByLoginAsync(loginProvider, providerKey, cancellationToken: cancellationToken);
+            return UserRepository.FindByLoginAsync(loginProvider, providerKey, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -597,11 +601,12 @@ namespace Volo.Abp.Identity
         /// <param name="email">The email to set.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual Task SetEmailAsync([NotNull] IdentityUser user, string email, CancellationToken cancellationToken = default)
+        public virtual Task SetEmailAsync([NotNull] IdentityUser user, [NotNull]  string email, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
+            Check.NotNull(email, nameof(email));
 
             user.Email = email;
 
@@ -670,7 +675,7 @@ namespace Volo.Abp.Identity
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return _userRepository.FindByNormalizedEmailAsync(normalizedEmail, includeDetails: false, cancellationToken: cancellationToken);
+            return UserRepository.FindByNormalizedEmailAsync(normalizedEmail, includeDetails: false, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -949,7 +954,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(claim, nameof(claim));
 
-            return await _userRepository.GetListByClaimAsync(claim, cancellationToken: cancellationToken);
+            return await UserRepository.GetListByClaimAsync(claim, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -969,7 +974,7 @@ namespace Volo.Abp.Identity
                 throw new ArgumentNullException(nameof(normalizedRoleName));
             }
 
-            return await _userRepository.GetListByNormalizedRoleNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
+            return await UserRepository.GetListByNormalizedRoleNameAsync(normalizedRoleName, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -987,7 +992,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
 
             user.SetToken(loginProvider, name, value);
         }
@@ -1000,13 +1005,13 @@ namespace Volo.Abp.Identity
         /// <param name="name">The name of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public async Task RemoveTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
+        public virtual async Task RemoveTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
 
             user.RemoveToken(loginProvider, name);
         }
@@ -1019,23 +1024,23 @@ namespace Volo.Abp.Identity
         /// <param name="name">The name of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public async Task<string> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
+        public virtual async Task<string> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            await _userRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
 
             return user.FindToken(loginProvider, name)?.Value;
         }
 
-        public Task SetAuthenticatorKeyAsync(IdentityUser user, string key, CancellationToken cancellationToken = default)
+        public virtual Task SetAuthenticatorKeyAsync(IdentityUser user, string key, CancellationToken cancellationToken = default)
         {
             return SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
         }
 
-        public Task<string> GetAuthenticatorKeyAsync(IdentityUser user, CancellationToken cancellationToken = default)
+        public virtual Task<string> GetAuthenticatorKeyAsync(IdentityUser user, CancellationToken cancellationToken = default)
         {
             return GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
         }
@@ -1100,7 +1105,7 @@ namespace Volo.Abp.Identity
             return false;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
 
         }

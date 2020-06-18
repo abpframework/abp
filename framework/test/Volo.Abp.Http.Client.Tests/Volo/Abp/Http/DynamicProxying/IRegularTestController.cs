@@ -1,14 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
     public interface IRegularTestController
     {
-        int IncrementValue(int value);
-
         Task<int> IncrementValueAsync(int value);
 
         Task GetException1Async();
+
+        Task<DateTime> GetWithDateTimeParameterAsync(DateTime dateTime1);
 
         Task<string> PostValueWithHeaderAndQueryStringAsync(string headerValue, string qsValue);
 

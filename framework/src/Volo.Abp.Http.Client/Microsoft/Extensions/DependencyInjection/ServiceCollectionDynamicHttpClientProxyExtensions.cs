@@ -8,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -24,33 +25,36 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="assembly">The assembly containing the service interfaces</param>
         /// <param name="remoteServiceConfigurationName">
         /// The name of the remote service configuration to be used by the HTTP Client proxies.
-        /// See <see cref="RemoteServiceOptions"/>.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
         /// </param>
         /// <param name="asDefaultServices">
         /// True, to register the HTTP client proxy as the default implementation for the services.
+        /// </param>
+        /// <param name="configureHttpClientBuilder">
+        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
         /// </param>
         public static IServiceCollection AddHttpClientProxies(
             [NotNull] this IServiceCollection services,
             [NotNull] Assembly assembly,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            bool asDefaultServices = true)
+            bool asDefaultServices = true,
+            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
         {
             Check.NotNull(services, nameof(assembly));
 
-            //TODO: Make a configuration option and add remoteServiceName inside it!
-            //TODO: Add option to change type filter
+            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName, configureHttpClientBuilder);
 
-            var serviceTypes = assembly.GetTypes().Where(t =>
-                t.IsInterface && t.IsPublic && typeof(IRemoteService).IsAssignableFrom(t)
-            );
+            //TODO: Make a configuration option and add remoteServiceName inside it!
+
+            var serviceTypes = assembly.GetTypes().Where(IsSuitableForDynamicClientProxying);
 
             foreach (var serviceType in serviceTypes)
             {
                 services.AddHttpClientProxy(
-                    serviceType, 
+                    serviceType,
                     remoteServiceConfigurationName,
                     asDefaultServices
-                    );
+                );
             }
 
             return services;
@@ -63,21 +67,58 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">Service collection</param>
         /// <param name="remoteServiceConfigurationName">
         /// The name of the remote service configuration to be used by the HTTP Client proxy.
-        /// See <see cref="RemoteServiceOptions"/>.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
         /// </param>
         /// <param name="asDefaultService">
         /// True, to register the HTTP client proxy as the default implementation for the service <typeparamref name="T"/>.
         /// </param>
+        /// <param name="configureHttpClientBuilder">
+        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
+        /// </param>
         public static IServiceCollection AddHttpClientProxy<T>(
             [NotNull] this IServiceCollection services,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            bool asDefaultService = true)
+            bool asDefaultService = true,
+            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
         {
+            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName, configureHttpClientBuilder);
+
             return services.AddHttpClientProxy(
                 typeof(T),
                 remoteServiceConfigurationName,
                 asDefaultService
             );
+        }
+
+        /// <summary>
+        /// Use IHttpClientFactory and polly
+        /// </summary>
+        /// <param name="services">Service collection</param>
+        /// <param name="remoteServiceConfigurationName">
+        /// The name of the remote service configuration to be used by the HTTP Client proxies.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
+        /// </param>
+        /// <param name="configureHttpClientBuilder">
+        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
+        /// </param>
+        public static IServiceCollection AddHttpClientFactoryAndPolicy(
+            [NotNull] this IServiceCollection services,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
+            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
+        {
+            var httpClientBuilder = services.AddHttpClient(remoteServiceConfigurationName);
+            if (configureHttpClientBuilder == null)
+            {
+                httpClientBuilder.AddTransientHttpErrorPolicy(builder =>
+                    // retry 3 times
+                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
+            }
+            else
+            {
+                configureHttpClientBuilder.Invoke(httpClientBuilder);
+            }
+
+            return services;
         }
 
         /// <summary>
@@ -87,7 +128,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="type">Type of the service</param>
         /// <param name="remoteServiceConfigurationName">
         /// The name of the remote service configuration to be used by the HTTP Client proxy.
-        /// See <see cref="RemoteServiceOptions"/>.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
         /// </param>
         /// <param name="asDefaultService">
         /// True, to register the HTTP client proxy as the default implementation for the service <paramref name="type"/>.
@@ -106,17 +147,14 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(type, remoteServiceConfigurationName);
             });
-            
-            //use IHttpClientFactory and polly
-            services.AddHttpClient(remoteServiceConfigurationName)
-                .AddTransientHttpErrorPolicy(builder =>
-                    // retry 3 times
-                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
 
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);
             services.AddTransient(interceptorType);
 
-            var interceptorAdapterType = typeof(CastleAbpInterceptorAdapter<>).MakeGenericType(interceptorType);
+            var interceptorAdapterType = typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(interceptorType);
+
+            var validationInterceptorAdapterType =
+                typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(typeof(ValidationInterceptor));
 
             if (asDefaultService)
             {
@@ -125,6 +163,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     serviceProvider => ProxyGeneratorInstance
                         .CreateInterfaceProxyWithoutTarget(
                             type,
+                            (IInterceptor)serviceProvider.GetRequiredService(validationInterceptorAdapterType),
                             (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                         )
                 );
@@ -137,7 +176,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     var service = ProxyGeneratorInstance
                         .CreateInterfaceProxyWithoutTarget(
                             type,
-                            (IInterceptor) serviceProvider.GetRequiredService(interceptorAdapterType)
+                            (IInterceptor)serviceProvider.GetRequiredService(validationInterceptorAdapterType),
+                            (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                         );
 
                     return Activator.CreateInstance(
@@ -147,6 +187,22 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             return services;
+        }
+
+        /// <summary>
+        /// Checks wether the type is suitable to use with the dynamic proxying.
+        /// Currently the type is checked statically against some fixed conditions.
+        /// </summary>
+        /// <param name="type">Type to check</param>
+        /// <returns>True, if the type is suitable for dynamic proxying. Otherwise false.</returns>
+        static bool IsSuitableForDynamicClientProxying(Type type)
+        {
+            //TODO: Add option to change type filter
+
+            return type.IsInterface
+                && type.IsPublic
+                && !type.IsGenericType
+                && typeof(IRemoteService).IsAssignableFrom(type);
         }
     }
 }

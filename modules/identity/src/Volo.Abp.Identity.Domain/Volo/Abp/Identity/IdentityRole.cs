@@ -100,6 +100,22 @@ namespace Volo.Abp.Identity
             Claims.RemoveAll(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
         }
 
+        public virtual void ChangeName(string name)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+
+            var oldName = Name;
+            Name = name;
+
+            AddLocalEvent(
+                new IdentityRoleNameChangedEvent
+                {
+                    IdentityRole = this,
+                    OldName = oldName
+                }
+            );
+        }
+
         public override string ToString()
         {
             return $"{base.ToString()}, Name = {Name}";

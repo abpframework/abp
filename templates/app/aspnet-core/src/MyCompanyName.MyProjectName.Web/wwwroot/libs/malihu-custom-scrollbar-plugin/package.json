@@ -21,7 +21,7 @@
   "_resolved": "https://registry.npmjs.org/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-3.1.5.tgz",
   "_shasum": "310cecc5e59415a1c29e9dfb5d2b6e01d66a29ef",
   "_spec": "malihu-custom-scrollbar-plugin@^3.1.5",
-  "_where": "D:\\Github\\abp\\templates\\app\\aspnet-core\\src\\MyCompanyName.MyProjectName.Web\\node_modules\\@abp\\malihu-custom-scrollbar-plugin",
+  "_where": "D:\\github\\abp\\templates\\app\\aspnet-core\\src\\MyCompanyName.MyProjectName.Web\\node_modules\\@abp\\malihu-custom-scrollbar-plugin",
   "author": {
     "name": "malihu",
     "url": "http://manos.malihu.gr"

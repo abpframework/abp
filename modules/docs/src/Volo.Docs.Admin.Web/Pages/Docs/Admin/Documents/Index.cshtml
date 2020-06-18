@@ -1,0 +1,52 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Docs.Admin
+@using Volo.Docs.Admin.Navigation
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Docs.Localization
+@model Volo.Docs.Admin.Pages.Docs.Admin.Documents.IndexModel
+@inject IHtmlLocalizer<DocsResource> L
+@inject IAuthorizationService Authorization
+@{
+    ViewBag.PageTitle = L["Menu:Documents"];
+}
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["Documents"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:DocumentManagement"].Value);
+    PageLayout.Content.MenuItemName = DocsMenuNames.Documents;
+}
+
+@section scripts {
+    <abp-script src="/Pages/Docs/Admin/Documents/index.js" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <h2>Filters ...</h2>
+            @*<abp-column size-md="_6" class="text-right">
+                <abp-button button-type="Primary" icon="plus" text="@L["ReIndexAllProjects"].Value" id="ReIndexAllProjects" />
+            </abp-column>*@
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="DocumentsTable" class="nowrap">
+            <thead>
+                <tr>
+                    <th>@L["Actions"]</th>
+                    <th>@L["Name"]</th>
+                    <th>@L["Version"]</th>
+                    <th>@L["LanguageCode"]</th>
+                    <th>@L["FileName"]</th>
+                    <th>@L["Format"]</th>
+                    <th>@L["CreationTime"]</th>
+                    <th>@L["LastUpdatedTime"]</th>
+                    <th>@L["LastSignificantUpdateTime"]</th>
+                    <th>@L["LastCachedTime"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

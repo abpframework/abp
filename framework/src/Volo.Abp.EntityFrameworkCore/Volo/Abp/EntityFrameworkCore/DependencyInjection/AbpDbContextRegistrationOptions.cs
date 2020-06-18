@@ -6,19 +6,19 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
-    public class AbpDbContextRegistrationOptions : CommonDbContextRegistrationOptions, IAbpDbContextRegistrationOptionsBuilder
+    public class AbpDbContextRegistrationOptions : AbpCommonDbContextRegistrationOptions, IAbpDbContextRegistrationOptionsBuilder
     {
-        public Dictionary<Type, object> EntityOptions { get; }
+        public Dictionary<Type, object> AbpEntityOptions { get; }
 
         public AbpDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
             : base(originalDbContextType, services)
         {
-            EntityOptions = new Dictionary<Type, object>();
+            AbpEntityOptions = new Dictionary<Type, object>();
         }
 
-        public void Entity<TEntity>(Action<EntityOptions<TEntity>> optionsAction) where TEntity : IEntity
+        public void Entity<TEntity>(Action<AbpEntityOptions<TEntity>> optionsAction) where TEntity : IEntity
         {
-            Services.Configure<EntityOptions>(options =>
+            Services.Configure<AbpEntityOptions>(options =>
             {
                 options.Entity(optionsAction);
             });

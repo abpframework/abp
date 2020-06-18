@@ -4,13 +4,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 {
-    [ConnectionStringName(AbpPermissionManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpPermissionManagementDbProperties.ConnectionStringName)]
     public class PermissionManagementDbContext : AbpDbContext<PermissionManagementDbContext>, IPermissionManagementDbContext
     {
-        public static string TablePrefix { get; set; } = AbpPermissionManagementConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = AbpPermissionManagementConsts.DefaultDbSchema;
-
         public DbSet<PermissionGrant> PermissionGrants { get; set; }
 
         public PermissionManagementDbContext(DbContextOptions<PermissionManagementDbContext> options)
@@ -23,7 +19,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigurePermissionManagement(TablePrefix, Schema);
+            builder.ConfigurePermissionManagement();
         }
     }
 }

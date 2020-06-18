@@ -1,12 +1,13 @@
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
     public abstract class AspNetCoreMvcTestBase : AbpAspNetCoreTestBase<Startup>
     {
-        protected override IWebHostBuilder CreateWebHostBuilder()
+        protected override IHostBuilder CreateHostBuilder()
         {
             var contentRootPath = CalculateContentRootPath(
                 "Volo.Abp.AspNetCore.Mvc.Tests.csproj",
@@ -16,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 )
             );
 
-            return base.CreateWebHostBuilder()
+            return base.CreateHostBuilder()
                 .UseContentRoot(contentRootPath);
         }
 

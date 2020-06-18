@@ -121,5 +121,17 @@ namespace Volo.Abp.Modularity
         {
             ServiceConfigurationContext.Services.PreConfigure(configureOptions);
         }
+
+        protected void PostConfigure<TOptions>(Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.PostConfigure(configureOptions);
+        }
+
+        protected void PostConfigureAll<TOptions>(Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            ServiceConfigurationContext.Services.PostConfigureAll(configureOptions);
+        }
     }
 }

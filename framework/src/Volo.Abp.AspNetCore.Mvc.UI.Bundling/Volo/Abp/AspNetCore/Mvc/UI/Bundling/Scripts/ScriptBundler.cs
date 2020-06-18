@@ -1,6 +1,6 @@
 using System;
-using Volo.Abp.AspNetCore.Mvc.UI.Minification.Scripts;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
+using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts
 {

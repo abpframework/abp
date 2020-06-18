@@ -1,6 +1,6 @@
 /*!
  * tui-editor
- * @version 1.4.3
+ * @version 1.4.7
  * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
  * @license MIT
  */
@@ -621,13 +621,13 @@ function _createTheadOrTbodyHtml(trs, wrapperNodeName) {
  * @private
  */
 function createTableHtml(renderData) {
-  var thead = [renderData[0]];
+  var thead = renderData[0] ? [renderData[0]] : [];
   var tbody = renderData.slice(1);
   var theadHtml = _createTheadOrTbodyHtml(thead, 'THEAD');
   var tbodyHtml = _createTheadOrTbodyHtml(tbody, 'TBODY');
   var className = renderData.className ? ' class="' + renderData.className + '"' : '';
 
-  return '<table' + className + '>' + (theadHtml + tbodyHtml) + '</renderData>';
+  return '<table' + className + '>' + (theadHtml + tbodyHtml) + '</table>';
 }
 
 /**
@@ -2566,24 +2566,21 @@ var TASK_CHECKED_CLASS_NAME = 'checked';
 
 /**
  * Class ToastUIEditorViewer
+ * @param {object} options Option object
+ *     @param {HTMLElement} options.el - container element
+ *     @param {string} options.initialValue Editor's initial value
+ *     @param {object} options.events eventlist Event list
+ *         @param {function} options.events.load It would be emitted when editor fully load
+ *         @param {function} options.events.change It would be emitted when content changed
+ *         @param {function} options.events.stateChange It would be emitted when format change by cursor position
+ *         @param {function} options.events.focus It would be emitted when editor get focus
+ *         @param {function} options.events.blur It would be emitted when editor loose focus
+ *     @param {object} options.hooks Hook list
+ *     @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
+ *     @param {string[]} [options.exts] - extensions
  */
 
 var ToastUIEditorViewer = function () {
-  /**
-   * Viewer
-   * @param {object} options Option object
-    * @param {HTMLElement} options.el - container element
-    * @param {string} options.initialValue Editor's initial value
-    * @param {object} options.events eventlist Event list
-      * @param {function} options.events.load It would be emitted when editor fully load
-      * @param {function} options.events.change It would be emitted when content changed
-      * @param {function} options.events.stateChange It would be emitted when format change by cursor position
-      * @param {function} options.events.focus It would be emitted when editor get focus
-      * @param {function} options.events.blur It would be emitted when editor loose focus
-    * @param {object} options.hooks Hook list
-      * @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
-    * @param {string[]} [options.exts] - extensions
-    */
   function ToastUIEditorViewer(options) {
     var _this = this;
 
@@ -2603,7 +2600,6 @@ var ToastUIEditorViewer = function () {
     } else {
       this.convertor = new _convertor2.default(this.eventManager);
     }
-    this.toMarkOptions = null;
 
     if (this.options.useDefaultHTMLSanitizer) {
       this.convertor.initHtmlSanitizer();
@@ -2621,13 +2617,24 @@ var ToastUIEditorViewer = function () {
       });
     }
 
-    this.preview = new _mdPreview2.default((0, _jquery2.default)(this.options.el), this.eventManager, this.convertor, true);
+    var _options = this.options,
+        el = _options.el,
+        initialValue = _options.initialValue;
+
+    var existingHTML = el.innerHTML;
+    el.innerHTML = '';
+
+    this.preview = new _mdPreview2.default((0, _jquery2.default)(el), this.eventManager, this.convertor, true);
 
     this.preview.$el.on('mousedown', _jquery2.default.proxy(this._toggleTask, this));
 
     _extManager2.default.applyExtension(this, this.options.exts);
 
-    this.setValue(this.options.initialValue);
+    if (initialValue) {
+      this.setValue(initialValue);
+    } else if (existingHTML) {
+      this.preview.setHTML(existingHTML);
+    }
 
     this.eventManager.emit('load', this);
   }
@@ -2655,7 +2662,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Set content for preview
-     * @memberof ToastUIEditorViewer
      * @param {string} markdown Markdown text
      */
 
@@ -2670,7 +2676,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Set content for preview
-     * @memberof ToastUIEditorViewer
      * @param {string} markdown Markdown text
      * @deprecated
      */
@@ -2683,7 +2688,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Bind eventHandler to event type
-     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -2696,7 +2700,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Unbind eventHandler from event type
-     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      */
 
@@ -2708,7 +2711,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Remove Viewer preview from document
-     * @memberof ToastUIEditorViewer
      */
 
   }, {
@@ -2726,7 +2728,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Add hook to Viewer preview's event
-     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -2740,7 +2741,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return true
-     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -2752,7 +2752,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return false
-     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -2764,7 +2763,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return false
-     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -2776,7 +2774,6 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Define extension
-     * @memberof ToastUIEditorViewer
      * @param {string} name Extension name
      * @param {ExtManager~extension} ext extension
      */
@@ -2802,6 +2799,7 @@ ToastUIEditorViewer.isViewer = true;
 /**
  * domUtil instance
  * @type {DomUtil}
+ * @ignore
  */
 ToastUIEditorViewer.domUtils = _domUtils2.default;
 
@@ -2886,10 +2884,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Class Code Block Manager
  */
 var CodeBlockManager = function () {
-  /**
-   * Creates an instance of CodeBlockManager.
-   * @memberof CodeBlockManager
-   */
   function CodeBlockManager() {
     _classCallCheck(this, CodeBlockManager);
 
@@ -2913,7 +2907,6 @@ var CodeBlockManager = function () {
      * get replacer for code block
      * @param {string} language - code block type
      * @returns {function} - replacer function
-     * @memberof CodeBlockManager
      */
 
   }, {
@@ -2947,7 +2940,6 @@ var CodeBlockManager = function () {
     /**
      * get supported languages by highlight-js
      * @returns {Array<string>} - supported languages by highlight-js
-     * @static
      */
 
   }], [{
@@ -6561,9 +6553,9 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _tuiChart = __webpack_require__(29);
+var _tuiChartPolyfill = __webpack_require__(29);
 
-var _tuiChart2 = _interopRequireDefault(_tuiChart);
+var _tuiChartPolyfill2 = _interopRequireDefault(_tuiChartPolyfill);
 
 var _editorProxy = __webpack_require__(2);
 
@@ -7001,7 +6993,7 @@ function chartReplacer(codeBlockChartDataAndOptions, extensionOptions) {
         } else if (CATEGORY_CHART_TYPES.indexOf(chartType) > -1 && data.categories.length !== data.series[0].data.length) {
           chartContainer.innerHTML = 'invalid chart data';
         } else {
-          _tuiChart2.default[chartType](chartContainer, data, chartOptions);
+          _tuiChartPolyfill2.default[chartType](chartContainer, data, chartOptions);
         }
       });
     } catch (e) {
@@ -7059,9 +7051,10 @@ function _setWwCodeBlockManagerForChart(editor) {
 
       /**
        * Convert table nodes into code block as TSV
-       * @memberof WwCodeBlockManager
        * @param {Array.<Node>} nodes Node array
        * @returns {HTMLElement} Code block element
+       * @override
+       * @ignore
        */
       value: function convertNodesToText(nodes) {
         if (nodes.length !== 1 || nodes[0].tagName !== 'TABLE') {
@@ -7225,20 +7218,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /**
  * Class Markdown Preview
- * @extends {Preview}
+ * @param {jQuery} $el - base jQuery element
+ * @param {EventManager} eventManager - event manager
+ * @param {Convertor} convertor - convertor
+ * @param {boolean} isViewer - true for view only mode
+ * @param {Number} delayTime - lazyRunner delay time
+ * @ignore
  */
 var MarkdownPreview = function (_Preview) {
   _inherits(MarkdownPreview, _Preview);
 
-  /**
-   * Creates an instance of MarkdownPreview.
-   * @param {jQuery} $el - base jQuery element
-   * @param {EventManager} eventManager - event manager
-   * @param {Convertor} convertor - convertor
-   * @param {boolean} isViewer - true for view only mode
-   * @param {Number} delayTime - lazyRunner delay time
-   * @memberof MarkdownPreview
-   */
   function MarkdownPreview($el, eventManager, convertor, isViewer, delayTime) {
     _classCallCheck(this, MarkdownPreview);
 
@@ -7265,7 +7254,7 @@ var MarkdownPreview = function (_Preview) {
         latestMarkdownValue = markdownEditor.getValue();
 
         if (_this2.isVisible()) {
-          _this2.lazyRunner.run('refresh', latestMarkdownValue.replace(/<br>\n/g, '<br>'));
+          _this2.lazyRunner.run('refresh', latestMarkdownValue);
         }
       });
 
@@ -7284,7 +7273,6 @@ var MarkdownPreview = function (_Preview) {
     /**
      * render
      * @param {string} html - html string to render
-     * @memberof MarkdownPreview
      * @override
      */
 
@@ -7339,17 +7327,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class Preview
- **/
+ * @param {jQuery} $el Container element for preview
+ * @param {EventManager} eventManager Event manager instance
+ * @param {Convertor} convertor Convertor instance
+ * @param {boolean} isViewer - whether viewer mode or not
+ * @param {Number} delayTime - lazyRunner delay time
+ * @ignore
+ */
 var Preview = function () {
-  /**
-   * Creates an instance of Preview.
-   * @param {jQuery} $el Container element for preview
-   * @param {EventManager} eventManager Event manager instance
-   * @param {Convertor} convertor Convertor instance
-   * @param {boolean} isViewer - whether viewer mode or not
-   * @param {Number} delayTime - lazyRunner delay time
-   * @memberof Preview
-   */
   function Preview($el, eventManager, convertor, isViewer) {
     var delayTime = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 800;
 
@@ -7382,7 +7367,6 @@ var Preview = function () {
 
     /**
      * Refresh rendering
-     * @memberof Preview
      * @param {string} markdown Markdown text
      */
 
@@ -7395,7 +7379,6 @@ var Preview = function () {
     /**
      * get html string
      * @returns {string} - html preview string
-     * @memberof Preview
      */
 
   }, {
@@ -7407,7 +7390,6 @@ var Preview = function () {
     /**
      * set html string
      * @param {string} html - html preview string
-     * @memberof Preview
      */
 
   }, {
@@ -7418,9 +7400,7 @@ var Preview = function () {
 
     /**
      * Render HTML on preview
-     * @memberof Preview
      * @param {string} html HTML string
-     * @protected
      */
 
   }, {
@@ -7436,7 +7416,6 @@ var Preview = function () {
 
     /**
      * Set preview height
-     * @memberof Preview
      * @param {number} height - Height for preview container
      */
 
@@ -7449,7 +7428,6 @@ var Preview = function () {
     /**
      * set min height
      * @param {number} minHeight - min height
-     * @memberof Preview
      */
 
   }, {
@@ -7502,12 +7480,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class LazyRunner
+ * @ignore
  */
 var LazyRunner = function () {
-  /**
-   * Creates an instance of LazyRunner.
-   * @memberof LazyRunner
-   */
   function LazyRunner() {
     _classCallCheck(this, LazyRunner);
 
@@ -7611,13 +7586,10 @@ var eventList = ['previewBeforeHook', 'previewRenderAfter', 'previewNeedsRefresh
 
 /**
  * Class EventManager
+ * @ignore
  */
 
 var EventManager = function () {
-  /**
-   * Creates an instance of EventManager.
-   * @memberof EventManager
-   */
   function EventManager() {
     _classCallCheck(this, EventManager);
 
@@ -7627,7 +7599,6 @@ var EventManager = function () {
 
   /**
    * Listen event and bind event handler
-   * @memberof EventManager
    * @param {string} typeStr Event type string
    * @param {function} handler Event handler
    */
@@ -7654,7 +7625,6 @@ var EventManager = function () {
 
     /**
      * Emit event
-     * @memberof EventManager
      * @param {string} eventName Event name to emit
      * @returns {Array}
      */
@@ -7687,7 +7657,6 @@ var EventManager = function () {
 
     /**
      * Emit given event and return result
-     * @memberof EventManager
      * @param {string} eventName Event name to emit
      * @param {string} sourceText Source text to change
      * @returns {string}
@@ -7718,7 +7687,6 @@ var EventManager = function () {
 
     /**
      * Get event type and namespace
-     * @memberof EventManager
      * @param {string} typeStr Event type name
      * @returns {{type: string, namespace: string}}
      * @private
@@ -7750,7 +7718,6 @@ var EventManager = function () {
 
     /**
      * Add event type when given event not exists
-     * @memberof EventManager
      * @param {string} type Event type name
      */
 
@@ -7766,7 +7733,6 @@ var EventManager = function () {
 
     /**
      * Remove event handler from given event type
-     * @memberof EventManager
      * @param {string} typeStr Event type name
      * @param {function} [handler] - registered event handler
      */
@@ -7798,7 +7764,6 @@ var EventManager = function () {
      * Remove event handler with event handler
      * @param {string} type - event type name
      * @param {function} handler - event handler
-     * @memberof EventManager
      * @private
      */
 
@@ -7814,7 +7779,6 @@ var EventManager = function () {
 
     /**
      * Remove event handler with event type information
-     * @memberof EventManager
      * @param {string} type Event type name
      * @param {string} namespace Event namespace
      * @private
@@ -7886,14 +7850,13 @@ var KEYMAP_OS_INDEX = _util.isMac ? 1 : 0;
 
 /**
  * Class CommandManager
+ * @param {ToastUIEditor} base nedInstance
+ * @param {object} [options={}] - option object
+ *     @param {boolean} [options.useCommandShortcut=true] - execute command with keyMap
+ * @ignore
  */
 
 var CommandManager = function () {
-  /**
-   * @param {ToastUIEditor} base nedInstance
-   * @param {object} [options={}] - option object
-   *  @param {boolean} [options.useCommandShortcut=true] - execute command with keyMap
-   */
   function CommandManager(base) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -7933,7 +7896,6 @@ var CommandManager = function () {
 
     /**
      * Add command
-     * @memberof CommandManager
      * @param {Command} command Command instance
      * @returns {Command} Command
      */
@@ -7976,7 +7938,6 @@ var CommandManager = function () {
      * _initEvent
      * Bind event handler to eventManager
      * @private
-     * @memberof CommandManager
      */
 
   }, {
@@ -8003,7 +7964,6 @@ var CommandManager = function () {
 
     /**
      * Execute command
-     * @memberof CommandManager
      * @param {String} name Command name
      * @param {*} ...args Command argument
      * @returns {*}
@@ -8048,10 +8008,10 @@ var CommandManager = function () {
 
 /**
  * Create command by given editor type and property object
- * @memberof CommandManager
  * @param {string} type Command type
  * @param {{name: string, keyMap: Array}} props Property
  * @returns {*}
+ * @static
  */
 
 
@@ -8092,13 +8052,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class Command
+ * @param {string} name Command name
+ * @param {number} type Command type (Command.TYPE)
+ * @param {Array.<string>} [keyMap] keyMap
+ * @ignore
  */
 var Command = function () {
-  /**
-   * @param {string} name Command name
-   * @param {number} type Command type (Command.TYPE)
-   * @param {Array.<string>} [keyMap] keyMap
-   */
   function Command(name, type, keyMap) {
     _classCallCheck(this, Command);
 
@@ -8111,9 +8070,7 @@ var Command = function () {
   }
 
   /**
-   * getName
    * returns Name of command
-   * @memberof Command
    * @returns {string} Command Name
    */
 
@@ -8125,9 +8082,7 @@ var Command = function () {
     }
 
     /**
-     * getType
      * returns Type of command
-     * @memberof Command
      * @returns {number} Command Command type number
      */
 
@@ -8138,9 +8093,7 @@ var Command = function () {
     }
 
     /**
-     * isMDType
      * returns whether Command Type is Markdown or not
-     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -8151,9 +8104,7 @@ var Command = function () {
     }
 
     /**
-     * isWWType
      * returns whether Command Type is Wysiwyg or not
-     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -8164,9 +8115,7 @@ var Command = function () {
     }
 
     /**
-     * isGlobalType
      * returns whether Command Type is Global or not
-     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -8177,9 +8126,7 @@ var Command = function () {
     }
 
     /**
-     * setKeyMap
      * Set keymap value for each os
-     * @memberof Command
      * @param {string} win Windows Key(and etc)
      * @param {string} mac Mac osx key
      */
@@ -8196,12 +8143,12 @@ var Command = function () {
 
 /**
  * Command factory method
- * @memberof Command
  * @param {string} typeStr Editor type name
  * @param {object} props Property
  *     @param {string} props.name Command name
  *     @param {number} props.type Command type number
  * @returns {Command}
+ * @static
  */
 
 
@@ -8228,8 +8175,8 @@ Command.factory = function (typeStr, props) {
  * markdown : 0
  * wysiwyg : 1
  * global : 2
- * @memberof Command
  * @type {object}
+ * @private
  */
 Command.TYPE = {
   MD: 0,
@@ -8279,12 +8226,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class ExtManager
+ * @ignore
  */
 var ExtManager = function () {
-  /**
-   * Creates an instance of ExtManager.
-   * @memberof ExtManager
-   */
   function ExtManager() {
     _classCallCheck(this, ExtManager);
 
@@ -8292,11 +8236,9 @@ var ExtManager = function () {
   }
 
   /**
-   * defineExtension
    * Defined Extension
-   * @memberof ExtManager
    * @param {string} name extension name
-   * @param {ExtManager~extension} ext extension
+   * @param {function} ext extension
    */
 
 
@@ -8308,7 +8250,6 @@ var ExtManager = function () {
 
     /**
      * Apply extensions
-     * @memberof ExtManager
      * @param {object} context Context
      * @param {Array.<string|object>} options - options or names array
      */
@@ -8447,6 +8388,20 @@ markdownitHighlight.inline.ruler.at('backticks', _markdownitBackticksRenderer2.d
 markdownitHighlight.use(_markdownitTaskPlugin2.default);
 markdownitHighlight.use(_markdownitCodeBlockPlugin2.default);
 
+markdownitHighlight.renderer.rules.softbreak = function (tokens, idx, options) {
+  if (!options.breaks) {
+    return '\n';
+  }
+
+  var prevToken = tokens[idx - 1];
+
+  if (prevToken && prevToken.type === 'html_inline' && prevToken.content === '<br>') {
+    return '';
+  }
+
+  return options.xhtmlOut ? '<br />\n' : '<br>\n';
+};
+
 // markdownit
 markdownit.block.ruler.at('code', _markdownitCodeRenderer2.default);
 markdownit.block.ruler.at('table', _markdownitTableRenderer2.default, {
@@ -8462,15 +8417,24 @@ markdownit.inline.ruler.at('backticks', _markdownitBackticksRenderer2.default);
 markdownit.use(_markdownitTaskPlugin2.default);
 markdownit.use(_markdownitCodeBlockPlugin2.default);
 
+// This regular expression refere markdownIt.
+// https://github.com/markdown-it/markdown-it/blob/master/lib/common/html_re.js
+var attrName = '[a-zA-Z_:][a-zA-Z0-9:._-]*';
+var unquoted = '[^"\'=<>`\\x00-\\x20]+';
+var singleQuoted = "'[^']*'";
+var doubleQuoted = '"[^"]*"';
+var attrValue = '(?:' + unquoted + '|' + singleQuoted + '|' + doubleQuoted + ')';
+var attribute = '(?:\\s+' + attrName + '(?:\\s*=\\s*' + attrValue + ')?)*\\s*';
+var openingTag = '(\\\\<|<)([A-Za-z][A-Za-z0-9\\-]*' + attribute + ')(\\/?>)';
+var HTML_TAG_RX = new RegExp(openingTag, 'g');
+
 /**
  * Class Convertor
+ * @param {EventManager} em - EventManager instance
+ * @ignore
  */
 
 var Convertor = function () {
-  /**
-   * Convertor constructor
-   * @param {EventManager} em - EventManager instance
-   */
   function Convertor(em) {
     _classCallCheck(this, Convertor);
 
@@ -8480,22 +8444,17 @@ var Convertor = function () {
   /**
    * _markdownToHtmlWithCodeHighlight
    * Convert markdown to html with Codehighlight
-   * @private
-   * @memberof Convertor
    * @param {string} markdown markdown text
    * @param {object} env environment sandbox for markdownit
    * @returns {string} html text
+   * @private
    */
 
 
   _createClass(Convertor, [{
     key: '_markdownToHtmlWithCodeHighlight',
     value: function _markdownToHtmlWithCodeHighlight(markdown, env) {
-      // eslint-disable-next-line
-      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
-      while (onerrorStripeRegex.exec(markdown)) {
-        markdown = markdown.replace(onerrorStripeRegex, '$1$3');
-      }
+      markdown = this._replaceImgAttrToDataProp(markdown);
 
       return markdownitHighlight.render(markdown, env);
     }
@@ -8503,25 +8462,41 @@ var Convertor = function () {
     /**
      * _markdownToHtml
      * Convert markdown to html
-     * @private
-     * @memberof Convertor
      * @param {string} markdown markdown text
      * @param {object} env environment sandbox for markdownit
      * @returns {string} html text
+     * @private
      */
 
   }, {
     key: '_markdownToHtml',
     value: function _markdownToHtml(markdown, env) {
-      // should insert data-tomark-pass in the opening tag
-      markdown = markdown.replace(/<(?!\/)([^>]+)([/]?)>/g, '<$1 data-tomark-pass $2>');
-      // eslint-disable-next-line
-      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
+      markdown = markdown.replace(HTML_TAG_RX, function (match, $1, $2, $3) {
+        return match[0] !== '\\' ? '' + $1 + $2 + ' data-tomark-pass ' + $3 : match;
+      });
+
+      markdown = this._replaceImgAttrToDataProp(markdown);
+
+      return markdownit.render(markdown, env);
+    }
+
+    /**
+     * Replace 'onerror' attribute of img tag to data property string
+     * @param {string} markdown markdown text
+     * @returns {string} replaced markdown text
+     * @private
+     */
+
+  }, {
+    key: '_replaceImgAttrToDataProp',
+    value: function _replaceImgAttrToDataProp(markdown) {
+      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\\"']?[^\\"']*[\\"']?)(.*)/i;
+
       while (onerrorStripeRegex.exec(markdown)) {
         markdown = markdown.replace(onerrorStripeRegex, '$1$3');
       }
 
-      return markdownit.render(markdown, env);
+      return markdown;
     }
 
     /**
@@ -8540,7 +8515,7 @@ var Convertor = function () {
 
       $wrapperDiv.find('code, pre').each(function (i, codeOrPre) {
         var $code = (0, _jquery2.default)(codeOrPre);
-        $code.html($code.html().replace(/ data-tomark-pass &gt;/g, '&gt;'));
+        $code.html($code.html().replace(/\sdata-tomark-pass\s(\/?)&gt;/g, '$1&gt;'));
       });
 
       renderedHTML = $wrapperDiv.html();
@@ -8552,7 +8527,6 @@ var Convertor = function () {
      * toHTMLWithCodeHightlight
      * Convert markdown to html with Codehighlight
      * emit convertorAfterMarkdownToHtmlConverted
-     * @memberof Convertor
      * @param {string} markdown markdown text
      * @returns {string} html text
      */
@@ -8570,7 +8544,6 @@ var Convertor = function () {
      * toHTML
      * Convert markdown to html
      * emit convertorAfterMarkdownToHtmlConverted
-     * @memberof Convertor
      * @param {string} markdown markdown text
      * @returns {string} html text
      */
@@ -8596,16 +8569,16 @@ var Convertor = function () {
     /**
      * set link attribute to markdownitHighlight, markdownit
      * using linkAttribute of markdownItInlinePlugin
-     * @param {object} attribute markdown text
+     * @param {object} attr markdown text
      */
 
   }, {
     key: 'setLinkAttribute',
-    value: function setLinkAttribute(attribute) {
-      var keys = Object.keys(attribute);
+    value: function setLinkAttribute(attr) {
+      var keys = Object.keys(attr);
       var setAttributeToToken = function setAttributeToToken(tokens, idx) {
         keys.forEach(function (key) {
-          tokens[idx].attrPush([key, attribute[key]]);
+          tokens[idx].attrPush([key, attr[key]]);
         });
       };
 
@@ -8617,7 +8590,6 @@ var Convertor = function () {
      * toMarkdown
      * Convert html to markdown
      * emit convertorAfterHtmlToMarkdownConverted
-     * @memberof Convertor
      * @param {string} html html text
      * @param {object | null} toMarkOptions - toMark library options
      * @returns {string} markdown text
@@ -8633,6 +8605,7 @@ var Convertor = function () {
       var markdown = (0, _toMark2.default)(this._appendAttributeForBrIfNeed(html), toMarkOptions);
 
       markdown = this.eventManager.emitReduce('convertorAfterHtmlToMarkdownConverted', markdown);
+      markdown = this._removeNewlinesBeforeAfterAndBlockElement(markdown);
 
       _tuiCodeSnippet2.default.forEach(markdown.split('\n'), function (line, index) {
         var FIND_TABLE_RX = /^\|[^|]*\|/ig;
@@ -8647,6 +8620,18 @@ var Convertor = function () {
       return resultArray.join('\n');
     }
   }, {
+    key: '_removeNewlinesBeforeAfterAndBlockElement',
+    value: function _removeNewlinesBeforeAfterAndBlockElement(markdown) {
+      // Newlines('\n\n') are created on to-mark.
+      var NEWLINES_BEFORE_BLOCK_RX = /<br>\n\n(#{1,6} .*|```|\||(\*+|-+|\d+\.) .*| *>[^\n]+.*)/g;
+      var NEWLINES_AFTER_BLOCK_RX = /(#{1,6} .*|```|\|)\n\n<br>/g;
+
+      markdown = markdown.replace(NEWLINES_BEFORE_BLOCK_RX, '<br>$1');
+      markdown = markdown.replace(NEWLINES_AFTER_BLOCK_RX, '$1\n<br>');
+
+      return markdown;
+    }
+  }, {
     key: '_appendAttributeForBrIfNeed',
     value: function _appendAttributeForBrIfNeed(html) {
       var FIND_BR_RX = /<br>/ig;
@@ -8658,11 +8643,16 @@ var Convertor = function () {
       var FIND_ATTRI_WITH_EMTPY_STR_RX = /<br data-tomark-pass="">/ig;
 
       html = html.replace(FIND_BR_RX, '<br />');
+
       html = html.replace(FIND_DOUBLE_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />');
       html = html.replace(FIND_ATTRI_WITH_EMTPY_STR_RX, '<br data-tomark-pass />');
 
       html = html.replace(FIND_PASSING_AND_NORMAL_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />$1');
       html = html.replace(FIND_FIRST_TWO_BRS_RX, '$1<br /><br />');
+
+      // Preserve <br> when there is only one empty line before or after a block element.
+      html = html.replace(/(.)<br \/><br \/>(<h[1-6]>|<pre>|<table>|<ul>|<ol>|<blockquote>)/g, '$1<br /><br data-tomark-pass />$2');
+      html = html.replace(/(<\/h[1-6]>|<\/pre>|<\/table>|<\/ul>|<\/ol>|<\/blockquote>)<br \/>(.)/g, '$1<br data-tomark-pass />$2');
 
       return html;
     }
@@ -8670,7 +8660,6 @@ var Convertor = function () {
     /**
      * get markdownit with code highlight
      * @returns {markdownit} - markdownit instance
-     * @memberof Convertor
      * @static
      */
 
@@ -8683,7 +8672,6 @@ var Convertor = function () {
     /**
      * get markdownit
      * @returns {markdownit} - markdownit instance
-     * @memberof Convertor
      * @static
      */
 
@@ -8734,6 +8722,10 @@ var HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellpad
 
 var SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' + 'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' + 'cx|cy|d|dx|dy|descent|display|dur|end|fill|fill-rule|font-family|font-size|font-stretch|' + 'font-style|font-variant|font-weight|from|fx|fy|g1|g2|glyph-name|gradientUnits|hanging|' + 'height|horiz-adv-x|horiz-origin-x|ideographic|k|keyPoints|keySplines|keyTimes|lang|' + 'marker-end|marker-mid|marker-start|markerHeight|markerUnits|markerWidth|mathematical|' + 'max|min|offset|opacity|orient|origin|overline-position|overline-thickness|panose-1|' + 'path|pathLength|points|preserveAspectRatio|r|refX|refY|repeatCount|repeatDur|' + 'requiredExtensions|requiredFeatures|restart|rotate|rx|ry|slope|stemh|stemv|stop-color|' + 'stop-opacity|strikethrough-position|strikethrough-thickness|stroke|stroke-dasharray|' + 'stroke-dashoffset|stroke-linecap|stroke-linejoin|stroke-miterlimit|stroke-opacity|' + 'stroke-width|systemLanguage|target|text-anchor|to|transform|type|u1|u2|underline-position|' + 'underline-thickness|unicode|unicode-range|units-per-em|values|version|viewBox|visibility|' + 'width|widths|x|x-height|x1|x2|xlink:actuate|xlink:arcrole|xlink:role|xlink:show|xlink:title|' + 'xlink:type|xml:base|xml:lang|xml:space|xmlns|xmlns:xlink|y|y1|y2|zoomAndPan)', 'g');
 
+var ATTR_VALUE_BLACK_LIST_RX = {
+  'href': /^(javascript:).*/g
+};
+
 /**
  * htmlSanitizer
  * @param {string|Node} html html or Node
@@ -8750,6 +8742,7 @@ function htmlSanitizer(html, needHtmlText) {
 
   removeUnnecessaryTags($html);
   leaveOnlyWhitelistAttribute($html);
+  removeInvalidAttributeValues($html);
 
   return finalizeHtml($html, needHtmlText);
 }
@@ -8760,7 +8753,7 @@ function htmlSanitizer(html, needHtmlText) {
  * @param {jQuery} $html jQuery instance
  */
 function removeUnnecessaryTags($html) {
-  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title').remove();
+  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title, embed, object').remove();
 }
 
 /**
@@ -8786,6 +8779,30 @@ function leaveOnlyWhitelistAttribute($html) {
       }
     });
   });
+}
+
+/**
+ * Remove invalid attribute values
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function removeInvalidAttributeValues($html) {
+  var _loop = function _loop(attr) {
+    if (ATTR_VALUE_BLACK_LIST_RX.hasOwnProperty(attr)) {
+      $html.find('[' + attr + ']').each(function (index, node) {
+        var attrs = node.attributes;
+        var valueBlackListRX = ATTR_VALUE_BLACK_LIST_RX[attr];
+        var attrItem = attrs.getNamedItem(attr);
+        if (valueBlackListRX && attrItem && attrItem.value.toLowerCase().match(valueBlackListRX)) {
+          attrs.removeNamedItem(attr);
+        }
+      });
+    }
+  };
+
+  for (var attr in ATTR_VALUE_BLACK_LIST_RX) {
+    _loop(attr);
+  }
 }
 
 /**
@@ -9874,7 +9891,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var FIND_ZWB = /\u200B/g;
 
 /**
- * isTextNode
  * Check if node is text node
  * @param {Node} node node to check
  * @returns {boolean} result
@@ -9885,7 +9901,6 @@ var isTextNode = function isTextNode(node) {
 };
 
 /**
- * isElemNode
  * Check if node is element node
  * @param {Node} node node to check
  * @returns {boolean} result
@@ -9907,7 +9922,6 @@ var isBlockNode = function isBlockNode(node) {
 };
 
 /**
- * getNodeName
  * Get node name of node
  * @param {Node} node node
  * @returns {string} node name
@@ -9922,7 +9936,6 @@ var getNodeName = function getNodeName(node) {
 };
 
 /**
- * getTextLength
  * Get node offset length of node(for Range API)
  * @param {Node} node node
  * @returns {number} length
@@ -9941,7 +9954,6 @@ var getTextLength = function getTextLength(node) {
 };
 
 /**
- * getOffsetLength
  * Get node offset length of node(for Range API)
  * @param {Node} node node
  * @returns {number} length
@@ -9960,7 +9972,6 @@ var getOffsetLength = function getOffsetLength(node) {
 };
 
 /**
- * getNodeOffsetOfParent
  * get node offset between parent's childnodes
  * @param {Node} node node
  * @returns {number} offset(index)
@@ -9983,7 +9994,6 @@ var getNodeOffsetOfParent = function getNodeOffsetOfParent(node) {
 };
 
 /**
- * getChildNodeByOffset
  * get child node by offset
  * @param {Node} node node
  * @param {number} index offset index
@@ -10003,7 +10013,6 @@ var getChildNodeByOffset = function getChildNodeByOffset(node, index) {
 };
 
 /**
- * getNodeWithDirectionUntil
  * find next node from passed node
  * @param {strong} direction previous or next
  * @param {Node} node node
@@ -10034,7 +10043,6 @@ var getNodeWithDirectionUntil = function getNodeWithDirectionUntil(direction, no
 };
 
 /**
- * getPrevOffsetNodeUntil
  * get prev node of childnode pointed with index
  * @param {Node} node node
  * @param {number} index offset index
@@ -10073,7 +10081,6 @@ var getParentUntilBy = function getParentUntilBy(node, matchCondition, stopCondi
 };
 
 /**
- * getParentUntil
  * get parent node until paseed node name
  * @param {Node} node node
  * @param {string|HTMLNode} untilNode node name or node to limit
@@ -10097,7 +10104,6 @@ var getParentUntil = function getParentUntil(node, untilNode) {
 };
 
 /**
- * getNodeWithDirectionUnderParent
  * get node on the given direction under given parent
  * @param {strong} direction previous or next
  * @param {Node} node node
@@ -10119,7 +10125,6 @@ var getNodeWithDirectionUnderParent = function getNodeWithDirectionUnderParent(d
 };
 
 /**
- * getTopPrevNodeUnder
  * get top previous top level node under given node
  * @param {Node} node node
  * @param {Node} underNode underNode
@@ -10131,7 +10136,6 @@ var getTopPrevNodeUnder = function getTopPrevNodeUnder(node, underNode) {
 };
 
 /**
- * getNextTopBlockNode
  * get next top level block node
  * @param {Node} node node
  * @param {Node} underNode underNode
@@ -10185,6 +10189,7 @@ var getPrevTextNode = function getPrevTextNode(node) {
  * @param {HTMLNode} root - root node
  * @param {HTMLNode} node - node to test
  * @returns {Boolean} true if root contains node
+ * @ignore
  */
 var containsNode = function containsNode(root, node) {
   var walker = document.createTreeWalker(root, 4, null, false);
@@ -10522,11 +10527,261 @@ var mergeNode = function mergeNode(node, targetNode) {
     _tuiCodeSnippet2.default.forEachArray(node.childNodes, function () {
       targetNode.appendChild(node.firstChild);
     });
+
+    targetNode.normalize();
   }
 
   if (node.parentNode) {
     node.parentNode.removeChild(node);
   }
+};
+
+/**
+ * Create hr that is not contenteditable
+ * @returns {node} hr is wraped div
+ * @ignore
+ */
+var createHorizontalRule = function createHorizontalRule() {
+  var div = document.createElement('div');
+  var hr = document.createElement('hr');
+
+  div.setAttribute('contenteditable', false);
+  hr.setAttribute('contenteditable', false);
+
+  div.appendChild(hr);
+
+  return div;
+};
+
+/**
+ * Create Empty Line
+ * @returns {node} <div><br></div>
+ * @private
+ */
+var createEmptyLine = function createEmptyLine() {
+  var div = document.createElement('div');
+  div.appendChild(document.createElement('br'));
+
+  return div;
+};
+
+/**
+ * Find same tagName child node and change wrapping order.
+ * For example, if below node need to optimize 'B' tag.
+ * <i><s><b>test</b></s></i>
+ * should be changed tag's order.
+ * <b><i><s>test</s></i></b>
+ * @param {node} node
+ * @param {string} tagName
+ * @returns {node}
+ * @private
+ */
+var changeTagOrder = function changeTagOrder(node, tagName) {
+  if (node.nodeName !== 'SPAN') {
+    var parentNode = node.parentNode;
+
+    var tempNode = node;
+
+    while (tempNode.childNodes && tempNode.childNodes.length === 1 && !isTextNode(tempNode.firstChild)) {
+      tempNode = tempNode.firstChild;
+
+      if (tempNode.nodeName === 'SPAN') {
+        break;
+      }
+
+      if (tempNode.nodeName === tagName) {
+        var wrapper = document.createElement(tagName);
+
+        mergeNode(tempNode, tempNode.parentNode);
+        parentNode.replaceChild(wrapper, node);
+        wrapper.appendChild(node);
+
+        return wrapper;
+      }
+    }
+  }
+
+  return node;
+};
+
+/**
+ * Find same tagName nodes and merge from startNode to endNode.
+ * @param {node} startNode
+ * @param {node} endNode
+ * @param {string} tagName
+ * @returns {node}
+ * @private
+ */
+var mergeSameNodes = function mergeSameNodes(startNode, endNode, tagName) {
+  var startBlockNode = changeTagOrder(startNode, tagName);
+
+  if (startBlockNode.nodeName === tagName) {
+    var endBlockNode = changeTagOrder(endNode, tagName);
+    var mergeTargetNode = startBlockNode;
+    var nextNode = startBlockNode.nextSibling;
+
+    while (nextNode) {
+      var tempNext = nextNode.nextSibling;
+
+      nextNode = changeTagOrder(nextNode, tagName);
+
+      if (nextNode.nodeName === tagName) {
+        // eslint-disable-next-line max-depth
+        if (mergeTargetNode) {
+          mergeNode(nextNode, mergeTargetNode);
+        } else {
+          mergeTargetNode = nextNode;
+        }
+      } else {
+        mergeTargetNode = null;
+      }
+
+      if (nextNode === endBlockNode) {
+        break;
+      }
+
+      nextNode = tempNext;
+    }
+  }
+};
+
+/**
+ * Find same tagName nodes in range and merge nodes.
+ * For example range is like this
+ * <s><b>AAA</b></s><b>BBB</b>
+ * nodes is changed below
+ * <b><s>AAA</s>BBB</b>
+ * @param {range} range
+ * @param {string} tagName
+ * @private
+ */
+var optimizeRange = function optimizeRange(range, tagName) {
+  var collapsed = range.collapsed,
+      commonAncestorContainer = range.commonAncestorContainer,
+      startContainer = range.startContainer,
+      endContainer = range.endContainer;
+
+
+  if (!collapsed) {
+    var optimizedNode = null;
+
+    if (startContainer !== endContainer) {
+      mergeSameNodes(getParentUntil(startContainer, commonAncestorContainer), getParentUntil(endContainer, commonAncestorContainer), tagName);
+
+      optimizedNode = commonAncestorContainer;
+    } else if (isTextNode(startContainer)) {
+      optimizedNode = startContainer.parentNode;
+    }
+
+    if (optimizedNode && optimizedNode.nodeName === tagName) {
+      var _optimizedNode = optimizedNode,
+          previousSibling = _optimizedNode.previousSibling;
+
+      var tempNode = void 0;
+
+      if (previousSibling) {
+        tempNode = changeTagOrder(previousSibling);
+
+        if (tempNode.nodeName === tagName) {
+          mergeNode(optimizedNode, tempNode);
+        }
+      }
+
+      var _optimizedNode2 = optimizedNode,
+          nextSibling = _optimizedNode2.nextSibling;
+
+
+      if (nextSibling) {
+        tempNode = changeTagOrder(nextSibling);
+
+        if (tempNode.nodeName === tagName) {
+          mergeNode(tempNode, optimizedNode);
+        }
+      }
+    }
+  }
+};
+
+/**
+ * Gets all text node from root element.
+ * @param {HTMLElement} root Root element
+ * @returns {Array} list of text nodes
+ * @ignore
+ */
+var getAllTextNode = function getAllTextNode(root) {
+  var walker = document.createTreeWalker(root, 4, null, false);
+  var result = [];
+
+  while (walker.nextNode()) {
+    var node = walker.currentNode;
+
+    if (isTextNode(node)) {
+      result.push(node);
+    }
+  }
+
+  return result;
+};
+
+/**
+ * Check whether the node is 'TD' or 'TH'
+ * @param {HTMLElement} node - the target node
+ * @returns {boolean} - whether the node is 'TD' or 'TH'
+ * @ignore
+ */
+var isCellNode = function isCellNode(node) {
+  if (!node) {
+    return false;
+  }
+
+  return node.nodeName === 'TD' || node.nodeName === 'TH';
+};
+
+/**
+ * Get the last node on the target node by the condition
+ * @param {HTMLElement} node - the target node
+ * @returns {function} - the condition to find the node
+ * @ignore
+ */
+var getLastNodeBy = function getLastNodeBy(node, condition) {
+  var lastNode = node && node.lastChild;
+
+  while (lastNode && condition(lastNode)) {
+    lastNode = lastNode.lastChild;
+  }
+
+  return lastNode;
+};
+
+/**
+ * Get the parent node on the target node by the condition
+ * @param {HTMLElement} node - the target node
+ * @returns {function} - the condition to find the node
+ * @ignore
+ */
+var getParentNodeBy = function getParentNodeBy(node, condition) {
+  while (node && condition(node.parentNode, node)) {
+    node = node.parentNode;
+  }
+
+  return node;
+};
+
+/**
+ * Get the sibling node on the target node by the condition
+ * @param {HTMLElement} node - the target node
+ * @param {string} direction - the direction to find node ('previous', 'next')
+ * @returns {function} - the condition to find the node
+ * @ignore
+ */
+var getSiblingNodeBy = function getSiblingNodeBy(node, direction, condition) {
+  var directionKey = direction + 'Sibling';
+
+  while (node && condition(node[directionKey], node)) {
+    node = node[directionKey];
+  }
+
+  return node;
 };
 
 exports.default = {
@@ -10561,7 +10816,17 @@ exports.default = {
   isListNode: isListNode,
   isFirstListItem: isFirstListItem,
   isFirstLevelListItem: isFirstLevelListItem,
-  mergeNode: mergeNode
+  mergeNode: mergeNode,
+  createHorizontalRule: createHorizontalRule,
+  createEmptyLine: createEmptyLine,
+  changeTagOrder: changeTagOrder,
+  mergeSameNodes: mergeSameNodes,
+  optimizeRange: optimizeRange,
+  getAllTextNode: getAllTextNode,
+  isCellNode: isCellNode,
+  getLastNodeBy: getLastNodeBy,
+  getParentNodeBy: getParentNodeBy,
+  getSiblingNodeBy: getSiblingNodeBy
 };
 
 /***/ }),
@@ -11735,8 +12000,6 @@ var _tableUnmergePreparer2 = _interopRequireDefault(_tableUnmergePreparer);
 
 var _toMarkRenderer = __webpack_require__(69);
 
-var _toMarkRenderer2 = _interopRequireDefault(_toMarkRenderer);
-
 var _wwMergedTableManager = __webpack_require__(70);
 
 var _wwMergedTableManager2 = _interopRequireDefault(_wwMergedTableManager);
@@ -11792,8 +12055,6 @@ function tableExtension(editor) {
   var eventManager = editor.eventManager;
 
 
-  editor.toMarkOptions = editor.toMarkOptions || {};
-  editor.toMarkOptions.renderer = _toMarkRenderer2.default;
   _bindEvents(eventManager);
 
   if (editor.isViewer()) {
@@ -11806,9 +12067,20 @@ function tableExtension(editor) {
   _addCommands(editor);
   _changeWysiwygManagers(wwComponentManager);
 
+  editor.toMarkOptions = getExtendedToMarkOptions(editor.toMarkOptions);
+
   if (popupTableUtils) {
     _mergedTableUI2.default.updateContextMenu(popupTableUtils, eventManager, wwComponentManager.getManager('tableSelection'));
   }
+}
+
+function getExtendedToMarkOptions(toMarkOptions) {
+  var extendedOptions = toMarkOptions || {};
+  var baseRenderer = extendedOptions.renderer;
+
+  extendedOptions.renderer = (0, _toMarkRenderer.createToMarkRenderer)(baseRenderer);
+
+  return extendedOptions;
 }
 
 /**
@@ -12055,6 +12327,13 @@ if (i18n) {
     'Unmerge cells': 'Dela celler',
     'Cannot change part of merged cell': 'Ej möjligt att ändra en del av en sammanfogad cell',
     'Cannot paste row merged cells into the table header': 'Ej möjligt att klistra in rad-sammanfogade celler i tabellens huvud'
+  });
+
+  i18n.setLanguage(['it', 'it_IT'], {
+    'Merge cells': 'Unisci celle',
+    'Unmerge cells': 'Separa celle',
+    'Cannot change part of merged cell': 'Non è possibile modificare parte di una cella unita',
+    'Cannot paste row merged cells into the table header': 'Non è possibile incollare celle unite per riga nell\'intestazione della tabella'
   });
 }
 
@@ -12359,6 +12638,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports._getAdditionalThCount = _getAdditionalThCount;
 exports._createTheadMarkdown = _createTheadMarkdown;
+exports.createToMarkRenderer = createToMarkRenderer;
 
 var _jquery = __webpack_require__(0);
 
@@ -12463,9 +12743,11 @@ function _createTheadMarkdown(theadElement, theadContentMarkdown) {
   return theadContentMarkdown ? theadContentMarkdown + '|' + align + '\n' : '';
 }
 
-exports.default = _toMark2.default.Renderer.factory(_toMark2.default.gfmRenderer, {
-  'THEAD': _createTheadMarkdown
-});
+function createToMarkRenderer(baseRenderer) {
+  return _toMark2.default.Renderer.factory(baseRenderer || _toMark2.default.gfmRenderer, {
+    'THEAD': _createTheadMarkdown
+  });
+}
 
 /***/ }),
 /* 70 */
@@ -12524,7 +12806,7 @@ var PASTE_TABLE_CELL_BOOKMARK = 'tui-paste-table-cell-bookmark';
 
 /**
  * Class WwMergedTableManager
- * @extends {WwTableManager}
+ * @ignore
  */
 
 var WwMergedTableManager = function (_WwTableManager) {
@@ -13221,16 +13503,13 @@ var TABLE_CELL_SELECTED_CLASS_NAME = 'te-cell-selected';
 
 /**
  * Class WwMergedTableSelectionManager
+ * @param {WysiwygEditor} wwe - WysiwygEditor instance
+ * @ignore
  */
 
 var WwMergedTableSelectionManager = function (_WwTableSelectionMana) {
   _inherits(WwMergedTableSelectionManager, _WwTableSelectionMana);
 
-  /**
-   * Creates an instance of WwMergedTableSelectionManager.
-   * @param {WysiwygEditor} wwe - WysiwygEditor instance
-   * @memberof WwMergedTableSelectionManager
-   */
   function WwMergedTableSelectionManager(wwe) {
     _classCallCheck(this, WwMergedTableSelectionManager);
 
@@ -14771,6 +15050,8 @@ var decimalColorRx = /rgb\((\d+)[, ]+(\d+)[, ]+(\d+)\)/g;
 
 var RESET_COLOR = '#181818';
 
+var lastScrollTop = 0;
+
 /**
  * color syntax extension
  * @param {editor} editor - editor
@@ -14869,6 +15150,12 @@ function colorSyntaxExtension(editor) {
 
         var sq = wwe.getEditor();
         var tableSelectionManager = wwe.componentManager.getManager('tableSelection');
+
+        // Cache scrollTop before change text color.
+        // Because scrollTop is set 0 when focus() is called.
+        // focus() is called when change text color.
+        lastScrollTop = getScrollTopForReFocus(sq);
+
         if (sq.hasFormat('table') && tableSelectionManager.getSelectedCells().length) {
           tableSelectionManager.styleToSelectedCells(styleColor, color);
 
@@ -14902,6 +15189,15 @@ function styleColor(sq, color) {
       sq.setTextColour(color);
     }
   }
+}
+
+/**
+ * Get scrollTop of squire
+ * @param {SquireExt} sq - squire ext instance
+ * @ignore
+ */
+function getScrollTopForReFocus(sq) {
+  return sq.getRoot().parentNode.scrollTop;
 }
 
 /**
@@ -14967,6 +15263,11 @@ function initUI(editor, preset) {
 
   editor.eventManager.listen('focus', function () {
     popup.hide();
+
+    if (editor.isWysiwygMode() && lastScrollTop) {
+      editor.getSquire().getRoot().parentNode.scrollTop = lastScrollTop;
+      lastScrollTop = 0;
+    }
   });
 
   editor.eventManager.listen('colorButtonClicked', function () {

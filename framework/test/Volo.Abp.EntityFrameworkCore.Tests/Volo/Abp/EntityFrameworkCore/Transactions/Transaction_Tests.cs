@@ -32,7 +32,7 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
 
             try
             {
-                await WithUnitOfWorkAsync(new UnitOfWorkOptions { IsTransactional = true }, async () =>
+                await WithUnitOfWorkAsync(new AbpUnitOfWorkOptions { IsTransactional = true }, async () =>
                 {
                     await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
                     throw new Exception(exceptionMessage);
@@ -52,7 +52,7 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
         {
             var personId = Guid.NewGuid();
 
-            await WithUnitOfWorkAsync(new UnitOfWorkOptions { IsTransactional = true }, async () =>
+            await WithUnitOfWorkAsync(new AbpUnitOfWorkOptions { IsTransactional = true }, async () =>
             {
                 _unitOfWorkManager.Current.ShouldNotBeNull();
 
@@ -75,7 +75,7 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
             {
                 var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
 
-                using (uowManager.Begin(new UnitOfWorkOptions { IsTransactional = true }))
+                using (uowManager.Begin(new AbpUnitOfWorkOptions { IsTransactional = true }))
                 {
                     _unitOfWorkManager.Current.ShouldNotBeNull();
 

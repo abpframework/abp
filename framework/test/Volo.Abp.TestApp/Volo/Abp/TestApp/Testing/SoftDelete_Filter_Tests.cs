@@ -23,12 +23,13 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void Should_Not_Get_Deleted_Entities_Linq()
+        public async Task Should_Not_Get_Deleted_Entities_Linq()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 var person = PersonRepository.FirstOrDefault(p => p.Name == "John-Deleted");
                 person.ShouldBeNull();
+                return Task.CompletedTask;
             });
         }
 
@@ -43,20 +44,21 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void Should_Not_Get_Deleted_Entities_By_Default_ToList()
+        public async Task Should_Not_Get_Deleted_Entities_By_Default_ToList()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 var people = PersonRepository.ToList();
                 people.Count.ShouldBe(1);
                 people.Any(p => p.Name == "Douglas").ShouldBeTrue();
+                return Task.CompletedTask;
             });
         }
 
         [Fact]
-        public void Should_Get_Deleted_Entities_When_Filter_Is_Disabled()
+        public async Task Should_Get_Deleted_Entities_When_Filter_Is_Disabled()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 //Soft delete is enabled by default
                 var people = PersonRepository.ToList();
@@ -88,6 +90,8 @@ namespace Volo.Abp.TestApp.Testing
                 people = PersonRepository.ToList();
                 people.Any(p => !p.IsDeleted).ShouldBeTrue();
                 people.Any(p => p.IsDeleted).ShouldBeFalse();
+
+                return Task.CompletedTask;
             });
         }
     }

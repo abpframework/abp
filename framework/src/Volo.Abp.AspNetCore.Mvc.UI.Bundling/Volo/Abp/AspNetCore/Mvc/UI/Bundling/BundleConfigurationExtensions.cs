@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             return bundleConfiguration;
         }
 
-        public static BundleConfiguration AddContributors(this BundleConfiguration bundleConfiguration, params BundleContributor[] contributors)
+        public static BundleConfiguration AddContributors(this BundleConfiguration bundleConfiguration, params IBundleContributor[] contributors)
         {
             Check.NotNull(contributors, nameof(contributors));
 

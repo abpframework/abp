@@ -30,11 +30,13 @@ namespace Volo.Abp.Identity
             using (var scope = context.ServiceProvider.CreateScope())
             {
                 var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
-                AsyncHelper.RunSync(() => dataSeeder.SeedAsync());
-
-                scope.ServiceProvider
-                    .GetRequiredService<AbpIdentityTestDataBuilder>()
-                    .Build();
+                AsyncHelper.RunSync(async () =>
+                {
+                    await dataSeeder.SeedAsync();
+                    await scope.ServiceProvider
+                        .GetRequiredService<AbpIdentityTestDataBuilder>()
+                        .Build();
+                });
             }
         }
     }

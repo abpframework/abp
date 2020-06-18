@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Uow
@@ -19,7 +18,7 @@ namespace Volo.Abp.Uow
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public IUnitOfWork Begin(UnitOfWorkOptions options, bool requiresNew = false)
+        public IUnitOfWork Begin(AbpUnitOfWorkOptions options, bool requiresNew = false)
         {
             Check.NotNull(options, nameof(options));
 
@@ -52,7 +51,7 @@ namespace Volo.Abp.Uow
             return unitOfWork;
         }
 
-        public void BeginReserved(string reservationName, UnitOfWorkOptions options)
+        public void BeginReserved(string reservationName, AbpUnitOfWorkOptions options)
         {
             if (!TryBeginReserved(reservationName, options))
             {
@@ -60,7 +59,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public bool TryBeginReserved(string reservationName, UnitOfWorkOptions options)
+        public bool TryBeginReserved(string reservationName, AbpUnitOfWorkOptions options)
         {
             Check.NotNull(reservationName, nameof(reservationName));
 

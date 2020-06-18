@@ -31,7 +31,6 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
             permissionListResultDto.Groups.Count.ShouldBe(1);
             permissionListResultDto.Groups.ShouldContain(x => x.Name == "TestGroup");
 
-            permissionListResultDto.Groups.First().Permissions.Count.ShouldBe(4);
             permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission1");
             permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission2");
             permissionListResultDto.Groups.First().Permissions.ShouldContain(x => x.Name == "MyPermission2.ChildPermission1");
@@ -65,9 +64,9 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
         [Fact]
         public async Task Update_Revoke_Test()
         {
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
-                    Guid.NewGuid(), 
+                    Guid.NewGuid(),
                     "MyPermission1",
                     "Test",
                     "Test"

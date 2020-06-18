@@ -1,1 +1,0 @@
-<h1> @abp/ng.setting-management </h1>

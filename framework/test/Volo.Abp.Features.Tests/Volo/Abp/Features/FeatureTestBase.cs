@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Features
+﻿using Volo.Abp.Testing;
+
+namespace Volo.Abp.Features
 {
     public class FeatureTestBase : AbpIntegratedTest<AbpFeaturesTestModule>
     {

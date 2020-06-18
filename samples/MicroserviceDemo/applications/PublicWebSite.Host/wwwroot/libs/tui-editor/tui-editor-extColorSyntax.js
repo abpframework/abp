@@ -1,7 +1,7 @@
 /*!
  * tui-editor
- * @version 1.3.0
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
+ * @version 1.4.7
+ * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -99,7 +99,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
 * @fileoverview Editor/Viewer proxy for extensions
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 /* eslint global-require: 0 no-empty: 0 */
 
@@ -151,7 +151,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var colorSyntaxRx = /\{color:(.+?)}(.*?)\{color}/g; /**
                                                     * @fileoverview Implements Color syntax Extension
-                                                    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                    * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                     */
 
 var colorHtmlRx = /<span (?:class="colour" )?style="color:(.+?)"(?: class="colour")?>(.*?)/g;
@@ -159,6 +159,8 @@ var colorHtmlCompleteRx = /<span (?:class="colour" )?style="color:(.+?)"(?: clas
 var decimalColorRx = /rgb\((\d+)[, ]+(\d+)[, ]+(\d+)\)/g;
 
 var RESET_COLOR = '#181818';
+
+var lastScrollTop = 0;
 
 /**
  * color syntax extension
@@ -258,6 +260,12 @@ function colorSyntaxExtension(editor) {
 
         var sq = wwe.getEditor();
         var tableSelectionManager = wwe.componentManager.getManager('tableSelection');
+
+        // Cache scrollTop before change text color.
+        // Because scrollTop is set 0 when focus() is called.
+        // focus() is called when change text color.
+        lastScrollTop = getScrollTopForReFocus(sq);
+
         if (sq.hasFormat('table') && tableSelectionManager.getSelectedCells().length) {
           tableSelectionManager.styleToSelectedCells(styleColor, color);
 
@@ -291,6 +299,15 @@ function styleColor(sq, color) {
       sq.setTextColour(color);
     }
   }
+}
+
+/**
+ * Get scrollTop of squire
+ * @param {SquireExt} sq - squire ext instance
+ * @ignore
+ */
+function getScrollTopForReFocus(sq) {
+  return sq.getRoot().parentNode.scrollTop;
 }
 
 /**
@@ -356,6 +373,11 @@ function initUI(editor, preset) {
 
   editor.eventManager.listen('focus', function () {
     popup.hide();
+
+    if (editor.isWysiwygMode() && lastScrollTop) {
+      editor.getSquire().getRoot().parentNode.scrollTop = lastScrollTop;
+      lastScrollTop = 0;
+    }
   });
 
   editor.eventManager.listen('colorButtonClicked', function () {
@@ -385,6 +407,8 @@ function initUI(editor, preset) {
 
   editor.eventManager.listen('removeEditor', function () {
     colorPicker.off('selectColor');
+    popup.$el.find('.te-apply-button').off('click');
+    popup.remove();
   });
 
   colorPicker.on('selectColor', function (e) {

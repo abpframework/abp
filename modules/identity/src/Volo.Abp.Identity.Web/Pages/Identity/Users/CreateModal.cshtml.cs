@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Auditing;
+using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
-    public class CreateModalModel : AbpPageModel
+    public class CreateModalModel : IdentityPageModel
     {
         [BindProperty]
         public UserInfoViewModel UserInfo { get; set; }
@@ -15,37 +16,37 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         [BindProperty]
         public AssignedRoleViewModel[] Roles { get; set; }
 
-        private readonly IIdentityUserAppService _identityUserAppService;
-        private readonly IIdentityRoleAppService _identityRoleAppService;
+        protected IIdentityUserAppService IdentityUserAppService { get; }
 
-        public CreateModalModel(IIdentityUserAppService identityUserAppService, IIdentityRoleAppService identityRoleAppService)
+        public CreateModalModel(IIdentityUserAppService identityUserAppService)
         {
-            _identityUserAppService = identityUserAppService;
-            _identityRoleAppService = identityRoleAppService;
+            IdentityUserAppService = identityUserAppService;
         }
 
-        public async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             UserInfo = new UserInfoViewModel();
 
-            var roleDtoList = await _identityRoleAppService.GetListAsync();
+            var roleDtoList = (await IdentityUserAppService.GetAssignableRolesAsync()).Items;
 
-            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList.Items);
+            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
 
             foreach (var role in Roles)
             {
                 role.IsAssigned = role.IsDefault;
             }
+
+            return Page();
         }
 
-        public async Task<NoContentResult> OnPostAsync()
+        public virtual async Task<NoContentResult> OnPostAsync()
         {
             ValidateModel();
 
             var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
             input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
 
-            await _identityUserAppService.CreateAsync(input);
+            await IdentityUserAppService.CreateAsync(input);
 
             return NoContent();
         }
@@ -65,6 +66,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [Required]
             [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
 
             [Required]

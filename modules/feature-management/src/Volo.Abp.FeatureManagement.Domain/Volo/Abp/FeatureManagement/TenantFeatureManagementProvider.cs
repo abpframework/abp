@@ -25,7 +25,7 @@ namespace Volo.Abp.FeatureManagement
                 return providerKey;
             }
 
-            return CurrentTenant.Id?.ToString("N");
+            return CurrentTenant.Id?.ToString();
         }
     }
 }

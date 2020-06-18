@@ -2,20 +2,22 @@
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Validation;
 using Volo.Blogging.Areas.Blog.Helpers;
 
 namespace Volo.Blogging.Files
 {
-    public class FileAppService : ApplicationService, IFileAppService
+    public class FileAppService : BloggingAppServiceBase, IFileAppService
     {
         public BlogFileOptions Options { get; }
+        private readonly ILogger<FileAppService> _logger;
 
-        public FileAppService(IOptions<BlogFileOptions> options)
+        public FileAppService(IOptions<BlogFileOptions> options, ILogger<FileAppService> logger)
         {
+            _logger = logger;
             Options = options.Value;
         }
 
@@ -36,12 +38,13 @@ namespace Volo.Blogging.Files
 
             var filePath = Path.Combine(Options.FileUploadLocalFolder, name);
 
-            return Task.FromResult(
-                new RawFileDto
-                {
-                    Bytes = File.ReadAllBytes(filePath)
-                }
-            );
+            if (File.Exists(filePath))
+            {
+                return Task.FromResult(new RawFileDto {Bytes = File.ReadAllBytes(filePath)});
+            }
+
+            _logger.LogError($"Cannot find the file {filePath}");
+            return Task.FromResult(RawFileDto.EmptyResult());
         }
 
         public virtual Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)

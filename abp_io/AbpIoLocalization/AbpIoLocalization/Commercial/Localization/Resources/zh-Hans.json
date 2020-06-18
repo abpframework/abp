@@ -18,6 +18,13 @@
     "Manage": "管理",
     "StartDate": "开始日期",
     "EndDate": "结束日期",
-    "Modules":  "模块" 
+    "Modules": "模块",
+    "LicenseExtendMessage": "你的许可已经延长至{0}",
+    "LicenseUpgradeMessage": "你的许可已升级为{0}",
+    "LicenseAddDeveloperMessage": "{0}个开发者已添加到你的许可",
+    "Volo.AbpIo.Commercial:010004": "不能找到指定的用户! 用户必须已经注册.",
+    "MyOrganizations": "我的组织",
+    "ApiKey": "API key",
+    "UserNameNotFound": "没有用户名为{0}的用户"
   }
 }

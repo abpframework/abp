@@ -14,12 +14,12 @@ ABP v0.19已发布,包含解决的[~90个问题](https://github.com/abpframework
 * 更新了[ABP CLI](https://docs.abp.io/en/abp/latest/CLI)和[下载页面](https://abp.io/get-started),以便能够使用新的UI选项生成项目.
 * 创建了[教程](https://docs.abp.io/en/abp/latest/Tutorials/Angular/Part-I)以使用新的UI选项快速入门.
 
-我们基于最新的Angular工具和趋势创建了模板,文档和基础架构：
+我们基于最新的Angular工具和趋势创建了模板,文档和基础架构:
 
 * 使用[NgBootstrap](https://ng-bootstrap.github.io/)和[PrimeNG](https://www.primefaces.org/primeng/)作为UI组件库.你可以使用自己喜欢的库,没问题,但预构建的模块可以使用这些库.
 * 使用[NGXS](https://ngxs.gitbook.io/ngxs/)作为状态管理库.
 
-Angular是第一个SPA UI选项,但它不是最后一个.在v1.0发布之后,我们将开始第二个UI选项的工作.虽然尚未决定,但候选的有Blazor,React和Vue.js. 等待你的反馈.你可以使用以下issue进行投票(thumb)：
+Angular是第一个SPA UI选项,但它不是最后一个.在v1.0发布之后,我们将开始第二个UI选项的工作.虽然尚未决定,但候选的有Blazor,React和Vue.js. 等待你的反馈.你可以使用以下issue进行投票(thumb):
 
 * [Blazor](https://github.com/abpframework/abp/issues/394)
 * [Vue.js](https://github.com/abpframework/abp/issues/1168)
@@ -27,7 +27,7 @@ Angular是第一个SPA UI选项,但它不是最后一个.在v1.0发布之后,我
 
 ### Widget系统
 
-[Widget系统](https://docs.abp.io/en/abp/latest/AspNetCore/Widgets)允许为ASP.NET Core MVC应用程序**定义和重用**Widget.Widget可能有自己的脚本和样式资源以及由ABP框架管理的第三方库的依赖关系.
+[Widget系统](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Widgets)允许为ASP.NET Core MVC应用程序**定义和重用**Widget.Widget可能有自己的脚本和样式资源以及由ABP框架管理的第三方库的依赖关系.
 
 ### 其他
 

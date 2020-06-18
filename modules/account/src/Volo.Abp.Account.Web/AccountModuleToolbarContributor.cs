@@ -8,7 +8,7 @@ namespace Volo.Abp.Account.Web
 {
     public class AccountModuleToolbarContributor : IToolbarContributor
     {
-        public Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
+        public virtual Task ConfigureToolbarAsync(IToolbarConfigurationContext context)
         {
             if (context.Toolbar.Name != StandardToolbars.Main)
             {

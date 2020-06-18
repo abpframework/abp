@@ -7,21 +7,36 @@
 @inject ICurrentTenant CurrentTenant
 @inject IHtmlLocalizer<AbpUiResource> L
 @model ApplicationMenu
-<div class="dropdown d-inline">
-    <a class="btn btn-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        @CurrentUser.UserName
+<div class="dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @if (CurrentUser.TenantId != null)
+        {
+            <small><i>@CurrentTenant.Name</i>\</small>@CurrentUser.UserName
+        }
+        else
+        {
+            @CurrentUser.UserName
+        }
     </a>
 
     @if (Model.Items.Any())
     {
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+        <div class="dropdown-menu dropdown-menu-right border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
             @foreach (var menuItem in Model.Items)
             {
                 var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";
                 var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
                 var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
+                var url = string.IsNullOrEmpty(menuItem.Url) ? "#" : Url.Content(menuItem.Url);
 
-                <a class="dropdown-item @cssClass @disabled" href="@(menuItem.Url ?? "#")" target="@menuItem.Target" @Html.Raw(elementId)>
+                <a class="dropdown-item @cssClass @disabled" href="@url" target="@menuItem.Target" @Html.Raw(elementId)>
+                    @if (menuItem.Icon != null)
+                    {
+                        if (menuItem.Icon.StartsWith("fa"))
+                        {
+                            <i class="@menuItem.Icon"></i>
+                        }
+                    }
                     @menuItem.DisplayName
                 </a>
             }

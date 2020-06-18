@@ -7,52 +7,54 @@ namespace Microsoft.AspNetCore.Authorization
 {
     public static class AbpAuthorizationServiceExtensions
     {
-        public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, string policyName)
+        public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, string policyName)
         {
-            return AuthorizeAsync(
+            return await AuthorizeAsync(
                 authorizationService,
-                authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
+                null,
                 policyName
             );
         }
 
-        public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
+        public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
         {
-            return authorizationService.AuthorizeAsync(
+            return await authorizationService.AuthorizeAsync(
                 authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
                 resource,
                 requirement
             );
         }
 
-        public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
+        public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
         {
-            return authorizationService.AuthorizeAsync(
+            return await authorizationService.AuthorizeAsync(
                 authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
                 resource,
                 policy
             );
         }
 
-        public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
+        public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
         {
-            return AuthorizeAsync(authorizationService, authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
+            return await AuthorizeAsync(
+                authorizationService,
+                null,
                 policy
             );
         }
 
-        public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
+        public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
         {
-            return authorizationService.AuthorizeAsync(
+            return await authorizationService.AuthorizeAsync(
                 authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
                 resource,
                 requirements
             );
         }
 
-        public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, string policyName)
+        public static async Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, object resource, string policyName)
         {
-            return authorizationService.AuthorizeAsync(
+            return await authorizationService.AuthorizeAsync(
                 authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
                 resource,
                 policyName

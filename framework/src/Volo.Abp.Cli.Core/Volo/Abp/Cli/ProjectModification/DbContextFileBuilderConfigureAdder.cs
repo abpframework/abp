@@ -18,7 +18,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<DbContextFileBuilderConfigureAdder>.Instance;
         }
 
-        public void Add(string path, string moduleConfiguration)
+        public bool Add(string path, string moduleConfiguration)
         {
             var file = File.ReadAllText(path);
 
@@ -32,13 +32,18 @@ namespace Volo.Abp.Cli.ProjectModification
                 if (indexToInsert <= 0 || indexToInsert >= file.Length)
                 {
                     Logger.LogWarning($"\"OnModelCreating(ModelBuilder builder)\" method couldn't be found in {path}");
-                    return;
+                    return false;
                 }
                 file = file.Insert(indexToInsert, "    " + stringToAdd + Environment.NewLine + "        ");
+            }
+            else
+            {
+                return false;
             }
 
 
             File.WriteAllText(path, file);
+            return true;
         }
 
         protected int FindIndexToInsert(string file)

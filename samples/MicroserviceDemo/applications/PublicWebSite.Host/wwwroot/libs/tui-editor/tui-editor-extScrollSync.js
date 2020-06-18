@@ -1,7 +1,7 @@
 /*!
  * tui-editor
- * @version 1.3.0
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
+ * @version 1.4.7
+ * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -99,7 +99,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
 * @fileoverview Editor/Viewer proxy for extensions
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 /* eslint global-require: 0 no-empty: 0 */
 
@@ -167,7 +167,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
 * @fileoverview Implements Scroll Sync Extension
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function scrollSyncExtension(editor) {
   var className = 'tui-scrollsync';
@@ -251,11 +251,16 @@ function scrollSyncExtension(editor) {
   }
 
   editor.on('previewRenderAfter', function () {
-    sectionManager.sectionMatch();
-    if (isActive) {
-      scrollManager.syncPreviewScrollTopToMarkdown();
-    }
-    isScrollable = true;
+    // Immediately after the 'previewRenderAfter' event has occurred,
+    // browser rendering is not yet complete.
+    // So the size of elements can not be accurately measured.
+    setTimeout(function () {
+      sectionManager.sectionMatch();
+      if (isActive) {
+        scrollManager.syncPreviewScrollTopToMarkdown(true);
+      }
+      isScrollable = true;
+    }, 200);
   });
 
   editor.eventManager.listen('scroll', function (event) {
@@ -265,7 +270,7 @@ function scrollSyncExtension(editor) {
 
     if (isScrollable && editor.preview.isVisible()) {
       if (event.source === 'markdown' && !scrollManager.isMarkdownScrollEventBlocked) {
-        scrollManager.syncPreviewScrollTopToMarkdown();
+        scrollManager.syncPreviewScrollTopToMarkdown(false);
       } else if (event.source === 'preview' && !scrollManager.isPreviewScrollEventBlocked) {
         scrollManager.syncMarkdownScrollTopToPreview();
       }
@@ -293,7 +298,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implements Scroll Sync Extension ScrollManager Module
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
@@ -312,16 +317,13 @@ var SCROLL_BOCKING_RESET_DELAY = 15;
 /**
  * Class ScrollManager
  * manage scroll sync between markdown editor and preview
+ * @param {SectionManager} sectionManager - sectionManager
+ * @param {CodeMirror} cm - CodeMirror
+ * @param {jQuery} $previewContainerEl - preview container
+ * @ignore
  */
 
 var ScrollManager = function () {
-  /**
-   * Creates an instance of ScrollManager.
-   * @param {SectionManager} sectionManager - sectionManager
-   * @param {CodeMirror} cm - CodeMirror
-   * @param {jQuery} $previewContainerEl - preview container
-   * @memberof ScrollManager
-   */
   function ScrollManager(sectionManager, cm, $previewContainerEl) {
     _classCallCheck(this, ScrollManager);
 
@@ -330,21 +332,23 @@ var ScrollManager = function () {
     this.$previewContainerEl = $previewContainerEl;
     this.$contents = this.$previewContainerEl.find('.tui-editor-contents');
     this.releaseTimer = null;
+
     /**
      * current timeout id needs animation
      * @type {number}
+     * @private
      */
     this._currentTimeoutId = null;
 
     /**
      * Saved scrollInfo object of CodeMirror
      * @type {object}
+     * @private
      */
     this._savedScrollInfo = null;
   }
 
   /**
-   * _getEditorSectionHeight
    * Return section height of editor
    * @param {object} section section be calculated height
    * @returns {number} height
@@ -362,7 +366,6 @@ var ScrollManager = function () {
     }
 
     /**
-     * _getLineHeightGapInSection
      * Return height gap between passed line in passed section
      * @param {object} section section be calculated
      * @param {number} line line number
@@ -380,7 +383,6 @@ var ScrollManager = function () {
     }
 
     /**
-     * _getSectionScrollRatio
      * Return ratio of height between scrollTop line and scrollTop section
      * @param {object} section section be calculated
      * @param {number} line line number
@@ -404,7 +406,6 @@ var ScrollManager = function () {
     }
 
     /**
-     * _getScrollFactorsOfEditor
      * Return Scroll Information of editor for preview scroll sync
      * @returns {object} scroll factors
      * @private
@@ -448,6 +449,42 @@ var ScrollManager = function () {
       }
 
       return factors;
+    }
+
+    /**
+     * Return cursor position information of editor for preview scroll sync
+     * @returns {object} scroll factors
+     * @private
+     */
+
+  }, {
+    key: '_getCursorFactorsOfEditor',
+    value: function _getCursorFactorsOfEditor() {
+      var cm = this.cm;
+
+      var cursorInfo = cm.cursorCoords(true, 'local');
+
+      // if codemirror has not visible scrollInfo have incorrect value
+      // so we use saved scroll info for alternative
+      var scrollInfo = this._fallbackScrollInfoIfIncorrect(cm.getScrollInfo());
+      var cursorLine = cm.coordsChar({
+        left: cursorInfo.left,
+        top: cursorInfo.top
+      }, 'local').line;
+
+      var cusrsorSection = this.sectionManager.sectionByLine(cursorLine);
+
+      if (cusrsorSection && cusrsorSection.$previewSectionEl && cusrsorSection.$previewSectionEl.length) {
+        var ratio = this._getEditorSectionScrollRatio(cusrsorSection, cursorLine);
+
+        return {
+          section: cusrsorSection,
+          sectionRatio: ratio,
+          relativeCursorTop: cursorInfo.top - scrollInfo.top
+        };
+      }
+
+      return null;
     }
 
     /**
@@ -504,7 +541,6 @@ var ScrollManager = function () {
     }
 
     /**
-     * _getScrollTopForPreview
      * Return scrollTop value for preview
      * @returns {number|undefined} scrollTop value, when something wrong then return undefined
      * @private
@@ -526,6 +562,38 @@ var ScrollManager = function () {
         scrollTop = section.$previewSectionEl[0].offsetTop;
         scrollTop += section.$previewSectionEl.height() * sectionRatio - SCROLL_TOP_PADDING;
       }
+
+      scrollTop = scrollTop && Math.max(scrollTop, 0);
+
+      return scrollTop;
+    }
+
+    /**
+     * Return scrollTop value for preview according cursor position
+     * @returns {number} scrollTop value
+     * @private
+     */
+
+  }, {
+    key: '_getScrollTopForPreviewBaseCursor',
+    value: function _getScrollTopForPreviewBaseCursor() {
+      var cursorFactors = this._getCursorFactorsOfEditor();
+
+      if (!cursorFactors) {
+        return 0;
+      }
+
+      var section = cursorFactors.section,
+          sectionRatio = cursorFactors.sectionRatio,
+          relativeCursorTop = cursorFactors.relativeCursorTop;
+
+      var scrollTop = section.$previewSectionEl[0].offsetTop;
+
+      // Moves the preview so that the line of cursor is positioned at top of the preview.
+      scrollTop += section.$previewSectionEl.height() * sectionRatio - SCROLL_TOP_PADDING;
+
+      // Moves the preview by the position of the cursor at markdown.
+      scrollTop -= relativeCursorTop;
 
       scrollTop = scrollTop && Math.max(scrollTop, 0);
 
@@ -569,19 +637,19 @@ var ScrollManager = function () {
     }
 
     /**
-     * syncPreviewScrollTopToMarkdown
      * sync preview scroll to markdown
+     * @param {boolean} isCursorBase whether sync according to cursor position
      */
 
   }, {
     key: 'syncPreviewScrollTopToMarkdown',
-    value: function syncPreviewScrollTopToMarkdown() {
+    value: function syncPreviewScrollTopToMarkdown(isCursorBase) {
       var _this2 = this;
 
       var $previewContainerEl = this.$previewContainerEl;
 
       var sourceScrollTop = $previewContainerEl.scrollTop();
-      var targetScrollTop = this._getScrollTopForPreview();
+      var targetScrollTop = isCursorBase ? this._getScrollTopForPreviewBaseCursor() : this._getScrollTopForPreview();
 
       this.isPreviewScrollEventBlocked = true;
 
@@ -597,7 +665,6 @@ var ScrollManager = function () {
     }
 
     /**
-     * syncMarkdownScrollTopToPreview
      * sync markdown scroll to preview
      */
 
@@ -625,7 +692,6 @@ var ScrollManager = function () {
     }
 
     /**
-     * _animateRun
      * animate with passed Callback
      * @param {number} originValue original value
      * @param {number} targetValue target value
@@ -682,7 +748,6 @@ var ScrollManager = function () {
 
     /**
      * Save Codemirror's scrollInfo for alternative use
-     * memberOf ScrollManager
      */
 
   }, {
@@ -731,7 +796,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implements Scroll Sync Extension SectionManager Module
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
@@ -755,15 +820,12 @@ var FIND_SPACE = /\s/g;
 /**
  * Class SectionManager
  * manage logical markdown content sections
+ * @param {CodeMirror} cm - codemirror
+ * @param {Preview} preview - preview
+ * @ignore
  */
 
 var SectionManager = function () {
-  /**
-   * Creates an instance of SectionManager.
-   * @param {CodeMirror} cm - codemirror
-   * @param {Preview} preview - preview
-   * @memberof SectionManager
-   */
   function SectionManager(cm, preview) {
     _classCallCheck(this, SectionManager);
 
@@ -772,20 +834,21 @@ var SectionManager = function () {
     this.$previewContent = preview.$el.find('.tui-editor-contents');
 
     /**
-     *  section list
+     * section list
      * @type {object[]}
+     * @private
      */
     this._sectionList = null;
 
     /**
      * current working section needs making section list
      * @type {object}
+     * @private
      */
     this._currentSection = null;
   }
 
   /**
-   * _addNewSection
    * add new section
    * @param {number} start initial start line number
    * @param {number} end initial end line number
@@ -802,7 +865,6 @@ var SectionManager = function () {
     }
 
     /**
-     * getSectionList
      * return section list
      * @returns {object[]} section object list
      */
@@ -818,7 +880,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _makeSectionData
      * make default section object
      * @param {number} start initial start line number
      * @param {number} end initial end line number
@@ -837,7 +898,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _updateCurrentSectionEnd
      * update current section's end line number
      * @param {number} end end value to update
      * @private
@@ -850,7 +910,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _eachLineState
      * iterate codemiror lines, callback function parameter pass line type and line number
      * @param {function} iteratee callback function
      * @private
@@ -865,8 +924,8 @@ var SectionManager = function () {
           nextLineString = void 0,
           prevLineString = void 0,
           isTrimming = true,
-          onTable = false,
-          onCodeBlock = false,
+          isInTable = false,
+          isInCodeBlock = false,
           trimCapture = '';
       var isRightAfterImageSection = false;
       var isEnsuredSection = false;
@@ -881,22 +940,22 @@ var SectionManager = function () {
         prevLineString = this.cm.getLine(i - 1) || '';
         var isCodeBlockEnded = this._isCodeBlockEnd(prevLineString) && codeblockStartLineIndex !== i - 1;
 
-        if (onTable && (!lineString || !this._isTableCode(lineString))) {
-          onTable = false;
-        } else if (!onTable && this._isTable(lineString, nextLineString)) {
-          onTable = true;
+        if (isInTable && (!lineString || !this._isTableCode(lineString))) {
+          isInTable = false;
+        } else if (!isInTable && this._isTable(lineString, nextLineString)) {
+          isInTable = true;
         }
 
-        if (onCodeBlock && isCodeBlockEnded) {
-          onCodeBlock = false;
+        if (isInCodeBlock && isCodeBlockEnded) {
+          isInCodeBlock = false;
         }
-        if (!onCodeBlock && this._isCodeBlockStart(lineString)) {
-          onCodeBlock = this._doFollowedLinesHaveCodeBlockEnd(i, lineLength);
+        if (!isInCodeBlock && this._isCodeBlockStart(lineString)) {
+          isInCodeBlock = this._doFollowedLinesHaveCodeBlockEnd(i, lineLength);
           codeblockStartLineIndex = i;
         }
 
         if (isEnsuredSection && lineString.length !== 0) {
-          if (this._isIndependentImage(onCodeBlock, onTable, lineString, prevLineString)) {
+          if (this._isIndependentImage(isInCodeBlock, isInTable, lineString, prevLineString)) {
             isRightAfterImageSection = true;
             isEnsuredSection = true;
           } else {
@@ -905,16 +964,16 @@ var SectionManager = function () {
           }
 
           isSection = true;
-        } else if (this._isAtxHeader(lineString)) {
+        } else if (!isInCodeBlock && this._isAtxHeader(lineString)) {
           isRightAfterImageSection = false;
           isSection = true;
           isEnsuredSection = false;
           // setext header
-        } else if (!this._isCodeBlockEnd(lineString) && !onTable && this._isSeTextHeader(lineString, nextLineString)) {
+        } else if (!this._isCodeBlockEnd(lineString) && !isInTable && this._isSeTextHeader(lineString, nextLineString)) {
           isRightAfterImageSection = false;
           isSection = true;
           isEnsuredSection = false;
-        } else if (this._isIndependentImage(onCodeBlock, onTable, lineString, prevLineString)) {
+        } else if (this._isIndependentImage(isInCodeBlock, isInTable, lineString, prevLineString)) {
           isRightAfterImageSection = true;
           isSection = true;
           isEnsuredSection = false;
@@ -940,8 +999,8 @@ var SectionManager = function () {
 
     /**
      * Return whether is independent image line with padding lines top and bottom
-     * @param {boolean} onCodeBlock Is on codeblock
-     * @param {boolean} onTable Is on table
+     * @param {boolean} isInCodeBlock Is on codeblock
+     * @param {boolean} isInTable Is on table
      * @param {string} lineString Current line string
      * @param {string} prevLineString Previous line string
      * @returns {boolean}
@@ -950,12 +1009,11 @@ var SectionManager = function () {
 
   }, {
     key: '_isIndependentImage',
-    value: function _isIndependentImage(onCodeBlock, onTable, lineString, prevLineString) {
-      return !onCodeBlock && !onTable && this._isImage(lineString) && !this._isList(lineString) && !this._isQuote(lineString) && prevLineString.length === 0;
+    value: function _isIndependentImage(isInCodeBlock, isInTable, lineString, prevLineString) {
+      return !isInCodeBlock && !isInTable && this._isImage(lineString) && !this._isList(lineString) && !this._isQuote(lineString) && prevLineString.length === 0;
     }
 
     /**
-     * _doFollowedLinesHaveCodeBlockEnd
      * Check if follow lines have codeblock end
      * @param {number} lineIndex current index
      * @param {number} lineLength line length
@@ -979,7 +1037,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _isCodeBlockStart
      * Check if passed string have code block start
      * @param {string} string string to check
      * @returns {boolean} result
@@ -993,7 +1050,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _isCodeBlockEnd
      * Check if passed string have code block end
      * @param {string} string string to check
      * @returns {boolean} result
@@ -1007,7 +1063,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _isTable
      * Check if passed string have table
      * @param {string} lineString current line string
      * @param {string} nextLineString next line string
@@ -1022,7 +1077,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _isTableCode
      * Check if passed string have table code
      * @param {string} string string to check
      * @returns {boolean} result
@@ -1037,7 +1091,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _isTableAligner
      * Check if passed string have table align code
      * @param {string} string string to check
      * @returns {boolean} result
@@ -1052,7 +1105,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _isAtxHeader
      * Check if passed string have atx header
      * @param {string} string string to check
      * @returns {boolean} result
@@ -1066,7 +1118,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _isSeTextHeader
      * @param {string} lineString current line string
      * @param {string} nextLineString next line string
      * @returns {boolean} result
@@ -1095,7 +1146,6 @@ var SectionManager = function () {
     }
 
     /**
-     * makeSectionList
      * make section list
      */
 
@@ -1116,7 +1166,6 @@ var SectionManager = function () {
     }
 
     /**
-     * sectionMatch
      * make preview sections then match section list with preview section element
      */
 
@@ -1130,7 +1179,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _matchPreviewSectionsWithSectionlist
      * match section list with preview section element
      * @param {HTMLNode[]} sections section nodes
      * @private
@@ -1150,7 +1198,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _getPreviewSections
      * get preview html section group to make section
      * @returns {array[]} element node array
      * @private
@@ -1168,7 +1215,7 @@ var SectionManager = function () {
       this.$previewContent.contents().filter(findElementNodeFilter).each(function (index, el) {
         var isParagraph = el.tagName === 'P';
         var isHeading = el.tagName.match(/^(H1|H2|H3|H4|H5|H6)$/);
-        var isImage = isParagraph && el.childNodes[0].nodeName === 'IMG';
+        var isImage = isParagraph && el.hasChildNodes() && el.childNodes[0].nodeName === 'IMG';
 
         if ((isHeading || isImage || isRightAfterImageSection) && sections[lastSection].length) {
           sections.push([]);
@@ -1187,7 +1234,6 @@ var SectionManager = function () {
     }
 
     /**
-     * _sectionByLine
      * get section by markdown line
      * @param {number} line markdown editor line number
      * @returns {object} section
@@ -1219,7 +1265,6 @@ var SectionManager = function () {
 
 /**
  * findElementNodeFilter
- * @this Node
  * @returns {boolean} true or not
  * @ignore
  */

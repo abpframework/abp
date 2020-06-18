@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "zh-Hans",
   "texts": {
     "Hello <b>{0}</b>.": "你好 <b>{0}</b>.",

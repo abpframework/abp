@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 using IObjectMapper = Volo.Abp.ObjectMapping.IObjectMapper;
 

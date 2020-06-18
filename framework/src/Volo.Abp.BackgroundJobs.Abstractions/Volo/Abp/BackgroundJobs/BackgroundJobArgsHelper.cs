@@ -13,7 +13,8 @@ namespace Volo.Abp.BackgroundJobs
                     continue;
                 }
 
-                if (@interface.GetGenericTypeDefinition() != typeof(IBackgroundJob<>))
+                if (@interface.GetGenericTypeDefinition() != typeof(IBackgroundJob<>) &&
+                    @interface.GetGenericTypeDefinition() != typeof(IAsyncBackgroundJob<>))
                 {
                     continue;
                 }
@@ -27,7 +28,9 @@ namespace Volo.Abp.BackgroundJobs
                 return genericArgs[0];
             }
 
-            throw new AbpException($"Could not find type of the job args. Ensure that given type implements the {typeof(IBackgroundJob<>).AssemblyQualifiedName} interface. Given job type: {jobType.AssemblyQualifiedName}");
+            throw new AbpException($"Could not find type of the job args. " +
+                                   $"Ensure that given type implements the {typeof(IBackgroundJob<>).AssemblyQualifiedName} or {typeof(IAsyncBackgroundJob<>).AssemblyQualifiedName} interface. " +
+                                   $"Given job type: {jobType.AssemblyQualifiedName}");
         }
     }
 }

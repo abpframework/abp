@@ -6,15 +6,9 @@ namespace Volo.Abp.Http
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpHttpClientTestModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            //TODO: This is needed because ASP.NET Core does not use IServiceProviderFactory!
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<AbpHttpClientTestModule>();
         }
 
         public void Configure(IApplicationBuilder app)

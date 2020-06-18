@@ -11,19 +11,22 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
         [NotNull]
         public ProjectBuildArgs BuildArgs { get; }
 
-        [NotNull]
         public TemplateInfo Template { get; }
+
+        public ModuleInfo Module { get; }
 
         public FileEntryList Files { get; set; }
 
         public ProjectResult Result { get; set; }
         
         public ProjectBuildContext(
-            [NotNull] TemplateInfo template,
+            TemplateInfo template,
+            ModuleInfo module,
             [NotNull] TemplateFile templateFile,
             [NotNull] ProjectBuildArgs buildArgs)
         {
-            Template = Check.NotNull(template, nameof(template));
+            Template = template;
+            Module = module;
             TemplateFile = Check.NotNull(templateFile, nameof(templateFile));
             BuildArgs = Check.NotNull(buildArgs, nameof(buildArgs));
 

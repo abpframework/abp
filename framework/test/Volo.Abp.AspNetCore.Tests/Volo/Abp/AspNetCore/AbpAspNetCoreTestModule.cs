@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreTestModule>();
                 //options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreTestModule>(FindProjectPath(hostingEnvironment));

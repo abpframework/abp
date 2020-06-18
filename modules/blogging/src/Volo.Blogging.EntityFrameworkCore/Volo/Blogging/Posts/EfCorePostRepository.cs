@@ -7,7 +7,6 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Blogging.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
 
 namespace Volo.Blogging.Posts
 {
@@ -34,6 +33,19 @@ namespace Volo.Blogging.Posts
             }
 
             return post;
+        }
+
+        public async Task<List<Post>> GetOrderedList(Guid blogId,bool descending = false)
+        {
+            if (!descending)
+            {
+                return await DbSet.Where(x=>x.BlogId==blogId).OrderByDescending(x => x.CreationTime).ToListAsync();
+            }
+            else
+            {
+                return await DbSet.Where(x => x.BlogId == blogId).OrderBy(x => x.CreationTime).ToListAsync();
+            }
+
         }
 
         public override IQueryable<Post> WithDetails()

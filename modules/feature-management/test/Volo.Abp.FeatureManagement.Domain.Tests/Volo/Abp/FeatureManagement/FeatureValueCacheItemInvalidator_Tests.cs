@@ -26,21 +26,31 @@ namespace Volo.Abp.FeatureManagement
         public async Task Cache_Should_Invalidator_WhenFeatureChanged()
         {
             // Arrange cache feature.
-            await _featureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
-                EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"));
+            (await _featureManagementStore.GetOrNullAsync(
+                        TestFeatureDefinitionProvider.SocialLogins,
+                        EditionFeatureValueProvider.ProviderName,
+                        TestEditionIds.Regular.ToString()
+                    )
+                ).ShouldNotBeNull();
 
-            var feature = await _featureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
+            var feature = await _featureValueRepository.FindAsync(
+                TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"));
+                TestEditionIds.Regular.ToString()
+            );
 
             // Act
             await _featureValueRepository.DeleteAsync(feature);
 
             // Assert
-            (await _cache.GetAsync(FeatureValueCacheItem.CalculateCacheKey(TestFeatureDefinitionProvider.SocialLogins,
-                EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N")))).ShouldBeNull();
+            (await _cache.GetAsync(
+                        FeatureValueCacheItem.CalculateCacheKey(
+                            TestFeatureDefinitionProvider.SocialLogins,
+                            EditionFeatureValueProvider.ProviderName,
+                            TestEditionIds.Regular.ToString()
+                        )
+                    )
+                ).ShouldBeNull();
 
         }
     }

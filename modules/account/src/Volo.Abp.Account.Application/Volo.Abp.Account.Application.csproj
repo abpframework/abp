@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -10,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Encodings.Web" Version="4.6.0" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="4.7.0" />
     <ProjectReference Include="..\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />

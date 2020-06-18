@@ -1,19 +1,21 @@
-import { State, Selector, createSelector, Action, StateContext, Store } from '@ngxs/store';
-import { Config } from '../models/config';
-import { ABP } from '../models/common';
-import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
-import { ApplicationConfigurationService } from '../services/application-configuration.service';
-import { tap, switchMap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
+import { of, throwError } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
+import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
+import { RestOccurError } from '../actions/rest.actions';
 import { SetLanguage } from '../actions/session.actions';
+import { ApplicationConfiguration } from '../models/application-configuration';
+import { Config } from '../models/config';
 import { SessionState } from './session.state';
-import { of } from 'rxjs';
-import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils';
 
 @State<Config.State>({
   name: 'ConfigState',
   defaults: {} as Config.State,
 })
+@Injectable()
 export class ConfigState {
   @Selector()
   static getAll(state: Config.State) {
@@ -26,12 +28,9 @@ export class ConfigState {
   }
 
   static getOne(key: string) {
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State) => {
-        return state[key];
-      },
-    );
+    const selector = createSelector([ConfigState], (state: Config.State) => {
+      return state[key];
+    });
 
     return selector;
   }
@@ -45,189 +44,188 @@ export class ConfigState {
       throw new Error('The argument must be a dot string or an string array.');
     }
 
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State) => {
-        return (keys as string[]).reduce((acc, val) => {
-          if (acc) {
-            return acc[val];
-          }
+    const selector = createSelector([ConfigState], (state: Config.State) => {
+      return (keys as string[]).reduce((acc, val) => {
+        if (acc) {
+          return acc[val];
+        }
 
-          return undefined;
-        }, state);
-      },
-    );
-
-    return selector;
-  }
-
-  static getRoute(path?: string, name?: string) {
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State) => {
-        const { flattedRoutes } = state;
-        return (flattedRoutes as ABP.FullRoute[]).find(route => {
-          if (path && route.path === path) {
-            return route;
-          } else if (name && route.name === name) {
-            return route;
-          }
-        });
-      },
-    );
+        return undefined;
+      }, state);
+    });
 
     return selector;
   }
 
   static getApiUrl(key?: string) {
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State): string => {
-        return state.environment.apis[key || 'default'].url;
-      },
-    );
+    const selector = createSelector([ConfigState], (state: Config.State): string => {
+      return (state.environment.apis[key || 'default'] || state.environment.apis.default).url;
+    });
 
     return selector;
   }
 
   static getSetting(key: string) {
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State) => {
-        return snq(() => state.setting.values[key]);
-      },
-    );
+    const selector = createSelector([ConfigState], (state: Config.State) => {
+      return snq(() => state.setting.values[key]);
+    });
+
+    return selector;
+  }
+
+  static getSettings(keyword?: string) {
+    const selector = createSelector([ConfigState], (state: Config.State) => {
+      const settings = snq(() => state.setting.values, {});
+
+      if (!keyword) return settings;
+
+      const keysFound = Object.keys(settings).filter(key => key.indexOf(keyword) > -1);
+
+      return keysFound.reduce((acc, key) => {
+        acc[key] = settings[key];
+        return acc;
+      }, {});
+    });
 
     return selector;
   }
 
   static getGrantedPolicy(key: string) {
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State): boolean => {
-        if (!key) return true;
-        return snq(() => state.auth.grantedPolicies[key], false);
-      },
-    );
+    const selector = createSelector([ConfigState], (state: Config.State): boolean => {
+      if (!key) return true;
+      const getPolicy = k => snq(() => state.auth.grantedPolicies[k], false);
+
+      const orRegexp = /\|\|/g;
+      const andRegexp = /&&/g;
+
+      if (orRegexp.test(key)) {
+        const keys = key.split('||').filter(k => !!k);
+
+        if (keys.length !== 2) return false;
+
+        return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
+      } else if (andRegexp.test(key)) {
+        const keys = key.split('&&').filter(k => !!k);
+
+        if (keys.length !== 2) return false;
+
+        return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
+      }
+
+      return getPolicy(key);
+    });
 
     return selector;
   }
 
-  static getCopy(key: string, ...interpolateParams: string[]) {
+  static getLocalization(
+    key: string | Config.LocalizationWithDefault,
+    ...interpolateParams: string[]
+  ) {
     if (!key) key = '';
+    let defaultValue: string;
+
+    if (typeof key !== 'string') {
+      defaultValue = key.defaultValue;
+      key = key.key;
+    }
 
     const keys = key.split('::') as string[];
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State) => {
-        if (!state.localization) return key;
+    const selector = createSelector([ConfigState], (state: Config.State): string => {
+      const warn = (message: string) => {
+        if (!state.environment.production) console.warn(message);
+      };
 
-        const { defaultResourceName } = state.environment.localization;
-        if (keys[0] === '') {
-          if (!defaultResourceName) {
-            throw new Error(
-              `Please check your environment. May you forget set defaultResourceName?
-              Here is the example:
-               { production: false,
-                 localization: {
-                   defaultResourceName: 'MyProjectName'
-                  }
-               }`,
-            );
-          }
+      if (keys.length < 2) {
+        warn('The localization source separator (::) not found.');
+        return defaultValue || (key as string);
+      }
+      if (!state.localization) return defaultValue || keys[1];
 
-          keys[0] = snq(() => defaultResourceName);
-        }
+      const sourceName =
+        keys[0] ||
+        snq(() => state.environment.localization.defaultResourceName) ||
+        state.localization.defaultResourceName;
+      const sourceKey = keys[1];
 
-        let copy = (keys as any).reduce((acc, val) => {
-          if (acc) {
-            return acc[val];
-          }
+      if (sourceName === '_') {
+        return defaultValue || sourceKey;
+      }
 
-          return undefined;
-        }, state.localization.values);
+      if (!sourceName) {
+        warn(
+          'Localization source name is not specified and the defaultResourceName was not defined!',
+        );
 
-        interpolateParams = interpolateParams.filter(params => params != null);
-        if (copy && interpolateParams && interpolateParams.length) {
-          interpolateParams.forEach(param => {
-            copy = copy.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
-          });
-        }
+        return defaultValue || sourceKey;
+      }
 
-        return copy || key;
-      },
-    );
+      const source = state.localization.values[sourceName];
+      if (!source) {
+        warn('Could not find localization source: ' + sourceName);
+        return defaultValue || sourceKey;
+      }
+
+      let localization = source[sourceKey];
+      if (typeof localization === 'undefined') {
+        return defaultValue || sourceKey;
+      }
+
+      interpolateParams = interpolateParams.filter(params => params != null);
+      if (localization && interpolateParams && interpolateParams.length) {
+        interpolateParams.forEach(param => {
+          localization = localization.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
+        });
+      }
+
+      if (typeof localization !== 'string') localization = '';
+      return localization || defaultValue || (key as string);
+    });
 
     return selector;
   }
 
-  constructor(private appConfigurationService: ApplicationConfigurationService, private store: Store) {}
+  constructor(private http: HttpClient, private store: Store) {}
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
-    return this.appConfigurationService.getConfiguration().pipe(
-      tap(configuration =>
-        patchState({
-          ...configuration,
+    const apiName = this.store.selectSnapshot(ConfigState.getDeep('environment.application.name'));
+    const api = this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
+    return this.http
+      .get<ApplicationConfiguration.Response>(`${api}/api/abp/application-configuration`)
+      .pipe(
+        tap(configuration =>
+          patchState({
+            ...configuration,
+          }),
+        ),
+        switchMap(configuration => {
+          let defaultLang: string =
+            configuration.setting.values['Abp.Localization.DefaultLanguage'];
+
+          if (defaultLang.includes(';')) {
+            defaultLang = defaultLang.split(';')[0];
+          }
+
+          document.documentElement.setAttribute(
+            'lang',
+            configuration.localization.currentCulture.cultureName,
+          );
+          return this.store.selectSnapshot(SessionState.getLanguage)
+            ? of(null)
+            : dispatch(new SetLanguage(defaultLang, false));
         }),
-      ),
-      switchMap(configuration => {
-        let defaultLang: string = configuration.setting.values['Abp.Localization.DefaultLanguage'];
-
-        if (defaultLang.includes(';')) {
-          defaultLang = defaultLang.split(';')[0];
-        }
-
-        return this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
-      }),
-    );
+        catchError((err: HttpErrorResponse) => {
+          dispatch(new RestOccurError(err));
+          return throwError(err);
+        }),
+      );
   }
 
-  @Action(PatchRouteByName)
-  patchRoute({ patchState, getState }: StateContext<Config.State>, { name, newValue }: PatchRouteByName) {
-    let routes: ABP.FullRoute[] = getState().routes;
-
-    const index = routes.findIndex(route => route.name === name);
-
-    routes = patchRouteDeep(routes, name, newValue);
-
+  @Action(SetEnvironment)
+  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
     return patchState({
-      routes,
+      environment,
     });
   }
-}
-
-function patchRouteDeep(
-  routes: ABP.FullRoute[],
-  name: string,
-  newValue: Partial<ABP.FullRoute>,
-  parentUrl: string = null,
-): ABP.FullRoute[] {
-  routes = routes.map(route => {
-    if (route.name === name) {
-      if (newValue.path) {
-        newValue.url = `${parentUrl}/${newValue.path}`;
-      }
-
-      if (newValue.children && newValue.children.length) {
-        newValue.children = newValue.children.map(child => ({
-          ...child,
-          url: `${parentUrl}/${route.path}/${child.path}`,
-        }));
-      }
-
-      return { ...route, ...newValue };
-    } else if (route.children && route.children.length) {
-      route.children = patchRouteDeep(route.children, name, newValue, (parentUrl || '/') + route.path);
-    }
-
-    return route;
-  });
-
-  if (parentUrl) {
-    // recursive block
-    return routes;
-  }
-
-  return organizeRoutes(routes);
 }

@@ -14,6 +14,8 @@ namespace Volo.Abp.TestApp.Application
 
         Task RemovePhone(Guid id, string number);
 
+        Task GetWithAuthorized();
+
         Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input);
     }
 }

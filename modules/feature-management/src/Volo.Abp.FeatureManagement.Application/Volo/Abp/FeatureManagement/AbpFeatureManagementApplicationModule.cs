@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AutoMapper;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.FeatureManagement
@@ -12,6 +13,7 @@ namespace Volo.Abp.FeatureManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<AbpFeatureManagementApplicationModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<FeatureManagementApplicationAutoMapperProfile>(validate: true);

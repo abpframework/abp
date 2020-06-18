@@ -1,0 +1,10 @@
+{
+  "culture": "sl",
+  "texts": {
+    "Permission:Blogging": "Blog",
+    "Permission:Blogs": "Blogi",
+    "Permission:Posts": "Objave",
+    "Permission:Tags": "Oznake",
+    "Permission:Comments": "Komentarji"
+  }
+}

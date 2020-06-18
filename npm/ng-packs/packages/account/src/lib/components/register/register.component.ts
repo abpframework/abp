@@ -1,25 +1,29 @@
-import { ConfigState, GetAppConfiguration } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { Component } from '@angular/core';
+import { AuthService, ConfigState } from '@abp/ng.core';
+import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { from, throwError } from 'rxjs';
-import { catchError, finalize, switchMap, take, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import snq from 'snq';
 import { RegisterRequest } from '../../models';
 import { AccountService } from '../../services/account.service';
-const { maxLength, minLength, required, email } = Validators;
+import { eAccountComponents } from '../../enums/components';
+const { maxLength, required, email } = Validators;
 
 @Component({
   selector: 'abp-register',
   templateUrl: './register.component.html',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   form: FormGroup;
 
   inProgress: boolean;
+
+  isSelfRegistrationEnabled = true;
+
+  authWrapperKey = eAccountComponents.AuthWrapper;
 
   constructor(
     private fb: FormBuilder,
@@ -27,13 +31,31 @@ export class RegisterComponent {
     private oauthService: OAuthService,
     private store: Store,
     private toasterService: ToasterService,
-  ) {
-    this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
-    this.oauthService.loadDiscoveryDocument();
+    private authService: AuthService,
+  ) {}
+
+  ngOnInit() {
+    this.isSelfRegistrationEnabled =
+      (
+        this.store.selectSnapshot(
+          ConfigState.getSetting('Abp.Account.IsSelfRegistrationEnabled'),
+        ) || ''
+      ).toLowerCase() !== 'false';
+    if (!this.isSelfRegistrationEnabled) {
+      this.toasterService.warn(
+        {
+          key: 'AbpAccount::SelfRegistrationDisabledMessage',
+          defaultValue: 'Self registration is disabled.',
+        },
+        null,
+        { life: 10000 },
+      );
+      return;
+    }
 
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: ['', [required, maxLength(32)]],
+      password: ['', [required, ...getPasswordValidators(this.store)]],
       email: ['', [required, email]],
     });
   }
@@ -53,10 +75,7 @@ export class RegisterComponent {
     this.accountService
       .register(newUser)
       .pipe(
-        switchMap(() => from(this.oauthService.fetchTokenUsingPasswordFlow(newUser.userName, newUser.password))),
-        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
-        tap(() => this.store.dispatch(new Navigate(['/']))),
-        take(1),
+        switchMap(() => this.authService.login(newUser.userName, newUser.password)),
         catchError(err => {
           this.toasterService.error(
             snq(() => err.error.error_description) ||

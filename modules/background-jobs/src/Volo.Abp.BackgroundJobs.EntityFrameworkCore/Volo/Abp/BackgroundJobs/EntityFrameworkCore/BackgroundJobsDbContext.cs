@@ -4,13 +4,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
-    [ConnectionStringName(BackgroundJobsConsts.ConnectionStringName)]
+    [ConnectionStringName(BackgroundJobsDbProperties.ConnectionStringName)]
     public class BackgroundJobsDbContext : AbpDbContext<BackgroundJobsDbContext>, IBackgroundJobsDbContext
     {
-        public static string TablePrefix { get; set; } = BackgroundJobsConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = BackgroundJobsConsts.DefaultDbSchema;
-
         public DbSet<BackgroundJobRecord> BackgroundJobs { get; set; }
 
         public BackgroundJobsDbContext(DbContextOptions<BackgroundJobsDbContext> options) 
@@ -23,11 +19,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureBackgroundJobs(options =>
-            {
-                options.TablePrefix = TablePrefix;
-                options.Schema = Schema;
-            });
+            builder.ConfigureBackgroundJobs();
         }
     }
 }

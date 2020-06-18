@@ -23,6 +23,8 @@ namespace Volo.Abp.TenantManagement
                         return connStrings;
                     });
                 });
+
+            CreateMap<Tenant, TenantEto>();
         }
     }
 }

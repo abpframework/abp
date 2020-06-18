@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing.Smtp;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.MailKit

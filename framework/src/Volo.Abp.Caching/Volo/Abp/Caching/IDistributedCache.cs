@@ -10,7 +10,18 @@ namespace Volo.Abp.Caching
     /// Represents a distributed cache of <typeparamref name="TCacheItem" /> type.
     /// </summary>
     /// <typeparam name="TCacheItem">The type of cache item being cached.</typeparam>
-    public interface IDistributedCache<TCacheItem>
+    public interface IDistributedCache<TCacheItem> : IDistributedCache<TCacheItem, string>
+        where TCacheItem : class
+    {
+
+    }
+    /// <summary>
+    /// Represents a distributed cache of <typeparamref name="TCacheItem" /> type.
+    /// Uses a generic cache key type of <typeparamref name="TCacheKey" /> type.
+    /// </summary>
+    /// <typeparam name="TCacheItem">The type of cache item being cached.</typeparam>
+    /// <typeparam name="TCacheKey">The type of cache key being used.</typeparam>
+    public interface IDistributedCache<TCacheItem, TCacheKey>
         where TCacheItem : class
     {
         /// <summary>
@@ -20,7 +31,7 @@ namespace Volo.Abp.Caching
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         /// <returns>The cache item, or null.</returns>
         TCacheItem Get(
-            string key,
+            TCacheKey key,
             bool? hideErrors = null
         );
 
@@ -32,7 +43,7 @@ namespace Volo.Abp.Caching
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The cache item, or null.</returns>
         Task<TCacheItem> GetAsync(
-            [NotNull] string key,
+            [NotNull] TCacheKey key,
             bool? hideErrors = null,
             CancellationToken token = default
         );
@@ -47,7 +58,7 @@ namespace Volo.Abp.Caching
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         /// <returns>The cache item.</returns>
         TCacheItem GetOrAdd(
-            string key,
+            TCacheKey key,
             Func<TCacheItem> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null,
             bool? hideErrors = null
@@ -64,7 +75,7 @@ namespace Volo.Abp.Caching
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The cache item.</returns>
         Task<TCacheItem> GetOrAddAsync(
-            [NotNull] string key,
+            [NotNull] TCacheKey key,
             Func<Task<TCacheItem>> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null,
             bool? hideErrors = null,
@@ -79,7 +90,7 @@ namespace Volo.Abp.Caching
         /// <param name="options">The cache options for the value.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         void Set(
-            string key,
+            TCacheKey key,
             TCacheItem value,
             DistributedCacheEntryOptions options = null,
             bool? hideErrors = null
@@ -95,7 +106,7 @@ namespace Volo.Abp.Caching
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
         Task SetAsync(
-            [NotNull] string key,
+            [NotNull] TCacheKey key,
             [NotNull] TCacheItem value,
             [CanBeNull] DistributedCacheEntryOptions options = null,
             bool? hideErrors = null,
@@ -108,7 +119,7 @@ namespace Volo.Abp.Caching
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         void Refresh(
-            string key,
+            TCacheKey key,
             bool? hideErrors = null
         );
 
@@ -120,7 +131,7 @@ namespace Volo.Abp.Caching
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
         Task RefreshAsync(
-            string key,
+            TCacheKey key,
             bool? hideErrors = null,
             CancellationToken token = default
         );
@@ -131,7 +142,7 @@ namespace Volo.Abp.Caching
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         void Remove(
-            string key,
+            TCacheKey key,
             bool? hideErrors = null
         );
 
@@ -143,7 +154,7 @@ namespace Volo.Abp.Caching
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
         Task RemoveAsync(
-            string key,
+            TCacheKey key,
             bool? hideErrors = null,
             CancellationToken token = default
         );

@@ -1,19 +1,23 @@
+import { Config } from '@abp/ng.core';
+
 export namespace Toaster {
-  export interface Options {
-    id?: any;
-    closable?: boolean;
+  export interface ToastOptions {
     life?: number;
     sticky?: boolean;
-    data?: any;
+    closable?: boolean;
+    tapToDismiss?: boolean;
     messageLocalizationParams?: string[];
     titleLocalizationParams?: string[];
+    id: any;
+    containerKey?: string;
   }
 
-  export type Severity = 'success' | 'info' | 'warn' | 'error';
-
-  export const enum Status {
-    confirm = 'confirm',
-    reject = 'reject',
-    dismiss = 'dismiss',
+  export interface Toast {
+    message: Config.LocalizationParam;
+    title?: Config.LocalizationParam;
+    severity?: string;
+    options?: ToastOptions;
   }
+
+  export type Severity = 'neutral' | 'success' | 'info' | 'warning' | 'error';
 }

@@ -46,9 +46,10 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<VirtualFileSystemOptions>(options =>
+        Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<MyModule>();
+            // "YourRootNameSpace" is the root namespace of your project. It can be empty if your root namespace is empty.
+            options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
         });
 
         Configure<AbpLocalizationOptions>(options =>
@@ -66,7 +67,7 @@ In this example;
 
 * Added a new localization resource with "en" (English) as the default culture.
 * Used JSON files to store the localization strings.
-* JSON files are embedded into the assembly using `VirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
+* JSON files are embedded into the assembly using `AbpVirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
 
 JSON files are located under "/Localization/Resources/Test" project folder as shown below:
 
@@ -85,6 +86,21 @@ A JSON localization file content is shown below:
 
 * Every localization file should define the `culture` code for the file (like "en" or "en-US").
 * `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
+
+### Default Resource
+
+`AbpLocalizationOptions.DefaultResourceType` can be set to a resource type, so it is used when the localization resource was not specified:
+
+````csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.DefaultResourceType = typeof(TestResource);
+});
+````
+
+> The [application startup template](Startup-Templates/Application.md) sets `DefaultResourceType` to the localization resource of the application.
+
+See the *Client Side* section below for a use case.
 
 ### Short Localization Resource Name
 
@@ -165,6 +181,10 @@ public class MyService
 }
 ````
 
+##### Format Arguments
+
+Format arguments can be passed after the localization key. If your message is `Hello {0}, welcome!`, then you can pass the `{0}` argument to the localizer like `_localizer["HelloMessage", "John"]`
+
 #### Simplest Usage In A Razor View/Page
 
 ````c#
@@ -179,14 +199,47 @@ Refer to the [Microsoft's localization documentation](https://docs.microsoft.com
 
 ABP provides JavaScript services to use the same localized texts in the client side.
 
-Get a localization resource:
+#### getResource
+
+`abp.localization.getResource` function is used to get a localization resource:
 
 ````js
 var testResource = abp.localization.getResource('Test');
 ````
 
-Localize a string:
+Then you can localize a string based on this resource:
 
 ````js
 var str = testResource('HelloWorld');
 ````
+
+#### localize
+
+`abp.localization.localize` function is a shortcut where you can both specify the text name and the resource name:
+
+````js
+var str = abp.localization.localize('HelloWorld', 'Test');
+````
+
+`HelloWorld` is the text to localize, where `Test` is the localization resource name here.
+
+If you don't specify the localization resource name, it uses the default localization resource defined on the `AbpLocalizationOptions` (see the *Default Resource* section above). Example:
+
+````js
+var str = abp.localization.localize('HelloWorld'); //uses the default resource
+````
+
+##### Format Arguments
+
+If your localized string contains arguments, like `Hello {0}, welcome!`, you can pass arguments to the localization methods. Examples:
+
+````js
+var str1 = abp.localization.getResource('Test')('HelloWelcomeMessage', 'John');
+var str2 = abp.localization.localize('HelloWorld', 'Test', 'John');
+````
+
+Both of the samples above produce the output `Hello John, welcome!`.
+
+## See Also
+
+* [Localization in Angular UI](UI/Angular/Localization.md)

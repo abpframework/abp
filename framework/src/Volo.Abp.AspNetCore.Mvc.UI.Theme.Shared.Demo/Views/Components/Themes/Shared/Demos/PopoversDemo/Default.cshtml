@@ -1,0 +1,16 @@
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.PopoversDemo
+
+<abp-component-demo-section title="Example" view-path="@PopoversDemoViewComponent.ViewPath">
+    <abp-button button-type="Outline_Secondary" abp-popover="Hi, i'm popover content!">
+        Popover Default
+    </abp-button>
+    <abp-button button-type="Outline_Secondary" abp-popover-top="Hi, i'm popover content!" title="Popover Title">
+        Popover With Title
+    </abp-button>
+    <abp-button button-type="Outline_Secondary" abp-popover-right="Hi, i'm popover content!" title="Popover Title" dismissible="true">
+        Dismissible Popover
+    </abp-button>
+    <abp-button button-type="Outline_Danger" abp-popover-left="Hi, i'm popover content!" title="Popover Title" disabled="true">
+        Disabled Popover
+    </abp-button>
+</abp-component-demo-section>

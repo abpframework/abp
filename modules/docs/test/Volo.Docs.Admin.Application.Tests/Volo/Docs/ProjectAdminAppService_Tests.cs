@@ -45,10 +45,11 @@ namespace Volo.Docs
             var createProjectDto = new CreateProjectDto
             {
                 Name = "ABP vNext",
-                ShortName = "ABP",
+                ShortName = "ABPvNext",
                 Format = "md",
                 DefaultDocumentName = "index",
                 NavigationDocumentName = "docs-nav.json",
+                ParametersDocumentName = "docs-params.json",
                 MinimumVersion = "1",
                 MainWebsiteUrl = "abp.io",
                 LatestVersionBranchName = "",
@@ -62,9 +63,11 @@ namespace Volo.Docs
 
             //Act
             var projectDto = await _projectAdminAppService.CreateAsync(createProjectDto);
+
+            //Assert
             projectDto.ShouldNotBeNull();
             projectDto.Name.ShouldBe(createProjectDto.Name);
-            projectDto.ShortName.ShouldBe(createProjectDto.ShortName);
+            projectDto.ShortName.ShouldBe(createProjectDto.ShortName.ToLower());
             projectDto.Format.ShouldBe(createProjectDto.Format);
             projectDto.DefaultDocumentName.ShouldBe(createProjectDto.DefaultDocumentName);
             projectDto.NavigationDocumentName.ShouldBe(createProjectDto.NavigationDocumentName);
@@ -116,6 +119,33 @@ namespace Volo.Docs
             await _projectAdminAppService.DeleteAsync(_testData.PorjectId);
 
             (await _projectRepository.GetListAsync()).ShouldBeEmpty();
+        }
+
+        [Fact]
+        public async Task Should_Throw_ProjectShortNameAlready_Exception_For_Duplicate_ShortName()
+        {
+            var createProjectDto = new CreateProjectDto
+            {
+                Name = "ABP vNext",
+                ShortName = "ABP",
+                Format = "md",
+                DefaultDocumentName = "index",
+                NavigationDocumentName = "docs-nav.json",
+                ParametersDocumentName = "docs-params.json",
+                MinimumVersion = "1",
+                MainWebsiteUrl = "abp.io",
+                LatestVersionBranchName = "",
+                DocumentStoreType = "GitHub",
+                ExtraProperties = new Dictionary<string, object>()
+            };
+            createProjectDto.ExtraProperties.Add("GitHubRootUrl",
+                "https://github.com/abpframework/abp/tree/{version}/docs/en/");
+            createProjectDto.ExtraProperties.Add("GitHubAccessToken", "123456");
+            createProjectDto.ExtraProperties.Add("GitHubUserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+
+            //Act
+            await Assert.ThrowsAsync<ProjectShortNameAlreadyExistsException>(() =>
+                _projectAdminAppService.CreateAsync(createProjectDto));
         }
     }
 }

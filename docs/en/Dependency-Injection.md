@@ -166,6 +166,24 @@ public class BlogModule : AbpModule
 }
 ````
 
+### Replace a Service
+
+If you need to replace an existing service (defined by the ABP framework or another module dependency), you have two options;
+
+1. Use the `Dependency` attribute of the ABP framework as explained above.
+2. Use the `IServiceCollection.Replace` method of the Microsoft Dependency Injection library. Example:
+
+````csharp
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //Replacing the IConnectionStringResolver service
+        context.Services.Replace(ServiceDescriptor.Transient<IConnectionStringResolver, MyConnectionStringResolver>());
+    }
+}
+````
+
 ## Injecting Dependencies
 
 There are three common ways of using a service that has already been registered.

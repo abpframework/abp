@@ -1,4 +1,5 @@
 ﻿using MyCompanyName.MyProjectName.MultiTenancy;
+using MyCompanyName.MyProjectName.ObjectExtending;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -16,7 +17,7 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(MyProjectNameDomainSharedModule),
         typeof(AbpAuditLoggingDomainModule),
-        typeof(BackgroundJobsDomainModule),
+        typeof(AbpBackgroundJobsDomainModule),
         typeof(AbpFeatureManagementDomainModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
@@ -27,9 +28,14 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameDomainModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            MyProjectNameDomainObjectExtensions.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });

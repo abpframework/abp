@@ -1,15 +1,54 @@
+import {
+  DynamicLayoutComponent,
+  AuthGuard,
+  ReplaceableComponents,
+  ReplaceableRouteContainerComponent,
+} from '@abp/ng.core';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
+import { ManageProfileComponent } from './components/manage-profile/manage-profile.component';
 import { RegisterComponent } from './components/register/register.component';
-import { DynamicLayoutComponent } from '@abp/ng.core';
+import { eAccountComponents } from './enums/components';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   {
     path: '',
     component: DynamicLayoutComponent,
-    children: [{ path: 'login', component: LoginComponent }, { path: 'register', component: RegisterComponent }],
+    children: [
+      {
+        path: 'login',
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          replaceableComponent: {
+            key: eAccountComponents.Login,
+            defaultComponent: LoginComponent,
+          } as ReplaceableComponents.RouteData<LoginComponent>,
+        },
+      },
+      {
+        path: 'register',
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          replaceableComponent: {
+            key: eAccountComponents.Register,
+            defaultComponent: RegisterComponent,
+          } as ReplaceableComponents.RouteData<RegisterComponent>,
+        },
+      },
+      {
+        path: 'manage-profile',
+        component: ReplaceableRouteContainerComponent,
+        canActivate: [AuthGuard],
+        data: {
+          replaceableComponent: {
+            key: eAccountComponents.ManageProfile,
+            defaultComponent: ManageProfileComponent,
+          } as ReplaceableComponents.RouteData<ManageProfileComponent>,
+        },
+      },
+    ],
   },
 ];
 

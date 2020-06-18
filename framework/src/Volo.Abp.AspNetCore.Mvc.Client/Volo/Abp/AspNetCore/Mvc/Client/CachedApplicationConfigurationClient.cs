@@ -7,6 +7,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Threading;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client

@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Services;
 using Volo.Blogging.Tagging.Dtos;
 
 namespace Volo.Blogging.Tagging
 {
-    public class TagAppService : ApplicationService, ITagAppService
+    public class TagAppService : BloggingAppServiceBase, ITagAppService
     {
         private readonly ITagRepository _tagRepository;
 

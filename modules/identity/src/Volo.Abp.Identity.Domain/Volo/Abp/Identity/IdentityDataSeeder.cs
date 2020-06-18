@@ -9,12 +9,12 @@ namespace Volo.Abp.Identity
 {
     public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
     {
-        private readonly IGuidGenerator _guidGenerator;
-        private readonly IIdentityRoleRepository _roleRepository;
-        private readonly IIdentityUserRepository _userRepository;
-        private readonly ILookupNormalizer _lookupNormalizer;
-        private readonly IdentityUserManager _userManager;
-        private readonly IdentityRoleManager _roleManager;
+        protected IGuidGenerator GuidGenerator { get; }
+        protected IIdentityRoleRepository RoleRepository { get; }
+        protected IIdentityUserRepository UserRepository { get; }
+        protected ILookupNormalizer LookupNormalizer { get; }
+        protected IdentityUserManager UserManager { get; }
+        protected IdentityRoleManager RoleManager { get; }
 
         public IdentityDataSeeder(
             IGuidGenerator guidGenerator,
@@ -24,12 +24,12 @@ namespace Volo.Abp.Identity
             IdentityUserManager userManager,
             IdentityRoleManager roleManager)
         {
-            _guidGenerator = guidGenerator;
-            _roleRepository = roleRepository;
-            _userRepository = userRepository;
-            _lookupNormalizer = lookupNormalizer;
-            _userManager = userManager;
-            _roleManager = roleManager;
+            GuidGenerator = guidGenerator;
+            RoleRepository = roleRepository;
+            UserRepository = userRepository;
+            LookupNormalizer = lookupNormalizer;
+            UserManager = userManager;
+            RoleManager = roleManager;
         }
 
         [UnitOfWork]
@@ -45,8 +45,8 @@ namespace Volo.Abp.Identity
 
             //"admin" user
             const string adminUserName = "admin";
-            var adminUser = await _userRepository.FindByNormalizedUserNameAsync(
-                _lookupNormalizer.NormalizeName(adminUserName)
+            var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
+                LookupNormalizer.NormalizeName(adminUserName)
             );
 
             if (adminUser != null)
@@ -55,7 +55,7 @@ namespace Volo.Abp.Identity
             }
 
             adminUser = new IdentityUser(
-                _guidGenerator.Create(),
+                GuidGenerator.Create(),
                 adminUserName,
                 adminEmail,
                 tenantId
@@ -64,16 +64,16 @@ namespace Volo.Abp.Identity
                 Name = adminUserName
             };
 
-            (await _userManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
+            (await UserManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
             result.CreatedAdminUser = true;
 
             //"admin" role
             const string adminRoleName = "admin";
-            var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName(adminRoleName));
+            var adminRole = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
             if (adminRole == null)
             {
                 adminRole = new IdentityRole(
-                    _guidGenerator.Create(),
+                    GuidGenerator.Create(),
                     adminRoleName,
                     tenantId
                 )
@@ -82,11 +82,11 @@ namespace Volo.Abp.Identity
                     IsPublic = true
                 };
 
-                (await _roleManager.CreateAsync(adminRole)).CheckErrors();
+                (await RoleManager.CreateAsync(adminRole)).CheckErrors();
                 result.CreatedAdminRole = true;
             }
 
-            (await _userManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
+            (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
 
             return result;
         }

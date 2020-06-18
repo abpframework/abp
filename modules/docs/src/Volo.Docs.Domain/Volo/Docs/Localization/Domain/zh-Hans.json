@@ -1,19 +1,29 @@
 {
   "culture": "zh-Hans",
-  "texts": {
+  "texts": {  
     "Documents": "文档",
     "BackToWebsite": "返回主网站",
     "Contributors": "贡献者",
     "ShareOn": "分享到",
     "Version": "版本",
     "Edit": "编辑",
+    "LastEditTime": "上次编辑",
     "Delete": "删除",
     "InThisDocument": "在本文中",
     "GoToTop": "到顶部",
     "Projects": "项目",
     "NoProjectWarning": "还没有项目!",
     "DocumentNotFound": "找不到请求的文档!",
+    "ProjectNotFound": "找不到请求的项目!",
     "NavigationDocumentNotFound": "这个版本没有导航文件!",
-    "DocumentNotFoundInSelectedLanguage": "本文档不适用于所选语言, 将以默认语言显示文档."
+    "DocumentNotFoundInSelectedLanguage": "本文档不适用于所选语言, 将以默认语言显示文档.",
+    "FilterTopics": "过滤主题",
+    "FullSearch": "搜索文档",
+    "Volo.Docs.Domain:010001": "Elastic search未启用.",
+    "New": "新文档",
+    "Upd": "更新",
+    "NewExplanation": "在最近两周内创建.",
+    "UpdatedExplanation": "在最近两周内更新.",
+    "Volo.Docs.Domain:010002": "简称 {ShortName} 已经存在."
   }
 }

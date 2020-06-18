@@ -2,19 +2,20 @@
 using Volo.Abp.Localization;
 using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Localization.Resources.AbpValidation;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(AbpLocalizationModule)
+        typeof(AbpValidationModule)
     )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>("MyCompanyName.MyProjectName");
             });
@@ -27,7 +28,7 @@ namespace MyCompanyName.MyProjectName
                     .AddVirtualJson("/Localization/MyProjectName");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
             });

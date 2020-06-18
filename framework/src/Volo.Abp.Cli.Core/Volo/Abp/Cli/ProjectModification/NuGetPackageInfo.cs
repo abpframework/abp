@@ -7,5 +7,7 @@
         public string ModuleClass { get; set; }
 
         public NuGetPackageTarget Target { get; set; }
+
+        public NuGetPackageTarget TieredTarget { get; set; }
     }
 }

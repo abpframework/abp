@@ -1,0 +1,10 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Permission:Blogging": "部落格",
+    "Permission:Blogs": "部落格",
+    "Permission:Posts": "文章",
+    "Permission:Tags": "標籤",
+    "Permission:Comments": "評論"
+  }
+}

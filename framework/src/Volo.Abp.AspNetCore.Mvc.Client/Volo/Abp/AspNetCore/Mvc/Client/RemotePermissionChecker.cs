@@ -21,10 +21,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             return configuration.Auth.GrantedPolicies.ContainsKey(name);
         }
 
-        public Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
+        public async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
         {
             /* This provider always works for the current principal. */
-            return IsGrantedAsync(name);
+            return await IsGrantedAsync(name);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
@@ -12,9 +13,9 @@ using MyCompanyName.MyProjectName.Web.Menus;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Validation.Localization;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -62,7 +63,7 @@ namespace MyCompanyName.MyProjectName
 
         private static void ConfigureNavigationServices(IServiceCollection services)
         {
-            services.Configure<NavigationOptions>(options =>
+            services.Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
@@ -73,16 +74,40 @@ namespace MyCompanyName.MyProjectName
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            //app.UseErrorPage();
+            app.Use(async (ctx, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            });
 
             app.UseVirtualFiles();
-            app.UseRouting();
+            app.UseRouting();          
             app.UseAuthentication();
+            app.UseAbpRequestLocalization();
             app.UseAuthorization();
 
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
-            app.UseMvcWithDefaultRouteAndArea();
+            app.Use(async (ctx, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            });
+
+            app.UseConfiguredEndpoints();
         }
     }
 }

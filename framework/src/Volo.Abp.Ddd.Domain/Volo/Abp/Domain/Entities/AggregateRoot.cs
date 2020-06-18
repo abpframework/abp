@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.Domain.Entities
 {
@@ -23,8 +25,9 @@ namespace Volo.Abp.Domain.Entities
 
         protected AggregateRoot()
         {
-            ExtraProperties = new Dictionary<string, object>();
             ConcurrencyStamp = Guid.NewGuid().ToString("N");
+            ExtraProperties = new Dictionary<string, object>();
+            this.SetDefaultsForExtraProperties();
         }
 
         protected virtual void AddLocalEvent(object eventData)
@@ -55,6 +58,14 @@ namespace Volo.Abp.Domain.Entities
         public virtual void ClearDistributedEvents()
         {
             _distributedEvents.Clear();
+        }
+
+        public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            return ExtensibleObjectValidator.GetValidationErrors(
+                this,
+                validationContext
+            );
         }
     }
 
@@ -75,15 +86,17 @@ namespace Volo.Abp.Domain.Entities
 
         protected AggregateRoot()
         {
-            ExtraProperties = new Dictionary<string, object>();
             ConcurrencyStamp = Guid.NewGuid().ToString("N");
+            ExtraProperties = new Dictionary<string, object>();
+            this.SetDefaultsForExtraProperties();
         }
 
         protected AggregateRoot(TKey id)
             : base(id)
         {
-            ExtraProperties = new Dictionary<string, object>();
             ConcurrencyStamp = Guid.NewGuid().ToString("N");
+            ExtraProperties = new Dictionary<string, object>();
+            this.SetDefaultsForExtraProperties();
         }
 
         protected virtual void AddLocalEvent(object eventData)
@@ -114,6 +127,14 @@ namespace Volo.Abp.Domain.Entities
         public virtual void ClearDistributedEvents()
         {
             _distributedEvents.Clear();
+        }
+
+        public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            return ExtensibleObjectValidator.GetValidationErrors(
+                this,
+                validationContext
+            );
         }
     }
 }

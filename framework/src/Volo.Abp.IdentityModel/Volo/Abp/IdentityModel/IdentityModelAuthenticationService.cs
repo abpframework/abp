@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityModel
@@ -18,16 +19,26 @@ namespace Volo.Abp.IdentityModel
     [Dependency(ReplaceServices = true)]
     public class IdentityModelAuthenticationService : IIdentityModelAuthenticationService, ITransientDependency
     {
+        public const string HttpClientName = "IdentityModelAuthenticationServiceHttpClientName";
         public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
-        protected IdentityClientOptions ClientOptions { get; }
+        protected AbpIdentityClientOptions ClientOptions { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
+        protected IHttpClientFactory HttpClientFactory { get; }
+        protected ICurrentTenant CurrentTenant { get; }
+        protected IdentityModelHttpRequestMessageOptions IdentityModelHttpRequestMessageOptions { get; }
 
         public IdentityModelAuthenticationService(
-            IOptions<IdentityClientOptions> options,
-            ICancellationTokenProvider cancellationTokenProvider)
+            IOptions<AbpIdentityClientOptions> options,
+            ICancellationTokenProvider cancellationTokenProvider,
+            IHttpClientFactory httpClientFactory,
+            ICurrentTenant currentTenant,
+            IOptions<IdentityModelHttpRequestMessageOptions> identityModelHttpRequestMessageOptions)
         {
-            CancellationTokenProvider = cancellationTokenProvider;
             ClientOptions = options.Value;
+            CancellationTokenProvider = cancellationTokenProvider;
+            HttpClientFactory = httpClientFactory;
+            CurrentTenant = currentTenant;
+            IdentityModelHttpRequestMessageOptions = identityModelHttpRequestMessageOptions.Value;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
 
@@ -43,7 +54,6 @@ namespace Volo.Abp.IdentityModel
 
             SetAccessToken(client, accessToken);
             return true;
-
         }
 
         protected virtual async Task<string> GetAccessTokenOrNullAsync(string identityClientName)
@@ -67,9 +77,17 @@ namespace Volo.Abp.IdentityModel
             }
 
             var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
+
             if (tokenResponse.IsError)
             {
-                throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
+                if (tokenResponse.ErrorDescription != null)
+                {
+                    throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
+                }
+
+                var rawError = tokenResponse.Raw;
+                var withoutInnerException = rawError.Split(new string[] { "<eof/>" }, StringSplitOptions.RemoveEmptyEntries);
+                throw new AbpException(withoutInnerException[0]);
             }
 
             return tokenResponse.AccessToken;
@@ -95,25 +113,29 @@ namespace Volo.Abp.IdentityModel
         protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
-                return await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                var request = new DiscoveryDocumentRequest
                 {
                     Address = configuration.Authority,
                     Policy =
                     {
                         RequireHttps = configuration.RequireHttps
                     }
-                });
+                };
+                IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
+                return await httpClient.GetDiscoveryDocumentAsync(request);
             }
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
-            DiscoveryDocumentResponse discoveryResponse, 
+            DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
+                AddHeaders(httpClient);
+
                 switch (configuration.GrantType)
                 {
                     case OidcConstants.GrantTypes.ClientCredentials:
@@ -134,7 +156,7 @@ namespace Volo.Abp.IdentityModel
 
         protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
         {
-            var request =  new PasswordTokenRequest
+            var request = new PasswordTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
                 Scope = configuration.Scope,
@@ -143,23 +165,25 @@ namespace Volo.Abp.IdentityModel
                 UserName = configuration.UserName,
                 Password = configuration.UserPassword
             };
+            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
 
             AddParametersToRequestAsync(configuration, request);
 
             return Task.FromResult(request);
         }
 
-        protected virtual Task<ClientCredentialsTokenRequest>  CreateClientCredentialsTokenRequestAsync(
-            DiscoveryDocumentResponse discoveryResponse, 
+        protected virtual Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(
+            DiscoveryDocumentResponse discoveryResponse,
             IdentityClientConfiguration configuration)
         {
-            var request =  new ClientCredentialsTokenRequest
+            var request = new ClientCredentialsTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
                 Scope = configuration.Scope,
                 ClientId = configuration.ClientId,
                 ClientSecret = configuration.ClientSecret
             };
+            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
 
             AddParametersToRequestAsync(configuration, request);
 
@@ -174,6 +198,16 @@ namespace Volo.Abp.IdentityModel
             }
 
             return Task.CompletedTask;
+        }
+
+        protected virtual void AddHeaders(HttpClient client)
+        {
+            //tenantId
+            if (CurrentTenant.Id.HasValue)
+            {
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
+                client.DefaultRequestHeaders.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
+            }
         }
     }
 }

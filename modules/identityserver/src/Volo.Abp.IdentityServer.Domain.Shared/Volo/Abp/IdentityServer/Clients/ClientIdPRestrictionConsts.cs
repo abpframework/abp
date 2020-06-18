@@ -2,6 +2,6 @@
 {
     public class ClientIdPRestrictionConsts
     {
-        public const int ProviderMaxLength = 64;
+        public const int ProviderMaxLength = 200;
     }
 }

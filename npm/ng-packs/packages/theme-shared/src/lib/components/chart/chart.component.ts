@@ -6,7 +6,7 @@ import {
   Input,
   OnDestroy,
   Output,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { chartJsLoaded$ } from '../../utils/widget-utils';
@@ -14,7 +14,7 @@ declare const Chart: any;
 
 @Component({
   selector: 'abp-chart',
-  templateUrl: './chart.component.html'
+  templateUrl: './chart.component.html',
 })
 export class ChartComponent implements AfterViewInit, OnDestroy {
   @Input() type: string;
@@ -61,30 +61,33 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     chartJsLoaded$.subscribe(() => {
-      try {
-        // tslint:disable-next-line: no-unused-expression
-        Chart;
-      } catch (error) {
-        console.error(`Chart is not found. Import the Chart from app.module like shown below:
-        import('chart.js');
-        `);
-        return;
-      }
+      this.testChartJs();
 
       this.initChart();
       this._initialized = true;
     });
   }
 
+  testChartJs() {
+    try {
+      // tslint:disable-next-line: no-unused-expression
+      Chart;
+    } catch (error) {
+      throw new Error(`Chart is not found. Import the Chart from app.module like shown below:
+      import('chart.js');
+      `);
+    }
+  }
+
   onCanvasClick = event => {
     if (this.chart) {
       const element = this.chart.getElementAtEvent(event);
       const dataset = this.chart.getDatasetAtEvent(event);
-      if (element && element[0] && dataset) {
+      if (element && element.length && dataset) {
         this.onDataSelect.emit({
           originalEvent: event,
           element: element[0],
-          dataset
+          dataset,
         });
       }
     }
@@ -99,11 +102,11 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
       opts.maintainAspectRatio = false;
     }
 
-    this.chart = new Chart(this.el.nativeElement.children[0].children[0], {
+    this.chart = new Chart(this.canvas, {
       type: this.type,
       data: this.data,
       options: this.options,
-      plugins: this.plugins
+      plugins: this.plugins,
     });
 
     this.cdRef.detectChanges();

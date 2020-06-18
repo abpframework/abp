@@ -69,7 +69,7 @@ namespace Volo.Abp.Cli
         {
             var assembly = typeof(CliService).Assembly;
             var toolPath = GetToolPath(assembly);
-            var currentCliVersion = await GetCurrentCliVersion(toolPath, assembly);
+            var currentCliVersion = await GetCurrentCliVersion(assembly);
             var updateChannel = GetUpdateChannel(currentCliVersion);
 
             Logger.LogInformation($"Version {currentCliVersion} ({updateChannel} channel)");
@@ -100,25 +100,24 @@ namespace Volo.Abp.Cli
             return assembly.Location.Substring(0, assembly.Location.IndexOf(".store", StringComparison.Ordinal));
         }
 
-        private async Task<SemanticVersion> GetCurrentCliVersion(string toolPath, Assembly assembly)
+        private static async Task<SemanticVersion> GetCurrentCliVersion(Assembly assembly)
         {
             SemanticVersion currentCliVersion = default;
-            if (!string.IsNullOrEmpty(toolPath))
+
+            var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list -g"));
+            string line;
+            while ((line = await consoleOutput.ReadLineAsync()) != null)
             {
-                var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list --tool-path {toolPath}"));
-                string line;
-                while ((line = await consoleOutput.ReadLineAsync()) != null)
+                if (line.StartsWith("volo.abp.cli", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (line.StartsWith("Volo.Abp.Cli", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        var version = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1];
+                    var version = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1];
 
-                        SemanticVersion.TryParse(version, out currentCliVersion);
+                    SemanticVersion.TryParse(version, out currentCliVersion);
 
-                        break;
-                    }
+                    break;
                 }
             }
+
 
             if (currentCliVersion == null)
             {

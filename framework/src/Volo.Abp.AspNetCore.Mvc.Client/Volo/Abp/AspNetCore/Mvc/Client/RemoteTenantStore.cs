@@ -85,12 +85,58 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
         public TenantConfiguration Find(string name)
         {
-            return AsyncHelper.RunSync(() => FindAsync(name));
+            var cacheKey = CreateCacheKey(name);
+            var httpContext = HttpContextAccessor?.HttpContext;
+
+            if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
+            {
+                return tenantConfiguration;
+            }
+
+            tenantConfiguration = Cache.GetOrAdd(
+                cacheKey,
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name))),
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow =
+                        TimeSpan.FromMinutes(5) //TODO: Should be configurable.
+                }
+            );
+
+            if (httpContext != null)
+            {
+                httpContext.Items[cacheKey] = tenantConfiguration;
+            }
+
+            return tenantConfiguration;
         }
 
         public TenantConfiguration Find(Guid id)
         {
-            return AsyncHelper.RunSync(() => FindAsync(id));
+            var cacheKey = CreateCacheKey(id);
+            var httpContext = HttpContextAccessor?.HttpContext;
+
+            if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
+            {
+                return tenantConfiguration;
+            }
+            
+            tenantConfiguration = Cache.GetOrAdd(
+                cacheKey,
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id))),
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow =
+                        TimeSpan.FromMinutes(5) //TODO: Should be configurable.
+                }
+            );
+
+            if (httpContext != null)
+            {
+                httpContext.Items[cacheKey] = tenantConfiguration;
+            }
+
+            return tenantConfiguration;
         }
 
         protected virtual TenantConfiguration CreateTenantConfiguration(FindTenantResultDto tenantResultDto)

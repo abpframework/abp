@@ -3,10 +3,11 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.AuditLogging.MongoDB
 {
-    public class AuditLoggingMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
+    public class AuditLoggingMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
     {
-        public AuditLoggingMongoModelBuilderConfigurationOptions([NotNull] string tablePrefix = AbpAuditLoggingConsts.DefaultDbTablePrefix)
-            : base(tablePrefix)
+        public AuditLoggingMongoModelBuilderConfigurationOptions(
+            [NotNull] string collectionPrefix = "")
+            : base(collectionPrefix)
         {
         }
     }
