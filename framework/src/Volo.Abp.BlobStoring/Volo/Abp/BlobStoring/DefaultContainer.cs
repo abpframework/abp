@@ -3,6 +3,6 @@
     [BlobContainerName(Name)]
     public class DefaultContainer
     {
-        public const string Name = "Default";
+        public const string Name = "default";
     }
 }

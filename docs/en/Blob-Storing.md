@@ -169,7 +169,7 @@ public class ProfileAppService : ApplicationService
 
 If you don't use the generic argument and directly inject the `IBlobContainer` (as explained before), you get the default container. Another way of injecting the default container is using `IBlobContainer<DefaultContainer>`, which returns exactly the same container.
 
-The name of the default container is `Default`.
+The name of the default container is `default`.
 
 ### Named Containers
 
