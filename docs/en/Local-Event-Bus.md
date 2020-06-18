@@ -10,7 +10,7 @@ There are two ways of publishing local events explained in the following section
 
 `ILocalEventBus` can be [injected](Dependency-Injection.md) and used to publish a local event.
 
-**Example: Publish an event when the stock count of a product changes**
+**Example: Publish a local event when the stock count of a product changes**
 
 ````csharp
 using System;
@@ -66,9 +66,9 @@ Even if you don't need to transfer any data, you need to create a class (which i
 
 ### Inside Entity / Aggregate Root Classes
 
-[Entities](Entities.md) can not inject services via dependency injection, but it is very common to publish events inside entity / aggregate root classes.
+[Entities](Entities.md) can not inject services via dependency injection, but it is very common to publish local events inside entity / aggregate root classes.
 
-**Example: Publish an event inside an aggregate root method**
+**Example: Publish a local event inside an aggregate root method**
 
 ````csharp
 using System;
@@ -107,7 +107,7 @@ namespace AbpDemo
 }
 ````
 
-`AggregateRoot` class defines the `AddLocalEvent` to add a new local event, that is published when the aggregate root object is saved (created or updated) into the database.
+`AggregateRoot` class defines the `AddLocalEvent` to add a new local event, that is published when the aggregate root object is saved (created, updated or deleted) into the database.
 
 > If an entity publishes such an event, it is a good practice to change the related properties in a controlled manner, just like the example above - `StockCount` can only be changed by the `ChangeStockCount` method which guarantees publishing the event.
 
