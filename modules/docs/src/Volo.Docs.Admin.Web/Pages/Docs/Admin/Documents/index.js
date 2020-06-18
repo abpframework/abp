@@ -1,8 +1,32 @@
 ﻿$(function () {
 
     var l = abp.localization.getResource('Docs');
+    var service = window.volo.docs.admin.documentsAdmin;
 
-    var _dataTable = $('#DocumentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
+    var getFormattedDate = function ($datePicker) {
+        return $datePicker.data().datepicker.getFormattedDate("yyyy-mm-dd");
+    };
+
+    var getFilter = function () {
+        return {
+            projectId: $("#ProjectId").val(),
+            name: $("#Name").val(),
+            version: $("#Version").val(),
+            languageCode: $("#LanguageCode").val(),
+            fileName: $("#FileName").val(),
+            format: $("#Format").val(),
+            creationTimeMin: getFormattedDate($("#CreationTimeMin")),
+            creationTimeMax: getFormattedDate($("#CreationTimeMax")),
+            lastUpdatedTimeMin: getFormattedDate($("#LastUpdatedTimeMin")),
+            lastUpdatedTimeMax: getFormattedDate($("#LastUpdatedTimeMax")),
+            lastSignificantUpdateTimeMin: getFormattedDate($("#LastSignificantUpdateTimeMin")),
+            lastSignificantUpdateTimeMax: getFormattedDate($("#LastSignificantUpdateTimeMax")),
+            lastCachedTimeMin: getFormattedDate($("#LastCachedTimeMin")),
+            lastCachedTimeMax: getFormattedDate($("#LastCachedTimeMax"))
+        };
+    };
+
+    var dataTable = $('#DocumentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
         scrollX: true,
@@ -10,7 +34,7 @@
         searching: false,
         autoWidth: false,
         scrollCollapse: true,
-        ajax: abp.libs.datatables.createAjax(volo.docs.admin.documentsAdmin.getAll),
+        ajax: abp.libs.datatables.createAjax(service.getAll, getFilter),
         columnDefs: [
             {
                 rowAction: {
@@ -21,11 +45,10 @@
                                 visible: abp.auth.isGranted('Docs.Admin.Documents'),
                                 confirmMessage: function (data) { return l('RemoveFromCacheConfirmation'); },
                                 action: function (data) {
-                                    volo.docs.admin.documentsAdmin
-                                        .removeFromCache(data.record.id)
+                                    service.removeFromCache(data.record.id)
                                         .then(function () {
                                             abp.message.success(l('RemovedFromCache'));
-                                            _dataTable.ajax.reload();
+                                            dataTable.ajax.reload();
                                         });
                                 }
                             },
@@ -34,11 +57,10 @@
                                 visible: abp.auth.isGranted('Docs.Admin.Documents'),
                                 confirmMessage: function (data) { return l('ReIndexDocumentConfirmation'); },
                                 action: function (data) {
-                                    volo.docs.admin.documentsAdmin
-                                        .reindex(data.record.id)
+                                    service.reindex(data.record.id)
                                         .then(function () {
                                             abp.message.success(l('ReindexCompleted'));
-                                            _dataTable.ajax.reload();
+                                            dataTable.ajax.reload();
                                         });
                                 }
                             },
@@ -47,11 +69,10 @@
                                 visible: abp.auth.isGranted('Docs.Admin.Documents'),
                                 confirmMessage: function (data) { return l('DeleteDocumentFromDbConfirmation'); },
                                 action: function (data) {
-                                    volo.docs.admin.documentsAdmin
-                                        .deleteFromDatabase(data.record.id)
+                                    service.deleteFromDatabase(data.record.id)
                                         .then(function () {
                                             abp.message.success(l('Deleted'));
-                                            _dataTable.ajax.reload();
+                                            dataTable.ajax.reload();
                                         });
                                 }
                             }
@@ -76,14 +97,7 @@
             },
             {
                 target: 5,
-                data: "format",
-                render: function (data) {
-                    if (data === 'md') {
-                        return 'markdown';
-                    }
-
-                    return data;
-                }
+                data: "format"
             },
             {
                 target: 6,
@@ -136,18 +150,15 @@
         ]
     }));
 
+    $("#FilterForm input[type='text']").keypress(function (e) {
+        if (e.which === 13) {
+            dataTable.ajax.reload();
+        }
+    });
 
-    $("#ReIndexAllProjects").click(function (event) {
-        abp.message.confirm(l('ReIndexAllProjectConfirmationMessage'))
-            .done(function (accepted) {
-                if (accepted) {
-                    volo.docs.admin.projectsAdmin
-                        .reindexAll()
-                        .then(function () {
-                            abp.message.success(l('SuccessfullyReIndexAllProject'));
-                        });
-                }
-            });
+    $("#SearchButton").click(function (e) {
+        e.preventDefault();
+        dataTable.ajax.reload();
     });
 
 });
