@@ -133,7 +133,7 @@ namespace Volo.Abp.Domain.Entities.Events
                 await TriggerEventWithEntity(
                     DistributedEventBus,
                     typeof(EntityDeletedEto<>),
-                    EntityToEtoMapper.Map(entity),
+                    eto,
                     false
                 );
             }
