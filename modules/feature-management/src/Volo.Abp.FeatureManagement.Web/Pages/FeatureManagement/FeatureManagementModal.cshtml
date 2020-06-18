@@ -22,7 +22,7 @@
                     var feature = Model.FeatureListDto.Features[i];
                     <div class="mt-2" style="padding-left: @(feature.Depth * 20)px">
 
-                        <spam class="mr-2">@feature.Name</spam>
+                        <spam class="mr-2">@feature.DisplayName</spam>
 
                         <input type="text" name="Features[@i].Type" value="@feature.ValueType?.Name" hidden />
                         @if (feature.ValueType is FreeTextStringValueType)

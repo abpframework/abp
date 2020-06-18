@@ -178,7 +178,7 @@ pre[class*="language-"]:after {
 	cursor: help;
 }
 
-.namespace {
+.token.namespace {
 	opacity: .7;
 }
 

@@ -10,12 +10,6 @@ export namespace Confirmation {
     hideYesBtn?: boolean;
     cancelText?: Config.LocalizationParam;
     yesText?: Config.LocalizationParam;
-
-    /**
-     *
-     * @deprecated To be deleted in v2.9
-     */
-    closable?: boolean;
   }
 
   export interface DialogData {

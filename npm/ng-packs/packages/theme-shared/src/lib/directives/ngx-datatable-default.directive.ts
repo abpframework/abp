@@ -19,5 +19,7 @@ export class NgxDatatableDefaultDirective {
     this.table.footerHeight = 50;
     this.table.headerHeight = 50;
     this.table.rowHeight = 'auto';
+    this.table.scrollbarH = true;
+    this.table.virtualization = false;
   }
 }
