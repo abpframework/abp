@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.EventBus.Distributed
+namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
     public class EtoMappingDictionaryItem
     {

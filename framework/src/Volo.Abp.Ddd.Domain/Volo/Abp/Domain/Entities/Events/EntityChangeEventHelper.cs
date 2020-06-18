@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -22,13 +23,16 @@ namespace Volo.Abp.Domain.Entities.Events
 
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
         protected IEntityToEtoMapper EntityToEtoMapper { get; }
+        protected AbpDistributedEntityEventOptions DistributedEntityEventOptions { get; }
 
         public EntityChangeEventHelper(
             IUnitOfWorkManager unitOfWorkManager,
-            IEntityToEtoMapper entityToEtoMapper)
+            IEntityToEtoMapper entityToEtoMapper,
+            IOptions<AbpDistributedEntityEventOptions> distributedEntityEventOptions)
         {
             UnitOfWorkManager = unitOfWorkManager;
             EntityToEtoMapper = entityToEtoMapper;
+            DistributedEntityEventOptions = distributedEntityEventOptions.Value;
 
             LocalEventBus = NullLocalEventBus.Instance;
             DistributedEventBus = NullDistributedEventBus.Instance;
@@ -65,16 +69,30 @@ namespace Volo.Abp.Domain.Entities.Events
                 false
             );
 
-            var eto = EntityToEtoMapper.Map(entity);
-            if (eto != null)
+            if (ShouldPublishDistributedEventForEntity(entity))
             {
-                await TriggerEventWithEntity(
-                    DistributedEventBus,
-                    typeof(EntityCreatedEto<>),
-                    eto,
-                    false
-                );
+                var eto = EntityToEtoMapper.Map(entity);
+                if (eto != null)
+                {
+                    await TriggerEventWithEntity(
+                        DistributedEventBus,
+                        typeof(EntityCreatedEto<>),
+                        eto,
+                        false
+                    );
+                }
             }
+        }
+
+        private bool ShouldPublishDistributedEventForEntity(object entity)
+        {
+            return DistributedEntityEventOptions
+                .AutoEventSelectors
+                .IsMatch(
+                    ProxyHelper
+                        .UnProxy(entity)
+                        .GetType()
+                );
         }
 
         public virtual async Task TriggerEntityUpdatingEventAsync(object entity)
@@ -96,15 +114,18 @@ namespace Volo.Abp.Domain.Entities.Events
                 false
             );
 
-            var eto = EntityToEtoMapper.Map(entity);
-            if (eto != null)
+            if (ShouldPublishDistributedEventForEntity(entity))
             {
-                await TriggerEventWithEntity(
-                    DistributedEventBus,
-                    typeof(EntityUpdatedEto<>),
-                    eto,
-                    false
-                );
+                var eto = EntityToEtoMapper.Map(entity);
+                if (eto != null)
+                {
+                    await TriggerEventWithEntity(
+                        DistributedEventBus,
+                        typeof(EntityUpdatedEto<>),
+                        eto,
+                        false
+                    );
+                }
             }
         }
 
@@ -127,15 +148,18 @@ namespace Volo.Abp.Domain.Entities.Events
                 false
             );
 
-            var eto = EntityToEtoMapper.Map(entity);
-            if (eto != null)
+            if (ShouldPublishDistributedEventForEntity(entity))
             {
-                await TriggerEventWithEntity(
-                    DistributedEventBus,
-                    typeof(EntityDeletedEto<>),
-                    eto,
-                    false
-                );
+                var eto = EntityToEtoMapper.Map(entity);
+                if (eto != null)
+                {
+                    await TriggerEventWithEntity(
+                        DistributedEventBus,
+                        typeof(EntityDeletedEto<>),
+                        eto,
+                        false
+                    );
+                }
             }
         }
 
