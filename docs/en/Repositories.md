@@ -126,7 +126,7 @@ You can directly access the data access provider (`DbContext` in this case) to p
 
 `IRepository` inherits from `IQueryable`, that means you can **directly use LINQ extension methods** on it, as shown in the example of the "*Generic Repositories*" section above.
 
-**Example: Using the `Where(...)` &and the `ToList()` extension methods**
+**Example: Using the `Where(...)` and the `ToList()` extension methods**
 
 ````csharp
 var people = _personRepository
