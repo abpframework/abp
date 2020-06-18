@@ -1,7 +1,10 @@
 Prism.languages.markup = {
 	'comment': /<!--[\s\S]*?-->/,
 	'prolog': /<\?[\s\S]+?\?>/,
-	'doctype': /<!DOCTYPE[\s\S]+?>/i,
+	'doctype': {
+		pattern: /<!DOCTYPE(?:[^>"'[\]]|"[^"]*"|'[^']*')+(?:\[(?:(?!<!--)[^"'\]]|"[^"]*"|'[^']*'|<!--[\s\S]*?-->)*\]\s*)?>/i,
+		greedy: true
+	},
 	'cdata': /<!\[CDATA\[[\s\S]*?]]>/i,
 	'tag': {
 		pattern: /<\/?(?!\d)[^\s>\/=$<%]+(?:\s(?:\s*[^\s>\/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+(?=[\s>]))|(?=[\s/>])))+)?\s*\/?>/i,
@@ -84,7 +87,7 @@ Object.defineProperty(Prism.languages.markup.tag, 'addInlined', {
 
 		var def = {};
 		def[tagName] = {
-			pattern: RegExp(/(<__[\s\S]*?>)(?:<!\[CDATA\[[\s\S]*?\]\]>\s*|[\s\S])*?(?=<\/__>)/.source.replace(/__/g, tagName), 'i'),
+			pattern: RegExp(/(<__[\s\S]*?>)(?:<!\[CDATA\[[\s\S]*?\]\]>\s*|[\s\S])*?(?=<\/__>)/.source.replace(/__/g, function () { return tagName; }), 'i'),
 			lookbehind: true,
 			greedy: true,
 			inside: inside
