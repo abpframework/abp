@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Text;
 using System.Threading.Tasks;
-
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
@@ -19,6 +16,7 @@ namespace Volo.Abp.Application.Services
         protected AbstractKeyReadOnlyAppService(IRepository<TEntity> repository)
             : base(repository)
         {
+
         }
     }
 
@@ -29,6 +27,7 @@ namespace Volo.Abp.Application.Services
         protected AbstractKeyReadOnlyAppService(IRepository<TEntity> repository)
             : base(repository)
         {
+
         }
     }
 

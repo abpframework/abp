@@ -70,7 +70,7 @@ namespace Volo.Abp.Application.Services
         protected new IRepository<TEntity, TKey> Repository { get; }
 
         protected CrudAppService(IRepository<TEntity, TKey> repository)
-        : base(repository)
+            : base(repository)
         {
             Repository = repository;
         }

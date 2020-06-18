@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
@@ -16,8 +13,10 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository) : base(repository)
+        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository)
+            : base(repository)
         {
+
         }
     }
 
@@ -26,8 +25,10 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository) : base(repository)
+        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository)
+            : base(repository)
         {
+
         }
     }
 
