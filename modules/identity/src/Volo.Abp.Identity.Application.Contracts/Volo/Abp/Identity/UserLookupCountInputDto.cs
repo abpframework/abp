@@ -1,6 +1,8 @@
-﻿namespace Volo.Abp.Identity
+﻿using Volo.Abp.ObjectExtending;
+
+namespace Volo.Abp.Identity
 {
-    public class UserLookupCountInputDto
+    public class UserLookupCountInputDto : ExtensibleObject
     {
         public string Filter { get; set; }
     }

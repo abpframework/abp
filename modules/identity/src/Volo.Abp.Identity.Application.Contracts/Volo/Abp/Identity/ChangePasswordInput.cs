@@ -1,6 +1,8 @@
-﻿namespace Volo.Abp.Identity
+﻿using Volo.Abp.ObjectExtending;
+
+namespace Volo.Abp.Identity
 {
-    public class ChangePasswordInput
+    public class ChangePasswordInput : ExtensibleObject
     {
         public string CurrentPassword { get; set; }
 
