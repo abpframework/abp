@@ -1,6 +1,8 @@
-﻿namespace Volo.Abp.PermissionManagement
+﻿using Volo.Abp.ObjectExtending;
+
+namespace Volo.Abp.PermissionManagement
 {
-    public class ProviderInfoDto
+    public class ProviderInfoDto : ExtensibleObject
     {
         public string ProviderName { get; set; }
 

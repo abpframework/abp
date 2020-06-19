@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public class PermissionGrantInfoDto
+    public class PermissionGrantInfoDto : ExtensibleObject
     {
         public string Name { get; set; }
 

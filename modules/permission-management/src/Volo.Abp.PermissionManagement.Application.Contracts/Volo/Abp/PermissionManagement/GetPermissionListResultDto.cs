@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public class GetPermissionListResultDto
+    public class GetPermissionListResultDto : ExtensibleObject
     {
         public string EntityDisplayName { get; set; }
 
