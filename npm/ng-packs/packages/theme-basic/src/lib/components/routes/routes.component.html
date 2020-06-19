@@ -1,4 +1,4 @@
-<ul class="navbar-nav">
+<ul class="navbar-nav" *ngIf="isShow">
   <ng-container
     *ngFor="let route of routes.visible$ | async; trackBy: trackByFn"
     [ngTemplateOutlet]="route?.children?.length ? dropdownLink : defaultLink"
@@ -18,7 +18,7 @@
   <ng-template #dropdownLink let-route>
     <li
       #navbarRootDropdown
-      *ngIf="findRequiredPolicy(route)"
+      [abpVisibility]="routeContainer"
       [abpPermission]="route.requiredPolicy"
       class="nav-item dropdown"
       display="static"
@@ -74,7 +74,8 @@
       #dropdownSubmenu="ngbDropdown"
       placement="right-top"
       [autoClose]="true"
-      *abpPermission="child.requiredPolicy"
+      [abpPermission]="child.requiredPolicy"
+      [abpVisibility]="childrenContainer"
     >
       <div ngbDropdownToggle [class.dropdown-toggle]="false">
         <a
