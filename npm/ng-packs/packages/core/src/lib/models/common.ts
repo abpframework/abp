@@ -33,21 +33,18 @@ export namespace ABP {
   export interface Node {
     name: string;
     parentName?: string;
+    requiredPolicy?: string;
     order?: number;
     invisible?: boolean;
   }
 
-  export interface Nav extends Node {
+  export interface Route extends Node {
     path: string;
-    requiredPolicy?: string;
-  }
-
-  export interface Route extends Nav {
     layout?: eLayoutType;
     iconClass?: string;
   }
 
-  export interface Tab extends Nav {
+  export interface Tab extends Node {
     component: Type<any>;
   }
 
