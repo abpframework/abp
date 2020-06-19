@@ -1,6 +1,5 @@
 import { Directive, Input, Optional, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import snq from 'snq';
 
 @Directive({
   selector: '[abpVisibility]',
@@ -23,9 +22,8 @@ export class VisibilityDirective implements AfterViewInit {
       mutations.forEach(mutation => {
         if (!mutation.target) return;
 
-        const htmlNodes = snq(
-          () => Array.from(mutation.target.childNodes).filter(node => node instanceof HTMLElement),
-          [],
+        const htmlNodes = Array.from(mutation?.target?.childNodes || []).filter(
+          node => node instanceof HTMLElement,
         );
 
         if (!htmlNodes.length) {
@@ -39,9 +37,8 @@ export class VisibilityDirective implements AfterViewInit {
     });
 
     setTimeout(() => {
-      const htmlNodes = snq(
-        () => Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
-        [],
+      const htmlNodes = Array.from(this.focusedElement?.childNodes || []).filter(
+        node => node instanceof HTMLElement,
       );
 
       if (!htmlNodes.length) this.removeFromDOM();

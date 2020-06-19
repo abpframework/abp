@@ -14,7 +14,6 @@ import { Navigate, RouterDataResolved, RouterError, RouterState } from '@ngxs/ro
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import snq from 'snq';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { ErrorScreenErrorCodes, HttpErrorConfig } from '../models/common';
 import { Confirmation } from '../models/confirmation';
@@ -88,7 +87,7 @@ export class ErrorHandler {
         filter(this.filterRestErrors),
       )
       .subscribe(err => {
-        const body = snq(() => err.error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
+        const body = err?.error?.error || DEFAULT_ERROR_MESSAGES.defaultError.title;
 
         if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
           const confirmation$ = this.showError(null, null, body);
@@ -263,10 +262,9 @@ export class ErrorHandler {
   }
 
   canCreateCustomError(status: ErrorScreenErrorCodes): boolean {
-    return snq(
-      () =>
-        this.httpErrorConfig.errorScreen.component &&
-        this.httpErrorConfig.errorScreen.forWhichErrors.indexOf(status) > -1,
+    return (
+      this.httpErrorConfig?.errorScreen?.component &&
+      this.httpErrorConfig?.errorScreen?.forWhichErrors?.indexOf(status) > -1
     );
   }
 
@@ -278,7 +276,7 @@ export class ErrorHandler {
 
   private filterRouteErrors = (instance: RouterError<any>): boolean => {
     return (
-      snq(() => instance.event.error.indexOf('Cannot match') > -1) &&
+      instance?.event?.error?.indexOf('Cannot match') > -1 &&
       this.httpErrorConfig.skipHandledErrorCodes.findIndex(code => code === 404) < 0
     );
   };

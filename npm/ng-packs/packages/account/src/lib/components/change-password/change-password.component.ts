@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
-import snq from 'snq';
 import { Account } from '../../models/account';
 
 const { required } = Validators;
@@ -80,7 +79,7 @@ export class ChangePasswordComponent
         },
         error: err => {
           this.toasterService.error(
-            snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
+            err?.error?.error?.message || 'AbpAccount::DefaultErrorMessage',
             'Error',
             {
               life: 7000,

@@ -13,7 +13,7 @@ export function configureRoutes(routes: RoutesService) {
         path: '',
         name: eThemeSharedRouteNames.Administration,
         iconClass: 'fa fa-wrench',
-        order: 1,
+        order: 3,
       },
     ]);
   };

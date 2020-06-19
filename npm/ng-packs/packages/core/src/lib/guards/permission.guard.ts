@@ -3,7 +3,6 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angul
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import snq from 'snq';
 import { RestOccurError } from '../actions';
 import { ConfigState } from '../states';
 
@@ -14,14 +13,11 @@ export class PermissionGuard implements CanActivate {
   constructor(private store: Store) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    let resource =
-      snq(() => route.data.routes.requiredPolicy) || snq(() => route.data.requiredPolicy as string);
+    let resource = route.data?.routes?.requiredPolicy || (route.data?.requiredPolicy as string);
     if (!resource) {
-      resource = snq(
-        () =>
-          route.routeConfig.children.find(child => state.url.indexOf(child.path) > -1).data
-            .requiredPolicy,
-      );
+      resource = (route.routeConfig?.children || []).find(
+        child => state.url.indexOf(child.path) > -1,
+      ).data.requiredPolicy;
 
       if (!resource) {
         return of(true);

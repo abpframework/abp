@@ -19,7 +19,6 @@ import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
 import compare from 'just-compare';
-import snq from 'snq';
 
 @Directive({ selector: '[abpReplaceableTemplate]' })
 export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChanges {
@@ -94,7 +93,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (snq(() => changes.data.currentValue.inputs) && this.defaultComponentRef) {
+    if (changes.data?.currentValue?.inputs && this.defaultComponentRef) {
       this.setDefaultComponentInputs();
     }
   }

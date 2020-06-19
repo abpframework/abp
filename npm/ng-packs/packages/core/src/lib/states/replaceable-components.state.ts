@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
-import snq from 'snq';
 
 @State<ReplaceableComponents.State>({
   name: 'ReplaceableComponentsState',
@@ -21,7 +20,7 @@ export class ReplaceableComponentsState {
     const selector = createSelector(
       [ReplaceableComponentsState],
       (state: ReplaceableComponents.State): ReplaceableComponents.ReplaceableComponent => {
-        return snq(() => state.replaceableComponents.find(component => component.key === key));
+        return state.replaceableComponents.find(component => component.key === key);
       },
     );
 
@@ -35,10 +34,7 @@ export class ReplaceableComponentsState {
   ) {
     let { replaceableComponents } = getState();
 
-    const index = snq(
-      () => replaceableComponents.findIndex(component => component.key === payload.key),
-      -1,
-    );
+    const index = replaceableComponents.findIndex(component => component.key === payload.key);
     if (index > -1) {
       replaceableComponents[index] = payload;
     } else {

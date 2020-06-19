@@ -6,7 +6,6 @@ import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { throwError } from 'rxjs';
 import { catchError, finalize, switchMap } from 'rxjs/operators';
-import snq from 'snq';
 import { RegisterRequest } from '../../models';
 import { AccountService } from '../../services/account.service';
 import { eAccountComponents } from '../../enums/components';
@@ -78,8 +77,9 @@ export class RegisterComponent implements OnInit {
         switchMap(() => this.authService.login(newUser.userName, newUser.password)),
         catchError(err => {
           this.toasterService.error(
-            snq(() => err.error.error_description) ||
-              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
+            err?.error?.error_description ||
+              err?.error?.error?.message ||
+              'AbpAccount::DefaultErrorMessage',
             'Error',
             { life: 7000 },
           );

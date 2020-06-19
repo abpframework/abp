@@ -3,7 +3,6 @@ import { Store, Select } from '@ngxs/store';
 import { SetLanguage, ConfigState, ApplicationConfiguration, SessionState } from '@abp/ng.core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import snq from 'snq';
 
 @Component({
   selector: 'abp-languages',
@@ -56,21 +55,14 @@ export class LanguagesComponent implements OnInit {
     return this.languages$.pipe(
       map(
         languages =>
-          snq(
-            () => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName,
-          ),
-        '',
+          languages.find(lang => lang.cultureName === this.selectedLangCulture)?.displayName || '',
       ),
     );
   }
 
   get dropdownLanguages$(): Observable<ApplicationConfiguration.Language[]> {
     return this.languages$.pipe(
-      map(
-        languages =>
-          snq(() => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)),
-        [],
-      ),
+      map(languages => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)),
     );
   }
 

@@ -6,7 +6,6 @@ import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import snq from 'snq';
 import { eAccountComponents } from '../../enums/components';
 
 const { maxLength, minLength, required } = Validators;
@@ -56,8 +55,9 @@ export class LoginComponent implements OnInit {
       .pipe(
         catchError(err => {
           this.toasterService.error(
-            snq(() => err.error.error_description) ||
-              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
+            err?.error?.error_description ||
+              err?.error?.error?.message ||
+              'AbpAccount::DefaultErrorMessage',
             'Error',
             { life: 7000 },
           );

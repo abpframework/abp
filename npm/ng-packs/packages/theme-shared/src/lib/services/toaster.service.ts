@@ -2,7 +2,6 @@ import { Injectable, ComponentRef } from '@angular/core';
 import { Toaster } from '../models';
 import { ReplaySubject } from 'rxjs';
 import { Config, PROJECTION_STRATEGY, ContentProjectionService } from '@abp/ng.core';
-import snq from 'snq';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
 
 @Injectable({
@@ -115,7 +114,7 @@ export class ToasterService {
    * @param id ID of the toast to be removed.
    */
   remove(id: number): void {
-    this.toasts = this.toasts.filter(toast => snq(() => toast.options.id) !== id);
+    this.toasts = this.toasts.filter(toast => toast.options?.id !== id);
     this.toasts$.next(this.toasts);
   }
 
@@ -123,9 +122,7 @@ export class ToasterService {
    * Removes all open toasts at once.
    */
   clear(key?: string): void {
-    this.toasts = !key
-      ? []
-      : this.toasts.filter(toast => snq(() => toast.options.containerKey) !== key);
+    this.toasts = !key ? [] : this.toasts.filter(toast => toast.options?.containerKey !== key);
     this.toasts$.next(this.toasts);
   }
 }

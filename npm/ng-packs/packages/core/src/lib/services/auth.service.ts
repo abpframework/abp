@@ -5,7 +5,6 @@ import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { from, Observable } from 'rxjs';
 import { switchMap, tap, take } from 'rxjs/operators';
-import snq from 'snq';
 import { GetAppConfiguration } from '../actions/config.actions';
 import { SessionState } from '../states/session.state';
 import { RestService } from './rest.service';
@@ -41,8 +40,7 @@ export class AuthService {
       ),
       switchMap(() => this.store.dispatch(new GetAppConfiguration())),
       tap(() => {
-        const redirectUrl =
-          snq(() => window.history.state.redirectUrl) || (this.options || {}).redirectUrl || '/';
+        const redirectUrl = window.history?.state?.redirectUrl || this.options?.redirectUrl || '/';
         this.store.dispatch(new Navigate([redirectUrl]));
       }),
       take(1),

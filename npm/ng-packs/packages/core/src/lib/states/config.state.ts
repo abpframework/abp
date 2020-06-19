@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
-import snq from 'snq';
 import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
 import { SetLanguage } from '../actions/session.actions';
@@ -67,7 +66,7 @@ export class ConfigState {
 
   static getSetting(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return snq(() => state.setting.values[key]);
+      return state.setting?.values?.[key];
     });
 
     return selector;
@@ -75,7 +74,7 @@ export class ConfigState {
 
   static getSettings(keyword?: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      const settings = snq(() => state.setting.values, {});
+      const settings = state.setting?.values || {};
 
       if (!keyword) return settings;
 
@@ -93,7 +92,7 @@ export class ConfigState {
   static getGrantedPolicy(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State): boolean => {
       if (!key) return true;
-      const getPolicy = k => snq(() => state.auth.grantedPolicies[k], false);
+      const getPolicy = k => state.auth?.grantedPolicies?.[k] || false;
 
       const orRegexp = /\|\|/g;
       const andRegexp = /&&/g;
@@ -144,7 +143,7 @@ export class ConfigState {
 
       const sourceName =
         keys[0] ||
-        snq(() => state.environment.localization.defaultResourceName) ||
+        state.environment?.localization?.defaultResourceName ||
         state.localization.defaultResourceName;
       const sourceKey = keys[1];
 
