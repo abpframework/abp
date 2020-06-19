@@ -1,0 +1,16 @@
+{
+  "culture": "tr",
+  "texts": {
+    "Menu:ProductManagement": "Ürün Yönetimi",
+    "Menu:Products": "Ürünler",
+    "ProductManagement": "Ürün Yönetimi",
+    "CreateANewProduct": "Yeni Bir Ürün Oluştur",
+    "Products": "Ürünler",
+    "StockCount": "Stok Sayısı",
+    "Code": "Kod",
+    "Name": "İsim",
+    "Price": "Fiyat",
+    "ImageName": "Fotoğraf İsmi",
+    "ProductDeletionWarningMessage": "Bu ürünü silmek istediğinize emin misiniz?"
+  }
+}
