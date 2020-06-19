@@ -2,10 +2,6 @@ import { Directive, Input, Optional, ElementRef, Renderer2, AfterViewInit } from
 import { Subject } from 'rxjs';
 import snq from 'snq';
 
-/**
- *
- * @deprecated To be deleted in v3.3
- */
 @Directive({
   selector: '[abpVisibility]',
 })
