@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -197,7 +198,16 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
         {
+            CreateExtraPropertiesForTrackedEntities(e);
             FillExtraPropertiesForTrackedEntities(e);
+        }
+
+        protected virtual void CreateExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
+        {
+            if (e.Entry.Entity is IHasExtraProperties entity && entity.ExtraProperties == null)
+            {
+                SetExtraPropertiesValue(entity, new Dictionary<string, object>());
+            }
         }
 
         protected virtual void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
@@ -274,6 +284,7 @@ namespace Volo.Abp.EntityFrameworkCore
             }
 
             HandleExtraPropertiesOnSave(entry);
+            DeleteExtraPropertiesOnSave(entry);
 
             AddDomainEvents(changeReport, entry.Entity);
         }
@@ -314,6 +325,41 @@ namespace Volo.Abp.EntityFrameworkCore
                 }
 
                 entry.Property(property.Name).CurrentValue = entity.GetProperty(property.Name);
+            }
+        }
+
+        protected virtual void DeleteExtraPropertiesOnSave(EntityEntry entry)
+        {
+            if (entry.State.IsIn(EntityState.Deleted, EntityState.Unchanged))
+            {
+                return;
+            }
+
+            if (entry.Entity is IHasExtraProperties entity)
+            {
+                if (entity.ExtraProperties != null && entity.ExtraProperties.Count == 0)
+                {
+                    SetExtraPropertiesValue(entity, null);
+                }
+            }
+        }
+
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly ConcurrentDictionary<Type, PropertyInfo> ExtraPropertiesPropertyInfos =
+            new ConcurrentDictionary<Type, PropertyInfo>();
+
+        protected virtual void SetExtraPropertiesValue(IHasExtraProperties entity, Dictionary<string, object> value)
+        {
+            if (entity != null)
+            {
+                var property = ExtraPropertiesPropertyInfos.GetOrAdd(entity.GetType(),
+                    type => type.GetProperty(nameof(IHasExtraProperties.ExtraProperties),
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty));
+
+                if (property != null && property.CanWrite)
+                {
+                    property.SetValue(entity, value);
+                }
             }
         }
 

@@ -28,5 +28,13 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
             var london2 = await CityRepository.FindByNameAsync("London");
             london2.GetProperty<string>("PhoneCode").ShouldBe("53");
         }
+
+        [Fact]
+        public async Task Extra_Property_Should_Not_Be_Null()
+        {
+            var istanbul = await CityRepository.FindByNameAsync("Istanbul");
+            istanbul.ExtraProperties.ShouldNotBeNull();
+        }
+
     }
 }

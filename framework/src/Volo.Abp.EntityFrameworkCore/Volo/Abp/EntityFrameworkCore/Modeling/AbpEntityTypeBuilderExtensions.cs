@@ -43,6 +43,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
                 //TODO: Max length?
                 b.Property(nameof(IHasConcurrencyStamp.ConcurrencyStamp))
                     .IsConcurrencyToken()
+                    .HasMaxLength(64)
                     .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
             }
         }
