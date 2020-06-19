@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Volo.AbpIo.Domain:010004": "Maksimum üye sayısı aşıldı!",
@@ -18,12 +18,14 @@
     "ReadyToGetStarted?": "Başlamaya hazır mısın?",
     "JoinOurCommunity": "Topluluğumuza katılın",
     "GetStartedUpper": "BAŞLAYIN",
+    "ForkMeOnGitHub": "Fork me on GitHub",
     "Features": "Özellikler",
     "GetStarted": "Başlayın",
     "Documents": "Dokümanlar",
     "Community": "Topluluk",
     "ContributionGuide": "Katkı Rehberi",
     "Blog": "Blog",
+    "Commercial": "Ticari",
     "SeeDocuments": "Dokümanlara Göz Atın"
   }
 }

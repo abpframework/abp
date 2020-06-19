@@ -109,11 +109,13 @@
         var wWidth = $(window).width();
         if (wWidth > 766) {
             $("#sidebar-scroll").mCustomScrollbar({
-                theme: "minimal"
+                theme: "minimal",
+                alwaysShowScrollbar: 0,
             });
 
             $("#scroll-index").mCustomScrollbar({
-                theme: "minimal-dark"
+                theme: "minimal-dark",
+                alwaysShowScrollbar: 0,
             });
         }
     }
