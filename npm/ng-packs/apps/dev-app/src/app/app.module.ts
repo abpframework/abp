@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { APP_ROUTE_PROVIDER } from './route.provider';
 
 const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
@@ -35,6 +36,7 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     SharedModule,
     ...(environment.production ? [] : LOGGERS),
   ],
+  providers: [APP_ROUTE_PROVIDER],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
