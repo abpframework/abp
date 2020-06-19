@@ -13,6 +13,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.EventBus.RabbitMq;
@@ -76,6 +77,11 @@ namespace IdentityService.Host
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
+            });
+            
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.AutoEventSelectors.Add<IdentityUser>();
             });
 
             context.Services.AddStackExchangeRedisCache(options =>
