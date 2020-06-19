@@ -90,7 +90,7 @@ namespace Volo.Abp.Localization
 
             using (CultureHelper.Use("tr"))
             {
-                _localizer["SeeYou"].Value.ShouldBe("See you"); //Not defined in tr, getting from default lang
+                _localizer["SeeYou"].Value.ShouldBe("Görüşürüz");
             }
 
             using (CultureHelper.Use("it"))
@@ -149,7 +149,7 @@ namespace Volo.Abp.Localization
                 _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("El campo puede tener un máximo de '42' caracteres"); //Overriden in Source/es.json
             }
 
-            
+
         }
 
         [Fact]
@@ -192,7 +192,7 @@ namespace Volo.Abp.Localization
 
                 localizedStrings.ShouldContain(
                     ls => ls.Name == "FortyTwo" &&
-                          ls.Value == "Forty Two" &&
+                          ls.Value == "Kırk İki" &&
                           ls.ResourceNotFound == false
                 );
 
@@ -229,7 +229,7 @@ namespace Volo.Abp.Localization
             {
                 var localizedStrings = _localizer.GetAllStrings(false).ToList();
 
-                localizedStrings.ShouldNotContain(
+                localizedStrings.ShouldContain(
                     ls => ls.Name == "FortyTwo"
                 );
 
@@ -280,7 +280,7 @@ namespace Volo.Abp.Localization
 
                 localizedStrings.ShouldContain(
                     ls => ls.Name == "SeeYou" &&
-                          ls.Value == "See you" &&
+                          ls.Value == "Görüşürüz" &&
                           ls.ResourceNotFound == false
                 );
             }
@@ -307,7 +307,7 @@ namespace Volo.Abp.Localization
 
                 localizedStrings.ShouldContain(
                     ls => ls.Name == "SeeYou" &&
-                          ls.Value == "See you" &&
+                          ls.Value == "Görüşürüz" &&
                           ls.ResourceNotFound == false
                 );
             }
