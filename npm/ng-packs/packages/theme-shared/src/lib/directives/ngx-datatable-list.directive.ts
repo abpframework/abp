@@ -36,8 +36,15 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
 
   private subscribeToSort() {
     const sub = this.table.sort.subscribe(({ sorts: [{ prop, dir }] }) => {
-      this.list.sortKey = prop;
-      this.list.sortOrder = dir;
+      if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
+        this.list.sortKey = '';
+        this.list.sortOrder = '';
+        this.table.sorts = [];
+        this.cdRef.detectChanges();
+      } else {
+        this.list.sortKey = prop;
+        this.list.sortOrder = dir;
+      }
     });
     this.subscription.add(sub);
   }
@@ -45,7 +52,7 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private subscribeToIsLoading() {
     const sub = this.list.isLoading$.subscribe(loading => {
       this.table.loadingIndicator = loading;
-      this.cdRef.markForCheck();
+      this.cdRef.detectChanges();
     });
     this.subscription.add(sub);
   }

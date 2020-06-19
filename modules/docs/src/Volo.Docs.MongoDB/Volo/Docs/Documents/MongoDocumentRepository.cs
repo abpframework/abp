@@ -43,33 +43,88 @@ namespace Volo.Docs.Documents
                 x.Version == version, cancellationToken: cancellationToken);
         }
 
-        public async Task<List<Document>> GetAllAsync(Guid? projectId,
+        public async Task<List<Document>> GetAllAsync(
+            Guid? projectId,
             string name,
             string version,
             string languageCode,
+            string fileName,
+            string format,
+            DateTime? creationTimeMin,
+            DateTime? creationTimeMax,
+            DateTime? lastUpdatedTimeMin,
+            DateTime? lastUpdatedTimeMax,
+            DateTime? lastSignificantUpdateTimeMin,
+            DateTime? lastSignificantUpdateTimeMax,
+            DateTime? lastCachedTimeMin,
+            DateTime? lastCachedTimeMax,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
+
             return await
-                ApplyFilterForGetAll(GetMongoQueryable(), projectId, name, version, languageCode)
-                .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<Document>>()
-                .PageBy<Document, IMongoQueryable<Document>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                ApplyFilterForGetAll(
+                        GetMongoQueryable(),
+                        projectId: projectId,
+                        name: name,
+                        version: version,
+                        languageCode: languageCode,
+                        format: format,
+                        fileName: fileName,
+                        creationTimeMin: creationTimeMin,
+                        creationTimeMax: creationTimeMax,
+                        lastUpdatedTimeMin: lastUpdatedTimeMin,
+                        lastUpdatedTimeMax: lastUpdatedTimeMax,
+                        lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
+                        lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
+                        lastCachedTimeMin: lastCachedTimeMin,
+                        lastCachedTimeMax: lastCachedTimeMax)
+                    .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<Document>>()
+                    .PageBy<Document, IMongoQueryable<Document>>(skipCount, maxResultCount)
+                    .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetAllCountAsync(Guid? projectId,
+        public async Task<long> GetAllCountAsync(
+            Guid? projectId,
             string name,
             string version,
             string languageCode,
+            string fileName,
+            string format,
+            DateTime? creationTimeMin,
+            DateTime? creationTimeMax,
+            DateTime? lastUpdatedTimeMin,
+            DateTime? lastUpdatedTimeMax,
+            DateTime? lastSignificantUpdateTimeMin,
+            DateTime? lastSignificantUpdateTimeMax,
+            DateTime? lastCachedTimeMin,
+            DateTime? lastCachedTimeMax,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
+
+
             return await
-                ApplyFilterForGetAll(GetMongoQueryable(), projectId, name, version, languageCode)
+                ApplyFilterForGetAll(
+                        GetMongoQueryable(),
+                        projectId: projectId,
+                        name: name,
+                        version: version,
+                        languageCode: languageCode,
+                        format: format,
+                        fileName: fileName,
+                        creationTimeMin: creationTimeMin,
+                        creationTimeMax: creationTimeMax,
+                        lastUpdatedTimeMin: lastUpdatedTimeMin,
+                        lastUpdatedTimeMax: lastUpdatedTimeMax,
+                        lastSignificantUpdateTimeMin: lastSignificantUpdateTimeMin,
+                        lastSignificantUpdateTimeMax: lastSignificantUpdateTimeMax,
+                        lastCachedTimeMin: lastCachedTimeMin,
+                        lastCachedTimeMax: lastCachedTimeMax)
                     .OrderBy(string.IsNullOrWhiteSpace(sorting) ? "name asc" : sorting).As<IMongoQueryable<Document>>()
                     .PageBy<Document, IMongoQueryable<Document>>(skipCount, maxResultCount)
                     .LongCountAsync(GetCancellationToken(cancellationToken));
@@ -86,6 +141,16 @@ namespace Volo.Docs.Documents
             string name,
             string version,
             string languageCode,
+            string fileName,
+            string format,
+            DateTime? creationTimeMin,
+            DateTime? creationTimeMax,
+            DateTime? lastUpdatedTimeMin,
+            DateTime? lastUpdatedTimeMax,
+            DateTime? lastSignificantUpdateTimeMin,
+            DateTime? lastSignificantUpdateTimeMax,
+            DateTime? lastCachedTimeMin,
+            DateTime? lastCachedTimeMax,
             CancellationToken cancellationToken = default)
         {
             if (projectId.HasValue)
@@ -106,6 +171,51 @@ namespace Volo.Docs.Documents
             if (languageCode != null)
             {
                 query = query.Where(d => d.LanguageCode != null && d.LanguageCode == languageCode);
+            }
+
+            if (fileName != null)
+            {
+                query = query.Where(d => d.FileName != null && d.FileName.Contains(fileName));
+            }
+
+            if (creationTimeMin.HasValue)
+            {
+                query = query.Where(d => d.CreationTime.Date >= creationTimeMin.Value.Date);
+            }
+
+            if (creationTimeMax.HasValue)
+            {
+                query = query.Where(d => d.CreationTime.Date <= creationTimeMax.Value.Date);
+            }
+
+            if (lastUpdatedTimeMin.HasValue)
+            {
+                query = query.Where(d => d.LastUpdatedTime.Date >= lastUpdatedTimeMin.Value.Date);
+            }
+
+            if (lastUpdatedTimeMax.HasValue)
+            {
+                query = query.Where(d => d.LastUpdatedTime.Date <= lastUpdatedTimeMax.Value.Date);
+            }
+
+            if (lastSignificantUpdateTimeMin.HasValue)
+            {
+                query = query.Where(d => d.LastSignificantUpdateTime != null && d.LastSignificantUpdateTime.Value.Date >= lastSignificantUpdateTimeMin.Value.Date);
+            }
+
+            if (lastSignificantUpdateTimeMax.HasValue)
+            {
+                query = query.Where(d => d.LastSignificantUpdateTime != null && d.LastSignificantUpdateTime.Value.Date <= lastSignificantUpdateTimeMax.Value.Date);
+            }
+
+            if (lastCachedTimeMin.HasValue)
+            {
+                query = query.Where(d => d.LastCachedTime.Date >= lastCachedTimeMin.Value.Date);
+            }
+
+            if (lastCachedTimeMax.HasValue)
+            {
+                query = query.Where(d => d.LastCachedTime.Date <= lastCachedTimeMax.Value.Date);
             }
 
             return query;
