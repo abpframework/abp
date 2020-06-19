@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Volo.Abp.ObjectExtending;
 
 namespace Volo.Abp.FeatureManagement
 {
-    public class UpdateFeatureDto
+    public class UpdateFeatureDto : ExtensibleObject
     {
         public string Name { get; set; }
 

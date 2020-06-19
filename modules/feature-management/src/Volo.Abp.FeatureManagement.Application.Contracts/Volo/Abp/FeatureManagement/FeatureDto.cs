@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement
 {
-    public class FeatureDto
+    public class FeatureDto : ExtensibleObject
     {
         public string Name { get; set; }
 
