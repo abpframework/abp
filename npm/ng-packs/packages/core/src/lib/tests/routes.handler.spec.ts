@@ -7,32 +7,9 @@ describe('Routes Handler', () => {
     it('should add routes from router config', () => {
       const config = [
         { path: 'x' },
-        { path: '', data: { route: { name: 'Foo' } } },
-        { path: 'bar', data: { route: { name: 'Bar' } } },
-        { data: { routes: [{ path: '/baz', name: 'Baz' }] } },
-      ];
-      const foo = [{ path: '/', name: 'Foo' }];
-      const bar = [{ path: '/bar', name: 'Bar' }];
-      const baz = [{ path: '/baz', name: 'Baz' }];
-
-      const routes = [];
-      const add = jest.fn(routes.push.bind(routes));
-      const mockRoutesService = ({ add } as unknown) as RoutesService;
-      const mockRouter = ({ config } as unknown) as Router;
-
-      const handler = new RoutesHandler(mockRoutesService, mockRouter);
-
-      expect(add).toHaveBeenCalledTimes(3);
-      expect(routes).toEqual([foo, bar, baz]);
-    });
-  });
-  describe('#add', () => {
-    it('should add routes from router config', () => {
-      const config = [
-        { path: 'x' },
         { path: 'y', data: {} },
-        { path: '', data: { route: { name: 'Foo' } } },
-        { path: 'bar', data: { route: { name: 'Bar' } } },
+        { path: '', data: { routes: { name: 'Foo' } } },
+        { path: 'bar', data: { routes: { name: 'Bar' } } },
         { data: { routes: [{ path: '/baz', name: 'Baz' }] } },
       ];
       const foo = [{ path: '/', name: 'Foo' }];

@@ -1,5 +1,6 @@
 import { Injectable, Optional } from '@angular/core';
 import { Router } from '@angular/router';
+import { ABP } from '../models';
 import { RoutesService } from '../services/routes.service';
 
 @Injectable({
@@ -11,15 +12,34 @@ export class RoutesHandler {
   }
 
   addRoutes() {
-    this.router?.config.forEach(({ path, data }) => {
-      if (!data) return;
+    this.router?.config.forEach(({ path = '', data }) => {
+      if (!data?.routes) return;
 
-      if (data.route) {
-        this.routes.add([{ path: '/' + path, ...data.route }]);
+      if (Array.isArray(data.routes)) {
+        this.routes.add(data.routes);
         return;
       }
 
-      if (data.routes) this.routes.add(data.routes);
+      const routes = flatRoutes([{ ...data.routes, path }], { path: '' });
+      this.routes.add(routes);
     });
   }
 }
+
+function flatRoutes(routes: RouteDef[], parent: any) {
+  if (!routes) return [];
+
+  return routes.reduce((acc, route) => {
+    const current = {
+      ...route,
+      parentName: parent.name,
+      path: parent.path + '/' + route.path,
+    };
+
+    acc.push(current, ...flatRoutes(current.children, current));
+
+    return acc;
+  }, []);
+}
+
+type RouteDef = ABP.Route & { children: RouteDef[] };
