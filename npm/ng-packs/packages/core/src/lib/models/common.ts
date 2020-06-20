@@ -30,7 +30,7 @@ export namespace ABP {
     maxResultCount?: number;
   }
 
-  export interface Node {
+  export interface Nav {
     name: string;
     parentName?: string;
     requiredPolicy?: string;
@@ -38,13 +38,13 @@ export namespace ABP {
     invisible?: boolean;
   }
 
-  export interface Route extends Node {
+  export interface Route extends Nav {
     path: string;
     layout?: eLayoutType;
     iconClass?: string;
   }
 
-  export interface Tab extends Node {
+  export interface Tab extends Nav {
     component: Type<any>;
   }
 
