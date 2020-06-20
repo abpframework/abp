@@ -21,6 +21,7 @@ import { PermissionDirective } from './directives/permission.directive';
 import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
+import { RoutesHandler } from './handlers/routes.handler';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
@@ -194,6 +195,12 @@ export class CoreModule {
           provide: APP_INITIALIZER,
           multi: true,
           deps: [LocalizationService],
+          useFactory: noop,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [RoutesHandler],
           useFactory: noop,
         },
         { provide: OAuthStorage, useFactory: storageFactory },
