@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "OrganizationManagement": "Organizasyon yönetimi",
@@ -6,6 +6,8 @@
     "Volo.AbpIo.Commercial:010003": "Bu organizasyonda yetkili değilsiniz!",
     "OrganizationNotFoundMessage": "Organizasyon bulunamadı!",
     "DeveloperCount": "Yazılımcı sayısı",
+    "QuestionCount": "Kalan / toplam sorular",
+    "Unlimited": "Sınırsız",
     "Owners": "Yetkili sayısı",
     "AddMember": "Üye ekle",
     "AddOwner": "Yetkili ekle",
@@ -19,12 +21,15 @@
     "StartDate": "Başlangıç tarihi",
     "EndDate": "bitiş tarihi",
     "Modules": "Modüller",
-    "Volo.AbpIo.Commercial:010004": "Kullanıcı bulunamadı! İlgili kullanıcının daha önceden sisteme kayıt olmuş olması gerekiyor.",
     "LicenseExtendMessage": "Lisans bitiş tarihiniz {0} tarihine kadar uzatıldı",
     "LicenseUpgradeMessage": "Lisansınız {0} lisansa yükseltildi",
     "LicenseAddDeveloperMessage": "Lisansınıza {0} geliştirici eklendi",
-    "MyOrganizations":  "Organizasyonlarım",
-	"ApiKey": "API anahtarı",
-	"UserNameNotFound": "{0} kullanıcı adı ile bir kullanıcı yok"
+    "Volo.AbpIo.Commercial:010004": "Kullanıcı bulunamadı! İlgili kullanıcının daha önceden sisteme kayıt olmuş olması gerekiyor.",
+    "MyOrganizations": "Organizasyonlarım",
+    "ApiKey": "API anahtarı",
+    "UserNameNotFound": "{0} kullanıcı adı ile bir kullanıcı yok",
+    "SuccessfullyAddedToNewsletter": "Bültenimize abone olduğunuz için teşekkürler!",
+    "MyProfile": "Profilim",
+    "EmailNotValid": "Lütfen uygun bir e-posta adresi giriniz"
   }
 }

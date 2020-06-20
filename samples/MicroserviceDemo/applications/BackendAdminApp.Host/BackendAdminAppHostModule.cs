@@ -8,7 +8,6 @@ using ProductManagement;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
 using MsDemo.Shared;
-using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
 using Volo.Abp.AspNetCore.Mvc.Client;

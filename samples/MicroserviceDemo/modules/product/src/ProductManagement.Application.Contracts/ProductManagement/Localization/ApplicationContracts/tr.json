@@ -1,0 +1,10 @@
+{
+  "culture": "tr",
+  "texts": {
+    "Permission:ProductManagement": "Ürün Yönetimi",
+    "Permission:Products": "Ürünler",
+    "Permission:Edit": "Güncelle",
+    "Permission:Delete": "Sil",
+    "Permission:Create": "Oluştur"
+  }
+}
