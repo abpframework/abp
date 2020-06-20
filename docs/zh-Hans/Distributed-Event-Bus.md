@@ -19,7 +19,7 @@
 
 ### IDistributedEventBus
 
-`IDistributedEventBus` can be [injected](Dependency-Injection.md) and used to publish a distributed event.
+可以[注入](Dependency-Injection.md) `IDistributedEventBus` 并且使用发布分布式事件.
 
 **示例: 产品的存货数量发生变化时发布分布式事件**
 
@@ -180,3 +180,121 @@ namespace AbpDemo
 你可以在处理程序注入任何服务来执行所需的逻辑. 一个事件处理程序可以**订阅多个事件**,但是需要为每个事件实现 `IDistributedEventHandler<TEvent>`  接口.
 
 > 事件处理程序类必须注册到依赖注入(DI),示例中使用了 `ITransientDependency`. 参阅[DI文档](Dependency-Injection.md)了解更多选项.
+
+## 预定义的事件
+
+如果你配置,ABP框架会为[实体](Entities.md)**自动发布创建,更新和删除**分布式事件.
+
+### 事件类型
+
+有三种预定义的事件类型:
+
+* `EntityCreatedEto<T>` 是实体 `T` 创建后发布.
+* `EntityUpdatedEto<T>` 是实体 `T` 更新后发布.
+* `EntityDeletedEto<T>` 是实体 `T` 删除后发布.
+
+这些都是泛型的, `T` 实际上是**E**vent **T**ransfer **O**bject (ETO)的类型,而不是实体的类型,因为实体对象不能做为事件数据传输,所以通常会为实体类定义一个ETO类,如为 `Product` 实体定义 `ProductEto`.
+
+### 订阅事件
+
+订阅自动事件与订阅常规分布式事件相同.
+
+**示例: 产品更新后获取通知**
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.EventBus.Distributed;
+
+namespace AbpDemo
+{
+    public class MyHandler : 
+        IDistributedEventHandler<EntityUpdatedEto<ProductEto>>,
+        ITransientDependency
+    {
+        public async Task HandleEventAsync(EntityUpdatedEto<ProductEto> eventData)
+        {
+            var productId = eventData.Entity.Id;
+            //TODO
+        }
+    }
+}
+````
+
+* `MyHandler` 实现了 `IDistributedEventHandler<EntityUpdatedEto<ProductEto>>`.
+
+### 配置
+
+你可以在[模块](Module-Development-Basics.md)的 `ConfigureServices` 中配置 `AbpDistributedEntityEventOptions`添加选择器.
+
+**示例: 配置示例**
+
+````csharp
+Configure<AbpDistributedEntityEventOptions>(options =>
+{
+    //Enable for all entities
+    options.AutoEventSelectors.AddAll();
+
+    //Enable for a single entity
+    options.AutoEventSelectors.Add<IdentityUser>();
+
+    //Enable for all entities in a namespace (and child namespaces)
+    options.AutoEventSelectors.AddNamespace("Volo.Abp.Identity");
+
+    //Custom predicate expression that should return true to select a type
+    options.AutoEventSelectors.Add(
+        type => type.Namespace.StartsWith("MyProject.")
+    );
+});
+````
+
+* 最后一个提供了灵活性来决定是否应该针对给定的实体类型发布事件. 返回 `true` 代表为该 `Type` 发布事件.
+
+你可以添加多个选择器. 如果选择器之一与实体类型匹配,则将其选中.
+
+### 事件传输对象
+
+一旦你为一个实体启用了**自动事件**,ABP框架就会为实体上的更改发布事件. 如果你没有为实体指定对应的**E**vent **T**ransfer **O**bject(ETO), ABP框架会使用一个标准类型 `EntityEto`,它只有两个属性:
+
+* `EntityType` (`string`): 实体类的全名(包括命令空间).
+* `KeysAsString` (`string`): 已更改实体的主键.如果它只有一个主键,这个属性将是主键值. 对于复合键,它包含所有用`,`(逗号)分隔的键.
+
+因此可以实现 `IDistributedEventHandler<EntityUpdatedEto<EntityEto>>` 订阅事件. 但是订阅这样的通用事件不是一个好方法,你可以为实体类型定义对应的ETO.
+
+**示例: 为 `Product` 声明使用 `ProductDto`**
+
+````csharp
+Configure<AbpDistributedEntityEventOptions>(options =>
+{
+    options.AutoEventSelectors.Add<Product>();
+    options.EtoMappings.Add<Product, ProductEto>();
+});
+````
+
+在这个示例中;
+
+* 添加选择器允许发布 `Product` 实体的创建,更新和删除事件.
+* 配置为使用 `ProductEto` 作为事件传输对象来发布与 `Product` 相关的事件.
+
+分布式事件系统使用[对象到对象的映射](Object-To-Object-Mapping.md)系统来映射 `Product` 对象到 `ProductEto` 对象,你需要配置映射. 请参阅可以对象到对象映射文档了解所有选项,下面的示例展示了如何使用[AutoMapper](https://automapper.org/)库配置它.
+
+**示例: 使用AutoMapper配置 `Product` 到 `ProductEto` 映射**
+
+````csharp
+using System;
+using AutoMapper;
+using Volo.Abp.Domain.Entities.Events.Distributed;
+
+namespace AbpDemo
+{
+    [AutoMap(typeof(Product))]
+    public class ProductEto : EntityEto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+    }
+}
+````
+
+此示例使用AutoMapper的 `AutoMap` 属性配置的映射. 你可以创建一个配置文件类代替. 请参阅AutoMapper文档了解更多选项.
