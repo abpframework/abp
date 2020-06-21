@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
@@ -126,7 +126,8 @@ export abstract class AbstractTreeService<T extends object> {
   }
 }
 
-export abstract class AbstractNavTreeService<T extends ABP.Nav> extends AbstractTreeService<T> {
+export abstract class AbstractNavTreeService<T extends ABP.Nav> extends AbstractTreeService<T>
+  implements OnDestroy {
   readonly id = 'name';
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);

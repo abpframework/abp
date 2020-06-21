@@ -4,7 +4,7 @@ import { RoutesService } from '../services/routes.service';
 import { TreeNode } from './tree-utils';
 
 export function findRoute(routes: RoutesService, path: string): TreeNode<ABP.Route> {
-  let node = routes.find(route => route.path === path);
+  const node = routes.find(route => route.path === path);
 
   return node || path === '/'
     ? node
