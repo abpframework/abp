@@ -37,6 +37,6 @@ export function hideRoutes(routes: RoutesService, tabs: SettingTabsService) {
         debounceTime(0),
         map(nodes => !nodes.length),
       )
-      .subscribe(invisible => routes.patch('AbpSettingManagement::Settings', { invisible }));
+      .subscribe(invisible => routes.patch(eSettingManagementRouteNames.Settings, { invisible }));
   };
 }
