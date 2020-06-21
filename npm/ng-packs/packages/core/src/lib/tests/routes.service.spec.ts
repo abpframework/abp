@@ -52,6 +52,22 @@ describe('Routes Service', () => {
     });
   });
 
+  describe('#find', () => {
+    it('should return node found based on query', () => {
+      service.add(routes);
+      const result = service.find(route => route.invisible);
+      expect(result.name).toBe('bar');
+      expect(result.children.length).toBe(1);
+      expect(result.children[0].name).toBe('baz');
+    });
+
+    it('should return null when query is not found', () => {
+      service.add(routes);
+      const result = service.find(route => route.requiredPolicy === 'X');
+      expect(result).toBe(null);
+    });
+  });
+
   describe('#remove', () => {
     it('should remove routes based on given routeNames', () => {
       service.add(routes);

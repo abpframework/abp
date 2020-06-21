@@ -77,6 +77,13 @@ export abstract class AbstractTreeService<T extends object> {
     return this.publish(flatItems, visibleItems);
   }
 
+  find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree) {
+    return tree.reduce(
+      (acc, node) => (acc ? acc : predicate(node) ? node : this.find(predicate, node.children)),
+      null,
+    );
+  }
+
   patch(identifier: string, props: Partial<T>): T[] | false {
     const flatItems = this._flat$.value;
     const index = flatItems.findIndex(item => item[this.id] === identifier);
