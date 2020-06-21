@@ -77,7 +77,7 @@ export abstract class AbstractTreeService<T extends object> {
     return this.publish(flatItems, visibleItems);
   }
 
-  find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree) {
+  find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree): TreeNode<T> | null {
     return tree.reduce(
       (acc, node) => (acc ? acc : predicate(node) ? node : this.find(predicate, node.children)),
       null,
