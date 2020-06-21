@@ -68,6 +68,16 @@ describe('Routes Service', () => {
     });
   });
 
+  describe('#hasInvisibleChild', () => {
+    it('should return if node has invisible child', () => {
+      service.add(routes);
+
+      expect(service.hasInvisibleChild('foo')).toBe(true);
+      expect(service.hasInvisibleChild('bar')).toBe(false);
+      expect(service.hasInvisibleChild('baz')).toBe(false);
+    });
+  });
+
   describe('#remove', () => {
     it('should remove routes based on given routeNames', () => {
       service.add(routes);
