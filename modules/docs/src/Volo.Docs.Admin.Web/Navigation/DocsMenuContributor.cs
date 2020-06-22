@@ -23,7 +23,7 @@ namespace Volo.Docs.Admin.Navigation
 
             var l = context.GetLocalizer<DocsResource>();
 
-            var rootMenuItem = new ApplicationMenuItem(DocsMenuNames.GroupName, l["Menu:DocumentManagement"], icon: "fa fa-book");
+            var rootMenuItem = new ApplicationMenuItem(DocsMenuNames.GroupName, l["Menu:Documents"], icon: "fa fa-book");
 
             administrationMenu.AddItem(rootMenuItem);
 
@@ -32,6 +32,10 @@ namespace Volo.Docs.Admin.Navigation
                 rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Projects, l["Menu:ProjectManagement"], "~/Docs/Admin/Projects"));
             }
 
+            if (await context.IsGrantedAsync(DocsAdminPermissions.Documents.Default))
+            {
+                rootMenuItem.AddItem(new ApplicationMenuItem(DocsMenuNames.Documents, l["Menu:DocumentManagement"], "~/Docs/Admin/Documents"));
+            }
         }
     }
 }

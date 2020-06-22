@@ -29,43 +29,6 @@ const CONFIG_STATE_DATA = {
   requirements: {
     layouts: [null, null, null],
   },
-  routes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-        },
-      ],
-      url: '/account',
-    },
-  ],
-  flattedRoutes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: '::Menu:Identity',
-      path: 'identity',
-      children: [],
-      url: '/identity',
-    },
-  ],
   localization: {
     values: {
       MyProjectName: {

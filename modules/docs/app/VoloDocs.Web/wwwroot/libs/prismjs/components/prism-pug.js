@@ -22,9 +22,7 @@
 		'multiline-script': {
 			pattern: /(^([\t ]*)script\b.*\.[\t ]*)(?:(?:\r?\n|\r(?!\n))(?:\2[\t ]+.+|\s*?(?=\r?\n|\r)))+/m,
 			lookbehind: true,
-			inside: {
-				rest: Prism.languages.javascript
-			}
+			inside: Prism.languages.javascript
 		},
 
 		// See at the end of the file for known filters
@@ -46,9 +44,7 @@
 		'markup': {
 			pattern: /(^[\t ]*)<.+/m,
 			lookbehind: true,
-			inside: {
-				rest: Prism.languages.markup
-			}
+			inside: Prism.languages.markup
 		},
 		'doctype': {
 			pattern: /((?:^|\n)[\t ]*)doctype(?: .+)?/,
@@ -98,16 +94,14 @@
 						pattern: /^\+\w+/,
 						alias: 'function'
 					},
-					'rest': Prism.languages.javascript
+					rest: Prism.languages.javascript
 				}
 			}
 		],
 		'script': {
 			pattern: /(^[\t ]*script(?:(?:&[^(]+)?\([^)]+\))*[\t ]+).+/m,
 			lookbehind: true,
-			inside: {
-				rest: Prism.languages.javascript
-			}
+			inside: Prism.languages.javascript
 		},
 
 		'plain-text': {
@@ -121,9 +115,7 @@
 				'attributes': [
 					{
 						pattern: /&[^(]+\([^)]+\)/,
-						inside: {
-							rest: Prism.languages.javascript
-						}
+						inside: Prism.languages.javascript
 					},
 					{
 						pattern: /\([^)]+\)/,
@@ -131,9 +123,7 @@
 							'attr-value': {
 								pattern: /(=\s*)(?:\{[^}]*\}|[^,)\r\n]+)/,
 								lookbehind: true,
-								inside: {
-									rest: Prism.languages.javascript
-								}
+								inside: Prism.languages.javascript
 							},
 							'attr-name': /[\w-]+(?=\s*!?=|\s*[,)])/,
 							'punctuation': /[!=(),]+/
@@ -147,9 +137,7 @@
 			{
 				pattern: /(^[\t ]*(?:-|!?=)).+/m,
 				lookbehind: true,
-				inside: {
-					rest: Prism.languages.javascript
-				}
+				inside: Prism.languages.javascript
 			}
 		],
 		'punctuation': /[.\-!=|]+/
@@ -175,7 +163,7 @@
 		filter = typeof filter === 'string' ? {filter: filter, language: filter} : filter;
 		if (Prism.languages[filter.language]) {
 			all_filters['filter-' + filter.filter] = {
-				pattern: RegExp(filter_pattern.replace('{{filter_name}}', filter.filter), 'm'),
+				pattern: RegExp(filter_pattern.replace('{{filter_name}}', function () { return filter.filter; }), 'm'),
 				lookbehind: true,
 				inside: {
 					'filter-name': {

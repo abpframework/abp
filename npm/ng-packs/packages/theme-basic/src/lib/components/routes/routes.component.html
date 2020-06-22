@@ -1,14 +1,14 @@
 <ul class="navbar-nav">
   <ng-container
-    *ngFor="let route of visibleRoutes$ | async; trackBy: trackByFn"
-    [ngTemplateOutlet]="route?.children?.length ? dropdownLink : defaultLink"
+    *ngFor="let route of routes.visible$ | async; trackBy: trackByFn"
+    [ngTemplateOutlet]="isDropdown(route) ? dropdownLink : defaultLink"
     [ngTemplateOutletContext]="{ $implicit: route }"
   >
   </ng-container>
 
   <ng-template #defaultLink let-route>
     <li class="nav-item" *abpPermission="route.requiredPolicy">
-      <a class="nav-link" [routerLink]="[route.url]"
+      <a class="nav-link" [routerLink]="[route.path]"
         ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
         {{ route.name | abpLocalization }}</a
       >
@@ -44,27 +44,23 @@
         (click)="$event.preventDefault(); $event.stopPropagation()"
         [class.d-block]="smallScreen && navbarRootDropdown.expand"
       >
-        <ng-template
-          #forTemplate
-          ngFor
-          [ngForOf]="route.children"
-          [ngForTrackBy]="trackByFn"
-          [ngForTemplate]="childWrapper"
-        ></ng-template>
+        <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: route }"></ng-container>
       </div>
     </li>
   </ng-template>
 
-  <ng-template #childWrapper let-child>
-    <ng-template
-      [ngTemplateOutlet]="child?.children?.length ? dropdownChild : defaultChild"
-      [ngTemplateOutletContext]="{ $implicit: child }"
-    ></ng-template>
+  <ng-template #forTemplate let-route>
+    <ng-container *ngFor="let child of route.children">
+      <ng-template
+        [ngTemplateOutlet]="child.children?.length ? dropdownChild : defaultChild"
+        [ngTemplateOutletContext]="{ $implicit: child }"
+      ></ng-template>
+    </ng-container>
   </ng-template>
 
   <ng-template #defaultChild let-child>
     <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
-      <a class="dropdown-item" [routerLink]="[child.url]">
+      <a class="dropdown-item" [routerLink]="[child.path]">
         <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
         {{ child.name | abpLocalization }}</a
       >
@@ -97,12 +93,7 @@
         class="dropdown-menu border-0 shadow-sm"
         [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
       >
-        <ng-template
-          ngFor
-          [ngForOf]="child.children"
-          [ngForTrackBy]="trackByFn"
-          [ngForTemplate]="childWrapper"
-        ></ng-template>
+        <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: child }"></ng-container>
       </div>
     </div>
   </ng-template>

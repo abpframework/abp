@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Shouldly;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Testing.Utils;
 using Volo.Abp.Uow;
@@ -28,11 +29,17 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
-        public async Task Should_Register_Handler()
+        public void Should_Register_Handler()
         {
-            var options = GetRequiredService<IOptions<AbpDistributedEventBusOptions>>().Value;
-            options.EtoMappings.ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value.EtoType == typeof(UserEto));
-            options.Handlers.ShouldContain(h => h == typeof(DistributedUserUpdateHandler));
+            GetRequiredService<IOptions<AbpDistributedEntityEventOptions>>()
+                .Value
+                .EtoMappings
+                .ShouldContain(m => m.Key == typeof(IdentityUser) && m.Value.EtoType == typeof(UserEto));
+            
+            GetRequiredService<IOptions<AbpDistributedEventBusOptions>>()
+                .Value
+                .Handlers
+                .ShouldContain(h => h == typeof(DistributedUserUpdateHandler));
         }
 
         [Fact]

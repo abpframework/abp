@@ -31,5 +31,10 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+
+        Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default
+        );
     }
 }

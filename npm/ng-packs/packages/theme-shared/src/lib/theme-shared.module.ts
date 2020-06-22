@@ -14,7 +14,6 @@ import { LoaderBarComponent } from './components/loader-bar/loader-bar.component
 import { LoadingComponent } from './components/loading/loading.component';
 import { ModalContainerComponent } from './components/modal/modal-container.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { PaginationComponent } from './components/pagination/pagination.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
 import { TableComponent } from './components/table/table.component';
@@ -27,6 +26,7 @@ import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { initLazyStyleHandler } from './handlers/lazy-style.handler';
 import { RootParams } from './models/common';
+import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
@@ -59,7 +59,6 @@ export function ngxDatatableMessageFactory(store: Store) {
     LoadingComponent,
     ModalComponent,
     ModalContainerComponent,
-    PaginationComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
@@ -80,7 +79,6 @@ export function ngxDatatableMessageFactory(store: Store) {
     LoaderBarComponent,
     LoadingComponent,
     ModalComponent,
-    PaginationComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
@@ -108,6 +106,7 @@ export class ThemeSharedModule {
     return {
       ngModule: ThemeSharedModule,
       providers: [
+        THEME_SHARED_ROUTE_PROVIDERS,
         {
           provide: APP_INITIALIZER,
           multi: true,

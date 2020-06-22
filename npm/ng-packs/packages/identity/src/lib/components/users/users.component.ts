@@ -82,7 +82,7 @@ export class UsersComponent implements OnInit {
   }
 
   buildForm() {
-    this.identityService.getAllRoles().subscribe(({ items }) => {
+    this.identityService.getUserAssingableRoles().subscribe(({ items }) => {
       this.roles = items;
       this.form = this.fb.group({
         userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],

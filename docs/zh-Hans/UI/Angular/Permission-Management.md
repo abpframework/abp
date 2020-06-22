@@ -8,7 +8,7 @@
 
 ```js
 import { Store } from '@ngxs/store';
-import { ConfigState } from '../states';
+import { ConfigState } from '@abp/ng.core';
 
 export class YourComponent {
   constructor(private store: Store) {}
@@ -24,7 +24,7 @@ export class YourComponent {
 或者你可以通过 `ConfigStateService` 获取它:
 
 ```js
-import { ConfigStateService } from '../services/config-state.service';
+import { ConfigStateService } from '@abp/ng.core';
 
 export class YourComponent {
   constructor(private configStateService: ConfigStateService) {}
@@ -42,7 +42,7 @@ export class YourComponent {
 你可以使用 `PermissionDirective` 来根据用户的权限控制DOM元素是否可见.
 
 ```html
-<div *abpPermission="AbpIdentity.Roles">
+<div *abpPermission="'AbpIdentity.Roles'">
   仅当用户具有`AbpIdentity.Roles`权限时,此内容才可见.
 </div>
 ```
@@ -58,6 +58,8 @@ export class YourComponent {
 将 `requiredPolicy` 添加到路由模块中的 `routes`属性.
 
 ```js
+import { PermissionGuard } from '@abp/ng.core';
+// ...
 const routes: Routes = [
   {
     path: 'path',

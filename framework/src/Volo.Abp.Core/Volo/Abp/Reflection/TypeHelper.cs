@@ -359,5 +359,15 @@ namespace Volo.Abp.Reflection
                 ? type.GenericTypeArguments[0]
                 : type;
         }
+
+        public static bool IsDefaultValue([CanBeNull] object obj)
+        {
+            if (obj == null)
+            {
+                return true;
+            }
+
+            return obj.Equals(GetDefaultValue(obj.GetType()));
+        }
     }
 }

@@ -1,7 +1,6 @@
 import { eLayoutType, takeUntilDestroy } from '@abp/ng.core';
 import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
-import { Store } from '@ngxs/store';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { eThemeBasicComponents } from '../../enums/components';
@@ -24,8 +23,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   routesComponentKey = eThemeBasicComponents.Routes;
 
   navItemsComponentKey = eThemeBasicComponents.NavItems;
-
-  constructor(private store: Store) {}
 
   private checkWindowWidth() {
     setTimeout(() => {

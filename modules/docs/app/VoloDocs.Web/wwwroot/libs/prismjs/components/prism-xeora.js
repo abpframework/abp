@@ -63,7 +63,7 @@
 			alias: 'function'
 		},
 		'directive-block-open': {
-			pattern: /\$\w+:{|\$\w(?:#\d+\+?)?(?:\[[-\w.]+])?:[-\w.]+:{(![A-Z]+)?/,
+			pattern: /\$\w+:{|\$\w(?:#\d+\+?)?(?:\[[-\w.]+])?:[-\w.]+:{(?:![A-Z]+)?/,
 			inside: {
 				'punctuation': {
 					pattern: /\$(?:\w:|C(?:\[|#\d))?|[:{[\]]/,
