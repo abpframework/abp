@@ -7,13 +7,14 @@ import { Component, OnInit } from '@angular/core';
       my-project-name works!
     </p>
   `,
-  styles: []
+  styles: [
+  ]
 })
 export class MyProjectNameComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }
