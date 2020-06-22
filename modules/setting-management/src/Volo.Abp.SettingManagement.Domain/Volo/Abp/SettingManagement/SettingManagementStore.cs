@@ -15,8 +15,8 @@ namespace Volo.Abp.SettingManagement
         protected IGuidGenerator GuidGenerator { get; }
 
         public SettingManagementStore(
-            ISettingRepository settingRepository, 
-            IGuidGenerator guidGenerator, 
+            ISettingRepository settingRepository,
+            IGuidGenerator guidGenerator,
             IDistributedCache<SettingCacheItem> cache)
         {
             SettingRepository = settingRepository;
@@ -43,6 +43,8 @@ namespace Volo.Abp.SettingManagement
                 setting.Value = value;
                 await SettingRepository.UpdateAsync(setting);
             }
+
+            await Cache.SetAsync(CalculateCacheKey(name, providerName, providerKey), new SettingCacheItem(setting?.Value), considerUow: true);
         }
 
         public virtual async Task<List<SettingValue>> GetListAsync(string providerName, string providerKey)
@@ -57,13 +59,14 @@ namespace Volo.Abp.SettingManagement
             if (setting != null)
             {
                 await SettingRepository.DeleteAsync(setting);
+                await Cache.RemoveAsync(CalculateCacheKey(name, providerName, providerKey), considerUow: true);
             }
         }
 
         protected virtual async Task<SettingCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
         {
             var cacheKey = CalculateCacheKey(name, providerName, providerKey);
-            var cacheItem = await Cache.GetAsync(cacheKey);
+            var cacheItem = await Cache.GetAsync(cacheKey, considerUow: true);
 
             if (cacheItem != null)
             {
@@ -76,7 +79,8 @@ namespace Volo.Abp.SettingManagement
 
             await Cache.SetAsync(
                 cacheKey,
-                cacheItem
+                cacheItem,
+                considerUow: true
             );
 
             return cacheItem;

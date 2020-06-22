@@ -2,6 +2,7 @@
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.FeatureManagement
 {
@@ -21,12 +22,14 @@ namespace Volo.Abp.FeatureManagement
             Cache = cache;
         }
 
+        [UnitOfWork]
         public virtual async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
             var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
             return cacheItem.Value;
         }
 
+        [UnitOfWork]
         public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
             var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
@@ -40,21 +43,25 @@ namespace Volo.Abp.FeatureManagement
                 featureValue.Value = value;
                 await FeatureValueRepository.UpdateAsync(featureValue);
             }
+
+            await Cache.SetAsync(CalculateCacheKey(name, providerName, providerKey), new FeatureValueCacheItem(featureValue?.Value), considerUow: true);
         }
 
+        [UnitOfWork]
         public virtual async Task DeleteAsync(string name, string providerName, string providerKey)
         {
             var featureValues = await FeatureValueRepository.FindAllAsync(name, providerName, providerKey);
             foreach (var featureValue in featureValues)
             {
                 await FeatureValueRepository.DeleteAsync(featureValue);
+                await Cache.RemoveAsync(CalculateCacheKey(name, providerName, providerKey), considerUow: true);
             }
         }
 
         protected virtual async Task<FeatureValueCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
         {
             var cacheKey = CalculateCacheKey(name, providerName, providerKey);
-            var cacheItem = await Cache.GetAsync(cacheKey);
+            var cacheItem = await Cache.GetAsync(cacheKey, considerUow: true);
 
             if (cacheItem != null)
             {
@@ -67,7 +74,8 @@ namespace Volo.Abp.FeatureManagement
 
             await Cache.SetAsync(
                 cacheKey,
-                cacheItem
+                cacheItem,
+                considerUow: true
             );
 
             return cacheItem;
