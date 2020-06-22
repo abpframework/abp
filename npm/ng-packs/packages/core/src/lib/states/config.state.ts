@@ -190,7 +190,7 @@ export class ConfigState {
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
-    const apiName = this.store.selectSnapshot(ConfigState.getDeep('environment.application.name'));
+    const apiName = 'default';
     const api = this.store.selectSnapshot(ConfigState.getApiUrl(apiName));
     return this.http
       .get<ApplicationConfiguration.Response>(`${api}/api/abp/application-configuration`)
