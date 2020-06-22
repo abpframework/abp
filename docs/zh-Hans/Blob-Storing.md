@@ -169,7 +169,7 @@ public class ProfileAppService : ApplicationService
 
 如果不使用泛型参数,直接注入 `IBlobContainer` (如上所述),会得到默认容器. 注入默认容器的另一种方法是使用 `IBlobContainer<DefaultContainer>`,它返回完全相同的容器.
 
-默认容器的名称是  `Default`.
+默认容器的名称是  `default`.
 
 ### 命令容器
 

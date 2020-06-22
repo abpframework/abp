@@ -93,23 +93,24 @@ export class ConfigState {
   static getGrantedPolicy(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State): boolean => {
       if (!key) return true;
-      const getPolicy = k => snq(() => state.auth.grantedPolicies[k], false);
+      const getPolicy = (k: string) => snq(() => state.auth.grantedPolicies[k], false);
 
       const orRegexp = /\|\|/g;
       const andRegexp = /&&/g;
 
+      // TODO: Allow combination of ANDs & ORs
       if (orRegexp.test(key)) {
-        const keys = key.split('||').filter(k => !!k);
+        const keys = key.split('||').filter(Boolean);
 
-        if (keys.length !== 2) return false;
+        if (keys.length < 2) return false;
 
-        return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
+        return keys.some(k => getPolicy(k.trim()));
       } else if (andRegexp.test(key)) {
-        const keys = key.split('&&').filter(k => !!k);
+        const keys = key.split('&&').filter(Boolean);
 
-        if (keys.length !== 2) return false;
+        if (keys.length < 2) return false;
 
-        return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
+        return keys.every(k => getPolicy(k.trim()));
       }
 
       return getPolicy(key);

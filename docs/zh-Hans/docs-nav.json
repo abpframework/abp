@@ -154,16 +154,23 @@
       ]
     },
     {
-      "text": "事件",
+      "text": "事件总线",
       "items": [
         {
-          "text": "本地 Event Bus"
+          "text": "概述",
+          "path": "Event-Bus.md"
+        },
+        {
+          "text": "本地 Event Bus",
+          "path": "Local-Event-Bus.md"
         },
         {
           "text": "分布式 Event Bus",
+          "path": "Distributed-Event-Bus.md",
           "items": [
             {
-              "text": "RabbitMQ 集成"
+              "text": "RabbitMQ 集成",
+              "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
             }
           ]
         }

@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -52,33 +53,37 @@ namespace Volo.Abp.Cli.ProjectModification
 
             _npmGlobalPackagesChecker.Check();
 
-            foreach (var file in fileList)
+            var packagesUpdated = new ConcurrentDictionary<string, bool>();
+            async Task UpdateAsync(string file)
             {
-                var packagesUpdated = await UpdatePackagesInFile(file, includePreviews, switchToStable);
+                var updated = await UpdatePackagesInFile(file, includePreviews, switchToStable);
+                packagesUpdated.TryAdd(file, updated);
+            };
 
-                if (packagesUpdated)
+            Task.WaitAll(fileList.Select(UpdateAsync).ToArray());
+
+            foreach (var file in packagesUpdated.Where(x => x.Value))
+            {
+                var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
+
+                if (IsAngularProject(fileDirectory))
                 {
-                    var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
-
-                    if (IsAngularProject(fileDirectory))
+                    if (includePreviews)
                     {
-                        if (includePreviews)
-                        {
-                            await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
-                        }
-                        else if (switchToStable)
-                        {
-                            await DeleteNpmrcFileAsync(Path.GetDirectoryName(file));
-                        }
+                        await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
                     }
-
-                    RunYarn(fileDirectory);
-
-                    if (!IsAngularProject(fileDirectory))
+                    else if (switchToStable)
                     {
-                        Thread.Sleep(500);
-                        RunGulp(fileDirectory);
+                        await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
                     }
+                }
+
+                RunYarn(fileDirectory);
+
+                if (!IsAngularProject(fileDirectory))
+                {
+                    Thread.Sleep(500);
+                    RunGulp(fileDirectory);
                 }
             }
         }
