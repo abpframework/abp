@@ -1,6 +1,7 @@
 import { eLayoutType, RoutesService } from '@abp/ng.core';
 import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 import { APP_INITIALIZER } from '@angular/core';
+import { eIdentityPolicyNames } from '../enums/policy-names';
 import { eIdentityRouteNames } from '../enums/route-names';
 
 export const IDENTITY_ROUTE_PROVIDERS = [
@@ -14,6 +15,7 @@ export function configureRoutes(routes: RoutesService) {
         path: '/identity',
         name: eIdentityRouteNames.IdentityManagement,
         parentName: eThemeSharedRouteNames.Administration,
+        requiredPolicy: eIdentityPolicyNames.IdentityManagement,
         iconClass: 'fa fa-id-card-o',
         layout: eLayoutType.application,
         order: 1,
@@ -22,14 +24,14 @@ export function configureRoutes(routes: RoutesService) {
         path: '/identity/roles',
         name: eIdentityRouteNames.Roles,
         parentName: eIdentityRouteNames.IdentityManagement,
-        requiredPolicy: 'AbpIdentity.Roles',
+        requiredPolicy: eIdentityPolicyNames.Roles,
         order: 1,
       },
       {
         path: '/identity/users',
         name: eIdentityRouteNames.Users,
         parentName: eIdentityRouteNames.IdentityManagement,
-        requiredPolicy: 'AbpIdentity.Users',
+        requiredPolicy: eIdentityPolicyNames.Users,
         order: 2,
       },
     ]);

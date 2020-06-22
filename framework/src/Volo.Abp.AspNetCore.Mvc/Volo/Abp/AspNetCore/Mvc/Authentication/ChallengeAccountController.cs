@@ -52,6 +52,21 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
             return new SignOutResult(ChallengeAuthenticationSchemas);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> FrontChannelLogout(string sid)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentSid = User.FindFirst("sid").Value ?? string.Empty;
+                if (string.Equals(currentSid, sid, StringComparison.Ordinal))
+                {
+                    await Logout();
+                }
+            }
+
+            return NoContent();
+        }
+
         protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
         {
             return Redirect(GetRedirectUrl(returnUrl, returnUrlHash));

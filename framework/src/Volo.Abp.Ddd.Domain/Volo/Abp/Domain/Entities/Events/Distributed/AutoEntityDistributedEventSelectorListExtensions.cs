@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -69,6 +70,44 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
             );
         }
 
+        public static void Add(
+            [NotNull] this IAutoEntityDistributedEventSelectorList selectors,
+            string selectorName, 
+            Func<Type, bool> predicate)
+        {
+            Check.NotNull(selectors, nameof(selectors));
+            
+            if (selectors.Any(s => s.Name == selectorName))
+            {
+                throw new AbpException($"There is already a selector added before with the same name: {selectorName}");
+            }
+
+            selectors.Add(
+                new NamedTypeSelector(
+                    selectorName,
+                    predicate
+                )
+            );
+        }
+        
+        public static void Add(
+            [NotNull] this IAutoEntityDistributedEventSelectorList selectors,
+            Func<Type, bool> predicate)
+        {
+            selectors.Add(Guid.NewGuid().ToString("N"), predicate);
+        }
+
+        public static bool RemoveByName(
+            [NotNull] this IAutoEntityDistributedEventSelectorList selectors,
+            [NotNull] string name)
+        {
+            Check.NotNull(selectors, nameof(selectors));
+            Check.NotNull(name, nameof(name));
+            
+            return selectors.RemoveAll(s => s.Name == name).Count > 0;
+        }
+
+        
         public static bool IsMatch([NotNull] this IAutoEntityDistributedEventSelectorList selectors, Type entityType)
         {
             Check.NotNull(selectors, nameof(selectors));

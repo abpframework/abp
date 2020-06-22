@@ -6,7 +6,7 @@ import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { RoutesService } from '../services/routes.service';
 import { ReplaceableComponentsState } from '../states/replaceable-components.state';
-import { getRoutePath } from '../utils/route-utils';
+import { findRoute, getRoutePath } from '../utils/route-utils';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
 import { TreeNode } from '../utils/tree-utils';
 
@@ -23,13 +23,10 @@ import { TreeNode } from '../utils/tree-utils';
 export class DynamicLayoutComponent implements OnDestroy {
   layout: Type<any>;
 
-  constructor(
-    injector: Injector,
-    private route: ActivatedRoute,
-    private routes: RoutesService,
-    private store: Store,
-  ) {
+  constructor(injector: Injector, private store: Store) {
+    const route = injector.get(ActivatedRoute);
     const router = injector.get(Router);
+    const routes = injector.get(RoutesService);
     const layouts = {
       application: this.getComponent('Theme.ApplicationLayoutComponent'),
       account: this.getComponent('Theme.AccountLayoutComponent'),
@@ -38,11 +35,12 @@ export class DynamicLayoutComponent implements OnDestroy {
 
     router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
       if (event instanceof NavigationEnd) {
-        let expectedLayout = (this.route.snapshot.data || {}).layout;
-        const path = getRoutePath(router);
+        let expectedLayout = (route.snapshot.data || {}).layout;
 
         if (!expectedLayout) {
-          let node = { parent: this.routes.search({ path }) } as TreeNode<ABP.Route>;
+          let node = findRoute(routes, getRoutePath(router));
+          node = { parent: node } as TreeNode<ABP.Route>;
+
           while (node.parent) {
             node = node.parent;
 
