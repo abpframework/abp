@@ -11,7 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     </ItemGroup>
 
     <ItemGroup>
