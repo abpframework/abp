@@ -10,9 +10,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         {
             var fileEntries = context.Files.Where(x =>
                     !x.IsDirectory &&
-                    (x.Name.EndsWith("angular/src/environments/environment.ts", StringComparison.InvariantCultureIgnoreCase) ||
-                     x.Name.EndsWith("angular/src/environments/environment.hmr.ts", StringComparison.InvariantCultureIgnoreCase) ||
-                     x.Name.EndsWith("angular/src/environments/environment.prod.ts", StringComparison.InvariantCultureIgnoreCase))
+                    (x.Name.EndsWith("angular/projects/dev-app/src/environments/environment.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                     x.Name.EndsWith("angular/projects/dev-app/src/environments/environment.hmr.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                     x.Name.EndsWith("angular/projects/dev-app/src/environments/environment.prod.ts", StringComparison.InvariantCultureIgnoreCase))
                 )
                 .ToList();
 
