@@ -12,7 +12,7 @@ export class RoutesHandler {
   }
 
   addRoutes() {
-    this.router?.config.forEach(({ path = '', data }) => {
+    this.router?.config?.forEach(({ path = '', data }) => {
       if (!data?.routes) return;
 
       if (Array.isArray(data.routes)) {
