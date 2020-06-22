@@ -70,7 +70,7 @@ pre[class*="language-"] {
 	opacity: .7;
 }
 
-.namespace {
+.token.namespace {
 	opacity: .7;
 }
 

@@ -63,12 +63,10 @@
 			options = options || {};
 
 			var pattern = suffixTypes[contentType] ? getSuffixPattern(contentType) : contentType;
-			options[contentType] = {
+			options[contentType.replace(/\//g, '-')] = {
 				pattern: RegExp('(content-type:\\s*' + pattern + '[\\s\\S]*?)(?:\\r?\\n|\\r){2}[\\s\\S]*', 'i'),
 				lookbehind: true,
-				inside: {
-					rest: httpLanguages[contentType]
-				}
+				inside: httpLanguages[contentType]
 			};
 		}
 	}

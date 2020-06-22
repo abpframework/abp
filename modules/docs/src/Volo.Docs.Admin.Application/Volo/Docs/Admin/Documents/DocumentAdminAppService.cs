@@ -137,20 +137,40 @@ namespace Volo.Docs.Admin.Documents
         public async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
         {
             var totalCount = await _documentRepository.GetAllCountAsync(
-                 projectId: input.ProjectId,
-                 name: input.Name,
-                 version: input.Version,
-                 languageCode: input.LanguageCode,
-                 sorting: input.Sorting,
-                 maxResultCount: input.MaxResultCount,
-                 skipCount: input.SkipCount
-             );
+                projectId: input.ProjectId,
+                name: input.Name,
+                version: input.Version,
+                languageCode: input.LanguageCode,
+                fileName: input.FileName,
+                format: input.Format,
+                creationTimeMin: input.CreationTimeMin,
+                creationTimeMax: input.CreationTimeMax,
+                lastUpdatedTimeMin: input.LastUpdatedTimeMin,
+                lastUpdatedTimeMax: input.LastUpdatedTimeMax,
+                lastSignificantUpdateTimeMin: input.LastSignificantUpdateTimeMin,
+                lastSignificantUpdateTimeMax: input.LastSignificantUpdateTimeMax,
+                lastCachedTimeMin: input.LastCachedTimeMin,
+                lastCachedTimeMax: input.LastCachedTimeMax,
+                sorting: input.Sorting,
+                maxResultCount: input.MaxResultCount,
+                skipCount: input.SkipCount
+            );
 
             var docs = await _documentRepository.GetAllAsync(
                 projectId: input.ProjectId,
                 name: input.Name,
                 version: input.Version,
                 languageCode: input.LanguageCode,
+                fileName: input.FileName,
+                format: input.Format,
+                creationTimeMin: input.CreationTimeMin,
+                creationTimeMax: input.CreationTimeMax,
+                lastUpdatedTimeMin: input.LastUpdatedTimeMin,
+                lastUpdatedTimeMax: input.LastUpdatedTimeMax,
+                lastSignificantUpdateTimeMin: input.LastSignificantUpdateTimeMin,
+                lastSignificantUpdateTimeMax: input.LastSignificantUpdateTimeMax,
+                lastCachedTimeMin: input.LastCachedTimeMin,
+                lastCachedTimeMax: input.LastCachedTimeMax,
                 sorting: input.Sorting,
                 maxResultCount: input.MaxResultCount,
                 skipCount: input.SkipCount

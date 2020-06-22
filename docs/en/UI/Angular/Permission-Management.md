@@ -8,7 +8,7 @@ You can get permission as boolean value from store:
 
 ```js
 import { Store } from '@ngxs/store';
-import { ConfigState } from '../states';
+import { ConfigState } from '@abp/ng.core';
 
 export class YourComponent {
   constructor(private store: Store) {}
@@ -24,7 +24,7 @@ export class YourComponent {
 Or you can get it via `ConfigStateService`:
 
 ```js
-import { ConfigStateService } from '../services/config-state.service';
+import { ConfigStateService } from '@abp/ng.core';
 
 export class YourComponent {
   constructor(private configStateService: ConfigStateService) {}
@@ -42,7 +42,7 @@ export class YourComponent {
 You can use the `PermissionDirective` to manage visibility of a DOM Element accordingly to user's permission.
 
 ```html
-<div *abpPermission="AbpIdentity.Roles">
+<div *abpPermission="'AbpIdentity.Roles'">
   This content is only visible if the user has 'AbpIdentity.Roles' permission.
 </div>
 ```
@@ -58,6 +58,8 @@ You can use `PermissionGuard` if you want to control authenticated user's permis
 Add `requiredPolicy` to the `routes` property in your routing module.
 
 ```js
+import { PermissionGuard } from '@abp/ng.core';
+// ...
 const routes: Routes = [
   {
     path: 'path',

@@ -235,3 +235,4 @@ ABP框架不会更改SignalR. 就像在其他ASP.NET Core应用程序中一样,�
 ## 另请参阅
 
 * [微软SignalR文档](https://docs.microsoft.com/zh-cn/aspnet/core/signalr/introduction)
+* [使用ABP,SignalR和RabbitMQ在分布式体系结构中的实时消息传递](https://volosoft.com/blog/RealTime-Messaging-Distributed-Architecture-Abp-SingalR-RabbitMQ)

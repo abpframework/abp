@@ -1,4 +1,4 @@
-<ol *ngIf="show" class="breadcrumb">
+<ol class="breadcrumb" *ngIf="segments.length">
   <li class="breadcrumb-item">
     <a routerLink="/"><i class="fa fa-home"></i> </a>
   </li>
@@ -8,6 +8,6 @@
     [class.active]="last"
     aria-current="page"
   >
-    {{ segment | abpLocalization }}
+    {{ segment.name | abpLocalization }}
   </li>
 </ol>

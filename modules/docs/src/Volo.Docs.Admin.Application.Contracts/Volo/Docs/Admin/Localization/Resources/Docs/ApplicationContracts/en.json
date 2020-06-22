@@ -43,6 +43,16 @@
     "ReIndexDocumentConfirmation": "Are you sure you want to reindex this item?",
     "DeleteDocumentFromDbConfirmation": "Are you sure you want to delete this item from database?",
     "DeleteFromDatabase": "Delete from database",
-    "Deleted": "Deleted"
+    "Deleted": "Deleted",
+    "Search": "Search",
+    "StartDate": "Start date",
+    "EndDate": "End date",
+    "CreationTime": "Creation time",
+    "LastUpdateTime": "Last update",
+    "LastSignificantUpdateTime": "Last significant update",
+    "Version": "Version",
+    "LanguageCode": "Language code",
+    "FileName": "File name",
+    "LastCachedTime": "Cache time"
   }
 }

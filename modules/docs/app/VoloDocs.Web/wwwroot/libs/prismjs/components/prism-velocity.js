@@ -55,7 +55,7 @@
 			pattern: /(^|[^\\](?:\\\\)*)#@?(?:[a-z][\w-]*|{[a-z][\w-]*})(?:\s*\((?:[^()]|\([^()]*\))*\))?/i,
 			lookbehind: true,
 			inside: {
-				keyword: {
+				'keyword': {
 					pattern: /^#@?(?:[a-z][\w-]*|{[a-z][\w-]*})|\bin\b/,
 					inside: {
 						'punctuation': /[{}]/

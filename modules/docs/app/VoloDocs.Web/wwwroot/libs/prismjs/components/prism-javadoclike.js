@@ -35,6 +35,7 @@
 			var definition = {};
 			definition[tokenName] = {
 				pattern: /(^|[^\\])\/\*\*[^/][\s\S]*?(?:\*\/|$)/,
+				lookbehind: true,
 				alias: 'comment'
 			};
 
