@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { ConfigState } from '../states/config.state';
+import { takeUntilDestroy } from '../utils/rxjs-utils';
 import { pushValueTo } from '../utils/array-utils';
 import { BaseTreeNode, createTreeFromList, TreeNode } from '../utils/tree-utils';
 
@@ -75,6 +77,13 @@ export abstract class AbstractTreeService<T extends object> {
     return this.publish(flatItems, visibleItems);
   }
 
+  find(predicate: (item: TreeNode<T>) => boolean, tree = this.tree): TreeNode<T> | null {
+    return tree.reduce(
+      (acc, node) => (acc ? acc : predicate(node) ? node : this.find(predicate, node.children)),
+      null,
+    );
+  }
+
   patch(identifier: string, props: Partial<T>): T[] | false {
     const flatItems = this._flat$.value;
     const index = flatItems.findIndex(item => item[this.id] === identifier);
@@ -88,6 +97,10 @@ export abstract class AbstractTreeService<T extends object> {
     return this.publish(flatItems, visibleItems);
   }
 
+  refresh(): T[] {
+    return this.add([]);
+  }
+
   remove(identifiers: string[]): T[] {
     const set = new Set<string>();
     identifiers.forEach(id => set.add(id));
@@ -98,7 +111,7 @@ export abstract class AbstractTreeService<T extends object> {
     return this.publish(flatItems, visibleItems);
   }
 
-  search(params: Partial<T>, tree = this.tree): TreeNode<T> {
+  search(params: Partial<T>, tree = this.tree): TreeNode<T> | null {
     const searchKeys = Object.keys(params);
 
     return tree.reduce(
@@ -107,38 +120,42 @@ export abstract class AbstractTreeService<T extends object> {
           ? acc
           : searchKeys.every(key => node[key] === params[key])
           ? node
-          : node.children
-          ? this.search(params, node.children)
-          : acc,
+          : this.search(params, node.children),
       null,
     );
   }
 }
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RoutesService extends AbstractTreeService<ABP.Route> {
+export abstract class AbstractNavTreeService<T extends ABP.Nav> extends AbstractTreeService<T>
+  implements OnDestroy {
   readonly id = 'name';
   readonly parentId = 'parentName';
-  readonly hide = (item: ABP.Route) => item.invisible;
-  readonly sort = (a: ABP.Route, b: ABP.Route) => a.order - b.order;
-}
+  readonly hide = (item: T) => item.invisible || !this.isGranted(item);
+  readonly sort = (a: T, b: T) => a.order - b.order;
 
-@Injectable({
-  providedIn: 'root',
-})
-export class SettingTabsService extends AbstractTreeService<ABP.Tab> {
-  readonly id = 'name';
-  readonly parentId = 'parentName';
-  readonly hide = (setting: ABP.Tab) => setting.invisible || !this.isGranted(setting);
-  readonly sort = (a: ABP.Tab, b: ABP.Tab) => a.order - b.order;
-
-  constructor(private store: Store) {
+  constructor(protected actions: Actions, protected store: Store) {
     super();
+
+    this.actions
+      .pipe(takeUntilDestroy(this), ofActionSuccessful(GetAppConfiguration))
+      .subscribe(() => this.refresh());
   }
 
-  private isGranted(setting: ABP.Tab): boolean {
-    return this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy));
+  protected isGranted({ requiredPolicy }: T): boolean {
+    return this.store.selectSnapshot(ConfigState.getGrantedPolicy(requiredPolicy));
   }
+
+  hasInvisibleChild(identifier: string): boolean {
+    const node = this.find(item => item[this.id] === identifier);
+    return node?.children?.some(child => child.invisible);
+  }
+
+  /* istanbul ignore next */
+  ngOnDestroy() {}
 }
+
+@Injectable({ providedIn: 'root' })
+export class RoutesService extends AbstractNavTreeService<ABP.Route> {}
+
+@Injectable({ providedIn: 'root' })
+export class SettingTabsService extends AbstractNavTreeService<ABP.Tab> {}

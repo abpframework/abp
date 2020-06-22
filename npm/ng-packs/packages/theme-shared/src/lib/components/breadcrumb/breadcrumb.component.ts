@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs/operators';
+import { eThemeSharedRouteNames } from '../../enums';
 
 @Component({
   selector: 'abp-breadcrumb',
@@ -42,11 +43,15 @@ export class BreadcrumbComponent implements OnDestroy, OnInit {
           while (node.parent) {
             node = node.parent;
             const { parent, children, isLeaf, ...segment } = node;
-            this.segments.unshift(segment);
+            if (!isAdministration(segment)) this.segments.unshift(segment);
           }
 
           this.cdRef.detectChanges();
         }
       });
   }
+}
+
+function isAdministration(route: ABP.Route) {
+  return route.name === eThemeSharedRouteNames.Administration;
 }

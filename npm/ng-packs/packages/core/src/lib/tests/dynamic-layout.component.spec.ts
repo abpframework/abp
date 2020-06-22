@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
+import { Actions, NgxsModule, Store } from '@ngxs/store';
+import { NEVER } from 'rxjs';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
@@ -97,11 +98,24 @@ const storeData = {
 };
 
 describe('DynamicLayoutComponent', () => {
+  const mockActions: Actions = NEVER;
+  const mockStore = ({
+    selectSnapshot() {
+      return true;
+    },
+  } as unknown) as Store;
+
   const createComponent = createRoutingFactory({
     component: RouterOutletComponent,
     stubsEnabled: false,
     declarations: [DummyComponent, DynamicLayoutComponent],
     mocks: [ApplicationConfigurationService, HttpClient],
+    providers: [
+      {
+        provide: RoutesService,
+        useFactory: () => new RoutesService(mockActions, mockStore),
+      },
+    ],
     imports: [RouterModule, DummyLayoutModule, NgxsModule.forRoot([ReplaceableComponentsState])],
     routes: [
       { path: '', component: RouterOutletComponent },
