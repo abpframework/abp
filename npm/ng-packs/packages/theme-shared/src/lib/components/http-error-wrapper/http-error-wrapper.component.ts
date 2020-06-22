@@ -51,8 +51,10 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
   }
 
   ngOnInit() {
-    this.backgroundColor =
-      window.getComputedStyle(document.body).getPropertyValue('background-color') || '#fff';
+    if (window.getComputedStyle(document.body)?.getPropertyValue) {
+      this.backgroundColor =
+        window.getComputedStyle(document.body).getPropertyValue('background-color') || '#fff';
+    }
   }
 
   ngAfterViewInit() {
