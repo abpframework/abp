@@ -1,17 +1,31 @@
+import { Store } from '@ngxs/store';
+import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { GetAppConfiguration } from '../actions';
 import { RoutesService } from '../services';
 
-const routes = [
-  { path: '/foo', name: 'foo' },
-  { path: '/foo/bar', name: 'bar', parentName: 'foo', invisible: true, order: 2 },
-  { path: '/foo/bar/baz', name: 'baz', parentName: 'bar', order: 1 },
-  { path: '/foo/x', name: 'x', parentName: 'foo', order: 1 },
-];
-
 describe('Routes Service', () => {
+  let service: RoutesService;
+  const routes = [
+    { path: '/foo', name: 'foo' },
+    { path: '/foo/bar', name: 'bar', parentName: 'foo', invisible: true, order: 2 },
+    { path: '/foo/bar/baz', name: 'baz', parentName: 'bar', order: 1 },
+    { path: '/foo/x', name: 'x', parentName: 'foo', order: 1 },
+  ];
+
+  const mockActions = new Subject();
+  const mockStore = ({
+    selectSnapshot() {
+      return true;
+    },
+  } as unknown) as Store;
+
+  beforeEach(() => {
+    service = new RoutesService(mockActions, mockStore);
+  });
+
   describe('#add', () => {
     it('should add given routes as flat$, tree$, and visible$', async () => {
-      const service = new RoutesService();
       service.add(routes);
 
       const flat = await service.flat$.pipe(take(1)).toPromise();
@@ -38,9 +52,34 @@ describe('Routes Service', () => {
     });
   });
 
+  describe('#find', () => {
+    it('should return node found based on query', () => {
+      service.add(routes);
+      const result = service.find(route => route.invisible);
+      expect(result.name).toBe('bar');
+      expect(result.children.length).toBe(1);
+      expect(result.children[0].name).toBe('baz');
+    });
+
+    it('should return null when query is not found', () => {
+      service.add(routes);
+      const result = service.find(route => route.requiredPolicy === 'X');
+      expect(result).toBe(null);
+    });
+  });
+
+  describe('#hasInvisibleChild', () => {
+    it('should return if node has invisible child', () => {
+      service.add(routes);
+
+      expect(service.hasInvisibleChild('foo')).toBe(true);
+      expect(service.hasInvisibleChild('bar')).toBe(false);
+      expect(service.hasInvisibleChild('baz')).toBe(false);
+    });
+  });
+
   describe('#remove', () => {
     it('should remove routes based on given routeNames', () => {
-      const service = new RoutesService();
       service.add(routes);
       service.remove(['bar']);
 
@@ -66,9 +105,9 @@ describe('Routes Service', () => {
 
   describe('#patch', () => {
     it('should patch propeties of routes based on given routeNames', () => {
-      const service = new RoutesService();
+      service['isGranted'] = jest.fn(route => route.requiredPolicy !== 'X');
       service.add(routes);
-      service.patch('x', { invisible: true });
+      service.patch('x', { requiredPolicy: 'X' });
 
       const flat = service.flat;
       const tree = service.tree;
@@ -93,21 +132,40 @@ describe('Routes Service', () => {
     });
 
     it('should return false when route name is not found', () => {
-      const service = new RoutesService();
       service.add(routes);
       const result = service.patch('A man has no name.', { invisible: true });
       expect(result).toBe(false);
     });
   });
 
+  describe('#refresh', () => {
+    it('should call add once with empty array', () => {
+      const add = jest.spyOn(service, 'add');
+      service.refresh();
+      expect(add).toHaveBeenCalledTimes(1);
+      expect(add).toHaveBeenCalledWith([]);
+    });
+
+    it('should be called upon successful GetAppConfiguration action', () => {
+      const refresh = jest.spyOn(service, 'refresh');
+      mockActions.next({ action: new GetAppConfiguration(), status: 'SUCCESSFUL' });
+      expect(refresh).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('#search', () => {
-    it('should return node found when route name is not found', () => {
-      const service = new RoutesService();
+    it('should return node found based on query', () => {
       service.add(routes);
       const result = service.search({ invisible: true });
       expect(result.name).toBe('bar');
       expect(result.children.length).toBe(1);
       expect(result.children[0].name).toBe('baz');
+    });
+
+    it('should return null when query is not found', () => {
+      service.add(routes);
+      const result = service.search({ requiredPolicy: 'X' });
+      expect(result).toBe(null);
     });
   });
 });

@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Localization.TestResources.Base.CountryNames;

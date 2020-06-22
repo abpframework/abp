@@ -179,3 +179,121 @@ That's all.
 You can inject any service and perform any required logic here. A single event handler class can **subscribe to multiple events** but implementing the `IDistributedEventHandler<TEvent>` interface for each event type.
 
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
+
+## Pre-Defined Events
+
+ABP Framework **automatically publishes** distributed events for **create, update and delete** operations for an [entity](Entities.md) once you configure it.
+
+### Event Types
+
+There are three pre-defined event types:
+
+* `EntityCreatedEto<T>` is published when an entity of type `T` was created.
+* `EntityUpdatedEto<T>` is published when an entity of type `T` was updated.
+* `EntityDeletedEto<T>` is published when an entity of type `T` was deleted.
+
+These types are generics. `T` is actually the type of the **E**vent **T**ransfer **O**bject (ETO) rather than the type of the entity. Because, an entity object can not be transferred as a part of the event data. So, it is typical to define a ETO class for an entity class, like `ProductEto` for `Product` entity.
+
+### Subscribing to the Events
+
+Subscribing to the auto events is same as subscribing a regular distributed event.
+
+**Example: Get notified once a product updated**
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities.Events.Distributed;
+using Volo.Abp.EventBus.Distributed;
+
+namespace AbpDemo
+{
+    public class MyHandler : 
+        IDistributedEventHandler<EntityUpdatedEto<ProductEto>>,
+        ITransientDependency
+    {
+        public async Task HandleEventAsync(EntityUpdatedEto<ProductEto> eventData)
+        {
+            var productId = eventData.Entity.Id;
+            //TODO
+        }
+    }
+}
+````
+
+* `MyHandler` implements the `IDistributedEventHandler<EntityUpdatedEto<ProductEto>>`.
+
+### Configuration
+
+You can configure the `AbpDistributedEntityEventOptions` in the `ConfigureServices` of your [module](Module-Development-Basics.md) to add a selector.
+
+**Example: Configuration samples**
+
+````csharp
+Configure<AbpDistributedEntityEventOptions>(options =>
+{
+    //Enable for all entities
+    options.AutoEventSelectors.AddAll();
+
+    //Enable for a single entity
+    options.AutoEventSelectors.Add<IdentityUser>();
+
+    //Enable for all entities in a namespace (and child namespaces)
+    options.AutoEventSelectors.AddNamespace("Volo.Abp.Identity");
+
+    //Custom predicate expression that should return true to select a type
+    options.AutoEventSelectors.Add(
+        type => type.Namespace.StartsWith("MyProject.")
+    );
+});
+````
+
+* The last one provides flexibility to decide if the events should be published for the given entity type. Returns `true` to accept a `Type`.
+
+You can add more than one selector. If one of the selectors match for an entity type, then it is selected.
+
+### Event Transfer Object
+
+Once you enable **auto events** for an entity, ABP Framework starts to publish events on the changes on this entity. If you don't specify a corresponding **E**vent **T**ransfer **O**bject (ETO) for the entity, ABP Framework uses a standard type, named `EntityEto`, which has only two properties:
+
+* `EntityType` (`string`): Full name (including namespace) of the entity class.
+* `KeysAsString` (`string`): Primary key(s) of the changed entity. If it has a single key, this property will be the primary key value. For a composite key, it will contain all keys separated by `,` (comma).
+
+So, you can implement the `IDistributedEventHandler<EntityUpdatedEto<EntityEto>>` to subscribe the events. However, it is not a good approach to subscribe to such a generic event. You can define the corresponding ETO for the entity type.
+
+**Example: Declare to use `ProductEto` for the `Product` entity**
+
+````csharp
+Configure<AbpDistributedEntityEventOptions>(options =>
+{
+    options.AutoEventSelectors.Add<Product>();
+    options.EtoMappings.Add<Product, ProductEto>();
+});
+````
+
+This example;
+
+* Adds a selector to allow to publish the create, update and delete events for the `Product` entity.
+* Configure to use the `ProductEto` as the event transfer object to publish for the `Product` related events.
+
+Distributed event system use the [object to object mapping](Object-To-Object-Mapping.md) system to map `Product` objects to `ProductEto` objects. So, you need to configure the mapping. You can check the object to object mapping document for all options, but the following example shows how to configure it with the [AutoMapper](https://automapper.org/) library.
+
+**Example: Configure `Product` to `ProductEto` mapping using the AutoMapper**
+
+````csharp
+using System;
+using AutoMapper;
+using Volo.Abp.Domain.Entities.Events.Distributed;
+
+namespace AbpDemo
+{
+    [AutoMap(typeof(Product))]
+    public class ProductEto : EntityEto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+    }
+}
+````
+
+This example uses the `AutoMap` attribute of the AutoMapper to configure the mapping. You could create a profile class instead. Please refer to the AutoMapper document for more options.
