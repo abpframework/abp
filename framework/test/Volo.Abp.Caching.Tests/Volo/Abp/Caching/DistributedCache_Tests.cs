@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Testing;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.Caching
@@ -29,7 +30,7 @@ namespace Volo.Abp.Caching
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
-            //Remove 
+            //Remove
             await personCache.RemoveAsync(cacheKey);
 
             //Get (not exists since removed)
@@ -111,7 +112,7 @@ namespace Volo.Abp.Caching
             cacheItem1.ShouldNotBeNull();
             cacheItem1.Name.ShouldBe(personName);
 
-            //Remove 
+            //Remove
             await personCache.RemoveAsync(cacheKey);
 
 
@@ -145,7 +146,7 @@ namespace Volo.Abp.Caching
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
-            //Remove 
+            //Remove
             await personCache.RemoveAsync(cacheKey);
 
             //Get (not exists since removed)
@@ -227,7 +228,7 @@ namespace Volo.Abp.Caching
             cacheItem1.ShouldNotBeNull();
             cacheItem1.Name.ShouldBe(personName);
 
-            //Remove 
+            //Remove
             await personCache.RemoveAsync(cacheKey);
 
 
@@ -261,7 +262,7 @@ namespace Volo.Abp.Caching
             cacheItem.ShouldNotBeNull();
             cacheItem.Name.ShouldBe(personName);
 
-            //Remove 
+            //Remove
             await personCache.RemoveAsync(cacheKey);
 
             //Get (not exists since removed)
@@ -299,7 +300,7 @@ namespace Volo.Abp.Caching
             cacheItem2.ShouldNotBeNull();
             cacheItem2.Name.ShouldBe(personName);
 
-            //Remove 
+            //Remove
             await personCache.RemoveAsync(cache1Key);
             await personCache.RemoveAsync(cache2Key);
 
@@ -310,5 +311,233 @@ namespace Volo.Abp.Caching
             cacheItem2.ShouldBeNull();
         }
 
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_GetAsync()
+        {
+            const string key = "testkey";
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+               var  cacheValue =  await personCache.GetAsync(key, considerUow: true);
+               cacheValue.ShouldBeNull();
+
+               await personCache.SetAsync(key, new PersonCacheItem("john"), considerUow: true);
+
+               cacheValue =  await personCache.GetAsync(key, considerUow: true);
+               cacheValue.ShouldNotBeNull();
+               cacheValue.Name.ShouldBe("john");
+
+               cacheValue =  await personCache.GetAsync(key, considerUow: false);
+               cacheValue.ShouldBeNull();
+
+               uow.OnCompleted(async () =>
+               {
+                   cacheValue = await personCache.GetAsync(key, considerUow: false);
+                   cacheValue.ShouldNotBeNull();
+                   cacheValue.Name.ShouldBe("john");
+               });
+
+               await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_GetAsync()
+        {
+            const string key = "testkey";
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldBeNull();
+
+                await personCache.SetAsync(key, new PersonCacheItem("john"), considerUow: true);
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: false);
+                cacheValue.ShouldBeNull();
+            }
+
+            cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_GetOrAddAsync()
+        {
+            const string key = "testkey";
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+                var  cacheValue =  await personCache.GetOrAddAsync(key, () => Task.FromResult(new PersonCacheItem("john")), considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: false);
+                cacheValue.ShouldBeNull();
+
+                uow.OnCompleted(async () =>
+                {
+                    cacheValue = await personCache.GetAsync(key, considerUow: false);
+                    cacheValue.ShouldNotBeNull();
+                    cacheValue.Name.ShouldBe("john");
+                });
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_GetOrAddAsync()
+        {
+            const string key = "testkey";
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                cacheValue =  await personCache.GetOrAddAsync(key, () => Task.FromResult(new PersonCacheItem("john")), considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: false);
+                cacheValue.ShouldBeNull();
+            }
+
+            cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_SetAsync()
+        {
+            const string key = "testkey";
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+                await personCache.SetAsync(key, new PersonCacheItem("john"), considerUow: true);
+
+                var cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: false);
+                cacheValue.ShouldBeNull();
+
+                uow.OnCompleted(async () =>
+                {
+                    cacheValue = await personCache.GetAsync(key, considerUow: false);
+                    cacheValue.ShouldNotBeNull();
+                    cacheValue.Name.ShouldBe("john");
+                });
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_SetAsync()
+        {
+            const string key = "testkey";
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                await personCache.SetAsync(key, new PersonCacheItem("john"), considerUow: true);
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: false);
+                cacheValue.ShouldBeNull();
+            }
+
+            cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_RemoveAsync()
+        {
+            const string key = "testkey";
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+                await personCache.SetAsync(key, new PersonCacheItem("john"), considerUow: true);
+
+                var cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                await personCache.RemoveAsync(key, considerUow: true);
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldBeNull();
+
+                uow.OnCompleted(async () =>
+                {
+                    cacheValue = await personCache.GetAsync(key, considerUow: false);
+                    cacheValue.ShouldBeNull();
+                });
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_RemoveAsync()
+        {
+            const string key = "testkey";
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                await personCache.SetAsync(key, new PersonCacheItem("john"), considerUow: true);
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldNotBeNull();
+                cacheValue.Name.ShouldBe("john");
+
+                await personCache.RemoveAsync(key, considerUow: true);
+
+                cacheValue =  await personCache.GetAsync(key, considerUow: true);
+                cacheValue.ShouldBeNull();
+            }
+
+            cacheValue =  await personCache.GetAsync(key, considerUow: false);
+            cacheValue.ShouldBeNull();
+        }
     }
 }
