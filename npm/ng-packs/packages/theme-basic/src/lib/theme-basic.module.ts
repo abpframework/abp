@@ -13,6 +13,7 @@ import { ValidationErrorComponent } from './components/validation-error/validati
 import { CurrentUserComponent } from './components/nav-items/current-user.component';
 import { LanguagesComponent } from './components/nav-items/languages.component';
 import { BASIC_THEME_STYLES_PROVIDERS } from './providers/styles.provider';
+import { BASIC_THEME_NAV_ITEM_PROVIDERS } from './providers/nav-item.provider';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -62,13 +63,13 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       errorTemplate: ValidationErrorComponent,
     }),
   ],
-  entryComponents: [...LAYOUTS, ValidationErrorComponent],
+  entryComponents: [...LAYOUTS, ValidationErrorComponent, CurrentUserComponent, LanguagesComponent],
 })
 export class ThemeBasicModule {
   static forRoot(): ModuleWithProviders<ThemeBasicModule> {
     return {
       ngModule: ThemeBasicModule,
-      providers: [BASIC_THEME_STYLES_PROVIDERS],
+      providers: [BASIC_THEME_NAV_ITEM_PROVIDERS, BASIC_THEME_STYLES_PROVIDERS],
     };
   }
 }
