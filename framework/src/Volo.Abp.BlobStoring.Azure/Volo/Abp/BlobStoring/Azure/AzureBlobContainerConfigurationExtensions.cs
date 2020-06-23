@@ -15,6 +15,7 @@ namespace Volo.Abp.BlobStoring.Azure
             Action<AzureBlobProviderConfiguration> azureConfigureAction)
         {
             containerConfiguration.ProviderType = typeof(AzureBlobProvider);
+            containerConfiguration.NamingNormalizerProviders.Add<DefaultAzureBlobNamingNormalizerProvider>();
 
             azureConfigureAction(new AzureBlobProviderConfiguration(containerConfiguration));
 
