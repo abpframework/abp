@@ -5,6 +5,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Settings;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.SettingManagement
 {
@@ -24,12 +25,14 @@ namespace Volo.Abp.SettingManagement
             Cache = cache;
         }
 
+        [UnitOfWork]
         public virtual async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
             var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
             return cacheItem.Value;
         }
 
+        [UnitOfWork]
         public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
             var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
@@ -53,6 +56,7 @@ namespace Volo.Abp.SettingManagement
             return settings.Select(s => new SettingValue(s.Name, s.Value)).ToList();
         }
 
+        [UnitOfWork]
         public virtual async Task DeleteAsync(string name, string providerName, string providerKey)
         {
             var setting = await SettingRepository.FindAsync(name, providerName, providerKey);

@@ -31,13 +31,13 @@ namespace Volo.Abp.Caching
             IDistributedCacheKeyNormalizer keyNormalizer,
             IHybridServiceScopeFactory serviceScopeFactory,
             IUnitOfWorkManager unitOfWorkManager) : base(
-            distributedCacheOption: distributedCacheOption,
-            cache: cache,
-            cancellationTokenProvider: cancellationTokenProvider,
-            serializer: serializer,
-            keyNormalizer: keyNormalizer,
-            serviceScopeFactory: serviceScopeFactory,
-            unitOfWorkManager:unitOfWorkManager)
+                distributedCacheOption: distributedCacheOption,
+                cache: cache,
+                cancellationTokenProvider: cancellationTokenProvider,
+                serializer: serializer,
+                keyNormalizer: keyNormalizer,
+                serviceScopeFactory: serviceScopeFactory,
+                unitOfWorkManager:unitOfWorkManager)
         {
         }
 
