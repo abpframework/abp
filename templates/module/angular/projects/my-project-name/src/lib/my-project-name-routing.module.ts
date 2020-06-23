@@ -6,10 +6,8 @@ import { MyProjectNameComponent } from './components/my-project-name.component';
 const routes: Routes = [
   {
     path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      { path: '', pathMatch: 'full', component: MyProjectNameComponent },
-    ],
+    pathMatch: 'full',
+    component: MyProjectNameComponent,
   },
 ];
 
