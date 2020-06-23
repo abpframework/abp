@@ -19,7 +19,7 @@
     "ci:test": "ng test --coverage=false",
     "ci:build": "cd scripts && yarn build:prod",
     "lerna": "lerna",
-    "compile:ivy": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json'",
+    "compile:ivy": "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules --async false",
     "postinstall": "npm run compile:ivy"
   },
   "devDependencies": {
