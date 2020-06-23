@@ -153,7 +153,7 @@ namespace Volo.Abp.Caching
 
             if (considerUow)
             {
-                var value = GetUnitOfWorkCache().GetOrDefault(key)?.GetUnRemovedValue();
+                var value = GetUnitOfWorkCache().GetOrDefault(key)?.GetUnRemovedValueOrNull();
                 if (value != null)
                 {
                     return value;
@@ -203,7 +203,7 @@ namespace Volo.Abp.Caching
 
             if (considerUow)
             {
-                var value = GetUnitOfWorkCache().GetOrDefault(key)?.GetUnRemovedValue();
+                var value = GetUnitOfWorkCache().GetOrDefault(key)?.GetUnRemovedValueOrNull();
                 if (value != null)
                 {
                     return value;
@@ -639,7 +639,7 @@ namespace Volo.Abp.Caching
             }
         }
 
-        protected virtual string GetUnitOfWorkCacheName()
+        protected virtual string GetUnitOfWorkCacheKey()
         {
             return DistributedCacheName + CacheName;
         }
@@ -651,7 +651,7 @@ namespace Volo.Abp.Caching
                 throw new AbpException($"There is no unit of work in the current context, The {GetType().Name} can only be used in a unit of work.");
             }
 
-            return UnitOfWorkManager.Current.GetOrAddItem(GetUnitOfWorkCacheName(),
+            return UnitOfWorkManager.Current.GetOrAddItem(GetUnitOfWorkCacheKey(),
                 key => new Dictionary<TCacheKey, UnitOfWorkCacheItem<TCacheItem>>());
         }
     }

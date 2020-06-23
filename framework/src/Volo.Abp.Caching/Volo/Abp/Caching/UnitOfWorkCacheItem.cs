@@ -3,12 +3,6 @@
 namespace Volo.Abp.Caching
 {
     [Serializable]
-    public class UnitOfWorkCacheItem : UnitOfWorkCacheItem<object>
-    {
-
-    }
-
-    [Serializable]
     public class UnitOfWorkCacheItem<TValue>
         where TValue : class
     {
@@ -44,20 +38,6 @@ namespace Volo.Abp.Caching
             Value = null;
             IsRemoved = true;
             return this;
-        }
-    }
-
-    public static class UnitOfWorkCacheItemExtensions
-    {
-        public static object GetUnRemovedValue(this UnitOfWorkCacheItem item)
-        {
-            return item != null && !item.IsRemoved ? item.Value : null;
-        }
-
-        public static TValue GetUnRemovedValue<TValue>(this UnitOfWorkCacheItem<TValue> item)
-            where TValue : class
-        {
-            return item != null && !item.IsRemoved ? item.Value : null;
         }
     }
 }
