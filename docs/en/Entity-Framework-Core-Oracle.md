@@ -2,15 +2,26 @@
 
 This document explains how to switch to the **Oracle** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 
-> This document uses a paid library of [Devart](https://www.devart.com/dotconnect/oracle/) company, because it is the only library for Oracle that supports EF Core 3.x.
+ABP Framework provides integrations for two Oracle packages:
+
+* The [official Oracle NuGet package](https://www.nuget.org/packages/Oracle.EntityFrameworkCore) is free (**currently in beta**).
+* [Devart](https://www.devart.com/) company has a [commercial (paid) NuGet package](https://www.nuget.org/packages/Devart.Data.Oracle.EFCore/).
+
+> You can choose one of the package you want. If you don't know the differences of the packages, please search for it. ABP Framework only provides integrations we don't provide support for these 3rd-party libraries.
 
 ## Replace the Volo.Abp.EntityFrameworkCore.SqlServer Package
 
-`.EntityFrameworkCore` project in the solution depends on the [Volo.Abp.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.SqlServer) NuGet package. Remove this package and add the same version of the [Volo.Abp.EntityFrameworkCore.Oracle.Devart](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.Oracle.Devart) package.
+`.EntityFrameworkCore` project in the startup solution depends on the [Volo.Abp.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.SqlServer) NuGet package. Remove this package and add the same version of one of the packages based on your preference;
 
-## Replace the Module Dependency
+* [Volo.Abp.EntityFrameworkCore.Oracle](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.Oracle) is the official and free package.
+* [Volo.Abp.EntityFrameworkCore.Oracle.Devart](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.Oracle.Devart) is the paid Devart package.
 
-Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, remove `typeof(AbpEntityFrameworkCoreSqlServerModule)` from the `DependsOn` attribute, add `typeof(AbpEntityFrameworkCoreOracleDevartModule)` (also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Abp.EntityFrameworkCore.Oracle.Devart;`).
+### Replace the Module Dependency
+
+Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, remove `typeof(AbpEntityFrameworkCoreSqlServerModule)` from the `DependsOn` attribute. Then add one of the modules to the dependency list, based on the packages you've chosen:
+
+* `typeof(AbpEntityFrameworkCoreOracleModule)` (official Oracle package). Also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Abp.EntityFrameworkCore.Oracle;`
+* `typeof(AbpEntityFrameworkCoreOracleDevartModule)` (Devart package). Also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Abp.EntityFrameworkCore.Oracle.Devart;`
 
 ## UseOracle()
 
