@@ -13,7 +13,7 @@ namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(maxLength: 128, nullable: false)
                 },
@@ -28,7 +28,7 @@ namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     ContainerId = table.Column<Guid>(nullable: false),
                     TenantId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
@@ -37,12 +37,23 @@ namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpBlobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpBlobs_AbpBlobContainers_ContainerId",
+                        column: x => x.ContainerId,
+                        principalTable: "AbpBlobContainers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpBlobContainers_TenantId_Name",
                 table: "AbpBlobContainers",
                 columns: new[] { "TenantId", "Name" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpBlobs_ContainerId",
+                table: "AbpBlobs",
+                column: "ContainerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpBlobs_TenantId_ContainerId_Name",
@@ -53,10 +64,10 @@ namespace BlobStoring.Database.Host.ConsoleApp.ConsoleApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AbpBlobContainers");
+                name: "AbpBlobs");
 
             migrationBuilder.DropTable(
-                name: "AbpBlobs");
+                name: "AbpBlobContainers");
         }
     }
 }
