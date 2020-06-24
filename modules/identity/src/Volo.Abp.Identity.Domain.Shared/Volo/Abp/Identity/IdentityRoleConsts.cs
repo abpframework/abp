@@ -4,6 +4,5 @@
     {
         public const int MaxNameLength = 256;
         public const int MaxNormalizedNameLength = MaxNameLength;
-        public const int MaxConcurrencyStampLength = 256;
     }
 }

@@ -23,7 +23,5 @@ namespace Volo.Abp.Identity
         public const int MaxPasswordHashLength = 256;
 
         public const int MaxSecurityStampLength = 256;
-
-        public const int MaxConcurrencyStampLength = 256;
     }
 }
