@@ -54,7 +54,7 @@ namespace Volo.Abp.PermissionManagement
 
             Logger.LogDebug($"Not found in the cache: {cacheKey}");
             
-            cacheItem = new PermissionGrantCacheItem(name, false);
+            cacheItem = new PermissionGrantCacheItem(false);
             
             await SetCacheItemsAsync(providerName, providerKey, name, cacheItem);
 
@@ -71,19 +71,21 @@ namespace Volo.Abp.PermissionManagement
             
             Logger.LogDebug($"Getting all granted permissions from the repository for this provider name,key: {providerName},{providerKey}");
 
-            var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
+            var grantedPermissionsHashSet = new HashSet<string>(
+                (await PermissionGrantRepository.GetListAsync(providerName, providerKey)).Select(p => p.Name)
+            );
 
             Logger.LogDebug($"Setting the cache items. Count: {permissions.Count}");
 
             var cacheItems = new List<KeyValuePair<string, PermissionGrantCacheItem>>();
-            
+
             foreach (var permission in permissions)
             {
-                var isGranted = permissionGrants.Any(pg => pg.Name == permission.Name); //TODO: Optimize? Dictionary/Hash
+                var isGranted = grantedPermissionsHashSet.Contains(permission.Name);
 
                 cacheItems.Add(new KeyValuePair<string, PermissionGrantCacheItem>(
                     CalculateCacheKey(permission.Name, providerName, providerKey),
-                    new PermissionGrantCacheItem(permission.Name, isGranted))
+                    new PermissionGrantCacheItem(isGranted))
                 );
                 
                 if (permission.Name == currentName)
