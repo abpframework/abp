@@ -23,6 +23,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
@@ -33,6 +34,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(AbpAutofacModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAccountApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
@@ -101,11 +103,6 @@ namespace MyCompanyName.MyProjectName
             Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
-            });
-
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration["Redis:Configuration"];
             });
 
             if (!hostingEnvironment.IsDevelopment())
