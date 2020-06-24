@@ -21,7 +21,7 @@
         <abp-card-text>@L["LoggedOutText"]</abp-card-text>
         @if (Model.PostLogoutRedirectUri != null)
         {
-            <a abp-button="Primary" class="redirectButton" href="@Model.PostLogoutRedirectUri">@L["ReturnToText", Model.ClientName]</a>
+            <a abp-button="Primary" id="redirectButton" href="@Model.PostLogoutRedirectUri">@L["ReturnToText", Model.ClientName]</a>
         }
         @if (Model.SignOutIframeUrl != null)
         {

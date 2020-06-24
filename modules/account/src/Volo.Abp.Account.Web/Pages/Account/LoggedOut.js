@@ -1,6 +1,5 @@
-﻿(function ($) {
-    //TODO:gterdem There should be an option to set the redirect delay here
+﻿﻿document.addEventListener("DOMContentLoaded", function (event) {
     setTimeout(function () {
-        window.location = $('.redirectButton').attr('href');
+        window.location = document.getElementById("redirectButton").getAttribute("href");
     }, 3000)
-})(JQuery)
+});
