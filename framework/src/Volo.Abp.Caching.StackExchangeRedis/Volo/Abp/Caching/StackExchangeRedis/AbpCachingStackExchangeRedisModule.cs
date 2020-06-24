@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Caching.StackExchangeRedis
@@ -21,6 +23,8 @@ namespace Volo.Abp.Caching.StackExchangeRedis
                     options.Configuration = configuration["Redis:Configuration"];
                 }
             });
+
+            context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, AbpRedisCache>());
         }
     }
 }
