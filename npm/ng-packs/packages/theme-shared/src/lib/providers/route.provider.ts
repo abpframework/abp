@@ -10,10 +10,10 @@ export function configureRoutes(routes: RoutesService) {
   return () => {
     routes.add([
       {
-        path: '/',
+        path: undefined,
         name: eThemeSharedRouteNames.Administration,
         iconClass: 'fa fa-wrench',
-        order: 1,
+        order: 100,
       },
     ]);
   };
