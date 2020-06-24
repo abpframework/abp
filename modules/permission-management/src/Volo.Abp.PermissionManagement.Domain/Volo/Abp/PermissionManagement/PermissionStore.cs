@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -74,13 +75,15 @@ namespace Volo.Abp.PermissionManagement
 
             Logger.LogDebug($"Setting the cache items. Count: {permissions.Count}");
 
+            var cacheItems = new List<KeyValuePair<string, PermissionGrantCacheItem>>();
+            
             foreach (var permission in permissions)
             {
                 var isGranted = permissionGrants.Any(pg => pg.Name == permission.Name); //TODO: Optimize? Dictionary/Hash
-                
-                await Cache.SetAsync(
+
+                cacheItems.Add(new KeyValuePair<string, PermissionGrantCacheItem>(
                     CalculateCacheKey(permission.Name, providerName, providerKey),
-                    new PermissionGrantCacheItem(permission.Name, isGranted)
+                    new PermissionGrantCacheItem(permission.Name, isGranted))
                 );
                 
                 if (permission.Name == currentName)
@@ -88,6 +91,8 @@ namespace Volo.Abp.PermissionManagement
                     currentCacheItem.IsGranted = isGranted;
                 }
             }
+
+            await Cache.SetManyAsync(cacheItems);
             
             Logger.LogDebug($"Finished setting the cache items. Count: {permissions.Count}");
         }
