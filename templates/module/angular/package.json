@@ -24,6 +24,7 @@
     "@abp/ng.identity": "~3.0.0",
     "@abp/ng.tenant-management": "~3.0.0",
     "@abp/ng.setting-management": "~3.0.0",
+    "@abp/ng.theme.basic": "~3.0.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
