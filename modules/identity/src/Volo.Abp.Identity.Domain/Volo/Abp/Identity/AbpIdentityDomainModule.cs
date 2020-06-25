@@ -67,6 +67,12 @@ namespace Volo.Abp.Identity
                 IdentityModuleExtensionConsts.EntityNames.ClaimType,
                 typeof(IdentityClaimType)
             );
+            
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                IdentityModuleExtensionConsts.ModuleName,
+                IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
+                typeof(OrganizationUnit)
+            );
         }
 
         private static void AddAbpIdentityOptionsFactory(IServiceCollection services)
