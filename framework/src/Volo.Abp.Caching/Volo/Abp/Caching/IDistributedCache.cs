@@ -22,7 +22,7 @@ namespace Volo.Abp.Caching
     /// </summary>
     /// <typeparam name="TCacheItem">The type of cache item being cached.</typeparam>
     /// <typeparam name="TCacheKey">The type of cache key being used.</typeparam>
-    public interface IDistributedCache<TCacheItem, in TCacheKey>
+    public interface IDistributedCache<TCacheItem, TCacheKey>
         where TCacheItem : class
     {
         /// <summary>
@@ -37,36 +37,40 @@ namespace Volo.Abp.Caching
             bool considerUow = false,
             bool? hideErrors = null
         );
-        
-        /// <summary>
-        /// Gets multiple cache items with the given keys.
-        ///
-        /// The returned list contains exactly the same count of items specified in the given keys.
-        /// An item in the return list can not be null, but an item in the list has null value
-        /// if the related key not found in the cache. 
-        /// </summary>
-        /// <param name="keys">The keys of cached items to be retrieved from the cache.</param>
-        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
-        /// <returns>List of cache items.</returns>
-        KeyValuePair<TCacheKey, TCacheItem>[] GetMany(
-            IEnumerable<TCacheKey> keys,
-            bool? hideErrors = null
-        );
-        
+
         /// <summary>
         /// Gets multiple cache items with the given keys.
         ///
         /// The returned list contains exactly the same count of items specified in the given keys.
         /// An item in the return list can not be null, but an item in the list has null value
         /// if the related key not found in the cache.
-        /// 
         /// </summary>
         /// <param name="keys">The keys of cached items to be retrieved from the cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <returns>List of cache items.</returns>
+        KeyValuePair<TCacheKey, TCacheItem>[] GetMany(
+            IEnumerable<TCacheKey> keys,
+            bool considerUow = false,
+            bool? hideErrors = null
+        );
+
+        /// <summary>
+        /// Gets multiple cache items with the given keys.
+        ///
+        /// The returned list contains exactly the same count of items specified in the given keys.
+        /// An item in the return list can not be null, but an item in the list has null value
+        /// if the related key not found in the cache.
+        ///
+        /// </summary>
+        /// <param name="keys">The keys of cached items to be retrieved from the cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         /// /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>List of cache items.</returns>
         Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyAsync(
             IEnumerable<TCacheKey> keys,
+            bool considerUow = false,
             bool? hideErrors = null,
             CancellationToken token = default
         );
@@ -165,25 +169,29 @@ namespace Volo.Abp.Caching
         /// </summary>
         /// <param name="items">Items to set on the cache</param>
         /// <param name="options">The cache options for the value.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         void SetMany(
             IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
             DistributedCacheEntryOptions options = null,
+            bool considerUow = false,
             bool? hideErrors = null
         );
-        
+
         /// <summary>
         /// Sets multiple cache items.
         /// Based on the implementation, this can be more efficient than setting multiple items individually.
         /// </summary>
         /// <param name="items">Items to set on the cache</param>
         /// <param name="options">The cache options for the value.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
         Task SetManyAsync(
             IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
             DistributedCacheEntryOptions options = null,
+            bool considerUow = false,
             bool? hideErrors = null,
             CancellationToken token = default
         );

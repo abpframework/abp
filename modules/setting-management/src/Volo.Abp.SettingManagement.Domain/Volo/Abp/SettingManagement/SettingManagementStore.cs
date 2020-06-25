@@ -17,8 +17,8 @@ namespace Volo.Abp.SettingManagement
         protected IGuidGenerator GuidGenerator { get; }
 
         public SettingManagementStore(
-            ISettingRepository settingRepository, 
-            IGuidGenerator guidGenerator, 
+            ISettingRepository settingRepository,
+            IGuidGenerator guidGenerator,
             IDistributedCache<SettingCacheItem> cache,
             ISettingDefinitionManager settingDefinitionManager)
         {
@@ -82,26 +82,26 @@ namespace Volo.Abp.SettingManagement
             cacheItem = new SettingCacheItem(null);
 
             await SetCacheItemsAsync(providerName, providerKey, name, cacheItem);
-            
+
             return cacheItem;
         }
 
         private async Task SetCacheItemsAsync(
-            string providerName, 
-            string providerKey, 
-            string currentName, 
+            string providerName,
+            string providerKey,
+            string currentName,
             SettingCacheItem currentCacheItem)
         {
             var settingDefinitions = SettingDefinitionManager.GetAll();
             var settingsDictionary = (await SettingRepository.GetListAsync(providerName, providerKey))
                 .ToDictionary(s => s.Name, s => s.Value);
-            
-            var cacheItems = new List<KeyValuePair<string, SettingCacheItem>>();            
-            
+
+            var cacheItems = new List<KeyValuePair<string, SettingCacheItem>>();
+
             foreach (var settingDefinition in settingDefinitions)
             {
                 var settingValue = settingsDictionary.GetOrDefault(settingDefinition.Name);
-                
+
                 cacheItems.Add(
                     new KeyValuePair<string, SettingCacheItem>(
                         CalculateCacheKey(settingDefinition.Name, providerName, providerKey),
@@ -115,7 +115,7 @@ namespace Volo.Abp.SettingManagement
                 }
             }
 
-            await Cache.SetManyAsync(cacheItems);
+            await Cache.SetManyAsync(cacheItems, considerUow: true);
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)

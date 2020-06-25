@@ -75,28 +75,28 @@ namespace Volo.Abp.FeatureManagement
             }
 
             cacheItem = new FeatureValueCacheItem(null);
-            
+
             await SetCacheItemsAsync(providerName, providerKey, name, cacheItem);
 
             return cacheItem;
         }
-        
+
         private async Task SetCacheItemsAsync(
-            string providerName, 
-            string providerKey, 
-            string currentName, 
+            string providerName,
+            string providerKey,
+            string currentName,
             FeatureValueCacheItem currentCacheItem)
         {
             var featureDefinitions = FeatureDefinitionManager.GetAll();
             var featuresDictionary = (await FeatureValueRepository.GetListAsync(providerName, providerKey))
                 .ToDictionary(s => s.Name, s => s.Value);
-            
-            var cacheItems = new List<KeyValuePair<string, FeatureValueCacheItem>>();            
-            
+
+            var cacheItems = new List<KeyValuePair<string, FeatureValueCacheItem>>();
+
             foreach (var featureDefinition in featureDefinitions)
             {
                 var featureValue = featuresDictionary.GetOrDefault(featureDefinition.Name);
-                
+
                 cacheItems.Add(
                     new KeyValuePair<string, FeatureValueCacheItem>(
                         CalculateCacheKey(featureDefinition.Name, providerName, providerKey),
@@ -110,7 +110,7 @@ namespace Volo.Abp.FeatureManagement
                 }
             }
 
-            await Cache.SetManyAsync(cacheItems);
+            await Cache.SetManyAsync(cacheItems, considerUow: true);
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)

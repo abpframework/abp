@@ -43,6 +43,7 @@ namespace Volo.Abp.Caching
         {
         }
     }
+
     /// <summary>
     /// Represents a distributed cache of <typeparamref name="TCacheItem" /> type.
     /// Uses a generic cache key type of <typeparamref name="TCacheKey" /> type.
@@ -182,6 +183,7 @@ namespace Volo.Abp.Caching
 
         public virtual KeyValuePair<TCacheKey, TCacheItem>[] GetMany(
             IEnumerable<TCacheKey> keys,
+            bool considerUow = false,
             bool? hideErrors = null)
         {
             var keyArray = keys.ToArray();
@@ -191,6 +193,7 @@ namespace Volo.Abp.Caching
             {
                 return GetManyFallback(
                     keyArray,
+                    considerUow,
                     hideErrors
                 );
             }
@@ -212,12 +215,13 @@ namespace Volo.Abp.Caching
 
                 throw;
             }
-            
+
             return ToCacheItems(cachedBytes, keyArray);
         }
 
         protected virtual KeyValuePair<TCacheKey, TCacheItem>[] GetManyFallback(
             TCacheKey[] keys,
+            bool considerUow = false,
             bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
@@ -227,7 +231,7 @@ namespace Volo.Abp.Caching
                 return keys
                     .Select(key => new KeyValuePair<TCacheKey, TCacheItem>(
                             key,
-                            Get(key, hideErrors: false)
+                            Get(key, considerUow, hideErrors: false)
                         )
                     ).ToArray();
             }
@@ -245,6 +249,7 @@ namespace Volo.Abp.Caching
 
         public virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyAsync(
             IEnumerable<TCacheKey> keys,
+            bool considerUow = false,
             bool? hideErrors = null,
             CancellationToken token = default)
         {
@@ -255,6 +260,7 @@ namespace Volo.Abp.Caching
             {
                 return await GetManyFallbackAsync(
                     keyArray,
+                    considerUow,
                     hideErrors,
                     token
                 );
@@ -280,12 +286,13 @@ namespace Volo.Abp.Caching
 
                 throw;
             }
-            
+
             return ToCacheItems(cachedBytes, keyArray);
         }
 
         protected virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyFallbackAsync(
             TCacheKey[] keys,
+            bool considerUow = false,
             bool? hideErrors = null,
             CancellationToken token = default)
         {
@@ -299,7 +306,7 @@ namespace Volo.Abp.Caching
                 {
                     result.Add(new KeyValuePair<TCacheKey, TCacheItem>(
                         key,
-                        await GetAsync(key, false, token))
+                        await GetAsync(key, considerUow, hideErrors: false, token: token))
                     );
                 }
 
@@ -605,6 +612,7 @@ namespace Volo.Abp.Caching
         public void SetMany(
             IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
             DistributedCacheEntryOptions options = null,
+            bool considerUow = false,
             bool? hideErrors = null)
         {
             var itemsArray = items.ToArray();
@@ -615,12 +623,13 @@ namespace Volo.Abp.Caching
                 SetManyFallback(
                     itemsArray,
                     options,
+                    considerUow,
                     hideErrors
                 );
-                
+
                 return;
             }
-            
+
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
             try
@@ -641,14 +650,15 @@ namespace Volo.Abp.Caching
                 throw;
             }
         }
-        
+
         protected virtual void SetManyFallback(
             KeyValuePair<TCacheKey, TCacheItem>[] items,
             DistributedCacheEntryOptions options = null,
+            bool considerUow = false,
             bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
-            
+
             try
             {
                 foreach (var item in items)
@@ -656,7 +666,8 @@ namespace Volo.Abp.Caching
                     Set(
                         item.Key,
                         item.Value,
-                        options: options,
+                        options,
+                        considerUow,
                         hideErrors: false
                     );
                 }
@@ -676,6 +687,7 @@ namespace Volo.Abp.Caching
         public virtual async Task SetManyAsync(
             IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
             DistributedCacheEntryOptions options = null,
+            bool considerUow = false,
             bool? hideErrors = null,
             CancellationToken token = default)
         {
@@ -687,13 +699,14 @@ namespace Volo.Abp.Caching
                 await SetManyFallbackAsync(
                     itemsArray,
                     options,
+                    considerUow,
                     hideErrors,
                     token
                 );
-                
+
                 return;
             }
-            
+
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
             try
@@ -715,10 +728,11 @@ namespace Volo.Abp.Caching
                 throw;
             }
         }
-        
+
         protected virtual async Task SetManyFallbackAsync(
             KeyValuePair<TCacheKey, TCacheItem>[] items,
             DistributedCacheEntryOptions options = null,
+            bool considerUow = false,
             bool? hideErrors = null,
             CancellationToken token = default)
         {
@@ -731,7 +745,8 @@ namespace Volo.Abp.Caching
                     await SetAsync(
                         item.Key,
                         item.Value,
-                        options: options,
+                        options,
+                        considerUow,
                         hideErrors: false,
                         token: token
                     );
@@ -911,7 +926,7 @@ namespace Volo.Abp.Caching
         {
             AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
         }
-        
+
         protected virtual async Task HandleExceptionAsync(Exception ex)
         {
             Logger.LogException(ex, LogLevel.Warning);
@@ -923,7 +938,7 @@ namespace Volo.Abp.Caching
                     .NotifyAsync(new ExceptionNotificationContext(ex, LogLevel.Warning));
             }
         }
-        
+
         protected virtual KeyValuePair<TCacheKey, TCacheItem>[] ToCacheItems(byte[][] itemBytes, TCacheKey[] itemKeys)
         {
             if (itemBytes.Length != itemKeys.Length)
@@ -945,7 +960,7 @@ namespace Volo.Abp.Caching
 
             return result.ToArray();
         }
-        
+
         [CanBeNull]
         protected virtual TCacheItem ToCacheItem([CanBeNull] byte[] bytes)
         {
@@ -967,7 +982,7 @@ namespace Volo.Abp.Caching
                     )
                 ).ToArray();
         }
-        
+
         private static KeyValuePair<TCacheKey, TCacheItem>[] ToCacheItemsWithDefaultValues(TCacheKey[] keys)
         {
             return keys
