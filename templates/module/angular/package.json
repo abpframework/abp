@@ -8,7 +8,9 @@
     "build:app": "ng build dev-app --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "compile:ivy": "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules --async false",
+    "postinstall": "npm run compile:ivy"
   },
   "private": true,
   "dependencies": {
