@@ -54,11 +54,12 @@ namespace Volo.Abp.Cli.ProjectModification
             _npmGlobalPackagesChecker.Check();
 
             var packagesUpdated = new ConcurrentDictionary<string, bool>();
+
             async Task UpdateAsync(string file)
             {
                 var updated = await UpdatePackagesInFile(file, includePreviews, switchToStable);
                 packagesUpdated.TryAdd(file, updated);
-            };
+            }
 
             Task.WaitAll(fileList.Select(UpdateAsync).ToArray());
 
@@ -66,23 +67,20 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
 
-                if (IsAngularProject(fileDirectory))
+                if (includePreviews)
                 {
-                    if (includePreviews)
-                    {
-                        await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
-                    }
-                    else if (switchToStable)
-                    {
-                        await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
-                    }
+                    await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                    RunNpmInstall(fileDirectory);
                 }
-
-                RunYarn(fileDirectory);
+                else if (switchToStable)
+                {
+                    await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                    RunYarn(fileDirectory);
+                }
 
                 if (!IsAngularProject(fileDirectory))
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(1000);
                     RunGulp(fileDirectory);
                 }
             }
@@ -166,7 +164,8 @@ namespace Volo.Abp.Cli.ProjectModification
             return File.Exists(Path.Combine(fileDirectory, "angular.json"));
         }
 
-        protected virtual async Task<bool> UpdatePackagesInFile(string filePath, bool includePreviews = false, bool switchToStable = false)
+        protected virtual async Task<bool> UpdatePackagesInFile(string filePath, bool includePreviews = false,
+            bool switchToStable = false)
         {
             var packagesUpdated = false;
             var fileContent = File.ReadAllText(filePath);
@@ -201,7 +200,7 @@ namespace Volo.Abp.Cli.ProjectModification
             bool includePreviews = false,
             bool switchToStable = false)
         {
-            var currentVersion = (string)package.Value;
+            var currentVersion = (string) package.Value;
 
             var version = await GetLatestVersion(package, currentVersion, includePreviews, switchToStable);
 
@@ -214,7 +213,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
             package.Value.Replace(versionWithPrefix);
 
-            Logger.LogInformation($"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
+            Logger.LogInformation(
+                $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
             return true;
         }
 
@@ -256,12 +256,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
         {
-            var dependencyList = new[] { "dependencies", "devDependencies", "peerDependencies" };
+            var dependencyList = new[] {"dependencies", "devDependencies", "peerDependencies"};
             var abpPackages = new List<JProperty>();
 
             foreach (var dependencyListName in dependencyList)
             {
-                var dependencies = (JObject)fileObject[dependencyListName];
+                var dependencies = (JObject) fileObject[dependencyListName];
 
                 if (dependencies == null)
                 {
@@ -269,7 +269,8 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
 
                 var properties = dependencies.Properties().ToList();
-                abpPackages.AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList());
+                abpPackages.AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/"))
+                    .ToList());
             }
 
             return abpPackages;
@@ -285,6 +286,12 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             Logger.LogInformation($"Running Yarn on {fileDirectory}");
             CmdHelper.RunCmd($"cd {fileDirectory} && yarn");
+        }
+
+        protected virtual void RunNpmInstall(string fileDirectory)
+        {
+            Logger.LogInformation($"Running npm install on {fileDirectory}");
+            CmdHelper.RunCmd($"cd {fileDirectory} && npm install");
         }
     }
 }
