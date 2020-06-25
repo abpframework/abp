@@ -499,7 +499,7 @@ namespace Volo.Abp.Caching
             bool considerUow = false,
             bool? hideErrors = null)
         {
-            Task SetRealCache()
+            void SetRealCache()
             {
                 hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -515,14 +515,12 @@ namespace Volo.Abp.Caching
                 {
                     if (hideErrors == true)
                     {
-                        AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
-                        return Task.CompletedTask;
+                        HandleException(ex);
+                        return;
                     }
 
                     throw;
                 }
-
-                return Task.CompletedTask;
             }
 
             if (considerUow)
@@ -538,7 +536,11 @@ namespace Volo.Abp.Caching
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
-                UnitOfWorkManager.Current.OnCompleted(SetRealCache);
+                UnitOfWorkManager.Current.OnCompleted(() =>
+                {
+                    SetRealCache();
+                    return Task.CompletedTask;
+                });
             }
             else
             {
@@ -832,7 +834,7 @@ namespace Volo.Abp.Caching
             bool considerUow = false,
             bool? hideErrors = null)
         {
-            Task RemoveRealCache()
+            void RemoveRealCache()
             {
                 hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -844,14 +846,12 @@ namespace Volo.Abp.Caching
                 {
                     if (hideErrors == true)
                     {
-                        AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
-                        return Task.CompletedTask;
+                        HandleException(ex);
+                        return;
                     }
 
                     throw;
                 }
-
-                return Task.CompletedTask;
             }
 
             if (considerUow)
@@ -863,7 +863,11 @@ namespace Volo.Abp.Caching
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
-                UnitOfWorkManager.Current.OnCompleted(RemoveRealCache);
+                UnitOfWorkManager.Current.OnCompleted(() =>
+                {
+                    RemoveRealCache();
+                    return Task.CompletedTask;
+                });
             }
             else
             {
