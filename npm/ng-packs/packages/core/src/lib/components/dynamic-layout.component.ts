@@ -1,4 +1,4 @@
-import { Component, Injector, OnDestroy, Type } from '@angular/core';
+import { Component, Injector, OnDestroy, Type, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { eLayoutType } from '../enums/common';
@@ -23,7 +23,12 @@ import { TreeNode } from '../utils/tree-utils';
 export class DynamicLayoutComponent implements OnDestroy {
   layout: Type<any>;
 
-  constructor(injector: Injector, private store: Store) {
+  constructor(
+    injector: Injector,
+    private store: Store,
+    @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
+  ) {
+    if (dynamicLayoutComponent) return;
     const route = injector.get(ActivatedRoute);
     const router = injector.get(Router);
     const routes = injector.get(RoutesService);
