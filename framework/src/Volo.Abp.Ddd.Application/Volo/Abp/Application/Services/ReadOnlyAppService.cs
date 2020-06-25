@@ -13,7 +13,7 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository)
+        protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -25,7 +25,7 @@ namespace Volo.Abp.Application.Services
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
-        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository)
+        protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
             : base(repository)
         {
 
@@ -38,9 +38,9 @@ namespace Volo.Abp.Application.Services
         where TGetOutputDto : IEntityDto<TKey>
         where TGetListOutputDto : IEntityDto<TKey>
     {
-        protected new IRepository<TEntity, TKey> Repository { get; }
+        protected new IReadOnlyRepository<TEntity, TKey> Repository { get; }
 
-        protected ReadOnlyAppService(IRepository<TEntity, TKey> repository)
+        protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
         : base(repository)
         {
             Repository = repository;

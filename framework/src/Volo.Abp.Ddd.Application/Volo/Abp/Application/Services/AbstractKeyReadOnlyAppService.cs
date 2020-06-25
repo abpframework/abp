@@ -13,7 +13,7 @@ namespace Volo.Abp.Application.Services
         : AbstractKeyReadOnlyAppService<TEntity, TEntityDto, TEntityDto, TKey, PagedAndSortedResultRequestDto>
         where TEntity : class, IEntity
     {
-        protected AbstractKeyReadOnlyAppService(IRepository<TEntity> repository)
+        protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
             : base(repository)
         {
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.Application.Services
         : AbstractKeyReadOnlyAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput>
         where TEntity : class, IEntity
     {
-        protected AbstractKeyReadOnlyAppService(IRepository<TEntity> repository)
+        protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
             : base(repository)
         {
 
@@ -36,13 +36,13 @@ namespace Volo.Abp.Application.Services
         , IReadOnlyAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
         where TEntity : class, IEntity
     {
-        protected IRepository<TEntity> Repository { get; }
+        protected IReadOnlyRepository<TEntity> Repository { get; }
 
         protected virtual string GetPolicyName { get; set; }
 
         protected virtual string GetListPolicyName { get; set; }
 
-        protected AbstractKeyReadOnlyAppService(IRepository<TEntity> repository)
+        protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
         {
             Repository = repository;
         }

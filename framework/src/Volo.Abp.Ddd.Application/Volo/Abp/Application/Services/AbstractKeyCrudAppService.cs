@@ -62,6 +62,8 @@ namespace Volo.Abp.Application.Services
             ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity
     {
+        protected new IRepository<TEntity> Repository { get; }
+
         protected virtual string CreatePolicyName { get; set; }
 
         protected virtual string UpdatePolicyName { get; set; }
@@ -71,7 +73,7 @@ namespace Volo.Abp.Application.Services
         protected AbstractKeyCrudAppService(IRepository<TEntity> repository)
             : base(repository)
         {
-
+            Repository = repository;
         }
 
         public virtual async Task<TGetOutputDto> CreateAsync(TCreateInput input)
