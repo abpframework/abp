@@ -34,6 +34,7 @@ namespace Volo.Abp.Identity
                 options.EtoMappings.Add<IdentityUser, UserEto>(typeof(AbpIdentityDomainModule));
                 options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(AbpIdentityDomainModule));
                 options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
+                options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(AbpIdentityDomainModule));
             });
             
             var identityBuilder = context.Services.AddAbpIdentity(options =>
