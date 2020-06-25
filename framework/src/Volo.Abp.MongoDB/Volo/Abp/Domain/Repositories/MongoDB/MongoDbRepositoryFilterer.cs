@@ -19,7 +19,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             CurrentTenant = currentTenant;
         }
 
-        public void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
+        public virtual void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
         {
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
             {
