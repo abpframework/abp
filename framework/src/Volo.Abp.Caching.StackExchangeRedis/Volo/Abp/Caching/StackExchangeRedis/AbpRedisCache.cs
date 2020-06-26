@@ -77,7 +77,7 @@ namespace Volo.Abp.Caching.StackExchangeRedis
                     SlidingExpirationKey);
             }
 
-            Task.WaitAll(GetAndRefreshMany(keyArray, results, out var bytes));
+            Task.WaitAll(PipelineRefreshManyAndOutData(keyArray, results, out var bytes));
 
             return bytes;
         }
@@ -105,12 +105,15 @@ namespace Volo.Abp.Caching.StackExchangeRedis
                     SlidingExpirationKey);
             }
 
-            await Task.WhenAll(GetAndRefreshMany(keyArray, results, out var bytes));
+            await Task.WhenAll(PipelineRefreshManyAndOutData(keyArray, results, out var bytes));
 
             return bytes;
         }
 
-        private Task[] GetAndRefreshMany(string[] keys, RedisValue[][] results, out byte[][] bytes)
+        private Task[] PipelineRefreshManyAndOutData(
+            string[] keys,
+            RedisValue[][] results,
+            out byte[][] bytes)
         {
             bytes = new byte[keys.Length][];
             var tasks = new Task[keys.Length];
@@ -119,7 +122,27 @@ namespace Volo.Abp.Caching.StackExchangeRedis
                 if (results[i].Length >= 2)
                 {
                     MapMetadata(results[i], out DateTimeOffset? absExpr, out TimeSpan? sldExpr);
-                    tasks[i] = PipelineRefresh(keys[i], absExpr, sldExpr);
+
+                    if (sldExpr.HasValue)
+                    {
+                        TimeSpan? expr;
+
+                        if (absExpr.HasValue)
+                        {
+                            var relExpr = absExpr.Value - DateTimeOffset.Now;
+                            expr = relExpr <= sldExpr.Value ? relExpr : sldExpr;
+                        }
+                        else
+                        {
+                            expr = sldExpr;
+                        }
+
+                        tasks[i] = Cache.KeyExpireAsync(keys[i], expr);
+                    }
+                    else
+                    {
+                        tasks[i] = Task.CompletedTask;
+                    }
                 }
 
                 if (results[i].Length >= 3 && results[i][2].HasValue)
@@ -133,31 +156,6 @@ namespace Volo.Abp.Caching.StackExchangeRedis
             }
 
             return tasks;
-        }
-
-        private Task PipelineRefresh(
-            string key,
-            DateTimeOffset? absExpr,
-            TimeSpan? sldExpr)
-        {
-            if (sldExpr.HasValue)
-            {
-                TimeSpan? expr;
-
-                if (absExpr.HasValue)
-                {
-                    var relExpr = absExpr.Value - DateTimeOffset.Now;
-                    expr = relExpr <= sldExpr.Value ? relExpr : sldExpr;
-                }
-                else
-                {
-                    expr = sldExpr;
-                }
-
-                return Cache.KeyExpireAsync(key, expr);
-            }
-
-            return Task.CompletedTask;
         }
 
         private Task[] PipelineSetMany(
