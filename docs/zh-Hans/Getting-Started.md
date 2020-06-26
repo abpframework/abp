@@ -38,7 +38,7 @@
 
 > ABP CLI是[ABP框架](https://abp.io/)一个免费开源的工具.
 
-你需要使用以下命令安排ABP CLI:
+你需要使用以下命令安装ABP CLI:
 
 ````shell
 dotnet tool install -g Volo.Abp.Cli
