@@ -6,24 +6,26 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 {
     public static class AbpRedisExtensions
     {
-        private const string HmGetManyScript = (@"
-                                                local res = {};
-                                                for i , key in ipairs(KEYS) do
-                                                    res[#res+1] = redis.call('HMGET', key,unpack(ARGV))
-                                                end
-                                                return res");
-
         public static RedisValue[][] HashMemberGetMany(
             this IDatabase cache,
             string[] keys,
             params string[] members)
         {
-            var results = cache.ScriptEvaluate(
-                HmGetManyScript,
-                keys.Select(key => (RedisKey) key).ToArray(),
-                members.Select(member => (RedisValue) member).ToArray());
+            var tasks = new Task<RedisValue[]>[keys.Length];
+            var fields = members.Select(member => (RedisValue) member).ToArray();
+            var results = new RedisValue[keys.Length][];
 
-            return ((RedisResult[]) results).Select(result => (RedisValue[]) result).ToArray();
+            for (var i = 0; i < keys.Length; i++)
+            {
+                tasks[i] = cache.HashGetAsync((RedisKey) keys[i], fields);
+            }
+
+            for (var i = 0; i < tasks.Length; i++)
+            {
+                results[i] = cache.Wait(tasks[i]);
+            }
+
+            return results;
         }
 
         public static async Task<RedisValue[][]> HashMemberGetManyAsync(
@@ -31,12 +33,15 @@ namespace Volo.Abp.Caching.StackExchangeRedis
             string[] keys,
             params string[] members)
         {
-            var results = await cache.ScriptEvaluateAsync(
-                HmGetManyScript,
-                keys.Select(key => (RedisKey) key).ToArray(),
-                members.Select(member => (RedisValue) member).ToArray());
+            var tasks = new Task<RedisValue[]>[keys.Length];
+            var fields = members.Select(member => (RedisValue) member).ToArray();
 
-            return ((RedisResult[]) results).Select(result => (RedisValue[]) result).ToArray();
+            for (var i = 0; i < keys.Length; i++)
+            {
+                tasks[i] = cache.HashGetAsync((RedisKey) keys[i], fields);
+            }
+
+            return await Task.WhenAll(tasks);
         }
     }
 }
