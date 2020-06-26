@@ -126,6 +126,7 @@ export abstract class AbstractTreeService<T extends object> {
   }
 }
 
+@Injectable()
 export abstract class AbstractNavTreeService<T extends ABP.Nav> extends AbstractTreeService<T>
   implements OnDestroy {
   readonly id = 'name';

@@ -184,5 +184,15 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 
             return tasks;
         }
+        
+        private IDatabase GetRedisDatabase()
+        {
+            if (_redisDatabase == null)
+            {
+                _redisDatabase = RedisDatabaseField.GetValue(this) as IDatabase;                
+            }
+
+            return _redisDatabase;
+        }
     }
 }

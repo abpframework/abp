@@ -2,7 +2,7 @@ import { CoreModule, LazyModuleFactory } from '@abp/ng.core';
 import { PermissionManagementModule } from '@abp/ng.permission-management';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule, NgModuleFactory } from '@angular/core';
-import { NgbDropdownModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { NgxsModule } from '@ngxs/store';
 import { RolesComponent } from './components/roles/roles.component';
@@ -17,7 +17,7 @@ import { IdentityState } from './states/identity.state';
     NgxsModule.forFeature([IdentityState]),
     CoreModule,
     IdentityRoutingModule,
-    NgbTabsetModule,
+    NgbNavModule,
     ThemeSharedModule,
     NgbDropdownModule,
     PermissionManagementModule,
