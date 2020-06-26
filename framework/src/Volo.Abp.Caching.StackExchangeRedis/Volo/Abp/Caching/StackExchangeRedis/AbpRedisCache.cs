@@ -16,8 +16,9 @@ namespace Volo.Abp.Caching.StackExchangeRedis
         private static readonly MethodInfo ConnectMethod;
         private static readonly MethodInfo ConnectAsyncMethod;
 
-        protected IDatabase RedisDatabase => RedisDatabaseField.GetValue(this) as IDatabase;
-
+        protected IDatabase RedisDatabase => GetRedisDatabase();
+        private IDatabase _redisDatabase;
+        
         static AbpRedisCache()
         {
             RedisDatabaseField = typeof(RedisCache)
@@ -38,12 +39,32 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 
         protected virtual void Connect()
         {
+            if (GetRedisDatabase() != null)
+            {
+                return;
+            }
+
             ConnectMethod.Invoke(this, Array.Empty<object>());
         }
 
         protected virtual Task ConnectAsync(CancellationToken token = default)
         {
+            if (GetRedisDatabase() != null)
+            {
+                return Task.CompletedTask;
+            }
+
             return (Task) ConnectAsyncMethod.Invoke(this, new object[] {token});
+        }
+        
+        private IDatabase GetRedisDatabase()
+        {
+            if (_redisDatabase == null)
+            {
+                _redisDatabase = RedisDatabaseField.GetValue(this) as IDatabase;                
+            }
+
+            return _redisDatabase;
         }
     }
 }
