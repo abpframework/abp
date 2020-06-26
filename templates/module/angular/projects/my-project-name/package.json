@@ -1,5 +1,5 @@
 {
-  "name": "my-project-name",
+  "name": "@my-company-name/my-project-name",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^9.1.11",
@@ -8,6 +8,6 @@
     "@abp/ng.theme.shared": ">=3.0.0"
   },
   "dependencies": {
-    "tslib": "^1.10.0"
-  }
+    "tslib": "^2.0.0"
+}
 }
