@@ -222,13 +222,14 @@ namespace Volo.Abp.BlobStoring
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                foreach (var provider in Configuration.NamingNormalizers)
+                foreach (var normalizerType in Configuration.NamingNormalizers)
                 {
-                    var blobNamingNormalizerProvider = scope.ServiceProvider.GetRequiredService(provider)
+                    var normalizer = scope.ServiceProvider
+                        .GetRequiredService(normalizerType)
                         .As<IBlobNamingNormalizer>();
 
-                    containerName = blobNamingNormalizerProvider.NormalizeContainerName(containerName);
-                    blobName = blobNamingNormalizerProvider.NormalizeBlobName(blobName);
+                    containerName = normalizer.NormalizeContainerName(containerName);
+                    blobName = normalizer.NormalizeBlobName(blobName);
                 }
 
                 return (containerName, blobName);
