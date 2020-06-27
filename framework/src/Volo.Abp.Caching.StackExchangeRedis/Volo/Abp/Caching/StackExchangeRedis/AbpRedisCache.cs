@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -14,9 +15,75 @@ namespace Volo.Abp.Caching.StackExchangeRedis
     [DisableConventionalRegistration]
     public class AbpRedisCache : RedisCache, ICacheSupportsMultipleItems
     {
+        protected static readonly string SetScript;
+        protected static readonly string AbsoluteExpirationKey;
+        protected static readonly string SlidingExpirationKey;
+        protected static readonly string DataKey;
+        protected static readonly long NotPresent;
+
+        private static readonly FieldInfo RedisDatabaseField;
+        private static readonly MethodInfo ConnectMethod;
+        private static readonly MethodInfo ConnectAsyncMethod;
+        private static readonly MethodInfo MapMetadataMethod;
+        private static readonly MethodInfo GetAbsoluteExpirationMethod;
+        private static readonly MethodInfo GetExpirationInSecondsMethod;
+
+        protected IDatabase RedisDatabase => GetRedisDatabase();
+        private IDatabase _redisDatabase;
+
+        protected string Instance { get; }
+
+        static AbpRedisCache()
+        {
+            var type = typeof(RedisCache);
+
+            RedisDatabaseField = type.GetField("_cache", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            ConnectMethod = type.GetMethod("Connect", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            ConnectAsyncMethod = type.GetMethod("ConnectAsync", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            MapMetadataMethod = type.GetMethod("MapMetadata", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            GetAbsoluteExpirationMethod = type.GetMethod("GetAbsoluteExpiration", BindingFlags.Static | BindingFlags.NonPublic);
+
+            GetExpirationInSecondsMethod = type.GetMethod("GetExpirationInSeconds", BindingFlags.Static | BindingFlags.NonPublic);
+
+            SetScript = type.GetField("SetScript", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+
+            AbsoluteExpirationKey = type.GetField("AbsoluteExpirationKey", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+
+            SlidingExpirationKey = type.GetField("SlidingExpirationKey", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+
+            DataKey = type.GetField("DataKey", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).ToString();
+
+            NotPresent = type.GetField("NotPresent", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null).To<int>();
+        }
+
         public AbpRedisCache(IOptions<RedisCacheOptions> optionsAccessor)
             : base(optionsAccessor)
         {
+            Instance = optionsAccessor.Value.InstanceName ?? string.Empty;
+        }
+
+        protected virtual void Connect()
+        {
+            if (GetRedisDatabase() != null)
+            {
+                return;
+            }
+
+            ConnectMethod.Invoke(this, Array.Empty<object>());
+        }
+
+        protected virtual Task ConnectAsync(CancellationToken token = default)
+        {
+            if (GetRedisDatabase() != null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return (Task) ConnectAsyncMethod.Invoke(this, new object[] {token});
         }
 
         public byte[][] GetMany(
@@ -68,12 +135,12 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 
             if (getData)
             {
-                results = Cache.HashMemberGetMany(keyArray, AbsoluteExpirationKey,
+                results = RedisDatabase.HashMemberGetMany(keyArray, AbsoluteExpirationKey,
                     SlidingExpirationKey, DataKey);
             }
             else
             {
-                results = Cache.HashMemberGetMany(keyArray, AbsoluteExpirationKey,
+                results = RedisDatabase.HashMemberGetMany(keyArray, AbsoluteExpirationKey,
                     SlidingExpirationKey);
             }
 
@@ -96,12 +163,12 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 
             if (getData)
             {
-                results = await Cache.HashMemberGetManyAsync(keyArray, AbsoluteExpirationKey,
+                results = await RedisDatabase.HashMemberGetManyAsync(keyArray, AbsoluteExpirationKey,
                     SlidingExpirationKey, DataKey);
             }
             else
             {
-                results = await Cache.HashMemberGetManyAsync(keyArray, AbsoluteExpirationKey,
+                results = await RedisDatabase.HashMemberGetManyAsync(keyArray, AbsoluteExpirationKey,
                     SlidingExpirationKey);
             }
 
@@ -110,13 +177,14 @@ namespace Volo.Abp.Caching.StackExchangeRedis
             return bytes;
         }
 
-        private Task[] PipelineRefreshManyAndOutData(
+        protected virtual Task[] PipelineRefreshManyAndOutData(
             string[] keys,
             RedisValue[][] results,
             out byte[][] bytes)
         {
             bytes = new byte[keys.Length][];
             var tasks = new Task[keys.Length];
+
             for (var i = 0; i < keys.Length; i++)
             {
                 if (results[i].Length >= 2)
@@ -137,7 +205,7 @@ namespace Volo.Abp.Caching.StackExchangeRedis
                             expr = sldExpr;
                         }
 
-                        tasks[i] = Cache.KeyExpireAsync(keys[i], expr);
+                        tasks[i] = RedisDatabase.KeyExpireAsync(keys[i], expr);
                     }
                     else
                     {
@@ -158,7 +226,7 @@ namespace Volo.Abp.Caching.StackExchangeRedis
             return tasks;
         }
 
-        private Task[] PipelineSetMany(
+        protected virtual Task[] PipelineSetMany(
             IEnumerable<KeyValuePair<string, byte[]>> items,
             DistributedCacheEntryOptions options)
         {
@@ -172,7 +240,7 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 
             for (var i = 0; i < itemArray.Length; i++)
             {
-                tasks[i] = Cache.ScriptEvaluateAsync(SetScript, new RedisKey[] {Instance + itemArray[i].Key},
+                tasks[i] = RedisDatabase.ScriptEvaluateAsync(SetScript, new RedisKey[] {Instance + itemArray[i].Key},
                     new RedisValue[]
                     {
                         absoluteExpiration?.Ticks ?? NotPresent,
@@ -184,12 +252,40 @@ namespace Volo.Abp.Caching.StackExchangeRedis
 
             return tasks;
         }
-        
+
+        protected virtual void MapMetadata(
+            RedisValue[] results,
+            out DateTimeOffset? absoluteExpiration,
+            out TimeSpan? slidingExpiration)
+        {
+            var parameters = new object[] {results, null, null};
+            MapMetadataMethod.Invoke(this, parameters);
+
+            absoluteExpiration = (DateTimeOffset?) parameters[1];
+            slidingExpiration = (TimeSpan?) parameters[2];
+        }
+
+        protected virtual long? GetExpirationInSeconds(
+            DateTimeOffset creationTime,
+            DateTimeOffset? absoluteExpiration,
+            DistributedCacheEntryOptions options)
+        {
+            return (long?) GetExpirationInSecondsMethod.Invoke(null,
+                new object[] {creationTime, absoluteExpiration, options});
+        }
+
+        protected virtual DateTimeOffset? GetAbsoluteExpiration(
+            DateTimeOffset creationTime,
+            DistributedCacheEntryOptions options)
+        {
+            return (DateTimeOffset?) GetAbsoluteExpirationMethod.Invoke(null, new object[] {creationTime, options});
+        }
+
         private IDatabase GetRedisDatabase()
         {
             if (_redisDatabase == null)
             {
-                _redisDatabase = RedisDatabaseField.GetValue(this) as IDatabase;                
+                _redisDatabase = RedisDatabaseField.GetValue(this) as IDatabase;
             }
 
             return _redisDatabase;
