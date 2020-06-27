@@ -10,9 +10,16 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
         IQuartzBackgroundWorkerAdapter
         where TWorker : IBackgroundWorker
     {
+        private readonly MethodInfo _doWorkAsyncMethod;
+        private readonly MethodInfo _doWorkMethod;
+
         public QuartzPeriodicBackgroundWorkerAdapter()
         {
             AutoRegister = false;
+
+            _doWorkAsyncMethod = typeof(TWorker).GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic);
+            _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
+
         }
 
         public void BuildWorker(IBackgroundWorker worker)
@@ -59,24 +66,18 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
             {
                 case AsyncPeriodicBackgroundWorkerBase asyncWorker:
                 {
-                    var doWorkAsyncMethod = asyncWorker.GetType()
-                        .GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    if (doWorkAsyncMethod != null)
+                    if (_doWorkAsyncMethod != null)
                     {
-                        await (Task) doWorkAsyncMethod.Invoke(asyncWorker, new object[] {workerContext});
+                        await (Task) _doWorkAsyncMethod.Invoke(asyncWorker, new object[] {workerContext});
                     }
 
                     break;
                 }
                 case PeriodicBackgroundWorkerBase syncWorker:
                 {
-                    var doWorkMethod = syncWorker.GetType()
-                        .GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    if (doWorkMethod != null)
+                    if (_doWorkMethod != null)
                     {
-                        doWorkMethod.Invoke(syncWorker, new object[] {workerContext});
+                        _doWorkMethod.Invoke(syncWorker, new object[] {workerContext});
                     }
 
                     break;
