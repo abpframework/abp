@@ -24,7 +24,7 @@ export function configureRoutes(routes: RoutesService) {
         parentName: eThemeSharedRouteNames.Administration,
         requiredPolicy: eSettingManagementPolicyNames.Settings,
         layout: eLayoutType.application,
-        order: 6,
+        order: 100,
         iconClass: 'fa fa-cog',
       },
     ]);
