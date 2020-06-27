@@ -104,28 +104,6 @@ namespace Volo.Abp.BlobStoring
             ServiceProvider = serviceProvider;
         }
 
-        private (string, string) NormalizeContainerNameAndBlobName(string containerName,  string blobName)
-        {
-            if (!Configuration.NamingNormalizers.Any())
-            {
-                return (containerName, blobName);
-            }
-
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                foreach (var provider in Configuration.NamingNormalizers)
-                {
-                    var blobNamingNormalizerProvider = scope.ServiceProvider.GetRequiredService(provider)
-                        .As<IBlobNamingNormalizer>();
-
-                    containerName = blobNamingNormalizerProvider.NormalizeContainerName(containerName);
-                    blobName = blobNamingNormalizerProvider.NormalizeBlobName(blobName);
-                }
-
-                return (containerName, blobName);
-            }
-        }
-
         public virtual async Task SaveAsync(
             string name,
             Stream stream,
@@ -134,8 +112,7 @@ namespace Volo.Abp.BlobStoring
         {
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
-                var (normalizedContainerName, normalizedBlobName) =
-                    NormalizeContainerNameAndBlobName(ContainerName, name);
+                var (normalizedContainerName, normalizedBlobName) = NormalizeNaming(ContainerName, name);
 
                 await Provider.SaveAsync(
                     new BlobProviderSaveArgs(
@@ -157,7 +134,7 @@ namespace Volo.Abp.BlobStoring
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
                 var (normalizedContainerName, normalizedBlobName) =
-                    NormalizeContainerNameAndBlobName(ContainerName, name);
+                    NormalizeNaming(ContainerName, name);
 
                 return await Provider.DeleteAsync(
                     new BlobProviderDeleteArgs(
@@ -177,7 +154,7 @@ namespace Volo.Abp.BlobStoring
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
                 var (normalizedContainerName, normalizedBlobName) =
-                    NormalizeContainerNameAndBlobName(ContainerName, name);
+                    NormalizeNaming(ContainerName, name);
 
                 return await Provider.ExistsAsync(
                     new BlobProviderExistsArgs(
@@ -213,7 +190,7 @@ namespace Volo.Abp.BlobStoring
             using (CurrentTenant.Change(GetTenantIdOrNull()))
             {
                 var (normalizedContainerName, normalizedBlobName) =
-                    NormalizeContainerNameAndBlobName(ContainerName, name);
+                    NormalizeNaming(ContainerName, name);
 
                 return await Provider.GetOrNullAsync(
                     new BlobProviderGetArgs(
@@ -234,6 +211,28 @@ namespace Volo.Abp.BlobStoring
             }
 
             return CurrentTenant.Id;
+        }
+        
+        protected virtual (string, string) NormalizeNaming(string containerName,  string blobName)
+        {
+            if (!Configuration.NamingNormalizers.Any())
+            {
+                return (containerName, blobName);
+            }
+
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                foreach (var provider in Configuration.NamingNormalizers)
+                {
+                    var blobNamingNormalizerProvider = scope.ServiceProvider.GetRequiredService(provider)
+                        .As<IBlobNamingNormalizer>();
+
+                    containerName = blobNamingNormalizerProvider.NormalizeContainerName(containerName);
+                    blobName = blobNamingNormalizerProvider.NormalizeBlobName(blobName);
+                }
+
+                return (containerName, blobName);
+            }
         }
     }
 }
