@@ -24,7 +24,7 @@ namespace Volo.Abp.BlobStoring
         /// </summary>
         public bool IsMultiTenant { get; set; } = true;
 
-        public ITypeList<IBlobNamingNormalizerProvider> NamingNormalizerProviders { get; }
+        public ITypeList<IBlobNamingNormalizer> NamingNormalizers { get; }
 
         [NotNull] private readonly Dictionary<string, object> _properties;
 
@@ -32,7 +32,7 @@ namespace Volo.Abp.BlobStoring
 
         public BlobContainerConfiguration(BlobContainerConfiguration fallbackConfiguration = null)
         {
-            NamingNormalizerProviders = new TypeList<IBlobNamingNormalizerProvider>();
+            NamingNormalizers = new TypeList<IBlobNamingNormalizer>();
             _fallbackConfiguration = fallbackConfiguration;
             _properties = new Dictionary<string, object>();
         }

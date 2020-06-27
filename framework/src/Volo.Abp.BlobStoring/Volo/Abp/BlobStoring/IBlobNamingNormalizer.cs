@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.BlobStoring
 {
-    public interface IBlobNamingNormalizerProvider
+    public interface IBlobNamingNormalizer
     {
         string NormalizeContainerName(string containerName);
 

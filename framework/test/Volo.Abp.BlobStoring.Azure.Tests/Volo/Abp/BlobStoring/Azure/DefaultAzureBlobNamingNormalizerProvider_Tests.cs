@@ -5,18 +5,18 @@ namespace Volo.Abp.BlobStoring.Azure
 {
     public class DefaultAzureBlobNamingNormalizerProvider_Tests : AbpBlobStoringAzureTestCommonBase
     {
-        private readonly IBlobNamingNormalizerProvider _blobNamingNormalizerProvider;
+        private readonly IBlobNamingNormalizer _blobNamingNormalizer;
 
         public DefaultAzureBlobNamingNormalizerProvider_Tests()
         {
-            _blobNamingNormalizerProvider = GetRequiredService<IBlobNamingNormalizerProvider>();
+            _blobNamingNormalizer = GetRequiredService<IBlobNamingNormalizer>();
         }
 
         [Fact]
         public void NormalizeContainerName_Lowercase()
         {
             var filename = "ThisIsMyContainerName";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe("thisismycontainername");
         }
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.BlobStoring.Azure
         public void NormalizeContainerName_Only_Letters_Numbers_Dash()
         {
             var filename = ",./this-i,./s-my-c,./ont,./ai+*/.=!@#$n^&*er-name.+/";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe("this-is-my-container-name");
         }
 
@@ -32,7 +32,7 @@ namespace Volo.Abp.BlobStoring.Azure
         public void NormalizeContainerName_Dash()
         {
             var filename = "-this--is----my-container----name-";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe("this-is-my-container-name");
         }
 
@@ -41,7 +41,7 @@ namespace Volo.Abp.BlobStoring.Azure
         public void NormalizeContainerName_Min_Length()
         {
             var filename = "a";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.Length.ShouldBeGreaterThanOrEqualTo(3);
         }
 
@@ -50,7 +50,7 @@ namespace Volo.Abp.BlobStoring.Azure
         public void NormalizeContainerName_Max_Length()
         {
             var filename = "abpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabpabp";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.Length.ShouldBeLessThanOrEqualTo(63);
         }
     }

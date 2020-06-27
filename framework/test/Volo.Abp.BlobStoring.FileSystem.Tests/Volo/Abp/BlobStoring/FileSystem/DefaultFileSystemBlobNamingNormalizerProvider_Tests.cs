@@ -9,11 +9,11 @@ namespace Volo.Abp.BlobStoring.FileSystem
 {
     public class DefaultFileSystemBlobNamingNormalizerProvider_Tests : AbpBlobStoringFileSystemTestBase
     {
-        private readonly IBlobNamingNormalizerProvider _blobNamingNormalizerProvider;
+        private readonly IBlobNamingNormalizer _blobNamingNormalizer;
 
         public DefaultFileSystemBlobNamingNormalizerProvider_Tests()
         {
-            _blobNamingNormalizerProvider = GetRequiredService<IBlobNamingNormalizerProvider>();
+            _blobNamingNormalizer = GetRequiredService<IBlobNamingNormalizer>();
         }
 
         protected override void AfterAddApplication(IServiceCollection services)
@@ -27,7 +27,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
         public void NormalizeContainerName()
         {
             var filename = "thisismy:*?\"<>|foldername";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe("thisismyfoldername");
         }
 
@@ -35,7 +35,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
         public void NormalizeBlobName()
         {
             var filename = "thisismy:*?\"<>|filename";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe("thisismyfilename");
         }
 
@@ -45,7 +45,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
         public void NormalizeContainerName_With_Directory(string delimiter)
         {
             var filename = $"thisis{delimiter}my:*?\"<>|{delimiter}foldername";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe($"thisis{delimiter}my{delimiter}foldername");
         }
 
@@ -55,7 +55,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
         public void NormalizeBlobName_With_Directory(string delimiter)
         {
             var filename = $"thisis{delimiter}my:*?\"<>|{delimiter}filename";
-            filename = _blobNamingNormalizerProvider.NormalizeContainerName(filename);
+            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
             filename.ShouldBe($"thisis{delimiter}my{delimiter}filename");
         }
     }

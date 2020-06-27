@@ -15,7 +15,7 @@ namespace Volo.Abp.BlobStoring.FileSystem
             Action<FileSystemBlobProviderConfiguration> fileSystemConfigureAction)
         {
             containerConfiguration.ProviderType = typeof(FileSystemBlobProvider);
-            containerConfiguration.NamingNormalizerProviders.Add<DefaultFileSystemBlobNamingNormalizerProvider>();
+            containerConfiguration.NamingNormalizers.Add<FileSystemBlobNamingNormalizer>();
 
             fileSystemConfigureAction(new FileSystemBlobProviderConfiguration(containerConfiguration));
 

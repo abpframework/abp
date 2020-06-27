@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -106,17 +106,17 @@ namespace Volo.Abp.BlobStoring
 
         private (string, string) NormalizeContainerNameAndBlobName(string containerName,  string blobName)
         {
-            if (!Configuration.NamingNormalizerProviders.Any())
+            if (!Configuration.NamingNormalizers.Any())
             {
                 return (containerName, blobName);
             }
 
             using (var scope = ServiceProvider.CreateScope())
             {
-                foreach (var provider in Configuration.NamingNormalizerProviders)
+                foreach (var provider in Configuration.NamingNormalizers)
                 {
                     var blobNamingNormalizerProvider = scope.ServiceProvider.GetRequiredService(provider)
-                        .As<IBlobNamingNormalizerProvider>();
+                        .As<IBlobNamingNormalizer>();
 
                     containerName = blobNamingNormalizerProvider.NormalizeContainerName(containerName);
                     blobName = blobNamingNormalizerProvider.NormalizeBlobName(blobName);

@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlobStoring.Azure
 {
-    public class DefaultAzureBlobNamingNormalizerProvider : IBlobNamingNormalizerProvider, ITransientDependency
+    public class AzureBlobNamingNormalizer : IBlobNamingNormalizer, ITransientDependency
     {
         /// <summary>
         ///https://docs.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata#container-names

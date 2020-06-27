@@ -6,11 +6,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BlobStoring.FileSystem
 {
-    public class DefaultFileSystemBlobNamingNormalizerProvider : IBlobNamingNormalizerProvider, ITransientDependency
+    public class FileSystemBlobNamingNormalizer : IBlobNamingNormalizer, ITransientDependency
     {
         private readonly IOSPlatformProvider _iosPlatformProvider;
 
-        public DefaultFileSystemBlobNamingNormalizerProvider(IOSPlatformProvider iosPlatformProvider)
+        public FileSystemBlobNamingNormalizer(IOSPlatformProvider iosPlatformProvider)
         {
             _iosPlatformProvider = iosPlatformProvider;
         }
