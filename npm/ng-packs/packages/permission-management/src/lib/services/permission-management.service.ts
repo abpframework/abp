@@ -16,7 +16,7 @@ export class PermissionManagementService {
   ): Observable<PermissionManagement.Response> {
     const request: Rest.Request<PermissionManagement.GrantedProvider> = {
       method: 'GET',
-      url: '/api/abp/permissions',
+      url: '/api/permission-management/permissions',
       params,
     };
 
@@ -33,7 +33,7 @@ export class PermissionManagementService {
   }: PermissionManagement.GrantedProvider & PermissionManagement.UpdateRequest): Observable<null> {
     const request: Rest.Request<PermissionManagement.UpdateRequest> = {
       method: 'PUT',
-      url: '/api/abp/permissions',
+      url: '/api/permission-management/permissions',
       body: { permissions },
       params: { providerKey, providerName },
     };
