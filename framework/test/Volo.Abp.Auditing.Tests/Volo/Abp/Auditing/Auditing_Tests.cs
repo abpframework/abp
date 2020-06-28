@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -215,5 +216,63 @@ namespace Volo.Abp.Auditing
 #pragma warning restore 4014
         }
 
+        private static List<string> GetBaseAuditPropertyNames()
+        {
+            return new List<string>
+            {
+                nameof(IHasCreationTime.CreationTime),
+                nameof(IMustHaveCreator.CreatorId),
+                nameof(IHasModificationTime.LastModificationTime),
+                nameof(IModificationAuditedObject.LastModifierId),
+                nameof(ISoftDelete.IsDeleted),
+                nameof(IHasDeletionTime.DeletionTime),
+                nameof(IDeletionAuditedObject.DeleterId)
+            };
+        }
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_Ignoring_Base_Auditing_Properties_For_Entity_That_Has_Audited_Attribute()
+        {
+            using (var scope = _auditingManager.BeginScope())
+            {
+                var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppFullAuditedEntityWithAudited, Guid>>();
+                await repository.InsertAsync(new AppFullAuditedEntityWithAudited(Guid.NewGuid(), "test name"));
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1
+                                                                          && x.EntityChanges[0].PropertyChanges.Any(y =>
+                                                                              !GetBaseAuditPropertyNames().Contains(y.PropertyName))));
+#pragma warning restore 4014
+        }
+
+        [Fact]
+        public virtual async Task Should_Write_AuditLog_Including_Custom_Base_Auditing_Properties_For_Entity_That_Has_Audited_Attribute()
+        {
+            using (var scope = _auditingManager.BeginScope())
+            {
+                var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithAuditedAndHasCustomAuditingProperties, Guid>>();
+                await repository.InsertAsync(new AppEntityWithAuditedAndHasCustomAuditingProperties(Guid.NewGuid())
+                {
+                    CreationTime = DateTime.Now,
+                    CreatorId = Guid.NewGuid(),
+                    LastModificationTime = DateTime.Now,
+                    LastModifierId = Guid.NewGuid(),
+                    IsDeleted = true,
+                    DeletionTime = DateTime.Now,
+                    DeleterId = Guid.NewGuid()
+                });
+                await scope.SaveAsync();
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1
+                                                                          && x.EntityChanges[0].PropertyChanges
+                                                                              .Where(y => y.PropertyName != nameof(AppEntityWithAuditedAndHasCustomAuditingProperties
+                                                                                  .ExtraProperties))
+                                                                              .All(y => GetBaseAuditPropertyNames().Contains(y.PropertyName))));
+#pragma warning restore 4014
+        }
     }
 }
