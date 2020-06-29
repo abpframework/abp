@@ -1,10 +1,9 @@
-import { ConfigState, CoreModule, noop } from '@abp/ng.core';
+import { CoreModule, noop } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { Store } from '@ngxs/store';
-import { INgxDatatableConfig, NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -52,7 +51,6 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
-    ToastContainerComponent,
   ],
   exports: [
     NgxDatatableModule,
@@ -72,7 +70,6 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
-    ToastContainerComponent,
   ],
   providers: [DatePipe],
   entryComponents: [
