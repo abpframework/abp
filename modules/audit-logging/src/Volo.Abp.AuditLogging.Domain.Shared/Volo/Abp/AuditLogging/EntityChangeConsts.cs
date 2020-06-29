@@ -2,8 +2,8 @@
 {
     public class EntityChangeConsts
     {
-        public const int MaxEntityTypeFullNameLength = 128;
+        public static int MaxEntityTypeFullNameLength { get; set; } = 128;
 
-        public const int MaxEntityIdLength = 128;
+        public static int MaxEntityIdLength { get; set; } = 128;
     }
 }

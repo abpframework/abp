@@ -2,10 +2,10 @@
 {
     public class AuditLogActionConsts
     {
-        public const int MaxServiceNameLength = 256;
+        public static int MaxServiceNameLength { get; set; } = 256;
 
-        public const int MaxMethodNameLength = 128;
+        public static int MaxMethodNameLength { get; set; } = 128;
 
-        public const int MaxParametersLength = 2000;
+        public static int MaxParametersLength { get; set; } = 2000;
     }
 }

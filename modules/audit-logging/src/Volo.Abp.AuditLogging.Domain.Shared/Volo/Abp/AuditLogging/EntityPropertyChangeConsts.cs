@@ -2,12 +2,12 @@
 {
     public class EntityPropertyChangeConsts
     {
-        public const int MaxNewValueLength = 512;
+        public static int MaxNewValueLength { get; set; } = 512;
 
-        public const int MaxOriginalValueLength = 512;
+        public static int MaxOriginalValueLength { get; set; } = 512;
 
-        public const int MaxPropertyNameLength = 128;
+        public static int MaxPropertyNameLength { get; set; } = 128;
 
-        public const int MaxPropertyTypeFullNameLength = 64;
+        public static int MaxPropertyTypeFullNameLength { get; set; } = 64;
     }
 }
