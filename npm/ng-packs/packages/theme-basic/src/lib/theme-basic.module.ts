@@ -3,7 +3,6 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgxsModule } from '@ngxs/store';
 import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
 import { ApplicationLayoutComponent } from './components/application-layout/application-layout.component';
 import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.component';
@@ -11,8 +10,10 @@ import { LogoComponent } from './components/logo/logo.component';
 import { NavItemsComponent } from './components/nav-items/nav-items.component';
 import { RoutesComponent } from './components/routes/routes.component';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
+import { CurrentUserComponent } from './components/nav-items/current-user.component';
+import { LanguagesComponent } from './components/nav-items/languages.component';
 import { BASIC_THEME_STYLES_PROVIDERS } from './providers/styles.provider';
-import { LayoutState } from './states/layout.state';
+import { BASIC_THEME_NAV_ITEM_PROVIDERS } from './providers/nav-item.provider';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -23,6 +24,17 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     LogoComponent,
     NavItemsComponent,
     RoutesComponent,
+    CurrentUserComponent,
+    LanguagesComponent,
+  ],
+  exports: [
+    ...LAYOUTS,
+    ValidationErrorComponent,
+    LogoComponent,
+    NavItemsComponent,
+    RoutesComponent,
+    CurrentUserComponent,
+    LanguagesComponent,
   ],
   imports: [
     CoreModule,
@@ -30,7 +42,6 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     NgbCollapseModule,
     NgbDropdownModule,
     NgxValidateCoreModule,
-    NgxsModule.forFeature([LayoutState]),
     NgxValidateCoreModule.forRoot({
       targetSelector: '.form-group',
       blueprints: {
@@ -52,20 +63,13 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       errorTemplate: ValidationErrorComponent,
     }),
   ],
-  exports: [
-    ...LAYOUTS,
-    ValidationErrorComponent,
-    LogoComponent,
-    NavItemsComponent,
-    RoutesComponent,
-  ],
-  entryComponents: [...LAYOUTS, ValidationErrorComponent],
+  entryComponents: [...LAYOUTS, ValidationErrorComponent, CurrentUserComponent, LanguagesComponent],
 })
 export class ThemeBasicModule {
   static forRoot(): ModuleWithProviders<ThemeBasicModule> {
     return {
       ngModule: ThemeBasicModule,
-      providers: [BASIC_THEME_STYLES_PROVIDERS],
+      providers: [BASIC_THEME_NAV_ITEM_PROVIDERS, BASIC_THEME_STYLES_PROVIDERS],
     };
   }
 }

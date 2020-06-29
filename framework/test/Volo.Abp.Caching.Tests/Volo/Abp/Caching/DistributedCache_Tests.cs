@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Testing;
@@ -79,7 +80,6 @@ namespace Volo.Abp.Caching
         {
             var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
             var otherPersonCache = GetRequiredService<IDistributedCache<Sail.Testing.Caching.PersonCacheItem>>();
-
 
             var cacheKey = Guid.NewGuid().ToString();
             const string personName = "john nash";
@@ -310,5 +310,34 @@ namespace Volo.Abp.Caching
             cacheItem2.ShouldBeNull();
         }
 
+        [Fact]
+        public async Task Should_Set_And_Get_Multiple_Items_Async()
+        {
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            await personCache.SetManyAsync(new[]
+            {
+                new KeyValuePair<string, PersonCacheItem>("john", new PersonCacheItem("John Nash")), 
+                new KeyValuePair<string, PersonCacheItem>("thomas", new PersonCacheItem("Thomas Moore"))
+            });
+
+            var cacheItems = await personCache.GetManyAsync(new[]
+            {
+                "john",
+                "thomas",
+                "baris" //doesn't exist
+            });
+            
+            cacheItems.Length.ShouldBe(3);
+            cacheItems[0].Key.ShouldBe("john");
+            cacheItems[0].Value.Name.ShouldBe("John Nash");
+            cacheItems[1].Key.ShouldBe("thomas");
+            cacheItems[1].Value.Name.ShouldBe("Thomas Moore");
+            cacheItems[2].Key.ShouldBe("baris");
+            cacheItems[2].Value.ShouldBeNull();
+            
+            (await personCache.GetAsync("john")).Name.ShouldBe("John Nash");
+            (await personCache.GetAsync("baris")).ShouldBeNull();
+        }
     }
 }

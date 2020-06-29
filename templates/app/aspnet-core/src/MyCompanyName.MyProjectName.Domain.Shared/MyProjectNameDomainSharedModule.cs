@@ -26,6 +26,11 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            MyProjectNameModulePropertyConfigurator.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpVirtualFileSystemOptions>(options =>

@@ -1,32 +1,13 @@
-import {
-  AuthGuard,
-  DynamicLayoutComponent,
-  PermissionGuard,
-  ReplaceableComponents,
-  ReplaceableRouteContainerComponent,
-} from '@abp/ng.core';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { DynamicLayoutComponent } from '@abp/ng.core';
+import { Routes, RouterModule } from '@angular/router';
 import { MyProjectNameComponent } from './components/my-project-name.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DynamicLayoutComponent,
-    canActivate: [AuthGuard, PermissionGuard],
-    children: [
-      {
-        path: '',
-        component: ReplaceableRouteContainerComponent,
-        data: {
-          requiredPolicy: '',
-          replaceableComponent: {
-            defaultComponent: MyProjectNameComponent,
-            key: 'MyProjectName.MyProjectNameComponent',
-          } as ReplaceableComponents.RouteData<MyProjectNameComponent>,
-        },
-      },
-    ],
+    pathMatch: 'full',
+    component: MyProjectNameComponent,
   },
 ];
 

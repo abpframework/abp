@@ -29,11 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

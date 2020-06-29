@@ -51,7 +51,7 @@ namespace Volo.Abp.Cli.Commands
             var apiUrl = commandLineArgs.Options.GetOrNull(Options.ApiUrl.Short, Options.ApiUrl.Long);
             if (string.IsNullOrWhiteSpace(apiUrl))
             {
-                var environmentJson = File.ReadAllText("src/environments/environment.ts").Split("export const environment = ")[1].Replace(";", " ");
+                var environmentJson = File.ReadAllText("projects/dev-app/src/environments/environment.ts").Split("export const environment = ")[1].Replace(";", " ");
                 var environment = JObject.Parse(environmentJson);
                 apiUrl = environment["apis"]["default"]["url"].ToString();
             }
@@ -61,7 +61,7 @@ namespace Volo.Abp.Cli.Commands
 
             output = commandLineArgs.Options.GetOrNull(Options.Output.Short, Options.Output.Long);
             if (!string.IsNullOrWhiteSpace(output) && !(output.EndsWith("/") || output.EndsWith("\\")))
-            { 
+            {
                 output += "/";
             }
 
@@ -110,7 +110,7 @@ namespace Volo.Abp.Cli.Commands
                 if (rootPath != "app")
                 {
                     Logger.LogInformation($"{rootPath} directory is creating");
-                }                
+                }
 
                 if (rootPath == "app")
                 {
@@ -536,7 +536,7 @@ namespace Volo.Abp.Cli.Commands
 
                     modelFileText.AppendLine(Environment.NewLine);
                     modelFileText.AppendLine($"import {{ {baseTypeName} }} from '{baseTypeKebabCase}';");
-                    
+
                     extends = "extends " + (!string.IsNullOrWhiteSpace(customBaseTypeName) ? customBaseTypeName : baseTypeName);
 
                     var modelIndex = CreateType(data, baseType, rootPath, modelIndexList, controllerPathName);
@@ -628,7 +628,7 @@ namespace Volo.Abp.Cli.Commands
                         {
                             from = "./" + propertyTypeKebabCase;
                         }
-                         
+
                         modelFileText.Insert(0, $"import {{ {propertyType} }} from '{from}';");
                         modelFileText.Insert(0, Environment.NewLine);
                         modelIndexList.Add(modelIndex);

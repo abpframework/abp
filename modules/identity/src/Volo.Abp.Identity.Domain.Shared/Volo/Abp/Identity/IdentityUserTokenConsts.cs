@@ -2,8 +2,8 @@
 {
     public static class IdentityUserTokenConsts
     {
-        public const int MaxLoginProviderLength = 64;
+        public static int MaxLoginProviderLength { get; set; } = 64;
 
-        public const int MaxNameLength = 128;
+        public static int MaxNameLength { get; set; } = 128;
     }
 }

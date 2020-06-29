@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 {
@@ -34,7 +35,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
         public class RoleInfoModel
         {
             [Required]
-            [StringLength(IdentityRoleConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
             [Display(Name = "DisplayName:RoleName")]
             public string Name { get; set; }
 
