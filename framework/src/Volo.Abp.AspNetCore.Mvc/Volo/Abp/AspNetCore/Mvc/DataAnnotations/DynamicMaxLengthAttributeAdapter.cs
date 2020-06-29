@@ -9,9 +9,9 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
     public class DynamicMaxLengthAttributeAdapter : AttributeAdapterBase<DynamicMaxLengthAttribute>
     {
         private readonly string _max;
-        
+
         public DynamicMaxLengthAttributeAdapter(
-            DynamicMaxLengthAttribute attribute, 
+            DynamicMaxLengthAttribute attribute,
             IStringLocalizer stringLocalizer)
             : base(attribute, stringLocalizer)
         {
@@ -33,9 +33,9 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
         {
             Check.NotNull(context, nameof(context));
 
-                       MergeAttribute(context.Attributes, "data-val", "true");
-                       MergeAttribute(context.Attributes, "data-val-maxlength", GetErrorMessage(context));
-                       MergeAttribute(context.Attributes, "data-val-maxlength-max", _max);
+            MergeAttribute(context.Attributes, "data-val", "true");
+            MergeAttribute(context.Attributes, "data-val-maxlength", GetErrorMessage(context));
+            MergeAttribute(context.Attributes, "data-val-maxlength-max", _max);
 
             if (Attribute.Length != int.MaxValue)
             {
