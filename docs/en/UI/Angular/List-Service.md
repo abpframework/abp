@@ -73,7 +73,7 @@ Bind `ListService` to ngx-datatable like this:
 
 You may use observables in combination with [AsyncPipe](https://angular.io/guide/observables-in-angular#async-pipe) of Angular instead. Here are some possibilities:
 
-```ts
+```js
   book$ = this.list.hookToQuery(query => this.bookService.getListByInput(query));
 ```
 
@@ -95,7 +95,7 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 ...or...
 
 
-```ts
+```js
   @Select(BookState.getBooks)
   books$: Observable<BookDto[]>;
 
@@ -127,7 +127,7 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 
 `ListService` exposes a `get` method to trigger a request with the current query. So, basically, whenever a create, update, or delete action resolves, you can call `this.list.get();` and it will call hooked stream creator again.
 
-```ts
+```js
   this.bookService.createByInput(form.value)
     .subscribe(() => {
       this.list.get();
@@ -138,7 +138,7 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 
 ...or...
 
-```ts
+```js
   this.store.dispatch(new DeleteBook(id)).subscribe(this.list.get);
 ```
 
