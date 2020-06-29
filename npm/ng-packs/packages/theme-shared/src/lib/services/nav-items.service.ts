@@ -45,5 +45,5 @@ function sortItems(a: NavItem, b: NavItem) {
   if (!a.order) return 1;
   if (!b.order) return -1;
 
-  return a.order < b.order ? -1 : 1;
+  return a.order - b.order;
 }

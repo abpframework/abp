@@ -2,10 +2,10 @@
 {
     public class IdentityClaimTypeConsts
     {
-        public const int MaxNameLength = 256;
-        public const int MaxRegexLength = 512;
-        public const int MaxRegexDescriptionLength = 128;
-        public const int MaxDescriptionLength = 256;
-        public const int MaxConcurrencyStampLength = 256;
+        public static int MaxNameLength { get; set; } = 256;
+        public static int MaxRegexLength { get; set; } = 512;
+        public static int MaxRegexDescriptionLength { get; set; } = 128;
+        public static int MaxDescriptionLength { get; set; } = 256;
+        public static int MaxConcurrencyStampLength { get; set; } = 256;
     }
 }

@@ -19,7 +19,9 @@ const publish = async () => {
     process.exit(1);
   }
 
-  const registry = program.preview ? 'http://localhost:4873' : 'https://registry.npmjs.org';
+  const registry = program.preview
+    ? 'https://www.myget.org/F/abp-nightly/npm'
+    : 'https://registry.npmjs.org';
 
   try {
     await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });

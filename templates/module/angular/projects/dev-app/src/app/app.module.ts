@@ -13,7 +13,7 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
-import { SharedModule } from './shared/shared.module';
+import { ThemeBasicModule } from '@abp/ng.theme.basic';
 
 @NgModule({
   imports: [
@@ -32,7 +32,7 @@ import { SharedModule } from './shared/shared.module';
     TenantManagementConfigModule.forRoot(),
     SettingManagementConfigModule.forRoot(),
     NgxsModule.forRoot(),
-    SharedModule,
+    ThemeBasicModule.forRoot(),
   ],
   providers: [APP_ROUTE_PROVIDER],
   declarations: [AppComponent],

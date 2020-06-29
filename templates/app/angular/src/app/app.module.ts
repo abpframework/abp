@@ -8,13 +8,11 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
+import { APP_ROUTE_PROVIDER } from './route.provider';
 
 @NgModule({
   imports: [
@@ -31,9 +29,9 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     SettingManagementConfigModule.forRoot(),
     NgxsModule.forRoot(),
     ThemeBasicModule.forRoot(),
-    ...(environment.production ? [] : LOGGERS),
   ],
   declarations: [AppComponent],
+  providers: [APP_ROUTE_PROVIDER],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

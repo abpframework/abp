@@ -16,7 +16,7 @@ $Version = $NextVersion;
 }
 
 if(-Not $Registry) {
-$Registry = "http://localhost:4873";
+$Registry = "https://www.myget.org/F/abp-nightly/npm";
 }
 
 $commands = (

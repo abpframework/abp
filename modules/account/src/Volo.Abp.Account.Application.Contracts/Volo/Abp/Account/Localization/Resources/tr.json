@@ -40,6 +40,9 @@
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "self-registration etkin mi ?",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "Bir kullanıcının hesabı kendisi tarafından kaydedip kaydedememesidir.",
     "DisplayName:Abp.Account.EnableLocalLogin": "Yerel bir hesapla kimlik doğrulaması",
-    "Description:Abp.Account.EnableLocalLogin": "Sunucunun, kullanıcıların yerel bir hesapla kimlik doğrulamasına izin verip vermeyeceğini belirtir."
+    "Description:Abp.Account.EnableLocalLogin": "Sunucunun, kullanıcıların yerel bir hesapla kimlik doğrulamasına izin verip vermeyeceğini belirtir.",
+    "LoggedOutTitle": "Çıkış Yaptınız",
+    "LoggedOutText": "Çıkış yaptınız ve birazdan yönlendirileceksiniz.",
+    "ReturnToText": "{0} uygulamasına dönmek için tıklayın."
   }
 }

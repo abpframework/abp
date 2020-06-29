@@ -22,8 +22,6 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>

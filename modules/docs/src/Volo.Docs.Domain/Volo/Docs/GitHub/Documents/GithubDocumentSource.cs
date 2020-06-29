@@ -38,7 +38,7 @@ namespace Volo.Docs.GitHub.Documents
             var rawDocumentUrl = rawRootUrl + documentName;
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var isParameterDocument = documentName == project.ParametersDocumentName;
-            var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + languageCode + "/" + documentName;
+            var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/").EnsureEndsWith('/') + languageCode + "/" + documentName;
             var localDirectory = "";
             var fileName = documentName;
 

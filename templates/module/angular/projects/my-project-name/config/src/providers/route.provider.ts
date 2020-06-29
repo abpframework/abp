@@ -18,7 +18,6 @@ export function configureRoutes(routes: RoutesService) {
       {
         path: '/my-project-name',
         name: eMyProjectNameRouteNames.MyProjectName,
-        parentName: eThemeSharedRouteNames.Administration,
         iconClass: 'fas fa-book',
         layout: eLayoutType.application,
         order: 3,

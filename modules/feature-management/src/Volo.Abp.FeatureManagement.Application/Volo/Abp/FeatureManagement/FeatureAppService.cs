@@ -16,7 +16,6 @@ namespace Volo.Abp.FeatureManagement
     public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppService
     {
         protected FeatureManagementOptions Options { get; }
-
         protected IFeatureManager FeatureManager { get; }
         protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
 
