@@ -152,7 +152,7 @@ namespace Volo.Abp.Caching
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
-            if (considerUow)
+            if (ShouldConsiderUow(considerUow))
             {
                 var value = GetUnitOfWorkCache().GetOrDefault(key)?.GetUnRemovedValueOrNull();
                 if (value != null)
@@ -198,25 +198,47 @@ namespace Volo.Abp.Caching
                 );
             }
 
+            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+            var notCachedKeys = new List<TCacheKey>();
+            if (ShouldConsiderUow(considerUow))
+            {
+                var cache = GetUnitOfWorkCache();
+                foreach (var key in keyArray)
+                {
+                    var value = cache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
+                    if (value != null)
+                    {
+                        cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                    }
+                }
+
+                notCachedKeys = keyArray.Except(cachedValues.Select(x => x.Key)).ToList();
+                if (!notCachedKeys.Any())
+                {
+                    return cachedValues.ToArray();
+                }
+            }
+
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
             byte[][] cachedBytes;
 
+            var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
             try
             {
-                cachedBytes = cacheSupportsMultipleItems.GetMany(keyArray.Select(NormalizeKey));
+                cachedBytes = cacheSupportsMultipleItems.GetMany(readKeys.Select(NormalizeKey));
             }
             catch (Exception ex)
             {
                 if (hideErrors == true)
                 {
                     HandleException(ex);
-                    return ToCacheItemsWithDefaultValues(keyArray);
+                    return ToCacheItemsWithDefaultValues(readKeys);
                 }
 
                 throw;
             }
 
-            return ToCacheItems(cachedBytes, keyArray);
+            return cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
         }
 
         protected virtual KeyValuePair<TCacheKey, TCacheItem>[] GetManyFallback(
@@ -266,13 +288,36 @@ namespace Volo.Abp.Caching
                 );
             }
 
+            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+            var notCachedKeys = new List<TCacheKey>();
+            if (ShouldConsiderUow(considerUow))
+            {
+                var cache = GetUnitOfWorkCache();
+                foreach (var key in keyArray)
+                {
+                    var value = cache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
+                    if (value != null)
+                    {
+                        cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
+                    }
+                }
+
+                notCachedKeys = keyArray.Except(cachedValues.Select(x => x.Key)).ToList();
+                if (!notCachedKeys.Any())
+                {
+                    return cachedValues.ToArray();
+                }
+            }
+
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
             byte[][] cachedBytes;
+
+            var readKeys = notCachedKeys.Any() ? notCachedKeys.ToArray() : keyArray;
 
             try
             {
                 cachedBytes = await cacheSupportsMultipleItems.GetManyAsync(
-                    keyArray.Select(NormalizeKey),
+                    readKeys.Select(NormalizeKey),
                     CancellationTokenProvider.FallbackToProvider(token)
                 );
             }
@@ -281,13 +326,13 @@ namespace Volo.Abp.Caching
                 if (hideErrors == true)
                 {
                     await HandleExceptionAsync(ex);
-                    return ToCacheItemsWithDefaultValues(keyArray);
+                    return ToCacheItemsWithDefaultValues(readKeys);
                 }
 
                 throw;
             }
 
-            return ToCacheItems(cachedBytes, keyArray);
+            return cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
         }
 
         protected virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyFallbackAsync(
@@ -340,7 +385,7 @@ namespace Volo.Abp.Caching
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
-            if (considerUow)
+            if (ShouldConsiderUow(considerUow))
             {
                 var value = GetUnitOfWorkCache().GetOrDefault(key)?.GetUnRemovedValueOrNull();
                 if (value != null)
@@ -410,7 +455,7 @@ namespace Volo.Abp.Caching
 
                 value = factory();
 
-                if (considerUow)
+                if (ShouldConsiderUow(considerUow))
                 {
                     var uowCache = GetUnitOfWorkCache();
                     if (uowCache.TryGetValue(key, out var item))
@@ -465,7 +510,7 @@ namespace Volo.Abp.Caching
 
                 value = await factory();
 
-                if (considerUow)
+                if (ShouldConsiderUow(considerUow))
                 {
                     var uowCache = GetUnitOfWorkCache();
                     if (uowCache.TryGetValue(key, out var item))
@@ -523,16 +568,16 @@ namespace Volo.Abp.Caching
                 }
             }
 
-            if (considerUow)
+            if (ShouldConsiderUow(considerUow))
             {
-                var ouwCache = GetUnitOfWorkCache();
-                if (ouwCache.TryGetValue(key, out _))
+                var cache = GetUnitOfWorkCache();
+                if (cache.TryGetValue(key, out _))
                 {
-                    ouwCache[key].SetValue(value);
+                    cache[key].SetValue(value);
                 }
                 else
                 {
-                    ouwCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
+                    cache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
@@ -590,16 +635,16 @@ namespace Volo.Abp.Caching
                 }
             }
 
-           if (considerUow)
+           if (ShouldConsiderUow(considerUow))
            {
-               var ouwCache = GetUnitOfWorkCache();
-               if (ouwCache.TryGetValue(key, out _))
+               var cache = GetUnitOfWorkCache();
+               if (cache.TryGetValue(key, out _))
                {
-                   ouwCache[key].SetValue(value);
+                   cache[key].SetValue(value);
                }
                else
                {
-                   ouwCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
+                   cache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
                }
 
                // ReSharper disable once PossibleNullReferenceException
@@ -632,24 +677,55 @@ namespace Volo.Abp.Caching
                 return;
             }
 
-            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+            void SetRealCache()
+            {
+                hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
-            try
-            {
-                cacheSupportsMultipleItems.SetMany(
-                    ToRawCacheItems(itemsArray),
-                    options ?? DefaultCacheOptions
-                );
-            }
-            catch (Exception ex)
-            {
-                if (hideErrors == true)
+                try
                 {
-                    HandleException(ex);
-                    return;
+                    cacheSupportsMultipleItems.SetMany(
+                        ToRawCacheItems(itemsArray),
+                        options ?? DefaultCacheOptions
+                    );
+                }
+                catch (Exception ex)
+                {
+                    if (hideErrors == true)
+                    {
+                        HandleException(ex);
+                        return;
+                    }
+
+                    throw;
+                }
+            }
+
+            if (ShouldConsiderUow(considerUow))
+            {
+                var cache = GetUnitOfWorkCache();
+
+                foreach (var pair in itemsArray)
+                {
+                    if (cache.TryGetValue(pair.Key, out _))
+                    {
+                        cache[pair.Key].SetValue(pair.Value);
+                    }
+                    else
+                    {
+                        cache.Add(pair.Key, new UnitOfWorkCacheItem<TCacheItem>(pair.Value));
+                    }
                 }
 
-                throw;
+                // ReSharper disable once PossibleNullReferenceException
+                UnitOfWorkManager.Current.OnCompleted(() =>
+                {
+                    SetRealCache();
+                    return Task.CompletedTask;
+                });
+            }
+            else
+            {
+                SetRealCache();
             }
         }
 
@@ -709,25 +785,52 @@ namespace Volo.Abp.Caching
                 return;
             }
 
-            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+            async Task SetRealCache()
+            {
+                hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
-            try
-            {
-                await cacheSupportsMultipleItems.SetManyAsync(
-                    ToRawCacheItems(itemsArray),
-                    options ?? DefaultCacheOptions,
-                    CancellationTokenProvider.FallbackToProvider(token)
-                );
-            }
-            catch (Exception ex)
-            {
-                if (hideErrors == true)
+                try
                 {
-                    await HandleExceptionAsync(ex);
-                    return;
+                    await cacheSupportsMultipleItems.SetManyAsync(
+                        ToRawCacheItems(itemsArray),
+                        options ?? DefaultCacheOptions,
+                        CancellationTokenProvider.FallbackToProvider(token)
+                    );
+                }
+                catch (Exception ex)
+                {
+                    if (hideErrors == true)
+                    {
+                        await HandleExceptionAsync(ex);
+                        return;
+                    }
+
+                    throw;
+                }
+            }
+
+            if (ShouldConsiderUow(considerUow))
+            {
+                var cache = GetUnitOfWorkCache();
+
+                foreach (var pair in itemsArray)
+                {
+                    if (cache.TryGetValue(pair.Key, out _))
+                    {
+                        cache[pair.Key].SetValue(pair.Value);
+                    }
+                    else
+                    {
+                        cache.Add(pair.Key, new UnitOfWorkCacheItem<TCacheItem>(pair.Value));
+                    }
                 }
 
-                throw;
+                // ReSharper disable once PossibleNullReferenceException
+                UnitOfWorkManager.Current.OnCompleted(SetRealCache);
+            }
+            else
+            {
+                await SetRealCache();
             }
         }
 
@@ -854,12 +957,12 @@ namespace Volo.Abp.Caching
                 }
             }
 
-            if (considerUow)
+            if (ShouldConsiderUow(considerUow))
             {
-                var ouwCache = GetUnitOfWorkCache();
-                if (ouwCache.TryGetValue(key, out _))
+                var cache = GetUnitOfWorkCache();
+                if (cache.TryGetValue(key, out _))
                 {
-                    ouwCache[key].RemoveValue();
+                    cache[key].RemoveValue();
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
@@ -909,12 +1012,12 @@ namespace Volo.Abp.Caching
                 }
             }
 
-            if (considerUow)
+            if (ShouldConsiderUow(considerUow))
             {
-                var ouwCache = GetUnitOfWorkCache();
-                if (ouwCache.TryGetValue(key, out _))
+                var cache = GetUnitOfWorkCache();
+                if (cache.TryGetValue(key, out _))
                 {
-                    ouwCache[key].RemoveValue();
+                    cache[key].RemoveValue();
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
@@ -992,6 +1095,11 @@ namespace Volo.Abp.Caching
             return keys
                 .Select(key => new KeyValuePair<TCacheKey, TCacheItem>(key, default))
                 .ToArray();
+        }
+
+        protected virtual bool ShouldConsiderUow(bool considerUow)
+        {
+            return considerUow && UnitOfWorkManager.Current != null;
         }
 
         protected virtual string GetUnitOfWorkCacheKey()
