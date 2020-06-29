@@ -18,10 +18,10 @@
   <ng-template #dropdownLink let-route>
     <li
       #navbarRootDropdown
-      *abpPermission="route.requiredPolicy"
-      [abpVisibility]="routeContainer"
       class="nav-item dropdown"
       display="static"
+      *ngIf="route.children?.length"
+      [abpPermission]="route.requiredPolicy"
       (click)="
         navbarRootDropdown.expand
           ? (navbarRootDropdown.expand = false)
@@ -69,13 +69,12 @@
 
   <ng-template #dropdownChild let-child>
     <div
-      [abpVisibility]="childrenContainer"
       class="dropdown-submenu"
       ngbDropdown
       #dropdownSubmenu="ngbDropdown"
       placement="right-top"
       [autoClose]="true"
-      *abpPermission="child.requiredPolicy"
+      [abpPermission]="child.requiredPolicy"
     >
       <div ngbDropdownToggle [class.dropdown-toggle]="false">
         <a

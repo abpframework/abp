@@ -325,7 +325,7 @@ public async Task<int> CreateAsync(string name)
 
 If your intent is just to save the changes after creating/updating/deleting an entity, it is suggested to use the `autoSave` option instead of manually using the `CurrentUnitOfWork.SaveChangesAsync()`.
 
-> **Note-1**: All changes are automatically saved when a unit of work ends without any error. So, don't call `SaveChangesAsync()` unless you really need it.
+> **Note-1**: All changes are automatically saved when a unit of work ends without any error. So, don't call `SaveChangesAsync()` and don't set `autoSave` to `true` unless you really need it.
 >
 > **Note-2**: If you use `Guid` as the primary key, you never need to save changes on insert to just get the generated id, because `Guid` keys are set in the application and are immediately available once you create a new entity.
 

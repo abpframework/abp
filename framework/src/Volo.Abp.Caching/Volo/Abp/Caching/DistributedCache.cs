@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,16 +31,16 @@ namespace Volo.Abp.Caching
             IDistributedCacheSerializer serializer,
             IDistributedCacheKeyNormalizer keyNormalizer,
             IHybridServiceScopeFactory serviceScopeFactory) : base(
-                distributedCacheOption: distributedCacheOption,
-                cache: cache,
-                cancellationTokenProvider: cancellationTokenProvider,
-                serializer: serializer,
-                keyNormalizer: keyNormalizer,
-                serviceScopeFactory: serviceScopeFactory)
+            distributedCacheOption: distributedCacheOption,
+            cache: cache,
+            cancellationTokenProvider: cancellationTokenProvider,
+            serializer: serializer,
+            keyNormalizer: keyNormalizer,
+            serviceScopeFactory: serviceScopeFactory)
         {
         }
-
     }
+
     /// <summary>
     /// Represents a distributed cache of <typeparamref name="TCacheItem" /> type.
     /// Uses a generic cache key type of <typeparamref name="TCacheKey" /> type.
@@ -148,19 +151,151 @@ namespace Volo.Abp.Caching
             {
                 if (hideErrors == true)
                 {
-                    AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
+                    HandleException(ex);
                     return null;
                 }
 
                 throw;
             }
 
-            if (cachedBytes == null)
+            return ToCacheItem(cachedBytes);
+        }
+
+        public virtual KeyValuePair<TCacheKey, TCacheItem>[] GetMany(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null)
+        {
+            var keyArray = keys.ToArray();
+
+            var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
+            if (cacheSupportsMultipleItems == null)
             {
-                return null;
+                return GetManyFallback(
+                    keyArray,
+                    hideErrors
+                );
             }
 
-            return Serializer.Deserialize<TCacheItem>(cachedBytes);
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+            byte[][] cachedBytes;
+
+            try
+            {
+                cachedBytes = cacheSupportsMultipleItems.GetMany(keyArray.Select(NormalizeKey));
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    HandleException(ex);
+                    return ToCacheItemsWithDefaultValues(keyArray);
+                }
+
+                throw;
+            }
+            
+            return ToCacheItems(cachedBytes, keyArray);
+        }
+
+        protected virtual KeyValuePair<TCacheKey, TCacheItem>[] GetManyFallback(
+            TCacheKey[] keys,
+            bool? hideErrors = null)
+        {
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                return keys
+                    .Select(key => new KeyValuePair<TCacheKey, TCacheItem>(
+                            key,
+                            Get(key, hideErrors: false)
+                        )
+                    ).ToArray();
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    HandleException(ex);
+                    return ToCacheItemsWithDefaultValues(keys);
+                }
+
+                throw;
+            }
+        }
+
+        public virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyAsync(
+            IEnumerable<TCacheKey> keys,
+            bool? hideErrors = null,
+            CancellationToken token = default)
+        {
+            var keyArray = keys.ToArray();
+
+            var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
+            if (cacheSupportsMultipleItems == null)
+            {
+                return await GetManyFallbackAsync(
+                    keyArray,
+                    hideErrors,
+                    token
+                );
+            }
+
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+            byte[][] cachedBytes;
+
+            try
+            {
+                cachedBytes = await cacheSupportsMultipleItems.GetManyAsync(
+                    keyArray.Select(NormalizeKey),
+                    CancellationTokenProvider.FallbackToProvider(token)
+                );
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    await HandleExceptionAsync(ex);
+                    return ToCacheItemsWithDefaultValues(keyArray);
+                }
+
+                throw;
+            }
+            
+            return ToCacheItems(cachedBytes, keyArray);
+        }
+
+        protected virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyFallbackAsync(
+            TCacheKey[] keys,
+            bool? hideErrors = null,
+            CancellationToken token = default)
+        {
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                var result = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+
+                foreach (var key in keys)
+                {
+                    result.Add(new KeyValuePair<TCacheKey, TCacheItem>(
+                        key,
+                        await GetAsync(key, false, token))
+                    );
+                }
+
+                return result.ToArray();
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    await HandleExceptionAsync(ex);
+                    return ToCacheItemsWithDefaultValues(keys);
+                }
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -307,7 +442,7 @@ namespace Volo.Abp.Caching
             {
                 if (hideErrors == true)
                 {
-                    AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
+                    HandleException(ex);
                     return;
                 }
 
@@ -354,14 +489,156 @@ namespace Volo.Abp.Caching
             }
         }
 
-        /// <summary>
-        /// Refreshes the cache value of the given key, and resets its sliding expiration timeout.
-        /// </summary>
-        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
-        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        public void SetMany(
+            IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
+            DistributedCacheEntryOptions options = null,
+            bool? hideErrors = null)
+        {
+            var itemsArray = items.ToArray();
+
+            var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
+            if (cacheSupportsMultipleItems == null)
+            {
+                SetManyFallback(
+                    itemsArray,
+                    options,
+                    hideErrors
+                );
+                
+                return;
+            }
+            
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                cacheSupportsMultipleItems.SetMany(
+                    ToRawCacheItems(itemsArray),
+                    options ?? DefaultCacheOptions
+                );
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    HandleException(ex);
+                    return;
+                }
+
+                throw;
+            }
+        }
+        
+        protected virtual void SetManyFallback(
+            KeyValuePair<TCacheKey, TCacheItem>[] items,
+            DistributedCacheEntryOptions options = null,
+            bool? hideErrors = null)
+        {
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+            
+            try
+            {
+                foreach (var item in items)
+                {
+                    Set(
+                        item.Key,
+                        item.Value,
+                        options: options,
+                        hideErrors: false
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    HandleException(ex);
+                    return;
+                }
+
+                throw;
+            }
+        }
+
+        public virtual async Task SetManyAsync(
+            IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
+            DistributedCacheEntryOptions options = null,
+            bool? hideErrors = null,
+            CancellationToken token = default)
+        {
+            var itemsArray = items.ToArray();
+
+            var cacheSupportsMultipleItems = Cache as ICacheSupportsMultipleItems;
+            if (cacheSupportsMultipleItems == null)
+            {
+                await SetManyFallbackAsync(
+                    itemsArray,
+                    options,
+                    hideErrors,
+                    token
+                );
+                
+                return;
+            }
+            
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                await cacheSupportsMultipleItems.SetManyAsync(
+                    ToRawCacheItems(itemsArray),
+                    options ?? DefaultCacheOptions,
+                    CancellationTokenProvider.FallbackToProvider(token)
+                );
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    await HandleExceptionAsync(ex);
+                    return;
+                }
+
+                throw;
+            }
+        }
+        
+        protected virtual async Task SetManyFallbackAsync(
+            KeyValuePair<TCacheKey, TCacheItem>[] items,
+            DistributedCacheEntryOptions options = null,
+            bool? hideErrors = null,
+            CancellationToken token = default)
+        {
+            hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
+
+            try
+            {
+                foreach (var item in items)
+                {
+                    await SetAsync(
+                        item.Key,
+                        item.Value,
+                        options: options,
+                        hideErrors: false,
+                        token: token
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                if (hideErrors == true)
+                {
+                    await HandleExceptionAsync(ex);
+                    return;
+                }
+
+                throw;
+            }
+        }
+
         public virtual void Refresh(
             TCacheKey key, bool?
-            hideErrors = null)
+                hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -373,20 +650,14 @@ namespace Volo.Abp.Caching
             {
                 if (hideErrors == true)
                 {
-                    AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
+                    HandleException(ex);
                     return;
                 }
 
                 throw;
             }
         }
-        /// <summary>
-        /// Refreshes the cache value of the given key, and resets its sliding expiration timeout.
-        /// </summary>
-        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
-        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
-        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
-        /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
+
         public virtual async Task RefreshAsync(
             TCacheKey key,
             bool? hideErrors = null,
@@ -410,11 +681,6 @@ namespace Volo.Abp.Caching
             }
         }
 
-        /// <summary>
-        /// Removes the cache item for given key from cache.
-        /// </summary>
-        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
-        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         public virtual void Remove(
             TCacheKey key,
             bool? hideErrors = null)
@@ -429,7 +695,7 @@ namespace Volo.Abp.Caching
             {
                 if (hideErrors == true)
                 {
-                    AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
+                    HandleException(ex);
                     return;
                 }
 
@@ -437,13 +703,6 @@ namespace Volo.Abp.Caching
             }
         }
 
-        /// <summary>
-        /// Removes the cache item for given key from cache.
-        /// </summary>
-        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
-        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
-        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
-        /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
         public virtual async Task RemoveAsync(
             TCacheKey key,
             bool? hideErrors = null,
@@ -467,6 +726,11 @@ namespace Volo.Abp.Caching
             }
         }
 
+        protected virtual void HandleException(Exception ex)
+        {
+            AsyncHelper.RunSync(() => HandleExceptionAsync(ex));
+        }
+        
         protected virtual async Task HandleExceptionAsync(Exception ex)
         {
             Logger.LogException(ex, LogLevel.Warning);
@@ -477,6 +741,57 @@ namespace Volo.Abp.Caching
                     .GetRequiredService<IExceptionNotifier>()
                     .NotifyAsync(new ExceptionNotificationContext(ex, LogLevel.Warning));
             }
+        }
+        
+        protected virtual KeyValuePair<TCacheKey, TCacheItem>[] ToCacheItems(byte[][] itemBytes, TCacheKey[] itemKeys)
+        {
+            if (itemBytes.Length != itemKeys.Length)
+            {
+                throw new AbpException("count of the item bytes should be same with the count of the given keys");
+            }
+
+            var result = new List<KeyValuePair<TCacheKey, TCacheItem>>();
+
+            for (int i = 0; i < itemKeys.Length; i++)
+            {
+                result.Add(
+                    new KeyValuePair<TCacheKey, TCacheItem>(
+                        itemKeys[i],
+                        ToCacheItem(itemBytes[i])
+                    )
+                );
+            }
+
+            return result.ToArray();
+        }
+        
+        [CanBeNull]
+        protected virtual TCacheItem ToCacheItem([CanBeNull] byte[] bytes)
+        {
+            if (bytes == null)
+            {
+                return null;
+            }
+
+            return Serializer.Deserialize<TCacheItem>(bytes);
+        }
+
+
+        protected virtual KeyValuePair<string, byte[]>[] ToRawCacheItems(KeyValuePair<TCacheKey, TCacheItem>[] items)
+        {
+            return items
+                .Select(i => new KeyValuePair<string, byte[]>(
+                        NormalizeKey(i.Key),
+                        Serializer.Serialize(i.Value)
+                    )
+                ).ToArray();
+        }
+        
+        private static KeyValuePair<TCacheKey, TCacheItem>[] ToCacheItemsWithDefaultValues(TCacheKey[] keys)
+        {
+            return keys
+                .Select(key => new KeyValuePair<TCacheKey, TCacheItem>(key, default))
+                .ToArray();
         }
     }
 }

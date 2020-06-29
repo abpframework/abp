@@ -1,0 +1,39 @@
+<ngx-datatable default [rows]="data" [count]="recordsTotal" [list]="list">
+  <ngx-datatable-column
+    [name]="actionsText | abpLocalization"
+    [maxWidth]="columnWidths[0]"
+    [width]="columnWidths[0]"
+    [sortable]="false"
+  >
+    <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
+      <ng-container
+        *ngTemplateOutlet="actionsTemplate || gridActions; context: { $implicit: row, index: i }"
+      ></ng-container>
+      <ng-template #gridActions>
+        <abp-grid-actions
+          [index]="i"
+          [record]="row"
+          text="LanguageManagement::Actions"
+        ></abp-grid-actions>
+      </ng-template>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ng-container *ngFor="let prop of propList; let i = index; trackBy: trackByFn">
+    <ngx-datatable-column
+      [width]="columnWidths[i + 1] || 200"
+      [name]="prop.displayName | abpLocalization"
+      [prop]="prop.name"
+      [sortable]="prop.sortable"
+    >
+      <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
+        <ng-container
+          *abpPropData="let data; fromList: propList; withRecord: row; atIndex: i"
+          [abpPermission]="prop.permission"
+        >
+          <div *ngIf="prop.visible(data)" [innerHTML]="getContent(prop, data) | async"></div>
+        </ng-container>
+      </ng-template>
+    </ngx-datatable-column>
+  </ng-container>
+</ngx-datatable>

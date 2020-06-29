@@ -2,7 +2,6 @@ import { eLayoutType, RoutesService, SettingTabsService } from '@abp/ng.core';
 import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 import { APP_INITIALIZER } from '@angular/core';
 import { debounceTime, map } from 'rxjs/operators';
-import { eSettingManagementPolicyNames } from '../enums/policy-names';
 import { eSettingManagementRouteNames } from '../enums/route-names';
 
 export const SETTING_MANAGEMENT_ROUTE_PROVIDERS = [
@@ -22,9 +21,8 @@ export function configureRoutes(routes: RoutesService) {
         name: eSettingManagementRouteNames.Settings,
         path: '/setting-management',
         parentName: eThemeSharedRouteNames.Administration,
-        requiredPolicy: eSettingManagementPolicyNames.Settings,
         layout: eLayoutType.application,
-        order: 6,
+        order: 100,
         iconClass: 'fa fa-cog',
       },
     ]);

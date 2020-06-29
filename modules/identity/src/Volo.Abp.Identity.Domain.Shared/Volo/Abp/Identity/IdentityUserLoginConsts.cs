@@ -2,8 +2,8 @@
 {
     public static class IdentityUserLoginConsts
     {
-        public const int MaxLoginProviderLength = 64;
-        public const int MaxProviderKeyLength = 196;
-        public const int MaxProviderDisplayNameLength = 128;
+        public static int MaxLoginProviderLength { get; set; } = 64;
+        public static int MaxProviderKeyLength { get; set; } = 196;
+        public static int MaxProviderDisplayNameLength { get; set; } = 128;
     }
 }

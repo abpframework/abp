@@ -11,23 +11,25 @@ namespace Volo.Abp.SettingManagement
     public class SettingManagementStore : ISettingManagementStore, ITransientDependency
     {
         protected IDistributedCache<SettingCacheItem> Cache { get; }
+        protected ISettingDefinitionManager SettingDefinitionManager { get; }
         protected ISettingRepository SettingRepository { get; }
         protected IGuidGenerator GuidGenerator { get; }
 
         public SettingManagementStore(
             ISettingRepository settingRepository, 
             IGuidGenerator guidGenerator, 
-            IDistributedCache<SettingCacheItem> cache)
+            IDistributedCache<SettingCacheItem> cache,
+            ISettingDefinitionManager settingDefinitionManager)
         {
             SettingRepository = settingRepository;
             GuidGenerator = guidGenerator;
             Cache = cache;
+            SettingDefinitionManager = settingDefinitionManager;
         }
 
         public virtual async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
-            var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
-            return cacheItem.Value;
+            return (await GetCacheItemAsync(name, providerName, providerKey)).Value;
         }
 
         public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
@@ -70,16 +72,43 @@ namespace Volo.Abp.SettingManagement
                 return cacheItem;
             }
 
-            var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
+            cacheItem = new SettingCacheItem(null);
 
-            cacheItem = new SettingCacheItem(setting?.Value);
-
-            await Cache.SetAsync(
-                cacheKey,
-                cacheItem
-            );
-
+            await SetCacheItemsAsync(providerName, providerKey, name, cacheItem);
+            
             return cacheItem;
+        }
+
+        private async Task SetCacheItemsAsync(
+            string providerName, 
+            string providerKey, 
+            string currentName, 
+            SettingCacheItem currentCacheItem)
+        {
+            var settingDefinitions = SettingDefinitionManager.GetAll();
+            var settingsDictionary = (await SettingRepository.GetListAsync(providerName, providerKey))
+                .ToDictionary(s => s.Name, s => s.Value);
+            
+            var cacheItems = new List<KeyValuePair<string, SettingCacheItem>>();            
+            
+            foreach (var settingDefinition in settingDefinitions)
+            {
+                var settingValue = settingsDictionary.GetOrDefault(settingDefinition.Name);
+                
+                cacheItems.Add(
+                    new KeyValuePair<string, SettingCacheItem>(
+                        CalculateCacheKey(settingDefinition.Name, providerName, providerKey),
+                        new SettingCacheItem(settingValue)
+                    )
+                );
+
+                if (settingDefinition.Name == currentName)
+                {
+                    currentCacheItem.Value = settingValue;
+                }
+            }
+
+            await Cache.SetManyAsync(cacheItems);
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)

@@ -23,9 +23,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Properties\launchSettings.json" />
     <None Include="compilerconfig.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
