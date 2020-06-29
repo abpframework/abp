@@ -13,7 +13,7 @@ namespace Volo.Abp.Validation
         static DynamicMaxLengthAttribute()
         {
             MaximumLengthField = typeof(MaxLengthAttribute).GetField(
-                "<MaximumLength>k__BackingField",
+                "<Length>k__BackingField",
                 BindingFlags.Instance | BindingFlags.NonPublic
             );
             Debug.Assert(MaximumLengthField != null, nameof(MaximumLengthField) + " != null");
