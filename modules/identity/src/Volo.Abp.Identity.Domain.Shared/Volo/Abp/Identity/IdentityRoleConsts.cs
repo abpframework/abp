@@ -2,7 +2,7 @@
 {
     public static class IdentityRoleConsts
     {
-        public const int MaxNameLength = 256;
-        public const int MaxNormalizedNameLength = MaxNameLength;
+        public static int MaxNameLength { get; set; } = 256;
+        public static int MaxNormalizedNameLength { get; set; } = 256;
     }
 }
