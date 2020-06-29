@@ -183,15 +183,13 @@ The `patch` method of `RoutesService` finds a route by its name and replaces its
 // this.routes is instance of RoutesService
 // eThemeSharedRouteNames enum can be imported from @abp/ng.theme.shared
 
-this.routes.add([
-  {
-    path: '/dashboard',
-    name: '::Menu:Dashboard',
-    parentName: '::Menu:Home',
-    order: 1,
-    layout: eLayoutType.application,
-  },
-])
+const dashboardRouteConfig: ABP.Route = {
+  path: '/dashboard',
+  name: '::Menu:Dashboard',
+  parentName: '::Menu:Home',
+  order: 1,
+  layout: eLayoutType.application,
+};
 
 const newHomeRouteConfig: Partial<ABP.Route> = {
   iconClass: 'fas fa-home',
@@ -199,10 +197,9 @@ const newHomeRouteConfig: Partial<ABP.Route> = {
   order: 0,
 };
 
-const new DashboardRouteConfig: 
-
+this.routes.add([dashboardRouteConfig]);
 this.routes.patch('::Menu:Home', newHomeRouteConfig);
-this.routes.remove('Your navigation', newHomeRouteConfig);
+this.routes.remove(['Your navigation']);
 ```
 
 - Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.
