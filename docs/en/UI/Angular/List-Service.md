@@ -53,42 +53,21 @@ class BookComponent {
 }
 ```
 
-> Noticed `list` is `public` and `readonly`? That is because we will use `ListService` properties directly in the component's template. That may be considered as an anti-pattern, but it is much quicker to implement. You can always use public component properties instead.
+> Noticed `list` is `public` and `readonly`? That is because we will use `ListService` directly in the component's template. That may be considered as an anti-pattern, but it is much quicker to implement. You can always use public component members to expose the `ListService` instance instead.
 
-Place `ListService` properties into the template like this:
+Bind `ListService` to ngx-datatable like this:
 
 ```html
-<abp-table
-  [value]="book.items"
-  [(page)]="list.page"
-  [rows]="list.maxResultCount"
-  [totalRecords]="book.totalCount"
-  [headerTemplate]="tableHeader"
-  [bodyTemplate]="tableBody"
-  [abpLoading]="list.isLoading$ | async"
+<ngx-datatable
+  [rows]="items"
+  [count]="count"
+  [list]="list"
+  default
 >
-</abp-table>
-
-<ng-template #tableHeader>
-  <tr>
-    <th (click)="nameSort.sort('name')">
-      {%{{{ '::Name' | abpLocalization }}}%}
-      <abp-sort-order-icon
-        #nameSort
-        sortKey="name"
-        [(selectedSortKey)]="list.sortKey"
-        [(order)]="list.sortOrder"
-      ></abp-sort-order-icon>
-    </th>
-  </tr>
-</ng-template>
-
-<ng-template #tableBody let-data>
-  <tr>
-    <td>{%{{{ data.name }}}%}</td>
-  </tr>
-</ng-template>
+  <!-- column templates here -->
+</ngx-datatable>
 ```
+
 
 ## Usage with Observables
 
@@ -101,11 +80,14 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 ```html
 <!-- simplified representation of the template -->
 
-<abp-table
-  [value]="(book$ | async)?.items || []"
-  [totalRecords]="(book$ | async)?.totalCount"
+<ngx-datatable
+  [rows]="(book$ | async)?.items || []"
+  [count]="(book$ | async)?.totalCount || 0"
+  [list]="list"
+  default
 >
-</abp-table>
+  <!-- column templates here -->
+</ngx-datatable>
 
 <!-- DO NOT WORRY, ONLY ONE REQUEST WILL BE MADE -->
 ```
@@ -128,31 +110,40 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 ```html
 <!-- simplified representation of the template -->
 
-<abp-table
-  [value]="books$ | async"
-  [totalRecords]="bookCount$ | async"
+<ngx-datatable
+  [rows]="(books$ | async) || []"
+  [count]="(bookCount$ | async) || 0"
+  [list]="list"
+  default
 >
-</abp-table>
+  <!-- column templates here -->
+</ngx-datatable>
 ```
+
+> We donot recommend using NGXS store for CRUD pages, unless your application needs to share list information between components or use it later on in another page.
+
 
 ## How to Refresh Table on Create/Update/Delete
 
 `ListService` exposes a `get` method to trigger a request with the current query. So, basically, whenever a create, update, or delete action resolves, you can call `this.list.get();` and it will call hooked stream creator again.
 
 ```ts
-this.store.dispatch(new DeleteBook(id)).subscribe(this.list.get);
+  this.bookService.createByInput(form.value)
+    .subscribe(() => {
+      this.list.get();
+
+      // Other subscription logic here
+    });
 ```
 
 ...or...
 
 ```ts
-this.bookService.createByInput(form.value)
-  .subscribe(() => {
-    this.list.get();
-
-    // Other subscription logic here
-  })
+  this.store.dispatch(new DeleteBook(id)).subscribe(this.list.get);
 ```
+
+> We donot recommend using NGXS store for CRUD pages, unless your application needs to share list information between components or use it later on in another page.
+
 
 ## How to Implement Server-Side Search in a Table
 
