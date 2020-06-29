@@ -2,8 +2,8 @@
 {
     public static class BackgroundJobRecordConsts
     {
-        public const int MaxJobNameLength = 128;
+        public static int MaxJobNameLength { get; set; } = 128;
 
-        public const int MaxJobArgsLength = 1024 * 1024;
+        public static int MaxJobArgsLength { get; set; } = 1024 * 1024;
     }
 }
