@@ -33,12 +33,13 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
         {
             Check.NotNull(context, nameof(context));
 
-            MergeAttribute(context.Attributes, "data-val", "true");
-            MergeAttribute(context.Attributes, "data-val-length", GetErrorMessage(context));
+                       MergeAttribute(context.Attributes, "data-val", "true");
+                       MergeAttribute(context.Attributes, "data-val-maxlength", GetErrorMessage(context));
+                       MergeAttribute(context.Attributes, "data-val-maxlength-max", _max);
 
             if (Attribute.Length != int.MaxValue)
             {
-                MergeAttribute(context.Attributes, "data-val-length-max", _max);
+                MergeAttribute(context.Attributes, "data-val-maxlength-max", _max);
             }
         }
     }
