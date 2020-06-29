@@ -22,6 +22,11 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
             {
                 return new DynamicStringLengthAttributeAdapter((DynamicStringLengthAttribute) attribute, stringLocalizer);
             }
+
+            if (type == typeof(DynamicMaxLengthAttribute))
+            {
+                return new DynamicMaxLengthAttributeAdapter((DynamicMaxLengthAttribute) attribute, stringLocalizer);
+            }
             
             return _defaultAdapter.GetAttributeAdapter(attribute, stringLocalizer);
         }
