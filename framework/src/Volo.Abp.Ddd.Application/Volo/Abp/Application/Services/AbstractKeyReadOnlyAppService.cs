@@ -36,7 +36,7 @@ namespace Volo.Abp.Application.Services
         , IReadOnlyAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
         where TEntity : class, IEntity
     {
-        protected IReadOnlyRepository<TEntity> Repository { get; }
+        protected IReadOnlyRepository<TEntity> ReadOnlyRepository { get; }
 
         protected virtual string GetPolicyName { get; set; }
 
@@ -44,7 +44,7 @@ namespace Volo.Abp.Application.Services
 
         protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
         {
-            Repository = repository;
+            ReadOnlyRepository = repository;
         }
 
         public virtual async Task<TGetOutputDto> GetAsync(TKey id)
@@ -123,7 +123,7 @@ namespace Volo.Abp.Application.Services
                 return query.OrderByDescending(e => ((ICreationAuditedObject)e).CreationTime);
             }
 
-            throw new AbpException("No sorting specified but this query requires sorting. Override the ApplyDefaultSorting method for your application service derived from AbstractKeyCrudAppService!");
+            throw new AbpException("No sorting specified but this query requires sorting. Override the ApplyDefaultSorting method for your application service derived from AbstractKeyReadOnlyAppService!");
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Volo.Abp.Application.Services
         /// <param name="input">The input.</param>
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetListInput input)
         {
-            return Repository;
+            return ReadOnlyRepository;
         }
 
         /// <summary>

@@ -62,7 +62,7 @@ namespace Volo.Abp.Application.Services
             ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity
     {
-        protected new IRepository<TEntity> Repository { get; }
+        protected IRepository<TEntity> Repository { get; }
 
         protected virtual string CreatePolicyName { get; set; }
 
