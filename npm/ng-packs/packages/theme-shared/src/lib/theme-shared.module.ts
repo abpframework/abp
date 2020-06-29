@@ -31,22 +31,6 @@ import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 
-export function ngxDatatableMessageFactory(store: Store) {
-  const emptyMessage = store.selectSnapshot(
-    ConfigState.getLocalization('AbpUi::NoDataAvailableInDatatable'),
-  );
-  const totalMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Total'));
-  const selectedMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Selected'));
-
-  return {
-    messages: {
-      emptyMessage,
-      totalMessage,
-      selectedMessage,
-    },
-  } as INgxDatatableConfig;
-}
-
 @NgModule({
   imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
   declarations: [
@@ -126,11 +110,6 @@ export class ThemeSharedModule {
           deps: [HTTP_ERROR_CONFIG],
         },
         { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
-        {
-          provide: 'configuration',
-          useFactory: ngxDatatableMessageFactory,
-          deps: [Store],
-        },
       ],
     };
   }
