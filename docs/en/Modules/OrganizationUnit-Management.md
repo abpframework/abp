@@ -18,7 +18,6 @@ The OrganizationUnit entity's primary key (Id) is a **Guid** type and it derives
 Since an OU can have a parent, all OUs of a tenant are in a **tree** structure. There are some rules for this tree;
 
 - There can be more than one root (where the ParentId is null).
-- Maximum depth of the tree is defined as a constant as OrganizationUnit.**MaxDepth**. The value is **16**.
 - There is a limit for the first-level children count of an OU (because of the fixed OU Code unit length explained below).
 
 #### OU Code
@@ -33,7 +32,7 @@ This code can be used to easily query the database for all the children of an OU
 - All the children of the same OU have codes that **start with the parent OU's code**.
 - It's **fixed length** and based on the level of the OU in the tree, as shown in the sample.
 - While the OU code is unique, it can be **changeable** if you move an OU.
-- We must reference an OU by Id, not Code.
+- You must reference an OU by Id, not Code.
 
 ### OrganizationUnit Manager
 
