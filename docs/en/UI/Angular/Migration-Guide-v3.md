@@ -355,6 +355,15 @@ Once you bind the injected `ListService` instance through `NgxDatatableListDirec
 **Important Note:** The `abp-table` is not removed, but is deprecated and will be removed in the future. Please consider switching to ngx-datatable.
 
 
+### Deprecated Interfaces
+
+Some interfaces have long been marked as deprectaed and now they are removed.
+
+#### What to Do When Migrating?
+
+- Please check if you are still using [anything listed in this issue](https://github.com/abpframework/abp/issues/4281)
+
+
 ## What's Next?
 
 * [Service Proxies](./Service-Proxies.md)
