@@ -37,7 +37,7 @@ yarn ng update @angular/cli @angular/core ng-zorro-antd --force
 
 In ABP v2.x, every lazy loaded module had a config module available via a separate package and module configuration was as follows:
 
-```ts
+```js
 import { AccountConfigModule } from '@abp/ng.account.config';
 
 @NgModule({
@@ -52,7 +52,7 @@ export class AppModule {}
 
 ...and in app-routing.module.ts...
 
-```ts
+```js
 const routes: Routes = [
   // other route configuration
   {
@@ -72,7 +72,7 @@ Although working, this had a few disadvantages:
 
 In ABP v3.0, we have introduced a secondary entry points for each config module as well as a new way to configure lazy loaded modules without the wrappers. Now, the module configuration looks like this:
 
-```ts
+```js
 import { AccountConfigModule } from '@abp/ng.account/config';
 
 @NgModule({
@@ -87,7 +87,7 @@ export class AppModule {}
 
 ...and in app-routing.module.ts...
 
-```ts
+```js
 const routes: Routes = [
   // other route configuration
   {
@@ -104,7 +104,7 @@ This change helped us reduce bundle size and build times substantially. We belie
 
 AppModule:
 
-```ts
+```js
 import { AccountConfigModule } from '@abp/ng.account/config';
 import { CoreModule } from '@abp/ng.core';
 import { IdentityConfigModule } from '@abp/ng.identity/config';
@@ -144,7 +144,7 @@ export class AppModule {}
 
 AppRoutingModule:
 
-```ts
+```js
 import { DynamicLayoutComponent } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -261,7 +261,7 @@ Since `abp-table` is not dropped yet, modules previously built by ABP v2.x will 
 
 The usage of those directives is rather simple:
 
-```ts
+```js
 @Component({
   providers: [ListService],
 })
