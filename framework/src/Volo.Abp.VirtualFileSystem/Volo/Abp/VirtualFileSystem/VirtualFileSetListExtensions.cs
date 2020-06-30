@@ -3,7 +3,9 @@ using System.IO;
 using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 using Volo.Abp.VirtualFileSystem.Embedded;
+using Volo.Abp.VirtualFileSystem.Physical;
 
 namespace Volo.Abp.VirtualFileSystem
 {
@@ -26,6 +28,18 @@ namespace Volo.Abp.VirtualFileSystem
             list.Add(new EmbeddedVirtualFileSetInfo(fileProvider, assembly, baseFolder));
         }
 
+        public static void AddPhysical(
+            [NotNull] this VirtualFileSetList list,
+            [NotNull] string root,
+            ExclusionFilters exclusionFilters = ExclusionFilters.Sensitive)
+        {
+            Check.NotNull(list, nameof(list));
+            Check.NotNullOrWhiteSpace(root, nameof(root));
+
+            var fileProvider = new PhysicalFileProvider(root, exclusionFilters);
+            list.Add(new PhysicalVirtualFileSetInfo(fileProvider, root));
+        }
+
         private static IFileProvider CreateFileProvider(
             [NotNull] Assembly assembly,
             [CanBeNull] string baseNamespace = null,
@@ -37,7 +51,7 @@ namespace Volo.Abp.VirtualFileSystem
 
             if (info == null)
             {
-                return new EmbeddedFileSet(assembly, baseNamespace);
+                return new AbpEmbeddedFileProvider(assembly, baseNamespace);
             }
 
             if (baseFolder == null)
@@ -50,10 +64,10 @@ namespace Volo.Abp.VirtualFileSystem
 
         public static void ReplaceEmbeddedByPhysical<T>(
             [NotNull] this VirtualFileSetList fileSets,
-            [NotNull] string pyhsicalPath)
+            [NotNull] string physicalPath)
         {
             Check.NotNull(fileSets, nameof(fileSets));
-            Check.NotNullOrWhiteSpace(pyhsicalPath, nameof(pyhsicalPath));
+            Check.NotNullOrWhiteSpace(physicalPath, nameof(physicalPath));
 
             var assembly = typeof(T).Assembly;
 
@@ -62,14 +76,14 @@ namespace Volo.Abp.VirtualFileSystem
                 if (fileSets[i] is EmbeddedVirtualFileSetInfo embeddedVirtualFileSet &&
                     embeddedVirtualFileSet.Assembly == assembly)
                 {
-                    var thisPath = pyhsicalPath;
+                    var thisPath = physicalPath;
 
                     if (!embeddedVirtualFileSet.BaseFolder.IsNullOrEmpty())
                     {
                         thisPath = Path.Combine(thisPath, embeddedVirtualFileSet.BaseFolder);
                     }
 
-                    fileSets[i] = new VirtualFileSetInfo(new PhysicalFileProvider(thisPath));
+                    fileSets[i] = new PhysicalVirtualFileSetInfo(new PhysicalFileProvider(thisPath), thisPath);
                 }
             }
         }

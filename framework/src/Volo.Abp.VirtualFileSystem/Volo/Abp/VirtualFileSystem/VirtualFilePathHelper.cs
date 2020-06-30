@@ -6,8 +6,6 @@ namespace Volo.Abp.VirtualFileSystem
 {
     internal static class VirtualFilePathHelper
     {
-        //TODO: Optimize this class!
-
         public static string NormalizePath(string fullPath)
         {
             if (fullPath.Equals("/", StringComparison.Ordinal))

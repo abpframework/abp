@@ -8,7 +8,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Volo.Abp.VirtualFileSystem.Embedded
 {
-    public class EmbeddedFileSet : DictionaryBasedFileProvider
+    public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
     {
         [NotNull]
         public Assembly Assembly { get; }
@@ -19,7 +19,7 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
         protected override IDictionary<string, IFileInfo> Files => _files.Value;
         private readonly Lazy<Dictionary<string, IFileInfo>> _files;
 
-        public EmbeddedFileSet(
+        public AbpEmbeddedFileProvider(
             [NotNull] Assembly assembly, 
             [CanBeNull] string baseNamespace = null)
         {
