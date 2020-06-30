@@ -165,6 +165,7 @@
     "RemainingQuestionCount": "Remaining question count",
     "TotalQuestionMustBeGreaterWarningMessage": "TotalQuestionCount must be greater than RemainingQuestionCount !",
     "QuestionCountsMustBeGreaterThanZero": "TotalQuestionCount and RemainingQuestionCount must be zero or greater than zero !",
-    "UnlimitedQuestionCount": "Unlimited question count"
+    "UnlimitedQuestionCount": "Unlimited question count",
+    "Notes": "Notes"
   }
 }
