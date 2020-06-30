@@ -50,13 +50,23 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
         
         public class ValidationDynamicTestModel
         {
-            [DynamicStringLength(typeof(Consts), nameof(Consts.MaxValue2Length), nameof(Consts.MinValue2Length))]
+            [DynamicStringLength(typeof(Consts), nameof(Consts.MaxValue1Length), nameof(Consts.MinValue1Length))]
             public string Value1 { get; set; }
 
+            [DynamicMaxLength(typeof(Consts), nameof(Consts.MaxValue2Length))]
+            public string Value2 { get; set; }
+            
+            [DynamicMaxLength(typeof(Consts), nameof(Consts.MaxValue3Length))]
+            public int[] Value3 { get; set; }
+            
             public static class Consts
             {
-                public static int MinValue2Length { get; set; } = 2;
-                public static int MaxValue2Length { get; set; } = 7;
+                public static int MinValue1Length { get; set; } = 2;
+                public static int MaxValue1Length { get; set; } = 7;
+
+                public static int MaxValue2Length { get; set; } = 4;
+                
+                public static int MaxValue3Length { get; set; } = 2;
             }
         }
 

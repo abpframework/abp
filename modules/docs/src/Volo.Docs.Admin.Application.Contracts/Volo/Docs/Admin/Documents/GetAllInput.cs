@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
 using Volo.Docs.Documents;
 
 namespace Volo.Docs.Admin.Documents
@@ -9,19 +10,19 @@ namespace Volo.Docs.Admin.Documents
     {
         public Guid? ProjectId { get; set; }
 
-        [StringLength(DocumentConsts.MaxNameLength)]
+        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxNameLength))]
         public string Name { get; set; }
 
-        [StringLength(DocumentConsts.MaxVersionNameLength)]
+        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxVersionNameLength))]
         public string Version { get; set; }
  
-        [StringLength(DocumentConsts.MaxLanguageCodeNameLength)]
+        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxLanguageCodeNameLength))]
         public string LanguageCode { get; set; }
 
-        [StringLength(DocumentConsts.MaxFileNameNameLength)]
+        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxFileNameNameLength))]
         public string FileName { get; set; }
 
-        [StringLength(DocumentConsts.MaxFormatNameLength)]
+        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxFormatNameLength))]
         public string Format { get; set; }
 
         public DateTime? CreationTimeMin { get; set; }

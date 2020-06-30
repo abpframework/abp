@@ -55,7 +55,7 @@ namespace Volo.Abp.Cli.Commands
                 var environment = JObject.Parse(environmentJson);
                 apiUrl = environment["apis"]["default"]["url"].ToString();
             }
-            apiUrl += "/api/abp/api-definition?IncludeTypes=true";
+            apiUrl = apiUrl.EnsureEndsWith('/') + "api/abp/api-definition?IncludeTypes=true";
 
             var uiFramework = GetUiFramework(commandLineArgs);
 
@@ -469,17 +469,21 @@ namespace Volo.Abp.Cli.Commands
                 if (returnValueType.Contains("<"))
                 {
                     returnValueType = returnValueType.Split('<')[1].Split('>')[0];
+                    var clrType = Type.GetType(returnValueType, throwOnError: false);
+                    if (clrType != null && TypeHelper.IsPrimitiveExtended(clrType, includeEnums: true))
+                    {
+                        return null;
+                    }
+
                     if (returnValueType.StartsWith("Volo.Abp.Application.Dtos")
-                     || returnValueType.StartsWith("System.Collections")
-                     || returnValueType == "System.String"
-                     || returnValueType == "System.Void"
-                     || returnValueType.Contains("System.Net.HttpStatusCode?")
-                     || returnValueType.Contains("IActionResult")
-                     || returnValueType.Contains("ActionResult")
-                     || returnValueType.Contains("IStringValueType")
-                     || returnValueType.Contains("IValueValidator")
-                     || returnValueType.Contains("Guid")
-                       )
+                        || returnValueType.StartsWith("System.Collections")
+                        || returnValueType == "System.Void"
+                        || returnValueType.Contains("System.Net.HttpStatusCode?")
+                        || returnValueType.Contains("IActionResult")
+                        || returnValueType.Contains("ActionResult")
+                        || returnValueType.Contains("IStringValueType")
+                        || returnValueType.Contains("IValueValidator")
+                    )
                     {
                         return null;
                     }
