@@ -152,7 +152,12 @@ namespace Volo.Abp.Auditing
             }
 
 #pragma warning disable 4014
-            _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1
+                                                                          && x.EntityChanges[0].PropertyChanges.Count == 2
+                                                                          && x.EntityChanges[0].PropertyChanges[0].PropertyName ==
+                                                                          nameof(AppEntityWithPropertyHasAudited.Name1)
+                                                                          && x.EntityChanges[0].PropertyChanges[1].PropertyName ==
+                                                                          nameof(AppEntityWithPropertyHasAudited.Name99)));
 #pragma warning restore 4014
         }
 

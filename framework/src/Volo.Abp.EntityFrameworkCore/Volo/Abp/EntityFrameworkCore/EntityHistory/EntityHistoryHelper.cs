@@ -246,6 +246,16 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             {
                 return false;
             }
+            
+            if (!entityType.IsDefined(typeof(AuditedAttribute), true)
+                && !entityType.IsDefined(typeof(DisableAuditingAttribute), true)
+                && !Options.EntityHistorySelectors.Any(selector => selector.Predicate(entityType)))
+            {
+                if (propertyInfo == null || !propertyInfo.IsDefined(typeof(AuditedAttribute), true))
+                {
+                    return false;
+                }
+            }
 
             var isModified = !(propertyEntry.OriginalValue?.Equals(propertyEntry.CurrentValue) ?? propertyEntry.CurrentValue == null);
             if (isModified)
