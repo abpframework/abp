@@ -5,7 +5,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
-    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
   
   <ItemGroup>
@@ -22,11 +21,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Localization\MyProjectName\*.json" />
     <Content Remove="Localization\MyProjectName\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="MyFolder\*.*" />
-    <Content Remove="MyFolder\*.*" />
   </ItemGroup>
 
 </Project>
