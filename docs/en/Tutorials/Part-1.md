@@ -784,10 +784,11 @@ Open the `app-routing.module.ts` file in `src\app` folder and add a route as sho
 const routes: Routes = [
 // ...
 // added a new route to the routes array
-{
-  path: 'books',
-  loadChildren: () => import('./book/book.module').then(m => m.BookModule)
-}]
+  {
+    path: 'books',
+    loadChildren: () => import('./book/book.module').then(m => m.BookModule)
+  }
+]
 ```
 
 * We added a lazy-loaded route. See the [Lazy-Loading Feature Modules](https://angular.io/guide/lazy-loading-ngmodules#lazy-loading-feature-modules).
@@ -805,13 +806,7 @@ export const APP_ROUTE_PROVIDER = [
 function configureRoutes(routes: RoutesService) {
   return () => {
     routes.add([
-      {
-        path: '/',
-        name: '::Menu:Home',
-        iconClass: 'fas fa-home',
-        order: 1,
-        layout: eLayoutType.application,
-      },
+      //...
       // added below element
       {
         path: '/books',
@@ -823,7 +818,6 @@ function configureRoutes(routes: RoutesService) {
     ]);
   };
 }
-
 ```
 
 * We added a new route element to show a navigation element labeled "Books" on the menu. 
@@ -833,7 +827,7 @@ function configureRoutes(routes: RoutesService) {
   * `order` is the order of the menu item. We define 101 to show the route after the "Administration" item.
   * `layout` is the layout of the BooksModule's routes. `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty` can be defined.
 
-<!-- TODO: Add RoutesService doc link here -->
+For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
 #### Book list component
 
@@ -949,8 +943,9 @@ export class BookListComponent implements OnInit {
   }
 }
 ```
+
 * We imported and injected the generated `BookService`.
-* We implemented the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service)` that is a utility service to provide easy pagination, sorting, and search implementation.
+* We implemented the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service) that is a utility service to provide easy pagination, sorting, and search implementation.
 
 Open the `book-list.component.html` file in `app\book\book-list` folder and replace the content as below:
 
