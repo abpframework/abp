@@ -202,16 +202,22 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var currentVersion = (string) package.Value;
 
-            var version = await GetLatestVersion(package, currentVersion, includePreviews, switchToStable);
+            var version = "";
+            if (includePreviews || (!switchToStable && currentVersion.Contains("-preview")))
+            {
+                version = "preview";
+            }
+            else
+            {
+                version = await GetLatestVersion(package);
+            }
 
-            var versionWithPrefix = $"~{version}";
-
-            if (versionWithPrefix == currentVersion)
+            if (version == currentVersion)
             {
                 return false;
             }
 
-            package.Value.Replace(versionWithPrefix);
+            package.Value.Replace(version);
 
             Logger.LogInformation(
                 $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
@@ -219,39 +225,19 @@ namespace Volo.Abp.Cli.ProjectModification
         }
 
         protected virtual async Task<string> GetLatestVersion(
-            JProperty package,
-            string currentVersion,
-            bool includePreviews = false,
-            bool switchToStable = false)
+            JProperty package)
         {
             if (_fileVersionStorage.ContainsKey(package.Name))
             {
                 return _fileVersionStorage[package.Name];
             }
 
-            var newVersion = currentVersion;
+            var newVersion = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
+            var newVersionWithPrefix = $"~{newVersion}";
 
-            if (includePreviews || (!switchToStable && currentVersion.Contains("-preview")))
-            {
-                if (_myGetApiResponse == null)
-                {
-                    _myGetApiResponse = await _myGetPackageListFinder.GetPackagesAsync();
-                }
+            _fileVersionStorage[package.Name] = newVersionWithPrefix;
 
-                var mygetPackage = _myGetApiResponse.Packages.FirstOrDefault(p => p.Id == package.Name);
-                if (mygetPackage != null)
-                {
-                    newVersion = mygetPackage.Versions.Last();
-                }
-            }
-            else
-            {
-                newVersion = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
-            }
-
-            _fileVersionStorage[package.Name] = newVersion;
-
-            return newVersion;
+            return $"~{newVersionWithPrefix}";
         }
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
