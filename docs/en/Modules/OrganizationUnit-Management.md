@@ -11,7 +11,7 @@ An OU is represented by the **OrganizationUnit** entity. The fundamental propert
 - **Code**: A hierarchical string code that is unique for a tenant.
 - **DisplayName**: Shown name of the OU.
 
-The OrganizationUnit entity's primary key (Id) is a **Guid** type and it derives from the [**FullAuditedAggregateRoot**](../Entities##aggregateroot-class) class which provides audit information with **IsDeleted** property (OUs are not deleted from the database, they are just marked as deleted).
+The OrganizationUnit entity's primary key (Id) is a **Guid** type and it derives from the [**FullAuditedAggregateRoot**](../Entities.md#aggregateroot-class) class which provides audit information with **IsDeleted** property (OUs are not deleted from the database, they are just marked as deleted).
 
 #### Organization Tree
 
