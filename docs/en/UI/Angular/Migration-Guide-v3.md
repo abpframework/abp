@@ -357,7 +357,7 @@ Once you bind the injected `ListService` instance through `NgxDatatableListDirec
 
 ### Deprecated Interfaces
 
-Some interfaces have long been marked as deprectaed and now they are removed.
+Some interfaces have long been marked as deprecated and now they are removed.
 
 #### What to Do When Migrating?
 
