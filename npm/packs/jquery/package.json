@@ -5,8 +5,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^2.9.0",
-    "jquery": "^3.5.1"
+    "@abp/core": "~2.9.0",
+    "jquery": "~3.5.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
 }

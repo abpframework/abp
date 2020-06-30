@@ -2,13 +2,35 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
 import { RouterOutletComponent } from '../components';
-import { getRoutePath } from '../utils/route-utils';
+import { RoutesService } from '../services/routes.service';
+import { findRoute, getRoutePath } from '../utils/route-utils';
 
 // tslint:disable-next-line
 @Component({ template: '' })
 class DummyComponent {}
 
 describe('Route Utils', () => {
+  describe('#findRoute', () => {
+    const node = { path: '/foo' };
+
+    test.each`
+      path              | expected | count
+      ${'/foo/bar/baz'} | ${node}  | ${3}
+      ${'/foo/bar'}     | ${node}  | ${2}
+      ${'/foo'}         | ${node}  | ${1}
+      ${'/'}            | ${null}  | ${1}
+    `(
+      'should find $expected in $count turns when path is $path',
+      async ({ path, expected, count }) => {
+        const find = jest.fn(cb => (cb(node) ? node : null));
+        const routes = ({ find } as any) as RoutesService;
+        const route = findRoute(routes, path);
+        expect(route).toBe(expected);
+        expect(find).toHaveBeenCalledTimes(count);
+      },
+    );
+  });
+
   describe('#getRoutePath', () => {
     let spectator: SpectatorRouting<RouterOutletComponent>;
     const createRouting = createRoutingFactory({

@@ -2,6 +2,9 @@
 {
     public class ClientScopeConsts
     {
-        public const int ScopeMaxLength = 200;
+        /// <summary>
+        /// Default value: 200
+        /// </summary>
+        public static int ScopeMaxLength { get; set; } = 200;
     }
 }

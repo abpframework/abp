@@ -367,6 +367,10 @@
           "text": "Angular",
           "items": [
             {
+              "text": "Migration Guide v2.x to v3",
+              "path": "UI/Angular/Migration-Guide-v3.md"
+            },
+            {
               "text": "Service Proxies",
               "path": "UI/Angular/Service-Proxies.md"
             },

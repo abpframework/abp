@@ -15,7 +15,7 @@ export class FeatureManagementService {
   getFeatures(params: FeatureManagement.Provider): Observable<FeatureManagement.Features> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: '/api/abp/features',
+      url: '/api/feature-management/features',
       params,
     };
     return this.rest.request<FeatureManagement.Provider, FeatureManagement.Features>(request, {
@@ -30,7 +30,7 @@ export class FeatureManagementService {
   }: FeatureManagement.Provider & FeatureManagement.Features): Observable<null> {
     const request: Rest.Request<FeatureManagement.Features> = {
       method: 'PUT',
-      url: '/api/abp/features',
+      url: '/api/feature-management/features',
       body: { features },
       params: { providerKey, providerName },
     };

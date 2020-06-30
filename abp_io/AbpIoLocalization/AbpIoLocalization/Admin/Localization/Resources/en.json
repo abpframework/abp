@@ -102,7 +102,16 @@
     "DoYouWantToCreateNewUser": "Do you want to create new user?",
     "MasterModules": "Master Modules",
     "OrganizationName": "Organization name",
+    "CreationDate": "Creation date",
+    "LicenseStart": "License start date",
+    "LicenseEndDate": "License end date",
     "OrganizationNamePlaceholder": "Organization name...",
+    "TotalQuestionCountPlaceholder": "Total question count...",
+    "RemainingQuestionCountPlaceholder": "Remaining question count...",
+    "LicenseTypePlaceholder": "License type...",
+    "CreationDatePlaceholder": "Creation date...",
+    "LicenseStartDatePlaceholder": "License start date...",
+    "LicenseEndDatePlaceholder": "License end date...",
     "UsernameOrEmail": "Username or email",
     "UsernameOrEmailPlaceholder": "Username or email...",
     "Member": "Member",
@@ -156,6 +165,7 @@
     "RemainingQuestionCount": "Remaining question count",
     "TotalQuestionMustBeGreaterWarningMessage": "TotalQuestionCount must be greater than RemainingQuestionCount !",
     "QuestionCountsMustBeGreaterThanZero": "TotalQuestionCount and RemainingQuestionCount must be zero or greater than zero !",
-    "UnlimitedQuestionCount": "Unlimited question count"
+    "UnlimitedQuestionCount": "Unlimited question count",
+    "Notes": "Notes"
   }
 }

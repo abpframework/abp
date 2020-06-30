@@ -2,6 +2,9 @@
 {
     public static class DatabaseContainerConsts
     {
-        public const int MaxNameLength = 128;
+        /// <summary>
+        /// Default value: 128.
+        /// </summary>
+        public static int MaxNameLength { get; set; } = 128;
     }
 }

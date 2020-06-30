@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductService.Host.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
 
 namespace ProductService.Host.Migrations
 {
@@ -15,48 +16,62 @@ namespace ProductService.Host.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ProductManagement.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
                         .IsRequired()
+                        .HasColumnType("nvarchar(32)")
                         .HasMaxLength(32);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnName("ConcurrencyStamp");
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime");
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("CreatorId")
-                        .HasColumnName("CreatorId");
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ExtraProperties")
-                        .HasColumnName("ExtraProperties");
+                        .HasColumnName("ExtraProperties")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnName("LastModificationTime");
+                        .HasColumnName("LastModificationTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("LastModifierId")
-                        .HasColumnName("LastModifierId");
+                        .HasColumnName("LastModifierId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<float>("Price");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
-                    b.Property<int>("StockCount");
+                    b.Property<int>("StockCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

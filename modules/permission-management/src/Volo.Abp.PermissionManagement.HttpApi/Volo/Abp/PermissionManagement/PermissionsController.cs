@@ -5,7 +5,8 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Volo.Abp.PermissionManagement
 {
     [RemoteService(Name = PermissionManagementRemoteServiceConsts.RemoteServiceName)]
-    [Area("abp")]
+    [Area("permissionManagement")]
+    [Route("api/permission-management/permissions")]
     public class PermissionsController : AbpController, IPermissionAppService
     {
         protected IPermissionAppService PermissionAppService { get; }
@@ -15,11 +16,13 @@ namespace Volo.Abp.PermissionManagement
             PermissionAppService = permissionAppService;
         }
 
+        [HttpGet]
         public virtual Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
             return PermissionAppService.GetAsync(providerName, providerKey);
         }
 
+        [HttpPut]
         public virtual Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
             return PermissionAppService.UpdateAsync(providerName, providerKey, input);

@@ -3,6 +3,7 @@ import { CoreModule } from '@abp/ng.core';
 import { IdentityConfigModule } from '@abp/ng.identity/config';
 import { SettingManagementConfigModule } from '@abp/ng.setting-management/config';
 import { TenantManagementConfigModule } from '@abp/ng.tenant-management/config';
+import { ThemeBasicModule } from '@abp/ng.theme.basic';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -12,7 +13,7 @@ import { NgxsModule } from '@ngxs/store';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
+import { APP_ROUTE_PROVIDER } from './route.provider';
 
 const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
@@ -32,9 +33,10 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     TenantManagementConfigModule.forRoot(),
     SettingManagementConfigModule.forRoot(),
     NgxsModule.forRoot(),
-    SharedModule,
+    ThemeBasicModule.forRoot(),
     ...(environment.production ? [] : LOGGERS),
   ],
+  providers: [APP_ROUTE_PROVIDER],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
 })

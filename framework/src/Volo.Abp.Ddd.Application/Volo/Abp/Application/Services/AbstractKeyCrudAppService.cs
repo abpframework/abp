@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.MultiTenancy;
@@ -61,16 +58,11 @@ namespace Volo.Abp.Application.Services
     }
 
     public abstract class AbstractKeyCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        : ApplicationService,
+        : AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>,
             ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntity : class, IEntity
     {
-
         protected IRepository<TEntity> Repository { get; }
-
-        protected virtual string GetPolicyName { get; set; }
-
-        protected virtual string GetListPolicyName { get; set; }
 
         protected virtual string CreatePolicyName { get; set; }
 
@@ -79,35 +71,9 @@ namespace Volo.Abp.Application.Services
         protected virtual string DeletePolicyName { get; set; }
 
         protected AbstractKeyCrudAppService(IRepository<TEntity> repository)
+            : base(repository)
         {
             Repository = repository;
-        }
-
-        public virtual async Task<TGetOutputDto> GetAsync(TKey id)
-        {
-            await CheckGetPolicyAsync();
-
-            var entity = await GetEntityByIdAsync(id);
-            return MapToGetOutputDto(entity);
-        }
-
-        public virtual async Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input)
-        {
-            await CheckGetListPolicyAsync();
-
-            var query = CreateFilteredQuery(input);
-
-            var totalCount = await AsyncExecuter.CountAsync(query);
-
-            query = ApplySorting(query, input);
-            query = ApplyPaging(query, input);
-
-            var entities = await AsyncExecuter.ToListAsync(query);
-
-            return new PagedResultDto<TGetListOutputDto>(
-                totalCount,
-                entities.Select(MapToGetListOutputDto).ToList()
-            );
         }
 
         public virtual async Task<TGetOutputDto> CreateAsync(TCreateInput input)
@@ -144,18 +110,6 @@ namespace Volo.Abp.Application.Services
 
         protected abstract Task DeleteByIdAsync(TKey id);
 
-        protected abstract Task<TEntity> GetEntityByIdAsync(TKey id);
-
-        protected virtual async Task CheckGetPolicyAsync()
-        {
-            await CheckPolicyAsync(GetPolicyName);
-        }
-
-        protected virtual async Task CheckGetListPolicyAsync()
-        {
-            await CheckPolicyAsync(GetListPolicyName);
-        }
-
         protected virtual async Task CheckCreatePolicyAsync()
         {
             await CheckPolicyAsync(CreatePolicyName);
@@ -169,101 +123,6 @@ namespace Volo.Abp.Application.Services
         protected virtual async Task CheckDeletePolicyAsync()
         {
             await CheckPolicyAsync(DeletePolicyName);
-        }
-
-        /// <summary>
-        /// Should apply sorting if needed.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="input">The input.</param>
-        protected virtual IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetListInput input)
-        {
-            //Try to sort query if available
-            if (input is ISortedResultRequest sortInput)
-            {
-                if (!sortInput.Sorting.IsNullOrWhiteSpace())
-                {
-                    return query.OrderBy(sortInput.Sorting);
-                }
-            }
-
-            //IQueryable.Task requires sorting, so we should sort if Take will be used.
-            if (input is ILimitedResultRequest)
-            {
-                return ApplyDefaultSorting(query);
-            }
-
-            //No sorting
-            return query;
-        }
-
-        /// <summary>
-        /// Applies sorting if no sorting specified but a limited result requested.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        protected virtual IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
-        {
-            if (typeof(TEntity).IsAssignableTo<ICreationAuditedObject>())
-            {
-                return query.OrderByDescending(e => ((ICreationAuditedObject)e).CreationTime);
-            }
-
-            throw new AbpException("No sorting specified but this query requires sorting. Override the ApplyDefaultSorting method for your application service derived from AbstractKeyCrudAppService!");
-        }
-
-        /// <summary>
-        /// Should apply paging if needed.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="input">The input.</param>
-        protected virtual IQueryable<TEntity> ApplyPaging(IQueryable<TEntity> query, TGetListInput input)
-        {
-            //Try to use paging if available
-            if (input is IPagedResultRequest pagedInput)
-            {
-                return query.PageBy(pagedInput);
-            }
-
-            //Try to limit query result if available
-            if (input is ILimitedResultRequest limitedInput)
-            {
-                return query.Take(limitedInput.MaxResultCount);
-            }
-
-            //No paging
-            return query;
-        }
-
-        /// <summary>
-        /// This method should create <see cref="IQueryable{TEntity}"/> based on given input.
-        /// It should filter query if needed, but should not do sorting or paging.
-        /// Sorting should be done in <see cref="ApplySorting"/> and paging should be done in <see cref="ApplyPaging"/>
-        /// methods.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetListInput input)
-        {
-            return Repository;
-        }
-
-        /// <summary>
-        /// Maps <see cref="TEntity"/> to <see cref="TGetOutputDto"/>.
-        /// It uses <see cref="IObjectMapper"/> by default.
-        /// It can be overriden for custom mapping.
-        /// </summary>
-        protected virtual TGetOutputDto MapToGetOutputDto(TEntity entity)
-        {
-            return ObjectMapper.Map<TEntity, TGetOutputDto>(entity);
-        }
-
-        /// <summary>
-        /// Maps <see cref="TEntity"/> to <see cref="TGetListOutputDto"/>.
-        /// It uses <see cref="IObjectMapper"/> by default.
-        /// It can be overriden for custom mapping.
-        /// </summary>
-        protected virtual TGetListOutputDto MapToGetListOutputDto(TEntity entity)
-        {
-            return ObjectMapper.Map<TEntity, TGetListOutputDto>(entity);
         }
 
         /// <summary>
@@ -284,18 +143,14 @@ namespace Volo.Abp.Application.Services
         /// </summary>
         protected virtual void SetIdForGuids(TEntity entity)
         {
-            var entityWithGuidId = entity as IEntity<Guid>;
-
-            if (entityWithGuidId == null || entityWithGuidId.Id != Guid.Empty)
+            if (entity is IEntity<Guid> entityWithGuidId && entityWithGuidId.Id == Guid.Empty)
             {
-                return;
+                EntityHelper.TrySetId(
+                    entityWithGuidId,
+                    () => GuidGenerator.Create(),
+                    true
+                );
             }
-
-            EntityHelper.TrySetId(
-                entityWithGuidId,
-                () => GuidGenerator.Create(),
-                true
-            );
         }
 
         /// <summary>

@@ -17,6 +17,10 @@ namespace Volo.Abp.Auditing.App.EntityFrameworkCore
         public DbSet<AppEntityWithPropertyHasAudited> AppEntityWithPropertyHasAudited { get; set; }
 
         public DbSet<AppEntityWithSelector> AppEntityWithSelector { get; set; }
+        
+        public DbSet<AppFullAuditedEntityWithAudited> AppFullAuditedEntityWithAudited { get; set; }
+        
+        public DbSet<AppEntityWithAuditedAndHasCustomAuditingProperties> AppEntityWithAuditedAndHasCustomAuditingProperties { get; set; }
 
         public AbpAuditingTestDbContext(DbContextOptions<AbpAuditingTestDbContext> options)
             : base(options)

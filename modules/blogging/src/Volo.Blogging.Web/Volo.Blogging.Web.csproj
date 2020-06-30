@@ -19,7 +19,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\Volo.Blogging.HttpApi\Volo.Blogging.HttpApi.csproj" />
-    <PackageReference Include="Markdig.Signed" Version="0.18.0" />
+    <PackageReference Include="Markdig.Signed" Version="0.20.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,9 +28,7 @@
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Properties\launchSettings.json" />
     <None Include="compilerconfig.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
 </Project>

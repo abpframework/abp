@@ -21,9 +21,8 @@ export function configureRoutes(routes: RoutesService) {
         name: eSettingManagementRouteNames.Settings,
         path: '/setting-management',
         parentName: eThemeSharedRouteNames.Administration,
-        requiredPolicy: 'AbpAccount.SettingManagement',
         layout: eLayoutType.application,
-        order: 6,
+        order: 100,
         iconClass: 'fa fa-cog',
       },
     ]);
@@ -37,6 +36,6 @@ export function hideRoutes(routes: RoutesService, tabs: SettingTabsService) {
         debounceTime(0),
         map(nodes => !nodes.length),
       )
-      .subscribe(invisible => routes.patch('AbpSettingManagement::Settings', { invisible }));
+      .subscribe(invisible => routes.patch(eSettingManagementRouteNames.Settings, { invisible }));
   };
 }

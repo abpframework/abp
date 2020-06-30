@@ -754,8 +754,8 @@ It's end of this part. The final UI of this work is shown as below:
 It's time to create something visible and usable! There are some tools that we will use when developing ABP Angular frontend application:
 
 - [Angular CLI](https://angular.io/cli) will be used to create modules, components and services.
-- [NGXS](https://ngxs.gitbook.io/ngxs/) will be used as the state management library.
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
+- [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
 - [Visual Studio Code](https://code.visualstudio.com/) will be used as the code editor (you can use your favorite editor).
 
 #### Install NPM packages
@@ -778,26 +778,56 @@ yarn ng generate module book --routing true
 
 #### Routing
 
-Open the `app-routing.module.ts` file in `src\app` folder. Add the new `import` and add a route as shown below
+Open the `app-routing.module.ts` file in `src\app` folder and add a route as shown below:
 
 ```js
-import { ApplicationLayoutComponent } from '@abp/ng.theme.basic'; //==> added this line to imports <==
+const routes: Routes = [
+// ...
+// added a new route to the routes array
+  {
+    path: 'books',
+    loadChildren: () => import('./book/book.module').then(m => m.BookModule)
+  }
+]
+```
 
-//...added books path with the below to the routes array
-{
-  path: 'books',
-  component: ApplicationLayoutComponent,
-  loadChildren: () => import('./book/book.module').then(m => m.BookModule),
-  data: {
-    routes: {
-      name: '::Menu:Books',
-      iconClass: 'fas fa-book'
-    } as ABP.Route
-  },
+* We added a lazy-loaded route. See the [Lazy-Loading Feature Modules](https://angular.io/guide/lazy-loading-ngmodules#lazy-loading-feature-modules).
+
+Open the `route.provider.ts` file in `src\app` folder and replace the content as below:
+
+```js
+import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { APP_INITIALIZER } from '@angular/core';
+
+export const APP_ROUTE_PROVIDER = [
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+];
+
+function configureRoutes(routes: RoutesService) {
+  return () => {
+    routes.add([
+      //...
+      // added below element
+      {
+        path: '/books',
+        name: '::Menu:Books',
+        iconClass: 'fas fa-book',
+        order: 101,
+        layout: eLayoutType.application,
+      },
+    ]);
+  };
 }
 ```
 
-* The `ApplicationLayoutComponent` configuration sets the application layout to the new page. We added the `data` object. The `name` is the menu item name and the `iconClass` is the icon of the menu item.
+* We added a new route element to show a navigation element labeled "Books" on the menu. 
+  * `path` is the URL of the route.
+  * `name` is the menu item name. A Localization key can be passed.
+  * `iconClass` is the icon of the menu item.
+  * `order` is the order of the menu item. We define 101 to show the route after the "Administration" item.
+  * `layout` is the layout of the BooksModule's routes. `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty` can be defined.
+
+For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
 #### Book list component
 
@@ -865,35 +895,6 @@ Open the browser and navigate to http://localhost:4200/books. We'll see **book-l
 
 ![Initial book list page](./images/bookstore-initial-book-list-page.png)
 
-#### Create BookState
-
-Run the following command in the terminal to create a new state, named `BooksState`:
-
-```bash
-npx @ngxs/cli --name book --directory src/app/book
-```
-
-* This command creates `book.state.ts` and `book.actions.ts` files in the `src/app/book/state` folder. See the [NGXS CLI documentation](https://www.ngxs.io/plugins/cli).
-
-Import the `BookState` to the `app.module.ts` in the `src/app` folder and then add the `BookState` to `forRoot` static method of `NgxsModule` as an array element of the first parameter of the method.
-
-```js
-// ...
-import { BookState } from './books/state/book.state'; //<== imported BookState ==>
-
-@NgModule({
-  imports: [
-    // other imports
-
-    NgxsModule.forRoot([BookState]), //<== added BookState ==>
-
-    //other imports
-  ],
-  // ...
-})
-export class AppModule {}
-```
-
 #### Generate proxies
 
 ABP CLI provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running generate-proxy command, your host must be up and running. See the [CLI documentation](../CLI.md)
@@ -910,109 +911,41 @@ The generated files looks like below:
 
 ![Generated files](./images/generated-proxies.png)
 
-#### GetBooks Action
-
-Actions can either be thought of as a command which should trigger something to happen, or as the resulting event of something that has already happened. [See NGXS Actions documentation](https://www.ngxs.io/concepts/actions).
-
-Open the `book.actions.ts` file in `app/book/state` folder and replace the content below:
-
-```js
-export class GetBooks {
-  static readonly type = '[Book] Get';
-}
-```
-
-#### Implement BookState
-
-Open the `book.state.ts` file in `app/book/state` folder and replace the content below:
-
-```js
-import { PagedResultDto } from '@abp/ng.core';
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks } from './book.actions';
-import { BookService } from '../services';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { BookDto } from '../models';
-
-export class BookStateModel {
-  public book: PagedResultDto<BookDto>;
-}
-
-@State<BookStateModel>({
-  name: 'BookState',
-  defaults: { book: {} } as BookStateModel,
-})
-@Injectable()
-export class BookState {
-  @Selector()
-  static getBooks(state: BookStateModel) {
-    return state.book.items || [];
-  }
-
-  constructor(private bookService: BookService) {}
-
-  @Action(GetBooks)
-  get(ctx: StateContext<BookStateModel>) {
-    return this.bookService.getListByInput().pipe(
-      tap((booksResponse) => {
-        ctx.patchState({
-          book: booksResponse,
-        });
-      })
-    );
-  }
-}
-```
-
-* We added the book property to BookStateModel model.
-* We added the `GetBooks` action that retrieves the book data via `BookService` that generated via ABP CLI and patches the state.
-* `NGXS` requires to return the observable without subscribing it in the get function.
-
 #### BookListComponent
 
 Open the `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
 ```js
+import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
 import { BookDto, BookType } from '../models';
-import { GetBooks } from '../state/book.actions';
-import { BookState } from '../state/book.state';
+import { BookService } from '../services';
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
+  providers: [ListService],
 })
 export class BookListComponent implements OnInit {
-  @Select(BookState.getBooks)
-  books$: Observable<BookDto[]>;
+  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
   booksType = BookType;
 
-  loading = false;
-
-  constructor(private store: Store) {}
+  constructor(public readonly list: ListService, private bookService: BookService) {}
 
   ngOnInit() {
-    this.get();
-  }
+    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
 
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
+    this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
+      this.book = response;
+    });
   }
 }
 ```
 
-* We added the `get` function that updates store to get the books.
-* See the [Dispatching actions](https://ngxs.gitbook.io/ngxs/concepts/store#dispatching-actions) and [Select](https://ngxs.gitbook.io/ngxs/concepts/select) on the `NGXS` documentation for more information on these `NGXS` features.
+* We imported and injected the generated `BookService`.
+* We implemented the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service) that is a utility service to provide easy pagination, sorting, and search implementation.
 
 Open the `book-list.component.html` file in `app\book\book-list` folder and replace the content as below:
 
@@ -1022,38 +955,31 @@ Open the `book-list.component.html` file in `app\book\book-list` folder and repl
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">
-          {%{{{ "::Menu:Books" | abpLocalization }}}%}
+          {%{{{ '::Menu:Books' | abpLocalization }}}%}
         </h5>
       </div>
       <div class="text-right col col-md-6"></div>
     </div>
   </div>
   <div class="card-body">
-    <abp-table
-      [value]="books$ | async"
-      [abpLoading]="loading"
-      [headerTemplate]="tableHeader"
-      [bodyTemplate]="tableBody"
-      [rows]="10"
-      [scrollable]="true"
-    >
-    </abp-table>
-    <ng-template #tableHeader>
-      <tr>
-        <th>{%{{{ "::Name" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Type" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::PublishDate" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Price" | abpLocalization }}}%}</th>
-      </tr>
-    </ng-template>
-    <ng-template #tableBody let-data>
-      <tr>
-        <td>{%{{{ data.name }}}%}</td>
-        <td>{%{{{ booksType[data.type] }}}%}</td>
-        <td>{%{{{ data.publishDate | date }}}%}</td>
-        <td>{%{{{ data.price }}}%}</td>
-      </tr>
-    </ng-template>
+    <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ booksType[row.type] }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.publishDate | date }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Price' | abpLocalization" prop="price">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.price | currency }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
   </div>
 </div>
 ```
@@ -1074,4 +1000,4 @@ In this tutorial we have applied the rules of official [Angular Style Guide](htt
 
 ### Next Part
 
-See the [part 2](part-2.md) for creating, updating and deleting books.
+See the [part 2](./Part-2.md) for creating, updating and deleting books.
