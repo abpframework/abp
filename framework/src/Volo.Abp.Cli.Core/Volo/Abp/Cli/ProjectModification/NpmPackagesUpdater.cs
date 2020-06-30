@@ -233,6 +233,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (includePreviews || (!switchToStable && currentVersion.Contains("-preview")))
             {
+                // We directly set "preview" version and no longer get the latest preview from myGet.
+                /*
                 if (_myGetApiResponse == null)
                 {
                     _myGetApiResponse = await _myGetPackageListFinder.GetPackagesAsync();
@@ -243,6 +245,9 @@ namespace Volo.Abp.Cli.ProjectModification
                 {
                     newVersion = mygetPackage.Versions.Last();
                 }
+                */
+
+                newVersion = "preview";
             }
             else
             {
