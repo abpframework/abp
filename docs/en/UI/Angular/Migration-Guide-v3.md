@@ -237,6 +237,26 @@ Until v3, we had been using a custom component, `abp-table`, as the default tabl
 
 As of ABP v3, we have switched to a battle-tested, well-executed data grid: [ngx-datatable](https://github.com/swimlane/ngx-datatable). All ABP modules will come with ngx-datatable already implemented in them. `ThemeSharedModule` already exports `NgxDatatableModule`. So, if you install the package by running `yarn add @swimlane/ngx-datatable` in your terminal, it will be available for use in all modules of your app.
 
+For proper styling, you need to add the following in the styles section of your angular.json file:
+
+```json
+  {
+    "input": "node_modules/@swimlane/ngx-datatable/index.css",
+    "inject": true,
+    "bundleName": "ngx-datatable-index"
+  },
+  {
+    "input": "node_modules/@swimlane/ngx-datatable/assets/icons.css",
+    "inject": true,
+    "bundleName": "ngx-datatable-icons"
+  },
+  {
+    "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
+    "inject": true,
+    "bundleName": "ngx-datatable-material"
+  }
+```
+
 Since `abp-table` is not dropped yet, modules previously built by ABP v2.x will not suddenly lose all their tables. Yet, they will look and feel different from built-in ABP v3 modules. Therefore, you will probably want to convert the tables in those modules to ngx-datatable. In order to decrease the amount of work required to convert an abp-table into ngx-datatable, we have modified the [ListService](./List-Service.md) to work well with ngx-datatable and [introduced](https://volosoft.com/blog/attribute-directives-to-avoid-repetition-in-angular-templates) two new directives: `NgxDatatableListDirective` and `NgxDatatableDefaultDirective`.
 
 The usage of those directives is rather simple:
@@ -327,6 +347,8 @@ Once you bind the injected `ListService` instance through `NgxDatatableListDirec
 
 #### What to Do When Migrating?
 
+- Install `@swimlane/ngx-datatable` package.
+- Add ngx-datatable styles in the angular.json file.
 - If you can, update your modules according to the example above.
 - If you have to do that later and are planning to keep abp-table for a while, make sure you update your pagination according to the [breaking change described here](./List-Service.md).
 
