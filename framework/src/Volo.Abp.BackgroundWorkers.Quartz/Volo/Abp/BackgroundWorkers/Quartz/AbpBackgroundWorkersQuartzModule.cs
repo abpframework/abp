@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using Volo.Abp.Quartz;
@@ -16,6 +17,11 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddConventionalRegistrar(new AbpQuartzConventionalRegistrar());
+        }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddSingleton(typeof(QuartzPeriodicBackgroundWorkerAdapter<>));
         }
 
         public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
