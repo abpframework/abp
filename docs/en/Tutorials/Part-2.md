@@ -456,7 +456,6 @@ In this section, you will learn how to create a new modal dialog form to create 
 
 #### Add a modal to BookListComponent
 
-
 Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
 ```js
