@@ -20,7 +20,7 @@ export class RoutesHandler {
         return;
       }
 
-      const routes = flatRoutes([{ ...data.routes, path }], { path: '' });
+      const routes = flatRoutes([{ path, ...data.routes }], { path: '' });
       this.routes.add(routes);
     });
   }
@@ -30,13 +30,13 @@ function flatRoutes(routes: RouteDef[], parent: any) {
   if (!routes) return [];
 
   return routes.reduce((acc, route) => {
-    const current = {
+    const { children, ...current } = {
       ...route,
       parentName: parent.name,
-      path: parent.path + '/' + route.path,
+      path: (parent.path + '/' + route.path).replace(/\/\//g, '/'),
     };
 
-    acc.push(current, ...flatRoutes(current.children, current));
+    acc.push(current, ...flatRoutes(children, current));
 
     return acc;
   }, []);
