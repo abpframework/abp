@@ -198,6 +198,7 @@ export class AppRoutingModule {}
 - Remove config packages from your project using `yarn remove`.
 - Import config modules from secondary entry points (e.g. `@abp/ng.identity/config`).
 - Call static `forRoot` method of all new config modules, even if a configuration is not passed.
+- Call static `forRoot` method of `ThemeSharedModule` and remove `SharedModule` from imports (unless you have added anything that is necessary for your root module in it).
 - Import lazy ABP modules directly in app routing module (e.g. `() => import('@abp/ng.identity').then(...)`).
 - Call static `forLazy` method of all lazy modules inside `then`, even if a configuration is not passed.
 - [OPTIONAL] Add an empty parent route with `DynamicLayoutComponent` for better performance and UX.
