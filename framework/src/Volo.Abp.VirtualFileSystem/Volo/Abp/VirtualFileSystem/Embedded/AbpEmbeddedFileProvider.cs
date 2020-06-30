@@ -8,7 +8,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace Volo.Abp.VirtualFileSystem.Embedded
 {
-    public class EmbeddedFileSet : IVirtualFileSet
+    public class AbpEmbeddedFileProvider : DictionaryBasedFileProvider
     {
         [NotNull]
         public Assembly Assembly { get; }
@@ -16,19 +16,22 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
         [CanBeNull]
         public string BaseNamespace { get; }
 
-        [CanBeNull]
-        public string BaseFolderInProject { get; }
+        protected override IDictionary<string, IFileInfo> Files => _files.Value;
+        private readonly Lazy<Dictionary<string, IFileInfo>> _files;
 
-        public EmbeddedFileSet(
+        public AbpEmbeddedFileProvider(
             [NotNull] Assembly assembly, 
-            [CanBeNull] string baseNamespace = null,
-            [CanBeNull] string baseFolderInProject = null)
+            [CanBeNull] string baseNamespace = null)
         {
             Check.NotNull(assembly, nameof(assembly));
 
             Assembly = assembly;
             BaseNamespace = baseNamespace;
-            BaseFolderInProject = baseFolderInProject;
+            
+            _files = new Lazy<Dictionary<string, IFileInfo>>(
+                CreateFiles,
+                true
+            );
         }
 
         public void AddFiles(Dictionary<string, IFileInfo> files)
@@ -126,6 +129,18 @@ namespace Volo.Abp.VirtualFileSystem.Embedded
             }
 
             return filePath.Substring(filePath.LastIndexOf("/", StringComparison.Ordinal) + 1);
+        }
+        
+        protected override string NormalizePath(string subpath)
+        {
+            return VirtualFilePathHelper.NormalizePath(subpath);
+        }
+
+        private Dictionary<string, IFileInfo> CreateFiles()
+        {
+            var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);
+            AddFiles(files);
+            return files;
         }
     }
 }
