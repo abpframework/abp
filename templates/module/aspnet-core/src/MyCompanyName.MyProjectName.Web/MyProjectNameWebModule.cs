@@ -41,7 +41,7 @@ namespace MyCompanyName.MyProjectName.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<MyProjectNameWebModule>("MyCompanyName.MyProjectName.Web");
+                options.FileSets.AddEmbedded<MyProjectNameWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<MyProjectNameWebModule>();
