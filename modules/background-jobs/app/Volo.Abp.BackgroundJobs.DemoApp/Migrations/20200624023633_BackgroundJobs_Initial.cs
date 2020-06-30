@@ -12,6 +12,8 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     JobName = table.Column<string>(maxLength: 128, nullable: false),
                     JobArgs = table.Column<string>(maxLength: 1048576, nullable: false),
                     TryCount = table.Column<short>(nullable: false, defaultValue: (short)0),

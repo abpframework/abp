@@ -13,7 +13,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 256, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     Required = table.Column<bool>(nullable: false),
                     IsStatic = table.Column<bool>(nullable: false),
@@ -33,7 +33,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     CreatorId = table.Column<Guid>(nullable: true),
                     LastModificationTime = table.Column<DateTime>(nullable: true),
@@ -78,7 +78,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 256, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: false),
@@ -112,7 +112,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     CreatorId = table.Column<Guid>(nullable: true),
                     LastModificationTime = table.Column<DateTime>(nullable: true),
@@ -148,7 +148,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     ProjectId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 255, nullable: false),
                     Version = table.Column<string>(maxLength: 128, nullable: false),
@@ -176,7 +176,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
                     ShortName = table.Column<string>(maxLength: 32, nullable: false),
                     Format = table.Column<string>(nullable: true),

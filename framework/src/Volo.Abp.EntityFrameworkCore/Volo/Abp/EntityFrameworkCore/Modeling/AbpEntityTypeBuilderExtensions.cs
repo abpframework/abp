@@ -40,9 +40,9 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         {
             if (b.Metadata.ClrType.IsAssignableTo<IHasConcurrencyStamp>())
             {
-                //TODO: Max length?
                 b.Property(nameof(IHasConcurrencyStamp.ConcurrencyStamp))
                     .IsConcurrencyToken()
+                    .HasMaxLength(ConcurrencyStampConsts.MaxLength)
                     .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
             }
         }

@@ -32,10 +32,5 @@ namespace Volo.Abp.Identity
         /// Default value: 256
         /// </summary>
         public static int MaxSecurityStampLength { get; set; } = 256;
-        
-        /// <summary>
-        /// Default value: 256
-        /// </summary>
-        public static int MaxConcurrencyStampLength { get; set; } = 256;
     }
 }
