@@ -123,7 +123,7 @@ namespace Volo.Abp.IdentityModel
                         RequireHttps = configuration.RequireHttps
                     }
                 };
-                IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
+                IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
                 return await httpClient.GetDiscoveryDocumentAsync(request);
             }
         }
@@ -165,7 +165,7 @@ namespace Volo.Abp.IdentityModel
                 UserName = configuration.UserName,
                 Password = configuration.UserPassword
             };
-            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
+            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
 
             AddParametersToRequestAsync(configuration, request);
 
@@ -183,7 +183,7 @@ namespace Volo.Abp.IdentityModel
                 ClientId = configuration.ClientId,
                 ClientSecret = configuration.ClientSecret
             };
-            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage(request);
+            IdentityModelHttpRequestMessageOptions.ConfigureHttpRequestMessage?.Invoke(request);
 
             AddParametersToRequestAsync(configuration, request);
 
