@@ -14,6 +14,7 @@ namespace Volo.Blogging.Admin
             {
                 options.FileSets.AddEmbedded<BloggingAdminApplicationContractsModule>();
             });
+            
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
