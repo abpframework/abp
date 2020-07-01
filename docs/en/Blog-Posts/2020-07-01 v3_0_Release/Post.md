@@ -39,7 +39,7 @@ See the [caching document](https://docs.abp.io/en/abp/latest/Caching) for detail
 
 ### Embedded Files Manifest Support for the Virtual File System
 
-Virtual File System now supports to use `GenerateEmbeddedFilesManifest` in your projects to add the real file/directory structure of your embedded resources in the compiled file. So, you can now access to the files without any file name restriction (previously, some special chars like `.` in the directory names was a problem in some cases)
+Virtual File System now supports to use `GenerateEmbeddedFilesManifest` in your projects to add the real file/directory structure of your embedded resources in the compiled assembly. So, you can now access to the files without any file name restriction (previously, some special chars like `.` in the directory names was a problem in some cases)
 
 See [the documentation](https://docs.abp.io/en/abp/latest/Virtual-File-System) to learn how to take the advantage of new system.
 
@@ -50,7 +50,73 @@ Based on the requests from the community, we've prepared two new sample applicat
 * [StoredProcedureDemo](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo) demonstrates how to call stored procedures, views and functions inside a custom repository.
 * [OrganizationUnitSample](https://github.com/abpframework/abp-samples/tree/master/OrganizationUnitSample) shows how to use the organization unit system of the [Identity module](https://docs.abp.io/en/abp/latest/Modules/Identity) for your entities.
 
+### DynamicStringLength & DynamicMaxLength Attributes
+
+The standard `StringLength` and `MaxLength` data annotation attributes is useful to validate properties of a class when the class is used as a Model or [DTO](https://docs.abp.io/en/abp/latest/Data-Transfer-Objects). However, just like any other attribute, the length values should be literal (constant) values known at **compile time**.
+
+**Example: Using the `StringLength`**
+
+````csharp
+public class CreateBookDto
+{
+    //CONSTANT
+    public const int MaxNameLength = 128;
+    
+    [StringLength(MaxNameLength)]
+    public string Name { get; set; }
+}
+````
+
+ABP Framework now has the `DynamicStringLength` & `DynamicMaxLength` properties to allow to determine the lengths at **runtime**. 
+
+**Example: Using the `DynamicStringLength`**
+
+````csharp
+public class CreateBookDto
+{
+    public static int MaxNameLength { get; set; } = 128;
+    
+    [DynamicStringLength(typeof(CreateBookDto), nameof(MaxNameLength))]
+    public string Name { get; set; }
+}
+````
+
+`DynamicStringLength` gets a class **type** and the **name** of a static property on this class to read the max length (There is also a minimum length option just like the `StringLength`).
+
+This allows you to get the max value from a configuration and set on the application startup (generally, in the `PreConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics)):
+
+````csharp
+CreateBookDto.MaxNameLength = 200;
+````
+
+This feature is used by the [pre-built application modules](https://docs.abp.io/en/abp/latest/Modules/Index), so you can now override the max lengths of the properties defined in these modules.
+
+### Auto Distributed Events
+
+ABP can publish distributed events for all entities on their create, update and delete events. That's pretty useful since you commonly interest in these basic events in a distributed system.
+
+This feature is mature and [documented](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#pre-defined-events) with the v3.0. You can easily configure some or all the entities to be published.
+
+### IAsyncQueryableExecuter
+
+When you work with LINQ extension methods, you need to call `ToListAsync()`, `FirstOrDefaultAsync()`... methods on your queries. Unfortunately, these methods are **not standard** LINQ extension methods. They are defined in the [Microsoft.EntityFrameworkCore](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore) package (or in the [MongoDB.Driver](https://www.nuget.org/packages/MongoDB.Driver/) package if you are using the MongoDB).
+
+So, you need to depend on this package if you want to use the async extension methods. That breaks the layering and makes your application or domain layer depends on the EF Core / MongoDB package.
+
+`IAsyncQueryableExecuter` is a service defined by the ABP Framework to **execute queries asynchronously without depending the specific provider** (EF Core / MongoDB) package.
+
+See [the documentation](https://docs.abp.io/en/abp/latest/Repositories#iqueryable-async-operations) to read the details and learn our recommendations.
+
+### API documentation
+
+We are now publishing [API documents](https://docs.abp.io/api-docs/abp/2.9/api/index.html) for the ABP Framework and modules in every release. So, you can explore the ABP Framework classes much more easier than before. Click the the **API Documentation** link on the navigation menu of the [documentation](https://docs.abp.io/en/abp/latest/).
+
 ### Others
+
+* Implemented front-channel server-side clients [sign out](https://identityserver4.readthedocs.io/en/latest/topics/signout.html) for the identity server.
+* `abp.currentUser` (`CurrentUser` service in the Angular UI) now has a `roles` array that contains role names of the current user.
+* Upgraded all the NuGet and NPM package dependencies.
+* Introduced `ReadOnlyAppService` base class (which has only the get operations) in addition to the `CrudAppService` base class (which has get, create, update and delete operations).
 
 See the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/3.0.0) for others updates.
 
@@ -58,13 +124,23 @@ See the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/
 
 In addition to all the features coming with the ABP Framework, the ABP Commercial has additional features with this release, as always. This section covers the [ABP Commercial](https://commercial.abp.io/) highlights in the version 2.9.
 
-...
+### New File Management Module
+
+We've created a new module that is used to upload & download and organize files in a hierarchical folder structure. Example screenshot:
+
+
+
+> It currently available only for the MVC / Razor Pages UI. We are working on the Angular UI and will be released in the next versions.
 
 ## About the Next Versions
 
-We will continue to release a new minor/feature version in every two weeks. So, the next expected release date is **2020-07-16**, for the version **3.1**.
+We will continue to release a new minor/feature version in every two weeks. So, the next expected release date is **2020-07-16** for the version **3.1**.
 
 In the next few versions, we will be focused on the **Blazor UI**, as promised on [the road map](https://docs.abp.io/en/abp/latest/Road-Map). We will continue to improve the documentation, create samples, add other new features and enhancements. Follow the [ABP Framework Twitter account](https://twitter.com/abpframework) for the latest news...
+
+## Breaking Changes
+
+TODO
 
 ## Bonus: Articles!
 
