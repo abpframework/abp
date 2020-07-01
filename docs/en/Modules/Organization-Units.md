@@ -11,13 +11,13 @@ An OU is represented by the **OrganizationUnit** entity. The fundamental propert
 - **Code**: A hierarchical string code that is unique for a tenant.
 - **DisplayName**: Shown name of the OU.
 
-The OrganizationUnit entity's primary key (Id) is a **Guid** type and it derives from the [**FullAuditedAggregateRoot**](../Entities.md#aggregateroot-class) class which provides audit information with **IsDeleted** property (OUs are not deleted from the database, they are just marked as deleted).
+The OrganizationUnit entity's primary key (Id) is a **Guid** type and it derives from the [**FullAuditedAggregateRoot**](../Entities.md) class.
 
 #### Organization Tree
 
 Since an OU can have a parent, all OUs of a tenant are in a **tree** structure. There are some rules for this tree;
 
-- There can be more than one root (where the ParentId is null).
+- There can be more than one root (where the `ParentId` is `null`).
 - There is a limit for the first-level children count of an OU (because of the fixed OU Code unit length explained below).
 
 #### OU Code
@@ -44,81 +44,4 @@ The **OrganizationUnitManager** class can be [injected](../Dependency-Injection.
 
 #### Multi-Tenancy
 
-The OrganizationUnitManager is designed to work for a **single tenant** at a time. It works for the **current tenant** by default.
-
-### Common Use Cases
-
-There are some common use cases for OUs. You can find the source code of the samples [here](https://github.com/abpframework/abp-samples/tree/master/OrganizationUnitSample).
-
-#### Creating An Entity That Belongs To An Organization Unit
-
-The most obvious usage of OUs is to assign an entity to an OU. Sample entity:
-
-```csharp
-public class Product : AuditedAggregateRoot<Guid>, IMultiTenant
-{
-    public virtual Guid OrganizationUnitId { get; private set; }
-    public virtual Guid? TenantId { get; }
-    public virtual string Name { get; private set; }
-    public virtual float Price { get; private set; }
-}
-```
-
-You need to create **OrganizationUnitId** property to assign this entity to an OU. Depending on requirement, this property can be nullable. You can now relate a Product to an OU and query the products of a specific OU.
-
-You can use **IMultiTenant** interface if you want to distinguish products of different tenants in a multi-tenant application (see the [Multi-Tenancy document](https://aspnetboilerplate.com/Pages/Documents/Multi-Tenancy#data-filters) for more info). If your application is not multi-tenant, you don't need this interface and property.
-
-#### Getting Entities In An Organization Unit
-
-To get the Products of an OU,  you can implement a simple domain service; [Product Manager](https://github.com/abpframework/abp-samples/blob/master/OrganizationUnitSample/src/OrganizationUnitSample.Domain/Products/ProductManager.cs) in this case to get the filtered data:
-
-```csharp
-public class ProductManager : IDomainService
-{
-    private readonly IProductRepository<Product> _productRepository;
-
-    public ProductManager(IProductRepository productRepository)
-    {
-        _productRepository = productRepository;
-    }
-
-    public List<Product> GetProductsInOu(OrganizationUnit organizationUnit)
-    {
-        return (await _productRepository.GetListAsync()).Where(q => q.OrganizationUnitId == 			organizationUnit.Id).ToList();
-    }                
-}
-```
-
-**For better practice**, you should consider querying it on domain layer for performance and scalability. To do so, add a method to your repository interface:
-
-```csharp
-public interface IProductRepository : IRepository<Product, Guid>
-{
-    public Task<List<Product>> GetProductsOfOrganizationUnitAsync(Guid organizationUnitId);
-}
-```
-
-Then implement it on your ORM layer (which is EntityFrameworkCore in this [sample](https://github.com/abpframework/abp-samples/blob/master/OrganizationUnitSample/src/OrganizationUnitSample.EntityFrameworkCore/Products/ProductRepository.cs)):
-
-```csharp
-public Task<List<Product>> GetProductsOfOrganizationUnitAsync(Guid organizationUnitId)
-{
-    return DbSet.Where(p => p.OrganizationUnitId == organizationUnitId).ToListAsync();
-}
-```
-
-Afterwards, you can modify your domain service like below:
-
-```csharp
-public List<Product> GetProductsInOu(OrganizationUnit organizationUnit)
-{
-	return await _productRepository.GetProductsOfOrganizationUnitAsync(organizationUnit.Id);
-}
-```
-
-### Settings
-
-You can find **MaxUserMembershipCount** settings under SettingManagement:
-
-- **MaxUserMembershipCount**: Maximum allowed membership count for a user.
-  Default value is **int.MaxValue** which allows a user to be a member of unlimited OUs at the same time.
+The `OrganizationUnitManager` is designed to work for a **single tenant** at a time. It works for the **current tenant** by default.
