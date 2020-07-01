@@ -24,6 +24,8 @@ const publish = async () => {
     : 'https://registry.npmjs.org';
 
   try {
+    await fse.remove('../dist');
+
     await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
 
     await fse.rename('../lerna.version.json', '../lerna.json');
@@ -49,8 +51,6 @@ const publish = async () => {
     await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
 
     await fse.rename('../lerna.publish.json', '../lerna.json');
-
-    await fse.remove('../dist/dev-app');
 
     await execa(
       'yarn',
