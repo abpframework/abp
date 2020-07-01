@@ -1,12 +1,14 @@
 # ABP Framework v3.0 Has Been Released
 
-We are excited to announce that the **ABP Framework** & and the **ABP Commercial** version 3.0 have been released. As different than the regular release lifecycles, which are 2-weeks, this version has taken 4-weeks with **119 [issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A3.0)** closed, **89 [pull requests](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A3.0)** merged and **796 commits** done just in the main framework [repository](https://github.com/abpframework/abp). See the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/3.0.0) for a detailed change log.
+We are excited to announce that the **ABP Framework** & and the **ABP Commercial** version 3.0 have been released. As different than the regular release lifecycle, which is 2-weeks, this version has taken 4-weeks with **119 [issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A3.0)** closed, **89 [pull requests](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A3.0)** merged and **798 commits** done in the main framework [repository](https://github.com/abpframework/abp).
 
 Since this is a **major version**, it also includes some **breaking changes**. Don't panic, the changes are easy to adapt and will be explained below.
 
+> See the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/3.0.0) for a detailed change log.
+
 ## What's New with the ABP Framework 3.0?
 
-You can see all the changes on the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/2.9.0). This post will only cover the important features/changes.
+This post will only cover the important features/changes. You can see all the changes on the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/2.9.0).
 
 ### Angular 10!
 
@@ -22,7 +24,7 @@ See [the documentation](https://docs.abp.io/en/abp/latest/Entity-Framework-Core-
 
 ### Azure BLOB Storage Provider
 
-We had created a [BLOB storing system](https://docs.abp.io/en/abp/latest/Blob-Storing) in the previous version. This release introduces the Azure BLOB Storage integration. See [the documentation](https://docs.abp.io/en/abp/latest/Blob-Storing-Azure).
+We had created a [BLOB storing system](https://docs.abp.io/en/abp/latest/Blob-Storing) in the previous version with a file system and database storage provider. This release introduces the Azure BLOB Storage provider. See [the documentation](https://docs.abp.io/en/abp/latest/Blob-Storing-Azure).
 
 ### Distributed Cache Bulk Operations & the New Redis Cache Package
 
@@ -39,7 +41,7 @@ See the [caching document](https://docs.abp.io/en/abp/latest/Caching) for detail
 
 ### Embedded Files Manifest Support for the Virtual File System
 
-Virtual File System now supports to use `GenerateEmbeddedFilesManifest` in your projects to add the real file/directory structure of your embedded resources in the compiled assembly. So, you can now access to the files without any file name restriction (previously, some special chars like `.` in the directory names was a problem in some cases)
+Virtual File System now supports to use `GenerateEmbeddedFilesManifest` in your projects to add the **real file/directory structure** of your embedded resources in the compiled assembly. So, you can now access to the files without any file name restriction (previously, some special chars like `.` in the directory names was a problem in some cases)
 
 See [the documentation](https://docs.abp.io/en/abp/latest/Virtual-File-System) to learn how to take the advantage of new system.
 
@@ -59,8 +61,7 @@ The standard `StringLength` and `MaxLength` data annotation attributes is useful
 ````csharp
 public class CreateBookDto
 {
-    //CONSTANT
-    public const int MaxNameLength = 128;
+    public const int MaxNameLength = 128; //CONSTANT!
     
     [StringLength(MaxNameLength)]
     public string Name { get; set; }
@@ -81,7 +82,7 @@ public class CreateBookDto
 }
 ````
 
-`DynamicStringLength` gets a class **type** and the **name** of a static property on this class to read the max length (There is also a minimum length option just like the `StringLength`).
+`DynamicStringLength` gets a class **type** and the **name** of a static property on this class to read the max length (there is also a minimum length option just like the `StringLength`).
 
 This allows you to get the max value from a configuration and set on the application startup (generally, in the `PreConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics)):
 
@@ -93,9 +94,9 @@ This feature is used by the [pre-built application modules](https://docs.abp.io/
 
 ### Auto Distributed Events
 
-ABP can publish distributed events for all entities on their create, update and delete events. That's pretty useful since you commonly interest in these basic events in a distributed system.
+ABP can **automatically publish distributed events** for all entities on their create, update and delete events. That's pretty useful since you commonly interest in these basic events in a distributed system.
 
-This feature is mature and [documented](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#pre-defined-events) with the v3.0. You can easily configure some or all the entities to be published.
+This feature is **mature and [documented](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#pre-defined-events)** with the v3.0. You can easily configure some or all the entities to be published.
 
 ### IAsyncQueryableExecuter
 
@@ -134,7 +135,7 @@ We've created a new module that is used to store and manage files in your applic
 
 You can upload, download and organize files in a hierarchical folder structure. It is also compatible to multi-tenancy and you can determine total size limit for your tenants. In the next versions, we will be working on a "share" system to share files between users in a more controlled way or share your files with your customers with a public link.
 
-> It currently available only for the MVC / Razor Pages UI. We are working on the Angular UI and will be released in the next versions.
+> File Management module is currently available only for the MVC / Razor Pages UI. We are working on the Angular UI and it will be released in the next versions.
 
 ## Breaking Changes
 
@@ -149,6 +150,7 @@ Since this is a major version, we've redesigned some APIs and introduced a few "
 ### ABP Commercial
 
 * Changed file names for the application logos. Previously, it was using separate logo files for each theme, like `theme1.png`, `theme1-reverse.png`, `theme2.png`, `theme2-reverse.png` (... `6`). Now, we have only two logo files: `logo-light.png` and `logo-dark.png`. So, rename your logo in the `wwwroot/images/logo/` folder for the MVC UI and `/src/assets/images/logo/` folder for the Angular UI.
+* We've added the [API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html) for the ABP Commercial too.
 
 > **Also, see the [migration guide](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Angular/Migration-Guide-v3.md) for Angular UI**.
 
