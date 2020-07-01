@@ -120,7 +120,7 @@ You may use observables in combination with [AsyncPipe](https://angular.io/guide
 </ngx-datatable>
 ```
 
-> We donot recommend using NGXS store for CRUD pages, unless your application needs to share list information between components or use it later on in another page.
+> We do not recommend using NGXS store for CRUD pages, unless your application needs to share list information between components or use it later on in another page.
 
 
 ## How to Refresh Table on Create/Update/Delete

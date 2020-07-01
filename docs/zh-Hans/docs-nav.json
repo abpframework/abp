@@ -369,6 +369,10 @@
           "text": "Angular",
           "items": [
             {
+              "text": "v2.x 到 v3 迁移指南",
+              "path": "UI/Angular/Migration-Guide-v3.md"
+            },
+            {
               "text": "服务代理",
               "path": "UI/Angular/Service-Proxies.md"
             },
