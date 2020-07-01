@@ -154,6 +154,10 @@ Since this is a major version, we've redesigned some APIs and introduced a few "
 
 > **Also, see the [migration guide](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Angular/Migration-Guide-v3.md) for Angular UI**.
 
+## Known Issues
+
+* 3.0.0 version has a problem with tiered architecture. See [this issue](https://github.com/abpframework/abp/pull/4562) to fix it for your application until we release the v3.0.1.
+
 ## About the Next Versions
 
 We will continue to release a new minor/feature version in every two weeks. So, the next expected release date is **2020-07-16** for the version **3.1**.
