@@ -325,7 +325,7 @@ public async Task<int> CreateAsync(string name)
 
 如果你的目的只是在创建/更新/删除实体后保存更改,建议你使用 `autoSave` 选项,而不是手动使用 `CurrentUnitOfWork.SaveChangesAsync()`.
 
-> **Note-1**: 当工作单元结束而没有任何错误时,所有更改都会自动保存. 所以除非确实需要,否则不要调用 `SaveChangesAsync()`.
+> **Note-1**: 当工作单元结束而没有任何错误时,所有更改都会自动保存. 所以除非确实需要,否则不要调用 `SaveChangesAsync()` 和设置 `autoSave` 为 `true`.
 > 
 > **Note-2**: 如果你使用 `Guid` 作为主键,则无需插入时保存来获取生成的id,因为 `Guid` 主键是在应用程序中设置的,创建新实体后立即可用.
 
