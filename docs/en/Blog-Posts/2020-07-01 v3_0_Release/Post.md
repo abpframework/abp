@@ -156,7 +156,7 @@ Since this is a major version, we've redesigned some APIs and introduced a few "
 
 ## Known Issues
 
-* 3.0.0 version has a problem with tiered architecture. See [this issue](https://github.com/abpframework/abp/pull/4562) to fix it for your application until we release the v3.0.1.
+* 3.0.0 version has a problem with tiered architecture. See [this issue](https://github.com/abpframework/abp/pull/4564) to fix it for your application until we release the v3.0.1.
 
 ## About the Next Versions
 
