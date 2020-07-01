@@ -1,14 +1,14 @@
 {
-  "version": "2.9.0",
+  "version": "3.0.0",
   "name": "@abp/tui-editor",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/codemirror": "~2.9.0",
-    "@abp/highlight.js": "~2.9.0",
-    "@abp/jquery": "~2.9.0",
-    "@abp/markdown-it": "~2.9.0",
+    "@abp/codemirror": "~3.0.0",
+    "@abp/highlight.js": "~3.0.0",
+    "@abp/jquery": "~3.0.0",
+    "@abp/markdown-it": "~3.0.0",
     "tui-editor": "^1.4.10"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"
