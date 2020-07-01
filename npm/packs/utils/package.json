@@ -1,6 +1,6 @@
 {
   "name": "@abp/utils",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0",
   "scripts": {
     "prepublish": "yarn install --ignore-scripts && node prepublish.js",
     "ng": "ng",
@@ -49,7 +49,6 @@
     "typescript": "~3.9.5",
     "zone.js": "~0.10.2"
   },
-  "peerDependencies": {},
   "dependencies": {
     "just-compare": "^1.3.0"
   },
