@@ -358,6 +358,94 @@ Once you bind the injected `ListService` instance through `NgxDatatableListDirec
 **Important Note:** The `abp-table` is not removed, but is deprecated and will be removed in the future. Please consider switching to ngx-datatable.
 
 
+### Lepton Theme Logos [COMMERCIAL]
+
+In ABP v2.x, Lepton had one light and one dark logo per color theme. We have realized we could make it work with only one light and one dark logo. So, we have changed how Lepton looks up logo images and now you just need to have a `logo-light.png` and a `logo-dark.png` in your project.
+
+#### What to Do When Migrating?
+
+If you have switched template logo PNGs before, the change is simple:
+
+- Go to `/assets/images/logo` folder.
+- Rename `theme1.png` as `logo-light.png` and `theme1-reverse.png` as `logo-dark.png`.
+- Delete all other `theme*.png` files.
+
+If you have replaced the logo component(s), the change is a little bit different, but still simple. The `LayoutStateService` has a two new members: `primaryLogoColor` and `secondaryLogoColor`. They have an observable stream of `'light'` and `'dark'` strings as value. You can consume their value in your custom logo component templates with the `async` pipe. Here is a complete example which covers both primary and secondary (account) layout logos.
+
+```js
+import { AddReplaceableComponent } from '@abp/ng.core';
+import { CommonModule } from '@angular/common';
+import { APP_INITIALIZER, Component, Injector, NgModule } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { eAccountComponents } from '@volo/abp.ng.account';
+import {
+  AccountLayoutComponent,
+  eThemeLeptonComponents,
+  LayoutStateService,
+} from '@volo/abp.ng.theme.lepton';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Component({
+  template: `
+    <div class="account-brand p-4 text-center mb-1" *ngIf="isAccount; else link">
+      <ng-template [ngTemplateOutlet]="link"></ng-template>
+    </div>
+
+    <ng-template #link>
+      <a [style.background-image]="logoUrl | async" class="navbar-brand" routerLink="/"></a>
+    </ng-template>
+  `,
+})
+export class LogoComponent {
+  isAccount: boolean;
+
+  logoColor: Observable<'dark' | 'light'>;
+
+  get logoUrl() {
+    return this.logoColor.pipe(map(color => `url(/assets/images/logo/logo-${color}.png)`));
+  }
+
+  constructor(injector: Injector) {
+    const layout = injector.get(LayoutStateService);
+    this.isAccount = Boolean(injector.get(AccountLayoutComponent, false));
+    this.logoColor = this.isAccount ? layout.secondaryLogoColor : layout.primaryLogoColor;
+  }
+}
+
+@NgModule({
+  imports: [CommonModule],
+  declarations: [LogoComponent],
+  exports: [LogoComponent],
+})
+export class LogoModule {}
+
+export const APP_LOGO_PROVIDER = [
+  { provide: APP_INITIALIZER, useFactory: switchLogos, multi: true, deps: [Store] },
+];
+
+export function switchLogos(store: Store) {
+  return () => {
+    store.dispatch(
+      new AddReplaceableComponent({
+        component: LogoComponent,
+        key: eThemeLeptonComponents.Logo,
+      }),
+    );
+
+    store.dispatch(
+      new AddReplaceableComponent({
+        component: LogoComponent,
+        key: eAccountComponents.Logo,
+      }),
+    );
+  };
+}
+```
+
+Just add `APP_LOGO_PROVIDER` to the providers of your root module (usually `AppModule`) and you will have a custom logo component adjusting to the theme colors.
+
+
 ### Deprecated Interfaces
 
 Some interfaces have long been marked as deprecated and now they are removed.
