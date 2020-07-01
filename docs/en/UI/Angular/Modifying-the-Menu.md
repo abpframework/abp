@@ -239,7 +239,7 @@ export class AppComponent {
         id: 'SignOutIcon',
         html: '<i class="fas fa-sign-out-alt fa-lg text-white m-2"><i>',
         action: () => console.log('Clicked the sign out icon'),
-        order: 102, // puts as last element
+        order: 101, // puts as last element
       },
     ]);
   }
@@ -249,6 +249,8 @@ export class AppComponent {
 This inserts a search input and a sign out icon to the menu. The final UI looks like below:
 
 ![navigation-menu-search-input](./images/navigation-menu-search-input.png)
+
+> The default elements have an order of `100`. If you want to place a custom element before the defaults, assign an order number up to `99`. If you want to place a custom element after the defaults, assign orders starting from `101`. Finally, if you must place an item between the defaults, patch the default element orders as described below. A warning though: We may add another default element in the future and it too will have an order number of `100`.
 
 ## How to Patch or Remove an Right Part Element
 
