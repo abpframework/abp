@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Collections;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.EventBus
@@ -16,9 +17,12 @@ namespace Volo.Abp.EventBus
     {
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        protected EventBusBase(IServiceScopeFactory serviceScopeFactory)
+        protected ICurrentTenant CurrentTenant { get; }
+
+        protected EventBusBase(IServiceScopeFactory serviceScopeFactory, ICurrentTenant currentTenant)
         {
             ServiceScopeFactory = serviceScopeFactory;
+            CurrentTenant = currentTenant;
         }
 
         /// <inheritdoc/>
@@ -162,31 +166,34 @@ namespace Volo.Abp.EventBus
                 {
                     var handlerType = eventHandlerWrapper.EventHandler.GetType();
 
-                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)))
+                    using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
                     {
-                        var method = typeof(ILocalEventHandler<>)
-                            .MakeGenericType(eventType)
-                            .GetMethod(
-                                nameof(ILocalEventHandler<object>.HandleEventAsync),
-                                new[] { eventType }
-                            );
+                        if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)))
+                        {
+                            var method = typeof(ILocalEventHandler<>)
+                                .MakeGenericType(eventType)
+                                .GetMethod(
+                                    nameof(ILocalEventHandler<object>.HandleEventAsync),
+                                    new[] { eventType }
+                                );
 
-                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
-                    }
-                    else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
-                    {
-                        var method = typeof(IDistributedEventHandler<>)
-                            .MakeGenericType(eventType)
-                            .GetMethod(
-                                nameof(IDistributedEventHandler<object>.HandleEventAsync),
-                                new[] { eventType }
-                            );
+                            await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
+                        }
+                        else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
+                        {
+                            var method = typeof(IDistributedEventHandler<>)
+                                .MakeGenericType(eventType)
+                                .GetMethod(
+                                    nameof(IDistributedEventHandler<object>.HandleEventAsync),
+                                    new[] { eventType }
+                                );
 
-                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
-                    }
-                    else
-                    {
-                        throw new AbpException("The object instance is not an event handler. Object type: " + handlerType.AssemblyQualifiedName);
+                            await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
+                        }
+                        else
+                        {
+                            throw new AbpException("The object instance is not an event handler. Object type: " + handlerType.AssemblyQualifiedName);
+                        }
                     }
                 }
                 catch (TargetInvocationException ex)
@@ -198,6 +205,27 @@ namespace Volo.Abp.EventBus
                     exceptions.Add(ex);
                 }
             }
+        }
+
+        protected virtual Guid? GetEventDataTenantId(object eventData)
+        {
+            if (eventData is IMultiTenant multiTenantEventData)
+            {
+                return multiTenantEventData.TenantId;
+            }
+
+            //TODO: Cache propertyInfo & Use interface or class to get Entity property.
+            var propertyInfo = eventData.GetType().GetProperty("Entity");
+            if (propertyInfo != null && propertyInfo.GetGetMethod(true) != null)
+            {
+                var entity = propertyInfo.GetValue(eventData);
+                if (entity != null && entity is IMultiTenant multiTenantEntity)
+                {
+                    return multiTenantEntity.TenantId;
+                }
+            }
+
+            return CurrentTenant.Id;
         }
 
         protected class EventTypeWithEventHandlerFactories
