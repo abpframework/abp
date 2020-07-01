@@ -23,7 +23,7 @@ export function configureNavItems(navItems: NavItemsService) {
       },
       {
         id: eThemeBasicComponents.CurrentUser,
-        order: 101,
+        order: 100,
         component: CurrentUserComponent,
       },
     ]);

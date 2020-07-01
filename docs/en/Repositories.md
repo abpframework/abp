@@ -190,8 +190,6 @@ This method is suggested;
 
 ### Option-3: IAsyncQueryableExecuter
 
-> Notice that this feature is available in the ABP Framework 3.0 and later. While it is also usable with older versions, it was providing a very limited set of methods.
-
 `IAsyncQueryableExecuter` is a service that is used to execute an `IQueryable<T>` object asynchronously **without depending on the actual database provider**.
 
 **Example: Inject & use the `IAsyncQueryableExecuter.ToListAsync()` method**
