@@ -126,21 +126,37 @@ In addition to all the features coming with the ABP Framework, the ABP Commercia
 
 ### New File Management Module
 
-We've created a new module that is used to upload & download and organize files in a hierarchical folder structure. Example screenshot:
+We've created a new module that is used to store and manage files in your application. This new module is based on the [BLOB Storing system](https://docs.abp.io/en/abp/latest/Blob-Storing), so it can use different storage providers to store the file contents.
 
+**Example screenshot**
 
+![file-management-ui](file-management-ui.png)
+
+You can upload, download and organize files in a hierarchical folder structure. It is also compatible to multi-tenancy and you can determine total size limit for your tenants. In the next versions, we will be working on a "share" system to share files between users in a more controlled way or share your files with your customers with a public link.
 
 > It currently available only for the MVC / Razor Pages UI. We are working on the Angular UI and will be released in the next versions.
+
+## Breaking Changes
+
+Since this is a major version, we've redesigned some APIs and introduced a few "easy to fix" breaking changes.
+
+### ABP Framework
+
+* Changed some **consts** in the pre-built application modules to static properties that is possible to change by your code. If you've used these consts on an attribute, then use the `DynamicStringLength` as explained above.
+* Changed `ConcurrencyStamp` max length to 40. You need to **add a database migration** and update your database after upgrading the ABP Framework.
+* Using `~` instead of `^` for NPM package dependencies anymore, to be more stable.
+
+### ABP Commercial
+
+* Changed file names for the application logos. Previously, it was using separate logo files for each theme, like `theme1.png`, `theme1-reverse.png`, `theme2.png`, `theme2-reverse.png` (... `6`). Now, we have only two logo files: `logo-light.png` and `logo-dark.png`. So, rename your logo in the `wwwroot/images/logo/` folder for the MVC UI and `/src/assets/images/logo/` folder for the Angular UI.
+
+> **Also, see the [migration guide](https://github.com/abpframework/abp/blob/dev/docs/en/UI/Angular/Migration-Guide-v3.md) for Angular UI**.
 
 ## About the Next Versions
 
 We will continue to release a new minor/feature version in every two weeks. So, the next expected release date is **2020-07-16** for the version **3.1**.
 
 In the next few versions, we will be focused on the **Blazor UI**, as promised on [the road map](https://docs.abp.io/en/abp/latest/Road-Map). We will continue to improve the documentation, create samples, add other new features and enhancements. Follow the [ABP Framework Twitter account](https://twitter.com/abpframework) for the latest news...
-
-## Breaking Changes
-
-TODO
 
 ## Bonus: Articles!
 
