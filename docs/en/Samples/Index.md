@@ -48,6 +48,8 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 * **Text Templates Demo**: Shows different use cases of the text templating system.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
   * [Text templating documentation](../Text-Templating.md)
+* **Stored Procedure Demo**: Demonstrates how to use stored procedures, database views and functions with best practices.
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo)
 * **Authentication Customization**: A solution to show how to customize the authentication for ASP.NET Core MVC / Razor Pages applications.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)
   * Related "[How To](../How-To/Index.md)" documents:
