@@ -112,6 +112,10 @@ See [the documentation](https://docs.abp.io/en/abp/latest/Repositories#iqueryabl
 
 We are now publishing [API documents](https://docs.abp.io/api-docs/abp/2.9/api/index.html) for the ABP Framework and modules in every release. So, you can explore the ABP Framework classes much more easier than before. Click the the **API Documentation** link on the navigation menu of the [documentation](https://docs.abp.io/en/abp/latest/).
 
+### Package List
+
+We have [created a page](http://abp.io/packages) to list all the ABP-related official NuGet and NPM packages.
+
 ### Others
 
 * Implemented front-channel server-side clients [sign out](https://identityserver4.readthedocs.io/en/latest/topics/signout.html) for the identity server.
