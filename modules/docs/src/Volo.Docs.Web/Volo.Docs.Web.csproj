@@ -9,6 +9,7 @@
     <PackageId>Volo.Docs.Web</PackageId>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace>Volo.Docs</RootNamespace>
     <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
@@ -23,6 +24,7 @@
     <ProjectReference Include="..\Volo.Docs.HttpApi\Volo.Docs.HttpApi.csproj" />
     <PackageReference Include="Markdig.Signed" Version="0.20.0" />
     <PackageReference Include="Scriban" Version="2.1.3" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
   </ItemGroup>
 
 
