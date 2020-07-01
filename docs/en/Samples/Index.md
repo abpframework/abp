@@ -51,7 +51,7 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 * **Stored Procedure Demo**: Demonstrates how to use stored procedures, database views and functions with best practices.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo)
 * **Authentication Customization**: A solution to show how to customize the authentication for ASP.NET Core MVC / Razor Pages applications.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)
   * Related "[How To](../How-To/Index.md)" documents:
     * [Azure Active Directory Authentication](../How-To/Azure-Active-Directory-Authentication-MVC.md)
     * [Customize the Login Page](../How-To/Customize-Login-Page-MVC.md)
