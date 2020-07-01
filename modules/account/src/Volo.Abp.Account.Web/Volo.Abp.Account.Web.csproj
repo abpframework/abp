@@ -11,6 +11,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace>Volo.Abp.Account.Web</RootNamespace>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
@@ -34,4 +35,8 @@
     <ProjectReference Include="..\Volo.Abp.Account.HttpApi\Volo.Abp.Account.HttpApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+  </ItemGroup>
+  
 </Project>
