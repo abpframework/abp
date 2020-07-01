@@ -1,8 +1,10 @@
 # ABP Framework v3.0 Has Been Released
 
-We are excited to announce that the **ABP Framework** & and the **ABP Commercial** version 3.0 have been released. As different than the regular release lifecycles, which are 2-weeks, this version has taken 4-weeks. Since this is a major version, it also includes some **breaking changes**. Don't panic, the changes are easy to adapt.
+We are excited to announce that the **ABP Framework** & and the **ABP Commercial** version 3.0 have been released. As different than the regular release lifecycles, which are 2-weeks, this version has taken 4-weeks with **119 [issues](https://github.com/abpframework/abp/issues?q=is%3Aopen+is%3Aissue+milestone%3A3.0)** closed, **89 [pull requests](https://github.com/abpframework/abp/pulls?q=is%3Aopen+is%3Apr+milestone%3A3.0)** merged and **796 commits** done just in the main framework [repository](https://github.com/abpframework/abp). See the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/3.0.0) for a detailed change log.
 
-## What's New with the ABP Framework 3.00?
+Since this is a **major version**, it also includes some **breaking changes**. Don't panic, the changes are easy to adapt and will be explained below.
+
+## What's New with the ABP Framework 3.0?
 
 You can see all the changes on the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/2.9.0). This post will only cover the important features/changes.
 
@@ -12,7 +14,7 @@ You can see all the changes on the [GitHub release notes](https://github.com/abp
 
 See the [GitHub release notes](https://github.com/abpframework/abp/releases/tag/3.0.0) for others updates.
 
-## What's New with the ABP Commercial 3.0
+## What's New with the ABP Commercial 3.0?
 
 In addition to all the features coming with the ABP Framework, the ABP Commercial has additional features with this release, as always. This section covers the [ABP Commercial](https://commercial.abp.io/) highlights in the version 2.9.
 
