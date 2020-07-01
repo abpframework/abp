@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Validation;
 using Volo.Docs.Documents;
 
 namespace Volo.Docs.Admin.Documents
@@ -8,10 +9,10 @@ namespace Volo.Docs.Admin.Documents
     {
         public Guid ProjectId { get; set; }
 
-        [StringLength(DocumentConsts.MaxLanguageCodeNameLength)]
+        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxLanguageCodeNameLength))]
         public string LanguageCode { get; set; }
 
-        [StringLength(DocumentConsts.MaxVersionNameLength)]
+        [DynamicStringLength(typeof(DocumentConsts), nameof(DocumentConsts.MaxVersionNameLength))]
         public string Version { get; set; }
     }
 }

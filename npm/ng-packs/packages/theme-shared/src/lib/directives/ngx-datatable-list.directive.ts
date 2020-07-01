@@ -1,4 +1,4 @@
-import { ListService } from '@abp/ng.core';
+import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   ChangeDetectorRef,
   Directive,
@@ -21,9 +21,26 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
 
   @Input() list: ListService;
 
-  constructor(private table: DatatableComponent, private cdRef: ChangeDetectorRef) {
+  constructor(
+    private table: DatatableComponent,
+    private cdRef: ChangeDetectorRef,
+    private localizationService: LocalizationService,
+  ) {
+    this.setInitialValues();
+  }
+
+  private setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
+    this.table.messages = {
+      emptyMessage: this.localizationService.localizeSync(
+        'AbpUi',
+        'NoDataAvailableInDatatable',
+        'No data available',
+      ),
+      totalMessage: this.localizationService.localizeSync('AbpUi', 'Total', 'total'),
+      selectedMessage: this.localizationService.localizeSync('AbpUi', 'Selected', 'selected'),
+    };
   }
 
   private subscribeToPage() {

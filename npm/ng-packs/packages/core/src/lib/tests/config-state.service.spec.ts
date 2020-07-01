@@ -1,9 +1,9 @@
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
+import { Store } from '@ngxs/store';
+import * as ConfigActions from '../actions';
+import { Config } from '../models/config';
 import { ConfigStateService } from '../services/config-state.service';
 import { ConfigState } from '../states';
-import { Store } from '@ngxs/store';
-import { Config } from '../models/config';
-import * as ConfigActions from '../actions';
 
 const CONFIG_STATE_DATA = {
   environment: {
@@ -86,6 +86,7 @@ const CONFIG_STATE_DATA = {
     tenantId: null,
     userName: null,
     email: null,
+    roles: [],
   },
   features: {
     values: {},

@@ -737,8 +737,8 @@ $(function () {
 是时候创建可见和可用的东西了!开发ABP Angular前端应用程序时,需要使用一些工具:
 
 - [Angular CLI](https://angular.io/cli) 用于创建模块,组件和服务.
-- [NGXS](https://ngxs.gitbook.io/ngxs/) 用于管理状态库.
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) 用做UI组件库.
+- [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/) 用做 datatable 类库.
 - [Visual Studio Code](https://code.visualstudio.com/) 用做代码编辑器 (你可以选择自己喜欢的编辑器).
 
 #### 安装 NPM 包
@@ -761,26 +761,56 @@ yarn ng generate module book --routing true
 
 #### 路由
 
-打开位于 `src\app` 目录下的 `app-routing.module.ts` 文件. 添加新的 `import` 和路由:
+打开位于 `src\app` 目录下的 `app-routing.module.ts` 文件. 添加新的路由:
 
 ```js
-import { ApplicationLayoutComponent } from '@abp/ng.theme.basic'; //==> added this line to imports <==
+const routes: Routes = [
+// ...
+// added a new route to the routes array
+  {
+    path: 'books',
+    loadChildren: () => import('./book/book.module').then(m => m.BookModule)
+  }
+]
+```
 
-//...added book path with the below to the routes array
-{
-  path: 'book',
-  component: ApplicationLayoutComponent,
-  loadChildren: () => import('./book/book.module').then(m => m.BookModule),
-  data: {
-    routes: {
-      name: '::Menu:Book',
-      iconClass: 'fas fa-book'
-    } as ABP.Route
-  },
+* 我们添加了一个懒加载路由. 参阅 [嬾加載功能模块](https://angular.io/guide/lazy-loading-ngmodules#lazy-loading-feature-modules).
+
+打开位于 `src\app` 目录下的 `route.provider.ts` 文件,用以下内容替换它:
+
+```js
+import { RoutesService, eLayoutType } from '@abp/ng.core';
+import { APP_INITIALIZER } from '@angular/core';
+
+export const APP_ROUTE_PROVIDER = [
+  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+];
+
+function configureRoutes(routes: RoutesService) {
+  return () => {
+    routes.add([
+      //...
+      // added below element
+      {
+        path: '/books',
+        name: '::Menu:Books',
+        iconClass: 'fas fa-book',
+        order: 101,
+        layout: eLayoutType.application,
+      },
+    ]);
+  };
 }
 ```
 
-* `ApplicationLayoutComponent` 配置将应用程序布局设置为新页面, 我们添加了 `data` 对象. `name` 是菜单项的名称,`iconClass` 是菜单项的图标.
+* 我们添加了一个新的路由元素在菜单上显示为 "Books" 的导航元素.
+  * `path` 路由的URL.
+  * `name` 菜单项的名称,可以使用本地化Key.
+  * `iconClass` 菜单项的图标.
+  * `order` 菜单项的排序.我们定义了101,它显示在 "Administration" 项的后面.
+  * `layout` BooksModule路由的布局. 可以定义 `eLayoutType.application`, `eLayoutType.account` 或 `eLayoutType.empty`.
+
+更多信息请参阅[RoutesService 文档](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
 #### Book 列表组件
 
@@ -848,35 +878,6 @@ yarn start
 
 ![Initial book list page](./images/bookstore-initial-book-list-page.png)
 
-#### 创建 BookState
-
-运行以下命令创建名为 `BookState` 的新state:
-
-```bash
-npx @ngxs/cli --name book --directory src/app/book
-```
-
-* 此命令在 `src/app/book/state` 文件夹下创建了 `book.state.ts` 和 `book.actions.ts` 文件. 参阅 [NGXS CLI文档](https://www.ngxs.io/plugins/cli)了解更多.
-
-将 `BookState` 导入到 `src/app` 文件夹中的 `app.module.ts` 中. 然后添加 `BookState` 到 `NgxsModule` 的 `forRoot` 静态方法,作为该方法的第一个参数的数组元素.
-
-```js
-// ...
-import { BookState } from './book/state/book.state'; //<== imported BookState ==>
-
-@NgModule({
-  imports: [
-    // other imports
-
-    NgxsModule.forRoot([BookState]), //<== added BookState ==>
-
-    //other imports
-  ],
-  // ...
-})
-export class AppModule {}
-```
-
 #### 生成代理
 
 ABP CLI提供了 `generate-proxy` 命令为你的服务HTTP API生成客户端代理简化客户端使用服务的成本. 运行 `generate-proxy` 命令前你的host必须正在运行. 参阅 [CLI 文档](../CLI.md).
@@ -893,109 +894,41 @@ abp generate-proxy --module app
 
 ![Generated files](./images/generated-proxies.png)
 
-#### GetBook 动作
-
-动作可以被认为是一个命令,它应该触发某些事情发生,或者是已经发生的事情的结果事件.[See NGXS Actions文档](https://www.ngxs.io/concepts/actions).
-
-打开 `app/book/state` 目录下的 `book.actions.ts` 文件用以下内容替换它:
-
-```js
-export class GetBook {
-  static readonly type = '[Book] Get';
-}
-```
-
-#### 实现 BookState
-
-打开 `app/book/state` 目录下的 `book.state.ts` 文件用以下内容替换它:
-
-```js
-import { PagedResultDto } from '@abp/ng.core';
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetBooks } from './book.actions';
-import { BookService } from '../services';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { BookDto } from '../models';
-
-export class BookStateModel {
-  public book: PagedResultDto<BookDto>;
-}
-
-@State<BookStateModel>({
-  name: 'BookState',
-  defaults: { book: {} } as BookStateModel,
-})
-@Injectable()
-export class BookState {
-  @Selector()
-  static getBooks(state: BookStateModel) {
-    return state.book.items || [];
-  }
-
-  constructor(private bookService: BookService) {}
-
-  @Action(GetBooks)
-  get(ctx: StateContext<BookStateModel>) {
-    return this.bookService.getListByInput().pipe(
-      tap((booksResponse) => {
-        ctx.patchState({
-          book: booksResponse,
-        });
-      })
-    );
-  }
-}
-```
-
-* 我们添加了book属性到BookStateModel模态框.
-* 我们添加了 `GetBook` 动作. 它通过 ABP CLI生成的 `BookService` 检索图书数据.
-* `NGXS` 需要在不订阅get函数的情况下返回被观察对象.
-
 #### BookListComponent
 
 打开 `app\book\book-list` 目录下的 `book-list.component.ts` 用以下内容替换它:
 
 ```js
+import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
 import { BookDto, BookType } from '../models';
-import { GetBooks } from '../state/book.actions';
-import { BookState } from '../state/book.state';
+import { BookService } from '../services';
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss'],
+  providers: [ListService],
 })
 export class BookListComponent implements OnInit {
-  @Select(BookState.getBooks)
-  books$: Observable<BookDto[]>;
+  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
   booksType = BookType;
 
-  loading = false;
-
-  constructor(private store: Store) {}
+  constructor(public readonly list: ListService, private bookService: BookService) {}
 
   ngOnInit() {
-    this.get();
-  }
+    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
 
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetBooks())
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe(() => {});
+    this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
+      this.book = response;
+    });
   }
 }
 ```
 
-* 我们添加了 `get` 函数获取book更新store.
-* 有关 `NGXS` 特性的更多信息请参见NGXS文档中的[Dispatching actions](https://ngxs.gitbook.io/ngxs/concepts/store#dispatching-actions)和[Select](https://ngxs.gitbook.io/ngxs/concepts/select).
+* 我们注入了生成的 `BookService`.
+* 我们实现了 [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service),它是一个公用服务,提供了简单的分页,排序和搜索.
 
 打开 `app\book\book-list` 目录下的 `book-list.component.html` 用以下内容替换它:
 
@@ -1005,38 +938,31 @@ export class BookListComponent implements OnInit {
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">
-          {%{{{ "::Menu:Book" | abpLocalization }}}%}
+          {%{{{ '::Menu:Books' | abpLocalization }}}%}
         </h5>
       </div>
       <div class="text-right col col-md-6"></div>
     </div>
   </div>
   <div class="card-body">
-    <abp-table
-      [value]="book$ | async"
-      [abpLoading]="loading"
-      [headerTemplate]="tableHeader"
-      [bodyTemplate]="tableBody"
-      [rows]="10"
-      [scrollable]="true"
-    >
-    </abp-table>
-    <ng-template #tableHeader>
-      <tr>
-        <th>{%{{{ "::Name" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Type" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::PublishDate" | abpLocalization }}}%}</th>
-        <th>{%{{{ "::Price" | abpLocalization }}}%}</th>
-      </tr>
-    </ng-template>
-    <ng-template #tableBody let-data>
-      <tr>
-        <td>{%{{{ data.name }}}%}</td>
-        <td>{%{{{ bookType[data.type] }}}%}</td>
-        <td>{%{{{ data.publishDate | date }}}%}</td>
-        <td>{%{{{ data.price }}}%}</td>
-      </tr>
-    </ng-template>
+    <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ booksType[row.type] }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.publishDate | date }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Price' | abpLocalization" prop="price">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {%{{{ row.price | currency }}}%}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
   </div>
 </div>
 ```

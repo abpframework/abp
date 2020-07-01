@@ -16,7 +16,9 @@ $commands = (
   "npm install",
   "npm run publish-packages -- --nextVersion $Version",
   "cd ../../",
-  "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish",
+  "yarn lerna version $Version --yes --no-commit-hooks --skip-git --force-publish",
+  "yarn replace-with-tilde",
+  "yarn lerna exec 'npm publish --registry https://registry.npmjs.org'",
   "yarn update:templates",
   "yarn gulp:app",
   "yarn gulp:module"

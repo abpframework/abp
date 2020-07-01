@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using Volo.Abp.DependencyInjection;
@@ -48,6 +49,19 @@ namespace Volo.Abp.BackgroundWorkers.Quartz
                 else
                 {
                     await DefaultScheduleJobAsync(quartzWork);
+                }
+            }
+            else
+            {
+                var adapterType = typeof(QuartzPeriodicBackgroundWorkerAdapter<>).MakeGenericType(worker.GetType());
+
+                var workerAdapter = Activator.CreateInstance(adapterType) as IQuartzBackgroundWorkerAdapter;
+
+                workerAdapter?.BuildWorker(worker);
+
+                if (workerAdapter?.Trigger != null)
+                {
+                    await DefaultScheduleJobAsync(workerAdapter);
                 }
             }
         }

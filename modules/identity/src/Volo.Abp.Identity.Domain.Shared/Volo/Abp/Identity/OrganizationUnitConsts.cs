@@ -5,7 +5,7 @@
         /// <summary>
         /// Maximum length of the <see cref="DisplayName"/> property.
         /// </summary>
-        public const int MaxDisplayNameLength = 128;
+        public static int MaxDisplayNameLength { get; set; } = 128;
 
         /// <summary>
         /// Maximum depth of an OU hierarchy.

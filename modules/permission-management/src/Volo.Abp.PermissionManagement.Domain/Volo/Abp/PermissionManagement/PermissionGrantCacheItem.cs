@@ -5,8 +5,6 @@ namespace Volo.Abp.PermissionManagement
     [Serializable]
     public class PermissionGrantCacheItem
     {
-        public string Name { get; set; } //TODO: Consider to remove this
-
         public bool IsGranted { get; set; }
 
         public PermissionGrantCacheItem()
@@ -14,9 +12,8 @@ namespace Volo.Abp.PermissionManagement
 
         }
 
-        public PermissionGrantCacheItem(string name, bool isGranted)
+        public PermissionGrantCacheItem(bool isGranted)
         {
-            Name = name;
             IsGranted = isGranted;
         }
 

@@ -28,7 +28,6 @@
         <Content Remove="Pages\**\*.js" />
         <Content Remove="Pages\**\*.css" />
         <Content Remove="compilerconfig.json" />
-        <Content Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
 </Project>

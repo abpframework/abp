@@ -33,10 +33,10 @@ describe('Routes Service', () => {
       const visible = await service.visible$.pipe(take(1)).toPromise();
 
       expect(flat.length).toBe(4);
-      expect(flat[0].name).toBe('foo');
-      expect(flat[1].name).toBe('baz');
-      expect(flat[2].name).toBe('x');
-      expect(flat[3].name).toBe('bar');
+      expect(flat[3].name).toBe('foo');
+      expect(flat[0].name).toBe('baz');
+      expect(flat[1].name).toBe('x');
+      expect(flat[2].name).toBe('bar');
 
       expect(tree.length).toBe(1);
       expect(tree[0].name).toBe('foo');
@@ -68,6 +68,16 @@ describe('Routes Service', () => {
     });
   });
 
+  describe('#hasChildren', () => {
+    it('should return if node has invisible child', () => {
+      service.add(routes);
+
+      expect(service.hasChildren('foo')).toBe(true);
+      expect(service.hasChildren('bar')).toBe(true);
+      expect(service.hasChildren('baz')).toBe(false);
+    });
+  });
+
   describe('#hasInvisibleChild', () => {
     it('should return if node has invisible child', () => {
       service.add(routes);
@@ -88,8 +98,8 @@ describe('Routes Service', () => {
       const visible = service.visible;
 
       expect(flat.length).toBe(2);
-      expect(flat[0].name).toBe('foo');
-      expect(flat[1].name).toBe('x');
+      expect(flat[1].name).toBe('foo');
+      expect(flat[0].name).toBe('x');
 
       expect(tree.length).toBe(1);
       expect(tree[0].name).toBe('foo');
@@ -114,10 +124,10 @@ describe('Routes Service', () => {
       const visible = service.visible;
 
       expect(flat.length).toBe(4);
-      expect(flat[0].name).toBe('foo');
-      expect(flat[1].name).toBe('baz');
-      expect(flat[2].name).toBe('x');
-      expect(flat[3].name).toBe('bar');
+      expect(flat[3].name).toBe('foo');
+      expect(flat[0].name).toBe('baz');
+      expect(flat[1].name).toBe('x');
+      expect(flat[2].name).toBe('bar');
 
       expect(tree.length).toBe(1);
       expect(tree[0].name).toBe('foo');

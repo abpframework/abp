@@ -58,5 +58,28 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
             result.Error.ValidationErrors.ShouldContain(x => x.Message == "Value1 should be hello");
         }
 
+        [Fact]
+        public async Task Should_Validate_Dynamic_Length_Object_Result_Success()
+        {
+            var result = await GetResponseAsStringAsync("/api/validation-test/object-result-action-dynamic-length?value1=hello&value3[0]=53&value3[1]=54");
+            result.ShouldBe("hello");
+            
+        }
+
+        [Fact]
+        public async Task Should_Validate_Dynamic_Length_Object_Result_Failing()
+        {
+            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action-dynamic-length?value1=a", HttpStatusCode.BadRequest); //value1 has min string length of 2 chars.
+            result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
+            
+            result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action-dynamic-length?value1=12345678", HttpStatusCode.BadRequest); //value1 has max string length of 7 chars.
+            result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
+            
+            result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action-dynamic-length?value1=123458&value2=12345", HttpStatusCode.BadRequest); //value2 has max length of 5 chars.
+            result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
+            
+            result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>("/api/validation-test/object-result-action-dynamic-length?value1=123458&value3[0]=53&value3[1]=54&value3[2]=55&value3[3]=56", HttpStatusCode.BadRequest); //value3 has max length of 2.
+            result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
+        }
     }
 }

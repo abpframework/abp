@@ -5,10 +5,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/codemirror": "^2.9.0",
-    "@abp/highlight.js": "^2.9.0",
-    "@abp/jquery": "^2.9.0",
-    "@abp/markdown-it": "^2.9.0",
+    "@abp/codemirror": "~2.9.0",
+    "@abp/highlight.js": "~2.9.0",
+    "@abp/jquery": "~2.9.0",
+    "@abp/markdown-it": "~2.9.0",
     "tui-editor": "^1.4.10"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431"

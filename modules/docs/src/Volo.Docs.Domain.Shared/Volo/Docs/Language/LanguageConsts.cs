@@ -3,6 +3,9 @@ namespace Volo.Docs.Language
 {
     public static class LanguageConsts
     {
-        public const int MaxLanguageCodeLength = 10;
+        /// <summary>
+        /// Default value: 10
+        /// </summary>
+        public static int MaxLanguageCodeLength { get; set; } = 10;
     }
 }

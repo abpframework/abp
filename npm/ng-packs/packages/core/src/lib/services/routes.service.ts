@@ -126,12 +126,18 @@ export abstract class AbstractTreeService<T extends object> {
   }
 }
 
+@Injectable()
 export abstract class AbstractNavTreeService<T extends ABP.Nav> extends AbstractTreeService<T>
   implements OnDestroy {
   readonly id = 'name';
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
-  readonly sort = (a: T, b: T) => a.order - b.order;
+  readonly sort = (a: T, b: T) => {
+    if (!a.order) return 1;
+    if (!b.order) return -1;
+
+    return a.order - b.order;
+  };
 
   constructor(protected actions: Actions, protected store: Store) {
     super();
@@ -143,6 +149,11 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav> extends Abstract
 
   protected isGranted({ requiredPolicy }: T): boolean {
     return this.store.selectSnapshot(ConfigState.getGrantedPolicy(requiredPolicy));
+  }
+
+  hasChildren(identifier: string): boolean {
+    const node = this.find(item => item[this.id] === identifier);
+    return Boolean(node?.children?.length);
   }
 
   hasInvisibleChild(identifier: string): boolean {
