@@ -9,7 +9,6 @@ While we will **continue to add other exciting features**, we will work on the f
 
 Beside this middle term goals, there are many features in the [backlog](https://github.com/abpframework/abp/milestone/2). Here, a list of some major items in the backlog;
 
-* [#4098](https://github.com/abpframework/abp/issues/4098) / Blob Storing Azure provider.
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a **gRPC integration** infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](https://docs.abp.io/en/abp/latest/Modules/Index))
 * [#236](https://github.com/abpframework/abp/issues/236) Resource based authorization system
 * [#1754](https://github.com/abpframework/abp/issues/1754) / Multi-lingual entities
