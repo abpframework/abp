@@ -19,9 +19,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
         public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from scope in DbSet.IncludeDetails(includeDetails)
-                where scopeNames.Contains(scope.Name)
-                select scope;
+            var query = from scope in DbSet where scopeNames.Contains(scope.Name) select scope;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }

@@ -14,17 +14,17 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
     {
         DbSet<ApiResource> ApiResources { get; set; }
 
-        DbSet<ApiSecret> ApiSecrets { get; set; }
+        DbSet<ApiResourceSecret> ApiSecrets { get; set; }
 
         DbSet<ApiResourceClaim> ApiResourceClaims { get; set; }
 
-        DbSet<ApiScope> ApiScopes { get; set; }
+        DbSet<ApiResourceScope> ApiScopes { get; set; }
 
         DbSet<ApiScopeClaim> ApiScopeClaims { get; set; }
 
         DbSet<IdentityResource> IdentityResources { get; set; }
 
-        DbSet<IdentityClaim> IdentityClaims { get; set; }
+        DbSet<IdentityResourceClaim> IdentityClaims { get; set; }
 
         DbSet<Client> Clients { get; set; }
 

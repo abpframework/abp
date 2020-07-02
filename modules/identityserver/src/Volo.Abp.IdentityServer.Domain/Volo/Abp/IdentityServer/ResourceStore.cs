@@ -6,7 +6,6 @@ using IdentityServer4.Stores;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.ObjectMapping;
-using ApiScope = Volo.Abp.IdentityServer.ApiResources.ApiScope;
 
 namespace Volo.Abp.IdentityServer
 {

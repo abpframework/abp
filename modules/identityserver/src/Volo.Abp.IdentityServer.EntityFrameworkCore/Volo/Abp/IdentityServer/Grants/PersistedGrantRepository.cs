@@ -74,10 +74,9 @@ namespace Volo.Abp.IdentityServer.Grants
             string clientId,
             string type)
         {
-            //IDS TODO: add SessionId to entity
             return DbSet
                 .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
-                // .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
+                .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
                 .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
                 .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type);
         }

@@ -35,7 +35,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
             CancellationToken cancellationToken = default)
         {
             var query = from api in DbSet.IncludeDetails(includeDetails)
-                        where api.Scopes.Any(x => scopeNames.Contains(x.Name))
+                        where api.Scopes.Any(x => scopeNames.Contains(x.Scope))
                         select api;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
@@ -74,18 +74,18 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiResourceId == id);
+            var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiScopeId == id);
 
             foreach (var scopeClaim in scopeClaims)
             {
                 DbContext.Set<ApiScopeClaim>().Remove(scopeClaim);
             }
 
-            var scopes = DbContext.Set<ApiScope>().Where(s => s.ApiResourceId == id);
+            var scopes = DbContext.Set<ApiResourceScope>().Where(s => s.ApiResourceId == id);
 
             foreach (var scope in scopes)
             {
-                DbContext.Set<ApiScope>().Remove(scope);
+                DbContext.Set<ApiResourceScope>().Remove(scope);
             }
 
             await base.DeleteAsync(id, autoSave, cancellationToken);

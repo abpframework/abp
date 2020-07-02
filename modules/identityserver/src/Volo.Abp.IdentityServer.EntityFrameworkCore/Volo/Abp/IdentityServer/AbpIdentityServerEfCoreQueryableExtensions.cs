@@ -18,20 +18,7 @@ namespace Volo.Abp.IdentityServer
             return queryable
                 .Include(x => x.Secrets)
                 .Include(x => x.UserClaims)
-                .Include(x => x.Scopes)
-                .ThenInclude(s => s.UserClaims);
-        }
-
-        public static IQueryable<ApiScope> IncludeDetails(this IQueryable<ApiScope> queryable, bool include = true)
-        {
-            if (!include)
-            {
-                return queryable;
-            }
-
-            return queryable
-                .Include(x => x.UserClaims)
-                .Include(x => x.Properties);
+                .Include(x => x.Scopes);
         }
 
         public static IQueryable<IdentityResource> IncludeDetails(this IQueryable<IdentityResource> queryable, bool include = true)

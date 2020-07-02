@@ -91,6 +91,7 @@ namespace Volo.Abp.IdentityServer
             {
                 Key = "PersistedGrantKey1",
                 SubjectId = "PersistedGrantSubjectId1",
+                SessionId = "PersistedGrantSessionId1",
                 ClientId = "PersistedGrantClientId1",
                 Type = "PersistedGrantType1",
                 Data = ""
@@ -147,9 +148,9 @@ namespace Volo.Abp.IdentityServer
             apiResource.Description = nameof(apiResource.Description);
             apiResource.DisplayName = nameof(apiResource.DisplayName);
 
-            apiResource.AddScope(nameof(ApiScope.Name));
+            apiResource.AddScope(nameof(ApiResourceScope.Scope));
             apiResource.AddUserClaim(nameof(ApiResourceClaim.Type));
-            apiResource.AddSecret(nameof(ApiSecret.Value));
+            apiResource.AddSecret(nameof(ApiResourceSecret.Value));
 
             await _apiResourceRepository.InsertAsync(apiResource);
             await _apiResourceRepository.InsertAsync(new ApiResource(_guidGenerator.Create(), "NewApiResource2"));

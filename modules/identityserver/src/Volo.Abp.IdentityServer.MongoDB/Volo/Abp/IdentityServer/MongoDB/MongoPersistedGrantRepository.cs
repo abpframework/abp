@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -7,6 +8,7 @@ using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.MongoDB;
+
 
 namespace Volo.Abp.IdentityServer.MongoDB
 {
@@ -85,12 +87,11 @@ namespace Volo.Abp.IdentityServer.MongoDB
             string clientId,
             string type)
         {
-            //IDS TODO: add SessionId to entity
             return GetMongoQueryable()
-                .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
-                // .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
-                .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
-                .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type)
+                .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
+                .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
+                .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+                .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!type.IsNullOrWhiteSpace(), x => x.Type == type)
                 .As<IMongoQueryable<PersistedGrant>>();
         }
     }

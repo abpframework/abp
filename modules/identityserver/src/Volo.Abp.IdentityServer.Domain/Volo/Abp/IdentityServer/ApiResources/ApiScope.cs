@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class ApiScope : Entity
+    public class ApiScope :  FullAuditedAggregateRoot<Guid>
     {
-        public virtual Guid ApiResourceId { get; protected set; }
+        public virtual bool Enabled { get; set; }
 
         [NotNull]
         public virtual string Name { get; protected set; }
@@ -25,44 +25,39 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public virtual List<ApiScopeClaim> UserClaims { get; protected set; }
 
-        public virtual Dictionary<string, string> Properties { get; protected set; }
+        public virtual List<ApiScopeProperty> Properties { get; protected set; }
 
         protected ApiScope()
         {
 
         }
 
-        public virtual bool Equals(Guid apiResourceId, [NotNull] string name)
-        {
-            return ApiResourceId == apiResourceId && Name == name;
-        }
-
         protected internal ApiScope(
-            Guid apiResourceId,
             [NotNull] string name,
             string displayName = null,
             string description = null,
             bool required = false,
             bool emphasize = false,
-            bool showInDiscoveryDocument = true)
+            bool showInDiscoveryDocument = true,
+            bool enabled = true)
         {
             Check.NotNull(name, nameof(name));
 
-            ApiResourceId = apiResourceId;
             Name = name;
             DisplayName = displayName ?? name;
             Description = description;
             Required = required;
             Emphasize = emphasize;
             ShowInDiscoveryDocument = showInDiscoveryDocument;
+            Enabled = enabled;
 
             UserClaims = new List<ApiScopeClaim>();
-            Properties = new Dictionary<string, string>();
+            Properties = new List<ApiScopeProperty>();
         }
 
         public virtual void AddUserClaim([NotNull] string type)
         {
-            UserClaims.Add(new ApiScopeClaim(ApiResourceId, Name, type));
+            UserClaims.Add(new ApiScopeClaim(Id, Name, type));
         }
 
         public virtual void RemoveAllUserClaims()
@@ -78,11 +73,6 @@ namespace Volo.Abp.IdentityServer.ApiResources
         public virtual ApiScopeClaim FindClaim(string type)
         {
             return UserClaims.FirstOrDefault(r => r.Name == Name && r.Type == type);
-        }
-
-        public override object[] GetKeys()
-        {
-            return new object[] { ApiResourceId, Name };
         }
     }
 }

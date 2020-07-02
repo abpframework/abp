@@ -19,13 +19,13 @@ namespace Volo.Abp.IdentityServer.Clients
         }
 
         [Fact]
-        public async Task FindApiResourceAsync_Should_Return_Null_If_Not_Found()
+        public async Task FindApiResourceAsync_Should_Return_Empty_If_Not_Found()
         {
             //Act
             var resource = await _resourceStore.FindApiResourcesByNameAsync(new []{"non-existing-name"});
 
             //Assert
-            resource.ShouldBeNull();
+            resource.ShouldBeEmpty();
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task FindIdentityResourcesByScopeAsync_Should_Return_For_Given_Scopes()
         {
             //Act
-            var identityResourcesByScope = (await _resourceStore.FindApiResourcesByScopeNameAsync(new List<string>
+            var identityResourcesByScope = (await _resourceStore.FindIdentityResourcesByScopeNameAsync(new List<string>
             {
                 "Test-Identity-Resource-Name-1"
             })).ToArray();
@@ -69,9 +69,7 @@ namespace Volo.Abp.IdentityServer.Clients
             identityResourcesByScope.Length.ShouldBe(1);
             identityResourcesByScope.First().DisplayName.ShouldBe("Test-Identity-Resource-DisplayName-1");
             identityResourcesByScope.First().Description.ShouldBe("Test-Identity-Resource-Description-1");
-
-            //IDS TODO:
-            //identityResourcesByScope.First().Required.ShouldBe(true);
+            identityResourcesByScope.First().Required.ShouldBe(true);
         }
 
         [Fact]

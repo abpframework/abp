@@ -30,7 +30,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Name)))
+                .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Scope)))
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 

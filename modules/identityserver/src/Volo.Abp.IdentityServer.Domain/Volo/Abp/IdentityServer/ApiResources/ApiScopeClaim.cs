@@ -5,7 +5,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiScopeClaim : UserClaim
     {
-        public Guid ApiResourceId { get; protected set; }
+        public Guid ApiScopeId { get; protected set; }
 
         [NotNull]
         public string Name { get; protected set; }
@@ -15,23 +15,23 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         }
 
-        public virtual bool Equals(Guid apiResourceId, [NotNull] string name, [NotNull] string type)
+        public virtual bool Equals(Guid apiScopeId, [NotNull] string name, [NotNull] string type)
         {
-            return ApiResourceId == apiResourceId && Name == name && Type == type;
+            return ApiScopeId == apiScopeId && Name == name && Type == type;
         }
 
-        protected internal ApiScopeClaim(Guid apiResourceId, [NotNull] string name, [NotNull] string type)
+        protected internal ApiScopeClaim(Guid apiScopeId, [NotNull] string name, [NotNull] string type)
             : base(type)
         {
             Check.NotNull(name, nameof(name));
 
-            ApiResourceId = apiResourceId;
+            ApiScopeId = apiScopeId;
             Name = name;
         }
 
         public override object[] GetKeys()
         {
-            return new object[] { ApiResourceId, Name, Type };
+            return new object[] { ApiScopeId, Name, Type };
         }
     }
 }

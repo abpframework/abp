@@ -27,7 +27,7 @@ namespace Volo.Abp.IdentityServer
             IClientRepository clientRepository,
             IGuidGenerator guidGenerator,
             IPersistentGrantRepository persistentGrantRepository,
-            IApiResourceRepository apiResourceRepository, 
+            IApiResourceRepository apiResourceRepository,
             IIdentityResourceRepository identityResourceRepository)
         {
             _clientRepository = clientRepository;
@@ -51,7 +51,7 @@ namespace Volo.Abp.IdentityServer
             {
                 ProtocolType = "TestProtocol-42"
             };
-            
+
             client42.AddCorsOrigin("Origin1");
 
             client42.AddScope("api1");
@@ -108,7 +108,8 @@ namespace Volo.Abp.IdentityServer
             };
 
             apiResource.AddSecret("secret".Sha256());
-            apiResource.AddScope("Test-ApiResource-ApiScope-Name-1", "Test-ApiResource-ApiScope-DisplayName-1");
+            apiResource.AddScope("Test-ApiResource-ApiScope-Name-1");
+            apiResource.AddScope("Test-ApiResource-ApiScope-DisplayName-1");
             apiResource.AddUserClaim("Test-ApiResource-Claim-Type-1");
 
             await _apiResourceRepository.InsertAsync(apiResource);
