@@ -107,12 +107,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
         private async Task CreateNpmrcFileAsync(string directoryName)
         {
+            var fileName = Path.Combine(directoryName, ".npmrc");
             var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
             var voloRegistry = await GetVoloRegistryAsync();
 
             if (await NpmrcFileExistAsync(directoryName))
             {
-                var fileName = Path.Combine(directoryName, ".npmrc");
 
                 var fileContent = File.ReadAllText(fileName);
 
