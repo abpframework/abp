@@ -242,7 +242,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 );
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized || response.StatusCode == System.Net.HttpStatusCode.Forbidden)
                 {
-                    throw new AbpAuthorizationException(errorResponse.Error.Message);
+                    throw new Volo.Abp.Authorization.AbpAuthorizationException(errorResponse.Error.Message);
                 }
                 throw new AbpRemoteCallException(errorResponse.Error);
             }
