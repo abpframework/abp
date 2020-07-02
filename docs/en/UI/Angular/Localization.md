@@ -174,6 +174,7 @@ Find [styles configuration in angular.json](https://angular.io/guide/workspace-c
     }
   }
 }
+```
 
 #### Step 2. Clear Lazy Loaded Fontawesome in AppComponent
 
