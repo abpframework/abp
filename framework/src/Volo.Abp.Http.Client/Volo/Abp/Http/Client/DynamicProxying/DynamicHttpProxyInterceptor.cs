@@ -240,7 +240,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 var errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
                     await response.Content.ReadAsStringAsync()
                 );
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized || response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized 
+                //|| response.StatusCode == System.Net.HttpStatusCode.Forbidden   //because the UserFriendlyException will send 403 code,commet this code
+                )
                 {
                     throw new Volo.Abp.Authorization.AbpAuthorizationException(errorResponse.Error.Message);
                 }
