@@ -41,7 +41,7 @@ ASP.NET Core的[标准IDistributeCache](https://docs.microsoft.com/en-us/aspnet/
 
 ### 为虚拟文件系统支持嵌入文件清单
 
-虚拟文件系统现在支持在项目中使用`GenerateEmbeddedFilesManifest`来添加编译程序集中嵌入资源的**真实的文件/目录结构**.所以,你现在可以访问文件,而无需任何文件名的限制(以前,目录名称中的一些特殊字符,比如`.`在某些情况会有问题)
+虚拟文件系统现在支持在项目中使用`GenerateEmbeddedFilesManifest`来添加编译程序集中嵌入资源的**真实的文件/目录结构**.所以,你现在可以访问文件,而没有任何文件名的限制(以前,目录名称中的一些特殊字符,比如`.`在某些情况会有问题)
 
 查看[文档](https://docs.abp.io/en/abp/latest/Virtual-File-System)学习如何利用新系统的优点.
 
@@ -92,9 +92,9 @@ CreateBookDto.MaxNameLength = 200;
 
 [预建应用程序模块](https://docs.abp.io/en/abp/latest/Modules/Index)使用了这个功能,所以你现在可以覆盖这些模块中定义的属性的最大长度了.
 
-### 自动分页式事件
+### 自动分布式事件
 
-ABP可以为所有的实体创建,更新和删除时**自动发布分布式事件**. 这很有用因为在分布式系统中你通常会对这些基础事件感兴趣.
+ABP可以为所有的实体在创建,更新和删除时**自动发布分布式事件**. 这很有用因为在分布式系统中你通常会对这些基础事件感兴趣.
 
 这个功能在v3.0中**已成熟并[文档化了](https://docs.abp.io/en/abp/latest/Distributed-Event-Bus#pre-defined-events)**. 你可以轻松地配置一部分或全部要发布事件的实体.
 
@@ -125,7 +125,7 @@ ABP可以为所有的实体创建,更新和删除时**自动发布分布式事�
 
 其他更新请查看[GitHub发行说明](https://github.com/abpframework/abp/releases/tag/3.0.0).
 
-## ABP框架3.0有哪些新增内容？
+## ABP商业版3.0有哪些新增内容？
 
 除了所有ABP框架的功能以外,ABP商业版同样在本次发布中有一些额外的功能.本节介绍3.0版本中[ABP商业版](https://commercial.abp.io/)的亮点.
 
@@ -147,7 +147,7 @@ ABP可以为所有的实体创建,更新和删除时**自动发布分布式事�
 
 ### ABP框架
 
-* 更改了一些预建应用程序模块的**常量**为静态属性, 这样你就可在你的代码中对它们修改. 如果你在属性中使用了这些常量,那么请使用上面解释的`DynamicStringLength`.
+* 更改了一些预建应用程序模块的**常量**为静态属性, 这样你就可在你的代码中对它们修改. 如果你在属性中使用了这些常量,那么请使用上面介绍的`DynamicStringLength`.
 * 更改`ConcurrencyStamp`最大长度为40. 你需要在更新ABP框架后**添加一个数据库迁移**并且更新数据库.
 * NPM软件包的依赖关系使用`~`代替`^`,为了更加稳定.
 
@@ -166,7 +166,6 @@ ABP可以为所有的实体创建,更新和删除时**自动发布分布式事�
 
 我们将继续在每两个星期发布一个新的小功能版本.所以,下一个预计发布日期是**2020年7月16日**的**3.1**版本.
 
-In the next few versions, we will be focused on the **Blazor UI**, as promised on [the road map](https://docs.abp.io/en/abp/latest/Road-Map). We will continue to improve the documentation, create samples, add other new features and enhancements. Follow the [ABP Framework Twitter account](https://twitter.com/abpframework) for the latest news...
 在接下来的几个版本中,我们将专注于**Blazor UI**,如[路线图](https://docs.abp.io/en/abp/latest/Road-Map)中承诺的.我们将继续改进文档,创建示例,添加其他新功能和改善.关注[ABP框架Twitter账号](https://twitter.com/abpframework)获取最新消息...
 
 ## 彩蛋: 文章!
