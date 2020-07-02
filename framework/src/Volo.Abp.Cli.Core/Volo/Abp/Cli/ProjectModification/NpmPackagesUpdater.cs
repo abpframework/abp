@@ -70,14 +70,18 @@ namespace Volo.Abp.Cli.ProjectModification
                 if (includePreviews)
                 {
                     await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                }
+                else if (switchToStable)
+                {
+                    await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                }
+
+                if (await NpmrcFileExistAsync(fileDirectory))
+                {
                     RunNpmInstall(fileDirectory);
                 }
                 else
                 {
-                    if (switchToStable)
-                    {
-                        await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
-                    }
                     RunYarn(fileDirectory);
                 }
 
@@ -96,15 +100,20 @@ namespace Volo.Abp.Cli.ProjectModification
             await Task.CompletedTask;
         }
 
+        private static async Task<bool> NpmrcFileExistAsync(string directoryName)
+        {
+            return File.Exists(Path.Combine(directoryName, ".npmrc"));
+        }
+
         private async Task CreateNpmrcFileAsync(string directoryName)
         {
-            var fileName = Path.Combine(directoryName, ".npmrc");
-
             var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
             var voloRegistry = await GetVoloRegistryAsync();
 
-            if (File.Exists(fileName))
+            if (await NpmrcFileExistAsync(directoryName))
             {
+                var fileName = Path.Combine(directoryName, ".npmrc");
+
                 var fileContent = File.ReadAllText(fileName);
 
                 if (!fileContent.Contains(abpRegistry))
