@@ -237,7 +237,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             _fileVersionStorage[package.Name] = newVersionWithPrefix;
 
-            return $"~{newVersionWithPrefix}";
+            return newVersionWithPrefix;
         }
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
