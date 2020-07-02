@@ -22,6 +22,18 @@ namespace Volo.Abp.IdentityServer
                 .ThenInclude(s => s.UserClaims);
         }
 
+        public static IQueryable<ApiScope> IncludeDetails(this IQueryable<ApiScope> queryable, bool include = true)
+        {
+            if (!include)
+            {
+                return queryable;
+            }
+
+            return queryable
+                .Include(x => x.UserClaims)
+                .Include(x => x.Properties);
+        }
+
         public static IQueryable<IdentityResource> IncludeDetails(this IQueryable<IdentityResource> queryable, bool include = true)
         {
             if (!include)
@@ -30,7 +42,8 @@ namespace Volo.Abp.IdentityServer
             }
 
             return queryable
-                .Include(x => x.UserClaims);
+                .Include(x => x.UserClaims)
+                .Include(x => x.Properties);
         }
 
         public static IQueryable<Client> IncludeDetails(this IQueryable<Client> queryable, bool include = true)

@@ -37,7 +37,7 @@ namespace Volo.Abp.IdentityServer
 
             CreateMap<ApiSecret, IdentityServer4.Models.Secret>();
 
-            CreateMap<ApiScope, IdentityServer4.Models.Scope>();
+            CreateMap<ApiScope, IdentityServer4.Models.ApiScope>();
 
             CreateMap<ClientProperty, KeyValuePair<string, string>>()
               .ReverseMap();

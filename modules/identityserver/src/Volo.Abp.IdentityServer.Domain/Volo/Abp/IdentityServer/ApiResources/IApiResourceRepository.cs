@@ -8,8 +8,8 @@ namespace Volo.Abp.IdentityServer.ApiResources
 {
     public interface IApiResourceRepository : IBasicRepository<ApiResource, Guid>
     {
-        Task<ApiResource> FindByNameAsync(
-            string name,
+        Task<List<ApiResource>> FindByNameAsync(
+            string[] apiResourceNames,
             bool includeDetails = true,
             CancellationToken cancellationToken = default
         );

@@ -40,7 +40,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<List<IdentityResource>> GetListByScopesAsync(string[] scopeNames, bool includeDetails = false,
+        public virtual async Task<List<IdentityResource>> GetListByScopeNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()

@@ -25,6 +25,8 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public virtual List<ApiScopeClaim> UserClaims { get; protected set; }
 
+        public virtual Dictionary<string, string> Properties { get; protected set; }
+
         protected ApiScope()
         {
 
@@ -36,12 +38,12 @@ namespace Volo.Abp.IdentityServer.ApiResources
         }
 
         protected internal ApiScope(
-            Guid apiResourceId, 
-            [NotNull] string name, 
-            string displayName = null, 
-            string description = null, 
-            bool required = false, 
-            bool emphasize = false, 
+            Guid apiResourceId,
+            [NotNull] string name,
+            string displayName = null,
+            string description = null,
+            bool required = false,
+            bool emphasize = false,
             bool showInDiscoveryDocument = true)
         {
             Check.NotNull(name, nameof(name));
@@ -55,6 +57,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
             ShowInDiscoveryDocument = showInDiscoveryDocument;
 
             UserClaims = new List<ApiScopeClaim>();
+            Properties = new Dictionary<string, string>();
         }
 
         public virtual void AddUserClaim([NotNull] string type)

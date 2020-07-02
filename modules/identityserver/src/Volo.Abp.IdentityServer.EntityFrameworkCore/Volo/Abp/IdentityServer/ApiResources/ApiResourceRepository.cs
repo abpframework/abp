@@ -19,17 +19,14 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         }
 
-        public virtual async Task<ApiResource> FindByNameAsync(
-            string name,
-            bool includeDetails = true,
+        public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             var query = from apiResource in DbSet.IncludeDetails(includeDetails)
-                        where apiResource.Name == name
-                        select apiResource;
+                where apiResourceNames.Contains(apiResource.Name)
+                select apiResource;
 
-            return await query
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<ApiResource>> GetListByScopesAsync(
@@ -45,7 +42,10 @@ namespace Volo.Abp.IdentityServer.ApiResources
         }
 
         public virtual async Task<List<ApiResource>> GetListAsync(
-            string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false,
+            string sorting, int skipCount,
+            int maxResultCount,
+            string filter,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await DbSet

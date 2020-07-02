@@ -21,7 +21,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
     public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         protected SignInManager<IdentityUser> SignInManager { get; }
-        protected IEventService Events { get; }
         protected UserManager<IdentityUser> UserManager { get; }
         protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
         protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
@@ -29,13 +28,11 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         public AbpResourceOwnerPasswordValidator(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IEventService events,
-            ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger, 
+            ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
             IStringLocalizer<AbpIdentityServerResource> localizer)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            Events = events;
             Logger = logger;
             Localizer = localizer;
         }
@@ -59,7 +56,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     var sub = await UserManager.GetUserIdAsync(user);
 
                     Logger.LogInformation("Credentials validated for username: {username}", context.UserName);
-                    await Events.RaiseAsync(new UserLoginSuccessEvent(context.UserName, sub, context.UserName, interactive: false));
 
                     var additionalClaims = new List<Claim>();
 
@@ -76,26 +72,22 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 else if (result.IsLockedOut)
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", context.UserName);
-                    await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "locked out", interactive: false));
                     errorDescription = Localizer["UserLockedOut"];
                 }
                 else if (result.IsNotAllowed)
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
-                    await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "not allowed", interactive: false));
                     errorDescription = Localizer["LoginIsNotAllowed"];
                 }
                 else
                 {
                     Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", context.UserName);
-                    await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "invalid credentials", interactive: false));
                     errorDescription = Localizer["InvalidUserNameOrPassword"];
                 }
             }
             else
             {
                 Logger.LogInformation("No user found matching username: {username}", context.UserName);
-                await Events.RaiseAsync(new UserLoginFailureEvent(context.UserName, "invalid username", interactive: false));
                 errorDescription = Localizer["InvalidUsername"];
             }
 

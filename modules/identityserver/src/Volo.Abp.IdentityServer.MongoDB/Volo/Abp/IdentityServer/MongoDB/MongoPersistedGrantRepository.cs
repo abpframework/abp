@@ -16,6 +16,13 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
         }
 
+        public async Task<List<PersistedGrant>> GetListAsync(string subjectId, string sessionId, string clientId, string type, bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await Filter(subjectId, sessionId, clientId, type)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public virtual async Task<PersistedGrant> FindByKeyAsync(string key, CancellationToken cancellationToken = default)
         {
 
@@ -27,8 +34,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(x => x.SubjectId == subjectId)
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                ;
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<PersistedGrant>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
@@ -39,6 +45,22 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task DeleteAsync(
+            string subjectId = null,
+            string sessionId = null,
+            string clientId = null,
+            string type = null,
+            CancellationToken cancellationToken = default)
+        {
+            var persistedGrants = await Filter(subjectId, sessionId, clientId, type)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+
+            foreach (var persistedGrant in persistedGrants)
+            {
+                await DeleteAsync(persistedGrant, false, GetCancellationToken(cancellationToken));
+            }
         }
 
         public virtual async Task DeleteAsync(string subjectId, string clientId, CancellationToken cancellationToken = default)
@@ -55,6 +77,21 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 x => x.SubjectId == subjectId && x.ClientId == clientId && x.Type == type,
                 cancellationToken: GetCancellationToken(cancellationToken)
             );
+        }
+
+        private IMongoQueryable<PersistedGrant> Filter(
+            string subjectId,
+            string sessionId,
+            string clientId,
+            string type)
+        {
+            //IDS TODO: add SessionId to entity
+            return GetMongoQueryable()
+                .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
+                // .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
+                .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+                .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type)
+                .As<IMongoQueryable<PersistedGrant>>();
         }
     }
 }

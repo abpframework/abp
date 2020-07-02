@@ -20,7 +20,7 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task FindByNormalizedNameAsync()
         {
-            (await apiResourceRepository.FindByNameAsync("NewApiResource2")).ShouldNotBeNull();
+            (await apiResourceRepository.FindByNameAsync(new []{"NewApiResource2"})).ShouldNotBeNull();
         }
 
         [Fact]
