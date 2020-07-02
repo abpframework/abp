@@ -72,9 +72,12 @@ namespace Volo.Abp.Cli.ProjectModification
                     await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
                     RunNpmInstall(fileDirectory);
                 }
-                else if (switchToStable)
+                else
                 {
-                    await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                    if (switchToStable)
+                    {
+                        await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                    }
                     RunYarn(fileDirectory);
                 }
 
