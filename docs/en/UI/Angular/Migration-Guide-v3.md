@@ -237,9 +237,10 @@ Until v3, we had been using a custom component, `abp-table`, as the default tabl
 
 As of ABP v3, we have switched to a battle-tested, well-executed data grid: [ngx-datatable](https://github.com/swimlane/ngx-datatable). All ABP modules will come with ngx-datatable already implemented in them. `ThemeSharedModule` already exports `NgxDatatableModule`. So, if you install the package by running `yarn add @swimlane/ngx-datatable` in your terminal, it will be available for use in all modules of your app.
 
-For proper styling, you need to add the following in the styles section of your angular.json file:
+For proper styling, you need to add the following in the styles section of your angular.json file (above all others):
 
 ```json
+"styles": [
   {
     "input": "node_modules/@swimlane/ngx-datatable/index.css",
     "inject": true,
@@ -254,7 +255,9 @@ For proper styling, you need to add the following in the styles section of your 
     "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
     "inject": true,
     "bundleName": "ngx-datatable-material"
-  }
+  },
+  // other styles
+]
 ```
 
 Since `abp-table` is not dropped yet, modules previously built by ABP v2.x will not suddenly lose all their tables. Yet, they will look and feel different from built-in ABP v3 modules. Therefore, you will probably want to convert the tables in those modules to ngx-datatable. In order to decrease the amount of work required to convert an abp-table into ngx-datatable, we have modified the [ListService](./List-Service.md) to work well with ngx-datatable and [introduced](https://volosoft.com/blog/attribute-directives-to-avoid-repetition-in-angular-templates) two new directives: `NgxDatatableListDirective` and `NgxDatatableDefaultDirective`.
@@ -353,6 +356,103 @@ Once you bind the injected `ListService` instance through `NgxDatatableListDirec
 - If you have to do that later and are planning to keep abp-table for a while, make sure you update your pagination according to the [breaking change described here](./List-Service.md).
 
 **Important Note:** The `abp-table` is not removed, but is deprecated and will be removed in the future. Please consider switching to ngx-datatable.
+
+
+### Extensions System [COMMERCIAL]
+
+The extensions system is open sourced now and is publicly available from `@abp/ng.theme.shared/extensions` package instead of `@volo/abp.commercial.ng.ui`. Also, according to the new structure of config packages, the configuration is given through `forLazy` static methods as described above.
+
+#### What to Do When Migrating?
+
+If you have never used the extensions system before, you do not have to do anything. If you have, then please check the documentation again to see what changed. Extension system itself works the same as before. The only changes are the package you import from and the static method and the module you pass your contributors to.
+
+
+### Lepton Theme Logos [COMMERCIAL]
+
+In ABP v2.x, Lepton had one light and one dark logo per color theme. We have realized we could make it work with only one light and one dark logo. So, we have changed how Lepton looks up logo images and now you just need to have a `logo-light.png` and a `logo-dark.png` in your project.
+
+#### What to Do When Migrating?
+
+If you have switched template logo PNGs before, the change is simple:
+
+- Go to `/assets/images/logo` folder.
+- Rename `theme1.png` as `logo-light.png` and `theme1-reverse.png` as `logo-dark.png`.
+- Delete all other `theme*.png` files.
+
+If you have replaced the logo component(s), the change is a little bit different, but still simple. The `LayoutStateService` has a two new members: `primaryLogoColor` and `secondaryLogoColor`. They have an observable stream of `'light'` and `'dark'` strings as value. You can consume their value in your custom logo component templates with the `async` pipe. Here is a complete example which covers both primary and secondary (account) layout logos.
+
+```js
+import { AddReplaceableComponent } from '@abp/ng.core';
+import { CommonModule } from '@angular/common';
+import { APP_INITIALIZER, Component, Injector, NgModule } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { eAccountComponents } from '@volo/abp.ng.account';
+import {
+  AccountLayoutComponent,
+  eThemeLeptonComponents,
+  LayoutStateService,
+} from '@volo/abp.ng.theme.lepton';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Component({
+  template: `
+    <div class="account-brand p-4 text-center mb-1" *ngIf="isAccount; else link">
+      <ng-template [ngTemplateOutlet]="link"></ng-template>
+    </div>
+
+    <ng-template #link>
+      <a [style.background-image]="logoUrl | async" class="navbar-brand" routerLink="/"></a>
+    </ng-template>
+  `,
+})
+export class LogoComponent {
+  isAccount: boolean;
+
+  logoColor: Observable<'dark' | 'light'>;
+
+  get logoUrl() {
+    return this.logoColor.pipe(map(color => `url(/assets/images/logo/logo-${color}.png)`));
+  }
+
+  constructor(injector: Injector) {
+    const layout = injector.get(LayoutStateService);
+    this.isAccount = Boolean(injector.get(AccountLayoutComponent, false));
+    this.logoColor = this.isAccount ? layout.secondaryLogoColor : layout.primaryLogoColor;
+  }
+}
+
+@NgModule({
+  imports: [CommonModule],
+  declarations: [LogoComponent],
+  exports: [LogoComponent],
+})
+export class LogoModule {}
+
+export const APP_LOGO_PROVIDER = [
+  { provide: APP_INITIALIZER, useFactory: switchLogos, multi: true, deps: [Store] },
+];
+
+export function switchLogos(store: Store) {
+  return () => {
+    store.dispatch(
+      new AddReplaceableComponent({
+        component: LogoComponent,
+        key: eThemeLeptonComponents.Logo,
+      }),
+    );
+
+    store.dispatch(
+      new AddReplaceableComponent({
+        component: LogoComponent,
+        key: eAccountComponents.Logo,
+      }),
+    );
+  };
+}
+```
+
+Just add `APP_LOGO_PROVIDER` to the providers of your root module (usually `AppModule`) and you will have a custom logo component adjusting to the theme colors.
 
 
 ### Deprecated Interfaces
