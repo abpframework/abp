@@ -435,7 +435,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual bool SuppressLabel(TagHelperOutput inputTag)
         {
-            return inputTag.AllAttributes.ContainsName("nolabel");
+            return inputTag.Attributes.ContainsName("nolabel");
         }
 
         protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
