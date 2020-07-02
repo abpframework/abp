@@ -240,7 +240,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 var errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
                     await response.Content.ReadAsStringAsync()
                 );
-
+                if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    throw new AbpAuthorizationException(errorResponse.Error.Message);
+                }
                 throw new AbpRemoteCallException(errorResponse.Error);
             }
 
