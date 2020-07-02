@@ -32,7 +32,7 @@ A variable named `apiName` (available as of v2.4) is defined in each service. `a
 The `providedIn` property of the services is defined as `'root'`. Therefore no need to add a service as a provider to a module. You can use a service by injecting it into a constructor as shown below:
 
 ```js
-import { AbpApplicationConfigurationService } from '../app/shared/services';
+import { AbpApplicationConfigurationService } from '../abp/applicationconfiguration/services';
 
 //...
 export class HomeComponent{
@@ -48,14 +48,14 @@ The Angular compiler removes the services that have not been injected anywhere f
 
 ### Models
 
-The generated models match the DTOs in the back-end. Each model is generated as a class under the `src/app/*/shared/models` folder. 
+The generated models match the DTOs in the back-end. Each model is generated as a class under the `src/app/*/models` folder. 
 
 There are a few [base classes](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/dtos.ts) in the `@abp/ng.core` package. Some models extend these classes.
 
 A class instance can be created as shown below:
 
 ```js
-import { IdentityRoleCreateDto } from '../identity/shared/models';
+import { IdentityRoleCreateDto } from '../identity/role/models'
 //...
 const instance = new IdentityRoleCreateDto({name: 'Role 1', isDefault: false, isPublic: true})
 ```
