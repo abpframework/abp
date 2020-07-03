@@ -53,7 +53,7 @@ namespace Volo.Abp.IdentityServer.Clients
             //Assert
             apiResources.ShouldNotBe(null);
 
-            apiResources[0].Scopes.Count.ShouldBe(2);
+            apiResources[0].Scopes.Count.ShouldBe(3);
         }
 
         [Fact]

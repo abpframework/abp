@@ -73,9 +73,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-            if (context?.ClientId != null)
+            if (context?.Client?.ClientId != null)
             {
-                var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
+                var client = await ClientStore.FindEnabledClientByIdAsync(context?.Client?.ClientId);
                 if (client != null)
                 {
                     EnableLocalLogin = client.EnableLocalLogin;
@@ -105,7 +105,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     return Redirect("~/");
                 }
 
-                await Interaction.GrantConsentAsync(context, ConsentResponse.Denied);
+                await Interaction.GrantConsentAsync(context, new ConsentResponse()
+                {
+                    Error = AuthorizationError.AccessDenied
+                });
 
                 return Redirect(ReturnUrl);
             }
