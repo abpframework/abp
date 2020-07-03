@@ -631,7 +631,7 @@ Open the `en.json` (*the English translations*) file and change the content as b
     "Enum:BookType:4": "Fantastic",
     "Enum:BookType:5": "Horror",
     "Enum:BookType:6": "Science",
-    "Enum:BookType:7": "ScienceFiction",
+    "Enum:BookType:7": "Science fiction",
     "Enum:BookType:8": "Poetry"
   }
 }
@@ -639,7 +639,7 @@ Open the `en.json` (*the English translations*) file and change the content as b
 
 * Localization key names are arbitrary. You can set any name. We prefer some conventions for specific text types;
   * Add `Menu:` prefix for menu items.
-  * Use `Enum:<enum-type>:<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums.
+  * Use `Enum:<enum-type>:<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
 
 If a text is not defined in the localization file, it **fallbacks** to the localization key (as ASP.NET Core's standard behavior).
 
@@ -653,80 +653,116 @@ Run the project, login to the application with the username `admin` and the pass
 
 When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
 
-### Book list
+### Book List
 
-We will use the [Datatables.net](https://datatables.net/) jQuery plugin to show the book list. [Datatables](https://datatables.net/) can completely work via AJAX, it is fast, popular and provides a good user experience. [Datatables](https://datatables.net/) plugin is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
+We will use the [Datatables.net](https://datatables.net/) jQuery library to show the book list. Datatables library completely work via AJAX, it is fast, popular and provides a good user experience.
 
-##### Index.cshtml
+> Datatables library is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
+
+#### Index.cshtml
 
 Change the `Pages/Books/Index.cshtml` as following:
 
 ````html
 @page
-@model Acme.BookStore.Web.Pages.Books.IndexModel
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Web.Pages.Books
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IStringLocalizer<BookStoreResource> L
 @section scripts
 {
-    <abp-script src="/Pages/Books/index.js" />
+    <abp-script src="/Pages/Books/Index.js" />
 }
 <abp-card>
     <abp-card-header>
         <h2>@L["Books"]</h2>
     </abp-card-header>
     <abp-card-body>
-        <abp-table striped-rows="true" id="BooksTable">
-            <thead>
-                <tr>
-                    <th>@L["Name"]</th>
-                    <th>@L["Type"]</th>
-                    <th>@L["PublishDate"]</th>
-                    <th>@L["Price"]</th>
-                    <th>@L["CreationTime"]</th>
-                </tr>
-            </thead>
-        </abp-table>
+        <abp-table striped-rows="true" id="BooksTable"></abp-table>
     </abp-card-body>
 </abp-card>
 ````
 
-* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to standard `script` tag. It handles **minification** and **versioning**. See the [bundling & minification document](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification) for details.
-* `abp-card` and `abp-table` are **tag helpers** for Twitter Bootstrap's [card component](http://getbootstrap.com/docs/4.1/components/card/). There are other useful tag helpers in ABP to easily use most of the [bootstrap](https://getbootstrap.com/) components. You can also use regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by help the of IntelliSense and compile time type checking. Further information, see the [tag helpers](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Tag-Helpers/Index) document.
-* You can **localize** the column names in the localization file as you did for the menu items above.
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to standard `script` tag. It handles **minification** and **versioning**. See the [bundling & minification document](../UI/AspNetCore/Bundling-Minification.md) for details.
+* `abp-card` is a tag helper for Twitter Bootstrap's [card component](https://getbootstrap.com/docs/4.5/components/card/). There are other useful tag helpers provided by the ABP Framework to easily use most of the [bootstrap](https://getbootstrap.com/) components. You could use the regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by help the of IntelliSense and compile time type checking. Further information, see the [tag helpers](../UI/AspNetCore/Tag-Helpers/Index.md) document.
 
-##### Add a Script File
+#### Index.js
 
-Create `index.js` JavaScript file under the `Pages/Books/` folder:
+Create an `Index.js` file under the `Pages/Books` folder:
 
-![bookstore-index-js-file](./images/bookstore-index-js-file-v2.png)
+![bookstore-index-js-file](./images/bookstore-index-js-file-v3.png)
 
-`index.js` content is shown below:
+The content of the file is shown below:
 
 ````js
 $(function () {
-    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
-        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
-        columnDefs: [
-            { data: "name" },
-            { data: "type",
-              render: function(data){
-                return l('Enum:BookType:' + data);
-              }
-            },
-            { data: "publishDate" },
-            { data: "price" },
-            { data: "creationTime" }
-        ]
-    }));
+    var l = abp.localization.getResource('BookStore');
+
+    var dataTable = $('#BooksTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+                ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList),
+                columnDefs: [
+                    {
+                        title: l('Name'),
+                        data: "name"
+                    },
+                    {
+                        title: l('Type'),
+                        data: "type",
+                        render: function (data) {
+                            console.log(data);
+                            return l('Enum:BookType:' + data);
+                        }
+                    },
+                    {
+                        title: l('PublishDate'),
+                        data: "publishDate",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString();
+                        }
+                    },
+                    {
+                        title: l('Price'),
+                        data: "price"
+                    },
+                    {
+                        title: l('CreationTime'), data: "creationTime",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
+                        }
+                    }
+                ]
+            }
+        )
+    );
+
 });
 ````
 
-* `abp.libs.datatables.createAjax` is a helper function to adapt ABP's dynamic JavaScript API proxies to [Datatable](https://datatables.net/)'s format.
-* `abp.libs.datatables.normalizeConfiguration` is another helper function. There's no requirement to use it, but it simplifies the [Datatables](https://datatables.net/) configuration by providing conventional values for missing options.
-* `acme.bookStore.book.getList` is the function to get list of books (as described in [dynamic JavaScript proxies](#dynamic-javascript-proxies)).
-* See [Datatables documentation](https://datatables.net/manual/) for all configuration options.
+* `abp.localization.getResource` gets a function that is used to localize text using the same JSON file defined in the server side. In this way, you can share the localization values with the client side.
+* `abp.libs.datatables.normalizeConfiguration` is a helper function defined by the ABP Framework. There's no requirement to use it, but it simplifies the [Datatables](https://datatables.net/) configuration by providing conventional default values for missing options.
+* `abp.libs.datatables.createAjax` is another helper function to adapt ABP's dynamic JavaScript API proxies to [Datatable](https://datatables.net/)'s expected parameter format
+* `acme.bookStore.books.book.getList` is the dynamic JavaScript proxy function introduced before.
+* [luxon](https://moment.github.io/luxon/) library is also a standard library that is pre-configured in the solution, so you can use to perform date/time operations easily.
 
-It's end of this part. The final UI of this work is shown as below:
+> See [Datatables documentation](https://datatables.net/manual/) for all configuration options.
 
-![Book list](./images/bookstore-book-list-2.png)
+## Run the Final Application
+
+You can run the application! The final UI of this part is shown below:
+
+![Book list](images/bookstore-book-list-3.png)
+
+This is a fully working, server side paged, sorted and localized table of books.
 
 {{end}}
 
