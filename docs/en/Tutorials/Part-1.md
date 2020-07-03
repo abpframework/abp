@@ -186,7 +186,7 @@ Add-Migration "Created_Book_Entity"
 
 This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project.
 
-Before updating the database, you will learn how to seed initial data to the database.
+Before updating the database, read the section below to learn how to seed some initial data to the database.
 
 > If you are using another IDE than the Visual Studio, you can use `dotnet-ef` tool as [documented here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration).
 
@@ -232,7 +232,8 @@ namespace Acme.BookStore
                     Type = BookType.Dystopia,
                     PublishDate = new DateTime(1949, 6, 8),
                     Price = 19.84f
-                }
+                },
+                autoSave: true
             );
 
             await _bookRepository.InsertAsync(
@@ -242,7 +243,8 @@ namespace Acme.BookStore
                     Type = BookType.ScienceFiction,
                     PublishDate = new DateTime(1995, 9, 27),
                     Price = 42.0f
-                }
+                },
+                autoSave: true
             );
         }
     }
@@ -438,7 +440,9 @@ namespace Acme.BookStore.Books
 
 ## Auto API Controllers
 
-In a typical ASP.NET Core application, you create **API Controllers** to expose application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP. ABP can [**automagically**](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) configures your application services as MVC API Controllers by convention.
+In a typical ASP.NET Core application, you create **API Controllers** to expose application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP.
+
+ABP can [**automagically**](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) configures your application services as MVC API Controllers by convention.
 
 #### Swagger UI
 
@@ -448,11 +452,45 @@ You will see some built-in service endpoints as well as the `Book` service and i
 
 ![bookstore-swagger](./images/bookstore-swagger.png)
 
-Swagger has a nice interface to test the APIs. You can try to execute the `[GET] /api/app/book` API to get a list of books.
+Swagger has a nice interface to test the APIs.
+
+If you try to execute the `[GET] /api/app/book` API to get a list of books, the server returns such a JSON result:
+
+````json
+{
+  "totalCount": 2,
+  "items": [
+    {
+      "name": "The Hitchhiker's Guide to the Galaxy",
+      "type": 7,
+      "publishDate": "1995-09-27T00:00:00",
+      "price": 42,
+      "lastModificationTime": null,
+      "lastModifierId": null,
+      "creationTime": "2020-07-03T21:04:18.4607218",
+      "creatorId": null,
+      "id": "86100bb6-cbc1-25be-6643-39f62806969c"
+    },
+    {
+      "name": "1984",
+      "type": 3,
+      "publishDate": "1949-06-08T00:00:00",
+      "price": 19.84,
+      "lastModificationTime": null,
+      "lastModifierId": null,
+      "creationTime": "2020-07-03T21:04:18.3174016",
+      "creatorId": null,
+      "id": "41055277-cce8-37d7-bb37-39f62806960b"
+    }
+  ]
+}
+````
+
+That's pretty cool since we haven't written a single line of code to create the API controller, but now we have a fully working REST API!
 
 {{if UI == "MVC"}}
 
-### Dynamic JavaScript proxies
+## Dynamic JavaScript proxies
 
 It's common to call HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
 
