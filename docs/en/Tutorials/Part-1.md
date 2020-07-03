@@ -269,22 +269,24 @@ While MongoDB **doesn't require** a database schema migration, it is still good 
 
 {{end}}
 
-### Create the application service
+## Create the Application Service
 
-The next step is to create an [application service](../Application-Services.md) to manage the books which will allow us the four basic functions: creating, reading, updating and deleting. Application layer is separated into two projects:
+The application layer is separated into two projects:
 
-* `Acme.BookStore.Application.Contracts` mainly contains your `DTO`s and application service interfaces.
+* `Acme.BookStore.Application.Contracts` contains your [DTO](../Data-Transfer-Objects.md)s and [application service](../Application-Services.md) interfaces.
 * `Acme.BookStore.Application` contains the implementations of your application services.
 
-#### BookDto
+In this section, you will create an application service to get, create, update and delete books using the `CrudAppService` base class of the ABP Framework.
 
-Create a DTO class named `BookDto` into the `Acme.BookStore.Application.Contracts` project:
+### BookDto
+
+`CrudAppService` base class requires to define the fundamental DTOs for the entity. Create a DTO class named `BookDto` into the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
 using Volo.Abp.Application.Dtos;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public class BookDto : AuditedEntityDto<Guid>
     {
@@ -301,11 +303,12 @@ namespace Acme.BookStore
 
 * **DTO** classes are used to **transfer data** between the *presentation layer* and the *application layer*. See the [Data Transfer Objects document](https://docs.abp.io/en/abp/latest/Data-Transfer-Objects) for more details.
 * `BookDto` is used to transfer book data to the presentation layer in order to show the book information on the UI.
-* `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` class defined above.
+* `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` entity defined above.
 
-It will be needed to map `Book` entities to `BookDto` objects while returning books to the presentation layer. [AutoMapper](https://automapper.org) library can automate this conversion when you define the proper mapping. The startup template comes with AutoMapper configured, so you can just define the mapping in the `BookStoreApplicationAutoMapperProfile` class in the `Acme.BookStore.Application` project:
+It will be needed to map `Book` entities to `BookDto` objects while returning books to the presentation layer. [AutoMapper](https://automapper.org) library can automate this conversion when you define the proper mapping. The startup template comes with AutoMapper pre-configured. So, you can just define the mapping in the `BookStoreApplicationAutoMapperProfile` class in the `Acme.BookStore.Application` project:
 
 ````csharp
+using Acme.BookStore.Books;
 using AutoMapper;
 
 namespace Acme.BookStore
@@ -320,15 +323,17 @@ namespace Acme.BookStore
 }
 ````
 
-#### CreateUpdateBookDto
+> See the [object to object mapping](../Object-To-Object-Mapping.md) document for details.
 
-Create a DTO class named `CreateUpdateBookDto` into the `Acme.BookStore.Application.Contracts` project:
+### CreateUpdateBookDto
+
+Create another DTO class named `CreateUpdateBookDto` into the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public class CreateUpdateBookDto
     {
@@ -351,9 +356,10 @@ namespace Acme.BookStore
 * This `DTO` class is used to get book information from the user interface while creating or updating a book.
 * It defines data annotation attributes (like `[Required]`) to define validations for the properties. `DTO`s are [automatically validated](https://docs.abp.io/en/abp/latest/Validation) by the ABP framework.
 
-Next, add a mapping in `BookStoreApplicationAutoMapperProfile` from the `CreateUpdateBookDto` object to the `Book` entity with the `CreateMap<CreateUpdateBookDto, Book>();` command:
+Just like done for the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be like shown below:
 
 ````csharp
+using Acme.BookStore.Books;
 using AutoMapper;
 
 namespace Acme.BookStore
@@ -363,30 +369,29 @@ namespace Acme.BookStore
         public BookStoreApplicationAutoMapperProfile()
         {
             CreateMap<Book, BookDto>();
-            CreateMap<CreateUpdateBookDto, Book>(); //<--added this line-->
+            CreateMap<CreateUpdateBookDto, Book>();
         }
     }
 }
 ````
 
-#### IBookAppService
+### IBookAppService
 
-Create an interface named `IBookAppService` in the `Acme.BookStore.Application.Contracts` project:
+Next step is to define an interface for the application service. Create an interface named `IBookAppService` in the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public interface IBookAppService :
         ICrudAppService< //Defines CRUD methods
             BookDto, //Used to show books
             Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
-            CreateUpdateBookDto, //Used to create a new book
-            CreateUpdateBookDto> //Used to update a book
+            PagedAndSortedResultRequestDto, //Used for paging/sorting
+            CreateUpdateBookDto> //Used to create/update a book
     {
 
     }
@@ -394,12 +399,12 @@ namespace Acme.BookStore
 ````
 
 * Defining interfaces for the application services **are not required** by the framework. However, it's suggested as a best practice.
-* `ICrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods manually.
-* There are some variations of the `ICrudAppService` where you can use separated DTOs for each method.
+* `ICrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods manually (which will be done for the authors in the next parts).
+* There are some variations of the `ICrudAppService` where you can use separated DTOs for each method (like using different DTOs for create and update).
 
-#### BookAppService
+### BookAppService
 
-Implement the `IBookAppService` as named `BookAppService` in the `Acme.BookStore.Application` project:
+Implement the `IBookAppService`, as named `BookAppService`, in the `Acme.BookStore.Application` project:
 
 ````csharp
 using System;
@@ -407,12 +412,16 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public class BookAppService :
-        CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
-                       CreateUpdateBookDto, CreateUpdateBookDto>,
-        IBookAppService
+        CrudAppService<
+            Book, //The Book entity
+            BookDto, //Used to show books
+            Guid, //Primary key of the book entity
+            PagedAndSortedResultRequestDto, //Used for paging/sorting
+            CreateUpdateBookDto>, //Used to create/update a book
+        IBookAppService //implement the IBookAppService
     {
         public BookAppService(IRepository<Book, Guid> repository)
             : base(repository)
@@ -423,13 +432,13 @@ namespace Acme.BookStore
 }
 ````
 
-* `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD (create, read, update, delete) methods defined above.
+* `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD (create, read, update, delete) methods defined by the `ICrudAppService`.
 * `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](https://docs.abp.io/en/abp/latest/Repositories).
-* `BookAppService` uses `IObjectMapper` to map `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
+* `BookAppService` uses `IObjectMapper` service ([see](../Object-To-Object-Mapping.md)) to map `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
 
-### Auto API Controllers
+## Auto API Controllers
 
-We normally create **Controllers** to expose application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them via AJAX. ABP can [**automagically**](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) configures your application services as MVC API Controllers by convention.
+In a typical ASP.NET Core application, you create **API Controllers** to expose application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP. ABP can [**automagically**](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) configures your application services as MVC API Controllers by convention.
 
 #### Swagger UI
 
