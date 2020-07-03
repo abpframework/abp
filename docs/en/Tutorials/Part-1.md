@@ -768,8 +768,8 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 {{if UI == "NG"}}
 
-### Angular development
-#### Create the books page
+## Angular UI Development
+### Create the books page
 
 It's time to create something visible and usable! There are some tools that we will use when developing ABP Angular frontend application:
 
@@ -778,7 +778,7 @@ It's time to create something visible and usable! There are some tools that we w
 - [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
 - [Visual Studio Code](https://code.visualstudio.com/) will be used as the code editor (you can use your favorite editor).
 
-#### Install NPM packages
+### Install NPM packages
 
 Open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install NPM packages:
 
@@ -786,7 +786,7 @@ Open a new command line interface (terminal window) and go to your `angular` fol
 yarn
 ```
 
-#### BookModule
+### BookModule
 
 Run the following command line to create a new module, named `BookModule`:
 
@@ -796,7 +796,7 @@ yarn ng generate module book --routing true
 
 ![Generating books module](./images/bookstore-creating-book-module-terminal.png)
 
-#### Routing
+### Routing
 
 Open the `app-routing.module.ts` file in `src\app` folder and add a route as shown below:
 
@@ -849,7 +849,7 @@ function configureRoutes(routes: RoutesService) {
 
 For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
-#### Book list component
+#### Book List Component
 
 Run the command below on the terminal in the root folder to generate a new component, named book-list:
 
@@ -915,7 +915,7 @@ Open the browser and navigate to http://localhost:4200/books. We'll see **book-l
 
 ![Initial book list page](./images/bookstore-initial-book-list-page.png)
 
-#### Generate proxies
+### Generate Proxies
 
 ABP CLI provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running generate-proxy command, your host must be up and running. See the [CLI documentation](../CLI.md)
 
@@ -931,7 +931,7 @@ The generated files looks like below:
 
 ![Generated files](./images/generated-proxies.png)
 
-#### BookListComponent
+### BookListComponent
 
 Open the `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
@@ -1018,6 +1018,6 @@ In this tutorial we have applied the rules of official [Angular Style Guide](htt
 
 {{end}}
 
-### Next Part
+## Next Part
 
 See the [part 2](./Part-2.md) for creating, updating and deleting books.
