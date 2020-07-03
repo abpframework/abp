@@ -37,7 +37,7 @@ import { SessionState } from './states/session.state';
 import { CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
-import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { getInitialData, localeInitializer, configureOAuth } from './utils/initial-utils';
 
 export function storageFactory(): OAuthStorage {
   return localStorage;
@@ -178,6 +178,12 @@ export class CoreModule {
           provide: HTTP_INTERCEPTORS,
           useClass: ApiInterceptor,
           multi: true,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [Injector, NGXS_CONFIG_PLUGIN_OPTIONS],
+          useFactory: configureOAuth,
         },
         {
           provide: APP_INITIALIZER,
