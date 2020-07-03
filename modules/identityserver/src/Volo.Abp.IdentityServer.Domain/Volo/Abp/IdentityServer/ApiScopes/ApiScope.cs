@@ -74,5 +74,25 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         {
             return UserClaims.FirstOrDefault(r => r.Name == Name && r.Type == type);
         }
+
+        public virtual void AddProperty([NotNull] string key, string value)
+        {
+            Properties.Add(new ApiScopeProperty(Id, key, value));
+        }
+
+        public virtual void RemoveAllProperties()
+        {
+            Properties.Clear();
+        }
+
+        public virtual void RemoveProperty(string key)
+        {
+            Properties.RemoveAll(r => r.Key == key);
+        }
+
+        public virtual ApiScopeProperty FindProperty(string key)
+        {
+            return Properties.FirstOrDefault(r => r.Key == key);
+        }
     }
 }

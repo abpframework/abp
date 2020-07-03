@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 
-namespace Volo.Abp.IdentityServer.ApiResources
+namespace Volo.Abp.IdentityServer.ApiScopes
 {
     public class ApiResourceScope : Entity
     {

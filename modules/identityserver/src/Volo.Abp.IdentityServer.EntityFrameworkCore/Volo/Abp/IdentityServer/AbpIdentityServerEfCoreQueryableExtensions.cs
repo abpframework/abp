@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 
@@ -20,6 +20,19 @@ namespace Volo.Abp.IdentityServer
                 .Include(x => x.UserClaims)
                 .Include(x => x.Scopes);
         }
+
+        public static IQueryable<ApiScope> IncludeDetails(this IQueryable<ApiScope> queryable, bool include = true)
+        {
+            if (!include)
+            {
+                return queryable;
+            }
+
+            return queryable
+                .Include(x => x.UserClaims)
+                .Include(x => x.Properties);
+        }
+
 
         public static IQueryable<IdentityResource> IncludeDetails(this IQueryable<IdentityResource> queryable, bool include = true)
         {

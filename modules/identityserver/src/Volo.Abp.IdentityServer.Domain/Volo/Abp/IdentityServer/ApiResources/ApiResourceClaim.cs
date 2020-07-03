@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.IdentityServer.ApiResources
+namespace Volo.Abp.IdentityServer.ApiScopes
 {
     public class ApiResourceClaim : UserClaim
     {

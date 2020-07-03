@@ -5,7 +5,7 @@ using IdentityServer4;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Volo.Abp.IdentityServer.ApiResources
+namespace Volo.Abp.IdentityServer.ApiScopes
 {
     public class ApiResource : FullAuditedAggregateRoot<Guid>
     {

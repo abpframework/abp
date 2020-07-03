@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 
-namespace Volo.Abp.IdentityServer.ApiResources
+namespace Volo.Abp.IdentityServer.ApiScopes
 {
     public class ApiScopeRepository : EfCoreRepository<IIdentityServerDbContext, ApiScope>, IApiScopeRepository
     {
@@ -20,7 +19,9 @@ namespace Volo.Abp.IdentityServer.ApiResources
         public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = from scope in DbSet where scopeNames.Contains(scope.Name) select scope;
+            var query = from scope in DbSet.IncludeDetails(includeDetails)
+                where scopeNames.Contains(scope.Name)
+                select scope;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }

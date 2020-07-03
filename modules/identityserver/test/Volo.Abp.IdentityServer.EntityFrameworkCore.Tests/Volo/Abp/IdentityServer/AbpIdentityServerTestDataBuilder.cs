@@ -2,11 +2,11 @@
 using IdentityServer4.Models;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
-using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
-using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
+using ApiResource = Volo.Abp.IdentityServer.ApiScopes.ApiResource;
 using Client = Volo.Abp.IdentityServer.Clients.Client;
 using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResource;
 using PersistedGrant = Volo.Abp.IdentityServer.Grants.PersistedGrant;

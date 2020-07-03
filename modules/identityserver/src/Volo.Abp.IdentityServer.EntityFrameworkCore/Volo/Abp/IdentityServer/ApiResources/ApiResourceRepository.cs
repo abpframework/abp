@@ -10,7 +10,7 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace Volo.Abp.IdentityServer.ApiResources
+namespace Volo.Abp.IdentityServer.ApiScopes
 {
     public class ApiResourceRepository : EfCoreRepository<IIdentityServerDbContext, ApiResource, Guid>, IApiResourceRepository
     {
