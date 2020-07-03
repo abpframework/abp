@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.ObjectMapping;
 
@@ -43,7 +44,7 @@ namespace Volo.Abp.IdentityServer
         public virtual async Task<IEnumerable<IdentityServer4.Models.ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
         {
             var scopes = await ApiScopeRepository.GetListByNameAsync(scopeNames.ToArray(), includeDetails: true);
-            return ObjectMapper.Map<List<Volo.Abp.IdentityServer.ApiResources.ApiScope>, List<IdentityServer4.Models.ApiScope>>(scopes);
+            return ObjectMapper.Map<List<Volo.Abp.IdentityServer.ApiScopes.ApiScope>, List<IdentityServer4.Models.ApiScope>>(scopes);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace Volo.Abp.IdentityServer
             return new Resources(
                 ObjectMapper.Map<List<Volo.Abp.IdentityServer.IdentityResources.IdentityResource>, List<IdentityServer4.Models.IdentityResource>>(identityResources),
                 ObjectMapper.Map<List<Volo.Abp.IdentityServer.ApiResources.ApiResource>, List<IdentityServer4.Models.ApiResource>>(apiResources),
-                ObjectMapper.Map<List<Volo.Abp.IdentityServer.ApiResources.ApiScope>, List<IdentityServer4.Models.ApiScope>>(apiScopes));
+                ObjectMapper.Map<List<Volo.Abp.IdentityServer.ApiScopes.ApiScope>, List<IdentityServer4.Models.ApiScope>>(apiScopes));
         }
     }
 }

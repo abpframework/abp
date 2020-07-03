@@ -83,16 +83,14 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiScopeId == id);
-
-            foreach (var scopeClaim in scopeClaims)
+            var resourceClaims = DbContext.Set<ApiResourceClaim>().Where(sc => sc.ApiResourceId == id);
+            foreach (var scopeClaim in resourceClaims)
             {
-                DbContext.Set<ApiScopeClaim>().Remove(scopeClaim);
+                DbContext.Set<ApiResourceClaim>().Remove(scopeClaim);
             }
 
-            var scopes = DbContext.Set<ApiResourceScope>().Where(s => s.ApiResourceId == id);
-
-            foreach (var scope in scopes)
+            var resourceScopes = DbContext.Set<ApiResourceScope>().Where(s => s.ApiResourceId == id);
+            foreach (var scope in resourceScopes)
             {
                 DbContext.Set<ApiResourceScope>().Remove(scope);
             }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 
 namespace Volo.Abp.IdentityServer.ApiResources
