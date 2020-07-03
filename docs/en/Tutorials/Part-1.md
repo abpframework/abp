@@ -1,4 +1,4 @@
-## ASP.NET Core {{UI_Value}} Tutorial - Part 1
+# ASP.NET Core {{UI_Value}} Tutorial - Part 1
 ````json
 //[doc-params]
 {
@@ -20,108 +20,43 @@ else
 end
 }}
 
-### About this tutorial:
+## About This Tutorial
 
-In this tutorial series, you will build an ABP application named `Acme.BookStore`. In this sample project, we will manage a list of books and authors. **{{DB_Text}}** will be used as the ORM provider. And on the front-end side {{UI_Value}} and JavaScript will be used.
+In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-The ASP.NET Core {{UI_Value}} tutorial series consists of 3 parts:
+* **{{DB_Text}}** as the ORM provider. 
+* **{{UI_Value}}** as the UI Framework.
 
-- **Part-1: Creating the project and book list page (this tutorial)**
+This tutorial is organized as the following parts;
+
+- **Part-1: Creating the project and book list page (this part)**
 - [Part-2: Creating, updating and deleting books](part-2.md)
 - [Part-3: Integration tests](part-3.md)
 
-*You can also check out [the video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by the community, based on this tutorial.*
+### Source Code
 
-### Creating the project
+You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore){{else}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb){{end}}.
 
-Create a new project named `Acme.BookStore` where `Acme` is the company name and `BookStore` is the project name. You can check out [creating a new project](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project) document to see how you can create a new project.  We will create the project with ABP CLI.
+## Creating the Solution
 
-#### Create the project
+Before starting to the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project).
 
-By running the below command, it creates a new ABP project with the database provider `{{DB_Text}}` and UI option `{{UI_Value}}`. To see the other CLI options, check out [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) document.
+## Create the Book Entity
 
-```bash
-abp new Acme.BookStore --template app --database-provider {{DB}} --ui {{UI_Text}} --mobile none
-```
-![Creating project](./images/bookstore-create-project-{{UI_Text}}.png)
+**Domain layer** in the startup template is separated into two projects:
 
-### Apply migrations
-
-After creating the project, you need to apply the initial migrations and create the database. To apply migrations, right click on the `Acme.BookStore.DbMigrator` and click **Debug** > **Start New Instance**. This will run the application and apply all migrations. You will see the below result when it successfully completes the process. The application database is  ready!
-
-![Migrations applied](./images/bookstore-migrations-applied-{{UI_Text}}.png)
-
-> Alternatively, you can run `Update-Database` command in the Visual Studio > Package Manager Console to apply migrations.
-
-#### Initial database tables
-
-![Initial database tables](./images/bookstore-database-tables-{{DB}}.png)
-
-### Run the application
-
-To run the project, right click to the {{if UI == "MVC"}} `Acme.BookStore.Web`{{end}} {{if UI == "NG"}} `Acme.BookStore.HttpApi.Host` {{end}} project and click **Set As StartUp Project**. And run the web project by pressing **CTRL+F5** (*without debugging and fast*) or press **F5** (*with debugging and slow*). {{if UI == "NG"}}You will see the Swagger UI for BookStore API.{{end}}
-
-Further information, see the [running the application section](../Getting-Started?UI={{UI}}#run-the-application).
-
-![Set as startup project](./images/bookstore-start-project-{{UI_Text}}.png)
-
-{{if UI == "NG"}}
-
-To start Angular project, go to the `angular` folder, open a command line terminal, execute the `yarn`  command:
-
-```bash
-yarn
-```
-
-Once all node modules are loaded, execute the `yarn start` command:
-
-```bash
-yarn start
-```
-
-The website will be accessible from the following default URL:
-
-http://localhost:4200/
-
-If you see the website's landing page successfully, you can exit Angular hosting by pressing `ctrl-c`. (We'll later start it again.)
-
-> Be aware that, Firefox does not use the Windows Certificate Store, so you'll need to add the self-signed developer certificate to Firefox manually. To do this, open Firefox and navigate to the below URL:
->
-> https://localhost:44322/api/abp/application-configuration
->
-> If you see the below screen, click the **Accept the Risk and Continue** button to bypass this warning.
->
-> ![Set as startup project](./images/mozilla-self-signed-cert-error.png)
-
-{{end}}
-
-The default login credentials are;
-
-* **Username**: admin
-* **Password**: 1q2w3E*
-
-### Solution structure
-
-This is how the layered solution structure looks like:
-
-![bookstore-visual-studio-solution](./images/bookstore-solution-structure-{{UI_Text}}.png)
-
-Check out the [solution structure](../startup-templates/application#solution-structure) section to understand the structure in details.
-
-### Create the book entity
-
-Domain layer in the startup template is separated into two projects:
-
-- `Acme.BookStore.Domain` contains your [entities](https://docs.abp.io/en/abp/latest/Entities), [domain services](https://docs.abp.io/en/abp/latest/Domain-Services) and other core domain objects.
+- `Acme.BookStore.Domain` contains your [entities](../Entities.md), [domain services](../Domain-Services.md) and other core domain objects.
 - `Acme.BookStore.Domain.Shared` contains `constants`, `enums` or other domain related objects those can be shared with clients.
 
-Define [entities](https://docs.abp.io/en/abp/latest/Entities) in the **domain layer** (`Acme.BookStore.Domain` project) of the solution. The main entity of the application is the `Book`. Create a class, named `Book`, in the `Acme.BookStore.Domain` project as shown below:
+So, define your entities in the domain layer (`Acme.BookStore.Domain` project) of the solution. 
+
+The main entity of the application is the `Book`. Create a `Books` folder (namespace) in the `Acme.BookStore.Domain` project and add a `Book` class inside it:
 
 ````csharp
 using System;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public class Book : AuditedAggregateRoot<Guid>
     {
@@ -132,31 +67,19 @@ namespace Acme.BookStore
         public DateTime PublishDate { get; set; }
 
         public float Price { get; set; }
-
-        protected Book()
-        {
-
-        }
-
-        public Book(Guid id, string name, BookType type, DateTime publishDate, float price) :
-            base(id)
-        {
-            Name = name;
-            Type = type;
-            PublishDate = publishDate;
-            Price = price;
-        }
     }
 }
 ````
 
-* ABP has 2 fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is one of the **Domain Driven Design (DDD)** concepts. See [entity document](https://docs.abp.io/en/abp/latest/Entities) for details and best practices.
-* `Book` entity inherits `AuditedAggregateRoot` which adds some auditing properties (`CreationTime`, `CreatorId`, `LastModificationTime`... etc.) on top of the `AggregateRoot` class.
+* ABP Framework has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is a [Domain Driven Design](../Domain-Driven-Design.md) concept which can be thought as a root entity that is directly queried and worked on (see the [entities document](../Entities.md) for more).
+* `Book` entity inherits from the `AuditedAggregateRoot` which adds some base [auditing](../Audit-Logging.md) properties (like `CreationTime`, `CreatorId`, `LastModificationTime`...) on top of the `AggregateRoot` class. ABP automatically manages these properties for you.
 * `Guid` is the **primary key type** of the `Book` entity.
 
-#### BookType enum
+> This tutorials leaves the entity properties with **public get/set** for the sake of simplicity. See the [entities document](../Entities.md) if you learn more about DDD best practices.
 
-Create the `BookType` enum in the `Acme.BookStore.Domain.Shared` project:
+#### BookType Enum
+
+The `Book` entity uses the `BookType` enum. Create the `BookType` in the `Acme.BookStore.Domain.Shared` project:
 
 ````csharp
 namespace Acme.BookStore
@@ -175,6 +98,10 @@ namespace Acme.BookStore
     }
 }
 ````
+
+The final folder/file structure should be as shown below:
+
+![bookstore-book-and-booktype](images/bookstore-book-and-booktype.png)
 
 #### Add book entity to the DbContext
 
