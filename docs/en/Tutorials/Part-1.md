@@ -77,7 +77,7 @@ namespace Acme.BookStore.Books
 
 > This tutorials leaves the entity properties with **public get/set** for the sake of simplicity. See the [entities document](../Entities.md) if you learn more about DDD best practices.
 
-#### BookType Enum
+### BookType Enum
 
 The `Book` entity uses the `BookType` enum. Create the `BookType` in the `Acme.BookStore.Domain.Shared` project:
 
@@ -103,19 +103,18 @@ The final folder/file structure should be as shown below:
 
 ![bookstore-book-and-booktype](images/bookstore-book-and-booktype.png)
 
-#### Add book entity to the DbContext
+### Add Book Entity to the DbContext
 
 {{if DB == "ef"}}
 
 EF Core requires to relate entities with your `DbContext`. The easiest way to do this is to add a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
 
 ````csharp
-    public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
-    {
-        public DbSet<AppUser> Users { get; set; }
-        public DbSet<Book> Books { get; set; } //<--added this line-->
-		//...
-    }
+public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
+{
+    public DbSet<Book> Books { get; set; }
+    //...
+}
 ````
 
 {{end}}
@@ -127,9 +126,8 @@ Add a `IMongoCollection<Book> Books` property to the `BookStoreMongoDbContext` i
 ```csharp
 public class BookStoreMongoDbContext : AbpMongoDbContext
 {
-        public IMongoCollection<AppUser> Users => Collection<AppUser>();
-        public IMongoCollection<Book> Books => Collection<Book>();//<--added this line-->
-        //...
+    public IMongoCollection<Book> Books => Collection<Book>();
+    //...
 }
 ```
 
@@ -137,36 +135,76 @@ public class BookStoreMongoDbContext : AbpMongoDbContext
 
 {{if DB == "ef"}}
 
-#### Configure the book entity
+### Map the Book Entity to a Database Table
 
-Open `BookStoreDbContextModelCreatingExtensions.cs` file in the `Acme.BookStore.EntityFrameworkCore` project and add following code to the end of the `ConfigureBookStore` method to configure the Book entity:
+Open `BookStoreDbContextModelCreatingExtensions.cs` file in the `Acme.BookStore.EntityFrameworkCore` project and add the mapping code for the `Book` entity. The final class should be the following:
 
 ````csharp
-builder.Entity<Book>(b =>
+using Acme.BookStore.Books;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
+
+namespace Acme.BookStore.EntityFrameworkCore
 {
-    b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
-    b.ConfigureByConvention(); //auto configure for the base class props
-    b.Property(x => x.Name).IsRequired().HasMaxLength(128);
-});
+    public static class BookStoreDbContextModelCreatingExtensions
+    {
+        public static void ConfigureBookStore(this ModelBuilder builder)
+        {
+            Check.NotNull(builder, nameof(builder));
+
+            /* Configure your own tables/entities inside here */
+
+            builder.Entity<Book>(b =>
+            {
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
+                          BookStoreConsts.DbSchema);
+                b.ConfigureByConvention(); //auto configure for the base class props
+                b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+            });
+        }
+    }
+}
 ````
 
-Add the `using Volo.Abp.EntityFrameworkCore.Modeling;` statement to resolve `ConfigureByConvention` extension method.
+* `BookStoreConsts` has constant values for schema and table prefixes for your tables. You don't have to use it, but suggested to control the table prefixes in a single point.
+* `ConfigureByConvention()` method gracefully configures/maps the inherited properties. Always use it for all your entities.
+
+### Add Database Migration
+
+The startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** under the menu *Tools > NuGet Package Manager*.
+
+![Open Package Manager Console](images/bookstore-open-package-manager-console.png)
+
+Select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
+
+```bash
+Add-Migration "Created_Book_Entity"
+```
+
+![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
+
+This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project.
+
+Before updating the database, you will learn how to seed initial data to the database.
+
+> If you are using another IDE than the Visual Studio, you can use `dotnet-ef` tool as [documented here](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli#create-a-migration).
 
 {{end}}
 
-{{if DB == "mongodb"}}
+### Add Sample Seed Data
 
-#### Add seed (sample) data
+> It's good to have some initial data in the database before running the application. This section introduces the [Data Seeding](../Data-Seeding.md) system of the ABP framework. You can skip this section if you don't want to create seed data, but it is suggested to follow it to learn this useful ABP Framework feature.
 
-Adding sample data is optional, but it's good to have initial data in the database for the first run. ABP provides a [data seed system](https://docs.abp.io/en/abp/latest/Data-Seeding). Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project:
+Create a class deriving from the `IDataSeedContributor` in the `*.Domain` project and copy the following code:
 
 ```csharp
 using System;
 using System.Threading.Tasks;
+using Acme.BookStore.Books;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Guids;
 
 namespace Acme.BookStore
 {
@@ -174,14 +212,10 @@ namespace Acme.BookStore
         : IDataSeedContributor, ITransientDependency
     {
         private readonly IRepository<Book, Guid> _bookRepository;
-        private readonly IGuidGenerator _guidGenerator;
 
-        public BookStoreDataSeederContributor(
-            IRepository<Book, Guid> bookRepository,
-            IGuidGenerator guidGenerator)
+        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository)
         {
             _bookRepository = bookRepository;
-            _guidGenerator = guidGenerator;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -192,71 +226,46 @@ namespace Acme.BookStore
             }
 
             await _bookRepository.InsertAsync(
-                new Book(
-                    id: _guidGenerator.Create(),
-                    name: "1984",
-                    type: BookType.Dystopia,
-                    publishDate: new DateTime(1949, 6, 8),
-                    price: 19.84f
-                )
+                new Book
+                {
+                    Name = "1984",
+                    Type = BookType.Dystopia,
+                    PublishDate = new DateTime(1949, 6, 8),
+                    Price = 19.84f
+                }
             );
 
             await _bookRepository.InsertAsync(
-                new Book(
-                    id: _guidGenerator.Create(),
-                    name: "The Hitchhiker's Guide to the Galaxy",
-                    type: BookType.ScienceFiction,
-                    publishDate: new DateTime(1995, 9, 27),
-                    price: 42.0f
-                )
+                new Book
+                {
+                    Name = "The Hitchhiker's Guide to the Galaxy",
+                    Type = BookType.ScienceFiction,
+                    PublishDate = new DateTime(1995, 9, 27),
+                    Price = 42.0f
+                }
             );
         }
     }
 }
 ```
 
-{{end}}
+* This code simply uses the `IRepository<Book, Guid>` (the default [repository](../Repositories.md)) to insert two books to the database, if there is no book currently in the database.
+
+### Update the Database
+
+Run the `Acme.BookStore.DbMigrator` application to update the database:
+
+![bookstore-dbmigrator-on-solution](images/bookstore-dbmigrator-on-solution.png)
 
 {{if DB == "ef"}}
 
-#### Add new migration & update the database
+`.DbMigrator` is a console application that can be run to **migrate the database schema** and **seed the data** on **development** and **production** environments.
 
-The startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** under the menu *Tools > NuGet Package Manager*.
+{{end}}
 
-![Open Package Manager Console](./images/bookstore-open-package-manager-console.png)
+{{if DB == "mongodb"}}
 
-Select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
-
-```bash
-Add-Migration "Created_Book_Entity"
-```
-
-![bookstore-pmc-add-book-migration](./images/bookstore-pmc-add-book-migration-v2.png)
-
-This will create a new migration class inside the `Migrations` folder of the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project. Then execute the `Update-Database` command to update the database schema:
-
-````bash
-Update-Database
-````
-
-![bookstore-update-database-after-book-entity](./images/bookstore-update-database-after-book-entity.png)
-
-#### Add initial (sample) data
-
-`Update-Database` command has created the `AppBooks` table in the database. Open your database and enter a few sample rows, so you can show them on the listing page.
-
-```mssql
-INSERT INTO AppBooks (Id,CreationTime,[Name],[Type],PublishDate,Price) VALUES
-('f3c04764-6bfd-49e2-859e-3f9bfda6183e', '2018-07-01', '1984',3,'1949-06-08','19.84')
-
-INSERT INTO AppBooks (Id,CreationTime,[Name],[Type],PublishDate,Price) VALUES
-('13024066-35c9-473c-997b-83cd8d3e29dc', '2018-07-01', 'The Hitchhiker`s Guide to the Galaxy',7,'1995-09-27','42')
-
-INSERT INTO AppBooks (Id,CreationTime,[Name],[Type],PublishDate,Price) VALUES
-('4fa024a1-95ac-49c6-a709-6af9e4d54b54', '2018-07-02', 'Pet Sematary',5,'1983-11-14','23.7')
-```
-
-![bookstore-books-table](./images/bookstore-books-table.png)
+While MongoDB **doesn't require** a database schema migration, it is still good to run this application since it **seeds the initial data** on the database. This application can be used on **development** and **production** environments.
 
 {{end}}
 
