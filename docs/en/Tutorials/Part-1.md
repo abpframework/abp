@@ -442,7 +442,7 @@ namespace Acme.BookStore.Books
 
 In a typical ASP.NET Core application, you create **API Controllers** to expose application services as **HTTP API** endpoints. This allows browsers or 3rd-party clients to call them over HTTP.
 
-ABP can [**automagically**](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) configures your application services as MVC API Controllers by convention.
+ABP can [**automagically**](../API/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
 
 #### Swagger UI
 
@@ -490,38 +490,45 @@ That's pretty cool since we haven't written a single line of code to create the 
 
 {{if UI == "MVC"}}
 
-## Dynamic JavaScript proxies
+## Dynamic JavaScript Proxies
 
-It's common to call HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
+It's common to call the HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
 
-ABP **dynamically** creates JavaScript **proxies** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
+ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
 
-#### Testing in developer console of the browser
+### Testing in Developer Console of the Browser
 
-You can easily test the JavaScript proxies using your favorite browser's **Developer Console**. Run the application, open your browser's **developer tools** (*shortcut is F12 for Chrome*), switch to the **Console** tab, type the following code and press enter:
+You can easily test the JavaScript proxies using your favorite browser's **Developer Console**. Run the application, open your browser's **developer tools** (*shortcut is generally F12*), switch to the **Console** tab, type the following code and press enter:
 
 ````js
-acme.bookStore.book.getList({}).done(function (result) { console.log(result); });
+acme.bookStore.books.book.getList({}).done(function (result) { console.log(result); });
 ````
 
-* `acme.bookStore` is the namespace of the `BookAppService` converted to [camelCase](https://en.wikipedia.org/wiki/Camel_case).
+* `acme.bookStore.books` is the namespace of the `BookAppService` converted to [camelCase](https://en.wikipedia.org/wiki/Camel_case).
 * `book` is the conventional name for the `BookAppService` (removed `AppService` postfix and converted to camelCase).
-* `getList` is the conventional name for the `GetListAsync` method defined in the `AsyncCrudAppService` base class (removed `Async` postfix and converted to camelCase).
-* `{}` argument is used to send an empty object to the `GetListAsync` method which normally expects an object of type `PagedAndSortedResultRequestDto` that is used to send paging and sorting options to the server (all properties are optional, so you can send an empty object).
-* `getList` function returns a `promise`. You can pass a callback to the `done` (or `then`) function to get the result from the server.
+* `getList` is the conventional name for the `GetListAsync` method defined in the `CrudAppService` base class (removed `Async` postfix and converted to camelCase).
+* `{}` argument is used to send an empty object to the `GetListAsync` method which normally expects an object of type `PagedAndSortedResultRequestDto` that is used to send paging and sorting options to the server (all properties are optional with default values, so you can send an empty object).
+* `getList` function returns a `promise`. You can pass a callback to the `then` (or `done`) function to get the result returned from the server.
 
 Running this code produces the following output:
 
-![bookstore-test-js-proxy-getlist](./images/bookstore-test-js-proxy-getlist.png)
+![bookstore-javascript-proxy-console](images/bookstore-javascript-proxy-console.png)
 
 You can see the **book list** returned from the server. You can also check the **network** tab of the developer tools to see the client to server communication:
 
-![bookstore-test-js-proxy-getlist-network](./images/bookstore-test-js-proxy-getlist-network.png)
+![bookstore-getlist-result-network](images/bookstore-getlist-result-network.png)
 
 Let's **create a new book** using the `create` function:
 
 ````js
-acme.bookStore.book.create({ name: 'Foundation', type: 7, publishDate: '1951-05-24', price: 21.5 }).done(function (result) { console.log('successfully created the book with id: ' + result.id); });
+acme.bookStore.books.book.create({ 
+        name: 'Foundation', 
+        type: 7, 
+        publishDate: '1951-05-24', 
+        price: 21.5 
+    }).then(function (result) { 
+        console.log('successfully created the book with id: ' + result.id); 
+    });
 ````
 
 You should see a message in the console something like that:
@@ -532,9 +539,11 @@ successfully created the book with id: 439b0ea8-923e-8e1e-5d97-39f2c7ac4246
 
 Check the `Books` table in the database to see the new book row. You can try `get`, `update` and `delete` functions yourself.
 
+We will use these dynamic proxy functions in the next sections to communicate to the server.
+
 ### Create the books page
 
-It's time to create something visible and usable! Instead of classic MVC, we will use the new [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
+It's time to create something visible and usable! Instead of classic MVC, we will use the [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
 
 Create `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project. Add a new Razor Page by right clicking the Books folder then selecting **Add > Razor Page** menu item. Name it as `Index`:
 
