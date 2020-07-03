@@ -541,7 +541,7 @@ Check the `Books` table in the database to see the new book row. You can try `ge
 
 We will use these dynamic proxy functions in the next sections to communicate to the server.
 
-### Create the books page
+## Create a Books Page
 
 It's time to create something visible and usable! Instead of classic MVC, we will use the [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
 
@@ -551,8 +551,6 @@ Create `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` proje
 
 Open the `Index.cshtml` and change the whole content as shown below:
 
-**Index.cshtml:**
-
 ````html
 @page
 @using Acme.BookStore.Web.Pages.Books
@@ -561,12 +559,7 @@ Open the `Index.cshtml` and change the whole content as shown below:
 <h2>Books</h2>
 ````
 
-
-* Set the `IndexModel`'s namespace to `Acme.BookStore.Pages.Books`  in `Index.cshtml.cs`.
-
-
-
-**Index.cshtml.cs:**
+`Index.cshtml.cs` content should be like that:
 
 ```csharp
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -577,46 +570,41 @@ namespace Acme.BookStore.Web.Pages.Books
     {
         public void OnGet()
         {
-
+            
         }
     }
 }
 ```
 
-#### Add books page to the main menu
+### Add Books Page to the Main Menu
 
 Open the `BookStoreMenuContributor` class in the `Menus` folder and add the following code to the end of the `ConfigureMainMenuAsync` method:
 
 ````csharp
-//...
-namespace Acme.BookStore.Web.Menus
-{
-    public class BookStoreMenuContributor : IMenuContributor
-    {
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
-        {
-            //<-- added the below code
-            context.Menu.AddItem(
-                new ApplicationMenuItem("BooksStore", l["Menu:BookStore"], icon: "fa fa-book")
-                    .AddItem(
-                        new ApplicationMenuItem("BooksStore.Books", l["Menu:Books"], url: "/Books")
-                    )
-            );
-            //-->
-        }
-    }
-}
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/Books"
+        )
+    )
+);
 ````
 
 {{end}}
 
-#### Localize the menu items
+### Localization
 
 Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
 
 ![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
 
-Open the `en.json` (*English translations*) file and add the below localization texts to the end of the file:
+Open the `en.json` (*the English translations*) file and change the content as below:
 
 ````json
 {
@@ -625,7 +613,6 @@ Open the `en.json` (*English translations*) file and add the below localization 
     "Menu:Home": "Home",
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
-
     "Menu:BookStore": "Book Store",
     "Menu:Books": "Books",
     "Actions": "Actions",
@@ -650,18 +637,23 @@ Open the `en.json` (*English translations*) file and add the below localization 
 }
 ````
 
-* ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](https://docs.abp.io/en/abp/latest/Localization) for details.
-* Localization key names are arbitrary. You can set any name. As a best practice, we prefer to add `Menu:` prefix for menu items to distinguish from other texts. If a text is not defined in the localization file, it **fallbacks** to the localization key (as ASP.NET Core's standard behavior).
+* Localization key names are arbitrary. You can set any name. We prefer some conventions for specific text types;
+  * Add `Menu:` prefix for menu items.
+  * Use `Enum:<enum-type>:<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums.
+
+If a text is not defined in the localization file, it **fallbacks** to the localization key (as ASP.NET Core's standard behavior).
+
+> ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](../Localization.md) for details.
 
 {{if UI == "MVC"}}
 
-Run the project, login to the application with the username `admin` and password `1q2w3E*` and see the new menu item has been added to the menu.
+Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
 
 ![bookstore-menu-items](./images/bookstore-new-menu-item.png)
 
-When you click to the Books menu item under the Book Store parent, you are being redirected to the new Books page.
+When you click to the Books menu item under the Book Store parent, you are being redirected to the new empty Books Page.
 
-#### Book list
+### Book list
 
 We will use the [Datatables.net](https://datatables.net/) jQuery plugin to show the book list. [Datatables](https://datatables.net/) can completely work via AJAX, it is fast, popular and provides a good user experience. [Datatables](https://datatables.net/) plugin is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
 
