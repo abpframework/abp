@@ -18,6 +18,13 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
         }
 
+        public async Task<ApiResource> FindByNameAsync(string apiResourceName, bool includeDetails = true, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .Where(ar => ar.Name == apiResourceName)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+        }
+
         public async Task<List<ApiResource>> FindByNameAsync(string[] apiResourceNames, bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
