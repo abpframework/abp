@@ -11,8 +11,10 @@ using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using Volo.Abp.Localization;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Cli.Commands
@@ -801,13 +803,16 @@ namespace Volo.Abp.Cli.Commands
                 return value;
             }
 
-            return Regex.Replace(
-                value,
-                "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                "-$1",
-                RegexOptions.Compiled)
-                .Trim()
-                .ToLower();
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            {
+                return Regex.Replace(
+                        value,
+                        "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                        "-$1",
+                        RegexOptions.Compiled)
+                    .Trim()
+                    .ToLower();
+            }
         }
     }
 
