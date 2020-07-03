@@ -9,6 +9,16 @@ import { ABP } from '../models/common';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
 
+export function configureOAuth(injector: Injector, options: ABP.Root) {
+  const fn = () => {
+    const oAuth = injector.get(OAuthService);
+    oAuth.configure(options.environment.oAuthConfig);
+    return Promise.resolve();
+  };
+
+  return fn;
+}
+
 export function getInitialData(injector: Injector) {
   const fn = () => {
     const store: Store = injector.get(Store);
