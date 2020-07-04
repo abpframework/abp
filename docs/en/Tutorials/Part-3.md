@@ -1,4 +1,4 @@
-## ASP.NET Core {{UI_Value}} Tutorial - Part 3
+# ASP.NET Core {{UI_Value}} Tutorial - Part 3
 ````json
 //[doc-params]
 {
@@ -21,15 +21,18 @@ else
 end
 }}
 
-### About this tutorial
+## About This Tutorial
 
-This is the third part of the ASP.NET Core {{UI_Value}} tutorial series. See all parts:
+In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
+
+* **{{DB_Text}}** as the ORM provider. 
+* **{{UI_Value}}** as the UI Framework.
+
+This tutorial is organized as the following parts;
 
 - [Part I: Creating the project and book list page](part-1.md)
-- [Part II: Creating, updating and deleting books](part-2.md)
-- **Part III: Integration tests (this tutorial)**
-
-*You can also check out [the video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by the community, based on this tutorial.*
+- [Part-2: Creating, updating and deleting books](Part-2.md)
+- **Part-3: Integration tests (this part)**
 
 ### Test projects in the solution
 
