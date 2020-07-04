@@ -34,7 +34,7 @@ This tutorial is organized as the following parts;
 - [Part-2: Creating, updating and deleting books](Part-2.md)
 - **Part-3: Integration tests (this part)**
 
-### Test projects in the solution
+## Test Projects in the Solution
 
 This part covers the **server side** tests. There are several test projects in the solution:
 
@@ -46,76 +46,31 @@ Each project is used to test the related project. Test projects use the followin
 * [Shoudly](http://shouldly.readthedocs.io/en/latest/) as the assertion library.
 * [NSubstitute](http://nsubstitute.github.io/) as the mocking library.
 
-### Adding test data
+{{if DB="ef"}}
 
-Startup template contains the `BookStoreTestDataBuilder` class in the `Acme.BookStore.TestBase` project which creates initial data to run tests. Change the content of `BookStoreTestDataSeedContributor` class as show below:
+> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 
-````csharp
-using System;
-using System.Threading.Tasks;
-using Volo.Abp.Data;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Guids;
+{{else if DB="mongodb"}}
 
-namespace Acme.BookStore
-{
-    public class BookStoreTestDataSeedContributor
-        : IDataSeedContributor, ITransientDependency
-    {
-        private readonly IRepository<Book, Guid> _bookRepository;
-        private readonly IGuidGenerator _guidGenerator;
+> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 
-        public BookStoreTestDataSeedContributor(
-            IRepository<Book, Guid> bookRepository,
-            IGuidGenerator guidGenerator)
-        {
-            _bookRepository = bookRepository;
-            _guidGenerator = guidGenerator;
-        }
+{{end}}
 
-        public async Task SeedAsync(DataSeedContext context)
-        {
-            await _bookRepository.InsertAsync(
-                new Book(id: _guidGenerator.Create(),
-                    name: "Test book 1",
-                    type: BookType.Fantastic,
-                    publishDate: new DateTime(2015, 05, 24),
-                    price: 21
-                )
-            );
+## Adding Test Data
 
-            await _bookRepository.InsertAsync(
-                new Book(id: _guidGenerator.Create(),
-                    name: "Test book 2",
-                    type: BookType.Science,
-                    publishDate: new DateTime(2014, 02, 11),
-                    price: 15
-                )
-            );
-        }
-    }
-}
-````
+If you had created a data seed contributor as described in the [first part](Part-1.md), the same data will be available in your tests. So, you can skip this section. If you haven't created the seed contributor, you can use the `BookStoreTestDataSeedContributor` to seed the same data to be used in the tests below.
 
-* `IRepository<Book, Guid>` is injected and used it in the `SeedAsync` to create two book entities as the test data.
-* `IGuidGenerator` is injected to create GUIDs. While `Guid.NewGuid()` would perfectly work for testing, `IGuidGenerator` has additional features especially important while using real databases. Further information, see the [Guid generation document](../Guid-Generation.md).
-
-### Testing the application service BookAppService
+## Testing The Application Service: BookAppService
 
 Create a test class named `BookAppService_Tests` in the `Acme.BookStore.Application.Tests` project:
 
 ````csharp
-using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Validation;
-using Microsoft.EntityFrameworkCore.Internal;
+using Xunit;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public class BookAppService_Tests : BookStoreApplicationTestBase
     {
@@ -136,15 +91,16 @@ namespace Acme.BookStore
 
             //Assert
             result.TotalCount.ShouldBeGreaterThan(0);
-            result.Items.ShouldContain(b => b.Name == "Test book 1");
+            result.Items.ShouldContain(b => b.Name == "1984");
         }
     }
 }
 ````
 
-* `Should_Get_List_Of_Books` test simply uses `BookAppService.GetListAsync` method to get and check the list of users.
+* `Should_Get_List_Of_Books` test simply uses `BookAppService.GetListAsync` method to get and check the list of books.
+* We can safely check the book "1984" by its name, because we know that this books is available in the database since we've added it in the seed data.
 
-Add a new test that creates a valid new book:
+Add a new test method to the `BookAppService_Tests` class that creates a new **valid** book:
 
 ````csharp
 [Fact]
@@ -173,7 +129,7 @@ Add a new test that tries to create an invalid book and fails:
 [Fact]
 public async Task Should_Not_Create_A_Book_Without_Name()
 {
-    var exception = await Assert.ThrowsAsync<Volo.Abp.Validation.AbpValidationException>(async () =>
+    var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
     {
         await _bookAppService.CreateAsync(
             new CreateUpdateBookDto
@@ -193,9 +149,86 @@ public async Task Should_Not_Create_A_Book_Without_Name()
 
 * Since the `Name` is empty, ABP will throw an `AbpValidationException`.
 
+The final test class should be as shown below:
+
+````csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Shouldly;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
+using Xunit;
+
+namespace Acme.BookStore.Books
+{
+    public class BookAppService_Tests : BookStoreApplicationTestBase
+    {
+        private readonly IBookAppService _bookAppService;
+
+        public BookAppService_Tests()
+        {
+            _bookAppService = GetRequiredService<IBookAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Books()
+        {
+            //Act
+            var result = await _bookAppService.GetListAsync(
+                new PagedAndSortedResultRequestDto()
+            );
+
+            //Assert
+            result.TotalCount.ShouldBeGreaterThan(0);
+            result.Items.ShouldContain(b => b.Name == "1984");
+        }
+        
+        [Fact]
+        public async Task Should_Create_A_Valid_Book()
+        {
+            //Act
+            var result = await _bookAppService.CreateAsync(
+                new CreateUpdateBookDto
+                {
+                    Name = "New test book 42",
+                    Price = 10,
+                    PublishDate = System.DateTime.Now,
+                    Type = BookType.ScienceFiction
+                }
+            );
+
+            //Assert
+            result.Id.ShouldNotBe(Guid.Empty);
+            result.Name.ShouldBe("New test book 42");
+        }
+        
+        [Fact]
+        public async Task Should_Not_Create_A_Book_Without_Name()
+        {
+            var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
+            {
+                await _bookAppService.CreateAsync(
+                    new CreateUpdateBookDto
+                    {
+                        Name = "",
+                        Price = 10,
+                        PublishDate = DateTime.Now,
+                        Type = BookType.ScienceFiction
+                    }
+                );
+            });
+
+            exception.ValidationErrors
+                .ShouldContain(err => err.MemberNames.Any(mem => mem == "Name"));
+        }
+    }
+}
+````
+
 Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if it is not visible) and **Run All** tests:
 
 ![bookstore-appservice-tests](./images/bookstore-appservice-tests.png)
 
-Congratulations, the green icons show, the tests have been successfully passed!
+Congratulations, the **green icons** indicates that the tests have been successfully passed!
 
