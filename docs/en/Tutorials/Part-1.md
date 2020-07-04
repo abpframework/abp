@@ -718,6 +718,7 @@ Create `index.js` JavaScript file under the `Pages/Books/` folder:
 
 ````js
 $(function () {
+    var l = abp.localization.getResource('BookStore');
     var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
