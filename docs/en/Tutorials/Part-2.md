@@ -1,4 +1,4 @@
-## ASP.NET Core {{UI_Value}} Tutorial - Part 2
+# ASP.NET Core {{UI_Value}} Tutorial - Part 2
 ````json
 //[doc-params]
 {
@@ -21,36 +21,40 @@ else
 end
 }}
 
-### About this tutorial
+## About This Tutorial
 
-This is the second part of the ASP.NET Core {{UI_Value}} tutorial series. All parts:
+In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
 
-* [Part I: Creating the project and book list page](part-1.md)
-* **Part II: Creating, updating and deleting books (this tutorial)**
-* [Part III: Integration tests](part-3.md)
+* **{{DB_Text}}** as the ORM provider. 
+* **{{UI_Value}}** as the UI Framework.
 
-*You can also watch [this video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by an ABP community member, based on this tutorial.*
+This tutorial is organized as the following parts;
+
+- [Part I: Creating the project and book list page](part-1.md)
+- **Part-2: Creating, updating and deleting books (this part)**
+- [Part-3: Integration tests](part-3.md)
 
 {{if UI == "MVC"}}
 
-### Creating a new book
+## Creating a New Book
 
-In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like in the below image:
+In this section, you will learn how to create a new modal dialog form to create a new book. The modal dialog will look like in the image below:
 
 ![bookstore-create-dialog](./images/bookstore-create-dialog-2.png)
 
-#### Create the modal form
+### Create the Modal Form
 
 Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project.
 
 ![bookstore-add-create-dialog](./images/bookstore-add-create-dialog-v2.png)
 
-##### CreateModal.cshtml.cs
+#### CreateModal.cshtml.cs
 
 Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace with the following code:
 
 ````C#
 using System.Threading.Tasks;
+using Acme.BookStore.Books;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Acme.BookStore.Web.Pages.Books
@@ -67,6 +71,11 @@ namespace Acme.BookStore.Web.Pages.Books
             _bookAppService = bookAppService;
         }
 
+        public void OnGet()
+        {
+            Book = new CreateUpdateBookDto();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             await _bookAppService.CreateAsync(Book);
@@ -76,21 +85,24 @@ namespace Acme.BookStore.Web.Pages.Books
 }
 ````
 
-* This class is derived from the `BookStorePageModel` instead of standard `PageModel`. `BookStorePageModel` inherits the `PageModel` and adds some common properties & methods that can be used in your page model classes.
+* This class is derived from the `BookStorePageModel` instead of standard `PageModel`. `BookStorePageModel` indirectly inherits the `PageModel` and adds some common properties & methods that can be shared in your page model classes.
 * `[BindProperty]` attribute on the `Book` property binds post request data to this property.
 * This class simply injects the `IBookAppService` in the constructor and calls the `CreateAsync` method in the `OnPostAsync` handler.
+* It creates a new `CreateUpdateBookDto` object in the `OnGet` method. ASP.NET Core can work without creating a new instance like that. However, it doesn't create an instance for you and if your class has some default value assignments or code execution in the class constructor, they won't work. For this case, we set default values for some of the `CreateUpdateBookDto` properties.
 
-##### CreateModal.cshtml
+#### CreateModal.cshtml
 
 Open the `CreateModal.cshtml` file and paste the code below:
 
 ````html
 @page
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Web.Pages.Books
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@model Acme.BookStore.Web.Pages.Books.CreateModalModel
-@{
-    Layout = null;
-}
+@model CreateModalModel
+@inject IStringLocalizer<BookStoreResource> L
+
 <abp-dynamic-form abp-model="Book" data-ajaxForm="true" asp-page="/Books/CreateModal">
     <abp-modal>
         <abp-modal-header title="@L["NewBook"].Value"></abp-modal-header>
@@ -102,12 +114,12 @@ Open the `CreateModal.cshtml` file and paste the code below:
 </abp-dynamic-form>
 ````
 
-* This modal uses `abp-dynamic-form` tag helper to automatically create the form from the model  `CreateBookViewModel`.
+* This modal uses `abp-dynamic-form` [tag helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) to automatically create the form from the  `CreateBookViewModel` model class.
   * `abp-model` attribute indicates the model object where it's the `Book` property in this case.
   * `data-ajaxForm` attribute sets the form to submit via AJAX, instead of a classic page post.
   * `abp-form-content` tag helper is a placeholder to render the form controls (it is optional and needed only if you have added some other content in the `abp-dynamic-form` tag, just like in this page).
 
-#### Add the "New book" button
+### Add the "New book" Button
 
 Open the `Pages/Books/Index.cshtml` and set the content of `abp-card-header` tag as below:
 
@@ -115,23 +127,57 @@ Open the `Pages/Books/Index.cshtml` and set the content of `abp-card-header` tag
 <abp-card-header>
     <abp-row>
         <abp-column size-md="_6">
-            <h2>@L["Books"]</h2>
+            <abp-card-title>@L["Books"]</abp-card-title>
         </abp-column>
         <abp-column size-md="_6" class="text-right">
             <abp-button id="NewBookButton"
                         text="@L["NewBook"].Value"
                         icon="plus"
-                        button-type="Primary" />
+                        button-type="Primary"/>
         </abp-column>
     </abp-row>
 </abp-card-header>
 ````
 
+The final content of the `Index.cshtml` is shown below:
+
+````html
+@page
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Web.Pages.Books
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IStringLocalizer<BookStoreResource> L
+@section scripts
+{
+    <abp-script src="/Pages/Books/Index.js"/>
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Books"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button id="NewBookButton"
+                            text="@L["NewBook"].Value"
+                            icon="plus"
+                            button-type="Primary"/>
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable"></abp-table>
+    </abp-card-body>
+</abp-card>
+````
+
 This adds a new button called **New book** to the **top-right** of the table:
 
-![bookstore-new-book-button](./images/bookstore-new-book-button.png)
+![bookstore-new-book-button](./images/bookstore-new-book-button-2.png)
 
-Open the `pages/books/index.js` and add the following code just after the `Datatable` configuration:
+Open the `Pages/Books/Index.js` and add the following code just after the `Datatable` configuration:
 
 ````js
 var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
@@ -148,9 +194,9 @@ $('#NewBookButton').click(function (e) {
 
 * `abp.ModalManager` is a helper class to manage modals in the client side. It internally uses Twitter Bootstrap's standard modal, but abstracts many details by providing a simple API.
 
-Now, you can **run the application** and add new books using the new modal form.
+Now, you can **run the application** and add some new books using the new modal form.
 
-### Updating a book
+## Updating a Book
 
 Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
 

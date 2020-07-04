@@ -347,7 +347,8 @@ namespace Acme.BookStore.Books
         public BookType Type { get; set; } = BookType.Undefined;
 
         [Required]
-        public DateTime PublishDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime PublishDate { get; set; } = DateTime.Now;
 
         [Required]
         public float Price { get; set; }
@@ -1020,4 +1021,4 @@ In this tutorial we have applied the rules of official [Angular Style Guide](htt
 
 ## Next Part
 
-See the [part 2](./Part-2.md) for creating, updating and deleting books.
+See the [part 2](Part-2.md) for creating, updating and deleting books.
