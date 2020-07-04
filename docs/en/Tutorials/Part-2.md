@@ -102,8 +102,10 @@ Open the `CreateModal.cshtml` file and paste the code below:
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model CreateModalModel
 @inject IStringLocalizer<BookStoreResource> L
-
-<abp-dynamic-form abp-model="Book" data-ajaxForm="true" asp-page="/Books/CreateModal">
+@{
+    Layout = null;
+}
+<abp-dynamic-form abp-model="Book" asp-page="/Books/CreateModal">
     <abp-modal>
         <abp-modal-header title="@L["NewBook"].Value"></abp-modal-header>
         <abp-modal-body>
@@ -115,9 +117,10 @@ Open the `CreateModal.cshtml` file and paste the code below:
 ````
 
 * This modal uses `abp-dynamic-form` [tag helper](../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md) to automatically create the form from the  `CreateBookViewModel` model class.
-  * `abp-model` attribute indicates the model object where it's the `Book` property in this case.
-  * `data-ajaxForm` attribute sets the form to submit via AJAX, instead of a classic page post.
-  * `abp-form-content` tag helper is a placeholder to render the form controls (it is optional and needed only if you have added some other content in the `abp-dynamic-form` tag, just like in this page).
+* `abp-model` attribute indicates the model object where it's the `Book` property in this case.
+* `abp-form-content` tag helper is a placeholder to render the form controls (it is optional and needed only if you have added some other content in the `abp-dynamic-form` tag, just like in this page).
+
+> Tip: `Layout` should be `null` just as done in this example since we don't want to include all the layout for the modals when they are loaded via AJAX.
 
 ### Add the "New book" Button
 
@@ -193,6 +196,73 @@ $('#NewBookButton').click(function (e) {
 ````
 
 * `abp.ModalManager` is a helper class to manage modals in the client side. It internally uses Twitter Bootstrap's standard modal, but abstracts many details by providing a simple API.
+* `createModal.onResult(...)` used to refresh the data table after creating a new book.
+* `createModal.open();` is used to open the model to create a new book.
+
+The final content of the `Index.js` should be like that:
+
+````js
+$(function () {
+    var l = abp.localization.getResource('BookStore');
+
+    var dataTable = $('#BooksTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+                ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList),
+                columnDefs: [
+                    {
+                        title: l('Name'),
+                        data: "name"
+                    },
+                    {
+                        title: l('Type'),
+                        data: "type",
+                        render: function (data) {
+                            return l('Enum:BookType:' + data);
+                        }
+                    },
+                    {
+                        title: l('PublishDate'),
+                        data: "publishDate",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString();
+                        }
+                    },
+                    {
+                        title: l('Price'),
+                        data: "price"
+                    },
+                    {
+                        title: l('CreationTime'), data: "creationTime",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
+                        }
+                    }
+                ]
+            }
+        )
+    );
+
+    var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
+
+    createModal.onResult(function () {
+        dataTable.ajax.reload();
+    });
+
+    $('#NewBookButton').click(function (e) {
+        e.preventDefault();
+        createModal.open();
+    });
+
+});
+````
 
 Now, you can **run the application** and add some new books using the new modal form.
 
@@ -202,13 +272,14 @@ Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder
 
 ![bookstore-add-edit-dialog](./images/bookstore-add-edit-dialog.png)
 
-#### EditModal.cshtml.cs
+### EditModal.cshtml.cs
 
 Open the `EditModal.cshtml.cs` file (`EditModalModel` class) and replace with the following code:
 
 ````csharp
 using System;
 using System.Threading.Tasks;
+using Acme.BookStore.Books;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Acme.BookStore.Web.Pages.Books
@@ -245,10 +316,10 @@ namespace Acme.BookStore.Web.Pages.Books
 ````
 
 * `[HiddenInput]` and `[BindProperty]` are standard ASP.NET Core MVC attributes. `SupportsGet` is used to be able to get `Id` value from query string parameter of the request.
-* In the `GetAsync` method, we get `BookDto `from `BookAppService` and this is being mapped to the DTO object `CreateUpdateBookDto`.
-* The `OnPostAsync` uses `BookAppService.UpdateAsync()` to update the entity.
+* In the `OnGetAsync` method, we get `BookDto ` from the `BookAppService` and this is being mapped to the DTO object `CreateUpdateBookDto`.
+* The `OnPostAsync` uses `BookAppService.UpdateAsync(...)` to update the entity.
 
-#### Mapping from BookDto to CreateUpdateBookDto
+### Mapping from BookDto to CreateUpdateBookDto
 
 To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and change it as shown below:
 
@@ -269,19 +340,24 @@ namespace Acme.BookStore.Web
 
 * We have just added `CreateMap<BookDto, CreateUpdateBookDto>();` to define this mapping.
 
-#### EditModal.cshtml
+> Notice that we do the mapping definition in the web layer as a best practice since it is only needed in this layer.
+
+### EditModal.cshtml
 
 Replace `EditModal.cshtml` content with the following content:
 
 ````html
 @page
+@using Acme.BookStore.Localization
 @using Acme.BookStore.Web.Pages.Books
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel
+@inject IStringLocalizer<BookStoreResource> L
 @{
     Layout = null;
 }
-<abp-dynamic-form abp-model="Book" data-ajaxForm="true" asp-page="/Books/EditModal">
+<abp-dynamic-form abp-model="Book" asp-page="/Books/EditModal">
     <abp-modal>
         <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
         <abp-modal-body>
@@ -296,71 +372,78 @@ Replace `EditModal.cshtml` content with the following content:
 This page is very similar to the `CreateModal.cshtml`, except:
 
 * It includes an `abp-input` for the `Id` property to store `Id` of the editing book (which is a hidden input).
-* It uses `Books/EditModal` as the post URL and *Update* text as the modal header.
+* It uses `Books/EditModal` as the post URL.
 
-#### Add "Actions" dropdown to the table
+### Add "Actions" Dropdown to the Table
 
 We will add a dropdown button to the table named *Actions*.
 
-Open the `Pages/Books/Index.cshtml` page and change the `<abp-table>` section as shown below:
-
-````html
-<abp-table striped-rows="true" id="BooksTable">
-    <thead>
-        <tr>
-            <th>@L["Actions"]</th>
-            <th>@L["Name"]</th>
-            <th>@L["Type"]</th>
-            <th>@L["PublishDate"]</th>
-            <th>@L["Price"]</th>
-            <th>@L["CreationTime"]</th>
-        </tr>
-    </thead>
-</abp-table>
-````
-
-* We just added a new `th` tag for the "*Actions*" button.
-
-Open the `pages/books/index.js` and replace the content as below:
+Open the `Pages/Books/Index.js` and replace the content as below:
 
 ````js
 $(function () {
-
     var l = abp.localization.getResource('BookStore');
-
     var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
     var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
 
-    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
-        processing: true,
-        serverSide: true,
-        paging: true,
-        searching: false,
-        autoWidth: false,
-        scrollCollapse: true,
-        order: [[1, "asc"]],
-        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
-        columnDefs: [
-            {
-                rowAction: {
-                    items:
-                        [
-                            {
-                                text: l('Edit'),
-                                action: function (data) {
-                                    editModal.open({ id: data.record.id });
-                                }
-                            }
-                        ]
-                }
-            },
-            { data: "name" },
-            { data: "type" },
-            { data: "publishDate" },
-            { data: "price" },
-            { data: "creationTime" }
-        ]
-    }));
+    var dataTable = $('#BooksTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+                ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList),
+                columnDefs: [
+                    {
+                        title: l('Actions'),
+                        rowAction: {
+                            items:
+                                [
+                                    {
+                                        text: l('Edit'),
+                                        action: function (data) {
+                                            editModal.open({ id: data.record.id });
+                                        }
+                                    }
+                                ]
+                        }
+                    },
+                    {
+                        title: l('Name'),
+                        data: "name"
+                    },
+                    {
+                        title: l('Type'),
+                        data: "type",
+                        render: function (data) {
+                            return l('Enum:BookType:' + data);
+                        }
+                    },
+                    {
+                        title: l('PublishDate'),
+                        data: "publishDate",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString();
+                        }
+                    },
+                    {
+                        title: l('Price'),
+                        data: "price"
+                    },
+                    {
+                        title: l('CreationTime'), data: "creationTime",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
+                        }
+                    }
+                ]
+            }
+        )
+    );
 
     createModal.onResult(function () {
         dataTable.ajax.reload();
@@ -377,20 +460,20 @@ $(function () {
 });
 ````
 
-* Used `abp.localization.getResource('BookStore')` to be able to use the same localization texts defined on the server-side.
-* Added a new `ModalManager` named `createModal` to open the create modal dialog.
 * Added a new `ModalManager` named `editModal` to open the edit modal dialog.
 * Added a new column at the beginning of the `columnDefs` section. This column is used for the "*Actions*" dropdown button.
-* "*New Book*" action simply calls `createModal.open()` to open the create dialog.
 * "*Edit*" action simply calls `editModal.open()` to open the edit dialog.
+* `editModal.onResult(...)`  callback refreshes the data table when you close the edit modal.
 
-You can run the application and edit any book by selecting the edit action. The final UI looks as below:
+You can run the application and edit any book by selecting the edit action on a book.
 
-![bookstore-books-table-actions](./images/bookstore-edit-button.png)
+The final UI looks as below:
 
-### Deleting a book
+![bookstore-books-table-actions](./images/bookstore-edit-button-2.png)
 
-Open the `pages/books/index.js` and add a new item to the `rowAction` `items`:
+## Deleting a Book
+
+Open the `Pages/Books/Index.js` and add a new item to the `rowAction` `items`:
 
 ````js
 {
@@ -399,7 +482,7 @@ Open the `pages/books/index.js` and add a new item to the `rowAction` `items`:
         return l('BookDeletionConfirmationMessage', data.record.name);
     },
     action: function (data) {
-        acme.bookStore.book
+        acme.bookStore.books.book
             .delete(data.record.id)
             .then(function() {
                 abp.notify.info(l('SuccessfullyDeleted'));
@@ -410,63 +493,101 @@ Open the `pages/books/index.js` and add a new item to the `rowAction` `items`:
 ````
 
 * `confirmMessage` option is used to ask a confirmation question before executing the `action`.
-* `acme.bookStore.book.delete()` method makes an AJAX request to JavaScript proxy function to delete a book.
+* `acme.bookStore.books.book.delete(...)` method makes an AJAX request to the server to delete a book.
 * `abp.notify.info()` shows a notification after the delete operation.
 
-The final `index.js` content is shown below:
+Since we've used two new localization texts (`BookDeletionConfirmationMessage` and `SuccessfullyDeleted`) you need to add these to the localization file (`en.json` under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project):
+
+````json
+"BookDeletionConfirmationMessage": "Are you sure to delete the book '{0}'?",
+"SuccessfullyDeleted": "Successfully deleted!"
+````
+
+The final `Index.js` content is shown below:
 
 ````js
 $(function () {
-
     var l = abp.localization.getResource('BookStore');
-
     var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
     var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
 
-    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
-        processing: true,
-        serverSide: true,
-        paging: true,
-        searching: false,
-        autoWidth: false,
-        scrollCollapse: true,
-        order: [[1, "asc"]],
-        ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
-        columnDefs: [
-            {
-                rowAction: {
-                    items:
-                    [
-                        {
-                            text: l('Edit'),
-                            action: function (data) {
-                                editModal.open({ id: data.record.id });
-                            }
-                        },
-                        {
-                            text: l('Delete'),
-                            confirmMessage: function (data) {
-                                return l('BookDeletionConfirmationMessage', data.record.name);
-                            },
-                            action: function (data) {
-                                acme.bookStore.book
-                                    .delete(data.record.id)
-                                    .then(function() {
-                                        abp.notify.info(l('SuccessfullyDeleted'));
-                                        dataTable.ajax.reload();
-                                    });
-                            }
+    var dataTable = $('#BooksTable').DataTable(
+        abp.libs.datatables.normalizeConfiguration({
+                ajax: abp.libs.datatables.createAjax(acme.bookStore.books.book.getList),
+                columnDefs: [
+                    {
+                        title: l('Actions'),
+                        rowAction: {
+                            items:
+                                [
+                                    {
+                                        text: l('Edit'),
+                                        action: function (data) {
+                                            editModal.open({ id: data.record.id });
+                                        }
+                                    },
+                                    {
+                                        text: l('Delete'),
+                                        confirmMessage: function (data) {
+                                            return l(
+                                                'BookDeletionConfirmationMessage',
+                                                data.record.name
+                                            );
+                                        },
+                                        action: function (data) {
+                                            acme.bookStore.books.book
+                                                .delete(data.record.id)
+                                                .then(function() {
+                                                    abp.notify.info(
+                                                        l('SuccessfullyDeleted')
+                                                    );
+                                                    dataTable.ajax.reload();
+                                                });
+                                        }
+                                    }
+                                ]
                         }
-                    ]
-                }
-            },
-            { data: "name" },
-            { data: "type" },
-            { data: "publishDate" },
-            { data: "price" },
-            { data: "creationTime" }
-        ]
-    }));
+                    },
+                    {
+                        title: l('Name'),
+                        data: "name"
+                    },
+                    {
+                        title: l('Type'),
+                        data: "type",
+                        render: function (data) {
+                            return l('Enum:BookType:' + data);
+                        }
+                    },
+                    {
+                        title: l('PublishDate'),
+                        data: "publishDate",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString();
+                        }
+                    },
+                    {
+                        title: l('Price'),
+                        data: "price"
+                    },
+                    {
+                        title: l('CreationTime'), data: "creationTime",
+                        render: function (data) {
+                            return luxon
+                                .DateTime
+                                .fromISO(data, {
+                                    locale: abp.localization.currentCulture.name
+                                }).toLocaleString(luxon.DateTime.DATETIME_SHORT);
+                        }
+                    }
+                ]
+            }
+        )
+    );
 
     createModal.onResult(function () {
         dataTable.ajax.reload();
@@ -483,24 +604,17 @@ $(function () {
 });
 ````
 
-Open the `en.json` in the `Acme.BookStore.Domain.Shared` project and add the following translations:
-
-````json
-"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
-"SuccessfullyDeleted": "Successfully deleted"
-````
-
-Run the application and try to delete a book.
+You can run the application and try to delete a book.
 
 {{end}}
 
 {{if UI == "NG"}}
 
-### Creating a new book
+## Creating a new book
 
 In this section, you will learn how to create a new modal dialog form to create a new book.
 
-#### Add a modal to BookListComponent
+### Add a modal to BookListComponent
 
 Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
@@ -610,7 +724,7 @@ You can open your browser and click **New book** button to see the new modal.
 
 ![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
 
-#### Create a reactive form
+### Create a reactive form
 
 [Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
 
@@ -676,7 +790,7 @@ export class BookListComponent implements OnInit {
   * The `group` method of `FormBuilder`, `fb` creates a `FormGroup`.
   * Added `Validators.required` static method which validates the relevant form element.
 
-#### Create the DOM elements of the form
+### Create the DOM elements of the form
 
 Open `book-list.component.html` in `app\books\book-list` folder and replace `<ng-template #abpBody> </ng-template>`  with the following code part:
 
@@ -719,7 +833,7 @@ Open `book-list.component.html` in `app\books\book-list` folder and replace `<ng
 - This template creates a form with `Name`, `Price`, `Type` and `Publish` date fields.
 - We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component.
 
-#### Datepicker requirements
+### Datepicker requirements
 
 Open `book.module.ts` file in `app\book` folder and replace the content as below:
 
@@ -822,7 +936,7 @@ Now, you can open your browser to see the changes:
 
 ![New book modal](./images/bookstore-new-book-form.png)
 
-#### Saving the book
+### Saving the book
 
 Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
 
@@ -928,7 +1042,7 @@ The final modal UI looks like below:
 
 ![Save button to the modal](./images/bookstore-new-book-form-v2.png)
 
-### Updating a book
+## Updating a book
 
 Open `book-list.component.ts` in `app\book\book-list` folder and add a variable named `selectedBook`.
 
@@ -1030,7 +1144,7 @@ export class BookListComponent implements OnInit {
 * We replaced the `createBook` method so it sets `selectedBook` to an empty object.
 * We replaced the `save` method.
 
-#### Add "Actions" dropdown to the table
+### Add "Actions" dropdown to the table
 
 Open the `book-list.component.html` in `app\book\book-list` folder and replace the `<div class="card-body">` tag as below:
 
@@ -1099,9 +1213,9 @@ Open `book-list.component.html` in `app\book\book-list` folder and find the `<ng
 
 * This template will show **Edit** text for edit record operation, **New Book** for new record operation in the title.
 
-### Deleting a book
+## Deleting a book
 
-#### Delete confirmation popup
+### Delete confirmation popup
 
 Open `book-list.component.ts` in `app\book\book-list` folder and inject the `ConfirmationService`.
 
@@ -1146,7 +1260,7 @@ The `delete` method shows a confirmation popup and subscribes for the user respo
 ![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
 
 
-#### Add a delete button
+### Add a delete button
 
 
 Open `book-list.component.html` in `app\book\book-list` folder and modify the `ngbDropdownMenu` to add the delete button as shown below:
@@ -1166,6 +1280,6 @@ The final actions dropdown UI looks like below:
 
 {{end}}
 
-### Next Part
+## Next Part
 
 See the [next part](part-3.md) of this tutorial.
