@@ -33,6 +33,7 @@ This tutorial is organized as the following parts;
 - [Part I: Creating the project and book list page](part-1.md)
 - **Part-2: Creating, updating and deleting books (this part)**
 - [Part-3: Integration tests](part-3.md)
+- [Part-4: Authorization](Part-4.md)
 
 ### Source Code
 

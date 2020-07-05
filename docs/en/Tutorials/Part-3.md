@@ -33,6 +33,7 @@ This tutorial is organized as the following parts;
 - [Part I: Creating the project and book list page](part-1.md)
 - [Part-2: Creating, updating and deleting books](Part-2.md)
 - **Part-3: Integration tests (this part)**
+- [Part-4: Authorization](Part-4.md)
 
 ### Source Code
 
@@ -236,3 +237,6 @@ Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if 
 
 Congratulations, the **green icons** indicates that the tests have been successfully passed!
 
+## Next Part
+
+See the [next part](part-4.md) of this tutorial.
