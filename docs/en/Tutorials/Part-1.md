@@ -2,21 +2,24 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"]
+    "UI": ["MVC","NG"],
+    "DB": ["EF","Mongo"]
 }
 ````
 {{
 if UI == "MVC"
-  DB="ef"
-  DB_Text="Entity Framework Core"
   UI_Text="mvc"
 else if UI == "NG"
-  DB="mongodb"
-  DB_Text="MongoDB"
   UI_Text="angular"
 else
-  DB ="?"
   UI_Text="?"
+end
+if DB == "EF"
+  DB_Text="Entity Framework Core"
+else if DB == "Mongo"
+  DB_Text="MongoDB"
+else
+  DB_Text="?"
 end
 }}
 
@@ -41,7 +44,7 @@ You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository]
 
 ## Creating the Solution
 
-Before starting to the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started-{{if UI == 'NG'}}Angular{{else}}AspNetCore-MVC{{end}}-Template#creating-a-new-project).
+Before starting to the development, create a new solution named `Acme.BookStore` and run it by following the [getting started tutorial](../Getting-Started.md).
 
 ## Create the Book Entity
 
@@ -107,7 +110,7 @@ The final folder/file structure should be as shown below:
 
 ### Add Book Entity to the DbContext
 
-{{if DB == "ef"}}
+{{if DB == "EF"}}
 
 EF Core requires to relate entities with your `DbContext`. The easiest way to do this is to add a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
 
@@ -121,7 +124,7 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 {{end}}
 
-{{if DB == "mongodb"}}
+{{if DB == "Mongo"}}
 
 Add a `IMongoCollection<Book> Books` property to the `BookStoreMongoDbContext` inside the `Acme.BookStore.MongoDB` project:
 
@@ -135,7 +138,7 @@ public class BookStoreMongoDbContext : AbpMongoDbContext
 
 {{end}}
 
-{{if DB == "ef"}}
+{{if DB == "EF"}}
 
 ### Map the Book Entity to a Database Table
 
@@ -261,13 +264,13 @@ Run the `Acme.BookStore.DbMigrator` application to update the database:
 
 ![bookstore-dbmigrator-on-solution](images/bookstore-dbmigrator-on-solution.png)
 
-{{if DB == "ef"}}
+{{if DB == "EF"}}
 
 `.DbMigrator` is a console application that can be run to **migrate the database schema** and **seed the data** on **development** and **production** environments.
 
 {{end}}
 
-{{if DB == "mongodb"}}
+{{if DB == "Mongo"}}
 
 While MongoDB **doesn't require** a database schema migration, it is still good to run this application since it **seeds the initial data** on the database. This application can be used on **development** and **production** environments.
 

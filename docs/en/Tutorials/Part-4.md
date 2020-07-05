@@ -2,22 +2,24 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"]
+    "UI": ["MVC","NG"],
+    "DB": ["EF","Mongo"]
 }
 ````
-
 {{
 if UI == "MVC"
-  DB="ef"
-  DB_Text="Entity Framework Core"
   UI_Text="mvc"
 else if UI == "NG"
-  DB="mongodb"
-  DB_Text="MongoDB"
   UI_Text="angular"
-else 
-  DB ="?"
+else
   UI_Text="?"
+end
+if DB == "EF"
+  DB_Text="Entity Framework Core"
+else if DB == "Mongo"
+  DB_Text="MongoDB"
+else
+  DB_Text="?"
 end
 }}
 
@@ -52,11 +54,11 @@ Each project is used to test the related project. Test projects use the followin
 * [Shoudly](http://shouldly.readthedocs.io/en/latest/) as the assertion library.
 * [NSubstitute](http://nsubstitute.github.io/) as the mocking library.
 
-{{if DB="ef"}}
+{{if DB="EF"}}
 
 > The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 
-{{else if DB="mongodb"}}
+{{else if DB="Mongo"}}
 
 > **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 

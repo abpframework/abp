@@ -2,22 +2,24 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","NG"]
+    "UI": ["MVC","NG"],
+    "DB": ["EF","Mongo"]
 }
 ````
-
 {{
 if UI == "MVC"
-  DB="ef"
-  DB_Text="Entity Framework Core"
   UI_Text="mvc"
 else if UI == "NG"
-  DB="mongodb"
-  DB_Text="MongoDB"
   UI_Text="angular"
 else
-  DB ="?"
   UI_Text="?"
+end
+if DB == "EF"
+  DB_Text="Entity Framework Core"
+else if DB == "Mongo"
+  DB_Text="MongoDB"
+else
+  DB_Text="?"
 end
 }}
 
