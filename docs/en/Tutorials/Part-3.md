@@ -34,6 +34,10 @@ This tutorial is organized as the following parts;
 - [Part-2: Creating, updating and deleting books](Part-2.md)
 - **Part-3: Integration tests (this part)**
 
+### Source Code
+
+You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore){{else}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb){{end}}.
+
 ## Test Projects in the Solution
 
 This part covers the **server side** tests. There are several test projects in the solution:
