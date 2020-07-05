@@ -38,9 +38,12 @@ This tutorial is organized as the following parts;
 - **Part 4: Integration tests (this part)**
 - [Part 5: Authorization](Part-5.md)
 
-### Source Code
+### Download the Source Code
 
-You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore){{else}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb){{end}}.
+This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+
+* [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 ## Test Projects in the Solution
 
@@ -68,7 +71,7 @@ Each project is used to test the related project. Test projects use the followin
 
 If you had created a data seed contributor as described in the [first part](Part-1.md), the same data will be available in your tests. So, you can skip this section. If you haven't created the seed contributor, you can use the `BookStoreTestDataSeedContributor` to seed the same data to be used in the tests below.
 
-## Testing The Application Service: BookAppService
+## Testing the BookAppService
 
 Create a test class named `BookAppService_Tests` in the `Acme.BookStore.Application.Tests` project:
 

@@ -38,9 +38,12 @@ This tutorial is organized as the following parts;
 - [Part 4: Integration tests](Part-4.md)
 - **Part 5: Authorization (this part)**
 
-### Source Code
+### Download the Source Code
 
-You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore){{else}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb){{end}}.
+This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+
+* [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 ## Permissions
 

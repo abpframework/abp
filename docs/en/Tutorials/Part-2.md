@@ -38,9 +38,12 @@ This tutorial is organized as the following parts;
 - [Part 4: Integration tests](Part-4.md)
 - [Part 5: Authorization](Part-5.md)
 
-### Source Code
+### Download the Source Code
 
-You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore){{else}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb){{end}}.
+This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+
+* [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+* [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
 {{if UI == "MVC"}}
 
@@ -50,7 +53,7 @@ It's common to call the HTTP API endpoints via AJAX from the **JavaScript** side
 
 ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
 
-### Testing in Developer Console of the Browser
+### Testing in the Developer Console
 
 You can easily test the JavaScript proxies using your favorite browser's **Developer Console**. Run the application, open your browser's **developer tools** (*shortcut is generally F12*), switch to the **Console** tab, type the following code and press enter:
 
