@@ -1,0 +1,226 @@
+# ASP.NET Core {{UI_Value}} Tutorial - Part 4
+````json
+//[doc-params]
+{
+    "UI": ["MVC","NG"]
+}
+````
+
+{{
+if UI == "MVC"
+  DB="ef"
+  DB_Text="Entity Framework Core"
+  UI_Text="mvc"
+else if UI == "NG"
+  DB="mongodb"
+  DB_Text="MongoDB"
+  UI_Text="angular"
+else 
+  DB ="?"
+  UI_Text="?"
+end
+}}
+
+## About This Tutorial
+
+In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
+
+* **{{DB_Text}}** as the ORM provider. 
+* **{{UI_Value}}** as the UI Framework.
+
+This tutorial is organized as the following parts;
+
+- [Part I: Creating the project and book list page](part-1.md)
+- [Part-2: Creating, updating and deleting books](Part-2.md)
+- [Part-3: Integration tests](Part-3.md)
+- **Part-4: Authorization (this part)**
+
+### Source Code
+
+You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore){{else}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb){{end}}.
+
+## Permissions
+
+ABP Framework provides an [authorization system](../Authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
+
+### Permission Names
+
+A permission must have a unique name (a `string`). The best way is to define it as a `const`, so we can reuse the permission name.
+
+Open the `BookStorePermissions` class and change the content as shown below:
+
+````csharp
+namespace Acme.BookStore.Permissions
+{
+    public static class BookStorePermissions
+    {
+        public const string GroupName = "BookStore";
+
+        public static class Books
+        {
+            public const string Default = GroupName + ".Books";
+            public const string Create = Default + ".Create";
+            public const string Edit = Default + ".Edit";
+            public const string Delete = Default + ".Delete";
+        }
+    }
+}
+````
+
+This is a hierarchical way of defining permission names. For example, "create book" permission name was defined as `BookStore.Books.Create`.
+
+### Permission Definitions
+
+You should define permissions before using them.
+
+Open the `BookStorePermissionDefinitionProvider` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
+
+````csharp
+using Acme.BookStore.Localization;
+using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Localization;
+
+namespace Acme.BookStore.Permissions
+{
+    public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvider
+    {
+        public override void Define(IPermissionDefinitionContext context)
+        {
+            var bookStoreGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
+
+            var booksPermission = bookStoreGroup.AddPermission(BookStorePermissions.Books.Default, L("Permission:Books"));
+            booksPermission.AddChild(BookStorePermissions.Books.Create, L("Permission:Books.Create"));
+            booksPermission.AddChild(BookStorePermissions.Books.Edit, L("Permission:Books.Edit"));
+            booksPermission.AddChild(BookStorePermissions.Books.Delete, L("Permission:Books.Delete"));
+        }
+
+        private static LocalizableString L(string name)
+        {
+            return LocalizableString.Create<BookStoreResource>(name);
+        }
+    }
+}
+````
+
+This class defines a **permission group** (to group permissions on the UI, will be seen below) and **4 permissions** inside this group. Also, **Create**, **Edit** and **Delete** are children of the `BookStorePermissions.Books.Default` permission. A child permission can be selected **only if the parent was selected**.
+
+Finally, edit the localization file (`en.json` under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project) to define the localization keys used above:
+
+````json
+"Permission:BookStore": "Book Store",
+"Permission:Books": "Book Management",
+"Permission:Books.Create": "Creating new books",
+"Permission:Books.Edit": "Editing the books",
+"Permission:Books.Delete": "Deleting the books"
+````
+
+> Localization key names are arbitrary and no forcing rule. But we prefer the convention used above.
+
+### Permission Management UI
+
+Once you define the permissions, you can see them on the **permission management modal**.
+
+Go to the *Administration -> Identity -> Roles* page, select *Permissions* action for the admin role to open the permission management modal:
+
+![bookstore-permissions-ui](images/bookstore-permissions-ui.png)
+
+Grant the permissions you want and save the modal.
+
+## Authorization
+
+Now, you can use the permissions to authorize the book management.
+
+### Application Layer & HTTP API
+
+Open the `BookAppService` class and add set the policy names as the permission names defined above:
+
+````csharp
+using System;
+using Acme.BookStore.Permissions;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace Acme.BookStore.Books
+{
+    public class BookAppService :
+        CrudAppService<
+            Book, //The Book entity
+            BookDto, //Used to show books
+            Guid, //Primary key of the book entity
+            PagedAndSortedResultRequestDto, //Used for paging/sorting
+            CreateUpdateBookDto>, //Used to create/update a book
+        IBookAppService //implement the IBookAppService
+    {
+        public BookAppService(IRepository<Book, Guid> repository)
+            : base(repository)
+        {
+            GetPolicyName = BookStorePermissions.Books.Default;
+            GetListPolicyName = BookStorePermissions.Books.Default;
+            CreatePolicyName = BookStorePermissions.Books.Create;
+            UpdatePolicyName = BookStorePermissions.Books.Edit;
+            DeletePolicyName = BookStorePermissions.Books.Create;
+        }
+    }
+}
+````
+
+Added code to the constructor. Base `CrudAppService` automatically uses these permissions on the CRUD operations. This makes the **application service** secure, but also makes the **HTTP API** secure since this service is automatically used as an HTTP API as explained before (see [auto API controllers](../API/Auto-API-Controllers.md)).
+
+{{if UI == "MVC"}}
+
+### Razor Page
+
+While securing the HTTP API & the application service prevents unauthorized users to use the services, they can still navigate to the book management page. While they will get authorization exceptions when the page makes the first AJAX call to the server, we should also authorize the page for a better user experience and security.
+
+Open the `BookStoreWebModule` and add the following code block inside the `ConfigureServices` method:
+
+````csharp
+Configure<RazorPagesOptions>(options =>
+{
+    options.Conventions.AuthorizePage("/Books/Index", BookStorePermissions.Books.Default);
+    options.Conventions.AuthorizePage("/Books/CreateModal", BookStorePermissions.Books.Create);
+    options.Conventions.AuthorizePage("/Books/EditModal", BookStorePermissions.Books.Edit);
+});
+````
+
+Now, unauthorized users are redirected to the **login page**.
+
+### JavaScript Side
+
+Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* action:
+
+![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions.png)
+
+We should hide an action if the current user has not granted for the related permission. Datatables row actions has a `visible` option that can be set to `false` to hide the action item.
+
+Open the `Pages/Books/Index.js` inside the `Acme.BookStore.Web` project and add a `visible` option to the `Edit` action as shown below:
+
+````js
+{
+    text: l('Edit'),
+    visible: abp.auth.isGranted('BookStore.Books.Edit'), //CHECK for the PERMISSION
+    action: function (data) {
+        editModal.open({ id: data.record.id });
+    }
+}
+````
+
+Do same for the `Delete` action:
+
+````js
+visible: abp.auth.isGranted('BookStore.Books.Delete')
+````
+
+* `abp.auth.isGranted(...)` is used to check a permission that is defined before.
+* `visible` could also be get a function that returns a `bool` if the value will be calculated later, based on some conditions.
+
+### Menu Item
+
+Even we secured all layers of the book management page, it is still visible on the main menu of the application.
+
+{{else if UI == "NG"}}
+
+***Angular UI authorization document is being prepared...***
+
+{{end}}
