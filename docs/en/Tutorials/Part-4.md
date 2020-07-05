@@ -1,4 +1,4 @@
-# ASP.NET Core {{UI_Value}} Tutorial - Part 4
+# Web Application Development Tutorial - Part 4: Integration Tests
 ````json
 //[doc-params]
 {
@@ -30,286 +30,214 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part I: Creating the project and book list page](part-1.md)
-- [Part-2: Creating, updating and deleting books](Part-2.md)
-- [Part-3: Integration tests](Part-3.md)
-- **Part-4: Authorization (this part)**
+- [Part 1: Creating the project and book list page](Part-1.md)
+- [Part 2: The book list page](Part-2.md)
+- [Part 3: Creating, updating and deleting books](Part-3.md)
+- **Part 4: Integration tests (this part)**
+- [Part 5: Authorization](Part-5.md)
 
 ### Source Code
 
 You can find the completed solution on {{if UI == "MVC"}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore){{else}}[the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb){{end}}.
 
-## Permissions
+## Test Projects in the Solution
 
-ABP Framework provides an [authorization system](../Authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
+This part covers the **server side** tests. There are several test projects in the solution:
 
-### Permission Names
+![bookstore-test-projects-v2](./images/bookstore-test-projects-{{UI_Text}}.png)
 
-A permission must have a unique name (a `string`). The best way is to define it as a `const`, so we can reuse the permission name.
+Each project is used to test the related project. Test projects use the following libraries for testing:
 
-Open the `BookStorePermissions` class and change the content as shown below:
+* [Xunit](https://xunit.github.io/) as the main test framework.
+* [Shoudly](http://shouldly.readthedocs.io/en/latest/) as the assertion library.
+* [NSubstitute](http://nsubstitute.github.io/) as the mocking library.
 
-````csharp
-namespace Acme.BookStore.Permissions
-{
-    public static class BookStorePermissions
-    {
-        public const string GroupName = "BookStore";
+{{if DB="ef"}}
 
-        public static class Books
-        {
-            public const string Default = GroupName + ".Books";
-            public const string Create = Default + ".Create";
-            public const string Edit = Default + ".Edit";
-            public const string Delete = Default + ".Delete";
-        }
-    }
-}
-````
+> The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 
-This is a hierarchical way of defining permission names. For example, "create book" permission name was defined as `BookStore.Books.Create`.
+{{else if DB="mongodb"}}
 
-### Permission Definitions
+> **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 
-You should define permissions before using them.
+{{end}}
 
-Open the `BookStorePermissionDefinitionProvider` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
+## Adding Test Data
+
+If you had created a data seed contributor as described in the [first part](Part-1.md), the same data will be available in your tests. So, you can skip this section. If you haven't created the seed contributor, you can use the `BookStoreTestDataSeedContributor` to seed the same data to be used in the tests below.
+
+## Testing The Application Service: BookAppService
+
+Create a test class named `BookAppService_Tests` in the `Acme.BookStore.Application.Tests` project:
 
 ````csharp
-using Acme.BookStore.Localization;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Localization;
-
-namespace Acme.BookStore.Permissions
-{
-    public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvider
-    {
-        public override void Define(IPermissionDefinitionContext context)
-        {
-            var bookStoreGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
-
-            var booksPermission = bookStoreGroup.AddPermission(BookStorePermissions.Books.Default, L("Permission:Books"));
-            booksPermission.AddChild(BookStorePermissions.Books.Create, L("Permission:Books.Create"));
-            booksPermission.AddChild(BookStorePermissions.Books.Edit, L("Permission:Books.Edit"));
-            booksPermission.AddChild(BookStorePermissions.Books.Delete, L("Permission:Books.Delete"));
-        }
-
-        private static LocalizableString L(string name)
-        {
-            return LocalizableString.Create<BookStoreResource>(name);
-        }
-    }
-}
-````
-
-This class defines a **permission group** (to group permissions on the UI, will be seen below) and **4 permissions** inside this group. Also, **Create**, **Edit** and **Delete** are children of the `BookStorePermissions.Books.Default` permission. A child permission can be selected **only if the parent was selected**.
-
-Finally, edit the localization file (`en.json` under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project) to define the localization keys used above:
-
-````json
-"Permission:BookStore": "Book Store",
-"Permission:Books": "Book Management",
-"Permission:Books.Create": "Creating new books",
-"Permission:Books.Edit": "Editing the books",
-"Permission:Books.Delete": "Deleting the books"
-````
-
-> Localization key names are arbitrary and no forcing rule. But we prefer the convention used above.
-
-### Permission Management UI
-
-Once you define the permissions, you can see them on the **permission management modal**.
-
-Go to the *Administration -> Identity -> Roles* page, select *Permissions* action for the admin role to open the permission management modal:
-
-![bookstore-permissions-ui](images/bookstore-permissions-ui.png)
-
-Grant the permissions you want and save the modal.
-
-## Authorization
-
-Now, you can use the permissions to authorize the book management.
-
-### Application Layer & HTTP API
-
-Open the `BookAppService` class and add set the policy names as the permission names defined above:
-
-````csharp
-using System;
-using Acme.BookStore.Permissions;
+using System.Threading.Tasks;
+using Shouldly;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
+using Xunit;
 
 namespace Acme.BookStore.Books
 {
-    public class BookAppService :
-        CrudAppService<
-            Book, //The Book entity
-            BookDto, //Used to show books
-            Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting
-            CreateUpdateBookDto>, //Used to create/update a book
-        IBookAppService //implement the IBookAppService
+    public class BookAppService_Tests : BookStoreApplicationTestBase
     {
-        public BookAppService(IRepository<Book, Guid> repository)
-            : base(repository)
+        private readonly IBookAppService _bookAppService;
+
+        public BookAppService_Tests()
         {
-            GetPolicyName = BookStorePermissions.Books.Default;
-            GetListPolicyName = BookStorePermissions.Books.Default;
-            CreatePolicyName = BookStorePermissions.Books.Create;
-            UpdatePolicyName = BookStorePermissions.Books.Edit;
-            DeletePolicyName = BookStorePermissions.Books.Create;
+            _bookAppService = GetRequiredService<IBookAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Books()
+        {
+            //Act
+            var result = await _bookAppService.GetListAsync(
+                new PagedAndSortedResultRequestDto()
+            );
+
+            //Assert
+            result.TotalCount.ShouldBeGreaterThan(0);
+            result.Items.ShouldContain(b => b.Name == "1984");
         }
     }
 }
 ````
 
-Added code to the constructor. Base `CrudAppService` automatically uses these permissions on the CRUD operations. This makes the **application service** secure, but also makes the **HTTP API** secure since this service is automatically used as an HTTP API as explained before (see [auto API controllers](../API/Auto-API-Controllers.md)).
+* `Should_Get_List_Of_Books` test simply uses `BookAppService.GetListAsync` method to get and check the list of books.
+* We can safely check the book "1984" by its name, because we know that this books is available in the database since we've added it in the seed data.
 
-{{if UI == "MVC"}}
-
-### Razor Page
-
-While securing the HTTP API & the application service prevents unauthorized users to use the services, they can still navigate to the book management page. While they will get authorization exception when the page makes the first AJAX call to the server, we should also authorize the page for a better user experience and security.
-
-Open the `BookStoreWebModule` and add the following code block inside the `ConfigureServices` method:
+Add a new test method to the `BookAppService_Tests` class that creates a new **valid** book:
 
 ````csharp
-Configure<RazorPagesOptions>(options =>
+[Fact]
+public async Task Should_Create_A_Valid_Book()
 {
-    options.Conventions.AuthorizePage("/Books/Index", BookStorePermissions.Books.Default);
-    options.Conventions.AuthorizePage("/Books/CreateModal", BookStorePermissions.Books.Create);
-    options.Conventions.AuthorizePage("/Books/EditModal", BookStorePermissions.Books.Edit);
-});
-````
+    //Act
+    var result = await _bookAppService.CreateAsync(
+        new CreateUpdateBookDto
+        {
+            Name = "New test book 42",
+            Price = 10,
+            PublishDate = System.DateTime.Now,
+            Type = BookType.ScienceFiction
+        }
+    );
 
-Now, unauthorized users are redirected to the **login page**.
-
-#### Hide the New Book Button
-
-The book management page has a *New Book* button that should be invisible if the current user has no *Book Creation* permission.
-
-![bookstore-new-book-button-small](images/bookstore-new-book-button-small.png)
-
-Open the `Pages/Books/Index.cshtml` file and change the content as shown below:
-
-````html
-@page
-@using Acme.BookStore.Localization
-@using Acme.BookStore.Permissions
-@using Acme.BookStore.Web.Pages.Books
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.Extensions.Localization
-@model IndexModel
-@inject IStringLocalizer<BookStoreResource> L
-@inject IAuthorizationService AuthorizationService
-@section scripts
-{
-    <abp-script src="/Pages/Books/Index.js"/>
+    //Assert
+    result.Id.ShouldNotBe(Guid.Empty);
+    result.Name.ShouldBe("New test book 42");
 }
-
-<abp-card>
-    <abp-card-header>
-        <abp-row>
-            <abp-column size-md="_6">
-                <abp-card-title>@L["Books"]</abp-card-title>
-            </abp-column>
-            <abp-column size-md="_6" class="text-right">
-                @if (await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create))
-                {
-                    <abp-button id="NewBookButton"
-                                text="@L["NewBook"].Value"
-                                icon="plus"
-                                button-type="Primary"/>
-                }
-            </abp-column>
-        </abp-row>
-    </abp-card-header>
-    <abp-card-body>
-        <abp-table striped-rows="true" id="BooksTable"></abp-table>
-    </abp-card-body>
-</abp-card>
 ````
 
-* Added `@inject IAuthorizationService AuthorizationService` to access to the authorization service.
-* Used `@if (await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create))` to check the book creation permission to conditionally render the *New Book* button.
+Add a new test that tries to create an invalid book and fails:
 
-### JavaScript Side
-
-Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* action:
-
-![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions.png)
-
-We should hide an action if the current user has not granted for the related permission. Datatables row actions has a `visible` option that can be set to `false` to hide the action item.
-
-Open the `Pages/Books/Index.js` inside the `Acme.BookStore.Web` project and add a `visible` option to the `Edit` action as shown below:
-
-````js
+````csharp
+[Fact]
+public async Task Should_Not_Create_A_Book_Without_Name()
 {
-    text: l('Edit'),
-    visible: abp.auth.isGranted('BookStore.Books.Edit'), //CHECK for the PERMISSION
-    action: function (data) {
-        editModal.open({ id: data.record.id });
+    var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
+    {
+        await _bookAppService.CreateAsync(
+            new CreateUpdateBookDto
+            {
+                Name = "",
+                Price = 10,
+                PublishDate = DateTime.Now,
+                Type = BookType.ScienceFiction
+            }
+        );
+    });
+
+    exception.ValidationErrors
+        .ShouldContain(err => err.MemberNames.Any(mem => mem == "Name"));
+}
+````
+
+* Since the `Name` is empty, ABP will throw an `AbpValidationException`.
+
+The final test class should be as shown below:
+
+````csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Shouldly;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
+using Xunit;
+
+namespace Acme.BookStore.Books
+{
+    public class BookAppService_Tests : BookStoreApplicationTestBase
+    {
+        private readonly IBookAppService _bookAppService;
+
+        public BookAppService_Tests()
+        {
+            _bookAppService = GetRequiredService<IBookAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Books()
+        {
+            //Act
+            var result = await _bookAppService.GetListAsync(
+                new PagedAndSortedResultRequestDto()
+            );
+
+            //Assert
+            result.TotalCount.ShouldBeGreaterThan(0);
+            result.Items.ShouldContain(b => b.Name == "1984");
+        }
+        
+        [Fact]
+        public async Task Should_Create_A_Valid_Book()
+        {
+            //Act
+            var result = await _bookAppService.CreateAsync(
+                new CreateUpdateBookDto
+                {
+                    Name = "New test book 42",
+                    Price = 10,
+                    PublishDate = System.DateTime.Now,
+                    Type = BookType.ScienceFiction
+                }
+            );
+
+            //Assert
+            result.Id.ShouldNotBe(Guid.Empty);
+            result.Name.ShouldBe("New test book 42");
+        }
+        
+        [Fact]
+        public async Task Should_Not_Create_A_Book_Without_Name()
+        {
+            var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
+            {
+                await _bookAppService.CreateAsync(
+                    new CreateUpdateBookDto
+                    {
+                        Name = "",
+                        Price = 10,
+                        PublishDate = DateTime.Now,
+                        Type = BookType.ScienceFiction
+                    }
+                );
+            });
+
+            exception.ValidationErrors
+                .ShouldContain(err => err.MemberNames.Any(mem => mem == "Name"));
+        }
     }
 }
 ````
 
-Do same for the `Delete` action:
+Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if it is not visible) and **Run All** tests:
 
-````js
-visible: abp.auth.isGranted('BookStore.Books.Delete')
-````
+![bookstore-appservice-tests](./images/bookstore-appservice-tests.png)
 
-* `abp.auth.isGranted(...)` is used to check a permission that is defined before.
-* `visible` could also be get a function that returns a `bool` if the value will be calculated later, based on some conditions.
+Congratulations, the **green icons** indicates that the tests have been successfully passed!
 
-### Menu Item
+## The Next Part
 
-Even we have secured all the layers of the book management page, it is still visible on the main menu of the application. We should hide the menu item if the current user has no permission.
-
-Open the `BookStoreMenuContributor` class, find the code block below:
-
-````csharp
-context.Menu.AddItem(
-    new ApplicationMenuItem(
-        "BooksStore",
-        l["Menu:BookStore"],
-        icon: "fa fa-book"
-    ).AddItem(
-        new ApplicationMenuItem(
-            "BooksStore.Books",
-            l["Menu:Books"],
-            url: "/Books"
-        )
-    )
-);
-````
-
-And replace this code block with the following:
-
-````csharp
-var bookStoreMenu = new ApplicationMenuItem(
-    "BooksStore",
-    l["Menu:BookStore"],
-    icon: "fa fa-book"
-);
-
-context.Menu.AddItem(bookStoreMenu);
-
-//CHECK the PERMISSION
-if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-{
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
-        "BooksStore.Books",
-        l["Menu:Books"],
-        url: "/Books"
-    ));
-}
-````
-
-{{else if UI == "NG"}}
-
-***Angular UI authorization document is being prepared...***
-
-{{end}}
+See the [next part](part-5.md) of this tutorial.
