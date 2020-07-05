@@ -54,11 +54,11 @@ Each project is used to test the related project. Test projects use the followin
 * [Shoudly](http://shouldly.readthedocs.io/en/latest/) as the assertion library.
 * [NSubstitute](http://nsubstitute.github.io/) as the mocking library.
 
-{{if DB="EF"}}
+{{if DB=="EF"}}
 
 > The test projects are configured to use **SQLite in-memory** as the database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 
-{{else if DB="Mongo"}}
+{{else if DB=="Mongo"}}
 
 > **[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)** library is used to mock the MongoDB database. A separate database instance is created and seeded (with the data seed system) to prepare a fresh database for every test.
 
