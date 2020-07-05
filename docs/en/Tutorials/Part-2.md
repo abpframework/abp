@@ -98,6 +98,59 @@ Check the `Books` table in the database to see the new book row. You can try `ge
 
 We will use these dynamic proxy functions in the next sections to communicate to the server.
 
+{{end}}
+
+## Localization
+
+Before starting to the UI development, we first want to prepare the localization texts (you normally do when needed while developing your application).
+
+Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
+
+![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
+
+Open the `en.json` (*the English translations*) file and change the content as below:
+
+````json
+{
+  "Culture": "en",
+  "Texts": {
+    "Menu:Home": "Home",
+    "Welcome": "Welcome",
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+    "Menu:BookStore": "Book Store",
+    "Menu:Books": "Books",
+    "Actions": "Actions",
+    "Edit": "Edit",
+    "PublishDate": "Publish date",
+    "NewBook": "New book",
+    "Name": "Name",
+    "Type": "Type",
+    "Price": "Price",
+    "CreationTime": "Creation time",
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "Enum:BookType:0": "Undefined",
+    "Enum:BookType:1": "Adventure",
+    "Enum:BookType:2": "Biography",
+    "Enum:BookType:3": "Dystopia",
+    "Enum:BookType:4": "Fantastic",
+    "Enum:BookType:5": "Horror",
+    "Enum:BookType:6": "Science",
+    "Enum:BookType:7": "Science fiction",
+    "Enum:BookType:8": "Poetry"
+  }
+}
+````
+
+* Localization key names are arbitrary. You can set any name. We prefer some conventions for specific text types;
+  * Add `Menu:` prefix for menu items.
+  * Use `Enum:<enum-type>:<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
+
+If a text is not defined in the localization file, it **fallbacks** to the localization key (as ASP.NET Core's standard behavior).
+
+> ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](../Localization.md) for details.
+
+{{if UI == "MVC"}}
+
 ## Create a Books Page
 
 It's time to create something visible and usable! Instead of classic MVC, we will use the [Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start) approach which is recommended by Microsoft.
@@ -152,57 +205,6 @@ context.Menu.AddItem(
     )
 );
 ````
-
-{{end}}
-
-### Localization
-
-Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
-
-![bookstore-localization-files](./images/bookstore-localization-files-v2.png)
-
-Open the `en.json` (*the English translations*) file and change the content as below:
-
-````json
-{
-  "Culture": "en",
-  "Texts": {
-    "Menu:Home": "Home",
-    "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
-    "Menu:BookStore": "Book Store",
-    "Menu:Books": "Books",
-    "Actions": "Actions",
-    "Edit": "Edit",
-    "PublishDate": "Publish date",
-    "NewBook": "New book",
-    "Name": "Name",
-    "Type": "Type",
-    "Price": "Price",
-    "CreationTime": "Creation time",
-    "AreYouSureToDelete": "Are you sure you want to delete this item?",
-    "Enum:BookType:0": "Undefined",
-    "Enum:BookType:1": "Adventure",
-    "Enum:BookType:2": "Biography",
-    "Enum:BookType:3": "Dystopia",
-    "Enum:BookType:4": "Fantastic",
-    "Enum:BookType:5": "Horror",
-    "Enum:BookType:6": "Science",
-    "Enum:BookType:7": "Science fiction",
-    "Enum:BookType:8": "Poetry"
-  }
-}
-````
-
-* Localization key names are arbitrary. You can set any name. We prefer some conventions for specific text types;
-  * Add `Menu:` prefix for menu items.
-  * Use `Enum:<enum-type>:<enum-value>` naming convention to localize the enum members. When you do it like that, ABP can automatically localize the enums in some proper cases.
-
-If a text is not defined in the localization file, it **fallbacks** to the localization key (as ASP.NET Core's standard behavior).
-
-> ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](../Localization.md) for details.
-
-{{if UI == "MVC"}}
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
 
@@ -327,23 +329,22 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 {{if UI == "NG"}}
 
-## Angular UI Development
-### Create the books page
+## Install NPM packages
 
-It's time to create something visible and usable! There are some tools that we will use when developing ABP Angular frontend application:
+If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install NPM packages:
+
+```bash
+yarn
+```
+
+## Create a Books Page
+
+It's time to create something visible and usable! There are some tools that we will use when developing the Angular frontend application:
 
 - [Angular CLI](https://angular.io/cli) will be used to create modules, components and services.
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
 - [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
 - [Visual Studio Code](https://code.visualstudio.com/) will be used as the code editor (you can use your favorite editor).
-
-### Install NPM packages
-
-Open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install NPM packages:
-
-```bash
-yarn
-```
 
 ### BookModule
 
@@ -408,7 +409,7 @@ function configureRoutes(routes: RoutesService) {
 
 For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
-#### Book List Component
+### Book List Component
 
 Run the command below on the terminal in the root folder to generate a new component, named book-list:
 
