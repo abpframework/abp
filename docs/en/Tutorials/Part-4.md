@@ -171,7 +171,7 @@ Added code to the constructor. Base `CrudAppService` automatically uses these pe
 
 ### Razor Page
 
-While securing the HTTP API & the application service prevents unauthorized users to use the services, they can still navigate to the book management page. While they will get authorization exceptions when the page makes the first AJAX call to the server, we should also authorize the page for a better user experience and security.
+While securing the HTTP API & the application service prevents unauthorized users to use the services, they can still navigate to the book management page. While they will get authorization exception when the page makes the first AJAX call to the server, we should also authorize the page for a better user experience and security.
 
 Open the `BookStoreWebModule` and add the following code block inside the `ConfigureServices` method:
 
@@ -185,6 +185,55 @@ Configure<RazorPagesOptions>(options =>
 ````
 
 Now, unauthorized users are redirected to the **login page**.
+
+#### Hide the New Book Button
+
+The book management page has a *New Book* button that should be invisible if the current user has no *Book Creation* permission.
+
+![bookstore-new-book-button-small](images/bookstore-new-book-button-small.png)
+
+Open the `Pages/Books/Index.cshtml` file and change the content as shown below:
+
+````html
+@page
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Permissions
+@using Acme.BookStore.Web.Pages.Books
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IStringLocalizer<BookStoreResource> L
+@inject IAuthorizationService AuthorizationService
+@section scripts
+{
+    <abp-script src="/Pages/Books/Index.js"/>
+}
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <abp-card-title>@L["Books"]</abp-card-title>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                @if (await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create))
+                {
+                    <abp-button id="NewBookButton"
+                                text="@L["NewBook"].Value"
+                                icon="plus"
+                                button-type="Primary"/>
+                }
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable"></abp-table>
+    </abp-card-body>
+</abp-card>
+````
+
+* Added `@inject IAuthorizationService AuthorizationService` to access to the authorization service.
+* Used `@if (await AuthorizationService.IsGrantedAsync(BookStorePermissions.Books.Create))` to check the book creation permission to conditionally render the *New Book* button.
 
 ### JavaScript Side
 
@@ -217,7 +266,47 @@ visible: abp.auth.isGranted('BookStore.Books.Delete')
 
 ### Menu Item
 
-Even we secured all layers of the book management page, it is still visible on the main menu of the application.
+Even we have secured all the layers of the book management page, it is still visible on the main menu of the application. We should hide the menu item if the current user has no permission.
+
+Open the `BookStoreMenuContributor` class, find the code block below:
+
+````csharp
+context.Menu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore",
+        l["Menu:BookStore"],
+        icon: "fa fa-book"
+    ).AddItem(
+        new ApplicationMenuItem(
+            "BooksStore.Books",
+            l["Menu:Books"],
+            url: "/Books"
+        )
+    )
+);
+````
+
+And replace this code block with the following:
+
+````csharp
+var bookStoreMenu = new ApplicationMenuItem(
+    "BooksStore",
+    l["Menu:BookStore"],
+    icon: "fa fa-book"
+);
+
+context.Menu.AddItem(bookStoreMenu);
+
+//CHECK the PERMISSION
+if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+{
+    bookStoreMenu.AddItem(new ApplicationMenuItem(
+        "BooksStore.Books",
+        l["Menu:Books"],
+        url: "/Books"
+    ));
+}
+````
 
 {{else if UI == "NG"}}
 
