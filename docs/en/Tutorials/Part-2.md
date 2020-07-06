@@ -425,79 +425,13 @@ function configureRoutes(routes: RoutesService) {
 * `name` is the localized menu item name (see the [localization document](../UI/Angular/Localization.md) for details).
 * `iconClass` is the icon of the menu item (you can use [Font Awesome](https://fontawesome.com/) icons by default).
 * `order` is the order of the menu item.
-* `layout` is the layout of the BooksModule's routes. `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty` can be used.
+* `layout` is the layout of the BooksModule's routes (there are three types of pre-defined layouts: `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty`).
 
 For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
-### Book List Component
-
-Run the command below on the terminal in the root folder to generate a new component, named book-list:
-
-```bash
-yarn ng generate component book/book-list
-```
-
-![Creating books list](./images/bookstore-creating-book-list-terminal.png)
-
-Open `book.module.ts` file in the `app\book` folder and replace the content as below:
-
-```js
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BookRoutingModule } from './book-routing.module';
-import { BookListComponent } from './book-list/book-list.component';
-import { SharedModule } from '../shared/shared.module'; //<== added this line ==>
-
-@NgModule({
-  declarations: [BookListComponent],
-  imports: [
-    CommonModule,
-    BookRoutingModule,
-    SharedModule, //<== added this line ==>
-  ],
-})
-export class BookModule {}
-```
-
-* We imported `SharedModule` and added to `imports` array.
-
-Open `book-routing.module.ts`  file in the `app\book` folder and replace the content as below:
-
-```js
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { BookListComponent } from './book-list/book-list.component'; // <== added this line ==>
-
-// <== replaced routes ==>
-const routes: Routes = [
-  {
-    path: '',
-    component: BookListComponent,
-  },
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class BookRoutingModule { }
-```
-
-* We imported `BookListComponent` and replaced `routes` const.
-
-Run `yarn start` and wait for Angular to serve the application:
-
-```bash
-yarn start
-```
-
-Open the browser and navigate to http://localhost:4200/books. We'll see **book-list works!**  text on the books page:
-
-![Initial book list page](./images/bookstore-initial-book-list-page.png)
-
 ### Generate Proxies
 
-ABP CLI provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running generate-proxy command, your host must be up and running. See the [CLI documentation](../CLI.md)
+[ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
 
 Run the following command in the `angular` folder:
 
