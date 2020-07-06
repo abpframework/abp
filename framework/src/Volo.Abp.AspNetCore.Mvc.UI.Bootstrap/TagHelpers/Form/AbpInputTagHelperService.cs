@@ -247,7 +247,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
         {
-            if (IsOutputHidden(inputTag) || ShouldSuppressLabel(inputTag))
+            if (IsOutputHidden(inputTag) || TagHelper.SuppressLabel)
             {
                 return "";
             }
@@ -431,11 +431,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
 
             return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
-        }
-
-        protected virtual bool ShouldSuppressLabel(TagHelperOutput inputTag)
-        {
-            return inputTag.Attributes.ContainsName("nolabel");
         }
 
         protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
