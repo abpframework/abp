@@ -349,12 +349,25 @@ It's time to create something visible and usable! There are some tools that we w
 Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
 
 ```bash
-yarn ng generate module books --module app --routing --route books
+yarn ng generate module book --module app --routing --route books
 ```
 
 This command should produce the following output:
 
-![Generating books module](./images/bookstore-creating-book-module-terminal-2.png)
+````bash
+> yarn ng generate module book --module app --routing --route books
+
+yarn run v1.19.1
+$ ng generate module book --module app --routing --route books
+CREATE src/app/book/book-routing.module.ts (336 bytes)
+CREATE src/app/book/book.module.ts (335 bytes)
+CREATE src/app/book/book.component.html (19 bytes)
+CREATE src/app/book/book.component.spec.ts (614 bytes)
+CREATE src/app/book/book.component.ts (268 bytes)
+CREATE src/app/book/book.component.scss (0 bytes)
+UPDATE src/app/app-routing.module.ts (1289 bytes)
+Done in 3.88s.
+````
 
 ### Routing
 
@@ -369,7 +382,7 @@ const routes: Routes = [
       // ...
     ],
   },
-  { path: 'books', loadChildren: () => import('./books/books.module').then(m => m.BooksModule) },
+  { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
 ];
 ````
 
@@ -382,7 +395,7 @@ const routes: Routes = [
     component: DynamicLayoutComponent,
     children: [
       // ...
-      { path: 'books', loadChildren: () => import('./books/books.module').then(m => m.BooksModule) },
+      { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
     ],
   },
 ];
@@ -436,8 +449,11 @@ For more information, see the [RoutesService document](https://docs.abp.io/en/ab
 Run the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy --module app
+abp generate-proxy --module app --apiUrl https://localhost:XXXXX
 ```
+
+* XXXXX should be replaced with the backend port of your application.
+* If you don't specify the `--apiUrl` parameter, it will try to get the URL from the `src/environments/environment.ts` file.
 
 ![Generate proxy command](./images/generate-proxy-command.png)
 
