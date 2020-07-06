@@ -369,6 +369,30 @@ UPDATE src/app/app-routing.module.ts (1289 bytes)
 Done in 3.88s.
 ````
 
+### BookModule
+
+Open the `/src/app/book/book.module.ts` and replace the content as shown below:
+
+````js
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
+import { BookRoutingModule } from './book-routing.module';
+import { BookComponent } from './book.component';
+
+@NgModule({
+  declarations: [BookComponent],
+  imports: [
+    BookRoutingModule,
+    SharedModule
+  ]
+})
+export class BookModule { }
+
+````
+
+* Added the `SharedModule`. `SharedModule` exports some common modules needed to create user interfaces.
+* `SharedModule` already exports the `CommonModule`, so we've removed the `CommonModule`.
+
 ### Routing
 
 Generated code places the new route definition to the `src/app/app-routing.module.ts` file as shown below:
@@ -442,42 +466,40 @@ function configureRoutes(routes: RoutesService) {
 
 For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
-### Generate Proxies
+### Service Proxy Generation
 
 [ABP CLI](../CLI.md) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
 
 Run the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy --module app --apiUrl https://localhost:XXXXX
+abp generate-proxy --apiUrl https://localhost:XXXXX
 ```
 
 * XXXXX should be replaced with the backend port of your application.
 * If you don't specify the `--apiUrl` parameter, it will try to get the URL from the `src/environments/environment.ts` file.
 
-![Generate proxy command](./images/generate-proxy-command.png)
-
 The generated files looks like below:
 
-![Generated files](./images/generated-proxies.png)
+![Generated files](./images/generated-proxies-2.png)
 
-### BookListComponent
+### BookComponent
 
-Open the `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
+Open the `/src/app/book/book.component.ts` file and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from '../models';
-import { BookService } from '../services';
+import { BookDto, BookType } from './models';
+import { BookService } from './services';
 
 @Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
   providers: [ListService],
 })
-export class BookListComponent implements OnInit {
+export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
   booksType = BookType;
@@ -495,9 +517,9 @@ export class BookListComponent implements OnInit {
 ```
 
 * We imported and injected the generated `BookService`.
-* We implemented the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service) that is a utility service to provide easy pagination, sorting, and search implementation.
+* We are using the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
 
-Open the `book-list.component.html` file in `app\book\book-list` folder and replace the content as below:
+Open the `/src/app/book/book.component.html` and replace the content as below:
 
 ```html
 <div class="card">
@@ -534,17 +556,9 @@ Open the `book-list.component.html` file in `app\book\book-list` folder and repl
 </div>
 ```
 
-* We added HTML code of book list page.
-
 Now you can see the final result on your browser:
 
 ![Book list final result](./images/bookstore-book-list.png)
-
-The file system structure of the project:
-
-![Book list final result](./images/bookstore-angular-file-tree.png)
-
-In this tutorial we have applied the rules of official [Angular Style Guide](https://angular.io/guide/styleguide#file-tree).
 
 {{end}}
 
