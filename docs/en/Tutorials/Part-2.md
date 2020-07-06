@@ -341,58 +341,77 @@ yarn
 
 It's time to create something visible and usable! There are some tools that we will use when developing the Angular frontend application:
 
-- [Angular CLI](https://angular.io/cli) will be used to create modules, components and services.
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
-- [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
-- [Visual Studio Code](https://code.visualstudio.com/) will be used as the code editor (you can use your favorite editor).
+- [Ngx-Datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
 
 ### BookModule
 
-Run the following command line to create a new module, named `BookModule`:
+Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
 
 ```bash
-yarn ng generate module book --routing true
+yarn ng generate module books --module app --routing --route books
 ```
 
-![Generating books module](./images/bookstore-creating-book-module-terminal.png)
+This command should produce the following output:
+
+![Generating books module](./images/bookstore-creating-book-module-terminal-2.png)
 
 ### Routing
 
-Open the `app-routing.module.ts` file in `src\app` folder and add a route as shown below:
+Generated code places the new route definition to the `src/app/app-routing.module.ts` file as shown below:
 
-```js
+````js
 const routes: Routes = [
-// ...
-// added a new route to the routes array
   {
-    path: 'books',
-    loadChildren: () => import('./book/book.module').then(m => m.BookModule)
-  }
-]
-```
+    path: '',
+    component: DynamicLayoutComponent,
+    children: [
+      // ...
+    ],
+  },
+  { path: 'books', loadChildren: () => import('./books/books.module').then(m => m.BooksModule) },
+];
+````
 
-* We added a lazy-loaded route. See the [Lazy-Loading Feature Modules](https://angular.io/guide/lazy-loading-ngmodules#lazy-loading-feature-modules).
+We need to **move this route** definition inside the `children` array, so it can use the application layout:
 
-Open the `route.provider.ts` file in `src\app` folder and replace the content as below:
+````js
+const routes: Routes = [
+  {
+    path: '',
+    component: DynamicLayoutComponent,
+    children: [
+      // ...
+      { path: 'books', loadChildren: () => import('./books/books.module').then(m => m.BooksModule) },
+    ],
+  },
+];
+````
+
+Finally, open the `src/app/route.provider.ts` file replace the `configureRoutes` function declaration as shown below:
 
 ```js
-import { RoutesService, eLayoutType } from '@abp/ng.core';
-import { APP_INITIALIZER } from '@angular/core';
-
-export const APP_ROUTE_PROVIDER = [
-  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
-];
-
 function configureRoutes(routes: RoutesService) {
   return () => {
     routes.add([
-      //...
-      // added below element
+      {
+        path: '/',
+        name: '::Menu:Home',
+        iconClass: 'fas fa-home',
+        order: 1,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/book-store',
+        name: '::Menu:BookStore',
+        iconClass: 'fas fa-book',
+        order: 2,
+        layout: eLayoutType.application,
+      },
       {
         path: '/books',
         name: '::Menu:Books',
-        iconClass: 'fas fa-book',
-        order: 101,
+        parentName: '::Menu:BookStore',
         layout: eLayoutType.application,
       },
     ]);
@@ -400,12 +419,13 @@ function configureRoutes(routes: RoutesService) {
 }
 ```
 
-* We added a new route element to show a navigation element labeled "Books" on the menu. 
-  * `path` is the URL of the route.
-  * `name` is the menu item name. A Localization key can be passed.
-  * `iconClass` is the icon of the menu item.
-  * `order` is the order of the menu item. We define 101 to show the route after the "Administration" item.
-  * `layout` is the layout of the BooksModule's routes. `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty` can be defined.
+`RoutesService` is a service provided by the ABP Framework to configure the main menu and the routes.
+
+* `path` is the URL of the route.
+* `name` is the localized menu item name (see the [localization document](../UI/Angular/Localization.md) for details).
+* `iconClass` is the icon of the menu item (you can use [Font Awesome](https://fontawesome.com/) icons by default).
+* `order` is the order of the menu item.
+* `layout` is the layout of the BooksModule's routes. `eLayoutType.application`, `eLayoutType.account` or `eLayoutType.empty` can be used.
 
 For more information, see the [RoutesService document](https://docs.abp.io/en/abp/latest/UI/Angular/Modifying-the-Menu.md#via-routesservice).
 
