@@ -183,11 +183,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         {
             if (entity is IEntity<Guid> entityWithGuidId)
             {
-                TrySetGuidId(entity, entityWithGuidId);
+                TrySetGuidId(entityWithGuidId);
             }
         }
 
-        protected virtual void TrySetGuidId(TEntity entry, IEntity<Guid> entity)
+        protected virtual void TrySetGuidId(IEntity<Guid> entity)
         {
             if (entity.Id != default)
             {
