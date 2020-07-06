@@ -632,32 +632,32 @@ You can run the application and try to delete a book.
 
 {{if UI == "NG"}}
 
-## Creating a new book
+## Creating a New Book
 
 In this section, you will learn how to create a new modal dialog form to create a new book.
 
-### Add a modal to BookListComponent
+### BookComponent
 
-Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
+Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from '../models';
-import { BookService } from '../services';
+import { BookDto, BookType } from './models';
+import { BookService } from './services';
 
 @Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
   providers: [ListService],
 })
-export class BookListComponent implements OnInit {
+export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
   booksType = BookType;
 
-  isModalOpen = false; // <== added this line ==>
+  isModalOpen = false; // add this line
 
   constructor(public readonly list: ListService, private bookService: BookService) {}
 
@@ -669,18 +669,17 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  // added createBook method
+  // add new method
   createBook() {
     this.isModalOpen = true;
   }
 }
 ```
 
-* We defined a variable called `isModalOpen` and `createBook` method.
-* We added the `createBook` method.
+* We defined a property called `isModalOpen` and a method called `createBook`.
 
 
-Open `book-list.component.html` file in `books\book-list` folder and replace the content as below:
+Open `/src/app/book/book.component.html` and make the following changes:
 
 ```html
 <div class="card">
@@ -688,41 +687,26 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">{%{{{ '::Menu:Books' | abpLocalization }}}%}</h5>
-      </div>
-      <!--Added new book button -->
+      </div>        
       <div class="text-right col col-md-6">
+          
+        <!-- Add the "new book" button here -->
         <div class="text-lg-right pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
             <i class="fa fa-plus mr-1"></i>
             <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
           </button>
         </div>
+          
       </div>
     </div>
   </div>
   <div class="card-body">
-    <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
-      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          {%{{{ booksType[row.type] }}}%}
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          {%{{{ row.publishDate | date }}}%}
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::Price' | abpLocalization" prop="price">
-        <ng-template let-row="row" ngx-datatable-cell-template>
-          {%{{{ row.price | currency }}}%}
-        </ng-template>
-      </ngx-datatable-column>
-    </ngx-datatable>
+    <!-- ngx-datatable should be here! -->
   </div>
 </div>
 
-<!--added modal-->
+<!-- Add the modal here -->
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
     <h3>{%{{{ '::NewBook' | abpLocalization }}}%}</h3>
@@ -738,26 +722,25 @@ Open `book-list.component.html` file in `books\book-list` folder and replace the
 </abp-modal>
 ```
 
-* We added the `abp-modal` which renders a modal to allow user to create a new book.
-* `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
-* We added `New book` button to the `AbpContentToolbar`.
+* Added `New book` button to the card header..
+* Added the `abp-modal` which renders a modal to allow user to create a new book. `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
 
 You can open your browser and click **New book** button to see the new modal.
 
 ![Empty modal for new book](./images/bookstore-empty-new-book-modal.png)
 
-### Create a reactive form
+### Create a Reactive Form
 
 [Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
 
-Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
+Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { BookDto, BookType } from '../models';
 import { BookService } from '../services';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== added this line ==>
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== added this
 
 @Component({
   selector: 'app-book-list',
@@ -789,7 +772,7 @@ export class BookListComponent implements OnInit {
   }
 
   createBook() {
-    this.buildForm(); // <== added this line ==>
+    this.buildForm(); // <== added this line
     this.isModalOpen = true;
   }
 
