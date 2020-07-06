@@ -49,6 +49,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             LocalEventBus = NullLocalEventBus.Instance;
             DistributedEventBus = NullDistributedEventBus.Instance;
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
+            GuidGenerator = SimpleGuidGenerator.Instance;
         }
 
         public override async Task<TEntity> InsertAsync(
