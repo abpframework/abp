@@ -538,7 +538,7 @@ Open the `/src/app/book/book.component.html` and replace the content as below:
       <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
       <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {%{{{ booksType[row.type] }}}%}
+          {%{{{ '::Enum:BookType:' + row.type | abpLocalization }}}%}
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
