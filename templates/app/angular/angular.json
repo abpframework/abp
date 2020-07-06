@@ -51,7 +51,6 @@
                 "inject": true,
                 "bundleName": "ngx-datatable-material"
               },
-
               {
                 "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
                 "inject": false,
