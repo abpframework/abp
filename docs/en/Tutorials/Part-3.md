@@ -738,29 +738,34 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from '../models';
-import { BookService } from '../services';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // <== added this
+import { BookDto, BookType } from './models';
+import { BookService } from './services';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
   providers: [ListService],
 })
-export class BookListComponent implements OnInit {
+export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
   booksType = BookType;
 
-  isModalOpen = false;
+  form: FormGroup; // add this line
 
-  form: FormGroup; // <== added this line ==>
+  // add bookTypes as a list of enum members
+  bookTypes = Object.keys(BookType).filter(
+    (bookType) => typeof this.booksType[bookType] === 'number'
+  );
+
+  isModalOpen = false;
 
   constructor(
     public readonly list: ListService,
     private bookService: BookService,
-    private fb: FormBuilder // <== injected FormBuilder ==>
+    private fb: FormBuilder // inject FormBuilder
   ) {}
 
   ngOnInit() {
@@ -772,11 +777,11 @@ export class BookListComponent implements OnInit {
   }
 
   createBook() {
-    this.buildForm(); // <== added this line
+    this.buildForm(); // add this line
     this.isModalOpen = true;
   }
 
-  // added buildForm method
+  // add buildForm method
   buildForm() {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -785,23 +790,34 @@ export class BookListComponent implements OnInit {
       price: [null, Validators.required],
     });
   }
+
+  // add save method
+  save() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.bookService.createByInput(this.form.value).subscribe(() => {
+      this.isModalOpen = false;
+      this.form.reset();
+      this.list.get();
+    });
+  }
 }
 ```
 
-* We imported `FormGroup, FormBuilder and Validators`.
-* We added `form: FormGroup` variable.
-* We injected `fb: FormBuilder` service to the constructor. The [FormBuilder](https://angular.io/api/forms/FormBuilder) service provides convenient methods for generating controls. It reduces the amount of boilerplate needed to build complex forms.
-* We added `buildForm` method to the end of the file and executed  `buildForm()` in the `createBook` method. This method creates a reactive form to be able to create a new book.
-  * The `group` method of `FormBuilder`, `fb` creates a `FormGroup`.
-  * Added `Validators.required` static method which validates the relevant form element.
+* Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
+* Added `form: FormGroup` property.
+* Add `bookTypes` as a list of `BookType` enum members.
+* Injected `FormBuilder` into the constructor. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
+* Added `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
+* Added `save` method.
 
-### Create the DOM elements of the form
-
-Open `book-list.component.html` in `app\books\book-list` folder and replace `<ng-template #abpBody> </ng-template>`  with the following code part:
+Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </ng-template>`  with the following code part:
 
 ```html
 <ng-template #abpBody>
-  <form [formGroup]="form">
+  <form [formGroup]="form" (ngSubmit)="save()">
     <div class="form-group">
       <label for="book-name">Name</label><span> * </span>
       <input type="text" id="book-name" class="form-control" formControlName="name" autofocus />
@@ -835,142 +851,82 @@ Open `book-list.component.html` in `app\books\book-list` folder and replace `<ng
 </ng-template>
 ```
 
-- This template creates a form with `Name`, `Price`, `Type` and `Publish` date fields.
-- We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component.
+Also replace `<ng-template #abpFooter> </ng-template>` with the following code part:
 
-### Datepicker requirements
+````html
+<ng-template #abpFooter>
+  <button type="button" class="btn btn-secondary" #abpClose>
+      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
+  </button>
 
-Open `book.module.ts` file in `app\book` folder and replace the content as below:
+  <!--added save button-->
+  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+        <i class="fa fa-check mr-1"></i>
+        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
+  </button>
+</ng-template>
+````
+
+### Datepicker
+
+We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component. So, need to arrange dependencies related to this component.
+
+Open `/src/app/book/book.module.ts` and replace the content as below:
 
 ```js
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BookRoutingModule } from './book-routing.module';
-import { BookListComponent } from './book-list/book-list.component';
 import { SharedModule } from '../shared/shared.module';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; //<== added this line ==>
+import { BookRoutingModule } from './book-routing.module';
+import { BookComponent } from './book.component';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; // add this line
 
 @NgModule({
-  declarations: [BookListComponent],
+  declarations: [BookComponent],
   imports: [
-    CommonModule,
     BookRoutingModule,
     SharedModule,
-    NgbDatepickerModule, //<== added this line ==>
-  ],
+    NgbDatepickerModule, // add this line
+  ]
 })
-export class BookModule {}
+export class BookModule { }
 ```
 
 * We imported `NgbDatepickerModule`  to be able to use the date picker.
 
-Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
+Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from '../models';
-import { BookService } from '../services';
+import { BookDto, BookType } from './models';
+import { BookService } from './services';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap'; // <== added this line ==>
 
-@Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }], // <== added a provide ==>
-})
-export class BookListComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
-
-  booksType = BookType;
-
-  // <== added bookTypeArr array ==>
-  bookTypeArr = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
-  );
-
-  isModalOpen = false;
-
-  form: FormGroup;
-
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder
-  ) {}
-
-  ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
-
-    this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
-    });
-  }
-
-  createBook() {
-    this.buildForm();
-    this.isModalOpen = true;
-  }
-
-  buildForm() {
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      type: [null, Validators.required],
-      publishDate: [null, Validators.required],
-      price: [null, Validators.required],
-    });
-  }
-}
-```
-
-* We imported ` NgbDateNativeAdapter, NgbDateAdapter`
-
-* We added a new provider `NgbDateAdapter` that converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
-
-* We added `bookTypeArr` array to be able to use it in the combobox values. The `bookTypeArr` contains the fields of the `BookType` enum. Resulting array is shown below:
-
-  ```js
-  ['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
-  ```
-
-  This array was used in the previous form template in the `ngFor` loop.
-
-Now, you can open your browser to see the changes:
-
-
-![New book modal](./images/bookstore-new-book-form.png)
-
-### Saving the book
-
-Open `book-list.component.ts` file in `app\book\book-list` folder and replace the content as below:
-
-```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from '../models';
-import { BookService } from '../services';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+// added this line
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
+  providers: [
+    ListService,
+    { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter } // add this line
+  ],
 })
-export class BookListComponent implements OnInit {
+export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
   booksType = BookType;
 
-  bookTypeArr = Object.keys(BookType).filter(
+  form: FormGroup;
+
+  // <== added bookTypeArr array ==>
+  bookTypes = Object.keys(BookType).filter(
     (bookType) => typeof this.booksType[bookType] === 'number'
   );
 
   isModalOpen = false;
-
-  form: FormGroup;
 
   constructor(
     public readonly list: ListService,
@@ -1000,7 +956,6 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  // <== added save ==>
   save() {
     if (this.form.invalid) {
       return;
@@ -1015,35 +970,10 @@ export class BookListComponent implements OnInit {
 }
 ```
 
-* We added `save` method
+* Imported ` NgbDateNativeAdapter` and `NgbDateAdapter`.
+* We added a new provider `NgbDateAdapter` that converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
-Open `book-list.component.html` in `app\book\book-list` folder, find the `<ng-template #abpFooter>` element and replace this element with the following to create a new book.
-
-```html
-<ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
-      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
-  </button>
-
-  <!--added save button-->
-  <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
-        <i class="fa fa-check mr-1"></i>
-        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
-  </button>
-</ng-template>
-```
-
-Find the `<form [formGroup]="form">` tag and replace below content:
-
-```html
-<form [formGroup]="form" (ngSubmit)="save()"> <!-- added the ngSubmit -->
-```
-
-
-* We added the `(ngSubmit)="save()"` to `<form>` element to save a new book by pressing the enter.
-* We added `abp-button` to the bottom area of the modal to save a new book.
-
-The final modal UI looks like below:
+Now, you can open your browser to see the changes:
 
 ![Save button to the modal](./images/bookstore-new-book-form-v2.png)
 
