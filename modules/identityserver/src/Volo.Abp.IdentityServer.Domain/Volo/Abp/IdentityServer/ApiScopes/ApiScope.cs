@@ -32,7 +32,8 @@ namespace Volo.Abp.IdentityServer.ApiScopes
 
         }
 
-        protected internal ApiScope(
+        public ApiScope(
+            Guid id,
             [NotNull] string name,
             string displayName = null,
             string description = null,
@@ -43,6 +44,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         {
             Check.NotNull(name, nameof(name));
 
+            Id = id;
             Name = name;
             DisplayName = displayName ?? name;
             Description = description;

@@ -19,6 +19,11 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
         }
 
+        public async Task<ApiScope> GetByNameAsync(string scopeName, bool includeDetails = true, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.Name == scopeName, GetCancellationToken(cancellationToken));
+        }
+
         public async Task<List<ApiScope>> GetListByNameAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {

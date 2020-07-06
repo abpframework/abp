@@ -88,13 +88,15 @@ namespace Volo.Abp.Account.Web.Pages
             // user clicked 'yes' - validate the data
             else if (Consent?.Button == "yes")
             {
+                Consent.ScopesConsented =
+                    Consent.ApiScopes.Union(Consent.IdentityScopes).Distinct().Select(x => x.Value).ToList();
                 // if the user consented to some scope, build the response model
                 if (!Consent.ScopesConsented.IsNullOrEmpty())
                 {
                     var scopes = Consent.ScopesConsented;
                     if (ConsentOptions.EnableOfflineAccess == false)
                     {
-                        scopes = scopes.Where(x => x != IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess);
+                        scopes = scopes.Where(x => x != IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess).ToList();
                     }
 
                     grantedConsent = new ConsentResponse
@@ -124,7 +126,7 @@ namespace Volo.Abp.Account.Web.Pages
                 await _interaction.GrantConsentAsync(request, grantedConsent);
 
                 // indicate that's it ok to redirect back to authorization endpoint
-                result.RedirectUri = Consent.ReturnUrl;  //TODO: ReturnUrlHash?
+                result.RedirectUri = ReturnUrl;  //TODO: ReturnUrlHash?
                 result.Client = request.Client;
             }
             else
@@ -153,10 +155,8 @@ namespace Volo.Abp.Account.Web.Pages
             var consentViewModel = new ConsentViewModel
             {
                 RememberConsent = model?.RememberConsent ?? true,
-                ScopesConsented = model?.ScopesConsented ?? Enumerable.Empty<string>(),
+                ScopesConsented = model?.ScopesConsented ?? new List<string>(),
                 Description = model?.Description,
-
-                ReturnUrl = returnUrl,
 
                 ClientName = request.Client.ClientName ?? request.Client.ClientId,
                 ClientUrl = request.Client.ClientUri,
@@ -166,7 +166,7 @@ namespace Volo.Abp.Account.Web.Pages
 
             consentViewModel.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x =>
                 CreateScopeViewModel(x, consentViewModel.ScopesConsented.Contains(x.Name) || model == null))
-                .ToArray();
+                .ToList();
 
             var apiScopes = new List<ScopeViewModel>();
             foreach(var parsedScope in request.ValidatedResources.ParsedScopes)
@@ -240,10 +240,9 @@ namespace Volo.Abp.Account.Web.Pages
             [Required]
             public string Button { get; set; }
 
-            public IEnumerable<string> ScopesConsented { get; set; }
-            public bool RememberConsent { get; set; }
+            public List<string> ScopesConsented { get; set; }
 
-            public string ReturnUrl { get; set; }
+            public bool RememberConsent { get; set; }
 
             public string Description { get; set; }
         }
@@ -258,9 +257,9 @@ namespace Volo.Abp.Account.Web.Pages
 
             public bool AllowRememberConsent { get; set; }
 
-            public IEnumerable<ScopeViewModel> IdentityScopes { get; set; }
+            public List<ScopeViewModel> IdentityScopes { get; set; }
 
-            public IEnumerable<ScopeViewModel> ApiScopes { get; set; }
+            public List<ScopeViewModel> ApiScopes { get; set; }
         }
 
         public class ScopeViewModel

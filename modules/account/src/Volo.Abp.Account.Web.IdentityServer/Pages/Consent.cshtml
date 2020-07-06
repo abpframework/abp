@@ -1,5 +1,4 @@
 @page
-@using IdentityServer4.Extensions
 @using Volo.Abp.Account.Web.Pages
 @model ConsentModel
 <abp-card id="IdentityServerConsentWrapper">
@@ -31,28 +30,29 @@
 
                 <ul class="list-group">
 
-                    @foreach (var identityScope in Model.Consent.IdentityScopes)
+                    @for (var i = 0; i < Model.Consent.IdentityScopes.Count; i++)
                     {
                         <li class="list-group-item">
                             <div class="form-check">
-                                <label asp-for="@identityScope.Checked" class="form-check-label">
-                                    <input asp-for="@identityScope.Checked" class="form-check-input"/>
-                                    @identityScope.DisplayName
-                                    @if (identityScope.Required)
+                                <label asp-for="@Model.Consent.IdentityScopes[i].Checked" class="form-check-label">
+                                    <input asp-for="@Model.Consent.IdentityScopes[i].Checked" class="form-check-input"  />
+                                    @Model.Consent.IdentityScopes[i].DisplayName
+                                    @if (Model.Consent.IdentityScopes[i].Required)
                                     {
                                         <span><em>(required)</em></span>
                                     }
                                 </label>
                             </div>
-                            <input asp-for="@identityScope.Value" type="hidden"/> @* TODO: Use attributes on the view model instead of using hidden here *@
-                            @if (identityScope.Description != null)
+                            <input asp-for="@Model.Consent.IdentityScopes[i].Value" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
+                            @if (Model.Consent.IdentityScopes[i].Description != null)
                             {
                                 <div class="consent-description">
-                                    @identityScope.Description
+                                    @Model.Consent.IdentityScopes[i].Description
                                 </div>
                             }
                         </li>
                     }
+
                 </ul>
             }
 
@@ -62,24 +62,24 @@
 
                 <ul class="list-group">
 
-                    @foreach (var apiScope in Model.Consent.ApiScopes)
+                    @for (var i = 0; i < Model.Consent.ApiScopes.Count; i++)
                     {
                         <li class="list-group-item">
                             <div class="form-check">
-                                <label asp-for="@apiScope.Checked" class="form-check-label">
-                                    <input asp-for="@apiScope.Checked" class="form-check-input" disabled="@apiScope.Required"/>
-                                    @apiScope.DisplayName
-                                    @if (apiScope.Required)
+                                <label asp-for="@Model.Consent.ApiScopes[i].Checked" class="form-check-label">
+                                    <input asp-for="@Model.Consent.ApiScopes[i].Checked" class="form-check-input" disabled="@Model.Consent.ApiScopes[i].Required" />
+                                    @Model.Consent.ApiScopes[i].DisplayName
+                                    @if (Model.Consent.ApiScopes[i].Required)
                                     {
                                         <span><em>(required)</em></span>
                                     }
                                 </label>
                             </div>
-                            <input asp-for="@apiScope.Value" type="hidden"/> @* TODO: Use attributes on the view model instead of using hidden here *@
-                            @if (apiScope.Description != null)
+                            <input asp-for="@Model.Consent.ApiScopes[i].Value" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
+                            @if (Model.Consent.ApiScopes[i].Description != null)
                             {
                                 <div class="consent-description">
-                                    @apiScope.Description
+                                    @Model.Consent.ApiScopes[i].Description
                                 </div>
                             }
                         </li>
@@ -110,8 +110,8 @@
             }
 
             <div>
-                <button name="UserDecision" value="yes" class="btn btn-primary" autofocus>Yes, Allow</button>
-                <button name="UserDecision" value="no" class="btn">No, Do Not Allow</button>
+                <button name="Consent.Button" value="yes" class="btn btn-primary" autofocus>Yes, Allow</button>
+                <button name="Consent.Button" value="no" class="btn">No, Do Not Allow</button>
                 @if (Model.Consent.ClientUrl != null)
                 {
                     <a class="pull-right btn btn-secondary" target="_blank" href="@Model.Consent.ClientUrl">
