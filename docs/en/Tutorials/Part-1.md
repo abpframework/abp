@@ -90,7 +90,7 @@ namespace Acme.BookStore.Books
 The `Book` entity uses the `BookType` enum. Create the `BookType` in the `Acme.BookStore.Domain.Shared` project:
 
 ````csharp
-namespace Acme.BookStore
+namespace Acme.BookStore.Books
 {
     public enum BookType
     {
