@@ -86,7 +86,9 @@
                     </div>
                 }
                 @(await Component.InvokeAsync<PageAlertsViewComponent>())
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Account)
                 @RenderBody()
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)
             </abp-column>
         </abp-row>
     </div>
