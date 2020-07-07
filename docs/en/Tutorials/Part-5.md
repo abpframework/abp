@@ -243,7 +243,7 @@ Open the `Pages/Books/Index.cshtml` file and change the content as shown below:
 
 ### JavaScript Side
 
-Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* action:
+Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* actions:
 
 ![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions.png)
 
@@ -372,4 +372,30 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 
 * Just added `abpPermission="BookStore.Books.Create"` that hides the button if the current user has no permission.
 
+### Hide the Edit and Delete Actions
+
+Books table in the book management page has an actions button for each row. The actions button includes *Edit* and *Delete* actions:
+
+![bookstore-edit-delete-actions](images/bookstore-edit-delete-actions.png)
+
+We should hide an action if the current user has not granted for the related permission.
+
+Open the `/src/app/book/book.component.html` file and replace the edit and delete buttons contents as shown below:
+
+````html
+<!-- Add the abpPermission directive -->
+<button abpPermission="BookStore.Books.Edit" ngbDropdownItem (click)="editBook(row.id)">
+  {{ '::Edit' | abpLocalization }}
+</button>
+
+<!-- Add the abpPermission directive -->
+<button abpPermission="BookStore.Books.Delete" ngbDropdownItem (click)="delete(row.id)">
+  {{ 'AbpAccount::Delete' | abpLocalization }}
+</button>
+````
+
+* Added `abpPermission="BookStore.Books.Edit"` that hides the edit action if the current user has no editing permission.
+* Added `abpPermission="BookStore.Books.Delete"` that hides the delete action if the current user has no delete permission.
+
 {{end}}
+
