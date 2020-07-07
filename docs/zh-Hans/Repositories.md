@@ -248,6 +248,4 @@ ABP框架使用实际数据库提供程序的API异步执行查询.虽然这不�
 
 * 如果你正在构建一个没有数据库提供程序集成包的**可重用库**,但是在某些情况下需要执行 `IQueryable<T>`对象.
 
-For example, ABP Framework uses the `IAsyncQueryableExecuter` in the `CrudAppService` base class (see the [application services](Application-Services.md) document).
-
 例如,ABP框架在 `CrudAppService` 基类中(参阅[应用程序](Application-Services.md)文档)使用 `IAsyncQueryableExecuter`.
