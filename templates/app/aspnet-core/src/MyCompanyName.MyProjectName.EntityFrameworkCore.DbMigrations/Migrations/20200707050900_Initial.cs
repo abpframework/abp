@@ -250,8 +250,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
                     AllowedAccessTokenSigningAlgorithms = table.Column<string>(nullable: true),
-                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
-                    Properties = table.Column<string>(nullable: true)
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -356,9 +355,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                     DeviceCode = table.Column<string>(maxLength: 200, nullable: false),
                     UserCode = table.Column<string>(maxLength: 200, nullable: false),
                     SubjectId = table.Column<string>(maxLength: 200, nullable: true),
-                    SessionId = table.Column<string>(nullable: true),
+                    SessionId = table.Column<string>(maxLength: 100, nullable: true),
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
-                    Description = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: false),
                     Data = table.Column<string>(maxLength: 50000, nullable: false)
                 },
@@ -404,9 +403,9 @@ namespace MyCompanyName.MyProjectName.Migrations
                     ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
                     Type = table.Column<string>(maxLength: 50, nullable: false),
                     SubjectId = table.Column<string>(maxLength: 200, nullable: true),
-                    SessionId = table.Column<string>(nullable: true),
+                    SessionId = table.Column<string>(maxLength: 100, nullable: true),
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
-                    Description = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
                     ConsumedTime = table.Column<DateTime>(nullable: true),
@@ -668,6 +667,25 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IdentityServerApiResourceProperties",
+                columns: table => new
+                {
+                    ApiResourceId = table.Column<Guid>(nullable: false),
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityServerApiResourceProperties", x => new { x.ApiResourceId, x.Key });
+                    table.ForeignKey(
+                        name: "FK_IdentityServerApiResourceProperties_IdentityServerApiResources_ApiResourceId",
+                        column: x => x.ApiResourceId,
+                        principalTable: "IdentityServerApiResources",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IdentityServerApiResourceScopes",
                 columns: table => new
                 {
@@ -692,7 +710,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ApiResourceId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 2000, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -711,12 +729,11 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: table => new
                 {
                     Type = table.Column<string>(maxLength: 200, nullable: false),
-                    ApiScopeId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 200, nullable: false)
+                    ApiScopeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerApiScopeClaims", x => new { x.ApiScopeId, x.Name, x.Type });
+                    table.PrimaryKey("PK_IdentityServerApiScopeClaims", x => new { x.ApiScopeId, x.Type });
                     table.ForeignKey(
                         name: "FK_IdentityServerApiScopeClaims_IdentityServerApiScopes_ApiScopeId",
                         column: x => x.ApiScopeId,
@@ -897,7 +914,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ClientId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 2000, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -1097,6 +1114,12 @@ namespace MyCompanyName.MyProjectName.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerApiResources_Name",
+                table: "IdentityServerApiResources",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerApiScopes_Name",
                 table: "IdentityServerApiScopes",
                 column: "Name",
@@ -1121,8 +1144,7 @@ namespace MyCompanyName.MyProjectName.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerDeviceFlowCodes_UserCode",
                 table: "IdentityServerDeviceFlowCodes",
-                column: "UserCode",
-                unique: true);
+                column: "UserCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerIdentityResources_Name",
@@ -1139,6 +1161,11 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_IdentityServerPersistedGrants_SubjectId_ClientId_Type",
                 table: "IdentityServerPersistedGrants",
                 columns: new[] { "SubjectId", "ClientId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerPersistedGrants_SubjectId_SessionId_Type",
+                table: "IdentityServerPersistedGrants",
+                columns: new[] { "SubjectId", "SessionId", "Type" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1190,6 +1217,9 @@ namespace MyCompanyName.MyProjectName.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResourceClaims");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerApiResourceProperties");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiResourceScopes");

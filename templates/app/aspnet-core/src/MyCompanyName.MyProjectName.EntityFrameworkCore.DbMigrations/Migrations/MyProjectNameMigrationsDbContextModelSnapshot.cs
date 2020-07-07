@@ -861,6 +861,25 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.ToTable("AbpOrganizationUnitRoles");
                 });
 
+            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty", b =>
+                {
+                    b.Property<Guid>("ApiResourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.HasKey("ApiResourceId", "Key");
+
+                    b.ToTable("IdentityServerApiResourceProperties");
+                });
+
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiScopes.ApiResource", b =>
                 {
                     b.Property<Guid>("Id")
@@ -926,13 +945,13 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<string>("Properties")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("ShowInDiscoveryDocument")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("IdentityServerApiResources");
                 });
@@ -979,8 +998,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
@@ -1074,15 +1093,11 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<Guid>("ApiScopeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
-
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.HasKey("ApiScopeId", "Name", "Type");
+                    b.HasKey("ApiScopeId", "Type");
 
                     b.ToTable("IdentityServerApiScopeClaims");
                 });
@@ -1424,8 +1439,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
@@ -1466,7 +1481,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(50000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("DeviceCode")
                         .IsRequired()
@@ -1482,7 +1498,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SessionId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(200)")
@@ -1500,8 +1517,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasIndex("Expiration");
 
-                    b.HasIndex("UserCode")
-                        .IsUnique();
+                    b.HasIndex("UserCode");
 
                     b.ToTable("IdentityServerDeviceFlowCodes");
                 });
@@ -1535,7 +1551,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(50000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
@@ -1548,7 +1565,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SessionId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("SubjectId")
                         .HasColumnType("nvarchar(200)")
@@ -1564,6 +1582,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasIndex("Expiration");
 
                     b.HasIndex("SubjectId", "ClientId", "Type");
+
+                    b.HasIndex("SubjectId", "SessionId", "Type");
 
                     b.ToTable("IdentityServerPersistedGrants");
                 });
@@ -1931,6 +1951,15 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasOne("Volo.Abp.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceProperty", b =>
+                {
+                    b.HasOne("Volo.Abp.IdentityServer.ApiScopes.ApiResource", null)
+                        .WithMany("Properties")
+                        .HasForeignKey("ApiResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
