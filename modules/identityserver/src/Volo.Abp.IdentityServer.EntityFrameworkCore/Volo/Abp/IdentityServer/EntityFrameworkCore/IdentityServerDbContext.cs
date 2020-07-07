@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
@@ -21,6 +22,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         public DbSet<ApiResourceClaim> ApiResourceClaims { get; set; }
 
         public DbSet<ApiResourceScope> ApiResourceScopes { get; set; }
+
+        public DbSet<ApiResourceProperty> ApiResourceProperties { get; set; }
 
         #endregion
 

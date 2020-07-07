@@ -128,16 +128,16 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new {x.ClientId, x.Type, x.Value});
 
-                b.Property(x => x.Type).HasMaxLength(ApiResourceSecretConsts.TypeMaxLength).IsRequired();
+                b.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    ApiResourceSecretConsts.ValueMaxLengthValue = 300;
+                    SecretConsts.ValueMaxLengthValue = 300;
                 }
 
-                b.Property(x => x.Value).HasMaxLength(ApiResourceSecretConsts.ValueMaxLengthValue).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLengthValue).IsRequired();
 
-                b.Property(x => x.Description).HasMaxLength(ApiResourceSecretConsts.DescriptionMaxLength);
+                b.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ClientClaim>(b =>
@@ -263,15 +263,15 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new {x.ApiResourceId, x.Type, x.Value});
 
-                b.Property(x => x.Type).HasMaxLength(ApiResourceSecretConsts.TypeMaxLength).IsRequired();
+                b.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    ApiResourceSecretConsts.ValueMaxLengthValue = 300;
+                    SecretConsts.ValueMaxLengthValue = 300;
                 }
-                b.Property(x => x.Value).HasMaxLength(ApiResourceSecretConsts.ValueMaxLengthValue).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLengthValue).IsRequired();
 
-                b.Property(x => x.Description).HasMaxLength(ApiResourceSecretConsts.DescriptionMaxLength);
+                b.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ApiResourceClaim>(b =>
