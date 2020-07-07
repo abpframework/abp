@@ -8,11 +8,6 @@ using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
-using ApiResource = Volo.Abp.IdentityServer.ApiScopes.ApiResource;
-using Client = Volo.Abp.IdentityServer.Clients.Client;
-using ClientClaim = Volo.Abp.IdentityServer.Clients.ClientClaim;
-using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResource;
-using PersistedGrant = Volo.Abp.IdentityServer.Grants.PersistedGrant;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace Volo.Abp.IdentityServer.ApiScopes
+namespace Volo.Abp.IdentityServer.ApiResources
 {
     public interface IApiResourceRepository : IBasicRepository<ApiResource, Guid>
     {

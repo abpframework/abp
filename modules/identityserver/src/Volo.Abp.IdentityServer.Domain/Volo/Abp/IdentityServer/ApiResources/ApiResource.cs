@@ -4,9 +4,8 @@ using System.Linq;
 using IdentityServer4;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Auditing;
-using Volo.Abp.IdentityServer.ApiResources;
 
-namespace Volo.Abp.IdentityServer.ApiScopes
+namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiResource : FullAuditedAggregateRoot<Guid>
     {

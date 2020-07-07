@@ -8,11 +8,12 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.ApiScopes;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
-using ApiResource = Volo.Abp.IdentityServer.ApiScopes.ApiResource;
+using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
 using ApiScope = Volo.Abp.IdentityServer.ApiScopes.ApiScope;
 using Client = Volo.Abp.IdentityServer.Clients.Client;
 
@@ -142,14 +143,14 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             }
 
             //Console Test Client
-            var consoleClientId = configurationSection["MyProjectName_App:ClientId"];
+            var consoleClientId = configurationSection["MyProjectName_ConsoleTestApp:ClientId"];
             if (!consoleClientId.IsNullOrWhiteSpace())
             {
                 await CreateClientAsync(
                     name: consoleClientId,
                     scopes: commonScopes,
                     grantTypes: new[] {"password", "client_credentials"},
-                    secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256()
+                    secret: (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
                 );
             }
         }

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
-using System.Runtime.InteropServices.ComTypes;
 
-namespace Volo.Abp.IdentityServer.ApiScopes
+namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiResourceRepository : EfCoreRepository<IIdentityServerDbContext, ApiResource, Guid>, IApiResourceRepository
     {

@@ -2,7 +2,7 @@
 using IdentityServer4;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.IdentityServer.ApiScopes
+namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiResourceSecret : Secret
     {

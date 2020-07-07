@@ -8,6 +8,7 @@ using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.IdentityServer.ApiScopes;
 using System.Linq.Dynamic.Core;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.IdentityServer.MongoDB
