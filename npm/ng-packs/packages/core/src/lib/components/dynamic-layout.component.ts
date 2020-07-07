@@ -1,9 +1,10 @@
-import { Component, Injector, OnDestroy, Type, Optional, SkipSelf } from '@angular/core';
+import { Component, Injector, OnDestroy, Optional, SkipSelf, Type } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
+import { LocalizationService } from '../services/localization.service';
 import { RoutesService } from '../services/routes.service';
 import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 import { findRoute, getRoutePath } from '../utils/route-utils';
@@ -16,15 +17,18 @@ import { TreeNode } from '../utils/tree-utils';
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
     <ng-template #componentOutlet
-      ><ng-container *ngComponentOutlet="layout"></ng-container
+      ><ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container
     ></ng-template>
   `,
 })
 export class DynamicLayoutComponent implements OnDestroy {
   layout: Type<any>;
 
+  isLayoutVisible = true;
+
   constructor(
     injector: Injector,
+    private localizationService: LocalizationService,
     private store: Store,
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
@@ -60,6 +64,15 @@ export class DynamicLayoutComponent implements OnDestroy {
 
         this.layout = layouts[expectedLayout].component;
       }
+    });
+
+    this.listenToLanguageChange();
+  }
+
+  private listenToLanguageChange() {
+    this.localizationService.languageChange.pipe(takeUntilDestroy(this)).subscribe(() => {
+      this.isLayoutVisible = false;
+      setTimeout(() => (this.isLayoutVisible = true), 0);
     });
   }
 

@@ -3,16 +3,20 @@
 @using Volo.Abp.Account.Localization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Web.Pages.Account
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
 @inject IHtmlLocalizer<AccountResource> L
-
+@{
+    Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
+}
 @section scripts {
     <abp-script-bundle name="@typeof(LoggedOutModel).FullName">
-        <abp-script src="/Pages/Account/LoggedOut.js"/>
+        <abp-script src="/Pages/Account/LoggedOut.js" />
     </abp-script-bundle>
 }
 
 @section styles {
-    <abp-style src="/Pages/Account/LoggedOut.css"/>
+    <abp-style src="/Pages/Account/LoggedOut.css" />
 }
 
 <abp-card>

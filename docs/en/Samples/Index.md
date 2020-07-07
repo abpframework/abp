@@ -7,7 +7,7 @@ Here, a list of official samples built with the ABP Framework. Most of these sam
 A complete solution to demonstrate how to build systems based on the microservice architecture.
 
 * [The complete documentation for this sample](Microservice-Demo.md)
-* [Source code](https://github.com/abpframework/abp/tree/dev/samples/MicroserviceDemo)
+* [Source code](https://github.com/abpframework/abp-samples/tree/master/MicroserviceDemo)
 * [Microservice architecture document](../Microservice-Architecture.md)
 
 ### Book Store
