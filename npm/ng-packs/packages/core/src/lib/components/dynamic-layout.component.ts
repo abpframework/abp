@@ -17,14 +17,14 @@ import { TreeNode } from '../utils/tree-utils';
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
     <ng-template #componentOutlet
-      ><ng-container *ngIf="isLayoutShow" [ngComponentOutlet]="layout"></ng-container
+      ><ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container
     ></ng-template>
   `,
 })
 export class DynamicLayoutComponent implements OnDestroy {
   layout: Type<any>;
 
-  isLayoutShow = true;
+  isLayoutVisible = true;
 
   constructor(
     injector: Injector,
@@ -71,8 +71,8 @@ export class DynamicLayoutComponent implements OnDestroy {
 
   private listenToLanguageChange() {
     this.localizationService.languageChange.pipe(takeUntilDestroy(this)).subscribe(() => {
-      this.isLayoutShow = false;
-      setTimeout(() => (this.isLayoutShow = true), 0);
+      this.isLayoutVisible = false;
+      setTimeout(() => (this.isLayoutVisible = true), 0);
     });
   }
 
