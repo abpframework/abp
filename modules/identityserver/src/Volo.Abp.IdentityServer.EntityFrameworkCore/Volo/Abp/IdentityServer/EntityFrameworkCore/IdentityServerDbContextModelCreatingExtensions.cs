@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Volo.Abp.EntityFrameworkCore.ValueComparers;
-using Volo.Abp.EntityFrameworkCore.ValueConverters;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
@@ -188,31 +186,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Value).HasMaxLength(ClientPropertyConsts.ValueMaxLength).IsRequired();
             });
 
-            builder.Entity<PersistedGrant>(b =>
-            {
-                b.ToTable(options.TablePrefix + "PersistedGrants", options.Schema);
-
-                b.ConfigureByConvention();
-
-                b.Property(x => x.Key).HasMaxLength(PersistedGrantConsts.KeyMaxLength).ValueGeneratedNever();
-                b.Property(x => x.Type).HasMaxLength(PersistedGrantConsts.TypeMaxLength).IsRequired();
-                b.Property(x => x.SubjectId).HasMaxLength(PersistedGrantConsts.SubjectIdMaxLength);
-                b.Property(x => x.ClientId).HasMaxLength(PersistedGrantConsts.ClientIdMaxLength).IsRequired();
-                b.Property(x => x.CreationTime).IsRequired();
-
-                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
-                {
-                    PersistedGrantConsts.DataMaxLengthValue = 10000; //TODO: MySQL accepts 20.000. We can consider to change in v3.0.
-                }
-
-                b.Property(x => x.Data).HasMaxLength(PersistedGrantConsts.DataMaxLengthValue).IsRequired();
-
-                b.HasKey(x => x.Key); //TODO: What about Id!!!
-
-                b.HasIndex(x => new {x.SubjectId, x.ClientId, x.Type});
-                b.HasIndex(x => x.Expiration);
-            });
-
             #endregion
 
             #region IdentityResource
@@ -255,9 +228,9 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Key).HasMaxLength(IdentityResourcePropertyConsts.KeyMaxLength).IsRequired();
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    IdentityResourcePropertyConsts.ValueMaxLengthValue = 300;
+                    IdentityResourcePropertyConsts.ValueMaxLength = 300;
                 }
-                b.Property(x => x.Value).HasMaxLength(IdentityResourcePropertyConsts.ValueMaxLengthValue).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(IdentityResourcePropertyConsts.ValueMaxLength).IsRequired();
             });
 
             #endregion
@@ -270,16 +243,16 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
+                b.HasIndex(x => x.Name).IsUnique();
+
                 b.Property(x => x.Name).HasMaxLength(ApiResourceConsts.NameMaxLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
                 b.Property(x => x.Description).HasMaxLength(ApiResourceConsts.DescriptionMaxLength);
-                b.Property(x => x.Properties)
-                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, string>>())
-                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, string>());
 
                 b.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 b.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
+                b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
             });
 
             builder.Entity<ApiResourceSecret>(b =>
@@ -291,14 +264,14 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasKey(x => new {x.ApiResourceId, x.Type, x.Value});
 
                 b.Property(x => x.Type).HasMaxLength(ApiResourceSecretConsts.TypeMaxLength).IsRequired();
-                b.Property(x => x.Description).HasMaxLength(ApiResourceSecretConsts.DescriptionMaxLength);
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
                     ApiResourceSecretConsts.ValueMaxLengthValue = 300;
                 }
-
                 b.Property(x => x.Value).HasMaxLength(ApiResourceSecretConsts.ValueMaxLengthValue).IsRequired();
+
+                b.Property(x => x.Description).HasMaxLength(ApiResourceSecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ApiResourceClaim>(b =>
@@ -323,6 +296,22 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Scope).HasMaxLength(ApiResourceScopeConsts.ScopeMaxLength).IsRequired();
             });
 
+            builder.Entity<ApiResourceProperty>(b =>
+            {
+                b.ToTable(options.TablePrefix + "ApiResourceProperties", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.HasKey(x => new {x.ApiResourceId, x.Key});
+
+                b.Property(x => x.Key).HasMaxLength(ApiResourcePropertyConsts.KeyMaxLength).IsRequired();
+                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
+                {
+                    ApiResourcePropertyConsts.ValueMaxLength = 300;
+                }
+                b.Property(x => x.Value).HasMaxLength(ApiResourcePropertyConsts.ValueMaxLength).IsRequired();
+            });
+
             #endregion
 
             #region ApiScope
@@ -340,9 +329,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.HasIndex(x => x.Name).IsUnique();
 
                 b.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
-
-                //TODO: Identity Server does not configure the relationship of Properties
-                //b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
+                b.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ApiScopeId).IsRequired();
             });
 
             builder.Entity<ApiScopeClaim>(b =>
@@ -351,10 +338,9 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
-                b.HasKey(x => new {x.ApiScopeId, x.Name, x.Type});
+                b.HasKey(x => new {x.ApiScopeId, x.Type});
 
                 b.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
-                b.Property(x => x.Name).HasMaxLength(ApiScopeClaimConsts.NameMaxLength).IsRequired();
             });
 
             builder.Entity<ApiScopeProperty>(b =>
@@ -368,9 +354,41 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Key).HasMaxLength(ApiScopePropertyConsts.KeyMaxLength).IsRequired();
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    ApiScopePropertyConsts.ValueMaxLengthValue = 300;
+                    ApiScopePropertyConsts.ValueMaxLength = 300;
                 }
-                b.Property(x => x.Value).HasMaxLength(ApiScopePropertyConsts.ValueMaxLengthValue).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(ApiScopePropertyConsts.ValueMaxLength).IsRequired();
+            });
+
+            #endregion
+
+            #region PersistedGrant
+
+            builder.Entity<PersistedGrant>(b =>
+            {
+                b.ToTable(options.TablePrefix + "PersistedGrants", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Key).HasMaxLength(PersistedGrantConsts.KeyMaxLength).ValueGeneratedNever();
+                b.Property(x => x.Type).HasMaxLength(PersistedGrantConsts.TypeMaxLength).IsRequired();
+                b.Property(x => x.SubjectId).HasMaxLength(PersistedGrantConsts.SubjectIdMaxLength);
+                b.Property(x => x.SessionId).HasMaxLength(PersistedGrantConsts.SessionIdMaxLength);
+                b.Property(x => x.ClientId).HasMaxLength(PersistedGrantConsts.ClientIdMaxLength).IsRequired();
+                b.Property(x => x.Description).HasMaxLength(PersistedGrantConsts.DescriptionMaxLength);
+                b.Property(x => x.CreationTime).IsRequired();
+
+                if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
+                {
+                    PersistedGrantConsts.DataMaxLengthValue = 10000; //TODO: MySQL accepts 20.000. We can consider to change in v3.0.
+                }
+
+                b.Property(x => x.Data).HasMaxLength(PersistedGrantConsts.DataMaxLengthValue).IsRequired();
+
+                b.HasKey(x => x.Key); //TODO: What about Id!!!
+
+                b.HasIndex(x => new {x.SubjectId, x.ClientId, x.Type});
+                b.HasIndex(x => new {x.SubjectId, x.SessionId, x.Type});
+                b.HasIndex(x => x.Expiration);
             });
 
             #endregion
@@ -386,16 +404,19 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.DeviceCode).HasMaxLength(DeviceFlowCodesConsts.DeviceCodeMaxLength).IsRequired();
                 b.Property(x => x.UserCode).HasMaxLength(DeviceFlowCodesConsts.UserCodeMaxLength).IsRequired();
                 b.Property(x => x.SubjectId).HasMaxLength(DeviceFlowCodesConsts.SubjectIdMaxLength);
+                b.Property(x => x.SessionId).HasMaxLength(DeviceFlowCodesConsts.SessionIdMaxLength);
                 b.Property(x => x.ClientId).HasMaxLength(DeviceFlowCodesConsts.ClientIdMaxLength).IsRequired();
+                b.Property(x => x.Description).HasMaxLength(DeviceFlowCodesConsts.DescriptionMaxLength);
+                b.Property(x => x.CreationTime).IsRequired();
                 b.Property(x => x.Expiration).IsRequired();
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql))
                 {
-                    DeviceFlowCodesConsts.DataMaxLengthValue = 10000; //TODO: MySQL accepts 20.000. We can consider to change in v3.0.
+                    DeviceFlowCodesConsts.DataMaxLength = 10000; //TODO: MySQL accepts 20.000. We can consider to change in v3.0.
                 }
-                b.Property(x => x.Data).HasMaxLength(DeviceFlowCodesConsts.DataMaxLengthValue).IsRequired();
+                b.Property(x => x.Data).HasMaxLength(DeviceFlowCodesConsts.DataMaxLength).IsRequired();
 
-                b.HasIndex(x => new {x.UserCode}).IsUnique();
+                b.HasIndex(x => new {x.UserCode});
                 b.HasIndex(x => x.DeviceCode).IsUnique();
                 b.HasIndex(x => x.Expiration);
             });

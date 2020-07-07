@@ -4,6 +4,7 @@ using System.Linq;
 using IdentityServer4;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.IdentityServer.ApiResources;
 
 namespace Volo.Abp.IdentityServer.ApiScopes
 {
@@ -28,7 +29,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
 
         public virtual List<ApiResourceClaim> UserClaims { get; protected set; }
 
-        public virtual Dictionary<string, string> Properties { get; protected set; }
+        public virtual List<ApiResourceProperty> Properties { get; protected set; }
 
         protected ApiResource()
         {
@@ -51,7 +52,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
             Secrets = new List<ApiResourceSecret>();
             Scopes = new List<ApiResourceScope>();
             UserClaims = new List<ApiResourceClaim>();
-            Properties = new Dictionary<string, string>();
+            Properties = new List<ApiResourceProperty>();
 
             Scopes.Add(new ApiResourceScope(id, name));
         }
@@ -120,6 +121,26 @@ namespace Volo.Abp.IdentityServer.ApiScopes
         public virtual ApiResourceScope FindScope(string scope)
         {
             return Scopes.FirstOrDefault(r => r.Scope == scope);
+        }
+
+        public virtual void AddProperty([NotNull] string key, string value)
+        {
+            Properties.Add(new ApiResourceProperty(Id, key, value));
+        }
+
+        public virtual void RemoveAllProperties()
+        {
+            Properties.Clear();
+        }
+
+        public virtual void RemoveProperty(string key)
+        {
+            Properties.RemoveAll(r => r.Key == key);
+        }
+
+        public virtual ApiResourceProperty FindProperty(string key)
+        {
+            return Properties.FirstOrDefault(r => r.Key == key);
         }
     }
 }

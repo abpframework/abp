@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.IdentityServer.ApiScopes
+﻿namespace Volo.Abp.IdentityServer.ApiResources
 {
     public class ApiResourceSecretConsts
     {
@@ -15,8 +15,8 @@
         public static int ValueMaxLengthValue { get; set; } = ValueMaxLength;
 
         /// <summary>
-        /// Default value: 2000
+        /// Default value: 1000
         /// </summary>
-        public static int DescriptionMaxLength { get; set; } = 2000;
+        public static int DescriptionMaxLength { get; set; } = 1000;
     }
 }

@@ -2,11 +2,18 @@
 {
     public class DeviceFlowCodesConsts
     {
-        public const int DeviceCodeMaxLength = 200;
-        public const int UserCodeMaxLength = 200;
-        public const int SubjectIdMaxLength = 200;
-        public const int ClientIdMaxLength = 200;
-        public const int DataMaxLength = 50000;
-        public static int DataMaxLengthValue { get; set; } = DataMaxLength;
+        public static int DeviceCodeMaxLength { get; set; } =  200;
+
+        public static int UserCodeMaxLength { get; set; } =  200;
+
+        public static int SubjectIdMaxLength { get; set; } =  200;
+
+        public static int SessionIdMaxLength { get; set; } = 100;
+
+        public static int DescriptionMaxLength { get; set; } = 200;
+
+        public static int ClientIdMaxLength { get; set; } =  200;
+
+        public static int DataMaxLength { get; set; } =  50000;
     }
 }

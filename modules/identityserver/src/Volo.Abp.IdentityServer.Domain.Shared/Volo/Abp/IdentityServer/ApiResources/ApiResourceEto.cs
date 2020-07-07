@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.IdentityServer.ApiScopes
+namespace Volo.Abp.IdentityServer.ApiResources
 {
     [Serializable]
     public class ApiResourceEto

@@ -8,6 +8,7 @@ using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;

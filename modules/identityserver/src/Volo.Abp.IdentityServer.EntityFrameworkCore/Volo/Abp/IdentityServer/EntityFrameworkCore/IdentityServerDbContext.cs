@@ -34,7 +34,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
         #endregion
 
-
         #region IdentityResource
 
         public DbSet<IdentityResource> IdentityResources { get; set; }

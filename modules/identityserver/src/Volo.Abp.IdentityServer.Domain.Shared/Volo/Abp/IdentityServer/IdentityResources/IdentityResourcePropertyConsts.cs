@@ -2,8 +2,8 @@
 {
     public class IdentityResourcePropertyConsts
     {
-        public const int KeyMaxLength = 250;
-        public const int ValueMaxLength = 2000;
-        public static int ValueMaxLengthValue { get; set; } = ValueMaxLength;
+        public static int KeyMaxLength { get; set; } =  250;
+
+        public static int ValueMaxLength { get; set; } = 2000;
     }
 }

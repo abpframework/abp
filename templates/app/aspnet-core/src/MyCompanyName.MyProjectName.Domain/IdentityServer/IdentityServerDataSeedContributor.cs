@@ -182,7 +182,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                         AccessTokenLifetime = 31536000, //365 days
                         AuthorizationCodeLifetime = 300,
                         IdentityTokenLifetime = 300,
-                        RequireConsent = false,
+                        RequireConsent = true,
                         RequirePkce = false,
                         FrontChannelLogoutUri = frontChannelLogoutUri
                     },

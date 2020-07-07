@@ -33,6 +33,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 options.AddRepository<Client, ClientRepository>();
                 options.AddRepository<ApiResource, ApiResourceRepository>();
+                options.AddRepository<ApiScope, ApiScopeRepository>();
                 options.AddRepository<IdentityResource, IdentityResourceRepository>();
                 options.AddRepository<PersistedGrant, PersistentGrantRepository>();
                 options.AddRepository<DeviceFlowCodes, DeviceFlowCodesRepository>();

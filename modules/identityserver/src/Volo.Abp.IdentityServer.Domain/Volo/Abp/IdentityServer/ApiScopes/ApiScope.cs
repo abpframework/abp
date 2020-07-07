@@ -59,7 +59,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
 
         public virtual void AddUserClaim([NotNull] string type)
         {
-            UserClaims.Add(new ApiScopeClaim(Id, Name, type));
+            UserClaims.Add(new ApiScopeClaim(Id, type));
         }
 
         public virtual void RemoveAllUserClaims()
@@ -74,7 +74,7 @@ namespace Volo.Abp.IdentityServer.ApiScopes
 
         public virtual ApiScopeClaim FindClaim(string type)
         {
-            return UserClaims.FirstOrDefault(r => r.Name == Name && r.Type == type);
+            return UserClaims.FirstOrDefault(r => r.Type == type);
         }
 
         public virtual void AddProperty([NotNull] string key, string value)

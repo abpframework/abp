@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using AutoMapper;
+using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.ApiScopes;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
@@ -11,58 +12,32 @@ namespace Volo.Abp.IdentityServer
 {
     public class IdentityServerAutoMapperProfile : Profile
     {
+        /// <summary>
+        /// TODO: Reverse maps will not used probably. Remove those will not used
+        /// </summary>
         public IdentityServerAutoMapperProfile()
         {
-            //TODO: Reverse maps will not used probably. Remove those will not used
-
-            CreateMap<ClientCorsOrigin, string>()
-                .ConstructUsing(src => src.Origin)
-                .ReverseMap()
-                .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src));
-
-            CreateMap<ApiResource, IdentityServer4.Models.ApiResource>()
-                .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets));
-
-            CreateMap<ApiResourceSecret, IdentityServer4.Models.Secret>();
-
-
-            //TODO: Why PersistedGrant mapping is in this profile?
-            CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>().ReverseMap();
-
-            CreateMap<IdentityResource, IdentityServer4.Models.IdentityResource>()
-                .ConstructUsing(src => new IdentityServer4.Models.IdentityResource());
-
-            CreateMap<IdentityResourceClaim, string>()
-                .ConstructUsing(x => x.Type)
-                .ReverseMap()
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src));
-
-            CreateMap<IdentityResourceProperty, KeyValuePair<string, string>>()
-                .ReverseMap();
-
             CreateMap<UserClaim, string>()
                 .ConstructUsing(src => src.Type)
                 .ReverseMap()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src));
 
-            CreateMap<ApiResourceScope, string>()
-                .ConstructUsing(x => x.Scope)
+            CreateClientMap();
+            CreateApiResourceMap();
+            CreateApiScopeMap();
+            CreateIdentityResourceMap();
+            CreatePersistedGrantMap();
+            CreateDeviceFlowCodesMap();
+        }
+
+        private void CreateClientMap()
+        {
+            CreateMap<ClientCorsOrigin, string>()
+                .ConstructUsing(src => src.Origin)
                 .ReverseMap()
-                .ForMember(dest => dest.Scope, opt => opt.MapFrom(src => src));
+                .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src));
 
-            CreateMap<ApiScopeProperty, KeyValuePair<string, string>>()
-                .ReverseMap();
-
-            CreateMap<ApiScopeClaim, string>()
-                .ConstructUsing(x => x.Type)
-                .ReverseMap()
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src));
-
-            CreateMap<ApiScope,  IdentityServer4.Models.ApiScope>(MemberList.Destination)
-                .ConstructUsing(src => new IdentityServer4.Models.ApiScope())
-                .ReverseMap();
-
-            CreateMap<ClientProperty, KeyValuePair<string, string>>()
+             CreateMap<ClientProperty, KeyValuePair<string, string>>()
               .ReverseMap();
 
             CreateMap<Client, IdentityServer4.Models.Client>()
@@ -115,10 +90,64 @@ namespace Volo.Abp.IdentityServer
 
             CreateMap<ApiResource, ApiResourceEto>();
             CreateMap<Client, ClientEto>();
-            CreateMap<DeviceFlowCodes, DeviceFlowCodesEto>();
-            CreateMap<PersistedGrant, PersistedGrantEto>();
-            CreateMap<IdentityResource, IdentityResourceEto>();
+        }
 
+        private void CreateApiResourceMap()
+        {
+            CreateMap<ApiResource, IdentityServer4.Models.ApiResource>()
+                .ForMember(dest => dest.ApiSecrets, opt => opt.MapFrom(src => src.Secrets));
+
+            CreateMap<ApiResourceSecret, IdentityServer4.Models.Secret>();
+
+            CreateMap<ApiResourceScope, string>()
+                .ConstructUsing(x => x.Scope)
+                .ReverseMap()
+                .ForMember(dest => dest.Scope, opt => opt.MapFrom(src => src));
+
+            CreateMap<ApiResource, ApiResourceEto>();
+        }
+
+        private void CreateApiScopeMap()
+        {
+            CreateMap<ApiScopeProperty, KeyValuePair<string, string>>()
+                .ReverseMap();
+
+            CreateMap<ApiScopeClaim, string>()
+                .ConstructUsing(x => x.Type)
+                .ReverseMap()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src));
+
+            CreateMap<ApiScope,  IdentityServer4.Models.ApiScope>(MemberList.Destination)
+                .ConstructUsing(src => new IdentityServer4.Models.ApiScope())
+                .ReverseMap();
+        }
+
+        private void CreateIdentityResourceMap()
+        {
+            CreateMap<IdentityResource, IdentityServer4.Models.IdentityResource>()
+                .ConstructUsing(src => new IdentityServer4.Models.IdentityResource());
+
+            CreateMap<IdentityResourceClaim, string>()
+                .ConstructUsing(x => x.Type)
+                .ReverseMap()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src));
+
+            CreateMap<IdentityResourceProperty, KeyValuePair<string, string>>()
+                .ReverseMap();
+
+            CreateMap<IdentityResource, IdentityResourceEto>();
+        }
+
+        private void CreatePersistedGrantMap()
+        {
+            //TODO: Why PersistedGrant mapping is in this profile?
+            CreateMap<PersistedGrant, IdentityServer4.Models.PersistedGrant>().ReverseMap();
+            CreateMap<PersistedGrant, PersistedGrantEto>();
+        }
+
+        private void CreateDeviceFlowCodesMap()
+        {
+            CreateMap<DeviceFlowCodes, DeviceFlowCodesEto>();
         }
     }
 }

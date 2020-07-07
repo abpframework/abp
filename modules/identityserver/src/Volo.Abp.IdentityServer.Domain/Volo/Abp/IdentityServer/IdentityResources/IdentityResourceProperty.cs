@@ -17,9 +17,9 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         }
 
-        public virtual bool Equals(Guid identityResourceId, [NotNull] string key)
+        public virtual bool Equals(Guid identityResourceId, [NotNull] string key, string value)
         {
-            return IdentityResourceId == identityResourceId && Key == key;
+            return IdentityResourceId == identityResourceId && Key == key && Value == value;
         }
 
         protected internal IdentityResourceProperty(Guid identityResourceId, [NotNull] string key, [NotNull] string value)

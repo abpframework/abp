@@ -35,11 +35,6 @@ namespace Volo.Abp.IdentityServer.ApiScopes
             CancellationToken cancellationToken = default
         );
 
-        Task<List<ApiResource>> GetListAsync(
-            bool includeDetails = false,
-            CancellationToken cancellationToken = default
-        );
-
         Task<bool> CheckNameExistAsync(
             string name,
             Guid? expectedId = null,
