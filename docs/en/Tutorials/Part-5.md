@@ -316,6 +316,44 @@ if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
 
 {{else if UI == "NG"}}
 
+### Angular Guard Configuration
+
+First step of the UI is to prevent unauthorized users to see the "Books" menu item and enter to the book management page.
+
+Open the `/src/app/book/book-routing.module.ts` and replace with the following content:
+
+````js
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard, PermissionGuard } from '@abp/ng.core';
+import { BookComponent } from './book.component';
+
+const routes: Routes = [
+  { path: '', component: BookComponent, canActivate: [AuthGuard, PermissionGuard] },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class BookRoutingModule {}
+````
+
+* Imported `AuthGuard` and `PermissionGuard` from the `@abp/ng.core`.
+* Added `canActivate: [AuthGuard, PermissionGuard]` to the route definition.
+
+Open the `/src/app/route.provider.ts` and add `requiredPolicy: 'BookStore.Books'` to the `/books` route. The `/books` route block should be following:
+
+````js
+{
+  path: '/books',
+  name: '::Menu:Books',
+  parentName: '::Menu:BookStore',
+  layout: eLayoutType.application,
+  requiredPolicy: 'BookStore.Books',
+}
+````
+
 
 
 {{end}}
