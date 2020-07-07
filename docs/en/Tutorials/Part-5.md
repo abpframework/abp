@@ -354,6 +354,22 @@ Open the `/src/app/route.provider.ts` and add `requiredPolicy: 'BookStore.Books'
 }
 ````
 
+### Hide the New Book Button
 
+The book management page has a *New Book* button that should be invisible if the current user has no *Book Creation* permission.
+
+![bookstore-new-book-button-small](images/bookstore-new-book-button-small.png)
+
+Open the `/src/app/book/book.component.html` file and replace the create button HTML content as shown below:
+
+````html
+<!-- Add the abpPermission directive -->
+<button abpPermission="BookStore.Books.Create" id="create" class="btn btn-primary" type="button" (click)="createBook()">
+  <i class="fa fa-plus mr-1"></i>
+  <span>{{ '::NewBook' | abpLocalization }}</span>
+</button>
+````
+
+* Just added `abpPermission="BookStore.Books.Create"` that hides the button if the current user has no permission.
 
 {{end}}
