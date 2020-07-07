@@ -40,27 +40,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpBackgroundJobs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 40, nullable: true),
-                    JobName = table.Column<string>(maxLength: 128, nullable: false),
-                    JobArgs = table.Column<string>(maxLength: 1048576, nullable: false),
-                    TryCount = table.Column<short>(nullable: false, defaultValue: (short)0),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    NextTryTime = table.Column<DateTime>(nullable: false),
-                    LastTryTime = table.Column<DateTime>(nullable: true),
-                    IsAbandoned = table.Column<bool>(nullable: false, defaultValue: false),
-                    Priority = table.Column<byte>(nullable: false, defaultValue: (byte)15)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbpClaimTypes",
                 columns: table => new
                 {
@@ -78,21 +57,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpFeatureValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Value = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderName = table.Column<string>(maxLength: 64, nullable: true),
-                    ProviderKey = table.Column<string>(maxLength: 64, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpFeatureValues", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,7 +213,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
-                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(nullable: true),
+                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(maxLength: 100, nullable: true),
                     ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -319,7 +283,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     BackChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
                     AllowOfflineAccess = table.Column<bool>(nullable: false),
                     IdentityTokenLifetime = table.Column<int>(nullable: false),
-                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(nullable: true),
+                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(maxLength: 100, nullable: true),
                     AccessTokenLifetime = table.Column<int>(nullable: false),
                     AuthorizationCodeLifetime = table.Column<int>(nullable: false),
                     ConsentLifetime = table.Column<int>(nullable: true),
@@ -676,7 +640,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerApiResourceProperties", x => new { x.ApiResourceId, x.Key });
+                    table.PrimaryKey("PK_IdentityServerApiResourceProperties", x => new { x.ApiResourceId, x.Key, x.Value });
                     table.ForeignKey(
                         name: "FK_IdentityServerApiResourceProperties_IdentityServerApiResources_ApiResourceId",
                         column: x => x.ApiResourceId,
@@ -752,7 +716,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerApiScopeProperties", x => new { x.ApiScopeId, x.Key });
+                    table.PrimaryKey("PK_IdentityServerApiScopeProperties", x => new { x.ApiScopeId, x.Key, x.Value });
                     table.ForeignKey(
                         name: "FK_IdentityServerApiScopeProperties_IdentityServerApiScopes_ApiScopeId",
                         column: x => x.ApiScopeId,
@@ -862,7 +826,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerClientProperties", x => new { x.ClientId, x.Key });
+                    table.PrimaryKey("PK_IdentityServerClientProperties", x => new { x.ClientId, x.Key, x.Value });
                     table.ForeignKey(
                         name: "FK_IdentityServerClientProperties_IdentityServerClients_ClientId",
                         column: x => x.ClientId,
@@ -914,7 +878,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     Type = table.Column<string>(maxLength: 250, nullable: false),
                     Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ClientId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -956,7 +920,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityServerIdentityResourceProperties", x => new { x.IdentityResourceId, x.Key });
+                    table.PrimaryKey("PK_IdentityServerIdentityResourceProperties", x => new { x.IdentityResourceId, x.Key, x.Value });
                     table.ForeignKey(
                         name: "FK_IdentityServerIdentityResourceProperties_IdentityServerIdentityResources_IdentityResourceId",
                         column: x => x.IdentityResourceId,
@@ -1009,11 +973,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
-                table: "AbpBackgroundJobs",
-                columns: new[] { "IsAbandoned", "NextTryTime" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -1027,11 +986,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_AbpEntityPropertyChanges_EntityChangeId",
                 table: "AbpEntityPropertyChanges",
                 column: "EntityChangeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpFeatureValues_Name_ProviderName_ProviderKey",
-                table: "AbpFeatureValues",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpOrganizationUnitRoles_RoleId_OrganizationUnitId",
@@ -1174,16 +1128,10 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpAuditLogActions");
 
             migrationBuilder.DropTable(
-                name: "AbpBackgroundJobs");
-
-            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityPropertyChanges");
-
-            migrationBuilder.DropTable(
-                name: "AbpFeatureValues");
 
             migrationBuilder.DropTable(
                 name: "AbpOrganizationUnitRoles");

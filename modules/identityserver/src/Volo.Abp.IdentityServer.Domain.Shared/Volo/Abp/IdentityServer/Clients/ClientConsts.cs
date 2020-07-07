@@ -23,5 +23,7 @@
         public static int PairWiseSubjectSaltMaxLength { get; set; } =  200;
 
         public static int UserCodeTypeMaxLength { get; set; } =  100;
+
+        public static int AllowedIdentityTokenSigningAlgorithms { get; set; } =  100;
     }
 }

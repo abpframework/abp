@@ -50,6 +50,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.ClientClaimsPrefix).HasMaxLength(ClientConsts.ClientClaimsPrefixMaxLength);
                 b.Property(x => x.PairWiseSubjectSalt).HasMaxLength(ClientConsts.PairWiseSubjectSaltMaxLength);
                 b.Property(x => x.UserCodeType).HasMaxLength(ClientConsts.UserCodeTypeMaxLength);
+                b.Property(x => x.AllowedIdentityTokenSigningAlgorithms).HasMaxLength(ClientConsts.AllowedIdentityTokenSigningAlgorithms);
 
                 b.HasMany(x => x.AllowedScopes).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
                 b.HasMany(x => x.ClientSecrets).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
@@ -128,16 +129,13 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new {x.ClientId, x.Type, x.Value});
 
-                b.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
-
+                b.Property(x => x.Type).HasMaxLength(ClientSecretConsts.TypeMaxLength).IsRequired();
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    SecretConsts.ValueMaxLength = 300;
+                    ClientSecretConsts.ValueMaxLength = 300;
                 }
-
-                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
-
-                b.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
+                b.Property(x => x.Value).HasMaxLength(ClientSecretConsts.ValueMaxLength).IsRequired();
+                b.Property(x => x.Description).HasMaxLength(ClientSecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ClientClaim>(b =>
@@ -180,7 +178,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
-                b.HasKey(x => new {x.ClientId, x.Key});
+                b.HasKey(x => new {x.ClientId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ClientPropertyConsts.KeyMaxLength).IsRequired();
                 b.Property(x => x.Value).HasMaxLength(ClientPropertyConsts.ValueMaxLength).IsRequired();
@@ -223,7 +221,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
-                b.HasKey(x => new {x.IdentityResourceId, x.Key});
+                b.HasKey(x => new {x.IdentityResourceId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(IdentityResourcePropertyConsts.KeyMaxLength).IsRequired();
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
@@ -248,6 +246,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 b.Property(x => x.Name).HasMaxLength(ApiResourceConsts.NameMaxLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
                 b.Property(x => x.Description).HasMaxLength(ApiResourceConsts.DescriptionMaxLength);
+                b.Property(x => x.AllowedAccessTokenSigningAlgorithms).HasMaxLength(ApiResourceConsts.AllowedAccessTokenSigningAlgorithmsMaxLength);
 
                 b.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 b.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
@@ -263,15 +262,15 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.HasKey(x => new {x.ApiResourceId, x.Type, x.Value});
 
-                b.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
+                b.Property(x => x.Type).HasMaxLength(ApiResourceSecretConsts.TypeMaxLength).IsRequired();
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    SecretConsts.ValueMaxLength = 300;
+                    ApiResourceSecretConsts.ValueMaxLength = 300;
                 }
-                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(ApiResourceSecretConsts.ValueMaxLength).IsRequired();
 
-                b.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
+                b.Property(x => x.Description).HasMaxLength(ApiResourceSecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ApiResourceClaim>(b =>
@@ -302,7 +301,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
-                b.HasKey(x => new {x.ApiResourceId, x.Key});
+                b.HasKey(x => new {x.ApiResourceId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ApiResourcePropertyConsts.KeyMaxLength).IsRequired();
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
@@ -349,7 +348,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 b.ConfigureByConvention();
 
-                b.HasKey(x => new {x.ApiScopeId, x.Key});
+                b.HasKey(x => new {x.ApiScopeId, x.Key, x.Value});
 
                 b.Property(x => x.Key).HasMaxLength(ApiScopePropertyConsts.KeyMaxLength).IsRequired();
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))

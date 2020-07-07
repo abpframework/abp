@@ -1,6 +1,6 @@
-﻿namespace Volo.Abp.IdentityServer
+﻿namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class SecretConsts
+    public class ApiResourceSecretConsts
     {
         /// <summary>
         /// Default value: 250

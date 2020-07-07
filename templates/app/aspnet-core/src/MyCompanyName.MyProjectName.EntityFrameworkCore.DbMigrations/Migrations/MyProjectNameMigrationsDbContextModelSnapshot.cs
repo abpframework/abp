@@ -871,11 +871,10 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.HasKey("ApiResourceId", "Key");
+                    b.HasKey("ApiResourceId", "Key", "Value");
 
                     b.ToTable("IdentityServerApiResourceProperties");
                 });
@@ -887,7 +886,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AllowedAccessTokenSigningAlgorithms")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1112,11 +1112,10 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.HasKey("ApiScopeId", "Key");
+                    b.HasKey("ApiScopeId", "Key", "Value");
 
                     b.ToTable("IdentityServerApiScopeProperties");
                 });
@@ -1149,7 +1148,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("AllowedIdentityTokenSigningAlgorithms")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
                         .HasColumnType("bit");
@@ -1388,11 +1388,10 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.HasKey("ClientId", "Key");
+                    b.HasKey("ClientId", "Key", "Value");
 
                     b.ToTable("IdentityServerClientProperties");
                 });
@@ -1439,8 +1438,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(4000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(1000)")
-                        .HasMaxLength(1000);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
@@ -1691,11 +1690,10 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(2000)")
                         .HasMaxLength(2000);
 
-                    b.HasKey("IdentityResourceId", "Key");
+                    b.HasKey("IdentityResourceId", "Key", "Value");
 
                     b.ToTable("IdentityServerIdentityResourceProperties");
                 });

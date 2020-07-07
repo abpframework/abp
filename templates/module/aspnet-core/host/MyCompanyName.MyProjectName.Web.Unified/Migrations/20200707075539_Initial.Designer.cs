@@ -11,7 +11,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20200624023340_Initial")]
+    [Migration("20200707075539_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
