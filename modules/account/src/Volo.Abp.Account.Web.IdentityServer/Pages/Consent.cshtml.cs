@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.UI;
 
 namespace Volo.Abp.Account.Web.Pages
 {
@@ -25,7 +25,9 @@ namespace Volo.Abp.Account.Web.Pages
         public string ReturnUrlHash { get; set; }
 
         [BindProperty]
-        public ConsentViewModel Consent { get; set; }
+        public ConsentModel.ConsentInputModel ConsentInput { get; set; }
+
+        public ClientInfoModel ClientInfo { get; set; }
 
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
@@ -43,7 +45,49 @@ namespace Volo.Abp.Account.Web.Pages
 
         public virtual async Task<IActionResult> OnGet()
         {
-            Consent = await BuildViewModelAsync(ReturnUrl);
+            var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
+            if (request == null)
+            {
+                throw new ApplicationException($"No consent request matching request: {ReturnUrl}");
+            }
+
+            var client = await _clientStore.FindEnabledClientByIdAsync(request.Client.ClientId);
+            if (client == null)
+            {
+                throw new ApplicationException($"Invalid client id: {request.Client.ClientId}");
+            }
+
+            var resources = await _resourceStore.FindEnabledResourcesByScopeAsync(request.ValidatedResources.RawScopeValues);
+            if (resources == null || (!resources.IdentityResources.Any() && !resources.ApiResources.Any()))
+            {
+                throw new ApplicationException($"No scopes matching: {request.ValidatedResources.RawScopeValues.Aggregate((x, y) => x + ", " + y)}");
+            }
+
+            ClientInfo = new ClientInfoModel(client);
+            ConsentInput = new ConsentInputModel
+            {
+                RememberConsent = true,
+                IdentityScopes = resources.IdentityResources.Select(x => CreateScopeViewModel(x, true)).ToList(),
+            };
+
+            var apiScopes = new List<ScopeViewModel>();
+            foreach(var parsedScope in request.ValidatedResources.ParsedScopes)
+            {
+                var apiScope = request.ValidatedResources.Resources.FindApiScope(parsedScope.ParsedName);
+                if (apiScope != null)
+                {
+                    var scopeVm = CreateScopeViewModel(parsedScope, apiScope, true);
+                    apiScopes.Add(scopeVm);
+                }
+            }
+
+            if (resources.OfflineAccess)
+            {
+                apiScopes.Add(GetOfflineAccessScope(true));
+            }
+
+            ConsentInput.ApiScopes = apiScopes;
+
             return Page();
         }
 
@@ -65,137 +109,56 @@ namespace Volo.Abp.Account.Web.Pages
             throw new ApplicationException("Unknown Error!");
         }
 
-        protected virtual async Task<ProcessConsentResult> ProcessConsentAsync()
+        protected virtual async Task<ConsentModel.ProcessConsentResult> ProcessConsentAsync()
         {
-            var result = new ProcessConsentResult();
+            var result = new ConsentModel.ProcessConsentResult();
 
-            // validate return url is still valid
-            var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
-            if (request == null)
-            {
-                return result;
-            }
+            ConsentResponse grantedConsent;
 
-            ConsentResponse grantedConsent = null;
-
-            // user clicked 'no' - send back the standard 'access_denied' response
-            if (Consent?.Button == "no")
+            if (ConsentInput.UserDecision == "no")
             {
-                grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
-                // emit event
-                //await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
-            }
-            // user clicked 'yes' - validate the data
-            else if (Consent?.Button == "yes")
-            {
-                Consent.ScopesConsented =
-                    Consent.ApiScopes.Union(Consent.IdentityScopes).Distinct().Select(x => x.Value).ToList();
-                // if the user consented to some scope, build the response model
-                if (!Consent.ScopesConsented.IsNullOrEmpty())
+                grantedConsent = new ConsentResponse
                 {
-                    var scopes = Consent.ScopesConsented;
-                    if (ConsentOptions.EnableOfflineAccess == false)
-                    {
-                        scopes = scopes.Where(x => x != IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess).ToList();
-                    }
-
-                    grantedConsent = new ConsentResponse
-                    {
-                        RememberConsent = Consent.RememberConsent,
-                        ScopesValuesConsented = scopes.ToArray(),
-                        Description = Consent.Description
-                    };
-
-                    // emit event
-                    //await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
-                }
-                else
-                {
-                    //throw new UserFriendlyException("You must pick at least one permission"); //TODO: How to handle this
-                    result.ValidationError = ConsentOptions.MustChooseOneErrorMessage;
-                }
+                    Error = AuthorizationError.AccessDenied
+                };
             }
             else
             {
-                result.ValidationError = ConsentOptions.InvalidSelectionErrorMessage;
+                if (!ConsentInput.IdentityScopes.IsNullOrEmpty() || !ConsentInput.ApiScopes.IsNullOrEmpty())
+                {
+                    grantedConsent = new ConsentResponse
+                    {
+                        RememberConsent = ConsentInput.RememberConsent,
+                        ScopesValuesConsented = ConsentInput.GetAllowedScopeNames()
+                    };
+                }
+                else
+                {
+                    throw new UserFriendlyException("You must pick at least one permission"); //TODO: How to handle this
+                }
             }
 
             if (grantedConsent != null)
             {
-                // communicate outcome of consent back to identityserver
+                var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
+                if (request == null)
+                {
+                    return result;
+                }
+
                 await _interaction.GrantConsentAsync(request, grantedConsent);
 
-                // indicate that's it ok to redirect back to authorization endpoint
-                result.RedirectUri = ReturnUrl;  //TODO: ReturnUrlHash?
-                result.Client = request.Client;
-            }
-            else
-            {
-                // we need to redisplay the consent UI
-
-                result.ViewModel = await BuildViewModelAsync(ReturnUrl, Consent);
+                result.RedirectUri = ReturnUrl; //TODO: ReturnUrlHash?
             }
 
             return result;
         }
 
-        private async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentInputModel model = null)
+        protected virtual ConsentModel.ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check)
         {
-            var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            if (request != null)
+            return new ConsentModel.ScopeViewModel
             {
-                return CreateConsentViewModel(model, returnUrl, request);
-            }
-
-            throw new ApplicationException($"No consent request matching request: {returnUrl}");
-        }
-
-        private ConsentViewModel CreateConsentViewModel(ConsentInputModel model, string returnUrl, AuthorizationRequest request)
-        {
-            var consentViewModel = new ConsentViewModel
-            {
-                RememberConsent = model?.RememberConsent ?? true,
-                ScopesConsented = model?.ScopesConsented ?? new List<string>(),
-                Description = model?.Description,
-
-                ClientName = request.Client.ClientName ?? request.Client.ClientId,
-                ClientUrl = request.Client.ClientUri,
-                ClientLogoUrl = request.Client.LogoUri,
-                AllowRememberConsent = request.Client.AllowRememberConsent
-            };
-
-            consentViewModel.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x =>
-                CreateScopeViewModel(x, consentViewModel.ScopesConsented.Contains(x.Name) || model == null))
-                .ToList();
-
-            var apiScopes = new List<ScopeViewModel>();
-            foreach(var parsedScope in request.ValidatedResources.ParsedScopes)
-            {
-                var apiScope = request.ValidatedResources.Resources.FindApiScope(parsedScope.ParsedName);
-                if (apiScope != null)
-                {
-                    var scopeVm = CreateScopeViewModel(parsedScope, apiScope,
-                        consentViewModel.ScopesConsented.Contains(parsedScope.RawValue) || model == null);
-                    apiScopes.Add(scopeVm);
-                }
-            }
-
-            if (ConsentOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess)
-            {
-                apiScopes.Add(GetOfflineAccessScope(consentViewModel.ScopesConsented.Contains(IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess) || model == null));
-            }
-
-            consentViewModel.ApiScopes = apiScopes;
-
-            return consentViewModel;
-        }
-
-
-        protected virtual ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check)
-        {
-            return new ScopeViewModel
-            {
-                Value = identity.Name,
+                Name = identity.Name,
                 DisplayName = identity.DisplayName,
                 Description = identity.Description,
                 Emphasize = identity.Emphasize,
@@ -204,7 +167,7 @@ namespace Volo.Abp.Account.Web.Pages
             };
         }
 
-        protected virtual ScopeViewModel CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)
+        protected virtual ConsentModel.ScopeViewModel CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)
         {
             var displayName = apiScope.DisplayName ?? apiScope.Name;
             if (!string.IsNullOrWhiteSpace(parsedScopeValue.ParsedParameter))
@@ -214,7 +177,7 @@ namespace Volo.Abp.Account.Web.Pages
 
             return new ScopeViewModel
             {
-                Value = parsedScopeValue.RawValue,
+                Name = parsedScopeValue.RawValue,
                 DisplayName = displayName,
                 Description = apiScope.Description,
                 Emphasize = apiScope.Emphasize,
@@ -223,11 +186,11 @@ namespace Volo.Abp.Account.Web.Pages
             };
         }
 
-        protected virtual ScopeViewModel GetOfflineAccessScope(bool check)
+        protected virtual ConsentModel.ScopeViewModel GetOfflineAccessScope(bool check)
         {
-            return new ScopeViewModel
+            return new ConsentModel.ScopeViewModel
             {
-                Value = IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess,
+                Name = IdentityServer4.IdentityServerConstants.StandardScopes.OfflineAccess,
                 DisplayName = "Offline Access", //TODO: Localize
                 Description = "Access to your applications and resources, even when you are offline",
                 Emphasize = true,
@@ -237,36 +200,28 @@ namespace Volo.Abp.Account.Web.Pages
 
         public class ConsentInputModel
         {
-            [Required]
-            public string Button { get; set; }
+            public List<ConsentModel.ScopeViewModel> IdentityScopes { get; set; }
 
-            public List<string> ScopesConsented { get; set; }
+            public List<ConsentModel.ScopeViewModel> ApiScopes { get; set; }
+
+            [Required]
+            public string UserDecision { get; set; }
 
             public bool RememberConsent { get; set; }
 
-            public string Description { get; set; }
-        }
-
-
-        public class ConsentViewModel : ConsentInputModel
-        {
-            public string ClientName { get; set; }
-            public string ClientUrl { get; set; }
-
-            public string ClientLogoUrl { get; set; }
-
-            public bool AllowRememberConsent { get; set; }
-
-            public List<ScopeViewModel> IdentityScopes { get; set; }
-
-            public List<ScopeViewModel> ApiScopes { get; set; }
+            public List<string> GetAllowedScopeNames()
+            {
+                var identityScopes = IdentityScopes ?? new List<ConsentModel.ScopeViewModel>();
+                var apiScopes = ApiScopes ?? new List<ConsentModel.ScopeViewModel>();
+                return identityScopes.Union(apiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
+            }
         }
 
         public class ScopeViewModel
         {
             [Required]
             [HiddenInput]
-            public string Value { get; set; }
+            public string Name { get; set; }
 
             public bool Checked { get; set; }
 
@@ -283,13 +238,29 @@ namespace Volo.Abp.Account.Web.Pages
         {
             public bool IsRedirect => RedirectUri != null;
             public string RedirectUri { get; set; }
-            public Client Client { get; set; }
-
-            public bool ShowView => ViewModel != null;
-            public ConsentViewModel ViewModel { get; set; }
 
             public bool HasValidationError => ValidationError != null;
             public string ValidationError { get; set; }
+        }
+
+        public class ClientInfoModel
+        {
+            public string ClientName { get; set; }
+
+            public string ClientUrl { get; set; }
+
+            public string ClientLogoUrl { get; set; }
+
+            public bool AllowRememberConsent { get; set; }
+
+            public ClientInfoModel(Client client)
+            {
+                //TODO: Automap
+                ClientName = client.ClientId;
+                ClientUrl = client.ClientUri;
+                ClientLogoUrl = client.LogoUri;
+                AllowRememberConsent = client.AllowRememberConsent;
+            }
         }
     }
 }

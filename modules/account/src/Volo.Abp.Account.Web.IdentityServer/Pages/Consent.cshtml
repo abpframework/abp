@@ -1,17 +1,18 @@
 @page
 @using Volo.Abp.Account.Web.Pages
+@using Volo.Abp.Account.Web.Pages.Account
 @model ConsentModel
 <abp-card id="IdentityServerConsentWrapper">
     <abp-card-header>
         <div class="row">
             <div class="col-md-12">
                 <h2>
-                    @if (Model.Consent.ClientLogoUrl != null)
+                    @if (Model.ClientInfo.ClientLogoUrl != null)
                     {
-                        <img src="@Model.Consent.ClientLogoUrl">
+                        <img src="@Model.ClientInfo.ClientLogoUrl">
                     }
 
-                    @Model.Consent.ClientName
+                    @Model.ClientInfo.ClientName
                     <small>is requesting your permission</small>
                 </h2>
             </div>
@@ -24,62 +25,59 @@
 
             <div>Uncheck the permissions you do not wish to grant.</div>
 
-            @if (!Model.Consent.IdentityScopes.IsNullOrEmpty())
+            @if (!Model.ConsentInput.IdentityScopes.IsNullOrEmpty())
             {
                 <h3>Personal Information</h3>
 
                 <ul class="list-group">
-
-                    @for (var i = 0; i < Model.Consent.IdentityScopes.Count; i++)
+                    @for (var i = 0; i < Model.ConsentInput.IdentityScopes.Count; i++)
                     {
                         <li class="list-group-item">
                             <div class="form-check">
-                                <label asp-for="@Model.Consent.IdentityScopes[i].Checked" class="form-check-label">
-                                    <input asp-for="@Model.Consent.IdentityScopes[i].Checked" class="form-check-input"  />
-                                    @Model.Consent.IdentityScopes[i].DisplayName
-                                    @if (Model.Consent.IdentityScopes[i].Required)
+                                <label asp-for="@Model.ConsentInput.IdentityScopes[i].Checked" class="form-check-label">
+                                    <input asp-for="@Model.ConsentInput.IdentityScopes[i].Checked" class="form-check-input"  />
+                                    @Model.ConsentInput.IdentityScopes[i].DisplayName
+                                    @if (Model.ConsentInput.IdentityScopes[i].Required)
                                     {
                                         <span><em>(required)</em></span>
                                     }
                                 </label>
                             </div>
-                            <input asp-for="@Model.Consent.IdentityScopes[i].Value" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
-                            @if (Model.Consent.IdentityScopes[i].Description != null)
+                            <input asp-for="@Model.ConsentInput.IdentityScopes[i].Name" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
+                            @if (Model.ConsentInput.IdentityScopes[i].Description != null)
                             {
                                 <div class="consent-description">
-                                    @Model.Consent.IdentityScopes[i].Description
+                                    @Model.ConsentInput.IdentityScopes[i].Description
                                 </div>
                             }
                         </li>
                     }
-
                 </ul>
             }
 
-            @if (!Model.Consent.ApiScopes.IsNullOrEmpty())
+            @if (!Model.ConsentInput.ApiScopes.IsNullOrEmpty())
             {
                 <h3>Application Access</h3>
 
                 <ul class="list-group">
-
-                    @for (var i = 0; i < Model.Consent.ApiScopes.Count; i++)
+                    @for (var i = 0; i < Model.ConsentInput.ApiScopes.Count; i++)
                     {
                         <li class="list-group-item">
                             <div class="form-check">
-                                <label asp-for="@Model.Consent.ApiScopes[i].Checked" class="form-check-label">
-                                    <input asp-for="@Model.Consent.ApiScopes[i].Checked" class="form-check-input" disabled="@Model.Consent.ApiScopes[i].Required" />
-                                    @Model.Consent.ApiScopes[i].DisplayName
-                                    @if (Model.Consent.ApiScopes[i].Required)
+                                <label asp-for="@Model.ConsentInput.ApiScopes[i].Checked" class="form-check-label">
+                                    <input asp-for="@Model.ConsentInput.ApiScopes[i].Checked" class="form-check-input" disabled="@Model.ConsentInput.ApiScopes[i].Required" />
+                                    @Model.ConsentInput.ApiScopes[i].DisplayName
+                                    @if (Model.ConsentInput.ApiScopes[i].Required)
                                     {
                                         <span><em>(required)</em></span>
                                     }
                                 </label>
                             </div>
-                            <input asp-for="@Model.Consent.ApiScopes[i].Value" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
-                            @if (Model.Consent.ApiScopes[i].Description != null)
+                            <input asp-for="@Model.ConsentInput.ApiScopes[i].Name" type="hidden" /> @* TODO: Use attributes on the view model instead of using hidden here *@
+                            @if (Model.ConsentInput.ApiScopes[i].Description != null)
                             {
                                 <div class="consent-description">
-                                    @Model.Consent.ApiScopes[i].Description
+                                    @Model.ConsentInput.ApiScopes[i].Description
                                 </div>
                             }
                         </li>
@@ -87,35 +85,23 @@
                 </ul>
             }
 
-            <div class="form-group">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="glyphicon glyphicon-tasks"></span>
-                        Description
-                    </div>
-                    <div class="card-body">
-                        <input class="form-control" placeholder="Description or name of device" asp-for="@Model.Consent.Description" autofocus>
-                    </div>
-                </div>
-            </div>
-
-            @if (Model.Consent.AllowRememberConsent)
+            @if (Model.ClientInfo.AllowRememberConsent)
             {
                 <div class="form-check">
-                    <label asp-for="@Model.Consent.RememberConsent" class="form-check-label">
-                        <input asp-for="@Model.Consent.RememberConsent" class="form-check-input" />
+                    <label asp-for="@Model.ConsentInput.RememberConsent" class="form-check-label">
+                        <input asp-for="@Model.ConsentInput.RememberConsent" class="form-check-input" />
                         <strong>Remember My Decision</strong>
                     </label>
                 </div>
             }
 
             <div>
-                <button name="Consent.Button" value="yes" class="btn btn-primary" autofocus>Yes, Allow</button>
-                <button name="Consent.Button" value="no" class="btn">No, Do Not Allow</button>
-                @if (Model.Consent.ClientUrl != null)
+                <button name="ConsentInput.UserDecision" value="yes" class="btn btn-primary" autofocus>Yes, Allow</button>
+                <button name="ConsentInput.UserDecision" value="no" class="btn">No, Do Not Allow</button>
+                @if (Model.ClientInfo.ClientUrl != null)
                 {
-                    <a class="pull-right btn btn-secondary" target="_blank" href="@Model.Consent.ClientUrl">
-                        <strong>@Model.Consent.ClientName</strong>
+                    <a class="pull-right btn btn-secondary" target="_blank" href="@Model.ClientInfo.ClientUrl">
+                        <strong>@Model.ClientInfo.ClientName</strong>
                     </a>
                 }
             </div>
