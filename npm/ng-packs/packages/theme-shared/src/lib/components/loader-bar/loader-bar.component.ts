@@ -24,14 +24,22 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./loader-bar.component.scss'],
 })
 export class LoaderBarComponent implements OnDestroy, OnInit {
+  protected _isLoading: boolean;
+
+  @Input()
+  set isLoading(value: boolean) {
+    this._isLoading = value;
+    this.cdRef.detectChanges();
+  }
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
+
   @Input()
   containerClass = 'abp-loader-bar';
 
   @Input()
   color = '#77b6ff';
-
-  @Input()
-  isLoading: boolean;
 
   progressLevel = 0;
 
@@ -122,7 +130,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     if (this.interval) this.interval.unsubscribe();
 
     this.progressLevel = 100;
-    setTimeout(() => (this.isLoading = false), 0);
+    this.isLoading = false;
 
     if (this.timer && !this.timer.closed) return;
 
