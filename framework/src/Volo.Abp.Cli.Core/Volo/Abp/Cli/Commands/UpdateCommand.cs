@@ -63,11 +63,13 @@ namespace Volo.Abp.Cli.Commands
                 solution = Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories).FirstOrDefault();
             }
 
+            var checkAll = commandLineArgs.Options.ContainsKey(Options.CheckAll.Long);
+
             if (solution != null)
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews, checkAll: checkAll);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -79,7 +81,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews, checkAll: checkAll);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
@@ -107,6 +109,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("--nuget                                     (Only updates Nuget packages)");
             sb.AppendLine("-sp|--solution-path                         (Specify the solution path)");
             sb.AppendLine("-sn|--solution-name                         (Specify the solution name)");
+            sb.AppendLine("--check-all                                 (Check the new version of each package separately)");
             sb.AppendLine("");
             sb.AppendLine("Some examples:");
             sb.AppendLine("");
@@ -148,6 +151,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Npm = "npm";
                 public const string NuGet = "nuget";
+            }
+
+            public static class CheckAll
+            {
+                public const string Long = "check-all";
             }
         }
     }

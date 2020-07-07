@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Abp.Application.Services
+﻿namespace Volo.Abp.Application.Services
 {
     public interface ICreateUpdateAppService<TEntityDto, in TKey>
         : ICreateUpdateAppService<TEntityDto, TKey, TEntityDto, TEntityDto>
@@ -17,9 +13,8 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface ICreateUpdateAppService<TGetOutputDto, in TKey, in TCreateUpdateInput, in TUpdateInput>
-        : ICreateAppService<TGetOutputDto, TCreateUpdateInput>
-        , IUpdateAppService<TGetOutputDto, TKey, TUpdateInput>
-        , IApplicationService
+        : ICreateAppService<TGetOutputDto, TCreateUpdateInput>,
+            IUpdateAppService<TGetOutputDto, TKey, TUpdateInput>
     {
 
     }

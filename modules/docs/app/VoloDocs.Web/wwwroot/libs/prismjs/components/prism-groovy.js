@@ -1,21 +1,23 @@
 Prism.languages.groovy = Prism.languages.extend('clike', {
-	'keyword': /\b(?:as|def|in|abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|trait|transient|try|void|volatile|while)\b/,
 	'string': [
 		{
-			pattern: /("""|''')[\s\S]*?\1|(?:\$\/)(?:\$\/\$|[\s\S])*?\/\$/,
+			pattern: /("""|''')(?:[^\\]|\\[\s\S])*?\1|\$\/(?:\$\/\$|[\s\S])*?\/\$/,
 			greedy: true
 		},
 		{
-			pattern: /(["'\/])(?:\\.|(?!\1)[^\\\r\n])*\1/,
+			// TODO: Slash strings (e.g. /foo/) can contain line breaks but this will cause a lot of trouble with
+			// simple division (see JS regex), so find a fix maybe?
+			pattern: /(["'/])(?:\\.|(?!\1)[^\\\r\n])*\1/,
 			greedy: true
 		}
 	],
+	'keyword': /\b(?:as|def|in|abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|trait|transient|try|void|volatile|while)\b/,
 	'number': /\b(?:0b[01_]+|0x[\da-f_]+(?:\.[\da-f_p\-]+)?|[\d_]+(?:\.[\d_]+)?(?:e[+-]?[\d]+)?)[glidf]?\b/i,
 	'operator': {
-		pattern: /(^|[^.])(?:~|==?~?|\?[.:]?|\*(?:[.=]|\*=?)?|\.[@&]|\.\.<|\.{1,2}(?!\.)|-[-=>]?|\+[+=]?|!=?|<(?:<=?|=>?)?|>(?:>>?=?|=)?|&[&=]?|\|[|=]?|\/=?|\^=?|%=?)/,
+		pattern: /(^|[^.])(?:~|==?~?|\?[.:]?|\*(?:[.=]|\*=?)?|\.[@&]|\.\.<|\.\.(?!\.)|-[-=>]?|\+[+=]?|!=?|<(?:<=?|=>?)?|>(?:>>?=?|=)?|&[&=]?|\|[|=]?|\/=?|\^=?|%=?)/,
 		lookbehind: true
 	},
-	'punctuation': /\.+|[{}[\];(),:$]/
+	'punctuation': /\.+|[{}[\];(),.:$]/
 });
 
 Prism.languages.insertBefore('groovy', 'string', {
@@ -31,9 +33,9 @@ Prism.languages.insertBefore('groovy', 'punctuation', {
 
 Prism.languages.insertBefore('groovy', 'function', {
 	'annotation': {
-		alias: 'punctuation',
 		pattern: /(^|[^.])@\w+/,
-		lookbehind: true
+		lookbehind: true,
+		alias: 'punctuation'
 	}
 });
 

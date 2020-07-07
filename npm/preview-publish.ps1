@@ -16,7 +16,7 @@ $Version = $NextVersion;
 }
 
 if(-Not $Registry) {
-$Registry = "http://localhost:4873";
+$Registry = "https://www.myget.org/F/abp-nightly/npm";
 }
 
 $commands = (
@@ -24,7 +24,9 @@ $commands = (
   "npm install",
   "npm run publish-packages -- --nextVersion $Version --preview",
   "cd ../../",
-  "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish --dist-tag preview --registry $Registry"
+  "yarn lerna version $Version --yes --no-commit-hooks --skip-git --force-publish",
+  "yarn replace-with-tilde",
+  "yarn lerna exec 'npm publish --registry $Registry --tag preview'"
 )
 
 foreach ($command in $commands) { 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Identity;
@@ -14,6 +15,14 @@ namespace Volo.Abp.Identity
         )]
     public class AbpIdentityDomainTestModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpDistributedEntityEventOptions>(options =>
+            {
+                options.AutoEventSelectors.Add<IdentityUser>();
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);

@@ -53,57 +53,38 @@ class BookComponent {
 
 > 注意 `list` 是 `public` 并且 `readonly`. 因为我们将直接在组件的模板中使用 `ListService` 属性. 可以视为反模式,但是实现起来要快得多. 你可以改为使用公共组件属性.
 
-将 `ListService` 属性放入模板中,如下所示:
+像这样绑定 `ListService` 到 ngx-datatable:
 
 ```html
-<abp-table
-  [value]="book.items"
-  [(page)]="list.page"
-  [rows]="list.maxResultCount"
-  [totalRecords]="book.totalCount"
-  [headerTemplate]="tableHeader"
-  [bodyTemplate]="tableBody"
-  [abpLoading]="list.isLoading$ | async"
+<ngx-datatable
+  [rows]="items"
+  [count]="count"
+  [list]="list"
+  default
 >
-</abp-table>
-
-<ng-template #tableHeader>
-  <tr>
-    <th (click)="nameSort.sort('name')">
-      {%{{{ '::Name' | abpLocalization }}}%}
-      <abp-sort-order-icon
-        #nameSort
-        sortKey="name"
-        [(selectedSortKey)]="list.sortKey"
-        [(order)]="list.sortOrder"
-      ></abp-sort-order-icon>
-    </th>
-  </tr>
-</ng-template>
-
-<ng-template #tableBody let-data>
-  <tr>
-    <td>{%{{{ data.name }}}%}</td>
-  </tr>
-</ng-template>
+  <!-- column templates here -->
+</ngx-datatable>
 ```
 
 ## 与Observables一起使用
 
 你可以将Observables与Angular的[AsyncPipe](https://angular.io/guide/observables-in-angular#async-pipe)结合使用:
 
-```ts
+```js
   book$ = this.list.hookToQuery(query => this.bookService.getListByInput(query));
 ```
 
 ```html
 <!-- simplified representation of the template -->
 
-<abp-table
-  [value]="(book$ | async)?.items || []"
-  [totalRecords]="(book$ | async)?.totalCount"
+<ngx-datatable
+  [rows]="(book$ | async)?.items || []"
+  [count]="(book$ | async)?.totalCount || 0"
+  [list]="list"
+  default
 >
-</abp-table>
+  <!-- column templates here -->
+</ngx-datatable>
 
 <!-- DO NOT WORRY, ONLY ONE REQUEST WILL BE MADE -->
 ```
@@ -111,7 +92,7 @@ class BookComponent {
 ...or...
 
 
-```ts
+```js
   @Select(BookState.getBooks)
   books$: Observable<BookDto[]>;
 
@@ -126,12 +107,17 @@ class BookComponent {
 ```html
 <!-- simplified representation of the template -->
 
-<abp-table
-  [value]="books$ | async"
-  [totalRecords]="bookCount$ | async"
+<ngx-datatable
+  [rows]="(books$ | async) || []"
+  [count]="(bookCount$ | async) || 0"
+  [list]="list"
+  default
 >
-</abp-table>
+  <!-- column templates here -->
+</ngx-datatable>
 ```
+
+> 我们不建议将NGXS存储用于CRUD页面,除非你的应用程序需要在组件之间共享列表信息或稍后在另一页面中使用它.
 
 ## 如何在创建/更新/删除时刷新表
 
@@ -161,3 +147,26 @@ this.bookService.createByInput(form.value)
 
 <input type="text" name="search" [(ngModel)]="list.filter">
 ```
+
+## ABP v3.0的重大更改
+
+我们必须修改 `ListService` 使其与 `ngx-datatable` 一起使用. 之前 `page` 属性的最小值为 `1`, 你可以像这样使用它:
+
+```html
+<!-- other bindings are hidden in favor of brevity -->
+<abp-table
+  [(page)]="list.page"
+></abp-table>
+```
+
+从v3.0开始, 对于`ngx-datatable`, 初始页面的 `page`属性必须设置为 `0`. 因此如果你以前在表上使用过 `ListService` 并打算保留 `abp-table`,则需要进行以下更改:
+
+```html
+<!-- other bindings are hidden in favor of brevity -->
+<abp-table
+  [page]="list.page + 1"
+  (pageChange)="list.page = $event - 1"
+></abp-table>
+```
+
+**重要提示:** `abp-table` 没有被删除,但是会被弃用,并在将来的版本中移除,请考虑切换到 ngx-datatable.

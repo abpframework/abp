@@ -45,7 +45,7 @@ namespace Volo.Docs
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
+                options.FileSets.AddEmbedded<DocsWebModule>();
             });
 
             var configuration = context.Services.GetConfiguration();

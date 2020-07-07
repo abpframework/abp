@@ -169,7 +169,8 @@ abp update [options]
 * `--nuget`: 仅更新的NuGet包
 * `--solution-path` 或 `-sp`: 指定解决方案路径/目录. 默认使用当前目录
 * `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
-
+*`--check-all`: 分别检查每个包的新版本. 默认是 `false`.
+  
 ### 切换到每晚构建(预览)包
 
 想要切换到ABP框架的最新预览版可以使用此命令.

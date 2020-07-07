@@ -131,7 +131,7 @@ namespace Volo.Abp.Identity
 
             if (siblings.Any(ou => ou.DisplayName == organizationUnit.DisplayName))
             {
-                throw new UserFriendlyException(Localizer["OrganizationUnitDuplicateDisplayNameWarning", organizationUnit.DisplayName]);
+                throw new UserFriendlyException(Localizer["Identity.OrganizationUnit.DuplicateDisplayNameWarning", organizationUnit.DisplayName]);
             }
         }
 

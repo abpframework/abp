@@ -1,13 +1,15 @@
-import { Component, OnDestroy, Type } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
+import { Component, Injector, OnDestroy, Optional, SkipSelf, Type } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import snq from 'snq';
 import { eLayoutType } from '../enums/common';
-import { ABP } from '../models/common';
+import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
-import { ConfigState } from '../states/config.state';
+import { LocalizationService } from '../services/localization.service';
+import { RoutesService } from '../services/routes.service';
 import { ReplaceableComponentsState } from '../states/replaceable-components.state';
+import { findRoute, getRoutePath } from '../utils/route-utils';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
+import { TreeNode } from '../utils/tree-utils';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -15,33 +17,62 @@ import { takeUntilDestroy } from '../utils/rxjs-utils';
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
     <ng-template #componentOutlet
-      ><ng-container *ngComponentOutlet="layout"></ng-container
+      ><ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container
     ></ng-template>
   `,
 })
 export class DynamicLayoutComponent implements OnDestroy {
   layout: Type<any>;
 
-  constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
-    const { routes } = this.store.selectSnapshot(ConfigState.getAll);
+  isLayoutVisible = true;
+
+  constructor(
+    injector: Injector,
+    private localizationService: LocalizationService,
+    private store: Store,
+    @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
+  ) {
+    if (dynamicLayoutComponent) return;
+    const route = injector.get(ActivatedRoute);
+    const router = injector.get(Router);
+    const routes = injector.get(RoutesService);
+    const layouts = {
+      application: this.getComponent('Theme.ApplicationLayoutComponent'),
+      account: this.getComponent('Theme.AccountLayoutComponent'),
+      empty: this.getComponent('Theme.EmptyLayoutComponent'),
+    };
 
     router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
       if (event instanceof NavigationEnd) {
-        const segments = snq(() => router.parseUrl(event.url).root.children.primary.segments, [
-          { path: router.url.replace('/', '') },
-        ] as any);
+        let expectedLayout = (route.snapshot.data || {}).layout;
 
-        const layouts = {
-          application: this.getComponent('Theme.ApplicationLayoutComponent'),
-          account: this.getComponent('Theme.AccountLayoutComponent'),
-          empty: this.getComponent('Theme.EmptyLayoutComponent'),
-        };
+        if (!expectedLayout) {
+          let node = findRoute(routes, getRoutePath(router));
+          node = { parent: node } as TreeNode<ABP.Route>;
 
-        const expectedLayout =
-          (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
+          while (node.parent) {
+            node = node.parent;
+
+            if (node.layout) {
+              expectedLayout = node.layout;
+              break;
+            }
+          }
+        }
+
+        if (!expectedLayout) expectedLayout = eLayoutType.empty;
 
         this.layout = layouts[expectedLayout].component;
       }
+    });
+
+    this.listenToLanguageChange();
+  }
+
+  private listenToLanguageChange() {
+    this.localizationService.languageChange.pipe(takeUntilDestroy(this)).subscribe(() => {
+      this.isLayoutVisible = false;
+      setTimeout(() => (this.isLayoutVisible = true), 0);
     });
   }
 
@@ -50,28 +81,4 @@ export class DynamicLayoutComponent implements OnDestroy {
   }
 
   ngOnDestroy() {}
-}
-
-function findLayout(segments: UrlSegment[], routes: ABP.FullRoute[]): eLayoutType {
-  let layout = eLayoutType.empty;
-
-  const route = routes
-    .reduce((acc, val) => (val.wrapper ? [...acc, ...val.children] : [...acc, val]), [])
-    .find(r => r.path === segments[0].path);
-
-  if (route) {
-    if (route.layout) {
-      layout = route.layout;
-    }
-
-    if (route.children && route.children.length && segments.length > 1) {
-      const child = route.children.find(c => c.path === segments[1].path);
-
-      if (child && child.layout) {
-        layout = child.layout;
-      }
-    }
-  }
-
-  return layout;
 }

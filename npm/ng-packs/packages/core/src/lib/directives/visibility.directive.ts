@@ -2,6 +2,10 @@ import { Directive, Input, Optional, ElementRef, Renderer2, AfterViewInit } from
 import { Subject } from 'rxjs';
 import snq from 'snq';
 
+/**
+ *
+ * @deprecated To be deleted in v3.3
+ */
 @Directive({
   selector: '[abpVisibility]',
 })
@@ -40,7 +44,8 @@ export class VisibilityDirective implements AfterViewInit {
 
     setTimeout(() => {
       const htmlNodes = snq(
-        () => Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
+        () =>
+          Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
         [],
       );
 

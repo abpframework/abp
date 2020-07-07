@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Application.Services
@@ -29,10 +27,9 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface ICrudAppService<TGetOutputDto, TGetListOutputDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : IReadOnlyAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>
-        , ICreateUpdateAppService<TGetOutputDto, TKey, TCreateInput, TUpdateInput>
-        , IDeleteAppService<TKey>
-        , IApplicationService
+        : IReadOnlyAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput>,
+            ICreateUpdateAppService<TGetOutputDto, TKey, TCreateInput, TUpdateInput>,
+            IDeleteAppService<TKey>
     {
 
     }

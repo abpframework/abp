@@ -5,7 +5,8 @@
     "gulp:app": "node run-gulp-script.js ../templates/app/aspnet-core",
     "gulp:module": "node run-gulp-script.js ../templates/module/aspnet-core",
     "ncu": "ncu",
-    "update:templates": "node abp-package-update-script.js ../templates"
+    "update:templates": "node abp-package-update-script.js ../templates",
+    "replace-with-tilde": "node replace-with-tilde.js"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",

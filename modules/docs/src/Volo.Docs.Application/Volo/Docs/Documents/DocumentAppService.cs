@@ -245,8 +245,13 @@ namespace Volo.Docs.Documents
                 return await GetDocumentAsync(documentName, project, languageCode, version, document);
             }
 
-            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, document.Name,
-                document.LanguageCode, document.Version);
+            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
+                project: project,
+                documentName: document.Name,
+                languageCode: document.LanguageCode,
+                version: document.Version
+            );
+
             await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
             {
                 Name = document.Name,
@@ -282,8 +287,13 @@ namespace Volo.Docs.Documents
 
             Logger.LogInformation($"Document retrieved: {documentName}");
 
-            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, sourceDocument.Name,
-                sourceDocument.LanguageCode, sourceDocument.Version);
+            var cacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
+                project: project,
+                documentName: sourceDocument.Name,
+                languageCode: sourceDocument.LanguageCode,
+                version: sourceDocument.Version
+            );
+
             await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
             {
                 Name = sourceDocument.Name,

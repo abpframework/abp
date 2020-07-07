@@ -2,7 +2,14 @@
 {
     public class ClientPropertyConsts
     {
-        public const int KeyMaxLength = 250;
-        public const int ValueMaxLength = 2000;
+        /// <summary>
+        /// Default value: 250
+        /// </summary>
+        public static int KeyMaxLength { get; set; } = 250;
+        
+        /// <summary>
+        /// Default value: 2000
+        /// </summary>
+        public static int ValueMaxLength { get; set; } = 2000;
     }
 }

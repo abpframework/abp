@@ -60,6 +60,17 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await DbSet.IncludeDetails(includeDetails).Where(r => r.IsDefault).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.Name.Contains(filter) ||
+                         x.NormalizedName.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         public override IQueryable<IdentityRole> WithDetails()
         {
             return GetQueryable().IncludeDetails();

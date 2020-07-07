@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Caching;
@@ -25,13 +25,15 @@ namespace Volo.Docs.Admin.Documents
         private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDistributedCache<LanguageConfig> _languageCache;
+        private readonly IDocumentFullSearch _documentFullSearch;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDistributedCache<LanguageConfig> languageCache)
+            IDistributedCache<LanguageConfig> languageCache,
+            IDocumentFullSearch documentFullSearch)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
@@ -39,6 +41,7 @@ namespace Volo.Docs.Admin.Documents
             _documentUpdateCache = documentUpdateCache;
             _versionCache = versionCache;
             _languageCache = languageCache;
+            _documentFullSearch = documentFullSearch;
 
             LocalizationResource = typeof(DocsResource);
         }
@@ -57,7 +60,13 @@ namespace Volo.Docs.Admin.Documents
 
             foreach (var document in documents)
             {
-                var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(project, document.Name, document.LanguageCode, document.LanguageCode);
+                var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
+                    project: project,
+                    documentName: document.Name,
+                    languageCode: document.LanguageCode,
+                    version: document.Version
+                );
+
                 await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
 
                 document.LastCachedTime = DateTime.MinValue;
@@ -123,6 +132,87 @@ namespace Volo.Docs.Admin.Documents
                 sourceDocument.LanguageCode, sourceDocument.Version);
             await _documentRepository.InsertAsync(sourceDocument, true);
             await UpdateDocumentUpdateInfoCache(sourceDocument);
+        }
+
+        public async Task<PagedResultDto<DocumentDto>> GetAllAsync(GetAllInput input)
+        {
+            var totalCount = await _documentRepository.GetAllCountAsync(
+                projectId: input.ProjectId,
+                name: input.Name,
+                version: input.Version,
+                languageCode: input.LanguageCode,
+                fileName: input.FileName,
+                format: input.Format,
+                creationTimeMin: input.CreationTimeMin,
+                creationTimeMax: input.CreationTimeMax,
+                lastUpdatedTimeMin: input.LastUpdatedTimeMin,
+                lastUpdatedTimeMax: input.LastUpdatedTimeMax,
+                lastSignificantUpdateTimeMin: input.LastSignificantUpdateTimeMin,
+                lastSignificantUpdateTimeMax: input.LastSignificantUpdateTimeMax,
+                lastCachedTimeMin: input.LastCachedTimeMin,
+                lastCachedTimeMax: input.LastCachedTimeMax,
+                sorting: input.Sorting,
+                maxResultCount: input.MaxResultCount,
+                skipCount: input.SkipCount
+            );
+
+            var docs = await _documentRepository.GetAllAsync(
+                projectId: input.ProjectId,
+                name: input.Name,
+                version: input.Version,
+                languageCode: input.LanguageCode,
+                fileName: input.FileName,
+                format: input.Format,
+                creationTimeMin: input.CreationTimeMin,
+                creationTimeMax: input.CreationTimeMax,
+                lastUpdatedTimeMin: input.LastUpdatedTimeMin,
+                lastUpdatedTimeMax: input.LastUpdatedTimeMax,
+                lastSignificantUpdateTimeMin: input.LastSignificantUpdateTimeMin,
+                lastSignificantUpdateTimeMax: input.LastSignificantUpdateTimeMax,
+                lastCachedTimeMin: input.LastCachedTimeMin,
+                lastCachedTimeMax: input.LastCachedTimeMax,
+                sorting: input.Sorting,
+                maxResultCount: input.MaxResultCount,
+                skipCount: input.SkipCount
+            );
+
+            return new PagedResultDto<DocumentDto>
+            {
+                TotalCount = totalCount,
+                Items = ObjectMapper.Map<List<Document>, List<DocumentDto>>(docs)
+            };
+        }
+
+        public async Task RemoveFromCacheAsync(Guid documentId)
+        {
+            var document = await _documentRepository.GetAsync(documentId);
+            var project = await _projectRepository.GetAsync(document.ProjectId);
+
+            var documentUpdateInfoCacheKey = CacheKeyGenerator.GenerateDocumentUpdateInfoCacheKey(
+                project: project,
+                documentName: document.Name,
+                languageCode: document.LanguageCode,
+                version: document.Version
+            );
+
+            await _documentUpdateCache.RemoveAsync(documentUpdateInfoCacheKey);
+
+            document.LastCachedTime = DateTime.MinValue;
+
+            await _documentRepository.UpdateAsync(document);
+        }
+
+        public async Task ReindexAsync(Guid documentId)
+        {
+            await _documentFullSearch.DeleteAsync(documentId);
+            var document = await _documentRepository.GetAsync(documentId);
+            await _documentFullSearch.AddOrUpdateAsync(document);
+        }
+
+        public async Task DeleteFromDatabaseAsync(Guid documentId)
+        {
+            var document = await _documentRepository.GetAsync(documentId);
+            await _documentRepository.DeleteAsync(document);
         }
 
         private async Task UpdateDocumentUpdateInfoCache(Document document)

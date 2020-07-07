@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnDestroy, Optional } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
-import { debounceTime, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
+import { catchError, debounceTime, filter, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { ABP } from '../models/common';
 import { PagedResultDto } from '../models/dtos';
 import { LIST_QUERY_DEBOUNCE_TIME } from '../tokens/list.token';
@@ -88,7 +88,8 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
     this._isLoading$.next(true);
 
     return this.query$.pipe(
-      switchMap(streamCreatorCallback),
+      switchMap(query => streamCreatorCallback(query).pipe(catchError(() => of(null)))),
+      filter(Boolean),
       tap(() => this._isLoading$.next(false)),
       shareReplay({ bufferSize: 1, refCount: true }),
       takeUntilDestroy(this),

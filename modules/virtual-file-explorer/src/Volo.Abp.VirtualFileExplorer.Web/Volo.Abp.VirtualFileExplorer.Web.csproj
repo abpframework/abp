@@ -30,9 +30,4 @@
     <Content Remove="Localization\**\*.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
-  </ItemGroup>
-
 </Project>

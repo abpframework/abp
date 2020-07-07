@@ -54,9 +54,22 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
-            bool includeDetails = false, CancellationToken cancellationToken = default)
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().Where(r => r.IsDefault).ToListAsync(cancellationToken: GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<long> GetCountAsync(
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.Name.Contains(filter) ||
+                         x.NormalizedName.Contains(filter))
+                .As<IMongoQueryable<IdentityRole>>()
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

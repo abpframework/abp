@@ -54,6 +54,12 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetCountAsync_With_Filter()
+        {
+            (await RoleRepository.GetCountAsync("admin")).ShouldBe(1);
+        }
+
+        [Fact]
         public async Task Should_Eager_Load_Role_Collections()
         {
             var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"));
