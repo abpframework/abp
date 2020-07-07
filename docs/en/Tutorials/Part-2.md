@@ -331,6 +331,8 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 ## Install NPM packages
 
+> Notice: This tutorial is based on the ABP Framework v3.0.3+ If your project version is older, then please upgrade your solution. See the [migration guide](../UI/Angular/Migration-Guide-v3.md) if you are upgrading an existing project with v2.x.
+
 If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install NPM packages:
 
 ```bash
@@ -399,33 +401,12 @@ Generated code places the new route definition to the `src/app/app-routing.modul
 
 ````js
 const routes: Routes = [
-  {
-    path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      // ...
-    ],
-  },
+  // other route definitions...
   { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
 ];
 ````
 
-We need to **move this route** definition inside the `children` array, so it can use the application layout:
-
-````js
-const routes: Routes = [
-  {
-    path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      // ...
-      { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
-    ],
-  },
-];
-````
-
-Finally, open the `src/app/route.provider.ts` file replace the `configureRoutes` function declaration as shown below:
+Now, open the `src/app/route.provider.ts` file replace the `configureRoutes` function declaration as shown below:
 
 ```js
 function configureRoutes(routes: RoutesService) {

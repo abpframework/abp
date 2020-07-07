@@ -977,38 +977,38 @@ Now, you can open your browser to see the changes:
 
 ![Save button to the modal](./images/bookstore-new-book-form-v2.png)
 
-## Updating a book
+## Updating a Book
 
-Open `book-list.component.ts` in `app\book\book-list` folder and add a variable named `selectedBook`.
+Open `/src/app/book/book.component.ts` and replace the content as shown below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from '../models';
-import { BookService } from '../services';
+import { BookDto, BookType, CreateUpdateBookDto } from './models';
+import { BookService } from './services';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-book-list',
-  templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
+  selector: 'app-book',
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.scss'],
   providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
-export class BookListComponent implements OnInit {
+export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
   booksType = BookType;
 
-  bookTypeArr = Object.keys(BookType).filter(
+  form: FormGroup;
+
+  selectedBook = new BookDto(); // declare selectedBook
+
+  bookTypes = Object.keys(BookType).filter(
     (bookType) => typeof this.booksType[bookType] === 'number'
   );
 
   isModalOpen = false;
-
-  form: FormGroup;
-
-  selectedBook = {} as BookDto; // <== declared selectedBook ==>
 
   constructor(
     public readonly list: ListService,
@@ -1024,14 +1024,13 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  // <== this method is replaced ==>
   createBook() {
-    this.selectedBook = {} as BookDto; // <== added ==>
+    this.selectedBook = new BookDto(); // reset the selected book
     this.buildForm();
     this.isModalOpen = true;
   }
 
-  // <== added editBook method ==>
+  // Add editBook method
   editBook(id: string) {
     this.bookService.getById(id).subscribe((book) => {
       this.selectedBook = book;
@@ -1040,7 +1039,6 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  // <== this method is replaced ==>
   buildForm() {
     this.form = this.fb.group({
       name: [this.selectedBook.name || '', Validators.required],
@@ -1053,13 +1051,12 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  // <== this method is replaced ==>
+  // change the save method
   save() {
     if (this.form.invalid) {
       return;
     }
 
-    // <== added request ==>
     const request = this.selectedBook.id
       ? this.bookService.updateByIdAndInput(this.form.value, this.selectedBook.id)
       : this.bookService.createByInput(this.form.value);
@@ -1074,71 +1071,46 @@ export class BookListComponent implements OnInit {
 ```
 
 * We declared a variable named `selectedBook` as `BookDto`.
-* We added `editBook`  method. This method fetches the book with the given `Id` and sets it to `selectedBook` object.
+* We added `editBook`  method. This method fetches the book with the given `id` and sets it to `selectedBook` object.
 * We replaced the `buildForm` method so that it creates the form with the `selectedBook` data.
 * We replaced the `createBook` method so it sets `selectedBook` to an empty object.
-* We replaced the `save` method.
+* We changed the `save` method to handle both of create and update operations.
 
-### Add "Actions" dropdown to the table
+### Add "Actions" Dropdown to the Table
 
-Open the `book-list.component.html` in `app\book\book-list` folder and replace the `<div class="card-body">` tag as below:
+Open the `/src/app/book/book.component.html`  and add the following `ngx-datatable-column` definition as the first column in the `ngx-datatable`:
 
 ```html
-<div class="card-body">
-  <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
-    <!-- added actions column -->
-    <ngx-datatable-column
-      [name]="'::Actions' | abpLocalization"
-      [maxWidth]="150"
-      [sortable]="false"
-    >
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        <div ngbDropdown container="body" class="d-inline-block">
-          <button
-            class="btn btn-primary btn-sm dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            ngbDropdownToggle
-          >
-            <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
-          </button>
-          <div ngbDropdownMenu>
-            <button ngbDropdownItem (click)="editBook(row.id)">
-              {%{{{ '::Edit' | abpLocalization }}}%}
-            </button>
-          </div>
-        </div>
-      </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
-    <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {%{{{ booksType[row.type] }}}%}
-      </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column [name]="'::PublishDate' | abpLocalization" prop="publishDate">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {%{{{ row.publishDate | date }}}%}
-      </ng-template>
-    </ngx-datatable-column>
-    <ngx-datatable-column [name]="'::Price' | abpLocalization" prop="price">
-      <ng-template let-row="row" ngx-datatable-cell-template>
-        {%{{{ row.price | currency }}}%}
-      </ng-template>
-    </ngx-datatable-column>
-  </ngx-datatable>
-</div>
+<ngx-datatable-column
+  [name]="'::Actions' | abpLocalization"
+  [maxWidth]="150"
+  [sortable]="false"
+>
+  <ng-template let-row="row" ngx-datatable-cell-template>
+    <div ngbDropdown container="body" class="d-inline-block">
+      <button
+        class="btn btn-primary btn-sm dropdown-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        ngbDropdownToggle
+      >
+        <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
+      </button>
+      <div ngbDropdownMenu>
+        <button ngbDropdownItem (click)="editBook(row.id)">
+          {%{{{ '::Edit' | abpLocalization }}}%}
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</ngx-datatable-column>
 ```
 
-- We added a `ngx-datatable-column` for the "Actions" column.
-- We added `button` with `ngbDropdownToggle` to open actions when clicked the button.
-- We have used to [NgbDropdown](https://ng-bootstrap.github.io/#/components/dropdown/examples) for the dropdown menu of actions.
-
-The final UI looks like as below:
+Added an "Actions" dropdown as the first column of the table that is shown below:
 
 ![Action buttons](./images/bookstore-actions-buttons.png)
 
-Open `book-list.component.html` in `app\book\book-list` folder and find the `<ng-template #abpHeader>` tag and replace the content as below.
+Also, change the `ng-template #abpHeader` section as shown below:
 
 ```html
 <ng-template #abpHeader>
@@ -1146,9 +1118,9 @@ Open `book-list.component.html` in `app\book\book-list` folder and find the `<ng
 </ng-template>
 ```
 
-* This template will show **Edit** text for edit record operation, **New Book** for new record operation in the title.
+This template will show **Edit** text for edit record operation, **New Book** for new record operation in the title.
 
-## Deleting a book
+## Deleting a Book
 
 ### Delete confirmation popup
 
