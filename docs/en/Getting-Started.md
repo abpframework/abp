@@ -322,7 +322,6 @@ Once all node modules are loaded, execute `yarn start` (or `npm start`) command:
 yarn start
 ```
 
-Wait `Angular CLI` to launch `Webpack` dev-server with `BrowserSync`. 
 This will take care of compiling your `TypeScript` code, and automatically reloading your browser. 
 After it finishes, `Angular Live Development Server` will be listening on localhost:4200, 
 open your web browser and navigate to [localhost:4200](http://localhost:4200/)
