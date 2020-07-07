@@ -165,7 +165,7 @@ namespace Acme.BookStore.Books
             GetListPolicyName = BookStorePermissions.Books.Default;
             CreatePolicyName = BookStorePermissions.Books.Create;
             UpdatePolicyName = BookStorePermissions.Books.Edit;
-            DeletePolicyName = BookStorePermissions.Books.Create;
+            DeletePolicyName = BookStorePermissions.Books.Delete;
         }
     }
 }
