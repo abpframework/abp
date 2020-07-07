@@ -31,7 +31,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   color = '#77b6ff';
 
   @Input()
-  isLoading = false;
+  isLoading: boolean;
 
   progressLevel = 0;
 
@@ -122,7 +122,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     if (this.interval) this.interval.unsubscribe();
 
     this.progressLevel = 100;
-    this.isLoading = false;
+    setTimeout(() => (this.isLoading = false), 0);
 
     if (this.timer && !this.timer.closed) return;
 
