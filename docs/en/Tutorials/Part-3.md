@@ -1122,36 +1122,25 @@ This template will show **Edit** text for edit record operation, **New Book** fo
 
 ## Deleting a Book
 
-### Delete confirmation popup
-
-Open `book-list.component.ts` in `app\book\book-list` folder and inject the `ConfirmationService`.
+Open the `/src/app/book/book.component.ts` and inject the `ConfirmationService`.
 
 Replace the constructor as below:
 
 ```js
-import { ConfirmationService } from '@abp/ng.theme.shared';
-//...
+// ...
 
+// add new imports
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+
+//change the constructor
 constructor(
   public readonly list: ListService,
   private bookService: BookService,
   private fb: FormBuilder,
-  private confirmation: ConfirmationService // <== added this line ==>
+  private confirmation: ConfirmationService // inject the ConfirmationService
 ) {}
-```
 
-* We imported `ConfirmationService`.
-* We injected `ConfirmationService` to the constructor.
-
-See the [Confirmation Popup documentation](https://docs.abp.io/en/abp/latest/UI/Angular/Confirmation-Service)
-
-In the `book-list.component.ts` add a delete method:
-
-```js
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared'; //<== imported Confirmation namespace ==>
-
-//...
-
+// Add a delete method
 delete(id: string) {
   this.confirmation.warn('::AreYouSureToDelete', 'AbpAccount::AreYouSure').subscribe((status) => {
     if (status === Confirmation.Status.confirm) {
@@ -1161,20 +1150,20 @@ delete(id: string) {
 }
 ```
 
+* We imported `ConfirmationService`.
+* We injected `ConfirmationService` to the constructor.
+* Added a `delete` method.
 
-The `delete` method shows a confirmation popup and subscribes for the user response. The `deleteById` method of `BookService` called only if user clicks to the `Yes` button. The confirmation popup looks like below:
+> See the [Confirmation Popup documentation](../UI/Angular/Confirmation-Service) for more about this service.
 
-![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
-
-
-### Add a delete button
+### Add a Delete Button
 
 
-Open `book-list.component.html` in `app\book\book-list` folder and modify the `ngbDropdownMenu` to add the delete button as shown below:
+Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add the delete button as shown below:
 
 ```html
 <div ngbDropdownMenu>
-  <!-- added Delete button -->
+  <!-- add the Delete button -->
     <button ngbDropdownItem (click)="delete(row.id)">
         {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
     </button>
@@ -1184,6 +1173,10 @@ Open `book-list.component.html` in `app\book\book-list` folder and modify the `n
 The final actions dropdown UI looks like below:
 
 ![bookstore-final-actions-dropdown](./images/bookstore-final-actions-dropdown.png)
+
+Clicking the "Delete" action calls the `delete` method which then shows a confirmation popup as shown below:
+
+![bookstore-confirmation-popup](./images/bookstore-confirmation-popup.png)
 
 {{end}}
 
