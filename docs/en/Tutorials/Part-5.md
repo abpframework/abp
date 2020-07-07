@@ -53,7 +53,7 @@ ABP Framework provides an [authorization system](../Authorization.md) based on t
 
 A permission must have a unique name (a `string`). The best way is to define it as a `const`, so we can reuse the permission name.
 
-Open the `BookStorePermissions` class and change the content as shown below:
+Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
 
 ````csharp
 namespace Acme.BookStore.Permissions
@@ -316,6 +316,6 @@ if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
 
 {{else if UI == "NG"}}
 
-***Angular UI authorization document is being prepared...***
+
 
 {{end}}
