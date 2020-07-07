@@ -132,10 +132,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    SecretConsts.ValueMaxLengthValue = 300;
+                    SecretConsts.ValueMaxLength = 300;
                 }
 
-                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLengthValue).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
 
                 b.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
@@ -267,9 +267,9 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 if (IsDatabaseProvider(builder, options, EfCoreDatabaseProvider.MySql, EfCoreDatabaseProvider.Oracle))
                 {
-                    SecretConsts.ValueMaxLengthValue = 300;
+                    SecretConsts.ValueMaxLength = 300;
                 }
-                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLengthValue).IsRequired();
+                b.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
 
                 b.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
