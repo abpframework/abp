@@ -6,6 +6,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Pages.Abp.MultiTenancy
 {
+    [Authorize(TenantManagementPermissions.Tenants.Default)] //Psuedo as there might be no reference to the 'TenantManagementPermissions' class.
     public class AbpTenantAppService : ApplicationService, IAbpTenantAppService
     {
         protected ITenantStore TenantStore { get; }
@@ -15,6 +16,7 @@ namespace Pages.Abp.MultiTenancy
             TenantStore = tenantStore;
         }
 
+        [Authorize(TenantManagementPermissions.Tenants.View)]
         public async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
         {
             var tenant = await TenantStore.FindAsync(name);
@@ -32,6 +34,8 @@ namespace Pages.Abp.MultiTenancy
             };
         }
         
+
+        [Authorize(TenantManagementPermissions.Tenants.View)]
         public async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
         {
             var tenant = await TenantStore.FindAsync(id);
