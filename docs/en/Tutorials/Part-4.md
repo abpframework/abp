@@ -82,10 +82,8 @@ using Volo.Abp.Application.Dtos;
 using Xunit;
 
 namespace Acme.BookStore.Books
-{
-{{if DB=="Mongo"}}
-    [Collection(BookStoreTestConsts.CollectionDefinitionName)]
-{{end}}
+{ {{if DB=="Mongo"}}
+    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
     public class BookAppService_Tests : BookStoreApplicationTestBase
     {
         private readonly IBookAppService _bookAppService;
@@ -175,10 +173,8 @@ using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books
-{
-{{if DB=="Mongo"}}
-    [Collection(BookStoreTestConsts.CollectionDefinitionName)]
-{{end}}
+{ {{if DB=="Mongo"}}
+    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
     public class BookAppService_Tests : BookStoreApplicationTestBase
     {
         private readonly IBookAppService _bookAppService;
