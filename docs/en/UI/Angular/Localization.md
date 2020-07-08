@@ -147,16 +147,6 @@ Find [styles configuration in angular.json](https://angular.io/guide/workspace-c
           "options": {
             "styles": [
               {
-                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
-                "inject": false,
-                "bundleName": "bootstrap-rtl.min"
-              },
-              {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "inject": true,
-                "bundleName": "bootstrap-ltr.min"
-              },
-              {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
                 "inject": true,
                 "bundleName": "fontawesome-all.min"
@@ -166,6 +156,16 @@ Find [styles configuration in angular.json](https://angular.io/guide/workspace-c
                 "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
               },
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
+              },
               "apps/dev-app/src/styles.scss"
             ],
           }
@@ -174,6 +174,7 @@ Find [styles configuration in angular.json](https://angular.io/guide/workspace-c
     }
   }
 }
+```
 
 #### Step 2. Clear Lazy Loaded Fontawesome in AppComponent
 

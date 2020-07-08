@@ -8,6 +8,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.MongoDB
 {
@@ -15,12 +16,12 @@ namespace Volo.Abp.MongoDB
     {
         public bool CanExecute<T>(IQueryable<T> queryable)
         {
-            return queryable.Provider.GetType().Namespace?.StartsWith("MongoDB") ?? false;
+            return ProxyHelper.UnProxy(queryable) is IMongoQueryable<T>;
         }
 
-        protected IMongoQueryable<T> GetMongoQueryable<T>(IQueryable<T> queryable)
+        protected virtual IMongoQueryable<T> GetMongoQueryable<T>(IQueryable<T> queryable)
         {
-            return (IMongoQueryable<T>) queryable;
+            return ProxyHelper.UnProxy(queryable).As<IMongoQueryable<T>>();
         }
 
         public Task<bool> ContainsAsync<T>(IQueryable<T> queryable, T item, CancellationToken cancellationToken = default)

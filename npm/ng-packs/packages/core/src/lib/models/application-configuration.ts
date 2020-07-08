@@ -62,10 +62,11 @@ export namespace ApplicationConfiguration {
   }
 
   export interface CurrentUser {
-    isAuthenticated: boolean;
+    email: string;
     id: string;
+    isAuthenticated: boolean;
+    roles: string[];
     tenantId: string;
     userName: string;
-    email: string;
   }
 }

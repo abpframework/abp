@@ -18,6 +18,11 @@ export interface TableSortOptions {
   order: SortOrder;
 }
 
+
+/**
+ *
+ * @deprecated To be deleted in v3.3
+ */
 @Directive({
   selector: '[abpTableSort]',
   providers: [SortPipe],

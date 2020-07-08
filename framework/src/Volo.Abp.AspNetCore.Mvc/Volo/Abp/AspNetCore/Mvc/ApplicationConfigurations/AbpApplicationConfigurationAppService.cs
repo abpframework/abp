@@ -117,7 +117,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Id = _currentUser.Id,
                 TenantId = _currentUser.TenantId,
                 UserName = _currentUser.UserName,
-                Email = _currentUser.Email
+                Email = _currentUser.Email,
+                Roles = _currentUser.Roles
             };
         }
 
@@ -170,6 +171,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                     _localizationOptions.DefaultResourceType
                 );
             }
+
+            localizationConfig.LanguagesMap = _localizationOptions.LanguagesMap;
+            localizationConfig.LanguageFilesMap = _localizationOptions.LanguageFilesMap;
 
             return localizationConfig;
         }

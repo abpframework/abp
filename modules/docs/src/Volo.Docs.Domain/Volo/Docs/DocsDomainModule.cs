@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain;
-using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -34,7 +34,7 @@ namespace Volo.Docs
                 options.AddProfile<DocsDomainMappingProfile>(validate: true);
             });
 
-            Configure<AbpDistributedEventBusOptions>(options =>
+            Configure<AbpDistributedEntityEventOptions>(options =>
             {
                 options.EtoMappings.Add<Document, DocumentEto>(typeof(DocsDomainModule));
                 options.EtoMappings.Add<Project, ProjectEto>(typeof(DocsDomainModule));

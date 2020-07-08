@@ -1,0 +1,11 @@
+{
+  "culture": "nl",
+  "texts": {
+    "Permission:BloggingAdmin": "Blog",
+    "Permission:Blogs": "Blogs",
+    "Permission:Management": "Beheer",
+    "Permission:Edit": "Bewerk",
+    "Permission:Create": "Maak aan",
+    "Permission:Delete": "Verwijder"
+  }
+}

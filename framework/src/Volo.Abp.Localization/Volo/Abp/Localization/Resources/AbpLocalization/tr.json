@@ -1,0 +1,7 @@
+{
+  "culture": "tr",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "Varsayılan dil",
+    "Description:Abp.Localization.DefaultLanguage": "Varsayılan uygulama dili."
+  }
+}

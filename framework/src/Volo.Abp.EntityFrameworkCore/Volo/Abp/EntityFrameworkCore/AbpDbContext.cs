@@ -118,7 +118,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 modelBuilder.SetDatabaseProvider(provider.Value);
             }
         }
-        
+
         protected virtual EfCoreDatabaseProvider? GetDatabaseProviderOrNull(ModelBuilder modelBuilder)
         {
             switch (Database.ProviderName)
@@ -129,6 +129,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     return EfCoreDatabaseProvider.PostgreSql;
                 case "Pomelo.EntityFrameworkCore.MySql":
                     return EfCoreDatabaseProvider.MySql;
+                case "Oracle.EntityFrameworkCore":
                 case "Devart.Data.Oracle.Entity.EFCore":
                     return EfCoreDatabaseProvider.Oracle;
                 case "Microsoft.EntityFrameworkCore.Sqlite":
@@ -187,7 +188,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 Database.IsRelational() &&
                 !Database.GetCommandTimeout().HasValue)
             {
-                Database.SetCommandTimeout(initializationContext.UnitOfWork.Options.Timeout.Value.TotalSeconds.To<int>());
+                Database.SetCommandTimeout(TimeSpan.FromMilliseconds(initializationContext.UnitOfWork.Options.Timeout.Value));
             }
 
             ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;

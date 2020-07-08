@@ -261,6 +261,13 @@ export class PermissionManagementComponent
     this.setTabCheckboxState();
     this.setGrantCheckboxState();
   }
+
+  getAssignedCount(groupName: string) {
+    return this.permissions.reduce(
+      (acc, val) => (val.name.split('.')[0] === groupName && val.isGranted ? acc + 1 : acc),
+      0,
+    );
+  }
 }
 
 function findMargin(

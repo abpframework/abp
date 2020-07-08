@@ -126,9 +126,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
                 b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
                 b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
-                b.Property(u => u.ConcurrencyStamp).IsRequired().IsConcurrencyToken()
-                    .HasMaxLength(IdentityRoleConsts.MaxConcurrencyStampLength)
-                    .HasColumnName(nameof(IdentityRole.ConcurrencyStamp));
                 b.Property(r => r.IsDefault).HasColumnName(nameof(IdentityRole.IsDefault));
                 b.Property(r => r.IsStatic).HasColumnName(nameof(IdentityRole.IsStatic));
                 b.Property(r => r.IsPublic).HasColumnName(nameof(IdentityRole.IsPublic));
@@ -163,9 +160,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(uc => uc.Regex).HasMaxLength(IdentityClaimTypeConsts.MaxRegexLength);
                 b.Property(uc => uc.RegexDescription).HasMaxLength(IdentityClaimTypeConsts.MaxRegexDescriptionLength);
                 b.Property(uc => uc.Description).HasMaxLength(IdentityClaimTypeConsts.MaxDescriptionLength);
-                b.Property(uc => uc.ConcurrencyStamp).IsRequired().IsConcurrencyToken()
-                    .HasMaxLength(IdentityClaimTypeConsts.MaxConcurrencyStampLength)
-                    .HasColumnName(nameof(IdentityClaimType.ConcurrencyStamp));
             });
 
             builder.Entity<OrganizationUnit>(b =>

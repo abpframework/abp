@@ -34,7 +34,7 @@
               "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "第一章: 增删改查操作",
+              "text": "第二章: 增删改查操作",
               "path": "Tutorials/Part-2.md"
             },
             {
@@ -154,16 +154,23 @@
       ]
     },
     {
-      "text": "事件",
+      "text": "事件总线",
       "items": [
         {
-          "text": "本地 Event Bus"
+          "text": "概述",
+          "path": "Event-Bus.md"
+        },
+        {
+          "text": "本地 Event Bus",
+          "path": "Local-Event-Bus.md"
         },
         {
           "text": "分布式 Event Bus",
+          "path": "Distributed-Event-Bus.md",
           "items": [
             {
-              "text": "RabbitMQ 集成"
+              "text": "RabbitMQ 集成",
+              "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
             }
           ]
         }
@@ -287,7 +294,8 @@
               "path": "Data-Transfer-Objects.md"
             },
             {
-              "text": "工作单元"
+              "text": "工作单元",
+              "path": "Unit-Of-Work.md"
             }
           ]
         }
@@ -360,6 +368,10 @@
         {
           "text": "Angular",
           "items": [
+            {
+              "text": "v2.x 到 v3 迁移指南",
+              "path": "UI/Angular/Migration-Guide-v3.md"
+            },
             {
               "text": "服务代理",
               "path": "UI/Angular/Service-Proxies.md"

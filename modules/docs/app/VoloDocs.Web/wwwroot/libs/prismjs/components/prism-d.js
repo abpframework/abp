@@ -1,19 +1,54 @@
 Prism.languages.d = Prism.languages.extend('clike', {
+	'comment': [
+		{
+			// Shebang
+			pattern: /^\s*#!.+/,
+			greedy: true
+		},
+		{
+			pattern: RegExp(/(^|[^\\])/.source + '(?:' + [
+				// /+ comment +/
+				// Allow one level of nesting
+				/\/\+(?:\/\+[\s\S]*?\+\/|(?!\/\+)[\s\S])*?\+\//.source,
+				// // comment
+				/\/\/.*/.source,
+				// /* comment */
+				/\/\*[\s\S]*?\*\//.source
+			].join('|') + ')'),
+			lookbehind: true,
+			greedy: true
+		}
+	],
 	'string': [
-		// r"", x""
-		/\b[rx]"(?:\\[\s\S]|[^\\"])*"[cwd]?/,
-		// q"[]", q"()", q"<>", q"{}"
-		/\bq"(?:\[[\s\S]*?\]|\([\s\S]*?\)|<[\s\S]*?>|\{[\s\S]*?\})"/,
-		// q"IDENT
-		// ...
-		// IDENT"
-		/\bq"([_a-zA-Z][_a-zA-Z\d]*)(?:\r?\n|\r)[\s\S]*?(?:\r?\n|\r)\1"/,
-		// q"//", q"||", etc.
-		/\bq"(.)[\s\S]*?\1"/,
-		// Characters
-		/'(?:\\'|\\?[^']+)'/,
+		{
+			pattern: RegExp([
+				// r"", x""
+				/\b[rx]"(?:\\[\s\S]|[^\\"])*"[cwd]?/.source,
 
-		/(["`])(?:\\[\s\S]|(?!\1)[^\\])*\1[cwd]?/
+				// q"[]", q"()", q"<>", q"{}"
+				/\bq"(?:\[[\s\S]*?\]|\([\s\S]*?\)|<[\s\S]*?>|\{[\s\S]*?\})"/.source,
+
+				// q"IDENT
+				// ...
+				// IDENT"
+				/\bq"((?!\d)\w+)$[\s\S]*?^\1"/.source,
+
+				// q"//", q"||", etc.
+				/\bq"(.)[\s\S]*?\2"/.source,
+
+				// Characters
+				// 'a', '\\', '\n', '\xFF', '\377', '\uFFFF', '\U0010FFFF', '\quot'
+				/'(?:\\(?:\W|\w+)|[^\\])'/.source,
+
+				/(["`])(?:\\[\s\S]|(?!\3)[^\\])*\3[cwd]?/.source
+			].join('|'), 'm'),
+			greedy: true
+		},
+		{
+			pattern: /\bq\{(?:\{[^{}]*\}|[^{}])*\}/,
+			greedy: true,
+			alias: 'token-string'
+		}
 	],
 
 	'number': [
@@ -29,26 +64,6 @@ Prism.languages.d = Prism.languages.extend('clike', {
 	// In order: $, keywords and special tokens, globally defined symbols
 	'keyword': /\$|\b(?:abstract|alias|align|asm|assert|auto|body|bool|break|byte|case|cast|catch|cdouble|cent|cfloat|char|class|const|continue|creal|dchar|debug|default|delegate|delete|deprecated|do|double|else|enum|export|extern|false|final|finally|float|for|foreach|foreach_reverse|function|goto|idouble|if|ifloat|immutable|import|inout|int|interface|invariant|ireal|lazy|long|macro|mixin|module|new|nothrow|null|out|override|package|pragma|private|protected|public|pure|real|ref|return|scope|shared|short|static|struct|super|switch|synchronized|template|this|throw|true|try|typedef|typeid|typeof|ubyte|ucent|uint|ulong|union|unittest|ushort|version|void|volatile|wchar|while|with|__(?:(?:FILE|MODULE|LINE|FUNCTION|PRETTY_FUNCTION|DATE|EOF|TIME|TIMESTAMP|VENDOR|VERSION)__|gshared|traits|vector|parameters)|string|wstring|dstring|size_t|ptrdiff_t)\b/,
 	'operator': /\|[|=]?|&[&=]?|\+[+=]?|-[-=]?|\.?\.\.|=[>=]?|!(?:i[ns]\b|<>?=?|>=?|=)?|\bi[ns]\b|(?:<[<>]?|>>?>?|\^\^|[*\/%^~])=?/
-});
-
-
-Prism.languages.d.comment = [
-	// Shebang
-	/^\s*#!.+/,
-	// /+ +/
-	{
-		// Allow one level of nesting
-		pattern: /(^|[^\\])\/\+(?:\/\+[\s\S]*?\+\/|[\s\S])*?\+\//,
-		lookbehind: true
-	}
-].concat(Prism.languages.d.comment);
-
-Prism.languages.insertBefore('d', 'comment', {
-	'token-string': {
-		// Allow one level of nesting
-		pattern: /\bq\{(?:\{[^}]*\}|[^}])*\}/,
-		alias: 'string'
-	}
 });
 
 Prism.languages.insertBefore('d', 'keyword', {

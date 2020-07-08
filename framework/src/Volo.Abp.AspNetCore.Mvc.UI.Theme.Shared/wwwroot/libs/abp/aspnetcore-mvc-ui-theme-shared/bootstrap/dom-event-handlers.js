@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
 
     abp.dom = abp.dom || {};
 
@@ -73,25 +73,12 @@
 
     abp.libs = abp.libs = abp.libs || {};
     abp.libs.bootstrapDatepicker = {
-        languageMap: {
-            'zh-Hans': 'zh-CN'
-        },
-        mapLanguageName: function (name) {
-            return abp.libs.bootstrapDatepicker.languageMap[abp.localization.currentCulture.name] || name;
-        },
-        isLanguageMapped: function (name) {
-            return abp.libs.bootstrapDatepicker.languageMap[abp.localization.currentCulture.name] !== undefined;
-        },
-        getCurrentLanguageConfig: function () {
-            var mappedName = abp.libs.bootstrapDatepicker.mapLanguageName(abp.localization.currentCulture.name);
-            return $.fn.datepicker.dates[mappedName];
-        },
+        packageName: "bootstrap-datepicker",
         normalizeLanguageConfig: function () {
-            var languageConfig = abp.libs.bootstrapDatepicker.getCurrentLanguageConfig();
-            if (languageConfig) {
-                if (!languageConfig.format || abp.libs.bootstrapDatepicker.isLanguageMapped(abp.localization.currentCulture.name)) {
-                    languageConfig.format = abp.localization.currentCulture.dateTimeFormat.shortDatePattern.toLowerCase();
-                }
+            var language = abp.localization.getLanguagesMap(this.packageName);
+            var languageConfig = $.fn.datepicker.dates[language];
+            if (languageConfig && (!languageConfig.format || language !== abp.localization.currentCulture.name)) {
+                languageConfig.format = abp.localization.currentCulture.dateTimeFormat.shortDatePattern.toLowerCase();
             }
         },
         getFormattedValue: function (isoFormattedValue) {
@@ -108,7 +95,7 @@
             return {
                 todayBtn: "linked",
                 autoclose: true,
-                language: abp.libs.bootstrapDatepicker.mapLanguageName(abp.localization.currentCulture.cultureName)
+                language: abp.localization.getLanguagesMap(this.packageName)
             };
         }
     };
@@ -132,7 +119,6 @@
         abp.dom.initializers.initializeToolTips(args.$el.findWithSelf('[data-toggle="tooltip"]'));
         abp.dom.initializers.initializePopovers(args.$el.findWithSelf('[data-toggle="popover"]'));
         abp.dom.initializers.initializeTimeAgos(args.$el.findWithSelf('.timeago'));
-        abp.dom.initializers.initializeDatepickers(args.$el);
         abp.dom.initializers.initializeForms(args.$el.findWithSelf('form'), true);
         abp.dom.initializers.initializeScript(args.$el);
     });

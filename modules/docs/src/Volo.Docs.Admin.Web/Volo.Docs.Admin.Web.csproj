@@ -14,12 +14,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+      <PackageReference Include="CommonMark.NET" Version="0.15.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
     <ProjectReference Include="..\Volo.Docs.Admin.HttpApi\Volo.Docs.Admin.HttpApi.csproj" />
-    <PackageReference Include="CommonMark.NET" Version="0.15.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,11 +30,9 @@
     <EmbeddedResource Include="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="compilerconfig.json.defaults" />
+    <Content Remove="compilerconfig.json.defaults" />  
     <None Include="compilerconfig.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
 </Project>

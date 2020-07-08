@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "tr",
   "texts": {
     "Menu:Blogs": "Bloglar",
@@ -20,7 +20,6 @@
     "SeeAll": "Hepsini Gör",
     "PopularTags": "Popüler Etiketler",
     "WiewsWithCount": "{0} görüntüleme",
-    "ShareOnTwitter": "Twitter'da paylaş",
     "LastPosts": "Son Yazılar",
     "LeaveComment": "Yorum Bırak",
     "TagsInThisArticle": "Makalenin Etiketleri",
@@ -33,6 +32,7 @@
     "AreYouSure": "Emin misiniz?",
     "CommentWithCount": "{0} yorum",
     "Comment": "Yorum",
+    "ShareOnTwitter": "Twitter'da paylaş",
     "CoverImage": "Kapak resmi",
     "CreateANewPost": "Yeni Yazı oluştur",
     "CreateANewBlog": "Yeni Blog Ekle",
@@ -43,6 +43,7 @@
     "Description": "Açıklama",
     "Blogs": "Bloglar",
     "Tags": "Etiketler",
-    "ShareOn": "Paylaş"
+    "ShareOn": "Paylaş",
+    "TitleLengthWarning": "Başlığınınz SEO dostu olabilmesi için 60 karakterden az olmasını sağlayın!"
   }
 }

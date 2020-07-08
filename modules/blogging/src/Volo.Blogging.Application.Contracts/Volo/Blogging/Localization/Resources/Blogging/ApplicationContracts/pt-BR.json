@@ -5,10 +5,6 @@
     "Permission:Blogs": "Blogs",
     "Permission:Posts": "Postagens",
     "Permission:Tags": "Etiquetas",
-    "Permission:Comments": "Comentários",
-    "Permission:Management": "Gerenciamento",
-    "Permission:Edit": "Editar",
-    "Permission:Create": "Criar",
-    "Permission:Delete": "Excluir"
+    "Permission:Comments": "Comentários"
   }
 }

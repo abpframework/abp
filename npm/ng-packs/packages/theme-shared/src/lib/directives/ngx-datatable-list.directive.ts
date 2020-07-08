@@ -1,4 +1,4 @@
-import { ListService } from '@abp/ng.core';
+import { ListService, LocalizationService } from '@abp/ng.core';
 import {
   ChangeDetectorRef,
   Directive,
@@ -21,9 +21,26 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
 
   @Input() list: ListService;
 
-  constructor(private table: DatatableComponent, private cdRef: ChangeDetectorRef) {
+  constructor(
+    private table: DatatableComponent,
+    private cdRef: ChangeDetectorRef,
+    private localizationService: LocalizationService,
+  ) {
+    this.setInitialValues();
+  }
+
+  private setInitialValues() {
     this.table.externalPaging = true;
     this.table.externalSorting = true;
+    this.table.messages = {
+      emptyMessage: this.localizationService.localizeSync(
+        'AbpUi',
+        'NoDataAvailableInDatatable',
+        'No data available',
+      ),
+      totalMessage: this.localizationService.localizeSync('AbpUi', 'Total', 'total'),
+      selectedMessage: this.localizationService.localizeSync('AbpUi', 'Selected', 'selected'),
+    };
   }
 
   private subscribeToPage() {
@@ -36,16 +53,15 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
 
   private subscribeToSort() {
     const sub = this.table.sort.subscribe(({ sorts: [{ prop, dir }] }) => {
-      this.list.sortKey = prop;
-      this.list.sortOrder = dir;
-    });
-    this.subscription.add(sub);
-  }
-
-  private subscribeToIsLoading() {
-    const sub = this.list.isLoading$.subscribe(loading => {
-      this.table.loadingIndicator = loading;
-      this.cdRef.markForCheck();
+      if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
+        this.list.sortKey = '';
+        this.list.sortOrder = '';
+        this.table.sorts = [];
+        this.cdRef.detectChanges();
+      } else {
+        this.list.sortKey = prop;
+        this.list.sortOrder = dir;
+      }
     });
     this.subscription.add(sub);
   }
@@ -65,6 +81,5 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   ngOnInit() {
     this.subscribeToPage();
     this.subscribeToSort();
-    this.subscribeToIsLoading();
   }
 }
