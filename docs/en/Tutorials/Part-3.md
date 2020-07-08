@@ -832,7 +832,7 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
+        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -921,7 +921,7 @@ export class BookComponent implements OnInit {
 
   form: FormGroup;
 
-  // <== added bookTypeArr array ==>
+  // <== added bookTypes array ==>
   bookTypes = Object.keys(BookType).filter(
     (bookType) => typeof this.booksType[bookType] === 'number'
   );
