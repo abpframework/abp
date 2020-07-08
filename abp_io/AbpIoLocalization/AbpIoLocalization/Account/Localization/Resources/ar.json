@@ -1,0 +1,14 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Account": "حساب ABP - تسجيل الدخول وإنشاء حساب | ABP.IO",
+    "Welcome": "أهلا و سهلا",
+    "UseOneOfTheFollowingLinksToContinue": "استخدم أحد الروابط التالية للمتابعة",
+    "FrameworkHomePage": "الصفحة الرئيسية للنظام",
+    "FrameworkDocumentation": "وثائق النظام",
+    "OfficialBlog": "المدونة الرسمية",
+    "CommercialHomePage": "الصفحة الرئيسية للنظام التجاري",
+    "CommercialSupportWebSite": "موقع الدعم الفني للنظام التجاري",
+    "CommunityWebSite": "موقع مجتمع ABP"
+  }
+}
