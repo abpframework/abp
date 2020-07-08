@@ -366,7 +366,7 @@ Open the `/src/app/book/book.component.html` file and replace the create button 
 <!-- Add the abpPermission directive -->
 <button abpPermission="BookStore.Books.Create" id="create" class="btn btn-primary" type="button" (click)="createBook()">
   <i class="fa fa-plus mr-1"></i>
-  <span>{{ '::NewBook' | abpLocalization }}</span>
+  <span>{%{{{ '::NewBook' | abpLocalization }}}%}</span>
 </button>
 ````
 
@@ -385,12 +385,12 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 ````html
 <!-- Add the abpPermission directive -->
 <button abpPermission="BookStore.Books.Edit" ngbDropdownItem (click)="editBook(row.id)">
-  {{ '::Edit' | abpLocalization }}
+  {%{{{ '::Edit' | abpLocalization }}}%}
 </button>
 
 <!-- Add the abpPermission directive -->
 <button abpPermission="BookStore.Books.Delete" ngbDropdownItem (click)="delete(row.id)">
-  {{ 'AbpAccount::Delete' | abpLocalization }}
+  {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
 </button>
 ````
 
