@@ -626,6 +626,10 @@
     {
       "text": "API Documentation",
       "path": "{ApiDocumentationUrl}"
+    },
+    {
+      "text": "Official Packages",
+      "path": "https://abp.io/packages"
     }
   ]
 }

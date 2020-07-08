@@ -344,6 +344,6 @@ If you don't plan to develop a mobile application with React Native, you can saf
 
 See the "[Getting Started with the React Native](Getting-Started-React-Native.md)" document to learn how to configure and run the React Native application.
 
-## See Also
+## Next
 
 * [Web Application Development Tutorial](Tutorials/Part-1.md)
