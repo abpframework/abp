@@ -105,7 +105,7 @@ Just changed the `@model` to `Acme.BookStore.Web.Pages.Account.CustomLoginModel`
 
 ## The Source Code
 
-You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization).
+You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization).
 
 ## See Also
 

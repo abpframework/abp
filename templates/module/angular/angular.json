@@ -67,16 +67,6 @@
             ],
             "styles": [
               {
-                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
-                "inject": false,
-                "bundleName": "bootstrap-rtl.min"
-              },
-              {
-                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
-                "inject": true,
-                "bundleName": "bootstrap-ltr.min"
-              },
-              {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
                 "inject": true,
                 "bundleName": "fontawesome-all.min"
@@ -100,6 +90,16 @@
                 "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
                 "inject": true,
                 "bundleName": "ngx-datatable-material"
+              },
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
               },
               "projects/dev-app/src/styles.scss"
             ],

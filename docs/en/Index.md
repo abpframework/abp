@@ -1,6 +1,6 @@
 ﻿# ABP Documentation
 
-ABP is an **open source application framework** focused on ASP.NET Core based web application development, but also supports developing other types of applications.
+ABP is an **open source application framework** focused on ASP.NET Core based web application development, but also supports developing other type of applications.
 
 Explore the left navigation menu to deep dive in the documentation.
 
@@ -15,6 +15,10 @@ If you want to start from scratch (with an empty project) then manually install 
 
 * [Console Application](Getting-Started-Console-Application.md)
 * [ASP.NET Core Web Application](Getting-Started-AspNetCore-Application.md)
+
+## Packages
+
+ABP Framework is distributed as NuGet and NPM packages. See [this page](http://abp.io/packages) for the complete list of the packages.
 
 ## Source Code
 

@@ -37,7 +37,7 @@ namespace Volo.Abp.Account.Web
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");
+                options.FileSets.AddEmbedded<AbpAccountWebModule>();
             });
 
             Configure<AbpNavigationOptions>(options =>

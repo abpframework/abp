@@ -491,6 +491,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
+            if (!typeof(IEntity).IsAssignableFrom(typeof(TEntity)))
+            {
+                return;
+            }
+
             modelBuilder.Entity<TEntity>().ConfigureByConvention();
 
             ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType);

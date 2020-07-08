@@ -7,6 +7,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>Volo.Blogging.Admin.Application.Contracts</AssemblyName>
         <PackageId>Volo.Blogging.Admin.Application.Contracts</PackageId>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
         <RootNamespace />
     </PropertyGroup>
 
@@ -16,16 +17,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\cs.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\de.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\en.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\nl.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\pl-PL.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\pt-BR.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\sl.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\tr.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\vi.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\zh-Hans.json" />
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\zh-Hant.json" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\*.json" />
     </ItemGroup>
 </Project>

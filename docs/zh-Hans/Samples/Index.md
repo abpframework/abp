@@ -49,7 +49,7 @@
   * [源码](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
   * [文本模板文档](../Text-Templating.md)
 * **自定义认证**: 如何为ASP.NET Core MVC / Razor Pages应用程序自定义身份验证的解决方案.
-  * [源码](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization)
+  * [源码](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)
   * 相关 "[How To](../How-To/Index.md)" 文档:
     * [Azure Active Directory 认证](../How-To/Azure-Active-Directory-Authentication-MVC.md)
     * [自定义登录页面](../How-To/Customize-Login-Page-MVC.md)

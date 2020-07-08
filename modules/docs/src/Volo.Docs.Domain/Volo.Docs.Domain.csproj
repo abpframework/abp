@@ -7,6 +7,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Docs.Domain</AssemblyName>
     <PackageId>Volo.Docs.Domain</PackageId>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 
@@ -19,6 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.5" />
     <PackageReference Include="Octokit" Version="0.48.0" />
     <PackageReference Include="NEST" Version="7.7.1" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
   </ItemGroup>
   
   <ItemGroup>

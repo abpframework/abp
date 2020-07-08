@@ -675,7 +675,7 @@ namespace Acme.BookStore.Web.Menus
         <h2>@L["Book"]</h2>
     </abp-card-header>
     <abp-card-body>
-        <abp-table striped-rows="true" id="BookTable">
+        <abp-table striped-rows="true" id="BooksTable">
             <thead>
                 <tr>
                     <th>@L["Name"]</th>
@@ -704,7 +704,8 @@ namespace Acme.BookStore.Web.Menus
 
 ````js
 $(function () {
-    var dataTable = $('#BookTable').DataTable(abp.libs.datatables.normalizeConfiguration({
+    var l = abp.localization.getResource('BookStore');
+    var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
             { data: "name" },
