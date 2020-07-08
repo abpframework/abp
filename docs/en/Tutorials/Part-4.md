@@ -83,6 +83,9 @@ using Xunit;
 
 namespace Acme.BookStore.Books
 {
+{{if DB=="Mongo"}}
+    [Collection(BookStoreTestConsts.CollectionDefinitionName)]
+{{end}}
     public class BookAppService_Tests : BookStoreApplicationTestBase
     {
         private readonly IBookAppService _bookAppService;
@@ -173,6 +176,9 @@ using Xunit;
 
 namespace Acme.BookStore.Books
 {
+{{if DB=="Mongo"}}
+    [Collection(BookStoreTestConsts.CollectionDefinitionName)]
+{{end}}
     public class BookAppService_Tests : BookStoreApplicationTestBase
     {
         private readonly IBookAppService _bookAppService;
