@@ -1,13 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, NgModule } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
+import { Actions, NgxsModule, Store } from '@ngxs/store';
+import { NEVER } from 'rxjs';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
-import { eLayoutType } from '../enums';
+import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
-import { ConfigState, ReplaceableComponentsState } from '../states';
-import { ApplicationConfigurationService } from '../services';
-import { HttpClient } from '@angular/common/http';
+import { ApplicationConfigurationService, RoutesService } from '../services';
+import { ReplaceableComponentsState } from '../states';
 
 @Component({
   selector: 'abp-layout-application',
@@ -48,28 +49,36 @@ class DummyComponent {
   constructor(public route: ActivatedRoute) {}
 }
 
-const storeData = {
-  ConfigState: {
-    routes: [
-      {
-        path: '',
-        wrapper: true,
-        children: [
-          {
-            path: 'parentWithLayout',
-            layout: eLayoutType.application,
-            children: [
-              { path: 'childWithoutLayout' },
-              { path: 'childWithLayout', layout: eLayoutType.account },
-            ],
-          },
-        ],
-      },
-      { path: 'withData', layout: eLayoutType.application },
-      ,
-    ] as ABP.FullRoute[],
-    environment: { application: {} },
+const routes: ABP.Route[] = [
+  {
+    path: '',
+    name: 'Root',
   },
+  {
+    path: '/parentWithLayout',
+    name: 'ParentWithLayout',
+    parentName: 'Root',
+    layout: eLayoutType.application,
+  },
+  {
+    path: '/parentWithLayout/childWithoutLayout',
+    name: 'ChildWithoutLayout',
+    parentName: 'ParentWithLayout',
+  },
+  {
+    path: '/parentWithLayout/childWithLayout',
+    name: 'ChildWithLayout',
+    parentName: 'ParentWithLayout',
+    layout: eLayoutType.account,
+  },
+  {
+    path: '/withData',
+    name: 'WithData',
+    layout: eLayoutType.application,
+  },
+];
+
+const storeData = {
   ReplaceableComponentsState: {
     replaceableComponents: [
       {
@@ -89,16 +98,25 @@ const storeData = {
 };
 
 describe('DynamicLayoutComponent', () => {
+  const mockActions: Actions = NEVER;
+  const mockStore = ({
+    selectSnapshot() {
+      return true;
+    },
+  } as unknown) as Store;
+
   const createComponent = createRoutingFactory({
     component: RouterOutletComponent,
     stubsEnabled: false,
     declarations: [DummyComponent, DynamicLayoutComponent],
     mocks: [ApplicationConfigurationService, HttpClient],
-    imports: [
-      RouterModule,
-      DummyLayoutModule,
-      NgxsModule.forRoot([ConfigState, ReplaceableComponentsState]),
+    providers: [
+      {
+        provide: RoutesService,
+        useFactory: () => new RoutesService(mockActions, mockStore),
+      },
     ],
+    imports: [RouterModule, DummyLayoutModule, NgxsModule.forRoot([ReplaceableComponentsState])],
     routes: [
       { path: '', component: RouterOutletComponent },
       {
@@ -150,6 +168,8 @@ describe('DynamicLayoutComponent', () => {
   beforeEach(async () => {
     spectator = createComponent();
     store = spectator.get(Store);
+    const routesService = spectator.get(RoutesService);
+    routesService.add(routes);
 
     store.reset(storeData);
   });

@@ -29,6 +29,13 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task GetListAsync()
+        {
+            var persons = await PersonRepository.GetListAsync();
+            persons.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
         public async Task GetAsync_With_Predicate()
         {
             var person = await PersonRepository.GetAsync(p => p.Name == "Douglas");

@@ -21,6 +21,7 @@ import { PermissionDirective } from './directives/permission.directive';
 import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
+import { RoutesHandler } from './handlers/routes.handler';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { LocalizationModule } from './localization.module';
 import { ABP } from './models/common';
@@ -36,7 +37,7 @@ import { SessionState } from './states/session.state';
 import { CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
-import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { getInitialData, localeInitializer, configureOAuth } from './utils/initial-utils';
 
 export function storageFactory(): OAuthStorage {
   return localStorage;
@@ -117,6 +118,7 @@ export class BaseCoreModule {}
     NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
+    OAuthModule.forRoot(),
   ],
 })
 export class RootCoreModule {}
@@ -180,6 +182,12 @@ export class CoreModule {
         {
           provide: APP_INITIALIZER,
           multi: true,
+          deps: [Injector, NGXS_CONFIG_PLUGIN_OPTIONS],
+          useFactory: configureOAuth,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
           deps: [Injector],
           useFactory: getInitialData,
         },
@@ -195,7 +203,12 @@ export class CoreModule {
           deps: [LocalizationService],
           useFactory: noop,
         },
-        ...OAuthModule.forRoot().providers,
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [RoutesHandler],
+          useFactory: noop,
+        },
         { provide: OAuthStorage, useFactory: storageFactory },
       ],
     };

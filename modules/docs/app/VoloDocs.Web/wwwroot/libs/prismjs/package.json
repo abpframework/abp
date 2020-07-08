@@ -1,45 +1,56 @@
 {
-  "name": "prismjs",
-  "version": "1.17.1",
-  "description": "Lightweight, robust, elegant syntax highlighting. A spin-off project from Dabblet.",
-  "main": "prism.js",
-  "style": "themes/prism.css",
-  "scripts": {
-    "test:aliases": "mocha tests/aliases-test.js",
-    "test:languages": "mocha tests/run.js",
-    "test:plugins": "mocha tests/plugins/**/*.js",
-    "test:regex": "mocha tests/regex-tests.js",
-    "test:runner": "mocha tests/testrunner-tests.js",
-    "test": "npm run test:runner && npm run test:languages && npm run test:plugins && npm run test:aliases && npm run test:regex"
+  "_from": "prismjs@^1.20.0",
+  "_id": "prismjs@1.20.0",
+  "_inBundle": false,
+  "_integrity": "sha512-AEDjSrVNkynnw6A+B1DsFkd6AVdTnp+/WoUixFRULlCLZVRZlVQMVWio/16jv7G1FscUxQxOQhWwApgbnxr6kQ==",
+  "_location": "/prismjs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "prismjs@^1.20.0",
+    "name": "prismjs",
+    "escapedName": "prismjs",
+    "rawSpec": "^1.20.0",
+    "saveSpec": null,
+    "fetchSpec": "^1.20.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/LeaVerou/prism.git"
-  },
-  "keywords": [
-    "prism",
-    "highlight"
+  "_requiredBy": [
+    "/@abp/prismjs"
   ],
-  "author": "Lea Verou",
-  "license": "MIT",
-  "readmeFilename": "README.md",
-  "optionalDependencies": {
+  "_resolved": "https://registry.npmjs.org/prismjs/-/prismjs-1.20.0.tgz",
+  "_shasum": "9b685fc480a3514ee7198eac6a3bf5024319ff03",
+  "_spec": "prismjs@^1.20.0",
+  "_where": "D:\\github\\abp\\modules\\docs\\app\\VoloDocs.Web\\node_modules\\@abp\\prismjs",
+  "author": {
+    "name": "Lea Verou"
+  },
+  "bugs": {
+    "url": "https://github.com/LeaVerou/prism/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
     "clipboard": "^2.0.0"
   },
+  "deprecated": false,
+  "description": "Lightweight, robust, elegant syntax highlighting. A spin-off project from Dabblet.",
   "devDependencies": {
     "chai": "^4.2.0",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.3.4",
     "gulp-header": "^2.0.7",
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^1.0.0",
     "gulp-uglify": "^3.0.1",
+    "htmlparser2": "^4.0.0",
     "jsdom": "^13.0.0",
-    "mocha": "^6.0.0",
+    "mocha": "^6.2.0",
     "pump": "^3.0.0",
+    "regexpp": "^2.0.1",
     "simple-git": "^1.107.0",
     "yargs": "^13.2.2"
   },
+  "homepage": "https://github.com/LeaVerou/prism#readme",
   "jspm": {
     "main": "prism",
     "registry": "jspm",
@@ -51,5 +62,32 @@
       "themes/*.css",
       "prism.js"
     ]
-  }
+  },
+  "keywords": [
+    "prism",
+    "highlight"
+  ],
+  "license": "MIT",
+  "main": "prism.js",
+  "name": "prismjs",
+  "optionalDependencies": {
+    "clipboard": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeaVerou/prism.git"
+  },
+  "scripts": {
+    "test": "npm run test:runner && npm run test:core && npm run test:dependencies && npm run test:languages && npm run test:plugins && npm run test:aliases && npm run test:patterns && npm run test:examples",
+    "test:aliases": "mocha tests/aliases-test.js",
+    "test:core": "mocha tests/core/**/*.js",
+    "test:dependencies": "mocha tests/dependencies-test.js",
+    "test:examples": "mocha tests/examples-test.js",
+    "test:languages": "mocha tests/run.js",
+    "test:patterns": "mocha tests/pattern-tests.js",
+    "test:plugins": "mocha tests/plugins/**/*.js",
+    "test:runner": "mocha tests/testrunner-tests.js"
+  },
+  "style": "themes/prism.css",
+  "version": "1.20.0"
 }

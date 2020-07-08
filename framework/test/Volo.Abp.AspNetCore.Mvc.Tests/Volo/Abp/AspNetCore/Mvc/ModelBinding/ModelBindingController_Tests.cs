@@ -13,11 +13,6 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
     {
         protected DateTimeKind DateTimeKind { get; set; }
 
-        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
-        {
-            services.Configure<AbpClockOptions>(x => x.Kind = DateTimeKind);
-        }
-
         [Fact]
         public async Task DateTimeKind_Test()
         {
@@ -84,17 +79,19 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
     public class ModelBindingController_Utc_Tests : ModelBindingController_Tests
     {
-        public ModelBindingController_Utc_Tests()
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
             DateTimeKind = DateTimeKind.Utc;
+            services.Configure<AbpClockOptions>(x => x.Kind = DateTimeKind);
         }
     }
 
     public class ModelBindingController_Local_Tests : ModelBindingController_Tests
     {
-        public ModelBindingController_Local_Tests()
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
             DateTimeKind = DateTimeKind.Local;
+            services.Configure<AbpClockOptions>(x => x.Kind = DateTimeKind);
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.Collections;
 
 namespace Volo.Abp.BlobStoring
 {
@@ -18,10 +19,12 @@ namespace Volo.Abp.BlobStoring
         /// then the container is shared by all tenants in the system.
         ///
         /// This can be <code>true</code> even if your application is not multi-tenant.
-        /// 
+        ///
         /// Default: true.
         /// </summary>
         public bool IsMultiTenant { get; set; } = true;
+
+        public ITypeList<IBlobNamingNormalizer> NamingNormalizers { get; }
 
         [NotNull] private readonly Dictionary<string, object> _properties;
 
@@ -29,6 +32,7 @@ namespace Volo.Abp.BlobStoring
 
         public BlobContainerConfiguration(BlobContainerConfiguration fallbackConfiguration = null)
         {
+            NamingNormalizers = new TypeList<IBlobNamingNormalizer>();
             _fallbackConfiguration = fallbackConfiguration;
             _properties = new Dictionary<string, object>();
         }

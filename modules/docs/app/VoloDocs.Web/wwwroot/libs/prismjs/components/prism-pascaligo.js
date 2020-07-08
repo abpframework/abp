@@ -3,26 +3,26 @@
 	// Pascaligo is a layer 2 smart contract language for the tezos blockchain
 
 	var braces = /\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)/.source;
-	var type = /(?:\w+(?:<braces>)?|<braces>)/.source.replace(/<braces>/g, braces);
+	var type = /(?:\w+(?:<braces>)?|<braces>)/.source.replace(/<braces>/g, function () { return braces; });
 
 	var pascaligo = Prism.languages.pascaligo = {
 		'comment': /\(\*[\s\S]+?\*\)|\/\/.*/,
 		'string': {
-			pattern: /(["'`])(\\[\s\S]|(?!\1)[^\\])*\1|\^[a-z]/i,
+			pattern: /(["'`])(?:\\[\s\S]|(?!\1)[^\\])*\1|\^[a-z]/i,
 			greedy: true
 		},
 		'class-name': [
 			{
-				pattern: RegExp(/(\btype\s+\w+\s+is\s+)<type>/.source.replace(/<type>/g, type), 'i'),
+				pattern: RegExp(/(\btype\s+\w+\s+is\s+)<type>/.source.replace(/<type>/g, function () { return type; }), 'i'),
 				lookbehind: true,
 				inside: null // see below
 			},
 			{
-				pattern: RegExp(/<type>(?=\s+is\b)/.source.replace(/<type>/g, type), 'i'),
+				pattern: RegExp(/<type>(?=\s+is\b)/.source.replace(/<type>/g, function () { return type; }), 'i'),
 				inside: null // see below
 			},
 			{
-				pattern: RegExp(/(:\s*)<type>/.source.replace(/<type>/g, type)),
+				pattern: RegExp(/(:\s*)<type>/.source.replace(/<type>/g, function () { return type; })),
 				lookbehind: true,
 				inside: null // see below
 			}

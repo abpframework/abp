@@ -26,19 +26,27 @@
       "text": "Tutorials",
       "items": [
         {
-          "text": "Application Development",
+          "text": "Web Application Development",
           "items": [
             {
-              "text": "Part-1: Creating a new solution and listing items",
+              "text": "1: Creating the Server Side",
               "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "Part-2: CRUD operations",
+              "text": "2: The Book List Page",
               "path": "Tutorials/Part-2.md"
             },
             {
-              "text": "Part-3: Integration tests",
+              "text": "3: Creating, Updating and Deleting Books",
               "path": "Tutorials/Part-3.md"
+            },
+            {
+              "text": "4: Integration Tests",
+              "path": "Tutorials/Part-4.md"
+            },
+            {
+              "text": "5: Authorization",
+              "path": "Tutorials/Part-5.md"
             }
           ]
         }
@@ -153,16 +161,23 @@
       ]
     },
     {
-      "text": "Events",
+      "text": "Event Bus",
       "items": [
         {
-          "text": "Event Bus (local)"
+          "text": "Overall",
+          "path": "Event-Bus.md"
+        },
+        {
+          "text": "Local Event Bus",
+          "path": "Local-Event-Bus.md"
         },
         {
           "text": "Distributed Event Bus",
+          "path": "Distributed-Event-Bus.md",
           "items": [
             {
-              "text": "RabbitMQ Integration"
+              "text": "RabbitMQ Integration",
+              "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
             }
           ]
         }
@@ -180,26 +195,46 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "BLOB Storing",
+          "items": [
+            {
+              "text": "BLOB Storing System",
+              "path": "Blob-Storing.md"
+            },
+            {
+              "text": "Storage Providers",
+              "items": [
+                {
+                  "text": "File System Provider",
+                  "path": "Blob-Storing-File-System.md"
+                },
+                {
+                  "text": "Database Provider",
+                  "path": "Blob-Storing-Database.md"
+                },
+                {
+                  "text": "Azure Provider",
+                  "path": "Blob-Storing-Azure.md"
+                },
+                {
+                  "text": "Create a Custom Provider",
+                  "path": "Blob-Storing-Custom-Provider.md"
+                }
+              ]
+            }            
+          ]
+        },
+        {
           "text": "Text Templating",
           "path": "Text-Templating.md"
         },
         {
-          "text": "Object Serialization"
+          "text": "GUID Generation",
+          "path": "Guid-Generation.md"
         },
         {
-          "text": "JSON Serialization"
-        },
-        {
-          "text": "Emailing"
-        },
-        {
-          "text": "GUIDs"
-        },
-        {
-          "text": "Threading"
-        },
-        {
-          "text": "Timing"
+          "text": "Timing",
+          "path": "Timing.md"
         }
       ]
     },
@@ -261,10 +296,12 @@
               "path": "Application-Services.md"
             },
             {
-              "text": "Data Transfer Objects"
+              "text": "Data Transfer Objects",
+              "path": "Data-Transfer-Objects.md"
             },
             {
-              "text": "Unit Of Work"
+              "text": "Unit Of Work",
+              "path": "Unit-Of-Work.md"
             }
           ]
         }
@@ -280,6 +317,15 @@
         {
           "text": "Dynamic C# API Clients",
           "path": "API/Dynamic-CSharp-API-Clients.md"
+        },
+        {
+          "text": "ABP Endpoints",
+          "items": [
+            {
+              "text": "Application Configuration",
+              "path": "API/Application-Configuration.md"
+            }
+          ]
         }
       ]
     },
@@ -328,6 +374,10 @@
         {
           "text": "Angular",
           "items": [
+            {
+              "text": "Migration Guide v2.x to v3",
+              "path": "UI/Angular/Migration-Guide-v3.md"
+            },
             {
               "text": "Service Proxies",
               "path": "UI/Angular/Service-Proxies.md"
@@ -387,6 +437,15 @@
             {
               "text": "ListService",
               "path": "UI/Angular/List-Service.md"
+            }
+          ]
+        },
+        {
+          "text": "React Native",
+          "items": [
+            {
+              "text": "Getting Started",
+              "path": "Getting-Started-React-Native.md"
             }
           ]
         },
@@ -461,6 +520,10 @@
               "path": "Dapper.md"
             }
           ]
+        },
+        {
+          "text": "Data Seeding",
+          "path": "Data-Seeding.md"
         }
       ]
     },
@@ -520,6 +583,10 @@
         {
           "text": "Module",
           "path": "Startup-Templates/Module.md"
+        },
+        {
+          "text": "Console",
+          "path": "Startup-Templates/Console.md"
         }
       ]
     },
@@ -555,6 +622,10 @@
     {
       "text": "Contribution Guide",
       "path": "Contribution/Index.md"
+    },
+    {
+      "text": "API Documentation",
+      "path": "{ApiDocumentationUrl}"
     }
   ]
 }

@@ -42,7 +42,7 @@
 		{
 			pattern: /\$\{[^}]+\}/,
 			inside: {
-				delimiter: {
+				'delimiter': {
 					pattern: /^\$\{|\}$/,
 					alias: 'variable'
 				},

@@ -1,9 +1,9 @@
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
+import { Store } from '@ngxs/store';
+import * as ConfigActions from '../actions';
+import { Config } from '../models/config';
 import { ConfigStateService } from '../services/config-state.service';
 import { ConfigState } from '../states';
-import { Store } from '@ngxs/store';
-import { Config } from '../models/config';
-import * as ConfigActions from '../actions';
 
 const CONFIG_STATE_DATA = {
   environment: {
@@ -29,43 +29,6 @@ const CONFIG_STATE_DATA = {
   requirements: {
     layouts: [null, null, null],
   },
-  routes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-        },
-      ],
-      url: '/account',
-    },
-  ],
-  flattedRoutes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: '::Menu:Identity',
-      path: 'identity',
-      children: [],
-      url: '/identity',
-    },
-  ],
   localization: {
     values: {
       MyProjectName: {
@@ -123,6 +86,7 @@ const CONFIG_STATE_DATA = {
     tenantId: null,
     userName: null,
     email: null,
+    roles: [],
   },
   features: {
     values: {},

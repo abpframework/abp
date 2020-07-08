@@ -1,0 +1,21 @@
+﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@inherits Volo.Blogging.Admin.Pages.Blogging.BloggingAdminPage
+@model Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs.EditModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inject IHtmlLocalizer<BloggingResource> L
+@{
+    Layout = null;
+}
+
+<abp-dynamic-form abp-model="Blog" asp-page="/Blogging/Admin/Blogs/Edit">
+    <abp-modal size="@(AbpModalSize.Large)">
+        <abp-modal-header title="@L["Edit"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)">
+        </abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>

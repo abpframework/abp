@@ -59,13 +59,31 @@ namespace Volo.Abp.Cli.Commands
                 return;
             }
 
-            var result = CmdHelper.RunCmd("dotnet tool install " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
-
-            if (result == 0)
+            try
             {
-                Logger.LogInformation("ABP Suite has been successfully installed.");
-                Logger.LogInformation("You can run it with the CLI command \"abp suite\"");
+                var result = CmdHelper.RunCmd("dotnet tool install " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
+
+                if (result == 0)
+                {
+                    Logger.LogInformation("ABP Suite has been successfully installed.");
+                    Logger.LogInformation("You can run it with the CLI command \"abp suite\"");
+                }
+                else
+                {
+                    ShowSuiteManualInstallCommand();
+                }
             }
+            catch (Exception e)
+            {
+                Logger.LogError("Couldn't install ABP Suite." + e.Message);
+                ShowSuiteManualInstallCommand();
+            }
+        }
+
+        private void ShowSuiteManualInstallCommand()
+        {
+            Logger.LogInformation("You can also run the following command to install ABP Suite.");
+            Logger.LogInformation("dotnet tool install -g Volo.Abp.Suite");
         }
 
         private async Task UpdateSuiteAsync()
@@ -77,7 +95,26 @@ namespace Volo.Abp.Cli.Commands
                 return;
             }
 
-            CmdHelper.RunCmd("dotnet tool update " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
+            try
+            {
+                var result = CmdHelper.RunCmd("dotnet tool update " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
+
+                if (result != 0)
+                {
+                    ShowSuiteManualUpdateCommand();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Couldn't update ABP Suite." + ex.Message);
+                ShowSuiteManualUpdateCommand();
+            }
+        }
+
+        private void ShowSuiteManualUpdateCommand()
+        {
+            Logger.LogError("You can also run the following command to update ABP Suite.");
+            Logger.LogError("dotnet tool update -g Volo.Abp.Suite");
         }
 
         private static void RemoveSuite()

@@ -11,6 +11,10 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+/**
+ *
+ * @deprecated use ngx-datatale instead.
+ */
 @Component({
   selector: 'abp-table',
   templateUrl: 'table.component.html',
@@ -54,7 +58,7 @@ export class TableComponent implements OnInit {
   @Output()
   readonly pageChange = new EventEmitter<number>();
 
-  @ViewChild('wrapper', { read: ElementRef, static: false })
+  @ViewChild('wrapper', { read: ElementRef })
   wrapperRef: ElementRef<HTMLDivElement>;
 
   @Input()

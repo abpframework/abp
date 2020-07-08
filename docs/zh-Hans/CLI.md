@@ -87,6 +87,7 @@ abp new Acme.BookStore
       * `mongodb`: MongoDB.
   * `module`: [Module template](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI.仅创建服务模块(也称为微服务 - 没有UI).
+  * **`console`**: [Console template](Startup-Templates/Console.md).
 * `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
 * `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,你会希望使用最新的版本.
 * `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D\localTemplate` 或 `https://<your url>.zip`).
@@ -168,7 +169,8 @@ abp update [options]
 * `--nuget`: 仅更新的NuGet包
 * `--solution-path` 或 `-sp`: 指定解决方案路径/目录. 默认使用当前目录
 * `--solution-name` 或 `-sn`: 指定解决方案名称. 默认在目录中搜索`*.sln`文件.
-
+*`--check-all`: 分别检查每个包的新版本. 默认是 `false`.
+  
 ### 切换到每晚构建(预览)包
 
 想要切换到ABP框架的最新预览版可以使用此命令.

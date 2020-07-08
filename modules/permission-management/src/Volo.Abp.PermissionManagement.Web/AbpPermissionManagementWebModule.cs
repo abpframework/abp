@@ -31,7 +31,7 @@ namespace Volo.Abp.PermissionManagement.Web
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
+                options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<AbpPermissionManagementWebModule>();

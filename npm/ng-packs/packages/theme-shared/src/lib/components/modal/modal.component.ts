@@ -60,11 +60,11 @@ export class ModalComponent implements OnDestroy {
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
 
-  @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
+  @ContentChild('abpHeader', {static: false}) abpHeader: TemplateRef<any>;
 
-  @ContentChild('abpBody', { static: false }) abpBody: TemplateRef<any>;
+  @ContentChild('abpBody', {static: false}) abpBody: TemplateRef<any>;
 
-  @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
+  @ContentChild('abpFooter', {static: false}) abpFooter: TemplateRef<any>;
 
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;

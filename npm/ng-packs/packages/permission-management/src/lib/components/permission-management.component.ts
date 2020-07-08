@@ -14,6 +14,14 @@ type PermissionWithMargin = PermissionManagement.Permission & {
   selector: 'abp-permission-management',
   templateUrl: './permission-management.component.html',
   exportAs: 'abpPermissionManagement',
+  styles: [
+    `
+      .overflow-scroll {
+        max-height: 70vh;
+        overflow-y: scroll;
+      }
+    `,
+  ],
 })
 export class PermissionManagementComponent
   implements
@@ -252,6 +260,13 @@ export class PermissionManagementComponent
   initModal() {
     this.setTabCheckboxState();
     this.setGrantCheckboxState();
+  }
+
+  getAssignedCount(groupName: string) {
+    return this.permissions.reduce(
+      (acc, val) => (val.name.split('.')[0] === groupName && val.isGranted ? acc + 1 : acc),
+      0,
+    );
   }
 }
 

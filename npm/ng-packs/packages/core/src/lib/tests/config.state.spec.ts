@@ -1,13 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import clone from 'just-clone';
 import { of, ReplaySubject, timer } from 'rxjs';
-import { AddRoute, PatchRouteByName, SetLanguage } from '../actions';
-import { ABP } from '../models';
+import { SetLanguage } from '../actions';
 import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
-import { HttpClient } from '@angular/common/http';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -33,61 +31,6 @@ export const CONFIG_STATE_DATA = {
   requirements: {
     layouts: [null, null, null],
   },
-  routes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-          parentName: 'AbpAccount::Menu:Account',
-        },
-      ],
-      url: '/account',
-    },
-  ],
-  flattedRoutes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-          parentName: 'AbpAccount::Menu:Account',
-        },
-      ],
-      url: '/account',
-    },
-    {
-      path: 'login',
-      name: 'AbpAccount::Login',
-      order: 1,
-      url: '/account/login',
-      parentName: 'AbpAccount::Menu:Account',
-    },
-  ],
   localization: {
     values: {
       MyProjectName: {
@@ -147,6 +90,7 @@ export const CONFIG_STATE_DATA = {
     tenantId: null,
     userName: null,
     email: null,
+    roles: [],
   },
   features: {
     values: {},
@@ -205,17 +149,6 @@ describe('ConfigState', () => {
       ).toEqual(CONFIG_STATE_DATA.environment.localization.defaultResourceName);
 
       expect(ConfigState.getDeep('test')(null)).toBeFalsy();
-    });
-  });
-
-  describe('#getRoute', () => {
-    it('should return route', () => {
-      expect(ConfigState.getRoute(null, '::Menu:Home')(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.flattedRoutes[0],
-      );
-      expect(ConfigState.getRoute('account')(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.flattedRoutes[1],
-      );
     });
   });
 
@@ -328,123 +261,6 @@ describe('ConfigState', () => {
         expect(dispatchArg).toEqual({ payload: 'tr', dispatchAppConfiguration: false });
         done();
       });
-    });
-  });
-
-  describe('#PatchRouteByName', () => {
-    it('should patch the route', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.patchRoute(
-        { patchState, getState } as any,
-        new PatchRouteByName('::Menu:Home', {
-          name: 'Home',
-          path: 'home',
-          children: [{ path: 'dashboard', name: 'Dashboard' }],
-        }),
-      );
-
-      expect(patchStateArg.routes[0]).toEqual({
-        name: 'Home',
-        path: 'home',
-        url: '/home',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/home/dashboard' }],
-      });
-      expect(patchStateArg.flattedRoutes[0]).toEqual({
-        name: 'Home',
-        path: 'home',
-        url: '/home',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/home/dashboard' }],
-      });
-    });
-
-    it('should patch the route without path', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.patchRoute(
-        { patchState, getState } as any,
-        new PatchRouteByName('::Menu:Home', {
-          name: 'Main',
-          children: [{ path: 'dashboard', name: 'Dashboard' }],
-        }),
-      );
-
-      expect(patchStateArg.routes[0]).toEqual({
-        name: 'Main',
-        path: '',
-        url: '/',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/dashboard' }],
-      });
-
-      expect(patchStateArg.flattedRoutes[0]).toEqual({
-        name: 'Main',
-        path: '',
-        url: '/',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/dashboard' }],
-      });
-    });
-  });
-
-  describe('#AddRoute', () => {
-    const newRoute = {
-      name: 'My new page',
-      children: [],
-      iconClass: 'fa fa-dashboard',
-      path: 'page',
-      invisible: false,
-      order: 2,
-      requiredPolicy: 'MyProjectName::MyNewPage',
-    } as Omit<ABP.Route, 'children'>;
-
-    test('should add a new route', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.addRoute({ patchState, getState } as any, new AddRoute(newRoute));
-
-      expect(patchStateArg.routes[CONFIG_STATE_DATA.routes.length]).toEqual({
-        ...newRoute,
-        url: '/page',
-      });
-      expect(patchStateArg.flattedRoutes[CONFIG_STATE_DATA.flattedRoutes.length]).toEqual(
-        patchStateArg.routes[CONFIG_STATE_DATA.routes.length],
-      );
-    });
-
-    it('should add a new child route', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.addRoute(
-        { patchState, getState } as any,
-        new AddRoute({ ...newRoute, parentName: 'AbpAccount::Login' }),
-      );
-
-      expect(patchStateArg.routes[1].children[0].children[0]).toEqual({
-        ...newRoute,
-        parentName: 'AbpAccount::Login',
-        url: '/account/login/page',
-      });
-
-      expect(patchStateArg.flattedRoutes[CONFIG_STATE_DATA.flattedRoutes.length]).toEqual(
-        patchStateArg.routes[1].children[0].children[0],
-      );
-
-      expect(
-        patchStateArg.flattedRoutes[
-          CONFIG_STATE_DATA.flattedRoutes.findIndex(route => route.name === 'AbpAccount::Login')
-        ],
-      ).toEqual(patchStateArg.routes[1].children[0]);
     });
   });
 });

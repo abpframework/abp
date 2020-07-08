@@ -49,8 +49,8 @@ describe('ListService', () => {
   });
 
   describe('#page', () => {
-    it('should initially be 1', () => {
-      expect(service.page).toBe(1);
+    it('should initially be 0', () => {
+      expect(service.page).toBe(0);
     });
 
     it('should be changed', () => {
@@ -110,7 +110,7 @@ describe('ListService', () => {
           filter: 'foo',
           sorting: 'bar baz',
           maxResultCount: 20,
-          skipCount: 160,
+          skipCount: 180,
         });
 
         done();

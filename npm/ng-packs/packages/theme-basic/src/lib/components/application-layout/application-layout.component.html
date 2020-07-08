@@ -34,23 +34,15 @@
 
         <abp-nav-items
           *abpReplaceableTemplate="{
-            componentKey: navItemsComponentKey,
-            inputs: {
-              smallScreen: { value: smallScreen }
-            }
+            componentKey: navItemsComponentKey
           }"
-          [smallScreen]="smallScreen"
         ></abp-nav-items>
       </ng-template>
     </div>
   </div>
 </nav>
 
-<div
-  [@slideFromBottom]="
-    outlet && outlet.isActivated && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path
-  "
-  class="container"
->
+<!-- [@slideFromBottom]="outlet.isActivated && outlet.activatedRoute?.routeConfig?.path" TODO: throws ExpressionChangedAfterItHasBeenCheck when animation is active. It should be fixed -->
+<div class="container">
   <router-outlet #outlet="outlet"></router-outlet>
 </div>

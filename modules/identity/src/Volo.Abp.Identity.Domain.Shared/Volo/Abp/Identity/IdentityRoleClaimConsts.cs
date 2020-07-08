@@ -2,8 +2,8 @@
 {
     public static class IdentityRoleClaimConsts
     {
-        public const int MaxClaimTypeLength = IdentityUserClaimConsts.MaxClaimTypeLength;
+        public static int MaxClaimTypeLength { get; set; } = IdentityUserClaimConsts.MaxClaimTypeLength;
 
-        public const int MaxClaimValueLength = IdentityUserClaimConsts.MaxClaimValueLength;
+        public static int MaxClaimValueLength { get; set; } = IdentityUserClaimConsts.MaxClaimValueLength;
     }
 }

@@ -40,7 +40,7 @@ namespace Volo.Abp.TenantManagement.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpTenantManagementWebModule>("Volo.Abp.TenantManagement.Web");
+                options.FileSets.AddEmbedded<AbpTenantManagementWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<AbpTenantManagementWebModule>();

@@ -10,6 +10,8 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 
         public static void Configure()
         {
+            MyProjectNameModulePropertyConfigurator.Configure();
+            
             OneTimeRunner.Run(() =>
             {
                 /* You can configure entity extension properties for the

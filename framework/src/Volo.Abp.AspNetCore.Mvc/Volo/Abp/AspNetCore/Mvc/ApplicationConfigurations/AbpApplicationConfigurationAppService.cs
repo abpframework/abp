@@ -117,7 +117,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Id = _currentUser.Id,
                 TenantId = _currentUser.TenantId,
                 UserName = _currentUser.UserName,
-                Email = _currentUser.Email
+                Email = _currentUser.Email,
+                Roles = _currentUser.Roles
             };
         }
 
@@ -171,6 +172,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 );
             }
 
+            localizationConfig.LanguagesMap = _localizationOptions.LanguagesMap;
+            localizationConfig.LanguageFilesMap = _localizationOptions.LanguageFilesMap;
+
             return localizationConfig;
         }
 
@@ -188,7 +192,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 ThreeLetterIsoLanguageName = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName,
                 DateTimeFormat = new DateTimeFormatDto
                 {
-                    CalendarAlgorithmType = CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
+                    CalendarAlgorithmType =
+                        CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
                     DateTimeFormatLong = CultureInfo.CurrentUICulture.DateTimeFormat.LongDatePattern,
                     ShortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern,
                     FullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern,
@@ -238,25 +243,24 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         protected virtual async Task<TimingDto> GetTimingConfigAsync()
         {
-            var result = new TimingDto();
-
             var windowsTimeZoneId = await _settingProvider.GetOrNullAsync(TimingSettingNames.TimeZone);
-            if (!windowsTimeZoneId.IsNullOrWhiteSpace())
+
+            return new TimingDto
             {
-                result.TimeZone = new TimeZone
+                TimeZone = new TimeZone
                 {
                     Windows = new WindowsTimeZone
                     {
                         TimeZoneId = windowsTimeZoneId
                     },
-                    Iana = new IanaTimeZone()
+                    Iana = new IanaTimeZone
                     {
-                        TimeZoneName = _timezoneProvider.WindowsToIana(windowsTimeZoneId)
+                        TimeZoneName = windowsTimeZoneId.IsNullOrWhiteSpace()
+                            ? null
+                            : _timezoneProvider.WindowsToIana(windowsTimeZoneId)
                     }
-                };
-            }
-
-            return result;
+                }
+            };
         }
 
         protected virtual ClockDto GetClockConfig()

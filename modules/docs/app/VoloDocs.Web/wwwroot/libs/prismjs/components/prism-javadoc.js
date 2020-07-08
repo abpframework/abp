@@ -2,7 +2,7 @@
 
 	var codeLines = {
 		'code': {
-			pattern: /(^(\s*(?:\*\s*)*)).*[^*\s].+$/m,
+			pattern: /(^(?:\s*(?:\*\s*)*)).*[^*\s].+$/m,
 			lookbehind: true,
 			inside: Prism.languages.java,
 			alias: 'language-java'

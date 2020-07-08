@@ -1,6 +1,8 @@
 ﻿@page
 @using Volo.Blogging.Pages.Blog
-@inherits BloggingPage
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Blogging.Localization
+@inject IHtmlLocalizer<BloggingResource> L
 @model IndexModel
 @{
     ViewBag.PageTitle = "Blogs";

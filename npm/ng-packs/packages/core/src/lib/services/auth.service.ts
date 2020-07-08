@@ -25,10 +25,6 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     const tenant = this.store.selectSnapshot(SessionState.getTenant);
 
-    this.oAuthService.configure(
-      this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig,
-    );
-
     return from(this.oAuthService.loadDiscoveryDocument()).pipe(
       switchMap(() =>
         from(
@@ -63,7 +59,7 @@ export class AuthService {
       )
       .pipe(
         switchMap(() => {
-          this.oAuthService.logOut();
+          this.oAuthService.logOut(true);
           return this.store.dispatch(new GetAppConfiguration());
         }),
       );

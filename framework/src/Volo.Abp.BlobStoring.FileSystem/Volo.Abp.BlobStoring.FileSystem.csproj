@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj" />
+    <PackageReference Include="Polly" Version="7.2.1" />
   </ItemGroup>
 
 </Project>

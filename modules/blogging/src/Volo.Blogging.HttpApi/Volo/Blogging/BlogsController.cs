@@ -40,25 +40,5 @@ namespace Volo.Blogging
         {
             return await _blogAppService.GetAsync(id);
         }
-
-        [HttpPost]
-        public async Task<BlogDto> Create(CreateBlogDto input)
-        {
-            return await _blogAppService.Create(input);
-        }
-
-        [HttpPut]
-        [Route("{id}")]
-        public async Task<BlogDto> Update(Guid id, UpdateBlogDto input)
-        {
-            return await _blogAppService.Update(id, input);
-        }
-
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task Delete(Guid id)
-        {
-            await _blogAppService.Delete(id);
-        }
     }
 }

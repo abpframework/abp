@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -52,33 +53,42 @@ namespace Volo.Abp.Cli.ProjectModification
 
             _npmGlobalPackagesChecker.Check();
 
-            foreach (var file in fileList)
+            var packagesUpdated = new ConcurrentDictionary<string, bool>();
+
+            async Task UpdateAsync(string file)
             {
-                var packagesUpdated = await UpdatePackagesInFile(file, includePreviews, switchToStable);
+                var updated = await UpdatePackagesInFile(file, includePreviews, switchToStable);
+                packagesUpdated.TryAdd(file, updated);
+            }
 
-                if (packagesUpdated)
+            Task.WaitAll(fileList.Select(UpdateAsync).ToArray());
+
+            foreach (var file in packagesUpdated.Where(x => x.Value))
+            {
+                var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
+
+                if (includePreviews)
                 {
-                    var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
+                    await CreateNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                }
+                else if (switchToStable)
+                {
+                    await DeleteNpmrcFileAsync(Path.GetDirectoryName(file.Key));
+                }
 
-                    if (IsAngularProject(fileDirectory))
-                    {
-                        if (includePreviews)
-                        {
-                            await CreateNpmrcFileAsync(Path.GetDirectoryName(file));
-                        }
-                        else if (switchToStable)
-                        {
-                            await DeleteNpmrcFileAsync(Path.GetDirectoryName(file));
-                        }
-                    }
-
+                if (await NpmrcFileExistAsync(fileDirectory))
+                {
+                    RunNpmInstall(fileDirectory);
+                }
+                else
+                {
                     RunYarn(fileDirectory);
+                }
 
-                    if (!IsAngularProject(fileDirectory))
-                    {
-                        Thread.Sleep(500);
-                        RunGulp(fileDirectory);
-                    }
+                if (!IsAngularProject(fileDirectory))
+                {
+                    Thread.Sleep(1000);
+                    RunGulp(fileDirectory);
                 }
             }
         }
@@ -90,15 +100,20 @@ namespace Volo.Abp.Cli.ProjectModification
             await Task.CompletedTask;
         }
 
+        private static async Task<bool> NpmrcFileExistAsync(string directoryName)
+        {
+            return File.Exists(Path.Combine(directoryName, ".npmrc"));
+        }
+
         private async Task CreateNpmrcFileAsync(string directoryName)
         {
             var fileName = Path.Combine(directoryName, ".npmrc");
-
             var abpRegistry = "@abp:registry=https://www.myget.org/F/abp-nightly/npm";
             var voloRegistry = await GetVoloRegistryAsync();
 
-            if (File.Exists(fileName))
+            if (await NpmrcFileExistAsync(directoryName))
             {
+
                 var fileContent = File.ReadAllText(fileName);
 
                 if (!fileContent.Contains(abpRegistry))
@@ -161,7 +176,8 @@ namespace Volo.Abp.Cli.ProjectModification
             return File.Exists(Path.Combine(fileDirectory, "angular.json"));
         }
 
-        protected virtual async Task<bool> UpdatePackagesInFile(string filePath, bool includePreviews = false, bool switchToStable = false)
+        protected virtual async Task<bool> UpdatePackagesInFile(string filePath, bool includePreviews = false,
+            bool switchToStable = false)
         {
             var packagesUpdated = false;
             var fileContent = File.ReadAllText(filePath);
@@ -196,67 +212,54 @@ namespace Volo.Abp.Cli.ProjectModification
             bool includePreviews = false,
             bool switchToStable = false)
         {
-            var currentVersion = (string)package.Value;
+            var currentVersion = (string) package.Value;
 
-            var version = await GetLatestVersion(package, currentVersion, includePreviews, switchToStable);
+            var version = "";
+            if (includePreviews || (!switchToStable && currentVersion.Contains("-preview")))
+            {
+                version = "preview";
+            }
+            else
+            {
+                version = await GetLatestVersion(package);
+            }
 
-            var versionWithPrefix = $"~{version}";
-
-            if (versionWithPrefix == currentVersion)
+            if (version == currentVersion)
             {
                 return false;
             }
 
-            package.Value.Replace(versionWithPrefix);
+            package.Value.Replace(version);
 
-            Logger.LogInformation($"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
+            Logger.LogInformation(
+                $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
             return true;
         }
 
         protected virtual async Task<string> GetLatestVersion(
-            JProperty package,
-            string currentVersion,
-            bool includePreviews = false,
-            bool switchToStable = false)
+            JProperty package)
         {
             if (_fileVersionStorage.ContainsKey(package.Name))
             {
                 return _fileVersionStorage[package.Name];
             }
 
-            var newVersion = currentVersion;
+            var newVersion = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
+            var newVersionWithPrefix = $"~{newVersion}";
 
-            if (includePreviews || (!switchToStable && currentVersion.Contains("-preview")))
-            {
-                if (_myGetApiResponse == null)
-                {
-                    _myGetApiResponse = await _myGetPackageListFinder.GetPackagesAsync();
-                }
+            _fileVersionStorage[package.Name] = newVersionWithPrefix;
 
-                var mygetPackage = _myGetApiResponse.Packages.FirstOrDefault(p => p.Id == package.Name);
-                if (mygetPackage != null)
-                {
-                    newVersion = mygetPackage.Versions.Last();
-                }
-            }
-            else
-            {
-                newVersion = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
-            }
-
-            _fileVersionStorage[package.Name] = newVersion;
-
-            return newVersion;
+            return newVersionWithPrefix;
         }
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
         {
-            var dependencyList = new[] { "dependencies", "devDependencies", "peerDependencies" };
+            var dependencyList = new[] {"dependencies", "devDependencies", "peerDependencies"};
             var abpPackages = new List<JProperty>();
 
             foreach (var dependencyListName in dependencyList)
             {
-                var dependencies = (JObject)fileObject[dependencyListName];
+                var dependencies = (JObject) fileObject[dependencyListName];
 
                 if (dependencies == null)
                 {
@@ -264,7 +267,8 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
 
                 var properties = dependencies.Properties().ToList();
-                abpPackages.AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList());
+                abpPackages.AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/"))
+                    .ToList());
             }
 
             return abpPackages;
@@ -280,6 +284,12 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             Logger.LogInformation($"Running Yarn on {fileDirectory}");
             CmdHelper.RunCmd($"cd {fileDirectory} && yarn");
+        }
+
+        protected virtual void RunNpmInstall(string fileDirectory)
+        {
+            Logger.LogInformation($"Running npm install on {fileDirectory}");
+            CmdHelper.RunCmd($"cd {fileDirectory} && npm install");
         }
     }
 }

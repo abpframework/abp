@@ -91,7 +91,7 @@ pre[class*="language-"] {
 	color: #586e75; /* base01 */
 }
 
-.namespace {
+.token.namespace {
 	opacity: .7;
 }
 

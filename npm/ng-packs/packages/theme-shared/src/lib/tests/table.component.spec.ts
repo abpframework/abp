@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
-import { PaginationComponent, TableComponent } from '../components';
+import { TableComponent } from '../components';
 
 @Pipe({
   name: 'abpLocalization',
@@ -16,7 +16,7 @@ describe('TableComponent', () => {
   let spectator: SpectatorHost<TableComponent>;
   const createHost = createHostFactory({
     component: TableComponent,
-    declarations: [PaginationComponent, DummyLocalizationPipe],
+    declarations: [DummyLocalizationPipe],
     imports: [NgbPaginationModule],
   });
 

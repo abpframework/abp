@@ -93,10 +93,6 @@ The following is the list of supported scopes:
 - **feature-management**
 - **permission-management**
 - **setting-management**
-- **account-config**
-- **identity-config**
-- **setting-management-config**
-- **tenant-management-config**
 
 There are currently a few exceptions to the "use package name" rule:
 

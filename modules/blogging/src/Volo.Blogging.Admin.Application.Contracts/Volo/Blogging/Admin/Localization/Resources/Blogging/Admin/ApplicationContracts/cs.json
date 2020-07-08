@@ -1,0 +1,11 @@
+{
+  "culture": "cs",
+  "texts": {
+    "Permission:BloggingAdmin": "Blog",
+    "Permission:Blogs": "Blogy",
+    "Permission:Management": "Správa",
+    "Permission:Edit": "Upravit",
+    "Permission:Create": "Vytvořit",
+    "Permission:Delete": "Smazat"
+  }
+}

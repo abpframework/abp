@@ -136,6 +136,9 @@ export default `
 .sorting_asc:after {
   opacity: .3;
 }
+.ngx-datatable.material {
+  box-shadow: none;
+}
 
 @keyframes fadeInTop {
   from {

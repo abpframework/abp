@@ -17,14 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Views\**\*.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Views\**\*.cshtml" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Properties\launchSettings.json" />
-    <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>

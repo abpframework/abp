@@ -26,7 +26,7 @@ Then you can override any method you need and add new methods and properties nee
 
 ## Overriding the Login Page UI
 
-Create folder named **Account** under **Pages** directory and create a **Login.cshtml** under this folder. It will automatically override the `Login.cshtml` file defined in the Account Module thanks to the [Virtual File System](../Virtual-File-System.md).
+Create folder named **Account** under **Pages** directory and create a **Login.cshtml** under this folder. It will automatically override the `Login.cshtml` file defined in the Account Module.
 
 A good way to customize a page is to copy its source code. [Click here](https://github.com/abpframework/abp/blob/dev/modules/account/src/Volo.Abp.Account.Web/Pages/Account/Login.cshtml) for the source code of the login page. At the time this document has been written, the source code was like below:
 
@@ -35,7 +35,6 @@ A good way to customize a page is to copy its source code. [Click here](https://
 @using Volo.Abp.Account.Settings
 @using Volo.Abp.Settings
 @model Acme.BookStore.Web.Pages.Account.CustomLoginModel
-@inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 @if (Model.EnableLocalLogin)
 {
@@ -106,7 +105,7 @@ Just changed the `@model` to `Acme.BookStore.Web.Pages.Account.CustomLoginModel`
 
 ## The Source Code
 
-You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/aspnet-core/Authentication-Customization).
+You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization).
 
 ## See Also
 

@@ -1,9 +1,9 @@
-# [Prism](http://prismjs.com/)
+# [Prism](https://prismjs.com/)
 
 [![Build Status](https://travis-ci.org/PrismJS/prism.svg?branch=master)](https://travis-ci.org/PrismJS/prism)
 [![npm](https://img.shields.io/npm/dw/prismjs.svg)](https://www.npmjs.com/package/prismjs)
 
-Prism is a lightweight, robust, elegant syntax highlighting library. It's a spin-off project from [Dabblet](http://dabblet.com/).
+Prism is a lightweight, robust, elegant syntax highlighting library. It's a spin-off project from [Dabblet](https://dabblet.com/).
 
 You can learn more on [prismjs.com](https://prismjs.com/).
 
@@ -28,4 +28,4 @@ Thank you so much for contributing!!
 
 ## Translations
 
-* [![中文说明](http://awesomes.oss-cn-beijing.aliyuncs.com/readme.png)](http://www.awesomes.cn/repo/PrismJS/prism)
+* [![中文说明](http://awesomes.oss-cn-beijing.aliyuncs.com/readme.png)](https://www.awesomes.cn/repo/PrismJS/prism)
