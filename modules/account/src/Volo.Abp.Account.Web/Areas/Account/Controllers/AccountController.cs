@@ -7,6 +7,7 @@ using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
+using Volo.Abp.SecurityLog;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -25,14 +26,20 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         protected SignInManager<IdentityUser> SignInManager { get; }
         protected IdentityUserManager UserManager { get; }
         protected ISettingProvider SettingProvider { get; }
+        protected ISecurityLogManager SecurityLogManager { get; }
 
-        public AccountController(SignInManager<IdentityUser> signInManager, IdentityUserManager userManager, ISettingProvider settingProvider)
+        public AccountController(
+            SignInManager<IdentityUser> signInManager,
+            IdentityUserManager userManager,
+            ISettingProvider settingProvider,
+            ISecurityLogManager securityLogManager)
         {
             LocalizationResource = typeof(AccountResource);
 
             SignInManager = signInManager;
             UserManager = userManager;
             SettingProvider = settingProvider;
+            SecurityLogManager = securityLogManager;
         }
 
         [HttpPost]
@@ -44,19 +51,23 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             ValidateLoginInfo(login);
 
             await ReplaceEmailToUsernameOfInputIfNeeds(login);
-            
-            return GetAbpLoginResult(await SignInManager.PasswordSignInAsync(
+            var loginResult = GetAbpLoginResult(await SignInManager.PasswordSignInAsync(
                 login.UserNameOrEmailAddress,
                 login.Password,
                 login.RememberMe,
                 true
             ));
+
+            await CreateSecurityLog("Login_" + loginResult.Result);
+
+            return loginResult;
         }
 
         [HttpGet]
         [Route("logout")]
         public virtual async Task Logout()
         {
+            await CreateSecurityLog("Logout");
            await SignInManager.SignOutAsync();
         }
 
@@ -149,6 +160,14 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             {
                 throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
             }
+        }
+
+        protected virtual async Task CreateSecurityLog(string action)
+        {
+            var securityLog = await SecurityLogManager.CreateAsync();
+            securityLog.Identity = "Web";
+            securityLog.Action = action;
+            await SecurityLogManager.SaveAsync(securityLog);
         }
     }
 }

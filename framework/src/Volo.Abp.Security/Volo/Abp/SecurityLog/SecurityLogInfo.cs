@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Volo.Abp.Data;
 
-namespace Volo.Abp.Users.SecurityLog
+namespace Volo.Abp.SecurityLog
 {
     [Serializable]
-    public class UserSecurityLogInfo : IHasExtraProperties
+    public class SecurityLogInfo : IHasExtraProperties
     {
         /// <summary>
         /// The name of the application or service writing user security logs.
@@ -45,9 +45,14 @@ namespace Volo.Abp.Users.SecurityLog
 
         public DateTime CreationTime { get; set; }
 
-        public UserSecurityLogInfo()
+        public SecurityLogInfo()
         {
             ExtraProperties = new Dictionary<string, object>();
+        }
+
+        public override string ToString()
+        {
+            return $"SECURITY LOG: [{ApplicationName} - {Identity} - {Action}]";
         }
     }
 }

@@ -14,8 +14,8 @@ using Volo.Abp.Account.Settings;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.SecurityLog;
 using Volo.Abp.Settings;
-using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
@@ -83,7 +83,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ValidateModel();
 
             ExternalProviders = await GetExternalProviders();
-            
+
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
@@ -94,6 +94,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 LoginInput.RememberMe,
                 true
             );
+
+            await CreateSecurityLog(result.ToString());
 
             if (result.RequiresTwoFactor)
             {
@@ -181,6 +183,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 isPersistent: false,
                 bypassTwoFactor: true
             );
+
+            await CreateSecurityLog(result.ToString());
 
             if (result.IsLockedOut)
             {

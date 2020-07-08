@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Identity;
+using Volo.Abp.SecurityLog;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.Account.Web.Pages.Account
@@ -15,6 +17,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
     {
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
+        public ISecurityLogManager SecurityLogManager { get; }
 
         protected AccountPageModel()
         {
@@ -75,6 +78,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
         protected virtual string GetAppHomeUrl()
         {
             return "~/"; //TODO: ???
+        }
+
+        protected virtual async Task CreateSecurityLog(string action)
+        {
+            var securityLog = await SecurityLogManager.CreateAsync();
+            securityLog.Identity = "Web";
+            securityLog.Action = action;
+            await SecurityLogManager.SaveAsync(securityLog);
         }
     }
 }

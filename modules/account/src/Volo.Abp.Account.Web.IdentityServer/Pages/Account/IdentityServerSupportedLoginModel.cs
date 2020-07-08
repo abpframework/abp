@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SecurityLog;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 
@@ -126,6 +127,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 LoginInput.RememberMe,
                 true
             );
+
+            await CreateSecurityLog("Login_" + result);
 
             if (result.RequiresTwoFactor)
             {
