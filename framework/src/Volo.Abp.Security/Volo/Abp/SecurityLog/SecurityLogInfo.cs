@@ -35,8 +35,6 @@ namespace Volo.Abp.SecurityLog
 
         public string ClientId { get; set; }
 
-        public string ClientName { get; set; }
-
         public string CorrelationId { get; set; }
 
         public string ClientIpAddress { get; set; }

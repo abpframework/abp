@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -18,17 +19,19 @@ namespace Volo.Abp.SecurityLog
             SecurityLogOptions = securityLogOptions.Value;
         }
 
-        public virtual Task<SecurityLogInfo> CreateAsync()
+        public async Task SaveAsync(Action<SecurityLogInfo> saveAction)
+        {
+            var securityLogInfo = await CreateAsync();
+            saveAction?.Invoke(securityLogInfo);
+            await SecurityLogStore.SaveAsync(securityLogInfo);
+        }
+
+        protected virtual Task<SecurityLogInfo> CreateAsync()
         {
             return Task.FromResult(new SecurityLogInfo
             {
                 ApplicationName = SecurityLogOptions.ApplicationName
             });
-        }
-
-        public async Task SaveAsync(SecurityLogInfo securityLogInfo)
-        {
-            await SecurityLogStore.SaveAsync(securityLogInfo);
         }
     }
 }

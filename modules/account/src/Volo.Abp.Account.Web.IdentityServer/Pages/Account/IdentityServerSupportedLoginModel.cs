@@ -14,6 +14,8 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SecurityLog;
 using Volo.Abp.Settings;
@@ -128,7 +130,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 true
             );
 
-            await CreateSecurityLog("Login_" + result);
+            await LocalEventBus.PublishAsync(new SecurityLogEvent
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress
+            });
 
             if (result.RequiresTwoFactor)
             {
