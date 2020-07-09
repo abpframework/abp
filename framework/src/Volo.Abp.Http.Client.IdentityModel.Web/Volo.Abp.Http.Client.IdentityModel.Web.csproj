@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Volo.Abp.Http.Client.IdentityModel\Volo.Abp.Http.Client.IdentityModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>
