@@ -64,6 +64,8 @@ Use the `new` command of the ABP CLI to create a new project:
 abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}}
 ````
 
+> This command also creates a React Native mobile application inside the solution folder. If you don't want it, you can safely delete it or specify the `-m none` option to the `abp new` command to not include it in the solution at all.
+
 {{ if UI == "NG" }}
 
 * `-u` argument specifies the UI framework, `angular` in this case.
@@ -340,7 +342,7 @@ When you create a new application, the solution includes `react-native` folder b
 
 If you don't plan to develop a mobile application with React Native, you can safely delete the `react-native` folder.
 
-> You can specifying the `--mobile none` option to the ABP CLI to not create the `react-native` folder in the beginning.
+> You can specifying the `-m none` option to the ABP CLI to not create the `react-native` folder in the beginning.
 
 See the "[Getting Started with the React Native](Getting-Started-React-Native.md)" document to learn how to configure and run the React Native application.
 
