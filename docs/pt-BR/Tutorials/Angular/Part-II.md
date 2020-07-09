@@ -195,7 +195,7 @@ Abra `book-list.component.html`e adicione o formulário no modelo de corpo do mo
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
+        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -218,18 +218,18 @@ Abra `book-list.component.html`e adicione o formulário no modelo de corpo do mo
 
 > Usamos o [datepicker do NgBootstrap](https://ng-bootstrap.github.io/#/components/datepicker/overview) neste componente.
 
-Abra o `book-list.component.ts`e crie uma matriz chamada `bookTypeArr`:
+Abra o `book-list.component.ts`e crie uma matriz chamada `bookTypes`:
 
 ```js
 //...
 form: FormGroup;
 
-bookTypeArr = Object.keys(Books.BookType).filter(
+bookTypes = Object.keys(Books.BookType).filter(
     bookType => typeof this.booksType[bookType] === 'number'
 );
 ```
 
-O `bookTypeArr`contém os campos da `BookType`enumeração. A matriz resultante é mostrada abaixo:
+O `bookTypes`contém os campos da `BookType`enumeração. A matriz resultante é mostrada abaixo:
 
 ```js
 ['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
