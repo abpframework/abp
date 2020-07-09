@@ -82,7 +82,7 @@ abp new Acme.BookStore
     * `--mobile` or `-m`: Specifies the mobile application framework. Default framework is `react-native`. Available frameworks:
       * `none`: no mobile application.
       * `react-native`: React Native.
-	  * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+    * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
         * `mongodb`: MongoDB.
   * **`module`**: [Module template](Startup-Templates/Module.md). Additional options:
