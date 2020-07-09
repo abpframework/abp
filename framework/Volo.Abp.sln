@@ -305,15 +305,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Azure"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Azure.Tests", "test\Volo.Abp.BlobStoring.Azure.Tests\Volo.Abp.BlobStoring.Azure.Tests.csproj", "{A80E9A0B-8932-4B5D-83FB-6751708FD484}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Minio", "src\Volo.Abp.BlobStoring.Minio\Volo.Abp.BlobStoring.Minio.csproj", "{658D7EDE-A057-4256-96B6-083D3C2B9704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Minio", "src\Volo.Abp.BlobStoring.Minio\Volo.Abp.BlobStoring.Minio.csproj", "{658D7EDE-A057-4256-96B6-083D3C2B9704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Minio.Tests", "test\Volo.Abp.BlobStoring.Minio.Tests\Volo.Abp.BlobStoring.Minio.Tests.csproj", "{36D4B268-FD3A-4655-A41B-D56D68476C83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Minio.Tests", "test\Volo.Abp.BlobStoring.Minio.Tests\Volo.Abp.BlobStoring.Minio.Tests.csproj", "{36D4B268-FD3A-4655-A41B-D56D68476C83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.Oracle", "src\Volo.Abp.EntityFrameworkCore.Oracle\Volo.Abp.EntityFrameworkCore.Oracle.csproj", "{1738845A-5348-4EB8-B736-CD1D22A808B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.Oracle", "src\Volo.Abp.EntityFrameworkCore.Oracle\Volo.Abp.EntityFrameworkCore.Oracle.csproj", "{1738845A-5348-4EB8-B736-CD1D22A808B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Caching.StackExchangeRedis", "src\Volo.Abp.Caching.StackExchangeRedis\Volo.Abp.Caching.StackExchangeRedis.csproj", "{2B83DF1F-0FD2-4DEA-ABC5-E324B51401D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Caching.StackExchangeRedis", "src\Volo.Abp.Caching.StackExchangeRedis\Volo.Abp.Caching.StackExchangeRedis.csproj", "{2B83DF1F-0FD2-4DEA-ABC5-E324B51401D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Caching.StackExchangeRedis.Tests", "test\Volo.Abp.Caching.StackExchangeRedis.Tests\Volo.Abp.Caching.StackExchangeRedis.Tests.csproj", "{60D0E384-965E-4F81-9D71-B28F419254FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Caching.StackExchangeRedis.Tests", "test\Volo.Abp.Caching.StackExchangeRedis.Tests\Volo.Abp.Caching.StackExchangeRedis.Tests.csproj", "{60D0E384-965E-4F81-9D71-B28F419254FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -917,6 +917,14 @@ Global
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1738845A-5348-4EB8-B736-CD1D22A808B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1738845A-5348-4EB8-B736-CD1D22A808B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1738845A-5348-4EB8-B736-CD1D22A808B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1083,6 +1091,8 @@ Global
 		{75E5C841-5F36-4C44-A532-57CB8E7FFE15} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{C44242F7-D55D-4867-AAF4-A786E404312E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{658D7EDE-A057-4256-96B6-083D3C2B9704} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{36D4B268-FD3A-4655-A41B-D56D68476C83} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{1738845A-5348-4EB8-B736-CD1D22A808B4} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{2B83DF1F-0FD2-4DEA-ABC5-E324B51401D4} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{60D0E384-965E-4F81-9D71-B28F419254FC} = {447C8A77-E5F0-4538-8687-7383196D04EA}
