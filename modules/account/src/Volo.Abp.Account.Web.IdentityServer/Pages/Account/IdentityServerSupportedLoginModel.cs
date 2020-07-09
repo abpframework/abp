@@ -130,7 +130,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 true
             );
 
-            await LocalEventBus.PublishAsync(new SecurityLogEvent
+            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = result.ToIdentitySecurityLogAction(),

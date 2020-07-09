@@ -16,7 +16,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
-            await LocalEventBus.PublishAsync(new SecurityLogEvent
+            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = IdentitySecurityLogActionConsts.Logout

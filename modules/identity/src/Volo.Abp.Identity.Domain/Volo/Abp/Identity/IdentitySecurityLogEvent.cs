@@ -3,7 +3,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
-    public class SecurityLogEvent : IMultiTenant
+    public class IdentitySecurityLogEvent : IMultiTenant
     {
         public Guid? TenantId { get; set; }
 

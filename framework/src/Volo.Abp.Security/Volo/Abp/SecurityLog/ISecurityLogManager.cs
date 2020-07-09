@@ -5,6 +5,6 @@ namespace Volo.Abp.SecurityLog
 {
     public interface ISecurityLogManager
     {
-        Task SaveAsync(Action<SecurityLogInfo> saveAction);
+        Task SaveAsync(Action<SecurityLogInfo> saveAction = null);
     }
 }

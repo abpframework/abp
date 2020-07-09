@@ -5,7 +5,7 @@ using Volo.Abp.Data;
 namespace Volo.Abp.SecurityLog
 {
     [Serializable]
-    public class SecurityLogInfo : IHasExtraProperties
+    public class SecurityLogInfo
     {
         /// <summary>
         /// The name of the application or service writing user security logs.

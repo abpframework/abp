@@ -62,7 +62,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
                 true
             );
 
-            await LocalEventBus.PublishAsync(new SecurityLogEvent
+            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = signInResult.ToIdentitySecurityLogAction(),
@@ -76,7 +76,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         [Route("logout")]
         public virtual async Task Logout()
         {
-            await LocalEventBus.PublishAsync(new SecurityLogEvent
+            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = IdentitySecurityLogActionConsts.Logout
@@ -147,7 +147,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
                 return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
             }
 
-            return new AbpLoginResult(LoginResultType.Succeeded);
+            return new AbpLoginResult(LoginResultType.Success);
         }
 
         protected virtual void ValidateLoginInfo(UserLoginInfo login)

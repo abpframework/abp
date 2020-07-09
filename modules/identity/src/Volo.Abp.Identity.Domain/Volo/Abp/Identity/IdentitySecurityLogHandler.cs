@@ -10,32 +10,29 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class SecurityLogHandler : ILocalEventHandler<SecurityLogEvent>, ITransientDependency
+    public class IdentitySecurityLogHandler : ILocalEventHandler<IdentitySecurityLogEvent>, ITransientDependency
     {
         protected ISecurityLogManager SecurityLogManager { get; }
         protected IdentityUserManager UserManager { get; }
         protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
         protected IUserClaimsPrincipalFactory<IdentityUser> UserClaimsPrincipalFactory { get; }
         protected ICurrentUser CurrentUser { get; }
-        protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
-        public SecurityLogHandler(
+        public IdentitySecurityLogHandler(
             ISecurityLogManager securityLogManager,
             IdentityUserManager userManager,
             ICurrentPrincipalAccessor currentPrincipalAccessor,
             IUserClaimsPrincipalFactory<IdentityUser> userClaimsPrincipalFactory,
-            ICurrentUser currentUser,
-            IUnitOfWorkManager unitOfWorkManager)
+            ICurrentUser currentUser)
         {
             SecurityLogManager = securityLogManager;
             UserManager = userManager;
             CurrentPrincipalAccessor = currentPrincipalAccessor;
             UserClaimsPrincipalFactory = userClaimsPrincipalFactory;
             CurrentUser = currentUser;
-            UnitOfWorkManager = unitOfWorkManager;
         }
 
-        public async Task HandleEventAsync(SecurityLogEvent eventData)
+        public async Task HandleEventAsync(IdentitySecurityLogEvent eventData)
         {
             Action<SecurityLogInfo> securityLogAction = securityLog =>
             {
@@ -53,32 +50,31 @@ namespace Volo.Abp.Identity
                 }
             };
 
-            using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+            if (CurrentUser.IsAuthenticated)
             {
-                if (CurrentUser.IsAuthenticated)
+                await SecurityLogManager.SaveAsync(securityLogAction);
+            }
+            else
+            {
+                if (eventData.UserName.IsNullOrWhiteSpace())
                 {
                     await SecurityLogManager.SaveAsync(securityLogAction);
                 }
                 else
                 {
-                    if (eventData.UserName.IsNullOrWhiteSpace())
+                    var user = await UserManager.FindByNameAsync(eventData.UserName);
+                    if (user != null)
                     {
-                        await SecurityLogManager.SaveAsync(securityLogAction);
+                        using (CurrentPrincipalAccessor.Change(await UserClaimsPrincipalFactory.CreateAsync(user)))
+                        {
+                            await SecurityLogManager.SaveAsync(securityLogAction);
+                        }
                     }
                     else
                     {
-                        var user = await UserManager.FindByNameAsync(eventData.UserName);
-                        if (user != null)
-                        {
-                            using (CurrentPrincipalAccessor.Change(await UserClaimsPrincipalFactory.CreateAsync(user)))
-                            {
-                                await SecurityLogManager.SaveAsync(securityLogAction);
-                            }
-                        }
+                        await SecurityLogManager.SaveAsync(securityLogAction);
                     }
                 }
-
-                await uow.CompleteAsync();
             }
         }
     }
