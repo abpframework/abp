@@ -322,7 +322,6 @@ Once all node modules are loaded, execute `yarn start` (or `npm start`) command:
 yarn start
 ```
 
-Wait `Angular CLI` to launch `Webpack` dev-server with `BrowserSync`. 
 This will take care of compiling your `TypeScript` code, and automatically reloading your browser. 
 After it finishes, `Angular Live Development Server` will be listening on localhost:4200, 
 open your web browser and navigate to [localhost:4200](http://localhost:4200/)
@@ -345,6 +344,6 @@ If you don't plan to develop a mobile application with React Native, you can saf
 
 See the "[Getting Started with the React Native](Getting-Started-React-Native.md)" document to learn how to configure and run the React Native application.
 
-## See Also
+## Next
 
 * [Web Application Development Tutorial](Tutorials/Part-1.md)

@@ -1,7 +1,7 @@
 {
   "culture": "cs",
   "texts": {
-    "Permission:BloggingAdmin": "Blog",
+    "Permission:BloggingAdmin": "Blogování",
     "Permission:Blogs": "Blogy",
     "Permission:Management": "Správa",
     "Permission:Edit": "Upravit",
