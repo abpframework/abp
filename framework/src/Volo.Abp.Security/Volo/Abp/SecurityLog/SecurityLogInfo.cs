@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Volo.Abp.Data;
 
 namespace Volo.Abp.SecurityLog
 {
