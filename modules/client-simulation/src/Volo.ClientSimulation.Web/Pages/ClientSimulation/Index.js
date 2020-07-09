@@ -1,5 +1,5 @@
 ﻿(function ($) {
-    $(function () {
-        SimulationArea.init($('#SimulationArea'));
-    });
+	$(function () {
+		SimulationArea.init($('#SimulationArea'));
+	});
 })(jQuery);
