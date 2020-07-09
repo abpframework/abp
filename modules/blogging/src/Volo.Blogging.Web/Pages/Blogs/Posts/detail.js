@@ -1,170 +1,184 @@
 ﻿(function ($) {
+	var l = abp.localization.getResource('Blogging');
 
-    var l = abp.localization.getResource('Blogging');
+	var initSocialShareLinks = function () {
+		var re = new RegExp(/^.*\//);
+		var rootUrl = re.exec(window.location.href);
 
-    var initSocialShareLinks = function () {
+		var pageHeader = $('#PostTitle').text();
+		var blogName = $('#BlogFullName').attr('name');
 
-        var re = new RegExp(/^.*\//);
-        var rootUrl = re.exec(window.location.href);
+		$('#TwitterShareLink').attr(
+			'href',
+			'https://twitter.com/intent/tweet?text=' +
+				encodeURI(pageHeader + ' | ' + blogName + ' | ' + window.location.href)
+		);
 
-        var pageHeader = $("#PostTitle").text();
-        var blogName = $('#BlogFullName').attr('name');
+		$('#LinkedinShareLink').attr(
+			'href',
+			'https://www.linkedin.com/shareArticle?' +
+				'url=' +
+				encodeURI(window.location.href) +
+				'&' +
+				'mini=true&' +
+				'summary=' +
+				encodeURI(blogName) +
+				'&' +
+				'title=' +
+				encodeURI(pageHeader) +
+				'&' +
+				'source=' +
+				encodeURI(rootUrl)
+		);
 
-        $('#TwitterShareLink').attr('href',
-            'https://twitter.com/intent/tweet?text=' + encodeURI(pageHeader + " | " + blogName + " | " + window.location.href)
-        );
+		$('#EmailShareLink').attr(
+			'href',
+			'mailto:?' +
+				'body=' +
+				encodeURI('I want you to look at ' + window.location.href) +
+				'&' +
+				'subject=' +
+				encodeURI(pageHeader + ' | ' + blogName) +
+				'&'
+		);
+	};
 
-        $('#LinkedinShareLink').attr('href',
-            'https://www.linkedin.com/shareArticle?'
-            + 'url=' + encodeURI(window.location.href) + '&'
-            + 'mini=true&'
-            + "summary=" + encodeURI(blogName) + '&'
-            + "title=" + encodeURI(pageHeader) + '&'
-            + "source=" + encodeURI(rootUrl)
-        );
+	$('div .replyForm').hide();
 
-        $('#EmailShareLink').attr('href',
-            'mailto:?'
-            + 'body=' + encodeURI('I want you to look at ' + window.location.href) + '&'
-            + "subject=" + encodeURI(pageHeader + ' | ' + blogName) + '&'
-        );
-    };
+	$('div .editForm').hide();
 
-    $('div .replyForm').hide();
+	$('form[class="editFormClass"]').submit(function (event) {
+		event.preventDefault();
+		var form = $(this).serializeFormToObject();
 
-    $('div .editForm').hide();
+		$.ajax({
+			type: 'POST',
+			url: '/Blog/Comments/Update',
+			data: {
+				id: form.commentId,
+				commentDto: {
+					text: form.text,
+				},
+			},
+			success: function (response) {
+				$('div .editForm').hide();
+				$('#' + form.commentId).text(form.text);
+			},
+		});
+	});
 
-    $('form[class="editFormClass"]').submit(function (event) {
-        event.preventDefault();
-        var form = $(this).serializeFormToObject();
+	$('.editCancelButton').click(function (event) {
+		event.preventDefault();
+		$('div .editForm').hide();
+	});
 
-        $.ajax({
-            type: "POST",
-            url: "/Blog/Comments/Update",
-            data: {
-                id: form.commentId,
-                commentDto: {
-                    text: form.text
-                }
-            },
-            success: function (response) {
-                $('div .editForm').hide();
-                $('#' + form.commentId).text(form.text);
-            }
-        });
-    });
+	$('.replyCancelButton').click(function (event) {
+		event.preventDefault();
+		$('div .replyForm').hide();
+	});
 
-    $('.editCancelButton').click(function (event) {
-        event.preventDefault();
-        $('div .editForm').hide();
-    });
+	$('.replyLink').click(function (event) {
+		event.preventDefault();
+		$('div .editForm').hide();
+		var linkElement = $(this);
+		var replyCommentId = linkElement.attr('data-relpyid');
 
-    $('.replyCancelButton').click(function (event) {
-        event.preventDefault();
-        $('div .replyForm').hide();
-    });
+		if (replyCommentId != '' && replyCommentId !== undefined) {
+			var div = linkElement.parent().next();
 
-    $('.replyLink').click(function (event) {
-        event.preventDefault();
-        $('div .editForm').hide();
-        var linkElement = $(this);
-        var replyCommentId = linkElement.attr('data-relpyid');
+			if (div.is(':hidden')) {
+				$('div .replyForm').hide();
+				div.show();
+			} else {
+				div.hide();
+			}
+			return;
+		}
+	});
 
-        if (replyCommentId != '' && replyCommentId !== undefined) {
-            var div = linkElement.parent().next();
+	$('.deleteLink').click(function (event) {
+		event.preventDefault();
+		var linkElement = $(this);
+		var deleteCommentId = linkElement.attr('data-deleteid');
 
-            if (div.is(":hidden")) {
-                $('div .replyForm').hide();
-                div.show();
-            } else {
-                div.hide();
-            }
-            return;
-        }
-    });
+		if (deleteCommentId != '' && deleteCommentId !== undefined) {
+			abp.message.confirm(
+				l('CommentDeletionWarningMessage'), // TODO: localize
+				l('Are you sure?'),
+				function (isConfirmed) {
+					if (isConfirmed) {
+						$.ajax({
+							type: 'POST',
+							url: '/Blog/Comments/Delete',
+							data: { id: deleteCommentId },
+							success: function (response) {
+								linkElement.parent().parent().parent().remove();
+							},
+						});
+					}
+				}
+			);
+		}
+	});
 
-    $('.deleteLink').click(function (event) {
-        event.preventDefault();
-        var linkElement = $(this);
-        var deleteCommentId = linkElement.attr('data-deleteid');
+	$('#DeletePostLink').click(function (event) {
+		event.preventDefault();
+		var linkElement = $(this);
+		var deleteCommentId = linkElement.attr('data-postid');
+		var blogShortName = linkElement.attr('data-blogShortName');
 
-        if (deleteCommentId != '' && deleteCommentId !== undefined) {
-            abp.message.confirm(
-                l('CommentDeletionWarningMessage'), // TODO: localize
-                l('Are you sure?'),
-                function (isConfirmed) {
-                    if (isConfirmed) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/Blog/Comments/Delete",
-                            data: { id: deleteCommentId },
-                            success: function (response) {
-                                linkElement.parent().parent().parent().remove();
-                            }
-                        });
-                    }
-                }
-            );
-        }
-    });
+		if (deleteCommentId != '' && deleteCommentId !== undefined) {
+			abp.message.confirm(
+				l('PostDeletionWarningMessage'),
+				l('AreYouSure'),
+				function (isConfirmed) {
+					if (isConfirmed) {
+						$.ajax({
+							type: 'POST',
+							url: '/Blog/Posts/Delete',
+							data: { id: deleteCommentId },
+							success: function () {
+								var url = window.location.pathname;
+								var postNameBeginning = url.lastIndexOf('/');
+								window.location.replace(url.substring(0, postNameBeginning));
+							},
+						});
+					}
+				}
+			);
+		}
+	});
 
-    $('#DeletePostLink').click(function (event) {
-        event.preventDefault();
-        var linkElement = $(this);
-        var deleteCommentId = linkElement.attr('data-postid');
-        var blogShortName = linkElement.attr('data-blogShortName');
+	$('.updateLink').click(function (event) {
+		event.preventDefault();
+		$('div .replyForm').hide();
 
-        if (deleteCommentId != '' && deleteCommentId !== undefined) {
-            abp.message.confirm(
-                l('PostDeletionWarningMessage'),
-                l('AreYouSure'),
-                function (isConfirmed) {
-                    if (isConfirmed) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/Blog/Posts/Delete",
-                            data: { id: deleteCommentId },
-                            success: function () {
-                                var url = window.location.pathname;
-                                var postNameBeginning = url.lastIndexOf('/');
-                                window.location.replace(url.substring(0, postNameBeginning));
-                            }
-                        });
-                    }
-                }
-            );
-        }
-    });
+		var linkElement = $(this);
+		var updateCommentId = $(this).attr('data-updateid');
 
-    $('.updateLink').click(function (event) {
-        event.preventDefault();
-        $('div .replyForm').hide();
+		if (updateCommentId != '' && updateCommentId !== undefined) {
+			var div = linkElement.parent().next().next();
 
-        var linkElement = $(this);
-        var updateCommentId = $(this).attr('data-updateid');
+			if (div.is(':hidden')) {
+				$('div .editForm').hide();
+				div.show();
+			} else {
+				div.hide();
+			}
+			return;
+		}
+	});
 
-        if (updateCommentId != '' && updateCommentId !== undefined) {
+	if ($('#FocusCommentId').val() != '00000000-0000-0000-0000-000000000000') {
+		$('html, body').animate(
+			{
+				scrollTop: $('#' + $('#FocusCommentId').val()).offset().top - 150,
+			},
+			500
+		);
+	}
 
-            var div = linkElement.parent().next().next();
+	$(".post-content a[href^='http']").attr('target', '_blank');
 
-            if (div.is(":hidden")) {
-                $('div .editForm').hide();
-                div.show();
-            } else {
-                div.hide();
-            }
-            return;
-        }
-    });
-
-    if ($('#FocusCommentId').val() != '00000000-0000-0000-0000-000000000000') {
-        $('html, body').animate({
-            scrollTop: ($('#' + $('#FocusCommentId').val()).offset().top - 150)
-        }, 500);
-    }
-
-    $(".post-content a[href^='http']").attr('target', '_blank');
-
-    initSocialShareLinks();
-
+	initSocialShareLinks();
 })(jQuery);
