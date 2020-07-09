@@ -176,7 +176,7 @@ namespace Volo.Docs.Documents
                 Version = esDoc.Version,
                 LanguageCode = esDoc.LanguageCode,
                 Highlight = esDoc.Highlight
-            }).ToList();
+            }).Where(x => x.FileName != project.NavigationDocumentName && x.FileName != project.ParametersDocumentName).ToList();
         }
 
         public async Task<bool> FullSearchEnabledAsync()
