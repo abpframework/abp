@@ -141,6 +141,7 @@ $projects = (
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB",
 
     # modules/blogging
+    "modules/blogging/src/Volo.Blogging.Application.Contracts.Shared",
     "modules/blogging/src/Volo.Blogging.Application.Contracts",
     "modules/blogging/src/Volo.Blogging.Application",
     "modules/blogging/src/Volo.Blogging.Domain",
