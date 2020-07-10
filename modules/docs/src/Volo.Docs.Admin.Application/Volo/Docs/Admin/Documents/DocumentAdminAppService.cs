@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
+using Volo.Abp.Uow;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
@@ -96,28 +98,35 @@ namespace Volo.Docs.Admin.Documents
 
             var source = _documentStoreFactory.Create(project.DocumentStoreType);
 
-            var documents = new List<Document>();
             foreach (var leaf in leafs)
             {
-                if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                    leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
                 {
-                    continue;
+                    if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                        leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+                        (leaf.Path.StartsWith("{{") && leaf.Path.EndsWith("}}")))
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var sourceDocument = await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
+
+                        await _documentRepository.DeleteAsync(sourceDocument.ProjectId, sourceDocument.Name,
+                            sourceDocument.LanguageCode,
+                            sourceDocument.Version);
+
+                        await _documentRepository.InsertAsync(sourceDocument, true);
+                        await UpdateDocumentUpdateInfoCache(sourceDocument);
+
+                        await uow.CompleteAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogException(e);
+                    }
                 }
-
-                var sourceDocument =
-                    await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
-                documents.Add(sourceDocument);
-            }
-
-            foreach (var document in documents)
-            {
-                await _documentRepository.DeleteAsync(document.ProjectId, document.Name,
-                    document.LanguageCode,
-                    document.Version);
-
-                await _documentRepository.InsertAsync(document, true);
-                await UpdateDocumentUpdateInfoCache(document);
             }
         }
 
