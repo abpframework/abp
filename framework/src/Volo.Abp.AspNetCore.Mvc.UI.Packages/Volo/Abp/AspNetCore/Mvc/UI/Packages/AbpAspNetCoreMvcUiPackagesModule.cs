@@ -25,8 +25,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages
 
                 //Timeago
                 options.AddLanguageFilesMapOrUpdate(TimeagoScriptContributor.PackageName,
-                    new NameValue("zh-Hans", "zh_CN"),
-                    new NameValue("zh-Hant", "zh_TW"));
+                    new NameValue("zh-Hans", "zh-CN"),
+                    new NameValue("zh-Hant", "zh-TW"));
 
                 //JQueryValidation
                 options.AddLanguageFilesMapOrUpdate(JQueryValidationScriptContributor.PackageName,
