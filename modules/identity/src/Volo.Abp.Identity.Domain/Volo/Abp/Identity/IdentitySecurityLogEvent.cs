@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
@@ -14,5 +15,19 @@ namespace Volo.Abp.Identity
         public string UserName { get; set; }
 
         public string ClientId { get; set; }
+
+        public Dictionary<string, object> ExtraProperties { get; }
+
+        public IdentitySecurityLogEvent()
+        {
+            ExtraProperties = new Dictionary<string, object>();
+        }
+
+        public virtual IdentitySecurityLogEvent WithProperty(string key, object value)
+        {
+            ExtraProperties[key] = value;
+            return this;
+        }
+
     }
 }

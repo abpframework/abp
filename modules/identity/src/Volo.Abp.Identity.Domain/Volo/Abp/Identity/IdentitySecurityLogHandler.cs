@@ -48,6 +48,11 @@ namespace Volo.Abp.Identity
                 {
                     securityLog.ClientId = eventData.ClientId;
                 }
+
+                foreach (var property in eventData.ExtraProperties)
+                {
+                    securityLog.ExtraProperties[property.Key] = property.Value;
+                }
             };
 
             if (CurrentUser.IsAuthenticated)

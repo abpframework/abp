@@ -17,6 +17,7 @@ namespace Volo.Abp.Identity
             string applicationName = null,
             string identity = null,
             string action = null,
+            Guid? userId = null,
             string userName = null,
             string clientId = null,
             string correlationId = null,
@@ -29,9 +30,16 @@ namespace Volo.Abp.Identity
             string applicationName = null,
             string identity = null,
             string action = null,
+            Guid? userId = null,
             string userName = null,
             string clientId = null,
             string correlationId = null,
+            CancellationToken cancellationToken = default);
+
+        Task<IdentitySecurityLog> GetByUserIdAsync(
+            Guid id,
+            Guid userId,
+            bool includeDetails = false,
             CancellationToken cancellationToken = default);
     }
 }

@@ -11,7 +11,8 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
 {
-    public class MongoIdentitySecurityLogRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentitySecurityLog, Guid>, IIdentitySecurityLogRepository
+    public class MongoIdentitySecurityLogRepository :
+        MongoDbRepository<IAbpIdentityMongoDbContext, IdentitySecurityLog, Guid>, IIdentitySecurityLogRepository
     {
         public MongoIdentitySecurityLogRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
             : base(dbContextProvider)
@@ -27,6 +28,7 @@ namespace Volo.Abp.Identity.MongoDB
             string applicationName = null,
             string identity = null,
             string action = null,
+            Guid? userId = null,
             string userName = null,
             string clientId = null,
             string correlationId = null,
@@ -39,6 +41,7 @@ namespace Volo.Abp.Identity.MongoDB
                 applicationName,
                 identity,
                 action,
+                userId,
                 userName,
                 clientId,
                 correlationId
@@ -56,6 +59,7 @@ namespace Volo.Abp.Identity.MongoDB
             string applicationName = null,
             string identity = null,
             string action = null,
+            Guid? userId = null,
             string userName = null,
             string clientId = null,
             string correlationId = null,
@@ -67,33 +71,47 @@ namespace Volo.Abp.Identity.MongoDB
                 applicationName,
                 identity,
                 action,
+                userId,
                 userName,
                 clientId,
                 correlationId
             );
 
-            return await query.As<IMongoQueryable<IdentitySecurityLog>>().LongCountAsync(GetCancellationToken(cancellationToken));
+            return await query.As<IMongoQueryable<IdentitySecurityLog>>()
+                .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-          protected virtual IQueryable<IdentitySecurityLog> GetListQuery(
-              DateTime? startTime = null,
-              DateTime? endTime = null,
-              string applicationName = null,
-              string identity = null,
-              string action = null,
-              string userName = null,
-              string clientId = null,
-              string correlationId = null)
-          {
-              return GetMongoQueryable()
-                  .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime)
-                  .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime >= endTime)
-                  .WhereIf(!applicationName.IsNullOrWhiteSpace(), securityLog => securityLog.ApplicationName == applicationName)
-                  .WhereIf(!identity.IsNullOrWhiteSpace(), securityLog => securityLog.Identity == identity)
-                  .WhereIf(!action.IsNullOrWhiteSpace(), securityLog => securityLog.Action == action)
-                  .WhereIf(!userName.IsNullOrWhiteSpace(), securityLog => securityLog.UserName == userName)
-                  .WhereIf(!clientId.IsNullOrWhiteSpace(), securityLog => securityLog.ClientId == clientId)
-                  .WhereIf(!correlationId.IsNullOrWhiteSpace(), securityLog => securityLog.CorrelationId == correlationId);
-          }
+
+        public async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
+                GetCancellationToken(cancellationToken));
+        }
+
+        protected virtual IQueryable<IdentitySecurityLog> GetListQuery(
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            string applicationName = null,
+            string identity = null,
+            string action = null,
+            Guid? userId = null,
+            string userName = null,
+            string clientId = null,
+            string correlationId = null)
+        {
+            return GetMongoQueryable()
+                .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime)
+                .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime >= endTime)
+                .WhereIf(!applicationName.IsNullOrWhiteSpace(),
+                    securityLog => securityLog.ApplicationName == applicationName)
+                .WhereIf(!identity.IsNullOrWhiteSpace(), securityLog => securityLog.Identity == identity)
+                .WhereIf(!action.IsNullOrWhiteSpace(), securityLog => securityLog.Action == action)
+                .WhereIf(userId.HasValue, securityLog => securityLog.UserId == userId)
+                .WhereIf(!userName.IsNullOrWhiteSpace(), securityLog => securityLog.UserName == userName)
+                .WhereIf(!clientId.IsNullOrWhiteSpace(), securityLog => securityLog.ClientId == clientId)
+                .WhereIf(!correlationId.IsNullOrWhiteSpace(),
+                    securityLog => securityLog.CorrelationId == correlationId);
+        }
     }
 }

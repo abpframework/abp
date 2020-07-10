@@ -27,6 +27,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string applicationName = null,
             string identity = null,
             string action = null,
+            Guid? userId = null,
             string userName = null,
             string clientId = null,
             string correlationId = null,
@@ -39,6 +40,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 applicationName,
                 identity,
                 action,
+                userId,
                 userName,
                 clientId,
                 correlationId
@@ -55,6 +57,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string applicationName = null,
             string identity = null,
             string action = null,
+            Guid? userId = null,
             string userName = null,
             string clientId = null,
             string correlationId = null,
@@ -66,6 +69,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 applicationName,
                 identity,
                 action,
+                userId,
                 userName,
                 clientId,
                 correlationId
@@ -74,12 +78,18 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return  await query.LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-          protected virtual IQueryable<IdentitySecurityLog> GetListQuery(
+        public async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId, GetCancellationToken(cancellationToken));
+        }
+
+        protected virtual IQueryable<IdentitySecurityLog> GetListQuery(
               DateTime? startTime = null,
               DateTime? endTime = null,
               string applicationName = null,
               string identity = null,
               string action = null,
+              Guid? userId = null,
               string userName = null,
               string clientId = null,
               string correlationId = null)
@@ -90,6 +100,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                   .WhereIf(!applicationName.IsNullOrWhiteSpace(), securityLog => securityLog.ApplicationName == applicationName)
                   .WhereIf(!identity.IsNullOrWhiteSpace(), securityLog => securityLog.Identity == identity)
                   .WhereIf(!action.IsNullOrWhiteSpace(), securityLog => securityLog.Action == action)
+                  .WhereIf(userId.HasValue, securityLog => securityLog.UserId == userId)
                   .WhereIf(!userName.IsNullOrWhiteSpace(), securityLog => securityLog.UserName == userName)
                   .WhereIf(!clientId.IsNullOrWhiteSpace(), securityLog => securityLog.ClientId == clientId)
                   .WhereIf(!correlationId.IsNullOrWhiteSpace(), securityLog => securityLog.CorrelationId == correlationId);

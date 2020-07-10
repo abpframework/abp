@@ -226,8 +226,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
                 Action = result.ToIdentitySecurityLogAction(),
-                UserName = user.Name,
-                TenantId = user.TenantId
+                UserName = user.Name
             });
 
             return RedirectSafely(returnUrl, returnUrlHash);
