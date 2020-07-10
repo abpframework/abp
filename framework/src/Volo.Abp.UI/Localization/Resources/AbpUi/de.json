@@ -56,7 +56,7 @@
     "401Message": "Unauthorisiert",
     "403Message": "Verboten",
     "404Message": "Seite nicht gefunden",
-    "500Message": "Internet Server Fehler",
+    "500Message": "Interner Server Fehler",
     "GoHomePage": "Zur Startseite",
     "GoBack": "Zurück"
   }
