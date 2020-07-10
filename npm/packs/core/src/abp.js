@@ -717,7 +717,7 @@ var abp = abp || {};
     };
 
     var toUtc = function (date) {
-        Date.UTC(
+        return Date.UTC(
             date.getUTCFullYear(),
             date.getUTCMonth(),
             date.getUTCDate(),
