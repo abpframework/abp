@@ -98,35 +98,35 @@ namespace Volo.Docs.Admin.Documents
 
             var source = _documentStoreFactory.Create(project.DocumentStoreType);
 
+            var documents = new List<Document>();
             foreach (var leaf in leafs)
             {
-                using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+                if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                    leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+                    (leaf.Path.StartsWith("{{") && leaf.Path.EndsWith("}}")))
                 {
-                    if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                        leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
-                        (leaf.Path.StartsWith("{{") && leaf.Path.EndsWith("}}")))
-                    {
-                        continue;
-                    }
-
-                    try
-                    {
-                        var sourceDocument = await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
-
-                        await _documentRepository.DeleteAsync(sourceDocument.ProjectId, sourceDocument.Name,
-                            sourceDocument.LanguageCode,
-                            sourceDocument.Version);
-
-                        await _documentRepository.InsertAsync(sourceDocument, true);
-                        await UpdateDocumentUpdateInfoCache(sourceDocument);
-
-                        await uow.CompleteAsync();
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.LogException(e);
-                    }
+                    continue;
                 }
+
+                try
+                {
+                    var sourceDocument = await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
+                    documents.Add(sourceDocument);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogException(e);
+                }
+            }
+
+            foreach (var document in documents)
+            {
+                await _documentRepository.DeleteAsync(document.ProjectId, document.Name,
+                    document.LanguageCode,
+                    document.Version);
+
+                await _documentRepository.InsertAsync(document, true);
+                await UpdateDocumentUpdateInfoCache(document);
             }
         }
 
