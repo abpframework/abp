@@ -6,20 +6,10 @@ namespace Volo.Abp.SecurityLog
     [Serializable]
     public class SecurityLogInfo
     {
-        /// <summary>
-        /// The name of the application or service writing user security logs.
-        /// Default: null.
-        /// </summary>
         public string ApplicationName { get; set; }
 
-        /// <summary>
-        /// Web, JWT, Identity, Identity_Server
-        /// </summary>
         public string Identity { get; set; }
 
-        /// <summary>
-        /// login_successful, login_failed, logout, change_pwd, refresh_token...
-        /// </summary>
         public string Action { get; set; }
 
         public Dictionary<string, object> ExtraProperties { get; }

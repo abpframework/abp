@@ -34,6 +34,11 @@ namespace Volo.Abp.Identity
 
         public async Task SaveAsync(SecurityLogInfo securityLogInfo)
         {
+            if (!SecurityLogOptions.IsEnabled)
+            {
+                return;
+            }
+
             using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
             {
                 await IdentitySecurityLogRepository.InsertAsync(new IdentitySecurityLog(GuidGenerator, securityLogInfo));

@@ -21,6 +21,11 @@ namespace Volo.Abp.SecurityLog
 
         public async Task SaveAsync(Action<SecurityLogInfo> saveAction = null)
         {
+            if (!SecurityLogOptions.IsEnabled)
+            {
+                return;
+            }
+
             var securityLogInfo = await CreateAsync();
             saveAction?.Invoke(securityLogInfo);
             await SecurityLogStore.SaveAsync(securityLogInfo);

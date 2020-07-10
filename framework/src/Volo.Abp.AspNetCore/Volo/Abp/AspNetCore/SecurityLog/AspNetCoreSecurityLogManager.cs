@@ -23,7 +23,6 @@ namespace Volo.Abp.AspNetCore.SecurityLog
         protected ICurrentClient CurrentClient { get; }
         protected IHttpContextAccessor HttpContextAccessor { get; }
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
-
         protected IWebClientInfoProvider WebClientInfoProvider { get; }
 
         public AspNetCoreSecurityLogManager(
