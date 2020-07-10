@@ -21,28 +21,31 @@ namespace Volo.Abp.BlobStoring.Minio
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var configuration = args.Configuration.GetMinioConfiguration();
+            var client = GetMinioClient(args);
+            var containerName = GetContainerName(args);
 
-            if (!args.OverrideExisting && await BlobExistsAsync(args, blobName))
+            if (!args.OverrideExisting && await BlobExistsAsync(client, containerName, blobName))
             {
-                throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{GetContainerName(args)}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
+                throw new BlobAlreadyExistsException($"Saving BLOB '{args.BlobName}' does already exists in the container '{containerName}'! Set {nameof(args.OverrideExisting)} if it should be overwritten.");
             }
 
             if (configuration.CreateBucketIfNotExists)
             {
-                await CreateBucketIfNotExists(args);
+                await CreateBucketIfNotExists(client, containerName);
             }
 
-            await GetMinioClient(args).PutObjectAsync(GetContainerName(args), blobName, args.BlobStream, args.BlobStream.Length);
+            await client.PutObjectAsync(containerName, blobName, args.BlobStream, args.BlobStream.Length);
         }
 
         public override async Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
+            var client = GetMinioClient(args);
+            var containerName = GetContainerName(args);
 
-            if (await BlobExistsAsync(args, blobName))
+            if (await BlobExistsAsync(client, containerName, blobName))
             {
-                var client = GetMinioClient(args);
-                await client.RemoveObjectAsync(GetContainerName(args), blobName);
+                await client.RemoveObjectAsync(containerName, blobName);
                 return true;
             }
 
@@ -52,45 +55,37 @@ namespace Volo.Abp.BlobStoring.Minio
         public override async Task<bool> ExistsAsync(BlobProviderExistsArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
+            var client = GetMinioClient(args);
+            var containerName = GetContainerName(args);
 
-            return await BlobExistsAsync(args, blobName);
+            return await BlobExistsAsync(client, containerName, blobName);
         }
 
         public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var blobName = MinioBlobNameCalculator.Calculate(args);
-
-            if (!await BlobExistsAsync(args, blobName))
+            var client = GetMinioClient(args);
+            var containerName = GetContainerName(args);
+            if (!await BlobExistsAsync(client, containerName, blobName))
             {
                 return null;
-            }
-            try
-            {
-                var client = GetMinioClient(args);
-             
-               var stat = await client.StatObjectAsync(GetContainerName(args), blobName);
+            }      
+               
+            var memoryStream = new MemoryStream();
+            await client.GetObjectAsync(containerName, blobName,
+                                                (stream) =>
+                                                {
+                                                    if (stream != null)
+                                                    {
+                                                        stream.CopyTo(memoryStream);
+                                                    }
+                                                    else
+                                                    {
+                                                        memoryStream = null;
+                                                    }
+                                                });
 
-                MemoryStream returnStream = new MemoryStream();
-
-                await client.GetObjectAsync(GetContainerName(args), blobName,
-                                                 (stream) =>
-                                                 {
-                                                     if (stream != null)
-                                                     {
-                                                         stream.CopyTo(returnStream);
-
-                                                            // returnStream = new MemoryStream(stream.GetAllBytes());
-
-                                                     }
-                                                 });
-
-                return returnStream;
-            }
-            catch (MinioException ex)
-            {
-
-            }
-            return null;
+            return memoryStream;
 
         }
 
@@ -99,6 +94,7 @@ namespace Volo.Abp.BlobStoring.Minio
         {
             var configuration = args.Configuration.GetMinioConfiguration();
             var client = new MinioClient(configuration.EndPoint, configuration.AccessKey, configuration.SecretKey);
+
             if (configuration.WithSSL)
             {
                 client.WithSSL();
@@ -110,10 +106,8 @@ namespace Volo.Abp.BlobStoring.Minio
 
 
 
-        protected virtual async Task CreateBucketIfNotExists(BlobProviderArgs args)
+        protected virtual async Task CreateBucketIfNotExists(MinioClient client,string containerName)
         {
-            var client = GetMinioClient(args);
-            var containerName = GetContainerName(args);
             if (!await client.BucketExistsAsync(containerName))
             {
                 await client.MakeBucketAsync(containerName);
@@ -121,21 +115,31 @@ namespace Volo.Abp.BlobStoring.Minio
 
         }
 
-        private async Task<bool> BlobExistsAsync(BlobProviderArgs args, string blobName)
+        private async Task<bool> BlobExistsAsync(MinioClient client, string containerName , string blobName)
         {
             // Make sure Blob Container exists.
-            if (await ContainerExistsAsync(args))
+            if (await client.BucketExistsAsync(containerName))
             {
                 try
                 {
-                    await GetMinioClient(args).StatObjectAsync(GetContainerName(args), blobName);
+                    // Check whether the object exists using statObject().
+                    // If the object is not found, statObject() throws an exception,
+                    // else it means that the object exists.
+                    // Execution is successful.
+                    await client.StatObjectAsync(containerName, blobName);
                     return true;
                 }
                 catch (MinioException ex)
-                {
+                {                    
+                    if(ex is ObjectNotFoundException)
+                    {
+                        return false;
+                    }
 
+                    throw ex;
                 }
             }
+
             return false;
 
         }
@@ -143,17 +147,11 @@ namespace Volo.Abp.BlobStoring.Minio
         {
             var configuration = args.Configuration.GetMinioConfiguration();
 
-            //minio bucket name must be lower
+            //Minio bucket name must be lowercase
             return configuration.BucketName.IsNullOrWhiteSpace()
                 ? args.ContainerName.ToLower()
                 : configuration.BucketName.ToLower();
         }
 
-        private async Task<bool> ContainerExistsAsync(BlobProviderArgs args)
-        {
-            var client = GetMinioClient(args);
-
-            return await client.BucketExistsAsync(GetContainerName(args));
-        }
     }
 }
