@@ -57,7 +57,34 @@
     font-size: 0.8em;
 }
 
-
 .dataTables_scrollBody {
     min-height: 248px;
 }
+
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 11px;
+    white-space: nowrap;
+}
+
+div.dataTables_wrapper div.dataTables_length label {
+    padding-top: 10px;
+    margin-bottom: 0;
+}
+
+.rtl .dropdown-menu-right {
+    right: auto;
+    left: 0; 
+}
+
+    .rtl .dropdown-menu-right a { 
+        text-align: right;
+    }
+
+.rtl .navbar .dropdown-menu a {
+    text-align: right;
+}
+.rtl .navbar .dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: auto;
+    right: 100%;
+} 
