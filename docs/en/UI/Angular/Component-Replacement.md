@@ -11,25 +11,24 @@ Create a new component that you want to use instead of an ABP component. Add tha
 Then, open the `app.component.ts` and dispatch the `AddReplaceableComponent` action to replace your component with an ABP component as shown below:
 
 ```js
-import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent action
+import { AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent action
 import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
 import { Store } from '@ngxs/store'; // imported Store
 //...
 
 @Component(/* component metadata */)
-export class AppComponent implements OnInit {
-  constructor(..., private store: Store) {} // injected Store
-
-  ngOnInit() {
-    // added dispatch
+export class AppComponent {
+  constructor(
+    private store: Store // injected Store
+  )
+  {
+    // dispatched the AddReplaceableComponent action
     this.store.dispatch(
       new AddReplaceableComponent({
         component: YourNewRoleComponent,
         key: eIdentityComponents.Roles,
       }),
     );
-
-    //...
   }
 }
 ```
@@ -60,26 +59,23 @@ Add the following code in your layout template (`my-layout.component.html`) wher
 Open `app.component.ts` in `src/app` folder and modify it as shown below:
 
 ```js
-import { ..., AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
+import { AddReplaceableComponent } from '@abp/ng.core'; // imported AddReplaceableComponent
 import { eThemeBasicComponents } from '@abp/ng.theme.basic'; // imported eThemeBasicComponents enum for component keys
-import { MyApplicationLayoutComponent } from './shared/my-application-layout/my-application-layout.component'; // imported MyApplicationLayoutComponent
 import { Store } from '@ngxs/store'; // imported Store
-//...
+import { MyApplicationLayoutComponent } from './my-application-layout/my-application-layout.component'; // imported MyApplicationLayoutComponent
 
 @Component(/* component metadata */)
-export class AppComponent implements OnInit {
-  constructor(..., private store: Store) {} // injected Store
-
-  ngOnInit() {
-    // added dispatch
+export class AppComponent {
+  constructor(
+    private store: Store, // injected Store
+  ) {
+    // dispatched the AddReplaceableComponent action
     this.store.dispatch(
       new AddReplaceableComponent({
         component: MyApplicationLayoutComponent,
         key: eThemeBasicComponents.ApplicationLayout,
       }),
     );
-
-    //...
   }
 }
 ```
