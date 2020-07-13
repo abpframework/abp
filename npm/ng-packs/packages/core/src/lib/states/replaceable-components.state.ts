@@ -1,3 +1,4 @@
+import { noop } from '@abp/ng.core';
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, createSelector, Selector, State, StateContext } from '@ngxs/store';
@@ -42,7 +43,7 @@ export class ReplaceableComponentsState {
     this.router.navigated = false;
 
     this.ngZone.run(async () => {
-      await this.router.navigateByUrl(this.router.url).catch();
+      await this.router.navigateByUrl(this.router.url).catch(noop);
       setRouteReuse(shouldReuseRoute);
     });
   }
