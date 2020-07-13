@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
         private readonly Func<object, Task> _clearCacheHeadersDelegate;
 
-        public AbpExceptionHandlingMiddleware(ILogger<AbpUnitOfWorkMiddleware> logger)
+        public AbpExceptionHandlingMiddleware(ILogger<AbpExceptionHandlingMiddleware> logger)
         {
             _logger = logger;
 
