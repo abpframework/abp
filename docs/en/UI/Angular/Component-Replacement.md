@@ -48,9 +48,7 @@ The example below describes how to replace the `ApplicationLayoutComponent`:
 Run the following command to generate a layout in `angular` folder:
 
 ```bash
-yarn ng generate component shared/my-application-layout --export --entryComponent
-
-# You don't need the --entryComponent option in Angular 9
+yarn ng generate component my-application-layout
 ```
 
 Add the following code in your layout template (`my-layout.component.html`) where you want the page to be loaded.
