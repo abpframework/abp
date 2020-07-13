@@ -18,7 +18,7 @@ This will make the following modifications:
 
 - Update your package.json and install new packages
 - Revise tsconfig.json files to create a "Solution Style" configuration
-- Rename `browserlist` as `.browserlistrc`
+- Rename `browserslist` as `.browserslistrc`
 
 On the other hand, it would be better if you check which packages to update first with `yarn ng update` command alone. Angular will give you a list of packages to update.
 
