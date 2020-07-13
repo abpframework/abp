@@ -37,7 +37,7 @@ namespace Volo.Abp.PermissionManagement
                 RolePermissionValueProvider.ProviderName,
                 "admin",
                 permissionNames,
-                context.TenantId
+                context?.TenantId
             );
         }
     }

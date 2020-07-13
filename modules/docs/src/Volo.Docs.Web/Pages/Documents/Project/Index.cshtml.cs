@@ -105,6 +105,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 Logger.LogWarning(exception.Message);
 
                 DocumentFound = false;
+                Response.StatusCode = 404;
                 return Page();
             }
         }
@@ -123,6 +124,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 Logger.LogWarning(e.Message);
                 ProjectFound = false;
+                Response.StatusCode = 404;
                 return Page();
             }
 

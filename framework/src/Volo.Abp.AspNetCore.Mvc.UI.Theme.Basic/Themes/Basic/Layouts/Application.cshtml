@@ -64,7 +64,9 @@
                 @RenderSection("content_toolbar", false)
             </div>
         </div>
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Application)
         @RenderBody()
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Application)
     </div>
 
     <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />

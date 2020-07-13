@@ -22,6 +22,5 @@ $solutionPaths = (
     "../modules/virtual-file-explorer",
     "../templates/module/aspnet-core",
     "../templates/app/aspnet-core",
-    "../samples/MicroserviceDemo",
     "../abp_io/AbpIoLocalization"
 )

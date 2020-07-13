@@ -11,6 +11,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 
@@ -23,4 +24,8 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+  </ItemGroup>
+  
 </Project>

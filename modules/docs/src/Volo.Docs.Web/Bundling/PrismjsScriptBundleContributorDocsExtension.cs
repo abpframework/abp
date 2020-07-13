@@ -12,6 +12,7 @@ namespace Volo.Docs.Bundling
             context.Files.AddIfNotContains("/libs/prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard.js");
             context.Files.AddIfNotContains("/libs/prismjs/plugins/line-highlight/prism-line-highlight.js");
             context.Files.AddIfNotContains("/libs/prismjs/components/prism-csharp.js");
+            context.Files.AddIfNotContains("/libs/prismjs/components/prism-json.js");
         }
     }
 }

@@ -12,11 +12,12 @@
     var $coverImage = $("#CoverImage");
     var $postCoverImage = $('#Post_CoverImage');
     var $coverImageFile = $('#CoverImageFile');
-
+    var $postFormSubmitButton = $('#PostFormSubmitButton');
 
     var setCoverImage = function (file) {
         $postCoverImage.val(file.fileUrl);
         $coverImage.attr("src", file.fileUrl);
+        $postFormSubmitButton.removeAttr('disabled');
     };
 
     var uploadCoverImage = function (file) {
@@ -56,6 +57,7 @@
             return;
         }
 
+        $postFormSubmitButton.attr('disabled',true);
         var file = $coverImageFile.prop('files')[0];
         uploadCoverImage(file);
     });
@@ -113,7 +115,7 @@
             var validationResult = $form.validate();
             abp.message.warn(validationResult.errorList[0].message); //TODO: errors can be merged into lines. make sweetalert accept HTML.
             e.preventDefault();
-            return false; //for old browsers 
+            return false; //for old browsers
         }
 
         $submitButton.buttonBusy();

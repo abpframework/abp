@@ -12,11 +12,13 @@
     var $coverImage = $("#CoverImage");
     var $postCoverImage = $('#Post_CoverImage');
     var $coverImageFile = $('#CoverImageFile');
+    var $postFormSubmitButton = $('#PostFormSubmitButton');
 
     var setCoverImage = function (file) {
         $postCoverImage.val(file.fileUrl);
         $coverImage.attr("src", file.fileUrl);
         $coverImage.show();
+        $postFormSubmitButton.removeAttr('disabled');
     };
 
     var uploadCoverImage = function (file) {
@@ -39,6 +41,7 @@
         if (!$coverImageFile.prop('files').length) {
             return;
         }
+        $postFormSubmitButton.attr('disabled',true);
         var file = $coverImageFile.prop('files')[0];
         uploadCoverImage(file);
     });

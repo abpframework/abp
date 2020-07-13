@@ -1,9 +1,0 @@
-{
-  "version": "0.1.0",
-  "name": "msdemo-backend-admin-app-host",
-  "private": true,
-  "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^1.0.2",
-    "@abp/blogging": "^1.0.2"
-  }
-}
