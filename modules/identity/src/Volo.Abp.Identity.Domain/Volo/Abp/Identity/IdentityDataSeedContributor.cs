@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity
             return IdentityDataSeeder.SeedAsync(
                 context["AdminEmail"] as string ?? "admin@abp.io",
                 context["AdminPassword"] as string ?? "1q2w3E*",
-                context.TenantId
+                context?.TenantId
             );
         }
     }
