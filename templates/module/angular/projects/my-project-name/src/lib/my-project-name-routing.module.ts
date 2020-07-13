@@ -7,7 +7,13 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: MyProjectNameComponent,
+    component: DynamicLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: MyProjectNameComponent,
+      },
+    ],
   },
 ];
 

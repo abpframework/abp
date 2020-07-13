@@ -72,7 +72,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 Name = document.Name,
                 FileName = document.FileName,
                 Content = document.Content,
-                LanguageCode = document.LanguageCode,
+                LanguageCode = ConvertLanguageCode(document.LanguageCode),
                 Version = document.Version
             };
 
@@ -178,7 +178,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                                 new TermQuery
                                 {
                                     Field = "languageCode",
-                                    Value = languageCode
+                                    Value = ConvertLanguageCode(languageCode)
                                 }
                             }
                         }
@@ -231,6 +231,11 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             {
                 throw new BusinessException(DocsDomainErrorCodes.ElasticSearchNotEnabled);
             }
+        }
+
+        protected string ConvertLanguageCode(string languageCode)
+        {
+            return languageCode.Replace("-", "").ToLower();
         }
     }
 }

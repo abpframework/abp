@@ -18,7 +18,7 @@ This will make the following modifications:
 
 - Update your package.json and install new packages
 - Revise tsconfig.json files to create a "Solution Style" configuration
-- Rename `browserlist` as `.browserlistrc`
+- Rename `browserslist` as `.browserslistrc`
 
 On the other hand, it would be better if you check which packages to update first with `yarn ng update` command alone. Angular will give you a list of packages to update.
 
@@ -145,42 +145,33 @@ export class AppModule {}
 AppRoutingModule:
 
 ```js
-import { DynamicLayoutComponent } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        loadChildren: () => import('./home/home.module')
-          .then(m => m.HomeModule),
-      },
-      {
-        path: 'account',
-        loadChildren: () => import('@abp/ng.account')
-          .then(m => m.AccountModule.forLazy({ redirectUrl: '/' })),
-      },
-      {
-        path: 'identity',
-        loadChildren: () => import('@abp/ng.identity')
-          .then(m => m.IdentityModule.forLazy()),
-      },
-      {
-        path: 'tenant-management',
-        loadChildren: () => import('@abp/ng.tenant-management')
-          .then(m => m.TenantManagementModule.forLazy()),
-      },
-      {
-        path: 'setting-management',
-        loadChildren: () => import('@abp/ng.setting-management')
-          .then(m => m.SettingManagementModule.forLazy()),
-      },
-    ],
+    pathMatch: 'full',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+  },
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('@abp/ng.account').then(m => m.AccountModule.forLazy({ redirectUrl: '/' })),
+  },
+  {
+    path: 'identity',
+    loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule.forLazy()),
+  },
+  {
+    path: 'tenant-management',
+    loadChildren: () =>
+      import('@abp/ng.tenant-management').then(m => m.TenantManagementModule.forLazy()),
+  },
+  {
+    path: 'setting-management',
+    loadChildren: () =>
+      import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
   },
 ];
 
@@ -191,7 +182,23 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-> You may have noticed that we used `DynamicLayoutComponent` at top level route component. We made this change in order to avoid unnecessary renders and flickering. It is not mandatory, but we recommend doing the same in your app routing.
+AppComponent:
+
+```js
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <abp-loader-bar></abp-loader-bar>
+    <abp-dynamic-layout></abp-dynamic-layout>
+  `,
+})
+export class AppComponent {}
+```
+
+
+> You may have noticed that we used `<abp-dynamic-layout>` instead of `<router-outlet>` in the AppComponent template. We made this change in order to avoid unnecessary renders and flickering. It is not mandatory, but we recommend doing the same in your AppComponent.
 
 #### What to Do When Migrating?
 
@@ -201,7 +208,7 @@ export class AppRoutingModule {}
 - Call static `forRoot` method of `ThemeBasicModule` (or `ThemeLeptonModule` if commercial) and remove `SharedModule` from imports (unless you have added anything that is necessary for your root module in it).
 - Import lazy ABP modules directly in app routing module (e.g. `() => import('@abp/ng.identity').then(...)`).
 - Call static `forLazy` method of all lazy modules inside `then`, even if a configuration is not passed.
-- [OPTIONAL] Add an empty parent route with `DynamicLayoutComponent` for better performance and UX.
+- [OPTIONAL] Add the `<abp-dynamic-layout></abp-dynamic-layout>` to the AppComponent template and remove the `<router-outlet></router-outlet>` for better performance and UX.
 
 
 ### RoutesService

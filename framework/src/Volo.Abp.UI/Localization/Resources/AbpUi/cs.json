@@ -47,6 +47,8 @@
     "PagerInfoEmpty": "Zobrazeno od 0 do 0 z celkem 0 záznamů",
     "PagerInfoFiltered": "(filtrováno ze všech _MAX_ záznamů)",
     "NoDataAvailableInDatatable": "Nejsou žádná data",
+    "Total": "celkem",
+    "Selected": "vybráno",
     "PagerShowMenuEntries": "Zobrazit _MENU_ záznamů",
     "DatatableActionDropdownDefaultText": "Akce",
     "ChangePassword": "Změnit heslo",
