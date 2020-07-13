@@ -299,9 +299,11 @@
                     column.targets = i;
                 }
 
-                if (!column.render && column.dataFormat){
+                if (!column.render && column.dataFormat) {
                     var render = datatables.defaultRenderers[column.dataFormat];
-                    column.render = render ? render : ISOStringToDateTimeLocaleString(column.dataFormat);
+                    if (render) {
+                        column.render = render;
+                    }
                 }
 
                 if (column.rowAction) {
