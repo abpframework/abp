@@ -9,12 +9,19 @@ import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import { ApplicationConfigurationService, RoutesService } from '../services';
 import { ReplaceableComponentsState } from '../states';
+import { AddReplaceableComponent } from '../actions';
 
 @Component({
   selector: 'abp-layout-application',
   template: '<router-outlet></router-outlet>',
 })
 class DummyApplicationLayoutComponent {}
+
+@Component({
+  selector: 'abp-layout-application-2',
+  template: '<router-outlet></router-outlet>',
+})
+class DummyApplicationLayout2Component {}
 
 @Component({
   selector: 'abp-layout-account',
@@ -30,6 +37,7 @@ class DummyEmptyLayoutComponent {}
 
 const LAYOUTS = [
   DummyApplicationLayoutComponent,
+  DummyApplicationLayout2Component,
   DummyAccountLayoutComponent,
   DummyEmptyLayoutComponent,
 ];
@@ -180,6 +188,23 @@ describe('DynamicLayoutComponent', () => {
     spectator.detectComponentChanges();
     expect(spectator.query('abp-dynamic-layout')).toBeTruthy();
     expect(spectator.query('abp-layout-application')).toBeTruthy();
+  });
+
+  it('should display the custom layout component when the store is updated.', async () => {
+    spectator.router.navigateByUrl('/parentWithLayout/childWithoutLayout');
+    await spectator.fixture.whenStable();
+    spectator.detectComponentChanges();
+
+    store.dispatch(new AddReplaceableComponent({
+      component: DummyApplicationLayout2Component,
+      key: 'Theme.ApplicationLayoutComponent',
+    }));
+
+    await spectator.fixture.whenStable();
+    spectator.detectComponentChanges();
+    expect(spectator.query('abp-dynamic-layout')).toBeTruthy();
+    expect(spectator.query('abp-layout-application')).toBeFalsy();
+    expect(spectator.query('abp-layout-application-2')).toBeTruthy();
   });
 
   it('should handle account layout from own property and display it', async () => {

@@ -10,6 +10,7 @@ import { ReplaceableComponentsState } from '../states/replaceable-components.sta
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
 import { TreeNode } from '../utils/tree-utils';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -36,17 +37,39 @@ export class DynamicLayoutComponent implements OnDestroy {
     const route = injector.get(ActivatedRoute);
     const router = injector.get(Router);
     const routes = injector.get(RoutesService);
+
+    const layoutKeys = {
+      application: 'Theme.ApplicationLayoutComponent',
+      account: 'Theme.AccountLayoutComponent',
+      empty: 'Theme.EmptyLayoutComponent'
+    };
+
     const layouts = {
       application: this.getComponent('Theme.ApplicationLayoutComponent'),
       account: this.getComponent('Theme.AccountLayoutComponent'),
       empty: this.getComponent('Theme.EmptyLayoutComponent'),
     };
 
+    let expectedLayout: string;
+
+    for (const key of Object.keys(layoutKeys)) {
+      this.store
+        .select(ReplaceableComponentsState.getComponent(layoutKeys[key]))
+        .pipe(takeUntilDestroy(this), distinctUntilChanged())
+        .subscribe((res = {} as ReplaceableComponents.ReplaceableComponent) => {
+          (layouts[key] || {}).component = res.component;
+
+          if (expectedLayout === key) {
+            this.layout = (layouts[expectedLayout] || {}).component;
+          }
+        });
+    }
+
     router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
       if (event instanceof NavigationEnd) {
-        let expectedLayout = (route.snapshot.data || {}).layout;
+        let newExpectedLayout = (route.snapshot.data || {}).layout;
 
-        if (!expectedLayout) {
+        if (!newExpectedLayout) {
           let node = findRoute(routes, getRoutePath(router));
           node = { parent: node } as TreeNode<ABP.Route>;
 
@@ -54,13 +77,15 @@ export class DynamicLayoutComponent implements OnDestroy {
             node = node.parent;
 
             if (node.layout) {
-              expectedLayout = node.layout;
+              newExpectedLayout = node.layout;
               break;
             }
           }
         }
 
-        if (!expectedLayout) expectedLayout = eLayoutType.empty;
+        if (!newExpectedLayout) newExpectedLayout = eLayoutType.empty;
+
+        expectedLayout = newExpectedLayout;
 
         this.layout = layouts[expectedLayout].component;
       }
