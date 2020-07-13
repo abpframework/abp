@@ -80,6 +80,8 @@ export class AppComponent {
 }
 ```
 
+> If you like to replace a layout component at runtime (e.g: changing the layout by pressing a button), pass the second parameter of the AddReplaceableComponent action as true. DynamicLayoutComponent loads content using a router-outlet. When the second parameter of AddReplaceableComponent is true, the route will be refreshed, so use it with caution. Your component state will be gone and any initiation logic (including HTTP requests) will be repeated.
+
 ### Layout Components
 
 ![Layout Components](./images/layout-components.png)
