@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
     {
-        private readonly ILogger<AbpUnitOfWorkMiddleware> _logger;
+        private readonly ILogger<AbpExceptionHandlingMiddleware> _logger;
 
         private readonly Func<object, Task> _clearCacheHeadersDelegate;
 
