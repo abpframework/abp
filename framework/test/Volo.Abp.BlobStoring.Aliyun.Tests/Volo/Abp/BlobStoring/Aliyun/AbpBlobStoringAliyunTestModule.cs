@@ -5,10 +5,6 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring.Aliyun
 {
-
-    /// <summary>
-    /// This module will not try to connect to azure.
-    /// </summary>
     [DependsOn(
         typeof(AbpBlobStoringAliyunModule),
         typeof(AbpBlobStoringTestModule)

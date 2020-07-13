@@ -11,8 +11,9 @@ using Volo.Abp.DependencyInjection;
 namespace Volo.Abp.BlobStoring.Aliyun
 {
     /// <summary>
+    /// Sub-account access to OSS or STS temporary authorization to access OSS
+    /// 子账号/STS临时授权访问OSS
     /// STS:https://help.aliyun.com/document_detail/28756.html
-    /// STS or sub account number
     /// </summary>
     public class DefaultOssClientFactory : IOssClientFactory, ITransientDependency
     {
@@ -28,7 +29,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
 
         public virtual IOss Create(AliyunBlobProviderConfiguration aliyunConfig)
         {
-            //使用账号 sub account number
+            //Sub-account
             if (aliyunConfig.DurationSeconds <= 0)
             {
                 var key = aliyunConfig.ToOssKeyString();
@@ -43,7 +44,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             }
             else
             {
-                //使用STS
+                //STS temporary authorization to access OSS
                 var key = aliyunConfig.ToOssWithStsKeyString();
                 var iOssClient = _cache.Get<IOss>(key);
                 if (iOssClient != null)
@@ -55,16 +56,15 @@ namespace Volo.Abp.BlobStoring.Aliyun
                     aliyunConfig.AccessKeyId,
                     aliyunConfig.AccessKeySecret);
                 DefaultAcsClient client = new DefaultAcsClient(profile);
-                //构建AssumeRole请求
                 AssumeRoleRequest request = new AssumeRoleRequest
                 {
                     AcceptFormat = FormatType.JSON,
-                    //指定角色ARN
+                    //eg:acs:ram::$accountID:role/$roleName
                     RoleArn = aliyunConfig.RoleArn,
                     RoleSessionName = aliyunConfig.RoleSessionName,
-                    //设置Token有效期，可选参数，默认3600秒
+                    //Set the validity period of the temporary access credential, the unit is s, the minimum is 900, and the maximum is 3600. default 3600
                     DurationSeconds = aliyunConfig.DurationSeconds,
-                    //设置Token的附加权限策略；在获取Token时，通过额外设置一个权限策略进一步减小Token的权限
+                    //Set additional permission policy of Token; when acquiring Token, further reduce the permission of Token by setting an additional permission policy
                     Policy = aliyunConfig.Policy.IsNullOrEmpty() ? null : aliyunConfig.Policy,
                 };
                 var response = client.GetAcsResponse(request);

@@ -3,7 +3,9 @@
 namespace Volo.Abp.BlobStoring.Aliyun
 {
     /// <summary>
-    /// STS临时授权访问OSS:https://help.aliyun.com/document_detail/100624.html
+    /// Sub-account access to OSS or STS temporary authorization to access OSS
+    /// 子账号/STS临时授权访问OSS
+    /// https://help.aliyun.com/document_detail/100624.html
     /// </summary>
     public class AliyunBlobProviderConfiguration
     {
@@ -48,12 +50,20 @@ namespace Volo.Abp.BlobStoring.Aliyun
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.RoleArn, value);
         }
 
+        /// <summary>
+        /// The name used to identify the temporary access credentials, it is recommended to use different application users to distinguish.
+        /// 用来标识临时访问凭证的名称，建议使用不同的应用程序用户来区分。
+        /// </summary>
         public string RoleSessionName
         {
             get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.RoleSessionName);
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.RoleSessionName, value);
         }
 
+        /// <summary>
+        /// Set the validity period of the temporary access credential, the unit is s, the minimum is 900, and the maximum is 3600.
+        /// 设置临时访问凭证的有效期，单位是s，最小为900，最大为3600。
+        /// </summary>
         public int DurationSeconds
         {
             get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.DurationSeconds, 0);

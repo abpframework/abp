@@ -6,11 +6,11 @@ namespace Volo.Abp.BlobStoring.Aliyun
     public class AliyunBlobNamingNormalizer : IBlobNamingNormalizer, ITransientDependency
     {
         /// <summary>
-        /// 只允许小写字母、数字、短横线（-），且不能以短横线开头或结尾
         /// Container names can contain only letters, numbers, and the dash (-) character 
-        /// can't start or end with the dash (-) character 
-        /// 3~63 个字符
+        /// they can't start or end with the dash (-) character 
         /// Container names must be from 3 through 63 characters long
+        /// 只允许小写字母、数字、短横线（-），且不能以短横线开头或结尾
+        /// 3~63 个字符
         /// </summary>
         public virtual string NormalizeContainerName(string containerName)
         {
