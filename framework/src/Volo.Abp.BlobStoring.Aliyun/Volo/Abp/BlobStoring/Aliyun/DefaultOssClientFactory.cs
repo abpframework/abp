@@ -17,13 +17,10 @@ namespace Volo.Abp.BlobStoring.Aliyun
     /// </summary>
     public class DefaultOssClientFactory : IOssClientFactory, ITransientDependency
     {
-        private readonly IBlobContainerConfigurationProvider _configurationProvider;
         private readonly IMemoryCache _cache;
         public DefaultOssClientFactory(
-            IBlobContainerConfigurationProvider configurationProvider,
             IMemoryCache cache)
         {
-            _configurationProvider = configurationProvider;
             _cache = cache;
         }
 
