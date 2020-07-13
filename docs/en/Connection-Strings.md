@@ -29,9 +29,9 @@ See the following configuration:
 
 This configuration defines three different connection strings:
 
-* `MyMainDb` (the `Default` connection string) is the main connection string of the application. If you don't specify a connection string for a module, it fallbacks to the `Default` connection string. The [application startup template](Startup-Templates/Application.md) is configured to use a single connection string, so all the modules uses a single shared database.
-* `MyIdsDb` is used by the [IdentityServer](Modules/IdentityServer.md) module.
-* `MyPermissionDb` is used by the [Permission Management](Modules/Permission-Management.md) module.
+* `Default` (the Default connection string) is the main connection string of the application. If you don't specify a connection string for a module, it fallbacks to the `Default` connection string. The [application startup template](Startup-Templates/Application.md) is configured to use a single connection string, so all the modules uses a single shared database.
+* `AbpIdentityServer` is used by the [IdentityServer](Modules/IdentityServer.md) module.
+* `AbpPermissionManagement` is used by the [Permission Management](Modules/Permission-Management.md) module.
 
 [Pre-built application modules](Modules/Index.md) define constants for the connection string names. For example, the IdentityServer module defines a ` ConnectionStringName ` constant in the ` AbpIdentityServerDbProperties ` class (located in the ` Volo.Abp.IdentityServer ` namespace). Other modules similarly define constants, so you can investigate the connection string name.
 
