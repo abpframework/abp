@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, createSelector, Selector, State, StateContext } from '@ngxs/store';
 import snq from 'snq';
@@ -29,10 +29,26 @@ export class ReplaceableComponentsState {
     return selector;
   }
 
-  constructor(private router: Router) {}
+  constructor(private ngZone: NgZone, private router: Router) {}
+
+  // TODO: Create a shared service for route reload and more
+  private reloadRoute() {
+    const { shouldReuseRoute } = this.router.routeReuseStrategy;
+    const setRouteReuse = (reuse: typeof shouldReuseRoute) => {
+      this.router.routeReuseStrategy.shouldReuseRoute = reuse;
+    };
+
+    setRouteReuse(() => false);
+    this.router.navigated = false;
+
+    this.ngZone.run(async () => {
+      await this.router.navigateByUrl(this.router.url).catch();
+      setRouteReuse(shouldReuseRoute);
+    });
+  }
 
   @Action(AddReplaceableComponent)
-  async replaceableComponentsAction(
+  replaceableComponentsAction(
     { getState, patchState }: StateContext<ReplaceableComponents.State>,
     { payload, reload }: AddReplaceableComponent,
   ) {
@@ -52,14 +68,6 @@ export class ReplaceableComponentsState {
       replaceableComponents,
     });
 
-    if (reload) {
-      // TODO: Create a shared service for route reload and more
-      const { shouldReuseRoute } = this.router.routeReuseStrategy;
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-      this.router.navigated = false;
-
-      await this.router.navigateByUrl(this.router.url).catch();
-      this.router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;
-    }
+    if (reload) this.reloadRoute();
   }
 }
