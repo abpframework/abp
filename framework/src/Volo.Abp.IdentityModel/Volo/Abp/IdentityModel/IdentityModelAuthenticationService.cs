@@ -10,6 +10,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -26,18 +28,21 @@ namespace Volo.Abp.IdentityModel
         protected IHttpClientFactory HttpClientFactory { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IdentityModelHttpRequestMessageOptions IdentityModelHttpRequestMessageOptions { get; }
+        protected IDistributedCache<IdentityModelTokenCacheItem> Cache { get; }
 
         public IdentityModelAuthenticationService(
             IOptions<AbpIdentityClientOptions> options,
             ICancellationTokenProvider cancellationTokenProvider,
             IHttpClientFactory httpClientFactory,
             ICurrentTenant currentTenant,
-            IOptions<IdentityModelHttpRequestMessageOptions> identityModelHttpRequestMessageOptions)
+            IOptions<IdentityModelHttpRequestMessageOptions> identityModelHttpRequestMessageOptions,
+            IDistributedCache<IdentityModelTokenCacheItem> cache)
         {
             ClientOptions = options.Value;
             CancellationTokenProvider = cancellationTokenProvider;
             HttpClientFactory = httpClientFactory;
             CurrentTenant = currentTenant;
+            Cache = cache;
             IdentityModelHttpRequestMessageOptions = identityModelHttpRequestMessageOptions.Value;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
@@ -76,21 +81,36 @@ namespace Volo.Abp.IdentityModel
                 throw new AbpException($"Could not retrieve the OpenId Connect discovery document! ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
             }
 
-            var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
-
-            if (tokenResponse.IsError)
+            var cacheKey = CalculateCacheKey(discoveryResponse, configuration);
+            var tokenCacheItem = await Cache.GetAsync(cacheKey);
+            if (tokenCacheItem == null)
             {
-                if (tokenResponse.ErrorDescription != null)
+                var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
+
+                if (tokenResponse.IsError)
                 {
-                    throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
+                    if (tokenResponse.ErrorDescription != null)
+                    {
+                        throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. " +
+                                               $"Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
+                    }
+
+                    var rawError = tokenResponse.Raw;
+                    var withoutInnerException = rawError.Split(new string[] { "<eof/>" }, StringSplitOptions.RemoveEmptyEntries);
+                    throw new AbpException(withoutInnerException[0]);
                 }
 
-                var rawError = tokenResponse.Raw;
-                var withoutInnerException = rawError.Split(new string[] { "<eof/>" }, StringSplitOptions.RemoveEmptyEntries);
-                throw new AbpException(withoutInnerException[0]);
+                await Cache.SetAsync(cacheKey, new IdentityModelTokenCacheItem(tokenResponse.AccessToken),
+                    new DistributedCacheEntryOptions()
+                    {
+                        //Subtract 10 seconds of network request time.
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(tokenResponse.ExpiresIn - 10)
+                    });
+
+                return tokenResponse.AccessToken;
             }
 
-            return tokenResponse.AccessToken;
+            return tokenCacheItem.AccessToken;
         }
 
         protected virtual void SetAccessToken(HttpClient client, string accessToken)
@@ -208,6 +228,11 @@ namespace Volo.Abp.IdentityModel
                 //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
                 client.DefaultRequestHeaders.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
             }
+        }
+
+        protected virtual string CalculateCacheKey(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
+        {
+            return IdentityModelTokenCacheItem.CalculateCacheKey(discoveryResponse, configuration);
         }
     }
 }
