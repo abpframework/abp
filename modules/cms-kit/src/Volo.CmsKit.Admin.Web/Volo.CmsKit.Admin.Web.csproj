@@ -28,10 +28,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <EmbeddedResource Include="wwwroot\**\*.*" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="wwwroot\**\*.*" />
   </ItemGroup>
 
 </Project>
