@@ -16,12 +16,10 @@ $commands = (
   "npm install",
   "npm run publish-packages -- --nextVersion $Version",
   "cd ../../",
-  "yarn lerna version $Version --yes --no-commit-hooks --skip-git --force-publish",
-  "yarn replace-with-tilde",
-  "yarn lerna exec 'npm publish --registry https://registry.npmjs.org'",
-  "yarn update:templates",
-  "yarn gulp:app",
-  "yarn gulp:module"
+  "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
+  "npm run replace-with-tilde",
+  "npm run lerna -- exec 'npm publish --registry https://registry.npmjs.org'",
+  "npm run update-gulp"
 )
 
 foreach ($command in $commands) { 
