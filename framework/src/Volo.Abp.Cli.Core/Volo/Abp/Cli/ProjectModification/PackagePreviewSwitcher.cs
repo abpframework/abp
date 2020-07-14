@@ -9,26 +9,41 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
-    public class PackageSourceSwitcher : ITransientDependency
+    public class PackagePreviewSwitcher : ITransientDependency
     {
         private readonly PackageSourceAdder _packageSourceAdder;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
 
-        public ILogger<PackageSourceSwitcher> Logger { get; set; }
+        public ILogger<PackagePreviewSwitcher> Logger { get; set; }
 
-        public PackageSourceSwitcher(PackageSourceAdder packageSourceAdder,
+        public PackagePreviewSwitcher(PackageSourceAdder packageSourceAdder,
             NpmPackagesUpdater npmPackagesUpdater,
             VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater)
         {
             _packageSourceAdder = packageSourceAdder;
             _npmPackagesUpdater = npmPackagesUpdater;
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
-            Logger = NullLogger<PackageSourceSwitcher>.Instance;
+            Logger = NullLogger<PackagePreviewSwitcher>.Instance;
         }
 
         public async Task SwitchToPreview(CommandLineArgs commandLineArgs)
         {
+            var solutionPath = GetSolutionPath(commandLineArgs);
+            var solutionFolder = GetSolutionFolder(commandLineArgs);
+
+            await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
+                solutionPath,
+                includeReleaseCandidates: true);
+
+            await _npmPackagesUpdater.Update(
+                solutionFolder,
+                true);
+        }
+
+        public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
+        {
+            // TODO: Remove this when switched to stable
             _packageSourceAdder.Add("ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
             var solutionPath = GetSolutionPath(commandLineArgs);
@@ -50,6 +65,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 solutionPath,
+                false,
                 false,
                 true);
 

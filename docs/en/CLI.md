@@ -210,12 +210,12 @@ abp switch-to-nightly [options]
 
 ### switch-to-stable
 
-If you're using the ABP Framework **nightly** preview packages, you can switch back to stable version using this command.
+If you're using the ABP Framework preview packages, you can switch back to latest stable version using this command.
 
 Usage:
 
 ````bash
-abp switch-from-nightly-to-stable [options]
+abp switch-to-stable [options]
 ````
 #### Options
 

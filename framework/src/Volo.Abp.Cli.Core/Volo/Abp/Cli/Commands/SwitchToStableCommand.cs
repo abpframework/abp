@@ -6,18 +6,18 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class SwitchFromNightlyToStableCommand : IConsoleCommand, ITransientDependency
+    public class SwitchToStableCommand : IConsoleCommand, ITransientDependency
     {
-        private readonly PackageSourceSwitcher _packageSourceSwitcher;
+        private readonly PackagePreviewSwitcher _packagePreviewSwitcher;
 
-        public SwitchFromNightlyToStableCommand(PackageSourceSwitcher packageSourceSwitcher)
+        public SwitchToStableCommand(PackagePreviewSwitcher packagePreviewSwitcher)
         {
-            _packageSourceSwitcher = packageSourceSwitcher;
+            _packagePreviewSwitcher = packagePreviewSwitcher;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            await _packageSourceSwitcher.SwitchToStable(commandLineArgs);
+            await _packagePreviewSwitcher.SwitchToStable(commandLineArgs);
         }
 
         public string GetUsageInfo()
