@@ -16,7 +16,7 @@
     "Permission:Delete": "Verwijder",
     "Permission:ManageConnectionStrings": "Beheer connection strings",
     "Permission:ManageFeatures": "Beheer functies",
-    "DisplayName:AdminEmailAddress": "Admin e-mail adres", 
-    "DisplayName:AdminPassword": "Admin wachtwoord" 
+    "DisplayName:AdminEmailAddress": "Admin e-mail adres",
+    "DisplayName:AdminPassword": "Admin wachtwoord"
   }
 }
