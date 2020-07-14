@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Public.Permissions
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            var myGroup = context.AddGroup(CmsKitPublicPermissions.GroupName, L("Permission:Public"));
+            var myGroup = context.AddGroup(CmsKitPublicPermissions.GroupName, L("Permission:CmsKit.Public"));
         }
 
         private static LocalizableString L(string name)
