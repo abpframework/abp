@@ -539,9 +539,9 @@
             }
             return -1;
         };
-        LinkedList.prototype.forEach = function (callback) {
+        LinkedList.prototype.forEach = function (iteratorFn) {
             for (var node = this.first, position = 0; node; position++, node = node.next) {
-                callback(node, position, this);
+                iteratorFn(node, position, this);
             }
         };
         LinkedList.prototype.get = function (position) {
