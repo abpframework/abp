@@ -350,6 +350,7 @@
             "tsConfig": "apps/dev-app/tsconfig.dev.json",
             "aot": true,
             "extractCss": true,
+            "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
             "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
             "styles": [
               {
