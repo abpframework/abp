@@ -10,7 +10,6 @@ namespace Volo.Abp.BlobStoring.Minio
         private readonly IMinioBlobNameCalculator _calculator;
         private readonly ICurrentTenant _currentTenant;
 
-        private const string MinioContainerName = "/";
         private const string MinioSeparator = "/";
 
         public MinioBlobNameCalculator_Tests()

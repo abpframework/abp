@@ -2,7 +2,6 @@
 using Minio.Exceptions;
 using System;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -66,29 +65,27 @@ namespace Volo.Abp.BlobStoring.Minio
             var blobName = MinioBlobNameCalculator.Calculate(args);
             var client = GetMinioClient(args);
             var containerName = GetContainerName(args);
+
             if (!await BlobExistsAsync(client, containerName, blobName))
             {
                 return null;
             }      
                
             var memoryStream = new MemoryStream();
-            await client.GetObjectAsync(containerName, blobName,
-                                                (stream) =>
-                                                {
-                                                    if (stream != null)
-                                                    {
-                                                        stream.CopyTo(memoryStream);
-                                                    }
-                                                    else
-                                                    {
-                                                        memoryStream = null;
-                                                    }
-                                                });
+            await client.GetObjectAsync(containerName, blobName,  stream => 
+            {
+                    if (stream != null)
+                    {
+                        stream.CopyTo(memoryStream);
+                    }
+                    else
+                    {
+                        memoryStream = null;
+                    }
+            });
 
             return memoryStream;
-
         }
-
 
         private MinioClient GetMinioClient(BlobProviderArgs args)
         {
@@ -101,10 +98,7 @@ namespace Volo.Abp.BlobStoring.Minio
             }
 
             return client;
-
         }
-
-
 
         protected virtual async Task CreateBucketIfNotExists(MinioClient client,string containerName)
         {
@@ -112,7 +106,6 @@ namespace Volo.Abp.BlobStoring.Minio
             {
                 await client.MakeBucketAsync(containerName);
             }
-
         }
 
         private async Task<bool> BlobExistsAsync(MinioClient client, string containerName , string blobName)
@@ -127,22 +120,25 @@ namespace Volo.Abp.BlobStoring.Minio
                     // else it means that the object exists.
                     // Execution is successful.
                     await client.StatObjectAsync(containerName, blobName);
-                    return true;
                 }
-                catch (MinioException ex)
-                {                    
-                    if(ex is ObjectNotFoundException)
+                catch (Exception e)
+                {                   
+                    if (e is ObjectNotFoundException)
                     {
                         return false;
                     }
-
-                    throw ex;
+                    else
+                    {
+                        throw e;
+                    }
                 }
+
+                return true;
             }
 
             return false;
-
         }
+
         private static string GetContainerName(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetMinioConfiguration();
@@ -152,6 +148,5 @@ namespace Volo.Abp.BlobStoring.Minio
                 ? args.ContainerName.ToLower()
                 : configuration.BucketName.ToLower();
         }
-
     }
 }

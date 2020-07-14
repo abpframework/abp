@@ -304,3 +304,11 @@ modules/virtual-file-explorer/app/Volo.Abp.VirtualFileExplorer.DemoApp/Logs/
 /templates/app/angular/package-lock.json
 /modules/client-simulation/demo/Volo.ClientSimulation.Demo/package-lock.json
 
+/framework/src/Volo.Abp.AspNetCore/Properties/launchSettings.json
+/framework/src/Volo.Abp.AspNetCore.Authentication.OAuth/Properties/launchSettings.json
+/framework/src/Volo.Abp.AspNetCore.MultiTenancy/Properties/launchSettings.json
+/framework/src/Volo.Abp.AspNetCore.Mvc.Client/Properties/launchSettings.json
+/framework/src/Volo.Abp.AspNetCore.Serilog/Properties/launchSettings.json
+/framework/src/Volo.Abp.AspNetCore.SignalR/Properties/launchSettings.json
+/framework/src/Volo.Abp.AspNetCore.TestBase/Properties/launchSettings.json
+/framework/src/Volo.Abp.Http.Client.IdentityModel.Web/Properties/launchSettings.json

@@ -28,7 +28,6 @@ namespace Volo.Abp.BlobStoring.Minio
         private string _accessKey;
         private string _secretKey;
 
-
         private readonly string _randomContainerName = "abp-minio-test-container-" + Guid.NewGuid().ToString("N");
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -70,7 +69,7 @@ namespace Volo.Abp.BlobStoring.Minio
                 IDisposable subscription = observables.Subscribe(
                       async  item => await minioClient.RemoveObjectAsync(_randomContainerName, item.Key),
                       async  () => await minioClient.RemoveBucketAsync(_randomContainerName)
-                  );
+                );
         
             }
            

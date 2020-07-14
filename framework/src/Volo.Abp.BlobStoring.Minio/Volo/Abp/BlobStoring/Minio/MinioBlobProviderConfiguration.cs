@@ -42,9 +42,7 @@
         {
             get => _containerConfiguration.GetConfigurationOrDefault(MinioBlobProviderConfigurationNames.WithSSL, false);
             set => _containerConfiguration.SetConfiguration(MinioBlobProviderConfigurationNames.WithSSL, value);
-        }
-
- 
+        } 
 
         /// <summary>
         ///Default value: false.
