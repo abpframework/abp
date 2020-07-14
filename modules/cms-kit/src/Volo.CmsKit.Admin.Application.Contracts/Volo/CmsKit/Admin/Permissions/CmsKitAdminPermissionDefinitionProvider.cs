@@ -4,11 +4,11 @@ using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit.Admin.Permissions
 {
-    public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
+    public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvider
     {
         public override void Define(IPermissionDefinitionContext context)
         {
-            var myGroup = context.AddGroup(AdminPermissions.GroupName, L("Permission:Admin"));
+            var myGroup = context.AddGroup(CmsKitAdminPermissions.GroupName, L("Permission:Admin"));
         }
 
         private static LocalizableString L(string name)
