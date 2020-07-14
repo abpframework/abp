@@ -53,7 +53,7 @@ namespace Volo.Abp.Cli.Commands
             var apiUrl = commandLineArgs.Options.GetOrNull(Options.ApiUrl.Short, Options.ApiUrl.Long);
             if (string.IsNullOrWhiteSpace(apiUrl))
             {
-                var environmentJson = File.ReadAllText("projects/dev-app/src/environments/environment.ts").Split("export const environment = ")[1].Replace(";", " ");
+                var environmentJson = File.ReadAllText("src/environments/environment.ts").Split("export const environment = ")[1].Replace(";", " ");
                 var environment = JObject.Parse(environmentJson);
                 apiUrl = environment["apis"]["default"]["url"].ToString();
             }
@@ -294,7 +294,7 @@ namespace Volo.Abp.Cli.Commands
                                 if (firstType == "List" && !File.Exists(secondTypeModelPath))
                                 {
                                     secondType = "any";
-                                }
+                                } 
 
                                 serviceFileText.AppendLine(
                                     firstType == "List"
@@ -322,13 +322,15 @@ namespace Volo.Abp.Cli.Commands
                                     "String" => "string",
                                     "IActionResult" => "void",
                                     "ActionResult" => "void",
+                                    "Int64" => "number",
+                                    "Int32" => "number",
                                     _ => type
-                                };
+                                }; 
 
                                 serviceFileText.AppendLine(
                                     $" {actionName}({parametersText}): Observable<{type}> {{");
 
-                                if (type != "void" && type != "string")
+                                if (type != "void" && type != "string" && type != "number")
                                 {
                                     secondTypeList.Add(type);
                                 }
@@ -502,6 +504,11 @@ namespace Volo.Abp.Cli.Commands
             var typeModelName = typeName.Replace("<", "").Replace(">", "").Replace("?", "").PascalToKebabCase() + ".ts";
 
             var path = output + $"{outputPrefix}/{rootPath}/{controllerPathName}/models/{typeModelName}";
+
+            if (File.Exists(path))
+            {
+                return null;
+            }
 
             var modelFileText = new StringBuilder();
 

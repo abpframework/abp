@@ -650,7 +650,7 @@ export class BookListComponent implements OnInit {
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="bookType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
+        <option [ngValue]="bookType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -721,8 +721,8 @@ export class BookListComponent implements OnInit {
 
   booksType = BookType;
 
-  // <== added bookTypeArr array ==>
-  bookTypeArr = Object.keys(BookType).filter(
+  // <== added bookTypes array ==>
+  bookTypes = Object.keys(BookType).filter(
     (bookType) => typeof this.booksType[bookType] === 'number'
   );
 
@@ -764,7 +764,7 @@ export class BookListComponent implements OnInit {
 
 * 我们添加了一个新的 `NgbDateAdapter` 提供程序,它将Datepicker值转换为Date类型. 有关更多详细信息,请参见[datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview).
 
-* 我们添加了 `bookTypeArr` 数组,以便能够在combobox值中使用它. `bookTypeArr` 包含 `BookType` 枚举的字段. 得到的数组如下所示:
+* 我们添加了 `bookTypes` 数组,以便能够在combobox值中使用它. `bookTypes` 包含 `BookType` 枚举的字段. 得到的数组如下所示:
 
   ```js
   ['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
@@ -799,7 +799,7 @@ export class BookListComponent implements OnInit {
 
   booksType = BookType;
 
-  bookTypeArr = Object.keys(BookType).filter(
+  bookTypes = Object.keys(BookType).filter(
     (bookType) => typeof this.booksType[bookType] === 'number'
   );
 
@@ -904,7 +904,7 @@ export class BookListComponent implements OnInit {
 
   booksType = BookType;
 
-  bookTypeArr = Object.keys(BookType).filter(
+  bookTypes = Object.keys(BookType).filter(
     (bookType) => typeof this.booksType[bookType] === 'number'
   );
 

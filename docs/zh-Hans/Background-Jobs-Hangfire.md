@@ -66,9 +66,7 @@ public class YourModule : AbpModule
   }
 ````
 
-1. 我们需要在 `Module` 类的 `OnApplicationInitialization` 方法添加 `UseHangfireServer` 方法调用.
-
-如果你想要使用Hangfire的面板,你可以使用: `UseHangfireDashboard`
+1. 如果你想要使用Hangfire的面板,你可以在 `Module` 类的 `OnApplicationInitialization` 方法添加: `UseHangfireDashboard`
 
 ````csharp
  public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -77,7 +75,6 @@ public class YourModule : AbpModule
 
     // ... others
 
-    app.UseHangfireServer();
     app.UseHangfireDashboard();
 
  }
