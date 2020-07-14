@@ -148,7 +148,10 @@ namespace Volo.Abp.Localization
                 _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("El campo puede tener un máximo de '42' caracteres"); //Overriden in Source/es.json
             }
 
-            
+            using (CultureHelper.Use("de"))
+            {
+                _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("Die Länge dieses Feldes kann maximal '42'-Zeichen betragen"); //Overriden in Source/es.json
+            }
         }
 
         [Fact]

@@ -20,19 +20,20 @@ First things first! Let's setup your development environment before creating the
 
 The following tools should be installed on your development machine:
 
-* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/).*
+* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
 * [.NET Core 3.1+](https://www.microsoft.com/net/download/dotnet-core/)
 
-* [Node v12+](https://nodejs.org)
-* [Yarn v1.19+](https://classic.yarnpkg.com/)
+* [Node v12 or v14](https://nodejs.org/en/)
+* [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v6+ (installed with Node)
 {{ if Tiered == "Yes" }}
 
 * [Redis](https://redis.io/) (the startup solution uses the Redis as the [distributed cache](Caching.md)).
 
 {{ end }}
 
+<sup id="f-editor"><b>1</b></sup> _You can use another editor instead of Visual Studio as long as it supports .NET Core and ASP.NET Core._ <sup>[↩](#a-editor)</sup>
 
-> *You can use another editor instead of Visual Studio as long as it supports .NET Core and ASP.NET Core.
+<sup id="f-yarn"><b>2</b></sup> _Yarn v2 works differently and is not supported._ <sup>[↩](#a-yarn)</sup>
 
 ### Install the ABP CLI
 
