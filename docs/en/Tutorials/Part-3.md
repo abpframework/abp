@@ -716,7 +716,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
 
   <ng-template #abpFooter>
     <button type="button" class="btn btn-secondary" #abpClose>
-      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
+      {%{{{ '::Close' | abpLocalization }}}%}
     </button>
   </ng-template>
 </abp-modal>
@@ -856,13 +856,13 @@ Also replace `<ng-template #abpFooter> </ng-template>` with the following code p
 ````html
 <ng-template #abpFooter>
   <button type="button" class="btn btn-secondary" #abpClose>
-      {%{{{ 'AbpAccount::Close' | abpLocalization }}}%}
+      {%{{{ '::Close' | abpLocalization }}}%}
   </button>
 
   <!--added save button-->
   <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
         <i class="fa fa-check mr-1"></i>
-        {%{{{ 'AbpAccount::Save' | abpLocalization }}}%}
+        {%{{{ '::Save' | abpLocalization }}}%}
   </button>
 </ng-template>
 ````
@@ -1142,7 +1142,7 @@ constructor(
 
 // Add a delete method
 delete(id: string) {
-  this.confirmation.warn('::AreYouSureToDelete', 'AbpAccount::AreYouSure').subscribe((status) => {
+  this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
     if (status === Confirmation.Status.confirm) {
       this.bookService.deleteById(id).subscribe(() => this.list.get());
     }
@@ -1165,7 +1165,7 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 <div ngbDropdownMenu>
   <!-- add the Delete button -->
     <button ngbDropdownItem (click)="delete(row.id)">
-        {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
+        {%{{{ '::Delete' | abpLocalization }}}%}
     </button>
 </div>
 ```
