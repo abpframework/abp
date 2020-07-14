@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.IdentityServer.ApiScopes;
+using System.Linq.Dynamic.Core;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.IdentityServer.MongoDB
@@ -32,6 +33,25 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 select scope;
 
             return await query.ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<ApiScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    x => x.Name.Contains(filter) ||
+                         x.Description.Contains(filter) ||
+                         x.DisplayName.Contains(filter))
+                .OrderBy(sorting ?? nameof(ApiScope.Name))
+                .As<IMongoQueryable<ApiScope>>()
+                .PageBy<ApiScope, IMongoQueryable<ApiScope>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable().AnyAsync(x => x.Id != expectedId && x.Name == name, GetCancellationToken(cancellationToken));
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public virtual async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
+            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name, GetCancellationToken(cancellationToken));
         }
 
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -83,6 +83,18 @@ namespace Volo.Abp.IdentityServer.ApiResources
             foreach (var scope in resourceScopes)
             {
                 DbContext.Set<ApiResourceScope>().Remove(scope);
+            }
+
+            var resourceSecrets = DbContext.Set<ApiResourceSecret>().Where(s => s.ApiResourceId == id);
+            foreach (var secret in resourceSecrets)
+            {
+                DbContext.Set<ApiResourceSecret>().Remove(secret);
+            }
+
+            var apiResourceProperties = DbContext.Set<ApiResourceProperty>().Where(s => s.ApiResourceId == id);
+            foreach (var property in apiResourceProperties)
+            {
+                DbContext.Set<ApiResourceProperty>().Remove(property);
             }
 
             await base.DeleteAsync(id, autoSave, cancellationToken);

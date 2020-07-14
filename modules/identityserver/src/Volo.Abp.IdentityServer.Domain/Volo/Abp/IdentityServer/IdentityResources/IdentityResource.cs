@@ -89,5 +89,25 @@ namespace Volo.Abp.IdentityServer.IdentityResources
         {
             return UserClaims.FirstOrDefault(c => c.Type == type);
         }
+
+        public virtual void AddProperty([NotNull] string key, string value)
+        {
+            Properties.Add(new IdentityResourceProperty(Id, key, value));
+        }
+
+        public virtual void RemoveAllProperties()
+        {
+            Properties.Clear();
+        }
+
+        public virtual void RemoveProperty(string key)
+        {
+            Properties.RemoveAll(r => r.Key == key);
+        }
+
+        public virtual IdentityResourceProperty FindProperty(string key)
+        {
+            return Properties.FirstOrDefault(r => r.Key == key);
+        }
     }
 }

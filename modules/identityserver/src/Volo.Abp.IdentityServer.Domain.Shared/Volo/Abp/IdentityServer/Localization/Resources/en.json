@@ -3,6 +3,7 @@
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resource name already exist: {Name}",
     "Volo.IdentityServer:DuplicateApiResourceName": "Api Resource name already exist: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Api Scope name already exist: {Name}",
     "Volo.IdentityServer:DuplicateClientId": "ClientId already exist: {ClientId}",
     "UserLockedOut": "The user account has been locked out due to invalid login attempts. Please wait a while and try again.",
     "InvalidUserNameOrPassword": "Invalid username or password!",
