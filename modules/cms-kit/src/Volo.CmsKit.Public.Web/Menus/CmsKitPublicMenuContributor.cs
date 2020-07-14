@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.CmsKit.Admin.Web.Menus
+namespace Volo.CmsKit.Public.Web.Menus
 {
-    public class AdminMenuContributor : IMenuContributor
+    public class CmsKitPublicMenuContributor : IMenuContributor
     {
         public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {

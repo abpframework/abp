@@ -1,8 +1,8 @@
 ﻿namespace Volo.CmsKit.Public.Web.Menus
 {
-    public class PublicMenus
+    public class CmsKitPublicMenus
     {
-        private const string Prefix = "Public";
+        private const string Prefix = "CmsKit.Public";
 
         //Add your menu items here...
         //public const string Home = Prefix + ".MyNewMenuItem";
