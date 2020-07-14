@@ -7,7 +7,7 @@
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
-    <RootNamespace>Volo.CmsKit.Web</RootNamespace>
+    <RootNamespace>Volo.CmsKit.Admin.Web</RootNamespace>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.CmsKit.HttpApi\Volo.CmsKit.HttpApi.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Admin.HttpApi\Volo.CmsKit.Admin.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
