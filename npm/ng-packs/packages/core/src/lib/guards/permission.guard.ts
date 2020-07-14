@@ -18,8 +18,8 @@ export class PermissionGuard implements CanActivate {
     let { requiredPolicy } = route.data || {};
 
     if (!requiredPolicy) {
-      const route = findRoute(this.routes, getRoutePath(this.router, state.url));
-      requiredPolicy = route?.requiredPolicy;
+      const routeFound = findRoute(this.routes, getRoutePath(this.router, state.url));
+      requiredPolicy = routeFound?.requiredPolicy;
     }
 
     if (!requiredPolicy) return of(true);
