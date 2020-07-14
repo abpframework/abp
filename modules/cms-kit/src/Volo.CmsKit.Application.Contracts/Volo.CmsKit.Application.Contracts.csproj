@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Volo.CmsKit</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>

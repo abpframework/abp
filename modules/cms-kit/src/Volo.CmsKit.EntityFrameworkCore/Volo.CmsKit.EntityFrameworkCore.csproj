@@ -4,12 +4,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Volo.CmsKit</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="3.0.3" />
     <ProjectReference Include="..\Volo.CmsKit.Domain\Volo.CmsKit.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Volo\CmsKit" />
   </ItemGroup>
 
 </Project>

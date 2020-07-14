@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Volo.CmsKit</RootNamespace>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Localization\CmsKit\*.json" />
     <Content Remove="Localization\CmsKit\*.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\cs.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\en.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\pl-PL.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\pt-BR.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\sl.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\tr.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\vi.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\zh-Hans.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\zh-Hant.json" />
   </ItemGroup>
 
 </Project>
