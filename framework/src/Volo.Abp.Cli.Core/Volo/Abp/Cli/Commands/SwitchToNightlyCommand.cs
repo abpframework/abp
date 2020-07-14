@@ -6,18 +6,18 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class SwitchStableCommand : IConsoleCommand, ITransientDependency
+    public class SwitchToNightlyCommand : IConsoleCommand, ITransientDependency
     {
         private readonly PackageSourceSwitcher _packageSourceSwitcher;
 
-        public SwitchStableCommand(PackageSourceSwitcher packageSourceSwitcher)
+        public SwitchToNightlyCommand(PackageSourceSwitcher packageSourceSwitcher)
         {
             _packageSourceSwitcher = packageSourceSwitcher;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            await _packageSourceSwitcher.SwitchToStable(commandLineArgs);
+            await _packageSourceSwitcher.SwitchToPreview(commandLineArgs);
         }
 
         public string GetUsageInfo()
@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.Commands
 
             sb.AppendLine("");
             sb.AppendLine("Usage:");
-            sb.AppendLine("  abp switch-to-stable [options]");
+            sb.AppendLine("  abp switch-to-nightly [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("-sd|--solution-directory");
@@ -38,7 +38,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Switches packages to stable ABP version from preview version.";
+            return "Switches packages to nightly preview ABP version.";
         }
     }
 }

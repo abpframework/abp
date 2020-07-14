@@ -196,12 +196,12 @@ abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
 
 ### switch-to-preview
 
-You can use this command to switch your project to latest preview version of the ABP framework packages.
+You can use this command to switch your project to latest **nightly** preview version of the ABP framework packages.
 
 Usage:
 
 ````bash
-abp switch-to-preview [options]
+abp switch-to-nightly [options]
 ````
 
 #### Options
@@ -210,12 +210,12 @@ abp switch-to-preview [options]
 
 ### switch-to-stable
 
-If you're using the ABP Framework preview packages, you can switch back to stable version using this command.
+If you're using the ABP Framework **nightly** preview packages, you can switch back to stable version using this command.
 
 Usage:
 
 ````bash
-abp switch-to-stable [options]
+abp switch-from-nightly-to-stable [options]
 ````
 #### Options
 
