@@ -7,18 +7,18 @@ namespace Volo.CmsKit.Admin
 {
     [DependsOn(
         typeof(CmsKitDomainModule),
-        typeof(AdminApplicationContractsModule),
+        typeof(CmsKitAdminApplicationContractsModule),
         typeof(AbpDddApplicationModule),
         typeof(AbpAutoMapperModule)
         )]
-    public class AdminApplicationModule : AbpModule
+    public class CmsKitAdminApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<AdminApplicationModule>();
+            context.Services.AddAutoMapperObjectMapper<CmsKitAdminApplicationModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<AdminApplicationModule>(validate: true);
+                options.AddMaps<CmsKitAdminApplicationModule>(validate: true);
             });
         }
     }

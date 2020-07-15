@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Admin
         protected AdminAppService()
         {
             LocalizationResource = typeof(CmsKitResource);
-            ObjectMapperContext = typeof(AdminApplicationModule);
+            ObjectMapperContext = typeof(CmsKitAdminApplicationModule);
         }
     }
 }

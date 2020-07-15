@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Volo.CmsKit.Reactions;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components
+namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 {
     public class ReactionSelectionViewModel
     {

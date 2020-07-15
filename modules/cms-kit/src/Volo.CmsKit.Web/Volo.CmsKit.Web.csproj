@@ -15,9 +15,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Public.Web\Volo.CmsKit.Public.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Volo.CmsKit.Admin.Web\Volo.CmsKit.Admin.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.HttpApi\Volo.CmsKit.HttpApi.csproj" />
   </ItemGroup>
 

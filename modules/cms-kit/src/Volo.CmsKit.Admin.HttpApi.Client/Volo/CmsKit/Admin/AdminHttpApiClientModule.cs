@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 namespace Volo.CmsKit.Admin
 {
     [DependsOn(
-        typeof(AdminApplicationContractsModule),
+        typeof(CmsKitAdminApplicationContractsModule),
         typeof(AbpHttpClientModule))]
     public class AdminHttpApiClientModule : AbpModule
     {
@@ -14,7 +14,7 @@ namespace Volo.CmsKit.Admin
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
-                typeof(AdminApplicationContractsModule).Assembly,
+                typeof(CmsKitAdminApplicationContractsModule).Assembly,
                 RemoteServiceName
             );
         }

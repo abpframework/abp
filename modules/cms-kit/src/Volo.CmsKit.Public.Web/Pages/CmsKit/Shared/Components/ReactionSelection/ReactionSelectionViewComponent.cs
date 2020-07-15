@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.CmsKit.Reactions;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components
+namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 {
     public class ReactionSelectionViewComponent : AbpViewComponent
     {
@@ -50,7 +50,7 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components
                     });
             }
 
-            return View("~/Pages/CmsKit/Shared/Components/Default.cshtml", viewModel);
+            return View("~/Pages/CmsKit/Shared/Components/ReactionSelection/Default.cshtml", viewModel);
         }
     }
 }

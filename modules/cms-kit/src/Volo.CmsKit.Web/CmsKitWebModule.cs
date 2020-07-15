@@ -8,6 +8,7 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit.Admin.Web;
 using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit.Web
@@ -15,7 +16,9 @@ namespace Volo.CmsKit.Web
     [DependsOn(
         typeof(CmsKitHttpApiModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpAutoMapperModule),
+        typeof(CmsKitPublicWebModule),
+        typeof(CmsKitAdminWebModule)
         )]
     public class CmsKitWebModule : AbpModule
     {
@@ -45,6 +48,7 @@ namespace Volo.CmsKit.Web
             });
 
             context.Services.AddAutoMapperObjectMapper<CmsKitWebModule>();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<CmsKitWebModule>(validate: true);

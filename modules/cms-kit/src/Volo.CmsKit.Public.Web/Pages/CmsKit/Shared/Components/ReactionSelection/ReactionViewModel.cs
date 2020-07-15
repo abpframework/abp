@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components
+namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 {
     public class ReactionViewModel
     {

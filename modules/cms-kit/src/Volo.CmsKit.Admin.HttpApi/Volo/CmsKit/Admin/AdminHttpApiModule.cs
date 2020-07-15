@@ -8,7 +8,7 @@ using Volo.CmsKit.Localization;
 namespace Volo.CmsKit.Admin
 {
     [DependsOn(
-        typeof(AdminApplicationContractsModule),
+        typeof(CmsKitAdminApplicationContractsModule),
         typeof(AbpAspNetCoreMvcModule))]
     public class AdminHttpApiModule : AbpModule
     {
