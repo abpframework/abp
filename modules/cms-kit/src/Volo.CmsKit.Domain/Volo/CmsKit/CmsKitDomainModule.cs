@@ -1,10 +1,12 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.Domain;
+using Volo.Abp.Modularity;
 using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit
 {
     [DependsOn(
-        typeof(CmsKitDomainSharedModule)
+        typeof(CmsKitDomainSharedModule),
+        typeof(AbpDddDomainModule)
     )]
     public class CmsKitDomainModule : AbpModule
     {

@@ -25,7 +25,7 @@ namespace Volo.CmsKit
                 options.Resources
                     .Add<CmsKitResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/CmsKit");
+                    .AddVirtualJson("Volo/CmsKit/Localization/Resources");
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

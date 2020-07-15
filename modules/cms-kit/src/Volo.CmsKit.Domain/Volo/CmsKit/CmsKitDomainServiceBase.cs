@@ -2,7 +2,7 @@
 
 namespace Volo.CmsKit
 {
-    public class CmsKitDomainServiceBase : DomainService
+    public abstract class CmsKitDomainServiceBase : DomainService
     {
 
     }
