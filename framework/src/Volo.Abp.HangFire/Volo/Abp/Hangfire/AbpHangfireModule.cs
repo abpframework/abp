@@ -19,7 +19,13 @@ namespace Volo.Abp.Hangfire
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
+            if (context.ServiceProvider.GetService<JobStorage>() == null)
+            {
+                return;
+            }
+            
             var options = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
+            
             _backgroundJobServer = options.BackgroundJobServerFactory.Invoke(context.ServiceProvider);
         }
 
