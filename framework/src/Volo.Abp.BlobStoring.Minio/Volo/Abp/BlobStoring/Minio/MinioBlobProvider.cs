@@ -87,7 +87,7 @@ namespace Volo.Abp.BlobStoring.Minio
             return memoryStream;
         }
 
-        private MinioClient GetMinioClient(BlobProviderArgs args)
+        protected virtual MinioClient GetMinioClient(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetMinioConfiguration();
             var client = new MinioClient(configuration.EndPoint, configuration.AccessKey, configuration.SecretKey);
