@@ -11,6 +11,7 @@ namespace Volo.CmsKit.Web.Icons
         public CmsIconTagHelper(CmsIconTagHelperService service)
             : base(service)
         {
+
         }
     }
 }

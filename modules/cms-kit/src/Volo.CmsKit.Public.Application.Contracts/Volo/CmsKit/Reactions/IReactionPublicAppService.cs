@@ -7,7 +7,7 @@ namespace Volo.CmsKit.Reactions
     public interface IReactionPublicAppService : IApplicationService
     {
         Task<ListResultDto<ReactionDto>> GetAvailableReactions(
-            GetAvailableReactionsDto getAvailableReactionsDto
+            GetAvailableReactionsDto input
         );
     }
 }

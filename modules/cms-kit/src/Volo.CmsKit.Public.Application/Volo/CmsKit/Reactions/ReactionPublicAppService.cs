@@ -1,22 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Reactions
 {
     public class ReactionPublicAppService : CmsKitPublicAppService, IReactionPublicAppService
     {
-        public Task<ListResultDto<ReactionDto>> GetAvailableReactions(
-            GetAvailableReactionsDto getAvailableReactionsDto)
+        protected IReactionDefinitionStore ReactionDefinitionStore { get; }
+
+        public ReactionPublicAppService(IReactionDefinitionStore reactionDefinitionStore)
         {
-            return Task.FromResult(
-                new ListResultDto<ReactionDto>(new List<ReactionDto>()
+            ReactionDefinitionStore = reactionDefinitionStore;
+        }
+
+        public virtual async Task<ListResultDto<ReactionDto>> GetAvailableReactions(
+            GetAvailableReactionsDto input)
+        {
+            var reactionDefinitions = await ReactionDefinitionStore.GetAvailableReactionsAsync(input.EntityType, CurrentUser.Id);
+
+            var reactionDtos = reactionDefinitions
+                .Select(reactionDefinition => new ReactionDto
                 {
-                    new ReactionDto {Name = StandardReactions.ThumbsUp},
-                    new ReactionDto {Name = StandardReactions.Smile, DisplayName = "Smile :)"}
-                })
-            );
+                    Name = reactionDefinition.Name,
+                    DisplayName = reactionDefinition.DisplayName?.Localize(StringLocalizerFactory)
+                }).ToList();
+
+            return new ListResultDto<ReactionDto>(reactionDtos);
         }
     }
 }

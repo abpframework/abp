@@ -1,7 +1,5 @@
 ﻿@model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection.ReactionSelectionViewModel
-<p>TEST!</p>
 <p>EntityType: @Model.EntityType</p>
-<p>EntityId: @Model.EntityId</p>
 @foreach (var reaction in Model.Reactions)
 {
     <cms-icon name="@reaction.Icon" />

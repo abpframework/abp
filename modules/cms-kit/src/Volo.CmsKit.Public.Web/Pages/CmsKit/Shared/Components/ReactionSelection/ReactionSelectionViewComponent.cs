@@ -10,6 +10,7 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
     public class ReactionSelectionViewComponent : AbpViewComponent
     {
         protected IReactionPublicAppService ReactionPublicAppService { get; }
+
         protected CmsKitUiOptions Options { get; }
 
         public ReactionSelectionViewComponent(
@@ -21,21 +22,18 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
         }
 
         public virtual async Task<IViewComponentResult> InvokeAsync(
-            string entityType = null,
-            string entityId = null)
+            string entityType = null)
         {
             var result = await ReactionPublicAppService.GetAvailableReactions(
                 new GetAvailableReactionsDto
                 {
-                    EntityType = entityType,
-                    EntityId = entityId
+                    EntityType = entityType
                 }
             );
 
             var viewModel = new ReactionSelectionViewModel
             {
                 EntityType = entityType,
-                EntityId = entityId,
                 Reactions = new List<ReactionViewModel>()
             };
 
