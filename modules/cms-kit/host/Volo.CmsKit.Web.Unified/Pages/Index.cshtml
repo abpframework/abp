@@ -10,4 +10,34 @@
 
 <h2>Reactions</h2>
 
-@await Component.InvokeAsync(typeof(ReactionSelectionViewComponent))
+<abp-card class="mb-3">
+    <abp-card-body>
+        <abp-blockquote>
+            <p>
+                Any fool can write code that a computer can understand. Good programmers write code that humans can understand.
+            </p>
+            <footer>
+                Martin Fowler
+            </footer>
+        </abp-blockquote>
+    </abp-card-body>
+    <abp-card-footer>
+        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote" })
+    </abp-card-footer>
+</abp-card>
+
+<abp-card class="mb-3">
+    <abp-card-body>
+        <abp-blockquote>
+            <p>
+                Writing code is very simple, but writing simple code is the hardest thing there is!
+            </p>
+            <footer>
+                Halil ibrahim Kalkan <small>(inspired from Johan Cruyff)</small>
+            </footer>
+        </abp-blockquote>
+    </abp-card-body>
+    <abp-card-footer>
+        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote" })
+    </abp-card-footer>
+</abp-card>
