@@ -14,7 +14,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
-        <ProjectReference Include="..\Volo.CmsKit.Domain.Shared\Volo.CmsKit.Domain.Shared.csproj" />
+        <ProjectReference Include="..\Volo.CmsKit.Common.HttpApi\Volo.CmsKit.Common.HttpApi.csproj" />
     </ItemGroup>
 
     <ItemGroup>
