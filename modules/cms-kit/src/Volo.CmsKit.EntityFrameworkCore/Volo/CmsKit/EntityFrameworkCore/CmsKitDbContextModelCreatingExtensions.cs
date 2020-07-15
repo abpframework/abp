@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -19,25 +21,19 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            /* Configure all entities here. Example:
-
-            builder.Entity<Question>(b =>
+            builder.Entity<UserReaction>(b =>
             {
-                //Configure table & schema name
-                b.ToTable(options.TablePrefix + "Questions", options.Schema);
-            
+                b.ToTable(options.TablePrefix + "UserReactions", options.Schema);
                 b.ConfigureByConvention();
-            
-                //Properties
-                b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-                
-                //Relations
-                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
 
-                //Indexes
-                b.HasIndex(q => q.CreationTime);
+                b.Property(x => x.EntityType).IsRequired().HasMaxLength(UserReactionConsts.EntityTypeLength);
+                b.Property(x => x.EntityId).IsRequired().HasMaxLength(UserReactionConsts.EntityIdLength);
+                b.Property(x => x.ReactionName).IsRequired().HasMaxLength(UserReactionConsts.ReactionNameLength);
+                b.Property(x => x.CreationTime);
+
+                b.HasIndex(x => new { x.EntityType, x.EntityId });
+                b.HasIndex(x => new { x.UserId, x.EntityType, x.EntityId, x.ReactionName });
             });
-            */
         }
     }
 }

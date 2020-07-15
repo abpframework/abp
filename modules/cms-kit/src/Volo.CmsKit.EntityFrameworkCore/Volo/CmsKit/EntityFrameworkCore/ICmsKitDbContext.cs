@@ -1,13 +1,13 @@
-﻿using Volo.Abp.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
     [ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
     public interface ICmsKitDbContext : IEfCoreDbContext
     {
-        /* Add DbSet for each Aggregate Root here. Example:
-         * DbSet<Question> Questions { get; }
-         */
+         DbSet<UserReaction> UserReactions { get; }
     }
 }

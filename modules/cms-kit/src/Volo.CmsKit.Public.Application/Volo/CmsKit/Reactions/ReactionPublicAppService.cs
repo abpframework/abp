@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 
@@ -76,8 +78,15 @@ namespace Volo.CmsKit.Reactions
                 .GetAvailableReactionsAsync(
                     input.EntityType
                 );
+            var summaries =
+                (await ReactionManager.GetSummariesAsync(input.EntityType, input.EntityId))
+                .ToDictionary(x => x.Reaction.Name, x => x.Count);
 
-            //var summaries = await ReactionManager.GetSummariesAsync(input.EntityType, input.EntityId);
+            var userReactions = await ReactionManager.GetUserReactionsAsync(
+                CurrentUser.GetId(),
+                input.EntityType,
+                input.EntityId
+            );
 
             var reactionDtos = new List<ReactionWithSelectionDto>();
 
@@ -87,8 +96,8 @@ namespace Volo.CmsKit.Reactions
                     new ReactionWithSelectionDto
                     {
                         Reaction = ConvertToReactionDto(reactionDefinition),
-                        Count = 0,
-                        IsSelectedByCurrentUser = false
+                        Count = summaries.GetOrDefault(reactionDefinition.Name),
+                        IsSelectedByCurrentUser = userReactions.Any(x => x.Name == reactionDefinition.Name)
                     }
                 );
             }
