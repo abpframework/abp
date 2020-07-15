@@ -4,8 +4,6 @@ namespace Volo.Abp.BlobStoring.Aliyun
 {
     /// <summary>
     /// Sub-account access to OSS or STS temporary authorization to access OSS
-    /// 子账号/STS临时授权访问OSS
-    /// https://help.aliyun.com/document_detail/100624.html
     /// </summary>
     public class AliyunBlobProviderConfiguration
     {
@@ -21,20 +19,12 @@ namespace Volo.Abp.BlobStoring.Aliyun
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.AccessKeySecret, Check.NotNullOrWhiteSpace(value, nameof(value)));
         }
 
-        /// <summary>
-        /// https://help.aliyun.com/document_detail/31837.html
-        /// eg: https://oss-cn-beijing.aliyuncs.com
-        /// </summary>
         public string Endpoint
         {
             get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.Endpoint);
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.Endpoint, Check.NotNullOrWhiteSpace(value, nameof(value)));
         }
 
-        /// <summary>
-        /// STS https://help.aliyun.com/document_detail/66053.html
-        /// eg:cn-beijing
-        /// </summary>
         public string RegionId
         {
             get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.RegionId);
@@ -42,7 +32,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
         }
 
         /// <summary>
-        /// eg:acs:ram::$accountID:role/$roleName
+        /// acs:ram::$accountID:role/$roleName
         /// </summary>
         public string RoleArn
         {
@@ -52,7 +42,6 @@ namespace Volo.Abp.BlobStoring.Aliyun
 
         /// <summary>
         /// The name used to identify the temporary access credentials, it is recommended to use different application users to distinguish.
-        /// 用来标识临时访问凭证的名称，建议使用不同的应用程序用户来区分。
         /// </summary>
         public string RoleSessionName
         {
@@ -62,7 +51,6 @@ namespace Volo.Abp.BlobStoring.Aliyun
 
         /// <summary>
         /// Set the validity period of the temporary access credential, the unit is s, the minimum is 900, and the maximum is 3600.
-        /// 设置临时访问凭证的有效期，单位是s，最小为900，最大为3600。
         /// </summary>
         public int DurationSeconds
         {
@@ -70,10 +58,25 @@ namespace Volo.Abp.BlobStoring.Aliyun
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.DurationSeconds, value);
         }
 
+        /// <summary>
+        /// If policy is empty, the user will get all permissions under this role
+        /// </summary>
         public string Policy
         {
             get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.Policy);
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.Policy, value);
+        }
+
+        /// <summary>
+        /// This name may only contain lowercase letters, numbers, and hyphens, and must begin with a letter or a number.
+        /// Each hyphen must be preceded and followed by a non-hyphen character.
+        /// The name must also be between 3 and 63 characters long.
+        /// If this parameter is not specified, the ContainerName of the <see cref="BlobProviderArgs"/> will be used.
+        /// </summary>
+        public string ContainerName
+        {
+            get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.ContainerName);
+            set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.ContainerName, Check.NotNullOrWhiteSpace(value, nameof(value)));
         }
 
         /// <summary>
@@ -92,15 +95,11 @@ namespace Volo.Abp.BlobStoring.Aliyun
             _containerConfiguration = containerConfiguration;
         }
 
-        public string ToOssKeyString()
+
+        public string ToKeyString()
         {
             Uri uPoint = new Uri(Endpoint);
-            return $"memorycache:aliyun:id:{AccessKeyId},sec:{AccessKeySecret},ept:{uPoint.Host.ToLower()}";
-        }
-
-        public string ToOssWithStsKeyString()
-        {
-            return ToOssKeyString() + $",rid:{RegionId},ra:{RoleArn},rsn:{RoleSessionName},pl:{Policy}";
+            return $"blobstoring:aliyun:id:{AccessKeyId},sec:{AccessKeySecret},ept:{uPoint.Host.ToLower()},rid:{RegionId},ra:{RoleArn},rsn:{RoleSessionName},pl:{Policy}";
         }
     }
 }

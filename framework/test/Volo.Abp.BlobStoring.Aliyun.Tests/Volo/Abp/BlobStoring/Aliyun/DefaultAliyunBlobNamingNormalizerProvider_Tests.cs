@@ -54,13 +54,5 @@ namespace Volo.Abp.BlobStoring.Aliyun
             filename.Length.ShouldBeLessThanOrEqualTo(63);
         }
 
-
-        [Fact]
-        public void NormalizeContainerName_Trim()
-        {
-            var filename = "-abpabpabpabp-";
-            filename = _blobNamingNormalizer.NormalizeContainerName(filename);
-            filename.ShouldBe("abpabpabpabp");
-        }
     }
 }

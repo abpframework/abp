@@ -21,6 +21,9 @@ namespace Volo.Abp.BlobStoring.Aliyun
     {
         private const string UserSecretsId = "fe9a87da-3584-40e0-a06c-aa499936015d";
 
+        private AliyunBlobProviderConfiguration _configuration;
+        private readonly string _randomContainerName = "abp-aliyun-test-container-" + Guid.NewGuid().ToString("N");
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.ReplaceConfiguration(ConfigurationHelper.BuildConfiguration(builderAction: builder =>
@@ -43,18 +46,27 @@ namespace Volo.Abp.BlobStoring.Aliyun
                     {
                         aliyun.AccessKeyId = _accessKeyId;
                         aliyun.AccessKeySecret = _accessKeySecret;
-                        aliyun.Endpoint = _endpoint;//eg:https://oss-cn-beijing.aliyuncs.com
+                        aliyun.Endpoint = _endpoint;
                         //STS
-                        aliyun.RegionId = _regionId;//eg:cn-beijing
-                        aliyun.RoleArn = _roleArn;//eg:acs:ram::1320235309887297:role/role-oss-xxxxx
+                        aliyun.RegionId = _regionId;
+                        aliyun.RoleArn = _roleArn;
                         aliyun.RoleSessionName = Guid.NewGuid().ToString("N");
                         aliyun.DurationSeconds = 3600;
                         aliyun.Policy = String.Empty;
                         //Other
                         aliyun.CreateContainerIfNotExists = true;
+                        aliyun.ContainerName = _randomContainerName;
+                        _configuration = aliyun;
                     });
                 });
             });
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            var ossClientFactory = context.ServiceProvider.GetService<IOssClientFactory>();
+            var ossClient = ossClientFactory.Create(_configuration);
+            ossClient.DeleteBucket(_randomContainerName);
         }
 
     }

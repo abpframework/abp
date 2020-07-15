@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Volo.Abp.BlobStoring.Tests\Volo.Abp.BlobStoring.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>
