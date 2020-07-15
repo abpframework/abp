@@ -12,7 +12,7 @@ using Volo.CmsKit.Web;
 namespace Volo.CmsKit.Admin.Web
 {
     [DependsOn(
-        typeof(AdminHttpApiModule),
+        typeof(CmsKitAdminHttpApiModule),
         typeof(CmsKitCommonWebModule),
         typeof(AbpAutoMapperModule)
         )]

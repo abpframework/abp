@@ -6,7 +6,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Localization;
-using Volo.CmsKit.Public;
 using Volo.CmsKit.Web.Menus;
 
 namespace Volo.CmsKit.Web

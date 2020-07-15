@@ -2,14 +2,14 @@
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
 
-namespace Volo.CmsKit.Public
+namespace Volo.CmsKit
 {
     [DependsOn(
         typeof(CmsKitPublicApplicationContractsModule),
-        typeof(AbpHttpClientModule))]
-    public class PublicHttpApiClientModule : AbpModule
+        typeof(CmsKitCommonHttpApiClientModule))]
+    public class CmsKitPublicHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "Public";
+        public const string RemoteServiceName = "CmsKitPublic";
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

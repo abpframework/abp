@@ -1,15 +1,15 @@
 ﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit.Public
+namespace Volo.CmsKit
 {
     [DependsOn(
         typeof(CmsKitPublicApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule))]
+        typeof(CmsKitCommonHttpApiModule))]
     public class CmsKitPublicHttpApiModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

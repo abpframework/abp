@@ -1,15 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Modularity;
+using Volo.CmsKit.Admin;
 
-namespace Volo.CmsKit.Admin
+namespace Volo.CmsKit
 {
     [DependsOn(
         typeof(CmsKitAdminApplicationContractsModule),
-        typeof(AbpHttpClientModule))]
-    public class AdminHttpApiClientModule : AbpModule
+        typeof(CmsKitCommonHttpApiClientModule))]
+    public class CmsKitAdminHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "Admin";
+        public const string RemoteServiceName = "CmsKitAdmin";
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

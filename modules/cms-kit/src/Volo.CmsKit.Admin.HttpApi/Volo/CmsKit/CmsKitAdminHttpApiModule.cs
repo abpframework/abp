@@ -1,22 +1,24 @@
 ﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Microsoft.Extensions.DependencyInjection;
+using Volo.CmsKit.Admin;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit.Admin
+namespace Volo.CmsKit
 {
     [DependsOn(
         typeof(CmsKitAdminApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule))]
-    public class AdminHttpApiModule : AbpModule
+        typeof(CmsKitCommonHttpApiModule)
+        )]
+    public class CmsKitAdminHttpApiModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AdminHttpApiModule).Assembly);
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitAdminHttpApiModule).Assembly);
             });
         }
 
