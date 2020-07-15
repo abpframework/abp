@@ -9,7 +9,7 @@ namespace Volo.CmsKit.Public
         typeof(AbpDddApplicationContractsModule),
         typeof(AbpAuthorizationModule)
         )]
-    public class PublicApplicationContractsModule : AbpModule
+    public class CmsKitPublicApplicationContractsModule : AbpModule
     {
 
     }

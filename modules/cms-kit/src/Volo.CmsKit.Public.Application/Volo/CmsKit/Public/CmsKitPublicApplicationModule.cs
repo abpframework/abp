@@ -7,18 +7,18 @@ namespace Volo.CmsKit.Public
 {
     [DependsOn(
         typeof(CmsKitDomainModule),
-        typeof(PublicApplicationContractsModule),
+        typeof(CmsKitPublicApplicationContractsModule),
         typeof(AbpDddApplicationModule),
         typeof(AbpAutoMapperModule)
         )]
-    public class PublicApplicationModule : AbpModule
+    public class CmsKitPublicApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<PublicApplicationModule>();
+            context.Services.AddAutoMapperObjectMapper<CmsKitPublicApplicationModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<PublicApplicationModule>(validate: true);
+                options.AddMaps<CmsKitPublicApplicationModule>(validate: true);
             });
         }
     }

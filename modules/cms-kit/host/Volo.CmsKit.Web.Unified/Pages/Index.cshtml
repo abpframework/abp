@@ -2,6 +2,10 @@
 @using Localization.Resources.AbpUi
 @using Microsoft.Extensions.Localization
 @using Volo.CmsKit.Pages
+@using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components
 @model IndexModel
 @inject IStringLocalizer<AbpUiResource> Localizer
-<a href="~/Account/Login">@Localizer["Login"]</a>
+<h1>CMS Kit DEMO</h1>
+<h2>Reactions</h2>
+@await Component.InvokeAsync(typeof(ReactionSelectionViewComponent))
+@* <vc:reaction-selection /> *@

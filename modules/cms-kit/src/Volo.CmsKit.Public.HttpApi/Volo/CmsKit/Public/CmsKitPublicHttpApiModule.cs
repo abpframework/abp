@@ -8,15 +8,15 @@ using Volo.CmsKit.Localization;
 namespace Volo.CmsKit.Public
 {
     [DependsOn(
-        typeof(PublicApplicationContractsModule),
+        typeof(CmsKitPublicApplicationContractsModule),
         typeof(AbpAspNetCoreMvcModule))]
-    public class PublicHttpApiModule : AbpModule
+    public class CmsKitPublicHttpApiModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(PublicHttpApiModule).Assembly);
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitPublicHttpApiModule).Assembly);
             });
         }
 

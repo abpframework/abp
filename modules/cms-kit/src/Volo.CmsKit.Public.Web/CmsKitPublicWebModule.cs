@@ -12,22 +12,22 @@ using Volo.CmsKit.Localization;
 namespace Volo.CmsKit.Public.Web
 {
     [DependsOn(
-        typeof(PublicHttpApiModule),
+        typeof(CmsKitPublicHttpApiModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
         typeof(AbpAutoMapperModule)
         )]
-    public class PublicWebModule : AbpModule
+    public class CmsKitPublicWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(CmsKitResource), typeof(PublicWebModule).Assembly);
+                options.AddAssemblyResource(typeof(CmsKitResource), typeof(CmsKitPublicWebModule).Assembly);
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(PublicWebModule).Assembly);
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitPublicWebModule).Assembly);
             });
         }
 
@@ -40,13 +40,13 @@ namespace Volo.CmsKit.Public.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<PublicWebModule>();
+                options.FileSets.AddEmbedded<CmsKitPublicWebModule>();
             });
 
-            context.Services.AddAutoMapperObjectMapper<PublicWebModule>();
+            context.Services.AddAutoMapperObjectMapper<CmsKitPublicWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<PublicWebModule>(validate: true);
+                options.AddMaps<CmsKitPublicWebModule>(validate: true);
             });
 
             Configure<RazorPagesOptions>(options =>

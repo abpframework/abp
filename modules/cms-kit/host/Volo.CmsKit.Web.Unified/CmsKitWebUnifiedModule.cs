@@ -34,6 +34,8 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit.Public;
+using Volo.CmsKit.Public.Web;
 
 namespace Volo.CmsKit
 {
@@ -58,7 +60,9 @@ namespace Volo.CmsKit
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(CmsKitPublicWebModule),
+        typeof(CmsKitPublicApplicationModule)
         )]
     public class CmsKitWebUnifiedModule : AbpModule
     {
@@ -136,7 +140,7 @@ namespace Volo.CmsKit
 
             app.UseAbpRequestLocalization();
             app.UseAuthorization();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

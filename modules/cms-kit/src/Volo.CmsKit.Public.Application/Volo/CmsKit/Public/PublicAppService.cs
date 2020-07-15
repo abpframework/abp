@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Public
         protected PublicAppService()
         {
             LocalizationResource = typeof(CmsKitResource);
-            ObjectMapperContext = typeof(PublicApplicationModule);
+            ObjectMapperContext = typeof(CmsKitPublicApplicationModule);
         }
     }
 }

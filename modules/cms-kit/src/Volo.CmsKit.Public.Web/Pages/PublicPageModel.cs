@@ -10,7 +10,7 @@ namespace Volo.CmsKit.Public.Web.Pages
         protected PublicPageModel()
         {
             LocalizationResourceType = typeof(CmsKitResource);
-            ObjectMapperContext = typeof(PublicWebModule);
+            ObjectMapperContext = typeof(CmsKitPublicWebModule);
         }
     }
 }
