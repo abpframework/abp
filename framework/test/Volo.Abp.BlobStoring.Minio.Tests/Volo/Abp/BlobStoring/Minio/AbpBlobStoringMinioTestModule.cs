@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
@@ -59,18 +60,19 @@ namespace Volo.Abp.BlobStoring.Minio
             });
         }
 
-        public async override void OnApplicationShutdown(ApplicationShutdownContext context)
+        public override async void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             var minioClient = new MinioClient(_endPoint, _accessKey, _secretKey);
             if (await minioClient.BucketExistsAsync(_randomContainerName))
             {
-                var observables =minioClient.ListObjectsAsync(_randomContainerName,null,true);
-                var objectNames = new List<string>();
-                IDisposable subscription = observables.Subscribe(
-                      async  item => await minioClient.RemoveObjectAsync(_randomContainerName, item.Key),
-                      async  () => await minioClient.RemoveBucketAsync(_randomContainerName)
-                );
-        
+                var objects = await minioClient.ListObjectsAsync(_randomContainerName, null, true).ToList();
+
+                foreach (var item in objects)
+                {
+                    await minioClient.RemoveObjectAsync(_randomContainerName, item.Key);
+                }
+
+                await minioClient.RemoveBucketAsync(_randomContainerName);
             }
            
         }

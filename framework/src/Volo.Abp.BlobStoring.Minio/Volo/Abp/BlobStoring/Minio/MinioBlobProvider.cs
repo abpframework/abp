@@ -115,10 +115,6 @@ namespace Volo.Abp.BlobStoring.Minio
             {
                 try
                 {
-                    // Check whether the object exists using statObject().
-                    // If the object is not found, statObject() throws an exception,
-                    // else it means that the object exists.
-                    // Execution is successful.
                     await client.StatObjectAsync(containerName, blobName);
                 }
                 catch (Exception e)
@@ -126,11 +122,9 @@ namespace Volo.Abp.BlobStoring.Minio
                     if (e is ObjectNotFoundException)
                     {
                         return false;
-                    }
-                    else
-                    {
-                        throw e;
-                    }
+                    }                
+                    
+                    throw;                    
                 }
 
                 return true;
@@ -143,10 +137,9 @@ namespace Volo.Abp.BlobStoring.Minio
         {
             var configuration = args.Configuration.GetMinioConfiguration();
 
-            //Minio bucket name must be lowercase
             return configuration.BucketName.IsNullOrWhiteSpace()
-                ? args.ContainerName.ToLower()
-                : configuration.BucketName.ToLower();
+                ? args.ContainerName
+                : configuration.BucketName;
         }
     }
 }
