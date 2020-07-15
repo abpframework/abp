@@ -12,9 +12,8 @@ namespace Volo.CmsKit.Web
 {
     [DependsOn(
         typeof(CmsKitPublicHttpApiModule),
-        typeof(CmsKitCommonWebModule),
-        typeof(AbpAutoMapperModule)
-        )]
+        typeof(CmsKitCommonWebModule)
+    )]
     public class CmsKitPublicWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

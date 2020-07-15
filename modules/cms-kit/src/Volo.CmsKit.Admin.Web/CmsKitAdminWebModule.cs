@@ -13,8 +13,7 @@ namespace Volo.CmsKit.Admin.Web
 {
     [DependsOn(
         typeof(CmsKitAdminHttpApiModule),
-        typeof(CmsKitCommonWebModule),
-        typeof(AbpAutoMapperModule)
+        typeof(CmsKitCommonWebModule)
         )]
     public class CmsKitAdminWebModule : AbpModule
     {

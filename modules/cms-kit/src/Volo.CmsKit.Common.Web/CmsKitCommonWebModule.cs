@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Reactions;
@@ -8,7 +9,8 @@ namespace Volo.CmsKit.Web
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(CmsKitCommonHttpApiModule)
+        typeof(CmsKitCommonHttpApiModule),
+        typeof(AbpAutoMapperModule)
         )]
     public class CmsKitCommonWebModule : AbpModule
     {

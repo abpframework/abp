@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 
-namespace Volo.CmsKit.Web
+namespace Volo.CmsKit.Admin.Web
 {
-    public class PublicWebAutoMapperProfile : Profile
+    public class CmsKitAdminWebAutoMapperProfile : Profile
     {
-        public PublicWebAutoMapperProfile()
+        public CmsKitAdminWebAutoMapperProfile()
         {
             /* You can configure your AutoMapper mapping configuration here.
              * Alternatively, you can split your mapping configurations

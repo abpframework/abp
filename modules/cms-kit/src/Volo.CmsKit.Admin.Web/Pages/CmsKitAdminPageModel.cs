@@ -5,9 +5,9 @@ namespace Volo.CmsKit.Admin.Web.Pages
 {
     /* Inherit your PageModel classes from this class.
      */
-    public abstract class AdminPageModel : AbpPageModel
+    public abstract class CmsKitAdminPageModel : AbpPageModel
     {
-        protected AdminPageModel()
+        protected CmsKitAdminPageModel()
         {
             LocalizationResourceType = typeof(CmsKitResource);
             ObjectMapperContext = typeof(CmsKitAdminWebModule);
