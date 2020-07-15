@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.CmsKit.Public.Web.Menus;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.Public;
+using Volo.CmsKit.Web.Menus;
 
-namespace Volo.CmsKit.Public.Web
+namespace Volo.CmsKit.Web
 {
     [DependsOn(
         typeof(CmsKitPublicHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(CmsKitCommonWebModule),
         typeof(AbpAutoMapperModule)
         )]
     public class CmsKitPublicWebModule : AbpModule

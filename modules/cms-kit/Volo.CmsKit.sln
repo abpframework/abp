@@ -77,6 +77,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Public.HttpApi.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Public.Web", "src\Volo.CmsKit.Public.Web\Volo.CmsKit.Public.Web.csproj", "{BE2572ED-F505-435D-9A90-30DBC6C2DC1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.CmsKit.Common.Web", "src\Volo.CmsKit.Common.Web\Volo.CmsKit.Common.Web.csproj", "{4B2C2431-7351-41F0-B5E1-F8A9859FA838}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -203,6 +205,10 @@ Global
 		{BE2572ED-F505-435D-9A90-30DBC6C2DC1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE2572ED-F505-435D-9A90-30DBC6C2DC1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE2572ED-F505-435D-9A90-30DBC6C2DC1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B2C2431-7351-41F0-B5E1-F8A9859FA838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B2C2431-7351-41F0-B5E1-F8A9859FA838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B2C2431-7351-41F0-B5E1-F8A9859FA838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B2C2431-7351-41F0-B5E1-F8A9859FA838}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -242,6 +248,7 @@ Global
 		{37C03B72-5FD8-4B67-8090-8A20CD8095A6} = {3C74B8E8-CB34-49C8-B02A-05E959601FEE}
 		{E790C2C6-39AC-4068-AA7D-309DC9AA1437} = {3C74B8E8-CB34-49C8-B02A-05E959601FEE}
 		{BE2572ED-F505-435D-9A90-30DBC6C2DC1D} = {3C74B8E8-CB34-49C8-B02A-05E959601FEE}
+		{4B2C2431-7351-41F0-B5E1-F8A9859FA838} = {DDE20914-DD1B-4C7B-86FF-F21E6B5DF1D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4324B3B4-B60B-4E3C-91D8-59576B4E26DD}

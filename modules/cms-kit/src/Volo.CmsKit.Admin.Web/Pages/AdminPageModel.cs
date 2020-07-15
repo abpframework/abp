@@ -10,7 +10,7 @@ namespace Volo.CmsKit.Admin.Web.Pages
         protected AdminPageModel()
         {
             LocalizationResourceType = typeof(CmsKitResource);
-            ObjectMapperContext = typeof(AdminWebModule);
+            ObjectMapperContext = typeof(CmsKitAdminWebModule);
         }
     }
 }

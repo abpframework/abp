@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Volo.CmsKit.Public.Web
+namespace Volo.CmsKit.Web
 {
     public class PublicWebAutoMapperProfile : Profile
     {

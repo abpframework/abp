@@ -1,2 +1,8 @@
 ﻿@model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelectionViewModel
 <p>TEST!</p>
+<p>EntityType: @Model.EntityType</p>
+<p>EntityId: @Model.EntityId</p>
+@foreach (var reaction in Model.Reactions)
+{
+    <img width="20" height="20" src="@reaction.Icon"/>
+}

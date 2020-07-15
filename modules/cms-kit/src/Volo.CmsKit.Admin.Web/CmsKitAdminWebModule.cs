@@ -2,32 +2,32 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.CmsKit.Admin.Web.Menus;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Admin.Web
 {
     [DependsOn(
         typeof(AdminHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(CmsKitCommonWebModule),
         typeof(AbpAutoMapperModule)
         )]
-    public class AdminWebModule : AbpModule
+    public class CmsKitAdminWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(CmsKitResource), typeof(AdminWebModule).Assembly);
+                options.AddAssemblyResource(typeof(CmsKitResource), typeof(CmsKitAdminWebModule).Assembly);
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
-                mvcBuilder.AddApplicationPartIfNotExists(typeof(AdminWebModule).Assembly);
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitAdminWebModule).Assembly);
             });
         }
 
@@ -40,13 +40,13 @@ namespace Volo.CmsKit.Admin.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AdminWebModule>();
+                options.FileSets.AddEmbedded<CmsKitAdminWebModule>();
             });
 
-            context.Services.AddAutoMapperObjectMapper<AdminWebModule>();
+            context.Services.AddAutoMapperObjectMapper<CmsKitAdminWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<AdminWebModule>(validate: true);
+                options.AddMaps<CmsKitAdminWebModule>(validate: true);
             });
 
             Configure<RazorPagesOptions>(options =>
