@@ -1,5 +1,12 @@
 ﻿@model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection.ReactionSelectionViewModel
-@foreach (var reaction in Model.Reactions)
-{
-    <cms-icon name="@reaction.Icon" />
-}
+<span class="cms-reaction-selection">
+    <a class="cms-reaction-selection-button">
+        <i class="far fa-smile"></i>
+    </a>
+    <div class="cms-reaction-selection-area" style="display: none">
+        @foreach (var reaction in Model.Reactions)
+        {
+            <cms-icon name="@reaction.Icon"/>
+        }
+    </div>
+</span>
