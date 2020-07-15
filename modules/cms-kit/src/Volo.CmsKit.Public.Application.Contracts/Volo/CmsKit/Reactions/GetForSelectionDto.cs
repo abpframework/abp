@@ -1,6 +1,6 @@
 ﻿namespace Volo.CmsKit.Reactions
 {
-    public class GetForSelectionInput
+    public class GetForSelectionDto
     {
         public string EntityType { get; set; }
 

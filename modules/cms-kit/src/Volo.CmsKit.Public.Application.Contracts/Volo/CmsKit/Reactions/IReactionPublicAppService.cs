@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -20,6 +18,10 @@ namespace Volo.CmsKit.Reactions
             GetMyReactionsDto input
         );
 
-        Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(GetForSelectionInput input);
+        Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(GetForSelectionDto input);
+
+        Task CreateAsync(CreateReactionDto input);
+
+        Task DeleteAsync(DeleteReactionDto input);
     }
 }

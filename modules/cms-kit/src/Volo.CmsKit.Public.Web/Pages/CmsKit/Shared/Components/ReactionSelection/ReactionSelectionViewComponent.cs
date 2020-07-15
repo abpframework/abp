@@ -30,7 +30,7 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
             string entityId)
         {
             var result = await ReactionPublicAppService.GetForSelectionAsync(
-                new GetForSelectionInput
+                new GetForSelectionDto
                 {
                     EntityType = entityType,
                     EntityId = entityId

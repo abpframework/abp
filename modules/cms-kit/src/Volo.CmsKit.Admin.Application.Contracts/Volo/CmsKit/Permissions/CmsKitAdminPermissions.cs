@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Reflection;
 
-namespace Volo.CmsKit.Admin.Permissions
+namespace Volo.CmsKit.Permissions
 {
     public class CmsKitAdminPermissions
     {

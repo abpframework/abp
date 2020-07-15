@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.CmsKit.Admin
+namespace Volo.CmsKit
 {
     [DependsOn(
         typeof(CmsKitCommonApplicationContractsModule)

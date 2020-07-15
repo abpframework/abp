@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Schema;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 
@@ -42,7 +40,7 @@ namespace Volo.CmsKit.Reactions
             return new ListResultDto<ReactionDto>(reactionDtos);
         }
 
-        public async Task<ListResultDto<ReactionSummaryDto>> GetReactionSummariesAsync(GetReactionSummariesDto input)
+        public virtual async Task<ListResultDto<ReactionSummaryDto>> GetReactionSummariesAsync(GetReactionSummariesDto input)
         {
             var summaries = await ReactionManager.GetSummariesAsync(input.EntityType, input.EntityId);
 
@@ -57,7 +55,7 @@ namespace Volo.CmsKit.Reactions
             return new ListResultDto<ReactionSummaryDto>(summaryDtos);
         }
 
-        public async Task<ListResultDto<ReactionDto>> GetMyReactions(GetMyReactionsDto input)
+        public virtual async Task<ListResultDto<ReactionDto>> GetMyReactions(GetMyReactionsDto input)
         {
             var userReactions = await ReactionManager.GetUserReactionsAsync(
                 CurrentUser.GetId(),
@@ -72,7 +70,7 @@ namespace Volo.CmsKit.Reactions
             return new ListResultDto<ReactionDto>(reactionDtos);
         }
 
-        public async Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(GetForSelectionInput input)
+        public virtual async Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(GetForSelectionDto input)
         {
             var reactionDefinitions = await ReactionManager
                 .GetAvailableReactionsAsync(
@@ -103,6 +101,26 @@ namespace Volo.CmsKit.Reactions
             }
 
             return new ListResultDto<ReactionWithSelectionDto>(reactionDtos);
+        }
+
+        public virtual async Task CreateAsync(CreateReactionDto input)
+        {
+            await ReactionManager.CreateAsync(
+                CurrentUser.GetId(),
+                input.EntityType,
+                input.EntityId,
+                input.ReactionName
+            );
+        }
+
+        public virtual async Task DeleteAsync(DeleteReactionDto input)
+        {
+            await ReactionManager.DeleteAsync(
+                CurrentUser.GetId(),
+                input.EntityType,
+                input.EntityId,
+                input.ReactionName
+            );
         }
 
         private ReactionDto ConvertToReactionDto(ReactionDefinition reactionDefinition)

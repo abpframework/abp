@@ -2,7 +2,7 @@
 using Volo.Abp.Localization;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit.Admin.Permissions
+namespace Volo.CmsKit.Permissions
 {
     public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvider
     {

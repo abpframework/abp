@@ -2,7 +2,6 @@
 using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-using Volo.CmsKit.Admin;
 
 namespace Volo.CmsKit
 {

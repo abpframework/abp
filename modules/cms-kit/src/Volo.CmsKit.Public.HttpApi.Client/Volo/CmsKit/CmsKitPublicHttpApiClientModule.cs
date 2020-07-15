@@ -8,13 +8,11 @@ namespace Volo.CmsKit
         typeof(CmsKitCommonHttpApiClientModule))]
     public class CmsKitPublicHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "CmsKitPublic";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddHttpClientProxies(
                 typeof(CmsKitPublicApplicationContractsModule).Assembly,
-                RemoteServiceName
+                CmsKitPublicRemoteServiceConsts.RemoteServiceName
             );
         }
     }

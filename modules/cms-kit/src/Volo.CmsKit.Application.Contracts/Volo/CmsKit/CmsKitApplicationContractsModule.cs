@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.Modularity;
-using Volo.CmsKit.Admin;
 
 namespace Volo.CmsKit
 {
