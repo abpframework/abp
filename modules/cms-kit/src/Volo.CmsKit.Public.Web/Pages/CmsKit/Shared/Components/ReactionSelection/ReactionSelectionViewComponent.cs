@@ -9,7 +9,8 @@ using Volo.CmsKit.Reactions;
 namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 {
     [Widget(
-        ScriptTypes = new[] {typeof(ReactionSelectionScriptBundleContributor)}
+        ScriptTypes = new[] {typeof(ReactionSelectionScriptBundleContributor)},
+        StyleTypes = new[] {typeof(ReactionSelectionStyleBundleContributor)}
     )]
     public class ReactionSelectionViewComponent : AbpViewComponent
     {

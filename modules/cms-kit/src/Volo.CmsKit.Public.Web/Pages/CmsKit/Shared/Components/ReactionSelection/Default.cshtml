@@ -5,7 +5,7 @@
         @foreach (var reaction in Model.Reactions)
         {
             <span class="mr-2">
-                <img src="@reaction.Icon" width="16" height="16" data-name="@reaction.Name" class="cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-highlighted" : "")"/>
+                <img src="@reaction.Icon" width="16" height="16" data-name="@reaction.Name" class="cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")"/>
             </span>
         }
     </div>
@@ -14,7 +14,7 @@
         @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
         {
             <span class="mr-2">
-                <img src="@reaction.Icon" width="20" height="20" data-name="@reaction.Name" class="cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-highlighted" : "")"/>
+                <img src="@reaction.Icon" width="20" height="20" data-name="@reaction.Name" class="cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")"/>
                 <span> @reaction.Count</span>
             </span>
         }
