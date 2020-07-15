@@ -1,13 +1,9 @@
-﻿using Volo.Abp.Application;
-using Volo.Abp.Modularity;
-using Volo.Abp.Authorization;
+﻿using Volo.Abp.Modularity;
 
 namespace Volo.CmsKit.Admin
 {
     [DependsOn(
-        typeof(CmsKitDomainSharedModule),
-        typeof(AbpDddApplicationContractsModule),
-        typeof(AbpAuthorizationModule)
+        typeof(CmsKitCommonApplicationContractsModule)
         )]
     public class CmsKitAdminApplicationContractsModule : AbpModule
     {

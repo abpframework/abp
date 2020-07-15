@@ -5,7 +5,7 @@ using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Reactions
 {
-    public class ReactionPublicAppService : ApplicationService, IReactionPublicAppService
+    public class ReactionPublicAppService : CmsKitPublicAppService, IReactionPublicAppService
     {
         public Task<ListResultDto<ReactionDto>> GetAvailableReactions(
             GetAvailableReactionsDto getAvailableReactionsDto)

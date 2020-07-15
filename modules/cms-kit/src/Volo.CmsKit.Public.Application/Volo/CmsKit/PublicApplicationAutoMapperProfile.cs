@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Volo.CmsKit.Public
+namespace Volo.CmsKit
 {
     public class PublicApplicationAutoMapperProfile : Profile
     {

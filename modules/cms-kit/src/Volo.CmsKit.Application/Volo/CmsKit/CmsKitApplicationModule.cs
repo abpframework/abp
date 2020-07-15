@@ -3,7 +3,6 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.Application;
 using Volo.CmsKit.Admin;
-using Volo.CmsKit.Public;
 
 namespace Volo.CmsKit
 {

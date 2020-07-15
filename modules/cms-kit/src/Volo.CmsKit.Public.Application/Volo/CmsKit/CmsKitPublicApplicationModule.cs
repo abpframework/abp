@@ -1,15 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-using Volo.Abp.Application;
 
-namespace Volo.CmsKit.Public
+namespace Volo.CmsKit
 {
     [DependsOn(
-        typeof(CmsKitDomainModule),
-        typeof(CmsKitPublicApplicationContractsModule),
-        typeof(AbpDddApplicationModule),
-        typeof(AbpAutoMapperModule)
+        typeof(CmsKitCommonApplicationModule),
+        typeof(CmsKitPublicApplicationContractsModule)
         )]
     public class CmsKitPublicApplicationModule : AbpModule
     {
