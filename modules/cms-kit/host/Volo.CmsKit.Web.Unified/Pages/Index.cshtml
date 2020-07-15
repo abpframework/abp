@@ -2,7 +2,6 @@
 @using Localization.Resources.AbpUi
 @using Microsoft.Extensions.Localization
 @using Volo.CmsKit.Pages
-@using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components
 @using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @model IndexModel
 @inject IStringLocalizer<AbpUiResource> Localizer
@@ -22,7 +21,7 @@
         </abp-blockquote>
     </abp-card-body>
     <abp-card-footer>
-        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote" })
+        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "1" })
     </abp-card-footer>
 </abp-card>
 
@@ -38,6 +37,6 @@
         </abp-blockquote>
     </abp-card-body>
     <abp-card-footer>
-        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote" })
+        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "2" })
     </abp-card-footer>
 </abp-card>

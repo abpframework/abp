@@ -20,27 +20,79 @@ namespace Volo.CmsKit.Reactions
         }
 
         public virtual async Task<List<ReactionDefinition>> GetAvailableReactionsAsync(
-            [CanBeNull] string entityType = null,
-            [CanBeNull] Guid? userId = null)
+            [CanBeNull] string entityType = null)
         {
-            return await ReactionDefinitionStore.GetAvailableReactionsAsync(entityType, userId);
+            return await ReactionDefinitionStore.GetAvailableReactionsAsync(entityType);
         }
 
-        public virtual Task<ReactionSummary> GetSummariesAsync(
+        public virtual async Task<List<ReactionSummary>> GetSummariesAsync(
             [NotNull] string entityType,
             [NotNull] string entityId)
         {
-            //TODO: ...
-            throw new NotImplementedException();
+            var summaries = await UserReactionRepository.GetSummariesAsync(entityType, entityId);
+
+            var summaryDtos = new List<ReactionSummary>();
+
+            foreach (var summary in summaries)
+            {
+                var summaryDto = new ReactionSummary
+                {
+                    Count = summary.Count
+                };
+
+                //TODO: Get all definitions then filter here?
+                var reactionDefinition = await ReactionDefinitionStore
+                    .GetReactionOrNullAsync(
+                        summary.ReactionName,
+                        entityType
+                    );
+
+                if (reactionDefinition == null)
+                {
+                    continue;
+                }
+
+                summaryDto.Reaction = reactionDefinition;
+
+                summaryDtos.Add(summaryDto);
+            }
+
+            return summaryDtos;
         }
 
-        public virtual Task<ReactionDefinition> GetUserReactionsAsync(
+        public virtual async Task<List<ReactionDefinition>> GetUserReactionsAsync(
             Guid userId,
             [NotNull] string entityType,
             [NotNull] string entityId)
         {
-            //TODO: ...
-            throw new NotImplementedException();
+            var userReactions = await UserReactionRepository
+                .GetListForUserAsync(
+                    userId,
+                    entityType,
+                    entityId
+                );
+
+            var reactionDtos = new List<ReactionDefinition>();
+
+            foreach (var userReaction in userReactions)
+            {
+                //TODO: Get all definitions then filter here?
+                var reactionDefinition = await ReactionDefinitionStore
+                    .GetReactionOrNullAsync(
+                        userReaction.ReactionName,
+                        userReaction.EntityType
+                    );
+
+                if (reactionDefinition == null)
+                {
+                    await UserReactionRepository.DeleteAsync(userReaction);
+                    continue;
+                }
+
+                reactionDtos.Add(reactionDefinition);
+            }
+
+            return reactionDtos;
         }
 
         public virtual async Task<UserReaction> CreateAsync(
@@ -86,12 +138,5 @@ namespace Volo.CmsKit.Reactions
             await UserReactionRepository.DeleteAsync(existingReaction);
             return true;
         }
-    }
-
-    public class ReactionSummary
-    {
-        public ReactionDefinition Reaction { get; set; }
-
-        public int Count { get; set; }
     }
 }

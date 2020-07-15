@@ -7,6 +7,8 @@ namespace Volo.CmsKit.Reactions
 {
     public interface IReactionDefinitionStore
     {
-        Task<List<ReactionDefinition>> GetAvailableReactionsAsync([CanBeNull] string entityType, [CanBeNull] Guid? userId);
+        Task<List<ReactionDefinition>> GetAvailableReactionsAsync([CanBeNull] string entityType);
+
+        Task<ReactionDefinition> GetReactionOrNullAsync([NotNull] string reactionName, [CanBeNull] string entityType);
     }
 }

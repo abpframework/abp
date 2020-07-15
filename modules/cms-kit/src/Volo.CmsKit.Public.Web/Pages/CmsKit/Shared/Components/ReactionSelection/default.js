@@ -1,16 +1,13 @@
 ﻿(function () {
     $(document).ready(function () {
 
-        $('.cms-reaction-selection').each(function () {
+        function initReactionSelection(){
             var $this = $(this);
-            var $selectionButton = $this.find('.cms-reaction-selection-button');
-            var $selectionArea = $this.find('.cms-reaction-selection-area');
+            var $availableReactions = $this.find('.cms-reaction-selection-available-reactions');
 
-            $selectionButton.popover({
-                html: true,
-                placement: 'right',
-                content: $selectionArea.html()
-            });
-        })
+        }
+
+        $('.cms-reaction-selection').each(initReactionSelection)
+
     });
 })();

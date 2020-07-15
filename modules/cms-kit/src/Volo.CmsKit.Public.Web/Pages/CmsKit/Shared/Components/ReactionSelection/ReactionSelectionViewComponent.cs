@@ -26,29 +26,33 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
         }
 
         public virtual async Task<IViewComponentResult> InvokeAsync(
-            string entityType = null)
+            string entityType,
+            string entityId)
         {
-            var result = await ReactionPublicAppService.GetAvailableReactions(
-                new GetAvailableReactionsDto
+            var result = await ReactionPublicAppService.GetForSelectionAsync(
+                new GetForSelectionInput
                 {
-                    EntityType = entityType
-                }
-            );
+                    EntityType = entityType,
+                    EntityId = entityId
+                });
 
             var viewModel = new ReactionSelectionViewModel
             {
                 EntityType = entityType,
+                EntityId = entityId,
                 Reactions = new List<ReactionViewModel>()
             };
 
             foreach (var reactionDto in result.Items)
             {
                 viewModel.Reactions.Add(
-                    new ReactionViewModel
+                    new ReactionViewModel //TODO: AutoMap
                     {
-                        Name = reactionDto.Name,
-                        DisplayName = reactionDto.DisplayName,
-                        Icon = Options.ReactionIcons.GetLocalizedIcon(reactionDto.Name)
+                        Name = reactionDto.Reaction.Name,
+                        DisplayName = reactionDto.Reaction.DisplayName,
+                        Icon = Options.ReactionIcons.GetLocalizedIcon(reactionDto.Reaction.Name),
+                        Count = reactionDto.Count,
+                        IsSelectedByCurrentUser = reactionDto.IsSelectedByCurrentUser
                     });
             }
 

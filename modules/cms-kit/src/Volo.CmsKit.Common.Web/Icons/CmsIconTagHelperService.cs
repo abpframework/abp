@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers;
@@ -20,6 +22,11 @@ namespace Volo.CmsKit.Web.Icons
             {
                 //TODO: Allow to font, svg icons.. etc.
                 throw new AbpException("Only file icons are allowed!");
+            }
+
+            if (TagHelper.Highlight)
+            {
+                output.AddClass("cms-icon-highlighted", HtmlEncoder.Default);
             }
 
             return Task.CompletedTask;

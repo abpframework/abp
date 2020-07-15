@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -16,11 +15,14 @@ namespace Volo.CmsKit.Reactions
             Options = options.Value;
         }
 
-        public virtual Task<List<ReactionDefinition>> GetAvailableReactionsAsync(
-            string entityType,
-            Guid? userId)
+        public virtual Task<List<ReactionDefinition>> GetAvailableReactionsAsync(string entityType)
         {
             return Task.FromResult(Options.Reactions.Values.ToList());
+        }
+
+        public Task<ReactionDefinition> GetReactionOrNullAsync(string reactionName, string entityType)
+        {
+            return Task.FromResult(Options.Reactions.GetOrDefault(reactionName));
         }
     }
 }

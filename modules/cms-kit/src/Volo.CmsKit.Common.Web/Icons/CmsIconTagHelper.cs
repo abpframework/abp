@@ -7,6 +7,8 @@ namespace Volo.CmsKit.Web.Icons
     public class CmsIconTagHelper : AbpTagHelper<CmsIconTagHelper, CmsIconTagHelperService>
     {
         public string Name { get; set; }
+        
+        public bool Highlight { get; set; }
 
         public CmsIconTagHelper(CmsIconTagHelperService service)
             : base(service)

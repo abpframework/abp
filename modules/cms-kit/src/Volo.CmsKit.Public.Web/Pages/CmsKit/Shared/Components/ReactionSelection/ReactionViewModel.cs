@@ -12,5 +12,10 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 
         [NotNull]
         public string Icon { get; set; }
+
+        public int Count { get; set; }
+
+        public bool IsSelectedByCurrentUser { get; set; }
+
     }
 }
