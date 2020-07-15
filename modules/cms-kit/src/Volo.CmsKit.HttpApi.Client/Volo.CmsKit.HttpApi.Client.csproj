@@ -9,8 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Admin.HttpApi.Client\Volo.CmsKit.Admin.HttpApi.Client.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Application.Contracts\Volo.CmsKit.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Public.HttpApi.Client\Volo.CmsKit.Public.HttpApi.Client.csproj" />
   </ItemGroup>
 
 </Project>

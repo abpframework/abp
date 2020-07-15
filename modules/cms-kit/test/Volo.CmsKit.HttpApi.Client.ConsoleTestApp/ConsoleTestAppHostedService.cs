@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Hosting;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 
-namespace Volo.CmsKit.HttpApi.Client.ConsoleTestApp
+namespace Volo.CmsKit
 {
     public class ConsoleTestAppHostedService : IHostedService
     {

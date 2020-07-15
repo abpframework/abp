@@ -15,6 +15,7 @@ namespace Volo.CmsKit
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAutoMapperObjectMapper<CmsKitAdminApplicationModule>();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<CmsKitAdminApplicationModule>(validate: true);

@@ -1,10 +1,6 @@
-﻿using Localization.Resources.AbpUi;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.CmsKit.Admin;
-using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit
 {
@@ -19,16 +15,6 @@ namespace Volo.CmsKit
             PreConfigure<IMvcBuilder>(mvcBuilder =>
             {
                 mvcBuilder.AddApplicationPartIfNotExists(typeof(CmsKitAdminHttpApiModule).Assembly);
-            });
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<CmsKitResource>()
-                    .AddBaseTypes(typeof(AbpUiResource));
             });
         }
     }
