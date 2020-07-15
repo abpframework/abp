@@ -8,12 +8,16 @@
             $availableReactions.find('.cms-reaction-icon').each(function(){
                 var $icon = $(this);
                 $icon.click(function(){
-
+                    volo.cmsKit.reactions.reactionPublic.create({
+                        entityType: $this.attr('data-entity-type'),
+                        entityId: $this.attr('data-entity-id'),
+                        reactionName: $icon.attr('data-name')
+                    });
                 });
             });
         }
 
-        $('.cms-reaction-selection').each(initReactionSelection)
+        $('.cms-reaction-selection').each(initReactionSelection);
 
     });
 })();
