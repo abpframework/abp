@@ -390,7 +390,7 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 <!-- Add the abpPermission directive -->
 <button abpPermission="BookStore.Books.Delete" ngbDropdownItem (click)="delete(row.id)">
-  {%{{{ 'AbpAccount::Delete' | abpLocalization }}}%}
+  {%{{{ '::Delete' | abpLocalization }}}%}
 </button>
 ````
 

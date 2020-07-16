@@ -37,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.CmsKit.Application\Volo.CmsKit.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.CmsKit.EntityFrameworkCore\Volo.CmsKit.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Volo.CmsKit.Application\Volo.CmsKit.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.CmsKit.Web\Volo.CmsKit.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Host.Shared\Volo.CmsKit.Host.Shared.csproj" />
   </ItemGroup>

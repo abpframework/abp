@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Volo.CmsKit.HttpApi.Client.ConsoleTestApp
+namespace Volo.CmsKit
 {
     class Program
     {
