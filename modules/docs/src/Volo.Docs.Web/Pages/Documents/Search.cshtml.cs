@@ -10,6 +10,7 @@ using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
+using Volo.Docs.Utils;
 
 namespace Volo.Docs.Pages.Documents
 {
@@ -61,7 +62,7 @@ namespace Volo.Docs.Pages.Documents
 
             if (versions.Any() && string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
             {
-                Version = versions.First().Name;
+                Version = (versions.FirstOrDefault(v=> !VersionHelper.IsPreRelease(v.Name)) ?? versions.First()).Name;
             }
 
             SearchOutputs = await _documentAppService.SearchAsync(new DocumentSearchInput
