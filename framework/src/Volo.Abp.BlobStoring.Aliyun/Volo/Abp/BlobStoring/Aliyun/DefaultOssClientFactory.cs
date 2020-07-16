@@ -16,11 +16,11 @@ namespace Volo.Abp.BlobStoring.Aliyun
     /// </summary>
     public class DefaultOssClientFactory : IOssClientFactory, ITransientDependency
     {
-        private readonly IDistributedCache<AssumeRoleCredentialsCacheItem> _cache;
+        protected IDistributedCache<AssumeRoleCredentialsCacheItem> Cache { get; }
         public DefaultOssClientFactory(
             IDistributedCache<AssumeRoleCredentialsCacheItem> cache)
         {
-            _cache = cache;
+            Cache = cache;
         }
 
         public virtual IOss Create(AliyunBlobProviderConfiguration aliyunConfig)
@@ -34,7 +34,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             {
                 //STS temporary authorization to access OSS
                 var key = aliyunConfig.ToKeyString();
-                var cacheItem = _cache.Get(key);
+                var cacheItem = Cache.Get(key);
                 if (cacheItem == null)
                 {
                     IClientProfile profile = DefaultProfile.GetProfile(
@@ -55,7 +55,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
                     };
                     var response = client.GetAcsResponse(request);
                     cacheItem = new AssumeRoleCredentialsCacheItem(response.Credentials.AccessKeyId, response.Credentials.AccessKeySecret, response.Credentials.SecurityToken);
-                    _cache.Set(key, cacheItem, new DistributedCacheEntryOptions()
+                    Cache.Set(key, cacheItem, new DistributedCacheEntryOptions()
                     {
                         //Subtract 10 seconds of network request time.
                         AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(aliyunConfig.DurationSeconds - 10)

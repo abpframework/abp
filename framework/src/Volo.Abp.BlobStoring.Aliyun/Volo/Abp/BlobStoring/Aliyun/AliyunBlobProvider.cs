@@ -19,13 +19,13 @@ namespace Volo.Abp.BlobStoring.Aliyun
             AliyunBlobNameCalculator = aliyunBlobNameCalculator;
         }
 
-        private IOss GetOssClient(BlobContainerConfiguration blobContainerConfiguration)
+        protected virtual IOss GetOssClient(BlobContainerConfiguration blobContainerConfiguration)
         {
             var aliyunConfig = blobContainerConfiguration.GetAliyunConfiguration();
             return OssClientFactory.Create(aliyunConfig);
         }
 
-        private IOss GetOssClient(AliyunBlobProviderConfiguration aliyunConfig)
+        protected virtual IOss GetOssClient(AliyunBlobProviderConfiguration aliyunConfig)
         {
             return OssClientFactory.Create(aliyunConfig);
         }
@@ -57,9 +57,11 @@ namespace Volo.Abp.BlobStoring.Aliyun
             var containerName = GetContainerName(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
             var ossClient = GetOssClient(args.Configuration);
-            var result = ossClient.DeleteObject(containerName, blobName);
-            //TODO: undifend delete flag
-            //https://help.aliyun.com/document_detail/91924.html
+            if(!BlobExistsAsync(ossClient, containerName, blobName))
+            {
+                return Task.FromResult(false);
+            }
+            ossClient.DeleteObject(containerName, blobName);
             return Task.FromResult(true);
         }
 
@@ -71,7 +73,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
             return Task.FromResult(BlobExistsAsync(ossClient, containerName, blobName));
         }
 
-        public override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+        public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
         {
             var containerName = GetContainerName(args);
             var blobName = AliyunBlobNameCalculator.Calculate(args);
@@ -81,7 +83,9 @@ namespace Volo.Abp.BlobStoring.Aliyun
                 return null;
             }
             var result = ossClient.GetObject(containerName, blobName);
-            return Task.FromResult(result.Content);
+            var memoryStream = new MemoryStream();
+            await result.Content.CopyToAsync(memoryStream);
+            return memoryStream;
         }
 
         private static string GetContainerName(BlobProviderArgs args)

@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Aliyun.OSS;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BlobStoring.Aliyun
@@ -19,7 +21,7 @@ namespace Volo.Abp.BlobStoring.Aliyun
     )]
     public class AbpBlobStoringAliyunTestModule : AbpModule
     {
-        private const string UserSecretsId = "fe9a87da-3584-40e0-a06c-aa499936015d";
+        private const string UserSecretsId = "9f0d2c00-80c1-435b-bfab-2c39c8249091";
 
         private AliyunBlobProviderConfiguration _configuration;
         private readonly string _randomContainerName = "abp-aliyun-test-container-" + Guid.NewGuid().ToString("N");
@@ -32,11 +34,11 @@ namespace Volo.Abp.BlobStoring.Aliyun
             }));
 
             var configuration = context.Services.GetConfiguration();
-            var _accessKeyId = configuration["Aliyun:AccessKeyId"];
-            var _accessKeySecret = configuration["Aliyun:AccessKeySecret"];
-            var _endpoint = configuration["Aliyun:Endpoint"];
-            var _regionId = configuration["Aliyun:RegionId"];
-            var _roleArn = configuration["Aliyun:RoleArn"];
+            var accessKeyId = configuration["Aliyun:AccessKeyId"];
+            var accessKeySecret = configuration["Aliyun:AccessKeySecret"];
+            var endpoint = configuration["Aliyun:Endpoint"];
+            var regionId = configuration["Aliyun:RegionId"];
+            var roleArn = configuration["Aliyun:RoleArn"];
 
             Configure<AbpBlobStoringOptions>(options =>
             {
@@ -44,14 +46,14 @@ namespace Volo.Abp.BlobStoring.Aliyun
                 {
                     containerConfiguration.UseAliyun(aliyun =>
                     {
-                        aliyun.AccessKeyId = _accessKeyId;
-                        aliyun.AccessKeySecret = _accessKeySecret;
-                        aliyun.Endpoint = _endpoint;
+                        aliyun.AccessKeyId = accessKeyId;
+                        aliyun.AccessKeySecret = accessKeySecret;
+                        aliyun.Endpoint = endpoint;
                         //STS
-                        aliyun.RegionId = _regionId;
-                        aliyun.RoleArn = _roleArn;
+                        aliyun.RegionId = regionId;
+                        aliyun.RoleArn = roleArn;
                         aliyun.RoleSessionName = Guid.NewGuid().ToString("N");
-                        aliyun.DurationSeconds = 3600;
+                        aliyun.DurationSeconds = 0;
                         aliyun.Policy = String.Empty;
                         //Other
                         aliyun.CreateContainerIfNotExists = true;
@@ -66,7 +68,16 @@ namespace Volo.Abp.BlobStoring.Aliyun
         {
             var ossClientFactory = context.ServiceProvider.GetService<IOssClientFactory>();
             var ossClient = ossClientFactory.Create(_configuration);
-            ossClient.DeleteBucket(_randomContainerName);
+            if(ossClient.DoesBucketExist(_randomContainerName))
+            {
+                var objects = ossClient.ListObjects(_randomContainerName);
+                if (objects.ObjectSummaries.Any())
+                {
+                    ossClient.DeleteObjects(new DeleteObjectsRequest(_randomContainerName,
+                        objects.ObjectSummaries.Select(o => o.Key).ToList()));
+                }
+                ossClient.DeleteBucket(_randomContainerName);
+            }
         }
 
     }
