@@ -41,9 +41,12 @@
             </form>
         </div>
 
-        <div class="card-footer text-center border-0">
-            <abp-button type="button" button-type="Link" name="Action" value="Cancel" class="px-2 py-0">@L["Cancel"]</abp-button> @* TODO: Only show if identity server is used *@
-        </div>
+        @if (Model.ShowCancelButton)
+        {
+            <div class="card-footer text-center border-0">
+                <abp-button type="button" button-type="Link" name="Action" value="Cancel" class="px-2 py-0">@L["Cancel"]</abp-button>
+            </div>
+        }
     </div>
 }
 
