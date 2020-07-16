@@ -19,16 +19,16 @@ import {
 })
 export class TreeComponent {
   @ContentChild('menu') menu: TemplateRef<any>;
+  @Output() readonly checkedKeysChange = new EventEmitter();
+  @Output() readonly expandedKeysChange = new EventEmitter<string[]>();
+  @Output() readonly selectedNodeChange = new EventEmitter();
   @Input() checkable: boolean;
   @Input() checkStrictly: boolean;
   @Input() checkedKeys = [];
-  @Output() checkedKeysChange = new EventEmitter();
   @Input() nodes = [];
   @Input() expandedKeys: string[] = [];
-  @Output() expandedKeysChange = new EventEmitter<string[]>();
-  @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
   @Input() selectedNode: any;
-  @Output() selectedNodeChange = new EventEmitter();
+  @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
 
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;
