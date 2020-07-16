@@ -38,6 +38,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             await _npmPackagesUpdater.Update(
                 solutionFolder,
+                false,
                 true);
         }
 
@@ -71,6 +72,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             await _npmPackagesUpdater.Update(
                 solutionFolder,
+                false,
                 false,
                 true);
         }
