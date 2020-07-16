@@ -19,9 +19,7 @@ $commands = (
   "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
   "npm run replace-with-tilde",
   "npm run lerna -- exec 'npm publish --registry https://registry.npmjs.org'",
-  "npm run update:templates",
-  "npm run gulp:app",
-  "npm run gulp:module"
+  "npm run update-gulp"
 )
 
 foreach ($command in $commands) { 
