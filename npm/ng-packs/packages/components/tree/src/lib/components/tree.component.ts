@@ -20,6 +20,7 @@ import {
 export class TreeComponent {
   @ContentChild('menu') menu: TemplateRef<any>;
   @Input() checkable: boolean;
+  @Input() checkStrictly: boolean;
   @Input() checkedKeys = [];
   @Output() checkedKeysChange = new EventEmitter();
   @Input() nodes = [];
@@ -35,13 +36,12 @@ export class TreeComponent {
   }
 
   onCheckboxChange(event) {
-    console.log(event);
-    this.checkedKeys = event.checkedKeys;
-    this.checkedKeysChange.emit(event.checkedKeys);
+    this.checkedKeys = [...event.keys];
+    this.checkedKeysChange.emit(event.keys);
   }
 
   onExpandedKeysChange(event) {
-    this.expandedKeys = event.keys;
+    this.expandedKeys = [...event.keys];
     this.expandedKeysChange.emit(event.keys);
   }
 }
