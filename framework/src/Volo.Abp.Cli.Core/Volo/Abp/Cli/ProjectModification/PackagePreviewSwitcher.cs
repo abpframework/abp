@@ -11,17 +11,17 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class PackagePreviewSwitcher : ITransientDependency
     {
-        private readonly PackageSourceAdder _packageSourceAdder;
+        private readonly PackageSourceManager _packageSourceManager;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
 
         public ILogger<PackagePreviewSwitcher> Logger { get; set; }
 
-        public PackagePreviewSwitcher(PackageSourceAdder packageSourceAdder,
+        public PackagePreviewSwitcher(PackageSourceManager packageSourceManager,
             NpmPackagesUpdater npmPackagesUpdater,
             VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater)
         {
-            _packageSourceAdder = packageSourceAdder;
+            _packageSourceManager = packageSourceManager;
             _npmPackagesUpdater = npmPackagesUpdater;
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             Logger = NullLogger<PackagePreviewSwitcher>.Instance;
@@ -44,8 +44,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
         {
-            // TODO: Remove this when switched to stable
-            _packageSourceAdder.Add("ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
+            _packageSourceManager.Add("ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
@@ -61,6 +60,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public async Task SwitchToStable(CommandLineArgs commandLineArgs)
         {
+            _packageSourceManager.Remove("ABP Nightly");
+
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
 

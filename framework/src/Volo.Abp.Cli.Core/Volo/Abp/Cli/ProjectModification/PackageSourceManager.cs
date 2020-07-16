@@ -7,19 +7,18 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
-    public class PackageSourceAdder: ITransientDependency
+    public class PackageSourceManager: ITransientDependency
     {
-        public ILogger<PackageSourceAdder> Logger { get; set; }
+        public ILogger<PackageSourceManager> Logger { get; set; }
 
-        public PackageSourceAdder()
+        public PackageSourceManager()
         {
-            Logger = NullLogger<PackageSourceAdder>.Instance;
+            Logger = NullLogger<PackageSourceManager>.Instance;
         }
 
         public void Add(string sourceKey, string sourceValue)
         {
-            var nugetConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "NuGet", "NuGet.Config");
+            var nugetConfigPath = GetNugetConfigPath();
 
             if (!File.Exists(nugetConfigPath))
             {
@@ -61,6 +60,51 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 Logger.LogWarning($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources FAILED.");
             }
+        }
+
+        public void Remove(string sourceKey)
+        {
+            var nugetConfigPath = GetNugetConfigPath();
+
+            if (!File.Exists(nugetConfigPath))
+            {
+                return;
+            }
+
+            var fileContent = File.ReadAllText(nugetConfigPath);
+
+            if (!fileContent.Contains($"\"{sourceKey}\""))
+            {
+                return;
+            }
+
+            Logger.LogInformation($"Removing \"{sourceKey}\" from nuget sources...");
+
+            try
+            {
+                var doc = new XmlDocument() { PreserveWhitespace = true };
+
+                doc.Load(GenerateStreamFromString(fileContent));
+
+                var nodes = doc.SelectNodes($"/configuration/packageSources[@key='{sourceKey}']");
+
+                if (nodes != null && nodes.Count > 0)
+                {
+                    nodes[0].ParentNode.RemoveChild(nodes[0]);
+                }
+
+                File.WriteAllText(nugetConfigPath, doc.OuterXml);
+            }
+            catch
+            {
+                Logger.LogWarning($"Removing \"{sourceKey}\" from nuget sources FAILED.");
+            }
+        }
+
+        private static string GetNugetConfigPath()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "NuGet", "NuGet.Config");
         }
 
         private static Stream GenerateStreamFromString(string s)
