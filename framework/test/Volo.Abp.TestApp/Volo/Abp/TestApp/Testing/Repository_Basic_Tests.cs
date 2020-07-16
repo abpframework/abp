@@ -36,6 +36,20 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
+        public async Task GetPagedListAsync()
+        {
+            var persons = await PersonRepository.GetPagedListAsync(0, 10, "name");
+            persons.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetPagedListAsync_Should_Return_Empty()
+        {
+            var persons = await PersonRepository.GetPagedListAsync(1, 10, "name");
+            persons.Count.ShouldBe(0);
+        }
+
+        [Fact]
         public async Task GetAsync_With_Predicate()
         {
             var person = await PersonRepository.GetAsync(p => p.Name == "Douglas");

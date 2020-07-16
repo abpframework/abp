@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -86,6 +87,21 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await DbSet.LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public override async Task<List<TEntity>> GetPagedListAsync(
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var queryable = includeDetails ? WithDetails() : DbSet;
+
+            return await queryable
+                .OrderBy(sorting)
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         protected override IQueryable<TEntity> GetQueryable()
