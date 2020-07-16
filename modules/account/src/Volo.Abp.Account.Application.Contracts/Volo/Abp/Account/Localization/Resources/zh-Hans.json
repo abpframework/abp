@@ -42,7 +42,7 @@
     "DisplayName:Abp.Account.EnableLocalLogin": "使用本地帐户进行身份验证",
     "Description:Abp.Account.EnableLocalLogin": "服务器是否将允许用户使用本地帐户进行身份验证。",
     "LoggedOutTitle": "注销",
-    "LoggedOutText": "您已成功注销并将马上返回。",
+    "LoggedOutText": "你已成功注销并将马上返回.",
     "ReturnToText": "点击此处返回到 {0}"
   }
 }
