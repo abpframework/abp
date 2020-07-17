@@ -1,25 +1,49 @@
-﻿(function () {
+﻿(function ($) {
     $(document).ready(function () {
 
-        function initReactionSelection() {
-            var $wrapper = $(this);
-            var $availableReactions = $wrapper.find('.cms-reaction-selection-available-reactions');
+        abp.widgets.CmsReactionSelection= function ($widget) {
 
-            $wrapper.find('.cms-reaction-icon').each(function () {
-                var $icon = $(this);
-                $icon.click(function () {
-                    var methodName = $icon.hasClass('cms-reaction-icon-selected') ? 'delete' : 'create';
-                    volo.cmsKit.reactions.reactionPublic[methodName]({
-                        entityType: $wrapper.attr('data-entity-type'),
-                        entityId: $wrapper.attr('data-entity-id'),
-                        reactionName: $icon.attr('data-name')
-                    }).then(function () {
-                        location.reload(); //TODO: JUST TESTING !!!!!!!!
+            var getFilters = function () {
+                return {
+
+                };
+            }
+
+            var refresh = function (filters) {
+
+            };
+
+            var init = function (filters) {
+                var $wrapper = $widget.find('.cms-reaction-selection');
+                $widget.find('.cms-reaction-icon').each(function () {
+                    var $icon = $(this);
+                    $icon.click(function () {
+                        var methodName = $icon.hasClass('cms-reaction-icon-selected') ? 'delete' : 'create';
+                        volo.cmsKit.reactions.reactionPublic[methodName]({
+                            entityType: $wrapper.attr('data-entity-type'),
+                            entityId: $wrapper.attr('data-entity-id'),
+                            reactionName: $icon.attr('data-name')
+                        }).then(function () {
+                            location.reload(); //TODO: JUST TESTING !!!!!!!!
+                        });
                     });
                 });
-            });
-        }
+            };
 
-        $('.cms-reaction-selection').each(initReactionSelection);
+            return {
+                getFilters: getFilters,
+                init: init,
+                refresh: refresh
+            };
+        };
+
+        $('.abp-widget-wrapper[data-widget-name="CmsReactionSelection"]').each(function(){
+            var $widget = $(this);
+            var widgetManager = new abp.WidgetManager({
+                wrapper: $widget.parent(), //TODO: Change to $widget once WidgetManager supports it!
+            });
+
+            widgetManager.init();
+        });
     });
-})();
+})(jQuery);
