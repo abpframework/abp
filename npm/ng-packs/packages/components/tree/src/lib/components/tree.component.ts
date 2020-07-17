@@ -7,8 +7,10 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
+import { NzFormatEmitEvent, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
+
+export type DropEvent = NzFormatEmitEvent & { pos: -1 | 0 | 1 };
 
 @Component({
   selector: 'abp-tree',
@@ -20,11 +22,13 @@ import { of } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
 })
 export class TreeComponent {
+  dropPosition: -1 | 0 | 1;
+
   @ContentChild('menu') menu: TemplateRef<any>;
   @Output() readonly checkedKeysChange = new EventEmitter();
   @Output() readonly expandedKeysChange = new EventEmitter<string[]>();
   @Output() readonly selectedNodeChange = new EventEmitter();
-  @Output() readonly dropOver = new EventEmitter<NzFormatEmitEvent>();
+  @Output() readonly dropOver = new EventEmitter<DropEvent>();
   @Input() draggable: boolean;
   @Input() checkable: boolean;
   @Input() checkStrictly: boolean;
@@ -33,7 +37,10 @@ export class TreeComponent {
   @Input() expandedKeys: string[] = [];
   @Input() selectedNode: any;
   @Input() isNodeSelected = node => this.selectedNode?.id === node.key;
-  @Input() beforeDrop = () => of(false);
+  @Input() beforeDrop = (event: NzFormatBeforeDropEvent) => {
+    this.dropPosition = event.pos;
+    return of(false);
+  };
 
   onSelectedNodeChange(node) {
     this.selectedNode = node.origin.entity;
@@ -50,9 +57,10 @@ export class TreeComponent {
     this.expandedKeysChange.emit(event.keys);
   }
 
-  onDrop(event: NzFormatEmitEvent) {
+  onDrop(event: DropEvent) {
     event.event.stopPropagation();
     event.event.preventDefault();
+    event.pos = this.dropPosition;
 
     this.dropOver.emit(event);
   }
