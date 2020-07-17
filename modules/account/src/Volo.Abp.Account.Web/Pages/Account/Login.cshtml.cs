@@ -51,9 +51,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
         protected IAuthenticationSchemeProvider SchemeProvider { get; }
         protected AbpAccountOptions AccountOptions { get; }
 
-        /// <summary>
-        /// TODO: Find a better way to implement it. Only show if identity server is used.
-        /// </summary>
         public bool ShowCancelButton { get; set; }
 
         public LoginModel(
