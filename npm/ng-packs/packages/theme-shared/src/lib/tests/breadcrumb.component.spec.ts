@@ -54,8 +54,8 @@ describe('BreadcrumbComponent', () => {
 
   beforeEach(() => {
     spectator = createRouting();
-    routes = spectator.get(RoutesService);
-    store = spectator.get(Store);
+    routes = spectator.inject(RoutesService);
+    store = spectator.inject(Store);
   });
 
   it('should display the breadcrumb', async () => {

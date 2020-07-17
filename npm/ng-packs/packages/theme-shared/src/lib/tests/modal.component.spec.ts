@@ -78,7 +78,7 @@ describe('ModalComponent', () => {
   });
 
   afterEach(() => {
-    const modalService = spectator.get(ModalService);
+    const modalService = spectator.inject(ModalService);
     modalService.clearModal();
   });
 
@@ -120,7 +120,7 @@ describe('ModalComponent', () => {
   });
 
   it('should open the confirmation popup and works correct', async () => {
-    const confirmationService = spectator.get(ConfirmationService);
+    const confirmationService = spectator.inject(ConfirmationService);
     const warnSpy = jest.spyOn(confirmationService, 'warn');
 
     await wait0ms();

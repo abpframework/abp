@@ -18,7 +18,7 @@ describe('LocalizationService', () => {
 
   beforeEach(() => {
     spectator = createService();
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     service = spectator.service;
   });
 
@@ -52,7 +52,7 @@ describe('LocalizationService', () => {
 
   describe('#registerLocale', () => {
     it('should return registerLocale and then call setRouteReuse', () => {
-      const router = spectator.get(Router);
+      const router = spectator.inject(Router);
 
       const shouldReuseRoute = () => true;
       router.routeReuseStrategy = { shouldReuseRoute } as any;
