@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.Localization;
@@ -19,26 +18,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker
 
         public override void ConfigureDynamicResources(BundleConfigurationContext context)
         {
-            var cultureName = CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType ==
-                              CalendarAlgorithmType.LunarCalendar
-                ? "en"
-                : CultureInfo.CurrentUICulture.Name;
-
-            TryAddCultureFile(context, cultureName);
-        }
-
-        protected virtual bool TryAddCultureFile(BundleConfigurationContext context, string cultureName)
-        {
-            var fileName = context.LocalizationOptions.GetLanguageFilesMap(PackageName, cultureName);
+            var fileName = context.LocalizationOptions.GetCurrentUICultureLanguageFilesMap(PackageName);
             var filePath = $"/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{fileName}.min.js";
-
-            if (!context.FileProvider.GetFileInfo(filePath).Exists)
+            if (context.FileProvider.GetFileInfo(filePath).Exists)
             {
-                return false;
+                context.Files.AddIfNotContains(filePath);
             }
-
-            context.Files.AddIfNotContains(filePath);
-            return true;
         }
     }
 }

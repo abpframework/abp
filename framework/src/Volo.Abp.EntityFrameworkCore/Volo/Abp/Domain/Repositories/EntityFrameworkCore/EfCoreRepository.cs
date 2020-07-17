@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.DependencyInjection;
+using Volo.Abp.Guids;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
@@ -29,9 +30,12 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         private readonly IDbContextProvider<TDbContext> _dbContextProvider;
         private readonly Lazy<AbpEntityOptions<TEntity>> _entityOptionsLazy;
 
+        protected virtual IGuidGenerator GuidGenerator { get; set; }
+
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
+            GuidGenerator = SimpleGuidGenerator.Instance;
 
             _entityOptionsLazy = new Lazy<AbpEntityOptions<TEntity>>(
                 () => ServiceProvider
@@ -40,9 +44,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
                           .GetOrNull<TEntity>() ?? AbpEntityOptions<TEntity>.Empty
             );
         }
-        
+
         public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
+            CheckAndSetId(entity);
+
             var savedEntity = DbSet.Add(entity).Entity;
 
             if (autoSave)
@@ -66,7 +72,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             return updatedEntity;
         }
-        
+
         public override async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             DbSet.Remove(entity);
@@ -110,7 +116,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         }
 
         public override async Task<TEntity> FindAsync(
-            Expression<Func<TEntity, bool>> predicate, 
+            Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -188,16 +194,38 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             return query;
         }
+
+        protected virtual void CheckAndSetId(TEntity entity)
+        {
+            if (entity is IEntity<Guid> entityWithGuidId)
+            {
+                TrySetGuidId(entityWithGuidId);
+            }
+        }
+
+        protected virtual void TrySetGuidId(IEntity<Guid> entity)
+        {
+            if (entity.Id != default)
+            {
+                return;
+            }
+
+            EntityHelper.TrySetId(
+                entity,
+                () => GuidGenerator.Create(),
+                true
+            );
+        }
     }
 
-    public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbContext, TEntity>, 
+    public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbContext, TEntity>,
         IEfCoreRepository<TEntity, TKey>,
         ISupportsExplicitLoading<TEntity, TKey>
 
         where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity<TKey>
     {
-        public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider) 
+        public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
 
