@@ -50,6 +50,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (context != null)
             {
+                ShowCancelButton = true;
+
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!

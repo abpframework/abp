@@ -4,7 +4,9 @@
 
     abp.modals.PermissionManagement = function () {
         function checkParents($tab, $checkBox) {
-            var parentName = $checkBox.closest('.custom-checkbox').attr('data-parent-name');
+            var parentName = $checkBox
+                .closest('.custom-checkbox')
+                .attr('data-parent-name');
             if (!parentName) {
                 return;
             }
@@ -20,7 +22,9 @@
         }
 
         function uncheckChildren($tab, $checkBox) {
-            var permissionName = $checkBox.closest('.custom-checkbox').attr('data-permission-name');
+            var permissionName = $checkBox
+                .closest('.custom-checkbox')
+                .attr('data-permission-name');
             if (!permissionName) {
                 return;
             }
@@ -37,37 +41,45 @@
 
         function handleTabCheckedCheckboxCount($tab) {
             var newCount = 0;
-            $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
-                if ($(this).is(':checked') === true) {
-                    newCount++;
-                }
-            });
+            $tab.find('input[type="checkbox"]')
+                .not('[name="SelectAllInThisTab"]')
+                .each(function () {
+                    if ($(this).is(':checked') === true) {
+                        newCount++;
+                    }
+                });
 
             var $tabTitle = $('#' + $tab.attr('id') + '-tab');
-            var title = $tabTitle.html()
-                .replace('<b>','').replace('</b>','')
-                .replace('<small>','').replace('</small>','');
+            var title = $tabTitle
+                .html()
+                .replace('<b>', '')
+                .replace('</b>', '')
+                .replace('<small>', '')
+                .replace('</small>', '');
 
             var titleSplitted = title.split(' ');
-            if (titleSplitted[titleSplitted.length-1].startsWith('(')){
+            if (titleSplitted[titleSplitted.length - 1].startsWith('(')) {
                 titleSplitted.pop();
             }
             var titleWithoutCount = titleSplitted.join(' ');
-            var newTitle = titleWithoutCount + ' (' + (newCount) + ')';
-            if (newCount > 0){
-                newTitle = '<b>' + newTitle + '</b>'
+            var newTitle = titleWithoutCount + ' (' + newCount + ')';
+            if (newCount > 0) {
+                newTitle = '<b>' + newTitle + '</b>';
+            } else {
+                newTitle = '<small>' + newTitle + '</small>';
             }
-            else {
-                newTitle = '<small>' + newTitle + '</small>'
-            }
-            $tabTitle.html(newTitle)
-        };
+            $tabTitle.html(newTitle);
+        }
 
         function handleUncheck($tab) {
             var $checkBox = $tab.find('input[name="SelectAllInThisTab"]');
 
             if ($checkBox.is(':checked')) {
-                if ($tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').length > 1) {
+                if (
+                    $tab
+                        .find('input[type="checkbox"]')
+                        .not('[name="SelectAllInThisTab"]').length > 1
+                ) {
                     $($checkBox).prop('indeterminate', true);
                 } else {
                     $checkBox.prop('checked', false);
@@ -75,11 +87,13 @@
             } else if ($checkBox.is(':indeterminate')) {
                 var allUnchecked = true;
 
-                $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
-                    if ($(this).is(':checked') === true) {
-                        allUnchecked = false;
-                    }
-                });
+                $tab.find('input[type="checkbox"]')
+                    .not('[name="SelectAllInThisTab"]')
+                    .each(function () {
+                        if ($(this).is(':checked') === true) {
+                            allUnchecked = false;
+                        }
+                    });
 
                 if (allUnchecked) {
                     $($checkBox).prop('indeterminate', false);
@@ -93,11 +107,13 @@
 
             var allChecked = true;
 
-            $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
-                if ($(this).is(':checked') === false) {
-                    allChecked = false;
-                }
-            });
+            $tab.find('input[type="checkbox"]')
+                .not('[name="SelectAllInThisTab"]')
+                .each(function () {
+                    if ($(this).is(':checked') === false) {
+                        allChecked = false;
+                    }
+                });
 
             if (allChecked) {
                 $($checkBox).prop('indeterminate', false);
@@ -106,7 +122,6 @@
                 $($checkBox).prop('indeterminate', true);
             }
         }
-
 
         function initSelectAllInThisTab() {
             var tabs = $('.tab-pane');
@@ -117,13 +132,15 @@
                 var allChecked = true;
                 var allUnChecked = true;
 
-                $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
-                    if ($(this).is(':checked') === true) {
-                        allUnChecked = false;
-                    } else {
-                        allChecked = false;
-                    }
-                });
+                $tab.find('input[type="checkbox"]')
+                    .not('[name="SelectAllInThisTab"]')
+                    .each(function () {
+                        if ($(this).is(':checked') === true) {
+                            allUnChecked = false;
+                        } else {
+                            allChecked = false;
+                        }
+                    });
 
                 if (allChecked) {
                     $($checkBox).prop('checked', true);
@@ -174,55 +191,65 @@
             $el.find('.tab-pane').each(function () {
                 var $tab = $(this);
                 handleTabCheckedCheckboxCount($tab);
-                $tab.find('input[type="checkbox"]').not('[name="SelectAllInThisTab"]').each(function () {
-                    var $checkBox = $(this);
-                    $checkBox.change(function () {
-                        if ($checkBox.is(':checked')) {
-                            checkParents($tab, $checkBox);
-                            handleCheck($tab);
-                        } else {
-                            uncheckChildren($tab, $checkBox);
-                            handleUncheck($tab);
-                        }
-                        setSelectAllInAllTabs();
-                        handleTabCheckedCheckboxCount($tab);
+                $tab.find('input[type="checkbox"]')
+                    .not('[name="SelectAllInThisTab"]')
+                    .each(function () {
+                        var $checkBox = $(this);
+                        $checkBox.change(function () {
+                            if ($checkBox.is(':checked')) {
+                                checkParents($tab, $checkBox);
+                                handleCheck($tab);
+                            } else {
+                                uncheckChildren($tab, $checkBox);
+                                handleUncheck($tab);
+                            }
+                            setSelectAllInAllTabs();
+                            handleTabCheckedCheckboxCount($tab);
+                        });
                     });
-                });
             });
 
             $('input[name="SelectAllInThisTab"]').change(function () {
                 var $checkBox = $(this);
                 var $tab = $('#' + $checkBox.attr('data-tab-id'));
                 if ($checkBox.is(':checked')) {
-                    $tab.find('input[type="checkbox"]').not(':disabled').prop('checked', true);
+                    $tab.find('input[type="checkbox"]')
+                        .not(':disabled')
+                        .prop('checked', true);
                 } else {
-                    $tab.find('input[type="checkbox"]').not(':disabled').prop('checked', false);
+                    $tab.find('input[type="checkbox"]')
+                        .not(':disabled')
+                        .prop('checked', false);
                 }
                 $($checkBox).prop('indeterminate', false);
                 setSelectAllInAllTabs();
-                handleTabCheckedCheckboxCount($tab)
+                handleTabCheckedCheckboxCount($tab);
             });
 
             $('input[name="SelectAllInAllTabs"]').change(function () {
                 var $checkBox = $(this);
                 if ($checkBox.is(':checked')) {
-                    $('.tab-pane input[type="checkbox"]').not(':disabled').prop('checked', true);
+                    $('.tab-pane input[type="checkbox"]')
+                        .not(':disabled')
+                        .prop('checked', true);
                 } else {
-                    $('.tab-pane input[type="checkbox"]').not(':disabled').prop('checked', false);
+                    $('.tab-pane input[type="checkbox"]')
+                        .not(':disabled')
+                        .prop('checked', false);
                 }
                 $($checkBox).prop('indeterminate', false);
 
                 $el.find('.tab-pane').each(function () {
-                    handleTabCheckedCheckboxCount($(this))
+                    handleTabCheckedCheckboxCount($(this));
                 });
             });
 
             $(function () {
-                $(".custom-scroll-content").mCustomScrollbar({
-                    theme: "minimal-dark"
+                $('.custom-scroll-content').mCustomScrollbar({
+                    theme: 'minimal-dark',
                 });
-                $(".custom-scroll-container > .col-4").mCustomScrollbar({
-                    theme: "minimal-dark"
+                $('.custom-scroll-container > .col-4').mCustomScrollbar({
+                    theme: 'minimal-dark',
                 });
             });
 

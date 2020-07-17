@@ -24,6 +24,13 @@ import { TreeNode } from '../utils/tree-utils';
 export class DynamicLayoutComponent implements OnDestroy {
   layout: Type<any>;
 
+  // TODO: Consider a shared enum (eThemeSharedComponents) for known layouts
+  readonly layouts = new Map([
+    ['application', 'Theme.ApplicationLayoutComponent'],
+    ['account', 'Theme.AccountLayoutComponent'],
+    ['empty', 'Theme.EmptyLayoutComponent'],
+  ]);
+
   isLayoutVisible = true;
 
   constructor(
@@ -36,11 +43,6 @@ export class DynamicLayoutComponent implements OnDestroy {
     const route = injector.get(ActivatedRoute);
     const router = injector.get(Router);
     const routes = injector.get(RoutesService);
-    const layouts = {
-      application: this.getComponent('Theme.ApplicationLayoutComponent'),
-      account: this.getComponent('Theme.AccountLayoutComponent'),
-      empty: this.getComponent('Theme.EmptyLayoutComponent'),
-    };
 
     router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -62,7 +64,8 @@ export class DynamicLayoutComponent implements OnDestroy {
 
         if (!expectedLayout) expectedLayout = eLayoutType.empty;
 
-        this.layout = layouts[expectedLayout].component;
+        const key = this.layouts.get(expectedLayout);
+        this.layout = this.getComponent(key).component;
       }
     });
 

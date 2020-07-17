@@ -453,7 +453,7 @@ In a typical ASP.NET Core application, you create **API Controllers** to expose 
 
 ABP can [**automagically**](../API/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
 
-#### Swagger UI
+### Swagger UI
 
 The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. (Replace `<port>` with your own port number.)
 
