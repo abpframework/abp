@@ -24,13 +24,11 @@ Configuration is done in the `ConfigureServices` method of your [module](Module-
 Configure<AbpBlobStoringOptions>(options =>
 {
     options.Containerscontainer.UseMinio(minio =>
-    {
-         
+    {         
         minio.EndPoint = "your minio endPoint";
         minio.AccessKey = "your minio accessKey";
         minio.SecretKey = "your minio secretKey";
-        minio.BucketName = "your minio bucketName";
-                    
+        minio.BucketName = "your minio bucketName";                    
     });
 });
 ````
@@ -51,7 +49,7 @@ Configure<AbpBlobStoringOptions>(options =>
     * Bucket names must be unique within a partition. 
     * Buckets used with Amazon S3 Transfer Acceleration can't have dots (.) in their names. For more information about transfer acceleration, see Amazon S3 Transfer Acceleration.
 * **WithSSL** (bool): Default value is `false`,Chain to MinIO Client object to use https instead of http.
-* **CreateContainerIfNotExists** (bool): Default value is `false`, If a container does not exist in minio, `MinioBlobProvider` will try to create it.
+* **CreateContainerIfNotExists** (bool): Default value is `false`, If a bucket does not exist in minio, `MinioBlobProvider` will try to create it.
 
 
 ## Minio Blob Name Calculator
