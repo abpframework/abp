@@ -4,8 +4,8 @@
 
     var myDefaultWhiteList = $.fn.tooltip.Constructor.Default.whiteList;
 
-    if (myDefaultWhiteList.img.indexOf('data-name') < 0) {
-        myDefaultWhiteList['img'].push('data-name');
+    if (myDefaultWhiteList.span.indexOf('data-reaction-name') < 0) {
+        myDefaultWhiteList.span.push('data-reaction-name');
     }
 
     $(document).ready(function () {
@@ -30,7 +30,7 @@
                         var methodName = $icon.hasClass('cms-reaction-icon-selected') ? 'delete' : 'create';
                         volo.cmsKit.reactions.reactionPublic[methodName](
                             $.extend(getFilters(), {
-                                reactionName: $icon.attr('data-name')
+                                reactionName: $icon.attr('data-reaction-name')
                             })
                         ).then(function () {
                             $selectIcon.popover('hide');
@@ -45,6 +45,7 @@
                 $selectIcon.popover({
                     placement: 'right',
                     html: true,
+                    trigger: 'focus',
                     title: l('PickYourReaction'),
                     content: $popoverContent.html()
                 }).on('shown.bs.popover', function () {
