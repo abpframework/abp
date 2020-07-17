@@ -12,7 +12,7 @@
                 };
             }
 
-            function init(filters) {
+            function init() {
                 $widget.find('.cms-reaction-icon').each(function () {
                     var $icon = $(this);
                     $icon.click(function () {
