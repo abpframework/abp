@@ -7,6 +7,7 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 @Component({
   selector: 'abp-tree',
@@ -22,6 +23,8 @@ export class TreeComponent {
   @Output() readonly checkedKeysChange = new EventEmitter();
   @Output() readonly expandedKeysChange = new EventEmitter<string[]>();
   @Output() readonly selectedNodeChange = new EventEmitter();
+  @Output() readonly drop = new EventEmitter<NzFormatEmitEvent>();
+  @Input() draggable: boolean;
   @Input() checkable: boolean;
   @Input() checkStrictly: boolean;
   @Input() checkedKeys = [];
@@ -43,5 +46,12 @@ export class TreeComponent {
   onExpandedKeysChange(event) {
     this.expandedKeys = [...event.keys];
     this.expandedKeysChange.emit(event.keys);
+  }
+
+  onDrop(event: NzFormatEmitEvent) {
+    event.event.stopPropagation();
+    event.event.preventDefault();
+
+    this.drop.emit(event);
   }
 }
