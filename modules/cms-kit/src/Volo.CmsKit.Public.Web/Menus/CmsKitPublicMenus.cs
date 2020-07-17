@@ -1,4 +1,4 @@
-﻿namespace Volo.CmsKit.Public.Web.Menus
+﻿namespace Volo.CmsKit.Web.Menus
 {
     public class CmsKitPublicMenus
     {

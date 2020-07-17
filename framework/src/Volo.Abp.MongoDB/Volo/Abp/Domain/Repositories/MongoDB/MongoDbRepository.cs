@@ -3,6 +3,7 @@ using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -145,6 +146,20 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public override async Task<List<TEntity>> GetPagedListAsync(
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .OrderBy(sorting)
+                .As<IMongoQueryable<TEntity>>()
+                .PageBy<TEntity, IMongoQueryable<TEntity>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override async Task DeleteAsync(

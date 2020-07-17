@@ -1,0 +1,8 @@
+﻿.cms-reaction-icon
+{
+    cursor: pointer;
+}
+.cms-reaction-icon-selected
+{
+    border: 1px solid gray;
+}

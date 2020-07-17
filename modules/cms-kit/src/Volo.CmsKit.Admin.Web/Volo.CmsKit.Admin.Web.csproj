@@ -14,10 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Volo.CmsKit.Common.Web\Volo.CmsKit.Common.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Admin.HttpApi\Volo.CmsKit.Admin.HttpApi.csproj" />
   </ItemGroup>
 
@@ -30,6 +27,11 @@
     <EmbeddedResource Include="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Admin\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Admin\_ViewImports.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -211,6 +211,10 @@
                   "path": "Blob-Storing-Azure.md"
                 },
                 {
+                  "text": "Aliyun提供程序",
+                  "path": "Blob-Storing-Aliyun.md"
+                },
+                {
                   "text": "创建自定义提供程序",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }

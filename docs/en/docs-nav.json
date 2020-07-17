@@ -217,6 +217,10 @@
                   "path": "Blob-Storing-Azure.md"
                 },
                 {
+                  "text": "Aliyun Provider",
+                  "path": "Blob-Storing-Aliyun.md"
+                },
+                {
                   "text": "Create a Custom Provider",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }

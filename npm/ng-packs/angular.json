@@ -74,6 +74,43 @@
         }
       }
     },
+    "components": {
+      "projectType": "library",
+      "root": "packages/components",
+      "sourceRoot": "packages/components/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/components/tsconfig.lib.json",
+            "project": "packages/components/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "packages/components/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/components/tsconfig.lib.json",
+              "packages/components/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
     "theme-basic": {
       "projectType": "library",
       "root": "packages/theme-basic",

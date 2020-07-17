@@ -1,0 +1,22 @@
+﻿@model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection.ReactionSelectionViewModel
+<span class="cms-reaction-selection" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+    <div class="cms-reaction-selection-available-reactions">
+        Pick a reaction:
+        @foreach (var reaction in Model.Reactions)
+        {
+            <span class="mr-2">
+                <img src="@reaction.Icon" width="16" height="16" data-name="@reaction.Name" class="cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")"/>
+            </span>
+        }
+    </div>
+    <div class="cms-reaction-selection-reactions">
+        Current reactions:
+        @foreach (var reaction in Model.Reactions.Where(r => r.Count > 0))
+        {
+            <span class="mr-2">
+                <img src="@reaction.Icon" width="20" height="20" data-name="@reaction.Name" class="cms-reaction-icon @(reaction.IsSelectedByCurrentUser ? "cms-reaction-icon-selected" : "")"/>
+                <span> @reaction.Count</span>
+            </span>
+        }
+    </div>
+</span>

@@ -11,15 +11,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\CmsKit\Localization\CmsKit\*.json" />
-    <Content Remove="Volo\CmsKit\Localization\CmsKit\*.json" />
+    <EmbeddedResource Include="Volo\CmsKit\Localization\Resources\*.json" />
+    <Content Remove="Volo\CmsKit\Localization\Resources\*.json" />
   </ItemGroup>
 
 </Project>
