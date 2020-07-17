@@ -78,11 +78,12 @@ namespace Volo.Abp.Cli.NuGet
                 var versions = JsonSerializer
                     .Deserialize<NuGetVersionResultDto>(responseContent)
                     .Versions
-                    .Select(SemanticVersion.Parse);
+                    .Select(SemanticVersion.Parse)
+                    .OrderByDescending(v=> v, new VersionComparer()).ToList();
 
                 if (!includePreviews && !includeNightly && !includeReleaseCandidates)
                 {
-                    versions = versions.Where(x => !x.IsPrerelease);
+                    versions = versions.Where(x => !x.IsPrerelease).ToList();
                 }
 
                 var semanticVersions = versions.ToList();

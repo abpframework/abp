@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NuGet.Versioning;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -258,6 +259,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var versionListAsJson = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions");
             var versionList = JsonConvert.DeserializeObject<string[]>(versionListAsJson);
+
+            versionList = versionList.OrderByDescending(SemanticVersion.Parse, new VersionComparer()).ToArray();
 
             var newVersion = includeReleaseCandidates
                 ? versionList.Last()

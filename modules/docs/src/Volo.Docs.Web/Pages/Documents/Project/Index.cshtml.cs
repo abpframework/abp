@@ -17,6 +17,7 @@ using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
 using Volo.Docs.Utils;
+using NuGet.Versioning;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -252,6 +253,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
             var versions = output.Items
+                .OrderByDescending(i => SemanticVersion.Parse(i.Name), new VersionComparer())
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 
