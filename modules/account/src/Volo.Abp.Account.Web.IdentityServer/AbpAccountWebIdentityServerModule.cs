@@ -30,7 +30,7 @@ namespace Volo.Abp.Account.Web
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpAccountWebIdentityServerModule>("Volo.Abp.Account.Web");
+                options.FileSets.AddEmbedded<AbpAccountWebIdentityServerModule>();
             });
 
             //TODO: Try to reuse from AbpIdentityAspNetCoreModule

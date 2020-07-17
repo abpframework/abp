@@ -7,6 +7,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Volo.Abp.Account.Application</AssemblyName>
     <PackageId>Volo.Abp.Account.Application</PackageId>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace />
   </PropertyGroup>
 
@@ -16,5 +17,9 @@
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+  </ItemGroup>
+  
 </Project>

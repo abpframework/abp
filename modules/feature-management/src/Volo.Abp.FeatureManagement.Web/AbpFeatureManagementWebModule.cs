@@ -33,7 +33,7 @@ namespace Volo.Abp.FeatureManagement
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>("Volo.Abp.FeatureManagement");
+                options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<AbpFeatureManagementWebModule>();

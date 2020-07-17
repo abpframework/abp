@@ -203,9 +203,9 @@ namespace AbpDemo
 
 事件类型;
 
-* `EntityCreatedEventData<T>` 当实体创建创建成功后发布.
-* `EntityUpdatedEventData<T>` 当实体创建更新成功后发布.
-* `EntityDeletedEventData<T>` 当实体创建删除成功后发布.
+* `EntityCreatedEventData<T>` 当实体创建成功后发布.
+* `EntityUpdatedEventData<T>` 当实体更新成功后发布.
+* `EntityDeletedEventData<T>` 当实体删除成功后发布.
 * `EntityChangedEventData<T>` 当实体创建,更新,删除后发布. 如果你需要监听任何类型的更改,它是一种快捷方式 - 而不是订阅单个事件.
 
 ### 用于进行时态事件

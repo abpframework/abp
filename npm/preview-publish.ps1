@@ -24,9 +24,9 @@ $commands = (
   "npm install",
   "npm run publish-packages -- --nextVersion $Version --preview",
   "cd ../../",
-  "yarn lerna version $Version --yes --no-commit-hooks --skip-git --force-publish",
-  "yarn replace-with-tilde",
-  "yarn lerna exec 'npm publish --registry $Registry --tag preview'"
+  "npm run lerna -- version $Version --yes --no-commit-hooks --skip-git --force-publish",
+  "npm run replace-with-tilde",
+  "npm run lerna -- exec 'npm publish --registry $Registry --tag preview'"
 )
 
 foreach ($command in $commands) { 
