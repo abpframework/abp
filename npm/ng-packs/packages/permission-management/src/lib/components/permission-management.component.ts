@@ -281,7 +281,7 @@ export class PermissionManagementComponent
     ) as ApplicationConfiguration.CurrentUser;
 
     if (this.providerName === 'R') {
-      return currentUser.roles.findIndex(role => role === this.providerKey) > -1;
+      currentUser.roles.some(role => role === this.providerKey);
     }
 
     if (this.providerName === 'U') {
