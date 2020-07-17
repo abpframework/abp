@@ -64,5 +64,15 @@ namespace Volo.Abp.MongoDB.Repositories
             person.Phones.Count.ShouldBe(1);
             person.Phones.Any(p => p.PersonId == person.Id && p.Number == "1234567890").ShouldBeTrue();
         }
+
+        [Fact]
+        public async Task Insert_Should_Set_Guid_Id()
+        {
+            var person = new Person(Guid.Empty, "New Person", 35);
+
+            await PersonRepository.InsertAsync(person);
+
+            person.Id.ShouldNotBe(Guid.Empty);
+        }
     }
 }
