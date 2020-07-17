@@ -10,7 +10,7 @@ import {
 import { NzFormatEmitEvent, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
 
-export type DropEvent = NzFormatEmitEvent & { pos: -1 | 0 | 1 };
+export type DropEvent = NzFormatEmitEvent & { pos: number };
 
 @Component({
   selector: 'abp-tree',
@@ -22,7 +22,7 @@ export type DropEvent = NzFormatEmitEvent & { pos: -1 | 0 | 1 };
   encapsulation: ViewEncapsulation.None,
 })
 export class TreeComponent {
-  dropPosition: -1 | 0 | 1;
+  dropPosition: number;
 
   @ContentChild('menu') menu: TemplateRef<any>;
   @Output() readonly checkedKeysChange = new EventEmitter();
