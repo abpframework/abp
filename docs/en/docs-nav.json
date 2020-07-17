@@ -221,6 +221,10 @@
                   "path": "Blob-Storing-Aliyun.md"
                 },
                 {
+                  "text": "Minio Provider",
+                  "path": "Blob-Storing-Minio.md"
+                },
+                {
                   "text": "Create a Custom Provider",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }
