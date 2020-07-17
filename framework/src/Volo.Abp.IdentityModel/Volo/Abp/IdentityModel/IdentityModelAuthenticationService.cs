@@ -78,13 +78,11 @@ namespace Volo.Abp.IdentityModel
 
         public virtual async Task<string> GetAccessTokenAsync(IdentityClientConfiguration configuration)
         {
-            var tokenEndpoint = await GetTokenEndpoint(configuration);
-
             var cacheKey = CalculateTokenCacheKey(configuration);
             var tokenCacheItem = await TokenCache.GetAsync(cacheKey);
             if (tokenCacheItem == null)
             {
-                var tokenResponse = await GetTokenResponse(tokenEndpoint, configuration);
+                var tokenResponse = await GetTokenResponse(configuration);
 
                 if (tokenResponse.IsError)
                 {
@@ -99,14 +97,12 @@ namespace Volo.Abp.IdentityModel
                     throw new AbpException(withoutInnerException[0]);
                 }
 
-                await TokenCache.SetAsync(cacheKey, new IdentityModelTokenCacheItem(tokenResponse.AccessToken),
-                    new DistributedCacheEntryOptions()
+                tokenCacheItem = new IdentityModelTokenCacheItem(tokenResponse.AccessToken);
+                await TokenCache.SetAsync(cacheKey, tokenCacheItem,
+                    new DistributedCacheEntryOptions
                     {
-                        //Subtract 10 seconds of network request time.
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(tokenResponse.ExpiresIn - 10)
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
                     });
-
-                return tokenResponse.AccessToken;
             }
 
             return tokenCacheItem.AccessToken;
@@ -148,15 +144,14 @@ namespace Volo.Abp.IdentityModel
                 await DiscoveryDocumentCache.SetAsync(tokenEndpointUrlCacheKey, discoveryDocumentCacheItem,
                     new DistributedCacheEntryOptions
                     {
-                        SlidingExpiration = TimeSpan.FromMinutes(30)
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(configuration.CacheAbsoluteExpiration)
                     });
             }
 
             return discoveryDocumentCacheItem.TokenEndpoint;
         }
 
-        protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
-            IdentityClientConfiguration configuration)
+        protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(IdentityClientConfiguration configuration)
         {
             using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
@@ -173,10 +168,10 @@ namespace Volo.Abp.IdentityModel
             }
         }
 
-        protected virtual async Task<TokenResponse> GetTokenResponse(
-            string tokenEndpoint,
-            IdentityClientConfiguration configuration)
+        protected virtual async Task<TokenResponse> GetTokenResponse(IdentityClientConfiguration configuration)
         {
+            var tokenEndpoint = await GetTokenEndpoint(configuration);
+
             using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
             {
                 AddHeaders(httpClient);
@@ -217,9 +212,7 @@ namespace Volo.Abp.IdentityModel
             return Task.FromResult(request);
         }
 
-        protected virtual Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(
-            string tokenEndpoint,
-            IdentityClientConfiguration configuration)
+        protected virtual Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(string tokenEndpoint, IdentityClientConfiguration configuration)
         {
             var request = new ClientCredentialsTokenRequest
             {
