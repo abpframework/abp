@@ -1,11 +1,11 @@
 ﻿using Volo.Abp.AspNetCore.Mvc;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit
+namespace Volo.CmsKit.Controllers
 {
-    public abstract class CmsKitPublicController : AbpController
+    public class CmsKitControllerBase : AbpController
     {
-        protected CmsKitPublicController()
+        public CmsKitControllerBase()
         {
             LocalizationResource = typeof(CmsKitResource);
         }
