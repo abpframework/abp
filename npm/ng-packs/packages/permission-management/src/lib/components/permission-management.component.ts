@@ -233,7 +233,7 @@ export class PermissionManagementComponent
       )
       .pipe(
         switchMap(() =>
-          this.isFetchAppConfigNecessary() ? this.store.dispatch(GetAppConfiguration) : of(null),
+          this.shouldFetchAppConfig() ? this.store.dispatch(GetAppConfiguration) : of(null),
         ),
         finalize(() => (this.modalBusy = false)),
       )
@@ -275,7 +275,7 @@ export class PermissionManagementComponent
     );
   }
 
-  isFetchAppConfigNecessary() {
+  shouldFetchAppConfig() {
     const currentUser = this.store.selectSnapshot(
       ConfigState.getOne('currentUser'),
     ) as ApplicationConfiguration.CurrentUser;
@@ -287,6 +287,8 @@ export class PermissionManagementComponent
     if (this.providerName === 'U') {
       return currentUser.id === this.providerKey;
     }
+
+    return false;
   }
 }
 
