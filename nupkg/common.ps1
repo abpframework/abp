@@ -59,6 +59,7 @@ $projects = (
     "framework/src/Volo.Abp.BlobStoring",
     "framework/src/Volo.Abp.BlobStoring.FileSystem",
     "framework/src/Volo.Abp.BlobStoring.Azure",
+    "framework/src/Volo.Abp.BlobStoring.Minio",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Caching.StackExchangeRedis",
     "framework/src/Volo.Abp.Castle.Core",
