@@ -52,6 +52,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
         protected IAuthenticationSchemeProvider SchemeProvider { get; }
         protected AbpAccountOptions AccountOptions { get; }
 
+        public bool ShowCancelButton { get; set; }
+
         public LoginModel(
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions)

@@ -104,7 +104,7 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Template Source: " + templateSource);
             }
 
-            var createSolutionFolder = (commandLineArgs.Options.GetOrNull(Options.CreateSolutionFolder.Short, Options.CreateSolutionFolder.Long) ?? "true").ToLowerInvariant() != "false";
+            var createSolutionFolder = GetCreateSolutionFolderPreference(commandLineArgs);
             if (!createSolutionFolder)
             {
                 Logger.LogInformation("Create Solution Folder: no");
@@ -181,6 +181,18 @@ namespace Volo.Abp.Cli.Commands
             }
 
             Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
+        }
+
+        private bool GetCreateSolutionFolderPreference(CommandLineArgs commandLineArgs)
+        {
+            var longKey = commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Long);
+
+            if (longKey == false)
+            {
+                return  commandLineArgs.Options.ContainsKey(Options.CreateSolutionFolder.Short);
+            }
+
+            return longKey;
         }
 
         private static string GetConnectionString(CommandLineArgs commandLineArgs)

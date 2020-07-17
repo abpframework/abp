@@ -1,5 +1,7 @@
-﻿﻿document.addEventListener("DOMContentLoaded", function (event) {
+﻿document.addEventListener('DOMContentLoaded', function (event) {
     setTimeout(function () {
-        window.location = document.getElementById("redirectButton").getAttribute("href");
-    }, 3000)
+        window.location = document
+            .getElementById('redirectButton')
+            .getAttribute('href');
+    }, 3000);
 });
