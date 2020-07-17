@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection;
 
 namespace Volo.CmsKit.Web.Controllers
 {
@@ -8,8 +9,7 @@ namespace Volo.CmsKit.Web.Controllers
     {
         public async Task<IActionResult> ReactionSelection(string entityType, string entityId)
         {
-            //TODO: Can we change "CmsReactionSelection" to typeof(ReactionSelectionViewComponent)
-            return ViewComponent("CmsReactionSelection", new {entityType, entityId});
+            return ViewComponent(typeof(ReactionSelectionViewComponent), new {entityType, entityId});
         }
     }
 }
