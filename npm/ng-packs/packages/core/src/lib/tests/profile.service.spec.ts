@@ -14,14 +14,14 @@ describe('ProfileService', () => {
   beforeEach(() => (spectator = createHttp()));
 
   it('should send a GET to my-profile API', () => {
-    spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
+    spectator.inject(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.get().subscribe();
     spectator.expectOne('https://abp.io/api/identity/my-profile', HttpMethod.GET);
   });
 
   it('should send a POST to change-password API', () => {
     const mock = { currentPassword: 'test', newPassword: 'test' };
-    spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
+    spectator.inject(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.changePassword(mock).subscribe();
     const req = spectator.expectOne(
       'https://abp.io/api/identity/my-profile/change-password',
@@ -38,7 +38,7 @@ describe('ProfileService', () => {
       surname: 'Doe',
       phoneNumber: '+123456',
     };
-    spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
+    spectator.inject(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.update(mock).subscribe();
     const req = spectator.expectOne('https://abp.io/api/identity/my-profile', HttpMethod.PUT);
     expect(req.request.body).toEqual(mock);

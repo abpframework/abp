@@ -20,7 +20,7 @@ describe('HttpClient testing', () => {
 
   beforeEach(() => {
     spectator = createHttp();
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     store.reset({
       ConfigState: {
         environment: {

@@ -110,9 +110,9 @@ describe('ConfigState', () => {
 
   beforeEach(() => {
     spectator = createService();
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     service = spectator.service;
-    state = new ConfigState(spectator.get(HttpClient), store);
+    state = new ConfigState(spectator.inject(HttpClient), store);
   });
 
   describe('#getAll', () => {
@@ -250,7 +250,7 @@ describe('ConfigState', () => {
         dispatchArg = a;
         return of(a);
       });
-      const httpClient = spectator.get(HttpClient);
+      const httpClient = spectator.inject(HttpClient);
       httpClient.get.andReturn(res$);
 
       state.addData({ patchState, dispatch } as any).subscribe();

@@ -42,7 +42,7 @@ describe('PermissionDirective', () => {
     });
 
     it('should do nothing when condition is undefined', () => {
-      const spy = jest.spyOn(spectator.get(Store), 'select');
+      const spy = jest.spyOn(spectator.inject(Store), 'select');
       grantedPolicy$.next(false);
       expect(spy.mock.calls).toHaveLength(0);
     });
