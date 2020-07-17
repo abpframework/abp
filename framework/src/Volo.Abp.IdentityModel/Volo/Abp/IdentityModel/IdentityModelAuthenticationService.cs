@@ -28,7 +28,8 @@ namespace Volo.Abp.IdentityModel
         protected IHttpClientFactory HttpClientFactory { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IdentityModelHttpRequestMessageOptions IdentityModelHttpRequestMessageOptions { get; }
-        protected IDistributedCache<IdentityModelTokenCacheItem> Cache { get; }
+        protected IDistributedCache<IdentityModelTokenCacheItem> TokenCache { get; }
+        protected IDistributedCache<IdentityModelDiscoveryDocumentCacheItem> DiscoveryDocumentCache { get; }
 
         public IdentityModelAuthenticationService(
             IOptions<AbpIdentityClientOptions> options,
@@ -36,13 +37,15 @@ namespace Volo.Abp.IdentityModel
             IHttpClientFactory httpClientFactory,
             ICurrentTenant currentTenant,
             IOptions<IdentityModelHttpRequestMessageOptions> identityModelHttpRequestMessageOptions,
-            IDistributedCache<IdentityModelTokenCacheItem> cache)
+            IDistributedCache<IdentityModelTokenCacheItem> tokenCache,
+            IDistributedCache<IdentityModelDiscoveryDocumentCacheItem> discoveryDocumentCache)
         {
             ClientOptions = options.Value;
             CancellationTokenProvider = cancellationTokenProvider;
             HttpClientFactory = httpClientFactory;
             CurrentTenant = currentTenant;
-            Cache = cache;
+            TokenCache = tokenCache;
+            DiscoveryDocumentCache = discoveryDocumentCache;
             IdentityModelHttpRequestMessageOptions = identityModelHttpRequestMessageOptions.Value;
             Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
@@ -75,17 +78,13 @@ namespace Volo.Abp.IdentityModel
 
         public virtual async Task<string> GetAccessTokenAsync(IdentityClientConfiguration configuration)
         {
-            var discoveryResponse = await GetDiscoveryResponse(configuration);
-            if (discoveryResponse.IsError)
-            {
-                throw new AbpException($"Could not retrieve the OpenId Connect discovery document! ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
-            }
+            var tokenEndpoint = await GetTokenEndpoint(configuration);
 
-            var cacheKey = CalculateCacheKey(discoveryResponse, configuration);
-            var tokenCacheItem = await Cache.GetAsync(cacheKey);
+            var cacheKey = CalculateTokenCacheKey(configuration);
+            var tokenCacheItem = await TokenCache.GetAsync(cacheKey);
             if (tokenCacheItem == null)
             {
-                var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
+                var tokenResponse = await GetTokenResponse(tokenEndpoint, configuration);
 
                 if (tokenResponse.IsError)
                 {
@@ -100,7 +99,7 @@ namespace Volo.Abp.IdentityModel
                     throw new AbpException(withoutInnerException[0]);
                 }
 
-                await Cache.SetAsync(cacheKey, new IdentityModelTokenCacheItem(tokenResponse.AccessToken),
+                await TokenCache.SetAsync(cacheKey, new IdentityModelTokenCacheItem(tokenResponse.AccessToken),
                     new DistributedCacheEntryOptions()
                     {
                         //Subtract 10 seconds of network request time.
@@ -130,6 +129,32 @@ namespace Volo.Abp.IdentityModel
                    ClientOptions.IdentityClients.Default;
         }
 
+        protected virtual async Task<string> GetTokenEndpoint(IdentityClientConfiguration configuration)
+        {
+            //TODO: Can use (configuration.Authority + /connect/token) directly?
+
+            var tokenEndpointUrlCacheKey = CalculateDiscoveryDocumentCacheKey(configuration);
+            var discoveryDocumentCacheItem = await DiscoveryDocumentCache.GetAsync(tokenEndpointUrlCacheKey);
+            if (discoveryDocumentCacheItem == null)
+            {
+                var discoveryResponse = await GetDiscoveryResponse(configuration);
+                if (discoveryResponse.IsError)
+                {
+                    throw new AbpException($"Could not retrieve the OpenId Connect discovery document! " +
+                                           $"ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
+                }
+
+                discoveryDocumentCacheItem = new IdentityModelDiscoveryDocumentCacheItem(discoveryResponse.TokenEndpoint);
+                await DiscoveryDocumentCache.SetAsync(tokenEndpointUrlCacheKey, discoveryDocumentCacheItem,
+                    new DistributedCacheEntryOptions
+                    {
+                        SlidingExpiration = TimeSpan.FromMinutes(30)
+                    });
+            }
+
+            return discoveryDocumentCacheItem.TokenEndpoint;
+        }
+
         protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
@@ -149,7 +174,7 @@ namespace Volo.Abp.IdentityModel
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
-            DiscoveryDocumentResponse discoveryResponse,
+            string tokenEndpoint,
             IdentityClientConfiguration configuration)
         {
             using (var httpClient = HttpClientFactory.CreateClient(HttpClientName))
@@ -160,12 +185,12 @@ namespace Volo.Abp.IdentityModel
                 {
                     case OidcConstants.GrantTypes.ClientCredentials:
                         return await httpClient.RequestClientCredentialsTokenAsync(
-                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
+                            await CreateClientCredentialsTokenRequestAsync(tokenEndpoint, configuration),
                             CancellationTokenProvider.Token
                         );
                     case OidcConstants.GrantTypes.Password:
                         return await httpClient.RequestPasswordTokenAsync(
-                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
+                            await CreatePasswordTokenRequestAsync(tokenEndpoint, configuration),
                             CancellationTokenProvider.Token
                         );
                     default:
@@ -174,11 +199,11 @@ namespace Volo.Abp.IdentityModel
             }
         }
 
-        protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
+        protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(string tokenEndpoint, IdentityClientConfiguration configuration)
         {
             var request = new PasswordTokenRequest
             {
-                Address = discoveryResponse.TokenEndpoint,
+                Address = tokenEndpoint,
                 Scope = configuration.Scope,
                 ClientId = configuration.ClientId,
                 ClientSecret = configuration.ClientSecret,
@@ -193,12 +218,12 @@ namespace Volo.Abp.IdentityModel
         }
 
         protected virtual Task<ClientCredentialsTokenRequest> CreateClientCredentialsTokenRequestAsync(
-            DiscoveryDocumentResponse discoveryResponse,
+            string tokenEndpoint,
             IdentityClientConfiguration configuration)
         {
             var request = new ClientCredentialsTokenRequest
             {
-                Address = discoveryResponse.TokenEndpoint,
+                Address = tokenEndpoint,
                 Scope = configuration.Scope,
                 ClientId = configuration.ClientId,
                 ClientSecret = configuration.ClientSecret
@@ -230,9 +255,14 @@ namespace Volo.Abp.IdentityModel
             }
         }
 
-        protected virtual string CalculateCacheKey(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
+        protected virtual string CalculateDiscoveryDocumentCacheKey(IdentityClientConfiguration configuration)
         {
-            return IdentityModelTokenCacheItem.CalculateCacheKey(discoveryResponse, configuration);
+            return IdentityModelDiscoveryDocumentCacheItem.CalculateCacheKey(configuration);
+        }
+
+        protected virtual string CalculateTokenCacheKey(IdentityClientConfiguration configuration)
+        {
+            return IdentityModelTokenCacheItem.CalculateCacheKey(configuration);
         }
     }
 }

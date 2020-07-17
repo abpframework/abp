@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using IdentityModel.Client;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.IdentityModel
@@ -21,9 +20,9 @@ namespace Volo.Abp.IdentityModel
             AccessToken = accessToken;
         }
 
-        public static string CalculateCacheKey(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
+        public static string CalculateCacheKey(IdentityClientConfiguration configuration)
         {
-            return discoveryResponse.TokenEndpoint + string.Join(",", configuration.Select(x => x.Key + ":" + x.Value));
+            return string.Join(",", configuration.Select(x => x.Key + ":" + x.Value)).ToMd5();
         }
     }
 }
