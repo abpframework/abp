@@ -294,7 +294,7 @@ namespace Volo.Abp.Cli.Commands
                                 if (firstType == "List" && !File.Exists(secondTypeModelPath))
                                 {
                                     secondType = "any";
-                                } 
+                                }
 
                                 serviceFileText.AppendLine(
                                     firstType == "List"
@@ -309,6 +309,11 @@ namespace Volo.Abp.Cli.Commands
                                 if (secondType != "any")
                                 {
                                     secondTypeList.Add(secondType);
+                                }
+
+                                if (returnValueType.StartsWith("Volo.Abp.Application.Dtos"))
+                                {
+                                    returnValueType = returnValueType.Substring(returnValueType.IndexOf('<') + 1).TrimEnd('>');
                                 }
                             }
                             else
@@ -325,7 +330,7 @@ namespace Volo.Abp.Cli.Commands
                                     "Int64" => "number",
                                     "Int32" => "number",
                                     _ => type
-                                }; 
+                                };
 
                                 serviceFileText.AppendLine(
                                     $" {actionName}({parametersText}): Observable<{type}> {{");
