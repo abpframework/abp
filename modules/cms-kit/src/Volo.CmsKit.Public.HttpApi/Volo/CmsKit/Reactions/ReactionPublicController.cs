@@ -18,31 +18,10 @@ namespace Volo.CmsKit.Reactions
         }
 
         [HttpGet]
-        [Route("available")]
-        public virtual Task<ListResultDto<ReactionDto>> GetAvailableReactions(GetAvailableReactionsDto input)
+        [Route("{entityType}/{entityId}")]
+        public virtual Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId)
         {
-            return ReactionPublicAppService.GetAvailableReactions(input);
-        }
-
-        [HttpGet]
-        [Route("summaries")]
-        public virtual Task<ListResultDto<ReactionSummaryDto>> GetReactionSummariesAsync(GetReactionSummariesDto input)
-        {
-            return ReactionPublicAppService.GetReactionSummariesAsync(input);
-        }
-
-        [HttpGet]
-        [Route("my")]
-        public virtual  Task<ListResultDto<ReactionDto>> GetMyReactions(GetMyReactionsDto input)
-        {
-            return ReactionPublicAppService.GetMyReactions(input);
-        }
-
-        [HttpGet]
-        [Route("selection")] //TODO: Consider to rename!
-        public virtual Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(GetForSelectionDto input)
-        {
-            return ReactionPublicAppService.GetForSelectionAsync(input);
+            return ReactionPublicAppService.GetForSelectionAsync(entityType, entityId);
         }
 
         [HttpPut]

@@ -6,19 +6,7 @@ namespace Volo.CmsKit.Reactions
 {
     public interface IReactionPublicAppService : IApplicationService
     {
-        Task<ListResultDto<ReactionDto>> GetAvailableReactions(
-            GetAvailableReactionsDto input
-        );
-
-        Task<ListResultDto<ReactionSummaryDto>> GetReactionSummariesAsync(
-            GetReactionSummariesDto input
-        );
-
-        Task<ListResultDto<ReactionDto>> GetMyReactions(
-            GetMyReactionsDto input
-        );
-
-        Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(GetForSelectionDto input);
+        Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId);
 
         Task CreateAsync(CreateReactionDto input);
 

@@ -25,65 +25,21 @@ namespace Volo.CmsKit.Reactions
             ReactionManager = reactionManager;
         }
 
-        public virtual async Task<ListResultDto<ReactionDto>> GetAvailableReactions(
-            GetAvailableReactionsDto input)
+        public virtual async Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId)
         {
             var reactionDefinitions = await ReactionManager
                 .GetAvailableReactionsAsync(
-                    input.EntityType
+                    entityType
                 );
 
-            var reactionDtos = reactionDefinitions
-                .Select(ConvertToReactionDto)
-                .ToList();
-
-            return new ListResultDto<ReactionDto>(reactionDtos);
-        }
-
-        public virtual async Task<ListResultDto<ReactionSummaryDto>> GetReactionSummariesAsync(GetReactionSummariesDto input)
-        {
-            var summaries = await ReactionManager.GetSummariesAsync(input.EntityType, input.EntityId);
-
-            var summaryDtos = summaries
-                .Select(summary => new ReactionSummaryDto
-                {
-                    Count = summary.Count,
-                    Reaction = ConvertToReactionDto(summary.Reaction)
-                })
-                .ToList();
-
-            return new ListResultDto<ReactionSummaryDto>(summaryDtos);
-        }
-
-        public virtual async Task<ListResultDto<ReactionDto>> GetMyReactions(GetMyReactionsDto input)
-        {
-            var userReactions = await ReactionManager.GetUserReactionsAsync(
-                CurrentUser.GetId(),
-                input.EntityType,
-                input.EntityId
-            );
-
-            var reactionDtos = userReactions
-                .Select(ConvertToReactionDto)
-                .ToList();
-
-            return new ListResultDto<ReactionDto>(reactionDtos);
-        }
-
-        public virtual async Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(GetForSelectionDto input)
-        {
-            var reactionDefinitions = await ReactionManager
-                .GetAvailableReactionsAsync(
-                    input.EntityType
-                );
             var summaries =
-                (await ReactionManager.GetSummariesAsync(input.EntityType, input.EntityId))
+                (await ReactionManager.GetSummariesAsync(entityType, entityId))
                 .ToDictionary(x => x.Reaction.Name, x => x.Count);
 
             var userReactions = await ReactionManager.GetUserReactionsAsync(
                 CurrentUser.GetId(),
-                input.EntityType,
-                input.EntityId
+                entityType,
+                entityId
             );
 
             var reactionDtos = new List<ReactionWithSelectionDto>();

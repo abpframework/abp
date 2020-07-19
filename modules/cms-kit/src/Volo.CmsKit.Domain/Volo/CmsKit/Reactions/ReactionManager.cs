@@ -29,21 +29,21 @@ namespace Volo.CmsKit.Reactions
             [NotNull] string entityType,
             [NotNull] string entityId)
         {
-            var summaries = await UserReactionRepository.GetSummariesAsync(entityType, entityId);
+            var queryResultItems = await UserReactionRepository.GetSummariesAsync(entityType, entityId);
 
             var summaryDtos = new List<ReactionSummary>();
 
-            foreach (var summary in summaries)
+            foreach (var queryResultItem in queryResultItems)
             {
-                var summaryDto = new ReactionSummary
+                var summary = new ReactionSummary
                 {
-                    Count = summary.Count
+                    Count = queryResultItem.Count
                 };
 
                 //TODO: Get all definitions then filter here?
                 var reactionDefinition = await ReactionDefinitionStore
                     .GetReactionOrNullAsync(
-                        summary.ReactionName,
+                        queryResultItem.ReactionName,
                         entityType
                     );
 
@@ -52,9 +52,9 @@ namespace Volo.CmsKit.Reactions
                     continue;
                 }
 
-                summaryDto.Reaction = reactionDefinition;
+                summary.Reaction = reactionDefinition;
 
-                summaryDtos.Add(summaryDto);
+                summaryDtos.Add(summary);
             }
 
             return summaryDtos;
