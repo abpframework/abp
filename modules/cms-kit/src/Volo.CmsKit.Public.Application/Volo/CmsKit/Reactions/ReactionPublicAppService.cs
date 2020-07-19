@@ -27,36 +27,30 @@ namespace Volo.CmsKit.Reactions
 
         public virtual async Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId)
         {
-            var reactionDefinitions = await ReactionManager
-                .GetAvailableReactionsAsync(
-                    entityType
-                );
+            var summaries = await ReactionManager.GetSummariesAsync(entityType, entityId);
 
-            var summaries =
-                (await ReactionManager.GetSummariesAsync(entityType, entityId))
-                .ToDictionary(x => x.Reaction.Name, x => x.Count);
+            var userReactions = (await UserReactionRepository
+                .GetListForUserAsync(
+                    CurrentUser.GetId(),
+                    entityType,
+                    entityId
+                )).ToDictionary(x => x.ReactionName, x => x);
 
-            var userReactions = await ReactionManager.GetUserReactionsAsync(
-                CurrentUser.GetId(),
-                entityType,
-                entityId
-            );
+            var reactionWithSelectionDtos = new List<ReactionWithSelectionDto>();
 
-            var reactionDtos = new List<ReactionWithSelectionDto>();
-
-            foreach (var reactionDefinition in reactionDefinitions)
+            foreach (var summary in summaries)
             {
-                reactionDtos.Add(
+                reactionWithSelectionDtos.Add(
                     new ReactionWithSelectionDto
                     {
-                        Reaction = ConvertToReactionDto(reactionDefinition),
-                        Count = summaries.GetOrDefault(reactionDefinition.Name),
-                        IsSelectedByCurrentUser = userReactions.Any(x => x.Name == reactionDefinition.Name)
+                        Reaction = ConvertToReactionDto(summary.Reaction),
+                        Count = summary.Count,
+                        IsSelectedByCurrentUser = userReactions.ContainsKey(summary.Reaction.Name)
                     }
                 );
             }
 
-            return new ListResultDto<ReactionWithSelectionDto>(reactionDtos);
+            return new ListResultDto<ReactionWithSelectionDto>(reactionWithSelectionDtos);
         }
 
         public virtual async Task CreateAsync(CreateReactionDto input)

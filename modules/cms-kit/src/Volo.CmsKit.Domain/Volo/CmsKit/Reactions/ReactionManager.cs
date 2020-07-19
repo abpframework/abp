@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp;
@@ -19,80 +20,34 @@ namespace Volo.CmsKit.Reactions
             ReactionDefinitionStore = reactionDefinitionStore;
         }
 
-        public virtual async Task<List<ReactionDefinition>> GetAvailableReactionsAsync(
+        public virtual async Task<List<ReactionDefinition>> GetReactionsAsync(
             [CanBeNull] string entityType = null)
         {
-            return await ReactionDefinitionStore.GetAvailableReactionsAsync(entityType);
+            return await ReactionDefinitionStore.GetReactionsAsync(entityType);
         }
 
         public virtual async Task<List<ReactionSummary>> GetSummariesAsync(
             [NotNull] string entityType,
             [NotNull] string entityId)
         {
-            var queryResultItems = await UserReactionRepository.GetSummariesAsync(entityType, entityId);
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var summaryDtos = new List<ReactionSummary>();
+            var userReactionCounts = (await UserReactionRepository.GetSummariesAsync(entityType, entityId))
+                .ToDictionary(x => x.ReactionName, x => x.Count);
 
-            foreach (var queryResultItem in queryResultItems)
-            {
-                var summary = new ReactionSummary
-                {
-                    Count = queryResultItem.Count
-                };
-
-                //TODO: Get all definitions then filter here?
-                var reactionDefinition = await ReactionDefinitionStore
-                    .GetReactionOrNullAsync(
-                        queryResultItem.ReactionName,
-                        entityType
-                    );
-
-                if (reactionDefinition == null)
-                {
-                    continue;
-                }
-
-                summary.Reaction = reactionDefinition;
-
-                summaryDtos.Add(summary);
-            }
-
-            return summaryDtos;
-        }
-
-        public virtual async Task<List<ReactionDefinition>> GetUserReactionsAsync(
-            Guid userId,
-            [NotNull] string entityType,
-            [NotNull] string entityId)
-        {
-            var userReactions = await UserReactionRepository
-                .GetListForUserAsync(
-                    userId,
-                    entityType,
-                    entityId
+            var reactions = await ReactionDefinitionStore
+                .GetReactionsAsync(
+                    entityType
                 );
 
-            var reactionDtos = new List<ReactionDefinition>();
-
-            foreach (var userReaction in userReactions)
-            {
-                //TODO: Get all definitions then filter here?
-                var reactionDefinition = await ReactionDefinitionStore
-                    .GetReactionOrNullAsync(
-                        userReaction.ReactionName,
-                        userReaction.EntityType
-                    );
-
-                if (reactionDefinition == null)
+            return reactions
+                .Select(reaction => new ReactionSummary
                 {
-                    await UserReactionRepository.DeleteAsync(userReaction);
-                    continue;
-                }
-
-                reactionDtos.Add(reactionDefinition);
-            }
-
-            return reactionDtos;
+                    Reaction = reaction,
+                    Count = userReactionCounts.GetOrDefault(reaction.Name)
+                })
+                .ToList();
         }
 
         public virtual async Task<UserReaction> CreateAsync(
@@ -129,6 +84,10 @@ namespace Volo.CmsKit.Reactions
             [NotNull] string entityId,
             [NotNull] string reactionName)
         {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
+            Check.NotNullOrWhiteSpace(reactionName, nameof(reactionName));
+
             var existingReaction = await UserReactionRepository.FindAsync(userId, entityType, entityId, reactionName);
             if (existingReaction == null)
             {
