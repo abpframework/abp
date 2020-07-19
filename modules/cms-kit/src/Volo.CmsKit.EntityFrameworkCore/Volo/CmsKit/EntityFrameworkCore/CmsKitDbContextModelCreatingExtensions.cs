@@ -32,7 +32,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 b.Property(x => x.CreationTime);
 
                 b.HasIndex(x => new { x.EntityType, x.EntityId });
-                b.HasIndex(x => new { x.UserId, x.EntityType, x.EntityId, x.ReactionName });
+                b.HasIndex(x => new { x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
             });
         }
     }

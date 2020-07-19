@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Volo.CmsKit.Migrations
 {
-    public partial class Added_UserReactions : Migration
+    public partial class Added_Reactions : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,8 @@ namespace Volo.CmsKit.Migrations
                     EntityType = table.Column<string>(maxLength: 64, nullable: false),
                     EntityId = table.Column<string>(maxLength: 64, nullable: false),
                     ReactionName = table.Column<string>(maxLength: 32, nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false)
+                    CreatorId = table.Column<Guid>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,9 +29,9 @@ namespace Volo.CmsKit.Migrations
                 columns: new[] { "EntityType", "EntityId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CmsUserReactions_UserId_EntityType_EntityId_ReactionName",
+                name: "IX_CmsUserReactions_CreatorId_EntityType_EntityId_ReactionName",
                 table: "CmsUserReactions",
-                columns: new[] { "UserId", "EntityType", "EntityId", "ReactionName" });
+                columns: new[] { "CreatorId", "EntityType", "EntityId", "ReactionName" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

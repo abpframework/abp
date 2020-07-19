@@ -51,7 +51,7 @@ namespace Volo.CmsKit.Reactions
         }
 
         public virtual async Task<UserReaction> CreateAsync(
-            Guid userId,
+            Guid creatorId,
             [NotNull] string entityType,
             [NotNull] string entityId,
             [NotNull] string reactionName)
@@ -60,7 +60,7 @@ namespace Volo.CmsKit.Reactions
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
             Check.NotNullOrWhiteSpace(reactionName, nameof(reactionName));
 
-            var existingReaction = await UserReactionRepository.FindAsync(userId, entityType, entityId, reactionName);
+            var existingReaction = await UserReactionRepository.FindAsync(creatorId, entityType, entityId, reactionName);
             if (existingReaction != null)
             {
                 return existingReaction;
@@ -69,11 +69,10 @@ namespace Volo.CmsKit.Reactions
             return await UserReactionRepository.InsertAsync(
                 new UserReaction(
                     GuidGenerator.Create(),
-                    userId,
                     entityType,
                     entityId,
                     reactionName,
-                    Clock.Now
+                    creatorId
                 )
             );
         }

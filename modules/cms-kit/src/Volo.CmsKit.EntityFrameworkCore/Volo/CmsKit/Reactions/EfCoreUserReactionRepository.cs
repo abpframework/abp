@@ -30,7 +30,7 @@ namespace Volo.CmsKit.Reactions
 
             return await DbSet
                 .Where(x =>
-                    x.UserId == userId &&
+                    x.CreatorId == userId &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.ReactionName == reactionName)
@@ -47,7 +47,7 @@ namespace Volo.CmsKit.Reactions
 
             return await DbSet
                 .Where(x =>
-                    x.UserId == userId &&
+                    x.CreatorId == userId &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId)
                 .ToListAsync();

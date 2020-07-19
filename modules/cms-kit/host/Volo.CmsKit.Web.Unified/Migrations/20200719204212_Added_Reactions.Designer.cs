@@ -11,8 +11,8 @@ using Volo.CmsKit.EntityFrameworkCore;
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20200715191733_Added_UserReactions")]
-    partial class Added_UserReactions
+    [Migration("20200719204212_Added_Reactions")]
+    partial class Added_Reactions
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -921,7 +921,12 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityId")
                         .IsRequired()
@@ -938,14 +943,11 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("nvarchar(32)")
                         .HasMaxLength(32);
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EntityType", "EntityId");
 
-                    b.HasIndex("UserId", "EntityType", "EntityId", "ReactionName");
+                    b.HasIndex("CreatorId", "EntityType", "EntityId", "ReactionName");
 
                     b.ToTable("CmsUserReactions");
                 });

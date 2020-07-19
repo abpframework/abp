@@ -919,7 +919,12 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityId")
                         .IsRequired()
@@ -936,14 +941,11 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("nvarchar(32)")
                         .HasMaxLength(32);
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EntityType", "EntityId");
 
-                    b.HasIndex("UserId", "EntityType", "EntityId", "ReactionName");
+                    b.HasIndex("CreatorId", "EntityType", "EntityId", "ReactionName");
 
                     b.ToTable("CmsUserReactions");
                 });
