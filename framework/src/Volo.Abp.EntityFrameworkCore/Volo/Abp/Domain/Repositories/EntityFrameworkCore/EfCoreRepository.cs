@@ -15,7 +15,7 @@ using Volo.Abp.Guids;
 
 namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 {
-    public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IEfCoreRepository<TEntity>
+    public class EfCoreRepository<TDbContext, TEntity> : RepositoryBase<TEntity>, IEfCoreRepository<TEntity>, IAsyncEnumerable<TEntity>
         where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity
     {
@@ -193,6 +193,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             }
 
             return query;
+        }
+
+        public IAsyncEnumerator<TEntity> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        {
+            return DbSet.AsAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
         }
 
         protected virtual void CheckAndSetId(TEntity entity)
