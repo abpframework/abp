@@ -38,6 +38,7 @@ This tutorial is organized as the following parts;
 - [Part 4: Integration tests](Part-4.md)
 - **Part 5: Authorization (this part)**
 - [Part 6: Author: Domain layer](Part-6.md)
+- [Part 7: Author: Database Integration](Part-7.md)
 
 ### Download the Source Code
 

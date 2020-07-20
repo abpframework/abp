@@ -1,4 +1,4 @@
-# Web Application Development Tutorial - Part 6: Authors
+# Web Application Development Tutorial - Part 6: Authors: Domain Layer
 ````json
 //[doc-params]
 {
@@ -38,6 +38,7 @@ This tutorial is organized as the following parts;
 - [Part 4: Integration tests](Part-4.md)
 - [Part 5: Authorization](Part-5.md)
 - **Part 6: Author: Domain layer (this part)**
+- [Part 7: Author: Database Integration](Part-7.md)
 
 ### Download the Source Code
 
