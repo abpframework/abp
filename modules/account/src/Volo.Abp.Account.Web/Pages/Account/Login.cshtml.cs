@@ -98,7 +98,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 true
             );
 
-            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = result.ToIdentitySecurityLogAction(),
@@ -194,7 +194,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (!result.Succeeded)
             {
-                await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
                 {
                     Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
                     Action = "Login" + result
@@ -224,7 +224,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             await SignInManager.SignInAsync(user, false);
 
-            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
             {
                 Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
                 Action = result.ToIdentitySecurityLogAction(),

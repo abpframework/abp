@@ -2,15 +2,13 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SecurityLog;
-using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentitySecurityLogHandler : ILocalEventHandler<IdentitySecurityLogEvent>, ITransientDependency
+    public class IdentitySecurityLogManager : ITransientDependency
     {
         protected ISecurityLogManager SecurityLogManager { get; }
         protected IdentityUserManager UserManager { get; }
@@ -18,7 +16,7 @@ namespace Volo.Abp.Identity
         protected IUserClaimsPrincipalFactory<IdentityUser> UserClaimsPrincipalFactory { get; }
         protected ICurrentUser CurrentUser { get; }
 
-        public IdentitySecurityLogHandler(
+        public IdentitySecurityLogManager(
             ISecurityLogManager securityLogManager,
             IdentityUserManager userManager,
             ICurrentPrincipalAccessor currentPrincipalAccessor,
@@ -32,24 +30,24 @@ namespace Volo.Abp.Identity
             CurrentUser = currentUser;
         }
 
-        public async Task HandleEventAsync(IdentitySecurityLogEvent eventData)
+        public async Task SaveAsync(IdentitySecurityLogContext context)
         {
             Action<SecurityLogInfo> securityLogAction = securityLog =>
             {
-                securityLog.Identity = eventData.Identity;
-                securityLog.Action = eventData.Action;
+                securityLog.Identity = context.Identity;
+                securityLog.Action = context.Action;
 
-                if (securityLog.UserName.IsNullOrWhiteSpace())
+                if (!context.UserName.IsNullOrWhiteSpace())
                 {
-                    securityLog.UserName = eventData.UserName;
+                    securityLog.UserName = context.UserName;
                 }
 
-                if (securityLog.ClientId.IsNullOrWhiteSpace())
+                if (!context.ClientId.IsNullOrWhiteSpace())
                 {
-                    securityLog.ClientId = eventData.ClientId;
+                    securityLog.ClientId = context.ClientId;
                 }
 
-                foreach (var property in eventData.ExtraProperties)
+                foreach (var property in context.ExtraProperties)
                 {
                     securityLog.ExtraProperties[property.Key] = property.Value;
                 }
@@ -61,13 +59,13 @@ namespace Volo.Abp.Identity
             }
             else
             {
-                if (eventData.UserName.IsNullOrWhiteSpace())
+                if (context.UserName.IsNullOrWhiteSpace())
                 {
                     await SecurityLogManager.SaveAsync(securityLogAction);
                 }
                 else
                 {
-                    var user = await UserManager.FindByNameAsync(eventData.UserName);
+                    var user = await UserManager.FindByNameAsync(context.UserName);
                     if (user != null)
                     {
                         using (CurrentPrincipalAccessor.Change(await UserClaimsPrincipalFactory.CreateAsync(user)))
