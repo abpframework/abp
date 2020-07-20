@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Validation;
 using Volo.Blogging.Admin.Blogs;
 using Volo.Blogging.Blogs;
 
@@ -23,7 +24,7 @@ namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 
         public virtual async Task<ActionResult> OnGetAsync()
         {
-            if (!await _authorization.IsGrantedAsync(BloggingAdminPermissions.Blogs.Create))
+            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Create))
             {
                 return Redirect("/");
             }
@@ -44,14 +45,14 @@ namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
         public class BlogCreateModalView
         {
             [Required]
-            [StringLength(BlogConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(BlogConsts), nameof(BlogConsts.MaxNameLength))]
             public string Name { get; set; }
 
             [Required]
-            [StringLength(BlogConsts.MaxShortNameLength)]
+            [DynamicStringLength(typeof(BlogConsts), nameof(BlogConsts.MaxShortNameLength))]
             public string ShortName { get; set; }
 
-            [StringLength(BlogConsts.MaxDescriptionLength)]
+            [DynamicStringLength(typeof(BlogConsts), nameof(BlogConsts.MaxDescriptionLength))]
             public string Description { get; set; }
 
         }

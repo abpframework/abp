@@ -18,12 +18,19 @@ namespace Volo.Abp.Identity
 
         public static int MaxPhoneNumberLength { get; set; } = AbpUserConsts.MaxPhoneNumberLength;
 
+        /// <summary>
+        /// Default value: 128
+        /// </summary>
         public static int MaxPasswordLength { get; set; } = 128;
 
+        /// <summary>
+        /// Default value: 256
+        /// </summary>
         public static int MaxPasswordHashLength { get; set; } = 256;
 
+        /// <summary>
+        /// Default value: 256
+        /// </summary>
         public static int MaxSecurityStampLength { get; set; } = 256;
-
-        public static int MaxConcurrencyStampLength { get; set; } = 256;
     }
 }

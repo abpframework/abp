@@ -20,11 +20,7 @@ export class AuthService {
     private oAuthService: OAuthService,
     private store: Store,
     @Optional() @Inject('ACCOUNT_OPTIONS') private options: any,
-  ) {
-    this.oAuthService.configure(
-      this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig,
-    );
-  }
+  ) {}
 
   login(username: string, password: string): Observable<any> {
     const tenant = this.store.selectSnapshot(SessionState.getTenant);

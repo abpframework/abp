@@ -3,6 +3,7 @@ using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 {
     public class MongoDbRepository<TMongoDbContext, TEntity>
         : RepositoryBase<TEntity>,
-        IMongoDbRepository<TEntity>
+        IMongoDbRepository<TEntity>,
+        IMongoQueryable<TEntity>
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity
     {
@@ -48,6 +50,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             LocalEventBus = NullLocalEventBus.Instance;
             DistributedEventBus = NullDistributedEventBus.Instance;
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
+            GuidGenerator = SimpleGuidGenerator.Instance;
         }
 
         public override async Task<TEntity> InsertAsync(
@@ -146,6 +149,20 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return await GetMongoQueryable().LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
+        public override async Task<List<TEntity>> GetPagedListAsync(
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .OrderBy(sorting)
+                .As<IMongoQueryable<TEntity>>()
+                .PageBy<TEntity, IMongoQueryable<TEntity>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
         public override async Task DeleteAsync(
             Expression<Func<TEntity, bool>> predicate,
             bool autoSave = false,
@@ -167,7 +184,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         }
 
         public override async Task<TEntity> FindAsync(
-            Expression<Func<TEntity, bool>> predicate, 
+            Expression<Func<TEntity, bool>> predicate,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -322,6 +339,35 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             throw new AbpDbConcurrencyException("Database operation expected to affect 1 row but actually affected 0 row. Data may have been modified or deleted since entities were loaded. This exception has been thrown on optimistic concurrency check.");
         }
+
+        /// <summary>
+        /// IMongoQueryable<TEntity>
+        /// </summary>
+        /// <returns></returns>
+        public QueryableExecutionModel GetExecutionModel()
+        {
+            return GetMongoQueryable().GetExecutionModel();
+        }
+
+        /// <summary>
+        /// IMongoQueryable<TEntity>
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public IAsyncCursor<TEntity> ToCursor(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return GetMongoQueryable().ToCursor(cancellationToken);
+        }
+
+        /// <summary>
+        /// IMongoQueryable<TEntity>
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task<IAsyncCursor<TEntity>> ToCursorAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            return GetMongoQueryable().ToCursorAsync(cancellationToken);
+        }
     }
 
     public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
@@ -331,7 +377,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         where TEntity : class, IEntity<TKey>
     {
         public IMongoDbRepositoryFilterer<TEntity, TKey> RepositoryFilterer { get; set; }
-        
+
         public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
             : base(dbContextProvider)
         {

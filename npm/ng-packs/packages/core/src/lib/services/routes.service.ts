@@ -151,6 +151,11 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav> extends Abstract
     return this.store.selectSnapshot(ConfigState.getGrantedPolicy(requiredPolicy));
   }
 
+  hasChildren(identifier: string): boolean {
+    const node = this.find(item => item[this.id] === identifier);
+    return Boolean(node?.children?.length);
+  }
+
   hasInvisibleChild(identifier: string): boolean {
     const node = this.find(item => item[this.id] === identifier);
     return node?.children?.some(child => child.invisible);

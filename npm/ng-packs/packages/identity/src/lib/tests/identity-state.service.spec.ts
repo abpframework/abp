@@ -13,7 +13,7 @@ describe('IdentityStateService', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
   });
 
   test('should have the all IdentityState static methods', () => {

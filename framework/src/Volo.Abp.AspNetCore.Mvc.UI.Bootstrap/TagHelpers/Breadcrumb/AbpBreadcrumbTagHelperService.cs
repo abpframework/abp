@@ -13,9 +13,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
             var list = InitilizeFormGroupContentsContext(context, output);
 
             await output.GetChildContentAsync();
-            
+
             SetInnerOlTag(context, output);
             SetInnerList(context, output, list);
+
+            output.TagName = "nav";
+            output.Attributes.Add("aria-label", "breadcrumb");
         }
 
         protected virtual void SetInnerOlTag(TagHelperContext context, TagHelperOutput output)

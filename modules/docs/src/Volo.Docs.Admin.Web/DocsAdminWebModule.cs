@@ -39,7 +39,7 @@ namespace Volo.Docs.Admin
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<DocsAdminWebModule>("Volo.Docs.Admin");
+                options.FileSets.AddEmbedded<DocsAdminWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<DocsAdminWebModule>();

@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedDemoModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo");
+                options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedDemoModule>();
             });
         }
     }

@@ -1,10 +1,9 @@
-import { ConfigState, CoreModule, noop } from '@abp/ng.core';
+import { CoreModule, noop } from '@abp/ng.core';
 import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { Store } from '@ngxs/store';
-import { INgxDatatableConfig, NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -31,22 +30,6 @@ import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 
-export function ngxDatatableMessageFactory(store: Store) {
-  const emptyMessage = store.selectSnapshot(
-    ConfigState.getLocalization('AbpUi::NoDataAvailableInDatatable'),
-  );
-  const totalMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Total'));
-  const selectedMessage = store.selectSnapshot(ConfigState.getLocalization('AbpUi::Selected'));
-
-  return {
-    messages: {
-      emptyMessage,
-      totalMessage,
-      selectedMessage,
-    },
-  } as INgxDatatableConfig;
-}
-
 @NgModule({
   imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
   declarations: [
@@ -68,7 +51,6 @@ export function ngxDatatableMessageFactory(store: Store) {
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
-    ToastContainerComponent,
   ],
   exports: [
     NgxDatatableModule,
@@ -88,7 +70,6 @@ export function ngxDatatableMessageFactory(store: Store) {
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
-    ToastContainerComponent,
   ],
   providers: [DatePipe],
   entryComponents: [
@@ -126,11 +107,6 @@ export class ThemeSharedModule {
           deps: [HTTP_ERROR_CONFIG],
         },
         { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
-        {
-          provide: 'configuration',
-          useFactory: ngxDatatableMessageFactory,
-          deps: [Store],
-        },
       ],
     };
   }

@@ -42,7 +42,7 @@ namespace Volo.Abp.Identity.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
+                options.FileSets.AddEmbedded<AbpIdentityWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<AbpIdentityWebModule>();

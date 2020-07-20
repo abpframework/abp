@@ -11,8 +11,10 @@ using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using Volo.Abp.Localization;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Cli.Commands
@@ -51,11 +53,11 @@ namespace Volo.Abp.Cli.Commands
             var apiUrl = commandLineArgs.Options.GetOrNull(Options.ApiUrl.Short, Options.ApiUrl.Long);
             if (string.IsNullOrWhiteSpace(apiUrl))
             {
-                var environmentJson = File.ReadAllText("projects/dev-app/src/environments/environment.ts").Split("export const environment = ")[1].Replace(";", " ");
+                var environmentJson = File.ReadAllText("src/environments/environment.ts").Split("export const environment = ")[1].Replace(";", " ");
                 var environment = JObject.Parse(environmentJson);
                 apiUrl = environment["apis"]["default"]["url"].ToString();
             }
-            apiUrl += "/api/abp/api-definition?IncludeTypes=true";
+            apiUrl = apiUrl.EnsureEndsWith('/') + "api/abp/api-definition?IncludeTypes=true";
 
             var uiFramework = GetUiFramework(commandLineArgs);
 
@@ -292,7 +294,7 @@ namespace Volo.Abp.Cli.Commands
                                 if (firstType == "List" && !File.Exists(secondTypeModelPath))
                                 {
                                     secondType = "any";
-                                }
+                                } 
 
                                 serviceFileText.AppendLine(
                                     firstType == "List"
@@ -320,13 +322,15 @@ namespace Volo.Abp.Cli.Commands
                                     "String" => "string",
                                     "IActionResult" => "void",
                                     "ActionResult" => "void",
+                                    "Int64" => "number",
+                                    "Int32" => "number",
                                     _ => type
-                                };
+                                }; 
 
                                 serviceFileText.AppendLine(
                                     $" {actionName}({parametersText}): Observable<{type}> {{");
 
-                                if (type != "void" && type != "string")
+                                if (type != "void" && type != "string" && type != "number")
                                 {
                                     secondTypeList.Add(type);
                                 }
@@ -469,17 +473,21 @@ namespace Volo.Abp.Cli.Commands
                 if (returnValueType.Contains("<"))
                 {
                     returnValueType = returnValueType.Split('<')[1].Split('>')[0];
+                    var clrType = Type.GetType(returnValueType, throwOnError: false);
+                    if (clrType != null && TypeHelper.IsPrimitiveExtended(clrType, includeEnums: true))
+                    {
+                        return null;
+                    }
+
                     if (returnValueType.StartsWith("Volo.Abp.Application.Dtos")
-                     || returnValueType.StartsWith("System.Collections")
-                     || returnValueType == "System.String"
-                     || returnValueType == "System.Void"
-                     || returnValueType.Contains("System.Net.HttpStatusCode?")
-                     || returnValueType.Contains("IActionResult")
-                     || returnValueType.Contains("ActionResult")
-                     || returnValueType.Contains("IStringValueType")
-                     || returnValueType.Contains("IValueValidator")
-                     || returnValueType.Contains("Guid")
-                       )
+                        || returnValueType.StartsWith("System.Collections")
+                        || returnValueType == "System.Void"
+                        || returnValueType.Contains("System.Net.HttpStatusCode?")
+                        || returnValueType.Contains("IActionResult")
+                        || returnValueType.Contains("ActionResult")
+                        || returnValueType.Contains("IStringValueType")
+                        || returnValueType.Contains("IValueValidator")
+                    )
                     {
                         return null;
                     }
@@ -496,6 +504,11 @@ namespace Volo.Abp.Cli.Commands
             var typeModelName = typeName.Replace("<", "").Replace(">", "").Replace("?", "").PascalToKebabCase() + ".ts";
 
             var path = output + $"{outputPrefix}/{rootPath}/{controllerPathName}/models/{typeModelName}";
+
+            if (File.Exists(path))
+            {
+                return null;
+            }
 
             var modelFileText = new StringBuilder();
 
@@ -797,13 +810,16 @@ namespace Volo.Abp.Cli.Commands
                 return value;
             }
 
-            return Regex.Replace(
-                value,
-                "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
-                "-$1",
-                RegexOptions.Compiled)
-                .Trim()
-                .ToLower();
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            {
+                return Regex.Replace(
+                        value,
+                        "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                        "-$1",
+                        RegexOptions.Compiled)
+                    .Trim()
+                    .ToLower();
+            }
         }
     }
 

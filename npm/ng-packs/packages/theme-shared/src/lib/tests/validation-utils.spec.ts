@@ -22,7 +22,7 @@ describe('ValidationUtils', () => {
 
   describe('#getPasswordValidators', () => {
     it('should return password valdiators', () => {
-      const store = spectator.get(Store);
+      const store = spectator.inject(Store);
       store.reset({
         ConfigState: {
           setting: {
