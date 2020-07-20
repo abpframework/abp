@@ -149,3 +149,7 @@ namespace Acme.BookStore.Authors
 TODO, for MongoDB
 
 {{end}}
+
+## The Next Part
+
+See the [next part](part-8.md) of this tutorial.

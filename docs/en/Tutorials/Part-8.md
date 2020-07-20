@@ -174,3 +174,382 @@ namespace Acme.BookStore.Authors
 
 We could share (re-use) the same DTO among the create and the update operations. While you can do it, we prefer to create different DTOs for these operations since we see they generally be different by the time. So, code duplication is reasonable here compared to a tightly coupled design.
 
+## AuthorAppService
+
+It is time to implement the `IAuthorAppService` interface. Create a new class, named `AuthorAppService` in the `Authors` namespace (folder) of the `Acme.BookStore.Application` project:
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
+
+namespace Acme.BookStore.Authors
+{
+    [Authorize(BookStorePermissions.Authors.Default)]
+    public class AuthorAppService : BookStoreAppService, IAuthorAppService
+    {
+        private readonly IAuthorRepository _authorRepository;
+        private readonly AuthorManager _authorManager;
+
+        public AuthorAppService(
+            IAuthorRepository authorRepository,
+            AuthorManager authorManager)
+        {
+            _authorRepository = authorRepository;
+            _authorManager = authorManager;
+        }
+
+        //...SERVICE METHODS WILL COME HERE...
+    }
+}
+````
+
+* `[Authorize(BookStorePermissions.Authors.Default)]` is a declarative way to check a permission (policy) to authorize the current user. See the [authorization document](../Authorization.md) for more. `BookStorePermissions` class will be updated below, don't worry for the compile error for now.
+* Derived from the `BookStoreAppService`, which is a simple base class comes with the startup template. It is derived from the standard `ApplicationService` class.
+* Implemented the `IAuthorAppService` which was defined above.
+* Injected the `IAuthorRepository` and `AuthorManager` to use in the service methods.
+
+Now, we will introduce the service methods one by one. Copy the explained method into the `AuthorAppService` class.
+
+### GetAsync
+
+````csharp
+public async Task<AuthorDto> GetAsync(Guid id)
+{
+    var author = await _authorRepository.GetAsync(id);
+    return ObjectMapper.Map<Author, AuthorDto>(author);
+}
+````
+
+This method simply gets the `Author` entity by its `Id`, converts to the `AuthorDto` using the [object to object mapper](../Object-To-Object-Mapping.md). This requires to configure the AutoMapper, which will be explained later.
+
+### GetListAsync
+
+````csharp
+public async Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input)
+{
+    if (input.Sorting.IsNullOrWhiteSpace())
+    {
+        input.Sorting = nameof(Author.Name);
+    }
+
+    var authors = await _authorRepository.GetListAsync(
+        input.SkipCount,
+        input.MaxResultCount,
+        input.Sorting,
+        input.Filter
+    );
+
+    var totalCount = await AsyncExecuter.CountAsync(
+        _authorRepository.WhereIf(
+            !input.Filter.IsNullOrWhiteSpace(),
+            author => author.Name.Contains(input.Filter)
+        )
+    );
+
+    return new PagedResultDto<AuthorDto>(
+        totalCount,
+        ObjectMapper.Map<List<Author>, List<AuthorDto>>(authors)
+    );
+}
+````
+
+* Default sorting is "by author name" which is done in the beginning of the method in case of it wasn't sent by the client.
+* Used the `IAuthorRepository.GetListAsync` to get a paged, sorted and filtered list of authors from the database. We had implemented it in the previous part of this tutorial. Again, it actually was not needed to create such a method since we could directly query over the repository, but wanted to demonstrate how to create custom repository methods.
+* Directly queried from the `AuthorRepository` while getting the count of the authors. We preferred to use the `AsyncExecuter` service which allows us to perform async queries without depending on the EF Core. However, you could depend on the EF Core package and directly use the `_authorRepository.WhereIf(...).ToListAsync()` method. See the [repository document](../Repositories.md) to read the alternative approaches and the discussion.
+* Finally, returning a paged result by mapping the list of `Author`s to a list of `AuthorDto`s.
+
+### CreateAsync
+
+````csharp
+[Authorize(BookStorePermissions.Authors.Create)]
+public async Task<AuthorDto> CreateAsync(CreateAuthorDto input)
+{
+    var author = await _authorManager.CreateAsync(
+        input.Name,
+        input.BirthDate,
+        input.ShortBio
+    );
+
+    await _authorRepository.InsertAsync(author);
+
+    return ObjectMapper.Map<Author, AuthorDto>(author);
+}
+````
+
+* `CreateAsync` requires the `BookStorePermissions.Authors.Create` permission (in addition to the `BookStorePermissions.Authors.Default` declared for the `AuthorAppService` class).
+* Used the `AuthorManeger` (domain service) to create a new author.
+* Used the `IAuthorRepository.InsertAsync` to insert the new author to the database.
+* Used the `ObjectMapper` to return an `AuthorDto` representing the newly created author.
+
+> **DDD tip**: Some developers may find useful to insert the new entity inside the `_authorManager.CreateAsync`. We think it is a better design to leave it to the application layer since it better knows when to insert it to the database (maybe it requires additional works on the entity before insert, which would require to an additional update if we perform the insert in the domain service). However, it is completely up to you.
+
+### UpdateAsync
+
+````csharp
+[Authorize(BookStorePermissions.Authors.Edit)]
+public async Task UpdateAsync(Guid id, UpdateAuthorDto input)
+{
+    var author = await _authorRepository.GetAsync(id);
+
+    if (author.Name != input.Name)
+    {
+        await _authorManager.ChangeNameAsync(author, input.Name);
+    }
+
+    author.BirthDate = input.BirthDate;
+    author.ShortBio = input.ShortBio;
+
+    await _authorRepository.UpdateAsync(author);
+}
+````
+
+* `UpdateAsync` requires the additional `BookStorePermissions.Authors.Edit` permission.
+* Used the `IAuthorRepository.GetAsync` to get the author entity from the database. `GetAsync` throws `EntityNotFoundException` if there is no author with the given id, which results a `404` HTTP status code in a web application. It is a good practice to always bring the entity on an update operation.
+* Used the `AuthorManager.ChangeNameAsync` (domain service method) to change the author name if it was requested to change by the client.
+* Directly updated the `BirthDate` and `ShortBio` since there is not any business rule to change these properties, they accept any value.
+* Finally, called the `IAuthorRepository.UpdateAsync` method to update the entity on the database.
+
+{{if DB == "EF"}}
+
+> **EF Core tip**: Entity Framework Core has a **change tracking** system and **automatically saves** any change to an entity at the end of the unit of work (You can simply think that the ABP Framework automatically calls `SaveChanges` at the end of the method). So, it will work as expected even if you don't call the `_authorRepository.UpdateAsync(...)` in the end of the method. If you don't consider to change the EF Core later, you can just remove this line.
+
+{{end}}
+
+### DeleteAsync
+
+````csharp
+[Authorize(BookStorePermissions.Authors.Delete)]
+public async Task DeleteAsync(Guid id)
+{
+    await _authorRepository.DeleteAsync(id);
+}
+````
+
+* `DeleteAsync` requires the additional `BookStorePermissions.Authors.Delete` permission.
+* It simply uses the `DeleteAsync` method of the repository.
+
+## Permission Definitions
+
+You can't compile the code since it is expecting some constants declared in the `BookStorePermissions` class.
+
+Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
+
+````csharp
+namespace Acme.BookStore.Permissions
+{
+    public static class BookStorePermissions
+    {
+        public const string GroupName = "BookStore";
+
+        public static class Books
+        {
+            public const string Default = GroupName + ".Books";
+            public const string Create = Default + ".Create";
+            public const string Edit = Default + ".Edit";
+            public const string Delete = Default + ".Delete";
+        }
+        
+        // *** ADDED a NEW NESTED CLASS ***
+        public static class Authors
+        {
+            public const string Default = GroupName + ".Authors";
+            public const string Create = Default + ".Create";
+            public const string Edit = Default + ".Edit";
+            public const string Delete = Default + ".Delete";
+        }
+    }
+}
+````
+
+Then open the `BookStorePermissionDefinitionProvider` in the same project and add the following lines at the end of the `Define` method:
+
+````csharp
+var authorsPermission = bookStoreGroup.AddPermission(
+    BookStorePermissions.Authors.Default, L("Permission:Authors"));
+
+authorsPermission.AddChild(
+    BookStorePermissions.Authors.Create, L("Permission:Authors.Create"));
+
+authorsPermission.AddChild(
+    BookStorePermissions.Authors.Edit, L("Permission:Authors.Edit"));
+
+authorsPermission.AddChild(
+    BookStorePermissions.Authors.Delete, L("Permission:Authors.Delete"));
+````
+
+Finally, add the following entries to the `Localization/BookStore/en.json` inside the `Acme.BookStore.Domain.Shared` project, to localize the permission names:
+
+````csharp
+"Permission:Authors": "Author Management",
+"Permission:Authors.Create": "Creating new authors",
+"Permission:Authors.Edit": "Editing the authors",
+"Permission:Authors.Delete": "Deleting the authors"
+````
+
+## Object to Object Mapping
+
+`AuthorAppService` is using the `ObjectMapper` to convert the `Author` objects to `AuthorDto` objects. So, we need to define this mapping in the AutoMapper configuration.
+
+Open the `BookStoreApplicationAutoMapperProfile` class inside the `Acme.BookStore.Application` project and add the following line to the constructor:
+
+````csharp
+CreateMap<Author, AuthorDto>();
+````
+
+## Data Seeder
+
+As just done for the books before, it would be good to have some initial author entities in the database. This will be good while running the application first time, but also it is very useful for the automated tests.
+
+Open the `BookStoreDataSeederContributor` in the `Acme.BookStore.Domain` project and add a new `CreateAuthorsAsync` method as shown below:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Acme.BookStore.Authors;
+using Acme.BookStore.Books;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+
+namespace Acme.BookStore
+{
+    public class BookStoreDataSeederContributor
+        : IDataSeedContributor, ITransientDependency
+    {
+        private readonly IRepository<Book, Guid> _bookRepository;
+        private readonly IAuthorRepository _authorRepository;
+        private readonly AuthorManager _authorManager;
+
+        public BookStoreDataSeederContributor(
+            IRepository<Book, Guid> bookRepository,
+            IAuthorRepository authorRepository,
+            AuthorManager authorManager)
+        {
+            _bookRepository = bookRepository;
+            _authorRepository = authorRepository;
+            _authorManager = authorManager;
+        }
+
+        public async Task SeedAsync(DataSeedContext context)
+        {
+            await CreateAuthorsAsync(); // CALL the NEW METHOD
+            await CreateBooksAsync();
+        }
+
+        // ADDED a NEW METHOD
+        private async Task CreateAuthorsAsync()
+        {
+            if (await _authorRepository.GetCountAsync() > 0)
+            {
+                return;
+            }
+
+            await _authorRepository.InsertAsync(
+                await _authorManager.CreateAsync(
+                    "George Orwell",
+                    new DateTime(1903, 06, 25),
+                    "Orwell produced literary criticism and poetry..."
+                )
+            );
+
+            await _authorRepository.InsertAsync(
+                await _authorManager.CreateAsync(
+                    "Douglas Adams",
+                    new DateTime(1952, 03, 11),
+                    "Douglas Adams was an English author, screenwriter..."
+                )
+            );
+        }
+
+        private async Task CreateBooksAsync()
+        {
+            //...omitted the code
+        }
+    }
+}
+````
+
+## Testing the Author Application Service
+
+Finally, we can write some tests for the `IAuthorAppService`. Add a new class, named `AuthorAppService_Tests` in the `Authors` namespace (folder) of the `Acme.BookStore.Application.Tests` project:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Shouldly;
+using Xunit;
+
+namespace Acme.BookStore.Authors
+{
+    public class AuthorAppService_Tests : BookStoreApplicationTestBase
+    {
+        private readonly IAuthorAppService _authorAppService;
+
+        public AuthorAppService_Tests()
+        {
+            _authorAppService = GetRequiredService<IAuthorAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Get_All_Authors_Without_Any_Filter()
+        {
+            var result = await _authorAppService.GetListAsync(new GetAuthorListDto());
+
+            result.TotalCount.ShouldBeGreaterThanOrEqualTo(2);
+            result.Items.ShouldContain(author => author.Name == "George Orwell");
+            result.Items.ShouldContain(author => author.Name == "Douglas Adams");
+        }
+
+        [Fact]
+        public async Task Should_Get_Filtered_Authors()
+        {
+            var result = await _authorAppService.GetListAsync(
+                new GetAuthorListDto {Filter = "George"});
+
+            result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
+            result.Items.ShouldContain(author => author.Name == "George Orwell");
+        }
+
+        [Fact]
+        public async Task Should_Create_A_New_Author()
+        {
+            var authorDto = await _authorAppService.CreateAsync(
+                new CreateAuthorDto
+                {
+                    Name = "Edward Bellamy",
+                    BirthDate = new DateTime(1850, 05, 22),
+                    ShortBio = "Edward Bellamy was an American author..."
+                }
+            );
+            
+            authorDto.Id.ShouldNotBe(Guid.Empty);
+            authorDto.Name.ShouldBe("Edward Bellamy");
+        }
+
+        [Fact]
+        public async Task Should_Not_Allow_To_Create_Duplicate_Author()
+        {
+            await Assert.ThrowsAsync<AuthorAlreadyExistsException>(async () =>
+            {
+                await _authorAppService.CreateAsync(
+                    new CreateAuthorDto
+                    {
+                        Name = "Douglas Adams",
+                        BirthDate = DateTime.Now,
+                        ShortBio = "..."
+                    }
+                );
+            });
+        }
+
+        //TODO: Test other methods...
+    }
+}
+````
+
+Created some tests for the application service methods, which should be clear to understand.
