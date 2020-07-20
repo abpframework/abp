@@ -67,7 +67,7 @@ Then open the `BookStoreDbContextModelCreatingExtensions` class in the same proj
 ````csharp
 builder.Entity<Author>(b =>
 {
-    b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
+    b.ToTable(BookStoreConsts.DbTablePrefix + "Authors",
         BookStoreConsts.DbSchema);
 
     b.ConfigureByConvention();
