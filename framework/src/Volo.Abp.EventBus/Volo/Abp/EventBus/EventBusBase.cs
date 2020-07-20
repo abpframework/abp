@@ -209,23 +209,12 @@ namespace Volo.Abp.EventBus
 
         protected virtual Guid? GetEventDataTenantId(object eventData)
         {
-            if (eventData is IMultiTenant multiTenantEventData)
+            return eventData switch
             {
-                return multiTenantEventData.TenantId;
-            }
-
-            //TODO: Cache propertyInfo & Use interface or class to get Entity property.
-            var propertyInfo = eventData.GetType().GetProperty("Entity");
-            if (propertyInfo != null && propertyInfo.GetGetMethod(true) != null)
-            {
-                var entity = propertyInfo.GetValue(eventData);
-                if (entity != null && entity is IMultiTenant multiTenantEntity)
-                {
-                    return multiTenantEntity.TenantId;
-                }
-            }
-
-            return CurrentTenant.Id;
+                IMultiTenant multiTenantEventData => multiTenantEventData.TenantId,
+                IEventDataMayHaveTenantId eventDataMayHaveTenantId when eventDataMayHaveTenantId.IsMultiTenant(out var tenantId) => tenantId,
+                _ => CurrentTenant.Id
+            };
         }
 
         protected class EventTypeWithEventHandlerFactories
