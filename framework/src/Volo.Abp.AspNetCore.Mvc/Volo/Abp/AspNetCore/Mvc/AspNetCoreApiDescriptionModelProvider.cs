@@ -270,7 +270,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return parameterInfo.Name;
             }
 
-            return modelNameProvider.Name;
+            return modelNameProvider.Name ?? parameterInfo.Name;
         }
 
         private static string GetRootPath([NotNull] Type controllerType, [CanBeNull] ConventionalControllerSetting setting)

@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.prod.json",
+  "compilerOptions": {
+    "paths": {
+      "@my-company-name/cms-kit": [
+        "projects/cms-kit/src/public-api.ts"
+      ],
+      "@my-company-name/cms-kit/config": [
+        "projects/cms-kit/config/src/public-api.ts"
+      ]
+    }
+  }
+}

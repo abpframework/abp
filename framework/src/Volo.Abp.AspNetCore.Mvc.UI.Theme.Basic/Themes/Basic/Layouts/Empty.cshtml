@@ -59,7 +59,9 @@
 
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Empty)
         @RenderBody()
+        @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Empty)
     </div>
 
     <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />

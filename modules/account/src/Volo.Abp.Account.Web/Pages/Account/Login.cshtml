@@ -38,11 +38,11 @@
                     </label>
                 </div>
                 <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-block btn-lg mt-3">@L["Login"]</abp-button>
+                @if (Model.ShowCancelButton)
+                {
+                    <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-block btn-lg mt-3">@L["Cancel"]</abp-button>
+                }
             </form>
-        </div>
-
-        <div class="card-footer text-center border-0">
-            <abp-button type="button" button-type="Link" name="Action" value="Cancel" class="px-2 py-0">@L["Cancel"]</abp-button> @* TODO: Only show if identity server is used *@
         </div>
     </div>
 }

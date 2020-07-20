@@ -1,9 +1,10 @@
-import { Component, Injector, OnDestroy, Type, Optional, SkipSelf } from '@angular/core';
+import { Component, Injector, OnDestroy, Optional, SkipSelf, Type } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
+import { LocalizationService } from '../services/localization.service';
 import { RoutesService } from '../services/routes.service';
 import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 import { findRoute, getRoutePath } from '../utils/route-utils';
@@ -16,15 +17,25 @@ import { TreeNode } from '../utils/tree-utils';
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
     <ng-template #componentOutlet
-      ><ng-container *ngComponentOutlet="layout"></ng-container
+      ><ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container
     ></ng-template>
   `,
 })
 export class DynamicLayoutComponent implements OnDestroy {
   layout: Type<any>;
 
+  // TODO: Consider a shared enum (eThemeSharedComponents) for known layouts
+  readonly layouts = new Map([
+    ['application', 'Theme.ApplicationLayoutComponent'],
+    ['account', 'Theme.AccountLayoutComponent'],
+    ['empty', 'Theme.EmptyLayoutComponent'],
+  ]);
+
+  isLayoutVisible = true;
+
   constructor(
     injector: Injector,
+    private localizationService: LocalizationService,
     private store: Store,
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
@@ -32,11 +43,6 @@ export class DynamicLayoutComponent implements OnDestroy {
     const route = injector.get(ActivatedRoute);
     const router = injector.get(Router);
     const routes = injector.get(RoutesService);
-    const layouts = {
-      application: this.getComponent('Theme.ApplicationLayoutComponent'),
-      account: this.getComponent('Theme.AccountLayoutComponent'),
-      empty: this.getComponent('Theme.EmptyLayoutComponent'),
-    };
 
     router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -58,8 +64,18 @@ export class DynamicLayoutComponent implements OnDestroy {
 
         if (!expectedLayout) expectedLayout = eLayoutType.empty;
 
-        this.layout = layouts[expectedLayout].component;
+        const key = this.layouts.get(expectedLayout);
+        this.layout = this.getComponent(key).component;
       }
+    });
+
+    this.listenToLanguageChange();
+  }
+
+  private listenToLanguageChange() {
+    this.localizationService.languageChange.pipe(takeUntilDestroy(this)).subscribe(() => {
+      this.isLayoutVisible = false;
+      setTimeout(() => (this.isLayoutVisible = true), 0);
     });
   }
 

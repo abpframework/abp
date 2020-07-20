@@ -8,14 +8,14 @@
 
 ## 替换模块依赖项
 
-在 `.EntityFrameworkCore` 项目中找到 **YourProjectName*EntityFrameworkCoreModule** 类, 删除 `DependsOn` attribute 上的`typeof(AbpEntityFrameworkCoreSqlServerModule)`, 添加 `typeof(AbpEntityFrameworkCoreSqliteModule)` (或者替换 `using Volo.Abp.EntityFrameworkCore.SqlServer;` 为 `using Volo.Abp.EntityFrameworkCore.Sqlite;`).
+在 `.EntityFrameworkCore` 项目中找到 **YourProjectName*EntityFrameworkCoreModule** 类, 删除 `DependsOn` attribute 上的`typeof(AbpEntityFrameworkCoreSqlServerModule)`, 添加 `typeof(AbpEntityFrameworkCoreSqliteModule)` (并且替换 `using Volo.Abp.EntityFrameworkCore.SqlServer;` 为 `using Volo.Abp.EntityFrameworkCore.Sqlite;`).
 
 ## UseSqlite()
 
 查找你的解决方案中 `UseSqlServer()`调用,替换为 `UseSqlite()`. 检查下列文件:
 
 * `.EntityFrameworkCore` 项目中的*YourProjectName*EntityFrameworkCoreModule.cs.
-* `.EntityFrameworkCore` 项目中的*YourProjectName*MigrationsDbContextFactory.cs.
+* `.EntityFrameworkCore.DbMigrations` 项目中的*YourProjectName*MigrationsDbContextFactory.cs.
 
 > 根据你的解决方案的结构,你可能发现更多需要改变代码的文件.
 

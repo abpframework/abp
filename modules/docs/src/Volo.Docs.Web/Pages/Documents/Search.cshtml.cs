@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Docs.Documents;
@@ -29,12 +31,15 @@ namespace Volo.Docs.Pages.Documents
 
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentAppService _documentAppService;
+        private readonly HtmlEncoder _encoder;
 
-        public SearchModel(IProjectAppService projectAppService, 
-            IDocumentAppService documentAppService)
+        public SearchModel(IProjectAppService projectAppService,
+            IDocumentAppService documentAppService,
+            HtmlEncoder encoder)
         {
             _projectAppService = projectAppService;
             _documentAppService = documentAppService;
+            _encoder = encoder;
         }
 
         public List<DocumentSearchOutput> SearchOutputs { get; set; } = new List<DocumentSearchOutput>();
@@ -45,7 +50,7 @@ namespace Volo.Docs.Pages.Documents
             {
                 return RedirectToPage("Index");
             }
-            
+
             KeyWord = keyword;
 
             Project = await _projectAppService.GetAsync(ProjectName);
@@ -66,6 +71,18 @@ namespace Volo.Docs.Pages.Documents
                 LanguageCode = LanguageCode,
                 Version = Version
             });
+
+            var highlightTag1 = Guid.NewGuid().ToString();
+            var highlightTag2 = Guid.NewGuid().ToString();
+            foreach (var searchOutput in SearchOutputs)
+            {
+                for (var i = 0; i < searchOutput.Highlight.Count; i++)
+                {
+                    searchOutput.Highlight[i] = _encoder
+                        .Encode(searchOutput.Highlight[i].Replace("<highlight>", highlightTag1).Replace("</highlight>", highlightTag2))
+                        .Replace(highlightTag1, "<highlight>").Replace(highlightTag2, "</highlight>");
+                }
+            }
 
             return Page();
         }

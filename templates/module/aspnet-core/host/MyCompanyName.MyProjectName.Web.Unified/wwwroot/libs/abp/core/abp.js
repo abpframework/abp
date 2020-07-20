@@ -136,6 +136,38 @@ var abp = abp || {};
     };
 
     abp.localization.defaultResourceName = undefined;
+    abp.localization.currentCulture = {
+        cultureName: undefined
+    };
+
+    var getMapValue = function (packageMaps, packageName, language) {
+        language = language || abp.localization.currentCulture.name;
+        if (!packageMaps || !packageName || !language) {
+            return language;
+        }
+
+        var packageMap = packageMaps[packageName];
+        if (!packageMap) {
+            return language;
+        }
+
+        for (var i = 0; i < packageMap.length; i++) {
+            var map = packageMap[i];
+            if (map.name === language){
+                return map.value;
+            }
+        }
+
+        return language;
+    };
+
+    abp.localization.getLanguagesMap = function (packageName, language) {
+        return getMapValue(abp.localization.languagesMap, packageName, language);
+    };
+
+    abp.localization.getLanguageFilesMap = function (packageName, language) {
+        return getMapValue(abp.localization.languageFilesMap, packageName, language);
+    };
 
     /* AUTHORIZATION **********************************************/
 
@@ -330,7 +362,7 @@ var abp = abp || {};
     };
 
     /* opts: {
-     *    
+     *
      * }
      */
     abp.ui.unblock = function (opts) {
@@ -584,7 +616,7 @@ var abp = abp || {};
      * This is a simple implementation created to be used by ABP.
      * Please use a complete cookie library if you need.
      * @param {string} key
-     * @param {string} value 
+     * @param {string} value
      * @param {Date} expireDate (optional). If not specified the cookie will expire at the end of session.
      * @param {string} path (optional)
      */

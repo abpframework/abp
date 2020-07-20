@@ -1,7 +1,8 @@
+import { ApplicationConfiguration, ConfigState, GetAppConfiguration } from '@abp/ng.core';
 import { Component, EventEmitter, Input, Output, Renderer2, TrackByFunction } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { finalize, map, pluck, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
@@ -203,7 +204,6 @@ export class PermissionManagementComponent
   }
 
   submit() {
-    this.modalBusy = true;
     const unchangedPermissions = getPermissions(
       this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
     );
@@ -217,23 +217,29 @@ export class PermissionManagementComponent
       )
       .map(({ name, isGranted }) => ({ name, isGranted }));
 
-    if (changedPermissions.length) {
-      this.store
-        .dispatch(
-          new UpdatePermissions({
-            providerKey: this.providerKey,
-            providerName: this.providerName,
-            permissions: changedPermissions,
-          }),
-        )
-        .pipe(finalize(() => (this.modalBusy = false)))
-        .subscribe(() => {
-          this.visible = false;
-        });
-    } else {
-      this.modalBusy = false;
+    if (!changedPermissions.length) {
       this.visible = false;
+      return;
     }
+
+    this.modalBusy = true;
+    this.store
+      .dispatch(
+        new UpdatePermissions({
+          providerKey: this.providerKey,
+          providerName: this.providerName,
+          permissions: changedPermissions,
+        }),
+      )
+      .pipe(
+        switchMap(() =>
+          this.shouldFetchAppConfig() ? this.store.dispatch(GetAppConfiguration) : of(null),
+        ),
+        finalize(() => (this.modalBusy = false)),
+      )
+      .subscribe(() => {
+        this.visible = false;
+      });
   }
 
   openModal() {
@@ -267,6 +273,18 @@ export class PermissionManagementComponent
       (acc, val) => (val.name.split('.')[0] === groupName && val.isGranted ? acc + 1 : acc),
       0,
     );
+  }
+
+  shouldFetchAppConfig() {
+    const currentUser = this.store.selectSnapshot(
+      ConfigState.getOne('currentUser'),
+    ) as ApplicationConfiguration.CurrentUser;
+
+    if (this.providerName === 'R') return currentUser.roles.some(role => role === this.providerKey);
+
+    if (this.providerName === 'U') return currentUser.id === this.providerKey;
+
+    return false;
   }
 }
 

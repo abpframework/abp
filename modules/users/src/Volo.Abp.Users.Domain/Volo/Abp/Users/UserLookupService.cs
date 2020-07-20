@@ -167,14 +167,14 @@ namespace Volo.Abp.Users
                     filter,
                     cancellationToken
                 );
-            
+
             return localUsers
                 .Cast<IUserData>()
                 .ToList();
         }
 
         public async Task<long> GetCountAsync(
-            string filter = null, 
+            string filter = null,
             CancellationToken cancellationToken = default)
         {
             if (ExternalUserLookupServiceProvider != null)
@@ -200,7 +200,7 @@ namespace Volo.Abp.Users
             using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
             {
                 await func();
-                await uow.SaveChangesAsync();
+                await uow.CompleteAsync();
             }
         }
     }

@@ -34,7 +34,7 @@
               "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "第一章: 增删改查操作",
+              "text": "第二章: 增删改查操作",
               "path": "Tutorials/Part-2.md"
             },
             {
@@ -211,6 +211,14 @@
                   "path": "Blob-Storing-Azure.md"
                 },
                 {
+                  "text": "Aliyun提供程序",
+                  "path": "Blob-Storing-Aliyun.md"
+                },
+                {
+                  "text": "Minio提供程序",
+                  "path": "Blob-Storing-Minio.md"
+                },
+                {
                   "text": "创建自定义提供程序",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }
@@ -368,6 +376,10 @@
         {
           "text": "Angular",
           "items": [
+            {
+              "text": "v2.x 到 v3 迁移指南",
+              "path": "UI/Angular/Migration-Guide-v3.md"
+            },
             {
               "text": "服务代理",
               "path": "UI/Angular/Service-Proxies.md"

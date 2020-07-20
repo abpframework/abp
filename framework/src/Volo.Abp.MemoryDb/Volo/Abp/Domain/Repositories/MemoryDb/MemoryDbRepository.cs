@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,21 +26,21 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         public virtual IMemoryDatabase Database => DatabaseProvider.GetDatabase();
 
         protected IMemoryDatabaseProvider<TMemoryDbContext> DatabaseProvider { get; }
-        
+
         public ILocalEventBus LocalEventBus { get; set; }
 
         public IDistributedEventBus DistributedEventBus { get; set; }
 
         public IEntityChangeEventHelper EntityChangeEventHelper { get; set; }
-        
+
         public IAuditPropertySetter AuditPropertySetter { get; set; }
-        
+
         public IGuidGenerator GuidGenerator { get; set; }
 
         public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
         {
             DatabaseProvider = databaseProvider;
-            
+
             LocalEventBus = NullLocalEventBus.Instance;
             DistributedEventBus = NullDistributedEventBus.Instance;
             EntityChangeEventHelper = NullEntityChangeEventHelper.Instance;
@@ -49,7 +50,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
             return ApplyDataFilters(Collection.AsQueryable());
         }
-        
+
         protected virtual async Task TriggerDomainEventsAsync(object entity)
         {
             var generatesDomainEventsEntity = entity as IGeneratesDomainEvents;
@@ -80,7 +81,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
                 generatesDomainEventsEntity.ClearDistributedEvents();
             }
         }
-        
+
         protected virtual bool IsHardDeleted(TEntity entity)
         {
             if (!(UnitOfWorkManager?.Current?.Items.GetOrDefault(UnitOfWorkItemNames.HardDeletedEntities) is HashSet<IEntity> hardDeletedEntities))
@@ -90,7 +91,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
             return hardDeletedEntities.Contains(entity);
         }
-        
+
         protected virtual void CheckAndSetId(TEntity entity)
         {
             if (entity is IEntity<Guid> entityWithGuidId)
@@ -117,12 +118,12 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
             AuditPropertySetter.SetCreationProperties(entity);
         }
-        
+
         protected virtual void SetModificationAuditProperties(TEntity entity)
         {
             AuditPropertySetter.SetModificationProperties(entity);
         }
-        
+
         protected virtual void SetDeletionAuditProperties(TEntity entity)
         {
             AuditPropertySetter.SetDeletionProperties(entity);
@@ -139,7 +140,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             await EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompletedAsync(entity);
             await EntityChangeEventHelper.TriggerEntityUpdatingEventAsync(entity);
         }
-        
+
         protected virtual async Task TriggerEntityDeleteEventsAsync(TEntity entity)
         {
             await EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompletedAsync(entity);
@@ -153,7 +154,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             await TriggerEntityCreateEvents(entity);
             await TriggerDomainEventsAsync(entity);
         }
-        
+
         protected virtual async Task ApplyAbpConceptsForDeletedEntityAsync(TEntity entity)
         {
             SetDeletionAuditProperties(entity);
@@ -170,8 +171,8 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         }
 
         public override async Task DeleteAsync(
-            Expression<Func<TEntity, bool>> predicate, 
-            bool autoSave = false, 
+            Expression<Func<TEntity, bool>> predicate,
+            bool autoSave = false,
             CancellationToken cancellationToken = default)
         {
             var entities = GetQueryable().Where(predicate).ToList();
@@ -189,10 +190,10 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             await ApplyAbpConceptsForAddedEntityAsync(entity);
 
             Collection.Add(entity);
-            
+
             return entity;
         }
-        
+
         public override async Task<TEntity> UpdateAsync(
             TEntity entity,
             bool autoSave = false,
@@ -216,7 +217,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
             return entity;
         }
-        
+
         public override async Task DeleteAsync(
             TEntity entity,
             bool autoSave = false,
@@ -243,6 +244,19 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult(GetQueryable().LongCount());
+        }
+
+        public override Task<List<TEntity>> GetPagedListAsync(
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(GetQueryable()
+                .OrderBy(sorting)
+                .PageBy(skipCount, maxResultCount)
+                .ToList());
         }
     }
 

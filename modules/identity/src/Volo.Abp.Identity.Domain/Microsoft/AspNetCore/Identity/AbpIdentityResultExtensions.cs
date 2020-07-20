@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Identity;
+using Volo.Abp.Localization;
 using Volo.Abp.Text.Formatting;
 
 namespace Microsoft.AspNetCore.Identity
@@ -48,12 +49,15 @@ namespace Microsoft.AspNetCore.Identity
 
             if (!localizedString.ResourceNotFound)
             {
-                var englishLocalizedString = localizer.WithCulture(CultureInfo.GetCultureInfo("en"))[key];
-                if (!englishLocalizedString.ResourceNotFound)
+                using (CultureHelper.Use(CultureInfo.GetCultureInfo("en")))
                 {
-                    if (FormattedStringValueExtracter.IsMatch(error.Description, englishLocalizedString.Value, out var values))
+                    var englishLocalizedString = localizer[key];
+                    if (!englishLocalizedString.ResourceNotFound)
                     {
-                        return string.Format(localizedString.Value, values.Cast<object>().ToArray());
+                        if (FormattedStringValueExtracter.IsMatch(error.Description, englishLocalizedString.Value, out var values))
+                        {
+                            return string.Format(localizedString.Value, values.Cast<object>().ToArray());
+                        }
                     }
                 }
             }
