@@ -5,8 +5,6 @@ namespace Volo.Abp.Identity
 {
     public class IdentitySecurityLogContext
     {
-        public Guid? TenantId { get; set; }
-
         public string Identity { get; set; }
 
         public string Action { get; set; }
