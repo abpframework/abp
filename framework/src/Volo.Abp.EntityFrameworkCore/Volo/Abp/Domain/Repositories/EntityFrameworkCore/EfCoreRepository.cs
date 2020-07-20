@@ -195,7 +195,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return query;
         }
 
-        public IAsyncEnumerator<TEntity> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
+        public IAsyncEnumerator<TEntity> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
             return DbSet.AsAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
         }
