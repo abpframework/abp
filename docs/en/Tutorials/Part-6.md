@@ -37,8 +37,9 @@ This tutorial is organized as the following parts;
 - [Part 3: Creating, updating and deleting books](Part-3.md)
 - [Part 4: Integration tests](Part-4.md)
 - [Part 5: Authorization](Part-5.md)
-- **Part 6: Author: Domain layer (this part)**
-- [Part 7: Author: Database Integration](Part-7.md)
+- **Part 6: Authors: Domain layer (this part)**
+- [Part 7: Authors: Database Integration](Part-7.md)
+- [Part 8: Authors: Application Layer](Part-8.md)
 
 ### Download the Source Code
 
