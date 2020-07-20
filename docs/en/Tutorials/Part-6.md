@@ -262,7 +262,7 @@ namespace Acme.BookStore.Authors
             int skipCount,
             int maxResultCount,
             string sorting,
-            string filter = ""
+            string filter = null
         );
     }
 }
@@ -272,9 +272,9 @@ namespace Acme.BookStore.Authors
 * `FindByNameAsync` was used in the `AuthorManager` to query an author by name.
 * `GetListAsync` will be used in the application layer to get a listed, sorted and filtered list of authors to show on the UI.
 
-We will implement this repository in the next parts.
+We will implement this repository in the next part.
 
-> Both of these methods might **seem unnecessary** since the standard repositories already `IQueryable` and you can directly use them instead of defining such custom methods. You're right and do it like in a real application. However, for this **"learning" tutorial**, it is useful to explain how to create custom repository methods.
+> Both of these methods might **seem unnecessary** since the standard repositories already `IQueryable` and you can directly use them instead of defining such custom methods. You're right and do it like in a real application. However, for this **"learning" tutorial**, it is useful to explain how to create custom repository methods when you really need it.
 
 ## Conclusion
 
