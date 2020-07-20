@@ -258,9 +258,8 @@ namespace Volo.Abp.Cli.ProjectModification
             }
 
             var versionListAsJson = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} versions");
-            var versionList = JsonConvert.DeserializeObject<string[]>(versionListAsJson);
-
-            versionList = versionList.OrderByDescending(SemanticVersion.Parse, new VersionComparer()).ToArray();
+            var versionList = JsonConvert.DeserializeObject<string[]>(versionListAsJson)
+                .OrderByDescending(SemanticVersion.Parse, new VersionComparer()).ToList();
 
             var newVersion = includeReleaseCandidates
                 ? versionList.First()
