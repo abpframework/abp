@@ -37,6 +37,7 @@ This tutorial is organized as the following parts;
 - [Part 3: Creating, updating and deleting books](Part-3.md)
 - [Part 4: Integration tests](Part-4.md)
 - **Part 5: Authorization (this part)**
+- [Part 6: Author: Domain layer](Part-6.md)
 
 ### Download the Source Code
 
@@ -399,3 +400,6 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 {{end}}
 
+## The Next Part
+
+See the [next part](part-6.md) of this tutorial.

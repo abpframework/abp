@@ -37,7 +37,7 @@ This tutorial is organized as the following parts;
 - [Part 3: Creating, updating and deleting books](Part-3.md)
 - [Part 4: Integration tests](Part-4.md)
 - [Part 5: Authorization](Part-5.md)
-- **Part 6: The author entity (this part)**
+- **Part 6: Author: Domain layer (this part)**
 
 ### Download the Source Code
 
@@ -54,7 +54,12 @@ In the previous parts, we've used the ABP infrastructure to easily build some se
 * Used [generic repositories](../Repositories.md) to completely automate the database layer.
 * Used [conventional API controllers](../API/Auto-API-Controllers.md) instead of manually writing API controllers.
 
-For the "Authors" part, we will do most of the things manually to show how you can do it in case of need.
+For the "Authors" part;
+
+* We will **do most of the things manually** to show how you can do it in case of need.
+* We will implement **Domain Driven Design (DDD) best practices**.
+
+> **The development will be done layer by layer to concentrate on an individual layer in one time. In a real project, you will develop your application feature by feature (vertical) as done in the previous parts. In this way, you will experience both approaches.**
 
 ## The Author Entity
 
@@ -62,20 +67,210 @@ Create an `Authors` folder (namespace) in the `Acme.BookStore.Domain` project an
 
 ````csharp
 using System;
+using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Acme.BookStore.Authors
 {
     public class Author : FullAuditedAggregateRoot<Guid>
     {
-        public string Name { get; internal set; }
-
+        public string Name { get; private set; }
         public DateTime BirthDate { get; set; }
-
         public string ShortBio { get; set; }
+
+        private Author()
+        {
+            /* This constructor is for deserialization / ORM purpose */
+        }
+
+        internal Author(
+            Guid id,
+            [NotNull] string name,
+            DateTime birthDate,
+            [CanBeNull] string shortBio = null)
+            : base(id)
+        {
+            SetName(name);
+            BirthDate = birthDate;
+            ShortBio = shortBio;
+        }
+
+        internal Author ChangeName([NotNull] string name)
+        {
+            SetName(name);
+            return this;
+        }
+
+        private void SetName([NotNull] string name)
+        {
+            Name = Check.NotNullOrWhiteSpace(
+                name, 
+                nameof(name), 
+                maxLength: AuthorConsts.MaxNameLength
+            );
+        }
     }
 }
 ````
 
 * Inherited from `FullAuditedAggregateRoot<Guid>` which makes the entity [soft delete](../Data-Filtering.md) (that means when you delete it, it is not deleted in the database, but just marked as deleted) with all the [auditing](../Entities.md) properties.
-* `internal set` for the `Name` property restricts to set this property from out of the domain layer. Because we want to change it in a controlled way in the domain layer to prevent to create two authors with the same name, to just demonstrate a simple business rule.
+* `private set` for the `Name` property restricts to set this property from out of this class. There are two ways of setting the name (in both cases, we validate the name):
+  * In the constructor, while creating a new author.
+  * Using the `ChangeName` method to update the name later.
+* The `constructor` and the `ChangeName` method is `internal` to force to use these methods only in the domain layer, using the `AuthorManager` that will be explained below.
+* `Check` class is an ABP Framework utility class to help you while checking method arguments (it throws exception on an invalid case).
+
+`AuthorConsts` is a simple class that is located under the `Authors` namespace of the `Acme.BookStore.Domain.Shared` project:
+
+````csharp
+namespace Acme.BookStore.Authors
+{
+    public static class AuthorConsts
+    {
+        public const int MaxNameLength = 64;
+    }
+}
+````
+
+Created this class inside the `Acme.BookStore.Domain.Shared` project since we will re-use it on the Data Transfer Objects (DTOs) later.
+
+## AuthorManager: The Domain Service
+
+`Author` constructor and `ChangeName` method is `internal`, so they can be usable only in the domain layer. Create an `AuthorManager` class in the `Authors` folder (namespace) of the `Acme.BookStore.Domain` project:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Volo.Abp;
+using Volo.Abp.Domain.Services;
+
+namespace Acme.BookStore.Authors
+{
+    public class AuthorManager : DomainService
+    {
+        private readonly IAuthorRepository _authorRepository;
+
+        public AuthorManager(IAuthorRepository authorRepository)
+        {
+            _authorRepository = authorRepository;
+        }
+
+        public async Task<Author> CreateAsync(
+            [NotNull] string name,
+            DateTime birthDate,
+            [CanBeNull] string shortBio = null)
+        {
+            Check.NotNullOrWhiteSpace(name, nameof(name));
+
+            var existingAuthor = _authorRepository.FindByNameAsync(name);
+            if (existingAuthor != null)
+            {
+                throw new AuthorAlreadyExistsException(name);
+            }
+
+            return new Author(
+                GuidGenerator.Create(),
+                name,
+                birthDate,
+                shortBio
+            );
+        }
+
+        public async Task ChangeNameAsync(
+            [NotNull] Author author,
+            [NotNull] string newName)
+        {
+            Check.NotNull(author, nameof(author));
+            Check.NotNullOrWhiteSpace(newName, nameof(newName));
+
+            var existingAuthor = await _authorRepository.FindByNameAsync(newName);
+            if (existingAuthor != null && existingAuthor.Id != author.Id)
+            {
+                throw new AuthorAlreadyExistsException(newName);
+            }
+
+            author.ChangeName(newName);
+        }
+    }
+}
+````
+
+* `AuthorManager` forces to create an author and change name of an author in a controlled way. The application layer (will be introduced later) will use these methods.
+
+> **DDD tip**: Do not introduce domain service methods unless they are needed and they perform core business rules. For this case, we needed to this service to be able to force the unique name constraint.
+
+Both methods checks if there is already an author with the given name and throws a special business exception, `AuthorAlreadyExistsException`, defined as shown below:
+
+````csharp
+using Volo.Abp;
+
+namespace Acme.BookStore.Authors
+{
+    public class AuthorAlreadyExistsException : BusinessException
+    {
+        public AuthorAlreadyExistsException(string name)
+            : base(BookStoreDomainErrorCodes.AuthorAlreadyExists)
+        {
+            WithData("name", name);
+        }
+    }
+}
+````
+
+`BusinessException` is a special exception type that. It is a good way to throw domain related exceptions. It is automatically handled by the ABP Framework and can be easily localized. `WithData` method is used to provide additional data to the exception object that will later be used on the localization message or for some other purpose.
+
+Open the `BookStoreDomainErrorCodes` in the `Acme.BookStore.Domain.Shared` project and change as shown below:
+
+````csharp
+namespace Acme.BookStore
+{
+    public static class BookStoreDomainErrorCodes
+    {
+        public const string AuthorAlreadyExists = "BookStore:00001";
+    }
+}
+````
+
+This is a unique string represents the error code thrown by your application and can be handled by client applications. For users, you probably want to localize it. Open the `Localization/BookStore/en.json` inside the `Acme.BookStore.Domain.Shared` project and add the following entry:
+
+````json
+"BookStore:00001": "There is already an author with the same name: {name}"
+````
+
+Whenever you throw an `AuthorAlreadyExistsException`, the end use will see a nice error message on the UI.
+
+## IAuthorRepository
+
+`AuthorManager` inject the `IAuthorRepository`, so we need to define it. Create this new interface in the `Authors` folder (namespace) of the `Acme.BookStore.Domain` project:
+
+````charp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+
+namespace Acme.BookStore.Authors
+{
+    public interface IAuthorRepository : IRepository<Author, Guid>
+    {
+        Task<Author> FindByNameAsync(string name);
+
+        Task<List<Author>> GetListAsync(
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            string filter = ""
+        );
+    }
+}
+````
+
+* `IAuthorRepository` extends the standard `IRepository<Author, Guid>` interface, so all the standard [repository](../Repositories.md) methods will also be available for the `IAuthorRepository`.
+* `FindByNameAsync` was used in the `AuthorManager` to query an author by name.
+* `GetListAsync` will be used in the application layer to get a listed, sorted and filtered list of authors to show on the UI.
+
+We will implement this repository in the next parts.
+
+> Both of these methods might **seem unnecessary** since the standard repositories already `IQueryable` and you can directly use them instead of defining such custom methods. You're right and do it like in a real application. However, for this **"learning" tutorial**, it is useful to explain how to create custom repository methods.
