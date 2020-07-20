@@ -257,6 +257,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 
+            SetLatestVersionBranchName(versions);
+
             if (versions.Any())
             {
                 LatestStableVersionInfo = versions.FirstOrDefault(v => !VersionHelper.IsPreRelease(v.Version)) ?? versions.First();
@@ -297,6 +299,14 @@ namespace Volo.Docs.Pages.Documents.Project
                 Value = CreateVersionLink(LatestStableVersionInfo, v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
+        }
+
+        private void SetLatestVersionBranchName(List<VersionInfoViewModel> versions)
+        {
+            if (versions.Any() && !string.IsNullOrEmpty(Project.LatestVersionBranchName))
+            {
+                versions.First(v=> !SemanticVersion.Parse(v.Version).IsPrerelease).Version = Project.LatestVersionBranchName;
+            }
         }
 
         private async Task SetNavigationAsync()
