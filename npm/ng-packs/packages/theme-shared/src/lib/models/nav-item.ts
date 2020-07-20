@@ -7,4 +7,5 @@ export interface NavItem {
   action?: () => void;
   order?: number;
   requiredPolicy?: string;
+  visible?: () => boolean;
 }
