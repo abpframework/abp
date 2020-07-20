@@ -263,8 +263,8 @@ namespace Volo.Abp.Cli.ProjectModification
             versionList = versionList.OrderByDescending(SemanticVersion.Parse, new VersionComparer()).ToArray();
 
             var newVersion = includeReleaseCandidates
-                ? versionList.Last()
-                : versionList.LastOrDefault(v => v.Split("-").Length < 2);
+                ? versionList.First()
+                : versionList.FirstOrDefault(v => v.Split("-").Length < 2);
 
             var newVersionWithPrefix = $"~{newVersion}";
 
