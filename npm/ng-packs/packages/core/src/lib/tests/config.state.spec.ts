@@ -93,7 +93,9 @@ export const CONFIG_STATE_DATA = {
     roles: [],
   },
   features: {
-    values: {},
+    values: {
+      'Chat.Enable': 'True',
+    },
   },
 } as Config.State;
 
@@ -159,6 +161,14 @@ describe('ConfigState', () => {
       );
       expect(ConfigState.getApiUrl()(CONFIG_STATE_DATA)).toEqual(
         CONFIG_STATE_DATA.environment.apis.default.url,
+      );
+    });
+  });
+
+  describe('#getFeature', () => {
+    it('should return a setting', () => {
+      expect(ConfigState.getFeature('Chat.Enable')(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.features.values['Chat.Enable'],
       );
     });
   });
