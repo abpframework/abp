@@ -155,7 +155,7 @@ namespace Volo.Abp.Cli.ProjectModification
                                 latestVersion = latestNugetVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: includeReleaseCandidates);
                             }
 
-                            if (latestVersion != null && (currentSemanticVersion.IsPrerelease || currentSemanticVersion < latestVersion))
+                            if (latestVersion != null && (currentSemanticVersion < latestVersion || (currentSemanticVersion.IsPrerelease && switchToStable)))
                             {
                                 Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, currentSemanticVersion.ToString(), latestVersion.ToString());
                                 versionAttribute.Value = latestVersion.ToString();
