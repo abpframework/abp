@@ -275,3 +275,13 @@ namespace Acme.BookStore.Authors
 We will implement this repository in the next parts.
 
 > Both of these methods might **seem unnecessary** since the standard repositories already `IQueryable` and you can directly use them instead of defining such custom methods. You're right and do it like in a real application. However, for this **"learning" tutorial**, it is useful to explain how to create custom repository methods.
+
+## Conclusion
+
+This part covered the domain layer of the authors functionality of the book store application. The main files created/updated in this part was highlighted in the picture below:
+
+![bookstore-author-domain-layer](images/bookstore-author-domain-layer.png)
+
+## The Next Part
+
+See the [next part](part-7.md) of this tutorial.
