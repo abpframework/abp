@@ -231,6 +231,11 @@ namespace Acme.BookStore
 
         public async Task SeedAsync(DataSeedContext context)
         {
+            await CreateBooksAsync();
+        }
+
+        private async Task CreateBooksAsync()
+        {
             if (await _bookRepository.GetCountAsync() > 0)
             {
                 return;
