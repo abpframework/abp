@@ -21,8 +21,8 @@ describe('ApiInterceptor', () => {
   beforeEach(() => {
     spectator = createService();
     interceptor = spectator.service;
-    store = spectator.get(Store);
-    oauthService = spectator.get(OAuthService);
+    store = spectator.inject(Store);
+    oauthService = spectator.inject(OAuthService);
   });
 
   it('should add headers to http request', done => {

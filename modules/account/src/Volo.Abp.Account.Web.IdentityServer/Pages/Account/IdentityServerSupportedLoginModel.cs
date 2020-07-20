@@ -14,7 +14,10 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.SecurityLog;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 
@@ -128,6 +131,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 LoginInput.RememberMe,
                 true
             );
+
+            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress
+            });
 
             if (result.RequiresTwoFactor)
             {

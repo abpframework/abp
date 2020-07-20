@@ -215,6 +215,10 @@
                   "path": "Blob-Storing-Aliyun.md"
                 },
                 {
+                  "text": "Minio提供程序",
+                  "path": "Blob-Storing-Minio.md"
+                },
+                {
                   "text": "创建自定义提供程序",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }

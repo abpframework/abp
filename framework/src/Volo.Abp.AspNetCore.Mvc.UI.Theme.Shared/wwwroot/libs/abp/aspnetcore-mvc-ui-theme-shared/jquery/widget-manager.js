@@ -27,7 +27,7 @@
 
         var getFilters = function ($widgetWrapperDiv) {
             var filters = {};
-            
+
             if (opts.filterForm) {
                 opts.filterForm.each(function() {
                     filters = $.extend(filters, opts.filterForm.serializeFormToObject());
@@ -47,7 +47,7 @@
         };
 
         var init = function () {
-            opts.wrapper.find('.abp-widget-wrapper').each(function () {
+            opts.wrapper.findWithSelf('.abp-widget-wrapper').each(function () {
                 var $widgetWrapperDiv = $(this);
                 var widgetName = $widgetWrapperDiv.attr('data-widget-name');
                 var widgetApiClass = abp.widgets[widgetName];
@@ -62,7 +62,7 @@
         };
 
         var refresh = function () {
-            opts.wrapper.find('.abp-widget-wrapper').each(function () {
+            opts.wrapper.findWithSelf('.abp-widget-wrapper').each(function () {
                 var $widgetWrapperDiv = $(this);
 
                 var refreshUrl = $widgetWrapperDiv.attr('data-refresh-url');
