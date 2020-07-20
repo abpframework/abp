@@ -15,7 +15,14 @@ export class NavItemsService {
   }
 
   addItems(items: NavItem[]) {
-    this._items$.next([...this.items, ...items].sort(sortItems));
+    this._items$.next(
+      [
+        ...this.items,
+        ...items.map(item =>
+          typeof item.visible === 'undefined' ? { ...item, visible: () => true } : item,
+        ),
+      ].sort(sortItems),
+    );
   }
 
   removeItem(id: string | number) {
