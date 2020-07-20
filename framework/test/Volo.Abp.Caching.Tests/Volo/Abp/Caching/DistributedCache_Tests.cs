@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Testing;
@@ -539,6 +540,148 @@ namespace Volo.Abp.Caching
             cacheValue =  await personCache.GetAsync(key, considerUow: false);
             cacheValue.ShouldBeNull();
         }
+
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_GetManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+            var testKeys = new[] {testkey, testkey2};
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+                var cacheValue = await personCache.GetManyAsync(testKeys, considerUow: true);
+               cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+
+               await personCache.SetManyAsync(new List<KeyValuePair<string, PersonCacheItem>>
+               {
+                   new KeyValuePair<string, PersonCacheItem>(testkey, new PersonCacheItem("john")),
+                   new KeyValuePair<string, PersonCacheItem>(testkey2, new PersonCacheItem("jack"))
+               }, considerUow: true);
+
+               cacheValue = await personCache.GetManyAsync(testKeys, considerUow: true);
+               cacheValue.Where(x => x.Value != null).ShouldNotBeEmpty();
+               cacheValue.ShouldContain(x => x.Value.Name == "john" || x.Value.Name == "jack");
+
+               cacheValue =  await personCache.GetManyAsync(testKeys, considerUow: false);
+               cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+
+               uow.OnCompleted(async () =>
+               {
+                   cacheValue = await personCache.GetManyAsync(testKeys, considerUow: false);
+                   cacheValue.ShouldNotBeEmpty();
+                   cacheValue.ShouldContain(x => x.Value.Name == "john" || x.Value.Name == "jack");
+               });
+
+               await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_GetManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+            var testKeys = new[] {testkey, testkey2};
+
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue = await personCache.GetManyAsync(testKeys, considerUow: false);
+            cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                cacheValue = await personCache.GetManyAsync(testKeys, considerUow: true);
+                cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+
+                await personCache.SetManyAsync(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new KeyValuePair<string, PersonCacheItem>(testkey, new PersonCacheItem("john")),
+                    new KeyValuePair<string, PersonCacheItem>(testkey2, new PersonCacheItem("jack"))
+                }, considerUow: true);
+
+                cacheValue = await personCache.GetManyAsync(testKeys, considerUow: true);
+                cacheValue.Where(x => x.Value != null).ShouldNotBeEmpty();
+                cacheValue.ShouldContain(x => x.Value.Name == "john" || x.Value.Name == "jack");
+
+                cacheValue =  await personCache.GetManyAsync(testKeys, considerUow: false);
+                cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+            }
+
+            cacheValue = await personCache.GetManyAsync(testKeys, considerUow: false);
+            cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+        }
+
+
+        [Fact]
+        public async Task Cache_Should_Only_Available_In_Uow_For_SetManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+            var testKeys = new[] {testkey, testkey2};
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+                await personCache.SetManyAsync(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new KeyValuePair<string, PersonCacheItem>(testkey, new PersonCacheItem("john")),
+                    new KeyValuePair<string, PersonCacheItem>(testkey, new PersonCacheItem("jack"))
+                }, considerUow: true);
+
+                var cacheValue = await personCache.GetManyAsync(testKeys, considerUow: true);
+                cacheValue.Where(x => x.Value != null).ShouldNotBeEmpty();
+                cacheValue.ShouldContain(x => x.Value.Name == "john" || x.Value.Name == "jack");
+
+                cacheValue =  await personCache.GetManyAsync(testKeys, considerUow: false);
+                cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+
+                uow.OnCompleted(async () =>
+                {
+                    var cacheValue = await personCache.GetManyAsync(testKeys, considerUow: false);
+                    cacheValue.Where(x => x.Value != null).ShouldNotBeEmpty();
+                    cacheValue.ShouldContain(x => x.Value.Name == "john" || x.Value.Name == "jack");
+                });
+
+                await uow.CompleteAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Cache_Should_Rollback_With_Uow_For_SetManyAsync()
+        {
+            var testkey = "testkey";
+            var testkey2 = "testkey2";
+            var testKeys = new[] {testkey, testkey2};
+
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            var cacheValue = await personCache.GetManyAsync(testKeys, considerUow: false);
+            cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                await personCache.SetManyAsync(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new KeyValuePair<string, PersonCacheItem>(testkey, new PersonCacheItem("john")),
+                    new KeyValuePair<string, PersonCacheItem>(testkey, new PersonCacheItem("jack"))
+                }, considerUow: true);
+
+                cacheValue = await personCache.GetManyAsync(testKeys, considerUow: true);
+                cacheValue.Where(x => x.Value != null).ShouldNotBeEmpty();
+                cacheValue.ShouldContain(x => x.Value.Name == "john" || x.Value.Name == "jack");
+
+                cacheValue =  await personCache.GetManyAsync(testKeys, considerUow: false);
+                cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+            }
+
+            cacheValue = await personCache.GetManyAsync(testKeys, considerUow: false);
+            cacheValue.Where(x => x.Value != null).ShouldBeEmpty();
+        }
+
 
         [Fact]
         public async Task Should_Set_And_Get_Multiple_Items_Async()
