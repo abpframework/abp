@@ -166,7 +166,7 @@ namespace Acme.BookStore.Authors
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
 
-            var existingAuthor = _authorRepository.FindByNameAsync(name);
+            var existingAuthor = await _authorRepository.FindByNameAsync(name);
             if (existingAuthor != null)
             {
                 throw new AuthorAlreadyExistsException(name);
