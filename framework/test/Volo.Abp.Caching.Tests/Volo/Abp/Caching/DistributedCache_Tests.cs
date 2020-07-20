@@ -181,10 +181,10 @@ namespace Volo.Abp.Caching
             factoryExecuted = false;
 
             cacheItem = await personCache.GetOrAddAsync(cacheKey,
-                async () =>
+                () =>
                 {
                     factoryExecuted = true;
-                    return new PersonCacheItem(personName);
+                    return Task.FromResult(new PersonCacheItem(personName));
                 });
 
             factoryExecuted.ShouldBeFalse();
@@ -539,7 +539,7 @@ namespace Volo.Abp.Caching
             cacheValue =  await personCache.GetAsync(key, considerUow: false);
             cacheValue.ShouldBeNull();
         }
-        
+
         [Fact]
         public async Task Should_Set_And_Get_Multiple_Items_Async()
         {
@@ -547,7 +547,7 @@ namespace Volo.Abp.Caching
 
             await personCache.SetManyAsync(new[]
             {
-                new KeyValuePair<string, PersonCacheItem>("john", new PersonCacheItem("John Nash")), 
+                new KeyValuePair<string, PersonCacheItem>("john", new PersonCacheItem("John Nash")),
                 new KeyValuePair<string, PersonCacheItem>("thomas", new PersonCacheItem("Thomas Moore"))
             });
 
@@ -557,7 +557,7 @@ namespace Volo.Abp.Caching
                 "thomas",
                 "baris" //doesn't exist
             });
-            
+
             cacheItems.Length.ShouldBe(3);
             cacheItems[0].Key.ShouldBe("john");
             cacheItems[0].Value.Name.ShouldBe("John Nash");
@@ -565,7 +565,7 @@ namespace Volo.Abp.Caching
             cacheItems[1].Value.Name.ShouldBe("Thomas Moore");
             cacheItems[2].Key.ShouldBe("baris");
             cacheItems[2].Value.ShouldBeNull();
-            
+
             (await personCache.GetAsync("john")).Name.ShouldBe("John Nash");
             (await personCache.GetAsync("baris")).ShouldBeNull();
         }

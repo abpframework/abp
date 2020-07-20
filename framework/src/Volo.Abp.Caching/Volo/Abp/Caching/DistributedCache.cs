@@ -53,7 +53,7 @@ namespace Volo.Abp.Caching
     public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheItem, TCacheKey>
         where TCacheItem : class
     {
-        public const string DistributedCacheName = "AbpDistributedCache";
+        public const string UowCacheName = "AbpDistributedCache";
 
         public ILogger<DistributedCache<TCacheItem, TCacheKey>> Logger { get; set; }
 
@@ -142,13 +142,13 @@ namespace Volo.Abp.Caching
         /// Gets a cache item with the given key. If no cache item is found for the given key then returns null.
         /// </summary>
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
-        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <returns>The cache item, or null.</returns>
         public virtual TCacheItem Get(
             TCacheKey key,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -183,8 +183,8 @@ namespace Volo.Abp.Caching
 
         public virtual KeyValuePair<TCacheKey, TCacheItem>[] GetMany(
             IEnumerable<TCacheKey> keys,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
             var keyArray = keys.ToArray();
 
@@ -193,19 +193,19 @@ namespace Volo.Abp.Caching
             {
                 return GetManyFallback(
                     keyArray,
-                    considerUow,
-                    hideErrors
+                    hideErrors,
+                    considerUow
                 );
             }
 
-            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
             var notCachedKeys = new List<TCacheKey>();
+            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
             if (ShouldConsiderUow(considerUow))
             {
-                var cache = GetUnitOfWorkCache();
+                var uowCache = GetUnitOfWorkCache();
                 foreach (var key in keyArray)
                 {
-                    var value = cache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
+                    var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
                     if (value != null)
                     {
                         cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
@@ -232,7 +232,7 @@ namespace Volo.Abp.Caching
                 if (hideErrors == true)
                 {
                     HandleException(ex);
-                    return ToCacheItemsWithDefaultValues(readKeys);
+                    return ToCacheItemsWithDefaultValues(keyArray);
                 }
 
                 throw;
@@ -243,8 +243,8 @@ namespace Volo.Abp.Caching
 
         protected virtual KeyValuePair<TCacheKey, TCacheItem>[] GetManyFallback(
             TCacheKey[] keys,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -253,7 +253,7 @@ namespace Volo.Abp.Caching
                 return keys
                     .Select(key => new KeyValuePair<TCacheKey, TCacheItem>(
                             key,
-                            Get(key, considerUow, hideErrors: false)
+                            Get(key, false, considerUow)
                         )
                     ).ToArray();
             }
@@ -271,8 +271,8 @@ namespace Volo.Abp.Caching
 
         public virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyAsync(
             IEnumerable<TCacheKey> keys,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             var keyArray = keys.ToArray();
@@ -282,20 +282,20 @@ namespace Volo.Abp.Caching
             {
                 return await GetManyFallbackAsync(
                     keyArray,
-                    considerUow,
                     hideErrors,
+                    considerUow,
                     token
                 );
             }
 
-            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
             var notCachedKeys = new List<TCacheKey>();
+            var cachedValues = new List<KeyValuePair<TCacheKey, TCacheItem>>();
             if (ShouldConsiderUow(considerUow))
             {
-                var cache = GetUnitOfWorkCache();
+                var uowCache = GetUnitOfWorkCache();
                 foreach (var key in keyArray)
                 {
-                    var value = cache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
+                    var value = uowCache.GetOrDefault(key)?.GetUnRemovedValueOrNull();
                     if (value != null)
                     {
                         cachedValues.Add(new KeyValuePair<TCacheKey, TCacheItem>(key, value));
@@ -326,7 +326,7 @@ namespace Volo.Abp.Caching
                 if (hideErrors == true)
                 {
                     await HandleExceptionAsync(ex);
-                    return ToCacheItemsWithDefaultValues(readKeys);
+                    return ToCacheItemsWithDefaultValues(keyArray);
                 }
 
                 throw;
@@ -337,8 +337,8 @@ namespace Volo.Abp.Caching
 
         protected virtual async Task<KeyValuePair<TCacheKey, TCacheItem>[]> GetManyFallbackAsync(
             TCacheKey[] keys,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
@@ -351,7 +351,7 @@ namespace Volo.Abp.Caching
                 {
                     result.Add(new KeyValuePair<TCacheKey, TCacheItem>(
                         key,
-                        await GetAsync(key, considerUow, hideErrors: false, token: token))
+                        await GetAsync(key, false, considerUow, token: token))
                     );
                 }
 
@@ -373,14 +373,14 @@ namespace Volo.Abp.Caching
         /// Gets a cache item with the given key. If no cache item is found for the given key then returns null.
         /// </summary>
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
-        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The cache item, or null.</returns>
         public virtual async Task<TCacheItem> GetAsync(
             TCacheKey key,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
@@ -429,17 +429,17 @@ namespace Volo.Abp.Caching
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
         /// <param name="factory">The factory delegate is used to provide the cache item when no cache item is found for the given <paramref name="key" />.</param>
         /// <param name="optionsFactory">The cache options for the factory delegate.</param>
-        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <returns>The cache item.</returns>
         public virtual TCacheItem GetOrAdd(
             TCacheKey key,
             Func<TCacheItem> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
-            var value = Get(key, considerUow, hideErrors);
+            var value = Get(key, hideErrors, considerUow);
             if (value != null)
             {
                 return value;
@@ -447,7 +447,7 @@ namespace Volo.Abp.Caching
 
             using (SyncSemaphore.Lock())
             {
-                value = Get(key, considerUow, hideErrors);
+                value = Get(key, hideErrors, considerUow);
                 if (value != null)
                 {
                     return value;
@@ -468,7 +468,7 @@ namespace Volo.Abp.Caching
                     }
                 }
 
-                Set(key, value, optionsFactory?.Invoke(), considerUow, hideErrors);
+                Set(key, value, optionsFactory?.Invoke(), hideErrors, considerUow);
             }
 
             return value;
@@ -489,12 +489,12 @@ namespace Volo.Abp.Caching
             TCacheKey key,
             Func<Task<TCacheItem>> factory,
             Func<DistributedCacheEntryOptions> optionsFactory = null,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             token = CancellationTokenProvider.FallbackToProvider(token);
-            var value = await GetAsync(key, considerUow, hideErrors, token);
+            var value = await GetAsync(key, hideErrors, considerUow, token);
             if (value != null)
             {
                 return value;
@@ -502,7 +502,7 @@ namespace Volo.Abp.Caching
 
             using (await SyncSemaphore.LockAsync(token))
             {
-                value = await GetAsync(key, considerUow, hideErrors, token);
+                value = await GetAsync(key, hideErrors, considerUow, token);
                 if (value != null)
                 {
                     return value;
@@ -523,7 +523,7 @@ namespace Volo.Abp.Caching
                     }
                 }
 
-                await SetAsync(key, value, optionsFactory?.Invoke(), considerUow, hideErrors, token);
+                await SetAsync(key, value, optionsFactory?.Invoke(), hideErrors, considerUow, token);
             }
 
             return value;
@@ -535,14 +535,14 @@ namespace Volo.Abp.Caching
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
         /// <param name="value">The cache item value to set in the cache.</param>
         /// <param name="options">The cache options for the value.</param>
-        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         public virtual void Set(
             TCacheKey key,
             TCacheItem value,
             DistributedCacheEntryOptions options = null,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
             void SetRealCache()
             {
@@ -570,14 +570,14 @@ namespace Volo.Abp.Caching
 
             if (ShouldConsiderUow(considerUow))
             {
-                var cache = GetUnitOfWorkCache();
-                if (cache.TryGetValue(key, out _))
+                var uowCache = GetUnitOfWorkCache();
+                if (uowCache.TryGetValue(key, out _))
                 {
-                    cache[key].SetValue(value);
+                    uowCache[key].SetValue(value);
                 }
                 else
                 {
-                    cache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
+                    uowCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
@@ -598,16 +598,16 @@ namespace Volo.Abp.Caching
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
         /// <param name="value">The cache item value to set in the cache.</param>
         /// <param name="options">The cache options for the value.</param>
-        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
         public virtual async Task SetAsync(
             TCacheKey key,
             TCacheItem value,
             DistributedCacheEntryOptions options = null,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             async Task SetRealCache()
@@ -637,14 +637,14 @@ namespace Volo.Abp.Caching
 
            if (ShouldConsiderUow(considerUow))
            {
-               var cache = GetUnitOfWorkCache();
-               if (cache.TryGetValue(key, out _))
+               var uowCache = GetUnitOfWorkCache();
+               if (uowCache.TryGetValue(key, out _))
                {
-                   cache[key].SetValue(value);
+                   uowCache[key].SetValue(value);
                }
                else
                {
-                   cache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
+                   uowCache.Add(key, new UnitOfWorkCacheItem<TCacheItem>(value));
                }
 
                // ReSharper disable once PossibleNullReferenceException
@@ -659,8 +659,8 @@ namespace Volo.Abp.Caching
         public void SetMany(
             IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
             DistributedCacheEntryOptions options = null,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
             var itemsArray = items.ToArray();
 
@@ -670,8 +670,8 @@ namespace Volo.Abp.Caching
                 SetManyFallback(
                     itemsArray,
                     options,
-                    considerUow,
-                    hideErrors
+                    hideErrors,
+                    considerUow
                 );
 
                 return;
@@ -702,17 +702,17 @@ namespace Volo.Abp.Caching
 
             if (ShouldConsiderUow(considerUow))
             {
-                var cache = GetUnitOfWorkCache();
+                var uowCache = GetUnitOfWorkCache();
 
                 foreach (var pair in itemsArray)
                 {
-                    if (cache.TryGetValue(pair.Key, out _))
+                    if (uowCache.TryGetValue(pair.Key, out _))
                     {
-                        cache[pair.Key].SetValue(pair.Value);
+                        uowCache[pair.Key].SetValue(pair.Value);
                     }
                     else
                     {
-                        cache.Add(pair.Key, new UnitOfWorkCacheItem<TCacheItem>(pair.Value));
+                        uowCache.Add(pair.Key, new UnitOfWorkCacheItem<TCacheItem>(pair.Value));
                     }
                 }
 
@@ -732,8 +732,8 @@ namespace Volo.Abp.Caching
         protected virtual void SetManyFallback(
             KeyValuePair<TCacheKey, TCacheItem>[] items,
             DistributedCacheEntryOptions options = null,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -745,8 +745,8 @@ namespace Volo.Abp.Caching
                         item.Key,
                         item.Value,
                         options,
-                        considerUow,
-                        hideErrors: false
+                        false,
+                        considerUow
                     );
                 }
             }
@@ -765,8 +765,8 @@ namespace Volo.Abp.Caching
         public virtual async Task SetManyAsync(
             IEnumerable<KeyValuePair<TCacheKey, TCacheItem>> items,
             DistributedCacheEntryOptions options = null,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             var itemsArray = items.ToArray();
@@ -777,8 +777,8 @@ namespace Volo.Abp.Caching
                 await SetManyFallbackAsync(
                     itemsArray,
                     options,
-                    considerUow,
                     hideErrors,
+                    considerUow,
                     token
                 );
 
@@ -811,17 +811,17 @@ namespace Volo.Abp.Caching
 
             if (ShouldConsiderUow(considerUow))
             {
-                var cache = GetUnitOfWorkCache();
+                var uowCache = GetUnitOfWorkCache();
 
                 foreach (var pair in itemsArray)
                 {
-                    if (cache.TryGetValue(pair.Key, out _))
+                    if (uowCache.TryGetValue(pair.Key, out _))
                     {
-                        cache[pair.Key].SetValue(pair.Value);
+                        uowCache[pair.Key].SetValue(pair.Value);
                     }
                     else
                     {
-                        cache.Add(pair.Key, new UnitOfWorkCacheItem<TCacheItem>(pair.Value));
+                        uowCache.Add(pair.Key, new UnitOfWorkCacheItem<TCacheItem>(pair.Value));
                     }
                 }
 
@@ -837,8 +837,8 @@ namespace Volo.Abp.Caching
         protected virtual async Task SetManyFallbackAsync(
             KeyValuePair<TCacheKey, TCacheItem>[] items,
             DistributedCacheEntryOptions options = null,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
@@ -851,8 +851,8 @@ namespace Volo.Abp.Caching
                         item.Key,
                         item.Value,
                         options,
+                        false,
                         considerUow,
-                        hideErrors: false,
                         token: token
                     );
                 }
@@ -934,8 +934,8 @@ namespace Volo.Abp.Caching
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
         public virtual void Remove(
             TCacheKey key,
-            bool considerUow = false,
-            bool? hideErrors = null)
+            bool? hideErrors = null,
+            bool considerUow = false)
         {
             void RemoveRealCache()
             {
@@ -959,10 +959,10 @@ namespace Volo.Abp.Caching
 
             if (ShouldConsiderUow(considerUow))
             {
-                var cache = GetUnitOfWorkCache();
-                if (cache.TryGetValue(key, out _))
+                var uowCache = GetUnitOfWorkCache();
+                if (uowCache.TryGetValue(key, out _))
                 {
-                    cache[key].RemoveValue();
+                    uowCache[key].RemoveValue();
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
@@ -982,14 +982,14 @@ namespace Volo.Abp.Caching
         /// Removes the cache item for given key from cache.
         /// </summary>
         /// <param name="key">The key of cached item to be retrieved from the cache.</param>
-        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="considerUow">This will store the cache in the current unit of work until the end of the current unit of work does not really affect the cache.</param>
         /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
         /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
         public virtual async Task RemoveAsync(
             TCacheKey key,
-            bool considerUow = false,
             bool? hideErrors = null,
+            bool considerUow = false,
             CancellationToken token = default)
         {
             async Task RemoveRealCache()
@@ -1014,10 +1014,10 @@ namespace Volo.Abp.Caching
 
             if (ShouldConsiderUow(considerUow))
             {
-                var cache = GetUnitOfWorkCache();
-                if (cache.TryGetValue(key, out _))
+                var uowCache = GetUnitOfWorkCache();
+                if (uowCache.TryGetValue(key, out _))
                 {
-                    cache[key].RemoveValue();
+                    uowCache[key].RemoveValue();
                 }
 
                 // ReSharper disable once PossibleNullReferenceException
@@ -1104,14 +1104,14 @@ namespace Volo.Abp.Caching
 
         protected virtual string GetUnitOfWorkCacheKey()
         {
-            return DistributedCacheName + CacheName;
+            return UowCacheName + CacheName;
         }
 
         protected virtual Dictionary<TCacheKey, UnitOfWorkCacheItem<TCacheItem>> GetUnitOfWorkCache()
         {
             if (UnitOfWorkManager.Current == null)
             {
-                throw new AbpException($"There is no unit of work in the current context, The {GetType().Name} can only be used in a unit of work.");
+                throw new AbpException($"There is no active UOW.");
             }
 
             return UnitOfWorkManager.Current.GetOrAddItem(GetUnitOfWorkCacheKey(),
