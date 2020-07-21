@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli.ProjectModification
             EfCoreMigrationAdder efCoreMigrationAdder,
             DerivedClassFinder derivedClassFinder,
             ProjectNpmPackageAdder projectNpmPackageAdder,
-            NpmGlobalPackagesChecker npmGlobalPackagesChecker, 
+            NpmGlobalPackagesChecker npmGlobalPackagesChecker,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
             SourceCodeDownloadService sourceCodeDownloadService,
             SolutionFileModifier solutionFileModifier,
@@ -159,7 +159,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 Directory.Delete(demoFolder, true);
             }
-            
+
             var hostFolder = Path.Combine(targetModuleFolder, "host");
             if (Directory.Exists(hostFolder))
             {
@@ -186,7 +186,9 @@ namespace Volo.Abp.Cli.ProjectModification
                 await ProjectNugetPackageAdder.AddAsync(targetProjectFile, nugetPackage);
             }
 
-            if (!module.NpmPackages.IsNullOrEmpty())
+            var mvcNpmPackages = module.NpmPackages?.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc)).ToList();
+
+            if (!mvcNpmPackages.IsNullOrEmpty())
             {
                 var targetProjects = ProjectFinder.FindNpmTargetProjectFile(projectFiles);
                 if (targetProjects.Any())
@@ -195,8 +197,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                     foreach (var targetProject in targetProjects)
                     {
-                        foreach (var npmPackage in module.NpmPackages.Where(p =>
-                            p.ApplicationType.HasFlag(NpmApplicationType.Mvc)))
+                        foreach (var npmPackage in mvcNpmPackages)
                         {
                             await ProjectNpmPackageAdder.AddAsync(Path.GetDirectoryName(targetProject), npmPackage);
                         }
@@ -222,7 +223,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
 
             var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"));
-            
+
             if (dbMigrationsProject == null)
             {
                 Logger.LogDebug("Solution doesn't have a \".DbMigrations\" project.");
@@ -241,7 +242,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (addedNewBuilder && !skipDbMigrations)
             {
-                EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject); 
+                EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject);
             }
         }
 
