@@ -65,6 +65,14 @@ export class ConfigState {
     return selector;
   }
 
+  static getFeature(key: string) {
+    const selector = createSelector([ConfigState], (state: Config.State) => {
+      return snq(() => state.features.values[key]);
+    });
+
+    return selector;
+  }
+
   static getSetting(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
       return snq(() => state.setting.values[key]);
