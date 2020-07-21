@@ -36,7 +36,7 @@ namespace Volo.Abp.BlobStoring.Aws
 
                 if (configuration.CreateContainerIfNotExists)
                 {
-                    await amazonS3Client.PutBucketAsync(containerName);
+                    await CreateContainerIfNotExists(amazonS3Client, containerName);
                 }
 
                 await amazonS3Client.PutObjectAsync(new PutObjectRequest
@@ -108,7 +108,6 @@ namespace Volo.Abp.BlobStoring.Aws
         protected virtual async Task<AmazonS3Client> GetAmazonS3Client(BlobProviderArgs args)
         {
             var configuration = args.Configuration.GetAwsConfiguration();
-
             return await AmazonS3ClientFactory.GetAmazonS3Client(configuration);
         }
 
@@ -135,6 +134,17 @@ namespace Volo.Abp.BlobStoring.Aws
             }
 
             return true;
+        }
+
+        protected virtual async Task CreateContainerIfNotExists(AmazonS3Client amazonS3Client, string containerName)
+        {
+            if (!await AmazonS3Util.DoesS3BucketExistV2Async(amazonS3Client, containerName))
+            {
+                await amazonS3Client.PutBucketAsync(new PutBucketRequest
+                {
+                    BucketName = containerName
+                });
+            }
         }
 
         private static string GetContainerName(BlobProviderArgs args)

@@ -1,13 +1,11 @@
 ﻿using System;
-using Volo.Abp.Caching;
 
 namespace Volo.Abp.BlobStoring.Aws
 {
     [Serializable]
-    [CacheName("TemporaryCredentials")]
-    public class TemporaryCredentialsCacheItem
+    public class AwsTemporaryCredentialsCacheItem
     {
-        public const string Key = "AwsTemporaryCredentialsCache";
+        public const string Key = "AwsBlobTemporaryCredentialsCache";
 
         public string AccessKeyId { get; set; }
 
@@ -15,12 +13,12 @@ namespace Volo.Abp.BlobStoring.Aws
 
         public string SessionToken { get; set; }
 
-        public TemporaryCredentialsCacheItem()
+        public AwsTemporaryCredentialsCacheItem()
         {
 
         }
 
-        public TemporaryCredentialsCacheItem(string accessKeyId,string secretAccessKey,string sessionToken)
+        public AwsTemporaryCredentialsCacheItem(string accessKeyId,string secretAccessKey,string sessionToken)
         {
             AccessKeyId = accessKeyId;
             SecretAccessKey = secretAccessKey;

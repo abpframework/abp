@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Amazon;
 using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
@@ -13,9 +14,9 @@ namespace Volo.Abp.BlobStoring.Aws
 {
     public class DefaultAmazonS3ClientFactory : IAmazonS3ClientFactory, ITransientDependency
     {
-        protected IDistributedCache<TemporaryCredentialsCacheItem> Cache { get; }
+        protected IDistributedCache<AwsTemporaryCredentialsCacheItem> Cache { get; }
 
-        public DefaultAmazonS3ClientFactory(IDistributedCache<TemporaryCredentialsCacheItem> cache)
+        public DefaultAmazonS3ClientFactory(IDistributedCache<AwsTemporaryCredentialsCacheItem> cache)
         {
             Cache = cache;
         }
@@ -23,31 +24,41 @@ namespace Volo.Abp.BlobStoring.Aws
         public virtual async Task<AmazonS3Client> GetAmazonS3Client(
             AwsBlobProviderConfiguration configuration)
         {
-            if (configuration.UseAwsCredentials)
+            var region = RegionEndpoint.GetBySystemName(configuration.Region);
+
+            if (configuration.UseCredentials)
             {
-                return new AmazonS3Client(GetAwsCredentials(configuration), configuration.Region);
+                var awsCredentials = GetAwsCredentials(configuration);
+                return awsCredentials == null
+                    ? new AmazonS3Client(region)
+                    : new AmazonS3Client(GetAwsCredentials(configuration), region);
             }
 
             if (configuration.UseTemporaryCredentials)
             {
-                return new AmazonS3Client(await GetTemporaryCredentialsAsync(configuration), configuration.Region);
+                return new AmazonS3Client(await GetTemporaryCredentialsAsync(configuration), region);
             }
 
             if (configuration.UseTemporaryFederatedCredentials)
             {
                 return new AmazonS3Client(await GetTemporaryFederatedCredentialsAsync(configuration),
-                    configuration.Region);
+                    region);
             }
 
             Check.NotNullOrWhiteSpace(configuration.AccessKeyId, nameof(configuration.AccessKeyId));
             Check.NotNullOrWhiteSpace(configuration.SecretAccessKey, nameof(configuration.SecretAccessKey));
 
-            return new AmazonS3Client(configuration.AccessKeyId, configuration.SecretAccessKey);
+            return new AmazonS3Client(configuration.AccessKeyId, configuration.SecretAccessKey, configuration.Region);
         }
 
         protected virtual AWSCredentials GetAwsCredentials(
             AwsBlobProviderConfiguration configuration)
         {
+            if (configuration.ProfileName.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             var chain = new CredentialProfileStoreChain(configuration.ProfilesLocation);
 
             if (chain.TryGetAWSCredentials(configuration.ProfileName, out var awsCredentials))
@@ -61,7 +72,7 @@ namespace Volo.Abp.BlobStoring.Aws
         protected virtual async Task<SessionAWSCredentials> GetTemporaryCredentialsAsync(
             AwsBlobProviderConfiguration configuration)
         {
-            var temporaryCredentialsCache = await Cache.GetAsync(TemporaryCredentialsCacheItem.Key);
+            var temporaryCredentialsCache = await Cache.GetAsync(AwsTemporaryCredentialsCacheItem.Key);
 
             if (temporaryCredentialsCache == null)
             {
@@ -74,7 +85,10 @@ namespace Volo.Abp.BlobStoring.Aws
                 }
                 else
                 {
-                    stsClient = new AmazonSecurityTokenServiceClient(GetAwsCredentials(configuration));
+                    var awsCredentials = GetAwsCredentials(configuration);
+                    stsClient = awsCredentials == null
+                        ? new AmazonSecurityTokenServiceClient()
+                        : new AmazonSecurityTokenServiceClient(awsCredentials);
                 }
 
                 using (stsClient)
@@ -105,8 +119,9 @@ namespace Volo.Abp.BlobStoring.Aws
             AwsBlobProviderConfiguration configuration)
         {
             Check.NotNullOrWhiteSpace(configuration.Name, nameof(configuration.Name));
+            Check.NotNullOrWhiteSpace(configuration.Policy, nameof(configuration.Policy));
 
-            var temporaryCredentialsCache = await Cache.GetAsync(TemporaryCredentialsCacheItem.Key);
+            var temporaryCredentialsCache = await Cache.GetAsync(AwsTemporaryCredentialsCacheItem.Key);
 
             if (temporaryCredentialsCache == null)
             {
@@ -119,7 +134,10 @@ namespace Volo.Abp.BlobStoring.Aws
                 }
                 else
                 {
-                    stsClient = new AmazonSecurityTokenServiceClient(GetAwsCredentials(configuration));
+                    var awsCredentials = GetAwsCredentials(configuration);
+                    stsClient = awsCredentials == null
+                        ? new AmazonSecurityTokenServiceClient()
+                        : new AmazonSecurityTokenServiceClient(awsCredentials);
                 }
 
                 using (stsClient)
@@ -148,15 +166,15 @@ namespace Volo.Abp.BlobStoring.Aws
             return sessionCredentials;
         }
 
-        private async Task<TemporaryCredentialsCacheItem> SetTemporaryCredentialsCache(
+        private async Task<AwsTemporaryCredentialsCacheItem> SetTemporaryCredentialsCache(
             Credentials credentials,
             int durationSeconds)
         {
-            var temporaryCredentialsCache = new TemporaryCredentialsCacheItem(credentials.AccessKeyId,
+            var temporaryCredentialsCache = new AwsTemporaryCredentialsCacheItem(credentials.AccessKeyId,
                 credentials.SecretAccessKey,
                 credentials.SessionToken);
 
-            await Cache.SetAsync(TemporaryCredentialsCacheItem.Key, temporaryCredentialsCache,
+            await Cache.SetAsync(AwsTemporaryCredentialsCacheItem.Key, temporaryCredentialsCache,
                 new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(durationSeconds - 10)

@@ -9,43 +9,43 @@ namespace Volo.Abp.BlobStoring.Aws
     {
         public string AccessKeyId
         {
-            get => _containerConfiguration.GetConfiguration<string>(AwsBlobProviderConfigurationNames.AccessKeyId);
+            get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.AccessKeyId);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.AccessKeyId, value);
         }
 
         public string SecretAccessKey
         {
-            get => _containerConfiguration.GetConfiguration<string>(AwsBlobProviderConfigurationNames.SecretAccessKey);
+            get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.SecretAccessKey);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.SecretAccessKey, value);
         }
 
-        public bool UseAwsCredentials
+        public bool UseCredentials
         {
-            get => _containerConfiguration.GetConfiguration<bool>(AwsBlobProviderConfigurationNames.UseAwsCredentials);
-            set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.UseAwsCredentials, value);
+            get => _containerConfiguration.GetConfigurationOrDefault(AwsBlobProviderConfigurationNames.UseCredentials,false);
+            set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.UseCredentials, value);
         }
 
         public bool UseTemporaryCredentials
         {
-            get => _containerConfiguration.GetConfiguration<bool>(AwsBlobProviderConfigurationNames.UseTemporaryCredentials);
+            get => _containerConfiguration.GetConfigurationOrDefault(AwsBlobProviderConfigurationNames.UseTemporaryCredentials,false);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.UseTemporaryCredentials, value);
         }
 
         public bool UseTemporaryFederatedCredentials
         {
-            get => _containerConfiguration.GetConfiguration<bool>(AwsBlobProviderConfigurationNames.UseTemporaryFederatedCredentials);
+            get => _containerConfiguration.GetConfigurationOrDefault(AwsBlobProviderConfigurationNames.UseTemporaryFederatedCredentials,false);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.UseTemporaryFederatedCredentials, value);
         }
 
         public string ProfileName
         {
-            get => _containerConfiguration.GetConfiguration<string>(AwsBlobProviderConfigurationNames.ProfileName);
+            get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ProfileName);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ProfileName, value);
         }
 
         public string ProfilesLocation
         {
-            get => _containerConfiguration.GetConfiguration<string>(AwsBlobProviderConfigurationNames.ProfilesLocation);
+            get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ProfilesLocation);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ProfilesLocation, value);
         }
 
@@ -66,13 +66,13 @@ namespace Volo.Abp.BlobStoring.Aws
 
         public string Policy
         {
-            get => _containerConfiguration.GetConfiguration<string>(AwsBlobProviderConfigurationNames.Policy);
+            get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.Policy);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Policy, value);
         }
 
-        public RegionEndpoint Region
+        public string Region
         {
-            get => _containerConfiguration.GetConfiguration<RegionEndpoint>(AwsBlobProviderConfigurationNames.Region);
+            get => _containerConfiguration.GetConfiguration<string>(AwsBlobProviderConfigurationNames.Region);
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Region, Check.NotNull(value, nameof(value)));
         }
 

@@ -4,7 +4,7 @@
     {
         public const string AccessKeyId = "Aws.AccessKeyId";
         public const string SecretAccessKey = "Aws.SecretAccessKey";
-        public const string UseAwsCredentials = "Aws.UseAWSCredentials";
+        public const string UseCredentials = "Aws.UseCredentials";
         public const string UseTemporaryCredentials = "Aws.UseTemporaryCredentials";
         public const string UseTemporaryFederatedCredentials = "Aws.UseTemporaryFederatedCredentials";
         public const string ProfileName = "Aws.ProfileName";
