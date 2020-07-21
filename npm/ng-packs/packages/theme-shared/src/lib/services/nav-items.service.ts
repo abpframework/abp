@@ -24,7 +24,7 @@ export class NavItemsService {
   removeItem(id: string | number) {
     const index = this.items.findIndex(item => item.id === id);
 
-    if (index < -1) return;
+    if (index < 0) return;
 
     const items = [...this.items.slice(0, index), ...this.items.slice(index + 1)];
     this._items$.next(items);
@@ -33,7 +33,7 @@ export class NavItemsService {
   patchItem(id: string | number, item: Partial<Omit<NavItem, 'id'>>) {
     const index = this.items.findIndex(i => i.id === id);
 
-    if (index < -1) return;
+    if (index < 0) return;
 
     const items = [...this.items];
     items[index] = new NavItem({ ...items[index], ...item });
