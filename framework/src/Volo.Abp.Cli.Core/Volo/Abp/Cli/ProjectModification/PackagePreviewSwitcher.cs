@@ -44,10 +44,10 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
         {
-            _packageSourceManager.Add("ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
-
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
+
+            _packageSourceManager.Add(solutionFolder, "ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 solutionPath,
@@ -60,10 +60,10 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public async Task SwitchToStable(CommandLineArgs commandLineArgs)
         {
-            _packageSourceManager.Remove("ABP Nightly");
-
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
+
+            _packageSourceManager.Remove(solutionFolder, "ABP Nightly");
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 solutionPath,

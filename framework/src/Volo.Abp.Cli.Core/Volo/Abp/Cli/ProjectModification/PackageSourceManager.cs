@@ -16,12 +16,21 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger = NullLogger<PackageSourceManager>.Instance;
         }
 
-        public void Add(string sourceKey, string sourceValue)
+        public void Add(string solutionFolder, string sourceKey, string sourceValue)
         {
-            var nugetConfigPath = GetNugetConfigPath();
+            var nugetConfigPath = GetNugetConfigPath(solutionFolder);
+
+            Logger.LogInformation($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources...");
 
             if (!File.Exists(nugetConfigPath))
             {
+                File.WriteAllText(nugetConfigPath, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                              "<configuration>\n" +
+                              "    <packageSources>\n" +
+                              "        <add key=\"nuget.org\" value=\"https://api.nuget.org/v3/index.json\" />\n" +
+                              $"        <add key=\"{sourceKey}\" value=\"{sourceValue}\" />\n" +
+                              "    </packageSources>\n" +
+                              "</configuration>");
                 return;
             }
 
@@ -31,8 +40,6 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 return;
             }
-
-            Logger.LogInformation($"Adding \"{sourceValue}\" ({sourceKey}) to nuget sources...");
 
             try
             {
@@ -62,9 +69,9 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        public void Remove(string sourceKey)
+        public void Remove(string solutionFolder, string sourceKey)
         {
-            var nugetConfigPath = GetNugetConfigPath();
+            var nugetConfigPath = GetNugetConfigPath(solutionFolder);
 
             if (!File.Exists(nugetConfigPath))
             {
@@ -101,10 +108,9 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private static string GetNugetConfigPath()
+        private static string GetNugetConfigPath(string solutionFolder)
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "NuGet", "NuGet.Config");
+            return Path.Combine(solutionFolder, "NuGet.Config");
         }
 
         private static Stream GenerateStreamFromString(string s)
