@@ -69,16 +69,30 @@ builder.Entity<Author>(b =>
 {
     b.ToTable(BookStoreConsts.DbTablePrefix + "Authors",
         BookStoreConsts.DbSchema);
-
+    
     b.ConfigureByConvention();
     
     b.Property(x => x.Name)
         .IsRequired()
         .HasMaxLength(AuthorConsts.MaxNameLength);
+
+    b.HasIndex(x => x.Name);
 });
 ````
 
 This is just like done for the `Book` entity before, so no need to explain again.
+
+## Create a new Database Migration
+
+Open the **Package Manager Console** on Visual Studio and ensure that the **Default project** is `Acme.BookStore.EntityFrameworkCore.DbMigrations` in the Package Manager Console, as shown on the picture below. Also, set the `Acme.BookStore.Web` as the startup project (right click it on the solution explorer and click to "Set as Startup Project").
+
+Run the following command to create a new database migration:
+
+![bookstore-add-migration-authors](images/bookstore-add-migration-authors.png)
+
+This will create a new migration class. Then run the `Update-Database` command to create the table on the database.
+
+> See the [Microsoft's documentation](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) for more about the EF Core database migrations.
 
 {{else if DB=="Mongo"}}
 
