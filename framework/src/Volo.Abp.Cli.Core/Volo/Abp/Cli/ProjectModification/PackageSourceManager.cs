@@ -86,7 +86,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 doc.Load(GenerateStreamFromString(fileContent));
 
-                var nodes = doc.SelectNodes($"/configuration/packageSources[@key='{sourceKey}']");
+                var nodes = doc.SelectNodes($"/configuration/packageSources/add[@key='{sourceKey}']");
 
                 if (nodes != null && nodes.Count > 0)
                 {
