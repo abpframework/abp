@@ -41,6 +41,7 @@ This tutorial is organized as the following parts;
 - [Part 7: Authors: Database Integration](Part-7.md)
 - [Part 8: Authors: Application Layer](Part-8.md)
 - [Part 9: Authors: User Interface](Part-9.md)
+- [Part 10: Book to Author Relation](Part-10.md)
 
 ### Download the Source Code
 
@@ -231,11 +232,6 @@ namespace Acme.BookStore
         }
 
         public async Task SeedAsync(DataSeedContext context)
-        {
-            await CreateBooksAsync();
-        }
-
-        private async Task CreateBooksAsync()
         {
             if (await _bookRepository.GetCountAsync() > 0)
             {

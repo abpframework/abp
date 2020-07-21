@@ -41,6 +41,7 @@ This tutorial is organized as the following parts;
 - [Part 7: Authors: Database Integration](Part-7.md)
 - **Part 8: Author: Application Layer (this part)**
 - [Part 9: Authors: User Interface](Part-9.md)
+- [Part 10: Book to Author Relation](Part-10.md)
 
 ### Download the Source Code
 
@@ -406,7 +407,7 @@ CreateMap<Author, AuthorDto>();
 
 As just done for the books before, it would be good to have some initial author entities in the database. This will be good while running the application first time, but also it is very useful for the automated tests.
 
-Open the `BookStoreDataSeederContributor` in the `Acme.BookStore.Domain` project and add a new `CreateAuthorsAsync` method as shown below:
+Open the `BookStoreDataSeederContributor` in the `Acme.BookStore.Domain` project and change the file content with the code below:
 
 ````csharp
 using System;
@@ -438,23 +439,18 @@ namespace Acme.BookStore
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            await CreateAuthorsAsync(); // CALL the NEW METHOD
-            await CreateBooksAsync();
-        }
-
-        // ADDED a NEW METHOD
-        private async Task CreateAuthorsAsync()
-        {
-            if (await _authorRepository.GetCountAsync() > 0)
+            if (await _bookRepository.GetCountAsync() > 0)
             {
                 return;
             }
 
+            // ADDED SEED DATA FOR AUTHORS
+            
             await _authorRepository.InsertAsync(
                 await _authorManager.CreateAsync(
                     "George Orwell",
                     new DateTime(1903, 06, 25),
-                    "Orwell produced literary criticism and poetry..."
+                    "Orwell produced literary criticism and poetry, fiction and polemical journalism; and is best known for the allegorical novella Animal Farm (1945) and the dystopian novel Nineteen Eighty-Four (1949)."
                 )
             );
 
@@ -462,14 +458,31 @@ namespace Acme.BookStore
                 await _authorManager.CreateAsync(
                     "Douglas Adams",
                     new DateTime(1952, 03, 11),
-                    "Douglas Adams was an English author, screenwriter..."
+                    "Douglas Adams was an English author, screenwriter, essayist, humorist, satirist and dramatist. Adams was an advocate for environmentalism and conservation, a lover of fast cars, technological innovation and the Apple Macintosh, and a self-proclaimed 'radical atheist'."
                 )
             );
-        }
 
-        private async Task CreateBooksAsync()
-        {
-            //...omitted the code
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "1984",
+                    Type = BookType.Dystopia,
+                    PublishDate = new DateTime(1949, 6, 8),
+                    Price = 19.84f
+                },
+                autoSave: true
+            );
+
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "The Hitchhiker's Guide to the Galaxy",
+                    Type = BookType.ScienceFiction,
+                    PublishDate = new DateTime(1995, 9, 27),
+                    Price = 42.0f
+                },
+                autoSave: true
+            );
         }
     }
 }

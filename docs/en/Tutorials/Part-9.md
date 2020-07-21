@@ -41,6 +41,7 @@ This tutorial is organized as the following parts;
 - [Part 7: Authors: Database Integration](Part-7.md)
 - [Part 8: Authors: Application Layer](Part-8.md)
 - **Part 9: Authors: User Interface (this part)**
+- [Part 10: Book to Author Relation](Part-10.md)
 
 ### Download the Source Code
 
@@ -257,6 +258,8 @@ As you see, the admin role has no *Author Management* permissions yet. Click to 
 ![bookstore-authors-page](images/bookstore-authors-page.png)
 
 The page is fully working except *New author* and *Actions/Edit* since we haven't implemented them yet.
+
+> **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
 
 ## Create Modal
 
@@ -509,3 +512,7 @@ That's all! You can run the application and try to edit an author.
 TODO: Angular UI is being prepared...
 
 {{end}}
+
+## The Next Part
+
+See the [next part](part-10.md) of this tutorial.
