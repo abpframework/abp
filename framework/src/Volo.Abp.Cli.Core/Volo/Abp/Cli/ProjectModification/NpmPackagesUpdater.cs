@@ -226,7 +226,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             else
             {
-                if (!switchToStable && currentVersion.Split("-").Length > 1)
+                if (!switchToStable && SemanticVersion.Parse(currentVersion).IsPrerelease)
                 {
                     version = await GetLatestVersion(package, true);
                 }
@@ -263,7 +263,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var newVersion = includeReleaseCandidates
                 ? versionList.First()
-                : versionList.FirstOrDefault(v => v.Split("-").Length < 2);
+                : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
 
             var newVersionWithPrefix = $"~{newVersion}";
 
