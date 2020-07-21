@@ -40,6 +40,7 @@ This tutorial is organized as the following parts;
 - [Part 6: Authors: Domain layer](Part-6.md)
 - [Part 7: Authors: Database Integration](Part-7.md)
 - [Part 8: Authors: Application Layer](Part-8.md)
+- [Part 9: Authors: User Interface](Part-9.md)
 
 ### Download the Source Code
 

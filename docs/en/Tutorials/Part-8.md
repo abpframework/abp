@@ -40,6 +40,7 @@ This tutorial is organized as the following parts;
 - [Part 6: Authors: Domain layer](Part-6.md)
 - [Part 7: Authors: Database Integration](Part-7.md)
 - **Part 8: Author: Application Layer (this part)**
+- [Part 9: Authors: User Interface](Part-9.md)
 
 ### Download the Source Code
 
@@ -553,3 +554,7 @@ namespace Acme.BookStore.Authors
 ````
 
 Created some tests for the application service methods, which should be clear to understand.
+
+## The Next Part
+
+See the [next part](part-9.md) of this tutorial.
