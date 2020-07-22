@@ -50,14 +50,16 @@ namespace Volo.Abp.BlobStoring.Aliyun
                         aliyun.AccessKeySecret = accessKeySecret;
                         aliyun.Endpoint = endpoint;
                         //STS
+                        aliyun.UseSecurityTokenService = true;
                         aliyun.RegionId = regionId;
                         aliyun.RoleArn = roleArn;
                         aliyun.RoleSessionName = Guid.NewGuid().ToString("N");
-                        aliyun.DurationSeconds = 0;
+                        aliyun.DurationSeconds = 900;
                         aliyun.Policy = String.Empty;
                         //Other
                         aliyun.CreateContainerIfNotExists = true;
                         aliyun.ContainerName = _randomContainerName;
+                        aliyun.TemporaryCredentialsCacheKey = "297A96094D7048DBB2C28C3FDB20839A";
                         _configuration = aliyun;
                     });
                 });
