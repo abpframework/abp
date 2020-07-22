@@ -225,7 +225,7 @@
                   "path": "Blob-Storing-Minio.md"
                 },
                 {
-                  "text": "Minio Provider",
+                  "text": "AWS Provider",
                   "path": "Blob-Storing-Aws.md"
                 },
                 {
