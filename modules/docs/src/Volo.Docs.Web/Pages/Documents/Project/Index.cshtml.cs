@@ -18,6 +18,7 @@ using Volo.Docs.Models;
 using Volo.Docs.Projects;
 using Volo.Docs.Utils;
 using NuGet.Versioning;
+using Volo.Docs.Version;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -78,6 +79,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentSectionRenderer _documentSectionRenderer;
+        private readonly IVersionHelper _versionHelper;
         private readonly DocsUiOptions _uiOptions;
 
         public IndexModel(
@@ -85,7 +87,8 @@ namespace Volo.Docs.Pages.Documents.Project
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
             IOptions<DocsUiOptions> options,
-            IDocumentSectionRenderer documentSectionRenderer)
+            IDocumentSectionRenderer documentSectionRenderer,
+            IVersionHelper versionHelper)
         {
             ObjectMapperContext = typeof(DocsWebModule);
 
@@ -93,6 +96,7 @@ namespace Volo.Docs.Pages.Documents.Project
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
             _documentSectionRenderer = documentSectionRenderer;
+            _versionHelper = versionHelper;
             _uiOptions = options.Value;
         }
 
@@ -252,16 +256,15 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
-            var versions = output.Items
-                .OrderByDescending(i => SemanticVersion.Parse(i.Name), new VersionComparer())
+            var versions = _versionHelper.OrderByDescending(output.Items.ToList())
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 
-            SetLatestVersionBranchName(versions);
-
             if (versions.Any())
             {
-                LatestStableVersionInfo = versions.FirstOrDefault(v => !VersionHelper.IsPreRelease(v.Version)) ?? versions.First();
+                LatestStableVersionInfo = versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Version)) ?? versions.First();
+
+                SetLatestVersionBranchName(versions);
 
                 LatestStableVersionInfo.DisplayText = $"{LatestStableVersionInfo.DisplayText} ({DocsAppConsts.Latest})";
 
@@ -287,6 +290,8 @@ namespace Volo.Docs.Pages.Documents.Project
             }
             else
             {
+                SetLatestVersionBranchName(versions);
+
                 LatestStableVersionInfo = new VersionInfoViewModel(
                     $"{DocsAppConsts.Latest}",
                     DocsAppConsts.Latest,
@@ -305,7 +310,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             if (versions.Any() && !string.IsNullOrEmpty(Project.LatestVersionBranchName))
             {
-                versions.First(v=> !SemanticVersion.Parse(v.Version).IsPrerelease).Version = Project.LatestVersionBranchName;
+                versions.First(v=> !_versionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
             }
         }
 

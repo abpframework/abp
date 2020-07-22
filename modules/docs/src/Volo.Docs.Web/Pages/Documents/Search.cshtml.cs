@@ -11,6 +11,7 @@ using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
 using Volo.Docs.Utils;
+using Volo.Docs.Version;
 
 namespace Volo.Docs.Pages.Documents
 {
@@ -33,14 +34,17 @@ namespace Volo.Docs.Pages.Documents
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentAppService _documentAppService;
         private readonly HtmlEncoder _encoder;
+        private readonly IVersionHelper _versionHelper;
 
         public SearchModel(IProjectAppService projectAppService,
             IDocumentAppService documentAppService,
-            HtmlEncoder encoder)
+            HtmlEncoder encoder,
+            IVersionHelper versionHelper)
         {
             _projectAppService = projectAppService;
             _documentAppService = documentAppService;
             _encoder = encoder;
+            _versionHelper = versionHelper;
         }
 
         public List<DocumentSearchOutput> SearchOutputs { get; set; } = new List<DocumentSearchOutput>();
@@ -63,7 +67,7 @@ namespace Volo.Docs.Pages.Documents
             if (versions.Any() && string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
             {
                 Version = string.IsNullOrEmpty(Project.LatestVersionBranchName) ?
-                    (versions.FirstOrDefault(v=> !VersionHelper.IsPreRelease(v.Name)) ?? versions.First()).Name :
+                    (versions.FirstOrDefault(v=> !_versionHelper.IsPreRelease(v.Name)) ?? versions.First()).Name :
                     Project.LatestVersionBranchName;
             }
 
