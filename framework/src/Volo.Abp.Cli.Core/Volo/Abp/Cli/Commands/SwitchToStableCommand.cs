@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.Commands
 
             sb.AppendLine("");
             sb.AppendLine("Usage:");
-            sb.AppendLine("  abp switch-from-nightly-to-stable [options]");
+            sb.AppendLine("  abp switch-to-stable [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("-sd|--solution-directory");
