@@ -443,9 +443,134 @@ Let's see the changes we've done:
 * Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. The logic is similar to the previous method, so you can easily understand the code.
 * Created a new method: `GetAuthorLookupAsync`. This simple gets all the authors. The UI uses this method to fill a dropdown list and select and author while creating/editing books.
 
+## Unit Tests
 
+Some of the unit tests will fail since we made some changed on the `AuthorAppService`. Open the `BookAppService_Tests` in the `Books` folder of the `Acme.BookStore.Application.Tests` project and change the content as the following:
 
+```csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Authors;
+using Shouldly;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Validation;
+using Xunit;
 
+namespace Acme.BookStore.Books
+{
+    public class BookAppService_Tests : BookStoreApplicationTestBase
+    {
+        private readonly IBookAppService _bookAppService;
+        private readonly IAuthorAppService _authorAppService;
+
+        public BookAppService_Tests()
+        {
+            _bookAppService = GetRequiredService<IBookAppService>();
+            _authorAppService = GetRequiredService<IAuthorAppService>();
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_Books()
+        {
+            //Act
+            var result = await _bookAppService.GetListAsync(
+                new PagedAndSortedResultRequestDto()
+            );
+
+            //Assert
+            result.TotalCount.ShouldBeGreaterThan(0);
+            result.Items.ShouldContain(b => b.Name == "1984" &&
+                                       b.AuthorName == "George Orwell");
+        }
+        
+        [Fact]
+        public async Task Should_Create_A_Valid_Book()
+        {
+            var authors = await _authorAppService.GetListAsync(new GetAuthorListDto());
+            var firstAuthor = authors.Items.First();
+
+            //Act
+            var result = await _bookAppService.CreateAsync(
+                new CreateUpdateBookDto
+                {
+                    AuthorId = firstAuthor.Id,
+                    Name = "New test book 42",
+                    Price = 10,
+                    PublishDate = System.DateTime.Now,
+                    Type = BookType.ScienceFiction
+                }
+            );
+
+            //Assert
+            result.Id.ShouldNotBe(Guid.Empty);
+            result.Name.ShouldBe("New test book 42");
+        }
+        
+        [Fact]
+        public async Task Should_Not_Create_A_Book_Without_Name()
+        {
+            var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
+            {
+                await _bookAppService.CreateAsync(
+                    new CreateUpdateBookDto
+                    {
+                        Name = "",
+                        Price = 10,
+                        PublishDate = DateTime.Now,
+                        Type = BookType.ScienceFiction
+                    }
+                );
+            });
+
+            exception.ValidationErrors
+                .ShouldContain(err => err.MemberNames.Any(m => m == "Name"));
+        }
+    }
+}
+```
+
+* Changed the assertion condition in the `Should_Get_List_Of_Books` from `b => b.Name == "1984"` to `b => b.Name == "1984" && b.AuthorName == "George Orwell"` to check if the author name was filled.
+* Changed the `Should_Create_A_Valid_Book` method to set the `AuthorId` while creating a new book, since it is required anymore.
+
+## The User Interface
+
+### The Book List
+
+Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.BookStore.Web` project and add the following column definition between the `name` and `type` columns:
+
+````js
+...
+{
+    title: l('Name'),
+    data: "name"
+},
+
+// ADDED the NEW AUTHOR NAME COLUMN
+{
+    title: l('Author'),
+    data: "authorName"
+},
+
+{
+    title: l('Type'),
+    data: "type",
+    render: function (data) {
+        return l('Enum:BookType:' + data);
+    }
+},
+...
+````
+
+Create Modal
+
+TODO
+
+Edit Modal
+
+TODO
 
 ### Object to Object Mapping Configuration
+
+TODO
 
