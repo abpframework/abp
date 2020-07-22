@@ -225,6 +225,10 @@
                   "path": "Blob-Storing-Minio.md"
                 },
                 {
+                  "text": "AWS Provider",
+                  "path": "Blob-Storing-Aws.md"
+                },
+                {
                   "text": "Create a Custom Provider",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }
