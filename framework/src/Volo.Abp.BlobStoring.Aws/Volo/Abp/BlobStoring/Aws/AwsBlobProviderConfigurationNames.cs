@@ -10,6 +10,7 @@
         public const string ProfileName = "Aws.ProfileName";
         public const string ProfilesLocation = "Aws.ProfilesLocation";
         public const string DurationSeconds = "Aws.DurationSeconds";
+        public const string TemporaryCredentialsCacheKey = "Aws.TemporaryCredentialsCacheKey";
         public const string Name = "Aws.Name";
         public const string Policy = "Aws.Policy";
         public const string Region = "Aws.Region";

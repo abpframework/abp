@@ -54,6 +54,7 @@ namespace Volo.Abp.BlobStoring.Aws
                         aws.SecretAccessKey = secretAccessKey;
                         aws.Region = region;
                         aws.CreateContainerIfNotExists = true;
+                        aws.ContainerName = _randomContainerName;
 
                         _configuration = aws;
                     });

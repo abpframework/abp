@@ -5,8 +5,6 @@ namespace Volo.Abp.BlobStoring.Aws
     [Serializable]
     public class AwsTemporaryCredentialsCacheItem
     {
-        public const string Key = "AwsBlobTemporaryCredentialsCache";
-
         public string AccessKeyId { get; set; }
 
         public string SecretAccessKey { get; set; }

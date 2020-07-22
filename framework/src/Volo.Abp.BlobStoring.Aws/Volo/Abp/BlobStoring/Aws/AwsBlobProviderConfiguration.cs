@@ -1,7 +1,4 @@
-﻿using Amazon;
-using Amazon.Runtime;
-using Amazon.Runtime.CredentialManagement;
-using Amazon.S3;
+﻿using System;
 
 namespace Volo.Abp.BlobStoring.Aws
 {
@@ -97,11 +94,19 @@ namespace Volo.Abp.BlobStoring.Aws
             set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.CreateContainerIfNotExists, value);
         }
 
+        private readonly string _temporaryCredentialsCacheKey;
+        public string TemporaryCredentialsCacheKey
+        {
+            get => _containerConfiguration.GetConfigurationOrDefault(AwsBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, _temporaryCredentialsCacheKey);
+            set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, value);
+        }
+
         private readonly BlobContainerConfiguration _containerConfiguration;
 
         public AwsBlobProviderConfiguration(BlobContainerConfiguration containerConfiguration)
         {
             _containerConfiguration = containerConfiguration;
+            _temporaryCredentialsCacheKey = Guid.NewGuid().ToString("N");
         }
     }
 }
