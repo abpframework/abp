@@ -443,6 +443,14 @@ Let's see the changes we've done:
 * Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. The logic is similar to the previous method, so you can easily understand the code.
 * Created a new method: `GetAuthorLookupAsync`. This simple gets all the authors. The UI uses this method to fill a dropdown list and select and author while creating/editing books.
 
+### Object to Object Mapping Configuration
+
+Introduced the `AuthorLookupDto` class and used object mapping inside the `GetAuthorLookupAsync` method. So, we need to add a new mapping definition inside the `BookStoreApplicationAutoMapperProfile.cs` file of the `Acme.BookStore.Application` project:
+
+````csharp
+CreateMap<Author, AuthorLookupDto>();
+````
+
 ## Unit Tests
 
 Some of the unit tests will fail since we made some changed on the `AuthorAppService`. Open the `BookAppService_Tests` in the `Books` folder of the `Acme.BookStore.Application.Tests` project and change the content as the following:
@@ -535,6 +543,8 @@ namespace Acme.BookStore.Books
 
 ## The User Interface
 
+{{if UI=="MVC"}}
+
 ### The Book List
 
 Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.BookStore.Web` project and add the following column definition between the `name` and `type` columns:
@@ -562,15 +572,206 @@ Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.B
 ...
 ````
 
-Create Modal
+### Create Modal
 
-TODO
+Open the `Pages/Books/CreateModal.cshtml.cs` in the `Acme.BookStore.Web` project and change the file content as shown below:
 
-Edit Modal
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Books;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
-TODO
+namespace Acme.BookStore.Web.Pages.Books
+{
+    public class CreateModalModel : BookStorePageModel
+    {
+        [BindProperty]
+        public CreateBookViewModel Book { get; set; }
+
+        public List<SelectListItem> Authors { get; set; }
+
+        private readonly IBookAppService _bookAppService;
+
+        public CreateModalModel(
+            IBookAppService bookAppService)
+        {
+            _bookAppService = bookAppService;
+        }
+
+        public async Task OnGetAsync()
+        {
+            Book = new CreateBookViewModel();
+
+            var authorLookup = await _bookAppService.GetAuthorLookupAsync();
+            Authors = authorLookup.Items
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            await _bookAppService.CreateAsync(
+                ObjectMapper.Map<CreateBookViewModel, CreateUpdateBookDto>(Book)
+                );
+            return NoContent();
+        }
+
+        public class CreateBookViewModel
+        {
+            [SelectItems(nameof(Authors))]
+            [DisplayName("Author")]
+            public Guid AuthorId { get; set; }
+
+            [Required]
+            [StringLength(128)]
+            public string Name { get; set; }
+
+            [Required]
+            public BookType Type { get; set; } = BookType.Undefined;
+
+            [Required]
+            [DataType(DataType.Date)]
+            public DateTime PublishDate { get; set; } = DateTime.Now;
+
+            [Required]
+            public float Price { get; set; }
+        }
+    }
+}
+```
+
+* Changed type of the `Book` property from `CreateUpdateBookDto` to the new `CreateBookViewModel` class defined in this file. The main motivation of this change to customize the model class based on the User Interface (UI) requirements. We didn't want to use UI-related `[SelectItems(nameof(Authors))]` and `[DisplayName("Author")]` attributes inside the `CreateUpdateBookDto` class.
+* Added `Authors` property that is filled inside the `OnGetAsync` method using the `IBookAppService.GetAuthorLookupAsync` method defined before.
+* Changed the `OnPostAsync` method to map `CreateBookViewModel` object to a `CreateUpdateBookDto`  object since `IBookAppService.CreateAsync` expects a parameter of this type.
+
+### Edit Modal
+
+Open the `Pages/Books/EditModal.cshtml.cs` in the `Acme.BookStore.Web` project and change the file content as shown below:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Books;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
+
+namespace Acme.BookStore.Web.Pages.Books
+{
+    public class EditModalModel : BookStorePageModel
+    {
+        [BindProperty]
+        public EditBookViewModel Book { get; set; }
+
+        public List<SelectListItem> Authors { get; set; }
+
+        private readonly IBookAppService _bookAppService;
+
+        public EditModalModel(IBookAppService bookAppService)
+        {
+            _bookAppService = bookAppService;
+        }
+
+        public async Task OnGetAsync(Guid id)
+        {
+            var bookDto = await _bookAppService.GetAsync(id);
+            Book = ObjectMapper.Map<BookDto, EditBookViewModel>(bookDto);
+
+            var authorLookup = await _bookAppService.GetAuthorLookupAsync();
+            Authors = authorLookup.Items
+                .Select(x => new SelectListItem(x.Name, x.Id.ToString()))
+                .ToList();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            await _bookAppService.UpdateAsync(
+                Book.Id,
+                ObjectMapper.Map<EditBookViewModel, CreateUpdateBookDto>(Book)
+            );
+
+            return NoContent();
+        }
+
+        public class EditBookViewModel
+        {
+            [HiddenInput]
+            public Guid Id { get; set; }
+
+            [SelectItems(nameof(Authors))]
+            [DisplayName("Author")]
+            public Guid AuthorId { get; set; }
+
+            [Required]
+            [StringLength(128)]
+            public string Name { get; set; }
+
+            [Required]
+            public BookType Type { get; set; } = BookType.Undefined;
+
+            [Required]
+            [DataType(DataType.Date)]
+            public DateTime PublishDate { get; set; } = DateTime.Now;
+
+            [Required]
+            public float Price { get; set; }
+        }
+    }
+}
+```
+
+* Changed type of the `Book` property from `CreateUpdateBookDto` to the new `EditBookViewModel` class defined in this file, just like done before for the create modal above.
+* Moved the `Id` property inside the new `EditBookViewModel` class.
+* Added `Authors` property that is filled inside the `OnGetAsync` method using the `IBookAppService.GetAuthorLookupAsync` method.
+* Changed the `OnPostAsync` method to map `EditBookViewModel` object to a `CreateUpdateBookDto`  object since `IBookAppService.UpdateAsync` expects a parameter of this type.
+
+These changes require a small change in the `EditModal.cshtml`. Remove the `<abp-input asp-for="Id" />` tag since we no longer need to it (since moved it to the `EditBookViewModel`). The final content of the `EditModal.cshtml` should be following:
+
+````html
+@page
+@using Acme.BookStore.Localization
+@using Acme.BookStore.Web.Pages.Books
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@model EditModalModel
+@inject IStringLocalizer<BookStoreResource> L
+@{
+    Layout = null;
+}
+<abp-dynamic-form abp-model="Book" asp-page="/Books/EditModal">
+    <abp-modal>
+        <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+    </abp-modal>
+</abp-dynamic-form>
+````
 
 ### Object to Object Mapping Configuration
 
-TODO
+The changes above requires to define some object to object mappings. Open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and add the following mapping definitions inside the constructor:
 
+```csharp
+CreateMap<Pages.Books.CreateModalModel.CreateBookViewModel, CreateUpdateBookDto>();
+CreateMap<BookDto, Pages.Books.EditModalModel.EditBookViewModel>();
+CreateMap<Pages.Books.EditModalModel.EditBookViewModel, CreateUpdateBookDto>();
+```
+
+{{else if UI=="NG"}}
+
+*TODO: Preparing for the Angular UI...*
+
+{{end}}
