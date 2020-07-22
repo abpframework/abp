@@ -9,30 +9,45 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
-    public class PackageSourceSwitcher : ITransientDependency
+    public class PackagePreviewSwitcher : ITransientDependency
     {
-        private readonly PackageSourceAdder _packageSourceAdder;
+        private readonly PackageSourceManager _packageSourceManager;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
 
-        public ILogger<PackageSourceSwitcher> Logger { get; set; }
+        public ILogger<PackagePreviewSwitcher> Logger { get; set; }
 
-        public PackageSourceSwitcher(PackageSourceAdder packageSourceAdder,
+        public PackagePreviewSwitcher(PackageSourceManager packageSourceManager,
             NpmPackagesUpdater npmPackagesUpdater,
             VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater)
         {
-            _packageSourceAdder = packageSourceAdder;
+            _packageSourceManager = packageSourceManager;
             _npmPackagesUpdater = npmPackagesUpdater;
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
-            Logger = NullLogger<PackageSourceSwitcher>.Instance;
+            Logger = NullLogger<PackagePreviewSwitcher>.Instance;
         }
 
         public async Task SwitchToPreview(CommandLineArgs commandLineArgs)
         {
-            _packageSourceAdder.Add("ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
-
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
+
+            await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
+                solutionPath,
+                includeReleaseCandidates: true);
+
+            await _npmPackagesUpdater.Update(
+                solutionFolder,
+                false,
+                true);
+        }
+
+        public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
+        {
+            var solutionPath = GetSolutionPath(commandLineArgs);
+            var solutionFolder = GetSolutionFolder(commandLineArgs);
+
+            _packageSourceManager.Add(solutionFolder, "ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 solutionPath,
@@ -48,13 +63,17 @@ namespace Volo.Abp.Cli.ProjectModification
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
 
+            _packageSourceManager.Remove(solutionFolder, "ABP Nightly");
+
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 solutionPath,
+                false,
                 false,
                 true);
 
             await _npmPackagesUpdater.Update(
                 solutionFolder,
+                false,
                 false,
                 true);
         }

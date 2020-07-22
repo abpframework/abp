@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Domain;
 using Volo.Abp.IdentityModel;
@@ -31,8 +30,9 @@ namespace Volo.Abp.Cli
                 options.Commands["logout"] = typeof(LogoutCommand);
                 options.Commands["generate-proxy"] = typeof(GenerateProxyCommand);
                 options.Commands["suite"] = typeof(SuiteCommand);
-                options.Commands["switch-to-preview"] = typeof(SwitchNightlyPreviewCommand);
-                options.Commands["switch-to-stable"] = typeof(SwitchStableCommand);
+                options.Commands["switch-to-preview"] = typeof(SwitchToPreviewCommand);
+                options.Commands["switch-to-stable"] = typeof(SwitchToStableCommand);
+                options.Commands["switch-to-nightly"] = typeof(SwitchToNightlyCommand);
                 options.Commands["translate"] = typeof(TranslateCommand);
             });
         }

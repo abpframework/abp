@@ -90,6 +90,7 @@ abp new Acme.BookStore
   * **`console`**: [Console template](Startup-Templates/Console.md).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
+* `--preview`: Use latest pre-release version (Only if `--version ` is not specified and there is at least one pre-release after latest stable version).
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D:\local-template` or `https://.../my-template-file.zip`).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
@@ -196,12 +197,12 @@ abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
 
 ### switch-to-preview
 
-You can use this command to switch your project to latest preview version of the ABP framework packages.
+You can use this command to switch your project to latest **nightly** preview version of the ABP framework packages.
 
 Usage:
 
 ````bash
-abp switch-to-preview [options]
+abp switch-to-nightly [options]
 ````
 
 #### Options
@@ -210,7 +211,7 @@ abp switch-to-preview [options]
 
 ### switch-to-stable
 
-If you're using the ABP Framework preview packages, you can switch back to stable version using this command.
+If you're using the ABP Framework preview packages, you can switch back to latest stable version using this command.
 
 Usage:
 
