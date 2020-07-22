@@ -13,14 +13,9 @@ export class StopPropagationDirective implements OnInit {
   constructor(private el: ElementRef, private subscription: SubscriptionService) {}
 
   ngOnInit(): void {
-    const click$ = this.subscription.addOne(
-      fromEvent(this.el.nativeElement, 'click'),
-      (event: MouseEvent) => {
-        event.stopPropagation();
-        this.stopPropEvent.emit(event);
-      },
-    );
+    this.subscription.addOne(fromEvent(this.el.nativeElement, 'click'), (event: MouseEvent) => {
+      event.stopPropagation();
+      this.stopPropEvent.emit(event);
+    });
   }
-
-  ngOnDestroy(): void {}
 }

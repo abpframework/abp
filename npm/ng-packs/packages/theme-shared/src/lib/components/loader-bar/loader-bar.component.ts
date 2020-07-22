@@ -21,6 +21,7 @@ import { filter } from 'rxjs/operators';
     </div>
   `,
   styleUrls: ['./loader-bar.component.scss'],
+  providers: [SubscriptionService],
 })
 export class LoaderBarComponent implements OnDestroy, OnInit {
   protected _isLoading: boolean;
