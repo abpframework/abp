@@ -64,7 +64,7 @@ Open the `Books/Book.cs` in the `Acme.BookStore.Domain` project and add the foll
 public Guid AuthorId { get; set; }
 ````
 
-## Database Migration
+## Database & Data Migration
 
 Added a new, required `AuthorId` property to the `Book` entity. But, what about the existing books on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
 
@@ -572,6 +572,10 @@ Book list page change is trivial. Open the `Pages/Books/Index.js` in the `Acme.B
 ...
 ````
 
+When you run the application, you can see the *Author* column on the table:
+
+![bookstore-added-author-to-book-list](images/bookstore-added-author-to-book-list.png)
+
 ### Create Modal
 
 Open the `Pages/Books/CreateModal.cshtml.cs` in the `Acme.BookStore.Web` project and change the file content as shown below:
@@ -769,6 +773,10 @@ CreateMap<Pages.Books.CreateModalModel.CreateBookViewModel, CreateUpdateBookDto>
 CreateMap<BookDto, Pages.Books.EditModalModel.EditBookViewModel>();
 CreateMap<Pages.Books.EditModalModel.EditBookViewModel, CreateUpdateBookDto>();
 ```
+
+You can run the application and try to create a new book or update an existing book. You will see a drop down list on the create/update form to select the author of the book:
+
+![bookstore-added-authors-to-modals](images/bookstore-added-authors-to-modals.png)
 
 {{else if UI=="NG"}}
 

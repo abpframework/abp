@@ -98,7 +98,7 @@ This will create a new migration class. Then run the `Update-Database` command t
 
 {{else if DB=="Mongo"}}
 
-TODO, for MongoDB
+*TODO: MongoDB part is being prepared...*
 
 {{end}}
 
@@ -162,7 +162,7 @@ namespace Acme.BookStore.Authors
 
 {{else if DB=="Mongo"}}
 
-TODO, for MongoDB
+*TODO: MongoDB part is being prepared...*
 
 {{end}}
 
