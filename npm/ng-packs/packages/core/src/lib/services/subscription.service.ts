@@ -11,6 +11,31 @@ export class SubscriptionService implements OnDestroy {
     return this.subscription.closed;
   }
 
+  addOne<T extends unknown>(
+    source$: Observable<T>,
+    next?: (value: T) => void,
+    error?: (error: any) => void,
+  ): Subscription;
+  addOne<T extends unknown>(source$: Observable<T>, observer?: PartialObserver<T>): Subscription;
+  addOne<T extends unknown>(
+    source$: Observable<T>,
+    nextOrObserver?: PartialObserver<T> | Next<T>,
+    error?: (error: any) => void,
+  ): Subscription {
+    const subscription = source$.subscribe(nextOrObserver as Next<T>, error);
+    this.subscription.add(subscription);
+    return subscription;
+  }
+
+  closeAll() {
+    this.subscription.unsubscribe();
+  }
+
+  closeOne(subscription: Subscription | undefined | null) {
+    this.removeOne(subscription);
+    subscription.unsubscribe();
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
@@ -23,31 +48,6 @@ export class SubscriptionService implements OnDestroy {
   reset() {
     this.subscription.unsubscribe();
     this.subscription = new Subscription();
-  }
-
-  subscribe<T extends unknown>(
-    source$: Observable<T>,
-    next?: (value: T) => void,
-    error?: (error: any) => void,
-  ): Subscription;
-  subscribe<T extends unknown>(source$: Observable<T>, observer?: PartialObserver<T>): Subscription;
-  subscribe<T extends unknown>(
-    source$: Observable<T>,
-    nextOrObserver?: PartialObserver<T> | Next<T>,
-    error?: (error: any) => void,
-  ): Subscription {
-    const subscription = source$.subscribe(nextOrObserver as Next<T>, error);
-    this.subscription.add(subscription);
-    return subscription;
-  }
-
-  unsubscribeAll() {
-    this.subscription.unsubscribe();
-  }
-
-  unsubscribeOne(subscription: Subscription | undefined | null) {
-    this.removeOne(subscription);
-    subscription.unsubscribe();
   }
 }
 

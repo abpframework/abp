@@ -12,11 +12,11 @@ describe('SubscriptionService', () => {
     service['subscription'].unsubscribe();
   });
 
-  describe('#subscribe', () => {
+  describe('#addOne', () => {
     it('should subscribe to given observable with next and error functions and return the Subscription instance', () => {
       const next = jest.fn();
       const error = jest.fn();
-      const subscription = service.subscribe(of(null), next, error);
+      const subscription = service.addOne(of(null), next, error);
       expect(subscription).toBeInstanceOf(Subscription);
       expect(next).toHaveBeenCalledWith(null);
       expect(next).toHaveBeenCalledTimes(1);
@@ -25,7 +25,7 @@ describe('SubscriptionService', () => {
 
     it('should subscribe to given observable with observer and return the Subscription instance', () => {
       const observer = { next: jest.fn(), complete: jest.fn() };
-      const subscription = service.subscribe(of(null), observer);
+      const subscription = service.addOne(of(null), observer);
       expect(subscription).toBeInstanceOf(Subscription);
       expect(observer.next).toHaveBeenCalledWith(null);
       expect(observer.next).toHaveBeenCalledTimes(1);
@@ -35,7 +35,7 @@ describe('SubscriptionService', () => {
 
   describe('#isClosed', () => {
     it('should return true if subscriptions are alive and false if not', () => {
-      service.subscribe(timer(1000), () => {});
+      service.addOne(timer(1000), () => {});
       expect(service.isClosed).toBe(false);
 
       service['subscription'].unsubscribe();
@@ -43,16 +43,16 @@ describe('SubscriptionService', () => {
     });
   });
 
-  describe('#unsubscribeAll', () => {
+  describe('#closeAll', () => {
     it('should close all subscriptions and the parent subscription', () => {
-      const sub1 = service.subscribe(timer(1000), () => {});
-      const sub2 = service.subscribe(timer(1000), () => {});
+      const sub1 = service.addOne(timer(1000), () => {});
+      const sub2 = service.addOne(timer(1000), () => {});
 
       expect(sub1.closed).toBe(false);
       expect(sub2.closed).toBe(false);
       expect(service.isClosed).toBe(false);
 
-      service.unsubscribeAll();
+      service.closeAll();
 
       expect(sub1.closed).toBe(true);
       expect(sub2.closed).toBe(true);
@@ -62,8 +62,8 @@ describe('SubscriptionService', () => {
 
   describe('#reset', () => {
     it('should close all subscriptions but not the parent subscription', () => {
-      const sub1 = service.subscribe(timer(1000), () => {});
-      const sub2 = service.subscribe(timer(1000), () => {});
+      const sub1 = service.addOne(timer(1000), () => {});
+      const sub2 = service.addOne(timer(1000), () => {});
 
       expect(sub1.closed).toBe(false);
       expect(sub2.closed).toBe(false);
@@ -77,17 +77,17 @@ describe('SubscriptionService', () => {
     });
   });
 
-  describe('#unsubscribeOne', () => {
+  describe('#closeOne', () => {
     it('should unsubscribe from given subscription only', () => {
-      const sub1 = service.subscribe(timer(1000), () => {});
-      const sub2 = service.subscribe(timer(1000), () => {});
+      const sub1 = service.addOne(timer(1000), () => {});
+      const sub2 = service.addOne(timer(1000), () => {});
       expect(service.isClosed).toBe(false);
 
-      service.unsubscribeOne(sub1);
+      service.closeOne(sub1);
       expect(sub1.closed).toBe(true);
       expect(service.isClosed).toBe(false);
 
-      service.unsubscribeOne(sub2);
+      service.closeOne(sub2);
       expect(sub2.closed).toBe(true);
       expect(service.isClosed).toBe(false);
     });
@@ -95,8 +95,8 @@ describe('SubscriptionService', () => {
 
   describe('#removeOne', () => {
     it('should remove given subscription from list of subscriptions', () => {
-      const sub1 = service.subscribe(timer(1000), () => {});
-      const sub2 = service.subscribe(timer(1000), () => {});
+      const sub1 = service.addOne(timer(1000), () => {});
+      const sub2 = service.addOne(timer(1000), () => {});
       expect(service.isClosed).toBe(false);
 
       service.removeOne(sub1);
