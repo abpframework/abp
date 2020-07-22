@@ -6,10 +6,10 @@ using Amazon.Runtime.CredentialManagement;
 using Amazon.S3;
 using Amazon.SecurityToken;
 using Amazon.SecurityToken.Model;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Security.Encryption;
 
 namespace Volo.Abp.BlobStoring.Aws
 {
@@ -17,13 +17,14 @@ namespace Volo.Abp.BlobStoring.Aws
     {
         protected IDistributedCache<AwsTemporaryCredentialsCacheItem> Cache { get; }
 
-        protected IDataProtector DataProtector { get; }
+        protected IStringEncryptionService StringEncryptionService { get; }
 
-        public DefaultAmazonS3ClientFactory(IDistributedCache<AwsTemporaryCredentialsCacheItem> cache,
-            IDataProtectionProvider dataProtectionProvider)
+        public DefaultAmazonS3ClientFactory(
+            IDistributedCache<AwsTemporaryCredentialsCacheItem> cache,
+            IStringEncryptionService stringEncryptionService)
         {
             Cache = cache;
-            DataProtector = dataProtectionProvider.CreateProtector(nameof(AwsTemporaryCredentialsCacheItem));
+            StringEncryptionService = stringEncryptionService;
         }
 
         public virtual async Task<AmazonS3Client> GetAmazonS3Client(
@@ -114,9 +115,9 @@ namespace Volo.Abp.BlobStoring.Aws
             }
 
             var sessionCredentials = new SessionAWSCredentials(
-                DataProtector.Unprotect(temporaryCredentialsCache.AccessKeyId),
-                DataProtector.Unprotect(temporaryCredentialsCache.SecretAccessKey),
-                DataProtector.Unprotect(temporaryCredentialsCache.SessionToken));
+                StringEncryptionService.Decrypt(temporaryCredentialsCache.AccessKeyId),
+                StringEncryptionService.Decrypt(temporaryCredentialsCache.SecretAccessKey),
+                StringEncryptionService.Decrypt(temporaryCredentialsCache.SessionToken));
             return sessionCredentials;
         }
 
@@ -165,9 +166,9 @@ namespace Volo.Abp.BlobStoring.Aws
             }
 
             var sessionCredentials = new SessionAWSCredentials(
-                DataProtector.Unprotect(temporaryCredentialsCache.AccessKeyId),
-                DataProtector.Unprotect(temporaryCredentialsCache.SecretAccessKey),
-                DataProtector.Unprotect(temporaryCredentialsCache.SessionToken));
+                StringEncryptionService.Decrypt(temporaryCredentialsCache.AccessKeyId),
+                StringEncryptionService.Decrypt(temporaryCredentialsCache.SecretAccessKey),
+                StringEncryptionService.Decrypt(temporaryCredentialsCache.SessionToken));
             return sessionCredentials;
         }
 
@@ -176,9 +177,9 @@ namespace Volo.Abp.BlobStoring.Aws
             Credentials credentials)
         {
             var temporaryCredentialsCache = new AwsTemporaryCredentialsCacheItem(
-                DataProtector.Protect(credentials.AccessKeyId),
-                DataProtector.Protect(credentials.SecretAccessKey),
-                DataProtector.Protect(credentials.SessionToken));
+                StringEncryptionService.Encrypt(credentials.AccessKeyId),
+                StringEncryptionService.Encrypt(credentials.SecretAccessKey),
+                StringEncryptionService.Encrypt(credentials.SessionToken));
 
             await Cache.SetAsync(configuration.TemporaryCredentialsCacheKey, temporaryCredentialsCache,
                 new DistributedCacheEntryOptions
