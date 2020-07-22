@@ -6,8 +6,7 @@ using Volo.Abp.Caching;
 namespace Volo.Abp.BlobStoring.Aliyun
 {
     [Serializable]
-    [CacheName("AssumeRoleCredentials")]
-    public class AssumeRoleCredentialsCacheItem
+    public class AliyunTemporaryCredentialsCacheItem
     {
         public string AccessKeyId { get; set; }
 
@@ -15,12 +14,12 @@ namespace Volo.Abp.BlobStoring.Aliyun
 
         public string SecurityToken { get; set; }
 
-        public AssumeRoleCredentialsCacheItem()
+        public AliyunTemporaryCredentialsCacheItem()
         {
 
         }
 
-        public AssumeRoleCredentialsCacheItem(string accessKeyId,string accessKeySecret,string securityToken)
+        public AliyunTemporaryCredentialsCacheItem(string accessKeyId,string accessKeySecret,string securityToken)
         {
             AccessKeyId = accessKeyId;
             AccessKeySecret = accessKeySecret;
