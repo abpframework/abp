@@ -17,12 +17,12 @@ class DemoComponent {
   count$ = interval(1000);
 
   constructor(private subscription: SubscriptionService) {
-    this.subscription.subscribe(this.count$, console.log);
+    this.subscription.addOne(this.count$, console.log);
   }
 }
 ```
 
-The values emitted by the `count$` will be logged until the component is destroyed. You will not have to `unsubscribe` manually.
+The values emitted by the `count$` will be logged until the component is destroyed. You will not have to unsubscribe manually.
 
 > Please do not try to use a singleton `SubscriptionService`. It simply will not work.
 
@@ -48,7 +48,7 @@ class DemoComponent implements OnInit {
       return of(null);
     };
 
-    this.subscription.subscribe(source$, nextFn, errorFn);
+    this.subscription.addOne(source$, nextFn, errorFn);
   }
 }
 ```
@@ -70,16 +70,16 @@ class DemoComponent implements OnInit {
       complete: () => console.log('DONE'),
     };
 
-    this.subscription.subscribe(source$, observer);
+    this.subscription.addOne(source$, observer);
   }
 }
 ```
 
-Ths `subscribe` method returns the individual subscription, so that you may use it later on. Please see topics below for details.
+The `addOne` method returns the individual subscription, so that you may use it later on. Please see topics below for details.
 
 ### How to Unsubscribe Before Instance Destruction
 
-There are two ways to do that. If you are not going to subscribe again, you may use the `unsubscribeAll` method.
+There are two ways to do that. If you are not going to subscribe again, you may use the `closeAll` method.
 
 ```js
 @Component({
@@ -90,11 +90,11 @@ class DemoComponent implements OnInit {
   constructor(private subscription: SubscriptionService) {}
 
   ngOnInit() {
-    this.subscription.subscribe(interval(1000), console.log);
+    this.subscription.addOne(interval(1000), console.log);
   }
 
   onSomeEvent() {
-    this.subscription.unsubscribeAll();
+    this.subscription.closeAll();
   }
 }
 ```
@@ -110,19 +110,19 @@ class DemoComponent implements OnInit {
   constructor(private subscription: SubscriptionService) {}
 
   ngOnInit() {
-    this.subscription.subscribe(interval(1000), console.log);
+    this.subscription.addOne(interval(1000), console.log);
   }
 
   onSomeEvent() {
     this.subscription.reset();
-    this.subscription.subscribe(interval(1000), console.warn);
+    this.subscription.addOne(interval(1000), console.warn);
   }
 }
 ```
 
 ### How to Unsubscribe From a Single Subscription
 
-Sometimes, you may need to unsubscribe from a particular subscription but leave others alive. In such a case, you may use the `unsubscribeOne` method.
+Sometimes, you may need to unsubscribe from a particular subscription but leave others alive. In such a case, you may use the `closeOne` method.
 
 ```js
 @Component({
@@ -135,14 +135,14 @@ class DemoComponent implements OnInit {
   constructor(private subscription: SubscriptionService) {}
 
   ngOnInit() {
-    this.countSubscription = this.subscription.subscribe(
+    this.countSubscription = this.subscription.addOne(
       interval(1000),
       console.log
     );
   }
 
   onSomeEvent() {
-    this.subscription.unsubscribeOne(this.countSubscription);
+    this.subscription.closeOne(this.countSubscription);
     console.log(this.countSubscription.closed); // true
   }
 }
@@ -163,7 +163,7 @@ class DemoComponent implements OnInit {
   constructor(private subscription: SubscriptionService) {}
 
   ngOnInit() {
-    this.countSubscription = this.subscription.subscribe(
+    this.countSubscription = this.subscription.addOne(
       interval(1000),
       console.log
     );
@@ -178,7 +178,7 @@ class DemoComponent implements OnInit {
 
 ### How to Check If Unsubscribed From All
 
-Please use `isClosed` getter to check if `unsubscribeAll` was called before.
+Please use `isClosed` getter to check if `closeAll` was called before.
 
 ```js
 @Component({
@@ -189,7 +189,7 @@ class DemoComponent implements OnInit {
   constructor(private subscription: SubscriptionService) {}
 
   ngOnInit() {
-    this.subscription.subscribe(interval(1000), console.log);
+    this.subscription.addOne(interval(1000), console.log);
   }
 
   onSomeEvent() {
