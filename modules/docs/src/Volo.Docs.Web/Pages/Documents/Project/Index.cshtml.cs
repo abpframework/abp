@@ -405,12 +405,15 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task ConvertDocumentContentToHtmlAsync()
         {
-            await SetDocumentPreferencesAsync();
-            SetUserPreferences();
+            if (_uiOptions.SectionRendering)
+            {
+                await SetDocumentPreferencesAsync();
+                SetUserPreferences();
 
-            var partialTemplates = await GetDocumentPartialTemplatesAsync();
+                var partialTemplates = await GetDocumentPartialTemplatesAsync();
 
-            Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+            }
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
