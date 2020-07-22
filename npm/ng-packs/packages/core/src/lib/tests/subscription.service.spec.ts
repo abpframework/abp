@@ -77,19 +77,33 @@ describe('SubscriptionService', () => {
     });
   });
 
-  describe('#unsubscribe', () => {
+  describe('#unsubscribeOne', () => {
     it('should unsubscribe from given subscription only', () => {
       const sub1 = service.subscribe(timer(1000), () => {});
       const sub2 = service.subscribe(timer(1000), () => {});
       expect(service.isClosed).toBe(false);
 
-      service.unsubscribe(sub1);
+      service.unsubscribeOne(sub1);
       expect(sub1.closed).toBe(true);
       expect(service.isClosed).toBe(false);
 
-      service.unsubscribe(sub2);
+      service.unsubscribeOne(sub2);
       expect(sub2.closed).toBe(true);
       expect(service.isClosed).toBe(false);
+    });
+  });
+
+  describe('#removeOne', () => {
+    it('should remove given subscription from list of subscriptions', () => {
+      const sub1 = service.subscribe(timer(1000), () => {});
+      const sub2 = service.subscribe(timer(1000), () => {});
+      expect(service.isClosed).toBe(false);
+
+      service.removeOne(sub1);
+      expect(sub1.closed).toBe(false);
+      expect(service.isClosed).toBe(false);
+
+      sub1.unsubscribe();
     });
   });
 });

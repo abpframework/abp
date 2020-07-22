@@ -15,6 +15,11 @@ export class SubscriptionService implements OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  removeOne(subscription: Subscription | undefined | null) {
+    if (!subscription) return;
+    this.subscription.remove(subscription);
+  }
+
   reset() {
     this.subscription.unsubscribe();
     this.subscription = new Subscription();
@@ -36,14 +41,13 @@ export class SubscriptionService implements OnDestroy {
     return subscription;
   }
 
-  unsubscribe(subscription: Subscription | undefined | null) {
-    if (!subscription) return;
-    this.subscription.remove(subscription);
-    subscription.unsubscribe();
-  }
-
   unsubscribeAll() {
     this.subscription.unsubscribe();
+  }
+
+  unsubscribeOne(subscription: Subscription | undefined | null) {
+    this.removeOne(subscription);
+    subscription.unsubscribe();
   }
 }
 
