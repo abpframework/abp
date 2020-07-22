@@ -509,7 +509,7 @@ That's all! You can run the application and try to edit an author.
 
 {{else if UI == "NG"}}
 
-TODO: Angular UI is being prepared...
+*TODO: Angular UI is being prepared...*
 
 {{end}}
 
