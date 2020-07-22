@@ -116,4 +116,4 @@ class DemoComponent {
 
 ## What's Next?
 
-- [ListService](./List-Service.md)
+- [SubscriptionService](./Subscription-Service.md)
