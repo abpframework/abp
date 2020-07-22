@@ -228,4 +228,224 @@ You can now run the `.DbMigrator` console application to **seed** the initial da
 
 ## Application Layer
 
-TODO
+We will change the `BookAppService` to support the Author relation.
+
+### Data Transfer Objects
+
+Let's begin from the DTOs.
+
+#### BookDto
+
+Open the `BookDto` class in the `Books` folder of the `Acme.BookStore.Application.Contracts` project and add the following properties:
+
+```csharp
+public Guid AuthorId { get; set; }
+public string AuthorName { get; set; }
+```
+
+The final `BookDto` class should be following:
+
+```csharp
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace Acme.BookStore.Books
+{
+    public class BookDto : AuditedEntityDto<Guid>
+    {
+        public Guid AuthorId { get; set; }
+
+        public string AuthorName { get; set; }
+
+        public string Name { get; set; }
+
+        public BookType Type { get; set; }
+
+        public DateTime PublishDate { get; set; }
+
+        public float Price { get; set; }
+    }
+}
+```
+
+#### CreateUpdateBookDto
+
+Open the `CreateUpdateBookDto` class in the `Books` folder of the `Acme.BookStore.Application.Contracts` project and add an `AuthorId` property as shown:
+
+````csharp
+public Guid AuthorId { get; set; }
+````
+
+#### AuthorLookupDto
+
+Create a new class, `AuthorLookupDto`, inside the `Books` folder of the `Acme.BookStore.Application.Contracts` project:
+
+````csharp
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace Acme.BookStore.Books
+{
+    public class AuthorLookupDto : EntityDto<Guid>
+    {
+        public string Name { get; set; }
+    }
+}
+````
+
+This will be used in a new method will be added to the `IBookAppService`.
+
+### IBookAppService
+
+Open the `IBookAppService` interface in the `Books` folder of the `Acme.BookStore.Application.Contracts` project and add a new method, named `GetAuthorLookupAsync`, as shown below:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+
+namespace Acme.BookStore.Books
+{
+    public interface IBookAppService :
+        ICrudAppService< //Defines CRUD methods
+            BookDto, //Used to show books
+            Guid, //Primary key of the book entity
+            PagedAndSortedResultRequestDto, //Used for paging/sorting
+            CreateUpdateBookDto> //Used to create/update a book
+    {
+        // ADD the NEW METHOD
+        Task<ListResultDto<AuthorLookupDto>> GetAuthorLookupAsync();
+    }
+}
+````
+
+This new method will be used from the UI to get a list of authors and fill a dropdown list to select the author of a book.
+
+### BookAppService
+
+Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Authors;
+using Acme.BookStore.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
+
+namespace Acme.BookStore.Books
+{
+    [Authorize(BookStorePermissions.Books.Default)]
+    public class BookAppService :
+        CrudAppService<
+            Book, //The Book entity
+            BookDto, //Used to show books
+            Guid, //Primary key of the book entity
+            PagedAndSortedResultRequestDto, //Used for paging/sorting
+            CreateUpdateBookDto>, //Used to create/update a book
+        IBookAppService //implement the IBookAppService
+    {
+        private readonly IAuthorRepository _authorRepository;
+
+        public BookAppService(
+            IRepository<Book, Guid> repository,
+            IAuthorRepository authorRepository)
+            : base(repository)
+        {
+            _authorRepository = authorRepository;
+            GetPolicyName = BookStorePermissions.Books.Default;
+            GetListPolicyName = BookStorePermissions.Books.Default;
+            CreatePolicyName = BookStorePermissions.Books.Create;
+            UpdatePolicyName = BookStorePermissions.Books.Edit;
+            DeletePolicyName = BookStorePermissions.Books.Create;
+        }
+
+        public override async Task<BookDto> GetAsync(Guid id)
+        {
+            //Prepare a query to join books and authors
+            var query = from book in Repository
+                join author in _authorRepository on book.AuthorId equals author.Id
+                where book.Id == id
+                select new { book, author };
+
+            //Execute the query and get the book with author
+            var queryResult = await AsyncExecuter.FirstOrDefaultAsync(query);
+            if (queryResult == null)
+            {
+                throw new EntityNotFoundException(typeof(Book), id);
+            }
+
+            var bookDto = ObjectMapper.Map<Book, BookDto>(queryResult.book);
+            bookDto.AuthorName = queryResult.author.Name;
+            return bookDto;
+        }
+
+        public override async Task<PagedResultDto<BookDto>>
+            GetListAsync(PagedAndSortedResultRequestDto input)
+        {
+            //Prepare a query to join books and authors
+            var query = from book in Repository
+                join author in _authorRepository on book.AuthorId equals author.Id
+                orderby input.Sorting
+                select new {book, author};
+
+            query = query
+                .Skip(input.SkipCount)
+                .Take(input.MaxResultCount);
+
+            //Execute the query and get a list
+            var queryResult = await AsyncExecuter.ToListAsync(query);
+
+            //Convert the query result to a list of BookDto objects
+            var bookDtos = queryResult.Select(x =>
+            {
+                var bookDto = ObjectMapper.Map<Book, BookDto>(x.book);
+                bookDto.AuthorName = x.author.Name;
+                return bookDto;
+            }).ToList();
+
+            //Get the total count with another query
+            var totalCount = await Repository.GetCountAsync();
+
+            return new PagedResultDto<BookDto>(
+                totalCount,
+                bookDtos
+            );
+        }
+
+        public async Task<ListResultDto<AuthorLookupDto>> GetAuthorLookupAsync()
+        {
+            var authors = await _authorRepository.GetListAsync();
+
+            return new ListResultDto<AuthorLookupDto>(
+                ObjectMapper.Map<List<Author>, List<AuthorLookupDto>>(authors)
+            );
+        }
+    }
+}
+```
+
+Let's see the changes we've done:
+
+* Added `[Authorize(BookStorePermissions.Books.Default)]` to authorize the methods we've newly added/overrode (remember, authorize attribute is valid for all the methods of the class when it is declared for a class).
+* Injected `IAuthorRepository` to query from the authors.
+* Overrode the `GetAsync` method of the base `CrudAppService`, which returns a single `BookDto` object with the given `id`.
+  * Used a simple LINQ expression to join books and authors and query them together for the given book id.
+  * Used `AsyncExecuter.FirstOrDefaultAsync(...)` to execute the query and get a result. `AsyncExecuter` was previously used in the `AuthorAppService`. Check the [repository documentation](../Repositories.md) to understand why we've used it.
+  * Throws an `EntityNotFoundException` which results an `HTTP 404` (not found) result if requested book was not present in the database.
+  * Finally, created a `BookDto` object using the `ObjectMapper`, then assigning the `AuthorName` manually.
+* Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. The logic is similar to the previous method, so you can easily understand the code.
+* Created a new method: `GetAuthorLookupAsync`. This simple gets all the authors. The UI uses this method to fill a dropdown list and select and author while creating/editing books.
+
+
+
+
+
+### Object to Object Mapping Configuration
+
