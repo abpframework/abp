@@ -56,12 +56,11 @@ In the previous parts, we've used the ABP infrastructure to easily build some se
 
 * Used the [CrudAppService](../Application-Services.md) base class instead of manually developing an application service for standard create, read, update and delete operations.
 * Used [generic repositories](../Repositories.md) to completely automate the database layer.
-* Used [conventional API controllers](../API/Auto-API-Controllers.md) instead of manually writing API controllers.
 
 For the "Authors" part;
 
-* We will **do most of the things manually** to show how you can do it in case of need.
-* We will implement **Domain Driven Design (DDD) best practices**.
+* We will **do some of the things manually** to show how you can do it in case of need.
+* We will implement some **Domain Driven Design (DDD) best practices**.
 
 > **The development will be done layer by layer to concentrate on an individual layer in one time. In a real project, you will develop your application feature by feature (vertical) as done in the previous parts. In this way, you will experience both approaches.**
 
@@ -122,10 +121,10 @@ namespace Acme.BookStore.Authors
 * `private set` for the `Name` property restricts to set this property from out of this class. There are two ways of setting the name (in both cases, we validate the name):
   * In the constructor, while creating a new author.
   * Using the `ChangeName` method to update the name later.
-* The `constructor` and the `ChangeName` method is `internal` to force to use these methods only in the domain layer, using the `AuthorManager` that will be explained below.
-* `Check` class is an ABP Framework utility class to help you while checking method arguments (it throws exception on an invalid case).
+* The `constructor` and the `ChangeName` method is `internal` to force to use these methods only in the domain layer, using the `AuthorManager` that will be explained later.
+* `Check` class is an ABP Framework utility class to help you while checking method arguments (it throws `ArgumentException` on an invalid case).
 
-`AuthorConsts` is a simple class that is located under the `Authors` namespace of the `Acme.BookStore.Domain.Shared` project:
+`AuthorConsts` is a simple class that is located under the `Authors` namespace (folder) of the `Acme.BookStore.Domain.Shared` project:
 
 ````csharp
 namespace Acme.BookStore.Authors
@@ -137,7 +136,7 @@ namespace Acme.BookStore.Authors
 }
 ````
 
-Created this class inside the `Acme.BookStore.Domain.Shared` project since we will re-use it on the Data Transfer Objects (DTOs) later.
+Created this class inside the `Acme.BookStore.Domain.Shared` project since we will re-use it on the [Data Transfer Objects](../Data-Transfer-Objects.md) (DTOs) later.
 
 ## AuthorManager: The Domain Service
 
@@ -203,9 +202,9 @@ namespace Acme.BookStore.Authors
 
 * `AuthorManager` forces to create an author and change name of an author in a controlled way. The application layer (will be introduced later) will use these methods.
 
-> **DDD tip**: Do not introduce domain service methods unless they are needed and they perform core business rules. For this case, we needed to this service to be able to force the unique name constraint.
+> **DDD tip**: Do not introduce domain service methods unless they are really needed and perform some core business rules. For this case, we needed to this service to be able to force the unique name constraint.
 
-Both methods checks if there is already an author with the given name and throws a special business exception, `AuthorAlreadyExistsException`, defined as shown below:
+Both methods checks if there is already an author with the given name and throws a special business exception, `AuthorAlreadyExistsException`, defined in the `Acme.BookStore.Domain` project as shown below:
 
 ````csharp
 using Volo.Abp;
@@ -223,7 +222,7 @@ namespace Acme.BookStore.Authors
 }
 ````
 
-`BusinessException` is a special exception type that. It is a good way to throw domain related exceptions. It is automatically handled by the ABP Framework and can be easily localized. `WithData` method is used to provide additional data to the exception object that will later be used on the localization message or for some other purpose.
+`BusinessException` is a special exception type. It is a good practice to throw domain related exceptions when needed. It is automatically handled by the ABP Framework and can be easily localized. `WithData(...)` method is used to provide additional data to the exception object that will later be used on the localization message or for some other purpose.
 
 Open the `BookStoreDomainErrorCodes` in the `Acme.BookStore.Domain.Shared` project and change as shown below:
 
@@ -247,7 +246,7 @@ Whenever you throw an `AuthorAlreadyExistsException`, the end use will see a nic
 
 ## IAuthorRepository
 
-`AuthorManager` inject the `IAuthorRepository`, so we need to define it. Create this new interface in the `Authors` folder (namespace) of the `Acme.BookStore.Domain` project:
+`AuthorManager` injects the `IAuthorRepository`, so we need to define it. Create this new interface in the `Authors` folder (namespace) of the `Acme.BookStore.Domain` project:
 
 ````charp
 using System;

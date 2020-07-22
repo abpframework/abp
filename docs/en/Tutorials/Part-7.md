@@ -54,9 +54,9 @@ This tutorials has multiple versions based on your **UI** and **Database** prefe
 
 This part explains how to configure the database integration for the `Author` entity introduced in the previous part.
 
-## DB Context
-
 {{if DB=="EF"}}
+
+## DB Context
 
 Open the `BookStoreDbContext` in the `Acme.BookStore.EntityFrameworkCore` project and add the following `DbSet` property:
 
@@ -98,7 +98,13 @@ This will create a new migration class. Then run the `Update-Database` command t
 
 {{else if DB=="Mongo"}}
 
-*TODO: MongoDB part is being prepared...*
+## DB Context
+
+Open the `BookStoreMongoDbContext` in the `MongoDb` folder of the `Acme.BookStore.MongoDB` project and add the following property to the class:
+
+````csharp
+public IMongoCollection<Author> Authors => Collection<Author>();
+````
 
 {{end}}
 
@@ -160,9 +166,68 @@ namespace Acme.BookStore.Authors
 * `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
 * `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
 
+> See the [EF Core Integration document](../Entity-Framework-Core.md) for more information on the EF Core based repositories.
+
 {{else if DB=="Mongo"}}
 
-*TODO: MongoDB part is being prepared...*
+Create a new class, named `MongoDbAuthorRepository` inside the `Acme.BookStore.MongoDB` project (in the `Authors` folder) and paste the following code:
+
+```csharp
+using System;
+using System.Linq;
+using System.Linq.Dynamic.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Acme.BookStore.MongoDB;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using Volo.Abp.Domain.Repositories.MongoDB;
+using Volo.Abp.MongoDB;
+
+namespace Acme.BookStore.Authors
+{
+    public class MongoDbAuthorRepository
+        : MongoDbRepository<BookStoreMongoDbContext, Author, Guid>,
+        IAuthorRepository
+    {
+        public MongoDbAuthorRepository(
+            IMongoDbContextProvider<BookStoreMongoDbContext> dbContextProvider
+            ) : base(dbContextProvider)
+        {
+        }
+
+        public async Task<Author> FindByNameAsync(string name)
+        {
+            return await GetMongoQueryable()
+                .FirstOrDefaultAsync(author => author.Name == name);
+        }
+
+        public async Task<List<Author>> GetListAsync(
+            int skipCount,
+            int maxResultCount,
+            string sorting,
+            string filter = null)
+        {
+            return await GetMongoQueryable()
+                .WhereIf<Author, IMongoQueryable<Author>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    author => author.Name.Contains(filter)
+                )
+                .OrderBy(sorting)
+                .As<IMongoQueryable<Author>>()
+                .Skip(skipCount)
+                .Take(maxResultCount)
+                .ToListAsync();
+        }
+    }
+}
+```
+
+* Inherited from the `MongoDbAuthorRepository`, so it inherits the standard repository method implementations.
+* `WhereIf` is a shortcut extension method of the ABP Framework. It adds the `Where` condition only if the first condition meets (it filters by name, only if the filter was provided). You could do the same yourself, but these type of shortcut methods makes our life easier.
+* `sorting` can be a string like `Name`, `Name ASC` or `Name DESC`. It is possible by using the [System.Linq.Dynamic.Core](https://www.nuget.org/packages/System.Linq.Dynamic.Core) NuGet package.
+
+> See the [MongoDB Integration document](../MongoDB.md) for more information on the MongoDB based repositories.
 
 {{end}}
 

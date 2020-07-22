@@ -86,7 +86,7 @@ namespace Acme.BookStore.Authors
 * `PagedResultDto` is a pre-defined DTO class in the ABP Framework. It has an `Items` collection and a `TotalCount` property to return a paged result.
 * Preferred to return an `AuthorDto` (for the newly created author) from the `CreateAsync` method, while it is not used by this application - just to show a different usage.
 
-This interface is using the DTOs defined below.
+This interface is using the DTOs defined below (create them for your project).
 
 ### AuthorDto
 
@@ -174,7 +174,7 @@ namespace Acme.BookStore.Authors
 }
 ````
 
-We could share (re-use) the same DTO among the create and the update operations. While you can do it, we prefer to create different DTOs for these operations since we see they generally be different by the time. So, code duplication is reasonable here compared to a tightly coupled design.
+> We could share (re-use) the same DTO among the create and the update operations. While you can do it, we prefer to create different DTOs for these operations since we see they generally be different by the time. So, code duplication is reasonable here compared to a tightly coupled design.
 
 ## AuthorAppService
 
@@ -499,7 +499,8 @@ using Shouldly;
 using Xunit;
 
 namespace Acme.BookStore.Authors
-{
+{ {{if DB=="Mongo"}}
+    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
     public class AuthorAppService_Tests : BookStoreApplicationTestBase
     {
         private readonly IAuthorAppService _authorAppService;
@@ -527,6 +528,7 @@ namespace Acme.BookStore.Authors
 
             result.TotalCount.ShouldBeGreaterThanOrEqualTo(1);
             result.Items.ShouldContain(author => author.Name == "George Orwell");
+            result.Items.ShouldNotContain(author => author.Name == "Douglas Adams");
         }
 
         [Fact]
