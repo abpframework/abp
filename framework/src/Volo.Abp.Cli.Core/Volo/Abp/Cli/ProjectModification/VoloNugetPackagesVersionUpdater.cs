@@ -148,7 +148,7 @@ namespace Volo.Abp.Cli.ProjectModification
                             SemanticVersion latestVersion;
                             if (currentSemanticVersion.IsPrerelease && !switchToStable)
                             {
-                                latestVersion = latestNugetReleaseCandidateVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, true);
+                                latestVersion = latestNugetReleaseCandidateVersion ?? await _nuGetService.GetLatestVersionOrNullAsync(packageId, includeReleaseCandidates: true);
                             }
                             else
                             {

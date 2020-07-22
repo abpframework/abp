@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli.NuGet
             Logger = NullLogger<VoloNugetPackagesVersionUpdater>.Instance;
         }
 
-        public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includePreviews = false, bool includeNightly = false, bool includeReleaseCandidates = false)
+        public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includeNightly = false, bool includeReleaseCandidates = false)
         {
             if (AuthService.IsLoggedIn())
             {
@@ -81,7 +81,7 @@ namespace Volo.Abp.Cli.NuGet
                     .Select(SemanticVersion.Parse)
                     .OrderByDescending(v=> v, new VersionComparer()).ToList();
 
-                if (!includePreviews && !includeNightly && !includeReleaseCandidates)
+                if (!includeNightly && !includeReleaseCandidates)
                 {
                     versions = versions.Where(x => !x.IsPrerelease).ToList();
                 }
