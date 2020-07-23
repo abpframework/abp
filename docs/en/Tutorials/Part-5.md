@@ -406,4 +406,4 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 
 ## The Next Part
 
-See the [next part](part-6.md) of this tutorial.
+See the [next part](Part-6.md) of this tutorial.

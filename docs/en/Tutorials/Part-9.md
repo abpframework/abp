@@ -851,4 +851,4 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 
 ## The Next Part
 
-See the [next part](part-10.md) of this tutorial.
+See the [next part](Part-10.md) of this tutorial.

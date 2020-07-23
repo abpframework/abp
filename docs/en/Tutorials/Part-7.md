@@ -233,4 +233,4 @@ namespace Acme.BookStore.Authors
 
 ## The Next Part
 
-See the [next part](part-8.md) of this tutorial.
+See the [next part](Part-8.md) of this tutorial.

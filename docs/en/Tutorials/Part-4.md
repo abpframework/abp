@@ -252,4 +252,4 @@ Congratulations, the **green icons** indicates that the tests have been successf
 
 ## The Next Part
 
-See the [next part](part-5.md) of this tutorial.
+See the [next part](Part-5.md) of this tutorial.

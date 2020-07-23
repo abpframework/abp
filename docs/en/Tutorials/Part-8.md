@@ -572,4 +572,4 @@ Created some tests for the application service methods, which should be clear to
 
 ## The Next Part
 
-See the [next part](part-9.md) of this tutorial.
+See the [next part](Part-9.md) of this tutorial.

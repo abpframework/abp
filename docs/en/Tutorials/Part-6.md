@@ -286,4 +286,4 @@ This part covered the domain layer of the authors functionality of the book stor
 
 ## The Next Part
 
-See the [next part](part-7.md) of this tutorial.
+See the [next part](Part-7.md) of this tutorial.

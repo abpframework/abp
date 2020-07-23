@@ -1185,4 +1185,4 @@ Clicking the "Delete" action calls the `delete` method which then shows a confir
 
 ## The Next Part
 
-See the [next part](part-4.md) of this tutorial.
+See the [next part](Part-4.md) of this tutorial.
