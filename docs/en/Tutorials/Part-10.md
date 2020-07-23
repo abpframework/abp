@@ -909,6 +909,29 @@ You can run the application and try to create a new book or update an existing b
 
 {{else if UI=="NG"}}
 
-*TODO: Preparing for the Angular UI...*
+### Service Proxy Generation
+
+Since the book service has changed (added a new action, changed DTOs), we need to refresh the service proxies. Run the following command in the root folder of the angular application:
+
+````bash
+abp generate-proxy
+````
+
+### Show Author Name on the Books Table
+
+Open the `/src/book/book.component.html` and add the following column to the `ngx-datatable`, just after the `name` column.
+
+````html
+<ngx-datatable-column
+  [name]="'::Author' | abpLocalization"
+  prop="authorName"
+></ngx-datatable-column>
+````
+
+This should add an *Author* column to the books page:
+
+![bookstore-added-author-to-book-list-angular](images/bookstore-added-author-to-book-list-angular.png)
+
+TODO...
 
 {{end}}
