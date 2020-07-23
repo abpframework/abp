@@ -57,7 +57,7 @@ Configure<AbpBlobStoringOptions>(options =>
     * Container names Must start and end with lowercase letters and numbers.
     * Container names must be from **3** through **63** characters long.
 * **CreateContainerIfNotExists** (bool): Default value is `false`, If a container does not exist in Aliyun, `AliyunBlobProvider` will try to create it.
-* **TemporaryCredentialsCacheKey** (bool): the cache key of STS credentials.
+* **TemporaryCredentialsCacheKey** (bool): The cache key of STS credentials.
 
 
 ## Aliyun Blob Name Calculator
