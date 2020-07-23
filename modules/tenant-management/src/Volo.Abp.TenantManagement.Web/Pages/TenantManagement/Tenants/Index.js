@@ -17,19 +17,12 @@
         modalClass: 'TenantConnectionStringManagement',
     });
 
-    $(function () {
-        var _$wrapper = $('#TenantsWrapper');
-
-        var _dataTable = _$wrapper.find('table').DataTable(
-            abp.libs.datatables.normalizeConfiguration({
-                order: [[1, 'asc']],
-                processing: true,
-                paging: true,
-                scrollX: true,
-                serverSide: true,
-                ajax: abp.libs.datatables.createAjax(_tenantAppService.getList),
-                columnDefs: [
+    abp.ui.extensions.tableColumns.get("tenant").addContributor(
+        function (columnList) {
+            columnList.addManyTail(
+                [
                     {
+                        title: l("Actions"),
                         rowAction: {
                             items: [
                                 {
@@ -89,9 +82,27 @@
                         },
                     },
                     {
+                        title: l("TenantName"),
                         data: 'name',
-                    },
-                ],
+                    }
+                ]
+            );
+        },
+        0 //adds as the first contributor
+    );
+    
+    $(function () {
+        var _$wrapper = $('#TenantsWrapper');
+
+        var _dataTable = _$wrapper.find('table').DataTable(
+            abp.libs.datatables.normalizeConfiguration({
+                order: [[1, 'asc']],
+                processing: true,
+                paging: true,
+                scrollX: true,
+                serverSide: true,
+                ajax: abp.libs.datatables.createAjax(_tenantAppService.getList),
+                columnDefs: abp.ui.extensions.tableColumns.get("tenant").columns.toArray(),
             })
         );
 

@@ -1,10 +1,13 @@
 ﻿@page
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
 @using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 @model CreateModalModel
 @inject IStringLocalizer<AbpTenantManagementResource> L
+@inject IStringLocalizerFactory StringLocalizerFactory
 @{
     Layout = null;
 }
@@ -17,6 +20,23 @@
             <abp-input asp-for="Tenant.AdminEmailAddress" />
 
             <abp-input asp-for="Tenant.AdminPassword" />
+            
+            @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.TenantInfoModel>())
+            {
+                if (propertyInfo.Type.IsEnum)
+                {
+                    <abp-select asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
+                                label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"></abp-select>
+                }
+                else
+                {
+                    <abp-input type="@propertyInfo.GetInputType()"
+                               asp-for="Tenant.ExtraProperties[propertyInfo.Name]"
+                               label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                               asp-format="@propertyInfo.GetInputFormatOrNull()"
+                               value="@propertyInfo.GetInputValueOrNull(Model.Tenant.ExtraProperties[propertyInfo.Name])" />
+                }
+            }
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
