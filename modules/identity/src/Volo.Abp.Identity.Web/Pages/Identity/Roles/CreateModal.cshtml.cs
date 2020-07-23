@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
@@ -19,6 +20,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 
         public virtual Task<IActionResult> OnGetAsync()
         {
+            Role = new RoleInfoModel();
+            
             return Task.FromResult<IActionResult>(Page());
         }
 
@@ -32,7 +35,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
             return NoContent();
         }
 
-        public class RoleInfoModel
+        public class RoleInfoModel : ExtensibleObject
         {
             [Required]
             [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxNameLength))]
