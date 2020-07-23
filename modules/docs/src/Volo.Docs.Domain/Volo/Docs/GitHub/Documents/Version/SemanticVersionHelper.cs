@@ -5,7 +5,7 @@ using NuGet.Versioning;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Projects;
 
-namespace Volo.Docs.Version
+namespace Volo.Docs.GitHub.Documents.Version
 {
     public class SemanticVersionHelper : IVersionHelper, ITransientDependency
     {
@@ -14,7 +14,7 @@ namespace Volo.Docs.Version
             return versions.OrderByDescending(v=> SemanticVersion.Parse(NormalizeVersion(v)), new VersionComparer()).ToList();
         }
 
-        public List<VersionInfoDto> OrderByDescending(List<VersionInfoDto> versions)
+        public List<VersionInfo> OrderByDescending(List<VersionInfo> versions)
         {
             return versions.OrderByDescending(v => SemanticVersion.Parse(NormalizeVersion(v.Name)), new VersionComparer()).ToList();
         }
