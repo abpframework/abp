@@ -509,9 +509,9 @@ That's all! You can run the application and try to edit an author.
 
 {{else if UI == "NG"}}
 
-## The Book List Page
+## The Author List Page, Create & Delete Authors
 
-Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
+Run the following command line to create a new module, named `AuthorModule` in the root folder of the angular application:
 
 ```bash
 yarn ng generate module author --module app --routing --route authors
@@ -543,16 +543,18 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { AuthorRoutingModule } from './author-routing.module';
 import { AuthorComponent } from './author.component';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AuthorComponent],
-  imports: [SharedModule, AuthorRoutingModule],
+  imports: [SharedModule, AuthorRoutingModule, NgbDatepickerModule],
 })
 export class AuthorModule {}
 ```
 
 - Added the `SharedModule`. `SharedModule` exports some common modules needed to create user interfaces.
 - `SharedModule` already exports the `CommonModule`, so we've removed the `CommonModule`.
+- Added `NgbDatepickerModule` that will be used later on the author create and edit forms.
 
 ### Menu Definition
 
@@ -630,17 +632,31 @@ import { Component, OnInit } from '@angular/core';
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { AuthorDto } from './models';
 import { AuthorService } from './services';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-author',
   templateUrl: './author.component.html',
   styleUrls: ['./author.component.scss'],
-  providers: [ListService],
+  providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class AuthorComponent implements OnInit {
   author = { items: [], totalCount: 0 } as PagedResultDto<AuthorDto>;
 
-  constructor(public readonly list: ListService, private authorService: AuthorService) {}
+  isModalOpen = false;
+
+  form: FormGroup;
+
+  selectedAuthor = new AuthorDto();
+
+  constructor(
+    public readonly list: ListService,
+    private authorService: AuthorService,
+    private fb: FormBuilder,
+    private confirmation: ConfirmationService
+  ) {}
 
   ngOnInit(): void {
     const authorStreamCreator = (query) => this.authorService.getListByInput(query);
@@ -649,13 +665,161 @@ export class AuthorComponent implements OnInit {
       this.author = response;
     });
   }
+
+  createAuthor() {
+    this.selectedAuthor = new AuthorDto();
+    this.buildForm();
+    this.isModalOpen = true;
+  }
+
+  editAuthor(id: string) {
+    this.authorService.getById(id).subscribe((author) => {
+      this.selectedAuthor = author;
+      this.buildForm();
+      this.isModalOpen = true;
+    });
+  }
+
+  buildForm() {
+    this.form = this.fb.group({
+      name: [this.selectedAuthor.name || '', Validators.required],
+      birthDate: [
+        this.selectedAuthor.birthDate ? new Date(this.selectedAuthor.birthDate) : null,
+        Validators.required,
+      ],
+    });
+  }
+
+  save() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    if (this.selectedAuthor.id) {
+      this.authorService
+        .updateByIdAndInput(this.form.value, this.selectedAuthor.id)
+        .subscribe(() => {
+          this.isModalOpen = false;
+          this.form.reset();
+          this.list.get();
+        });
+    } else {
+      this.authorService.createByInput(this.form.value).subscribe(() => {
+        this.isModalOpen = false;
+        this.form.reset();
+        this.list.get();
+      });
+    }
+  }
+
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure')
+        .subscribe((status) => {
+          if (status === Confirmation.Status.confirm) {
+            this.authorService.deleteById(id).subscribe(() => this.list.get());
+          }
+	    });
+  }
 }
 ```
 
-- We imported and injected the generated `AuthorService`.
-- We are using the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
-
 Open the `/src/app/author/author.component.html` and replace the content as below:
+
+````html
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">
+          {{ '::Menu:Authors' | abpLocalization }}
+        </h5>
+      </div>
+      <div class="text-right col col-md-6">
+        <div class="text-lg-right pt-2">
+          <button id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
+            <i class="fa fa-plus mr-1"></i>
+            <span>{{ '::NewAuthor' | abpLocalization }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ngx-datatable [rows]="author.items" [count]="author.totalCount" [list]="list" default>
+      <ngx-datatable-column
+        [name]="'::Actions' | abpLocalization"
+        [maxWidth]="150"
+        [sortable]="false"
+      >
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          <div ngbDropdown container="body" class="d-inline-block">
+            <button
+              class="btn btn-primary btn-sm dropdown-toggle"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              ngbDropdownToggle
+            >
+              <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
+            </button>
+            <div ngbDropdownMenu>
+              <button ngbDropdownItem (click)="editAuthor(row.id)">
+                {{ '::Edit' | abpLocalization }}
+              </button>
+              <button ngbDropdownItem (click)="delete(row.id)">
+                {{ '::Delete' | abpLocalization }}
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::BirthDate' | abpLocalization">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.birthDate | date }}
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>
+
+<abp-modal [(visible)]="isModalOpen">
+  <ng-template #abpHeader>
+    <h3>{{ (selectedAuthor.id ? '::Edit' : '::NewAuthor') | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-group">
+        <label for="author-name">Name</label><span> * </span>
+        <input type="text" id="author-name" class="form-control" formControlName="name" autofocus />
+      </div>
+
+      <div class="form-group">
+        <label>Birth date</label><span> * </span>
+        <input
+          #datepicker="ngbDatepicker"
+          class="form-control"
+          name="datepicker"
+          formControlName="birthDate"
+          ngbDatepicker
+          (click)="datepicker.toggle()"
+        />
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" #abpClose>
+      {{ '::Close' | abpLocalization }}
+    </button>
+
+    <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
+      <i class="fa fa-check mr-1"></i>
+      {{ '::Save' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
+````
 
 ### Localizations
 
@@ -669,8 +833,6 @@ This page uses some localization keys we need to declare. Open the `en.json` fil
 "NewAuthor": "New author"
 ````
 
-Notice that we've added more keys. They will be used in the next sections.
-
 ### Run the Application
 
 Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `identity/roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
@@ -680,6 +842,8 @@ Run and login to the application. **You can not see the menu item since you don'
 As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
 
 ![bookstore-authors-page](images/bookstore-angular-authors-page.png)
+
+That's all! This is a fully working CRUD page, you can create, edit and delete authors.
 
 > **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
 
