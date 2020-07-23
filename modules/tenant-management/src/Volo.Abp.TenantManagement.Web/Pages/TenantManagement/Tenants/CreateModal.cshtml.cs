@@ -20,6 +20,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
         public virtual Task<IActionResult> OnGetAsync()
         {
+            Tenant = new TenantInfoModel();
             return Task.FromResult<IActionResult>(Page());
         }
 

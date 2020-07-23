@@ -13,11 +13,11 @@ namespace Volo.Abp.TenantManagement.Web
 
             //CreateModal
             CreateMap<CreateModalModel.TenantInfoModel, TenantCreateDto>()
-                .Ignore(x => x.ExtraProperties);
+                .MapExtraProperties();
 
             //EditModal
             CreateMap<EditModalModel.TenantInfoModel, TenantUpdateDto>()
-                .Ignore(x => x.ExtraProperties);
+                .MapExtraProperties();
         }
     }
 }
