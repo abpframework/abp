@@ -64,6 +64,12 @@ Open the `Books/Book.cs` in the `Acme.BookStore.Domain` project and add the foll
 public Guid AuthorId { get; set; }
 ````
 
+{{if DB=="EF"}}
+
+> In this tutorial, we preferred to not add a **navigation property** to the `Author` entity (like `public Author Author { get; set; }`). This is due to follow the DDD best practices (rule: refer to other aggregates only by id). However, you can add such a navigation property and configure it for the EF Core. In this way, you don't need to write join queries while getting books with their entities (just like we will done below) which makes your application code simpler.
+
+{{end}}
+
 ## Database & Data Migration
 
 Added a new, required `AuthorId` property to the `Book` entity. But, what about the existing books on the database? They currently don't have `AuthorId`s and this will be a problem when we try to run the application.
