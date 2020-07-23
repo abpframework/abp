@@ -226,7 +226,7 @@ The only change is that we set the `AuthorId` properties of the `Book` entities.
 
 You can now run the `.DbMigrator` console application to **migrate** the **database schema** and **seed** the initial data.
 
-{{else if DB="Mongo"}}
+{{else if DB=="Mongo"}}
 
 You can now run the `.DbMigrator` console application to **seed** the initial data.
 
