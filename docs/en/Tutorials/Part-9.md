@@ -509,7 +509,179 @@ That's all! You can run the application and try to edit an author.
 
 {{else if UI == "NG"}}
 
-*TODO: Angular UI is being prepared...*
+## The Book List Page
+
+Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
+
+```bash
+yarn ng generate module author --module app --routing --route authors
+```
+
+This command should produce the following output:
+
+```bash
+> yarn ng generate module author --module app --routing --route authors
+
+yarn run v1.19.1
+$ ng generate module author --module app --routing --route authors
+CREATE src/app/author/author-routing.module.ts (344 bytes)
+CREATE src/app/author/author.module.ts (349 bytes)
+CREATE src/app/author/author.component.html (21 bytes)
+CREATE src/app/author/author.component.spec.ts (628 bytes)
+CREATE src/app/author/author.component.ts (276 bytes)
+CREATE src/app/author/author.component.scss (0 bytes)
+UPDATE src/app/app-routing.module.ts (1396 bytes)
+Done in 2.22s.
+```
+
+### AuthorModule
+
+Open the `/src/app/author/author.module.ts` and replace the content as shown below:
+
+```js
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
+import { AuthorRoutingModule } from './author-routing.module';
+import { AuthorComponent } from './author.component';
+
+@NgModule({
+  declarations: [AuthorComponent],
+  imports: [SharedModule, AuthorRoutingModule],
+})
+export class AuthorModule {}
+```
+
+- Added the `SharedModule`. `SharedModule` exports some common modules needed to create user interfaces.
+- `SharedModule` already exports the `CommonModule`, so we've removed the `CommonModule`.
+
+### Menu Definition
+
+Open the `src/app/route.provider.ts` file and add the following menu definition:
+
+````js
+{
+  path: '/authors',
+  name: '::Menu:Authors',
+  parentName: '::Menu:BookStore',
+  layout: eLayoutType.application,
+  requiredPolicy: 'BookStore.Authors',
+}
+````
+
+The final `configureRoutes` function declaration should be following:
+
+```js
+function configureRoutes(routes: RoutesService) {
+  return () => {
+    routes.add([
+      {
+        path: '/',
+        name: '::Menu:Home',
+        iconClass: 'fas fa-home',
+        order: 1,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/book-store',
+        name: '::Menu:BookStore',
+        iconClass: 'fas fa-book',
+        order: 2,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/books',
+        name: '::Menu:Books',
+        parentName: '::Menu:BookStore',
+        layout: eLayoutType.application,
+        requiredPolicy: 'BookStore.Books',
+      },
+      {
+        path: '/authors',
+        name: '::Menu:Authors',
+        parentName: '::Menu:BookStore',
+        layout: eLayoutType.application,
+        requiredPolicy: 'BookStore.Authors',
+      },
+    ]);
+  };
+}
+```
+
+### Service Proxy Generation
+
+[ABP CLI](https://docs.abp.io/en/abp/latest/CLI) provides `generate-proxy` command that generates client proxies for your HTTP APIs to make easy to consume your HTTP APIs from the client side. Before running `generate-proxy` command, your host must be up and running.
+
+Run the following command in the `angular` folder:
+
+```bash
+abp generate-proxy
+```
+
+This command generates the service proxy for the author service and the related model (DTO) classes:
+
+![bookstore-angular-service-proxy-author](images/bookstore-angular-service-proxy-author.png)
+
+### AuthorComponent
+
+Open the `/src/app/author/author.component.ts` file and replace the content as below:
+
+```js
+import { Component, OnInit } from '@angular/core';
+import { ListService, PagedResultDto } from '@abp/ng.core';
+import { AuthorDto } from './models';
+import { AuthorService } from './services';
+
+@Component({
+  selector: 'app-author',
+  templateUrl: './author.component.html',
+  styleUrls: ['./author.component.scss'],
+  providers: [ListService],
+})
+export class AuthorComponent implements OnInit {
+  author = { items: [], totalCount: 0 } as PagedResultDto<AuthorDto>;
+
+  constructor(public readonly list: ListService, private authorService: AuthorService) {}
+
+  ngOnInit(): void {
+    const authorStreamCreator = (query) => this.authorService.getListByInput(query);
+
+    this.list.hookToQuery(authorStreamCreator).subscribe((response) => {
+      this.author = response;
+    });
+  }
+}
+```
+
+- We imported and injected the generated `AuthorService`.
+- We are using the [ListService](https://docs.abp.io/en/abp/latest/UI/Angular/List-Service), a utility service of the ABP Framework which provides easy pagination, sorting and searching.
+
+Open the `/src/app/author/author.component.html` and replace the content as below:
+
+### Localizations
+
+This page uses some localization keys we need to declare. Open the `en.json` file under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project and add the following entries:
+
+````json
+"Menu:Authors": "Authors",
+"Authors": "Authors",
+"AuthorDeletionConfirmationMessage": "Are you sure to delete the author '{0}'?",
+"BirthDate": "Birth date",
+"NewAuthor": "New author"
+````
+
+Notice that we've added more keys. They will be used in the next sections.
+
+### Run the Application
+
+Run and login to the application. **You can not see the menu item since you don't have permission yet.** Go to the `identity/roles` page, click to the *Actions* button and select the *Permissions* action for the **admin role**:
+
+![bookstore-author-permissions](images/bookstore-author-permissions.png)
+
+As you see, the admin role has no *Author Management* permissions yet. Click to the checkboxes and save the modal to grant the necessary permissions. You will see the *Authors* menu item under the *Book Store* in the main menu, after **refreshing the page**:
+
+![bookstore-authors-page](images/bookstore-angular-authors-page.png)
+
+> **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
 
 {{end}}
 
