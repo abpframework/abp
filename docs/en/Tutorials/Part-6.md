@@ -248,7 +248,7 @@ Whenever you throw an `AuthorAlreadyExistsException`, the end use will see a nic
 
 `AuthorManager` injects the `IAuthorRepository`, so we need to define it. Create this new interface in the `Authors` folder (namespace) of the `Acme.BookStore.Domain` project:
 
-````charp
+````csharp
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
