@@ -326,6 +326,8 @@ This new method will be used from the UI to get a list of authors and fill a dro
 
 Open the `BookAppService` interface in the `Books` folder of the `Acme.BookStore.Application` project and replace the file content with the following code:
 
+{{if DB=="EF"}}
+
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -443,6 +445,132 @@ Let's see the changes we've done:
 * Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. The logic is similar to the previous method, so you can easily understand the code.
 * Created a new method: `GetAuthorLookupAsync`. This simple gets all the authors. The UI uses this method to fill a dropdown list and select and author while creating/editing books.
 
+{{else if DB=="Mongo"}}
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Authors;
+using Acme.BookStore.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
+
+namespace Acme.BookStore.Books
+{
+    [Authorize(BookStorePermissions.Books.Default)]
+    public class BookAppService :
+        CrudAppService<
+            Book, //The Book entity
+            BookDto, //Used to show books
+            Guid, //Primary key of the book entity
+            PagedAndSortedResultRequestDto, //Used for paging/sorting
+            CreateUpdateBookDto>, //Used to create/update a book
+        IBookAppService //implement the IBookAppService
+    {
+        private readonly IAuthorRepository _authorRepository;
+
+        public BookAppService(
+            IRepository<Book, Guid> repository,
+            IAuthorRepository authorRepository)
+            : base(repository)
+        {
+            _authorRepository = authorRepository;
+            GetPolicyName = BookStorePermissions.Books.Default;
+            GetListPolicyName = BookStorePermissions.Books.Default;
+            CreatePolicyName = BookStorePermissions.Books.Create;
+            UpdatePolicyName = BookStorePermissions.Books.Edit;
+            DeletePolicyName = BookStorePermissions.Books.Create;
+        }
+
+        public override async Task<BookDto> GetAsync(Guid id)
+        {
+            var book = await Repository.GetAsync(id);
+            var bookDto = ObjectMapper.Map<Book, BookDto>(book);
+
+            var author = await _authorRepository.GetAsync(book.AuthorId);
+            bookDto.AuthorName = author.Name;
+
+            return bookDto;
+        }
+
+        public override async Task<PagedResultDto<BookDto>> 
+            GetListAsync(PagedAndSortedResultRequestDto input)
+        {
+            //Set a default sorting, if not provided
+            if (input.Sorting.IsNullOrWhiteSpace())
+            {
+                input.Sorting = nameof(Book.Name);
+            }
+
+            //Get the books
+            var books = await AsyncExecuter.ToListAsync(
+                Repository
+                    .OrderBy(input.Sorting)
+                    .Skip(input.SkipCount)
+                    .Take(input.MaxResultCount)
+            );
+
+            //Convert to DTOs
+            var bookDtos = ObjectMapper.Map<List<Book>, List<BookDto>>(books);
+
+            //Get a lookup dictionary for the related authors
+            var authorDictionary = await GetAuthorDictionaryAsync(books);
+
+            //Set AuthorName for the DTOs
+            bookDtos.ForEach(bookDto => bookDto.AuthorName = 
+                             authorDictionary[bookDto.AuthorId].Name);
+
+            //Get the total count with another query (required for the paging)
+            var totalCount = await Repository.GetCountAsync();
+
+            return new PagedResultDto<BookDto>(
+                totalCount,
+                bookDtos
+            );
+        }
+
+        public async Task<ListResultDto<AuthorLookupDto>> GetAuthorLookupAsync()
+        {
+            var authors = await _authorRepository.GetListAsync();
+
+            return new ListResultDto<AuthorLookupDto>(
+                ObjectMapper.Map<List<Author>, List<AuthorLookupDto>>(authors)
+            );
+        }
+
+        private async Task<Dictionary<Guid, Author>>
+            GetAuthorDictionaryAsync(List<Book> books)
+        {
+            var authorIds = books
+                .Select(b => b.AuthorId)
+                .Distinct()
+                .ToArray();
+
+            var authors = await AsyncExecuter.ToListAsync(
+                _authorRepository.Where(a => authorIds.Contains(a.Id))
+            );
+
+            return authors.ToDictionary(x => x.Id, x => x);
+        }
+    }
+}
+```
+
+Let's see the changes we've done:
+
+* Added `[Authorize(BookStorePermissions.Books.Default)]` to authorize the methods we've newly added/overrode (remember, authorize attribute is valid for all the methods of the class when it is declared for a class).
+* Injected `IAuthorRepository` to query from the authors.
+* Overrode the `GetAsync` method of the base `CrudAppService`, which returns a single `BookDto` object with the given `id`.
+* Overrode the `GetListAsync` method of the base `CrudAppService`, which returns a list of books. This code separately queries the authors from database and sets the name of the authors in the application code. Instead, you could create a custom repository method and perform a join query or take the power of the MongoDB API to get the books and their authors in a single query, which would be more performant.
+* Created a new method: `GetAuthorLookupAsync`. This simple gets all the authors. The UI uses this method to fill a dropdown list and select and author while creating/editing books.
+
+{{end}}
+
 ### Object to Object Mapping Configuration
 
 Introduced the `AuthorLookupDto` class and used object mapping inside the `GetAuthorLookupAsync` method. So, we need to add a new mapping definition inside the `BookStoreApplicationAutoMapperProfile.cs` file of the `Acme.BookStore.Application` project:
@@ -466,7 +594,8 @@ using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books
-{
+{ {{if DB=="Mongo"}}
+    [Collection(BookStoreTestConsts.CollectionDefinitionName)]{{end}}
     public class BookAppService_Tests : BookStoreApplicationTestBase
     {
         private readonly IBookAppService _bookAppService;
