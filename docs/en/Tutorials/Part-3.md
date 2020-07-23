@@ -643,7 +643,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
+import { BookDto } from './models';
 import { BookService } from './services';
 
 @Component({
@@ -654,8 +654,6 @@ import { BookService } from './services';
 })
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
-
-  booksType = BookType;
 
   isModalOpen = false; // add this line
 
@@ -738,7 +736,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
+import { BookDto, BookType } from './models'; // add BookType
 import { BookService } from './services';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
@@ -751,13 +749,13 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  booksType = BookType;
-
   form: FormGroup; // add this line
 
-  // add bookTypes as a list of enum members
-  bookTypes = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
+  bookType = BookType; // add this line
+
+  // add bookTypes as a list of BookType enum members
+  bookTypes = Object.keys(this.bookType).filter(
+    (key) => typeof this.bookType[key] === 'number'
   );
 
   isModalOpen = false;
@@ -808,7 +806,8 @@ export class BookComponent implements OnInit {
 
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
 * Added `form: FormGroup` property.
-* Add `bookTypes` as a list of `BookType` enum members.
+* Added `bookType` property so that you can reach `BookType` enum members from template.
+* Added `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
 * Injected `FormBuilder` into the constructor. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
 * Added `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
 * Added `save` method.
@@ -832,7 +831,7 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
+        <option [ngValue]="bookType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -917,13 +916,12 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  booksType = BookType;
-
   form: FormGroup;
 
-  // <== added bookTypes array ==>
-  bookTypes = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
+  bookType = BookType;
+
+  bookTypes = Object.keys(this.bookType).filter(
+    (key) => typeof this.bookType[key] === 'number'
   );
 
   isModalOpen = false;
@@ -998,14 +996,14 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  booksType = BookType;
+  selectedBook = new BookDto(); // declare selectedBook
 
   form: FormGroup;
 
-  selectedBook = new BookDto(); // declare selectedBook
+  bookType = BookType;
 
-  bookTypes = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
+  bookTypes = Object.keys(this.bookType).filter(
+    (key) => typeof this.bookType[key] === 'number'
   );
 
   isModalOpen = false;
