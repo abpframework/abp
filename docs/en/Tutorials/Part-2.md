@@ -462,11 +462,8 @@ For more information, see the [RoutesService document](https://docs.abp.io/en/ab
 Run the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy --apiUrl https://localhost:XXXXX
+abp generate-proxy
 ```
-
-* XXXXX should be replaced with the backend port of your application.
-* If you don't specify the `--apiUrl` parameter, it will try to get the URL from the `src/environments/environment.ts` file.
 
 The generated files looks like below:
 
