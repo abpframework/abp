@@ -476,7 +476,7 @@ Open the `/src/app/book/book.component.ts` file and replace the content as below
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
+import { BookDto } from './models';
 import { BookService } from './services';
 
 @Component({
@@ -487,8 +487,6 @@ import { BookService } from './services';
 })
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
-
-  booksType = BookType;
 
   constructor(public readonly list: ListService, private bookService: BookService) {}
 

@@ -1,9 +1,15 @@
-import { Router, RouteReuseStrategy, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
+import {
+  Router,
+  RouteReuseStrategy,
+  NavigationStart,
+  NavigationEnd,
+  NavigationError,
+} from '@angular/router';
 import { createHostFactory, SpectatorHost, SpyObject } from '@ngneat/spectator/jest';
 import { Actions, NgxsModule, Store } from '@ngxs/store';
 import { Subject, Subscription, Observable, Subscriber, timer } from 'rxjs';
 import { LoaderBarComponent } from '../components/loader-bar/loader-bar.component';
-import { StartLoader, StopLoader } from '@abp/ng.core';
+import { StartLoader, StopLoader, SubscriptionService } from '@abp/ng.core';
 import { HttpRequest } from '@angular/common/http';
 
 describe('LoaderBarComponent', () => {
@@ -16,6 +22,7 @@ describe('LoaderBarComponent', () => {
     mocks: [Router],
     imports: [NgxsModule.forRoot()],
     detectChanges: false,
+    providers: [SubscriptionService],
   });
 
   beforeEach(() => {
