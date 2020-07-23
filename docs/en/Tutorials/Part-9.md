@@ -731,14 +731,14 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
     <div class="row">
       <div class="col col-md-6">
         <h5 class="card-title">
-          {{ '::Menu:Authors' | abpLocalization }}
+          {%{{{ '::Menu:Authors' | abpLocalization }}}%}
         </h5>
       </div>
       <div class="text-right col col-md-6">
         <div class="text-lg-right pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
             <i class="fa fa-plus mr-1"></i>
-            <span>{{ '::NewAuthor' | abpLocalization }}</span>
+            <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>
           </button>
         </div>
       </div>
@@ -759,14 +759,14 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
               aria-haspopup="true"
               ngbDropdownToggle
             >
-              <i class="fa fa-cog mr-1"></i>{{ '::Actions' | abpLocalization }}
+              <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
             </button>
             <div ngbDropdownMenu>
               <button ngbDropdownItem (click)="editAuthor(row.id)">
-                {{ '::Edit' | abpLocalization }}
+                {%{{{ '::Edit' | abpLocalization }}}%}
               </button>
               <button ngbDropdownItem (click)="delete(row.id)">
-                {{ '::Delete' | abpLocalization }}
+                {%{{{ '::Delete' | abpLocalization }}}%}
               </button>
             </div>
           </div>
@@ -775,7 +775,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
       <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
       <ngx-datatable-column [name]="'::BirthDate' | abpLocalization">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.birthDate | date }}
+          {%{{{ row.birthDate | date }}}%}
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
@@ -784,7 +784,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
 
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
-    <h3>{{ (selectedAuthor.id ? '::Edit' : '::NewAuthor') | abpLocalization }}</h3>
+    <h3>{%{{{ (selectedAuthor.id ? '::Edit' : '::NewAuthor') | abpLocalization }}}%}</h3>
   </ng-template>
 
   <ng-template #abpBody>
@@ -810,12 +810,12 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
 
   <ng-template #abpFooter>
     <button type="button" class="btn btn-secondary" #abpClose>
-      {{ '::Close' | abpLocalization }}
+      {%{{{ '::Close' | abpLocalization }}}%}
     </button>
 
     <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
       <i class="fa fa-check mr-1"></i>
-      {{ '::Save' | abpLocalization }}
+      {%{{{ '::Save' | abpLocalization }}}%}
     </button>
   </ng-template>
 </abp-modal>
