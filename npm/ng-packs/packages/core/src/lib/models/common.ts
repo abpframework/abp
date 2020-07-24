@@ -9,6 +9,7 @@ export namespace ABP {
     environment: Partial<Config.Environment>;
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
+    cultureNameToLocaleFileNameMapping?: Dictionary<string>;
   }
 
   export interface Test {
