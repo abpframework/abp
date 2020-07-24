@@ -122,9 +122,9 @@ namespace Volo.Abp.Application.Services
         /// <param name="query">The query.</param>
         protected virtual IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
         {
-            if (typeof(TEntity).IsAssignableTo<ICreationAuditedObject>())
+            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
             {
-                return query.OrderByDescending(e => ((ICreationAuditedObject)e).CreationTime);
+                return query.OrderByDescending(e => ((IHasCreationTime)e).CreationTime);
             }
 
             throw new AbpException("No sorting specified but this query requires sorting. Override the ApplyDefaultSorting method for your application service derived from AbstractKeyReadOnlyAppService!");
