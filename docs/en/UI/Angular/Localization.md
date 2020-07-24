@@ -211,7 +211,7 @@ If you see the error like above, you should pass the `cultureNameToLocaleFileNam
       // other options
       cultureNameToLocaleFileNameMapping: { 
         "X": "Y",
-        "AnotherLocaleNameDefinedInDotnet": "AnotherLocaleNameDefinedInAngular"
+        "AnotherCultureNameDefinedInDotnet": "AnotherLocaleFileNameDefinedInAngular"
       }
     })
     //...
