@@ -1,8 +1,8 @@
-$dev = $args[0] 
+$full = $args[0] 
 
-. ".\common.ps1" $dev
+. ".\common.ps1" $full
 
-# Build all solutions  
+# Build all solutions   
 
 foreach ($solutionPath in $solutionPaths) {    
     $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
