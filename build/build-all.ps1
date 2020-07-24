@@ -4,6 +4,8 @@ $full = $args[0]
 
 # Build all solutions   
 
+Write-Host $solutionPaths
+
 foreach ($solutionPath in $solutionPaths) {    
     $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
     Set-Location $solutionAbsPath
