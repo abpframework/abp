@@ -55,6 +55,11 @@ namespace Volo.Abp.Application.Services
 
         }
 
+        protected override Task<TEntityDto> MapToGetListOutputDtoAsync(TEntity entity)
+        {
+            return base.MapToGetOutputDtoAsync(entity);
+        }
+
         protected override TEntityDto MapToGetListOutputDto(TEntity entity)
         {
             return MapToGetOutputDto(entity);

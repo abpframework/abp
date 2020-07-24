@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
@@ -51,6 +52,11 @@ namespace Volo.Abp.Application.Services
 
         }
 
+        protected override Task<TEntityDto> MapToGetListOutputDtoAsync(TEntity entity)
+        {
+            return MapToGetOutputDtoAsync(entity);
+        }
+
         protected override TEntityDto MapToGetListOutputDto(TEntity entity)
         {
             return MapToGetOutputDto(entity);
@@ -80,13 +86,13 @@ namespace Volo.Abp.Application.Services
         {
             await CheckCreatePolicyAsync();
 
-            var entity = MapToEntity(input);
+            var entity = await MapToEntityAsync(input);
 
             TryToSetTenantId(entity);
 
             await Repository.InsertAsync(entity, autoSave: true);
 
-            return MapToGetOutputDto(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
 
         public virtual async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
@@ -95,10 +101,10 @@ namespace Volo.Abp.Application.Services
 
             var entity = await GetEntityByIdAsync(id);
             //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
-            MapToEntity(input, entity);
+            await MapToEntityAsync(input, entity);
             await Repository.UpdateAsync(entity, autoSave: true);
 
-            return MapToGetOutputDto(entity);
+            return await MapToGetOutputDtoAsync(entity);
         }
 
         public virtual async Task DeleteAsync(TKey id)
@@ -127,6 +133,17 @@ namespace Volo.Abp.Application.Services
 
         /// <summary>
         /// Maps <see cref="TCreateInput"/> to <see cref="TEntity"/> to create a new entity.
+        /// It uses <see cref="MapToEntity(TCreateInput)"/> by default.
+        /// It can be overriden for custom mapping.
+        /// Overriding this has higher priority than overriding the <see cref="MapToEntity(TCreateInput)"/>
+        /// </summary>
+        protected virtual Task<TEntity> MapToEntityAsync(TCreateInput createInput)
+        {
+            return Task.FromResult(MapToEntity(createInput));
+        }
+
+        /// <summary>
+        /// Maps <see cref="TCreateInput"/> to <see cref="TEntity"/> to create a new entity.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>
@@ -151,6 +168,18 @@ namespace Volo.Abp.Application.Services
                     true
                 );
             }
+        }
+
+        /// <summary>
+        /// Maps <see cref="TUpdateInput"/> to <see cref="TEntity"/> to update the entity.
+        /// It uses <see cref="MapToEntity(TUpdateInput, TEntity)"/> by default.
+        /// It can be overriden for custom mapping.
+        /// Overriding this has higher priority than overriding the <see cref="MapToEntity(TUpdateInput, TEntity)"/>
+        /// </summary>
+        protected virtual Task MapToEntityAsync(TUpdateInput updateInput, TEntity entity)
+        {
+            MapToEntity(updateInput, entity);
+            return Task.CompletedTask;
         }
 
         /// <summary>
