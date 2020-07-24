@@ -37,7 +37,7 @@ namespace Volo.Abp.BlobStoring.Aws
                 var awsCredentials = GetAwsCredentials(configuration);
                 return awsCredentials == null
                     ? new AmazonS3Client(region)
-                    : new AmazonS3Client(GetAwsCredentials(configuration), region);
+                    : new AmazonS3Client(awsCredentials, region);
             }
 
             if (configuration.UseTemporaryCredentials)

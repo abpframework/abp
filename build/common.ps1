@@ -13,13 +13,14 @@ $solutionPaths = (
     "../modules/identity",
     "../modules/identityserver",
     "../modules/tenant-management",
-    "../modules/account",
-    "../modules/docs",
-    "../modules/blogging",
     "../modules/audit-logging",
     "../modules/background-jobs",
+    "../modules/account",
+    
     "../modules/client-simulation",
     "../modules/virtual-file-explorer",
+    "../modules/docs",
+    "../modules/blogging",
     "../templates/module/aspnet-core",
     "../templates/app/aspnet-core",
     "../abp_io/AbpIoLocalization"

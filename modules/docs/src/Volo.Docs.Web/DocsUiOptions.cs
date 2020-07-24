@@ -21,6 +21,12 @@ namespace Volo.Docs
         /// </summary>
         public bool ShowProjectsCombobox = true;
 
+        /// <summary>
+        /// If true, allows to create sections in document and show/hide sections according to user preferences.
+        /// Default value: True;
+        /// </summary>
+        public bool SectionRendering = true;
+
         private string GetFormattedRoutePrefix()
         {
             if (string.IsNullOrWhiteSpace(_routePrefix))

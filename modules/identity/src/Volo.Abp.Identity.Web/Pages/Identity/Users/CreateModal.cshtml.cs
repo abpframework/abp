@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
@@ -52,7 +53,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             return NoContent();
         }
 
-        public class UserInfoViewModel
+        public class UserInfoViewModel : ExtensibleObject
         {
             [Required]
             [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]

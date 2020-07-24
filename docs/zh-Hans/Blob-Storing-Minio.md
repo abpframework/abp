@@ -41,13 +41,13 @@ Configure<AbpBlobStoringOptions>(options =>
 * **AccessKey** (string): Access key是唯一标识你的账户的用户ID, 
 * **SecretKey** (string): Access key是唯一标识你的账户的用户ID
 * **BucketName** (string):你可以指定bucket名称,如果没有指定,将使用 `BlogContainerName` 属性定义的BLOB容器的名称(查阅[BLOB storing document](Blob-Storing.md)),MinIO完全兼容S3标准,所以有一些 **bucket命名规则**,必须符合[规则](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
-    * Bucket名字必须 **3** 到 **63** 字符长度.
-    * Bucket名字必须是 **小写** 的字母,数字,点号(.), 横杠 (-),
-    * Bucket名字必须是以数字和字母开头和结尾,
-    * Bucket名字不能是ip (例如, 192.168.5.4),
-    * Bucket名字不能以 **xn--** 开头, (2020年2月以后创建),
-    * Bucket名字必须区块唯一 
-    * Buckets如果使用Amazon S3加速传输名字不能有点号(.),
+    * Bucket名称必须介于 3 到 63 个字符之间.
+    * Bucket名称只能由小写字母、数字、句点 (.) 和连字符 (-) 组成.
+    * Bucket名称必须以字母或数字开头和结尾.
+    * Bucket名称不能是ip (例如, 192.168.5.4).
+    * Bucket名称不能以 **xn--** 开头, (对于2020年2月以后创建的 Bucket).
+    * Bucket名称在分区中必须唯一 .
+    * Bucket 与 Amazon S3 Transfer Acceleration 一起使用时名称中不能有句点 (.).
 * **WithSSL** (bool): 默认 `false`,代表使用HTTPS,
 * **CreateContainerIfNotExists** (bool): 默认 `false`,如果不存在bucket, `MinioBlobProvider` 将会创建一个,
 

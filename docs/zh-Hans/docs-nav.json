@@ -219,6 +219,10 @@
                   "path": "Blob-Storing-Minio.md"
                 },
                 {
+                  "text": "AWS提供程序",
+                  "path": "Blob-Storing-Aws.md"
+                },
+                {
                   "text": "创建自定义提供程序",
                   "path": "Blob-Storing-Custom-Provider.md"
                 }

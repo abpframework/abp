@@ -45,17 +45,19 @@ Configure<AbpBlobStoringOptions>(options =>
 
 * **AccessKeyId** ([NotNull]string): AccessKey is the key to access the Alibaba Cloud API. It has full permissions for the account. Please keep it safe! Recommend to follow [Alibaba Cloud security best practicess](https://help.aliyun.com/document_detail/102600.html),Use RAM sub-user AccessKey to call API.
 * **AccessKeySecret** ([NotNull]string): Same as above.
-* **Endpoint** ([NotNull]string): Endpoint is the external domain name of OSS. See the [document](https://help.aliyun.com/document_detail/31837.html) for details.
+* **Endpoint** ([NotNull]string): Endpoint is the external domain name of OSS. See the [document](https://help.aliyun.com/document_detail/31837.html) for details. 
+* **UseSecurityTokenService** (bool): Use [STS temporary credentials](https://help.aliyun.com/document_detail/100624.html) to access OSS services,default: `false`.
 * **RegionId** (string): Access address of STS service. See the [document](https://help.aliyun.com/document_detail/66053.html) for details.
 * **RoleArn** ([NotNull]string): STS required role ARN. See the [document](https://help.aliyun.com/document_detail/100624.html) for details.
 * **RoleSessionName** ([NotNull]string): Used to identify the temporary access credentials, it is recommended to use different application users to distinguish.
 * **Policy** (string): Additional permission restrictions. See the [document](https://help.aliyun.com/document_detail/100680.html) for details.
-* **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600. **note**: Using subaccounts operated OSS,if the value is 0.
+* **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600.
 * **ContainerName** (string): You can specify the container name in Aliyun. If this is not specified, it uses the name of the BLOB container defined with the `BlogContainerName` attribute (see the [BLOB storing document](Blob-Storing.md)). Please note that Aliyun has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://help.aliyun.com/knowledge_detail/39668.html):
     * Container names must start or end with a letter or number, and can contain only letters, numbers, and the dash (-) character.
     * Container names Must start and end with lowercase letters and numbers.
     * Container names must be from **3** through **63** characters long.
 * **CreateContainerIfNotExists** (bool): Default value is `false`, If a container does not exist in Aliyun, `AliyunBlobProvider` will try to create it.
+* **TemporaryCredentialsCacheKey** (bool): The cache key of STS credentials.
 
 
 ## Aliyun Blob Name Calculator
