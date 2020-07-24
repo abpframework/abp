@@ -25,6 +25,12 @@ namespace Volo.Abp.BlobStoring.Aliyun
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.Endpoint, Check.NotNullOrWhiteSpace(value, nameof(value)));
         }
 
+        public bool UseSecurityTokenService
+        {
+            get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.UseSecurityTokenService, false);
+            set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.UseSecurityTokenService, value);
+        }
+
         public string RegionId
         {
             get => _containerConfiguration.GetConfiguration<string>(AliyunBlobProviderConfigurationNames.RegionId);
@@ -88,18 +94,19 @@ namespace Volo.Abp.BlobStoring.Aliyun
             set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.CreateContainerIfNotExists, value);
         }
 
+        private readonly string _temporaryCredentialsCacheKey;
+        public string TemporaryCredentialsCacheKey
+        {
+            get => _containerConfiguration.GetConfigurationOrDefault(AliyunBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, _temporaryCredentialsCacheKey);
+            set => _containerConfiguration.SetConfiguration(AliyunBlobProviderConfigurationNames.TemporaryCredentialsCacheKey, value);
+        }
+
         private readonly BlobContainerConfiguration _containerConfiguration;
 
         public AliyunBlobProviderConfiguration(BlobContainerConfiguration containerConfiguration)
         {
             _containerConfiguration = containerConfiguration;
-        }
-
-
-        public string ToKeyString()
-        {
-            Uri uPoint = new Uri(Endpoint);
-            return $"blobstoring:aliyun:id:{AccessKeyId},sec:{AccessKeySecret},ept:{uPoint.Host.ToLower()},rid:{RegionId},ra:{RoleArn},rsn:{RoleSessionName},pl:{Policy}";
+            _temporaryCredentialsCacheKey = Guid.NewGuid().ToString("N");
         }
     }
 }
