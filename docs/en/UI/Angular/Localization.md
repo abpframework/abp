@@ -217,7 +217,7 @@ If you see the error like above, you should pass the `cultureNameToLocaleFileNam
     //...
 ```
 
-See the [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales)
+See the [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales).
 
 
 ## See Also
