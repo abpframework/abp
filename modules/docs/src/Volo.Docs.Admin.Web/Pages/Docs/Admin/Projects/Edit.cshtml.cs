@@ -77,8 +77,16 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             GithubProject.GitHubAccessToken = (string) dto.ExtraProperties[nameof(GithubProject.GitHubAccessToken)];
             GithubProject.GitHubRootUrl = (string) dto.ExtraProperties[nameof(GithubProject.GitHubRootUrl)];
             GithubProject.GitHubUserAgent = (string) dto.ExtraProperties[nameof(GithubProject.GitHubUserAgent)];
-            GithubProject.GithubVersionProviderSource = (GithubVersionProviderSource) dto.ExtraProperties[nameof(GithubProject.GithubVersionProviderSource)];
-            GithubProject.VersionBranchPrefix = (string) dto.ExtraProperties[nameof(GithubProject.VersionBranchPrefix)];
+
+            if (dto.ExtraProperties.ContainsKey(nameof(GithubProject.GithubVersionProviderSource)))
+            {
+                GithubProject.GithubVersionProviderSource = (GithubVersionProviderSource) (long) dto.ExtraProperties[nameof(GithubProject.GithubVersionProviderSource)];
+            }
+
+            if (dto.ExtraProperties.ContainsKey(nameof(GithubProject.VersionBranchPrefix)))
+            {
+                GithubProject.VersionBranchPrefix = (string) dto.ExtraProperties[nameof(GithubProject.VersionBranchPrefix)];
+            }
         }
 
         public abstract class EditProjectViewModelBase

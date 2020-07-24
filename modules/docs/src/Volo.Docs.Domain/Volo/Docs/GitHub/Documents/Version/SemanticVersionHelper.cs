@@ -32,9 +32,19 @@ namespace Volo.Docs.GitHub.Documents.Version
 
             var versionParts = version.Split("-");
 
-            if (versionParts[0].Split(".").Length > 3)
+            var firstVersionPartSplitted = versionParts[0].Split(".");
+
+            if (firstVersionPartSplitted.Length > 3)
             {
-                normalizedVersion = string.Join(".",versionParts[0].Split(".").Take(3));
+                normalizedVersion = string.Join(".",firstVersionPartSplitted.Take(3));
+            }
+            else if (firstVersionPartSplitted.Length < 3)
+            {
+                normalizedVersion = versionParts[0];
+                for (int i = firstVersionPartSplitted.Length; i < 3; i++)
+                {
+                    normalizedVersion += ".0";
+                }
             }
             else
             {

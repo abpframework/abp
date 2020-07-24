@@ -253,8 +253,11 @@ namespace Volo.Docs.GitHub.Documents
                 if (!string.IsNullOrEmpty(prefix))
                 {
                     versions = versions.Where(v => v.Name.StartsWith(prefix)).ToList();
-                    versions.ForEach(v=> v.Name.Substring(prefix.Length));
-                    versions.ForEach(v=> v.DisplayName.Substring(prefix.Length));
+                    foreach (var v in versions)
+                    {
+                        v.Name = v.Name.Substring(prefix.Length);
+                        v.DisplayName = v.DisplayName.Substring(prefix.Length);
+                    }
                 }
 
                 versions = _versionHelper.OrderByDescending(versions);
@@ -278,7 +281,7 @@ namespace Volo.Docs.GitHub.Documents
         private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
         {
             return project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
-                ? (GithubVersionProviderSource) project.ExtraProperties["GithubVersionProviderSource"]
+                ? (GithubVersionProviderSource) (long) project.ExtraProperties["GithubVersionProviderSource"]
                 : GithubVersionProviderSource.Releases;
         }
 

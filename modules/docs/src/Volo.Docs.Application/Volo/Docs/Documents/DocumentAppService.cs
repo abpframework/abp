@@ -64,6 +64,8 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
+            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
+
             return await GetDocumentWithDetailsDtoAsync(
                 project,
                 input.Name,
@@ -76,6 +78,8 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
+            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
+
             return await GetDocumentWithDetailsDtoAsync(
                 project,
                 project.DefaultDocumentName + "." + project.Format,
@@ -87,6 +91,8 @@ namespace Volo.Docs.Documents
         public virtual async Task<NavigationNode> GetNavigationAsync(GetNavigationDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
 
             var navigationDocument = await GetDocumentWithDetailsDtoAsync(
                 project,
@@ -133,10 +139,11 @@ namespace Volo.Docs.Documents
         public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
-            var cacheKey =
-                CacheKeyGenerator.GenerateDocumentResourceCacheKey(project, input.Name, input.LanguageCode,
-                    input.Version);
+
             input.Version = string.IsNullOrWhiteSpace(input.Version) ? project.LatestVersionBranchName : input.Version;
+            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
+
+            var cacheKey = CacheKeyGenerator.GenerateDocumentResourceCacheKey(project, input.Name, input.LanguageCode,input.Version);
 
             async Task<DocumentResource> GetResourceAsync()
             {
@@ -166,6 +173,8 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
+            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
+
             var esDocs =
                 await _documentFullSearch.SearchAsync(input.Context, project.Id, input.LanguageCode, input.Version);
 
@@ -187,6 +196,8 @@ namespace Volo.Docs.Documents
         public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            input.Version = GetProjectVersionPrefixIfExist(project) + input.Version;
 
             try
             {
@@ -336,6 +347,23 @@ namespace Volo.Docs.Documents
             }
 
             return TimeSpan.Parse(value);
+        }
+
+        private string GetProjectVersionPrefixIfExist(Project project)
+        {
+            if (GetGithubVersionProviderSource(project) == GithubVersionProviderSource.Branches)
+            {
+                return project.ExtraProperties["VersionBranchPrefix"].ToString();
+            }
+
+            return "";
+        }
+
+        private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
+        {
+            return project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
+                ? (GithubVersionProviderSource) (long) project.ExtraProperties["GithubVersionProviderSource"]
+                : GithubVersionProviderSource.Releases;
         }
     }
 }

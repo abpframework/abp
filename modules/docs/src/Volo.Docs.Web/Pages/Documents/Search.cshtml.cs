@@ -64,7 +64,7 @@ namespace Volo.Docs.Pages.Documents
                 string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
             {
                 if ((!Project.ExtraProperties.ContainsKey("GithubVersionProviderSource") ||
-                     (GithubVersionProviderSource) Project.ExtraProperties["GithubVersionProviderSource"] ==GithubVersionProviderSource.Releases) &&
+                     (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] ==GithubVersionProviderSource.Releases) &&
                     !string.IsNullOrEmpty(Project.LatestVersionBranchName))
                 {
                     Version = Project.LatestVersionBranchName;

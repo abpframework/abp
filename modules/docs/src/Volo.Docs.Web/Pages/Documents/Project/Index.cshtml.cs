@@ -307,7 +307,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private void SetLatestVersionBranchName(List<VersionInfoViewModel> versions)
         {
             if (!Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
-                || (GithubVersionProviderSource) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Releases)
+                || (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Releases)
             {
                 versions.First(v=> !_versionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
             }
