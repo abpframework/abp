@@ -15,7 +15,7 @@ describe('AccountService', () => {
   beforeEach(() => (spectator = createHttp()));
 
   it('should send a GET to find tenant', () => {
-    spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
+    spectator.inject(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.findTenant('test').subscribe();
     spectator.expectOne(
       'https://abp.io/api/abp/multi-tenancy/tenants/by-name/test',
@@ -30,7 +30,7 @@ describe('AccountService', () => {
       password: 'test1234',
       appName: 'Angular',
     } as RegisterRequest;
-    spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
+    spectator.inject(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.register(mock).subscribe();
     const req = spectator.expectOne('https://abp.io/api/account/register', HttpMethod.POST);
     expect(req.request.body).toEqual(mock);

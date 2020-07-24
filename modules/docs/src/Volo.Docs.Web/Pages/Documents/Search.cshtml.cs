@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
+using Volo.Docs.Utils;
+using Volo.Docs.Version;
 
 namespace Volo.Docs.Pages.Documents
 {
@@ -29,12 +33,18 @@ namespace Volo.Docs.Pages.Documents
 
         private readonly IProjectAppService _projectAppService;
         private readonly IDocumentAppService _documentAppService;
+        private readonly HtmlEncoder _encoder;
+        private readonly IVersionHelper _versionHelper;
 
-        public SearchModel(IProjectAppService projectAppService, 
-            IDocumentAppService documentAppService)
+        public SearchModel(IProjectAppService projectAppService,
+            IDocumentAppService documentAppService,
+            HtmlEncoder encoder,
+            IVersionHelper versionHelper)
         {
             _projectAppService = projectAppService;
             _documentAppService = documentAppService;
+            _encoder = encoder;
+            _versionHelper = versionHelper;
         }
 
         public List<DocumentSearchOutput> SearchOutputs { get; set; } = new List<DocumentSearchOutput>();
@@ -45,7 +55,7 @@ namespace Volo.Docs.Pages.Documents
             {
                 return RedirectToPage("Index");
             }
-            
+
             KeyWord = keyword;
 
             Project = await _projectAppService.GetAsync(ProjectName);
@@ -56,7 +66,9 @@ namespace Volo.Docs.Pages.Documents
 
             if (versions.Any() && string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
             {
-                Version = versions.First().Name;
+                Version = string.IsNullOrEmpty(Project.LatestVersionBranchName) ?
+                    (versions.FirstOrDefault(v=> !_versionHelper.IsPreRelease(v.Name)) ?? versions.First()).Name :
+                    Project.LatestVersionBranchName;
             }
 
             SearchOutputs = await _documentAppService.SearchAsync(new DocumentSearchInput
@@ -66,6 +78,18 @@ namespace Volo.Docs.Pages.Documents
                 LanguageCode = LanguageCode,
                 Version = Version
             });
+
+            var highlightTag1 = Guid.NewGuid().ToString();
+            var highlightTag2 = Guid.NewGuid().ToString();
+            foreach (var searchOutput in SearchOutputs)
+            {
+                for (var i = 0; i < searchOutput.Highlight.Count; i++)
+                {
+                    searchOutput.Highlight[i] = _encoder
+                        .Encode(searchOutput.Highlight[i].Replace("<highlight>", highlightTag1).Replace("</highlight>", highlightTag2))
+                        .Replace(highlightTag1, "<highlight>").Replace(highlightTag2, "</highlight>");
+                }
+            }
 
             return Page();
         }

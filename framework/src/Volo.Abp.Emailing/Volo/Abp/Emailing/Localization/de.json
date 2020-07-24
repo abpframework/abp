@@ -12,12 +12,12 @@
     "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "Standard-Anmeldeinformationen verwenden",
     "Description:Abp.Mailing.DefaultFromAddress": "Die Standard-Absenderadresse",
     "Description:Abp.Mailing.DefaultFromDisplayName": "Der Standard-Absendername",
-    "Description:Abp.Mailing.Smtp.Host": "Der Name oder die IP-Adresse des für SMTP-Transaktionen verwendeten Hosts.",
-    "Description:Abp.Mailing.Smtp.Port": "Der für SMTP-Transaktionen verwendete Port.",
-    "Description:Abp.Mailing.Smtp.UserName": "Benutzername, der mit den Anmeldedaten verknüpft ist.",
-    "Description:Abp.Mailing.Smtp.Password": "Das Passwort für den Benutzernamen, der mit den Anmeldeinformationen verknüpft ist.",
-    "Description:Abp.Mailing.Smtp.Domain": "Die Domäne oder der Computername, der die Anmeldeinformationen verifiziert.",
-    "Description:Abp.Mailing.Smtp.EnableSsl": "Bestimmt, ob der SmptClient Secure Sockets Layer (SSL) zur Verschlüsselung der Verbindung verwendet.",
+    "Description:Abp.Mailing.Smtp.Host": "Der Name oder die IP-Adresse des fÃ¼r SMTP-Transaktionen verwendeten Hosts.",
+    "Description:Abp.Mailing.Smtp.Port": "Der fÃ¼r SMTP-Transaktionen verwendete Port.",
+    "Description:Abp.Mailing.Smtp.UserName": "Benutzername, der mit den Anmeldedaten verknÃ¼pft ist.",
+    "Description:Abp.Mailing.Smtp.Password": "Das Passwort fÃ¼r den Benutzernamen, der mit den Anmeldeinformationen verknÃ¼pft ist.",
+    "Description:Abp.Mailing.Smtp.Domain": "Die DomÃ¤ne oder der Computername, der die Anmeldeinformationen verifiziert.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "Bestimmt, ob der SmptClient Secure Sockets Layer (SSL) zur VerschlÃ¼sselung der Verbindung verwendet.",
     "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "Bestimmt, ob die DefaultCredentials mit Anfragen gesendet werden."
   }
 }

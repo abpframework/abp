@@ -84,7 +84,6 @@ public class IdentityServerDbContext
 ABP定义了 `IConnectionStringResolver`,并在需要连接字符串时使用它. 有两个预构建的实现:
 
 * `DefaultConnectionStringResolver` 根据上面"配置连接字符串"一节中定义的规则,使用 `AbpDbConnectionOptions` 选择连接字符串.
-* `MultiTenantConnectionStringResolver` used for multi-tenant applications and tries to get the configured connection string for the current tenant if available. It uses the `ITenantStore` to find the connection strings. It inherits from the `DefaultConnectionStringResolver` and fallbacks to the base logic if no connection string specified for the current tenant.
 * `MultiTenantConnectionStringResolver` 用于多租户应用程序,并尝试获取当前租户的已配置连接字符串(如果有). 它使用 `ITenantStore` 查找连接字符串. 它继承了 `DefaultConnectionStringResolver`, 如果没有为当前租户指定连接字符串则回退到基本逻辑.
 
 如果需要自定义逻辑来确定连接字符串,可以实现 `IConnectionStringResolver` 接口(也可以从现有类派生)并使用[依赖注入](Dependency-Injection.md)系统替换现有实现.

@@ -1,10 +1,10 @@
-import { ConfigState } from '@abp/ng.core';
 import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
 import { NgxsModule, Store } from '@ngxs/store';
 import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Rest } from '../models';
 import { RestService } from '../services/rest.service';
+import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens';
 
 describe('HttpClient testing', () => {
@@ -20,7 +20,7 @@ describe('HttpClient testing', () => {
 
   beforeEach(() => {
     spectator = createHttp();
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     store.reset({
       ConfigState: {
         environment: {

@@ -263,7 +263,7 @@ namespace Volo.Abp.Domain.Entities.Events
                         {
                             try
                             {
-                                await eventPublisher.PublishAsync(
+                                await eventEntry.EventBus.PublishAsync(
                                     eventEntry.EventType,
                                     Activator.CreateInstance(eventEntry.EventType, eventEntry.EntityOrEto)
                                 );

@@ -29,13 +29,13 @@ Now, you can install preview / nightly packages to your project from Nuget Brows
 The latest version of preview NPM packages can be installed by the running below command in the root folder of application:
 
 ```bash
-abp switch-to-preview
+abp switch-to-preview --npm
 ```
 
 If you're using the ABP Framework preview packages, you can switch back to stable version using this command:
 
 ```bash
-abp switch-to-stable
+abp switch-to-stable --npm
 ```
 
 See the [ABP CLI documentation](./CLI.md) for more information.

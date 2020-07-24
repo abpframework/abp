@@ -2,7 +2,7 @@
 
     <Import Project="..\..\..\..\configureawait.props" />
     <Import Project="..\..\..\..\common.props" />
-    
+
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <AssemblyName>Volo.Blogging.Admin.Application.Contracts</AssemblyName>
@@ -12,15 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Volo.Blogging.Domain.Shared\Volo.Blogging.Domain.Shared.csproj" />
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
+        <ProjectReference Include="..\Volo.Blogging.Application.Contracts.Shared\Volo.Blogging.Application.Contracts.Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <EmbeddedResource Include="Volo\Blogging\Admin\Localization\Resources\Blogging\Admin\ApplicationContracts\*.json" />
-    </ItemGroup>
 </Project>

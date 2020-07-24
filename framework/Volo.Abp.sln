@@ -289,27 +289,39 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.SignalR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.SignalR.Tests", "test\Volo.Abp.AspNetCore.SignalR.Tests\Volo.Abp.AspNetCore.SignalR.Tests.csproj", "{8B758716-DCC9-4223-8421-5588D1597487}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.csproj", "{79323211-E658-493E-9863-035AA4C3F913}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests", "test\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.csproj", "{79323211-E658-493E-9863-035AA4C3F913}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring", "src\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj", "{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring", "src\Volo.Abp.BlobStoring\Volo.Abp.BlobStoring.csproj", "{A0CFBDD6-A3CB-438C-83F1-5025F12E2D42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Tests", "test\Volo.Abp.BlobStoring.Tests\Volo.Abp.BlobStoring.Tests.csproj", "{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Tests", "test\Volo.Abp.BlobStoring.Tests\Volo.Abp.BlobStoring.Tests.csproj", "{D53A17BB-4E23-451D-AD9B-E1F6AC3F7958}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.FileSystem", "src\Volo.Abp.BlobStoring.FileSystem\Volo.Abp.BlobStoring.FileSystem.csproj", "{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.FileSystem", "src\Volo.Abp.BlobStoring.FileSystem\Volo.Abp.BlobStoring.FileSystem.csproj", "{02B1FBE2-850E-4612-ABC6-DD62BCF2DD6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.FileSystem.Tests", "test\Volo.Abp.BlobStoring.FileSystem.Tests\Volo.Abp.BlobStoring.FileSystem.Tests.csproj", "{68443D4A-1608-4039-B995-7AF4CF82E9F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.FileSystem.Tests", "test\Volo.Abp.BlobStoring.FileSystem.Tests\Volo.Abp.BlobStoring.FileSystem.Tests.csproj", "{68443D4A-1608-4039-B995-7AF4CF82E9F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.Oracle.Devart", "src\Volo.Abp.EntityFrameworkCore.Oracle.Devart\Volo.Abp.EntityFrameworkCore.Oracle.Devart.csproj", "{75E5C841-5F36-4C44-A532-57CB8E7FFE15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.Oracle.Devart", "src\Volo.Abp.EntityFrameworkCore.Oracle.Devart\Volo.Abp.EntityFrameworkCore.Oracle.Devart.csproj", "{75E5C841-5F36-4C44-A532-57CB8E7FFE15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Azure", "src\Volo.Abp.BlobStoring.Azure\Volo.Abp.BlobStoring.Azure.csproj", "{C44242F7-D55D-4867-AAF4-A786E404312E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Azure", "src\Volo.Abp.BlobStoring.Azure\Volo.Abp.BlobStoring.Azure.csproj", "{C44242F7-D55D-4867-AAF4-A786E404312E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Azure.Tests", "test\Volo.Abp.BlobStoring.Azure.Tests\Volo.Abp.BlobStoring.Azure.Tests.csproj", "{A80E9A0B-8932-4B5D-83FB-6751708FD484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Azure.Tests", "test\Volo.Abp.BlobStoring.Azure.Tests\Volo.Abp.BlobStoring.Azure.Tests.csproj", "{A80E9A0B-8932-4B5D-83FB-6751708FD484}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.Oracle", "src\Volo.Abp.EntityFrameworkCore.Oracle\Volo.Abp.EntityFrameworkCore.Oracle.csproj", "{1738845A-5348-4EB8-B736-CD1D22A808B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Minio", "src\Volo.Abp.BlobStoring.Minio\Volo.Abp.BlobStoring.Minio.csproj", "{658D7EDE-A057-4256-96B6-083D3C2B9704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Caching.StackExchangeRedis", "src\Volo.Abp.Caching.StackExchangeRedis\Volo.Abp.Caching.StackExchangeRedis.csproj", "{2B83DF1F-0FD2-4DEA-ABC5-E324B51401D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Minio.Tests", "test\Volo.Abp.BlobStoring.Minio.Tests\Volo.Abp.BlobStoring.Minio.Tests.csproj", "{36D4B268-FD3A-4655-A41B-D56D68476C83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Caching.StackExchangeRedis.Tests", "test\Volo.Abp.Caching.StackExchangeRedis.Tests\Volo.Abp.Caching.StackExchangeRedis.Tests.csproj", "{60D0E384-965E-4F81-9D71-B28F419254FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.EntityFrameworkCore.Oracle", "src\Volo.Abp.EntityFrameworkCore.Oracle\Volo.Abp.EntityFrameworkCore.Oracle.csproj", "{1738845A-5348-4EB8-B736-CD1D22A808B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Caching.StackExchangeRedis", "src\Volo.Abp.Caching.StackExchangeRedis\Volo.Abp.Caching.StackExchangeRedis.csproj", "{2B83DF1F-0FD2-4DEA-ABC5-E324B51401D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Caching.StackExchangeRedis.Tests", "test\Volo.Abp.Caching.StackExchangeRedis.Tests\Volo.Abp.Caching.StackExchangeRedis.Tests.csproj", "{60D0E384-965E-4F81-9D71-B28F419254FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Aliyun", "src\Volo.Abp.BlobStoring.Aliyun\Volo.Abp.BlobStoring.Aliyun.csproj", "{845E6A13-D1B5-4DDC-A16C-68D807E3B4C7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.BlobStoring.Aliyun.Tests", "test\Volo.Abp.BlobStoring.Aliyun.Tests\Volo.Abp.BlobStoring.Aliyun.Tests.csproj", "{8E49687A-E69F-49F2-8DB0-428D0883A937}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Aws", "src\Volo.Abp.BlobStoring.Aws\Volo.Abp.BlobStoring.Aws.csproj", "{50968CDE-1029-4051-B2E5-B69D0ECF2A18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlobStoring.Aws.Tests", "test\Volo.Abp.BlobStoring.Aws.Tests\Volo.Abp.BlobStoring.Aws.Tests.csproj", "{2CD3B26A-CA81-4279-8D5D-6A594517BB3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -913,6 +925,14 @@ Global
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{658D7EDE-A057-4256-96B6-083D3C2B9704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D4B268-FD3A-4655-A41B-D56D68476C83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1738845A-5348-4EB8-B736-CD1D22A808B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1738845A-5348-4EB8-B736-CD1D22A808B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1738845A-5348-4EB8-B736-CD1D22A808B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -925,6 +945,22 @@ Global
 		{60D0E384-965E-4F81-9D71-B28F419254FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60D0E384-965E-4F81-9D71-B28F419254FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60D0E384-965E-4F81-9D71-B28F419254FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{845E6A13-D1B5-4DDC-A16C-68D807E3B4C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{845E6A13-D1B5-4DDC-A16C-68D807E3B4C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{845E6A13-D1B5-4DDC-A16C-68D807E3B4C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{845E6A13-D1B5-4DDC-A16C-68D807E3B4C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E49687A-E69F-49F2-8DB0-428D0883A937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E49687A-E69F-49F2-8DB0-428D0883A937}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E49687A-E69F-49F2-8DB0-428D0883A937}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E49687A-E69F-49F2-8DB0-428D0883A937}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50968CDE-1029-4051-B2E5-B69D0ECF2A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50968CDE-1029-4051-B2E5-B69D0ECF2A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50968CDE-1029-4051-B2E5-B69D0ECF2A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50968CDE-1029-4051-B2E5-B69D0ECF2A18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CD3B26A-CA81-4279-8D5D-6A594517BB3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CD3B26A-CA81-4279-8D5D-6A594517BB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CD3B26A-CA81-4279-8D5D-6A594517BB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CD3B26A-CA81-4279-8D5D-6A594517BB3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1079,9 +1115,15 @@ Global
 		{75E5C841-5F36-4C44-A532-57CB8E7FFE15} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{C44242F7-D55D-4867-AAF4-A786E404312E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{A80E9A0B-8932-4B5D-83FB-6751708FD484} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{658D7EDE-A057-4256-96B6-083D3C2B9704} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{36D4B268-FD3A-4655-A41B-D56D68476C83} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{1738845A-5348-4EB8-B736-CD1D22A808B4} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{2B83DF1F-0FD2-4DEA-ABC5-E324B51401D4} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{60D0E384-965E-4F81-9D71-B28F419254FC} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{845E6A13-D1B5-4DDC-A16C-68D807E3B4C7} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{8E49687A-E69F-49F2-8DB0-428D0883A937} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{50968CDE-1029-4051-B2E5-B69D0ECF2A18} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{2CD3B26A-CA81-4279-8D5D-6A594517BB3F} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

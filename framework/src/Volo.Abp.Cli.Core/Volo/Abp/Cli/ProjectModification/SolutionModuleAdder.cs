@@ -159,6 +159,12 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 Directory.Delete(demoFolder, true);
             }
+            
+            var hostFolder = Path.Combine(targetModuleFolder, "host");
+            if (Directory.Exists(hostFolder))
+            {
+                Directory.Delete(hostFolder, true);
+            }
         }
 
         private async Task AddNugetAndNpmReferences(ModuleWithMastersInfo module, string[] projectFiles)

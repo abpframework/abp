@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Volo.Abp.TestApp.Testing
 {
-    public abstract class Repository_Basic_Tests<TStartupModule> : TestAppTestBase<TStartupModule> 
+    public abstract class Repository_Basic_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected readonly IRepository<Person, Guid> PersonRepository;
@@ -33,6 +33,20 @@ namespace Volo.Abp.TestApp.Testing
         {
             var persons = await PersonRepository.GetListAsync();
             persons.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetPagedListAsync()
+        {
+            var persons = await PersonRepository.GetPagedListAsync(0, 10, "name");
+            persons.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetPagedListAsync_Should_Return_Empty()
+        {
+            var persons = await PersonRepository.GetPagedListAsync(1, 10, "name");
+            persons.Count.ShouldBe(0);
         }
 
         [Fact]
@@ -90,6 +104,16 @@ namespace Volo.Abp.TestApp.Testing
 
             var person = await PersonRepository.FindAsync(personId);
             person.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task Insert_Should_Set_Guid_Id()
+        {
+            var person = new Person(Guid.Empty, "New Person", 35);
+
+            await PersonRepository.InsertAsync(person);
+
+            person.Id.ShouldNotBe(Guid.Empty);
         }
     }
 }

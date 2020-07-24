@@ -17,9 +17,9 @@ export function findRoute(routes: RoutesService, path: string): TreeNode<ABP.Rou
       );
 }
 
-export function getRoutePath(router: Router) {
+export function getRoutePath(router: Router, url = router.url) {
   const emptyGroup = { segments: [] } as UrlSegmentGroup;
-  const primaryGroup = router.parseUrl(router.url).root.children[PRIMARY_OUTLET];
+  const primaryGroup = router.parseUrl(url).root.children[PRIMARY_OUTLET];
 
   return '/' + (primaryGroup || emptyGroup).segments.map(({ path }) => path).join('/');
 }

@@ -26,19 +26,47 @@
       "text": "Tutorials",
       "items": [
         {
-          "text": "Application Development",
+          "text": "Web Application Development",
           "items": [
             {
-              "text": "Part-1: Creating a new solution and listing items",
+              "text": "1: Creating the Server Side",
               "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "Part-2: CRUD operations",
+              "text": "2: The Book List Page",
               "path": "Tutorials/Part-2.md"
             },
             {
-              "text": "Part-3: Integration tests",
+              "text": "3: Creating, Updating and Deleting Books",
               "path": "Tutorials/Part-3.md"
+            },
+            {
+              "text": "4: Integration Tests",
+              "path": "Tutorials/Part-4.md"
+            },
+            {
+              "text": "5: Authorization",
+              "path": "Tutorials/Part-5.md"
+            },
+            {
+              "text": "6: Authors: Domain layer",
+              "path": "Tutorials/Part-6.md"
+            },
+            {
+              "text": "7: Authors: Database Integration",
+              "path": "Tutorials/Part-7.md"
+            },
+            {
+              "text": "8: Authors: Application Layer",
+              "path": "Tutorials/Part-8.md"
+            },
+            {
+              "text": "9: Authors: User Interface",
+              "path": "Tutorials/Part-9.md"
+            },
+            {
+              "text": "10: Book to Author Relation",
+              "path": "Tutorials/Part-10.md"
             }
           ]
         }
@@ -207,6 +235,18 @@
                 {
                   "text": "Azure Provider",
                   "path": "Blob-Storing-Azure.md"
+                },
+                {
+                  "text": "Aliyun Provider",
+                  "path": "Blob-Storing-Aliyun.md"
+                },
+                {
+                  "text": "Minio Provider",
+                  "path": "Blob-Storing-Minio.md"
+                },
+                {
+                  "text": "AWS Provider",
+                  "path": "Blob-Storing-Aws.md"
                 },
                 {
                   "text": "Create a Custom Provider",
@@ -427,6 +467,10 @@
               "path": "UI/Angular/Track-By-Service.md"
             },
             {
+              "text": "SubscriptionService",
+              "path": "UI/Angular/Subscription-Service.md"
+            },
+            {
               "text": "ListService",
               "path": "UI/Angular/List-Service.md"
             }
@@ -618,6 +662,10 @@
     {
       "text": "API Documentation",
       "path": "{ApiDocumentationUrl}"
+    },
+    {
+      "text": "Official Packages",
+      "path": "https://abp.io/packages"
     }
   ]
 }

@@ -57,7 +57,7 @@ namespace Volo.Abp.AuditLogging
             using (var uow = UnitOfWorkManager.Begin(true))
             {
                 await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, auditInfo));
-                await uow.SaveChangesAsync();
+                await uow.CompleteAsync();
             }
         }
     }

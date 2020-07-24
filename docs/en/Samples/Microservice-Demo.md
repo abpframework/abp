@@ -28,7 +28,7 @@ The diagram below shows the system:
 
 ### Source Code
 
-You can get the source code from [the GitHub repository](https://github.com/abpframework/abp/tree/master/samples/MicroserviceDemo).
+You can get the source code from [the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/MicroserviceDemo).
 
 ## Running the Solution
 
@@ -42,6 +42,12 @@ To be able to run the solution from source code, following tools should be insta
 * [MongoDB](https://www.mongodb.com/download-center) 4.0+
 * [ElasticSearch](https://www.elastic.co/downloads/elasticsearch) 6.6+
 * [Kibana](https://www.elastic.co/downloads/kibana) 6.6+ (optional, recommended to show logs)
+
+### Running Infrastructure
+
+* Docker-compose is used to run the pre requirements with ease as default. If you don't have it, you can download and start using [Docker for Windows](https://docs.docker.com/docker-for-windows/) from [here](https://docs.docker.com/docker-for-windows/install/) on windows environment.
+* Run the command `docker-compose -f docker-compose.infrastructure.yml -f docker-compose.infrastructure.override.yml up -d` at `MicroserviceDemo` directory or run the powershell script `__Run_Infrastructure.ps1` located at `MicroserviceDemo/_run` directory.
+* If you don't want to use docker for pre required services and install them on your local development, you need to update `appsettings.json` files of the projects in the MicroserviceDemo solution accordingly.
 
 ### Open & Build the Visual Studio Solution
 
