@@ -242,6 +242,15 @@ This is a unique string represents the error code thrown by your application and
 "BookStore:00001": "There is already an author with the same name: {name}"
 ````
 
+Then open the `BookStoreDomainSharedModule` and add the following code block inside the `ConfigureServices` method:
+
+````csharp
+Configure<AbpExceptionLocalizationOptions>(options =>
+{
+    options.MapCodeNamespace("BookStore", typeof(BookStoreResource));
+});
+````
+
 Whenever you throw an `AuthorAlreadyExistsException`, the end use will see a nice error message on the UI.
 
 ## IAuthorRepository
