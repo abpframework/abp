@@ -207,18 +207,15 @@ If you see the error like above, you should pass the `cultureNameToLocaleFileNam
 @NgModule({
   imports: [
     // other imports
-    CoreModule.forRoot({
+     CoreModule.forRoot({
       // other options
       cultureNameToLocaleFileNameMapping: { 
-        "X": "Y",
-        "AnotherCultureNameDefinedInDotnet": "AnotherLocaleFileNameDefinedInAngular"
+        "DotnetCultureName": "AngularLocaleFileName",
+        "pt-BR": "pt"  // example
       }
     })
     //...
 ```
-
-- The key indicated by "X" above represents the culture name defined in .NET (e.g. "en-US").
-- The value indicated by "Y" above represents the locale file name defined in Angular (e.g. "en").
 
 See the [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales)
 
