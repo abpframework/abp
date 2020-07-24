@@ -103,7 +103,7 @@
     "MasterModules": "Master Modules",
     "OrganizationName": "Organization name",
     "CreationDate": "Creation date",
-    "LicenseStart": "License start date",
+    "LicenseStartDate": "License start date",
     "LicenseEndDate": "License end date",
     "OrganizationNamePlaceholder": "Organization name...",
     "TotalQuestionCountPlaceholder": "Total question count...",
