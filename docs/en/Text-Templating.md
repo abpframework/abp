@@ -4,7 +4,7 @@
 
 ABP Framework provides a simple, yet efficient text template system. Text templating is used to dynamically render contents based on a template and a model (a data object):
 
-***TEMPLATE + MODEL ==render==> RENDERED CONTENT***
+Template + Model =renderer=> Rendered Content
 
 It is very similar to an ASP.NET Core Razor View (or Page):
 

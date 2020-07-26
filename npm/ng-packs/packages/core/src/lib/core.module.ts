@@ -34,7 +34,7 @@ import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
 import { SessionState } from './states/session.state';
-import { CORE_OPTIONS } from './tokens/options.token';
+import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer, configureOAuth } from './utils/initial-utils';
@@ -171,8 +171,13 @@ export class CoreModule {
           useValue: { environment: options.environment },
         },
         {
-          provide: CORE_OPTIONS,
+          provide: 'CORE_OPTIONS',
           useValue: options,
+        },
+        {
+          provide: CORE_OPTIONS,
+          useFactory: coreOptionsFactory,
+          deps: ['CORE_OPTIONS'],
         },
         {
           provide: HTTP_INTERCEPTORS,

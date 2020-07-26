@@ -1,4 +1,4 @@
-import { takeUntilDestroy } from '@abp/ng.core';
+import { SubscriptionService } from '@abp/ng.core';
 import {
   Component,
   ContentChild,
@@ -27,7 +27,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   templateUrl: './modal.component.html',
   animations: [fadeAnimation],
   styleUrls: ['./modal.component.scss'],
-  providers: [ModalService],
+  providers: [ModalService, SubscriptionService],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -60,11 +60,11 @@ export class ModalComponent implements OnDestroy {
   @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
   abpSubmit: ButtonComponent;
 
-  @ContentChild('abpHeader', {static: false}) abpHeader: TemplateRef<any>;
+  @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
 
-  @ContentChild('abpBody', {static: false}) abpBody: TemplateRef<any>;
+  @ContentChild('abpBody', { static: false }) abpBody: TemplateRef<any>;
 
-  @ContentChild('abpFooter', {static: false}) abpFooter: TemplateRef<any>;
+  @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
 
   @ContentChild('abpClose', { static: false, read: ElementRef })
   abpClose: ElementRef<any>;
@@ -103,14 +103,15 @@ export class ModalComponent implements OnDestroy {
     private renderer: Renderer2,
     private confirmationService: ConfirmationService,
     private modalService: ModalService,
+    private subscription: SubscriptionService,
   ) {
     this.initToggleStream();
   }
 
   private initToggleStream() {
-    this.toggle$
-      .pipe(takeUntilDestroy(this), debounceTime(0), distinctUntilChanged())
-      .subscribe(value => this.toggle(value));
+    this.subscription.addOne(this.toggle$.pipe(debounceTime(0), distinctUntilChanged()), value =>
+      this.toggle(value),
+    );
   }
 
   private toggle(value: boolean) {
