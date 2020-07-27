@@ -8,14 +8,14 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Docs.GitHub.Documents.Version
 {
-    public class GithubReleaseProvider : IGithubVersionProvider, ITransientDependency
+    public class BranchGithubVersionProvider : IGithubVersionProvider, ITransientDependency
     {
         public async Task<List<GithubVersion>> GetVersions(string name, string repositoryName, string token)
         {
             var client = GetGitHubClient(name, token);
-            var releases = await client.Repository.Release.GetAll(name, repositoryName);
+            var branches = await client.Repository.Branch.GetAll(name, repositoryName);
 
-            return releases.Select(r => new GithubVersion {Name = r.TagName}).ToList();
+            return branches.Select(b => new GithubVersion {Name = b.Name}).ToList();
         }
 
         private static GitHubClient GetGitHubClient(string name, string token)

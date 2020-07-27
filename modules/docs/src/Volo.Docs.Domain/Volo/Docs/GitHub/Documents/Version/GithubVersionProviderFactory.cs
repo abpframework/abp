@@ -20,11 +20,11 @@ namespace Volo.Docs.GitHub.Documents.Version
             switch (source)
             {
                 case GithubVersionProviderSource.Branches:
-                    serviceType = typeof(GithubBranchProvider);
+                    serviceType = typeof(BranchGithubVersionProvider);
                     break;
                 case GithubVersionProviderSource.Releases:
                 default:
-                    serviceType = typeof(GithubReleaseProvider);
+                    serviceType = typeof(ReleaseGithubVersionProvider);
                     break;
             }
 
