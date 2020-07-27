@@ -285,7 +285,7 @@ public async Task CreateAsync(CreateAuthorDto input)
 abp.auth.isGranted('MyPermissionName');
 ````
 
-参阅 [abp.auth](AspNetCore/JavaScript-API/Auth.md) API 文档了解详情.
+参阅 [abp.auth](UI/AspNetCore/JavaScript-API/Index.md) API 文档了解详情.
 
 ## 权限管理
 

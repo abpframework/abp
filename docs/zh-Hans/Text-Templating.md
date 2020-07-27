@@ -4,7 +4,7 @@
 
 ABP框架提供了一个简单有效的文本模板系统,文本模板用于动态渲染基于模板和模型(数据对象)内容:
 
-***TEMPLATE + MODEL ==render==> RENDERED CONTENT***
+Template + Model =renderer=> Rendered Content
 
 它非常类似于 ASP.NET Core Razor View (或 Page):
 

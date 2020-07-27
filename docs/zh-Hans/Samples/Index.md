@@ -7,7 +7,7 @@
 演示如何基于微服务体系结构构建系统的完整解决方案.
 
 * [示例的文档](Microservice-Demo.md)
-* [源码](https://github.com/abpframework/abp/tree/dev/samples/MicroserviceDemo)
+* [源码](https://github.com/abpframework/abp-samples/tree/master/MicroserviceDemo)
 * [微服务架构文档](../Microservice-Architecture.md)
 
 ### Book Store
@@ -48,6 +48,8 @@
 * **文本模板 Demo**: 文本模板系统的不同用例.
   * [源码](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
   * [文本模板文档](../Text-Templating.md)
+* **存储过程 Demo**: 演示如何以最佳实践使用存储过程,数据库视图和函数.
+  * [源码](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo)
 * **自定义认证**: 如何为ASP.NET Core MVC / Razor Pages应用程序自定义身份验证的解决方案.
   * [源码](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)
   * 相关 "[How To](../How-To/Index.md)" 文档:
