@@ -46,16 +46,18 @@ Configure<AbpBlobStoringOptions>(options =>
 * **AccessKeyId** ([NotNull]string): 云账号AccessKey是访问阿里云API的密钥,具有该账户完全的权限,请你务必妥善保管!强烈建议遵循[阿里云安全最佳实践](https://help.aliyun.com/document_detail/102600.html),使用RAM子用户AccessKey来进行API调用.
 * **AccessKeySecret** ([NotNull]string): 同上.
 * **Endpoint** ([NotNull]string): Endpoint表示OSS对外服务的访问域名. [访问域名和数据中心](https://help.aliyun.com/document_detail/31837.html)
+* **UseSecurityTokenService** (bool): 是否使用STS临时授权访问OSS,默认false. [STS临时授权访问OSS](https://help.aliyun.com/document_detail/100624.html)
 * **RegionId** (string): STS服务的接入地址,每个地址的功能都相同,请尽量在同地域进行调用. [接入地址](https://help.aliyun.com/document_detail/66053.html)
-* **RoleArn** ([NotNull]string): STS所需角色ARN. [STS临时授权访问OSS](https://help.aliyun.com/document_detail/100624.html)
+* **RoleArn** ([NotNull]string): STS所需角色ARN. 
 * **RoleSessionName** ([NotNull]string): 用来标识临时访问凭证的名称,建议使用不同的应用程序用户来区分.
 * **Policy** (string): 在扮演角色的时候额外添加的权限限制. 请参见[基于RAM Policy的权限控制](https://help.aliyun.com/document_detail/100680.html).
-* **DurationSeconds** (int): 设置临时访问凭证的有效期,单位是s,最小为900,最大为3600. **注**:为0则使用子账号操作OSS.
+* **DurationSeconds** (int): 设置临时访问凭证的有效期,单位是s,最小为900,最大为3600. 
 * **ContainerName** (string): 你可以在aliyun中指定容器名称. 如果没有指定它将使用 `BlogContainerName` 属性定义的BLOB容器的名称(请参阅[BLOB存储文档](Blob-Storing.md)). 请注意Aliyun有一些**命名容器的规则**,容器名称必须是有效的DNS名称,[符合以下命名规则](https://help.aliyun.com/knowledge_detail/39668.html):
     * 只能包含小写字母,数字和短横线(-)
     * 必须以小写字母和数字开头和结尾
     * Bucket名称的长度限制在**3**到**63**个字符之间
 * **CreateContainerIfNotExists** (bool): 默认值为 `false`, 如果aliyun中不存在容器, `AliyunBlobProvider` 将尝试创建它.
+* **TemporaryCredentialsCacheKey** (bool): STS凭证缓存Key,默认Guid.NewGuid().ToString("N").
 
 ## Aliyun BLOB 名称计算器
 

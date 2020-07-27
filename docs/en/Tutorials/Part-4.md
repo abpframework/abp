@@ -32,11 +32,16 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the project and book list page](Part-1.md)
+- [Part 1: Creating the server side](Part-1.md)
 - [Part 2: The book list page](Part-2.md)
 - [Part 3: Creating, updating and deleting books](Part-3.md)
 - **Part 4: Integration tests (this part)**
 - [Part 5: Authorization](Part-5.md)
+- [Part 6: Authors: Domain layer](Part-6.md)
+- [Part 7: Authors: Database Integration](Part-7.md)
+- [Part 8: Authors: Application Layer](Part-8.md)
+- [Part 9: Authors: User Interface](Part-9.md)
+- [Part 10: Book to Author Relation](Part-10.md)
 
 ### Download the Source Code
 
@@ -247,4 +252,4 @@ Congratulations, the **green icons** indicates that the tests have been successf
 
 ## The Next Part
 
-See the [next part](part-5.md) of this tutorial.
+See the [next part](Part-5.md) of this tutorial.
