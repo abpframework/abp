@@ -247,7 +247,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag, bool isCheckbox)
         {
-            if (IsOutputHidden(inputTag))
+            if (IsOutputHidden(inputTag) || TagHelper.SuppressLabel)
             {
                 return "";
             }
