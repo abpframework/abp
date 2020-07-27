@@ -23,7 +23,7 @@ end
 
 ### 关于本教程
 
-这是ASP.NET Core{{UI_Value}}系列教程的第二章. 共有三章:
+这是ASP.NET Core{{UI_Value}}系列教程的第三章. 共有三章:
 
 - [Part-1: 创建项目和书籍列表页面](Part-1.md)
 - [Part 2: 创建,编辑,删除书籍](Part-2.md)
