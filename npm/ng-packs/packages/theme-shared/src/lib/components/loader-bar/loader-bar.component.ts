@@ -1,7 +1,6 @@
-import { StartLoader, StopLoader } from '@abp/ng.core';
+import { StartLoader, StopLoader, SubscriptionService } from '@abp/ng.core';
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { takeUntilDestroy } from '@ngx-validate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { Subscription, timer } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -22,16 +21,25 @@ import { filter } from 'rxjs/operators';
     </div>
   `,
   styleUrls: ['./loader-bar.component.scss'],
+  providers: [SubscriptionService],
 })
 export class LoaderBarComponent implements OnDestroy, OnInit {
+  protected _isLoading: boolean;
+
+  @Input()
+  set isLoading(value: boolean) {
+    this._isLoading = value;
+    this.cdRef.detectChanges();
+  }
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
+
   @Input()
   containerClass = 'abp-loader-bar';
 
   @Input()
   color = '#77b6ff';
-
-  @Input()
-  isLoading = false;
 
   progressLevel = 0;
 
@@ -69,36 +77,38 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     return `0 0 10px rgba(${this.color}, 0.5)`;
   }
 
-  constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {}
+  constructor(
+    private actions: Actions,
+    private router: Router,
+    private cdRef: ChangeDetectorRef,
+    private subscription: SubscriptionService,
+  ) {}
 
   private subscribeToLoadActions() {
-    this.actions
-      .pipe(
-        ofActionSuccessful(StartLoader, StopLoader),
-        filter(this.filter),
-        takeUntilDestroy(this),
-      )
-      .subscribe(action => {
+    this.subscription.addOne(
+      this.actions.pipe(ofActionSuccessful(StartLoader, StopLoader), filter(this.filter)),
+      action => {
         if (action instanceof StartLoader) this.startLoading();
         else this.stopLoading();
-      });
+      },
+    );
   }
 
   private subscribeToRouterEvents() {
-    this.router.events
-      .pipe(
+    this.subscription.addOne(
+      this.router.events.pipe(
         filter(
           event =>
             event instanceof NavigationStart ||
             event instanceof NavigationEnd ||
             event instanceof NavigationError,
         ),
-        takeUntilDestroy(this),
-      )
-      .subscribe(event => {
+      ),
+      event => {
         if (event instanceof NavigationStart) this.startLoading();
         else this.stopLoading();
-      });
+      },
+    );
   }
 
   ngOnInit() {

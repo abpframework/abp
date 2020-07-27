@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -13,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
-using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
@@ -67,7 +65,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private void AddApiDescriptionToModel(
             ApiDescription apiDescription,
-            ApplicationApiDescriptionModel applicationModel, 
+            ApplicationApiDescriptionModel applicationModel,
             ApplicationApiDescriptionModelRequestDto input)
         {
             var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
@@ -182,7 +180,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             type = AsyncHelper.UnwrapTask(type);
 
             if (type == typeof(object) ||
-                type == typeof(void) || 
+                type == typeof(void) ||
                 type == typeof(Enum) ||
                 type == typeof(ValueType) ||
                 TypeHelper.IsPrimitiveExtended(type))
@@ -212,7 +210,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 return;
             }
-            
+
             var typeModel = TypeApiDescriptionModel.Create(type);
             applicationModel.Types[typeName] = typeModel;
 
@@ -270,7 +268,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return parameterInfo.Name;
             }
 
-            return modelNameProvider.Name;
+            return modelNameProvider.Name ?? parameterInfo.Name;
         }
 
         private static string GetRootPath([NotNull] Type controllerType, [CanBeNull] ConventionalControllerSetting setting)

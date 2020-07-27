@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
+using Volo.Abp.Uow;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
@@ -100,14 +102,21 @@ namespace Volo.Docs.Admin.Documents
             foreach (var leaf in leafs)
             {
                 if (leaf.Path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                    leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                    leaf.Path.StartsWith("https://", StringComparison.OrdinalIgnoreCase) ||
+                    (leaf.Path.StartsWith("{{") && leaf.Path.EndsWith("}}")))
                 {
                     continue;
                 }
 
-                var sourceDocument =
-                    await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
-                documents.Add(sourceDocument);
+                try
+                {
+                    var sourceDocument = await source.GetDocumentAsync(project, leaf.Path, input.LanguageCode, input.Version);
+                    documents.Add(sourceDocument);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogException(e);
+                }
             }
 
             foreach (var document in documents)

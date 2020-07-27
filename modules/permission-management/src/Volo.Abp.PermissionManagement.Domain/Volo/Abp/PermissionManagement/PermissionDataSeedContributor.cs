@@ -30,6 +30,7 @@ namespace Volo.Abp.PermissionManagement
             var permissionNames = PermissionDefinitionManager
                 .GetPermissions()
                 .Where(p => p.MultiTenancySide.HasFlag(multiTenancySide))
+                .Where(p => !p.Providers.Any() || p.Providers.Contains(RolePermissionValueProvider.ProviderName))
                 .Select(p => p.Name)
                 .ToArray();
 
@@ -37,7 +38,7 @@ namespace Volo.Abp.PermissionManagement
                 RolePermissionValueProvider.ProviderName,
                 "admin",
                 permissionNames,
-                context.TenantId
+                context?.TenantId
             );
         }
     }

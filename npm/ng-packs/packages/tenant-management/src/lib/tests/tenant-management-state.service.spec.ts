@@ -16,7 +16,7 @@ describe('TenantManagementStateService', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
   });
 
   test('should have the all TenantManagementState static methods', () => {

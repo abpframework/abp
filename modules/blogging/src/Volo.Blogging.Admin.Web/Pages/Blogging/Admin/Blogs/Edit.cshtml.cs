@@ -28,7 +28,7 @@ namespace Volo.Blogging.Admin.Pages.Blogging.Admin.Blogs
 
         public virtual async Task<ActionResult> OnGetAsync()
         {
-            if (!await _authorization.IsGrantedAsync(BloggingAdminPermissions.Blogs.Update))
+            if (!await _authorization.IsGrantedAsync(BloggingPermissions.Blogs.Update))
             {
                 return Redirect("/");
             }

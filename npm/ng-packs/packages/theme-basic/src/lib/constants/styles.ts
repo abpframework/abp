@@ -134,4 +134,8 @@ background-color: rgba(0, 0, 0, 0.6);
     background-color: #f4f4f4;
     border: 1px solid #c8c8c8;
 }
+.bordered .datatable-body-row {
+    border-top: 1px solid #eee;
+    margin-top: -1px;
+}
 `;

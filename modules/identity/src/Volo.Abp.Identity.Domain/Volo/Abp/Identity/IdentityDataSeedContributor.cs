@@ -16,9 +16,9 @@ namespace Volo.Abp.Identity
         public virtual Task SeedAsync(DataSeedContext context)
         {
             return IdentityDataSeeder.SeedAsync(
-                context["AdminEmail"] as string ?? "admin@abp.io",
-                context["AdminPassword"] as string ?? "1q2w3E*",
-                context.TenantId
+                context?["AdminEmail"] as string ?? "admin@abp.io",
+                context?["AdminPassword"] as string ?? "1q2w3E*",
+                context?.TenantId
             );
         }
     }

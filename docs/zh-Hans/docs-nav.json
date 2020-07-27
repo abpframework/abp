@@ -34,7 +34,7 @@
               "path": "Tutorials/Part-1.md"
             },
             {
-              "text": "第一章: 增删改查操作",
+              "text": "第二章: 增删改查操作",
               "path": "Tutorials/Part-2.md"
             },
             {
@@ -209,6 +209,18 @@
                 {
                   "text": "Azure提供程序",
                   "path": "Blob-Storing-Azure.md"
+                },
+                {
+                  "text": "Aliyun提供程序",
+                  "path": "Blob-Storing-Aliyun.md"
+                },
+                {
+                  "text": "Minio提供程序",
+                  "path": "Blob-Storing-Minio.md"
+                },
+                {
+                  "text": "AWS提供程序",
+                  "path": "Blob-Storing-Aws.md"
                 },
                 {
                   "text": "创建自定义提供程序",

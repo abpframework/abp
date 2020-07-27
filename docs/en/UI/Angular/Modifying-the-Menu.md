@@ -3,9 +3,6 @@
 The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic package. There are several methods for modifying the menu elements. This document covers these methods. If you would like to replace the menu completely, please refer to [Component Replacement documentation](./Component-Replacement.md) and learn how to replace a layout.
 
 
-<!-- TODO: Replace layout replacement document with component replacement. Layout replacement document will be created.-->
-
-
 ## How to Add a Logo
 
 The `logoUrl` property in the environment variables is the url of the logo. 
@@ -215,51 +212,65 @@ After the operations above, the new menu looks like below:
 
 ## How to Add an Element to Right Part of the Menu
 
-The right part elements are stored in the `LayoutState` that is in the @abp/ng.theme.basic package.
-
-The `dispatchAddNavigationElement` method of the `LayoutStateService` adds an element to the right part of the menu. 
-
-You can insert an element by adding your template to `app.component` and calling the `dispatchAddNavigationElement` method:
+You can add elements to the right part of the menu by calling the `addItems` method of `NavItemsService`. It is a singleton service, i.e. provided in root, so you can inject and use it immediately.
 
 ```js
-import { Layout, LayoutStateService } from '@abp/ng.theme.basic'; // added this line
+import { NavItemsService } from '@abp/ng.theme.shared';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
   template: `
-  
-    <!-- Added below content -->
-    <ng-template #search
-      ><input type="search" placeholder="Search" class="bg-transparent border-0"
-    /></ng-template>
+    <input type="search" placeholder="Search" class="bg-transparent border-0 color-white" />
   `,
 })
+export class MySearchInputComponent {}
+
+
+@Component(/* component metadata */)
 export class AppComponent {
-  // Added ViewChild
-  @ViewChild('search', { static: false, read: TemplateRef }) searchElementRef: TemplateRef<any>;
-
-  constructor(private layout: LayoutStateService) {} // injected LayoutStateService
-
-  // Added ngAfterViewInit
-  ngAfterViewInit() {
-    const newElement = {
-      name: 'Search',
-      element: this.searchElementRef,
-      order: 1,
-    } as Layout.NavigationElement;
-
-    this.layout.dispatchAddNavigationElement(newElement);
+  constructor(private navItems: NavItemsService) {
+    navItems.addItems([
+      {
+        id: 'MySearchInput',
+        order: 1,
+        component: MySearchInputComponent,
+      },
+      {
+        id: 'SignOutIcon',
+        html: '<i class="fas fa-sign-out-alt fa-lg text-white m-2"><i>',
+        action: () => console.log('Clicked the sign out icon'),
+        order: 101, // puts as last element
+      },
+    ]);
   }
 }
 ```
 
-This inserts a search input to the menu. The final UI looks like below:
+This inserts a search input and a sign out icon to the menu. The final UI looks like below:
 
 ![navigation-menu-search-input](./images/navigation-menu-search-input.png)
 
-## How to Remove an Element From Right Part of the Menu
+> The default elements have an order of `100`. If you want to place a custom element before the defaults, assign an order number up to `99`. If you want to place a custom element after the defaults, assign orders starting from `101`. Finally, if you must place an item between the defaults, patch the default element orders as described below. A warning though: We may add another default element in the future and it too will have an order number of `100`.
 
-TODO
+## How to Patch or Remove an Right Part Element
+
+The `patchItem` method of `NavItemsService` finds an element by its `id` property and replaces its configuration with the new configuration passed as the second parameter. Similarly, `removeItem` method finds an element and removes it.
+
+```js
+export class AppComponent {
+  constructor(private navItems: NavItemsService) {
+    navItems.patchItem(eThemeBasicComponents.Languages, {
+      requiredPolicy: 'new policy here',
+      order: 1,
+    });
+
+    navItems.removeItem(eThemeBasicComponents.CurrentUser);
+  }
+}
+```
+
+* Patched the languages dropdown element with new `requiredPolicy` and new `order`.
+* Removed the current user dropdown element.
 
 
 ## What's Next

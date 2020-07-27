@@ -15,7 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
-const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
+const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: true })];
 
 @NgModule({
   imports: [

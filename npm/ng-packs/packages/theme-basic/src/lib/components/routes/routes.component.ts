@@ -13,6 +13,6 @@ export class RoutesComponent {
   constructor(public readonly routes: RoutesService) {}
 
   isDropdown(node: TreeNode<ABP.Route>) {
-    return !node.isLeaf || this.routes.hasInvisibleChild(node.name);
+    return !node.isLeaf || this.routes.hasChildren(node.name);
   }
 }

@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.SecurityLog;
 
 namespace Volo.Abp.Identity
 {
@@ -14,6 +15,7 @@ namespace Volo.Abp.Identity
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IIdentityRoleRepository _roleRepository;
         private readonly IOrganizationUnitRepository _organizationUnitRepository;
+        private readonly IIdentitySecurityLogRepository _identitySecurityLogRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IdentityTestData _testData;
         private readonly OrganizationUnitManager _organizationUnitManager;
@@ -31,6 +33,7 @@ namespace Volo.Abp.Identity
             IIdentityClaimTypeRepository identityClaimTypeRepository,
             IIdentityRoleRepository roleRepository,
             IOrganizationUnitRepository organizationUnitRepository,
+            IIdentitySecurityLogRepository identitySecurityLogRepository,
             ILookupNormalizer lookupNormalizer,
             IdentityTestData testData,
             OrganizationUnitManager organizationUnitManager)
@@ -43,6 +46,7 @@ namespace Volo.Abp.Identity
             _testData = testData;
             _organizationUnitRepository = organizationUnitRepository;
             _organizationUnitManager = organizationUnitManager;
+            _identitySecurityLogRepository = identitySecurityLogRepository;
         }
 
         public async Task Build()
@@ -51,6 +55,7 @@ namespace Volo.Abp.Identity
             await AddOrganizationUnits();
             await AddUsers();
             await AddClaimTypes();
+            await AddSecurityLogs();
         }
 
         private async Task AddRoles()
@@ -69,7 +74,7 @@ namespace Volo.Abp.Identity
         }
 
         /* Creates OU tree as shown below:
-         * 
+         *
          * - OU1
          *   - OU11
          *     - OU111
@@ -137,6 +142,31 @@ namespace Volo.Abp.Identity
         {
             var ou = await _organizationUnitRepository.InsertAsync(new OrganizationUnit(_guidGenerator.Create(), displayName, parentId) { Code = code });
             return ou;
+        }
+
+        private async Task AddSecurityLogs()
+        {
+            await _identitySecurityLogRepository.InsertAsync(new IdentitySecurityLog(_guidGenerator, new SecurityLogInfo
+            {
+                ApplicationName = "Test-ApplicationName",
+                Identity = "Test-Identity",
+                Action = "Test-Action",
+                UserId = _testData.UserJohnId,
+                UserName = "john.nash",
+
+                CreationTime = new DateTime(2020, 01, 01, 10, 0, 0)
+            }));
+
+            await _identitySecurityLogRepository.InsertAsync(new IdentitySecurityLog(_guidGenerator, new SecurityLogInfo
+            {
+                ApplicationName = "Test-ApplicationName",
+                Identity = "Test-Identity",
+                Action = "Test-Action",
+                UserId = _testData.UserDavidId,
+                UserName = "david",
+
+                CreationTime = new DateTime(2020, 01, 02, 10, 0, 0)
+            }));
         }
     }
 }
