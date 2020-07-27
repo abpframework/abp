@@ -31,6 +31,9 @@
     "JoinToTheDevelopment": "Join to the Development",
     "ContributeAbpFramework": "Contribute to the ABP Framework",
     "SeeAllArticles": "See All Articles",
-    "WelcomeToABPCommunity!": "Welcome to ABP Community!"
+    "WelcomeToABPCommunity!": "Welcome to ABP Community!",
+    "MyProfile": "My profile",
+    "MyOrganizations": "My organizations",
+    "EmailNotValid": "Please enter a valid email address."
   }
 }
