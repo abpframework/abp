@@ -9,7 +9,7 @@ namespace Volo.Abp.ObjectExtending
         public static ObjectExtensionInfo MapEfCoreProperty<TProperty>(
             [NotNull] this ObjectExtensionInfo objectExtensionInfo,
             [NotNull] string propertyName,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction)
         {
             return objectExtensionInfo.MapEfCoreProperty(
                 typeof(TProperty),
@@ -22,7 +22,7 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] this ObjectExtensionInfo objectExtensionInfo,
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction)
         {
             Check.NotNull(objectExtensionInfo, nameof(objectExtensionInfo));
 

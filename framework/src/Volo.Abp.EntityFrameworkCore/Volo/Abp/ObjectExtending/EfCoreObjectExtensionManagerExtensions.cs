@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Data;
@@ -11,7 +11,7 @@ namespace Volo.Abp.ObjectExtending
         public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] string propertyName,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction = null)
             where TEntity : IHasExtraProperties, IEntity
         {
             return objectExtensionManager.MapEfCoreProperty(
@@ -27,7 +27,7 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] Type entityType,
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction = null)
         {
             Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
@@ -73,7 +73,7 @@ namespace Volo.Abp.ObjectExtending
 
                 var propertyBuilder = typeBuilder.Property(property.Type, property.Name);
 
-                efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
+                efCoreMapping.PropertyBuildAction?.Invoke(typeBuilder, propertyBuilder);
             }
         }
     }

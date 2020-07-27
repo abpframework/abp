@@ -27,7 +27,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                  * ObjectExtensionManager.Instance
                  *    .MapEfCoreProperty<IdentityUser, string>(
                  *        "MyProperty",
-                 *        b => b.HasMaxLength(128)
+                 *        (e, b) => b.HasMaxLength(128)
                  *    );
                  *
                  * See the documentation for more:

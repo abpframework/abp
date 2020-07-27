@@ -12,7 +12,7 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public static ObjectExtensionPropertyInfo MapEfCore(
             [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction = null)
         {
             Check.NotNull(propertyExtension, nameof(propertyExtension));
 
