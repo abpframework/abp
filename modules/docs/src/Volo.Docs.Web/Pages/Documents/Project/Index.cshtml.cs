@@ -260,7 +260,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             if (versions.Any())
             {
-                LatestVersionInfo = versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Version)) ?? versions.First();
+                LatestVersionInfo = GetLatestVersionInfo(versions);
 
                 SetLatestVersionBranchName(versions);
 
@@ -302,6 +302,22 @@ namespace Volo.Docs.Pages.Documents.Project
                 Value = CreateVersionLink(LatestVersionInfo, v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
+        }
+
+        private VersionInfoViewModel GetLatestVersionInfo(List<VersionInfoViewModel> versions)
+        {
+            if (Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
+                && (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Branches)
+            {
+                var latest = versions.FirstOrDefault(v=> v.Version == Project.LatestVersionBranchName);
+
+                if (latest != null)
+                {
+                    return latest;
+                }
+            }
+
+            return versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Version)) ?? versions.First();
         }
 
         private void SetLatestVersionBranchName(List<VersionInfoViewModel> versions)
