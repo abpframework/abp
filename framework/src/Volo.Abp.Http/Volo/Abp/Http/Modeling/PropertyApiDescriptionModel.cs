@@ -19,22 +19,22 @@ namespace Volo.Abp.Http.Modeling
             string typeName;
             string simpleTypeName;
 
-            if (TypeHelper.IsEnumerable(propertyInfo.PropertyType, out var itemType, includePrimitives: false))
-            {
-                typeName = $"[{TypeHelper.GetFullNameHandlingNullableAndGenerics(itemType)}]";
-                simpleTypeName = $"[{TypeHelper.GetSimplifiedName(itemType)}]";
-            }
-            else if (TypeHelper.IsDictionary(propertyInfo.PropertyType, out var keyType, out var valueType))
+            if (TypeHelper.IsDictionary(propertyInfo.PropertyType, out var keyType, out var valueType))
             {
                 typeName = $"{{{TypeHelper.GetFullNameHandlingNullableAndGenerics(keyType)}:{TypeHelper.GetFullNameHandlingNullableAndGenerics(valueType)}}}";
                 simpleTypeName = $"{{{TypeHelper.GetSimplifiedName(keyType)}:{TypeHelper.GetSimplifiedName(valueType)}}}";
+            }
+            else if (TypeHelper.IsEnumerable(propertyInfo.PropertyType, out var itemType, includePrimitives: false))
+            {
+                typeName = $"[{TypeHelper.GetFullNameHandlingNullableAndGenerics(itemType)}]";
+                simpleTypeName = $"[{TypeHelper.GetSimplifiedName(itemType)}]";
             }
             else
             {
                 typeName = TypeHelper.GetFullNameHandlingNullableAndGenerics(propertyInfo.PropertyType);
                 simpleTypeName = TypeHelper.GetSimplifiedName(propertyInfo.PropertyType);
             }
-            
+
             return new PropertyApiDescriptionModel
             {
                 Name = propertyInfo.Name,

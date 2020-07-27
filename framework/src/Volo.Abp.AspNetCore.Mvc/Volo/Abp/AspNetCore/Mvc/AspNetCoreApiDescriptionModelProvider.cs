@@ -68,12 +68,24 @@ namespace Volo.Abp.AspNetCore.Mvc
             ApplicationApiDescriptionModel applicationModel,
             ApplicationApiDescriptionModelRequestDto input)
         {
-            var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
+            var controllerType = apiDescription
+                .ActionDescriptor
+                .AsControllerActionDescriptor()
+                .ControllerTypeInfo;
+
             var setting = FindSetting(controllerType);
 
-            var moduleModel = applicationModel.GetOrAddModule(GetRootPath(controllerType, setting), GetRemoteServiceName(controllerType, setting));
+            var moduleModel = applicationModel.GetOrAddModule(
+                GetRootPath(controllerType, setting),
+                GetRemoteServiceName(controllerType, setting)
+            );
 
-            var controllerModel = moduleModel.GetOrAddController(controllerType.FullName, CalculateControllerName(controllerType, setting), controllerType, _modelOptions.IgnoredInterfaces);
+            var controllerModel = moduleModel.GetOrAddController(
+                controllerType.FullName,
+                CalculateControllerName(controllerType, setting),
+                controllerType,
+                _modelOptions.IgnoredInterfaces
+            );
 
             var method = apiDescription.ActionDescriptor.GetMethodInfo();
 
@@ -86,13 +98,16 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             Logger.LogDebug($"ActionApiDescriptionModel.Create: {controllerModel.ControllerName}.{uniqueMethodName}");
 
-            var actionModel = controllerModel.AddAction(uniqueMethodName, ActionApiDescriptionModel.Create(
+            var actionModel = controllerModel.AddAction(
                 uniqueMethodName,
-                method,
-                apiDescription.RelativePath,
-                apiDescription.HttpMethod,
-                GetSupportedVersions(controllerType, method, setting)
-            ));
+                ActionApiDescriptionModel.Create(
+                    uniqueMethodName,
+                    method,
+                    apiDescription.RelativePath,
+                    apiDescription.HttpMethod,
+                    GetSupportedVersions(controllerType, method, setting)
+                )
+            );
 
             if (input.IncludeTypes)
             {
@@ -188,16 +203,16 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
-            if (TypeHelper.IsEnumerable(type, out var itemType))
-            {
-                AddCustomTypesToModel(applicationModel, itemType);
-                return;
-            }
-
             if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
             {
                 AddCustomTypesToModel(applicationModel, keyType);
                 AddCustomTypesToModel(applicationModel, valueType);
+                return;
+            }
+
+            if (TypeHelper.IsEnumerable(type, out var itemType))
+            {
+                AddCustomTypesToModel(applicationModel, itemType);
                 return;
             }
 
