@@ -27,5 +27,15 @@ namespace Volo.Abp.Auditing.App.EntityFrameworkCore
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppFullAuditedEntityWithAudited>(entity =>
+            {
+                entity.Property<string>("Shadow");
+            });
+        }
     }
 }
