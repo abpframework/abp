@@ -34,10 +34,10 @@ import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
 import { SessionState } from './states/session.state';
-import { CORE_OPTIONS, coreOptionsFactory } from './tokens/options.token';
+import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
-import { getInitialData, localeInitializer, configureOAuth } from './utils/initial-utils';
+import { configureOAuth, getInitialData, localeInitializer } from './utils/initial-utils';
 
 export function storageFactory(): OAuthStorage {
   return localStorage;

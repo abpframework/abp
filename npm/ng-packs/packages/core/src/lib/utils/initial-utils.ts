@@ -7,6 +7,7 @@ import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
+import { parseTenantFromUrl } from './multi-tenancy-utils';
 
 export function configureOAuth(injector: Injector, options: ABP.Root) {
   const fn = () => {
@@ -19,9 +20,11 @@ export function configureOAuth(injector: Injector, options: ABP.Root) {
 }
 
 export function getInitialData(injector: Injector) {
-  const fn = () => {
+  const fn = async () => {
     const store: Store = injector.get(Store);
     const { skipGetAppConfiguration } = injector.get(CORE_OPTIONS) as ABP.Root;
+
+    await parseTenantFromUrl(injector);
 
     if (skipGetAppConfiguration) return;
 
