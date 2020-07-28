@@ -101,8 +101,8 @@ namespace Volo.Abp.Identity.MongoDB
             string correlationId = null)
         {
             return GetMongoQueryable()
-                .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime.Date >= startTime.Value.Date)
-                .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime.Date <= endTime.Value.Date)
+                .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime.Value)
+                .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime < endTime.Value.AddDays(1).Date)
                 .WhereIf(!applicationName.IsNullOrWhiteSpace(),
                     securityLog => securityLog.ApplicationName == applicationName)
                 .WhereIf(!identity.IsNullOrWhiteSpace(), securityLog => securityLog.Identity == identity)
