@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,24 +44,30 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             ValidateModel();
 
-            await CheckSelfRegistrationAsync();
-
-            var registerDto = new RegisterDto
+            try
             {
-                AppName = "MVC",
-                EmailAddress = Input.EmailAddress,
-                Password = Input.Password,
-                UserName = Input.UserName
-            };
+                await CheckSelfRegistrationAsync();
 
-            var userDto = await AccountAppService.RegisterAsync(registerDto);
-            var user = await UserManager.GetByIdAsync(userDto.Id);
+                var registerDto = new RegisterDto
+                {
+                    AppName = "MVC",
+                    EmailAddress = Input.EmailAddress,
+                    Password = Input.Password,
+                    UserName = Input.UserName
+                };
 
-            await UserManager.SetEmailAsync(user, Input.EmailAddress);
+                var userDto = await AccountAppService.RegisterAsync(registerDto);
+                var user = await UserManager.GetByIdAsync(userDto.Id);
 
-            await SignInManager.SignInAsync(user, isPersistent: false);
+                await SignInManager.SignInAsync(user, isPersistent: false);
 
-            return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+                return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+            }
+            catch (BusinessException e)
+            {
+                Alerts.Danger(e.Message);
+                return Page();
+            }
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
