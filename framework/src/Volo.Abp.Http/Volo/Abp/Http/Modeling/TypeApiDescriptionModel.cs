@@ -47,6 +47,7 @@ namespace Volo.Abp.Http.Modeling
             {
                 typeModel.Properties = type
                     .GetProperties()
+                    .Where(p => p.DeclaringType == type)
                     .Select(PropertyApiDescriptionModel.Create)
                     .ToArray();
 

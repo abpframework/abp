@@ -252,7 +252,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             AddCustomTypesToModel(applicationModel, type.BaseType);
 
-            foreach (var propertyInfo in type.GetProperties())
+            foreach (var propertyInfo in type.GetProperties().Where(p => p.DeclaringType == type))
             {
                 AddCustomTypesToModel(applicationModel, propertyInfo.PropertyType);
             }
