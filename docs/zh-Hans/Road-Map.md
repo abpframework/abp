@@ -9,7 +9,6 @@
 
 除了中期目录,还有一些[积压](https://github.com/abpframework/abp/milestone/2)的功能, 这里积压中重要功能的列表:
 
-* [#4098](https://github.com/abpframework/abp/issues/4098) / Blob存储Azure提供者.
 * [#2882](https://github.com/abpframework/abp/issues/2882) / 提供 **gRPC集成** 基础设施 (虽然[已经可以](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo)为你的应用程序创建和使用gRPC端点,但我们计划为所有[标准应用程序模块](https://docs.abp.io/en/abp/latest/Modules/Index)创建端点)
 * [#236](https://github.com/abpframework/abp/issues/236) 基于权限系统的资源
 * [#1754](https://github.com/abpframework/abp/issues/1754) / 多语言实体

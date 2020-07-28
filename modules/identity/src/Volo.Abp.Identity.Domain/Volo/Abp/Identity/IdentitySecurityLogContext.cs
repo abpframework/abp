@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentitySecurityLogEvent : IMultiTenant
+    public class IdentitySecurityLogContext
     {
-        public Guid? TenantId { get; set; }
-
         public string Identity { get; set; }
 
         public string Action { get; set; }
@@ -18,12 +15,12 @@ namespace Volo.Abp.Identity
 
         public Dictionary<string, object> ExtraProperties { get; }
 
-        public IdentitySecurityLogEvent()
+        public IdentitySecurityLogContext()
         {
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public virtual IdentitySecurityLogEvent WithProperty(string key, object value)
+        public virtual IdentitySecurityLogContext WithProperty(string key, object value)
         {
             ExtraProperties[key] = value;
             return this;

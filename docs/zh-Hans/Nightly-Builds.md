@@ -29,13 +29,13 @@
 预览NPM包的最新版本可以通过在应用程序的根文件夹命令运行命令安装:
 
 ```bash
-abp switch-to-preview
+abp switch-to-preview --npm
 ```
 
 如果你正在使用ABP框架预览包,你可以使用此命令切换回稳定版本:
 
 ```bash
-abp switch-to-stable
+abp switch-to-stable --npm
 ```
 
 参阅 [ABP CLI 文档](./CLI.md) 了解更多信息.

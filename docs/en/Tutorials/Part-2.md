@@ -56,7 +56,7 @@ This tutorials has multiple versions based on your **UI** and **Database** prefe
 
 It's common to call the HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
 
-ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
+ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
 
 ### Testing in the Developer Console
 

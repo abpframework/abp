@@ -447,6 +447,15 @@
           ]
         },
         {
+          "text": "React Native",
+          "items": [
+            {
+              "text": "入门",
+              "path": "Getting-Started-React-Native.md"
+            }
+          ]
+        },
+        {
           "text": "通用",
           "items": [
             {
@@ -624,6 +633,10 @@
     {
       "text": "API文档",
       "path": "{ApiDocumentationUrl}"
+    },
+    {
+      "text": "官方包",
+      "path": "https://abp.io/packages"
     }
   ]
 }

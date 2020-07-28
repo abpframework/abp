@@ -16,6 +16,8 @@ namespace Volo.Abp.PermissionManagement
             myPermission2.AddChild("MyPermission2.ChildPermission1");
 
             testGroup.AddPermission("MyPermission3", multiTenancySide: MultiTenancySides.Host);
+
+            testGroup.AddPermission("MyPermission4", multiTenancySide: MultiTenancySides.Host).WithProviders(UserPermissionValueProvider.ProviderName);
         }
     }
 }

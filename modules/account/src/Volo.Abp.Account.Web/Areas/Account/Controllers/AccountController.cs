@@ -6,10 +6,8 @@ using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.EventBus.Local;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
-using Volo.Abp.SecurityLog;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -28,22 +26,20 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         protected SignInManager<IdentityUser> SignInManager { get; }
         protected IdentityUserManager UserManager { get; }
         protected ISettingProvider SettingProvider { get; }
-
-        protected ILocalEventBus LocalEventBus { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
 
         public AccountController(
             SignInManager<IdentityUser> signInManager,
             IdentityUserManager userManager,
             ISettingProvider settingProvider,
-            ISecurityLogManager securityLogManager,
-            ILocalEventBus localEventBus)
+            IdentitySecurityLogManager identitySecurityLogManager)
         {
             LocalizationResource = typeof(AccountResource);
 
             SignInManager = signInManager;
             UserManager = userManager;
             SettingProvider = settingProvider;
-            LocalEventBus = localEventBus;
+            IdentitySecurityLogManager = identitySecurityLogManager;
         }
 
         [HttpPost]
@@ -62,7 +58,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
                 true
             );
 
-            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = signInResult.ToIdentitySecurityLogAction(),
@@ -76,13 +72,13 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         [Route("logout")]
         public virtual async Task Logout()
         {
-            await LocalEventBus.PublishAsync(new IdentitySecurityLogEvent
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = IdentitySecurityLogActionConsts.Logout
             });
 
-           await SignInManager.SignOutAsync();
+            await SignInManager.SignOutAsync();
         }
 
         [HttpPost]
