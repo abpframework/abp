@@ -15,11 +15,13 @@ namespace Volo.Abp.Http.Modeling
 
         public object[] EnumValues { get; set; }
 
+        public string[] GenericArguments { get; set; }
+
         public PropertyApiDescriptionModel[] Properties { get; set; }
 
         private TypeApiDescriptionModel()
         {
-            
+
         }
 
         public static TypeApiDescriptionModel Create(Type type)
@@ -47,6 +49,11 @@ namespace Volo.Abp.Http.Modeling
                     .GetProperties()
                     .Select(PropertyApiDescriptionModel.Create)
                     .ToArray();
+
+                if (type.IsGenericTypeDefinition)
+                {
+                    typeModel.GenericArguments = type.GetGenericArguments().Select(a => a.Name).ToArray();
+                }
             }
 
             return typeModel;
