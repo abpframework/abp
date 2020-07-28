@@ -2,38 +2,33 @@
 
 不同的模块提供它们的设置选项卡. 你可以通过3个步骤在项目中自定义设置页面.
 
-1. 创建一个组件
+1. 使用以下命令创建一个组件
 
-```js
-import { Select } from '@ngxs/store';
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-your-custom-settings',
-  template: `
-    custom-settings works! 
-  `,
-})
-export class YourCustomSettingsComponent {
-  // Your component logic
-}
+```bash
+yarn ng generate component my-settings
 ```
 
-2. 添加 `YourCustomSettingsComponent` 到 `AppModule` 中的 `declarations`和 `entryComponents` 数组中.
-
-3. 打开 `app.component.ts` 在 `ngOnInit` 添加以下内容:
+2. 打开 `app.component.ts` 做以下修改:
 
 ```js
-import { addSettingTab } from '@abp/ng.theme.shared';
-// ...
+import { Component } from '@angular/core';
+import { SettingTabsService } from '@abp/ng.core'; // imported SettingTabsService
+import { MySettingsComponent } from './my-settings/my-settings.component'; // imported MySettingsComponent
 
-ngOnInit() {
-  addSettingTab({
-    component: YourCustomSettingsComponent,
-    name: 'Type here the setting tab title (you can type a localization key, e.g: AbpAccount::Login',
-    order: 4,
-    requiredPolicy: 'type here a policy key'
-  });
+@Component(/* component metadata */)
+export class AppComponent {
+  constructor(private settingTabs: SettingTabsService) // injected MySettingsComponent
+  {
+    // added below
+    settingTabs.add([
+      {
+        name: 'MySettings',
+        order: 1,
+        requiredPolicy: 'policy key here',
+        component: MySettingsComponent,
+      },
+    ]);
+  }
 }
 ```
 

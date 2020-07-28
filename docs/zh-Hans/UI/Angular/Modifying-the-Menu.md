@@ -2,8 +2,6 @@
 
 菜单在 @abp/ng.theme.basic包 `ApplicationLayoutComponent` 内部. 有几种修改菜单的方法,本文档介绍了这些方法. 如果你想完全替换菜单,请参考[组件替换文档]了解如何替换布局.
 
-<!-- TODO: Replace layout replacement document with component replacement. Layout replacement document will be created.-->
-
 ## 如何添加Logo
 
 环境变量中的 `logoUrl` 是logo的url.
@@ -212,51 +210,65 @@ this.routes.remove(['Your navigation']);
 
 ## 如何在菜单的右侧添加元素
 
-右侧的元素存储在 @abp/ng.theme.basic 包的 `LayoutState` 中.
-
-`LayoutStateService` 的 `dispatchAddNavigationElement` 方法添加元素到右侧的菜单.
-
-你可以通过将模板添加到 `app.component` 调用 `dispatchAddNavigationElement` 方法来插入元素:
+你可以通过调用 `NavItemsService` 的 `addItems` 方法将元素添加到菜单的右侧. 这是一个单例服务,即以根身份提供. 因此你可以立即注入并使用它.
 
 ```js
-import { Layout, LayoutStateService } from '@abp/ng.theme.basic'; // added this line
+import { NavItemsService } from '@abp/ng.theme.shared';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
   template: `
-  
-    <!-- Added below content -->
-    <ng-template #search
-      ><input type="search" placeholder="Search" class="bg-transparent border-0"
-    /></ng-template>
+    <input type="search" placeholder="Search" class="bg-transparent border-0 color-white" />
   `,
 })
+export class MySearchInputComponent {}
+
+
+@Component(/* component metadata */)
 export class AppComponent {
-  // Added ViewChild
-  @ViewChild('search', { static: false, read: TemplateRef }) searchElementRef: TemplateRef<any>;
-
-  constructor(private layout: LayoutStateService) {} // injected LayoutStateService
-
-  // Added ngAfterViewInit
-  ngAfterViewInit() {
-    const newElement = {
-      name: 'Search',
-      element: this.searchElementRef,
-      order: 1,
-    } as Layout.NavigationElement;
-
-    this.layout.dispatchAddNavigationElement(newElement);
+  constructor(private navItems: NavItemsService) {
+    navItems.addItems([
+      {
+        id: 'MySearchInput',
+        order: 1,
+        component: MySearchInputComponent,
+      },
+      {
+        id: 'SignOutIcon',
+        html: '<i class="fas fa-sign-out-alt fa-lg text-white m-2"><i>',
+        action: () => console.log('Clicked the sign out icon'),
+        order: 101, // puts as last element
+      },
+    ]);
   }
 }
 ```
 
-上面我们在菜单添加了一个搜索输入,最终UI如下:
+上面我们在菜单添加了一个搜索输入和退出登录图标,最终UI如下:
 
 ![navigation-menu-search-input](./images/navigation-menu-search-input.png)
 
-## 如何删除右侧菜单元素
+> 默认元素的排序为 `100`. 如果要将自定义元素放在默认值之前,请指定一个排序,最高为 `99`. 如果要将自定义元素放在默认值之后,请指定排序从 `101` 开始. 最后如果必须在默认值之间放置一个项目,请按如下所述修补默认元素顺序. 但有一个警告:我们将来可能会添加另一个默认元素,排序也为 `100`.
 
-TODO
+## 如何修补或删除右侧部分元素
+
+`NavItemsService` 的 `patchItem` 方法通过 `id` 查找元素,并将配置替换为第二个参数传递的新配置.  `removeItem` 方法会找到一个元素并删除.
+
+```js
+export class AppComponent {
+  constructor(private navItems: NavItemsService) {
+    navItems.patchItem(eThemeBasicComponents.Languages, {
+      requiredPolicy: 'new policy here',
+      order: 1,
+    });
+
+    navItems.removeItem(eThemeBasicComponents.CurrentUser);
+  }
+}
+```
+
+* 使用新的 `requiredPolicy` 和新的 `order` 修补了语言下拉菜单元素.
+* 删除了当前用户的下拉菜单元素.
 
 ## 下一步是什么?
 
