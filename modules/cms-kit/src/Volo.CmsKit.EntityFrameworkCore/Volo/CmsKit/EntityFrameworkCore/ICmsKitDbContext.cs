@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -12,5 +13,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
          DbSet<UserReaction> UserReactions { get; }
 
          DbSet<Comment> Comments { get; }
+
+         DbSet<CmsUser> CmsUsers { get; set; }
     }
 }

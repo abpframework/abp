@@ -4,6 +4,8 @@ using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Users;
+using Volo.Abp.Users.EntityFrameworkCore;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -21,6 +23,14 @@ namespace Volo.CmsKit.EntityFrameworkCore
             );
 
             optionsAction?.Invoke(options);
+
+            builder.Entity<CmsUser>(b =>
+            {
+                b.ToTable(options.TablePrefix + "Users", options.Schema);
+
+                b.ConfigureByConvention();
+                b.ConfigureAbpUser();
+            });
 
             builder.Entity<UserReaction>(b =>
             {
