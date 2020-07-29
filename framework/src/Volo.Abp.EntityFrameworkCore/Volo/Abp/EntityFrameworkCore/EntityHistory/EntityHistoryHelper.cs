@@ -242,7 +242,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 }
             }
 
-            if (IsBaseAuditProperty(propertyInfo, entityType))
+            if (propertyInfo != null && IsBaseAuditProperty(propertyInfo, entityType))
             {
                 return false;
             }

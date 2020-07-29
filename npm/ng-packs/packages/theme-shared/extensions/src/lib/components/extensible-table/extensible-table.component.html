@@ -27,11 +27,11 @@
       [sortable]="prop.sortable"
     >
       <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
-        <ng-container
-          *abpPropData="let data; fromList: propList; withRecord: row; atIndex: i"
-          [abpPermission]="prop.permission"
-        >
-          <div *ngIf="prop.visible(data)" [innerHTML]="getContent(prop, data) | async"></div>
+        <ng-container [abpPermission]="prop.permission">
+          <div
+            *ngIf="row['_' + prop.name].visible"
+            [innerHTML]="row['_' + prop.name].value | async"
+          ></div>
         </ng-container>
       </ng-template>
     </ngx-datatable-column>
