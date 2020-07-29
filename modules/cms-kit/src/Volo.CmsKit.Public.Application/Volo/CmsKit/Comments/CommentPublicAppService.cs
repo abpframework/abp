@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Comments
 {
@@ -12,21 +14,32 @@ namespace Volo.CmsKit.Comments
     public class CommentPublicAppService : ApplicationService, ICommentPublicAppService
     {
         protected ICommentRepository CommentRepository { get; }
+        public ICmsUserLookupService CmsUserLookupService { get; }
 
-        public CommentPublicAppService(ICommentRepository commentRepository)
+        public CommentPublicAppService(ICommentRepository commentRepository, ICmsUserLookupService cmsUserLookupService)
         {
             CommentRepository = commentRepository;
+            CmsUserLookupService = cmsUserLookupService;
         }
 
-        public async Task<List<CommentWithRepliesDto>> GetAllForEntityAsync(string entityType, string entityId)
+        public async Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
         {
-            var comments = await CommentRepository.GetListAsync(entityType, entityId);
+            var commentsWithAuthor = await CommentRepository.GetListAsync(entityType, entityId);
 
-            return ConvertCommentsToNestedStructure(comments);
+            return new ListResultDto<CommentWithDetailsDto>(
+                ConvertCommentsToNestedStructure(commentsWithAuthor)
+                );
         }
 
         public async Task<CommentDto> CreateAsync(CreateCommentInput input)
         {
+            var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.Id.Value);
+
+            if (user == null)
+            {
+                throw new BusinessException(message: "User Not found!");
+            }
+
             var comment = await CommentRepository.InsertAsync(new Comment(
                 GuidGenerator.Create(),
                 input.EntityType,
@@ -62,22 +75,34 @@ namespace Volo.CmsKit.Comments
             await CommentRepository.DeleteAsync(id);
         }
 
-        private List<CommentWithRepliesDto> ConvertCommentsToNestedStructure(List<Comment> comments)
+        private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthor> comments)
         {
             var parentComments = comments
-                .Where(c=> c.RepliedCommentId == null)
-                .Select(c=> ObjectMapper.Map<Comment, CommentWithRepliesDto>(c))
+                .Where(c=> c.Comment.RepliedCommentId == null)
+                .Select(c=> ObjectMapper.Map<Comment, CommentWithDetailsDto>(c.Comment))
                 .ToList();
 
             foreach (var parentComment in parentComments)
             {
+                parentComment.Author = GetAuthorAsDtoFromCommentList(comments, parentComment.Id);
+
                 parentComment.Replies = comments
-                    .Where(c => c.RepliedCommentId == parentComment.Id)
-                    .Select(c => ObjectMapper.Map<Comment, CommentDto>(c))
+                    .Where(c => c.Comment.RepliedCommentId == parentComment.Id)
+                    .Select(c => ObjectMapper.Map<Comment, CommentDto>(c.Comment))
                     .ToList();
+
+                foreach (var reply in parentComment.Replies)
+                {
+                    reply.Author = GetAuthorAsDtoFromCommentList(comments, reply.Id);
+                }
             }
 
             return parentComments;
+        }
+
+        private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthor> comments, Guid commentId)
+        {
+            return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
         }
     }
 }

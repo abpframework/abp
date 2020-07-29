@@ -1,22 +1,87 @@
-﻿@model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
+﻿@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Users
+@using Volo.CmsKit.Comments
+@using Volo.CmsKit.Localization
+@inject ICurrentUser CurrentUser
+@inject IHtmlLocalizer<CmsKitResource> L
+@model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
+
+@{
+    Func<dynamic, IHtmlContent> GetCommentAuthorName(CmsUserDto author) =>
+        @<span>
+            @((string.IsNullOrWhiteSpace(author.Name)
+                ? author.UserName
+                : author.Name + " " + author.Surname).Trim())
+        </span>;
+}
+@{
+    Func<dynamic, IHtmlContent> GetCommentArea(string repliedCommentIdAsString, bool cancelButton = false) =>
+        @<div class="cms-comment-form-area" data-reply-id="@repliedCommentIdAsString"
+              style="@(string.IsNullOrEmpty(repliedCommentIdAsString) ? "" : "display:none")">
+            <form class="cms-comment-form">
+                <input hidden value="@repliedCommentIdAsString" name="repliedCommentId"/>
+                <div class="form-group">
+                    <label> @(string.IsNullOrEmpty(repliedCommentIdAsString) ? L["YourComment"] : L["YourReply"]) </label>
+                    <textarea class="form-control" name="commentText" rows="3"></textarea>
+                </div>
+                @if (cancelButton)
+                {
+                    <abp-button type="button" button-type="Secondary" class="reply-cancel-button" data-reply-id="@repliedCommentIdAsString"> @L["Cancel"] </abp-button>
+                }
+                <abp-button type="submit" button-type="Primary"> @L["Send"] </abp-button>
+            </form>
+        </div>;
+}
+
 <div class="cms-comment-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
-    <div class="comment p-3 pl-5">
-        <h5> <i class="fa fa-comment-o"></i> Yunus Emre Kalkan </h5>
-        <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-            It has survived not only five centuries, but also the leap into electronic typesetting.
-        </p>
-    </div>
-    <hr/>
-    <div class="comment p-3 pl-5">
-        <h5> <i class="fa fa-comment-o"></i> Yunus Emre Kalkan </h5>
-        <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-            It has survived not only five centuries, but also the leap into electronic typesetting.
-        </p>
+
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="comment border p-3 pl-5">
+            <h4>
+                <i class="fa fa-comment-o"></i>
+                @GetCommentAuthorName(comment.Author).Invoke(null)
+            </h4>
+            <p>
+                @comment.Text
+            </p>
+
+            @if (comment.Author.Id == CurrentUser.Id)
+            {
+                <a href="#" class="comment-delete-link" data-comment-id="@comment.Id">
+                    @L["Delete"]
+                </a>
+            }
+
+            <a href="#" class="comment-reply-link" data-reply-id="@comment.Id">
+                @L["Reply"]
+            </a>
+
+            @foreach (var reply in comment.Replies)
+            {
+                <div class="comment border p-3 pl-5">
+                    <h6>
+                        <i class="fa fa-comment-o"></i>
+                        @GetCommentAuthorName(reply.Author).Invoke(null)
+                    </h6>
+                    <p>
+                        @reply.Text
+                    </p>
+
+                    @if (reply.Author.Id == CurrentUser.Id)
+                    {
+                        <a href="#" class="comment-delete-link" data-comment-id="@reply.Id">
+                            @L["Delete"]
+                        </a>
+                    }
+                </div>
+            }
+
+            @GetCommentArea(comment.Id.ToString(), true).Invoke(null)
+        </div>
+    }
+    <div class="p-3 pl-5">
+        @GetCommentArea("").Invoke(null)
     </div>
 </div>

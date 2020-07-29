@@ -17,5 +17,7 @@ namespace Volo.CmsKit.Comments
         public Guid CreatorId { get; set; }
 
         public DateTime CreationTime { get; set; }
+
+        public CmsUserDto Author { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.CmsKit.Comments
 {
-    public class CommentWithRepliesDto
+    public class CommentWithDetailsDto
     {
         public Guid Id { get; set; }
 
@@ -18,5 +18,7 @@ namespace Volo.CmsKit.Comments
         public DateTime CreationTime { get; set; }
 
         public List<CommentDto> Replies { get; set; }
+
+        public CmsUserDto Author { get; set; }
     }
 }

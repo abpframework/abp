@@ -1,6 +1,12 @@
 {
   "culture": "en",
   "texts": {
-    "PickYourReaction": "Pick your reaction"
+    "PickYourReaction": "Pick your reaction",
+    "YourComment": "Your comment",
+    "YourReply": "Your reply",
+    "Send": "Send",
+    "Delete": "delete",
+    "Reply": "reply",
+    "MessageDeletionConfirmationMessage": "This comment will be deleted completely."
   }
 }

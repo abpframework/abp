@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.CmsKit.Comments
 {
     public interface ICommentPublicAppService : IApplicationService
     {
-        Task<List<CommentWithRepliesDto>> GetAllForEntityAsync(string entityType, string entityId);
+        Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId);
 
         Task<CommentDto> CreateAsync(CreateCommentInput input);
 

@@ -8,7 +8,7 @@ namespace Volo.CmsKit.Comments
 {
     public interface ICommentRepository : IBasicRepository<Comment, Guid>
     {
-        Task<List<Comment>> GetListAsync(
+        Task<List<CommentWithAuthor>> GetListAsync(
             [NotNull] string entityType,
             [NotNull] string entityId);
     }

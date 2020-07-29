@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Volo.Abp.AutoMapper;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit
 {
@@ -12,8 +13,9 @@ namespace Volo.CmsKit
              * Alternatively, you can split your mapping configurations
              * into multiple profile classes for a better organization. */
 
-            CreateMap<Comment, CommentDto>();
-            CreateMap<Comment, CommentWithRepliesDto>().Ignore(x=> x.Replies);
+            CreateMap<CmsUser, CmsUserDto>();
+            CreateMap<Comment, CommentDto>().Ignore(x=> x.Author);
+            CreateMap<Comment, CommentWithDetailsDto>().Ignore(x=> x.Replies).Ignore(x=> x.Author);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 
 namespace Volo.CmsKit.Comments
 {
@@ -20,7 +21,7 @@ namespace Volo.CmsKit.Comments
 
         [HttpGet]
         [Route("{entityType}/{entityId}")]
-        public Task<List<CommentWithRepliesDto>> GetAllForEntityAsync(string entityType, string entityId)
+        public Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
         {
             return CommentPublicAppService.GetAllForEntityAsync(entityType, entityId);
         }
