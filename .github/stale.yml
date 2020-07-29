@@ -1,5 +1,5 @@
 # Number of days of inactivity before an issue becomes stale
-daysUntilStale: 30
+daysUntilStale: 60
 # Number of days of inactivity before a stale issue is closed
 daysUntilClose: 7
 # Set to true to ignore issues in a milestone (defaults to false)
