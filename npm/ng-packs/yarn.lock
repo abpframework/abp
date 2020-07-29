@@ -91,7 +91,14 @@
     chart.js "^2.9.3"
     tslib "^2.0.0"
 
-"@abp/utils@^3.0.3", "@abp/utils@^3.0.4":
+"@abp/utils@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-3.0.3.tgz#563aa062882ca82227b749d90458adafa46ae73b"
+  integrity sha512-eV4cl605j1IbuIbnTTO5JW+O3mpUUVxp+AG2xqIeqrRSnyTGhTG0q30XjsDGlTdcUfwxpZORptD4pu8NfCGUpg==
+  dependencies:
+    just-compare "^1.3.0"
+
+"@abp/utils@^3.0.4":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-3.0.4.tgz#38068fa8f735e1889cf2f226128366825948814d"
   integrity sha512-TnXRZIZcxv5+EctEPsZEi2cyRXbpl3A679wzQa6BACv+pM45cjGO1JR8P0VswKN4TVL0aQRMv26N6U/uie8sEQ==
@@ -2319,10 +2326,17 @@
     rxjs "6.5.5"
     webpack-sources "1.4.3"
 
-"@ngx-validate/core@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.9.tgz#c5baea9e6f2f28c70d1adaf1edde5a9bcc8929c0"
-  integrity sha512-bvgwGr3l47gyxqsfKkI8c7UNMlv8ct/OvwYVDjYI7GBt0A+nhBb+xFmirWbBkMT64bUI0Y8pWIiB5qiewPG1WA==
+"@ngx-validate/core@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.10.tgz#a9ff36e5645533f5bc2d4850a980582bdfee8033"
+  integrity sha512-/uq22KteDF3WcJEMNaK7C9eT6Mxw8rlPqJfq2XteO2g3utzx/n/gKDdb0GzD/2eefjmO1qq98XQKgpFzQXoTag==
+  dependencies:
+    tslib "^1.9.0"
+
+"@ngx-validate/core@^0.0.8", "@ngx-validate/core@^0.0.9":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.0.8.tgz#8577405eb1af0f5002cdda7a86fbcda56280f116"
+  integrity sha512-caIG5ao76Xhf7T+pNA8crnpAwK0yqj3i0OAUGZRUq1W+kNgz+ZnrSd4F9an/W4g+38u/8gfUVvsfsm07ju6qYA==
   dependencies:
     tslib "^1.9.0"
 

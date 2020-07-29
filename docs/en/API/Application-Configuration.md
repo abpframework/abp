@@ -7,7 +7,7 @@ ABP Framework provides a pre-built and standard endpoint that contains some usef
 * [Setting](../Settings.md) values for the current user.
 * Info about the [current user](../CurrentUser.md) (like id and user name).
 * Info about the current [tenant](../Multi-Tenancy.md) (like id and name).
-* [Time zone](../Timing.md) information for the current user and the [clock](Timing.md) type of the application.
+* [Time zone](../Timing.md) information for the current user and the [clock](../Timing.md) type of the application.
 
 ## HTTP API
 
