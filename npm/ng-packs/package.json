@@ -51,7 +51,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
     "@ngneat/spectator": "^5.11.0",
-    "@ngx-validate/core": "^0.0.9",
+    "@ngx-validate/core": "^0.0.10",
     "@ngxs/devtools-plugin": "^3.6.2",
     "@ngxs/logger-plugin": "^3.6.2",
     "@ngxs/router-plugin": "^3.6.2",
