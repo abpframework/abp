@@ -295,6 +295,10 @@ namespace Volo.Abp.Reflection
             {
                 return "number";
             }
+            else if (type == typeof(object))
+            {
+                return "object";
+            }
 
             return type.FullName ?? type.Name;
         }

@@ -613,7 +613,7 @@ Configure<DocsElasticSearchOptions>(options =>
 The `Index` is automatically created after the application starts if the `Index` does not exist.
 
 `DefaultElasticClientProvider` is responsible for creating `IElasticClient`. By default, it reads Elastic Search's `Url` from `IConfiguration`.
-If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](Dependency-Injection.md) system.
+If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](../Dependency-Injection.md) system.
 
 ```
 {

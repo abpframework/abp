@@ -16,7 +16,7 @@
     "scripts:build": "cd scripts && yarn && yarn build",
     "prepare:workspace": "yarn scripts:build --noInstall",
     "ci": "yarn ng lint && yarn prepare:workspace && yarn ci:test && yarn ci:build",
-    "ci:test": "ng test --coverage=false",
+    "ci:test": "ng test --coverage=false --silent",
     "ci:build": "cd scripts && yarn build:prod",
     "lerna": "lerna",
     "compile:ivy": "yarn ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points --tsconfig './tsconfig.prod.json' --source node_modules --async false",
@@ -39,8 +39,8 @@
     "@angular/animations": "~10.0.0",
     "@angular/cli": "~10.0.0",
     "@angular/common": "~10.0.0",
-    "@angular/compiler": "~10.0.0",
-    "@angular/compiler-cli": "~10.0.0",
+    "@angular/compiler": "10.0.0",
+    "@angular/compiler-cli": "10.0.0",
     "@angular/core": "~10.0.0",
     "@angular/forms": "~10.0.0",
     "@angular/language-service": "~10.0.0",
@@ -51,7 +51,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
     "@ngneat/spectator": "^5.11.0",
-    "@ngx-validate/core": "^0.0.9",
+    "@ngx-validate/core": "^0.0.10",
     "@ngxs/devtools-plugin": "^3.6.2",
     "@ngxs/logger-plugin": "^3.6.2",
     "@ngxs/router-plugin": "^3.6.2",
@@ -91,6 +91,10 @@
   },
   "dependencies": {
     "tslib": "^2.0.0"
+  },
+  "resolutions": {
+    "@angular/compiler": "10.0.0",
+    "@angular/compiler-cli": "10.0.0"
   },
   "config": {
     "commitizen": {

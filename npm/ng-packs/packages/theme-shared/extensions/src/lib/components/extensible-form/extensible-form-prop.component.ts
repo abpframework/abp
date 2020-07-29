@@ -1,14 +1,17 @@
-import { TrackByService } from '@abp/ng.core';
+import { ABP, TrackByService } from '@abp/ng.core';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   Input,
   Optional,
+  SimpleChanges,
   SkipSelf,
+  OnChanges,
 } from '@angular/core';
-import { ControlContainer, Validators } from '@angular/forms';
+import { ControlContainer, Validators, ValidatorFn } from '@angular/forms';
 import { NgbDateAdapter, NgbTimeAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from 'rxjs';
 import { DateAdapter } from '../../adapters/date.adapter';
 import { TimeAdapter } from '../../adapters/time.adapter';
 import { ePropType } from '../../enums/props.enum';
@@ -30,15 +33,23 @@ import { selfFactory } from '../../utils/factory.util';
     { provide: NgbTimeAdapter, useClass: TimeAdapter },
   ],
 })
-export class ExtensibleFormPropComponent {
+export class ExtensibleFormPropComponent implements OnChanges {
   @Input() data: PropData;
 
   @Input() prop: FormProp;
 
+  options$: Observable<ABP.Option<any>[]> = of([]);
+
+  validators: ValidatorFn[] = [];
+
+  readonly: boolean;
+
+  disabled: boolean;
+
   constructor(public readonly cdRef: ChangeDetectorRef, public readonly track: TrackByService) {}
 
-  getAsterisk(prop: FormProp, data: PropData): string {
-    return prop.validators(data).some(validator => validator === Validators.required) ? '*' : '';
+  get asterisk(): string {
+    return this.validators.some(validator => validator === Validators.required) ? '*' : '';
   }
 
   getComponent(prop: FormProp): string {
@@ -76,5 +87,17 @@ export class ExtensibleFormPropComponent {
       default:
         return 'hidden';
     }
+  }
+
+  ngOnChanges({ prop }: SimpleChanges) {
+    const options = prop.currentValue.options;
+    const readonly = prop.currentValue.readonly;
+    const disabled = prop.currentValue.disabled;
+    const validators = prop.currentValue.validators;
+
+    if (options) this.options$ = options(this.data);
+    if (readonly) this.readonly = readonly(this.data);
+    if (disabled) this.disabled = disabled(this.data);
+    if (validators) this.validators = validators(this.data);
   }
 }
