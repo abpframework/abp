@@ -92,7 +92,9 @@ namespace Volo.Abp.AspNetCore.Mvc
             var uniqueMethodName = GetUniqueActionName(method);
             if (controllerModel.Actions.ContainsKey(uniqueMethodName))
             {
-                Logger.LogWarning($"Controller '{controllerModel.ControllerName}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.RootPath}'. Ignored: " + method);
+                Logger.LogWarning(
+                    $"Controller '{controllerModel.ControllerName}' contains more than one action with name '{uniqueMethodName}' for module '{moduleModel.RootPath}'. Ignored: " +
+                    method);
                 return;
             }
 
@@ -119,11 +121,14 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static string CalculateControllerName(Type controllerType, ConventionalControllerSetting setting)
         {
-            var controllerName = controllerType.Name.RemovePostFix("Controller").RemovePostFix(ApplicationService.CommonPostfixes);
+            var controllerName = controllerType.Name.RemovePostFix("Controller")
+                .RemovePostFix(ApplicationService.CommonPostfixes);
 
             if (setting?.UrlControllerNameNormalizer != null)
             {
-                controllerName = setting.UrlControllerNameNormalizer(new UrlControllerNameNormalizerContext(setting.RootPath, controllerName));
+                controllerName =
+                    setting.UrlControllerNameNormalizer(
+                        new UrlControllerNameNormalizerContext(setting.RootPath, controllerName));
             }
 
             return controllerName;
@@ -152,7 +157,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             return methodNameBuilder.ToString();
         }
 
-        private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method, ConventionalControllerSetting setting)
+        private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method,
+            ConventionalControllerSetting setting)
         {
             var supportedVersions = new List<ApiVersion>();
 
@@ -185,9 +191,15 @@ namespace Volo.Abp.AspNetCore.Mvc
             AddCustomTypesToModel(applicationModel, method.ReturnType);
         }
 
-        private static void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel, [CanBeNull] Type type)
+        private static void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel,
+            [CanBeNull] Type type)
         {
             if (type == null)
+            {
+                return;
+            }
+
+            if (type.IsGenericParameter)
             {
                 return;
             }
@@ -216,28 +228,54 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
-            /* TODO: Add interfaces
-             */
+            if (type.IsGenericType && !type.IsGenericTypeDefinition)
+            {
+                var genericTypeDefinition = type.GetGenericTypeDefinition();
 
-            var typeName = TypeHelper.GetFullNameHandlingNullableAndGenerics(type);
+                AddCustomTypesToModel(applicationModel, genericTypeDefinition);
 
+                foreach (var genericArgument in type.GetGenericArguments())
+                {
+                    AddCustomTypesToModel(applicationModel, genericArgument);
+                }
+
+                return;
+            }
+
+            var typeName = CalculateTypeName(type);
             if (applicationModel.Types.ContainsKey(typeName))
             {
                 return;
             }
 
-            var typeModel = TypeApiDescriptionModel.Create(type);
-            applicationModel.Types[typeName] = typeModel;
+            applicationModel.Types[typeName] = TypeApiDescriptionModel.Create(type);
 
             AddCustomTypesToModel(applicationModel, type.BaseType);
 
-            foreach (var propertyInfo in type.GetProperties())
+            foreach (var propertyInfo in type.GetProperties().Where(p => p.DeclaringType == type))
             {
                 AddCustomTypesToModel(applicationModel, propertyInfo.PropertyType);
             }
         }
 
-        private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method, ApiDescription apiDescription)
+        private static string CalculateTypeName(Type type)
+        {
+            if (!type.IsGenericTypeDefinition)
+            {
+                return TypeHelper.GetFullNameHandlingNullableAndGenerics(type);
+            }
+
+            var i = 0;
+            var argumentList = type
+                .GetGenericArguments()
+                .Select(_ => "T" + i++)
+                .JoinAsString(",");
+
+            return $"{type.FullName.Left(type.FullName.IndexOf('`'))}<{argumentList}>";
+        }
+
+        private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method,
+            ApiDescription apiDescription)
         {
             if (!apiDescription.ParameterDescriptions.Any())
             {
@@ -253,8 +291,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 var parameterDescription = apiDescription.ParameterDescriptions[i];
                 var matchedMethodParamName = matchedMethodParamNames.Length > i
-                                                 ? matchedMethodParamNames[i]
-                                                 : parameterDescription.Name;
+                    ? matchedMethodParamNames[i]
+                    : parameterDescription.Name;
 
                 actionModel.AddParameter(ParameterApiDescriptionModel.Create(
                         parameterDescription.Name,
@@ -286,7 +324,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             return modelNameProvider.Name ?? parameterInfo.Name;
         }
 
-        private static string GetRootPath([NotNull] Type controllerType, [CanBeNull] ConventionalControllerSetting setting)
+        private static string GetRootPath([NotNull] Type controllerType,
+            [CanBeNull] ConventionalControllerSetting setting)
         {
             if (setting != null)
             {
@@ -309,7 +348,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return setting.RemoteServiceName;
             }
 
-            var remoteServiceAttr = controllerType.GetCustomAttributes().OfType<RemoteServiceAttribute>().FirstOrDefault();
+            var remoteServiceAttr =
+                controllerType.GetCustomAttributes().OfType<RemoteServiceAttribute>().FirstOrDefault();
             if (remoteServiceAttr?.Name != null)
             {
                 return remoteServiceAttr.Name;
