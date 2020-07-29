@@ -101,8 +101,10 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     this.data = data.currentValue.map((record, index) => {
       this.propList.forEach(prop => {
         const propData = { getInjected: this.getInjected, record, index } as any;
-        record[`${prop.value.name}Visible`] = prop.value.visible(propData);
-        record[`${prop.value.name}Value`] = this.getContent(prop.value, propData);
+        record[`_${prop.value.name}`] = {
+          visible: prop.value.visible(propData),
+          value: this.getContent(prop.value, propData),
+        };
       });
 
       return record;
