@@ -77,7 +77,8 @@ describe('InitialUtils', () => {
       const injectorSpy = jest.spyOn(injector, 'get');
       const store = spectator.inject(Store);
       store.selectSnapshot.andCallFake(selector => selector({ SessionState: { language: 'tr' } }));
-      injectorSpy.mockReturnValue(store);
+      injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({ cultureNameToLocaleFileNameMapping: {} });
       expect(typeof localeInitializer(injector)).toBe('function');
       expect(await localeInitializer(injector)()).toBe('resolved');
     });
