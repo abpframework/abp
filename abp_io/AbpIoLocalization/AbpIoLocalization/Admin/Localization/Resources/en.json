@@ -188,6 +188,7 @@
     "Enum:ContentSource:1": "External",
     "Enum:Status:0": "Waiting",
     "Enum:Status:1": "Rejected",
-    "Enum:Status:2": "Approved"
+    "Enum:Status:2": "Approved",
+    "Summary": "Summary"
   }
 }

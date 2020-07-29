@@ -34,6 +34,7 @@
     "WelcomeToABPCommunity!": "Welcome to ABP Community!",
     "MyProfile": "My profile",
     "MyOrganizations": "My organizations",
-    "EmailNotValid": "Please enter a valid email address."
+    "EmailNotValid": "Please enter a valid email address.",
+    "FeatureRequest": "Feature Request"
   }
 }
