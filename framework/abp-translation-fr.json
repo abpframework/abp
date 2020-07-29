@@ -1,0 +1,776 @@
+{
+  "ReferenceCulture": "en",
+  "TargetCulture": "fr",
+  "Resources": [
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.UI\\Localization\\Resources\\AbpUi",
+      "Texts": [
+        {
+          "LocalizationKey": "InternalServerErrorMessage",
+          "Reference": "An internal error occurred during your request!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ValidationErrorMessage",
+          "Reference": "Your request is not valid!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ValidationNarrativeErrorMessageTitle",
+          "Reference": "The following errors were detected during validation.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessage",
+          "Reference": "An error has occurred!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessageDetail",
+          "Reference": "Error detail not sent by server.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessage401",
+          "Reference": "You are not authenticated!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessage401Detail",
+          "Reference": "You should sign in to perform this operation.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessage403",
+          "Reference": "You are not authorized!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessage403Detail",
+          "Reference": "You are not allowed to perform this operation!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessage404",
+          "Reference": "Resource not found!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DefaultErrorMessage404Detail",
+          "Reference": "The resource requested could not found on the server!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "EntityNotFoundErrorMessage",
+          "Reference": "There is no entity {0} with id = {1}!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Languages",
+          "Reference": "Languages",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Error",
+          "Reference": "Error",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "AreYouSure",
+          "Reference": "Are you sure?",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Cancel",
+          "Reference": "Cancel",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Yes",
+          "Reference": "Yes",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "No",
+          "Reference": "No",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Ok",
+          "Reference": "Ok",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Close",
+          "Reference": "Close",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Save",
+          "Reference": "Save",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "SavingWithThreeDot",
+          "Reference": "Saving...",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Actions",
+          "Reference": "Actions",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Delete",
+          "Reference": "Delete",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Edit",
+          "Reference": "Edit",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Refresh",
+          "Reference": "Refresh",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Language",
+          "Reference": "Language",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "LoadMore",
+          "Reference": "Load more",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ProcessingWithThreeDot",
+          "Reference": "Processing...",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "LoadingWithThreeDot",
+          "Reference": "Loading...",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Welcome",
+          "Reference": "Welcome",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Login",
+          "Reference": "Login",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Register",
+          "Reference": "Register",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Logout",
+          "Reference": "Log out",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Submit",
+          "Reference": "Submit",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Back",
+          "Reference": "Back",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerSearch",
+          "Reference": "Search",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerNext",
+          "Reference": "Next",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerPrevious",
+          "Reference": "Previous",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerFirst",
+          "Reference": "First",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerLast",
+          "Reference": "Last",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerInfo",
+          "Reference": "Showing _START_ to _END_ of _TOTAL_ entries",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerInfo{0}{1}{2}",
+          "Reference": "Showing {0} to {1} of {2} entries",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerInfoEmpty",
+          "Reference": "Showing 0 to 0 of 0 entries",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerInfoFiltered",
+          "Reference": "(filtered from _MAX_ total entries)",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "NoDataAvailableInDatatable",
+          "Reference": "No data available",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Total",
+          "Reference": "total",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Selected",
+          "Reference": "selected",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PagerShowMenuEntries",
+          "Reference": "Show _MENU_ entries",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DatatableActionDropdownDefaultText",
+          "Reference": "Actions",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ChangePassword",
+          "Reference": "Change password",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "PersonalInfo",
+          "Reference": "My profile",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "AreYouSureYouWantToCancelEditingWarningMessage",
+          "Reference": "You have unsaved changes.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "UnhandledException",
+          "Reference": "Unhandled exception!",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "401Message",
+          "Reference": "Unauthorized",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "403Message",
+          "Reference": "Forbidden",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "404Message",
+          "Reference": "Page not found",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "500Message",
+          "Reference": "Internal Server Error",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "GoHomePage",
+          "Reference": "Go to the homepage",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "GoBack",
+          "Reference": "Go back",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Search",
+          "Reference": "Search",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.Emailing\\Volo\\Abp\\Emailing\\Localization",
+      "Texts": [
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.DefaultFromAddress",
+          "Reference": "Default from address",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.DefaultFromDisplayName",
+          "Reference": "Default from display name",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.Smtp.Host",
+          "Reference": "Host",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.Smtp.Port",
+          "Reference": "Port",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.Smtp.UserName",
+          "Reference": "User name",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.Smtp.Password",
+          "Reference": "Password",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.Smtp.Domain",
+          "Reference": "Domain",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.Smtp.EnableSsl",
+          "Reference": "Enable SSL",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials",
+          "Reference": "Use default credentials",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.DefaultFromAddress",
+          "Reference": "The default from address",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.DefaultFromDisplayName",
+          "Reference": "The default from display name",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.Smtp.Host",
+          "Reference": "The name or IP address of the host used for SMTP transactions.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.Smtp.Port",
+          "Reference": "The port used for SMTP transactions.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.Smtp.UserName",
+          "Reference": "User name associated with the credentials.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.Smtp.Password",
+          "Reference": "The password for the user name associated with the credentials.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.Smtp.Domain",
+          "Reference": "The domain or computer name that verifies the credentials.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.Smtp.EnableSsl",
+          "Reference": "Whether the SmtpClient uses Secure Sockets Layer (SSL) to encrypt the connection.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Mailing.Smtp.UseDefaultCredentials",
+          "Reference": "Whether the DefaultCredentials are sent with requests.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "TextTemplate:StandardEmailTemplates.Layout",
+          "Reference": "Default email layout template",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "TextTemplate:StandardEmailTemplates.Message",
+          "Reference": "Simple message template for emails",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.Timing\\Volo\\Abp\\Timing\\Localization",
+      "Texts": [
+        {
+          "LocalizationKey": "DisplayName:Abp.Timing.Timezone",
+          "Reference": "Timezone",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Timing.Timezone",
+          "Reference": "Application time zone",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.Validation\\Volo\\Abp\\Validation\\Localization",
+      "Texts": [
+        {
+          "LocalizationKey": "'{0}' and '{1}' do not match.",
+          "Reference": "'{0}' and '{1}' do not match.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The {0} field is not a valid credit card number.",
+          "Reference": "The {0} field is not a valid credit card number.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "{0} is not valid.",
+          "Reference": "{0} is not valid.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The {0} field is not a valid e-mail address.",
+          "Reference": "The {0} field is not a valid e-mail address.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The {0} field only accepts files with the following extensions: {1}",
+          "Reference": "The {0} field only accepts files with the following extensions: {1}",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The field {0} must be a string or array type with a maximum length of '{1}'.",
+          "Reference": "The field {0} must be a string or array type with a maximum length of '{1}'.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The field {0} must be a string or array type with a minimum length of '{1}'.",
+          "Reference": "The field {0} must be a string or array type with a minimum length of '{1}'.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The {0} field is not a valid phone number.",
+          "Reference": "The {0} field is not a valid phone number.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The field {0} must be between {1} and {2}.",
+          "Reference": "The field {0} must be between {1} and {2}.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The field {0} must match the regular expression '{1}'.",
+          "Reference": "The field {0} does not match the requested format.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The {0} field is required.",
+          "Reference": "The {0} field is required.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The field {0} must be a string with a maximum length of {1}.",
+          "Reference": "The field {0} must be a string with a maximum length of {1}.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.",
+          "Reference": "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The {0} field is not a valid fully-qualified http, https, or ftp URL.",
+          "Reference": "The {0} field is not a valid fully-qualified http, https, or ftp URL.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "The field {0} is invalid.",
+          "Reference": "The field {0} is invalid.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldIsNotAValidCreditCardNumber.",
+          "Reference": "This field is not a valid credit card number.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldIsNotValid.",
+          "Reference": "This field is not valid.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldIsNotAValidEmailAddress.",
+          "Reference": "This field is not a valid e-mail address.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}",
+          "Reference": "This field only accepts files with the following extensions: {0}",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthOf{0}",
+          "Reference": "This field must be a string or array type with a maximum length of '{0}'.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}",
+          "Reference": "This field must be a string or array type with a minimum length of '{0}'.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldIsNotAValidPhoneNumber.",
+          "Reference": "This field is not a valid phone number.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldMustBeBetween{0}And{1}",
+          "Reference": "This field must be between {0} and {1}.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldMustMatchTheRegularExpression{0}",
+          "Reference": "This field must match the regular expression '{0}'.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldIsRequired.",
+          "Reference": "This field is required.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldMustBeAStringWithAMaximumLengthOf{0}",
+          "Reference": "This field must be a string with a maximum length of {0}.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}",
+          "Reference": "This field must be a string with a minimum length of {1} and a maximum length of {0}.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl",
+          "Reference": "This field is not a valid fully-qualified http, https, or ftp URL.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "ThisFieldIsInvalid.",
+          "Reference": "This field is invalid.",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\test\\Volo.Abp.Emailing.Tests\\Volo\\Abp\\Emailing\\Localization",
+      "Texts": [
+        {
+          "LocalizationKey": "hello",
+          "Reference": "Hello",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\test\\Volo.Abp.TextTemplating.Tests\\Volo\\Abp\\TextTemplating\\Localization",
+      "Texts": [
+        {
+          "LocalizationKey": "HelloText",
+          "Reference": "Hello {0}",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "HowAreYou",
+          "Reference": "how are you?",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.Localization\\Volo\\Abp\\Localization\\Resources\\AbpLocalization",
+      "Texts": [
+        {
+          "LocalizationKey": "DisplayName:Abp.Localization.DefaultLanguage",
+          "Reference": "Default language",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Description:Abp.Localization.DefaultLanguage",
+          "Reference": "The default language of the application.",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\test\\Volo.Abp.Localization.Tests\\Volo\\Abp\\Localization\\TestResources\\Source",
+      "Texts": [
+        {
+          "LocalizationKey": "Hello <b>{0}</b>.",
+          "Reference": "Hello <b>{0}</b>.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Car",
+          "Reference": "Car",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "CarPlural",
+          "Reference": "Cars",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "MaxLenghtErrorMessage",
+          "Reference": "This field's length can be maximum of '{0}' chars",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Universe",
+          "Reference": "Universe",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "FortyTwo",
+          "Reference": "Forty Two",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\test\\Volo.Abp.Localization.Tests\\Volo\\Abp\\Localization\\TestResources\\SourceExt",
+      "Texts": [
+        {
+          "LocalizationKey": "SeeYou",
+          "Reference": "See you",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.Ddd.Application.Contracts\\Volo\\Abp\\Application\\Localization\\Resources\\AbpDdd",
+      "Texts": [
+        {
+          "LocalizationKey": "MaxResultCountExceededExceptionMessage",
+          "Reference": "{0} can not be more than {1}! Increase {2}.{3} on the server side to allow more results.",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.UI.Navigation\\Volo\\Abp\\Ui\\Navigation\\Localization\\Resource",
+      "Texts": [
+        {
+          "LocalizationKey": "Menu:Administration",
+          "Reference": "Administration",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\test\\Volo.Abp.AspNetCore.Mvc.Tests\\Volo\\Abp\\AspNetCore\\Mvc\\Localization\\Resource",
+      "Texts": [
+        {
+          "LocalizationKey": "BirthDate",
+          "Reference": "Birth date",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Value1",
+          "Reference": "Value One",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\test\\Volo.Abp.Localization.Tests\\Volo\\Abp\\Localization\\TestResources\\Base\\CountryNames",
+      "Texts": [
+        {
+          "LocalizationKey": "USA",
+          "Reference": "United States of America",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Brazil",
+          "Reference": "Brazil",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\test\\Volo.Abp.Localization.Tests\\Volo\\Abp\\Localization\\TestResources\\Base\\Validation",
+      "Texts": [
+        {
+          "LocalizationKey": "ThisFieldIsRequired",
+          "Reference": "This field is required",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "MaxLenghtErrorMessage",
+          "Reference": "This field can be maximum of '{0}' chars",
+          "Target": ""
+        }
+      ]
+    },
+    {
+      "ResourcePath": "G:\\source\\repos\\abp\\framework\\src\\Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy\\Volo\\Abp\\AspNetCore\\Mvc\\UI\\MultiTenancy\\Localization",
+      "Texts": [
+        {
+          "LocalizationKey": "GivenTenantIsNotAvailable",
+          "Reference": "Given tenant is not available: {0}",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Tenant",
+          "Reference": "Tenant",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Switch",
+          "Reference": "switch",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "Name",
+          "Reference": "Name",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "SwitchTenantHint",
+          "Reference": "Leave the name field blank to switch to the host side.",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "SwitchTenant",
+          "Reference": "Switch tenant",
+          "Target": ""
+        },
+        {
+          "LocalizationKey": "NotSelected",
+          "Reference": "Not selected",
+          "Target": ""
+        }
+      ]
+    }
+  ]
+}
