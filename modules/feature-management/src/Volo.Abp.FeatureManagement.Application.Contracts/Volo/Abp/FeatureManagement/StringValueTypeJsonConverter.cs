@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.DependencyInjection;
@@ -22,8 +25,66 @@ namespace Volo.Abp.FeatureManagement
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            //TODO: Deserialize!
-            return null;
+            if (reader.TokenType != JsonToken.StartObject)
+            {
+                return null;
+            }
+
+            var jsonObject = JObject.Load(reader);
+
+            var stringValue = CreateStringValueTypeByName(jsonObject, jsonObject["name"].ToString());
+            foreach (var o in serializer.Deserialize<Dictionary<string, object>>(
+                new JsonTextReader(new StringReader(jsonObject["properties"].ToString()))))
+            {
+                stringValue[o.Key] = o.Value;
+            }
+
+            stringValue.Validator = CreateValueValidatorByName(jsonObject["validator"], jsonObject["validator"]["name"].ToString());
+            foreach (var o in serializer.Deserialize<Dictionary<string, object>>(
+                new JsonTextReader(new StringReader(jsonObject["validator"]["properties"].ToString()))))
+            {
+                stringValue.Validator[o.Key] = o.Value;
+            }
+
+            return stringValue;
+        }
+
+        protected virtual IStringValueType CreateStringValueTypeByName(JObject jObject, string name)
+        {
+            if (name == "SelectionStringValueType")
+            {
+                var selectionStringValueType = new SelectionStringValueType();
+                if (jObject["itemSource"].HasValues)
+                {
+                    selectionStringValueType.ItemSource = new StaticSelectionStringValueItemSource(jObject["itemSource"]["items"]
+                        .Select(item => new LocalizableSelectionStringValueItem()
+                        {
+                            Value = item["value"].ToString(),
+                            DisplayText = new LocalizableStringInfo(item["displayText"]["resourceName"].ToString(), item["displayText"]["name"].ToString())
+                        }).ToArray());
+                }
+
+                return selectionStringValueType;
+            }
+
+            return name switch
+            {
+                "FreeTextStringValueType" => new FreeTextStringValueType(),
+                "ToggleStringValueType" => new ToggleStringValueType(),
+                _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
+            };
+        }
+
+        protected virtual IValueValidator CreateValueValidatorByName(JToken jObject, string name)
+        {
+            return name switch
+            {
+                "NULL" => new AlwaysValidValueValidator(),
+                "BOOLEAN" => new BooleanValueValidator(),
+                "NUMERIC" => new NumericValueValidator(),
+                "STRING" => new StringValueValidator(),
+                _ => throw new ArgumentException($"{nameof(IValueValidator)} named {name} was not found!")
+            };
         }
     }
 }
