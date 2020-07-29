@@ -24,17 +24,18 @@
     "Summary": "Summary",
     "MostRead": "Most Read",
     "LatestArticles": "Latest Articles",
+    "ContributeAbpCommunity": "Contribute to the ABP Community",
     "SubmitYourArticle": "Submit Your Article",
-    "ResourceLocalization": "Resource Localization",
-    "DocumentTranslation": "Document Translation",
+    "ContributionGuide": "Contribution Guide",
     "BugReport": "Bug Report",
-    "JoinToTheDevelopment": "Join to the Development",
-    "ContributeAbpFramework": "Contribute to the ABP Framework",
     "SeeAllArticles": "See All Articles",
     "WelcomeToABPCommunity!": "Welcome to ABP Community!",
     "MyProfile": "My profile",
     "MyOrganizations": "My organizations",
     "EmailNotValid": "Please enter a valid email address.",
-    "FeatureRequest": "Feature Request"
+    "FeatureRequest": "Feature Request",
+    "CreateArticleTitleInfo": "Title of the article to be shown on the article list.",
+    "CreateArticleUrlInfo": "Original GitHub/External URL of the article.",
+    "CreateArticleSummaryInfo": "A short summary of the article to be shown on the article list."
   }
 }
