@@ -16,6 +16,8 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                     .MapEfCoreProperty<City, string>(
                         "PhoneCode",
                         p => p.HasMaxLength(8)
+                    ).MapEfCoreProperty<City, int>(
+                        "Rank"
                     );
             });
         }

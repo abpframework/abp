@@ -314,7 +314,9 @@ namespace Volo.Abp.EntityFrameworkCore
                     continue;
                 }
 
-                entry.Property(property.Name).CurrentValue = entity.GetProperty(property.Name);
+                var entryProperty = entry.Property(property.Name);
+                var entityProperty = entity.GetProperty(property.Name);
+                entryProperty.CurrentValue = Convert.ChangeType(entityProperty, entryProperty.Metadata.ClrType);
             }
         }
 
