@@ -214,13 +214,23 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //TODO: Handle other cases for result!
 
             // Get the information about the user from the external login provider
-            var info = await SignInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
+            if (externalLoginInfo == null)
             {
                 throw new ApplicationException("Error loading external login information during confirmation.");
             }
 
-            var user = await CreateExternalUserAsync(info);
+            if (!IsEmailRetrievedFromExternalLogin(externalLoginInfo))
+            {
+                return RedirectToPage("./Register", new
+                {
+                    IsExternalLogin = true,
+                    ExternalLoginAuthSchema = externalLoginInfo.LoginProvider,
+                    ReturnUrl = returnUrl
+                });
+            }
+
+            var user = await CreateExternalUserAsync(externalLoginInfo);
 
             await SignInManager.SignInAsync(user, false);
 
@@ -232,6 +242,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
             });
 
             return RedirectSafely(returnUrl, returnUrlHash);
+        }
+
+        private static bool IsEmailRetrievedFromExternalLogin(ExternalLoginInfo externalLoginInfo)
+        {
+            return externalLoginInfo.Principal.FindFirstValue(AbpClaimTypes.Email) != null;
         }
 
         protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
