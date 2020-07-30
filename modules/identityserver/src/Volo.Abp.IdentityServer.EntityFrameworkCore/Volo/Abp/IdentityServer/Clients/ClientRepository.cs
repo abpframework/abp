@@ -18,7 +18,7 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        public virtual async Task<Client> FindByCliendIdAsync(
+        public virtual async Task<Client> FindByClientIdAsync(
             string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
