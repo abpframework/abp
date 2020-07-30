@@ -56,6 +56,11 @@ namespace Volo.CmsKit.Comments
         {
             var comment = await CommentRepository.GetAsync(id);
 
+            if (comment.CreatorId != CurrentUser.Id)
+            {
+                throw new BusinessException();
+            }
+
             comment.SetText(input.Text);
 
             var updatedComment = await CommentRepository.UpdateAsync(comment);

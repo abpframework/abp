@@ -33,52 +33,83 @@
             </form>
         </div>;
 }
+@{
+    Func<dynamic, IHtmlContent> GetCommentContentArea(Guid id, Guid authorId, bool isReply, string text) =>
+        @<div>
+            <div class="cms-comment-content-area" data-id="@id.ToString()">
+                <p>
+                    @text
+                </p>
+            </div>
+
+            @if (!isReply)
+            {
+                <a href="#" class="comment-reply-link" data-reply-id="@id.ToString()">
+                    <i class="fa fa-reply"></i> @L["Reply"]
+                </a>
+            }
+            @if (authorId == CurrentUser.Id)
+            {
+                @if (!isReply)
+                {
+                    <span> | </span>
+                }
+
+                <a href="#" class="comment-delete-link" data-id="@id.ToString()">
+                    <i class="fa fa-trash"></i> @L["Delete"]
+                </a>
+
+                <span> | </span>
+
+                <a href="#" class="comment-edit-link" data-id="@id.ToString()">
+                    <i class="fa fa-pencil"></i> @L["Edit"]
+                </a>
+            }
+            <div class="cms-comment-edit-area" data-id="@id.ToString()" style="display:none">
+                <form class="cms-comment-update-form">
+                    <input hidden value="@id.ToString()" name="id"/>
+                    <div class="form-group">
+                        <textarea class="form-control" name="commentText" rows="3">@text</textarea>
+                    </div>
+                    <abp-button type="button" button-type="Secondary" class="comment-edit-cancel-button" data-id="@id.ToString()"> @L["Cancel"] </abp-button>
+                    <abp-button type="submit" button-type="Primary"> @L["Update"] </abp-button>
+                </form>
+            </div>
+        </div>;
+}
 
 <div class="cms-comment-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
 
     @foreach (var comment in Model.Comments)
     {
         <div class="comment border p-3 pl-5">
-            <h4>
+            <h5>
                 <i class="fa fa-comment-o"></i>
                 @GetCommentAuthorName(comment.Author).Invoke(null)
-            </h4>
-            <p>
-                @comment.Text
-            </p>
+            </h5>
 
-            @if (comment.Author.Id == CurrentUser.Id)
+            @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
+
+            @GetCommentArea(comment.Id.ToString(), true).Invoke(null)
+
+            @if (comment.Replies.Any())
             {
-                <a href="#" class="comment-delete-link" data-comment-id="@comment.Id">
-                    @L["Delete"]
-                </a>
-            }
+                <div class="p-2">
+                @foreach (var reply in comment.Replies)
+                {
+                    <div class="comment border p-3 ml-5">
+                        <h6>
+                            <i class="fa fa-comment-o"></i>
+                            @GetCommentAuthorName(reply.Author).Invoke(null)
+                        </h6>
 
-            <a href="#" class="comment-reply-link" data-reply-id="@comment.Id">
-                @L["Reply"]
-            </a>
+                        @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
 
-            @foreach (var reply in comment.Replies)
-            {
-                <div class="comment border p-3 pl-5">
-                    <h6>
-                        <i class="fa fa-comment-o"></i>
-                        @GetCommentAuthorName(reply.Author).Invoke(null)
-                    </h6>
-                    <p>
-                        @reply.Text
-                    </p>
-
-                    @if (reply.Author.Id == CurrentUser.Id)
-                    {
-                        <a href="#" class="comment-delete-link" data-comment-id="@reply.Id">
-                            @L["Delete"]
-                        </a>
-                    }
+                    </div>
+                }
                 </div>
             }
 
-            @GetCommentArea(comment.Id.ToString(), true).Invoke(null)
         </div>
     }
     <div class="p-3 pl-5">

@@ -41,4 +41,5 @@
     <abp-card-footer>
         @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "2" })
     </abp-card-footer>
+        @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "2" })
 </abp-card>

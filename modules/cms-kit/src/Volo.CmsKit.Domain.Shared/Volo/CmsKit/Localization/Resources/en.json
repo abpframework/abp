@@ -5,8 +5,10 @@
     "YourComment": "Your comment",
     "YourReply": "Your reply",
     "Send": "Send",
-    "Delete": "delete",
-    "Reply": "reply",
+    "Delete": "Delete",
+    "Reply": "Reply",
+    "Update": "Update",
+    "Edit": "Edit",
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely."
   }
 }
