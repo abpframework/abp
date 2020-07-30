@@ -21,7 +21,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
         }
 
-        public virtual async Task<Client> FindByCliendIdAsync(
+        public virtual async Task<Client> FindByClientIdAsync(
             string clientId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
