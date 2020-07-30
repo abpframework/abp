@@ -11,4 +11,5 @@ export * from './profile.service';
 export * from './rest.service';
 export * from './routes.service';
 export * from './session-state.service';
+export * from './subscription.service';
 export * from './track-by.service';

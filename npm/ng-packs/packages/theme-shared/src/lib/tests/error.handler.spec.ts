@@ -52,7 +52,7 @@ describe('ErrorHandler', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     store.selectSnapshot = jest.fn(() => '/x');
   });
 
@@ -189,7 +189,7 @@ describe('ErrorHandler', () => {
 
   test('should call error method of ConfirmationService when authenticated error occurs with _AbpErrorFormat header', done => {
     spectator
-      .get(Actions)
+      .inject(Actions)
       .pipe(ofActionDispatched(Navigate))
       .subscribe(({ path, queryParams, extras }) => {
         expect(path).toEqual(['/account/login']);
@@ -281,7 +281,7 @@ describe('ErrorHandler with custom error component', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     store.selectSnapshot = jest.fn(() => '/x');
   });
 

@@ -1,10 +1,10 @@
-import { noop } from '@abp/ng.core';
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Action, createSelector, Selector, State, StateContext } from '@ngxs/store';
 import snq from 'snq';
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
+import { noop } from '../utils/common-utils';
 
 @State<ReplaceableComponents.State>({
   name: 'ReplaceableComponentsState',

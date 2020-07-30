@@ -13,5 +13,10 @@ namespace Volo.Abp.Identity
         public bool IsDefault { get; set; }
 
         public bool IsPublic { get; set; }
+
+        protected IdentityRoleCreateOrUpdateDtoBase() : base(false)
+        {
+            
+        }
     }
 }

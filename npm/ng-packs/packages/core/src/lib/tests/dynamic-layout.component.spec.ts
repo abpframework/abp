@@ -167,8 +167,8 @@ describe('DynamicLayoutComponent', () => {
 
   beforeEach(async () => {
     spectator = createComponent();
-    store = spectator.get(Store);
-    const routesService = spectator.get(RoutesService);
+    store = spectator.inject(Store);
+    const routesService = spectator.inject(RoutesService);
     routesService.add(routes);
 
     store.reset(storeData);

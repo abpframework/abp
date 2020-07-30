@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -19,6 +20,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public override async Task<IActionResult> OnGetAsync()
         {
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.Logout
+            });
+
             await SignInManager.SignOutAsync();
 
             var logoutId = Request.Query["logoutId"].ToString();

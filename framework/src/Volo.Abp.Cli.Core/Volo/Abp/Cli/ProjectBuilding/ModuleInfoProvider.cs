@@ -49,14 +49,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             using (var client = new CliHttpClient())
             {
-                var responseMessage = await client.GetAsync(
+                using (var responseMessage = await client.GetAsync(
                     $"{CliUrls.WwwAbpIo}api/download/modules/",
                     CancellationTokenProvider.Token
-                );
-
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-                var result = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<ModuleInfo>>(result);
+                ))
+                {
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                    var result = await responseMessage.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<List<ModuleInfo>>(result);
+                }
             }
         }
     }

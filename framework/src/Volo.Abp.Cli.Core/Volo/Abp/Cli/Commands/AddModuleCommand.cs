@@ -75,6 +75,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  -s|--solution <solution-file>                   Specify the solution file explicitly.");
             sb.AppendLine("  --skip-db-migrations <boolean>                  Specify if a new migration will be added or not.");
             sb.AppendLine("  -sp|--startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
+            sb.AppendLine("  -v|--version <version>                          Specify the version of the module. Default is your project's ABP version.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
@@ -152,7 +153,7 @@ namespace Volo.Abp.Cli.Commands
                 public const string Skip = "skip-db-migrations";
             }
 
-            public static class StartupProject 
+            public static class StartupProject
             {
                 public const string Short = "sp";
                 public const string Long = "startup-project";

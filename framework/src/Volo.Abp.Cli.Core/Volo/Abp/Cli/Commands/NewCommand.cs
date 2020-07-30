@@ -62,6 +62,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("Tiered: yes");
             }
 
+            var preview = commandLineArgs.Options.ContainsKey(Options.Preview.Long);
+            if (preview)
+            {
+                Logger.LogInformation("Preview: yes if any exist for next version.");
+            }
+
             var databaseProvider = GetDatabaseProvider(commandLineArgs);
             if (databaseProvider != DatabaseProvider.NotSpecified)
             {
@@ -218,6 +224,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
+            sb.AppendLine("--preview                                   (Use latest pre-release version if there is at least one pre-release after latest stable version)");
             sb.AppendLine("-ts|--template-source <template-source>     (your local or network abp template source)");
             sb.AppendLine("-csf|--create-solution-folder               (default: true)");
             sb.AppendLine("-cs|--connection-string <connection-string> (your database connection string)");
@@ -368,6 +375,11 @@ namespace Volo.Abp.Cli.Commands
             public static class Tiered
             {
                 public const string Long = "tiered";
+            }
+
+            public static class Preview
+            {
+                public const string Long = "preview";
             }
         }
     }

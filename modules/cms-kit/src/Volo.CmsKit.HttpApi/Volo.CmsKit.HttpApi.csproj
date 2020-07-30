@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\common.props" />
+  <Import Project="..\..\..\..\common.props" />
+  <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Volo.CmsKit</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="3.0.3" />
+    <ProjectReference Include="..\Volo.CmsKit.Admin.Application\Volo.CmsKit.Admin.Application.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Application.Contracts\Volo.CmsKit.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Public.Application\Volo.CmsKit.Public.Application.csproj" />
   </ItemGroup>
 
 </Project>

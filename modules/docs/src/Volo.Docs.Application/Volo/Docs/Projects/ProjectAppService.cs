@@ -86,11 +86,6 @@ namespace Volo.Docs.Projects
                 }
             }
 
-            if (versions.Any() && !string.IsNullOrEmpty(project.LatestVersionBranchName))
-            {
-                versions.First().Name = project.LatestVersionBranchName;
-            }
-
             return versions;
         }
 

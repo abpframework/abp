@@ -10,6 +10,7 @@ using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
@@ -22,17 +23,20 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
     {
         protected SignInManager<IdentityUser> SignInManager { get; }
         protected UserManager<IdentityUser> UserManager { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
         protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
 
         public AbpResourceOwnerPasswordValidator(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
+            IdentitySecurityLogManager identitySecurityLogManager,
             ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
             IStringLocalizer<AbpIdentityServerResource> localizer)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            IdentitySecurityLogManager = identitySecurityLogManager;
             Logger = logger;
             Localizer = localizer;
         }
@@ -67,6 +71,12 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                         additionalClaims.ToArray()
                     );
 
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                    {
+                        Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                        Action = result.ToIdentitySecurityLogAction(),
+                    });
+
                     return;
                 }
                 else if (result.IsLockedOut)
@@ -84,11 +94,24 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", context.UserName);
                     errorDescription = Localizer["InvalidUserNameOrPassword"];
                 }
+
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                    Action = result.ToIdentitySecurityLogAction(),
+                    UserName = context.UserName
+                });
             }
             else
             {
                 Logger.LogInformation("No user found matching username: {username}", context.UserName);
                 errorDescription = Localizer["InvalidUsername"];
+
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                    Action = IdentityServerSecurityLogActionConsts.LoginInvalidUserName
+                });
             }
 
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, errorDescription);

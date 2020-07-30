@@ -23,7 +23,7 @@ describe('ModalContainerComponent', () => {
       let foo = document.querySelector('div.foo');
       expect(foo).toBeNull();
 
-      const cfResolver = spectator.get(ComponentFactoryResolver);
+      const cfResolver = spectator.inject(ComponentFactoryResolver);
       const factory = cfResolver.resolveComponentFactory(TestComponent);
       componentRef = spectator.component.container.createComponent(factory);
 
