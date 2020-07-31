@@ -81,6 +81,15 @@
       "path": "CLI.md"
     },
     {
+      "text": "认证",
+      "items": [
+        {
+          "text": "社交/外部登录",
+          "path": "Authentication/Social-External-Logins.md"
+        }
+      ]
+    },
+    {
       "text": "基础知识",
       "items": [
         {
