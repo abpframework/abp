@@ -489,6 +489,16 @@ namespace Acme.BookStore
 }
 ````
 
+{{if DB=="EF"}}
+
+You can now run the `.DbMigrator` console application to **migrate** the **database schema** and **seed** the initial data.
+
+{{else if DB=="Mongo"}}
+
+You can now run the `.DbMigrator` console application to **seed** the initial data.
+
+{{end}}
+
 ## Testing the Author Application Service
 
 Finally, we can write some tests for the `IAuthorAppService`. Add a new class, named `AuthorAppService_Tests` in the `Authors` namespace (folder) of the `Acme.BookStore.Application.Tests` project:
