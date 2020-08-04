@@ -8,11 +8,12 @@
 @model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
 
 @{
-    Func<dynamic, IHtmlContent> GetCommentAuthorName(CmsUserDto author) =>
+    Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
         @<span>
             @((string.IsNullOrWhiteSpace(author.Name)
                 ? author.UserName
                 : author.Name + " " + author.Surname).Trim())
+            <small>@creationTime.ToString()</small>
         </span>;
 }
 @{
@@ -93,8 +94,7 @@
             <div class="border-bottom">
                 <h5>
                     <i class="fa fa-comment-o"></i>
-                    @GetCommentAuthorName(comment.Author).Invoke(null)
-                    <small>@comment.CreationTime.ToString()</small>
+                    @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
                 </h5>
 
                 @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
@@ -114,8 +114,7 @@
 
                                 <h6>
                                     <i class="fa fa-comment-o"></i>
-                                    @GetCommentAuthorName(reply.Author).Invoke(null)
-                    <small>@comment.CreationTime.ToString()</small>
+                                    @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
                                 </h6>
 
                                 @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
