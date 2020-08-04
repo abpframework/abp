@@ -6,6 +6,7 @@ import { SetLanguage } from '../actions';
 import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -107,14 +108,14 @@ describe('ConfigState', () => {
 
   const createService = createServiceFactory({
     service: ConfigStateService,
-    mocks: [ApplicationConfigurationService, Store, HttpClient],
+    mocks: [ApplicationConfigurationService, Store, HttpClient, OAuthService],
   });
 
   beforeEach(() => {
     spectator = createService();
     store = spectator.inject(Store);
     service = spectator.service;
-    state = new ConfigState(spectator.inject(HttpClient), store);
+    state = new ConfigState(spectator.inject(HttpClient), store, spectator.inject(OAuthService));
   });
 
   describe('#getAll', () => {

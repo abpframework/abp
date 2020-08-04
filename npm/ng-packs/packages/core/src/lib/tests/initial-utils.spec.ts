@@ -3,8 +3,9 @@ import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
-import { getInitialData, localeInitializer, configureOAuth } from '../utils';
+import { getInitialData, localeInitializer, configureOAuth, checkAccessToken } from '../utils';
 import { OAuthService } from 'angular-oauth2-oidc';
+import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 
 @Component({
   selector: 'abp-dummy',
@@ -41,6 +42,8 @@ describe('InitialUtils', () => {
       const injectorSpy = jest.spyOn(injector, 'get');
       const store = spectator.inject(Store);
       const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
+      parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
 
       injectorSpy.mockReturnValueOnce(store);
       injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
@@ -57,16 +60,16 @@ describe('InitialUtils', () => {
     test('should call logOut fn of OAuthService when token is valid and current user not found', async () => {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      const dispatchSpy = jest.spyOn(store, 'dispatch');
       const logOutFn = jest.fn();
 
-      injectorSpy.mockReturnValueOnce(store);
-      injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
-      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => true, logOut: logOutFn });
-      dispatchSpy.mockReturnValue(of({ currentUser: { id: null } }));
+      injectorSpy.mockReturnValue({ hasValidAccessToken: () => true, logOut: logOutFn });
 
-      getInitialData(injector)();
+      checkAccessToken(
+        {
+          selectSnapshot: () => false,
+        } as any,
+        injector,
+      );
       expect(logOutFn).toHaveBeenCalled();
     });
   });
