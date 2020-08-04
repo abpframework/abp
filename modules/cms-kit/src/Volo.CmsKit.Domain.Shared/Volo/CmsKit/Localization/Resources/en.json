@@ -9,6 +9,7 @@
     "Reply": "Reply",
     "Update": "Update",
     "Edit": "Edit",
-    "MessageDeletionConfirmationMessage": "This comment will be deleted completely."
+    "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
+    "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display."
   }
 }

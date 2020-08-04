@@ -3,27 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Comments
 {
-    [Authorize]
     public class CommentPublicAppService : ApplicationService, ICommentPublicAppService
     {
+        private readonly CmsKitOptions _cmsKitOptions;
         protected ICommentRepository CommentRepository { get; }
         public ICmsUserLookupService CmsUserLookupService { get; }
 
-        public CommentPublicAppService(ICommentRepository commentRepository, ICmsUserLookupService cmsUserLookupService)
+        public CommentPublicAppService(
+            ICommentRepository commentRepository,
+            ICmsUserLookupService cmsUserLookupService,
+            IOptionsSnapshot<CmsKitOptions> cmsKitOptions)
         {
+            _cmsKitOptions = cmsKitOptions.Value;
             CommentRepository = commentRepository;
             CmsUserLookupService = cmsUserLookupService;
         }
 
         public async Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
         {
+            CheckAuthorizationAsync(entityType);
+
             var commentsWithAuthor = await CommentRepository.GetListAsync(entityType, entityId);
 
             return new ListResultDto<CommentWithDetailsDto>(
@@ -31,6 +39,7 @@ namespace Volo.CmsKit.Comments
                 );
         }
 
+        [Authorize]
         public async Task<CommentDto> CreateAsync(CreateCommentInput input)
         {
             var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.Id.Value);
@@ -52,6 +61,7 @@ namespace Volo.CmsKit.Comments
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
 
+        [Authorize]
         public async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
         {
             var comment = await CommentRepository.GetAsync(id);
@@ -68,6 +78,7 @@ namespace Volo.CmsKit.Comments
             return ObjectMapper.Map<Comment, CommentDto>(updatedComment);
         }
 
+        [Authorize]
         public async Task DeleteAsync(Guid id)
         {
             var comment = await CommentRepository.GetAsync(id);
@@ -103,6 +114,24 @@ namespace Volo.CmsKit.Comments
             }
 
             return parentComments;
+        }
+
+        private async Task CheckAuthorizationAsync(string entityType)
+        {
+            if (await IsPublicEntity(entityType))
+            {
+                return;
+            }
+
+            if (!CurrentUser.IsAuthenticated)
+            {
+                throw new AbpAuthorizationException(L["CommentAuthorizationExceptionMessage"]);
+            }
+        }
+
+        private async Task<bool> IsPublicEntity(string entityType)
+        {
+            return _cmsKitOptions.PublicCommentEntities.Contains(entityType);
         }
 
         private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthor> comments, Guid commentId)
