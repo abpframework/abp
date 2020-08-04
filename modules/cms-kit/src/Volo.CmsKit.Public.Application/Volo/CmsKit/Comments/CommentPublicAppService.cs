@@ -14,16 +14,16 @@ namespace Volo.CmsKit.Comments
 {
     public class CommentPublicAppService : ApplicationService, ICommentPublicAppService
     {
-        private readonly CmsKitOptions _cmsKitOptions;
+        protected CmsKitOptions CmsKitOptions { get; }
         protected ICommentRepository CommentRepository { get; }
-        public ICmsUserLookupService CmsUserLookupService { get; }
+        protected ICmsUserLookupService CmsUserLookupService { get; }
 
         public CommentPublicAppService(
             ICommentRepository commentRepository,
             ICmsUserLookupService cmsUserLookupService,
-            IOptionsSnapshot<CmsKitOptions> cmsKitOptions)
+            IOptions<CmsKitOptions> cmsKitOptions)
         {
-            _cmsKitOptions = cmsKitOptions.Value;
+            CmsKitOptions = cmsKitOptions.Value;
             CommentRepository = commentRepository;
             CmsUserLookupService = cmsUserLookupService;
         }
@@ -32,7 +32,7 @@ namespace Volo.CmsKit.Comments
         {
             CheckAuthorizationAsync(entityType);
 
-            var commentsWithAuthor = await CommentRepository.GetListAsync(entityType, entityId);
+            var commentsWithAuthor = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
 
             return new ListResultDto<CommentWithDetailsDto>(
                 ConvertCommentsToNestedStructure(commentsWithAuthor)
@@ -131,7 +131,7 @@ namespace Volo.CmsKit.Comments
 
         private async Task<bool> IsPublicEntity(string entityType)
         {
-            return _cmsKitOptions.PublicCommentEntities.Contains(entityType);
+            return CmsKitOptions.PublicCommentEntities.Contains(entityType);
         }
 
         private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthor> comments, Guid commentId)

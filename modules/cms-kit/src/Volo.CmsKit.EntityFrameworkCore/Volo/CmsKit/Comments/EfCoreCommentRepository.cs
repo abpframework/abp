@@ -19,7 +19,7 @@ namespace Volo.CmsKit.Comments
         {
         }
 
-        public async Task<List<CommentWithAuthor>> GetListAsync(
+        public async Task<List<CommentWithAuthor>> GetListWithAuthorsAsync(
             string entityType,
             string entityId)
         {
