@@ -94,6 +94,7 @@
                 <h5>
                     <i class="fa fa-comment-o"></i>
                     @GetCommentAuthorName(comment.Author).Invoke(null)
+                    <small>@comment.CreationTime.ToString()</small>
                 </h5>
 
                 @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
@@ -114,6 +115,7 @@
                                 <h6>
                                     <i class="fa fa-comment-o"></i>
                                     @GetCommentAuthorName(reply.Author).Invoke(null)
+                    <small>@comment.CreationTime.ToString()</small>
                                 </h6>
 
                                 @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
