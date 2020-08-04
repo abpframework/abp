@@ -89,37 +89,41 @@
 
     @foreach (var comment in Model.Comments)
     {
-        <div class="comment border p-3 pl-5">
-            <h5>
-                <i class="fa fa-comment-o"></i>
-                @GetCommentAuthorName(comment.Author).Invoke(null)
-            </h5>
+        <div class="comment pt-2 pl-5 mt-1 mb-1">
+            <div class="border-bottom">
+                <h5>
+                    <i class="fa fa-comment-o"></i>
+                    @GetCommentAuthorName(comment.Author).Invoke(null)
+                </h5>
 
-            @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
+                @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
 
-            @if (CurrentUser.IsAuthenticated)
-            {
-                @GetCommentArea(comment.Id, true).Invoke(null)
-            }
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    @GetCommentArea(comment.Id, true).Invoke(null)
+                }
 
-            @if (comment.Replies.Any())
-            {
-                <div class="p-2">
-                    @foreach (var reply in comment.Replies)
-                    {
-                        <div class="comment border p-3 ml-5">
-                            <h6>
-                                <i class="fa fa-comment-o"></i>
-                                @GetCommentAuthorName(reply.Author).Invoke(null)
-                            </h6>
+                @if (comment.Replies.Any())
+                {
+                    <div class="pl-5">
+                        @foreach (var reply in comment.Replies)
+                        {
+                            <div class="comment pt-3 mt-1">
+                                <div class="border-top">
 
-                            @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
+                                <h6>
+                                    <i class="fa fa-comment-o"></i>
+                                    @GetCommentAuthorName(reply.Author).Invoke(null)
+                                </h6>
 
-                        </div>
-                    }
-                </div>
-            }
+                                @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
 
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
         </div>
     }
     <div class="p-3 pl-5">
@@ -129,7 +133,9 @@
         }
         else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
         {
-            <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
+            <div class="float-right mb-2">
+                <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
+            </div>
         }
     </div>
 </div>
