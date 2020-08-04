@@ -12,12 +12,12 @@ const environment = {
   production: false,
   hmr: false,
   application: {
-    baseUrl: 'https://{TENANCY_NAME}.volosoft.com',
+    baseUrl: 'https://{0}.volosoft.com',
     name: 'MyProjectName',
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://{TENANCY_NAME}.api.volosoft.com',
+    issuer: 'https://{0}.api.volosoft.com',
     clientId: 'MyProjectName_App',
     dummyClientSecret: '1q2w3e*',
     scope: 'MyProjectName',
@@ -26,10 +26,10 @@ const environment = {
   },
   apis: {
     default: {
-      url: 'https://{TENANCY_NAME}.api.volosoft.com',
+      url: 'https://{0}.api.volosoft.com',
     },
     abp: {
-      url: 'https://api.volosoft.com/{TENANCY_NAME}',
+      url: 'https://api.volosoft.com/{0}',
     },
   },
 };
@@ -62,13 +62,13 @@ describe('MultiTenancyUtils', () => {
   describe('#getCurrentTenancyNameOrNull', () => {
     test('should get tenancy name from href', async () => {
       setHref('https://abp.volosoft.com/');
-      expect(getCurrentTenancyNameOrNull('https://{TENANCY_NAME}.volosoft.com')).toBe('abp');
+      expect(getCurrentTenancyNameOrNull('https://{0}.volosoft.com')).toBe('abp');
 
       setHref('https://volosoft.com/');
-      expect(getCurrentTenancyNameOrNull('https://{TENANCY_NAME}.com')).toBe('volosoft');
+      expect(getCurrentTenancyNameOrNull('https://{0}.com')).toBe('volosoft');
 
       setHref('https://volosoft.com/abp/');
-      expect(getCurrentTenancyNameOrNull('https://volosoft.com/{TENANCY_NAME}')).toBe('abp');
+      expect(getCurrentTenancyNameOrNull('https://volosoft.com/{0}')).toBe('abp');
     });
   });
 

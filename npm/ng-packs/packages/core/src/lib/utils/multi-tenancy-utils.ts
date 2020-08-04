@@ -7,7 +7,7 @@ import { MultiTenancyService } from '../services/multi-tenancy.service';
 import { ConfigState } from '../states/config.state';
 import { FormattedStringValueExtractor } from './formatted-string-value-extractor';
 
-const tenancyPlaceholder = '{TENANCY_NAME}';
+const tenancyPlaceholder = '{0}';
 
 export function getCurrentTenancyNameOrNull(appBaseUrl: string): string {
   if (appBaseUrl.indexOf(tenancyPlaceholder) < 0) return null;
