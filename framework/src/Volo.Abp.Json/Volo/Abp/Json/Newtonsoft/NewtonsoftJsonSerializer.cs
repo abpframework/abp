@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
@@ -7,14 +11,19 @@ namespace Volo.Abp.Json.Newtonsoft
 {
     public class NewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
     {
-        private readonly AbpJsonIsoDateTimeConverter _dateTimeConverter;
-
         private static readonly CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
             new CamelCaseExceptDictionaryKeysResolver();
 
-        public NewtonsoftJsonSerializer(AbpJsonIsoDateTimeConverter dateTimeConverter)
+        protected List<JsonConverter> Converters { get; }
+
+        public NewtonsoftJsonSerializer(
+            IOptions<AbpNewtonsoftJsonSerializerOptions> options,
+            IServiceProvider serviceProvider)
         {
-            _dateTimeConverter = dateTimeConverter;
+            Converters = options.Value
+                .Converters
+                .Select(c => (JsonConverter) serviceProvider.GetRequiredService(c))
+                .ToList();
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)
@@ -36,8 +45,8 @@ namespace Volo.Abp.Json.Newtonsoft
         {
             var settings = new JsonSerializerSettings();
 
-            settings.Converters.Insert(0, _dateTimeConverter);
-            
+            settings.Converters.InsertRange(0, Converters);
+
             if (camelCase)
             {
                 settings.ContractResolver = SharedCamelCaseExceptDictionaryKeysResolver;
@@ -47,7 +56,7 @@ namespace Volo.Abp.Json.Newtonsoft
             {
                 settings.Formatting = Formatting.Indented;
             }
-            
+
             return settings;
         }
 

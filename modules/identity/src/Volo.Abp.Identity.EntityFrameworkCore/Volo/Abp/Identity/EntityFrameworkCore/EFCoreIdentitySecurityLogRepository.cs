@@ -95,8 +95,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
               string correlationId = null)
           {
               return DbSet.AsNoTracking()
-                  .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime)
-                  .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime >= endTime)
+                  .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime.Value)
+                  .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime < endTime.Value.AddDays(1).Date)
                   .WhereIf(!applicationName.IsNullOrWhiteSpace(), securityLog => securityLog.ApplicationName == applicationName)
                   .WhereIf(!identity.IsNullOrWhiteSpace(), securityLog => securityLog.Identity == identity)
                   .WhereIf(!action.IsNullOrWhiteSpace(), securityLog => securityLog.Action == action)

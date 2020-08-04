@@ -1,15 +1,13 @@
 <div class="form-group" [abpPermission]="prop.permission" [ngSwitch]="getComponent(prop)">
   <ng-template ngSwitchCase="input">
-    <label [htmlFor]="prop.id"
-      >{{ prop.displayName | abpLocalization }} {{ getAsterisk(prop, data) }}</label
-    >
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
     <input
       [id]="prop.id"
       [formControlName]="prop.name"
       [autocomplete]="prop.autocomplete"
       [type]="getType(prop)"
-      [abpDisabled]="prop.disabled(data)"
-      [readonly]="prop.readonly(data)"
+      [abpDisabled]="disabled"
+      [readonly]="readonly"
       class="form-control"
     />
   </ng-template>
@@ -19,28 +17,26 @@
       <input
         [id]="prop.id"
         [formControlName]="prop.name"
-        [abpDisabled]="prop.disabled(data)"
+        [abpDisabled]="disabled"
         type="checkbox"
         class="custom-control-input"
       />
       <label [htmlFor]="prop.id" class="custom-control-label"
-        >{{ prop.displayName | abpLocalization }} {{ getAsterisk(prop, data) }}</label
+        >{{ prop.displayName | abpLocalization }} {{ asterisk }}</label
       >
     </div>
   </ng-template>
 
   <ng-template ngSwitchCase="select">
-    <label [htmlFor]="prop.id"
-      >{{ prop.displayName | abpLocalization }} {{ getAsterisk(prop, data) }}</label
-    >
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
     <select
       [id]="prop.id"
       [formControlName]="prop.name"
-      [abpDisabled]="prop.disabled(data)"
+      [abpDisabled]="disabled"
       class="custom-select form-control"
     >
       <option
-        *ngFor="let option of prop.options(data) | async; trackBy: track.by('value')"
+        *ngFor="let option of options$ | async; trackBy: track.by('value')"
         [ngValue]="option.value"
         >{{ option.key }}</option
       >
@@ -48,9 +44,7 @@
   </ng-template>
 
   <ng-template ngSwitchCase="date">
-    <label [htmlFor]="prop.id"
-      >{{ prop.displayName | abpLocalization }} {{ getAsterisk(prop, data) }}</label
-    >
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
     <input
       [id]="prop.id"
       [formControlName]="prop.name"
@@ -64,28 +58,22 @@
   </ng-template>
 
   <ng-template ngSwitchCase="time">
-    <label [htmlFor]="prop.id"
-      >{{ prop.displayName | abpLocalization }} {{ getAsterisk(prop, data) }}</label
-    >
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
     <ngb-timepicker [formControlName]="prop.name"></ngb-timepicker>
   </ng-template>
 
   <ng-template ngSwitchCase="dateTime">
-    <label [htmlFor]="prop.id"
-      >{{ prop.displayName | abpLocalization }} {{ getAsterisk(prop, data) }}</label
-    >
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
     <abp-date-time-picker [prop]="prop"></abp-date-time-picker>
   </ng-template>
 
   <ng-template ngSwitchCase="textarea">
-    <label [htmlFor]="prop.id"
-      >{{ prop.displayName | abpLocalization }} {{ getAsterisk(prop, data) }}</label
-    >
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
     <textarea
       [id]="prop.id"
       [formControlName]="prop.name"
-      [abpDisabled]="prop.disabled(data)"
-      [readonly]="prop.readonly(data)"
+      [abpDisabled]="disabled"
+      [readonly]="readonly"
       class="form-control"
     ></textarea>
   </ng-template>

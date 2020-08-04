@@ -18,7 +18,7 @@ yarn ng update @angular/cli @angular/core --force
 
 - 更新你的package.json并安装新的软件包
 - 修改tsconfig.json文件创建一个"Solution Style"配置
-- 重命名 `browserlist` 为 `.browserlistrc`
+- 重命名 `browserslist` 为 `.browserslistrc`
 
 另一方面,如果你单独使用 `yarn ng update` 命令检查首先要更新哪些包会更好. Angular会给你一个要更新的包列表.
 
@@ -144,42 +144,33 @@ export class AppModule {}
 AppRoutingModule:
 
 ```js
-import { DynamicLayoutComponent } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
     path: '',
-    component: DynamicLayoutComponent,
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        loadChildren: () => import('./home/home.module')
-          .then(m => m.HomeModule),
-      },
-      {
-        path: 'account',
-        loadChildren: () => import('@abp/ng.account')
-          .then(m => m.AccountModule.forLazy({ redirectUrl: '/' })),
-      },
-      {
-        path: 'identity',
-        loadChildren: () => import('@abp/ng.identity')
-          .then(m => m.IdentityModule.forLazy()),
-      },
-      {
-        path: 'tenant-management',
-        loadChildren: () => import('@abp/ng.tenant-management')
-          .then(m => m.TenantManagementModule.forLazy()),
-      },
-      {
-        path: 'setting-management',
-        loadChildren: () => import('@abp/ng.setting-management')
-          .then(m => m.SettingManagementModule.forLazy()),
-      },
-    ],
+    pathMatch: 'full',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+  },
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('@abp/ng.account').then(m => m.AccountModule.forLazy({ redirectUrl: '/' })),
+  },
+  {
+    path: 'identity',
+    loadChildren: () => import('@abp/ng.identity').then(m => m.IdentityModule.forLazy()),
+  },
+  {
+    path: 'tenant-management',
+    loadChildren: () =>
+      import('@abp/ng.tenant-management').then(m => m.TenantManagementModule.forLazy()),
+  },
+  {
+    path: 'setting-management',
+    loadChildren: () =>
+      import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
   },
 ];
 
@@ -190,7 +181,7 @@ const routes: Routes = [
 export class AppRoutingModule {}
 ```
 
-> 你可能已经注意到我们在top级别路由组件上使用了 `DynamicLayoutComponent`. 我们这样做是为了避免不必要的渲染和闪烁. 这不是强制的,但是我们建议在你的应用程序路由中做同样的事情.
+> 你可能已经注意到我们在AppComponent模板中使用了 `<abp-dynamic-layout>` 而不是 `<router-outlet>`. 我们这样做是为了避免不必要的渲染和闪烁. 这不是强制的,但是我们建议在你的应用程序路由中做同样的事情.
 
 #### 如何迁移?
 
@@ -200,7 +191,7 @@ export class AppRoutingModule {}
 - 调用 `ThemeBasicModule` 的静态 `forRoot` 方法(或商业上的 `ThemeLeptonModule`),并从导入中删除 `SharedModule`(除非已在其中添加了根模块所需的任何内容).
 - 在app路由模块中直接导入延迟ABP模块 (如 `() => import('@abp/ng.identity').then(...)`).
 - 在所有延迟模块 `then` 中调用的静态 `forLazy` 方法,即使配置没有被传递.
-- [可选]使用 `DynamicLayoutComponent` 添加空的父路由,获得更好的性能和UX.
+- [可选]添加 `<abp-dynamic-layout></abp-dynamic-layout>` 到AppComponent模板并且删除 `<router-outlet></router-outlet>`,获得更好的性能和UX.
 
 ### RoutesService
 
@@ -233,9 +224,10 @@ export class AppRoutingModule {}
 
 从ABP v3开始,我们已切换到经过严格测试,执行良好的数据表格:[ngx-datatable](https://github.com/swimlane/ngx-datatable). 所有的ABP模块都已经实现了ngx-datatable. `ThemeSharedModule` 已经导出了 `NgxDatatableModule`. 因此如果你在终端运行 `yarn add @swimlane/ngx-datatable` 来安装这个包,它将在你的应用的所有模块中可用.
 
-为了正确设置样式,你需要在angular.json文件的样式部分中添加以下内容:
+为了正确设置样式,你需要在angular.json文件的样式部分中添加以下内容(在其他所有元素之上):
 
 ```json
+"styles": [
   {
     "input": "node_modules/@swimlane/ngx-datatable/index.css",
     "inject": true,
@@ -250,7 +242,9 @@ export class AppRoutingModule {}
     "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
     "inject": true,
     "bundleName": "ngx-datatable-material"
-  }
+  },
+  // other styles
+]
 ```
 
 由于尚未删除 `abp-table`, 因此以前由ABP v2.x构建的模块不会突然丢失所有. 但是它们的外观与内置ABP v3模块有所不同, 因此你可能希望将这些模块中的表转换为ngx-datatable. 为了减少将abp-table转换为ngx-datatable所需的工作量,我们修改了 `ListService` 以使其与 `ngx-datatable` 一起很好地工作,并引入了两个新指令: `NgxDatatableListDirective` 和 `NgxDatatableDefaultDirective`.
@@ -348,7 +342,103 @@ export class SomeComponent {
 - 如果可以的话,根据上面的例子更新你的模.
 - 如果你稍后需要这样做,并且打算保留abp-table一段时间,请确保根据此处描述的[破坏性更改](List-Service.md)更新分页.
 
-**重要说明:**abp-table没有被删除,但已被弃用并在以后的版本中删除. 请考虑切换到ngx-datatable。
+**重要说明:**abp-table没有被删除,但已被弃用并在以后的版本中删除. 请考虑切换到ngx-datatable.
+
+### 扩展系统[商业版]
+
+扩展程序系统现在是开源的, 可以从 `@abp/ng.theme.shared/extensions` 而不是从 `@volo/abp.commercial.ng.ui` 中获取. 同样,根据config软件包的新结构,如上所述通过 `forLazy` 静态方法进行配置.
+
+#### 如何迁移?
+
+如果你以前从未使用过扩展系统,则无需执行任何操作. 否则请再次检查文档以查看更改. 扩展系统本身的工作原理与以前相同,唯一的变化是你从中导入的包,静态方法以及您将贡献者传递给的模块.
+
+
+### Lepton 主题Logo [商业版]
+
+在ABP v2.x中,Lepton每个颜色主题都有一个亮徽标和一个暗徽标. 我们意识到我们可以使它仅使用一个浅色和一个深色徽标. 因此我们更改了Lepton查找徽标图像的方式,现在你只需要在项目中包含 `logo-light.png` 和 `logo-dark.png`.
+
+#### 如何迁移?
+
+如果你之前已切换模板徽标PNG,则更改很简单:
+
+- 转到 `/assets/images/logo` 目录.
+- 重命名 `theme1.png` 为 `logo-light.png` 并且重命名 `theme1-reverse.png` 为 `logo-dark.png`.
+- 删除所有其他 `theme*.png` 文件.
+
+如果你更换了徽标组件,则更改有些不同,但仍然很简单. `LayoutStateService` 有两个新成员: `primaryLogoColor` 和 `secondaryLogoColor`. 它们有 `'light'` 和 `'dark'` 设置值做为可观察流. 你可以使用 `async` 管道在自定义徽标组件模板中使用它们的值. 这是一个完整的示例,其中涵盖了主要和辅助(帐户)布局徽标. 
+
+```js
+import { AddReplaceableComponent } from '@abp/ng.core';
+import { CommonModule } from '@angular/common';
+import { APP_INITIALIZER, Component, Injector, NgModule } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { eAccountComponents } from '@volo/abp.ng.account';
+import {
+  AccountLayoutComponent,
+  eThemeLeptonComponents,
+  LayoutStateService,
+} from '@volo/abp.ng.theme.lepton';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Component({
+  template: `
+    <div class="account-brand p-4 text-center mb-1" *ngIf="isAccount; else link">
+      <ng-template [ngTemplateOutlet]="link"></ng-template>
+    </div>
+
+    <ng-template #link>
+      <a [style.background-image]="logoUrl | async" class="navbar-brand" routerLink="/"></a>
+    </ng-template>
+  `,
+})
+export class LogoComponent {
+  isAccount: boolean;
+
+  logoColor: Observable<'dark' | 'light'>;
+
+  get logoUrl() {
+    return this.logoColor.pipe(map(color => `url(/assets/images/logo/logo-${color}.png)`));
+  }
+
+  constructor(injector: Injector) {
+    const layout = injector.get(LayoutStateService);
+    this.isAccount = Boolean(injector.get(AccountLayoutComponent, false));
+    this.logoColor = this.isAccount ? layout.secondaryLogoColor : layout.primaryLogoColor;
+  }
+}
+
+@NgModule({
+  imports: [CommonModule],
+  declarations: [LogoComponent],
+  exports: [LogoComponent],
+})
+export class LogoModule {}
+
+export const APP_LOGO_PROVIDER = [
+  { provide: APP_INITIALIZER, useFactory: switchLogos, multi: true, deps: [Store] },
+];
+
+export function switchLogos(store: Store) {
+  return () => {
+    store.dispatch(
+      new AddReplaceableComponent({
+        component: LogoComponent,
+        key: eThemeLeptonComponents.Logo,
+      }),
+    );
+
+    store.dispatch(
+      new AddReplaceableComponent({
+        component: LogoComponent,
+        key: eAccountComponents.Logo,
+      }),
+    );
+  };
+}
+```
+
+只要将 `APP_LOGO_PROVIDER` 添加到根模块的提供程序(通常是 `AppModule` ),你就会有一个调整主题颜色的自定义徽标组件.
 
 ### 过时的接口
 

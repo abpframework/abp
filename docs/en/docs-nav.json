@@ -108,6 +108,15 @@
       "path": "CLI.md"
     },
     {
+      "text": "Authentication",
+      "items": [
+        {
+          "text": "Social/External Logins",
+          "path": "Authentication/Social-External-Logins.md"
+        }
+      ]
+    },
+    {
       "text": "Fundamentals",
       "items": [
         {
