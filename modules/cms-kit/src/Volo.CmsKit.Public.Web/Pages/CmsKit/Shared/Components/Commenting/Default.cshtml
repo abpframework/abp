@@ -16,18 +16,18 @@
         </span>;
 }
 @{
-    Func<dynamic, IHtmlContent> GetCommentArea(string repliedCommentIdAsString, bool cancelButton = false) =>
-        @<div class="cms-comment-form-area" data-reply-id="@repliedCommentIdAsString"
-              style="@(string.IsNullOrEmpty(repliedCommentIdAsString) ? "" : "display:none")">
+    Func<dynamic, IHtmlContent> GetCommentArea(Guid? repliedCommentId, bool cancelButton = false) =>
+        @<div class="cms-comment-form-area" data-reply-id="@(repliedCommentId?.ToString() ?? "")"
+              style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
             <form class="cms-comment-form">
-                <input hidden value="@repliedCommentIdAsString" name="repliedCommentId"/>
+                <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId"/>
                 <div class="form-group">
-                    <label> @(string.IsNullOrEmpty(repliedCommentIdAsString) ? L["YourComment"] : L["YourReply"]) </label>
+                    <label> @(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"]) </label>
                     <textarea class="form-control" name="commentText" rows="3"></textarea>
                 </div>
                 @if (cancelButton)
                 {
-                    <abp-button type="button" button-type="Secondary" class="reply-cancel-button" data-reply-id="@repliedCommentIdAsString"> @L["Cancel"] </abp-button>
+                    <abp-button type="button" button-type="Secondary" class="reply-cancel-button" data-reply-id="@(repliedCommentId?.ToString() ?? "")"> @L["Cancel"] </abp-button>
                 }
                 <abp-button type="submit" button-type="Primary"> @L["Send"] </abp-button>
             </form>
@@ -90,29 +90,35 @@
 
             @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
 
-            @GetCommentArea(comment.Id.ToString(), true).Invoke(null)
+            @if (CurrentUser.IsAuthenticated)
+            {
+                @GetCommentArea(comment.Id, true).Invoke(null)
+            }
 
             @if (comment.Replies.Any())
             {
                 <div class="p-2">
-                @foreach (var reply in comment.Replies)
-                {
-                    <div class="comment border p-3 ml-5">
-                        <h6>
-                            <i class="fa fa-comment-o"></i>
-                            @GetCommentAuthorName(reply.Author).Invoke(null)
-                        </h6>
+                    @foreach (var reply in comment.Replies)
+                    {
+                        <div class="comment border p-3 ml-5">
+                            <h6>
+                                <i class="fa fa-comment-o"></i>
+                                @GetCommentAuthorName(reply.Author).Invoke(null)
+                            </h6>
 
-                        @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
+                            @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
 
-                    </div>
-                }
+                        </div>
+                    }
                 </div>
             }
 
         </div>
     }
     <div class="p-3 pl-5">
-        @GetCommentArea("").Invoke(null)
+        @if (CurrentUser.IsAuthenticated)
+        {
+            @GetCommentArea(null).Invoke(null)
+        }
     </div>
 </div>
