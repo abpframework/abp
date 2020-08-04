@@ -3,7 +3,7 @@ import { Config } from '@abp/ng.core';
 export const environment = {
   production: false,
   application: {
-    baseUrl: 'https://localhost:4200/',
+    baseUrl: 'http://localhost:4200/',
     name: 'MyProjectName',
     logoUrl: '',
   },
