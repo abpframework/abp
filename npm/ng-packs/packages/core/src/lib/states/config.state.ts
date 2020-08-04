@@ -10,6 +10,9 @@ import { SetLanguage } from '../actions/session.actions';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
 import { SessionState } from './session.state';
+import compare from 'just-compare';
+import clone from 'just-clone';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @State<Config.State>({
   name: 'ConfigState',
@@ -29,7 +32,7 @@ export class ConfigState {
 
   static getOne(key: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
-      return state[key];
+      return clone(state[key]);
     });
 
     return selector;
@@ -194,7 +197,7 @@ export class ConfigState {
     return selector;
   }
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(private http: HttpClient, private store: Store, private oAuthService: OAuthService) {}
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
@@ -232,7 +235,16 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
+  setEnvironment(
+    { getState, patchState }: StateContext<Config.State>,
+    { environment }: SetEnvironment,
+  ) {
+    const { oAuthConfig } = getState().environment;
+
+    if (!compare(oAuthConfig, environment.oAuthConfig)) {
+      this.oAuthService.configure(environment.oAuthConfig);
+    }
+
     return patchState({
       environment,
     });
