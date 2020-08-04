@@ -1,6 +1,9 @@
+import { Config } from '@abp/ng.core';
+
 export const environment = {
   production: false,
   application: {
+    baseUrl: 'http://localhost:4200/',
     name: 'MyProjectName',
     logoUrl: '',
   },
@@ -21,4 +24,4 @@ export const environment = {
   localization: {
     defaultResourceName: 'MyProjectName',
   },
-};
+} as Config.Environment;
