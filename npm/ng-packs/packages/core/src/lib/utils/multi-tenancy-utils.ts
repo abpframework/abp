@@ -1,22 +1,23 @@
 import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ConfigState } from '../states/config.state';
+import { switchMap, tap } from 'rxjs/operators';
+import { SetEnvironment } from '../actions';
 import { Config } from '../models/config';
-import { FormattedStringValueExtractor } from './formatted-string-value-extractor';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
-import { tap, switchMap } from 'rxjs/operators';
-import { SetTenant, SetEnvironment } from '../actions';
-import { of } from 'rxjs';
+import { ConfigState } from '../states/config.state';
+import { FormattedStringValueExtractor } from './formatted-string-value-extractor';
 
 const tenancyPlaceholder = '{TENANCY_NAME}';
 
 export function getCurrentTenancyNameOrNull(appBaseUrl: string): string {
   if (appBaseUrl.indexOf(tenancyPlaceholder) < 0) return null;
 
-  const currentRootAddress = document.location.href;
+  if (appBaseUrl.charAt(appBaseUrl.length - 1) !== '/') appBaseUrl += '/';
 
-  const formattedStringValueExtracter = new FormattedStringValueExtractor();
-  const values: any[] = formattedStringValueExtracter.isMatch(currentRootAddress, appBaseUrl);
+  const currentRootAddress = window.location.href;
+
+  const formattedStringValueExtractor = new FormattedStringValueExtractor();
+  const values = formattedStringValueExtractor.isMatch(currentRootAddress, appBaseUrl);
   if (!values.length) {
     return null;
   }
@@ -39,9 +40,9 @@ export async function parseTenantFromUrl(injector: Injector) {
       .pipe(
         switchMap(() => multiTenancyService.findTenantByName(tenancyName, { __tenant: '' })),
         tap(res => {
-          if (!res.success) return;
-          const tenant = { id: res.tenantId, name: res.name };
-          multiTenancyService.domainTenant = tenant;
+          multiTenancyService.domainTenant = res.success
+            ? { id: res.tenantId, name: res.name }
+            : null;
         }),
       )
       .toPromise();
@@ -59,6 +60,11 @@ export function setEnvironment(store: Store, tenancyName: string) {
       tenancyName,
     );
   }
+
+  environment.oAuthConfig.issuer = environment.oAuthConfig.issuer.replace(
+    tenancyPlaceholder,
+    tenancyName,
+  );
 
   Object.keys(environment.apis).forEach(api => {
     Object.keys(environment.apis[api]).forEach(key => {
