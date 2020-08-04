@@ -44,9 +44,16 @@
 
             @if (!isReply)
             {
-                <a href="#" class="comment-reply-link" data-reply-id="@id.ToString()">
-                    <i class="fa fa-reply"></i> @L["Reply"]
-                </a>
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <a href="#" class="comment-reply-link" data-reply-id="@id.ToString()">
+                        <i class="fa fa-reply"></i> @L["Reply"]
+                    </a>
+                }
+                else
+                {
+                    <a href="@Model.LoginUrl"> @L["LoginToReply"]</a>
+                }
             }
             @if (authorId == CurrentUser.Id)
             {
@@ -119,6 +126,10 @@
         @if (CurrentUser.IsAuthenticated)
         {
             @GetCommentArea(null).Invoke(null)
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
+        {
+            <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
         }
     </div>
 </div>

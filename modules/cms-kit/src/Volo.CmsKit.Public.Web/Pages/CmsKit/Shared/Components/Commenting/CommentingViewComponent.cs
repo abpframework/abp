@@ -24,7 +24,7 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
             CommentPublicAppService = commentPublicAppService;
         }
 
-        public virtual async Task<IViewComponentResult> InvokeAsync( string entityType,string entityId)
+        public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId, string loginUrl = null)
         {
             var result = await CommentPublicAppService.GetAllForEntityAsync(entityType, entityId);
 
@@ -32,6 +32,7 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
             {
                 EntityId = entityId,
                 EntityType = entityType,
+                LoginUrl = loginUrl,
                 Comments = result.Items.ToList()
             };
 
@@ -43,6 +44,8 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
             public string EntityType { get; set; }
 
             public string EntityId { get; set; }
+
+            public string LoginUrl { get; set; }
 
             public List<CommentWithDetailsDto> Comments { get; set; }
         }

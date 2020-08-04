@@ -9,6 +9,8 @@
     "Reply": "Reply",
     "Update": "Update",
     "Edit": "Edit",
+    "LoginToAddComment": "Login to add comment",
+    "LoginToReply": "Login to reply",
     "MessageDeletionConfirmationMessage": "This comment will be deleted completely.",
     "CommentAuthorizationExceptionMessage": "Those comments are not allowed for public display."
   }
