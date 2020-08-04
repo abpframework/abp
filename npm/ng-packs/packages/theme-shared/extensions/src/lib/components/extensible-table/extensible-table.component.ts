@@ -9,6 +9,11 @@ import {
   LOCALE_ID,
   TemplateRef,
   TrackByFunction,
+  Type,
+  InjectionToken,
+  InjectFlags,
+  SimpleChanges,
+  OnChanges,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -25,7 +30,7 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExtensibleTableComponent<R = any> {
+export class ExtensibleTableComponent<R = any> implements OnChanges {
   @Input() actionsText: string;
   @Input() data: R[];
   @Input() list: ListService;
@@ -35,6 +40,8 @@ export class ExtensibleTableComponent<R = any> {
   }
   @Input() actionsTemplate: TemplateRef<any>;
 
+  getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
+
   readonly columnWidths: number[];
 
   readonly propList: EntityPropList<R>;
@@ -42,6 +49,8 @@ export class ExtensibleTableComponent<R = any> {
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
 
   constructor(@Inject(LOCALE_ID) private locale: string, injector: Injector) {
+    // tslint:disable-next-line
+    this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
     this.propList = extensions.entityProps.get(name).props;
@@ -84,5 +93,21 @@ export class ExtensibleTableComponent<R = any> {
         }
       }),
     );
+  }
+
+  ngOnChanges({ data }: SimpleChanges) {
+    if (!data?.currentValue) return;
+
+    this.data = data.currentValue.map((record, index) => {
+      this.propList.forEach(prop => {
+        const propData = { getInjected: this.getInjected, record, index } as any;
+        record[`_${prop.value.name}`] = {
+          visible: prop.value.visible(propData),
+          value: this.getContent(prop.value, propData),
+        };
+      });
+
+      return record;
+    });
   }
 }

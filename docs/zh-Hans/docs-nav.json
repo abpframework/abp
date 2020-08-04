@@ -441,6 +441,10 @@
               "path": "UI/Angular/Track-By-Service.md"
             },
             {
+              "text": "SubscriptionService",
+              "path": "UI/Angular/Subscription-Service.md"
+            },
+            {
               "text": "ListService",
               "path": "UI/Angular/List-Service.md"
             }
