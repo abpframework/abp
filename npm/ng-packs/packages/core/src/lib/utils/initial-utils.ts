@@ -9,14 +9,13 @@ import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
-import { Config } from '../models/config';
 
 export function getInitialData(injector: Injector) {
   const fn = async () => {
     const store: Store = injector.get(Store);
     const options = injector.get(CORE_OPTIONS) as ABP.Root;
 
-    await getRemoteEnv(injector, options.environment as Config.Environment);
+    await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
 
     if (options.skipGetAppConfiguration) return;
