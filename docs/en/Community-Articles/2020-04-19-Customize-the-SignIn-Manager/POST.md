@@ -94,8 +94,3 @@ PreConfigure<IdentityBuilder>(identityBuilder =>
 ## The Source Code
 
 You can find the source code of the completed example [here](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization).
-
-## See Also
-
-* [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC.md).
-* [Identity Management Module](../Modules/Identity.md).
