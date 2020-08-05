@@ -232,14 +232,7 @@ export class ConfigState {
   }
 
   @Action(SetEnvironment)
-  setEnvironment(
-    { getState, patchState }: StateContext<Config.State>,
-    { environment }: SetEnvironment,
-  ) {
-    const { oAuthConfig } = getState().environment;
-
-    return patchState({
-      environment,
-    });
+  setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
+    return patchState({ environment });
   }
 }
