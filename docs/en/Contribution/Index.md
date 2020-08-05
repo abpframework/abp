@@ -1,8 +1,12 @@
-## Contribution Guide
+# Contribution Guide
 
 ABP is an [open source](https://github.com/abpframework) and community driven project. This guide is aims to help anyone wants to contribute to the project.
 
-### Code Contribution
+## community.abp.io
+
+If you want to write articles or "how to" guides related to the ABP Framework and ASP.NET Core, please submit your article to the [community.abp.io](https://community.abp.io/) web site.
+
+## Code Contribution
 
 You can always send pull requests to the Github repository.
 
@@ -12,15 +16,15 @@ You can always send pull requests to the Github repository.
 
 Before making any change, please discuss it on the [Github issues](https://github.com/abpframework/abp/issues). In this way, no other developer will work on the same issue and your PR will have a better chance to be accepted.
 
-#### Bug Fixes & Enhancements
+### Bug Fixes & Enhancements
 
 You may want to fix a known bug or work on a planned enhancement. See [the issue list](https://github.com/abpframework/abp/issues) on Github.
 
-#### Feature Requests
+### Feature Requests
 
 If you have a feature idea for the framework or modules, [create an issue](https://github.com/abpframework/abp/issues/new) on Github or attend to an existing discussion. Then you can implement it if it's embraced by the community.
 
-### Document Translation
+## Document Translation
 
 You may want to translate the complete [documentation](https://abp.io/documents/) (including this one) to your mother language. If so, follow these steps:
 
@@ -37,13 +41,13 @@ There are some fundamental documents need to be translated before publishing a l
 
 A new language is published after these minimum translations have been completed.
 
-### Resource Localization
+## Resource Localization
 
 ABP framework has a flexible [localization system](../Localization.md). You can create localized user interfaces for your own application.
 
 In addition to that, the framework and the [pre-build modules](https://docs.abp.io/en/abp/latest/Modules/Index) have localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). 
 
-#### Using the "abp translate" command
+### Using the "abp translate" command
 
 This is the recommended approach, since it automatically finds all missing texts for a specific culture and lets you to translate in one place.
 
@@ -54,14 +58,10 @@ This is the recommended approach, since it automatically finds all missing texts
 * Once you done the translation, use `abp translate -a` command to apply changes to the related files.
 * Send a pull request on GitHub.
 
-#### Manual Translation
+### Manual Translation
 
 If you want to make a change on a specific resource file, you can find the file yourself, make the necessary change (or create a new file for your language) and send a pull request on GitHub.
 
-### Blog Posts & Tutorials
-
-If you decide to create some tutorials or blog posts on ABP, please inform us (by creating a [Github issue](https://github.com/abpframework/abp/issues)), so we may add a link to your tutorial/post in the official documentation and we can announce it on our [Twitter account](https://twitter.com/abpframework).
-
-### Bug Report
+## Bug Report
 
 If you find any bug, please [create an issue on the Github repository](https://github.com/abpframework/abp/issues/new).
