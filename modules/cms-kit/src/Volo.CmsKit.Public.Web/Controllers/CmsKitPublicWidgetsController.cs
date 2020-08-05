@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting;
 using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection;
 
 namespace Volo.CmsKit.Web.Controllers
@@ -10,6 +11,11 @@ namespace Volo.CmsKit.Web.Controllers
         public async Task<IActionResult> ReactionSelection(string entityType, string entityId)
         {
             return ViewComponent(typeof(ReactionSelectionViewComponent), new {entityType, entityId});
+        }
+
+        public async Task<IActionResult> Commenting(string entityType, string entityId)
+        {
+            return ViewComponent(typeof(CommentingViewComponent), new {entityType, entityId});
         }
     }
 }

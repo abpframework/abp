@@ -47,6 +47,16 @@
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
+    <Content Update="Pages\Public.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Compile Update="Pages\Public.cshtml.cs">
+      <DependentUpon>public.cshtml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\Public.cshtml.cs">
+      <DependentUpon>Public.cshtml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
