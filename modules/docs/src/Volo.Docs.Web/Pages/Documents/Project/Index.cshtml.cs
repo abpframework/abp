@@ -309,12 +309,7 @@ namespace Volo.Docs.Pages.Documents.Project
             if (Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
                 && (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Branches)
             {
-                var prefix = Project.ExtraProperties["VersionBranchPrefix"].ToString();
-                var LatestVersionBranchNameWithoutPrefix =
-                    !string.IsNullOrWhiteSpace(Project.LatestVersionBranchName) &&
-                    Project.LatestVersionBranchName.StartsWith(prefix) && Project.LatestVersionBranchName.Length > prefix.Length
-                        ? Project.LatestVersionBranchName.Substring(prefix.Length)
-                        : Project.LatestVersionBranchName;
+                var LatestVersionBranchNameWithoutPrefix = RemoveVersionPrefix(Project.LatestVersionBranchName);
 
                 var latest = versions.FirstOrDefault(v=> v.Version == LatestVersionBranchNameWithoutPrefix);
 
@@ -325,6 +320,23 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             return versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Version)) ?? versions.First();
+        }
+
+        private string RemoveVersionPrefix(string version)
+        {
+            if (!Project.ExtraProperties.ContainsKey("VersionBranchPrefix"))
+            {
+                return version;
+            }
+
+            var prefix = Project.ExtraProperties["VersionBranchPrefix"].ToString();
+
+            if (string.IsNullOrWhiteSpace(version) || !version.StartsWith(prefix) || version.Length <= prefix.Length)
+            {
+                return version;
+            }
+
+            return version.Substring(prefix.Length);
         }
 
         private void SetLatestVersionBranchName(List<VersionInfoViewModel> versions)
@@ -379,7 +391,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 return DocsAppConsts.Latest;
             }
 
-            return Document.Version == LatestVersionInfo.Version ?
+            return RemoveVersionPrefix(Document.Version) == LatestVersionInfo.Version ?
                 DocsAppConsts.Latest :
                 Document.Version;
         }
