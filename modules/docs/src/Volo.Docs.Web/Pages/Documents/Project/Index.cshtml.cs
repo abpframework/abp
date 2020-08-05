@@ -309,7 +309,14 @@ namespace Volo.Docs.Pages.Documents.Project
             if (Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
                 && (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Branches)
             {
-                var latest = versions.FirstOrDefault(v=> v.Version == Project.LatestVersionBranchName);
+                var prefix = Project.ExtraProperties["VersionBranchPrefix"].ToString();
+                var LatestVersionBranchNameWithoutPrefix =
+                    !string.IsNullOrWhiteSpace(Project.LatestVersionBranchName) &&
+                    Project.LatestVersionBranchName.StartsWith(prefix) && Project.LatestVersionBranchName.Length > prefix.Length
+                        ? Project.LatestVersionBranchName.Substring(prefix.Length)
+                        : Project.LatestVersionBranchName;
+
+                var latest = versions.FirstOrDefault(v=> v.Version == LatestVersionBranchNameWithoutPrefix);
 
                 if (latest != null)
                 {
