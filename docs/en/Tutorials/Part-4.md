@@ -78,7 +78,7 @@ If you had created a data seed contributor as described in the [first part](Part
 
 ## Testing the BookAppService
 
-Create a test class named `BookAppService_Tests` in the `Acme.BookStore.Application.Tests` project:
+Add a new test class, named `BookAppService_Tests` in the `Books` namespace (folder) of the `Acme.BookStore.Application.Tests` project:
 
 ````csharp
 using System.Threading.Tasks;

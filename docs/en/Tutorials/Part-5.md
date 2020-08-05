@@ -58,7 +58,7 @@ ABP Framework provides an [authorization system](../Authorization.md) based on t
 
 A permission must have a unique name (a `string`). The best way is to define it as a `const`, so we can reuse the permission name.
 
-Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
+Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
 
 ````csharp
 namespace Acme.BookStore.Permissions
@@ -84,7 +84,7 @@ This is a hierarchical way of defining permission names. For example, "create bo
 
 You should define permissions before using them.
 
-Open the `BookStorePermissionDefinitionProvider` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
+Open the `BookStorePermissionDefinitionProvider` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
 
 ````csharp
 using Acme.BookStore.Localization;

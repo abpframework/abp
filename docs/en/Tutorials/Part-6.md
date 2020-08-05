@@ -204,7 +204,7 @@ namespace Acme.BookStore.Authors
 
 > **DDD tip**: Do not introduce domain service methods unless they are really needed and perform some core business rules. For this case, we needed to this service to be able to force the unique name constraint.
 
-Both methods checks if there is already an author with the given name and throws a special business exception, `AuthorAlreadyExistsException`, defined in the `Acme.BookStore.Domain` project as shown below:
+Both methods checks if there is already an author with the given name and throws a special business exception, `AuthorAlreadyExistsException`, defined in the `Acme.BookStore.Domain` project (in the `Authors` folder) as shown below:
 
 ````csharp
 using Volo.Abp;
