@@ -74,10 +74,11 @@ The open toast overlay can be removed manually via the `remove` method by passin
 ```js
 const toastId = this.toaster.success('Message', 'Title')
 
-this.toast.remove(toastId);
+this.toaster.remove(toastId);
 ```
 
-### How to Remove All Toasts
+
+### How to Remove All Toasts
 
 The all open toasts can be removed manually via the `clear` method:
 
