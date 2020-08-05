@@ -74,7 +74,7 @@ describe('InitialUtils', () => {
       const store = spectator.inject(Store);
       store.selectSnapshot.andCallFake(selector => selector({ SessionState: { language: 'tr' } }));
       injectorSpy.mockReturnValueOnce(store);
-      injectorSpy.mockReturnValueOnce({ cultureNameToLocaleFileNameMapping: {} });
+      injectorSpy.mockReturnValueOnce({ cultureNameLocaleFileMap: {} });
       expect(typeof localeInitializer(injector)).toBe('function');
       expect(await localeInitializer(injector)()).toBe('resolved');
     });

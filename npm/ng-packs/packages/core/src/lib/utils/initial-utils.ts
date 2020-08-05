@@ -45,7 +45,7 @@ export function localeInitializer(injector: Injector) {
     const lang = store.selectSnapshot(state => state.SessionState.language) || 'en';
 
     return new Promise((resolve, reject) => {
-      registerLocale(lang, options.cultureNameToLocaleFileNameMapping).then(
+      registerLocale(lang, options.cultureNameLocaleFileMap).then(
         () => resolve('resolved'),
         reject,
       );
