@@ -3,9 +3,7 @@
 ABP Angular UI supports the multi-tenancy. The following features related to multi-tenancy are available in the startup templates.
 
 
-<p align="center">
-  <img src="./images/tenants-page.png">
-</p>
+![Tenants Page](./images/tenants-page.png)
 <p style="font-size:small;text-align:center;">Tenants page</p>
 
 On the page above, you can;
@@ -16,9 +14,7 @@ On the page above, you can;
 - Delete a tenant.
 
 
-<p align="center">
-  <img src="./images/tenant-switching-box.png">
-</p>
+![Tenant Switching Component](./images/tenant-switching-box.png)
 <p style="font-size:small;text-align:center;">Tenant Switching Component</p>
 
 You can switch between existing tenants by using the tenant switching component in the child pages of the `AccountLayoutComponent` (like Login page). Angular UI sends the selected tenant id sends to the backend as `__tenant` header on each request.
