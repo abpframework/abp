@@ -26,7 +26,7 @@ You can use the `success`, `warn`, `error`, and `info` methods of `ToasterServic
 ### How to Display a Toast Overlay
 
 ```js
-this.toast.success('Message', 'Title');
+this.toaster.success('Message', 'Title');
 ```
 
 - The `ToasterService` methods accept three parameters that are `message`, `title`, and `options`.
@@ -72,7 +72,7 @@ With the options above, the toast overlay looks like this:
 The open toast overlay can be removed manually via the `remove` method by passing the `id` of toast:
 
 ```js
-const toastId = this.toast.success('Message', 'Title')
+const toastId = this.toaster.success('Message', 'Title')
 
 this.toast.remove(toastId);
 ```
@@ -82,7 +82,7 @@ this.toast.remove(toastId);
 The all open toasts can be removed manually via the `clear` method:
 
 ```js
-this.toast.clear();
+this.toaster.clear();
 ```
 
 ## API
