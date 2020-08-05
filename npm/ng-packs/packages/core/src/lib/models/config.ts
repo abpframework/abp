@@ -17,6 +17,7 @@ export namespace Config {
 
   export interface Application {
     name: string;
+    baseUrl?: string;
     logoUrl?: string;
   }
 

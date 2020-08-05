@@ -7,21 +7,14 @@ import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
-
-export function configureOAuth(injector: Injector, options: ABP.Root) {
-  const fn = () => {
-    const oAuth = injector.get(OAuthService);
-    oAuth.configure(options.environment.oAuthConfig);
-    return Promise.resolve();
-  };
-
-  return fn;
-}
+import { parseTenantFromUrl } from './multi-tenancy-utils';
 
 export function getInitialData(injector: Injector) {
-  const fn = () => {
+  const fn = async () => {
     const store: Store = injector.get(Store);
     const { skipGetAppConfiguration } = injector.get(CORE_OPTIONS) as ABP.Root;
+
+    await parseTenantFromUrl(injector);
 
     if (skipGetAppConfiguration) return;
 
@@ -34,7 +27,7 @@ export function getInitialData(injector: Injector) {
   return fn;
 }
 
-function checkAccessToken(store: Store, injector: Injector) {
+export function checkAccessToken(store: Store, injector: Injector) {
   const oAuth = injector.get(OAuthService);
   if (oAuth.hasValidAccessToken() && !store.selectSnapshot(ConfigState.getDeep('currentUser.id'))) {
     oAuth.logOut();

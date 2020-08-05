@@ -262,7 +262,7 @@
                   "path": "Blob-Storing-Custom-Provider.md"
                 }
               ]
-            }            
+            }
           ]
         },
         {
@@ -434,6 +434,10 @@
             {
               "text": "Permission Management",
               "path": "UI/Angular/Permission-Management.md"
+            },
+            {
+              "text": "Multi Tenancy",
+              "path": "UI/Angular/Multi-Tenancy.md"
             },
             {
               "text": "Confirmation Popup",
