@@ -62,7 +62,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             {
                 {nameof(GithubProject.GitHubRootUrl), GithubProject.GitHubRootUrl},
                 {nameof(GithubProject.GitHubUserAgent), GithubProject.GitHubUserAgent},
-                {nameof(GithubProject.GitHubAccessToken), GithubProject.GitHubAccessToken}
+                {nameof(GithubProject.GitHubAccessToken), GithubProject.GitHubAccessToken},
+                {nameof(GithubProject.GithubVersionProviderSource), GithubProject.GithubVersionProviderSource},
+                {nameof(GithubProject.VersionBranchPrefix), GithubProject.VersionBranchPrefix}
             };
 
             return dto;
@@ -75,6 +77,16 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             GithubProject.GitHubAccessToken = (string) dto.ExtraProperties[nameof(GithubProject.GitHubAccessToken)];
             GithubProject.GitHubRootUrl = (string) dto.ExtraProperties[nameof(GithubProject.GitHubRootUrl)];
             GithubProject.GitHubUserAgent = (string) dto.ExtraProperties[nameof(GithubProject.GitHubUserAgent)];
+
+            if (dto.ExtraProperties.ContainsKey(nameof(GithubProject.GithubVersionProviderSource)))
+            {
+                GithubProject.GithubVersionProviderSource = (GithubVersionProviderSource) (long) dto.ExtraProperties[nameof(GithubProject.GithubVersionProviderSource)];
+            }
+
+            if (dto.ExtraProperties.ContainsKey(nameof(GithubProject.VersionBranchPrefix)))
+            {
+                GithubProject.VersionBranchPrefix = (string) dto.ExtraProperties[nameof(GithubProject.VersionBranchPrefix)];
+            }
         }
 
         public abstract class EditProjectViewModelBase
@@ -125,6 +137,13 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             [DisplayOrder(10002)]
             [StringLength(64)]
             public string GitHubUserAgent { get; set; }
+
+            [DisplayOrder(10003)]
+            public GithubVersionProviderSource GithubVersionProviderSource { get; set; } = GithubVersionProviderSource.Releases;
+
+            [DisplayOrder(10004)]
+            [StringLength(64)]
+            public string VersionBranchPrefix { get; set; }
         }
     }
 }
