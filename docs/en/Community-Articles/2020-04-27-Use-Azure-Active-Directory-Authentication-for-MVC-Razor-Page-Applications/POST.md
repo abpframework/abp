@@ -205,8 +205,3 @@ You can find the source code of the completed example [here](https://github.com/
       	await Task.CompletedTask;
       });
     ````
-
-## See Also
-
-* [How to Customize the Login Page for MVC / Razor Page Applications](Customize-Login-Page-MVC.md).
-* [How to Customize the SignIn Manager for ABP Applications](Customize-SignIn-Manager.md).
