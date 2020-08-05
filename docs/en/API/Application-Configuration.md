@@ -2,12 +2,12 @@
 
 ABP Framework provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, the list of some fundamental information at this endpoint:
 
-* [Localization](Localization.md) values, supported and the current language of the application.
-* Available and granted [policies](Authorization.md) (permissions) for the current user.
-* [Setting](Settings.md) values for the current user.
-* Info about the [current user](CurrentUser.md) (like id and user name).
-* Info about the current [tenant](Multi-Tenancy.md) (like id and name).
-* [Time zone](Timing.md) information for the current user and the [clock](Timing.md) type of the application.
+* [Localization](../Localization.md) values, supported and the current language of the application.
+* Available and granted [policies](../Authorization.md) (permissions) for the current user.
+* [Setting](../Settings.md) values for the current user.
+* Info about the [current user](../CurrentUser.md) (like id and user name).
+* Info about the current [tenant](../Multi-Tenancy.md) (like id and name).
+* [Time zone](../Timing.md) information for the current user and the [clock](../Timing.md) type of the application.
 
 ## HTTP API
 

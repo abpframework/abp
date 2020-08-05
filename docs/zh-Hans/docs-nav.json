@@ -81,6 +81,15 @@
       "path": "CLI.md"
     },
     {
+      "text": "认证",
+      "items": [
+        {
+          "text": "社交/外部登录",
+          "path": "Authentication/Social-External-Logins.md"
+        }
+      ]
+    },
+    {
       "text": "基础知识",
       "items": [
         {
@@ -441,8 +450,21 @@
               "path": "UI/Angular/Track-By-Service.md"
             },
             {
+              "text": "SubscriptionService",
+              "path": "UI/Angular/Subscription-Service.md"
+            },
+            {
               "text": "ListService",
               "path": "UI/Angular/List-Service.md"
+            }
+          ]
+        },
+        {
+          "text": "React Native",
+          "items": [
+            {
+              "text": "入门",
+              "path": "Getting-Started-React-Native.md"
             }
           ]
         },
@@ -624,6 +646,10 @@
     {
       "text": "API文档",
       "path": "{ApiDocumentationUrl}"
+    },
+    {
+      "text": "官方包",
+      "path": "https://abp.io/packages"
     }
   ]
 }
