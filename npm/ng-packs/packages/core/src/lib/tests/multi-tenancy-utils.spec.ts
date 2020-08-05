@@ -1,12 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { MultiTenancyService } from '../services/multi-tenancy.service';
-import { parseTenantFromUrl, getCurrentTenancyNameOrNull } from '../utils';
-import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
-import { of, Subject, BehaviorSubject } from 'rxjs';
-import { FindTenantResultDto } from '../models/find-tenant-result-dto';
 import clone from 'just-clone';
+import { BehaviorSubject } from 'rxjs';
+import { FindTenantResultDto } from '../models/find-tenant-result-dto';
+import { MultiTenancyService } from '../services/multi-tenancy.service';
+import { getCurrentTenancyName, parseTenantFromUrl } from '../utils';
 
 const environment = {
   production: false,
@@ -59,16 +58,17 @@ describe('MultiTenancyUtils', () => {
 
   beforeEach(() => (spectator = createComponent()));
 
-  describe('#getCurrentTenancyNameOrNull', () => {
+  describe('#getCurrentTenancyName', () => {
     test('should get tenancy name from href', async () => {
       setHref('https://abp.volosoft.com/');
-      expect(getCurrentTenancyNameOrNull('https://{0}.volosoft.com')).toBe('abp');
+      expect(getCurrentTenancyName('https://{0}.volosoft.com')).toBe('abp');
 
       setHref('https://volosoft.com/');
-      expect(getCurrentTenancyNameOrNull('https://{0}.com')).toBe('volosoft');
+      expect(getCurrentTenancyName('https://{0}.com')).toBe('volosoft');
 
       setHref('https://volosoft.com/abp/');
-      expect(getCurrentTenancyNameOrNull('https://volosoft.com/{0}')).toBe('abp');
+      expect(getCurrentTenancyName('https://volosoft.com/{0}')).toBe('abp');
+      expect(getCurrentTenancyName('https://volosoft.com')).toBe(undefined);
     });
   });
 

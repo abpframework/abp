@@ -1,10 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
-import { getInitialData, localeInitializer, configureOAuth, checkAccessToken } from '../utils';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { CORE_OPTIONS } from '../tokens/options.token';
+import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
 import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 
 @Component({
@@ -18,23 +19,12 @@ describe('InitialUtils', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     mocks: [Store, OAuthService],
+    providers: [
+      { provide: CORE_OPTIONS, useValue: { environment: { oAuthConfig: { issuer: 'test' } } } },
+    ],
   });
 
   beforeEach(() => (spectator = createComponent()));
-
-  describe('#configureOAuth', () => {
-    test('should be called the the configure method of OAuthService', async () => {
-      const injector = spectator.inject(Injector);
-      const injectorSpy = jest.spyOn(injector, 'get');
-      const oAuth = spectator.inject(OAuthService);
-      const configureSpy = jest.spyOn(oAuth, 'configure');
-
-      injectorSpy.mockReturnValueOnce(oAuth);
-
-      await configureOAuth(injector, { environment: { oAuthConfig: { issuer: 'test' } } })();
-      expect(configureSpy).toHaveBeenCalledWith({ issuer: 'test' });
-    });
-  });
 
   describe('#getInitialData', () => {
     test('should dispatch GetAppConfiguration and return', async () => {

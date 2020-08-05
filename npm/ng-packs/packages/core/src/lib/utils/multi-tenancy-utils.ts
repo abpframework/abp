@@ -5,24 +5,17 @@ import { SetEnvironment } from '../actions';
 import { Config } from '../models/config';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
 import { ConfigState } from '../states/config.state';
-import { FormattedStringValueExtractor } from './formatted-string-value-extractor';
+import clone from 'just-clone';
 
 const tenancyPlaceholder = '{0}';
 
-export function getCurrentTenancyNameOrNull(appBaseUrl: string): string {
-  if (appBaseUrl.indexOf(tenancyPlaceholder) < 0) return null;
-
+export function getCurrentTenancyName(appBaseUrl: string): string {
   if (appBaseUrl.charAt(appBaseUrl.length - 1) !== '/') appBaseUrl += '/';
 
   const currentRootAddress = window.location.href;
 
-  const formattedStringValueExtractor = new FormattedStringValueExtractor();
-  const values = formattedStringValueExtractor.isMatch(currentRootAddress, appBaseUrl);
-  if (!values.length) {
-    return null;
-  }
-
-  return values[0];
+  const regex = appBaseUrl.replace(/\./g, '.').replace(tenancyPlaceholder, '(.+)');
+  return (currentRootAddress.match(regex) || []).slice(1)[0];
 }
 
 export async function parseTenantFromUrl(injector: Injector) {
@@ -31,7 +24,7 @@ export async function parseTenantFromUrl(injector: Injector) {
   const environment = store.selectSnapshot(ConfigState.getOne('environment')) as Config.Environment;
 
   const { baseUrl = '' } = environment.application;
-  const tenancyName = getCurrentTenancyNameOrNull(baseUrl);
+  const tenancyName = getCurrentTenancyName(baseUrl);
 
   if (tenancyName) {
     multiTenancyService.isTenantBoxVisible = false;
@@ -51,8 +44,10 @@ export async function parseTenantFromUrl(injector: Injector) {
   return Promise.resolve();
 }
 
-export function setEnvironment(store: Store, tenancyName: string) {
-  const environment = store.selectSnapshot(ConfigState.getOne('environment')) as Config.Environment;
+function setEnvironment(store: Store, tenancyName: string) {
+  const environment = clone(
+    store.selectSnapshot(ConfigState.getOne('environment')),
+  ) as Config.Environment;
 
   if (environment.application.baseUrl) {
     environment.application.baseUrl = environment.application.baseUrl.replace(
