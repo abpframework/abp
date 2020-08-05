@@ -1,21 +1,21 @@
 import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
+import clone from 'just-clone';
 import { switchMap, tap } from 'rxjs/operators';
 import { SetEnvironment } from '../actions';
 import { Config } from '../models/config';
 import { MultiTenancyService } from '../services/multi-tenancy.service';
 import { ConfigState } from '../states/config.state';
-import clone from 'just-clone';
+import { createTokenParser } from './string-utils';
 
 const tenancyPlaceholder = '{0}';
 
-export function getCurrentTenancyName(appBaseUrl: string): string {
+function getCurrentTenancyName(appBaseUrl: string): string {
   if (appBaseUrl.charAt(appBaseUrl.length - 1) !== '/') appBaseUrl += '/';
 
-  const currentRootAddress = window.location.href;
-
-  const regex = appBaseUrl.replace(/\./g, '.').replace(tenancyPlaceholder, '(.+)');
-  return (currentRootAddress.match(regex) || []).slice(1)[0];
+  const parseTokens = createTokenParser(appBaseUrl);
+  const token = tenancyPlaceholder.replace(/[}{]/g, '');
+  return parseTokens(window.location.href)[token][0];
 }
 
 export async function parseTenantFromUrl(injector: Injector) {
