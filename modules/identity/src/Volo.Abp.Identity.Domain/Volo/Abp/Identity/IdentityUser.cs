@@ -68,7 +68,7 @@ namespace Volo.Abp.Identity
         [DisableAuditing]
         public virtual string SecurityStamp { get; protected internal set; }
 
-        public virtual string LoginProvider { get; protected set; }
+        public virtual bool IsExternal { get; set; }
 
         /// <summary>
         /// Gets or sets a telephone number for the user.
@@ -324,12 +324,6 @@ namespace Volo.Abp.Identity
             return OrganizationUnits.Any(
                 ou => ou.OrganizationUnitId == organizationUnitId
             );
-        }
-
-        public virtual void SetLoginProvider([CanBeNull] string loginProvider)
-        {
-            LoginProvider = Check.Length(loginProvider, nameof(loginProvider),
-                IdentityUserConsts.MaxLoginProviderLength);
         }
 
         /// <summary>

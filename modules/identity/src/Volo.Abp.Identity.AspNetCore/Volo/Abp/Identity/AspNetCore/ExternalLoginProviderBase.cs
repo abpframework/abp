@@ -48,12 +48,12 @@ namespace Volo.Abp.Identity.AspNetCore
             user.Name = externalUser.Name;
             user.Surname = externalUser.Surname;
 
-            user.SetLoginProvider(providerName);
+            user.IsExternal = true;
 
             user.SetEmailConfirmed(externalUser.EmailConfirmed ?? false);
             user.SetPhoneNumber(externalUser.PhoneNumber, externalUser.PhoneNumberConfirmed ?? false);
 
-            (await UserManager.CreateAsync(user, await RandomPasswordGenerator.CreateAsync())).CheckErrors();
+            (await UserManager.CreateAsync(user)).CheckErrors();
 
             if (externalUser.TwoFactorEnabled != null)
             {
@@ -133,6 +133,8 @@ namespace Volo.Abp.Identity.AspNetCore
             {
                 (await UserManager.AddLoginAsync(user, new UserLoginInfo(providerName, externalUser.ProviderKey, providerName))).CheckErrors();
             }
+
+            user.IsExternal = true;
 
             (await UserManager.UpdateAsync(user)).CheckErrors();
         }

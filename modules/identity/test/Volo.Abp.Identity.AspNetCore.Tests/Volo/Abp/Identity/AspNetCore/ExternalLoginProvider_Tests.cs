@@ -47,7 +47,7 @@ namespace Volo.Abp.Identity.AspNetCore
             user.TwoFactorEnabled.ShouldBeFalse();
             user.PhoneNumber.ShouldBe("123");
             user.PhoneNumberConfirmed.ShouldBeFalse();
-            user.LoginProvider.ShouldBe("Fake");
+            user.IsExternal.ShouldBeTrue();
 
             var logins = user.Logins.Where(l => l.LoginProvider == "Fake").ToList();
             logins.Count.ShouldBe(1);
