@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
@@ -14,16 +15,20 @@ namespace Volo.Abp.Identity.AspNetCore
         protected IdentityUserManager UserManager { get; }
         protected RandomPasswordGenerator RandomPasswordGenerator { get; }
 
+        protected IIdentityUserRepository IdentityUserRepository { get; }
+
         protected ExternalLoginProviderBase(
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant,
             IdentityUserManager userManager,
-            RandomPasswordGenerator randomPasswordGenerator)
+            RandomPasswordGenerator randomPasswordGenerator,
+            IIdentityUserRepository identityUserRepository)
         {
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
             UserManager = userManager;
             RandomPasswordGenerator = randomPasswordGenerator;
+            IdentityUserRepository = identityUserRepository;
         }
 
         public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
@@ -112,6 +117,8 @@ namespace Volo.Abp.Identity.AspNetCore
             {
                 (await UserManager.SetTwoFactorEnabledAsync(user, externalUser.TwoFactorEnabled.Value)).CheckErrors();
             }
+
+            await IdentityUserRepository.EnsureCollectionLoadedAsync(user, u => u.Logins);
 
             var userLogin = user.Logins.FirstOrDefault(l => l.LoginProvider == providerName);
             if (userLogin != null)

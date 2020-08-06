@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -13,8 +14,14 @@ namespace Volo.Abp.Identity.AspNetCore
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant,
             IdentityUserManager userManager,
-            RandomPasswordGenerator randomPasswordGenerator)
-            : base(guidGenerator, currentTenant, userManager, randomPasswordGenerator)
+            RandomPasswordGenerator randomPasswordGenerator,
+            IIdentityUserRepository identityUserRepository)
+            : base(
+                guidGenerator,
+                currentTenant,
+                userManager,
+                randomPasswordGenerator,
+                identityUserRepository)
         {
 
         }
@@ -28,7 +35,10 @@ namespace Volo.Abp.Identity.AspNetCore
 
         protected override Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName)
         {
-            // The only required property is the email, which is set in the constructor.
+            if (userName != "ext_user")
+            {
+                throw new ArgumentException();
+            }
 
             return Task.FromResult(
                 new ExternalLoginUserInfo("ext_user@test.com")
