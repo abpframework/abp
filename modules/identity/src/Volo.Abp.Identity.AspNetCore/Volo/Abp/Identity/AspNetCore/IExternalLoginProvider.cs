@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Identity.AspNetCore
 {
-    public interface IExternalLoginProvider //TODO: A base class to simplift implementing this!
+    public interface IExternalLoginProvider
     {
         /// <summary>
         /// Used to try authenticate a user by this source.
@@ -17,14 +17,16 @@ namespace Volo.Abp.Identity.AspNetCore
         /// So, the source should create the user and fill the properties.
         /// </summary>
         /// <param name="userName">User name</param>
+        /// <param name="providerName">The name of this provider</param>
         /// <returns>Newly created user</returns>
-        Task<IdentityUser> CreateUserAsync(string userName);
+        Task<IdentityUser> CreateUserAsync(string userName, string providerName);
 
         /// <summary>
         /// This method is called after an existing user is authenticated by this source.
         /// It can be used to update some properties of the user by the source.
         /// </summary>
+        /// <param name="providerName">The name of this provider</param>
         /// <param name="user">The user that can be updated</param>
-        Task UpdateUserAsync(IdentityUser user);
+        Task UpdateUserAsync(IdentityUser user, string providerName);
     }
 }

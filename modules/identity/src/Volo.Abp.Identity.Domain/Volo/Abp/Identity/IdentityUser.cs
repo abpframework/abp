@@ -30,11 +30,13 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets the Name for the user.
         /// </summary>
+        [CanBeNull]
         public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the Surname for the user.
         /// </summary>
+        [CanBeNull]
         public virtual string Surname { get; set; }
 
         /// <summary>
@@ -71,6 +73,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Gets or sets a telephone number for the user.
         /// </summary>
+        [CanBeNull]
         public virtual string PhoneNumber { get; protected internal set; }
 
         /// <summary>

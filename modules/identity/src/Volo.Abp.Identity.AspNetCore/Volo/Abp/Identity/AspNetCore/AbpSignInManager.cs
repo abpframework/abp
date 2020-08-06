@@ -49,11 +49,11 @@ namespace Volo.Abp.Identity.AspNetCore
                     var user = await UserManager.FindByNameAsync(userName);
                     if (user == null)
                     {
-                        user = await externalLoginProvider.CreateUserAsync(userName);
+                        user = await externalLoginProvider.CreateUserAsync(userName, externalLoginProviderInfo.Name);
                     }
                     else
                     {
-                        await externalLoginProvider.UpdateUserAsync(user);
+                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
                     }
 
                     return await SignInOrTwoFactorAsync(user, isPersistent);

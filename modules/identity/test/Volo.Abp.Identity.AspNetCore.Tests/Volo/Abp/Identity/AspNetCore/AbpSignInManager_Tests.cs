@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity.AspNetCore
     public class AbpSignInManager_Tests : AbpIdentityAspNetCoreTestBase
     {
         [Fact]
-        public async Task Should_Resolve_AbpSignInManager()
+        public void Should_Resolve_AbpSignInManager()
         {
             var signInManager = GetRequiredService<SignInManager<IdentityUser>>();
             signInManager.ShouldBeOfType<AbpSignInManager>();
