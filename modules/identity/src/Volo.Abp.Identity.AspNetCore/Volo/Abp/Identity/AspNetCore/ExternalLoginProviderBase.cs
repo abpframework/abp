@@ -13,21 +13,17 @@ namespace Volo.Abp.Identity.AspNetCore
         protected IGuidGenerator GuidGenerator { get; }
         protected ICurrentTenant CurrentTenant { get; }
         protected IdentityUserManager UserManager { get; }
-        protected RandomPasswordGenerator RandomPasswordGenerator { get; }
-
         protected IIdentityUserRepository IdentityUserRepository { get; }
 
         protected ExternalLoginProviderBase(
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant,
             IdentityUserManager userManager,
-            RandomPasswordGenerator randomPasswordGenerator,
             IIdentityUserRepository identityUserRepository)
         {
             GuidGenerator = guidGenerator;
             CurrentTenant = currentTenant;
             UserManager = userManager;
-            RandomPasswordGenerator = randomPasswordGenerator;
             IdentityUserRepository = identityUserRepository;
         }
 

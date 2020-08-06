@@ -14,13 +14,11 @@ namespace Volo.Abp.Identity.AspNetCore
             IGuidGenerator guidGenerator,
             ICurrentTenant currentTenant,
             IdentityUserManager userManager,
-            RandomPasswordGenerator randomPasswordGenerator,
             IIdentityUserRepository identityUserRepository)
             : base(
                 guidGenerator,
                 currentTenant,
                 userManager,
-                randomPasswordGenerator,
                 identityUserRepository)
         {
 
