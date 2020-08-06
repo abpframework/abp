@@ -244,6 +244,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: true),
                     SecurityStamp = table.Column<string>(maxLength: 256, nullable: false),
+                    IsExternal = table.Column<bool>(nullable: false, defaultValue: false),
                     PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false, defaultValue: false),
