@@ -24,6 +24,14 @@ namespace Volo.Abp.Identity.AspNetCore
             });
         }
 
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpIdentityAspNetCoreOptions>(options =>
+            {
+                options.ExternalLoginProviders.Add<FakeExternalLoginProvider>(FakeExternalLoginProvider.Name);
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
