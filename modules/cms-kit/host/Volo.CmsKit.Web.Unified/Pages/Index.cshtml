@@ -21,8 +21,9 @@
     </abp-card-body>
     <abp-card-footer>
         @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "1" })
-    </abp-card-footer>
+        <hr />
         @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "1" })
+    </abp-card-footer>
 </abp-card>
 
 <abp-card class="mb-3">
@@ -38,6 +39,7 @@
     </abp-card-body>
     <abp-card-footer>
         @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "quote", entityId = "2" })
-    </abp-card-footer>
+        <hr />
         @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "quote", entityId = "2" })
+    </abp-card-footer>
 </abp-card>

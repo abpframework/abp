@@ -1,6 +1,6 @@
 # How to Customize the Login Page for MVC / Razor Page Applications
 
-When you create a new application using the [application startup template](../Startup-Templates/Application.md), source code of the login page will not be inside your solution, so you can not directly change it. The login page comes from the [Account Module](../Modules/Account.md) that is used a [NuGet package](https://www.nuget.org/packages/Volo.Abp.Account.Web) reference.
+When you create a new application using the [application startup template](https://docs.abp.io/en/abp/latest/Startup-Templates/Application), source code of the login page will not be inside your solution, so you can not directly change it. The login page comes from the [Account Module](https://docs.abp.io/en/abp/latest/Modules/Account) that is used a [NuGet package](https://www.nuget.org/packages/Volo.Abp.Account.Web) reference.
 
 This document explains how to customize the login page for your own application.
 
@@ -20,7 +20,7 @@ public class CustomLoginModel : LoginModel
 }
 ````
 
-> Naming convention is important here. If your class name doesn't end with `LoginModel`, you need to manually replace the `LoginModel` using the [dependency injection](../Dependency-Injection.md) system.
+> Naming convention is important here. If your class name doesn't end with `LoginModel`, you need to manually replace the `LoginModel` using the [dependency injection](https://docs.abp.io/en/abp/latest/Dependency-Injection) system.
 
 Then you can override any method you need and add new methods and properties needed by the UI.
 
