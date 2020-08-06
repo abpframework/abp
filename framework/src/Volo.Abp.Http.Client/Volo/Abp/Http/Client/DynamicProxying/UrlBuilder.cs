@@ -1,9 +1,10 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Localization;
@@ -100,11 +101,43 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             urlBuilder.Append(isFirstParam ? "?" : "&");
 
-            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+            (string, string) GetKeyAndValue(string keyValuePair)
+            {
+                var pairString = keyValuePair.ToString().Trim('[', ']').Split(',');
+                return (pairString[0], pairString[1].IsNullOrWhiteSpace() ? null : pairString[1].Trim());
+            }
+
+            if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
+            {
+                var index = 0;
+                var parameters = new List<string>();
+
+                foreach (var item in (IEnumerable)value)
+                {
+                    if (item != null && ReflectionHelper.IsAssignableToGenericType(item.GetType(), typeof(KeyValuePair<,>)))
+                    {
+                        var keyValuePair = GetKeyAndValue(item.ToString());
+                        var encodedKey = System.Net.WebUtility.UrlEncode(ConvertValueToString(keyValuePair.Item1));
+                        parameters.Add(name + $"[{encodedKey}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(keyValuePair.Item2)));
+                    }
+                    else
+                    {
+                        parameters.Add(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)));
+                    }
+                }
+
+                urlBuilder.Append(string.Join("&", parameters));
+            }
+            else
+            {
+                urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+            }
         }
 
-        private static string ConvertValueToString([NotNull] object value)
+        private static string ConvertValueToString([CanBeNull] object value)
         {
+            if (value == null) return null;
+
             using (CultureHelper.Use(CultureInfo.InvariantCulture))
             {
                 if (value is DateTime dateTimeValue)
