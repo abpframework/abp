@@ -8,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
+using Volo.Abp.Users;
 using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Comments
@@ -42,7 +43,7 @@ namespace Volo.CmsKit.Comments
         [Authorize]
         public async Task<CommentDto> CreateAsync(CreateCommentInput input)
         {
-            var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.Id.Value);
+            var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.GetId());
 
             if (user == null)
             {
@@ -55,7 +56,7 @@ namespace Volo.CmsKit.Comments
                 input.EntityId,
                 input.Text,
                 input.RepliedCommentId,
-                CurrentUser.Id.Value
+                user.Id
             ));
 
             return ObjectMapper.Map<Comment, CommentDto>(comment);
@@ -66,7 +67,7 @@ namespace Volo.CmsKit.Comments
         {
             var comment = await CommentRepository.GetAsync(id);
 
-            if (comment.CreatorId != CurrentUser.Id)
+            if (comment.CreatorId != CurrentUser.GetId())
             {
                 throw new BusinessException();
             }
@@ -83,7 +84,7 @@ namespace Volo.CmsKit.Comments
         {
             var comment = await CommentRepository.GetAsync(id);
 
-            if (comment.CreatorId != CurrentUser.Id)
+            if (comment.CreatorId != CurrentUser.GetId())
             {
                 throw new BusinessException();
             }
