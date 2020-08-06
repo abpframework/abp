@@ -4,18 +4,18 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Identity.AspNetCore
 {
-    public class FakeExternalLoginProvider : IExternalLoginProvider, ITransientDependency
+    public class FakeExternalLoginProvider : ExternalLoginProviderBase, ITransientDependency
     {
         public const string Name = "Fake";
 
-        public Task<bool> TryAuthenticateAsync(string userName, string plainPassword)
+        public override Task<bool> TryAuthenticateAsync(string userName, string plainPassword)
         {
             return Task.FromResult(
                 userName == "ext_user" && plainPassword == "abc"
             );
         }
 
-        public Task<IdentityUser> CreateUserAsync(string userName)
+        public override Task<IdentityUser> CreateUserAsync(string userName)
         {
             return Task.FromResult(
                 new IdentityUser(
@@ -24,11 +24,6 @@ namespace Volo.Abp.Identity.AspNetCore
                     "test@abp.io"
                 )
             );
-        }
-
-        public Task UpdateUserAsync(IdentityUser user)
-        {
-            return Task.CompletedTask;
         }
     }
 }
