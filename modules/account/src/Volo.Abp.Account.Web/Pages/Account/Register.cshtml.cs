@@ -19,7 +19,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
     public class RegisterModel : AccountPageModel
     {
         protected IAccountAppService AccountAppService { get; }
-        protected RandomPasswordGenerator RandomPasswordGenerator { get; }
 
         [BindProperty(SupportsGet = true)]
         public string ReturnUrl { get; set; }
@@ -36,10 +35,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public string ExternalLoginAuthSchema { get; set; }
 
-        public RegisterModel(IAccountAppService accountAppService, RandomPasswordGenerator randomPasswordGenerator)
+        public RegisterModel(IAccountAppService accountAppService)
         {
             AccountAppService = accountAppService;
-            RandomPasswordGenerator = randomPasswordGenerator;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
@@ -80,11 +78,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             await CheckSelfRegistrationAsync();
 
-            var registerDto = new RegisterDto()
-            {
-                AppName = "MVC"
-            };
-
             if (IsExternalLogin)
             {
                 var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
@@ -94,34 +87,40 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     return RedirectToPage("./Login");
                 }
 
-                registerDto.EmailAddress = Input.EmailAddress;
-                registerDto.UserName = Input.EmailAddress;
-                registerDto.Password = await RandomPasswordGenerator.CreateAsync();
+                await RegisterExternalUserAsync(externalLoginInfo, Input.EmailAddress);
             }
             else
             {
-                ValidateModel();
-
-                registerDto.EmailAddress = Input.EmailAddress;
-                registerDto.Password = Input.Password;
-                registerDto.UserName = Input.UserName;
-            }
-
-            var userDto = await AccountAppService.RegisterAsync(registerDto);
-            var user = await UserManager.GetByIdAsync(userDto.Id);
-            await SignInManager.SignInAsync(user, isPersistent: false);
-
-            if (IsExternalLogin)
-            {
-                await AddToUserLogins(user);
+                await RegisterLocalUserAsync();
             }
 
             return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
-        protected virtual async Task AddToUserLogins(IdentityUser user)
+        protected virtual async Task RegisterLocalUserAsync()
         {
-            var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
+            ValidateModel();
+
+            var userDto = await AccountAppService.RegisterAsync(
+                new RegisterDto
+                {
+                    AppName = "MVC",
+                    EmailAddress = Input.EmailAddress,
+                    Password = Input.Password,
+                    UserName = Input.UserName
+                }
+            );
+
+            var user = await UserManager.GetByIdAsync(userDto.Id);
+            await SignInManager.SignInAsync(user, isPersistent: true);
+        }
+
+        protected virtual async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string emailAddress)
+        {
+            var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
+
+            (await UserManager.CreateAsync(user)).CheckErrors();
+            (await UserManager.AddDefaultRolesAsync(user)).CheckErrors();
 
             var userLoginAlreadyExists = user.Logins.Any(x =>
                 x.TenantId == user.TenantId &&
@@ -130,13 +129,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (!userLoginAlreadyExists)
             {
-                user.AddLogin(new UserLoginInfo(
-                        externalLoginInfo.LoginProvider,
-                        externalLoginInfo.ProviderKey,
-                        externalLoginInfo.ProviderDisplayName
-                    )
-                );
+                (await UserManager.AddLoginAsync(user, new UserLoginInfo(
+                    externalLoginInfo.LoginProvider,
+                    externalLoginInfo.ProviderKey,
+                    externalLoginInfo.ProviderDisplayName
+                ))).CheckErrors();
             }
+
+            await SignInManager.SignInAsync(user, isPersistent: true);
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
