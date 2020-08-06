@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -29,16 +28,18 @@ namespace Volo.Abp.Identity.AspNetCore
 
         protected override Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName)
         {
+            // The only required property is the email, which is set in the constructor.
+
             return Task.FromResult(
                 new ExternalLoginUserInfo("ext_user@test.com")
                 {
-                    Name = "Test Name",
-                    Surname = "Test Surname",
-                    EmailConfirmed = true,
-                    TwoFactorEnabled = false,
-                    PhoneNumber = "123",
-                    PhoneNumberConfirmed = false,
-                    ProviderKey = "123"
+                    Name = "Test Name", //optional, if the provider knows it
+                    Surname = "Test Surname", //optional, if the provider knows it
+                    EmailConfirmed = true, //optional, if the provider knows it
+                    TwoFactorEnabled = false, //optional, if the provider knows it
+                    PhoneNumber = "123", //optional, if the provider knows it
+                    PhoneNumberConfirmed = false, //optional, if the provider knows it
+                    ProviderKey = "123" //The id of the user on the provider side
                 }
             );
         }
