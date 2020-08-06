@@ -12,6 +12,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public PersonalSettingsInfoModel PersonalSettingsInfoModel { get; set; }
 
+        public bool DisablePasswordChange { get; set; }
+
         protected IProfileAppService ProfileAppService { get; }
 
         public ManageModel(IProfileAppService profileAppService)
@@ -24,6 +26,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             var user = await ProfileAppService.GetAsync();
 
             PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
+
+            DisablePasswordChange = user.IsExternalLoggedIn;
 
             return Page();
         }
@@ -54,7 +58,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [DataType(DataType.Password)]
         public string NewPasswordConfirm { get; set; }
     }
-    
+
     public class PersonalSettingsInfoModel
     {
         [Required]

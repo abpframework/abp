@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Identity.Settings;
@@ -20,9 +21,12 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<ProfileDto> GetAsync()
         {
-            return ObjectMapper.Map<IdentityUser, ProfileDto>(
-                await UserManager.GetByIdAsync(CurrentUser.GetId())
-            );
+            var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            var profile = ObjectMapper.Map<IdentityUser, ProfileDto>(currentUser);
+            profile.IsExternalLoggedIn = currentUser.Logins.Any();
+
+            return profile;
         }
 
         public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
@@ -56,6 +60,13 @@ namespace Volo.Abp.Identity
         public virtual async Task ChangePasswordAsync(ChangePasswordInput input)
         {
             var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+            var isExternalLoggedIn = currentUser.Logins.Any();
+            if (isExternalLoggedIn)
+            {
+                throw new BusinessException(code: IdentityErrorCodes.ExternalUserPasswordChange);
+            }
+
             (await UserManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword)).CheckErrors();
         }
     }

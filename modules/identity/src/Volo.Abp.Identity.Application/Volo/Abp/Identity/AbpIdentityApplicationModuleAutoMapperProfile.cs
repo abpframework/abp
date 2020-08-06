@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Volo.Abp.AutoMapper;
 
 namespace Volo.Abp.Identity
 {
@@ -11,8 +12,9 @@ namespace Volo.Abp.Identity
 
             CreateMap<IdentityRole, IdentityRoleDto>()
                 .MapExtraProperties();
-            
+
             CreateMap<IdentityUser, ProfileDto>()
+                .Ignore(x=>x.IsExternalLoggedIn)
                 .MapExtraProperties();
         }
     }

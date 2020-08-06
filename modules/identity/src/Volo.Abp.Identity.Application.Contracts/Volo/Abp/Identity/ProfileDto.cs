@@ -13,5 +13,7 @@ namespace Volo.Abp.Identity
         public string Surname { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public bool IsExternalLoggedIn { get; set; }
     }
 }
