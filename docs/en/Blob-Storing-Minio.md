@@ -23,12 +23,15 @@ Configuration is done in the `ConfigureServices` method of your [module](Module-
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseMinio(minio =>
-    {         
-        minio.EndPoint = "your minio endPoint";
-        minio.AccessKey = "your minio accessKey";
-        minio.SecretKey = "your minio secretKey";
-        minio.BucketName = "your minio bucketName";                    
+    options.Containers.ConfigureDefault(container =>
+    {
+        container.UseMinio(minio =>
+        {
+            minio.EndPoint = "your minio endPoint";
+            minio.AccessKey = "your minio accessKey";
+            minio.SecretKey = "your minio secretKey";
+            minio.BucketName = "your minio bucketName";
+        });
     });
 });
 ````
