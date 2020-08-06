@@ -19,6 +19,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
     public class RegisterModel : AccountPageModel
     {
         protected IAccountAppService AccountAppService { get; }
+        protected RandomPasswordGenerator RandomPasswordGenerator { get; }
 
         [BindProperty(SupportsGet = true)]
         public string ReturnUrl { get; set; }
@@ -35,9 +36,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public string ExternalLoginAuthSchema { get; set; }
 
-        public RegisterModel(IAccountAppService accountAppService)
+        public RegisterModel(IAccountAppService accountAppService, RandomPasswordGenerator randomPasswordGenerator)
         {
             AccountAppService = accountAppService;
+            RandomPasswordGenerator = randomPasswordGenerator;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
@@ -94,7 +96,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
                 registerDto.EmailAddress = Input.EmailAddress;
                 registerDto.UserName = Input.EmailAddress;
-                registerDto.Password = GeneratePassword();
+                registerDto.Password = await RandomPasswordGenerator.CreateAsync();
             }
             else
             {
@@ -135,47 +137,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
                     )
                 );
             }
-        }
-
-        protected virtual string GeneratePassword()
-        {
-            var random = new Random();
-            var options = UserManager.Options.Password;
-            int length = random.Next(options.RequiredLength, IdentityUserConsts.MaxPasswordLength - 1);
-
-            bool nonAlphanumeric = options.RequireNonAlphanumeric;
-            bool digit = options.RequireDigit;
-            bool lowercase = options.RequireLowercase;
-            bool uppercase = options.RequireUppercase;
-
-            StringBuilder password = new StringBuilder();
-
-            while (password.Length < length)
-            {
-                char c = (char)random.Next(32, 126);
-
-                password.Append(c);
-
-                if (char.IsDigit(c))
-                    digit = false;
-                else if (char.IsLower(c))
-                    lowercase = false;
-                else if (char.IsUpper(c))
-                    uppercase = false;
-                else if (!char.IsLetterOrDigit(c))
-                    nonAlphanumeric = false;
-            }
-
-            if (nonAlphanumeric)
-                password.Append((char)random.Next(33, 48));
-            if (digit)
-                password.Append((char)random.Next(48, 58));
-            if (lowercase)
-                password.Append((char)random.Next(97, 123));
-            if (uppercase)
-                password.Append((char)random.Next(65, 91));
-
-            return password.ToString();
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
