@@ -23,7 +23,7 @@ BLOB存储Aliyun提供程序可以将BLOB存储在[Aliyun Blob storage](https://
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAliyun(aliyun =>
+    options.Containers.UseAliyun(aliyun =>
     {
         aliyun.AccessKeyId = "your aliyun access key id";
         aliyun.AccessKeySecret = "your aliyun access key secret";

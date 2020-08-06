@@ -23,7 +23,7 @@ Configuration is done in the `ConfigureServices` method of your [module](Module-
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAws(Aws =>
+    options.Containers.UseAws(Aws =>
     {
         Aws.AccessKeyId = "your Aws access key id";
         Aws.SecretAccessKey = "your Aws access key secret";

@@ -23,7 +23,7 @@ Configuration is done in the `ConfigureServices` method of your [module](Module-
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAliyun(aliyun =>
+    options.Containers.UseAliyun(aliyun =>
     {
         aliyun.AccessKeyId = "your aliyun access key id";
         aliyun.AccessKeySecret = "your aliyun access key secret";

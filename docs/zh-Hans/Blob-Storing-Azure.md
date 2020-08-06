@@ -23,7 +23,7 @@ BLOB存储Azure提供程序可以将BLOB存储在[Azure Blob storage](https://az
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAzure(azure =>
+    options.Containers.UseAzure(azure =>
     {
         azure.ConnectionString = "your azure connection string";
         azure.ContainerName = "your azure container name";

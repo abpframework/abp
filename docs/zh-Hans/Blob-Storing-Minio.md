@@ -23,7 +23,7 @@ BLOB Storing Minio提供程序帮助你存储对象到 [MinIO Object storage](ht
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseMinio(minio =>
+    options.Containers.UseMinio(minio =>
     {         
         minio.EndPoint = "你的 minio endPoint";
         minio.AccessKey = "你的 minio accessKey";

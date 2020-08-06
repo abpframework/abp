@@ -23,7 +23,7 @@ Configuration is done in the `ConfigureServices` method of your [module](Module-
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAzure(azure =>
+    options.Containers.UseAzure(azure =>
     {
         azure.ConnectionString = "your azure connection string";
         azure.ContainerName = "your azure container name";

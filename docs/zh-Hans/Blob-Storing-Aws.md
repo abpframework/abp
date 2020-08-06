@@ -23,7 +23,7 @@ BLOB存储Aws提供程序可以将BLOB存储在[Amazon Simple Storage Service](h
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAws(Aws =>
+    options.Containers.UseAws(Aws =>
     {
         Aws.AccessKeyId = "your Aws access key id";
         Aws.SecretAccessKey = "your Aws access key secret";
