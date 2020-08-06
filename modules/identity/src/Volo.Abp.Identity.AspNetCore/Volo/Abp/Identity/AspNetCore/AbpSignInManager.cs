@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity.AspNetCore
 {
@@ -50,7 +51,7 @@ namespace Volo.Abp.Identity.AspNetCore
                     if (user == null)
                     {
                         user = await externalLoginProvider.CreateUserAsync(userName);
-                        //TODO: TenantId, LoginProvider, Password, NormalizeNames
+                        //TODO: +TenantId, LoginProvider, Password, +NormalizeNames
                         //TODO: Set default roles
                         await UserManager.CreateAsync(user);
                     }

@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Identity.AspNetCore
 {
     public class FakeExternalLoginProvider : ExternalLoginProviderBase, ITransientDependency
     {
         public const string Name = "Fake";
+
+        private readonly ICurrentTenant _currentTenant;
+
+        public FakeExternalLoginProvider(ICurrentTenant currentTenant)
+        {
+            _currentTenant = currentTenant;
+        }
 
         public override Task<bool> TryAuthenticateAsync(string userName, string plainPassword)
         {
@@ -21,7 +29,8 @@ namespace Volo.Abp.Identity.AspNetCore
                 new IdentityUser(
                     Guid.NewGuid(),
                     userName,
-                    "test@abp.io"
+                    "test@abp.io",
+                    tenantId: _currentTenant.Id
                 )
             );
         }
