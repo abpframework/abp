@@ -15,7 +15,7 @@ function getCurrentTenancyName(appBaseUrl: string): string {
 
   const parseTokens = createTokenParser(appBaseUrl);
   const token = tenancyPlaceholder.replace(/[}{]/g, '');
-  return parseTokens(window.location.href)[token][0];
+  return parseTokens(window.location.href)[token]?.[0];
 }
 
 export async function parseTenantFromUrl(injector: Injector) {

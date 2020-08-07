@@ -7,16 +7,18 @@ import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
+import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
 
 export function getInitialData(injector: Injector) {
   const fn = async () => {
     const store: Store = injector.get(Store);
-    const { skipGetAppConfiguration } = injector.get(CORE_OPTIONS) as ABP.Root;
+    const options = injector.get(CORE_OPTIONS) as ABP.Root;
 
+    await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
 
-    if (skipGetAppConfiguration) return;
+    if (options.skipGetAppConfiguration) return;
 
     return store
       .dispatch(new GetAppConfiguration())
@@ -42,7 +44,7 @@ export function localeInitializer(injector: Injector) {
     const lang = store.selectSnapshot(state => state.SessionState.language) || 'en';
 
     return new Promise((resolve, reject) => {
-      registerLocale(lang, options.cultureNameToLocaleFileNameMapping).then(
+      registerLocale(lang, options.cultureNameLocaleFileMap).then(
         () => resolve('resolved'),
         reject,
       );

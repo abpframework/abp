@@ -7,6 +7,7 @@ import { GetAppConfiguration } from '../actions';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
 import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
+import * as environmentUtils from '../utils/environment-utils';
 
 @Component({
   selector: 'abp-dummy',
@@ -33,7 +34,9 @@ describe('InitialUtils', () => {
       const store = spectator.inject(Store);
       const dispatchSpy = jest.spyOn(store, 'dispatch');
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
+      const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
       parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
+      getRemoteEnvSpy.mockReturnValue(Promise.resolve());
 
       injectorSpy.mockReturnValueOnce(store);
       injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
@@ -71,7 +74,7 @@ describe('InitialUtils', () => {
       const store = spectator.inject(Store);
       store.selectSnapshot.andCallFake(selector => selector({ SessionState: { language: 'tr' } }));
       injectorSpy.mockReturnValueOnce(store);
-      injectorSpy.mockReturnValueOnce({ cultureNameToLocaleFileNameMapping: {} });
+      injectorSpy.mockReturnValueOnce({ cultureNameLocaleFileMap: {} });
       expect(typeof localeInitializer(injector)).toBe('function');
       expect(await localeInitializer(injector)()).toBe('resolved');
     });
