@@ -1,0 +1,28 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "DisplayName:Abp.Ldap.ServerHost": "ServerHost",
+    "Description:Abp.Ldap.ServerHost": "ServerHost",
+
+    "DisplayName:Abp.Ldap.ServerPort": "ServerPort",
+    "Description:Abp.Ldap.ServerPort": "ServerPort",
+
+    "DisplayName:Abp.Ldap.UseSsl": "UseSsl",
+    "Description:Abp.Ldap.UseSsl": "UseSsl",
+
+    "DisplayName:Abp.Ldap.SearchBase": "SearchBase",
+    "Description:Abp.Ldap.SearchBase": "SearchBase",
+
+    "DisplayName:Abp.Ldap.DomainName": "DomainName",
+    "Description:Abp.Ldap.DomainName": "DomainName",
+
+    "DisplayName:Abp.Ldap.DomainDistinguishedName": "DomainDistinguishedName",
+    "Description:Abp.Ldap.DomainDistinguishedName": "DomainDistinguishedName",
+
+    "DisplayName:Abp.Ldap.Credentials.DomainUserName": "Credentials DomainUserName",
+    "Description:Abp.Ldap.Credentials.DomainUserName": "Credentials DomainUserName",
+
+    "DisplayName:Abp.Ldap.Credentials.Password": "Credentials Password",
+    "Description:Abp.Ldap.Credentials.Password": "Credentials Password",
+  }
+}

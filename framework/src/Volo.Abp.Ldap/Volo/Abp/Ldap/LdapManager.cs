@@ -251,8 +251,8 @@ namespace Volo.Abp.Ldap
         protected virtual ILdapConnection GetConnection(string bindUserName = null, string bindUserPassword = null)
         {
             // bindUserName/bindUserPassword only be used when authenticate
-            bindUserName = bindUserName ?? LdapOptions.Credentials.DomainUserName;
-            bindUserPassword = bindUserPassword ?? LdapOptions.Credentials.Password;
+            bindUserName ??= LdapOptions.Credentials.DomainUserName;
+            bindUserPassword ??= LdapOptions.Credentials.Password;
 
             var ldapConnection = new LdapConnection() { SecureSocketLayer = LdapOptions.UseSsl };
             if (LdapOptions.UseSsl)
