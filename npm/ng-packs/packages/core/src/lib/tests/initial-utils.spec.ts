@@ -32,6 +32,7 @@ describe('InitialUtils', () => {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
       const store = spectator.inject(Store);
+      const oAuthService = spectator.inject(OAuthService);
       const dispatchSpy = jest.spyOn(store, 'dispatch');
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
       const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
@@ -40,6 +41,7 @@ describe('InitialUtils', () => {
 
       injectorSpy.mockReturnValueOnce(store);
       injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
+      injectorSpy.mockReturnValueOnce(oAuthService);
       injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => false });
       dispatchSpy.mockReturnValue(of('test'));
 
