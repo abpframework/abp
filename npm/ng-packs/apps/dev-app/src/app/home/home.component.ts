@@ -11,4 +11,8 @@ export class HomeComponent {
   }
 
   constructor(private oAuthService: OAuthService) {}
+
+  login() {
+    this.oAuthService.initCodeFlow();
+  }
 }
