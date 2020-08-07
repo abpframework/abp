@@ -14,6 +14,11 @@ export function getInitialData(injector: Injector) {
   const fn = async () => {
     const store: Store = injector.get(Store);
     const options = injector.get(CORE_OPTIONS) as ABP.Root;
+    const oAuthService = injector.get(OAuthService);
+
+    if (oAuthService.responseType === 'code') {
+      await oAuthService.loadDiscoveryDocumentAndTryLogin();
+    }
 
     await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
