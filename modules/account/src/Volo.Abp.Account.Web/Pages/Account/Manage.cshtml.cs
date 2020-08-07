@@ -14,6 +14,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public bool DisablePasswordChange { get; set; }
 
+        public bool HideOldPasswordInput { get; set; }
+
         protected IProfileAppService ProfileAppService { get; }
 
         public ManageModel(IProfileAppService profileAppService)
@@ -28,6 +30,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
 
             DisablePasswordChange = user.IsExternalLoggedIn;
+            HideOldPasswordInput = !user.HasPassword;
 
             return Page();
         }

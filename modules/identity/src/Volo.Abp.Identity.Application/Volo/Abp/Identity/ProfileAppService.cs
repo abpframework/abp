@@ -24,7 +24,8 @@ namespace Volo.Abp.Identity
             var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
             var profile = ObjectMapper.Map<IdentityUser, ProfileDto>(currentUser);
-            profile.IsExternalLoggedIn = currentUser.Logins.Any();
+            profile.IsExternalLoggedIn = currentUser.IsExternal;
+            profile.HasPassword = currentUser.PasswordHash != null;
 
             return profile;
         }
@@ -61,10 +62,17 @@ namespace Volo.Abp.Identity
         {
             var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
-            var isExternalLoggedIn = currentUser.Logins.Any();
-            if (isExternalLoggedIn)
+            if (currentUser.IsExternal)
             {
                 throw new BusinessException(code: IdentityErrorCodes.ExternalUserPasswordChange);
+            }
+
+            if (currentUser.PasswordHash == null)
+            {
+                (await UserManager.RemovePasswordAsync(currentUser)).CheckErrors();
+                (await UserManager.AddPasswordAsync(currentUser, input.NewPassword)).CheckErrors();
+
+                return;
             }
 
             (await UserManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword)).CheckErrors();
