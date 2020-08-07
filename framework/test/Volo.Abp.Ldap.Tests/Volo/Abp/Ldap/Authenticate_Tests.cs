@@ -6,13 +6,8 @@ using Xunit;
 
 namespace Volo.Abp.Ldap
 {
-    
     public class Authenticate_Tests : AbpIntegratedTest<Authenticate_Tests.TestModule>
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
 
         private readonly ILdapManager _ldapManager;
         private readonly LdapTestData _testData;

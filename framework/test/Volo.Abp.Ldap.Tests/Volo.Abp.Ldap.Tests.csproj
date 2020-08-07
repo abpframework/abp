@@ -9,9 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Ldap\Volo.Abp.Ldap.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
   </ItemGroup>

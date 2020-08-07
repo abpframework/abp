@@ -1,25 +1,17 @@
 ﻿using System;
 using Shouldly;
-using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Ldap
 {
-
-    public class LdapManager_Tests : AbpIntegratedTest<LdapManager_Tests.TestModule>
+    public class LdapManager_Tests : AbpIntegratedTest<AbpLdapTestModule>
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
-
         private readonly ILdapManager _ldapManager;
         private readonly LdapTestData _testData;
 
         public LdapManager_Tests()
         {
-            // ReSharper disable once VirtualMemberCallInConstructor
             _testData = GetRequiredService<LdapTestData>();
             _ldapManager = GetRequiredService<ILdapManager>();
         }
@@ -194,52 +186,6 @@ namespace Volo.Abp.Ldap
             var result = _ldapManager.GetUsers(randomName);
             result.ShouldNotBeNull();
             result.ShouldContain(e=>e.Name == randomName);
-        }
-
-        [DependsOn(typeof(AbpLdapModule))]
-        public class TestModule : AbpModule
-        {
-            public override void ConfigureServices(ServiceConfigurationContext context)
-            {
-                // not use ssl
-                // "LDAP": {
-                //     "ServerHost": "192.168.101.54",
-                //     "ServerPort": 389,
-                //     "UseSSL": false,
-                //     "Credentials": {
-                //         "DomainUserName": "administrator@yourdomain.com.cn",
-                //         "Password": "yH.20190528"
-                //     },
-                //     "SearchBase": "CN=Users,DC=yourdomain,DC=com,DC=cn",
-                //     "DomainName": "yourdomain.com.cn",
-                //     "DomainDistinguishedName": "DC=yourdomain,DC=com,DC=cn"
-                // }
-
-                // use ssl
-                // "LDAP": {
-                //     "ServerHost": "192.168.101.54",
-                //     "ServerPort": 636,
-                //     "UseSSL": true,
-                //     "Credentials": {
-                //         "DomainUserName": "administrator@yourdomain.com.cn",
-                //         "Password": "yH.20190528"
-                //     },
-                //     "SearchBase": "CN=Users,DC=yourdomain,DC=com,DC=cn",
-                //     "DomainName": "yourdomain.com.cn",
-                //     "DomainDistinguishedName": "DC=yourdomain,DC=com,DC=cn"
-                // }
-                Configure<AbpLdapOptions>(settings =>
-                {
-                    settings.ServerHost = "192.168.101.54";
-                    settings.ServerPort = 636;
-                    settings.UseSsl = true;
-                    settings.Credentials.DomainUserName = "administrator@yourdomain.com.cn";
-                    settings.Credentials.Password = "yH.20190528";
-                    settings.SearchBase = "DC=yourdomain,DC=com,DC=cn";
-                    settings.DomainName = "yourdomain.com.cn";
-                    settings.DomainDistinguishedName = "DC=yourdomain,DC=com,DC=cn";
-                });
-            }
         }
     }
 

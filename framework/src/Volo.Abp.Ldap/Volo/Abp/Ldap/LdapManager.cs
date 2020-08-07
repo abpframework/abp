@@ -13,9 +13,8 @@ namespace Volo.Abp.Ldap
 {
     public class LdapManager : ILdapManager, ITransientDependency
     {
-        private readonly string _searchBase;
-        private readonly AbpLdapOptions _ldapOptions;
-        private readonly IHybridServiceScopeFactory _hybridServiceScopeFactory;
+        protected AbpLdapOptions LdapOptions { get; }
+        protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
 
         private readonly string[] _attributes =
         {
@@ -26,40 +25,39 @@ namespace Volo.Abp.Ldap
 
         public LdapManager(IOptions<AbpLdapOptions> ldapSettingsOptions, IHybridServiceScopeFactory hybridServiceScopeFactory)
         {
-            _hybridServiceScopeFactory = hybridServiceScopeFactory;
-            _ldapOptions = ldapSettingsOptions.Value;
-            _searchBase = _ldapOptions.SearchBase;
+            HybridServiceScopeFactory = hybridServiceScopeFactory;
+            LdapOptions = ldapSettingsOptions.Value;
         }
 
         #region Organization
         /// <summary>
         /// query the specified organizations.
-        /// 
+        ///
         /// filter: (&(name=xxx)(objectClass=organizationalUnit)) when name is not null
         /// filter: (&(objectClass=organizationalUnit)) when name is null
-        /// 
+        ///
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IList<LdapOrganization> GetOrganizations(string name = null)
+        public virtual IList<LdapOrganization> GetOrganizations(string name = null)
         {
             var conditions = new Dictionary<string, string>
             {
                 {"name", name},
                 {"objectClass", "organizationalUnit"},
             };
-            return Query<LdapOrganization>(_searchBase, conditions);
+            return Query<LdapOrganization>(LdapOptions.SearchBase, conditions);
         }
 
         /// <summary>
         /// query the specified organization.
-        /// 
+        ///
         /// filter: (&(distinguishedName=xxx)(objectClass=organizationalUnit)) when organizationName is not null
-        /// 
+        ///
         /// </summary>
         /// <param name="distinguishedName"></param>
         /// <returns></returns>
-        public LdapOrganization GetOrganization(string distinguishedName)
+        public virtual LdapOrganization GetOrganization(string distinguishedName)
         {
             distinguishedName = Check.NotNullOrWhiteSpace(distinguishedName, nameof(distinguishedName));
             var conditions = new Dictionary<string, string>
@@ -67,17 +65,17 @@ namespace Volo.Abp.Ldap
                 {"distinguishedName", distinguishedName},
                 {"objectClass", "organizationalUnit"},
             };
-            return QueryOne<LdapOrganization>(_searchBase, conditions);
+            return QueryOne<LdapOrganization>(LdapOptions.SearchBase, conditions);
         }
 
-        public void AddSubOrganization(string organizationName, LdapOrganization parentOrganization)
+        public virtual void AddSubOrganization(string organizationName, LdapOrganization parentOrganization)
         {
             organizationName = Check.NotNullOrWhiteSpace(organizationName, nameof(organizationName));
             var dn = $"OU={organizationName},{parentOrganization.DistinguishedName}";
 
             var attributeSet = new LdapAttributeSet
             {
-                new LdapAttribute("objectCategory", $"CN=Organizational-Unit,CN=Schema,CN=Configuration,{_ldapOptions.DomainDistinguishedName}"),
+                new LdapAttribute("objectCategory", $"CN=Organizational-Unit,CN=Schema,CN=Configuration,{LdapOptions.DomainDistinguishedName}"),
                 new LdapAttribute("objectClass", new[] {"top", "organizationalUnit"}),
                 new LdapAttribute("name", organizationName),
             };
@@ -90,7 +88,7 @@ namespace Volo.Abp.Ldap
             }
         }
 
-        public void AddSubOrganization(string organizationName, string parentDistinguishedName)
+        public virtual void AddSubOrganization(string organizationName, string parentDistinguishedName)
         {
             organizationName = Check.NotNullOrWhiteSpace(organizationName, nameof(organizationName));
             parentDistinguishedName =
@@ -110,7 +108,7 @@ namespace Volo.Abp.Ldap
         #region User
         /// <summary>
         /// query the specified users.
-        /// 
+        ///
         /// filter: (&(name=xxx)(objectCategory=person)(objectClass=user)) when name is not null
         /// filter: (&(objectCategory=person)(objectClass=user)) when name is null
         ///
@@ -119,13 +117,13 @@ namespace Volo.Abp.Ldap
         ///
         /// filter: (&(cn=xxx)(objectCategory=person)(objectClass=user)) when commonName is not null
         /// filter: (&(objectCategory=person)(objectClass=user)) when commonName is null
-        /// 
+        ///
         /// </summary>
         /// <param name="name"></param>
         /// <param name="displayName"></param>
         /// <param name="commonName"></param>
         /// <returns></returns>
-        public IList<LdapUser> GetUsers(string name = null, string displayName = null, string commonName = null)
+        public virtual IList<LdapUser> GetUsers(string name = null, string displayName = null, string commonName = null)
         {
             var conditions = new Dictionary<string, string>
             {
@@ -135,18 +133,18 @@ namespace Volo.Abp.Ldap
                 {"displayName", displayName},
                 {"cn", commonName},
             };
-            return Query<LdapUser>(_searchBase, conditions);
+            return Query<LdapUser>(LdapOptions.SearchBase, conditions);
         }
 
         /// <summary>
         /// query the specified User.
-        /// 
+        ///
         /// filter: (&(distinguishedName=xxx)(objectCategory=person)(objectClass=user)) when distinguishedName is not null
-        /// 
+        ///
         /// </summary>
         /// <param name="distinguishedName"></param>
         /// <returns></returns>
-        public LdapUser GetUser(string distinguishedName)
+        public virtual LdapUser GetUser(string distinguishedName)
         {
             distinguishedName = Check.NotNullOrWhiteSpace(distinguishedName, nameof(distinguishedName));
             var conditions = new Dictionary<string, string>
@@ -155,19 +153,19 @@ namespace Volo.Abp.Ldap
                 {"objectClass", "user"},
                 {"distinguishedName", distinguishedName},
             };
-            return QueryOne<LdapUser>(_searchBase, conditions);
+            return QueryOne<LdapUser>(LdapOptions.SearchBase, conditions);
         }
 
-        public void AddUserToOrganization(string userName, string password, LdapOrganization parentOrganization)
+        public virtual void AddUserToOrganization(string userName, string password, LdapOrganization parentOrganization)
         {
             var dn = $"CN={userName},{parentOrganization.DistinguishedName}";
-            var mail = $"{userName}@{_ldapOptions.DomainName}";
-            sbyte[] encodedBytes = SupportClass.ToSByteArray(Encoding.Unicode.GetBytes($"\"{password}\""));
+            var mail = $"{userName}@{LdapOptions.DomainName}";
+            var encodedBytes = SupportClass.ToSByteArray(Encoding.Unicode.GetBytes($"\"{password}\""));
 
             var attributeSet = new LdapAttributeSet
             {
                 new LdapAttribute("instanceType", "4"),
-                new LdapAttribute("objectCategory", $"CN=Person,CN=Schema,CN=Configuration,{_ldapOptions.DomainDistinguishedName}"),
+                new LdapAttribute("objectCategory", $"CN=Person,CN=Schema,CN=Configuration,{LdapOptions.DomainDistinguishedName}"),
                 new LdapAttribute("objectClass", new[] {"top", "person", "organizationalPerson", "user"}),
                 new LdapAttribute("name", userName),
                 new LdapAttribute("cn", userName),
@@ -187,16 +185,16 @@ namespace Volo.Abp.Ldap
             }
         }
 
-        public void AddUserToOrganization(string userName, string password, string parentDistinguishedName)
+        public virtual void AddUserToOrganization(string userName, string password, string parentDistinguishedName)
         {
             var dn = $"CN={userName},{parentDistinguishedName}";
-            var mail = $"{userName}@{_ldapOptions.DomainName}";
+            var mail = $"{userName}@{LdapOptions.DomainName}";
             sbyte[] encodedBytes = SupportClass.ToSByteArray(Encoding.Unicode.GetBytes($"\"{password}\""));
 
             var attributeSet = new LdapAttributeSet
             {
                 new LdapAttribute("instanceType", "4"),
-                new LdapAttribute("objectCategory", $"CN=Person,CN=Schema,CN=Configuration,{_ldapOptions.DomainDistinguishedName}"),
+                new LdapAttribute("objectCategory", $"CN=Person,CN=Schema,CN=Configuration,{LdapOptions.DomainDistinguishedName}"),
                 new LdapAttribute("objectClass", new[] {"top", "person", "organizationalPerson", "user"}),
                 new LdapAttribute("name", userName),
                 new LdapAttribute("cn", userName),
@@ -221,12 +219,12 @@ namespace Volo.Abp.Ldap
         #region Authenticate
 
         /// <summary>
-        /// Authenticate 
+        /// Authenticate
         /// </summary>
         /// <param name="userDomainName">E.g administrator@yourdomain.com.cn </param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public bool Authenticate(string userDomainName, string password)
+        public virtual bool Authenticate(string userDomainName, string password)
         {
             try
             {
@@ -237,7 +235,7 @@ namespace Volo.Abp.Ldap
             }
             catch (Exception ex)
             {
-                using (var scope = _hybridServiceScopeFactory.CreateScope())
+                using (var scope = HybridServiceScopeFactory.CreateScope())
                 {
                     scope.ServiceProvider
                         .GetRequiredService<IExceptionNotifier>()
@@ -250,20 +248,20 @@ namespace Volo.Abp.Ldap
 
         #endregion
 
-        private ILdapConnection GetConnection(string bindUserName = null, string bindUserPassword = null)
+        protected virtual ILdapConnection GetConnection(string bindUserName = null, string bindUserPassword = null)
         {
             // bindUserName/bindUserPassword only be used when authenticate
-            bindUserName = bindUserName ?? _ldapOptions.Credentials.DomainUserName;
-            bindUserPassword = bindUserPassword ?? _ldapOptions.Credentials.Password;
+            bindUserName = bindUserName ?? LdapOptions.Credentials.DomainUserName;
+            bindUserPassword = bindUserPassword ?? LdapOptions.Credentials.Password;
 
-            var ldapConnection = new LdapConnection() { SecureSocketLayer = _ldapOptions.UseSsl };
-            if (_ldapOptions.UseSsl)
+            var ldapConnection = new LdapConnection() { SecureSocketLayer = LdapOptions.UseSsl };
+            if (LdapOptions.UseSsl)
             {
                 ldapConnection.UserDefinedServerCertValidationDelegate += (sender, certificate, chain, sslPolicyErrors) => true;
             }
-            ldapConnection.Connect(_ldapOptions.ServerHost, _ldapOptions.ServerPort);
+            ldapConnection.Connect(LdapOptions.ServerHost, LdapOptions.ServerPort);
 
-            if (_ldapOptions.UseSsl)
+            if (LdapOptions.UseSsl)
             {
                 ldapConnection.Bind(LdapConnection.Ldap_V3, bindUserName, bindUserPassword);
             }
@@ -274,7 +272,7 @@ namespace Volo.Abp.Ldap
             return ldapConnection;
         }
 
-        private IList<T> Query<T>(string searchBase, Dictionary<string, string> conditions) where T : class, ILdapEntry
+        protected virtual IList<T> Query<T>(string searchBase, Dictionary<string, string> conditions) where T : class, ILdapEntry
         {
             var filter = LdapHelps.BuildFilter(conditions);
 
@@ -307,7 +305,7 @@ namespace Volo.Abp.Ldap
             return result;
         }
 
-        private T QueryOne<T>(string searchBase, Dictionary<string, string> conditions) where T : class, ILdapEntry
+        protected virtual T QueryOne<T>(string searchBase, Dictionary<string, string> conditions) where T : class, ILdapEntry
         {
             var filter = LdapHelps.BuildFilter(conditions);
 
