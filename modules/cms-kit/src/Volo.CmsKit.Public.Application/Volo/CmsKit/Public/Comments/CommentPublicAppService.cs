@@ -8,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Users;
@@ -57,7 +58,8 @@ namespace Volo.CmsKit.Public.Comments
                 input.EntityId,
                 input.Text,
                 input.RepliedCommentId,
-                user.Id
+                user.Id,
+                CurrentTenant.GetId()
             ));
 
             return ObjectMapper.Map<Comment, CommentDto>(comment);
