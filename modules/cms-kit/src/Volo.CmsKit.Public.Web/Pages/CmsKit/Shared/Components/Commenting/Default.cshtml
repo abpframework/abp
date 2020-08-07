@@ -3,9 +3,10 @@
 @using Volo.Abp.Users
 @using Volo.CmsKit.Comments
 @using Volo.CmsKit.Localization
+@using Volo.CmsKit.Public.Comments
 @inject ICurrentUser CurrentUser
 @inject IHtmlLocalizer<CmsKitResource> L
-@model Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
 
 @{
     Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>

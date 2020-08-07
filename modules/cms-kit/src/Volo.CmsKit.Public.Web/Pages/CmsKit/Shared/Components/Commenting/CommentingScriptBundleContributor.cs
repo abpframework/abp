@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
-using Volo.Abp.Modularity;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 {
     public class CommentingScriptBundleContributor : BundleContributor
     {
