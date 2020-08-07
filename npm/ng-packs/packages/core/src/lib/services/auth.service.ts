@@ -3,13 +3,13 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { from, Observable } from 'rxjs';
-import { switchMap, tap, take } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { switchMap, take, tap } from 'rxjs/operators';
 import snq from 'snq';
 import { GetAppConfiguration } from '../actions/config.actions';
+import { ConfigState } from '../states/config.state';
 import { SessionState } from '../states/session.state';
 import { RestService } from './rest.service';
-import { ConfigState } from '../states/config.state';
 
 @Injectable({
   providedIn: 'root',
@@ -48,6 +48,11 @@ export class AuthService {
   logout(): Observable<void> {
     const issuer = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
 
+    if (this.oAuthService.responseType === 'code') {
+      this.oAuthService.logOut();
+      return of(null);
+    }
+
     return this.rest
       .request(
         {
@@ -59,7 +64,7 @@ export class AuthService {
       )
       .pipe(
         switchMap(() => {
-          this.oAuthService.logOut(true);
+          this.oAuthService.logOut();
           return this.store.dispatch(new GetAppConfiguration());
         }),
       );
