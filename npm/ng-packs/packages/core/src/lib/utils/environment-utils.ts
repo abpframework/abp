@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { SetEnvironment } from '../actions/config.actions';
 import { Config } from '../models/config';
+import { RestOccurError } from '../actions/rest.actions';
 
 export function getRemoteEnv(injector: Injector, environment: Partial<Config.Environment>) {
   const { remoteEnv } = environment;
@@ -17,7 +17,7 @@ export function getRemoteEnv(injector: Injector, environment: Partial<Config.Env
   return http
     .request<Config.Environment>(method, url, { headers })
     .pipe(
-      catchError(() => of({} as Config.Environment)), // TODO: Handle error
+      catchError(err => store.dispatch(new RestOccurError(err))), // TODO: Condiser get handle function from a provider
       switchMap(env => store.dispatch(new SetEnvironment({ ...environment, ...env }))),
     )
     .toPromise();
