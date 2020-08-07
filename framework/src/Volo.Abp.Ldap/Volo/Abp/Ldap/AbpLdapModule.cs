@@ -22,10 +22,10 @@ namespace Volo.Abp.Ldap
             context.Services.Replace(ServiceDescriptor.Scoped<IOptions<AbpLdapOptions>, OptionsManager<AbpLdapOptions>>());
 
             var configuration = context.Services.GetConfiguration();
-            var ldapConfiguration = configuration["LDAP"];
+            var ldapConfiguration = configuration["Ldap"];
             if (!ldapConfiguration.IsNullOrEmpty())
             {
-                Configure<AbpLdapOptions>(configuration.GetSection("LDAP"));
+                Configure<AbpLdapOptions>(configuration.GetSection("Ldap"));
             }
 
             Configure<AbpVirtualFileSystemOptions>(options =>

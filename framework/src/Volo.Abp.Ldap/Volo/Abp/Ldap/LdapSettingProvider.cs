@@ -17,45 +17,22 @@ namespace Volo.Abp.Ldap
 
                 new SettingDefinition(
                     LdapSettingNames.ServerPort,
-                    "",
+                    "389",
                     L("DisplayName:Abp.Ldap.ServerPort"),
                     L("Description:Abp.Ldap.ServerPort")),
 
                 new SettingDefinition(
-                    LdapSettingNames.UseSsl,
+                    LdapSettingNames.UserName,
                     "",
-                    L("DisplayName:Abp.Ldap.UseSsl"),
-                    L("Description:Abp.Ldap.UseSsl")),
+                    L("DisplayName:Abp.Ldap.UserName"),
+                    L("Description:Abp.Ldap.UserName")),
 
                 new SettingDefinition(
-                    LdapSettingNames.SearchBase,
+                    LdapSettingNames.Password,
                     "",
-                    L("DisplayName:Abp.Ldap.SearchBase"),
-                    L("Description:Abp.Ldap.SearchBase")),
-
-                new SettingDefinition(
-                    LdapSettingNames.DomainName,
-                    "",
-                    L("DisplayName:Abp.Ldap.DomainName"),
-                    L("Description:Abp.Ldap.DomainName")),
-
-                new SettingDefinition(
-                    LdapSettingNames.DomainDistinguishedName,
-                    "",
-                    L("DisplayName:Abp.Ldap.DomainDistinguishedName"),
-                    L("Description:Abp.Ldap.DomainDistinguishedName")),
-
-                new SettingDefinition(
-                    LdapSettingNames.Credentials.DomainUserName,
-                    "",
-                    L("DisplayName:Abp.Ldap.Credentials.DomainUserName"),
-                    L("Description:Abp.Ldap.Credentials.DomainUserName")),
-
-                new SettingDefinition(
-                    LdapSettingNames.Credentials.Password,
-                    "",
-                    L("DisplayName:Abp.Ldap.Credentials.Password"),
-                    L("Description:Abp.Ldap.Credentials.Password"))
+                    L("DisplayName:Abp.Ldap.Password"),
+                    L("Description:Abp.Ldap.Password"),
+                    isEncrypted: true)
             );
         }
 

@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="2.3.8" />
+    <PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.2.0" />
   </ItemGroup>
   
   <ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Options;
@@ -31,14 +32,16 @@ namespace Volo.Abp.Ldap
 
         protected virtual async Task OverrideOptionsAsync(AbpLdapOptions options)
         {
-            options.ServerHost = await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerHost) ?? options.ServerHost;
+            options.ServerHost = await GetStringValueOrDefault(LdapSettingNames.ServerHost) ?? options.ServerHost;
             options.ServerPort = await SettingProvider.GetAsync(LdapSettingNames.ServerPort, options.ServerPort);
-            options.UseSsl = await SettingProvider.GetAsync(LdapSettingNames.UseSsl, options.UseSsl);
-            options.SearchBase = await SettingProvider.GetOrNullAsync(LdapSettingNames.SearchBase) ?? options.SearchBase;
-            options.DomainName = await SettingProvider.GetOrNullAsync(LdapSettingNames.DomainName) ?? options.DomainName;
-            options.DomainDistinguishedName = await SettingProvider.GetOrNullAsync(LdapSettingNames.DomainDistinguishedName) ?? options.DomainDistinguishedName;
-            options.Credentials.DomainUserName = await SettingProvider.GetOrNullAsync(LdapSettingNames.Credentials.DomainUserName) ?? options.Credentials.DomainUserName;
-            options.Credentials.Password = await SettingProvider.GetOrNullAsync(LdapSettingNames.Credentials.Password) ?? options.Credentials.Password;
+            options.UserName = await GetStringValueOrDefault(LdapSettingNames.UserName) ?? options.UserName;
+            options.Password = await GetStringValueOrDefault(LdapSettingNames.Password) ?? options.Password;
+        }
+
+        protected virtual async Task<string> GetStringValueOrDefault(string name, string defaultValue = default)
+        {
+            var value = await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerHost);
+            return value.IsNullOrWhiteSpace() ? defaultValue : value;
         }
     }
 }
