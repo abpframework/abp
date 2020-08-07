@@ -43,6 +43,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(u => u.LockoutEnabled).HasDefaultValue(false)
                     .HasColumnName(nameof(IdentityUser.LockoutEnabled));
 
+                b.Property(u => u.IsExternal).IsRequired().HasDefaultValue(false)
+                    .HasColumnName(nameof(IdentityUser.IsExternal));
+
                 b.Property(u => u.AccessFailedCount)
                     .If(!builder.IsUsingOracle(), p => p.HasDefaultValue(0))
                     .HasColumnName(nameof(IdentityUser.AccessFailedCount));
