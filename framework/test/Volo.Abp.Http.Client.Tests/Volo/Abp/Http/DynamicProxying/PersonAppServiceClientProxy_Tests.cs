@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,10 +41,27 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetList()
         {
-            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto())
-                ;
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.TotalCount.ShouldBeGreaterThan(0);
             people.Items.Count.ShouldBe((int) people.TotalCount);
+        }
+
+        [Fact]
+        public async Task GetParams()
+        {
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+
+            var @params = await _peopleAppService.GetParams(new List<Guid>
+            {
+                id1,
+                id2
+            }, new[] {"name1", "name2"});
+
+            @params.ShouldContain(id1.ToString("N"));
+            @params.ShouldContain(id2.ToString("N"));
+            @params.ShouldContain("name1");
+            @params.ShouldContain("name2");
         }
 
         [Fact]
