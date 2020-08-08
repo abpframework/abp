@@ -76,25 +76,33 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
-            await CheckSelfRegistrationAsync();
-
-            if (IsExternalLogin)
+            try
             {
-                var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
-                if (externalLoginInfo == null)
+                await CheckSelfRegistrationAsync();
+
+                if (IsExternalLogin)
                 {
-                    Logger.LogWarning("External login info is not available");
-                    return RedirectToPage("./Login");
+                    var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
+                    if (externalLoginInfo == null)
+                    {
+                        Logger.LogWarning("External login info is not available");
+                        return RedirectToPage("./Login");
+                    }
+
+                    await RegisterExternalUserAsync(externalLoginInfo, Input.EmailAddress);
+                }
+                else
+                {
+                    await RegisterLocalUserAsync();
                 }
 
-                await RegisterExternalUserAsync(externalLoginInfo, Input.EmailAddress);
+                return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
             }
-            else
+            catch (BusinessException e)
             {
-                await RegisterLocalUserAsync();
+                Alerts.Danger(e.Message);
+                return Page();
             }
-
-            return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
         protected virtual async Task RegisterLocalUserAsync()
