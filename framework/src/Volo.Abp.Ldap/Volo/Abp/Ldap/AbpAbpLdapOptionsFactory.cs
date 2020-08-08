@@ -32,15 +32,15 @@ namespace Volo.Abp.Ldap
 
         protected virtual async Task OverrideOptionsAsync(AbpLdapOptions options)
         {
-            options.ServerHost = await GetStringValueOrDefault(LdapSettingNames.ServerHost) ?? options.ServerHost;
+            options.ServerHost = await GetSettingOrDefaultValue(LdapSettingNames.ServerHost, options.ServerHost);
             options.ServerPort = await SettingProvider.GetAsync(LdapSettingNames.ServerPort, options.ServerPort);
-            options.UserName = await GetStringValueOrDefault(LdapSettingNames.UserName) ?? options.UserName;
-            options.Password = await GetStringValueOrDefault(LdapSettingNames.Password) ?? options.Password;
+            options.UserName = await GetSettingOrDefaultValue(LdapSettingNames.UserName, options.UserName);
+            options.Password = await GetSettingOrDefaultValue(LdapSettingNames.Password, options.Password);
         }
 
-        protected virtual async Task<string> GetStringValueOrDefault(string name, string defaultValue = default)
+        protected virtual async Task<string> GetSettingOrDefaultValue(string name, string defaultValue)
         {
-            var value = await SettingProvider.GetOrNullAsync(LdapSettingNames.ServerHost);
+            var value = await SettingProvider.GetOrNullAsync(name);
             return value.IsNullOrWhiteSpace() ? defaultValue : value;
         }
     }

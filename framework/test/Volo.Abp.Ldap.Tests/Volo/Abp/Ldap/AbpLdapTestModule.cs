@@ -12,9 +12,12 @@ namespace Volo.Abp.Ldap
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpLdapOptions>(settings =>
+            Configure<AbpLdapOptions>(options =>
             {
-
+                options.ServerHost = "192.168.0.3";
+                options.ServerPort = 389;
+                options.UserName = "cn=admin,dc=abp,dc=io";
+                options.Password = "123qwe";
             });
         }
     }

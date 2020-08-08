@@ -29,7 +29,7 @@ namespace Volo.Abp.Ldap
             try
             {
                 var conn = CreateLdapConnection();
-                AuthenticateLdapConnection(conn, username,password);
+                AuthenticateLdapConnection(conn, username, password);
                 return true;
             }
             catch (Exception ex)
