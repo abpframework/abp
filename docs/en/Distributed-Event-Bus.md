@@ -178,7 +178,10 @@ That's all.
 
 You can inject any service and perform any required logic here. A single event handler class can **subscribe to multiple events** but implementing the `IDistributedEventHandler<TEvent>` interface for each event type.
 
+In your handler if you call a methods on a Repository you may find that you get an `ObjectDisposedException` being thrown.  This will be because the unit of work being used by the Repository has been disposed in another context e.g. an ASP.net controller action.  You will need to create a specific unit of work for your `HandleEventAsync` method.  You can either use the `IUnitOfWorkManager.Begin` method or use the `UnitOfWorkAttribute` on the method. See the [Unit of work document](Unit-of-work.md) for more details.
+
 > The handler class must be registered to the dependency injection (DI). The sample above uses the `ITransientDependency` to accomplish it. See the [DI document](Dependency-Injection.md) for more options.
+
 
 ## Pre-Defined Events
 
