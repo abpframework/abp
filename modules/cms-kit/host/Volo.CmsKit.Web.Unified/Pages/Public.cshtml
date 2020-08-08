@@ -1,0 +1,36 @@
+﻿@page
+@using Localization.Resources.AbpUi
+@using Microsoft.Extensions.Localization
+@using Volo.CmsKit.Pages
+@using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
+@model PublicModel
+@inject IStringLocalizer<AbpUiResource> Localizer
+<h1>CMS Kit DEMO - Public</h1>
+
+<abp-card class="mb-3">
+    <abp-card-body>
+        <abp-blockquote>
+            <p>
+                Any fool can write code that a computer can understand. Good programmers write code that humans can understand.
+            </p>
+            <footer>
+                Martin Fowler
+            </footer>
+        </abp-blockquote>
+    </abp-card-body>
+        @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "publicQuote", entityId = "1", loginUrl="Account/Login?ReturnUrl=%2Fpublic" })
+</abp-card>
+
+<abp-card class="mb-3">
+    <abp-card-body>
+        <abp-blockquote>
+            <p>
+                Writing code is very simple, but writing simple code is the hardest thing there is!
+            </p>
+            <footer>
+                Halil ibrahim Kalkan <small>(inspired from Johan Cruyff)</small>
+            </footer>
+        </abp-blockquote>
+    </abp-card-body>
+        @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "publicQuote", entityId = "2", loginUrl="Account/Login?ReturnUrl=%2Fpublic" })
+</abp-card>

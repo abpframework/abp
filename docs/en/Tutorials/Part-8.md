@@ -339,7 +339,7 @@ public async Task DeleteAsync(Guid id)
 
 You can't compile the code since it is expecting some constants declared in the `BookStorePermissions` class.
 
-Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
+Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
 
 ````csharp
 namespace Acme.BookStore.Permissions
@@ -439,54 +439,65 @@ namespace Acme.BookStore
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            if (await _bookRepository.GetCountAsync() > 0)
+            if (await _bookRepository.GetCountAsync() <= 0)
             {
-                return;
+                await _bookRepository.InsertAsync(
+                    new Book
+                    {
+                        Name = "1984",
+                        Type = BookType.Dystopia,
+                        PublishDate = new DateTime(1949, 6, 8),
+                        Price = 19.84f
+                    },
+                    autoSave: true
+                );
+
+                await _bookRepository.InsertAsync(
+                    new Book
+                    {
+                        Name = "The Hitchhiker's Guide to the Galaxy",
+                        Type = BookType.ScienceFiction,
+                        PublishDate = new DateTime(1995, 9, 27),
+                        Price = 42.0f
+                    },
+                    autoSave: true
+                );
             }
 
             // ADDED SEED DATA FOR AUTHORS
-            
-            await _authorRepository.InsertAsync(
-                await _authorManager.CreateAsync(
-                    "George Orwell",
-                    new DateTime(1903, 06, 25),
-                    "Orwell produced literary criticism and poetry, fiction and polemical journalism; and is best known for the allegorical novella Animal Farm (1945) and the dystopian novel Nineteen Eighty-Four (1949)."
-                )
-            );
 
-            await _authorRepository.InsertAsync(
-                await _authorManager.CreateAsync(
-                    "Douglas Adams",
-                    new DateTime(1952, 03, 11),
-                    "Douglas Adams was an English author, screenwriter, essayist, humorist, satirist and dramatist. Adams was an advocate for environmentalism and conservation, a lover of fast cars, technological innovation and the Apple Macintosh, and a self-proclaimed 'radical atheist'."
-                )
-            );
+            if (await _authorRepository.GetCountAsync() <= 0)
+            {
+                await _authorRepository.InsertAsync(
+                    await _authorManager.CreateAsync(
+                        "George Orwell",
+                        new DateTime(1903, 06, 25),
+                        "Orwell produced literary criticism and poetry, fiction and polemical journalism; and is best known for the allegorical novella Animal Farm (1945) and the dystopian novel Nineteen Eighty-Four (1949)."
+                    )
+                );
 
-            await _bookRepository.InsertAsync(
-                new Book
-                {
-                    Name = "1984",
-                    Type = BookType.Dystopia,
-                    PublishDate = new DateTime(1949, 6, 8),
-                    Price = 19.84f
-                },
-                autoSave: true
-            );
-
-            await _bookRepository.InsertAsync(
-                new Book
-                {
-                    Name = "The Hitchhiker's Guide to the Galaxy",
-                    Type = BookType.ScienceFiction,
-                    PublishDate = new DateTime(1995, 9, 27),
-                    Price = 42.0f
-                },
-                autoSave: true
-            );
+                await _authorRepository.InsertAsync(
+                    await _authorManager.CreateAsync(
+                        "Douglas Adams",
+                        new DateTime(1952, 03, 11),
+                        "Douglas Adams was an English author, screenwriter, essayist, humorist, satirist and dramatist. Adams was an advocate for environmentalism and conservation, a lover of fast cars, technological innovation and the Apple Macintosh, and a self-proclaimed 'radical atheist'."
+                    )
+                );
+            }
         }
     }
 }
 ````
+
+{{if DB=="EF"}}
+
+You can now run the `.DbMigrator` console application to **migrate** the **database schema** and **seed** the initial data.
+
+{{else if DB=="Mongo"}}
+
+You can now run the `.DbMigrator` console application to **seed** the initial data.
+
+{{end}}
 
 ## Testing the Author Application Service
 

@@ -73,7 +73,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 FileName = document.FileName,
                 Content = document.Content,
                 LanguageCode = ConvertLanguageCode(document.LanguageCode),
-                Version = document.Version
+                Version = ConvertVersion(document.Version)
             };
 
             if (!existsResponse.Exists)
@@ -173,7 +173,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                                 new TermQuery
                                 {
                                     Field = "version",
-                                    Value = version
+                                    Value = ConvertVersion(version)
                                 },
                                 new TermQuery
                                 {
@@ -236,6 +236,11 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
         protected string ConvertLanguageCode(string languageCode)
         {
             return languageCode.Replace("-", "").ToLower();
+        }
+
+        protected string ConvertVersion(string version)
+        {
+            return version.Replace("-", "").ToLower();
         }
     }
 }

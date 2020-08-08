@@ -203,7 +203,7 @@ Task<int> VoteAsync(Guid id, VoteType type);
 
 #### 额外的属性
 
-* **推荐** 使用 `MapExtraPropertiesTo` 扩展方法 ([参阅](Object-Extensions.md)) 或配置对象映射 (`MapExtraProperties`) 以允许应用开发人员能够扩展对象和服务.
+* **推荐** 使用 `MapExtraPropertiesTo` 扩展方法 ([参阅](../Object-Extensions.md)) 或配置对象映射 (`MapExtraProperties`) 以允许应用开发人员能够扩展对象和服务.
 
 #### 操作/删除 实体
 

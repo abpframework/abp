@@ -27,7 +27,7 @@ const publish = async () => {
   try {
     await fse.remove('../dist');
 
-    await execa('npm', ['install'], { stdout: 'inherit', cwd: '../' });
+    await execa('yarn', ['install', '--ignore-scripts'], { stdout: 'inherit', cwd: '../' });
 
     await fse.rename('../lerna.version.json', '../lerna.json');
 

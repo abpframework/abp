@@ -62,7 +62,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             {
                 {nameof(GithubProject.GitHubRootUrl), GithubProject.GitHubRootUrl},
                 {nameof(GithubProject.GitHubUserAgent), GithubProject.GitHubUserAgent},
-                {nameof(GithubProject.GitHubAccessToken), GithubProject.GitHubAccessToken}
+                {nameof(GithubProject.GitHubAccessToken), GithubProject.GitHubAccessToken},
+                {nameof(GithubProject.GithubVersionProviderSource), GithubProject.GithubVersionProviderSource},
+                {nameof(GithubProject.VersionBranchPrefix), GithubProject.VersionBranchPrefix}
             };
 
             return dto;
@@ -118,6 +120,13 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             [DisplayOrder(10002)]
             [StringLength(64)]
             public string GitHubUserAgent { get; set; }
+
+            [DisplayOrder(10003)]
+            public GithubVersionProviderSource GithubVersionProviderSource { get; set; } = GithubVersionProviderSource.Releases;
+
+            [DisplayOrder(10004)]
+            [StringLength(64)]
+            public string VersionBranchPrefix { get; set; }
         }
     }
 }

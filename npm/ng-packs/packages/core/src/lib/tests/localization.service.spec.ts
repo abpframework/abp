@@ -1,3 +1,4 @@
+import { CORE_OPTIONS } from '../tokens/options.token';
 import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Actions, Store } from '@ngxs/store';
@@ -13,7 +14,10 @@ describe('LocalizationService', () => {
     service: LocalizationService,
     entryComponents: [],
     mocks: [Store, Router],
-    providers: [{ provide: Actions, useValue: new Subject() }],
+    providers: [
+      { provide: Actions, useValue: new Subject() },
+      { provide: CORE_OPTIONS, useValue: { cultureNameLocaleFileMap: {} } },
+    ],
   });
 
   beforeEach(() => {

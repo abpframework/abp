@@ -617,6 +617,12 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsExternal")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsExternal")
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
                         .HasColumnType("datetime2");

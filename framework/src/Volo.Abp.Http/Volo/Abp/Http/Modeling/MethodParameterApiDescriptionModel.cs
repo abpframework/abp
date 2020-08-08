@@ -31,7 +31,7 @@ namespace Volo.Abp.Http.Modeling
                 Name = parameterInfo.Name,
                 TypeAsString = parameterInfo.ParameterType.GetFullNameWithAssemblyName(),
                 Type = TypeHelper.GetFullNameHandlingNullableAndGenerics(parameterInfo.ParameterType),
-                TypeSimple = TypeHelper.GetSimplifiedName(parameterInfo.ParameterType),
+                TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(parameterInfo.ParameterType),
                 IsOptional = parameterInfo.IsOptional,
                 DefaultValue = parameterInfo.HasDefaultValue ? parameterInfo.DefaultValue : null
             };

@@ -611,7 +611,7 @@ Configure<DocsElasticSearchOptions>(options =>
 应用程序启动后如果`Index`不存在则会自动创建`Index`.
 
 `DefaultElasticClientProvider`负责创建`IElasticClient`, 默认情况下它会从`IConfiguration`中读取Elastic Search的`Url`.
-如果你的IElasticClient需要其它配置请使用重写IElasticClientProvider服务并在依赖注入系统中替换它.
+如果你的 `IElasticClient` 需要其它配置请使用重写 `IElasticClientProvider` 服务并在[依赖注入](../Dependency-Injection.md)系统中替换它.
 ```
 {
   "ElasticSearch": {

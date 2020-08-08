@@ -1,7 +1,10 @@
+import { Config } from '@abp/ng.core';
+
 export const environment = {
   production: false,
   hmr: false,
   application: {
+    baseUrl: 'http://localhost:4200/',
     name: 'MyProjectName',
     logoUrl: '',
   },
@@ -10,7 +13,6 @@ export const environment = {
     clientId: 'MyProjectName_App',
     dummyClientSecret: '1q2w3e*',
     scope: 'MyProjectName',
-    showDebugInformation: true,
     oidc: false,
     requireHttps: true,
   },
@@ -19,4 +21,4 @@ export const environment = {
       url: 'https://localhost:44305',
     },
   },
-};
+} as Config.Environment;

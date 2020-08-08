@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Domain.Shared\Volo.CmsKit.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\users\src\Volo.Abp.Users.Domain\Volo.Abp.Users.Domain.csproj" />
   </ItemGroup>
 
 </Project>

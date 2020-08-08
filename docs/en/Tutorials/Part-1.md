@@ -92,7 +92,7 @@ namespace Acme.BookStore.Books
 
 ### BookType Enum
 
-The `Book` entity uses the `BookType` enum. Create the `BookType` in the `Acme.BookStore.Domain.Shared` project:
+The `Book` entity uses the `BookType` enum. Create a `Books` folder (namespace) in the `Acme.BookStore.Domain.Shared` project and add a `BookType` inside it:
 
 ````csharp
 namespace Acme.BookStore.Books
@@ -233,32 +233,30 @@ namespace Acme.BookStore
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            if (await _bookRepository.GetCountAsync() > 0)
+            if (await _bookRepository.GetCountAsync() <= 0)
             {
-                return;
+                await _bookRepository.InsertAsync(
+                    new Book
+                    {
+                        Name = "1984",
+                        Type = BookType.Dystopia,
+                        PublishDate = new DateTime(1949, 6, 8),
+                        Price = 19.84f
+                    },
+                    autoSave: true
+                );
+
+                await _bookRepository.InsertAsync(
+                    new Book
+                    {
+                        Name = "The Hitchhiker's Guide to the Galaxy",
+                        Type = BookType.ScienceFiction,
+                        PublishDate = new DateTime(1995, 9, 27),
+                        Price = 42.0f
+                    },
+                    autoSave: true
+                );
             }
-
-            await _bookRepository.InsertAsync(
-                new Book
-                {
-                    Name = "1984",
-                    Type = BookType.Dystopia,
-                    PublishDate = new DateTime(1949, 6, 8),
-                    Price = 19.84f
-                },
-                autoSave: true
-            );
-
-            await _bookRepository.InsertAsync(
-                new Book
-                {
-                    Name = "The Hitchhiker's Guide to the Galaxy",
-                    Type = BookType.ScienceFiction,
-                    PublishDate = new DateTime(1995, 9, 27),
-                    Price = 42.0f
-                },
-                autoSave: true
-            );
         }
     }
 }
@@ -295,7 +293,7 @@ In this section, you will create an application service to get, create, update a
 
 ### BookDto
 
-`CrudAppService` base class requires to define the fundamental DTOs for the entity. Create a DTO class named `BookDto` into the `Acme.BookStore.Application.Contracts` project:
+`CrudAppService` base class requires to define the fundamental DTOs for the entity. Create a `Books` folder (namespace) in the `Acme.BookStore.Application.Contracts` project and add a `BookDto` class inside it:
 
 ````csharp
 using System;
@@ -342,7 +340,7 @@ namespace Acme.BookStore
 
 ### CreateUpdateBookDto
 
-Create another DTO class named `CreateUpdateBookDto` into the `Acme.BookStore.Application.Contracts` project:
+Create a `CreateUpdateBookDto` class in the `Books` folder (namespace) of the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
@@ -393,7 +391,7 @@ namespace Acme.BookStore
 
 ### IBookAppService
 
-Next step is to define an interface for the application service. Create an interface named `IBookAppService` in the `Acme.BookStore.Application.Contracts` project:
+Next step is to define an interface for the application service. Create an `IBookAppService` interface in the `Books` folder (namespace) of the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
@@ -420,7 +418,7 @@ namespace Acme.BookStore.Books
 
 ### BookAppService
 
-Implement the `IBookAppService`, as named `BookAppService`, in the `Acme.BookStore.Application` project:
+It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the Acme.BookStore.Application project:
 
 ````csharp
 using System;

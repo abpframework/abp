@@ -233,8 +233,6 @@ export class ConfigState {
 
   @Action(SetEnvironment)
   setEnvironment({ patchState }: StateContext<Config.State>, { environment }: SetEnvironment) {
-    return patchState({
-      environment,
-    });
+    return patchState({ environment });
   }
 }

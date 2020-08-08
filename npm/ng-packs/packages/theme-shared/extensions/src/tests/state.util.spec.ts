@@ -13,6 +13,7 @@ import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 describe('State Utils', () => {
   let spectator: SpectatorService<Store>;
@@ -21,7 +22,7 @@ describe('State Utils', () => {
   const createService = createServiceFactory({
     service: Store,
     imports: [NgxsModule.forRoot([ConfigState])],
-    mocks: [HttpClient],
+    mocks: [HttpClient, OAuthService],
   });
 
   beforeEach(() => {
