@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -132,8 +132,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                         var newBadge = "<span class='badge badge-primary ml-2' title=\"" + _localizer["NewExplanation"] + "\">" + _localizer["New"] + "</span>";
                         badge += newBadge;
                     }
-                    
-                    if (node.LastSignificantUpdateTime != null && node.LastSignificantUpdateTime + TimeSpan.FromDays(14) > DateTime.Now)
+                    else if (node.LastSignificantUpdateTime != null && node.LastSignificantUpdateTime + TimeSpan.FromDays(14) > DateTime.Now)
                     {
                         var updBadge = "<span class='badge badge-light ml-2' title=\"" + _localizer["UpdatedExplanation"] + "\">" + _localizer["Upd"] + "</span>";
                         badge += updBadge;
