@@ -50,6 +50,16 @@ This tutorials has multiple versions based on your **UI** and **Database** prefe
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
+{{if UI == "MVC" && DB == "EF"}}
+
+### Video Tutorial
+
+This tutorial part is also recorded as a video tutorial. Click to the image below to watch the video tutorial on YouTube.
+
+[![youtube](images/youtube.png)](https://www.youtube.com/watch?v=aidRB4YFDLM&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=4)
+
+{{end}}
+
 ## Test Projects in the Solution
 
 This part covers the **server side** tests. There are several test projects in the solution:

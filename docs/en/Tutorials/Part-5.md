@@ -50,6 +50,16 @@ This tutorials has multiple versions based on your **UI** and **Database** prefe
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
 
+{{if UI == "MVC" && DB == "EF"}}
+
+### Video Tutorial
+
+This tutorial part is also recorded as a video tutorial. Click to the image below to watch the video tutorial on YouTube.
+
+[![youtube](images/youtube.png)](https://www.youtube.com/watch?v=1WsfMITN_Jk&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=5)
+
+{{end}}
+
 ## Permissions
 
 ABP Framework provides an [authorization system](../Authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
