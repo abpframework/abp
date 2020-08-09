@@ -56,7 +56,9 @@ This tutorials has multiple versions based on your **UI** and **Database** prefe
 
 This tutorial part is also recorded as a video tutorial. Click to the image below to watch the video tutorial on YouTube.
 
-[![youtube](images/youtube.png)](https://www.youtube.com/watch?v=cJzyIFfAlp8&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=1)
+<a href="https://www.youtube.com/watch?v=cJzyIFfAlp8&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=1" target="_blank">
+<img src="images/youtube.png" />
+</a>
 
 {{end}}
 
