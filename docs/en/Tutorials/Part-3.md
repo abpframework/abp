@@ -45,7 +45,7 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
@@ -54,9 +54,7 @@ This tutorials has multiple versions based on your **UI** and **Database** prefe
 
 ### Video Tutorial
 
-This tutorial part is also recorded as a video tutorial. Click to the image below to watch the video tutorial on YouTube.
-
-[![youtube](images/youtube.png)](https://www.youtube.com/watch?v=TLShZO8u2VE&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=3)
+This part is also recorded as a video tutorial and **<a href="https://www.youtube.com/watch?v=TLShZO8u2VE&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=3" target="_blank">published on YouTube</a>**.
 
 {{end}}
 
