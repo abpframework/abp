@@ -19,4 +19,12 @@
       <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Remove="appsettings.json" />
+        <Content Include="appsettings.json">
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>
