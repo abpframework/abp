@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Users;
 using Volo.CmsKit.Reactions;
@@ -30,12 +31,13 @@ namespace Volo.CmsKit.Public.Reactions
         {
             var summaries = await ReactionManager.GetSummariesAsync(entityType, entityId);
 
-            var userReactions = (await UserReactionRepository
+            var userReactions = CurrentUser.IsAuthenticated ?
+                (await UserReactionRepository
                 .GetListForUserAsync(
                     CurrentUser.GetId(),
                     entityType,
                     entityId
-                )).ToDictionary(x => x.ReactionName, x => x);
+                )).ToDictionary(x => x.ReactionName, x => x) : null;
 
             var reactionWithSelectionDtos = new List<ReactionWithSelectionDto>();
 
@@ -46,7 +48,7 @@ namespace Volo.CmsKit.Public.Reactions
                     {
                         Reaction = ConvertToReactionDto(summary.Reaction),
                         Count = summary.Count,
-                        IsSelectedByCurrentUser = userReactions.ContainsKey(summary.Reaction.Name)
+                        IsSelectedByCurrentUser = userReactions?.ContainsKey(summary.Reaction.Name) ?? false
                     }
                 );
             }
@@ -54,6 +56,7 @@ namespace Volo.CmsKit.Public.Reactions
             return new ListResultDto<ReactionWithSelectionDto>(reactionWithSelectionDtos);
         }
 
+        [Authorize]
         public virtual async Task CreateAsync(CreateReactionDto input)
         {
             await ReactionManager.CreateAsync(
@@ -64,6 +67,7 @@ namespace Volo.CmsKit.Public.Reactions
             );
         }
 
+        [Authorize]
         public virtual async Task DeleteAsync(DeleteReactionDto input)
         {
             await ReactionManager.DeleteAsync(
