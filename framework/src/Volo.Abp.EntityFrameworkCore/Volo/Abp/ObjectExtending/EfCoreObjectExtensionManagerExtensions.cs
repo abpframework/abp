@@ -10,8 +10,39 @@ namespace Volo.Abp.ObjectExtending
     {
         public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] string propertyName)
+            where TEntity : IHasExtraProperties, IEntity
+        {
+            return objectExtensionManager.MapEfCoreProperty(
+                typeof(TEntity),
+                typeof(TProperty),
+                propertyName
+            );
+        }
+
+        public static ObjectExtensionManager MapEfCoreProperty(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] Type entityType,
+            [NotNull] Type propertyType,
+            [NotNull] string propertyName)
+        {
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+
+            return objectExtensionManager.AddOrUpdateProperty(
+                entityType,
+                propertyType,
+                propertyName,
+                options =>
+                {
+                    options.MapEfCore();
+                }
+            );
+        }
+
+        public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] string propertyName,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
             where TEntity : IHasExtraProperties, IEntity
         {
             return objectExtensionManager.MapEfCoreProperty(
@@ -27,7 +58,7 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] Type entityType,
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
         {
             Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
@@ -47,7 +78,7 @@ namespace Volo.Abp.ObjectExtending
         public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] string propertyName,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
             where TEntity : IHasExtraProperties, IEntity
         {
             return objectExtensionManager.MapEfCoreProperty(
@@ -63,7 +94,7 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] Type entityType,
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
         {
             Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
