@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.CmsKit.Comments;
+using Volo.CmsKit.Public.Comments;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 {
     [ViewComponent(Name = "CmsCommenting")]
     [Widget(

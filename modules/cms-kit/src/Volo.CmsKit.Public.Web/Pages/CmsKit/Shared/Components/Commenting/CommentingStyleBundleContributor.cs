@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 {
     public class CommentingStyleBundleContributor : BundleContributor
     {

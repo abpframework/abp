@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Public.Reactions;
+using Volo.CmsKit.Web;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 {
     [ViewComponent(Name = "CmsReactionSelection")]
     [Widget(

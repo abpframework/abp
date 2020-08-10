@@ -87,7 +87,7 @@
 
                         abp.message.confirm(l("MessageDeletionConfirmationMessage"), function (ok) {
                             if (ok){
-                                volo.cmsKit.comments.commentPublic.delete($link.data('id')
+                                volo.cmsKit.public.comments.commentPublic.delete($link.data('id')
                                 ).then(function () {
                                     widgetManager.refresh($widget);
                                 });
@@ -103,7 +103,7 @@
                     $form.submit(function (e) {
                         e.preventDefault();
                         var formAsObject = $form.serializeFormToObject();
-                        volo.cmsKit.comments.commentPublic.update(
+                        volo.cmsKit.public.comments.commentPublic.update(
                             formAsObject.id,
                             {
                                 text: formAsObject.commentText
@@ -121,8 +121,7 @@
                     $form.submit(function (e) {
                         e.preventDefault();
                         var formAsObject = $form.serializeFormToObject();
-                        console.log(formAsObject);
-                        volo.cmsKit.comments.commentPublic.create(
+                        volo.cmsKit.public.comments.commentPublic.create(
                             $.extend(getFilters(), {
                                 repliedCommentId: formAsObject.repliedCommentId,
                                 text: formAsObject.commentText

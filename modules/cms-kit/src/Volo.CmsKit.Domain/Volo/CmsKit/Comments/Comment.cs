@@ -3,11 +3,14 @@ using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Comments
 {
-    public class Comment: Entity<Guid>, IAggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator
+    public class Comment: Entity<Guid>, IAggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, IMultiTenant
     {
+        public virtual Guid? TenantId { get; protected set; }
+
         public virtual string EntityType { get; protected set; }
 
         public virtual string EntityId { get; protected set; }
@@ -31,13 +34,15 @@ namespace Volo.CmsKit.Comments
             [NotNull] string entityId,
             [NotNull] string text,
             Guid? repliedCommentId,
-            Guid creatorId)
+            Guid creatorId,
+            Guid? tenantId = null)
             : base(id)
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.EntityTypeLength);
             EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.EntityIdLength);
             RepliedCommentId = repliedCommentId;
             CreatorId = creatorId;
+            TenantId = tenantId;
 
             SetText(text);
         }
