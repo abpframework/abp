@@ -24,4 +24,4 @@ After you use the above command to create a solution, you will have a solution l
 
 ![basic-console-application-solution](../images/basic-console-application-solution.png)
 
-* `HelloWorldService` is a sample service that implements the `ITransientDependency` interface. It will be automatically registered to the [dependency injection](../Dependency-Injection.md) system.
+* `HelloWorldService` is a sample service that implements the `ITransientDependency` interface to register this service to the [dependency injection](../Dependency-Injection.md) system.

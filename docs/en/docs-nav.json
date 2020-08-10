@@ -4,21 +4,16 @@
       "text": "Getting Started",
       "items": [
         {
-          "text": "From Startup Templates",
+          "text": "Web Application",
           "path": "Getting-Started.md"
         },
         {
-          "text": "From Empty Projects",
-          "items": [
-            {
-              "text": "With ASP.NET Core Web Application",
-              "path": "Getting-Started-AspNetCore-Application.md"
-            },
-            {
-              "text": "With Console Application",
-              "path": "Getting-Started-Console-Application.md"
-            }
-          ]
+          "text": "Console Application",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "Empty Web Project",
+          "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
     },
