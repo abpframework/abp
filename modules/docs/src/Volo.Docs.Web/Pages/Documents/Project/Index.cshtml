@@ -53,7 +53,7 @@
                         <nav class="navbar navbar-logo">
                             @if (!Model.Project.Name.IsNullOrWhiteSpace())
                             {
-                                <a class="navbar-brand w-100" href="@Model.CreateVersionLink(Model.LatestStableVersionInfo, Model.GetSpecificVersionOrLatest())">
+                                <a class="navbar-brand w-100" href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())">
                                     <span id="ProjectName">@Model.Project.Name</span><br>
                                     <strong class="display-block">
                                         @L["Documents"]
@@ -173,7 +173,7 @@
                         else
                         {
                             <ul root-node="@Model.Navigation"
-                                version="@(Model.LatestStableVersionInfo == null || Model.LatestStableVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
+                                version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                                 project-name="@Model.ProjectName"
                                 project-format="@Model.Project.Format"
                                 selected-document-name="@Model.DocumentNameWithExtension"
@@ -374,7 +374,7 @@ else
               model = new ErrorPageModel
               {
                   RedirectUrl = Model.DocumentsUrlPrefix + Model.LanguageCode + "/" + Model.ProjectName + "/"
-                                + (Model.LatestStableVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
+                                + (Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version),
                   ErrorCode = "404",
                   ErrorMessage = L.GetString("DocumentNotFound"),
                   AutoRedirect = !Model.DocumentName.IsNullOrWhiteSpace()

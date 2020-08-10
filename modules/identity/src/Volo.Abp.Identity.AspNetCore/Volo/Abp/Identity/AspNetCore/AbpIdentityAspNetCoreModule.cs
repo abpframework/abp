@@ -13,8 +13,9 @@ namespace Volo.Abp.Identity.AspNetCore
         {
             PreConfigure<IdentityBuilder>(builder =>
             {
-                builder.AddDefaultTokenProviders();
-                builder.AddSignInManager();
+                builder
+                    .AddDefaultTokenProviders()
+                    .AddSignInManager<AbpSignInManager>();
             });
         }
 

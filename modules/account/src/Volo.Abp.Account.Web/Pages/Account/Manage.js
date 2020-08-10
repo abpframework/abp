@@ -15,13 +15,13 @@
 
         if (
             input.newPassword != input.newPasswordConfirm ||
-            input.currentPassword == ''
+            input.newPassword == ''
         ) {
             abp.message.error(l('NewPasswordConfirmFailed'));
             return;
         }
 
-        if (input.currentPassword == '') {
+        if (input.currentPassword && input.currentPassword == ''){
             return;
         }
 

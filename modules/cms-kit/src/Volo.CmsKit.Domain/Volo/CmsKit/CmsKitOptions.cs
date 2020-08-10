@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Volo.CmsKit.Reactions;
 
 namespace Volo.CmsKit
@@ -8,9 +9,13 @@ namespace Volo.CmsKit
         [NotNull]
         public ReactionDefinitionDictionary Reactions { get; }
 
+        [NotNull]
+        public List<string> PublicCommentEntities { get; }
+
         public CmsKitOptions()
         {
             Reactions = new ReactionDefinitionDictionary();
+            PublicCommentEntities = new List<string>();
         }
     }
 }

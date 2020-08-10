@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "InternalServerErrorMessage": "حدث خطأ داخلي أثناء طلبك!",
@@ -47,6 +47,8 @@
     "PagerInfoEmpty": "عرض 0 الي 0 من 0 إدخالات",
     "PagerInfoFiltered": "(تمت تصفيته من _MAX_ مجموع الإدخالات)",
     "NoDataAvailableInDatatable": "لا توجد بيانات متاحة في الجدول",
+    "Total": "مجموع",
+    "Selected": "مختارة",
     "PagerShowMenuEntries": "عرض _MENU_ إدخالات",
     "DatatableActionDropdownDefaultText": "أجراءات",
     "ChangePassword": "تغيير كلمة السر",

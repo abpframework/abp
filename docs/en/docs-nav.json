@@ -4,21 +4,16 @@
       "text": "Getting Started",
       "items": [
         {
-          "text": "From Startup Templates",
+          "text": "Web Application",
           "path": "Getting-Started.md"
         },
         {
-          "text": "From Empty Projects",
-          "items": [
-            {
-              "text": "With ASP.NET Core Web Application",
-              "path": "Getting-Started-AspNetCore-Application.md"
-            },
-            {
-              "text": "With Console Application",
-              "path": "Getting-Started-Console-Application.md"
-            }
-          ]
+          "text": "Console Application",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "Empty Web Project",
+          "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
     },
@@ -94,10 +89,6 @@
           ]
         },
         {
-          "text": "\"How to\" Guides",
-          "path": "How-To/Index.md"
-        },
-        {
           "text": "Migrating from the ASP.NET Boilerplate",
           "path": "AspNet-Boilerplate-Migration-Guide.md"
         }
@@ -106,6 +97,15 @@
     {
       "text": "CLI",
       "path": "CLI.md"
+    },
+    {
+      "text": "Authentication",
+      "items": [
+        {
+          "text": "Social/External Logins",
+          "path": "Authentication/Social-External-Logins.md"
+        }
+      ]
     },
     {
       "text": "Fundamentals",
@@ -253,7 +253,7 @@
                   "path": "Blob-Storing-Custom-Provider.md"
                 }
               ]
-            }            
+            }
           ]
         },
         {
@@ -425,6 +425,10 @@
             {
               "text": "Permission Management",
               "path": "UI/Angular/Permission-Management.md"
+            },
+            {
+              "text": "Multi Tenancy",
+              "path": "UI/Angular/Multi-Tenancy.md"
             },
             {
               "text": "Confirmation Popup",

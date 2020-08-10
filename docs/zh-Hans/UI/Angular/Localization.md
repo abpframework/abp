@@ -199,7 +199,7 @@ export class AppComponent {}
 
 ![locale-error](./images/locale-error.png)
 
-如果你看到这样的错误,你应该像下面这样传递 `cultureNameToLocaleFileNameMapping` 属性到CoreModule的forRoot静态方法.
+如果你看到这样的错误,你应该像下面这样传递 `cultureNameLocaleFileMap` 属性到CoreModule的forRoot静态方法.
 
 ```js
 // app.module.ts
@@ -209,7 +209,7 @@ export class AppComponent {}
     // other imports
      CoreModule.forRoot({
       // other options
-      cultureNameToLocaleFileNameMapping: { 
+      cultureNameLocaleFileMap: { 
         "DotnetCultureName": "AngularLocaleFileName",
         "pt-BR": "pt"  // example
       }
