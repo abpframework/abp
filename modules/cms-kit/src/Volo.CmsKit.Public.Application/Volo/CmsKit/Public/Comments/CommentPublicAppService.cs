@@ -59,7 +59,7 @@ namespace Volo.CmsKit.Public.Comments
                 input.Text,
                 input.RepliedCommentId,
                 user.Id,
-                CurrentTenant.GetId()
+                CurrentTenant.Id
             ));
 
             return ObjectMapper.Map<Comment, CommentDto>(comment);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
@@ -24,17 +25,26 @@ namespace Volo.CmsKit.MongoDB.Comments
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var query = from comment in GetMongoQueryable()
+            var authorsQuery = from comment in GetMongoQueryable()
                 join user in DbContext.CmsUsers on comment.CreatorId equals user.Id
                 where entityType == comment.EntityType && entityId == comment.EntityId
                 orderby comment.CreationTime
-                select new CommentWithAuthor
-                {
-                    Comment = comment,
-                    Author = user
-                };
+                select user;
 
-            return await query.ToListAsync();
+            var authors = await authorsQuery.ToListAsync();
+
+            var comments = await GetMongoQueryable()
+                .Where(c => c.EntityId == entityId && c.EntityType == entityType)
+                .OrderBy(c => c.CreationTime).ToListAsync();
+
+            return comments
+                .Select(
+                    comment =>
+                        new CommentWithAuthor
+                        {
+                            Comment = comment,
+                            Author = authors.FirstOrDefault(a => a.Id == comment.CreatorId)
+                        }).ToList();
         }
 
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
