@@ -16,11 +16,6 @@ export class OAuthConfigurationHandler {
     private oAuthService: OAuthService,
     @Inject(CORE_OPTIONS) private options: ABP.Root,
   ) {
-    this.oAuthService.configure(this.options.environment.oAuthConfig);
-    if (this.oAuthService.responseType === 'code') {
-      this.oAuthService.setupAutomaticSilentRefresh();
-    }
-
     this.listenToSetEnvironment();
   }
 

@@ -1,14 +1,15 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, Injector, Optional } from '@angular/core';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import snq from 'snq';
 import { GetAppConfiguration } from '../actions/config.actions';
 import { ConfigState } from '../states/config.state';
 import { SessionState } from '../states/session.state';
+import { OAUTH_STRATEGY } from '../strategies/oauth.strategy';
 import { RestService } from './rest.service';
 
 @Injectable({
@@ -16,6 +17,7 @@ import { RestService } from './rest.service';
 })
 export class AuthService {
   constructor(
+    private injector: Injector,
     private rest: RestService,
     private oAuthService: OAuthService,
     private store: Store,
@@ -45,28 +47,16 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<void> {
-    const issuer = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
-
-    if (this.oAuthService.responseType === 'code') {
-      this.oAuthService.logOut();
-      return of(null);
+  /**
+   * @deprecated use LogOut prop of OAUTH_STRATEGY instead, will be deleted in v3.3
+   */
+  logout(): Observable<any> {
+    if (!this.store.selectSnapshot(ConfigState.getDeep('environment.production'))) {
+      console.warn(
+        'The logout method of AuthService is depracated. Use LogOut prop of OAUTH_STRATEGY instead.',
+      );
     }
 
-    return this.rest
-      .request(
-        {
-          method: 'GET',
-          url: '/api/account/logout',
-        },
-        null,
-        issuer,
-      )
-      .pipe(
-        switchMap(() => {
-          this.oAuthService.logOut();
-          return this.store.dispatch(new GetAppConfiguration());
-        }),
-      );
+    return OAUTH_STRATEGY.LogOut(this.injector);
   }
 }

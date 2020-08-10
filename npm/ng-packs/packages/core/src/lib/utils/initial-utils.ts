@@ -9,19 +9,16 @@ import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
+import { OAUTH_STRATEGY } from '../strategies/oauth.strategy';
 
 export function getInitialData(injector: Injector) {
   const fn = async () => {
     const store: Store = injector.get(Store);
     const options = injector.get(CORE_OPTIONS) as ABP.Root;
-    const oAuthService = injector.get(OAuthService);
-
-    if (oAuthService.responseType === 'code') {
-      await oAuthService.loadDiscoveryDocumentAndTryLogin();
-    }
 
     await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
+    await OAUTH_STRATEGY.Init(injector);
 
     if (options.skipGetAppConfiguration) return;
 

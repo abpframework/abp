@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { OAUTH_STRATEGY } from '@abp/ng.core';
+import { Component, Injector } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
@@ -10,9 +11,9 @@ export class HomeComponent {
     return this.oAuthService.hasValidAccessToken();
   }
 
-  constructor(private oAuthService: OAuthService) {}
+  constructor(private oAuthService: OAuthService, private injector: Injector) {}
 
   login() {
-    this.oAuthService.initCodeFlow();
+    OAUTH_STRATEGY.NavigateToLogin(this.injector);
   }
 }

@@ -17,11 +17,11 @@ const routes: Routes = [
   {
     path: '',
     component: DynamicLayoutComponent,
-    canActivate: [AuthenticationFlowGuard],
     children: [
       {
         path: 'login',
         component: ReplaceableRouteContainerComponent,
+        canActivate: [AuthenticationFlowGuard],
         data: {
           replaceableComponent: {
             key: eAccountComponents.Login,
@@ -32,6 +32,7 @@ const routes: Routes = [
       {
         path: 'register',
         component: ReplaceableRouteContainerComponent,
+        canActivate: [AuthenticationFlowGuard],
         data: {
           replaceableComponent: {
             key: eAccountComponents.Register,

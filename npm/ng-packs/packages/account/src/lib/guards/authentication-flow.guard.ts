@@ -1,17 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { OAUTH_STRATEGY } from '@abp/ng.core';
 
 @Injectable()
 export class AuthenticationFlowGuard implements CanActivate {
-  constructor(private oauthService: OAuthService) {}
+  constructor(private injector: Injector) {}
 
   canActivate() {
-    if (this.oauthService.responseType === 'code') {
-      this.oauthService.initCodeFlow();
-      return false;
-    }
-
-    return true;
+    return OAUTH_STRATEGY.CanActivate(this.injector);
   }
 }

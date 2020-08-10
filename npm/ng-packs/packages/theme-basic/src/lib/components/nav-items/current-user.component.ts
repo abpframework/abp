@@ -1,5 +1,5 @@
-import { ApplicationConfiguration, AuthService, ConfigState } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { ApplicationConfiguration, OAUTH_STRATEGY, ConfigState } from '@abp/ng.core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -55,12 +55,12 @@ export class CurrentUserComponent implements OnInit {
     return window.innerWidth < 992;
   }
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private injector: Injector, private router: Router) {}
 
   ngOnInit() {}
 
   logout() {
-    this.authService.logout().subscribe(() => {
+    OAUTH_STRATEGY.LogOut(this.injector).subscribe(() => {
       this.router.navigate(['/'], { state: { redirectUrl: this.router.url } });
     });
   }
