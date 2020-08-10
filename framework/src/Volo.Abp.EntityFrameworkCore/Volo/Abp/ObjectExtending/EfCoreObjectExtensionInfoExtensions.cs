@@ -9,7 +9,7 @@ namespace Volo.Abp.ObjectExtending
         public static ObjectExtensionInfo MapEfCoreProperty<TProperty>(
             [NotNull] this ObjectExtensionInfo objectExtensionInfo,
             [NotNull] string propertyName,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
         {
             return objectExtensionInfo.MapEfCoreProperty(
                 typeof(TProperty),
@@ -22,7 +22,7 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] this ObjectExtensionInfo objectExtensionInfo,
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction)
         {
             Check.NotNull(objectExtensionInfo, nameof(objectExtensionInfo));
 
@@ -33,6 +33,38 @@ namespace Volo.Abp.ObjectExtending
                 {
                     options.MapEfCore(
                         propertyBuildAction
+                    );
+                }
+            );
+        }
+
+        public static ObjectExtensionInfo MapEfCoreProperty<TProperty>(
+            [NotNull] this ObjectExtensionInfo objectExtensionInfo,
+            [NotNull] string propertyName,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
+        {
+            return objectExtensionInfo.MapEfCoreProperty(
+                typeof(TProperty),
+                propertyName,
+                entityTypeAndPropertyBuildAction
+            );
+        }
+
+        public static ObjectExtensionInfo MapEfCoreProperty(
+            [NotNull] this ObjectExtensionInfo objectExtensionInfo,
+            [NotNull] Type propertyType,
+            [NotNull] string propertyName,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
+        {
+            Check.NotNull(objectExtensionInfo, nameof(objectExtensionInfo));
+
+            return objectExtensionInfo.AddOrUpdateProperty(
+                propertyType,
+                propertyName,
+                options =>
+                {
+                    options.MapEfCore(
+                        entityTypeAndPropertyBuildAction
                     );
                 }
             );

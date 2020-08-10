@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Data;
@@ -11,7 +11,7 @@ namespace Volo.Abp.ObjectExtending
         public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] string propertyName,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
             where TEntity : IHasExtraProperties, IEntity
         {
             return objectExtensionManager.MapEfCoreProperty(
@@ -27,7 +27,7 @@ namespace Volo.Abp.ObjectExtending
             [NotNull] Type entityType,
             [NotNull] Type propertyType,
             [NotNull] string propertyName,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
         {
             Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
 
@@ -39,6 +39,42 @@ namespace Volo.Abp.ObjectExtending
                 {
                     options.MapEfCore(
                         propertyBuildAction
+                    );
+                }
+            );
+        }
+
+        public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] string propertyName,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
+            where TEntity : IHasExtraProperties, IEntity
+        {
+            return objectExtensionManager.MapEfCoreProperty(
+                typeof(TEntity),
+                typeof(TProperty),
+                propertyName,
+                entityTypeAndPropertyBuildAction
+            );
+        }
+
+        public static ObjectExtensionManager MapEfCoreProperty(
+            [NotNull] this ObjectExtensionManager objectExtensionManager,
+            [NotNull] Type entityType,
+            [NotNull] Type propertyType,
+            [NotNull] string propertyName,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
+        {
+            Check.NotNull(objectExtensionManager, nameof(objectExtensionManager));
+
+            return objectExtensionManager.AddOrUpdateProperty(
+                entityType,
+                propertyType,
+                propertyName,
+                options =>
+                {
+                    options.MapEfCore(
+                        entityTypeAndPropertyBuildAction
                     );
                 }
             );
@@ -73,7 +109,8 @@ namespace Volo.Abp.ObjectExtending
 
                 var propertyBuilder = typeBuilder.Property(property.Type, property.Name);
 
-                efCoreMapping.PropertyBuildAction?.Invoke(typeBuilder, propertyBuilder);
+                efCoreMapping.EntityTypeAndPropertyBuildAction?.Invoke(typeBuilder, propertyBuilder);
+                efCoreMapping.PropertyBuildAction?.Invoke(propertyBuilder);
             }
         }
     }

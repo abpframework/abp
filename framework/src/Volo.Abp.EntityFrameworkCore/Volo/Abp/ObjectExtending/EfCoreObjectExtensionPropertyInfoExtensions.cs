@@ -12,7 +12,7 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public static ObjectExtensionPropertyInfo MapEfCore(
             [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
         {
             Check.NotNull(propertyExtension, nameof(propertyExtension));
 
@@ -20,6 +20,22 @@ namespace Volo.Abp.ObjectExtending
                 new ObjectExtensionPropertyInfoEfCoreMappingOptions(
                     propertyExtension,
                     propertyBuildAction
+                );
+
+            return propertyExtension;
+        }
+
+        [NotNull]
+        public static ObjectExtensionPropertyInfo MapEfCore(
+            [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
+        {
+            Check.NotNull(propertyExtension, nameof(propertyExtension));
+
+            propertyExtension.Configuration[EfCorePropertyConfigurationName] =
+                new ObjectExtensionPropertyInfoEfCoreMappingOptions(
+                    propertyExtension,
+                    entityTypeAndPropertyBuildAction: entityTypeAndPropertyBuildAction
                 );
 
             return propertyExtension;
