@@ -13,10 +13,10 @@ namespace Volo.Abp.ObjectExtending
         public ObjectExtensionInfo ObjectExtension => ExtensionProperty.ObjectExtension;
 
         [CanBeNull]
-        public Action<EntityTypeBuilder, PropertyBuilder> EntityTypeAndPropertyBuildAction { get; set; }
+        public Action<PropertyBuilder> PropertyBuildAction { get; set; }
 
         [CanBeNull]
-        public Action<PropertyBuilder> PropertyBuildAction { get; set; }
+        public Action<EntityTypeBuilder, PropertyBuilder> EntityTypeAndPropertyBuildAction { get; set; }
 
         public ObjectExtensionPropertyInfoEfCoreMappingOptions(
             [NotNull] ObjectExtensionPropertyInfo extensionProperty,
