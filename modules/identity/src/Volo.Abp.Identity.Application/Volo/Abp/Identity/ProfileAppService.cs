@@ -23,11 +23,7 @@ namespace Volo.Abp.Identity
         {
             var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
-            var profile = ObjectMapper.Map<IdentityUser, ProfileDto>(currentUser);
-            profile.IsExternalLoggedIn = currentUser.IsExternal;
-            profile.HasPassword = currentUser.PasswordHash != null;
-
-            return profile;
+            return ObjectMapper.Map<IdentityUser, ProfileDto>(currentUser);
         }
 
         public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
@@ -69,7 +65,6 @@ namespace Volo.Abp.Identity
 
             if (currentUser.PasswordHash == null)
             {
-                (await UserManager.RemovePasswordAsync(currentUser)).CheckErrors();
                 (await UserManager.AddPasswordAsync(currentUser, input.NewPassword)).CheckErrors();
 
                 return;

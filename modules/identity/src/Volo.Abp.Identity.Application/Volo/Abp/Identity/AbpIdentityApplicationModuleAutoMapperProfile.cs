@@ -14,8 +14,8 @@ namespace Volo.Abp.Identity
                 .MapExtraProperties();
 
             CreateMap<IdentityUser, ProfileDto>()
-                .Ignore(x=>x.IsExternalLoggedIn)
-                .Ignore(x=>x.HasPassword)
+                .ForMember(dest => dest.HasPassword,
+                    op => op.MapFrom(src => src.PasswordHash != null))
                 .MapExtraProperties();
         }
     }

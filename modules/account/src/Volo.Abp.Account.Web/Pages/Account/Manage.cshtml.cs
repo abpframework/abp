@@ -29,7 +29,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
 
-            DisablePasswordChange = user.IsExternalLoggedIn;
+            DisablePasswordChange = user.IsExternal;
             HideOldPasswordInput = !user.HasPassword;
 
             return Page();
