@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.Migrations
 {
-    public partial class BackgroundJobs_Initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
