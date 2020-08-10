@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.Testing;
 using Xunit;
 
@@ -27,6 +31,21 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
 
             var london2 = await CityRepository.FindByNameAsync("London");
             london2.GetProperty<string>("PhoneCode").ShouldBe("53");
+        }
+
+
+        [Fact]
+        public async Task An_Extra_Property_Configured_As_Extension2()
+        {
+            await WithUnitOfWorkAsync(() =>
+            {
+                var entityEntry = CityRepository.GetDbContext().Attach(new City(Guid.NewGuid(), "NewYork"));
+                var indexes = entityEntry.Metadata.GetIndexes().ToList();
+                indexes.ShouldNotBeEmpty();
+                indexes.ShouldContain(x => x.IsUnique);
+                return Task.CompletedTask;
+            });
+
         }
     }
 }

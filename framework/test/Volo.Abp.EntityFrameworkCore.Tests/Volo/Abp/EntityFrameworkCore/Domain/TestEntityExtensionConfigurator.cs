@@ -15,8 +15,11 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                 ObjectExtensionManager.Instance
                     .MapEfCoreProperty<City, string>(
                         "PhoneCode",
-                        p => p.HasMaxLength(8)
-                    );
+                        (e, p) =>
+                        {
+                            e.HasIndex(p.Metadata.Name).IsUnique();
+                            p.HasMaxLength(8);
+                        });
             });
         }
     }
