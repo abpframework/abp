@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity.AspNetCore
 {
     public class AbpSignInManager : SignInManager<IdentityUser>
     {
-        protected AbpIdentityAspNetCoreOptions AbpOptions { get; }
+        protected AbpIdentityOptions AbpOptions { get; }
 
         public AbpSignInManager(
             IdentityUserManager userManager,
@@ -20,7 +20,7 @@ namespace Volo.Abp.Identity.AspNetCore
             ILogger<SignInManager<IdentityUser>> logger,
             IAuthenticationSchemeProvider schemes,
             IUserConfirmation<IdentityUser> confirmation,
-            IOptions<AbpIdentityAspNetCoreOptions> options
+            IOptions<AbpIdentityOptions> options
         ) : base(
             userManager,
             contextAccessor,

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Modularity;
@@ -26,7 +25,7 @@ namespace Volo.Abp.Identity.AspNetCore
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpIdentityAspNetCoreOptions>(options =>
+            Configure<AbpIdentityOptions>(options =>
             {
                 options.ExternalLoginProviders.Add<FakeExternalLoginProvider>(FakeExternalLoginProvider.Name);
             });

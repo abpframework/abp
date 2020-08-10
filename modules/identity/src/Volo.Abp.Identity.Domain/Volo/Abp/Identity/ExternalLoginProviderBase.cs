@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Identity.AspNetCore
+namespace Volo.Abp.Identity
 {
     public abstract class ExternalLoginProviderBase : IExternalLoginProvider
     {

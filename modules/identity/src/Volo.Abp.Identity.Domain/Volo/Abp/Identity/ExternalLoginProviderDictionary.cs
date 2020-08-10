@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Identity.AspNetCore
+namespace Volo.Abp.Identity
 {
     public class ExternalLoginProviderDictionary : Dictionary<string, ExternalLoginProviderInfo>
     {

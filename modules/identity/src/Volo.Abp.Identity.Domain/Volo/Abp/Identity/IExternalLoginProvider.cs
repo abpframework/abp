@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Volo.Abp.Identity.AspNetCore
+namespace Volo.Abp.Identity
 {
     public interface IExternalLoginProvider
     {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel;
@@ -8,8 +10,11 @@ using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Localization;
 using Volo.Abp.Security.Claims;
@@ -27,6 +32,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
         protected ILogger<ResourceOwnerPasswordValidator<IdentityUser>> Logger { get; }
         protected IStringLocalizer<AbpIdentityServerResource> Localizer { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected AbpIdentityOptions AbpIdentityOptions { get; }
 
         public AbpResourceOwnerPasswordValidator(
             UserManager<IdentityUser> userManager,
@@ -34,7 +41,9 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             IdentitySecurityLogManager identitySecurityLogManager,
             IEventService events,
             ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger,
-            IStringLocalizer<AbpIdentityServerResource> localizer)
+            IStringLocalizer<AbpIdentityServerResource> localizer,
+            IOptions<AbpIdentityOptions> abpIdentityOptions,
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -42,6 +51,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             Events = events;
             Logger = logger;
             Localizer = localizer;
+            ServiceScopeFactory = serviceScopeFactory;
+            AbpIdentityOptions = abpIdentityOptions.Value;
         }
 
         /// <summary>
@@ -52,35 +63,71 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         [UnitOfWork]
         public virtual async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
+            using var scope = ServiceScopeFactory.CreateScope();
+
             await ReplaceEmailToUsernameOfInputIfNeeds(context);
-            var user = await UserManager.FindByNameAsync(context.UserName);
+
+            IdentityUser user = null;
+
+            async Task SetSuccessResultAsync()
+            {
+                var sub = await UserManager.GetUserIdAsync(user);
+
+                Logger.LogInformation("Credentials validated for username: {username}", context.UserName);
+                await Events.RaiseAsync(new UserLoginSuccessEvent(context.UserName, sub, context.UserName, interactive: false));
+
+                var additionalClaims = new List<Claim>();
+
+                await AddCustomClaimsAsync(additionalClaims, user, context);
+
+                context.Result = new GrantValidationResult(
+                    sub,
+                    OidcConstants.AuthenticationMethods.Password,
+                    additionalClaims.ToArray()
+                );
+
+                await IdentitySecurityLogManager.SaveAsync(
+                    new IdentitySecurityLogContext
+                    {
+                        Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                        Action = IdentityServerSecurityLogActionConsts.LoginSucceeded
+                    }
+                );
+            }
+
+            if (AbpIdentityOptions.ExternalLoginProviders.Any())
+            {
+                foreach (var externalLoginProviderInfo in AbpIdentityOptions.ExternalLoginProviders.Values)
+                {
+                    var externalLoginProvider = (IExternalLoginProvider) scope.ServiceProvider
+                        .GetRequiredService(externalLoginProviderInfo.Type);
+
+                    if (await externalLoginProvider.TryAuthenticateAsync(context.UserName, context.Password))
+                    {
+                        user = await UserManager.FindByNameAsync(context.UserName);
+                        if (user == null)
+                        {
+                            user = await externalLoginProvider.CreateUserAsync(context.UserName, externalLoginProviderInfo.Name);
+                        }
+                        else
+                        {
+                            await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                        }
+
+                        await SetSuccessResultAsync();
+                        return;
+                    }
+                }
+            }
+
+            user = await UserManager.FindByNameAsync(context.UserName);
             string errorDescription;
             if (user != null)
             {
                 var result = await SignInManager.CheckPasswordSignInAsync(user, context.Password, true);
                 if (result.Succeeded)
                 {
-                    var sub = await UserManager.GetUserIdAsync(user);
-
-                    Logger.LogInformation("Credentials validated for username: {username}", context.UserName);
-                    await Events.RaiseAsync(new UserLoginSuccessEvent(context.UserName, sub, context.UserName, interactive: false));
-
-                    var additionalClaims = new List<Claim>();
-
-                    await AddCustomClaimsAsync(additionalClaims, user, context);
-
-                    context.Result = new GrantValidationResult(
-                        sub,
-                        OidcConstants.AuthenticationMethods.Password,
-                        additionalClaims.ToArray()
-                    );
-
-                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-                    {
-                        Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
-                        Action = result.ToIdentitySecurityLogAction(),
-                    });
-
+                    await SetSuccessResultAsync();
                     return;
                 }
                 else if (result.IsLockedOut)
@@ -102,7 +149,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     errorDescription = Localizer["InvalidUserNameOrPassword"];
                 }
 
-                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
                 {
                     Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
                     Action = result.ToIdentitySecurityLogAction(),

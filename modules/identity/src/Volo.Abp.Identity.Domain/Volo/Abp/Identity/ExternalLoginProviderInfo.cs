@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Identity.AspNetCore
+namespace Volo.Abp.Identity
 {
     public class ExternalLoginProviderInfo
     {

@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Volo.Abp.Identity.AspNetCore
+namespace Volo.Abp.Identity
 {
     public class ExternalLoginUserInfo
     {
@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity.AspNetCore
         [CanBeNull]
         public string ProviderKey { get; set; }
 
-        public ExternalLoginUserInfo([System.Diagnostics.CodeAnalysis.NotNull] string email)
+        public ExternalLoginUserInfo([NotNull] string email)
         {
             Email = Check.NotNullOrWhiteSpace(email, nameof(email));
         }
