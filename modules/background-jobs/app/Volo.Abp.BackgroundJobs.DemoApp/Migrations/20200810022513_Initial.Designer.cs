@@ -11,15 +11,15 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Volo.Abp.BackgroundJobs.DemoApp.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20200624023633_BackgroundJobs_Initial")]
-    partial class BackgroundJobs_Initial
+    [Migration("20200810022513_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 

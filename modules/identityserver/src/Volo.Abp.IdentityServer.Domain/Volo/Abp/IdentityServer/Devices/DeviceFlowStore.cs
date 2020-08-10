@@ -5,20 +5,19 @@ using IdentityServer4.Models;
 using IdentityServer4.Stores;
 using IdentityServer4.Stores.Serialization;
 using JetBrains.Annotations;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 
 namespace Volo.Abp.IdentityServer.Devices
 {
-    public class DeviceFlowStore : IDeviceFlowStore, ITransientDependency
+    public class DeviceFlowStore : IDeviceFlowStore
     {
         protected IDeviceFlowCodesRepository DeviceFlowCodesRepository { get; }
         protected IGuidGenerator GuidGenerator { get; }
         protected IPersistentGrantSerializer PersistentGrantSerializer { get; }
 
         public DeviceFlowStore(
-            IDeviceFlowCodesRepository deviceFlowCodesRepository, 
-            IGuidGenerator guidGenerator, 
+            IDeviceFlowCodesRepository deviceFlowCodesRepository,
+            IGuidGenerator guidGenerator,
             IPersistentGrantSerializer persistentGrantSerializer)
         {
             DeviceFlowCodesRepository = deviceFlowCodesRepository;
@@ -46,7 +45,7 @@ namespace Volo.Abp.IdentityServer.Devices
                     }
                 );
         }
-        
+
         public virtual async Task<DeviceCode> FindByUserCodeAsync(string userCode)
         {
             Check.NotNull(userCode, nameof(userCode));
@@ -70,7 +69,7 @@ namespace Volo.Abp.IdentityServer.Devices
             var deviceCodes = await DeviceFlowCodesRepository
                 .FindByDeviceCodeAsync(deviceCode)
                 ;
-            
+
             if (deviceCodes == null)
             {
                 return null;

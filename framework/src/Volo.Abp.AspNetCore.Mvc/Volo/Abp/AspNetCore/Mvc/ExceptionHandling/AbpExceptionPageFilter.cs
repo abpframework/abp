@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -93,8 +94,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var logLevel = context.Exception.GetLogLevel();
 
-            Logger.LogWithLevel(logLevel, $"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-            Logger.LogWithLevel(logLevel, _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
+            var remoteServiceErrorInfoBuilder = new StringBuilder();
+            remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
+            remoteServiceErrorInfoBuilder.AppendLine( _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
+            Logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+
             Logger.LogException(context.Exception, logLevel);
 
             await context.HttpContext

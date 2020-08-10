@@ -182,6 +182,14 @@ namespace Volo.Abp.EntityFrameworkCore
             }
         }
 
+        /// <summary>
+        /// This method will call the DbContext <see cref="SaveChangesAsync(bool, CancellationToken)"/> method directly of EF Core, which doesn't apply concepts of abp.
+        /// </summary>
+        public virtual Task<int> SaveChangesOnDbContextAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
         public virtual void Initialize(AbpEfCoreDbContextInitializationContext initializationContext)
         {
             if (initializationContext.UnitOfWork.Options.Timeout.HasValue &&
