@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -322,7 +323,25 @@ namespace Volo.Abp.EntityFrameworkCore
                     continue;
                 }
 
-                entry.Property(property.Name).CurrentValue = entity.GetProperty(property.Name);
+                var entryProperty = entry.Property(property.Name);
+                var entityProperty = entity.GetProperty(property.Name);
+                if (entityProperty == null)
+                {
+                    entryProperty.CurrentValue = null;
+                    continue;
+                }
+
+                if (entryProperty.Metadata.ClrType == entityProperty.GetType())
+                {
+                    entryProperty.CurrentValue = entityProperty;
+                }
+                else
+                {
+                    if (TypeHelper.IsPrimitiveExtended(entryProperty.Metadata.ClrType, includeEnums: true))
+                    {
+                        entryProperty.CurrentValue = Convert.ChangeType(entityProperty, entryProperty.Metadata.ClrType, CultureInfo.InvariantCulture);
+                    }
+                }
             }
         }
 

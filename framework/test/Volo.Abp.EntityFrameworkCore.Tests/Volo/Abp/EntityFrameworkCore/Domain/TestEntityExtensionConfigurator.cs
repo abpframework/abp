@@ -19,7 +19,12 @@ namespace Volo.Abp.EntityFrameworkCore.Domain
                         {
                             e.HasIndex(p.Metadata.Name).IsUnique();
                             p.HasMaxLength(8);
-                        });
+                        }
+                    ).MapEfCoreProperty<City, string>(
+                        "ZipCode"
+                    ).MapEfCoreProperty<City, int>(
+                        "Rank"
+                    );
             });
         }
     }
