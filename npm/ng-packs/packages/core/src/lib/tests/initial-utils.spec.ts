@@ -8,6 +8,7 @@ import { CORE_OPTIONS } from '../tokens/options.token';
 import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
 import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 import * as environmentUtils from '../utils/environment-utils';
+import { OAUTH_STRATEGY } from '../strategies/oauth.strategy';
 
 @Component({
   selector: 'abp-dummy',
@@ -32,18 +33,18 @@ describe('InitialUtils', () => {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
       const store = spectator.inject(Store);
-      const oAuthService = spectator.inject(OAuthService);
       const dispatchSpy = jest.spyOn(store, 'dispatch');
       const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
       const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
+      const initOAuthSpy = jest.spyOn(OAUTH_STRATEGY, 'Init');
       parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
       getRemoteEnvSpy.mockReturnValue(Promise.resolve());
 
       injectorSpy.mockReturnValueOnce(store);
       injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
-      injectorSpy.mockReturnValueOnce(oAuthService);
       injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => false });
       dispatchSpy.mockReturnValue(of('test'));
+      initOAuthSpy.mockReturnValue(Promise.resolve());
 
       expect(typeof getInitialData(injector)).toBe('function');
       expect(await getInitialData(injector)()).toBe('test');
