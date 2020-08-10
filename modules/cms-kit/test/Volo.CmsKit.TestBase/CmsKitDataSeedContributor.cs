@@ -14,28 +14,42 @@ namespace Volo.CmsKit
         private readonly IGuidGenerator _guidGenerator;
         private readonly ICmsUserRepository _cmsUserRepository;
         private readonly CmsKitTestData _cmsKitTestData;
-        private readonly IUserReactionRepository _userReactionRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly ReactionManager _reactionManager;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
             CmsKitTestData cmsKitTestData,
-            IUserReactionRepository userReactionRepository,
-            ICommentRepository commentRepository)
+            ICommentRepository commentRepository,
+            ReactionManager reactionManager)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
             _cmsKitTestData = cmsKitTestData;
-            _userReactionRepository = userReactionRepository;
             _commentRepository = commentRepository;
+            _reactionManager = reactionManager;
         }
 
         public async Task SeedAsync(DataSeedContext context)
         {
-            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1","user1@volo.com", "user","1")));
-            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2","user2@volo.com", "user","2")));
+            await SeedUsersAsync();
 
+            await SeedCommentsAsync();
+
+            await SeedReactionsAsync();
+        }
+
+        private async Task SeedUsersAsync()
+        {
+            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1", "user1@volo.com",
+                "user", "1")));
+            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2", "user2@volo.com",
+                "user", "2")));
+        }
+
+        private async Task SeedCommentsAsync()
+        {
             var comment1 = await _commentRepository.InsertAsync(new Comment(_cmsKitTestData.CommentWithChildId,
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
@@ -83,6 +97,39 @@ namespace Volo.CmsKit
                 null,
                 _cmsKitTestData.User2Id
             ));
+        }
+
+        private async Task SeedReactionsAsync()
+        {
+            await _reactionManager.CreateAsync(
+                _cmsKitTestData.User1Id,
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1,
+                StandardReactions.Confused);
+
+            await _reactionManager.CreateAsync(
+                _cmsKitTestData.User1Id,
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1,
+                StandardReactions.ThumbsUp);
+
+            await _reactionManager.CreateAsync(
+                _cmsKitTestData.User1Id,
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId2,
+                StandardReactions.Heart);
+
+            await _reactionManager.CreateAsync(
+                _cmsKitTestData.User1Id,
+                _cmsKitTestData.EntityType2,
+                _cmsKitTestData.EntityId1,
+                StandardReactions.Rocket);
+
+            await _reactionManager.CreateAsync(
+                _cmsKitTestData.User2Id,
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1,
+                StandardReactions.ThumbsUp);
         }
     }
 }

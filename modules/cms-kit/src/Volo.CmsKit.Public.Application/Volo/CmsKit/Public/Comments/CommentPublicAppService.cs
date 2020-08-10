@@ -31,7 +31,7 @@ namespace Volo.CmsKit.Public.Comments
             CmsUserLookupService = cmsUserLookupService;
         }
 
-        public async Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
+        public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
         {
             CheckAuthorizationAsync(entityType);
 
@@ -43,7 +43,7 @@ namespace Volo.CmsKit.Public.Comments
         }
 
         [Authorize]
-        public async Task<CommentDto> CreateAsync(CreateCommentInput input)
+        public virtual async Task<CommentDto> CreateAsync(CreateCommentInput input)
         {
             var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.GetId());
 
@@ -66,7 +66,7 @@ namespace Volo.CmsKit.Public.Comments
         }
 
         [Authorize]
-        public async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
+        public virtual async Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
         {
             var comment = await CommentRepository.GetAsync(id);
 
@@ -83,7 +83,7 @@ namespace Volo.CmsKit.Public.Comments
         }
 
         [Authorize]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             var comment = await CommentRepository.GetAsync(id);
 

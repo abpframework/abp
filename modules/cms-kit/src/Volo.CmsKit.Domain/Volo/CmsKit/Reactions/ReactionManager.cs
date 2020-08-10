@@ -74,7 +74,7 @@ namespace Volo.CmsKit.Reactions
                     entityId,
                     reactionName,
                     creatorId,
-                    CurrentTenant.GetId()
+                    CurrentTenant.Id
                 )
             );
         }

@@ -8,7 +8,6 @@ namespace Volo.CmsKit
      */
     public abstract class CmsKitApplicationTestBase : CmsKitTestBase<CmsKitApplicationTestModule>
     {
-
         protected virtual void UsingDbContext(Action<ICmsKitDbContext> action)
         {
             using (var dbContext = GetRequiredService<ICmsKitDbContext>())
@@ -24,6 +23,5 @@ namespace Volo.CmsKit
                 return action.Invoke(dbContext);
             }
         }
-
     }
 }
