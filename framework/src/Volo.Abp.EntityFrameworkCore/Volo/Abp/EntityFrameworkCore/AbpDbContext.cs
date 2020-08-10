@@ -315,13 +315,13 @@ namespace Volo.Abp.EntityFrameworkCore
                     continue;
                 }
 
+                var entryProperty = entry.Property(property.Name);
                 var entityProperty = entity.GetProperty(property.Name);
                 if (entityProperty == null)
                 {
+                    entryProperty.CurrentValue = null;
                     continue;
                 }
-
-                var entryProperty = entry.Property(property.Name);
 
                 if (entryProperty.Metadata.ClrType == entityProperty.GetType())
                 {
