@@ -9,7 +9,7 @@ import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
-import { OAUTH_STRATEGY } from '../strategies/oauth.strategy';
+import { AuthService } from '../services/auth.service';
 
 export function getInitialData(injector: Injector) {
   const fn = async () => {
@@ -18,7 +18,7 @@ export function getInitialData(injector: Injector) {
 
     await getRemoteEnv(injector, options.environment);
     await parseTenantFromUrl(injector);
-    await OAUTH_STRATEGY.Init(injector);
+    await injector.get(AuthService).init();
 
     if (options.skipGetAppConfiguration) return;
 

@@ -3120,13 +3120,6 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-angular-oauth2-oidc-jwks@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/angular-oauth2-oidc-jwks/-/angular-oauth2-oidc-jwks-9.0.0.tgz#f11e4e561ff423928ab63ca2cca84703a00ff85d"
-  integrity sha512-3hTJc7vEI/ka/nnliMcCQuDnszzL3AhGInBBbn96BO+ZOdvP/4PbEumUsDto2WRpPMPxD6HAmExwYeQWljcc5A==
-  dependencies:
-    jsrsasign "^8.0.12"
-
 angular-oauth2-oidc@^10.0.3:
   version "10.0.3"
   resolved "https://registry.yarnpkg.com/angular-oauth2-oidc/-/angular-oauth2-oidc-10.0.3.tgz#612ef75c2e07b56592d2506f9618ee6a61857ad9"
@@ -8462,11 +8455,6 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
-
-jsrsasign@^8.0.12:
-  version "8.0.23"
-  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-8.0.23.tgz#4427ed0bbbd809d65b8e5ac9d48ba5383b49ee0c"
-  integrity sha512-COwd/XmwaxBwf/6E3FO21DGK504KdjfNMYv6hVd2q6W6lzTeaL2UKQ0cIBw6SFMBCdaQl8fGUm4dHFt7Wmo9xw==
 
 jszip@^3.1.3:
   version "3.5.0"

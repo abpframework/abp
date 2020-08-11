@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { AuthConfig, OAuthService, OAuthSuccessEvent } from 'angular-oauth2-oidc';
+import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { Router } from '@angular/router';
@@ -9,12 +9,18 @@ import { RestService } from '../services/rest.service';
 import { switchMap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 
-export abstract class OAuthStrategy {
+export abstract class AuthFlowStrategy {
+  protected abstract _isInternalAuth: boolean;
+  get isInternalAuth(): boolean {
+    return this._isInternalAuth;
+  }
+
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
-  abstract navigateToLogin(): void;
-  abstract canActivate(): boolean;
-  abstract logOut(): Observable<any>;
+  abstract checkIfInternalAuth(): boolean;
+  abstract login(): void;
+  abstract logout(): Observable<any>;
+  abstract destroy(): void;
 
   private catchError = err => {
     // TODO: handle the error
@@ -31,7 +37,9 @@ export abstract class OAuthStrategy {
   }
 }
 
-export class OAuthCodeFlowStrategy extends OAuthStrategy {
+export class AuthCodeFlowStrategy extends AuthFlowStrategy {
+  protected _isInternalAuth = false;
+
   async init() {
     return super
       .init()
@@ -39,32 +47,36 @@ export class OAuthCodeFlowStrategy extends OAuthStrategy {
       .then(() => this.oAuthService.setupAutomaticSilentRefresh());
   }
 
-  navigateToLogin() {
+  login() {
     this.oAuthService.initCodeFlow();
   }
 
-  canActivate() {
+  checkIfInternalAuth() {
     this.oAuthService.initCodeFlow();
     return false;
   }
 
-  logOut() {
+  logout() {
     this.oAuthService.logOut();
     return of(null);
   }
+
+  destroy() {}
 }
 
-export class OAuthPasswordFlowStrategy extends OAuthStrategy {
-  navigateToLogin() {
+export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
+  protected _isInternalAuth = true;
+
+  login() {
     const router = this.injector.get(Router);
     router.navigateByUrl('/account/login');
   }
 
-  canActivate() {
+  checkIfInternalAuth() {
     return true;
   }
 
-  logOut() {
+  logout() {
     const store = this.injector.get(Store);
     const rest = this.injector.get(RestService);
 
@@ -85,28 +97,15 @@ export class OAuthPasswordFlowStrategy extends OAuthStrategy {
         }),
       );
   }
+
+  destroy() {}
 }
 
-export const OAUTH_STRATEGY = {
-  async Init(injector: Injector) {
-    return getOAuthStrategy(injector).init();
+export const AUTH_FLOW_STRATEGY = {
+  Code(injector: Injector) {
+    return new AuthCodeFlowStrategy(injector);
   },
-  NavigateToLogin(injector: Injector) {
-    return getOAuthStrategy(injector).navigateToLogin();
-  },
-  CanActivate(injector: Injector) {
-    return getOAuthStrategy(injector).canActivate();
-  },
-  LogOut(injector: Injector) {
-    return getOAuthStrategy(injector).logOut();
+  Password(injector: Injector) {
+    return new AuthPasswordFlowStrategy(injector);
   },
 };
-
-function getOAuthStrategy(injector: Injector) {
-  const codeFlow =
-    injector
-      .get(Store)
-      .selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.responseType')) === 'code';
-
-  return codeFlow ? new OAuthCodeFlowStrategy(injector) : new OAuthPasswordFlowStrategy(injector);
-}
