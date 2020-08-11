@@ -2,7 +2,8 @@
 @using Localization.Resources.AbpUi
 @using Microsoft.Extensions.Localization
 @using Volo.CmsKit.Pages
-@using Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @model PublicModel
 @inject IStringLocalizer<AbpUiResource> Localizer
 <h1>CMS Kit DEMO - Public</h1>
@@ -18,7 +19,9 @@
             </footer>
         </abp-blockquote>
     </abp-card-body>
-        @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "publicQuote", entityId = "1", loginUrl="Account/Login?ReturnUrl=%2Fpublic" })
+    @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent), new { entityType = "publicQuote", entityId = "1" })
+    <hr />
+    @await Component.InvokeAsync(typeof(CommentingViewComponent), new { entityType = "publicQuote", entityId = "1", loginUrl = "Account/Login?ReturnUrl=%2Fpublic" })
 </abp-card>
 
 <abp-card class="mb-3">

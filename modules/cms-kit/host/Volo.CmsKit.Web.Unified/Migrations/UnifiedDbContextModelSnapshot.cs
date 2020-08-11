@@ -939,6 +939,10 @@ namespace Volo.CmsKit.Migrations
                     b.Property<Guid?>("RepliedCommentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(512)")
@@ -981,6 +985,10 @@ namespace Volo.CmsKit.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(32)")
                         .HasMaxLength(32);
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnName("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

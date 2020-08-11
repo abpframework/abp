@@ -1,5 +1,4 @@
-﻿using System;
-using Shouldly;
+﻿using Shouldly;
 using Volo.Abp.Testing;
 using Xunit;
 
@@ -22,10 +21,8 @@ namespace Volo.Abp.Ldap
         [Fact(Skip = "Required Ldap environment")]
         public void Authenticate()
         {
-            _ldapManager.Authenticate().ShouldBe(true);
             _ldapManager.Authenticate("cn=abp,dc=abp,dc=io", "123qwe").ShouldBe(true);
             _ldapManager.Authenticate("NoExists", "123qwe").ShouldBe(false);
         }
-
     }
 }

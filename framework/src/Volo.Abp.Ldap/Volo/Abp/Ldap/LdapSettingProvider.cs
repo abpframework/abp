@@ -22,6 +22,12 @@ namespace Volo.Abp.Ldap
                     L("Description:Abp.Ldap.ServerPort")),
 
                 new SettingDefinition(
+                    LdapSettingNames.BaseDc,
+                    "",
+                    L("DisplayName:Abp.Ldap.BaseDc"),
+                    L("Description:Abp.Ldap.BaseDc")),
+
+                new SettingDefinition(
                     LdapSettingNames.UserName,
                     "",
                     L("DisplayName:Abp.Ldap.UserName"),

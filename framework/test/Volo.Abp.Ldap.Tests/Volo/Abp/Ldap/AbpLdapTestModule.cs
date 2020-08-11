@@ -16,7 +16,8 @@ namespace Volo.Abp.Ldap
             {
                 options.ServerHost = "192.168.0.3";
                 options.ServerPort = 389;
-                options.UserName = "cn=admin,dc=abp,dc=io";
+                options.BaseDc = "dc=abp,dc=io";
+                options.UserName = "admin";
                 options.Password = "123qwe";
             });
         }

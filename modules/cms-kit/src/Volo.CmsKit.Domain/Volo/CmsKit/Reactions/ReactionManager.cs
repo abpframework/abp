@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Reactions
 {
@@ -72,7 +73,8 @@ namespace Volo.CmsKit.Reactions
                     entityType,
                     entityId,
                     reactionName,
-                    creatorId
+                    creatorId,
+                    CurrentTenant.Id
                 )
             );
         }

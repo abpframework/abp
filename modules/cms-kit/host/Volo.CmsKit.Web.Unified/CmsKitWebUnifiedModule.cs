@@ -34,6 +34,7 @@ using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
+using Volo.CmsKit.Public.Web;
 
 namespace Volo.CmsKit
 {

@@ -59,6 +59,3 @@ While there is no Razor Pages & MongoDB combination, you can check both document
 * **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with the ABP Framework installed.
   * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
   * [Documentation](../Getting-Started-AspNetCore-Application.md)
-* **Empty Console Application**: The most basic console application with the ABP Framework installed.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicConsoleApplication)
-  * [Documentation](../Getting-Started-Console-Application.md)

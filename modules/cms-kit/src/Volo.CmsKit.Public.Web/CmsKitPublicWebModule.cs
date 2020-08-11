@@ -6,9 +6,10 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Localization;
-using Volo.CmsKit.Web.Menus;
+using Volo.CmsKit.Public.Web.Menus;
+using Volo.CmsKit.Web;
 
-namespace Volo.CmsKit.Web
+namespace Volo.CmsKit.Public.Web
 {
     [DependsOn(
         typeof(CmsKitPublicHttpApiModule),

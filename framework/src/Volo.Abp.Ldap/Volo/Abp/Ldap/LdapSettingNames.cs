@@ -6,6 +6,8 @@
 
         public const string ServerPort = "Abp.Ldap.ServerPort";
 
+        public const string BaseDc = "Abp.Ldap.BaseDc";
+
         public const string UserName = "Abp.Ldap.UserName";
 
         public const string Password = "Abp.Ldap.Password";

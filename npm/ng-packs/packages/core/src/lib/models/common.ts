@@ -31,6 +31,11 @@ export namespace ABP {
     maxResultCount?: number;
   }
 
+  export interface Lookup {
+    id: string;
+    displayName: string;
+  }
+
   export interface Nav {
     name: string;
     parentName?: string;
