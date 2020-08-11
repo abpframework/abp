@@ -1,4 +1,4 @@
-import { ApplicationConfiguration, AuthService, ConfigState } from '@abp/ng.core';
+import { ApplicationConfiguration, ConfigState, AuthService } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Select } from '@ngxs/store';
