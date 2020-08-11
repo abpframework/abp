@@ -5,11 +5,11 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { tap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import { ABP } from '../models/common';
+import { AuthService } from '../services/auth.service';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { getRemoteEnv } from './environment-utils';
 import { parseTenantFromUrl } from './multi-tenancy-utils';
-import { AuthService } from '../services/auth.service';
 
 export function getInitialData(injector: Injector) {
   const fn = async () => {
