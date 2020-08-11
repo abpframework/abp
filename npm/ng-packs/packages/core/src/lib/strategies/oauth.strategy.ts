@@ -25,7 +25,7 @@ export abstract class OAuthStrategy {
     this.oAuthConfig = injector.get(CORE_OPTIONS).environment.oAuthConfig;
   }
 
-  async init(): Promise<OAuthSuccessEvent | void> {
+  async init(): Promise<any> {
     this.oAuthService.configure(this.oAuthConfig);
     return this.oAuthService.loadDiscoveryDocument().catch(this.catchError);
   }
