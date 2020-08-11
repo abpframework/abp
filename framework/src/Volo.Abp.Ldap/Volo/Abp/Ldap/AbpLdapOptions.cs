@@ -6,8 +6,16 @@
 
         public int ServerPort { get; set; }
 
+        public string BaseDc { get; set; }
+
+        /// <summary>
+        /// BindDN
+        /// </summary>
         public string UserName { get; set; }
 
+        /// <summary>
+        ///BindPassword
+        /// </summary>
         public string Password { get; set; }
     }
 }

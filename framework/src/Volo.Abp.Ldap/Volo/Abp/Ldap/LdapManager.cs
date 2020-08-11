@@ -19,18 +19,15 @@ namespace Volo.Abp.Ldap
             Logger = NullLogger<LdapManager>.Instance;
         }
 
-        public virtual bool Authenticate()
-        {
-            return Authenticate(LdapOptions.UserName, LdapOptions.Password);
-        }
-
         public bool Authenticate(string username, string password)
         {
             try
             {
-                var conn = CreateLdapConnection();
-                AuthenticateLdapConnection(conn, username, password);
-                return true;
+                using (var conn = CreateLdapConnection())
+                {
+                    AuthenticateLdapConnection(conn, username, password);
+                    return true;
+                }
             }
             catch (Exception ex)
             {
@@ -46,7 +43,6 @@ namespace Volo.Abp.Ldap
             ldapConnection.Connect(LdapOptions.ServerHost, LdapOptions.ServerPort);
             return ldapConnection;
         }
-
 
         protected virtual void ConfigureLdapConnection(ILdapConnection connection)
         {
