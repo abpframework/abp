@@ -10,10 +10,7 @@ import { switchMap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 
 export abstract class AuthFlowStrategy {
-  protected abstract _isInternalAuth: boolean;
-  get isInternalAuth(): boolean {
-    return this._isInternalAuth;
-  }
+  abstract readonly isInternalAuth: boolean;
 
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
@@ -38,7 +35,7 @@ export abstract class AuthFlowStrategy {
 }
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
-  protected _isInternalAuth = false;
+  readonly isInternalAuth = false;
 
   async init() {
     return super
@@ -65,7 +62,7 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
 }
 
 export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
-  protected _isInternalAuth = true;
+  readonly isInternalAuth = true;
 
   login() {
     const router = this.injector.get(Router);

@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, Injector, Optional } from '@angular/core';
 import { Navigate } from '@ngxs/router-plugin';
-import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
+import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { from, Observable } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
@@ -9,19 +9,15 @@ import snq from 'snq';
 import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
 import { ConfigState } from '../states/config.state';
 import { SessionState } from '../states/session.state';
+import { AuthFlowStrategy, AUTH_FLOW_STRATEGY } from '../strategies/auth-flow.strategy';
 import { RestService } from './rest.service';
-import {
-  AuthCodeFlowStrategy,
-  AuthPasswordFlowStrategy,
-  AUTH_FLOW_STRATEGY,
-} from '../strategies/auth-flow.strategy';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private flow: string;
-  private strategy: AuthCodeFlowStrategy | AuthPasswordFlowStrategy;
+  private strategy: AuthFlowStrategy;
 
   get isInternalAuth() {
     return this.strategy.isInternalAuth;
