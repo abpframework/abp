@@ -284,8 +284,6 @@ You may need to check a policy/permission on the client side. For ASP.NET Core M
 abp.auth.isGranted('MyPermissionName');
 ```
 
-See [abp.auth](API/JavaScript-API/Auth.md) API documentation for details.
-
 ## Permission Management
 
 Permission management is normally done by an admin user using the permission management modal:

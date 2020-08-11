@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Logging;
 
@@ -12,9 +13,9 @@ namespace Volo.Abp.Validation
     /// This exception type is used to throws validation exceptions.
     /// </summary>
     [Serializable]
-    public class AbpValidationException : AbpException, 
-        IHasLogLevel, 
-        IHasValidationErrors, 
+    public class AbpValidationException : AbpException,
+        IHasLogLevel,
+        IHasValidationErrors,
         IExceptionWithSelfLogging
     {
         /// <summary>
@@ -99,7 +100,8 @@ namespace Volo.Abp.Validation
                 return;
             }
 
-            logger.LogWithLevel(LogLevel, "There are " + ValidationErrors.Count + " validation errors:");
+            var validationErrors = new StringBuilder();
+            validationErrors.AppendLine("There are " + ValidationErrors.Count + " validation errors:");
             foreach (var validationResult in ValidationErrors)
             {
                 var memberNames = "";
@@ -108,8 +110,10 @@ namespace Volo.Abp.Validation
                     memberNames = " (" + string.Join(", ", validationResult.MemberNames) + ")";
                 }
 
-                logger.LogWithLevel(LogLevel, validationResult.ErrorMessage + memberNames);
+                validationErrors.AppendLine(validationResult.ErrorMessage + memberNames);
             }
+
+            logger.LogWithLevel(LogLevel, validationErrors.ToString());
         }
     }
 }

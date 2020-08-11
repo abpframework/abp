@@ -55,6 +55,11 @@ namespace Volo.Abp.Application.Services
 
         }
 
+        protected override Task<TEntityDto> MapToGetListOutputDtoAsync(TEntity entity)
+        {
+            return base.MapToGetOutputDtoAsync(entity);
+        }
+
         protected override TEntityDto MapToGetListOutputDto(TEntity entity)
         {
             return MapToGetOutputDto(entity);
@@ -97,9 +102,9 @@ namespace Volo.Abp.Application.Services
 
         protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
         {
-            if (typeof(TEntity).IsAssignableTo<ICreationAuditedObject>())
+            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
             {
-                return query.OrderByDescending(e => ((ICreationAuditedObject)e).CreationTime);
+                return query.OrderByDescending(e => ((IHasCreationTime)e).CreationTime);
             }
             else
             {

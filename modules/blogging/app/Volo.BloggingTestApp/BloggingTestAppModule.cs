@@ -1,4 +1,4 @@
-﻿//#define MONGODB
+//#define MONGODB
 
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -51,6 +52,7 @@ namespace Volo.BloggingTestApp
         typeof(BloggingTestAppEntityFrameworkCoreModule),
 #endif
         typeof(AbpAccountWebModule),
+        typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),

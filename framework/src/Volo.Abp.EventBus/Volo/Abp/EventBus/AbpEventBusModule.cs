@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.EventBus
 {
+    [DependsOn(typeof(AbpMultiTenancyModule))]
     public class AbpEventBusModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

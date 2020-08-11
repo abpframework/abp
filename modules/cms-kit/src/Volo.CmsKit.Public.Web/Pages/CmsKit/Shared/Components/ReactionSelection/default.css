@@ -1,8 +1,13 @@
-﻿.cms-reaction-icon
+﻿.cms-reaction-select-icon
 {
     cursor: pointer;
 }
+.cms-reaction-icon
+{
+    cursor: pointer;
+    padding: 3px 5px 5px;
+}
 .cms-reaction-icon-selected
 {
-    border: 1px solid gray;
+    background-color: #eef;
 }

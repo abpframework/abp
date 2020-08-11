@@ -37,13 +37,26 @@ This tutorial is organized as the following parts;
 - [Part 3: Creating, updating and deleting books](Part-3.md)
 - [Part 4: Integration tests](Part-4.md)
 - [Part 5: Authorization](Part-5.md)
+- [Part 6: Authors: Domain layer](Part-6.md)
+- [Part 7: Authors: Database Integration](Part-7.md)
+- [Part 8: Authors: Application Layer](Part-8.md)
+- [Part 9: Authors: User Interface](Part-9.md)
+- [Part 10: Book to Author Relation](Part-10.md)
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+{{if UI == "MVC" && DB == "EF"}}
+
+### Video Tutorial
+
+This part is also recorded as a video tutorial and **<a href="https://www.youtube.com/watch?v=UDNlLiPiBiw&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=2" target="_blank">published on YouTube</a>**.
+
+{{end}}
 
 {{if UI == "MVC"}}
 
@@ -51,7 +64,7 @@ This tutorials has multiple versions based on your **UI** and **Database** prefe
 
 It's common to call the HTTP API endpoints via AJAX from the **JavaScript** side. You can use `$.ajax` or another tool to call the endpoints. However, ABP offers a better way.
 
-ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
+ABP **dynamically** creates **[JavaScript Proxies](../UI/AspNetCore/Dynamic-JavaScript-Proxies.md)** for all API endpoints. So, you can use any **endpoint** just like calling a **JavaScript function**.
 
 ### Testing in the Developer Console
 
@@ -457,11 +470,8 @@ For more information, see the [RoutesService document](https://docs.abp.io/en/ab
 Run the following command in the `angular` folder:
 
 ```bash
-abp generate-proxy --apiUrl https://localhost:XXXXX
+abp generate-proxy
 ```
-
-* XXXXX should be replaced with the backend port of your application.
-* If you don't specify the `--apiUrl` parameter, it will try to get the URL from the `src/environments/environment.ts` file.
 
 The generated files looks like below:
 
@@ -474,7 +484,7 @@ Open the `/src/app/book/book.component.ts` file and replace the content as below
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
+import { BookDto } from './models';
 import { BookService } from './services';
 
 @Component({
@@ -485,8 +495,6 @@ import { BookService } from './services';
 })
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
-
-  booksType = BookType;
 
   constructor(public readonly list: ListService, private bookService: BookService) {}
 

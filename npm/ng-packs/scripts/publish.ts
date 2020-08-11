@@ -21,13 +21,13 @@ const publish = async () => {
   }
 
   const registry = program.preview
-    ? 'https://www.myget.org/F/abp-nightly/npm'
+    ? 'https://www.myget.org/F/abp-nightly/auth/8f2a5234-1bce-4dc7-b976-2983078590a9/npm/'
     : 'https://registry.npmjs.org';
 
   try {
     await fse.remove('../dist');
 
-    await execa('npm', ['install'], { stdout: 'inherit', cwd: '../' });
+    await execa('yarn', ['install', '--ignore-scripts'], { stdout: 'inherit', cwd: '../' });
 
     await fse.rename('../lerna.version.json', '../lerna.json');
 

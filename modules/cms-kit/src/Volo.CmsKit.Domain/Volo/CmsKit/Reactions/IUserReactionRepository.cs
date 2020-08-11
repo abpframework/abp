@@ -14,8 +14,13 @@ namespace Volo.CmsKit.Reactions
             [NotNull] string entityId,
             [NotNull] string reactionName);
 
-        Task<List<UserReaction>> GetListForUserAsync(Guid userId, string entityType, string entityId);
+        Task<List<UserReaction>> GetListForUserAsync(
+            Guid userId,
+            [NotNull] string entityType,
+            [NotNull] string entityId);
 
-        Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(string entityType, string entityId);
+        Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId);
     }
 }

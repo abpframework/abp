@@ -10,7 +10,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\Volo.CmsKit.Domain\Volo.CmsKit.Domain.csproj" />
+    <ProjectReference Include="..\Volo.CmsKit.Domain\Volo.CmsKit.Domain.csproj" />  
+    <ProjectReference Include="..\..\..\..\modules\users\src\Volo.Abp.Users.EntityFrameworkCore\Volo.Abp.Users.EntityFrameworkCore.csproj" />
   </ItemGroup>
   
 </Project>

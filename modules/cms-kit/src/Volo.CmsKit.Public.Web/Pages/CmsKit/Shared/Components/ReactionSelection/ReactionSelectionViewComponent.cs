@@ -1,16 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Public.Reactions;
+using Volo.CmsKit.Web;
 
-namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
+namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 {
+    [ViewComponent(Name = "CmsReactionSelection")]
     [Widget(
         ScriptTypes = new[] {typeof(ReactionSelectionScriptBundleContributor)},
-        StyleTypes = new[] {typeof(ReactionSelectionStyleBundleContributor)}
+        StyleTypes = new[] {typeof(ReactionSelectionStyleBundleContributor)},
+        RefreshUrl = "/CmsKitPublicWidgets/ReactionSelection"
     )]
     public class ReactionSelectionViewComponent : AbpViewComponent
     {
@@ -30,12 +34,7 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
             string entityType,
             string entityId)
         {
-            var result = await ReactionPublicAppService.GetForSelectionAsync(
-                new GetForSelectionDto
-                {
-                    EntityType = entityType,
-                    EntityId = entityId
-                });
+            var result = await ReactionPublicAppService.GetForSelectionAsync(entityType, entityId);
 
             var viewModel = new ReactionSelectionViewModel
             {
@@ -58,6 +57,31 @@ namespace Volo.CmsKit.Web.Pages.CmsKit.Shared.Components.ReactionSelection
             }
 
             return View("~/Pages/CmsKit/Shared/Components/ReactionSelection/Default.cshtml", viewModel);
+        }
+
+        public class ReactionSelectionViewModel
+        {
+            public string EntityType { get; set; }
+
+            public string EntityId { get; set; }
+
+            public List<ReactionViewModel> Reactions { get; set; }
+        }
+
+        public class ReactionViewModel
+        {
+            [NotNull]
+            public string Name { get; set; }
+
+            [CanBeNull]
+            public string DisplayName { get; set; }
+
+            [NotNull]
+            public string Icon { get; set; }
+
+            public int Count { get; set; }
+
+            public bool IsSelectedByCurrentUser { get; set; }
         }
     }
 }

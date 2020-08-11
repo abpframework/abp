@@ -56,7 +56,7 @@ abp new Acme.IssueManagement -t module --no-ui
 
 ### .Domain 项目
 
-解决方案的领域层. 它主要包含 [实体, 集合根](../Entities.md), [领域服务](../Domain-Services.md), [值类型](../Value-Types.md), [仓储接口](../Repositories.md) 和解决方案的其他领域对象.
+解决方案的领域层. 它主要包含 [实体, 集合根](../Entities.md), [领域服务](../Domain-Services.md), 值类型, [仓储接口](../Repositories.md) 和解决方案的其他领域对象.
 
 例如 `Issue` 实体, `IssueManager` 领域服务和 `IIssueRepository` 接口都适合放在这个项目中.
 

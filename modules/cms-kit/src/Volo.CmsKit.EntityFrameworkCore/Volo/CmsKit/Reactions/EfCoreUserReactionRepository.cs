@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
@@ -23,27 +24,42 @@ namespace Volo.CmsKit.Reactions
             string entityId,
             string reactionName)
         {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
+            Check.NotNullOrWhiteSpace(reactionName, nameof(reactionName));
+
             return await DbSet
                 .Where(x =>
-                    x.UserId == userId &&
+                    x.CreatorId == userId &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.ReactionName == reactionName)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<UserReaction>> GetListForUserAsync(Guid userId, string entityType, string entityId)
+        public async Task<List<UserReaction>> GetListForUserAsync(
+            Guid userId,
+            string entityType,
+            string entityId)
         {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
+
             return await DbSet
                 .Where(x =>
-                    x.UserId == userId &&
+                    x.CreatorId == userId &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId)
                 .ToListAsync();
         }
 
-        public async Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(string entityType, string entityId)
+        public async Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(
+            string entityType,
+            string entityId)
         {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
+
             return await DbSet
                 .Where(x =>
                     x.EntityType == entityType &&

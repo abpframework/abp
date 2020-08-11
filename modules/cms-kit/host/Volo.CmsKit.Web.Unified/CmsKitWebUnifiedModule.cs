@@ -34,6 +34,7 @@ using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
+using Volo.CmsKit.Public.Web;
 
 namespace Volo.CmsKit
 {
@@ -111,6 +112,11 @@ namespace Volo.CmsKit
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
+
+            Configure<CmsKitOptions>(options =>
+            {
+                options.PublicCommentEntities.Add("publicQuote");
             });
         }
 

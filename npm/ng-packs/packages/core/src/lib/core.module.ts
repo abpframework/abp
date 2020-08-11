@@ -21,6 +21,7 @@ import { PermissionDirective } from './directives/permission.directive';
 import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
+import { OAuthConfigurationHandler } from './handlers/oauth-configuration.handler';
 import { RoutesHandler } from './handlers/routes.handler';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { LocalizationModule } from './localization.module';
@@ -34,10 +35,10 @@ import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
 import { SessionState } from './states/session.state';
-import { CORE_OPTIONS } from './tokens/options.token';
+import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
-import { getInitialData, localeInitializer, configureOAuth } from './utils/initial-utils';
+import { getInitialData, localeInitializer } from './utils/initial-utils';
 
 export function storageFactory(): OAuthStorage {
   return localStorage;
@@ -171,8 +172,13 @@ export class CoreModule {
           useValue: { environment: options.environment },
         },
         {
-          provide: CORE_OPTIONS,
+          provide: 'CORE_OPTIONS',
           useValue: options,
+        },
+        {
+          provide: CORE_OPTIONS,
+          useFactory: coreOptionsFactory,
+          deps: ['CORE_OPTIONS'],
         },
         {
           provide: HTTP_INTERCEPTORS,
@@ -182,8 +188,8 @@ export class CoreModule {
         {
           provide: APP_INITIALIZER,
           multi: true,
-          deps: [Injector, NGXS_CONFIG_PLUGIN_OPTIONS],
-          useFactory: configureOAuth,
+          deps: [OAuthConfigurationHandler],
+          useFactory: noop,
         },
         {
           provide: APP_INITIALIZER,

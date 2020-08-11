@@ -158,7 +158,7 @@ namespace Volo.Abp.Cli
                     return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli");
 
                 case UpdateChannel.Prerelease:
-                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includePreviews: true);
+                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeReleaseCandidates: true);
 
                 case UpdateChannel.Nightly:
                     return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);

@@ -15,12 +15,12 @@ namespace Volo.CmsKit.Reactions
             Options = options.Value;
         }
 
-        public virtual Task<List<ReactionDefinition>> GetAvailableReactionsAsync(string entityType)
+        public virtual Task<List<ReactionDefinition>> GetReactionsAsync(string entityType = null)
         {
             return Task.FromResult(Options.Reactions.Values.ToList());
         }
 
-        public Task<ReactionDefinition> GetReactionOrNullAsync(string reactionName, string entityType)
+        public Task<ReactionDefinition> GetReactionOrNullAsync(string reactionName, string entityType = null)
         {
             return Task.FromResult(Options.Reactions.GetOrDefault(reactionName));
         }

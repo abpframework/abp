@@ -2,19 +2,18 @@ import {
   Directive,
   ElementRef,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
-  Renderer2,
-  ViewContainerRef,
-  TemplateRef,
   Optional,
+  Renderer2,
   SimpleChanges,
-  OnChanges,
+  TemplateRef,
+  ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ConfigState } from '../states';
-import { takeUntilDestroy } from '../utils';
 import { Subscription } from 'rxjs';
+import { ConfigState } from '../states';
 
 @Directive({
   selector: '[abpPermission]',
@@ -39,7 +38,6 @@ export class PermissionDirective implements OnInit, OnDestroy, OnChanges {
 
     this.subscription = this.store
       .select(ConfigState.getGrantedPolicy(this.condition))
-      .pipe(takeUntilDestroy(this))
       .subscribe(isGranted => {
         if (this.templateRef && isGranted) {
           this.vcRef.clear();
@@ -47,7 +45,10 @@ export class PermissionDirective implements OnInit, OnDestroy, OnChanges {
         } else if (this.templateRef && !isGranted) {
           this.vcRef.clear();
         } else if (!isGranted && !this.templateRef) {
-          this.renderer.removeChild((this.elRef.nativeElement as HTMLElement).parentElement, this.elRef.nativeElement);
+          this.renderer.removeChild(
+            (this.elRef.nativeElement as HTMLElement).parentElement,
+            this.elRef.nativeElement,
+          );
         }
       });
   }
@@ -58,7 +59,9 @@ export class PermissionDirective implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    if (this.subscription) this.subscription.unsubscribe();
+  }
 
   ngOnChanges({ condition }: SimpleChanges) {
     if ((condition || { currentValue: null }).currentValue) {

@@ -13,11 +13,11 @@
     <EmbeddedResource Include="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
     <content Remove="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>

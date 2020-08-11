@@ -32,18 +32,31 @@ In this tutorial series, you will build an ABP based web application named `Acme
 
 This tutorial is organized as the following parts;
 
-- [Part 1: Creating the project and book list page](Part-1.md)
+- [Part 1: Creating the server side](Part-1.md)
 - [Part 2: The book list page](Part-2.md)
 - **Part 3: Creating, updating and deleting books (this part)**
 - [Part 4: Integration tests](Part-4.md)
 - [Part 5: Authorization](Part-5.md)
+- [Part 6: Authors: Domain layer](Part-6.md)
+- [Part 7: Authors: Database Integration](Part-7.md)
+- [Part 8: Authors: Application Layer](Part-8.md)
+- [Part 9: Authors: User Interface](Part-9.md)
+- [Part 10: Book to Author Relation](Part-10.md)
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+{{if UI == "MVC" && DB == "EF"}}
+
+### Video Tutorial
+
+This part is also recorded as a video tutorial and **<a href="https://www.youtube.com/watch?v=TLShZO8u2VE&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=3" target="_blank">published on YouTube</a>**.
+
+{{end}}
 
 {{if UI == "MVC"}}
 
@@ -643,7 +656,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
+import { BookDto } from './models';
 import { BookService } from './services';
 
 @Component({
@@ -654,8 +667,6 @@ import { BookService } from './services';
 })
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
-
-  booksType = BookType;
 
   isModalOpen = false; // add this line
 
@@ -738,7 +749,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto, BookType } from './models';
+import { BookDto, BookType } from './models'; // add BookType
 import { BookService } from './services';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
@@ -751,13 +762,13 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  booksType = BookType;
-
   form: FormGroup; // add this line
 
-  // add bookTypes as a list of enum members
-  bookTypes = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
+  bookType = BookType; // add this line
+
+  // add bookTypes as a list of BookType enum members
+  bookTypes = Object.keys(this.bookType).filter(
+    (key) => typeof this.bookType[key] === 'number'
   );
 
   isModalOpen = false;
@@ -808,7 +819,8 @@ export class BookComponent implements OnInit {
 
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
 * Added `form: FormGroup` property.
-* Add `bookTypes` as a list of `BookType` enum members.
+* Added `bookType` property so that you can reach `BookType` enum members from template.
+* Added `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
 * Injected `FormBuilder` into the constructor. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
 * Added `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
 * Added `save` method.
@@ -832,7 +844,7 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
+        <option [ngValue]="bookType[type]" *ngFor="let type of bookTypes"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -917,13 +929,12 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  booksType = BookType;
-
   form: FormGroup;
 
-  // <== added bookTypes array ==>
-  bookTypes = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
+  bookType = BookType;
+
+  bookTypes = Object.keys(this.bookType).filter(
+    (key) => typeof this.bookType[key] === 'number'
   );
 
   isModalOpen = false;
@@ -998,14 +1009,14 @@ import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  booksType = BookType;
+  selectedBook = new BookDto(); // declare selectedBook
 
   form: FormGroup;
 
-  selectedBook = new BookDto(); // declare selectedBook
+  bookType = BookType;
 
-  bookTypes = Object.keys(BookType).filter(
-    (bookType) => typeof this.booksType[bookType] === 'number'
+  bookTypes = Object.keys(this.bookType).filter(
+    (key) => typeof this.bookType[key] === 'number'
   );
 
   isModalOpen = false;
@@ -1182,4 +1193,4 @@ Clicking the "Delete" action calls the `delete` method which then shows a confir
 
 ## The Next Part
 
-See the [next part](part-4.md) of this tutorial.
+See the [next part](Part-4.md) of this tutorial.
