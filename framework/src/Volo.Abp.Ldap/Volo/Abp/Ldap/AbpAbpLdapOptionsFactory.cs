@@ -34,6 +34,7 @@ namespace Volo.Abp.Ldap
         {
             options.ServerHost = await GetSettingOrDefaultValue(LdapSettingNames.ServerHost, options.ServerHost);
             options.ServerPort = await SettingProvider.GetAsync(LdapSettingNames.ServerPort, options.ServerPort);
+            options.BaseDc = await GetSettingOrDefaultValue(LdapSettingNames.BaseDc, options.BaseDc);
             options.UserName = await GetSettingOrDefaultValue(LdapSettingNames.UserName, options.UserName);
             options.Password = await GetSettingOrDefaultValue(LdapSettingNames.Password, options.Password);
         }
