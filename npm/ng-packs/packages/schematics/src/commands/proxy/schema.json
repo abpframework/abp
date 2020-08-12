@@ -12,23 +12,23 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "Please enter name of the module you wish to generate proxies for. (default: app)"
+      "x-prompt": "Please enter name of the module you wish to generate proxies for. (default: \"app\")"
     },
     "source": {
       "alias": "s",
-      "description": "The URL to get API configuration from",
+      "description": "The URL to get API definitions from",
       "type": "string",
       "$default": {
         "$source": "argv",
         "index": 1
       },
-      "x-prompt": "Plese enter URL to get API config from. (default: environment.apis.default.url)"
+      "x-prompt": "Plese enter URL to get API definitions from. (default: resolved from environment)"
     },
     "project": {
       "alias": "p",
       "description": "The project to place the generated code in",
       "type": "string",
-      "x-prompt": "Please enter the project to place proxies in. (default: default app in workspace)"
+      "x-prompt": "Please enter the project to place proxies in. (default: workspace \"defaultProject\")"
     },
     "path": {
       "description": "The path to place the generated code at",
