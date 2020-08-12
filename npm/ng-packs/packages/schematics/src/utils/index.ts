@@ -1,5 +1,6 @@
 export * from './angular';
+export * from './ast';
 export * from './common';
-export * from './project';
+export * from './source';
 export * from './text';
 export * from './workspace';
