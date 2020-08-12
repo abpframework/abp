@@ -84,12 +84,12 @@ namespace Volo.Abp.IdentityModel
         }
 
         /// <summary>
-        /// Cache absolute expiration
-        /// Default: 30 minutes.
+        /// Absolute expiration duration (as seconds) for the access token cache.
+        /// Default: 1800 seconds (30 minutes)
         /// </summary>
-        public double CacheAbsoluteExpiration
+        public int CacheAbsoluteExpiration
         {
-            get => this.GetOrDefault(nameof(CacheAbsoluteExpiration ))?.To<double>() ?? 60 * 30;
+            get => this.GetOrDefault(nameof(CacheAbsoluteExpiration ))?.To<int>() ?? 60 * 30;
             set => this[nameof(CacheAbsoluteExpiration)] = value.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -107,7 +107,7 @@ namespace Volo.Abp.IdentityModel
             string userName = null,
             string userPassword = null,
             bool requireHttps = true,
-            double cacheAbsoluteExpiration = 60 * 30)
+            int cacheAbsoluteExpiration = 60 * 30)
         {
             this[nameof(Authority)] = authority;
             this[nameof(Scope)] = scope;
