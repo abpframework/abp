@@ -1,0 +1,23 @@
+{
+  "name": "@abp/ng.schematics",
+  "version": "3.0.5",
+  "description": "Schematics that works with ABP Suite",
+  "keywords": [
+    "schematics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "~10.0.3",
+    "@angular-devkit/schematics": "~10.0.3",
+    "typescript": "~3.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.1",
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.0",
+    "jest-preset-angular": "^8.2.0",
+    "@schematics/angular": "~10.0.3"
+  }
+}

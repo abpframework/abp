@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "SchematicsAbpEntityModule",
+  "title": "ABP Entity Module Schema",
+  "type": "object",
+  "properties": {
+    "module": {
+      "alias": "m",
+      "description": "The name of the module to generate code for",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "x-prompt": "Please enter name of the module you wish to generate proxies for. (default: app)"
+    },
+    "apiUrl": {
+      "alias": "a",
+      "description": "The URL to get API configuration from",
+      "type": "string",
+      "x-prompt": "Plese enter URL to get API config from. Leave blank to use environment variables."
+    },
+    "out": {
+      "alias": "o",
+      "description": "The path to place the generated code at",
+      "type": "string",
+      "format": "path",
+      "x-prompt": "Plese enter a custom output path. Leave blank if you do not need one."
+    }
+  },
+  "required": []
+}

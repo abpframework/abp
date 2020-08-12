@@ -1,0 +1,9 @@
+{
+  "schematics": {
+    "proxy": {
+      "description": "ABP Proxy Generator Schematics",
+      "factory": "./commands/proxy",
+      "schema": "./commands/proxy/schema.json"
+    }
+  }
+}
