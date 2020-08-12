@@ -182,20 +182,23 @@ Go to`OnApplicationInitialization()` method in `AcmeBookStoreWebModule.cs` add `
 ```csharp
 public override void OnApplicationInitialization(ApplicationInitializationContext context)
 {
-	var app = context.GetApplicationBuilder();
-	var env = context.GetEnvironment();
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
 
-	if (env.IsDevelopment())
-	{
-		app.UseDeveloperExceptionPage();
-	}
-	else
-	{
-		app.UseErrorPage();
-		app.UseHsts();
-	}
+        if (env.IsDevelopment())
+        {
+                app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+                app.UseErrorPage();
+                app.UseHsts();
+        }
 
-	app.UseCookiePolicy(); //<--- added this --->
+        app.UseCookiePolicy(); //<--- added this --->
+	
+	//....
+}
 ```
 
 
