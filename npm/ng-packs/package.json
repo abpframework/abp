@@ -70,6 +70,7 @@
     "conventional-changelog-cli": "^2.0.31",
     "cz-conventional-changelog": "3.0.2",
     "font-awesome": "^4.7.0",
+    "got": "^11.5.2",
     "jest": "^25.0.0",
     "jest-canvas-mock": "^2.2.0",
     "jest-preset-angular": "^8.2.0",
