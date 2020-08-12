@@ -10,22 +10,32 @@
       "type": "string",
       "$default": {
         "$source": "argv",
-        "index": 1
+        "index": 0
       },
       "x-prompt": "Please enter name of the module you wish to generate proxies for. (default: app)"
     },
-    "apiUrl": {
-      "alias": "a",
+    "source": {
+      "alias": "s",
       "description": "The URL to get API configuration from",
       "type": "string",
-      "x-prompt": "Plese enter URL to get API config from. Leave blank to use environment variables."
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      },
+      "x-prompt": "Plese enter URL to get API config from. (default: environment.apis.default.url)"
     },
-    "out": {
-      "alias": "o",
+    "project": {
+      "alias": "p",
+      "description": "The project to place the generated code in",
+      "type": "string",
+      "x-prompt": "Please enter the project to place proxies in. (default: default app in workspace)"
+    },
+    "path": {
       "description": "The path to place the generated code at",
       "type": "string",
       "format": "path",
-      "x-prompt": "Plese enter a custom output path. Leave blank if you do not need one."
+      "default": "",
+      "visible": false
     }
   },
   "required": []
