@@ -22,6 +22,7 @@ import { EntityProp, EntityPropList } from '../../models/entity-props';
 import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
 import { EXTENSIONS_IDENTIFIER } from '../../tokens/extensions.token';
+import { EntityActionList } from '../../models/entity-actions';
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
 @Component({
@@ -46,6 +47,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
 
   readonly propList: EntityPropList<R>;
 
+  readonly actionList: EntityActionList<R>;
+
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
 
   constructor(@Inject(LOCALE_ID) private locale: string, injector: Injector) {
@@ -54,6 +57,8 @@ export class ExtensibleTableComponent<R = any> implements OnChanges {
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
     this.propList = extensions.entityProps.get(name).props;
+    this.actionList = (extensions['entityActions'].get(name)
+      .actions as unknown) as EntityActionList<R>;
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
   }
 
