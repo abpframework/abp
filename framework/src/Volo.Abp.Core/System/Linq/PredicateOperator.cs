@@ -34,12 +34,7 @@ namespace System.Linq
 
             protected override Expression VisitParameter(ParameterExpression node)
             {
-                if (node == _oldParameter)
-                {
-                    return _newParameter;
-                }
-
-                return base.VisitParameter(node);
+                return node == _oldParameter ? _newParameter : base.VisitParameter(node);
             }
         }
 
@@ -53,20 +48,6 @@ namespace System.Linq
         public static ExpressionStarter<T> New<T>(bool defaultExpression)
         {
             return new ExpressionStarter<T>(defaultExpression);
-        }
-
-        /// <summary> Always true </summary>
-        [Obsolete("Use PredicateBuilder.New() instead.")]
-        public static Expression<Func<T, bool>> True<T>()
-        {
-            return new ExpressionStarter<T>(true);
-        }
-
-        /// <summary> Always false </summary>
-        [Obsolete("Use PredicateBuilder.New() instead.")]
-        public static Expression<Func<T, bool>> False<T>()
-        {
-            return new ExpressionStarter<T>(false);
         }
 
         /// <summary> OR </summary>
@@ -127,9 +108,13 @@ namespace System.Linq
         public ExpressionStarter(bool defaultExpression)
         {
             if (defaultExpression)
+            {
                 DefaultExpression = f => true;
+            }
             else
+            {
                 DefaultExpression = f => false;
+            }
         }
 
         public ExpressionStarter(Expression<Func<T, bool>> exp) : this(false)
