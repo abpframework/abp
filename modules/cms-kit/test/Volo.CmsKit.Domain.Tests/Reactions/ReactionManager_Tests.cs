@@ -69,7 +69,7 @@ namespace Volo.CmsKit.Reactions
 
             UsingDbContext(context =>
             {
-                var reaction = context.UserReactions.FirstOrDefault(x =>
+                var reaction = context.Set<UserReaction>().FirstOrDefault(x =>
                     x.CreatorId == _cmsKitTestData.User1Id &&
                     x.ReactionName == StandardReactions.Confused &&
                     x.EntityId == _cmsKitTestData.EntityId1 &&

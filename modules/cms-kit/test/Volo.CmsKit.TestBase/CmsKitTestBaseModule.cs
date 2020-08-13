@@ -18,6 +18,8 @@ namespace Volo.CmsKit
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            CmsKitFeatures.EnableAll();
+
             context.Services.AddAlwaysAllowAuthorization();
         }
 

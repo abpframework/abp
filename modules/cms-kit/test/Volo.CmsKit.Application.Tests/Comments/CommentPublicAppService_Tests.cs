@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Public.Comments;
 using Xunit;
@@ -54,7 +51,7 @@ namespace Volo.CmsKit.Comments
 
             UsingDbContext(context =>
             {
-                var comments = context.Comments.Where(x =>
+                var comments = context.Set<Comment>().Where(x =>
                     x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
 
                 comments
@@ -75,7 +72,7 @@ namespace Volo.CmsKit.Comments
 
             UsingDbContext(context =>
             {
-                var comment = context.Comments.Single(x =>
+                var comment = context.Set<Comment>().Single(x =>
                     x.Id == _cmsKitTestData.CommentWithChildId);
 
                 comment.Text.ShouldBe("I'm Updated");
@@ -91,7 +88,7 @@ namespace Volo.CmsKit.Comments
 
             UsingDbContext(context =>
             {
-                var comment = context.Comments.FirstOrDefault(x =>
+                var comment = context.Set<Comment>().FirstOrDefault(x =>
                     x.Id == _cmsKitTestData.CommentWithChildId);
 
                 comment.ShouldBeNull();

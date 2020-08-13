@@ -8,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.EntityFrameworkCore;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.Comments
 {
@@ -27,7 +28,7 @@ namespace Volo.CmsKit.Comments
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
             var query = from comment in DbSet
-                join user in DbContext.CmsUsers on comment.CreatorId equals user.Id
+                join user in DbContext.Set<CmsUser>() on comment.CreatorId equals user.Id
                 where entityType == comment.EntityType && entityId == comment.EntityId
                 orderby comment.CreationTime
                 select new CommentWithAuthorQueryResultItem
