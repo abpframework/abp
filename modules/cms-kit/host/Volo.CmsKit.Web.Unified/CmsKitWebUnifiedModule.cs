@@ -113,11 +113,6 @@ namespace Volo.CmsKit
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
-
-            Configure<CmsKitOptions>(options =>
-            {
-                options.PublicCommentEntities.Add("publicQuote");
-            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
