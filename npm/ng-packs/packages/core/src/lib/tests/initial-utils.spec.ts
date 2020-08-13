@@ -1,10 +1,13 @@
 import { Component, Injector } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
-import { getInitialData, localeInitializer, configureOAuth } from '../utils';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { CORE_OPTIONS } from '../tokens/options.token';
+import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
+import * as environmentUtils from '../utils/environment-utils';
+import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 
 @Component({
   selector: 'abp-dummy',
@@ -17,23 +20,12 @@ describe('InitialUtils', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     mocks: [Store, OAuthService],
+    providers: [
+      { provide: CORE_OPTIONS, useValue: { environment: { oAuthConfig: { issuer: 'test' } } } },
+    ],
   });
 
   beforeEach(() => (spectator = createComponent()));
-
-  describe('#configureOAuth', () => {
-    test('should be called the the configure method of OAuthService', async () => {
-      const injector = spectator.inject(Injector);
-      const injectorSpy = jest.spyOn(injector, 'get');
-      const oAuth = spectator.inject(OAuthService);
-      const configureSpy = jest.spyOn(oAuth, 'configure');
-
-      injectorSpy.mockReturnValueOnce(oAuth);
-
-      await configureOAuth(injector, { environment: { oAuthConfig: { issuer: 'test' } } })();
-      expect(configureSpy).toHaveBeenCalledWith({ issuer: 'test' });
-    });
-  });
 
   describe('#getInitialData', () => {
     test('should dispatch GetAppConfiguration and return', async () => {
@@ -41,9 +33,14 @@ describe('InitialUtils', () => {
       const injectorSpy = jest.spyOn(injector, 'get');
       const store = spectator.inject(Store);
       const dispatchSpy = jest.spyOn(store, 'dispatch');
+      const parseTenantFromUrlSpy = jest.spyOn(multiTenancyUtils, 'parseTenantFromUrl');
+      const getRemoteEnvSpy = jest.spyOn(environmentUtils, 'getRemoteEnv');
+      parseTenantFromUrlSpy.mockReturnValue(Promise.resolve());
+      getRemoteEnvSpy.mockReturnValue(Promise.resolve());
 
       injectorSpy.mockReturnValueOnce(store);
       injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
+      injectorSpy.mockReturnValueOnce({ init: () => null });
       injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => false });
       dispatchSpy.mockReturnValue(of('test'));
 
@@ -57,16 +54,16 @@ describe('InitialUtils', () => {
     test('should call logOut fn of OAuthService when token is valid and current user not found', async () => {
       const injector = spectator.inject(Injector);
       const injectorSpy = jest.spyOn(injector, 'get');
-      const store = spectator.inject(Store);
-      const dispatchSpy = jest.spyOn(store, 'dispatch');
       const logOutFn = jest.fn();
 
-      injectorSpy.mockReturnValueOnce(store);
-      injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
-      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => true, logOut: logOutFn });
-      dispatchSpy.mockReturnValue(of({ currentUser: { id: null } }));
+      injectorSpy.mockReturnValue({ hasValidAccessToken: () => true, logOut: logOutFn });
 
-      getInitialData(injector)();
+      checkAccessToken(
+        {
+          selectSnapshot: () => false,
+        } as any,
+        injector,
+      );
       expect(logOutFn).toHaveBeenCalled();
     });
   });
@@ -77,7 +74,8 @@ describe('InitialUtils', () => {
       const injectorSpy = jest.spyOn(injector, 'get');
       const store = spectator.inject(Store);
       store.selectSnapshot.andCallFake(selector => selector({ SessionState: { language: 'tr' } }));
-      injectorSpy.mockReturnValue(store);
+      injectorSpy.mockReturnValueOnce(store);
+      injectorSpy.mockReturnValueOnce({ cultureNameLocaleFileMap: {} });
       expect(typeof localeInitializer(injector)).toBe('function');
       expect(await localeInitializer(injector)()).toBe('resolved');
     });

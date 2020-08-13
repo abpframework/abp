@@ -46,7 +46,15 @@ namespace Volo.Abp.TestApp
 
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Tokyo"));
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Madrid"));
-            await _cityRepository.InsertAsync(new City(LondonCityId, "London") { ExtraProperties = { { "Population", 10_470_000 }, { "PhoneCode", "42" } } });
+            await _cityRepository.InsertAsync(new City(LondonCityId, "London")
+            {
+                ExtraProperties =
+                {
+                    { "Population", 10_470_000 },
+                    { "PhoneCode", "42" },
+                    { "ZipCode", "1000" }
+                }
+            });
             await _cityRepository.InsertAsync(istanbul);
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Paris"));
             await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Washington"));

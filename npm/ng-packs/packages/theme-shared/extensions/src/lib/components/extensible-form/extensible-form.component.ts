@@ -1,20 +1,16 @@
 import { TrackByService } from '@abp/ng.core';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   Inject,
   Input,
-  OnDestroy,
   Optional,
   QueryList,
   SkipSelf,
   ViewChildren,
 } from '@angular/core';
 import { ControlContainer, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 import { EXTRA_PROPERTIES_KEY } from '../../constants/extra-properties';
 import { FormPropList } from '../../models/form-props';
 import { ExtensionsService } from '../../services/extensions.service';
@@ -35,7 +31,7 @@ import { ExtensibleFormPropComponent } from './extensible-form-prop.component';
     },
   ],
 })
-export class ExtensibleFormComponent<R = any> implements AfterViewInit, OnDestroy {
+export class ExtensibleFormComponent<R = any> {
   @ViewChildren(ExtensibleFormPropComponent)
   formProps: QueryList<ExtensibleFormPropComponent>;
 
@@ -46,7 +42,6 @@ export class ExtensibleFormComponent<R = any> implements AfterViewInit, OnDestro
     this.record = record;
   }
 
-  private subscription = new Subscription();
   extraPropertiesKey = EXTRA_PROPERTIES_KEY;
   propList: FormPropList<R>;
   record: R;
@@ -66,17 +61,4 @@ export class ExtensibleFormComponent<R = any> implements AfterViewInit, OnDestro
     private extensions: ExtensionsService,
     @Inject(EXTENSIONS_IDENTIFIER) private identifier: string,
   ) {}
-
-  ngAfterViewInit() {
-    this.subscription.add(
-      this.form.statusChanges.pipe(debounceTime(0)).subscribe(() => {
-        this.formProps.forEach(prop => prop.cdRef.markForCheck());
-        this.cdRef.detectChanges();
-      }),
-    );
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
 }

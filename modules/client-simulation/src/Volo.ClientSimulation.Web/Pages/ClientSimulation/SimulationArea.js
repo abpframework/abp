@@ -1,14 +1,13 @@
 ﻿var SimulationArea = {};
 (function ($) {
-
     var $mainContainer = null;
 
     function refreshSimulationArea() {
         $.get('/ClientSimulation/SimulationArea')
-            .done(function(result) {
+            .done(function (result) {
                 $mainContainer.html(result);
             })
-            .always(function() {
+            .always(function () {
                 setTimeout(refreshSimulationArea, 1000);
             });
     }
@@ -17,5 +16,4 @@
         $mainContainer = $container;
         setTimeout(refreshSimulationArea, 1000);
     };
-
 })(jQuery);

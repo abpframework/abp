@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
         public AbpExceptionFilter(
             IExceptionToErrorInfoConverter errorInfoConverter,
-            IHttpExceptionStatusCodeFinder statusCodeFinder, 
+            IHttpExceptionStatusCodeFinder statusCodeFinder,
             IJsonSerializer jsonSerializer)
         {
             _errorInfoConverter = errorInfoConverter;
@@ -54,7 +55,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             {
                 return true;
             }
-            
+
             if (context.HttpContext.Request.CanAccept(MimeTypes.Application.Json))
             {
                 return true;
@@ -81,8 +82,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 
             var logLevel = context.Exception.GetLogLevel();
 
-            Logger.LogWithLevel(logLevel, $"---------- {nameof(RemoteServiceErrorInfo)} ----------");
-            Logger.LogWithLevel(logLevel, _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
+            var remoteServiceErrorInfoBuilder = new StringBuilder();
+            remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
+            remoteServiceErrorInfoBuilder.AppendLine( _jsonSerializer.Serialize(remoteServiceErrorInfo, indented: true));
+            Logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+
             Logger.LogException(context.Exception, logLevel);
 
             await context.HttpContext

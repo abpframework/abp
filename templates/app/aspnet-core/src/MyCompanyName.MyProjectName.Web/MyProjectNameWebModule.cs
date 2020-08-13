@@ -143,12 +143,6 @@ namespace MyCompanyName.MyProjectName.Web
         {
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources
-                    .Get<MyProjectNameResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-
                 options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
@@ -197,7 +191,10 @@ namespace MyCompanyName.MyProjectName.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+
+            app.UseAbpRequestLocalization();
+
+            if (!env.IsDevelopment())
             {
                 app.UseErrorPage();
             }
@@ -213,7 +210,6 @@ namespace MyCompanyName.MyProjectName.Web
                 app.UseMultiTenancy();
             }
 
-            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();

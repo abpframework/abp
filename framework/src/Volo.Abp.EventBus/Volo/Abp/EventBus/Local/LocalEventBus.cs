@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.EventBus.Local
@@ -29,8 +30,9 @@ namespace Volo.Abp.EventBus.Local
 
         public LocalEventBus(
             IOptions<AbpLocalEventBusOptions> options,
-            IServiceScopeFactory serviceScopeFactory)
-            : base(serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory,
+            ICurrentTenant currentTenant)
+            : base(serviceScopeFactory, currentTenant)
         {
             Options = options.Value;
             Logger = NullLogger<LocalEventBus>.Instance;

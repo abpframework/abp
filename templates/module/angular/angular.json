@@ -61,6 +61,8 @@
             "polyfills": "projects/dev-app/src/polyfills.ts",
             "tsConfig": "projects/dev-app/tsconfig.app.json",
             "aot": true,
+            "extractCss": true,
+            "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
             "assets": [
               "projects/dev-app/src/favicon.ico",
               "projects/dev-app/src/assets"

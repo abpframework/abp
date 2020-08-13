@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Application;
+using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -15,6 +16,11 @@ namespace Volo.Abp.FeatureManagement
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
+            });
+
+            Configure<AbpNewtonsoftJsonSerializerOptions>(options =>
+            {
+                options.Converters.Add<StringValueTypeJsonConverter>();
             });
         }
     }

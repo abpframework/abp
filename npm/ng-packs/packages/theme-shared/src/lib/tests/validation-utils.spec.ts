@@ -6,6 +6,7 @@ import { NgxsModule, Store } from '@ngxs/store';
 import { HttpClient } from '@angular/common/http';
 import { getPasswordValidators } from '../utils';
 import { Validators } from '@angular/forms';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({ template: '', selector: 'abp-dummy' })
 class DummyComponent {}
@@ -15,14 +16,14 @@ describe('ValidationUtils', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     imports: [NgxsModule.forRoot([ConfigState]), NgxValidateCoreModule.forRoot()],
-    mocks: [HttpClient],
+    mocks: [HttpClient, OAuthService],
   });
 
   beforeEach(() => (spectator = createComponent()));
 
   describe('#getPasswordValidators', () => {
     it('should return password valdiators', () => {
-      const store = spectator.get(Store);
+      const store = spectator.inject(Store);
       store.reset({
         ConfigState: {
           setting: {

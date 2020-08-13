@@ -25,7 +25,7 @@
     "DisplayName:Email": "Email address",
     "DisplayName:PhoneNumber": "Phone number",
     "DisplayName:TwoFactorEnabled": "Two factor verification",
-    "DisplayName:LockoutEnabled": "Locking account after failed login attempts",
+    "DisplayName:LockoutEnabled": "Lock account after failed login attempts",
     "NewRole": "New role",
     "RoleName": "Role name",
     "CreationTime": "Creation time",
@@ -84,10 +84,10 @@
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Lockout duration(seconds)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Max failed access attempts",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "Require confirmed email",
-    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Enable phone number confirmation",
-    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Require confirmed phoneNumber",
-    "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "Is username update enabled",
-    "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "Is email update enabled",
+    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Allow users to confirm their phone number",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Require confirmed phone number",
+    "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "Allow users to change their usernames",
+    "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "Allow users to change their email addresses",
     "Description:Abp.Identity.Password.RequiredLength": "The minimum length a password must be.",
     "Description:Abp.Identity.Password.RequiredUniqueChars": "The minimum number of unique characters which a password must contain.",
     "Description:Abp.Identity.Password.RequireNonAlphanumeric": "If passwords must contain a non-alphanumeric character.",
@@ -102,6 +102,7 @@
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Whether a confirmed telephone number is required to sign in.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Whether the username can be updated by the user.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user.",
-    "Volo.Abp.Identity:010002": "Can not set more than {MaxUserMembershipCount} organization unit for a user!"
+    "Volo.Abp.Identity:010002": "Can not set more than {MaxUserMembershipCount} organization unit for a user!",
+    "Volo.Abp.Identity:010003": "Can not change password of an externally logged in user!"
   }
 }

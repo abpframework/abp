@@ -87,8 +87,8 @@ export class FeatureManagementComponent
     let features = this.store.selectSnapshot(FeatureManagementState.getFeatures);
 
     features = features.map((feature, i) => ({
-      name: feature.name,
-      value: !this.form.value[i] || this.form.value[i] === 'false' ? null : this.form.value[i],
+      ...feature,
+      value: this.form.value[i],
     }));
 
     this.store

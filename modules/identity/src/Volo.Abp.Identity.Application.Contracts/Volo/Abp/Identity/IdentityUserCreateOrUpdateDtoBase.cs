@@ -32,5 +32,10 @@ namespace Volo.Abp.Identity
 
         [CanBeNull]
         public string[] RoleNames { get; set; }
+
+        protected IdentityUserCreateOrUpdateDtoBase() : base(false)
+        {
+            
+        }
     }
 }

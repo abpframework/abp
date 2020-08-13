@@ -126,8 +126,8 @@ describe('Form Prop Utils', () => {
 
 function* getInjected(spectator: SpectatorService<ExtensionsService>) {
   yield spectator.service;
-  yield spectator.get(EXTENSIONS_IDENTIFIER);
-  yield spectator.get(LocalizationService);
+  yield spectator.inject(EXTENSIONS_IDENTIFIER);
+  yield spectator.inject(LocalizationService);
 }
 
 interface Foo {

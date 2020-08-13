@@ -23,8 +23,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             output.SuppressOutput();
         }
 
-
-
         protected virtual string GetAccordionHeaderItem(TagHelperContext context, TagHelperOutput output)
         {
             return "     <div class=\"card-header\" id=\"" + GetHeadingId() + "\">" + Environment.NewLine +

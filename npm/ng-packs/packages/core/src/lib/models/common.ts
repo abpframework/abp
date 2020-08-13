@@ -9,6 +9,7 @@ export namespace ABP {
     environment: Partial<Config.Environment>;
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
+    cultureNameLocaleFileMap?: Dictionary<string>;
   }
 
   export interface Test {
@@ -28,6 +29,11 @@ export namespace ABP {
     sorting?: string;
     skipCount?: number;
     maxResultCount?: number;
+  }
+
+  export interface Lookup {
+    id: string;
+    displayName: string;
   }
 
   export interface Nav {

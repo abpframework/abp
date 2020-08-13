@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Localization;
@@ -15,6 +14,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
     {
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
+        public IdentitySecurityLogManager IdentitySecurityLogManager { get; set; }
 
         protected AccountPageModel()
         {
