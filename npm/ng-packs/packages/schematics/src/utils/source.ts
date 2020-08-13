@@ -14,8 +14,14 @@ export async function getSourceJson(url: string) {
       searchParams: { includeTypes: true },
       https: { rejectUnauthorized: false },
     }));
-  } catch (e) {
-    throw new SchematicsException(Exception.NoApi);
+  } catch (err) {
+    // handle redirects
+    try {
+      ({ response: { body } } = err);
+      if (!body.types) throw Error('');
+    } catch (_) {
+      throw new SchematicsException(Exception.NoApi);
+    }
   }
 
   return body;
