@@ -22,7 +22,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public async Task OnGet(string errorId)
         {
-            ErrorMessage = await _interaction.GetErrorContextAsync(errorId);
+            ErrorMessage = await _interaction.GetErrorContextAsync(errorId) ?? new ErrorMessage
+            {
+                Error = L["Error"]
+            };
 
             if (ErrorMessage != null)
             {
