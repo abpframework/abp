@@ -44,10 +44,15 @@ namespace Volo.CmsKit.Comments
             CreatorId = creatorId;
             TenantId = tenantId;
 
-            SetText(text);
+            SetTextInternal(text);
         }
 
         public virtual void SetText(string text)
+        {
+            SetTextInternal(text);
+        }
+
+        protected virtual void SetTextInternal(string text)
         {
             Text = Check.NotNullOrWhiteSpace(text, nameof(text), CommentConsts.MaxTextLength);
         }

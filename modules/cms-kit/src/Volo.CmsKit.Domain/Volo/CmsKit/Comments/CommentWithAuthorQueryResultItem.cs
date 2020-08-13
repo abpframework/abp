@@ -2,7 +2,7 @@
 
 namespace Volo.CmsKit.Comments
 {
-    public class CommentWithAuthor
+    public class CommentWithAuthorQueryResultItem
     {
         public Comment Comment { get; set; }
 

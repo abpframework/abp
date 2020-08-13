@@ -93,7 +93,7 @@ namespace Volo.CmsKit.Public.Comments
             await CommentRepository.DeleteAsync(id);
         }
 
-        private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthor> comments)
+        private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
         {
             var parentComments = comments
                 .Where(c=> c.Comment.RepliedCommentId == null)
@@ -118,7 +118,7 @@ namespace Volo.CmsKit.Public.Comments
             return parentComments;
         }
 
-        private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthor> comments, Guid commentId)
+        private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
         {
             return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
         }

@@ -43,6 +43,7 @@ namespace Volo.CmsKit.Reactions
 
             reactions.Items.
                 First(r=>r.Reaction.Name == StandardReactions.Rocket).IsSelectedByCurrentUser.ShouldBeTrue();
+
             reactions.Items.
                 First(r=>r.Reaction.Name == StandardReactions.Rocket).Count.ShouldBe(1);
 
