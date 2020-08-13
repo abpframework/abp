@@ -32,8 +32,14 @@ namespace Volo.Abp.ObjectExtending
         }
 
         public ObjectExtensionPropertyInfoEfCoreMappingOptions(
+            [NotNull] ObjectExtensionPropertyInfo extensionProperty)
+        {
+            ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
+        }
+
+        public ObjectExtensionPropertyInfoEfCoreMappingOptions(
             [NotNull] ObjectExtensionPropertyInfo extensionProperty,
-            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
         {
             ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
 

@@ -50,7 +50,7 @@ namespace Volo.Abp.ObjectExtending
             propertyExtension.Configuration[EfCorePropertyConfigurationName] =
                 new ObjectExtensionPropertyInfoEfCoreMappingOptions(
                     propertyExtension,
-                    entityTypeAndPropertyBuildAction: entityTypeAndPropertyBuildAction
+                    entityTypeAndPropertyBuildAction
                 );
 
             return propertyExtension;
