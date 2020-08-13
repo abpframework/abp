@@ -3,6 +3,7 @@ using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -18,7 +19,7 @@ namespace Volo.CmsKit
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            CmsKitFeatures.EnableAll();
+            GlobalFeatureManager.Instance.Modules().CmsKit().EnableAll();
 
             context.Services.AddAlwaysAllowAuthorization();
         }

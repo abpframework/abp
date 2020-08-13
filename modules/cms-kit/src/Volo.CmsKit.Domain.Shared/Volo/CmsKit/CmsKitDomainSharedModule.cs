@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.GlobalFeatures;
+using Volo.Abp.Modularity;
 using Volo.Abp.Localization;
 using Volo.CmsKit.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -15,6 +16,20 @@ namespace Volo.CmsKit
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            GlobalFeatureManager.Instance.Modules().CmsKit().EnableAll();
+            GlobalFeatureManager.Instance.Modules().CmsKit().DisableAll();
+            GlobalFeatureManager.Instance.Modules().CmsKit().Reactions().Enable();
+            GlobalFeatureManager.Instance.Modules().CmsKit(cmsKit =>
+            {
+                cmsKit.Reactions().Disable();
+                cmsKit.Reactions(reactions =>
+                {
+                    reactions.Enable();
+                });
+            });
+
+            GlobalFeatureManager.Instance.IsEnabled("asd");
+
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<CmsKitDomainSharedModule>();

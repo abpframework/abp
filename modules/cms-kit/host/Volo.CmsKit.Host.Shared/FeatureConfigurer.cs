@@ -1,10 +1,12 @@
-﻿namespace Volo.CmsKit
+﻿using Volo.Abp.GlobalFeatures;
+
+namespace Volo.CmsKit
 {
     public static class FeatureConfigurer
     {
         public static void Configure()
         {
-            CmsKitFeatures.EnableAll();
+            GlobalFeatureManager.Instance.Modules().CmsKit().EnableAll();
         }
     }
 }
