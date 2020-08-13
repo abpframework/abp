@@ -6,7 +6,7 @@ export default function(params: GenerateProxySchema) {
   return chain([
     async (tree: Tree, _context: SchematicContext) => {
       const project = await resolveProject(tree, params.module!);
-      const url = params.source || getSourceUrl(tree, project.definition);
+      const url = params.source || getSourceUrl(tree, project.definition) + '/api/abp/api-definition';
       const data = await getSourceJson(url);
 
       console.log(Object.keys(data.types));
