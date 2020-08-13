@@ -38,8 +38,8 @@ namespace Volo.CmsKit.Comments
             Guid? tenantId = null)
             : base(id)
         {
-            EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.EntityTypeLength);
-            EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.EntityIdLength);
+            EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.MaxEntityTypeLength);
+            EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.MaxEntityIdLength);
             RepliedCommentId = repliedCommentId;
             CreatorId = creatorId;
             TenantId = tenantId;
