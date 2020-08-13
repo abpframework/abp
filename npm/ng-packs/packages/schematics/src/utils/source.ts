@@ -11,6 +11,7 @@ export async function getSourceJson(url: string) {
   try {
     ({ body } = await got(url, {
       responseType: 'json',
+      searchParams: { includeTypes: true },
       https: { rejectUnauthorized: false },
     }));
   } catch (e) {
