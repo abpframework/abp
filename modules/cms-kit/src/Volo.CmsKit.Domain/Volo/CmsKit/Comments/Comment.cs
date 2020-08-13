@@ -38,16 +38,21 @@ namespace Volo.CmsKit.Comments
             Guid? tenantId = null)
             : base(id)
         {
-            EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.EntityTypeLength);
-            EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.EntityIdLength);
+            EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), CommentConsts.MaxEntityTypeLength);
+            EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), CommentConsts.MaxEntityIdLength);
             RepliedCommentId = repliedCommentId;
             CreatorId = creatorId;
             TenantId = tenantId;
 
-            SetText(text);
+            SetTextInternal(text);
         }
 
         public virtual void SetText(string text)
+        {
+            SetTextInternal(text);
+        }
+
+        protected virtual void SetTextInternal(string text)
         {
             Text = Check.NotNullOrWhiteSpace(text, nameof(text), CommentConsts.MaxTextLength);
         }

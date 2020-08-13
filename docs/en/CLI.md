@@ -274,11 +274,13 @@ Then review changes on your source control system to be sure that it has changed
 Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:
 
 ```bash
-abp login <username>                # Asks password separately
-abp login <username> -p <password>  # Specify the password as a parameter
+abp login <username>                                  # Allows you to enter your password hidden
+abp login <username> -p <password>                    # Specify the password as a parameter (password is visible)
+abp login <username> --organization <organization>    # If you have multiple organizations, you need set your active organization
+abp login <username> -p <password> -o <organization>  # You can enter both your password and organization in the same command
 ```
 
-> Using `-p` parameter might not be safe if someone is watching your screen :) It can be useful for automation purposes.
+> When using the -p parameter, be careful as your password will be visible. It's useful for CI/CD automation pipelines.
 
 A new login with an already active session overwrites the previous session.
 

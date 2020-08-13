@@ -1,11 +1,13 @@
-﻿namespace Volo.CmsKit.Reactions
+﻿using Volo.CmsKit.Entities;
+
+namespace Volo.CmsKit.Reactions
 {
     public static class UserReactionConsts
     {
-        public static int EntityTypeLength { get; set; } = 64;
+        public static int MaxEntityTypeLength { get; set; } = CmsEntityConsts.MaxEntityTypeLength;
 
-        public static int EntityIdLength { get; set; } = 64;
+        public static int MaxEntityIdLength { get; set; } = CmsEntityConsts.MaxEntityIdLength;
 
-        public static int ReactionNameLength { get; set; } = 32;
+        public static int MaxReactionNameLength { get; set; } = 32;
     }
 }

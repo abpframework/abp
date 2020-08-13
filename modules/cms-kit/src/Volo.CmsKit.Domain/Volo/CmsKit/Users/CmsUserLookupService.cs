@@ -19,6 +19,5 @@ namespace Volo.CmsKit.Users
         {
             return new CmsUser(externalUser);
         }
-
     }
 }

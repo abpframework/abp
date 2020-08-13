@@ -19,7 +19,7 @@ namespace Volo.CmsKit.Comments
         {
         }
 
-        public async Task<List<CommentWithAuthor>> GetListWithAuthorsAsync(
+        public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
             string entityType,
             string entityId)
         {
@@ -30,7 +30,7 @@ namespace Volo.CmsKit.Comments
                 join user in DbContext.CmsUsers on comment.CreatorId equals user.Id
                 where entityType == comment.EntityType && entityId == comment.EntityId
                 orderby comment.CreationTime
-                select new CommentWithAuthor
+                select new CommentWithAuthorQueryResultItem
                 {
                     Comment = comment,
                     Author = user

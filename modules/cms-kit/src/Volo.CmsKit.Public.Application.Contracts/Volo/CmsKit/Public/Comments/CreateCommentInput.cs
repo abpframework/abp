@@ -8,11 +8,11 @@ namespace Volo.CmsKit.Public.Comments
     public class CreateCommentInput
     {
         [Required]
-        [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.EntityTypeLength))]
+        [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.MaxEntityTypeLength))]
         public string EntityType { get; set; }
 
         [Required]
-        [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.EntityIdLength))]
+        [DynamicStringLength(typeof(CommentConsts), nameof(CommentConsts.MaxEntityIdLength))]
         public string EntityId { get; set; }
 
         [Required]

@@ -200,6 +200,7 @@ namespace Volo.CmsKit.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     EntityType = table.Column<string>(maxLength: 64, nullable: false),
                     EntityId = table.Column<string>(maxLength: 64, nullable: false),
                     Text = table.Column<string>(maxLength: 512, nullable: false),
@@ -217,6 +218,7 @@ namespace Volo.CmsKit.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     EntityType = table.Column<string>(maxLength: 64, nullable: false),
                     EntityId = table.Column<string>(maxLength: 64, nullable: false),
                     ReactionName = table.Column<string>(maxLength: 32, nullable: false),

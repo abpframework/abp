@@ -18,7 +18,7 @@ namespace Volo.CmsKit.MongoDB.Comments
         {
         }
 
-        public async Task<List<CommentWithAuthor>> GetListWithAuthorsAsync(
+        public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
             string entityType,
             string entityId)
         {
@@ -40,7 +40,7 @@ namespace Volo.CmsKit.MongoDB.Comments
             return comments
                 .Select(
                     comment =>
-                        new CommentWithAuthor
+                        new CommentWithAuthorQueryResultItem
                         {
                             Comment = comment,
                             Author = authors.FirstOrDefault(a => a.Id == comment.CreatorId)

@@ -33,8 +33,6 @@ namespace Volo.CmsKit.Public.Comments
 
         public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
         {
-            CheckAuthorizationAsync(entityType);
-
             var commentsWithAuthor = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
 
             return new ListResultDto<CommentWithDetailsDto>(
@@ -95,7 +93,7 @@ namespace Volo.CmsKit.Public.Comments
             await CommentRepository.DeleteAsync(id);
         }
 
-        private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthor> comments)
+        private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
         {
             var parentComments = comments
                 .Where(c=> c.Comment.RepliedCommentId == null)
@@ -120,25 +118,7 @@ namespace Volo.CmsKit.Public.Comments
             return parentComments;
         }
 
-        private async Task CheckAuthorizationAsync(string entityType)
-        {
-            if (await IsPublicEntity(entityType))
-            {
-                return;
-            }
-
-            if (!CurrentUser.IsAuthenticated)
-            {
-                throw new AbpAuthorizationException(L["CommentAuthorizationExceptionMessage"]);
-            }
-        }
-
-        private async Task<bool> IsPublicEntity(string entityType)
-        {
-            return CmsKitOptions.PublicCommentEntities.Contains(entityType);
-        }
-
-        private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthor> comments, Guid commentId)
+        private CmsUserDto GetAuthorAsDtoFromCommentList(List<CommentWithAuthorQueryResultItem> comments, Guid commentId)
         {
             return ObjectMapper.Map<CmsUser, CmsUserDto>(comments.Single(c => c.Comment.Id == commentId).Author);
         }
