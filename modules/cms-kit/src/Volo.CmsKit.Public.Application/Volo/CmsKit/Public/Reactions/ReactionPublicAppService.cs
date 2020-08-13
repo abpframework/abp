@@ -9,7 +9,7 @@ using Volo.CmsKit.Reactions;
 namespace Volo.CmsKit.Public.Reactions
 {
     //TODO: Authorization
-    public class ReactionPublicAppService : CmsKitPublicAppService, IReactionPublicAppService
+    public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPublicAppService
     {
         protected IReactionDefinitionStore ReactionDefinitionStore { get; }
 

@@ -1,8 +1,8 @@
 ﻿namespace Volo.CmsKit.Admin
 {
-    public abstract class CmsKitAdminAppService : CmsKitAppService
+    public abstract class CmsKitAdminAppServiceBase : CmsKitAppServiceBase
     {
-        protected CmsKitAdminAppService()
+        protected CmsKitAdminAppServiceBase()
         {
             ObjectMapperContext = typeof(CmsKitAdminApplicationModule);
         }
