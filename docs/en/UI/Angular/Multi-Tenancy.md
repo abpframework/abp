@@ -17,7 +17,7 @@ On the page above, you can;
 ![Tenant Switching Component](./images/tenant-switching-box.png)
 <p style="font-size:small;text-align:center;">Tenant Switching Component</p>
 
-You can switch between existing tenants by using the tenant switching component in the child pages of the `AccountLayoutComponent` (like Login page). Angular UI sends the selected tenant id sends to the backend as `__tenant` header on each request.
+You can switch between existing tenants by using the tenant switching component in the child pages of the `AccountLayoutComponent` (like Login page). Angular UI sends the selected tenant id to the backend as `__tenant` header on each request.
 
 
 ## Domain Tenant Resolver
