@@ -12,6 +12,7 @@ import { GetAppConfiguration } from '../actions/config.actions';
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
 
+  protected store: Store;
   protected oAuthService: OAuthService;
   protected oAuthConfig: AuthConfig;
   abstract checkIfInternalAuth(): boolean;
@@ -20,12 +21,13 @@ export abstract class AuthFlowStrategy {
   abstract destroy(): void;
 
   private catchError = err => {
-    // TODO: handle the error
+    return this.store.dispatch(new RestOccurError(err));
   };
 
   constructor(protected injector: Injector) {
     this.oAuthService = injector.get(OAuthService);
     this.oAuthConfig = injector.get(CORE_OPTIONS).environment.oAuthConfig;
+    this.store = injector.get(Store);
   }
 
   async init(): Promise<any> {
