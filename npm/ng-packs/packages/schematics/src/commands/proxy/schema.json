@@ -6,36 +6,29 @@
   "properties": {
     "module": {
       "alias": "m",
-      "description": "The name of the module to generate code for",
+      "description": "The name of the backend module to generate code for",
       "type": "string",
       "$default": {
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "Please enter name of the module you wish to generate proxies for. (default: \"app\")"
+      "x-prompt": "Please enter name of the backend module you wish to generate proxies for. (default: \"app\")"
     },
     "source": {
       "alias": "s",
-      "description": "The URL to get API definitions from",
+      "description": "Angular project to resolve API definition URL from",
       "type": "string",
       "$default": {
         "$source": "argv",
         "index": 1
       },
-      "x-prompt": "Plese enter URL to get API definitions from. (default: resolved from environment)"
+      "x-prompt": "Plese enter Angular project name to resolve API definition URL from. (default: workspace \"defaultProject\")"
     },
-    "project": {
-      "alias": "p",
-      "description": "The project to place the generated code in",
+    "destination": {
+      "alias": "d",
+      "description": "Angular project to place the generated code in",
       "type": "string",
-      "x-prompt": "Please enter the project to place proxies in. (default: workspace \"defaultProject\")"
-    },
-    "path": {
-      "description": "The path to place the generated code at",
-      "type": "string",
-      "format": "path",
-      "default": "",
-      "visible": false
+      "x-prompt": "Plese enter Angular project name to place generated code in. (default: workspace \"defaultProject\")"
     }
   },
   "required": []

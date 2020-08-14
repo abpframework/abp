@@ -1,21 +1,16 @@
 export interface Schema {
   /**
-   * The name of the module to generate code for
+   * Angular project to place the generated code in
+   */
+  destination?: string;
+
+  /**
+   * The name of the backend module to generate code for
    */
   module?: string;
 
   /**
-   * The project to place the generated code in
-   */
-  project?: string;
-
-  /**
-   * The path to place the generated code at
-   */
-  path?: string;
-
-  /**
-   * The URL to get API configuration from
+   * Angular project to resolve API definition URL from
    */
   source?: string;
 }

@@ -1,8 +1,9 @@
-import type { workspaces } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
 import { Exception } from '../enums';
+import { Project } from '../models';
 import { getAssignedPropertyFromObjectliteral } from './ast';
+import { interpolate } from './common';
 import { readEnvironment } from './workspace';
 
 export async function getSourceJson(url: string) {
@@ -14,28 +15,33 @@ export async function getSourceJson(url: string) {
       searchParams: { includeTypes: true },
       https: { rejectUnauthorized: false },
     }));
-  } catch (err) {
+  } catch ({ response }) {
     // handle redirects
-    try {
-      ({ response: { body } } = err);
-      if (!body.types) throw Error('');
-    } catch (_) {
-      throw new SchematicsException(Exception.NoApi);
-    }
+    if (response?.body && response.statusCode < 400) return response.body;
+
+    throw new SchematicsException(Exception.NoApi);
   }
 
   return body;
 }
 
-export function getSourceUrl(tree: Tree, projectDefinition: workspaces.ProjectDefinition) {
-  const environmentExpr = readEnvironment(tree, projectDefinition);
-  let assignment: string | undefined;
+export function getSourceUrl(tree: Tree, project: Project, moduleName: string) {
+  const environmentExpr = readEnvironment(tree, project.definition);
 
-  if (environmentExpr) {
+  if (!environmentExpr)
+    throw new SchematicsException(interpolate(Exception.NoEnvironment, project.name));
+
+  let assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
+    'apis',
+    moduleName,
+    'url',
+  ]);
+
+  if (!assignment)
     assignment = getAssignedPropertyFromObjectliteral(environmentExpr, ['apis', 'default', 'url']);
-  }
 
-  if (!assignment) throw new SchematicsException(Exception.RequiredApiUrl);
+  if (!assignment)
+    throw new SchematicsException(interpolate(Exception.NoApiUrl, project.name, moduleName));
 
   return assignment.replace(/[`'"]/g, '');
 }

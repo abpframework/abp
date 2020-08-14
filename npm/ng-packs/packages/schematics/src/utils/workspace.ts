@@ -2,6 +2,7 @@ import type { experimental, workspaces } from '@angular-devkit/core';
 import { SchematicsException } from '@angular-devkit/schematics';
 import type { Tree } from '@angular-devkit/schematics';
 import { Exception } from '../enums';
+import { Project } from '../models';
 import { getWorkspace, ProjectType } from './angular';
 import { findEnvironmentExpression } from './ast';
 import { readFileInTree } from './common';
@@ -37,14 +38,10 @@ export function readWorkspaceSchema(tree: Tree) {
 export async function resolveProject(
   tree: Tree,
   name: string,
-): Promise<{ name: string; definition: workspaces.ProjectDefinition }> {
+): Promise<Project> {
+  name = name || readWorkspaceSchema(tree).defaultProject!;
   const workspace = await getWorkspace(tree);
-  let definition = workspace.projects.get(name);
-
-  if (!definition) {
-    name = readWorkspaceSchema(tree).defaultProject!;
-    definition = workspace.projects.get(name);
-  }
+  const definition = workspace.projects.get(name);
 
   if (!definition) throw new SchematicsException(Exception.NoProject);
 

@@ -21,5 +21,8 @@ export const environment = {
     default: {
       url: 'https://localhost:44305',
     },
+    saas: {
+      url: 'https://localhost:44305',
+    },
   },
 } as Config.Environment;
