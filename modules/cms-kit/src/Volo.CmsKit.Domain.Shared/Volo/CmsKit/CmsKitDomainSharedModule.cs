@@ -16,16 +16,14 @@ namespace Volo.CmsKit
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            GlobalFeatureManager.Instance.Modules().CmsKit().EnableAll();
-            GlobalFeatureManager.Instance.Modules().CmsKit().DisableAll();
-            GlobalFeatureManager.Instance.Modules().CmsKit().Reactions().Enable();
-            GlobalFeatureManager.Instance.Modules().CmsKit(cmsKit =>
+            GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
+            GlobalFeatureManager.Instance.Modules.CmsKit().DisableAll();
+            GlobalFeatureManager.Instance.Modules.CmsKit().Reactions.Enable();
+            GlobalFeatureManager.Instance.Modules.CmsKit().Reactions.Enable();
+            GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
             {
-                cmsKit.Reactions().Disable();
-                cmsKit.Reactions(reactions =>
-                {
-                    reactions.Enable();
-                });
+                cmsKit.Reactions.Disable();
+                cmsKit.Comments.Enable();
             });
 
             GlobalFeatureManager.Instance.IsEnabled("asd");

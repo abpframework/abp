@@ -7,6 +7,7 @@ using Volo.CmsKit.Comments;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Users;
 using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -33,7 +34,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 b.ConfigureAbpUser();
             });
 
-            if (GlobalFeatureManager.Instance.Modules().CmsKit().Reactions().IsEnabled)
+            if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
             {
                 builder.Entity<UserReaction>(b =>
                 {
@@ -50,7 +51,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 });
             }
 
-            if (GlobalFeatureManager.Instance.Modules().CmsKit().Comments().IsEnabled)
+            if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
             {
                 builder.Entity<Comment>(b =>
                 {

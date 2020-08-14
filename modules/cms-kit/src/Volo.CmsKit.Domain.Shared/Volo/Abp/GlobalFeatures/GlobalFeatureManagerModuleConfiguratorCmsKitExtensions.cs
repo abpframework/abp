@@ -1,30 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.Abp.GlobalFeatures
 {
     public static class GlobalFeatureManagerModuleConfiguratorCmsKitExtensions
     {
-        public static GlobalFeatureManagerCmsKitConfigurator CmsKit(
-            [NotNull] this GlobalFeatureManagerModulesConfigurator modulesConfigurator)
+        public static GlobalCmsKitFeatures CmsKit(
+            [NotNull] this GlobalFeatureManagerModuleDictionary modules)
         {
-            Check.NotNull(modulesConfigurator, nameof(modulesConfigurator));
+            Check.NotNull(modules, nameof(modules));
 
-            return modulesConfigurator
-                    .Modules
-                    .GetOrAdd("CmsKit", _ => new GlobalFeatureManagerCmsKitConfigurator(modulesConfigurator))
-                as GlobalFeatureManagerCmsKitConfigurator;
+            return modules
+                    .GetOrAdd(GlobalCmsKitFeatures.ModuleName, _ => new GlobalCmsKitFeatures(modules.FeatureManager))
+                as GlobalCmsKitFeatures;
         }
 
-        public static GlobalFeatureManagerModulesConfigurator CmsKit(
-            [NotNull] this GlobalFeatureManagerModulesConfigurator modulesConfigurator,
-            [NotNull] Action<GlobalFeatureManagerCmsKitConfigurator> configureAction)
+        public static GlobalFeatureManagerModuleDictionary CmsKit(
+            [NotNull] this GlobalFeatureManagerModuleDictionary modules,
+            [NotNull] Action<GlobalCmsKitFeatures> configureAction)
         {
             Check.NotNull(configureAction, nameof(configureAction));
 
-            configureAction(modulesConfigurator.CmsKit());
+            configureAction(modules.CmsKit());
 
-            return modulesConfigurator;
+            return modules;
         }
     }
 }

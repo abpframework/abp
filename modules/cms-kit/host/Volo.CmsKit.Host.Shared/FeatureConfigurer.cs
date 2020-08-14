@@ -6,7 +6,7 @@ namespace Volo.CmsKit
     {
         public static void Configure()
         {
-            GlobalFeatureManager.Instance.Modules().CmsKit().EnableAll();
+            GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
         }
     }
 }
