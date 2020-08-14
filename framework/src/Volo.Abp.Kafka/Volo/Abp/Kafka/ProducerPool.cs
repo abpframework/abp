@@ -33,13 +33,16 @@ namespace Volo.Abp.Kafka
         public virtual IProducer<string, byte[]> Get(string connectionName = null)
         {
             connectionName ??= KafkaConnections.DefaultConnectionName;
-            var config = Options.Connections.GetOrDefault(connectionName);
-            
-            Options.ConfigureProducer?.Invoke(new ProducerConfig(config));
-            
+
             return Producers.GetOrAdd(
-                connectionName,
-                new ProducerBuilder<string, byte[]>(config).Build());
+                connectionName, connection =>
+                {
+                    var config = Options.Connections.GetOrDefault(connection);
+
+                    Options.ConfigureProducer?.Invoke(new ProducerConfig(config));
+
+                    return new ProducerBuilder<string, byte[]>(config).Build();
+                });
         }
 
         public void Dispose()
@@ -84,11 +87,13 @@ namespace Volo.Abp.Kafka
 
             poolDisposeStopwatch.Stop();
 
-            Logger.LogInformation($"Disposed Kafka Producer Pool ({Producers.Count} producers in {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms).");
+            Logger.LogInformation(
+                $"Disposed Kafka Producer Pool ({Producers.Count} producers in {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms).");
 
-            if(poolDisposeStopwatch.Elapsed.TotalSeconds > 5.0)
+            if (poolDisposeStopwatch.Elapsed.TotalSeconds > 5.0)
             {
-                Logger.LogWarning($"Disposing Kafka Producer Pool got time greather than expected: {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
+                Logger.LogWarning(
+                    $"Disposing Kafka Producer Pool got time greather than expected: {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
             }
 
             Producers.Clear();

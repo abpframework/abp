@@ -34,17 +34,21 @@ namespace Volo.Abp.Kafka
         public virtual IConsumer<string, byte[]> Get(string groupId, string connectionName = null)
         {
             connectionName ??= KafkaConnections.DefaultConnectionName;
-            var config = new ConsumerConfig(Options.Connections.GetOrDefault(connectionName))
-            {
-                GroupId = groupId,
-                EnableAutoCommit = false
-            };
-
-            Options.ConfigureConsumer?.Invoke(config);
 
             return Consumers.GetOrAdd(
-                connectionName,
-                new ConsumerBuilder<string, byte[]>(config).Build());
+                connectionName, connection =>
+                {
+                    var config = new ConsumerConfig(Options.Connections.GetOrDefault(connection))
+                    {
+                        GroupId = groupId,
+                        EnableAutoCommit = false
+                    };
+
+                    Options.ConfigureConsumer?.Invoke(config);
+
+                    return new ConsumerBuilder<string, byte[]>(config).Build();
+                }
+            );
         }
 
         public void Dispose()
