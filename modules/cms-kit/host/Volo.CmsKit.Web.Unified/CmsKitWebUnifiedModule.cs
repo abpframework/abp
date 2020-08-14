@@ -63,6 +63,11 @@ namespace Volo.CmsKit
         )]
     public class CmsKitWebUnifiedModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            FeatureConfigurer.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
