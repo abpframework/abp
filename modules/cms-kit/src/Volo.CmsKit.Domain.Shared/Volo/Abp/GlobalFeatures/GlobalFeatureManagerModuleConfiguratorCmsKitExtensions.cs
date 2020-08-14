@@ -8,24 +8,27 @@ namespace Volo.Abp.GlobalFeatures
     public static class GlobalFeatureManagerModuleConfiguratorCmsKitExtensions
     {
         public static GlobalCmsKitFeatures CmsKit(
-            [NotNull] this GlobalModuleFeaturesDictionary modulesFeatures)
+            [NotNull] this GlobalModuleFeaturesDictionary modules)
         {
-            Check.NotNull(modulesFeatures, nameof(modulesFeatures));
+            Check.NotNull(modules, nameof(modules));
 
-            return modulesFeatures
-                    .GetOrAdd(GlobalCmsKitFeatures.ModuleName, _ => new GlobalCmsKitFeatures(modulesFeatures.FeatureManager))
+            return modules
+                    .GetOrAdd(
+                        GlobalCmsKitFeatures.ModuleName,
+                        _ => new GlobalCmsKitFeatures(modules.FeatureManager)
+                    )
                 as GlobalCmsKitFeatures;
         }
 
         public static GlobalModuleFeaturesDictionary CmsKit(
-            [NotNull] this GlobalModuleFeaturesDictionary modulesFeatures,
+            [NotNull] this GlobalModuleFeaturesDictionary modules,
             [NotNull] Action<GlobalCmsKitFeatures> configureAction)
         {
             Check.NotNull(configureAction, nameof(configureAction));
 
-            configureAction(modulesFeatures.CmsKit());
+            configureAction(modules.CmsKit());
 
-            return modulesFeatures;
+            return modules;
         }
     }
 }
