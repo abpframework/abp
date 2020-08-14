@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import { RestOccurError } from '../actions/rest.actions';
 import { RestService } from '../services/rest.service';
@@ -87,10 +87,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
         issuer,
       )
       .pipe(
-        switchMap(() => {
-          this.oAuthService.logOut();
-          return this.store.dispatch(new GetAppConfiguration());
-        }),
+        tap(() => this.oAuthService.logOut()),
+        switchMap(() =>  this.store.dispatch(new GetAppConfiguration())),
       );
   }
 
