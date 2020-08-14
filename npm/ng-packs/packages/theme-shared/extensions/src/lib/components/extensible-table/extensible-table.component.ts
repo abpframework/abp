@@ -32,7 +32,15 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExtensibleTableComponent<R = any> implements OnChanges {
-  @Input() actionsText: string;
+  protected _actionsText: string;
+  @Input()
+  set actionsText(value: string) {
+    this._actionsText = value;
+  }
+  get actionsText(): string {
+    return this._actionsText ?? (this.actionList.length > 1 ? 'AbpUi::Actions' : '');
+  }
+
   @Input() data: R[];
   @Input() list: ListService;
   @Input() recordsTotal: number;
