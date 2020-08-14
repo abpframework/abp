@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.GlobalFeatures
@@ -17,7 +17,7 @@ namespace Volo.Abp.GlobalFeatures
 
         protected HashSet<string> EnabledFeatures { get; }
 
-        private GlobalFeatureManager()
+        internal GlobalFeatureManager()
         {
             EnabledFeatures = new HashSet<string>();
             Configuration = new Dictionary<object, object>();
