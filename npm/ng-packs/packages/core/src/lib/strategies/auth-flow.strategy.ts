@@ -1,13 +1,13 @@
 import { Injector } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
-import { ConfigState } from '../states/config.state';
-import { CORE_OPTIONS } from '../tokens/options.token';
-import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { RestService } from '../services/rest.service';
 import { switchMap } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
+import { RestOccurError } from '../actions/rest.actions';
+import { RestService } from '../services/rest.service';
+import { ConfigState } from '../states/config.state';
 
 export abstract class AuthFlowStrategy {
   abstract readonly isInternalAuth: boolean;
@@ -26,8 +26,8 @@ export abstract class AuthFlowStrategy {
 
   constructor(protected injector: Injector) {
     this.oAuthService = injector.get(OAuthService);
-    this.oAuthConfig = injector.get(CORE_OPTIONS).environment.oAuthConfig;
     this.store = injector.get(Store);
+    this.oAuthConfig = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
   }
 
   async init(): Promise<any> {
@@ -76,10 +76,9 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   logout() {
-    const store = this.injector.get(Store);
     const rest = this.injector.get(RestService);
 
-    const issuer = store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
+    const issuer = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig.issuer'));
     return rest
       .request(
         {
@@ -92,7 +91,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       .pipe(
         switchMap(() => {
           this.oAuthService.logOut();
-          return store.dispatch(new GetAppConfiguration());
+          return this.store.dispatch(new GetAppConfiguration());
         }),
       );
   }
