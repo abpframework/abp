@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.GlobalFeatures
@@ -14,7 +13,7 @@ namespace Volo.Abp.GlobalFeatures
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
 
-        public GlobalFeatureManagerModuleDictionary Modules { get; }
+        public GlobalModuleFeaturesDictionary Modules { get; }
 
         protected HashSet<string> EnabledFeatures { get; }
 
@@ -22,7 +21,7 @@ namespace Volo.Abp.GlobalFeatures
         {
             EnabledFeatures = new HashSet<string>();
             Configuration = new Dictionary<object, object>();
-            Modules = new GlobalFeatureManagerModuleDictionary(this);
+            Modules = new GlobalModuleFeaturesDictionary(this);
         }
 
         public virtual bool IsEnabled<TFeature>()
@@ -31,47 +30,17 @@ namespace Volo.Abp.GlobalFeatures
             return IsEnabled(GlobalFeatureNameAttribute.GetName<TFeature>());
         }
 
-        public virtual void SetEnabled<TFeature>(bool isEnabled)
-            where TFeature : GlobalFeature
-        {
-            SetEnabled(GlobalFeatureNameAttribute.GetName<TFeature>(), isEnabled);
-        }
-
-        public virtual void Enable<TFeature>()
-            where TFeature : GlobalFeature
-        {
-            Enable(GlobalFeatureNameAttribute.GetName<TFeature>());
-        }
-
-        public virtual void Disable<TFeature>()
-            where TFeature : GlobalFeature
-        {
-            Disable(GlobalFeatureNameAttribute.GetName<TFeature>());
-        }
-
         public virtual bool IsEnabled(string featureName)
         {
             return EnabledFeatures.Contains(featureName);
         }
 
-        public virtual void SetEnabled(string featureName, bool isEnabled)
-        {
-            if (isEnabled)
-            {
-                Enable(featureName);
-            }
-            else
-            {
-                Disable(featureName);
-            }
-        }
-
-        public virtual void Enable(string featureName)
+        protected internal void Enable(string featureName)
         {
             EnabledFeatures.AddIfNotContains(featureName);
         }
 
-        public virtual void Disable(string featureName)
+        protected internal void Disable(string featureName)
         {
             EnabledFeatures.Remove(featureName);
         }

@@ -8,13 +8,13 @@ namespace Volo.Abp.GlobalFeatures
         public GlobalFeatureManager FeatureManager { get; }
 
         [NotNull]
-        protected GlobalFeatureConfiguratorDictionary AllFeatures { get; }
+        protected GlobalFeatureDictionary AllFeatures { get; }
 
         protected GlobalModuleFeatures(
             [NotNull] GlobalFeatureManager featureManager)
         {
             FeatureManager = Check.NotNull(featureManager, nameof(featureManager));
-            AllFeatures = new GlobalFeatureConfiguratorDictionary();
+            AllFeatures = new GlobalFeatureDictionary();
         }
 
         public virtual void EnableAll()

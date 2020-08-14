@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.GlobalFeatures
 {
-    public class GlobalFeatureConfiguratorDictionary : Dictionary<string, GlobalFeature>
+    public class GlobalFeatureDictionary : Dictionary<string, GlobalFeature>
     {
 
     }

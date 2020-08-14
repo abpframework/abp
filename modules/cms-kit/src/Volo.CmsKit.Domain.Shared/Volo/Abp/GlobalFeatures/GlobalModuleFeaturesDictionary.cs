@@ -3,11 +3,11 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.GlobalFeatures
 {
-    public class GlobalFeatureManagerModuleDictionary : Dictionary<string, GlobalModuleFeatures>
+    public class GlobalModuleFeaturesDictionary : Dictionary<string, GlobalModuleFeatures>
     {
         public GlobalFeatureManager FeatureManager { get; }
 
-        public GlobalFeatureManagerModuleDictionary(
+        public GlobalModuleFeaturesDictionary(
             [NotNull] GlobalFeatureManager featureManager)
         {
             FeatureManager = Check.NotNull(featureManager, nameof(featureManager));

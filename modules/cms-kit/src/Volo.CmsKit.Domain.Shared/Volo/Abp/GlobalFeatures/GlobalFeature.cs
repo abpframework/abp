@@ -16,7 +16,7 @@ namespace Volo.Abp.GlobalFeatures
         public bool IsEnabled
         {
             get => FeatureManager.IsEnabled(FeatureName);
-            set => FeatureManager.SetEnabled(FeatureName, value);
+            set => SetEnabled(value);
         }
 
         protected GlobalFeature([NotNull] GlobalModuleFeatures module)
@@ -36,9 +36,16 @@ namespace Volo.Abp.GlobalFeatures
             FeatureManager.Disable(FeatureName);
         }
 
-        public virtual void SetEnabled(bool isEnabled)
+        public void SetEnabled(bool isEnabled)
         {
-            FeatureManager.SetEnabled(FeatureName, isEnabled);
+            if (isEnabled)
+            {
+                Enable();
+            }
+            else
+            {
+                Disable();
+            }
         }
     }
 }

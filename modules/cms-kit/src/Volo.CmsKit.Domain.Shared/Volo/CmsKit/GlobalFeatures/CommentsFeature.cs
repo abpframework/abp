@@ -12,6 +12,7 @@ namespace Volo.CmsKit.GlobalFeatures
             [NotNull] GlobalCmsKitFeatures cmsKit
         ) : base(cmsKit)
         {
+
         }
     }
 }
