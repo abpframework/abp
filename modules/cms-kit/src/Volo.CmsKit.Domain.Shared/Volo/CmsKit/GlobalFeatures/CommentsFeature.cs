@@ -10,7 +10,7 @@ namespace Volo.CmsKit.GlobalFeatures
 
         public CommentsFeature(
             [NotNull] GlobalCmsKitFeatures cmsKit
-        ) : base(cmsKit, Name)
+        ) : base(cmsKit)
         {
         }
     }

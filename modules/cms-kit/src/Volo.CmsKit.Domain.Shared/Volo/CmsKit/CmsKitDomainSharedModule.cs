@@ -6,6 +6,7 @@ using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit
 {
@@ -26,7 +27,8 @@ namespace Volo.CmsKit
                 cmsKit.Comments.Enable();
             });
 
-            GlobalFeatureManager.Instance.IsEnabled("asd");
+            GlobalFeatureManager.Instance.IsEnabled("qweasd");
+            GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>();
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {

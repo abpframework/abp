@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.GlobalFeatures
 {
-    public class GlobalFeature
+    public abstract class GlobalFeature
     {
         [NotNull]
         public GlobalModuleFeatures Module { get; }
@@ -18,13 +18,11 @@ namespace Volo.Abp.GlobalFeatures
             set => FeatureManager.SetEnabled(FeatureName, value);
         }
 
-        public GlobalFeature(
-            [NotNull] GlobalModuleFeatures module,
-            [NotNull] string name)
+        protected GlobalFeature([NotNull] GlobalModuleFeatures module)
         {
             Module = Check.NotNull(module, nameof(module));
-            FeatureName = Check.NotNullOrWhiteSpace(name, nameof(name));
             FeatureManager = Module.FeatureManager;
+            FeatureName = GlobalFeatureNameAttribute.GetName(GetType());
         }
 
         public virtual void Enable()
@@ -39,7 +37,7 @@ namespace Volo.Abp.GlobalFeatures
 
         public virtual void SetEnabled(bool isEnabled)
         {
-
+            FeatureManager.SetEnabled(FeatureName, isEnabled);
         }
     }
 }

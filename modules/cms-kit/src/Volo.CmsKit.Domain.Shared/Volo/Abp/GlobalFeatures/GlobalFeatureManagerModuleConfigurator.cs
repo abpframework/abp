@@ -33,11 +33,6 @@ namespace Volo.Abp.GlobalFeatures
             }
         }
 
-        protected void AddFeature(string featureName)
-        {
-            AddFeature(new GlobalFeature(this, featureName));
-        }
-
         protected void AddFeature(GlobalFeature feature)
         {
             AllFeatures[feature.FeatureName] = feature;
