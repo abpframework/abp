@@ -25,9 +25,9 @@ export abstract class AuthFlowStrategy {
   };
 
   constructor(protected injector: Injector) {
-    this.oAuthService = injector.get(OAuthService);
     this.store = injector.get(Store);
-    this.oAuthConfig = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
+    this.oAuthService = injector.get(OAuthService);
+    this.oAuthConfig = injector.get(Store).selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
   }
 
   async init(): Promise<any> {
