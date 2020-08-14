@@ -5,7 +5,7 @@ using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.Abp.GlobalFeatures
 {
-    public static class GlobalFeatureManagerModuleConfiguratorCmsKitExtensions
+    public static class GlobalModuleFeaturesDictionaryCmsKitExtensions
     {
         public static GlobalCmsKitFeatures CmsKit(
             [NotNull] this GlobalModuleFeaturesDictionary modules)

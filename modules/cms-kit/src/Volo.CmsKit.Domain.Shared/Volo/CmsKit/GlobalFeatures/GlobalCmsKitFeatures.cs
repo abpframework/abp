@@ -8,6 +8,7 @@ namespace Volo.CmsKit.GlobalFeatures
         public const string ModuleName = "CmsKit";
 
         public ReactionsFeature Reactions => GetFeature<ReactionsFeature>();
+
         public CommentsFeature Comments => GetFeature<CommentsFeature>();
 
         public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)

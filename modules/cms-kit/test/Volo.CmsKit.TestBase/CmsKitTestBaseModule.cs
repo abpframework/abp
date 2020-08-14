@@ -17,9 +17,14 @@ namespace Volo.CmsKit
         )]
     public class CmsKitTestBaseModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
+            OneTimeRunner.Run(() =>
+            {
+                GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
+            });
 
             context.Services.AddAlwaysAllowAuthorization();
         }

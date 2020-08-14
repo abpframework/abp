@@ -1,12 +1,10 @@
-﻿using Volo.Abp.GlobalFeatures;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 using Volo.Abp.Localization;
 using Volo.CmsKit.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
-using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit
 {
@@ -17,19 +15,6 @@ namespace Volo.CmsKit
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
-            GlobalFeatureManager.Instance.Modules.CmsKit().DisableAll();
-            GlobalFeatureManager.Instance.Modules.CmsKit().Reactions.Enable();
-            GlobalFeatureManager.Instance.Modules.CmsKit().Reactions.Enable();
-            GlobalFeatureManager.Instance.Modules.CmsKit(cmsKit =>
-            {
-                cmsKit.Reactions.Disable();
-                cmsKit.Comments.Enable();
-            });
-
-            GlobalFeatureManager.Instance.IsEnabled("qweasd");
-            GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>();
-
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<CmsKitDomainSharedModule>();
