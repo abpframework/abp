@@ -20,9 +20,7 @@ export abstract class AuthFlowStrategy {
   abstract logout(): Observable<any>;
   abstract destroy(): void;
 
-  private catchError = err => {
-    return this.store.dispatch(new RestOccurError(err));
-  };
+  private catchError = err => this.store.dispatch(new RestOccurError(err));
 
   constructor(protected injector: Injector) {
     this.store = injector.get(Store);
