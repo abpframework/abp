@@ -14,30 +14,31 @@ export class NavItemsService {
     return this._items$.asObservable();
   }
 
-  addItems(items: NavItem[]) {
-    this._items$.next([...this.items, ...items].sort(sortItems));
+  addItems(newItems: NavItem[]) {
+    const items = [...this.items];
+    newItems.forEach(item => items.push(new NavItem(item)));
+    items.sort(sortItems);
+    this._items$.next(items);
   }
 
   removeItem(id: string | number) {
     const index = this.items.findIndex(item => item.id === id);
 
-    if (index > -1) {
-      this._items$.next([...this.items.slice(0, index), ...this.items.slice(index + 1)]);
-    }
+    if (index < 0) return;
+
+    const items = [...this.items.slice(0, index), ...this.items.slice(index + 1)];
+    this._items$.next(items);
   }
 
   patchItem(id: string | number, item: Partial<Omit<NavItem, 'id'>>) {
     const index = this.items.findIndex(i => i.id === id);
 
-    if (index > -1) {
-      this._items$.next(
-        [
-          ...this.items.slice(0, index),
-          { ...this.items[index], ...item },
-          ...this.items.slice(index + 1),
-        ].sort(sortItems),
-      );
-    }
+    if (index < 0) return;
+
+    const items = [...this.items];
+    items[index] = new NavItem({ ...items[index], ...item });
+    items.sort(sortItems);
+    this._items$.next(items);
   }
 }
 

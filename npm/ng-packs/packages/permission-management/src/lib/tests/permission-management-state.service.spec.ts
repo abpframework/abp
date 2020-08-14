@@ -16,7 +16,7 @@ describe('PermissionManagementStateService', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
   });
   test('should have the all PermissionManagementState static methods', () => {
     const reg = /(?<=static )(.*)(?=\()/gm;

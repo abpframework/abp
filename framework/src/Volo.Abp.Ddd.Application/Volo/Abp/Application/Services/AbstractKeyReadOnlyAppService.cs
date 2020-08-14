@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services
 {
@@ -52,7 +54,8 @@ namespace Volo.Abp.Application.Services
             await CheckGetPolicyAsync();
 
             var entity = await GetEntityByIdAsync(id);
-            return MapToGetOutputDto(entity);
+
+            return await MapToGetOutputDtoAsync(entity);
         }
 
         public virtual async Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input)
@@ -67,10 +70,11 @@ namespace Volo.Abp.Application.Services
             query = ApplyPaging(query, input);
 
             var entities = await AsyncExecuter.ToListAsync(query);
+            var entityDtos = await MapToGetListOutputDtosAsync(entities);
 
             return new PagedResultDto<TGetListOutputDto>(
                 totalCount,
-                entities.Select(MapToGetListOutputDto).ToList()
+                entityDtos
             );
         }
 
@@ -118,9 +122,9 @@ namespace Volo.Abp.Application.Services
         /// <param name="query">The query.</param>
         protected virtual IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
         {
-            if (typeof(TEntity).IsAssignableTo<ICreationAuditedObject>())
+            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
             {
-                return query.OrderByDescending(e => ((ICreationAuditedObject)e).CreationTime);
+                return query.OrderByDescending(e => ((IHasCreationTime)e).CreationTime);
             }
 
             throw new AbpException("No sorting specified but this query requires sorting. Override the ApplyDefaultSorting method for your application service derived from AbstractKeyReadOnlyAppService!");
@@ -163,12 +167,50 @@ namespace Volo.Abp.Application.Services
 
         /// <summary>
         /// Maps <see cref="TEntity"/> to <see cref="TGetOutputDto"/>.
+        /// It internally calls the <see cref="MapToGetOutputDto"/> by default.
+        /// It can be overriden for custom mapping.
+        /// Overriding this has higher priority than overriding the <see cref="MapToGetOutputDto"/>
+        /// </summary>
+        protected virtual Task<TGetOutputDto> MapToGetOutputDtoAsync(TEntity entity)
+        {
+            return Task.FromResult(MapToGetOutputDto(entity));
+        }
+
+        /// <summary>
+        /// Maps <see cref="TEntity"/> to <see cref="TGetOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overriden for custom mapping.
         /// </summary>
         protected virtual TGetOutputDto MapToGetOutputDto(TEntity entity)
         {
             return ObjectMapper.Map<TEntity, TGetOutputDto>(entity);
+        }
+
+        /// <summary>
+        /// Maps a list of <see cref="TEntity"/> to <see cref="TGetListOutputDto"/> objects.
+        /// It uses <see cref="MapToGetListOutputDtoAsync"/> method for each item in the list.
+        /// </summary>
+        protected virtual async Task<List<TGetListOutputDto>> MapToGetListOutputDtosAsync(List<TEntity> entities)
+        {
+            var dtos = new List<TGetListOutputDto>();
+
+            foreach (var entity in entities)
+            {
+                dtos.Add(await MapToGetListOutputDtoAsync(entity));
+            }
+
+            return dtos;
+        }
+
+        /// <summary>
+        /// Maps <see cref="TEntity"/> to <see cref="TGetListOutputDto"/>.
+        /// It internally calls the <see cref="MapToGetListOutputDto"/> by default.
+        /// It can be overriden for custom mapping.
+        /// Overriding this has higher priority than overriding the <see cref="MapToGetListOutputDto"/>
+        /// </summary>
+        protected virtual Task<TGetListOutputDto> MapToGetListOutputDtoAsync(TEntity entity)
+        {
+            return Task.FromResult(MapToGetListOutputDto(entity));
         }
 
         /// <summary>

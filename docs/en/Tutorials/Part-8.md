@@ -339,7 +339,7 @@ public async Task DeleteAsync(Guid id)
 
 You can't compile the code since it is expecting some constants declared in the `BookStorePermissions` class.
 
-Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project and change the content as shown below:
+Open the `BookStorePermissions` class inside the `Acme.BookStore.Application.Contracts` project (in the `Permissions` folder) and change the content as shown below:
 
 ````csharp
 namespace Acme.BookStore.Permissions
@@ -488,6 +488,16 @@ namespace Acme.BookStore
     }
 }
 ````
+
+{{if DB=="EF"}}
+
+You can now run the `.DbMigrator` console application to **migrate** the **database schema** and **seed** the initial data.
+
+{{else if DB=="Mongo"}}
+
+You can now run the `.DbMigrator` console application to **seed** the initial data.
+
+{{end}}
 
 ## Testing the Author Application Service
 

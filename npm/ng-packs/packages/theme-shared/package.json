@@ -10,7 +10,7 @@
     "@abp/ng.core": "~3.0.5",
     "@fortawesome/fontawesome-free": "^5.13.1",
     "@ng-bootstrap/ng-bootstrap": "^6.1.0",
-    "@ngx-validate/core": "^0.0.10",
+    "@ngx-validate/core": "^0.0.11",
     "@swimlane/ngx-datatable": "^17.0.0",
     "bootstrap": "^4.5.0",
     "chart.js": "^2.9.3",

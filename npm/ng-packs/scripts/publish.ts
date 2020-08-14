@@ -1,6 +1,7 @@
 import execa from 'execa';
 import fse from 'fs-extra';
 import program from 'commander';
+import replaceWithPreview from './replace-with-preview';
 
 program
   .option(
@@ -20,13 +21,13 @@ const publish = async () => {
   }
 
   const registry = program.preview
-    ? 'https://www.myget.org/F/abp-nightly/npm'
+    ? 'https://www.myget.org/F/abp-nightly/auth/8f2a5234-1bce-4dc7-b976-2983078590a9/npm/'
     : 'https://registry.npmjs.org';
 
   try {
     await fse.remove('../dist');
 
-    await execa('yarn', ['install'], { stdout: 'inherit', cwd: '../' });
+    await execa('yarn', ['install', '--ignore-scripts'], { stdout: 'inherit', cwd: '../' });
 
     await fse.rename('../lerna.version.json', '../lerna.json');
 
@@ -47,6 +48,8 @@ const publish = async () => {
     await fse.rename('../lerna.json', '../lerna.version.json');
 
     await execa('yarn', ['replace-with-tilde']);
+
+    if (program.preview) await replaceWithPreview(program.nextVersion);
 
     await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
 

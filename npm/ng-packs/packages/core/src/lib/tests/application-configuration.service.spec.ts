@@ -14,7 +14,7 @@ describe('ApplicationConfigurationService', () => {
   beforeEach(() => (spectator = createHttp()));
 
   it('should send a GET to application-configuration API', () => {
-    spectator.get(Store).selectSnapshot.andReturn('https://abp.io');
+    spectator.inject(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.getConfiguration().subscribe();
     spectator.expectOne('https://abp.io/api/abp/application-configuration', HttpMethod.GET);
   });

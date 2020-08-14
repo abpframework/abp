@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -15,6 +16,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.Logout
+            });
+
             await SignInManager.SignOutAsync();
             if (ReturnUrl != null)
             {

@@ -14,6 +14,7 @@ import { TenantBoxComponent } from './components/tenant-box/tenant-box.component
 import { Options } from './models/options';
 import { ACCOUNT_OPTIONS } from './tokens/options.token';
 import { accountOptionsFactory } from './utils/factory-utils';
+import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ export class AccountModule {
     return {
       ngModule: AccountModule,
       providers: [
+        AuthenticationFlowGuard,
         { provide: ACCOUNT_OPTIONS, useValue: options },
         {
           provide: 'ACCOUNT_OPTIONS',

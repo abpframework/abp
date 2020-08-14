@@ -64,6 +64,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder, _projectName);
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToCamelCase(), _projectName.ToCamelCase());
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToKebabCase(), _projectName.ToKebabCase());
+                RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToSnakeCase().ToUpper(), _projectName.ToSnakeCase().ToUpper());
             }
         }
     }

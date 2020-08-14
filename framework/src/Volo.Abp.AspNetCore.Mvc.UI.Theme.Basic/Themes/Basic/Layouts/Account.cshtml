@@ -39,8 +39,10 @@
 
     <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
 
-    <meta name="description" content="@(ViewBag.Description != null ? ViewBag.Description as string : "Login or register to check out your ABP account. You need to be logged in to to view pay statements, generate new project and manage your license.")" />
-
+    @if (ViewBag.Description != null)
+    {
+        <meta name="description" content="@(ViewBag.Description as string)" />
+    }
     <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
     @await RenderSectionAsync("styles", false)
@@ -86,7 +88,9 @@
                     </div>
                 }
                 @(await Component.InvokeAsync<PageAlertsViewComponent>())
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.First, StandardLayouts.Account)
                 @RenderBody()
+                @await Component.InvokeLayoutHookAsync(LayoutHooks.PageContent.Last, StandardLayouts.Account)
             </abp-column>
         </abp-row>
     </div>

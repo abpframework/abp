@@ -31,6 +31,8 @@
     "DisplayName:GitHubRootUrl": "GitHub root URL",
     "DisplayName:GitHubAccessToken": "GitHub access token",
     "DisplayName:GitHubUserAgent": "GitHub user agent",
+    "DisplayName:GithubVersionProviderSource": "GitHub version provider source",
+    "DisplayName:VersionBranchPrefix": "Version branch prefix",
     "DisplayName:All": "Pull all",
     "DisplayName:LanguageCode": "Language code",
     "DisplayName:Version": "Version",

@@ -8,6 +8,20 @@ namespace System.Collections.Generic
     public class AbpListExtensions_Tests
     {
         [Fact]
+        public void InsertRange()
+        {
+            var list = Enumerable.Range(1, 3).ToList();
+            list.InsertRange(1, new[] {7, 8, 9});
+
+            list[0].ShouldBe(1);
+            list[1].ShouldBe(7);
+            list[2].ShouldBe(8);
+            list[3].ShouldBe(9);
+            list[4].ShouldBe(2);
+            list[5].ShouldBe(3);
+        }
+
+        [Fact]
         public void InsertAfter()
         {
             var list = Enumerable.Range(1, 3).ToList();
@@ -191,7 +205,7 @@ namespace System.Collections.Generic
             {
                 var list = RandomHelper
                     .GenerateRandomizedList(new char[] {'A', 'B', 'C', 'D', 'E', 'F', 'G'});
-                
+
                 list = list.SortByDependencies(c => dependencies[c]);
 
                 foreach (var dependency in dependencies)

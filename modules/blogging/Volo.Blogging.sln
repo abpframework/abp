@@ -59,6 +59,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Admin.HttpApi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Admin.Web", "src\Volo.Blogging.Admin.Web\Volo.Blogging.Admin.Web.csproj", "{DB75CA32-96A5-4D10-8DD0-E62A3D0DDBCB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{9FAD5B78-0577-4500-92D5-DC86E05F773C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Application.Contracts.Shared", "src\Volo.Blogging.Application.Contracts.Shared\Volo.Blogging.Application.Contracts.Shared.csproj", "{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +157,10 @@ Global
 		{DB75CA32-96A5-4D10-8DD0-E62A3D0DDBCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB75CA32-96A5-4D10-8DD0-E62A3D0DDBCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB75CA32-96A5-4D10-8DD0-E62A3D0DDBCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,6 +191,8 @@ Global
 		{59BBAF94-CC8E-4313-9143-F2F5C36A7C45} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
 		{58A63CC9-C886-448B-AB4E-068600294D86} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
 		{DB75CA32-96A5-4D10-8DD0-E62A3D0DDBCB} = {BE2A423C-271E-469A-AD90-5640DEBEE9C1}
+		{9FAD5B78-0577-4500-92D5-DC86E05F773C} = {42BF26EF-B8C7-42DC-9FFB-3653109B7776}
+		{E28EBBE0-8EB7-4FC1-9267-E6D30993EAE4} = {9FAD5B78-0577-4500-92D5-DC86E05F773C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2BAE819-78D4-407A-9201-22473B2850B0}

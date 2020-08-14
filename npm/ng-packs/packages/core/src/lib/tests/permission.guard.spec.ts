@@ -52,7 +52,7 @@ describe('PermissionGuard', () => {
     spectator = createService();
     guard = spectator.service;
     routes = spectator.inject(RoutesService);
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
   });
 
   it('should return true when the grantedPolicy is true', done => {

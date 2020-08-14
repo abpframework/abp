@@ -72,8 +72,8 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 Name = document.Name,
                 FileName = document.FileName,
                 Content = document.Content,
-                LanguageCode = document.LanguageCode,
-                Version = document.Version
+                LanguageCode = ConvertLanguageCode(document.LanguageCode),
+                Version = ConvertVersion(document.Version)
             };
 
             if (!existsResponse.Exists)
@@ -173,12 +173,12 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                                 new TermQuery
                                 {
                                     Field = "version",
-                                    Value = version
+                                    Value = ConvertVersion(version)
                                 },
                                 new TermQuery
                                 {
                                     Field = "languageCode",
-                                    Value = languageCode
+                                    Value = ConvertLanguageCode(languageCode)
                                 }
                             }
                         }
@@ -231,6 +231,16 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             {
                 throw new BusinessException(DocsDomainErrorCodes.ElasticSearchNotEnabled);
             }
+        }
+
+        protected string ConvertLanguageCode(string languageCode)
+        {
+            return languageCode.Replace("-", "").ToLower();
+        }
+
+        protected string ConvertVersion(string version)
+        {
+            return version.Replace("-", "").ToLower();
         }
     }
 }

@@ -1,1 +1,0 @@
-start chrome http://localhost:64999,http://localhost:63568,http://localhost:62157,http://localhost:60244,http://localhost:65129/swagger,http://localhost:65115/swagger,http://localhost:64897/swagger,http://localhost:51954,http://localhost:53435

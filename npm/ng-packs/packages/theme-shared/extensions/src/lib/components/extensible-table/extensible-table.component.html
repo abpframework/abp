@@ -1,5 +1,6 @@
 <ngx-datatable default [rows]="data" [count]="recordsTotal" [list]="list">
   <ngx-datatable-column
+    *ngIf="actionsTemplate || actionList.length"
     [name]="actionsText | abpLocalization"
     [maxWidth]="columnWidths[0]"
     [width]="columnWidths[0]"
@@ -31,6 +32,7 @@
           <div
             *ngIf="row['_' + prop.name].visible"
             [innerHTML]="row['_' + prop.name].value | async"
+            (click)="prop.action({ getInjected: getInjected, record: row, index: i })"
           ></div>
         </ng-container>
       </ng-template>

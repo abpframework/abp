@@ -10,7 +10,7 @@ namespace Volo.Abp.Timing
     {
         public virtual List<NameValue> GetWindowsTimezones()
         {
-            return TZConvert.KnownIanaTimeZoneNames.OrderBy(x => x).Select(x => new NameValue(x, x)).ToList();
+            return TZConvert.KnownWindowsTimeZoneIds.OrderBy(x => x).Select(x => new NameValue(x, x)).ToList();
         }
 
         public virtual List<NameValue> GetIanaTimezones()

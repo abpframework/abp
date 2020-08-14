@@ -15,13 +15,18 @@ namespace Volo.Abp.ObjectExtending
         [CanBeNull]
         public Action<PropertyBuilder> PropertyBuildAction { get; set; }
 
+        [CanBeNull]
+        public Action<EntityTypeBuilder, PropertyBuilder> EntityTypeAndPropertyBuildAction { get; set; }
+
         public ObjectExtensionPropertyInfoEfCoreMappingOptions(
             [NotNull] ObjectExtensionPropertyInfo extensionProperty,
-            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null)
+            [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction = null)
         {
             ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
-            
+
             PropertyBuildAction = propertyBuildAction;
+            EntityTypeAndPropertyBuildAction = entityTypeAndPropertyBuildAction;
         }
     }
 }

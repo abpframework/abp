@@ -22,13 +22,13 @@ describe('AuthGuard', () => {
   });
 
   it('should return true when user logged in', () => {
-    spectator.get(OAuthService).hasValidAccessToken.andReturn(true);
+    spectator.inject(OAuthService).hasValidAccessToken.andReturn(true);
     expect(guard.canActivate(null, null)).toBe(true);
   });
 
   it('should return navigate to login page with redirectUrl state', () => {
-    const router = spectator.get(Router);
-    spectator.get(OAuthService).hasValidAccessToken.andReturn(false);
+    const router = spectator.inject(Router);
+    spectator.inject(OAuthService).hasValidAccessToken.andReturn(false);
 
     expect(guard.canActivate(null, { url: '/' } as any)).toBe(true);
     expect(router.navigate).toHaveBeenCalledWith(['/account/login'], {

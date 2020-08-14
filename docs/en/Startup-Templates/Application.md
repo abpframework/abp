@@ -437,7 +437,11 @@ See the [Testing Overview](https://reactjs.org/docs/testing.html) document.
 * [Formik](https://github.com/jaredpalmer/formik) is used to build forms.
 * [Yup](https://github.com/jquense/yup) is used for form validations.
 
+## Social / External Logins
+
+If you want to configure social/external logins for your application, please follow the [Social/External Logins](../Authentication/Social-External-Logins.md) document.
+
 ## What's Next?
 
-- [The getting started document](../Getting-Started-With-Startup-Templates.md) explains how to create a new application in a few minutes.
-- [The application development tutorial](../Tutorials/Part-1) explains step by step application development.
+- [The getting started document](../Getting-Started.md) explains how to create a new application in a few minutes.
+- [The application development tutorial](../Tutorials/Part-1.md) explains step by step application development.
