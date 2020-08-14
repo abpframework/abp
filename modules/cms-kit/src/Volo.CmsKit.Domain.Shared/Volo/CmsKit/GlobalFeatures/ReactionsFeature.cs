@@ -8,7 +8,7 @@ namespace Volo.CmsKit.GlobalFeatures
     {
         public const string Name = "CmsKit.Reactions";
 
-        public ReactionsFeature(
+        internal  ReactionsFeature(
             [NotNull] GlobalCmsKitFeatures cmsKit
             ) : base(cmsKit)
         {

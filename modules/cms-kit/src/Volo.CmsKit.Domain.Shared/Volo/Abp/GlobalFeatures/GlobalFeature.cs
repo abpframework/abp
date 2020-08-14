@@ -10,6 +10,7 @@ namespace Volo.Abp.GlobalFeatures
         [NotNull]
         public GlobalFeatureManager FeatureManager { get; }
 
+        [NotNull]
         public string FeatureName { get; }
 
         public bool IsEnabled

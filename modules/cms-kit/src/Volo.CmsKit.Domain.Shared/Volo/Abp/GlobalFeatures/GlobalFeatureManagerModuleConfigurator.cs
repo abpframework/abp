@@ -5,16 +5,16 @@ namespace Volo.Abp.GlobalFeatures
     public abstract class GlobalModuleFeatures
     {
         [NotNull]
-        public GlobalFeatureConfiguratorDictionary AllFeatures { get; }
-
-        [NotNull]
         public GlobalFeatureManager FeatureManager { get; }
 
+        [NotNull]
+        protected GlobalFeatureConfiguratorDictionary AllFeatures { get; }
+
         protected GlobalModuleFeatures(
-            GlobalFeatureManager featureManager)
+            [NotNull] GlobalFeatureManager featureManager)
         {
+            FeatureManager = Check.NotNull(featureManager, nameof(featureManager));
             AllFeatures = new GlobalFeatureConfiguratorDictionary();
-            FeatureManager = featureManager;
         }
 
         public virtual void EnableAll()
@@ -43,10 +43,10 @@ namespace Volo.Abp.GlobalFeatures
             return AllFeatures[featureName];
         }
 
-        protected TFeature GetFeature<TFeature>(string featureName)
+        protected TFeature GetFeature<TFeature>()
             where TFeature : GlobalFeature
         {
-            return (TFeature) AllFeatures[featureName];
+            return (TFeature) GetFeature(GlobalFeatureNameAttribute.GetName<TFeature>());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Volo.Abp.GlobalFeatures;
+﻿using JetBrains.Annotations;
+using Volo.Abp.GlobalFeatures;
 
 namespace Volo.CmsKit.GlobalFeatures
 {
@@ -6,11 +7,10 @@ namespace Volo.CmsKit.GlobalFeatures
     {
         public const string ModuleName = "CmsKit";
 
-        public ReactionsFeature Reactions => GetFeature<ReactionsFeature>(ReactionsFeature.Name);
+        public ReactionsFeature Reactions => GetFeature<ReactionsFeature>();
+        public CommentsFeature Comments => GetFeature<CommentsFeature>();
 
-        public CommentsFeature Comments => GetFeature<CommentsFeature>(CommentsFeature.Name);
-
-        public GlobalCmsKitFeatures(GlobalFeatureManager featureManager)
+        public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)
             : base(featureManager)
         {
             AddFeature(new ReactionsFeature(this));

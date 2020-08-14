@@ -8,6 +8,7 @@ namespace Volo.Abp.GlobalFeatures
     [AttributeUsage(AttributeTargets.Class)]
     public class GlobalFeatureNameAttribute : Attribute
     {
+        [NotNull]
         public string Name { get; }
 
         public GlobalFeatureNameAttribute([NotNull] string name)
@@ -21,6 +22,7 @@ namespace Volo.Abp.GlobalFeatures
             return GetName(typeof(TFeature));
         }
 
+        [NotNull]
         public static string GetName(Type type)
         {
             var attribute = type

@@ -8,6 +8,9 @@ namespace Volo.Abp.GlobalFeatures
     {
         public static GlobalFeatureManager Instance { get; protected set; } = new GlobalFeatureManager();
 
+        /// <summary>
+        /// A common dictionary to store arbitrary configurations.
+        /// </summary>
         [NotNull]
         public Dictionary<object, object> Configuration { get; }
 

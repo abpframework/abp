@@ -8,7 +8,7 @@ namespace Volo.CmsKit.GlobalFeatures
     {
         public const string Name = "CmsKit.Comments";
 
-        public CommentsFeature(
+        internal CommentsFeature(
             [NotNull] GlobalCmsKitFeatures cmsKit
         ) : base(cmsKit)
         {
