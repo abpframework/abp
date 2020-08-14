@@ -226,8 +226,8 @@ export class CoreModule {
             storage: StorageOption.LocalStorage,
             serialize: JSON.stringify,
             deserialize: JSON.parse,
-            beforeSerialize: obj => obj,
-            afterDeserialize: obj => obj,
+            beforeSerialize: ngxsStoragePluginSerialize,
+            afterDeserialize: ngxsStoragePluginSerialize,
             ...options.ngxsStoragePluginOptions,
             key: [...(options.ngxsStoragePluginOptions?.key || []), 'SessionState'],
           },
@@ -235,4 +235,8 @@ export class CoreModule {
       ],
     };
   }
+}
+
+export function ngxsStoragePluginSerialize(data) {
+  return data;
 }
