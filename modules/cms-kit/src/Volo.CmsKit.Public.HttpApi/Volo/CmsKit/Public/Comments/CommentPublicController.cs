@@ -38,6 +38,7 @@ namespace Volo.CmsKit.Public.Comments
             return CommentPublicAppService.UpdateAsync(id, input);
         }
 
+        //TODO: Route seems incorrect! Should be "{id}" ?
         [HttpDelete]
         [Route("update")]
         public Task DeleteAsync(Guid id)
