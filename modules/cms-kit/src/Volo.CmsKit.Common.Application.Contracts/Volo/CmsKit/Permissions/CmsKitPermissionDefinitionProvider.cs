@@ -2,14 +2,14 @@
 using Volo.Abp.Localization;
 using Volo.CmsKit.Localization;
 
-namespace Volo.CmsKit.Public.Permissions
+namespace Volo.CmsKit.Permissions
 {
-    public class CmsKitPublicPermissionDefinitionProvider : PermissionDefinitionProvider
+    public class CmsKitPermissionDefinitionProvider : PermissionDefinitionProvider
     {
         public override void Define(IPermissionDefinitionContext context)
         {
             var myGroup = context.AddGroup(
-                CmsKitPublicPermissions.GroupName,
+                CmsKitPermissions.GroupName,
                 L("Permission:CmsKit.Public")
             );
         }
