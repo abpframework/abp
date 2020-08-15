@@ -10,6 +10,5 @@ namespace Volo.CmsKit.MongoDB.Users
             : base(dbContextProvider)
         {
         }
-
     }
 }
