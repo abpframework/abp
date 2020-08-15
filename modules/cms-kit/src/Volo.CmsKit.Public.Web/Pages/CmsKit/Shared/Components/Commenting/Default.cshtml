@@ -54,7 +54,7 @@
                 }
                 else
                 {
-                    <a href="@Model.LoginUrl"> @L["LoginToReply"]</a>
+                    <a href="@(Model.LoginUrl + "_" + id)"> @L["LoginToReply"]</a>
                 }
             }
             @if (authorId == CurrentUser.Id)

@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.CmsKit.Public.Comments;
+using Volo.CmsKit.Web;
 
 namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 {
@@ -17,20 +19,24 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
     public class CommentingViewComponent : AbpViewComponent
     {
         public ICommentPublicAppService CommentPublicAppService { get; }
+        public CmsKitUiOptions Options { get; }
 
         public CommentingViewComponent(
-            ICommentPublicAppService commentPublicAppService)
+            ICommentPublicAppService commentPublicAppService,
+            IOptions<CmsKitUiOptions> options)
         {
             CommentPublicAppService = commentPublicAppService;
+            Options = options.Value;
         }
 
         public virtual async Task<IViewComponentResult> InvokeAsync(
             string entityType,
-            string entityId,
-            string loginUrl = null) //TODO: This can be a configuration (default: /Account/Login) rather than passing it to the component
+            string entityId)
         {
             var result = await CommentPublicAppService
                 .GetListAsync(entityType, entityId);
+
+            var loginUrl = $"{Options.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-comment_{entityType}_{entityId}";
 
             var viewModel = new CommentingViewModel
             {
