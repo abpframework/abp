@@ -32,6 +32,9 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
+
+                b.HasIndex(x => new {x.TenantId, x.UserName});
+                b.HasIndex(x => new {x.TenantId, x.Email});
             });
 
             if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
@@ -39,15 +42,15 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 builder.Entity<UserReaction>(b =>
                 {
                     b.ToTable(options.TablePrefix + "UserReactions", options.Schema);
+
                     b.ConfigureByConvention();
 
                     b.Property(x => x.EntityType).IsRequired().HasMaxLength(UserReactionConsts.MaxEntityTypeLength);
                     b.Property(x => x.EntityId).IsRequired().HasMaxLength(UserReactionConsts.MaxEntityIdLength);
                     b.Property(x => x.ReactionName).IsRequired().HasMaxLength(UserReactionConsts.MaxReactionNameLength);
-                    b.Property(x => x.CreationTime);
 
-                    b.HasIndex(x => new { x.EntityType, x.EntityId });
-                    b.HasIndex(x => new { x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.ReactionName });
+                    b.HasIndex(x => new { x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
                 });
             }
 
@@ -56,16 +59,16 @@ namespace Volo.CmsKit.EntityFrameworkCore
                 builder.Entity<Comment>(b =>
                 {
                     b.ToTable(options.TablePrefix + "Comments", options.Schema);
+
                     b.ConfigureByConvention();
 
                     b.Property(x => x.EntityType).IsRequired().HasMaxLength(CommentConsts.MaxEntityTypeLength);
                     b.Property(x => x.EntityId).IsRequired().HasMaxLength(CommentConsts.MaxEntityIdLength);
                     b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength);
                     b.Property(x => x.RepliedCommentId);
-                    b.Property(x => x.CreationTime);
 
-                    b.HasIndex(x => new { x.EntityType, x.EntityId });
-                    b.HasIndex(x => new { x.RepliedCommentId });
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+                    b.HasIndex(x => new { x.TenantId, x.RepliedCommentId });
                 });
             }
         }

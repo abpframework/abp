@@ -7,7 +7,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Comments
 {
-    public class Comment: Entity<Guid>, IAggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, IMultiTenant
+    public class Comment: BasicAggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, IMultiTenant
     {
         public virtual Guid? TenantId { get; protected set; }
 

@@ -90,7 +90,7 @@ namespace Volo.CmsKit.Public.Comments
                 throw new BusinessException();
             }
 
-            await CommentRepository.DeleteAsync(id);
+            await CommentRepository.DeleteWithRepliesAsync(id);
         }
 
         private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)

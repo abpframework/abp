@@ -22,7 +22,8 @@ namespace Volo.CmsKit.Comments
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
             string entityType,
-            string entityId)
+            string entityId,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
@@ -37,10 +38,12 @@ namespace Volo.CmsKit.Comments
                     Author = user
                 };
 
-            return await query.ToListAsync();
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
+        public async Task DeleteWithRepliesAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
         {
             var replies = await DbSet
                 .Where(x => x.RepliedCommentId == id)
@@ -49,10 +52,13 @@ namespace Volo.CmsKit.Comments
             foreach (var reply in replies)
             {
                 //TODO: Discuss if it is better to mark it as deleted and show in the ui as "This is deleted" instead of deleting it and replies completely
-                await base.DeleteAsync(reply.Id, autoSave, GetCancellationToken(cancellationToken));
+                await base.DeleteAsync(
+                    reply.Id,
+                    cancellationToken: GetCancellationToken(cancellationToken)
+                );
             }
 
-            await base.DeleteAsync(id, autoSave, GetCancellationToken(cancellationToken));
+            await base.DeleteAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }
