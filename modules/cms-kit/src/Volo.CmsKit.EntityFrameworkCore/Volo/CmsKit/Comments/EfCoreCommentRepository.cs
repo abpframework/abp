@@ -42,23 +42,22 @@ namespace Volo.CmsKit.Comments
         }
 
         public async Task DeleteWithRepliesAsync(
-            Guid id,
+            Comment comment,
             CancellationToken cancellationToken = default)
         {
             var replies = await DbSet
-                .Where(x => x.RepliedCommentId == id)
+                .Where(x => x.RepliedCommentId == comment.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
             foreach (var reply in replies)
             {
-                //TODO: Discuss if it is better to mark it as deleted and show in the ui as "This is deleted" instead of deleting it and replies completely
-                await base.DeleteAsync(
-                    reply.Id,
+                await DeleteAsync(
+                    reply,
                     cancellationToken: GetCancellationToken(cancellationToken)
                 );
             }
 
-            await base.DeleteAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            await DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }

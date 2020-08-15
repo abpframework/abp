@@ -16,7 +16,7 @@ namespace Volo.CmsKit.Comments
         );
 
         Task DeleteWithRepliesAsync(
-            Guid id,
+            Comment comment,
             CancellationToken cancellationToken = default
         );
     }

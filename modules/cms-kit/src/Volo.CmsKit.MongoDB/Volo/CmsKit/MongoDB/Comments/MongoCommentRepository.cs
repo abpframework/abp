@@ -50,11 +50,11 @@ namespace Volo.CmsKit.MongoDB.Comments
         }
 
         public async Task DeleteWithRepliesAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+            Comment comment,
+            CancellationToken cancellationToken = default)
         {
             var replies = await GetMongoQueryable()
-                .Where(x => x.RepliedCommentId == id)
+                .Where(x => x.RepliedCommentId == comment.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
             foreach (var reply in replies)
@@ -66,7 +66,7 @@ namespace Volo.CmsKit.MongoDB.Comments
                 );
             }
 
-            await base.DeleteAsync(id, cancellationToken: GetCancellationToken(cancellationToken));
+            await base.DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
         }
     }
 }

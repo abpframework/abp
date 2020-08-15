@@ -7,8 +7,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Authorization;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Users;
@@ -84,13 +82,12 @@ namespace Volo.CmsKit.Public.Comments
         public virtual async Task DeleteAsync(Guid id)
         {
             var comment = await CommentRepository.GetAsync(id);
-
             if (comment.CreatorId != CurrentUser.GetId())
             {
                 throw new BusinessException();
             }
 
-            await CommentRepository.DeleteWithRepliesAsync(id);
+            await CommentRepository.DeleteWithRepliesAsync(comment);
         }
 
         private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
