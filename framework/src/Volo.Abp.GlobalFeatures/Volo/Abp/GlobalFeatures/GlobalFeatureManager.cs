@@ -1,4 +1,5 @@
-﻿﻿using System.Collections.Generic;
+﻿﻿using System;
+ using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.GlobalFeatures
@@ -28,6 +29,11 @@ namespace Volo.Abp.GlobalFeatures
             where TFeature : GlobalFeature
         {
             return IsEnabled(GlobalFeatureNameAttribute.GetName<TFeature>());
+        }
+
+        public virtual bool IsEnabled([NotNull] Type featureType)
+        {
+            return IsEnabled(GlobalFeatureNameAttribute.GetName(featureType));
         }
 
         public virtual bool IsEnabled(string featureName)

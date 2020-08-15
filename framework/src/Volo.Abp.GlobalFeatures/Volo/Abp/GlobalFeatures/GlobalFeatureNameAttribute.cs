@@ -23,8 +23,10 @@ namespace Volo.Abp.GlobalFeatures
         }
 
         [NotNull]
-        public static string GetName(Type type)
+        public static string GetName([NotNull] Type type)
         {
+            Check.NotNull(type, nameof(type));
+
             var attribute = type
                 .GetCustomAttributes<GlobalFeatureNameAttribute>()
                 .FirstOrDefault();
