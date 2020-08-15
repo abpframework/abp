@@ -24,16 +24,20 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
             CommentPublicAppService = commentPublicAppService;
         }
 
-        public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId, string loginUrl = null)
+        public virtual async Task<IViewComponentResult> InvokeAsync(
+            string entityType,
+            string entityId,
+            string loginUrl = null) //TODO: This can be a configuration (default: /Account/Login) rather than passing it to the component
         {
-            var result = await CommentPublicAppService.GetListAsync(entityType, entityId);
+            var result = await CommentPublicAppService
+                .GetListAsync(entityType, entityId);
 
             var viewModel = new CommentingViewModel
             {
                 EntityId = entityId,
                 EntityType = entityType,
                 LoginUrl = loginUrl,
-                Comments = result.Items.ToList()
+                Comments = result.Items
             };
 
             return View("~/Pages/CmsKit/Shared/Components/Commenting/Default.cshtml", viewModel);
@@ -47,7 +51,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 
             public string LoginUrl { get; set; }
 
-            public List<CommentWithDetailsDto> Comments { get; set; }
+            public IReadOnlyList<CommentWithDetailsDto> Comments { get; set; }
         }
     }
 }
