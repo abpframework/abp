@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.Reactions
 {
+    [RequiresGlobalFeature(typeof(ReactionsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/reactions")]
