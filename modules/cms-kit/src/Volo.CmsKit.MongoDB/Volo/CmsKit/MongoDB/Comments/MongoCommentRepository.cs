@@ -59,14 +59,16 @@ namespace Volo.CmsKit.MongoDB.Comments
 
             foreach (var reply in replies)
             {
-                //TODO: Discuss if it is better to mark it as deleted and show in the ui as "This is deleted" instead of deleting it and replies completely
                 await base.DeleteAsync(
                     reply,
                     cancellationToken: GetCancellationToken(cancellationToken)
                 );
             }
 
-            await base.DeleteAsync(comment, cancellationToken: GetCancellationToken(cancellationToken));
+            await base.DeleteAsync(
+                comment,
+                cancellationToken: GetCancellationToken(cancellationToken)
+            );
         }
     }
 }
