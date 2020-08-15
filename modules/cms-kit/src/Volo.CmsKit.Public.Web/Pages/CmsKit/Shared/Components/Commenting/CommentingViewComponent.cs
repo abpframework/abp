@@ -19,11 +19,11 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
     public class CommentingViewComponent : AbpViewComponent
     {
         public ICommentPublicAppService CommentPublicAppService { get; }
-        public CmsKitUiOptions Options { get; }
+        public AbpMvcOptions AbpMvcOptions { get; }
 
         public CommentingViewComponent(
             ICommentPublicAppService commentPublicAppService,
-            IOptions<CmsKitUiOptions> options)
+            IOptions<AbpMvcOptions> options)
         {
             CommentPublicAppService = commentPublicAppService;
             Options = options.Value;
