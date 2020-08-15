@@ -29,7 +29,7 @@ namespace Volo.CmsKit.Public.Comments
             CmsUserLookupService = cmsUserLookupService;
         }
 
-        public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
+        public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
         {
             var commentsWithAuthor = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
 

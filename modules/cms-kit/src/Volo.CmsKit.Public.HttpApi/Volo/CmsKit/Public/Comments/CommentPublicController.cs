@@ -20,9 +20,9 @@ namespace Volo.CmsKit.Public.Comments
 
         [HttpGet]
         [Route("{entityType}/{entityId}")]
-        public Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
+        public Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
         {
-            return CommentPublicAppService.GetAllForEntityAsync(entityType, entityId);
+            return CommentPublicAppService.GetListAsync(entityType, entityId);
         }
 
         [HttpPost]

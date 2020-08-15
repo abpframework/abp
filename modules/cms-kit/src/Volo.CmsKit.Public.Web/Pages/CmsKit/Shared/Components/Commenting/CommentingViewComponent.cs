@@ -26,7 +26,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
 
         public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId, string loginUrl = null)
         {
-            var result = await CommentPublicAppService.GetAllForEntityAsync(entityType, entityId);
+            var result = await CommentPublicAppService.GetListAsync(entityType, entityId);
 
             var viewModel = new CommentingViewModel
             {

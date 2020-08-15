@@ -30,7 +30,7 @@ namespace Volo.CmsKit.Comments
         [Fact]
         public async Task GetAllForEntityAsync()
         {
-            var list = await _commentAppService.GetAllForEntityAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+            var list = await _commentAppService.GetListAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
 
             list.Items.Count.ShouldBe(2);
             list.Items.First().Replies.Count.ShouldBe(2);
