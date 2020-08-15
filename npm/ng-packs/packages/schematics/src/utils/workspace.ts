@@ -1,4 +1,4 @@
-import type { experimental, workspaces } from '@angular-devkit/core';
+import { experimental, strings, workspaces } from '@angular-devkit/core';
 import { SchematicsException } from '@angular-devkit/schematics';
 import type { Tree } from '@angular-devkit/schematics';
 import { Exception } from '../enums';
@@ -41,7 +41,29 @@ export async function resolveProject(
 ): Promise<Project> {
   name = name || readWorkspaceSchema(tree).defaultProject!;
   const workspace = await getWorkspace(tree);
-  const definition = workspace.projects.get(name);
+  let definition: Project['definition'] | undefined;
+
+  try {
+    definition = workspace.projects.get(name);
+  } catch (_) {}
+
+  if (!definition)
+    try {
+      name = strings.dasherize(name);
+      definition = workspace.projects.get(name);
+    } catch (_) {}
+
+  if (!definition)
+    try {
+      name = strings.camelize(name);
+      definition = workspace.projects.get(name);
+    } catch (_) {}
+
+  if (!definition)
+    try {
+      name = strings.classify(name);
+      definition = workspace.projects.get(name);
+    } catch (_) {}
 
   if (!definition) throw new SchematicsException(Exception.NoProject);
 

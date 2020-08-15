@@ -24,8 +24,8 @@
       },
       "x-prompt": "Plese enter Angular project name to resolve API definition URL from. (default: workspace \"defaultProject\")"
     },
-    "destination": {
-      "alias": "d",
+    "target": {
+      "alias": "t",
       "description": "Angular project to place the generated code in",
       "type": "string",
       "x-prompt": "Plese enter Angular project name to place generated code in. (default: workspace \"defaultProject\")"

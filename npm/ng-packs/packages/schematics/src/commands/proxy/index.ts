@@ -1,8 +1,9 @@
-import { strings } from '@angular-devkit/core';
-import { chain, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { normalize, strings } from '@angular-devkit/core';
+import { applyTemplates, branchAndMerge, chain, move, SchematicContext, Tree, url } from '@angular-devkit/schematics';
 import { API_DEFINITION_ENDPOINT } from '../../constants';
 import { ApiDefinition } from '../../models';
-import { getSourceJson, getSourceUrl, resolveProject } from '../../utils';
+import { applyWithOverwrite, buildDefaultPath, getSourceJson, getSourceUrl, isLibrary, resolveProject } from '../../utils';
+import * as cases from '../../utils/text';
 import type { Schema as GenerateProxySchema } from './schema';
 
 export default function(params: GenerateProxySchema) {
@@ -11,20 +12,35 @@ export default function(params: GenerateProxySchema) {
   return chain([
     async (tree: Tree, _context: SchematicContext) => {
       const source = await resolveProject(tree, params.source!);
-      const url = getSourceUrl(tree, source, moduleName);
-      const data: ApiDefinition = await getSourceJson(url + API_DEFINITION_ENDPOINT);
+      const target = await resolveProject(tree, params.target!);
+      const isModule = isLibrary(target.definition);
+      const sourceUrl = getSourceUrl(tree, source, moduleName);
+      const targetPath = buildDefaultPath(target.definition);
+      const data: ApiDefinition = await getSourceJson(sourceUrl + API_DEFINITION_ENDPOINT);
 
-      const services = Object.entries(data.modules).map(([name, def]) => [
-        name,
-        Object.values(def.controllers).map(
-          ({controllerName, actions}) => [controllerName, Object.keys(actions)]
+      const controllers = Object.values(data.modules[moduleName]?.controllers || {});
+
+      const createServiceFiles = chain(
+        controllers.map(controller => {
+          const {type} = controller;
+          const [namespace] = type.replace(/^Volo\.(Abp\.)?/, '').split('.');
+
+          return applyWithOverwrite(url('./files-service'), [
+            applyTemplates({
+              ...cases,
+              name: controller.type.split('.').pop()!.replace('Controller', ''),
+              sharedPath: 'shared/' + strings.dasherize(namespace),
+              controller,
+            }),
+            move(normalize(targetPath)),
+          ]);
+        }
         ),
-      ]);
+      );
 
-      const defs = services.filter(([name]) => name === moduleName);
+      console.log(isModule);
 
-      console.log(defs);
-      return chain([]);
+      return branchAndMerge(chain([createServiceFiles]));
     },
   ]);
 }
