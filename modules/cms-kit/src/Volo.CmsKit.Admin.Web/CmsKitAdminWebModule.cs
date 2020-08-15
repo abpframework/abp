@@ -21,7 +21,12 @@ namespace Volo.CmsKit.Admin.Web
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(CmsKitResource), typeof(CmsKitAdminWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(CmsKitResource),
+                    typeof(CmsKitAdminWebModule).Assembly,
+                    typeof(CmsKitAdminApplicationContractsModule).Assembly,
+                    typeof(CmsKitCommonApplicationContractsModule).Assembly
+                );
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>
