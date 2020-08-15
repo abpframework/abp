@@ -57,24 +57,24 @@ namespace Volo.CmsKit.Public.Reactions
         }
 
         [Authorize]
-        public virtual async Task CreateAsync(CreateReactionDto input)
+        public virtual async Task CreateAsync(string entityType, string entityId, string reaction)
         {
             await ReactionManager.CreateAsync(
                 CurrentUser.GetId(),
-                input.EntityType,
-                input.EntityId,
-                input.ReactionName
+                entityType,
+                entityId,
+                reaction
             );
         }
 
         [Authorize]
-        public virtual async Task DeleteAsync(DeleteReactionDto input)
+        public virtual async Task DeleteAsync(string entityType, string entityId, string reaction)
         {
             await ReactionManager.DeleteAsync(
                 CurrentUser.GetId(),
-                input.EntityType,
-                input.EntityId,
-                input.ReactionName
+                entityType,
+                entityId,
+                reaction
             );
         }
 

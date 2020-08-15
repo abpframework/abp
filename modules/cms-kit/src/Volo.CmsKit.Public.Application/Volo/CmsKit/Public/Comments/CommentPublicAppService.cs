@@ -40,7 +40,7 @@ namespace Volo.CmsKit.Public.Comments
         }
 
         [Authorize]
-        public virtual async Task<CommentDto> CreateAsync(CreateCommentInput input)
+        public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
             var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.GetId());
 
@@ -53,8 +53,8 @@ namespace Volo.CmsKit.Public.Comments
             var comment = await CommentRepository.InsertAsync(
                 new Comment(
                     GuidGenerator.Create(),
-                    input.EntityType,
-                    input.EntityId,
+                    entityType,
+                    entityId,
                     input.Text,
                     input.RepliedCommentId,
                     user.Id,

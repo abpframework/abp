@@ -25,15 +25,17 @@ namespace Volo.CmsKit.Public.Reactions
         }
 
         [HttpPut]
-        public virtual Task CreateAsync(CreateReactionDto input)
+        [Route("{entityType}/{entityId}/{reaction}")]
+        public virtual Task CreateAsync(string entityType, string entityId, string reaction)
         {
-            return ReactionPublicAppService.CreateAsync(input);
+            return ReactionPublicAppService.CreateAsync(entityType, entityId, reaction);
         }
 
         [HttpDelete]
-        public virtual Task DeleteAsync(DeleteReactionDto input)
+        [Route("{entityType}/{entityId}/{reaction}")]
+        public virtual Task DeleteAsync(string entityType, string entityId, string reaction)
         {
-            return ReactionPublicAppService.DeleteAsync(input);
+            return ReactionPublicAppService.DeleteAsync(entityType, entityId, reaction);
         }
     }
 }

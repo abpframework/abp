@@ -26,21 +26,21 @@ namespace Volo.CmsKit.Public.Comments
         }
 
         [HttpPost]
-        public Task<CommentDto> CreateAsync(CreateCommentInput input)
+        [Route("{entityType}/{entityId}")]
+        public Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
-            return CommentPublicAppService.CreateAsync(input);
+            return CommentPublicAppService.CreateAsync(entityType, entityId, input);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("{id}")]
         public Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
         {
             return CommentPublicAppService.UpdateAsync(id, input);
         }
 
-        //TODO: Route seems incorrect! Should be "{id}" ?
         [HttpDelete]
-        [Route("update")]
+        [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
             return CommentPublicAppService.DeleteAsync(id);
