@@ -427,7 +427,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
                 return true;
             }
 
-            return GlobalFeatureManager.Instance.IsEnabled(attribute.FeatureType);
+            return GlobalFeatureManager.Instance.IsEnabled(attribute.GetFeatureName());
         }
     }
 }

@@ -1,15 +1,28 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.GlobalFeatures
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class RequiresGlobalFeatureAttribute : Attribute
     {
-        public Type FeatureType { get; }
+        public Type Type { get; }
 
-        public RequiresGlobalFeatureAttribute(Type featureType)
+        public string Name { get; }
+
+        public RequiresGlobalFeatureAttribute([NotNull] Type type)
         {
-            FeatureType = featureType;
+            Type = Check.NotNull(type, nameof(type));
+        }
+
+        public RequiresGlobalFeatureAttribute([NotNull] string name)
+        {
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+        }
+
+        public virtual string GetFeatureName()
+        {
+            return Name ?? GlobalFeatureNameAttribute.GetName(Type);
         }
     }
 }
