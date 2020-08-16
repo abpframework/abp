@@ -42,13 +42,7 @@ namespace Volo.CmsKit.Public.Comments
         [Authorize]
         public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
-            var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.GetId());
-
-            if (user == null)
-            {
-                //TODO: Localize
-                throw new BusinessException(message: "User Not found!");
-            }
+            var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
             var comment = await CommentRepository.InsertAsync(
                 new Comment(
