@@ -2,6 +2,6 @@
 {
     public class AbpExceptionHandlingOptions
     {
-        public bool SendAllExceptionsToClients { get; set; } = false;
+        public bool SendExceptionsDetailsToClients { get; set; } = false;
     }
 }

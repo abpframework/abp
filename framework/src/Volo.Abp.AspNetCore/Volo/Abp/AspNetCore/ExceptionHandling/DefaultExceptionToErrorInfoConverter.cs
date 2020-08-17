@@ -53,7 +53,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
         protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception)
         {
-            if (ExceptionHandlingOptions.SendAllExceptionsToClients)
+            if (ExceptionHandlingOptions.SendExceptionsDetailsToClients)
             {
                 return CreateDetailedErrorInfoFromException(exception);
             }

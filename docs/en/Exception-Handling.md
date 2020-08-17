@@ -323,11 +323,11 @@ You can also throw these type of exceptions in your code (although it's rarely n
 
 ## Send exception details to the client
 
-You can send exceptions to the client via the `SendAllExceptionsToClients` property of the `AbpExceptionHandlingOptions` class:
+You can send exceptions to the client via the `SendExceptionsDetailsToClients` property of the `AbpExceptionHandlingOptions` class:
 
 ````csharp
 services.Configure<AbpExceptionHandlingOptions>(options =>
 {
-    options.SendAllExceptionsToClients = true;
+    options.SendExceptionsDetailsToClients = true;
 });
 ````

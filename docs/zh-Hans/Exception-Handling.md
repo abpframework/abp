@@ -303,11 +303,11 @@ services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
 
 ## 发送异常详情到客户端
 
-你可以通过 `AbpExceptionHandlingOptions` 类的 `SendAllExceptionsToClients` 属性异常发送到客户端:
+你可以通过 `AbpExceptionHandlingOptions` 类的 `SendExceptionsDetailsToClients` 属性异常发送到客户端:
 
 ````csharp
 services.Configure<AbpExceptionHandlingOptions>(options =>
 {
-    options.SendAllExceptionsToClients = true;
+    options.SendExceptionsDetailsToClients = true;
 });
 ````
