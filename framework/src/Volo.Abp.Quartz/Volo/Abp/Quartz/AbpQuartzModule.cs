@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Quartz;
+using Quartz.Impl.AdoJobStore.Common;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -13,6 +14,27 @@ namespace Volo.Abp.Quartz
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var options = context.Services.ExecutePreConfiguredActions<AbpQuartzOptions>();
+
+            // todo: Remove this once Pomelo update MySqlConnector to >= 1.0.0 : https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql/pull/1103
+            var mySqlAvailable = System.Type.GetType("MySql.Data.MySqlClient.MySqlConnection, MySqlConnector") != null;
+            if (mySqlAvailable)
+            {
+                // Overriding the default 'MySqlConnector' provider to use the old 'MySql.Data' namespace found in MySqlConnector < 1.0.0
+                DbProvider.RegisterDbMetadata("MySqlConnector", new DbMetadata()
+                {
+                    ProductName = "MySQL, MySqlConnector provider",
+                    AssemblyName = "MySqlConnector",
+                    ConnectionType = System.Type.GetType("MySql.Data.MySqlClient.MySqlConnection, MySqlConnector"),
+                    CommandType = System.Type.GetType("MySql.Data.MySqlClient.MySqlCommand, MySqlConnector"),
+                    ParameterType = System.Type.GetType("MySql.Data.MySqlClient.MySqlParameter, MySqlConnector"),
+                    ParameterDbType = System.Type.GetType("MySql.Data.MySqlClient.MySqlDbType, MySqlConnector"),
+                    ParameterDbTypePropertyName = "MySqlDbType",
+                    ParameterNamePrefix = "?",
+                    ExceptionType = System.Type.GetType("MySql.Data.MySqlClient.MySqlException, MySqlConnector"),
+                    BindByName = true,
+                    DbBinaryTypeName = "Blob"
+                });
+            }
 
             context.Services.AddQuartz(options.Properties, build =>
             {
