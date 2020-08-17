@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using AutoMapper.Internal;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -11,7 +12,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error;
 using Volo.Abp.Http;
 
-namespace Volo.Abp.Account.Web.Controllers
+namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 {
     [Area("account")]
     public class ErrorController : AbpController
@@ -43,10 +44,12 @@ namespace Volo.Abp.Account.Web.Controllers
                 errorMessage.ErrorDescription = null;
             }
 
-            return View(GetErrorPageUrl(500), new AbpErrorViewModel
+            const int statusCode = (int)HttpStatusCode.InternalServerError;
+
+            return View(GetErrorPageUrl(statusCode), new AbpErrorViewModel
             {
                 ErrorInfo = new RemoteServiceErrorInfo(errorMessage.Error, errorMessage.ErrorDescription),
-                HttpStatusCode = 500
+                HttpStatusCode = statusCode
             });
         }
 
