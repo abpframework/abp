@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "SchematicsAbpGenerateProxy",
-  "title": "ABP Generate Proxy Schema",
+  "id": "SchematicsAbpGenerateAPI",
+  "title": "ABP Generate API Schema",
   "type": "object",
   "properties": {
     "solution": {
@@ -14,23 +14,13 @@
       },
       "x-prompt": "Please enter the solution name. (case-sensitive, eg. Acme.BookStore)"
     },
-    "source": {
-      "alias": "s",
-      "description": "Angular project to resolve API definition URL from",
-      "type": "string",
-      "$default": {
-        "$source": "argv",
-        "index": 1
-      },
-      "x-prompt": "Plese enter Angular project name to resolve API definition URL from. (default: workspace \"defaultProject\")"
-    },
     "target": {
       "alias": "t",
       "description": "Angular project to generate code in",
       "type": "string",
       "$default": {
         "$source": "argv",
-        "index": 2
+        "index": 1
       },
       "x-prompt": "Plese enter Angular project name to place generated code in. (default: workspace \"defaultProject\")"
     },
@@ -40,7 +30,7 @@
       "type": "string",
       "$default": {
         "$source": "argv",
-        "index": 3
+        "index": 2
       },
       "x-prompt": "Please enter name of the backend module you wish to generate proxies for. (default: \"app\")"
     }

@@ -1,9 +1,8 @@
-import { normalize, strings } from '@angular-devkit/core';
-import { applyTemplates, branchAndMerge, chain, move, SchematicContext, Tree, url } from '@angular-devkit/schematics';
+import { strings } from '@angular-devkit/core';
+import { branchAndMerge, chain, schematic, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { API_DEFINITION_ENDPOINT } from '../../constants';
 import { ApiDefinition } from '../../models';
-import { applyWithOverwrite, buildDefaultPath, getSourceJson, getSourceUrl, isLibrary, resolveProject } from '../../utils';
-import * as cases from '../../utils/text';
+import { buildDefaultPath, createApiDefinitionSaver, getApiDefinition, getSourceUrl, resolveProject } from '../../utils';
 import type { Schema as GenerateProxySchema } from './schema';
 
 export default function(params: GenerateProxySchema) {
@@ -13,34 +12,14 @@ export default function(params: GenerateProxySchema) {
     async (tree: Tree, _context: SchematicContext) => {
       const source = await resolveProject(tree, params.source!);
       const target = await resolveProject(tree, params.target!);
-      const isModule = isLibrary(target.definition);
       const sourceUrl = getSourceUrl(tree, source, moduleName);
       const targetPath = buildDefaultPath(target.definition);
-      const data: ApiDefinition = await getSourceJson(sourceUrl + API_DEFINITION_ENDPOINT);
+      const data: ApiDefinition = await getApiDefinition(sourceUrl + API_DEFINITION_ENDPOINT);
 
-      const controllers = Object.values(data.modules[moduleName]?.controllers || {});
+      const saveApiDefinition = createApiDefinitionSaver(data, `${targetPath}/shared/api-definition.json`)
+      const createApi = schematic('api', params);
 
-      const createServiceFiles = chain(
-        controllers.map(controller => {
-          const {type} = controller;
-          const [namespace] = type.replace(/^Volo\.(Abp\.)?/, '').split('.');
-
-          return applyWithOverwrite(url('./files-service'), [
-            applyTemplates({
-              ...cases,
-              name: controller.type.split('.').pop()!.replace('Controller', ''),
-              sharedPath: 'shared/' + strings.dasherize(namespace),
-              controller,
-            }),
-            move(normalize(targetPath)),
-          ]);
-        }
-        ),
-      );
-
-      console.log(isModule);
-
-      return branchAndMerge(chain([createServiceFiles]));
+      return branchAndMerge(chain([saveApiDefinition, createApi]));
     },
   ]);
 }
