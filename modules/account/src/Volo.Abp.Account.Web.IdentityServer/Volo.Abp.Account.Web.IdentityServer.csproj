@@ -37,8 +37,4 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Account" />
-  </ItemGroup>
-
 </Project>
