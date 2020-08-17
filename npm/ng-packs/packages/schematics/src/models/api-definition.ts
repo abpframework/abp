@@ -4,12 +4,12 @@ export interface ApiDefinition {
 }
 
 export interface Type {
-  baseType?: string;
+  baseType: string | null;
   isEnum: boolean;
-  enumNames?: string[];
-  enumValues?: number[];
-  genericArguments?: string[];
-  properties?: Property[];
+  enumNames: string[] | null;
+  enumValues: number[] | null;
+  genericArguments: string[] | null;
+  properties: Property[] | null;
 }
 
 export interface Property {
@@ -62,7 +62,7 @@ export interface Parameter {
   typeSimple: string;
   isOptional: boolean;
   defaultValue: any;
-  constraintTypes?: string[];
+  constraintTypes: string[] | null;
   bindingSourceId: string;
   descriptorName: string;
 }
