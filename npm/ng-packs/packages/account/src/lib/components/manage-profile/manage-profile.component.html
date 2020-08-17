@@ -5,7 +5,11 @@
     <div class="row">
       <div class="col-12 col-md-3">
         <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
-          <li *ngIf="!hideChangePasswordTab" class="nav-item" (click)="selectedTab = 0">
+          <li
+            *ngIf="!hideChangePasswordTab && isProfileLoaded"
+            class="nav-item"
+            (click)="selectedTab = 0"
+          >
             <a
               class="nav-link"
               [ngClass]="{ active: selectedTab === 0 }"
