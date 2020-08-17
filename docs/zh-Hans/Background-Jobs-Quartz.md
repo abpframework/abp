@@ -70,7 +70,43 @@ public class YourModule : AbpModule
 }
 ````
 
-Quartz**默认**将作业与调度信息存储在**内存**中,示例中我们使用[选项模式](Options.md)的预配置将其更改为存储到数据库中. 有关Quartz的更多配置请参阅[Quartz文档](https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/index.html).
+从ABP3.1版本开始,我们在 `AbpQuartzOptions` 添加了 `Configurator` 用于配置Quartz. 例:
+
+````csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpBackgroundJobsQuartzModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigure<AbpQuartzOptions>(options =>
+        {
+            options.Configurator = configure =>
+            {
+                configure.UsePersistentStore(storeOptions =>
+                {
+                    storeOptions.UseProperties = true;
+                    storeOptions.UseJsonSerializer();
+                    storeOptions.UseSqlServer(configuration.GetConnectionString("Quartz"));
+                    storeOptions.UseClustering(c =>
+                    {
+                        c.CheckinMisfireThreshold = TimeSpan.FromSeconds(20);
+                        c.CheckinInterval = TimeSpan.FromSeconds(10);
+                    });
+                });
+            };
+        });
+    }
+}
+````
+
+> 你可以选择你喜爱的方式来配置Quaratz.
+
+Quartz**默认**将作业与调度信息存储在**内存**中,示例中我们使用[选项模式](Options.md)的预配置将其更改为存储到数据库中. 有关Quartz的更多配置请参阅[Quartz文档](https://www.quartz-scheduler.net/).
 
 ## 异常处理
 
