@@ -37,8 +37,6 @@ namespace Volo.Abp.Account.Web.Controllers
                 errorMessage.ErrorDescription = null;
             }
 
-
-            // ReSharper disable once Mvc.ViewNotResolved
             return View("~/Views/Error/Default.cshtml", new AbpErrorViewModel
             {
                 ErrorInfo = new RemoteServiceErrorInfo(errorMessage.Error, errorMessage.ErrorDescription),
