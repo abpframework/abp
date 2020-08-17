@@ -29,6 +29,10 @@
         <Content Remove="Pages\**\*.css" />
         <EmbeddedResource Include="Pages\**\*.js" />
         <Content Remove="Pages\**\*.js" />
+        <EmbeddedResource Include="Components\**\*.js" />
+        <EmbeddedResource Include="Components\**\*.css" />
+        <Content Remove="Components\**\*.js" />
+        <Content Remove="Components\**\*.css" />
     </ItemGroup>
 
 </Project>
