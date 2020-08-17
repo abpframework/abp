@@ -1,4 +1,4 @@
-import { ChangePassword } from '@abp/ng.core';
+import { ChangePassword, ProfileState } from '@abp/ng.core';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -23,6 +23,8 @@ export class ChangePasswordComponent
 
   inProgress: boolean;
 
+  hideOldPassword: boolean;
+
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
 
@@ -36,6 +38,8 @@ export class ChangePasswordComponent
   ) {}
 
   ngOnInit(): void {
+    this.hideOldPassword = !this.store.selectSnapshot(ProfileState.getProfile).hasPassword;
+
     const passwordValidations = getPasswordValidators(this.store);
 
     this.form = this.fb.group(
@@ -58,6 +62,8 @@ export class ChangePasswordComponent
         validators: [comparePasswords(PASSWORD_FIELDS)],
       },
     );
+
+    if (this.hideOldPassword) this.form.removeControl('password');
   }
 
   onSubmit() {
@@ -66,7 +72,7 @@ export class ChangePasswordComponent
     this.store
       .dispatch(
         new ChangePassword({
-          currentPassword: this.form.get('password').value,
+          ...(!this.hideOldPassword && { currentPassword: this.form.get('password').value }),
           newPassword: this.form.get('newPassword').value,
         }),
       )
