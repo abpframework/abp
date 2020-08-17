@@ -106,7 +106,7 @@ public class YourModule : AbpModule
 
 > You can choose the way you favorite to configure Quaratz.
 
-Quartz stores job and scheduling information **in memory by default**. In the example, we use the pre-configuration of [options pattern](Options.md) to change it to the database. For more configuration of Quartz, please refer to the Quartz's [documentation](https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/index.html).
+Quartz stores job and scheduling information **in memory by default**. In the example, we use the pre-configuration of [options pattern](Options.md) to change it to the database. For more configuration of Quartz, please refer to the Quartz's [documentation](https://www.quartz-scheduler.net/).
 
 ## Exception handling
 
