@@ -23,7 +23,7 @@ export class ChangePasswordComponent
 
   inProgress: boolean;
 
-  hideOldPassword: boolean;
+  hideCurrentPassword: boolean;
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
@@ -38,7 +38,7 @@ export class ChangePasswordComponent
   ) {}
 
   ngOnInit(): void {
-    this.hideOldPassword = !this.store.selectSnapshot(ProfileState.getProfile).hasPassword;
+    this.hideCurrentPassword = !this.store.selectSnapshot(ProfileState.getProfile).hasPassword;
 
     const passwordValidations = getPasswordValidators(this.store);
 
@@ -63,7 +63,7 @@ export class ChangePasswordComponent
       },
     );
 
-    if (this.hideOldPassword) this.form.removeControl('password');
+    if (this.hideCurrentPassword) this.form.removeControl('password');
   }
 
   onSubmit() {
@@ -72,7 +72,7 @@ export class ChangePasswordComponent
     this.store
       .dispatch(
         new ChangePassword({
-          ...(!this.hideOldPassword && { currentPassword: this.form.get('password').value }),
+          ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password').value }),
           newPassword: this.form.get('newPassword').value,
         }),
       )
