@@ -9,6 +9,8 @@ export namespace Profile {
     name: string;
     surname: string;
     phoneNumber: string;
+    isExternal: boolean;
+    hasPassword: boolean;
   }
 
   export interface ChangePasswordRequest {
