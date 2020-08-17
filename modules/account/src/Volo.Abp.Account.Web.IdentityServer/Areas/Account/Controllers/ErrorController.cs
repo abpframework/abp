@@ -31,7 +31,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             _abpErrorPageOptions = abpErrorPageOptions.Value;
         }
 
-        public async Task<IActionResult> Index(string errorId)
+        public virtual async Task<IActionResult> Index(string errorId)
         {
             var errorMessage = await _interaction.GetErrorContextAsync(errorId) ?? new ErrorMessage
             {
@@ -53,7 +53,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             });
         }
 
-        private string GetErrorPageUrl(int statusCode)
+        protected virtual string GetErrorPageUrl(int statusCode)
         {
             var page = _abpErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
 
