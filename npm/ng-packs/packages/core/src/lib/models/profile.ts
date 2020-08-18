@@ -12,7 +12,7 @@ export namespace Profile {
     surname: string;
     phoneNumber: string;
     /**
-     * Following 4 fields are added as optional (for backward compatibility) on 17.08.2020 
+     * Following 4 fields are added as optional (for backward compatibility) on 17.08.2020
      * Also, this interface extends `ExtensibleObject` as partial for extraProperties field.
      */
     isExternal?: boolean;
