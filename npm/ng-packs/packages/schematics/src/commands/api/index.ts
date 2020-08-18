@@ -1,7 +1,7 @@
 import { normalize, strings } from '@angular-devkit/core';
 import { applyTemplates, branchAndMerge, chain, move, SchematicContext, SchematicsException, Tree, url } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, createControllerToServiceMapper, interpolate, parseNamespace, resolveProject } from '../../utils';
+import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, createControllerToServiceMapper, interpolate, resolveProject, serializeParameters } from '../../utils';
 import * as cases from '../../utils/text';
 import type { Schema as GenerateProxySchema } from './schema';
 
@@ -23,17 +23,11 @@ export default function(params: GenerateProxySchema) {
 
       const createServiceFiles = chain(
         controllers.map(controller => {
-          console.log(JSON.stringify(mapControllerToService(controller), null, 2));
-
           return applyWithOverwrite(url('./files-service'), [
             applyTemplates({
               ...cases,
-              solution,
-              namespace: parseNamespace(solution, controller.type),
-              name: controller.controllerName,
-              apiName: data.modules[moduleName].remoteServiceName,
-              apiUrl: controller.actions[0]?.url,
-              service: mapControllerToService(controller),
+              serializeParameters,
+              ...mapControllerToService(controller),
             }),
             move(normalize(targetPath)),
           ]);

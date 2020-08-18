@@ -1,0 +1,25 @@
+import { RestService } from '@abp/ng.core';
+import { Injectable } from '@angular/core';<%
+for (let _import of imports) { %>
+import type { <%= _import.specifiers.join(', ') %> } from '<%= _import.path %>';<% } %>
+
+@Injectable({
+  providedIn: 'root',
+})
+export class <%= name %>Service {
+  apiName = '<%= apiName %>';<%
+  for (let method of methods) { %>
+
+  <%= camel(method.signature.name) %> = (<%= serializeParameters(method.signature.parameters) %>) =>
+    this.restService.request<<%= method.body.requestType %>, <%= method.body.responseType %>>({
+      method: '<%= method.body.method %>',
+      url: `/<%= method.body.url %>`,<%
+      if (method.body.params.length) { %>
+      params: { <%= method.body.params.join(', ') %> }<% }
+      if (method.body.body) { %>
+      body: <%= method.body.body %>,<% } %>
+    },
+    { apiName: this.apiName });<% } %>
+
+  constructor(private restService: RestService) {}
+}
