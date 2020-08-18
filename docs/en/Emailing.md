@@ -5,7 +5,7 @@ ABP Framework provides various services, settings and integrations for sending e
 * Provides `IEmailSender` service that is used to send emails.
 * Defines [settings](Settings.md) to configure email sending.
 * Integrates to the [background job system](Background-Jobs.md) to send emails via background jobs.
-* Provides [MailKit](https://github.com/jstedfast/MailKit) integration package.
+* Provides [MailKit integration](MailKit.md) package.
 
 ## Installation
 
@@ -219,10 +219,20 @@ See the [text templating system](Text-Templating.md) document for details.
 
 > Notice that you can define and use your own templates for your application, rather than using the standard simple templates. These standard templates are mostly for reusable modules where they don't define their own templates but rely on the built-in ones. This makes easy to customize emails sent by the used modules, by just overriding the standard email layout template.
 
-## MailKit Integration
-
-TODO
-
 ## NullEmailSender
 
-TODO
+`NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](Logging.md), rathen than actually sending the emails.
+
+This class can be useful especially in development time where you generally don't want to send real emails. The [application startup template](Startup-Templates/Application.md) already uses this class in the **DEBUG mode** with the following configuration in the domain layer:
+
+````csharp
+#if DEBUG
+  context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
+#endif
+````
+
+So, don't confuse if you don't receive emails on DEBUG mode. Emails will be sent as expected on production (RELEASE mode). Remove these lines if you want to send real emails on DEBUG too.
+
+## See Also
+
+* [MailKit integration for sending emails](MailKit.md)

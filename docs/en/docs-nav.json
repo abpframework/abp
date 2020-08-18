@@ -212,7 +212,16 @@
         },
         {
           "text": "Email Sending",
-          "path": "Emailing.md"
+          "items": [
+            {
+              "text": "Email Sending System",
+              "path": "Emailing.md",
+            },
+            {
+              "text": "MailKit Integration",
+              "path": "MailKit.md",
+            }
+          ]
         },
         {
           "text": "BLOB Storing",
