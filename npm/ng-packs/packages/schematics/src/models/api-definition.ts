@@ -45,7 +45,7 @@ export interface Action {
   supportedVersions: string[];
   parametersOnMethod: ParameterInSignature[];
   parameters: ParameterInBody[];
-  returnValue: ReturnValue;
+  returnValue: TypeDef;
 }
 
 export interface ParameterInSignature {
@@ -69,7 +69,7 @@ export interface ParameterInBody {
   descriptorName: string;
 }
 
-export interface ReturnValue {
+export interface TypeDef {
   type: string;
   typeSimple: string;
 }

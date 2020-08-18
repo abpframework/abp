@@ -6,9 +6,9 @@ import {
   Import,
   Method,
   Parameter,
-  ReturnValue,
   Service,
   Signature,
+  TypeDef,
 } from '../models';
 import { parseNamespace } from './namespace';
 import { relativePathFromServiceToModel } from './path';
@@ -30,7 +30,8 @@ export function createActionToImportsReducer(solution: string, namespace: string
   const mapTypeDefToImport = createTypeDefToImportMapper(solution, namespace);
 
   return (imports: Import[], action: Action) => {
-    const typeDefs = [action.returnValue, ...action.parametersOnMethod];
+    const typeDefs = getTypeDefsFromAction(action);
+
     typeDefs.forEach(typeDef => {
       const def = mapTypeDefToImport(typeDef);
       if (!def) return;
@@ -51,14 +52,14 @@ export function createActionToImportsReducer(solution: string, namespace: string
 export function createTypeDefToImportMapper(solution: string, namespace: string) {
   const adaptType = createTypeAdapter(solution);
 
-  return ({ type, typeSimple }: ReturnValue) => {
+  return ({ type, typeSimple }: TypeDef) => {
     if (type.startsWith('System')) return;
     const modelNamespace = parseNamespace(solution, type);
     const path = type.startsWith('Volo.Abp.Application.Dtos')
-      ? '@volo/abp.ng.core'
+      ? '@abp/ng.core'
       : relativePathFromServiceToModel(namespace, modelNamespace);
-    const specifier = adaptType(typeSimple.split('<')[0]);
-    return new Import({ keyword: eImportKeyword.Type, path, specifiers: [specifier] });
+    const specifiers = [adaptType(typeSimple.split('<')[0])];
+    return new Import({ keyword: eImportKeyword.Type, path, specifiers });
   };
 }
 
@@ -116,15 +117,29 @@ function createTypeAdapter(solution: string) {
   return (typeSimple: string) => {
     if (typeSimple === 'System.Void') return 'void';
 
-    return typeSimple
-      .replace(/>+$/, '')
-      .split('<')
-      .reduceRight((acc, type) => {
-        type = type.replace(voloRegex, '');
-        type = type.replace(solutionRegex, '');
-        type = type.replace(optionalRegex, '');
-        type = type.split('.').pop()!;
-        return acc ? `${type}<${acc}>` : type;
-      }, '');
+    return parseGenerics(typeSimple).reduceRight((acc, type) => {
+      type = type.replace(voloRegex, '');
+      type = type.replace(solutionRegex, '');
+      type = type.replace(optionalRegex, '');
+      type = type.split('.').pop()!;
+      return acc ? `${type}<${acc}>` : type;
+    }, '');
   };
+}
+
+function parseGenerics(type: string) {
+  return type.replace(/>+$/, '').split('<');
+}
+
+function getTypeDefsFromAction({ parametersOnMethod, returnValue }: Action) {
+  const typeDefs: TypeDef[] = [];
+
+  [returnValue, ...parametersOnMethod].forEach(({ type, typeSimple }) => {
+    const types = parseGenerics(type);
+    const simpleTypes = parseGenerics(typeSimple);
+
+    types.forEach((type, i) => typeDefs.push({ type, typeSimple: simpleTypes[i] }));
+  });
+
+  return typeDefs;
 }
