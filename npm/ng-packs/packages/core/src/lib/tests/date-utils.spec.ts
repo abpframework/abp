@@ -1,5 +1,3 @@
-import { Spectator, createComponentFactory, SpyObject } from '@ngneat/spectator/jest';
-import { Component } from '@angular/core';
 import { ConfigStateService, getShortDateFormat, getShortDateShortTimeFormat } from '@abp/ng.core';
 
 const dateTimeFormat = {
@@ -12,24 +10,11 @@ const dateTimeFormat = {
   shortTimePattern: 'h:mm tt',
 };
 
-@Component({
-  selector: 'abp-dummy',
-  template: 'dummy',
-})
-class DummyComponent {}
-
 describe('Date Utils', () => {
-  let spectator: Spectator<DummyComponent>;
-  let config: SpyObject<ConfigStateService>;
-
-  const createComponent = createComponentFactory({
-    component: DummyComponent,
-    mocks: [ConfigStateService],
-  });
+  let config: ConfigStateService;
 
   beforeEach(() => {
-    spectator = createComponent();
-    config = spectator.inject(ConfigStateService);
+    config = new ConfigStateService(undefined);
   });
 
   describe('#getShortDateFormat', () => {
