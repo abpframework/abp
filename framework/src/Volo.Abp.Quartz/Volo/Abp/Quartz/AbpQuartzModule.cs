@@ -45,6 +45,11 @@ namespace Volo.Abp.Quartz
                     });
                 }
 
+                if (options.Properties["quartz.plugin.timeZoneConverter.type"] == null)
+                {
+                    build.UseTimeZoneConverter();
+                }
+
                 options.Configurator?.Invoke(build);
             });
 
