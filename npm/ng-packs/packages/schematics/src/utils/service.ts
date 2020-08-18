@@ -11,23 +11,23 @@ import {
   Signature,
 } from '../models';
 import { parseNamespace } from './namespace';
-import { dir } from './text';
+import { relativePathFromServiceToModel } from './path';
 
 export function createControllerToServiceMapper(solution: string, apiName: string) {
   const mapActionToMethod = createActionToMethodMapper(solution);
 
   return (controller: Controller) => {
-    const actions = Object.values(controller.actions);
-    const imports = actions.reduce(createActionToImportsReducer(solution), []);
-    const methods = actions.map(mapActionToMethod);
     const name = controller.controllerName;
     const namespace = parseNamespace(solution, controller.type);
+    const actions = Object.values(controller.actions);
+    const imports = actions.reduce(createActionToImportsReducer(solution, namespace), []);
+    const methods = actions.map(mapActionToMethod);
     return new Service({ apiName, imports, methods, name, namespace });
   };
 }
 
-export function createActionToImportsReducer(solution: string) {
-  const mapTypeDefToImport = createTypeDefToImportMapper(solution);
+export function createActionToImportsReducer(solution: string, namespace: string) {
+  const mapTypeDefToImport = createTypeDefToImportMapper(solution, namespace);
 
   return (imports: Import[], action: Action) => {
     const typeDefs = [action.returnValue, ...action.parametersOnMethod];
@@ -48,15 +48,15 @@ export function createActionToImportsReducer(solution: string) {
   };
 }
 
-export function createTypeDefToImportMapper(solution: string) {
+export function createTypeDefToImportMapper(solution: string, namespace: string) {
   const adaptType = createTypeAdapter(solution);
 
   return ({ type, typeSimple }: ReturnValue) => {
     if (type.startsWith('System')) return;
-    const namespace = parseNamespace(solution, type);
+    const modelNamespace = parseNamespace(solution, type);
     const path = type.startsWith('Volo.Abp.Application.Dtos')
       ? '@volo/abp.ng.core'
-      : `@shared/models/${dir(namespace)}`;
+      : relativePathFromServiceToModel(namespace, modelNamespace);
     const specifier = adaptType(typeSimple.split('<')[0]);
     return new Import({ keyword: eImportKeyword.Type, path, specifiers: [specifier] });
   };
