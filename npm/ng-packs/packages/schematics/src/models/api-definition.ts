@@ -1,3 +1,5 @@
+import { eBindingSourceId } from '../enums';
+
 export interface ApiDefinition {
   modules: Record<string, Module>;
   types: Record<string, Type>;
@@ -41,12 +43,12 @@ export interface Action {
   httpMethod: string;
   url: string;
   supportedVersions: string[];
-  parametersOnMethod: ParameterOnMethod[];
-  parameters: Parameter[];
+  parametersOnMethod: ParameterInSignature[];
+  parameters: ParameterInBody[];
   returnValue: ReturnValue;
 }
 
-export interface ParameterOnMethod {
+export interface ParameterInSignature {
   name: string;
   typeAsString: string;
   type: string;
@@ -55,7 +57,7 @@ export interface ParameterOnMethod {
   defaultValue: any;
 }
 
-export interface Parameter {
+export interface ParameterInBody {
   nameOnMethod: string;
   name: string;
   type: string;
@@ -63,7 +65,7 @@ export interface Parameter {
   isOptional: boolean;
   defaultValue: any;
   constraintTypes: string[] | null;
-  bindingSourceId: string;
+  bindingSourceId: eBindingSourceId;
   descriptorName: string;
 }
 
