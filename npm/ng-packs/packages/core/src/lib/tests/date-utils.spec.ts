@@ -1,4 +1,9 @@
-import { ConfigStateService, getShortDateFormat, getShortDateShortTimeFormat } from '@abp/ng.core';
+import {
+  ConfigStateService,
+  getShortDateFormat,
+  getShortDateShortTimeFormat,
+  getShortTimeFormat,
+} from '@abp/ng.core';
 
 const dateTimeFormat = {
   calendarAlgorithmType: 'SolarCalendar',
@@ -23,6 +28,16 @@ describe('Date Utils', () => {
       getDeepSpy.mockReturnValueOnce(dateTimeFormat);
 
       expect(getShortDateFormat(config)).toBe('M/d/yyyy');
+      expect(getDeepSpy).toHaveBeenCalledWith('localization.currentCulture.dateTimeFormat');
+    });
+  });
+
+  describe('#getShortTimeFormat', () => {
+    test('should get the short time format from ConfigState and return it', () => {
+      const getDeepSpy = jest.spyOn(config, 'getDeep');
+      getDeepSpy.mockReturnValueOnce(dateTimeFormat);
+
+      expect(getShortTimeFormat(config)).toBe('h:mm a');
       expect(getDeepSpy).toHaveBeenCalledWith('localization.currentCulture.dateTimeFormat');
     });
   });
