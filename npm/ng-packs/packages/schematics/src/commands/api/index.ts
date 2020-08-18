@@ -1,6 +1,7 @@
 import { normalize, strings } from '@angular-devkit/core';
-import { applyTemplates, branchAndMerge, chain, move, SchematicContext, Tree, url } from '@angular-devkit/schematics';
-import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, resolveProject } from '../../utils';
+import { applyTemplates, branchAndMerge, chain, move, SchematicContext, SchematicsException, Tree, url } from '@angular-devkit/schematics';
+import { Exception } from '../../enums';
+import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, createControllerToServiceMapper, interpolate, parseNamespace, resolveProject } from '../../utils';
 import * as cases from '../../utils/text';
 import type { Schema as GenerateProxySchema } from './schema';
 
@@ -14,32 +15,25 @@ export default function(params: GenerateProxySchema) {
       const targetPath = buildDefaultPath(target.definition);
       const readApiDefinition = createApiDefinitionReader(`${targetPath}/shared/api-definition.json`);
       const data = readApiDefinition(tree);
+      const definition = data.modules[moduleName];
+      if (!definition) throw new SchematicsException(interpolate(Exception.InvalidModule, moduleName));
 
-      const controllers = Object.values(data.modules[moduleName]?.controllers || {});
+      const mapControllerToService = createControllerToServiceMapper(solution, definition.remoteServiceName);
+      const controllers = Object.values(definition.controllers || {});
 
       const createServiceFiles = chain(
         controllers.map(controller => {
-          const {controllerName: name, type, actions, interfaces} = controller;
-          let namespace = type.split('.').slice(0, -1).join('.');
-          solution.split('.').reduceRight((acc, part) => {
-            acc = part + '\.' + acc;
-            const regex = new RegExp('^' + acc + '(Controllers\.)?');
-            namespace = namespace.replace(regex, '');
-            return acc;
-          }, '');
-
-          console.log(namespace);
+          console.log(JSON.stringify(mapControllerToService(controller), null, 2));
 
           return applyWithOverwrite(url('./files-service'), [
             applyTemplates({
               ...cases,
               solution,
-              namespace,
-              name,
+              namespace: parseNamespace(solution, controller.type),
+              name: controller.controllerName,
               apiName: data.modules[moduleName].remoteServiceName,
               apiUrl: controller.actions[0]?.url,
-              actions,
-              interfaces,
+              service: mapControllerToService(controller),
             }),
             move(normalize(targetPath)),
           ]);
@@ -51,3 +45,4 @@ export default function(params: GenerateProxySchema) {
     },
   ]);
 }
+
