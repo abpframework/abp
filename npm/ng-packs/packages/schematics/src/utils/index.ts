@@ -3,6 +3,7 @@ export * from './ast';
 export * from './common';
 export * from './namespace';
 export * from './rule';
+export * from './service';
 export * from './source';
 export * from './text';
 export * from './workspace';
