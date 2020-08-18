@@ -211,6 +211,10 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Email Sending",
+          "path": "Emailing.md"
+        },
+        {
           "text": "BLOB Storing",
           "items": [
             {
