@@ -110,6 +110,115 @@ The easiest way to define these settings it to add them to the `appsettings.json
 
 See the [setting system document](Settings.md) to understand the setting system better.
 
+## Text Template Integration
+
+ABP Framework provides a strong and flexible [text templating system](Text-Templating.md). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
+
+While you can define and use your own text templates, email sending system provides two simple built-in text templates.
+
+**Example: Use the standard and simple message template to send emails**
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Emailing;
+using Volo.Abp.Emailing.Templates;
+using Volo.Abp.TextTemplating;
+
+namespace Acme.BookStore.Web
+{
+    public class MyService : ITransientDependency
+    {
+        private readonly IEmailSender _emailSender;
+        private readonly ITemplateRenderer _templateRenderer;
+
+        public MyService(
+        IEmailSender emailSender,
+        ITemplateRenderer templateRenderer)
+        {
+            _emailSender = emailSender;
+            _templateRenderer = templateRenderer;
+        }
+
+        public async Task DoItAsync()
+        {
+            var body = await _templateRenderer.RenderAsync(
+                StandardEmailTemplates.Message,
+                new
+                {
+                    message = "This is email body..."
+                }
+            );
+            
+            await _emailSender.SendAsync(
+                "target-address@domain.com",
+                "Email subject",
+                body
+            );
+        }
+    }
+}
+````
+
+The resulting email body will be shown below:
+
+````html
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+    This is email body...
+</body>
+</html>
+````
+
+Emailing system defines the built-in text templates with the given names:
+
+"**Abp.StandardEmailTemplates.Message**" is simplest template that has a text message:
+
+````html
+{{model.message}}
+````
+
+This template uses the "Abp.StandardEmailTemplates.Layout" as its layout.
+
+"**Abp.StandardEmailTemplates.Layout**" is a simple template to provide an HTML document layout:
+
+````html
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+    {{content}}
+</body>
+</html>
+````
+
+The final rendered message was shown above.
+
+> These template names are contants defined in the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` class.
+
+### Overriding/Replacing the Standard Templates
+
+You typically want to replace the standard templates with your own ones, so you can prepare a branded email messages. To do that, you can use the power of the [virtual file system](Virtual-File-System.md) (VFS) or replace them in your own template definition provider.
+
+Pathes of the templates in the virtual file system are shown below:
+
+* `/Volo/Abp/Emailing/Templates/Layout.tpl`
+* `/Volo/Abp/Emailing/Templates/Message.tpl`
+
+If you add files to the same localization in the virtual file system, your files will override them.
+
+Templates are inline localized, that means you can take the power of the [localization system](Localization.md) to make your templates multi-cultural.
+
+See the [text templating system](Text-Templating.md) document for details.
+
+> Notice that you can define and use your own templates for your application, rather than using the standard simple templates. These standard templates are mostly for reusable modules where they don't define their own templates but rely on the built-in ones. This makes easy to customize emails sent by the used modules, by just overriding the standard email layout template.
+
 ## MailKit Integration
 
 TODO
