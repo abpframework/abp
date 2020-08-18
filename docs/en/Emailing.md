@@ -179,7 +179,7 @@ Emailing system defines the built-in text templates with the given names:
 "**Abp.StandardEmailTemplates.Message**" is simplest template that has a text message:
 
 ````html
-{%{{model.message}}%}
+{%{{{model.message}}}%}
 ````
 
 This template uses the "Abp.StandardEmailTemplates.Layout" as its layout.
@@ -193,7 +193,7 @@ This template uses the "Abp.StandardEmailTemplates.Layout" as its layout.
     <meta charset="utf-8" />
 </head>
 <body>
-    {%{{content}}%}
+    {%{{{content}}}%}
 </body>
 </html>
 ````
