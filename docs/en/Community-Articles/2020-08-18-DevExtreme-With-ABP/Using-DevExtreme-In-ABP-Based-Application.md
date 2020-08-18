@@ -187,6 +187,14 @@ Configure<AbpLayoutHookOptions>(options =>
 });
 ```
 
+#### Known Issue: Uncaught TypeError: MutationObserver.observe: Argument 1 is not an object.
+
+> If you are using ABP 3.1 version or more, you can skip this section.
+
+This article is written in ABP Version 3.1 development cycle. We have fixed this issue [(ref)](https://github.com/abpframework/abp/issues/4566) in this development cycle.
+
+To fix that issue, download this file [abp.jquery.js](https://github.com/abpframework/abp/blob/dev/npm/packs/jquery/src/abp.jquery.js) and replace with `wwwroot / libs / abp / jquery / abp.jquery.js` file of your `*.Web` project.
+
 ### Result
 
 After following this step-by-step article you can use all DevExtreme features in your project.
