@@ -215,6 +215,19 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Email Sending",
+          "items": [
+            {
+              "text": "Email Sending System",
+              "path": "Emailing.md",
+            },
+            {
+              "text": "MailKit Integration",
+              "path": "MailKit.md",
+            }
+          ]
+        },
+        {
           "text": "BLOB Storing",
           "items": [
             {
