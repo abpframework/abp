@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'npm/ng-packs/**'
+      - '!npm/ng-packs/scripts/**'
 jobs:
   build-test-lint:
     runs-on: ubuntu-18.04
