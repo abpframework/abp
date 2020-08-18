@@ -62,10 +62,10 @@ dotnet tool update -g Volo.Abp.Cli
 使用ABP CLI的 `new` 命令创建新项目:
 
 ````shell
-abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}} --mobile react-native
 ````
 
-* 此命令还会在解决方案文件夹内创建一个React Native移动应用程序. 如果你不想要它,可以安全地删除它,或者在 `abp new` 命令中指定 `-m none` 选项,以使其完全不包含在解决方案中.
+* 此命令还会在解决方案文件夹内创建一个React Native移动应用程序. 如果你不想要它,可以安全地删除它或从`abp new`命令中删除`--mobile react-native`选项, 以使其完全不包含在解决方案中.
 
 {{ if UI == "NG" }}
 
