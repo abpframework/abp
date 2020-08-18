@@ -175,7 +175,7 @@ After that, your `*.Web` project should be like as following.
 
 Then we can add this view component to `<head>` section by using **hooks**.
 
-Open your `DevExtremeSampleWebModule.cs` file in your `DevExtremeSample.Application.Web` project and add following code to `ConfigureServices` method.
+Open your `DevExtremeSampleWebModule.cs` file in your `DevExtremeSample.Web` project and add following code to `ConfigureServices` method.
 
 ```csharp
 Configure<AbpLayoutHookOptions>(options =>
