@@ -27,6 +27,16 @@ describe('Date Utils', () => {
     });
   });
 
+  describe('#getShortTimeFormat', () => {
+    test('should get the short time format from ConfigState and return it', () => {
+      const getDeepSpy = jest.spyOn(config, 'getDeep');
+      getDeepSpy.mockReturnValueOnce(dateTimeFormat);
+
+      expect(getShortDateShortTimeFormat(config)).toBe('h:mm a');
+      expect(getDeepSpy).toHaveBeenCalledWith('localization.currentCulture.dateTimeFormat');
+    });
+  });
+
   describe('#getShortDateShortTimeFormat', () => {
     test('should get the short date time format from ConfigState and return it', () => {
       const getDeepSpy = jest.spyOn(config, 'getDeep');

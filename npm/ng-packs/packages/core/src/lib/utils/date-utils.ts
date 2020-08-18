@@ -9,6 +9,14 @@ export function getShortDateFormat(configStateService: ConfigStateService) {
   return dateTimeFormat.shortDatePattern;
 }
 
+export function getShortTimeFormat(configStateService: ConfigStateService) {
+  const dateTimeFormat = configStateService.getDeep(
+    'localization.currentCulture.dateTimeFormat',
+  ) as ApplicationConfiguration.DateTimeFormat;
+
+  return dateTimeFormat.shortTimePattern.replace('tt', 'a');
+}
+
 export function getShortDateShortTimeFormat(configStateService: ConfigStateService) {
   const dateTimeFormat = configStateService.getDeep(
     'localization.currentCulture.dateTimeFormat',
