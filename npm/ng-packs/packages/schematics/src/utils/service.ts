@@ -13,6 +13,10 @@ import {
 import { parseNamespace } from './namespace';
 import { relativePathFromServiceToModel } from './path';
 
+export function serializeParameters(parameters: Parameter[]) {
+  return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
+}
+
 export function createControllerToServiceMapper(solution: string, apiName: string) {
   const mapActionToMethod = createActionToMethodMapper(solution);
 
