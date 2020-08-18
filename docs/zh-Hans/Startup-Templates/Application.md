@@ -57,6 +57,20 @@ abp new Acme.BookStore -u angular
 abp new Acme.BookStore -d mongodb
 ````
 
+### 指定移动应用程序框架
+
+该模板支持以下移动应用程序框架:
+
+- `react-native`: React Native
+
+使用 `-m` (or `--mobile`) 选项来指定移动应用程序框架:
+
+````bash
+abp new Acme.BookStore -m react-native
+````
+
+如果未指定, 则不会创建任何移动应用程序.
+
 ## 解决方案结构
 
 根据命令的选项,会创建略有不同的解决方案结构.
@@ -342,7 +356,7 @@ Home模块是一个可延迟加载的模块, 它加载应用程序的根地址.
 
 ### React Native
 
-解决方案将[React Native](https://reactnative.dev/)应用程序作为默认值包含在 `react-native` 文件夹中. 
+如果使用 `-m react-native` 选项解决方案将[React Native](https://reactnative.dev/)应用程序作为默认值包含在 `react-native` 文件夹中. 
 
 服务器端类似于上面描述的解决方案. `*.HttpApi.Host` 的项目提供 API, 所以 React 本机应用程序使用它. 
 
