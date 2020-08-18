@@ -1,5 +1,6 @@
 export * from './array-utils';
 export * from './common-utils';
+export * from './date-utils';
 export * from './environment-utils';
 export * from './factory-utils';
 export * from './form-utils';
