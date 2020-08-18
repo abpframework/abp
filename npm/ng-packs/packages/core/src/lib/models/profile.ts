@@ -17,8 +17,8 @@ export namespace Profile {
      */
     isExternal?: boolean;
     hasPassword?: boolean;
-    emailConfirmed?: false;
-    phoneNumberConfirmed?: false;
+    emailConfirmed?: boolean;
+    phoneNumberConfirmed?: boolean;
   }
 
   export interface ChangePasswordRequest {
