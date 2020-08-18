@@ -2,7 +2,7 @@
 
 ABP平台提供了[React Native](https://reactnative.dev/)模板用于开发移动应用程序.
 
-当你按照[入门文档](Getting-Started.md)中所述**创建新应用程序**时,解决方案默认将React Native应用程序包含在 `react-native` 文件夹中.
+当你按照[入门文档](Getting-Started.md)中所述**创建新应用程序**时, 你应该使用`-m react-native`选项以在解决方案中包含`react-native`项目.
 
 ## 配置你的本地IP地址
 
