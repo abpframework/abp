@@ -90,7 +90,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     new IdentitySecurityLogContext
                     {
                         Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
-                        Action = IdentityServerSecurityLogActionConsts.LoginSucceeded
+                        Action = IdentityServerSecurityLogActionConsts.LoginSucceeded,
+                        UserName = context.UserName
                     }
                 );
             }
