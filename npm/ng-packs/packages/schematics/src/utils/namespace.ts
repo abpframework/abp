@@ -1,5 +1,8 @@
+import { createTypeParser } from './type';
+
 export function parseNamespace(solution: string, type: string) {
-  let namespace = type
+  const parseType = createTypeParser();
+  let namespace = parseType(type)
     .split('.')
     .slice(0, -1)
     .join('.');

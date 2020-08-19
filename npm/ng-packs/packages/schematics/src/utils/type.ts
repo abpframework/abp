@@ -7,28 +7,37 @@ import { relativePathToModel } from './path';
 import { parseGenerics } from './tree';
 
 export function createTypeSimplifier(solution: string) {
-  const optionalRegex = /\?/g;
   const solutionRegex = new RegExp(solution.replace(/\./g, `\.`) + `\.`);
   const voloRegex = /^Volo\.(Abp\.?)(Application\.?)/;
 
+  return createTypeParser(
+    type =>
+      type
+        .replace(voloRegex, '')
+        .replace(solutionRegex, '')
+        .split('.')
+        .pop()!,
+  );
+}
+
+export function createTypeParser(replacerFn = (t: string) => t) {
+  const optionalRegex = /\?/g;
+
   return (originalType: string) => {
-    const union = originalType
+    const unionType = originalType
       .replace(/^{/, '')
       .replace(/}$/, '')
       .split(':');
-    return union
+
+    return unionType
       .map(type => {
         type = type.startsWith('[') ? type.slice(1, -1) + '[]' : type;
-        type = type.replace(voloRegex, '');
-        type = type.replace(solutionRegex, '');
         type = type.replace(optionalRegex, '');
         type = type.replace(
           /System\.([0-9A-Za-z]+)/g,
           (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
         );
-        type = type.split('.').pop()!;
-        console.log(type);
-        return type;
+        return replacerFn(type);
       })
       .join(' | ');
   };
