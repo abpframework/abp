@@ -21,7 +21,8 @@ export function createImportRefsToModelMapper(solution: string, types: Record<st
 
     const reduceImportRefToImport = createImportRefToImportReducer(namespace);
     const imports = importRefs.reduce((accumulatedImports, ref) => {
-      model.interfaces.push(mapImportRefToInterface(ref));
+      if (!types[ref].isEnum) model.interfaces.push(mapImportRefToInterface(ref));
+
       return reduceImportRefToImport(accumulatedImports, ref);
     }, []);
 
