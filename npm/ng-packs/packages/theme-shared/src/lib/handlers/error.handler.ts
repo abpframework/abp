@@ -43,6 +43,29 @@ export const DEFAULT_ERROR_MESSAGES = {
   },
 };
 
+export const DEFAULT_ERROR_LOCALIZATIONS = {
+  defaultError: {
+    title: 'AbpUi::DefaultErrorMessage',
+    details: 'AbpUi::DefaultErrorMessageDetail',
+  },
+  defaultError401: {
+    title: 'AbpUi::DefaultErrorMessage401',
+    details: 'AbpUi::DefaultErrorMessage401Detail',
+  },
+  defaultError403: {
+    title: 'AbpUi::DefaultErrorMessage403',
+    details: 'AbpUi::DefaultErrorMessage403Detail',
+  },
+  defaultError404: {
+    title: 'AbpUi::DefaultErrorMessage404',
+    details: 'AbpUi::DefaultErrorMessage404Detail',
+  },
+  defaultError500: {
+    title: 'AbpUi::500Message',
+    details: 'AbpUi::DefaultErrorMessage',
+  },
+};
+
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
   componentRef: ComponentRef<HttpErrorWrapperComponent>;
@@ -88,7 +111,10 @@ export class ErrorHandler {
         filter(this.filterRestErrors),
       )
       .subscribe(err => {
-        const body = snq(() => err.error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
+        const body = snq(() => err.error.error, {
+          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+        });
 
         if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
           const confirmation$ = this.showError(null, null, body);
@@ -168,8 +194,14 @@ export class ErrorHandler {
               break;
             default:
               this.showError(
-                DEFAULT_ERROR_MESSAGES.defaultError.details,
-                DEFAULT_ERROR_MESSAGES.defaultError.title,
+                {
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.details,
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.details,
+                },
+                {
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+                },
               );
               break;
           }
@@ -207,10 +239,16 @@ export class ErrorHandler {
         message = body.details;
         title = body.message;
       } else if (body.message) {
-        title = DEFAULT_ERROR_MESSAGES.defaultError.title;
+        title = {
+          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+        };
         message = body.message;
       } else {
-        message = body.message || DEFAULT_ERROR_MESSAGES.defaultError.title;
+        message = body.message || {
+          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+        };
       }
     }
 
