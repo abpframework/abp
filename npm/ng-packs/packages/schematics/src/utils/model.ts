@@ -84,7 +84,17 @@ export function mergeBaseTypeWithProperties({ baseType, genericArguments, proper
   const baseTypes = baseType ? [baseType] : [];
   const propTypes = (properties ?? []).map(({ type }) => type);
 
-  return [...baseTypes, ...propTypes].map(removeGenerics);
+  return [...baseTypes, ...propTypes].reduce(flattenUnionTypes, []).map(removeGenerics);
+}
+
+export function flattenUnionTypes(types: string[], type: string) {
+  type
+    .replace(/^{/, '')
+    .replace(/}$/, '')
+    .split(':')
+    .forEach(t => types.push(t));
+
+  return types;
 }
 
 export function createGenericRemover(genericArguments: string[] | null) {
