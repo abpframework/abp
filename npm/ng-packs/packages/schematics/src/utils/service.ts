@@ -3,6 +3,7 @@ import { Action, Body, Controller, Import, Method, Property, Service, Signature 
 import { parseNamespace } from './namespace';
 import { relativePathFromServiceToModel } from './path';
 import { parseGenerics } from './tree';
+import { createTypeSimplifier } from './type';
 
 export function serializeParameters(parameters: Property[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
@@ -128,26 +129,12 @@ function getMethodNameFromAction(action: Action): string {
 }
 
 function createTypeAdapter(solution: string) {
-  const removeNamespace = createNamespaceRemover(solution);
+  const simplifyType = createTypeSimplifier(solution);
 
   return (typeSimple: string) => {
     if (typeSimple === 'System.Void') return 'void';
 
-    return parseGenerics(typeSimple, node => removeNamespace(node.data)).toString();
-  };
-}
-
-function createNamespaceRemover(solution: string) {
-  const optionalRegex = /\?/g;
-  const solutionRegex = new RegExp(solution.replace(/\./g, `\.`) + `\.`);
-  const voloRegex = /^Volo\.(Abp\.?)(Application\.?)/;
-
-  return (type: string) => {
-    type = type.replace(voloRegex, '');
-    type = type.replace(solutionRegex, '');
-    type = type.replace(optionalRegex, '');
-    type = type.split('.').pop()!;
-    return type;
+    return parseGenerics(typeSimple, node => simplifyType(node.data)).toString();
   };
 }
 
