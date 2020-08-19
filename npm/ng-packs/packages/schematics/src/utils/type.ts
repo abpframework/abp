@@ -30,17 +30,17 @@ export function createTypesToImportsReducer(solution: string, namespace: string)
 
   return (imports: Import[], types: string[]) => {
     types.forEach(type => {
-      const def = mapTypeToImport(type);
-      if (!def) return;
+      const newImport = mapTypeToImport(type);
+      if (!newImport) return;
 
       const existingImport = imports.find(
-        ({ keyword, path }) => keyword === def.keyword && path === def.path,
+        ({ keyword, path }) => keyword === newImport.keyword && path === newImport.path,
       );
-      if (!existingImport) return imports.push(def);
+      if (!existingImport) return imports.push(newImport);
 
-      existingImport.refs = [...new Set([...existingImport.refs, ...def.refs])];
+      existingImport.refs = [...new Set([...existingImport.refs, ...newImport.refs])];
       existingImport.specifiers = [
-        ...new Set([...existingImport.specifiers, ...def.specifiers]),
+        ...new Set([...existingImport.specifiers, ...newImport.specifiers]),
       ].sort();
     });
 
@@ -52,7 +52,7 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
   const adaptType = createTypeAdapter(solution);
 
   return (type: string) => {
-    if (type.startsWith('System')) return;
+    if (!type || type.startsWith('System')) return;
 
     const modelNamespace = parseNamespace(solution, type);
     const path = type.startsWith('Volo.Abp.Application.Dtos')

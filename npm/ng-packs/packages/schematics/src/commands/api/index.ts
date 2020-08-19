@@ -26,6 +26,7 @@ export default function(params: GenerateProxySchema) {
         controllers.map(controller => {
           const service = mapControllerToService(controller);
           service.imports.forEach(({refs, path}) => refs.forEach(ref => {
+            if (path === '@abp/ng.core') return;
             if (!serviceImports[path]) return (serviceImports[path] = [ref]);
             serviceImports[path] = [...new Set([...serviceImports[path], ref])];
           }));

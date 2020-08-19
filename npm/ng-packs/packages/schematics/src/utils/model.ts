@@ -1,18 +1,30 @@
 import { strings } from '@angular-devkit/core';
-import { Interface, Model, Property, Type } from '../models';
+import { Import, Interface, Model, Property, Type } from '../models';
+import { sortImports } from './import';
 import { parseNamespace } from './namespace';
-import { createTypeSimplifier } from './type';
+import { relativePathToModel } from './path';
+import { parseGenerics } from './tree';
+import { createTypeSimplifier, createTypesToImportsReducer } from './type';
 
 export function createImportRefsToModelMapper(solution: string, types: Record<string, Type>) {
   const mapImportRefToInterface = createImportRefToInterfaceMapper(solution, types);
+  const createImportRefToImportReducer = createImportRefToImportReducerCreator(solution, types);
 
   return (importRefs: string[]) => {
-    const model = new Model({
-      namespace: parseNamespace(solution, importRefs[0]),
-    });
+    const namespace = parseNamespace(solution, importRefs[0]);
+    const model = new Model({ namespace });
 
-    importRefs.forEach(ref => {
+    const reduceImportRefToImport = createImportRefToImportReducer(namespace);
+    const imports = importRefs.reduce((accumulatedImports, ref) => {
       model.interfaces.push(mapImportRefToInterface(ref));
+      return reduceImportRefToImport(accumulatedImports, ref);
+    }, []);
+
+    sortImports(imports);
+    const selfPath = relativePathToModel(namespace, namespace);
+    imports.forEach(i => {
+      if (i.path === selfPath) return;
+      model.imports.push(i);
     });
 
     model.interfaces.sort((a, b) => (a.identifier > b.identifier ? 1 : -1));
@@ -26,10 +38,10 @@ export function createImportRefToInterfaceMapper(solution: string, types: Record
 
   return (ref: string) => {
     const typeDef = types[ref];
-    let identifier = simplifyType(ref);
-    (typeDef.genericArguments ?? []).forEach((t, i) => {
-      identifier = identifier.replace(`T${i}`, t);
-    });
+    const identifier = (typeDef.genericArguments ?? []).reduce(
+      (acc, t, i) => acc.replace(`T${i}`, t),
+      simplifyType(ref),
+    );
 
     const base = typeDef.baseType ? simplifyType(typeDef.baseType) : null;
     const _interface = new Interface({ identifier, base });
@@ -44,4 +56,52 @@ export function createImportRefToInterfaceMapper(solution: string, types: Record
 
     return _interface;
   };
+}
+
+export function createImportRefToImportReducerCreator(
+  solution: string,
+  types: Record<string, Type>,
+) {
+  return (namespace: string) => {
+    const reduceTypesToImport = createTypesToImportsReducer(solution, namespace);
+
+    return (imports: Import[], importRef: string) =>
+      reduceTypesToImport(
+        imports,
+        mergeBaseTypeWithProperties(types[importRef]).reduce((typeNames: string[], { type }) => {
+          parseGenerics(type)
+            .toGenerics()
+            .forEach(t => typeNames.push(t));
+
+          return typeNames;
+        }, []),
+      );
+  };
+}
+
+export function mergeBaseTypeWithProperties({ baseType, genericArguments, properties }: Type) {
+  const removeGenerics = createGenericRemover(genericArguments);
+  const baseTypes = baseType ? [{ type: baseType }] : [];
+  const propTypes = (properties ?? []).map(({ type }) => ({ type }));
+
+  return [...baseTypes, ...propTypes].map(removeGenerics);
+}
+
+export function createGenericRemover(genericArguments: string[] | null) {
+  if (!genericArguments) return (def: SimpleTypeDef) => def;
+
+  return ({ type }: SimpleTypeDef) => ({
+    type: genericArguments.includes(type)
+      ? ''
+      : type.replace(/<([^<>]+)>/, (_, match) => {
+          return match
+            .split(/,\s*/)
+            .filter((t: string) => !genericArguments.includes(t))
+            .join(',');
+        }),
+  });
+}
+
+interface SimpleTypeDef {
+  type: string;
 }
