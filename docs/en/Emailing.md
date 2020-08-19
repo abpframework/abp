@@ -60,6 +60,8 @@ namespace MyProject
 * **from**: You can set this as the first argument to set a sender email address. If not provided, the default sender address is used (see the email settings below).
 * **isBodyHtml**: Indicates whether the email body may contain HTML tags. **Default: true**.
 
+> `IEmailSender` is the suggested way to send emails, since it makes your code provider independent.
+
 #### MailMessage
 
 In addition to primitive parameters, you can pass a **standard `MailMessage` object** ([see](https://docs.microsoft.com/en-us/dotnet/api/system.net.mail.mailmessage)) to the `SendAsync` method to set more options, like adding attachments.
@@ -68,7 +70,7 @@ In addition to primitive parameters, you can pass a **standard `MailMessage` obj
 
 Sending emails is implemented by the standard `SmtpClient` class ([see](https://docs.microsoft.com/en-us/dotnet/api/system.net.mail.smtpclient)) by default. The implementation class is the `SmtpEmailSender`. This class also expose the `ISmtpEmailSender` service (in addition to the `IEmailSender`).
 
-Most of the time you want to directly use the `ISmtpEmailSender` to make your code provider independent. However, if you want to create an `SmtpClient` easily with the same email settings, you can inject the `ISmtpEmailSender` and use its `BuildClientAsync` method to obtain a `SmtpClient` object and send the email yourself.
+Most of the time you want to directly use the `IEmailSender` to make your code provider independent. However, if you want to create an `SmtpClient` object with the same email settings, you can inject the `ISmtpEmailSender` and use its `BuildClientAsync` method to obtain a `SmtpClient` object and send the email yourself.
 
 ## Queueing Emails / Background Jobs
 
