@@ -390,7 +390,7 @@ The [Virtual File System](Virtual-File-System.md) allows you to override any fil
 
 #### Example: Replace the Standard Email Layout Template
 
-ABP Framework provides an [email sending system](Emailing.md) that internally uses the text templating to render the email content. It defines an email layout template in the `/Volo/Abp/Emailing/Templates/Layout.tpl` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
+ABP Framework provides an [email sending system](Emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.tpl` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
 
 Do the following steps to replace the template file with your own;
 
@@ -437,7 +437,7 @@ This makes the template files "embedded resource".
 
 **4)** Configure the virtual file system
 
-Configure the `AbpVirtualFileSystemOptions` to add embedded files into the virtual file system:
+Configure the `AbpVirtualFileSystemOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) to add the embedded files into the virtual file system:
 
 ```csharp
 Configure<AbpVirtualFileSystemOptions>(options =>
