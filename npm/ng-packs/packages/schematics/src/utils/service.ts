@@ -1,17 +1,8 @@
 import { eImportKeyword } from '../enums';
-import {
-  Action,
-  Body,
-  Controller,
-  Import,
-  Method,
-  Parameter,
-  Service,
-  Signature,
-  TypeDef,
-} from '../models';
+import { Action, Body, Controller, Import, Method, Parameter, Service, Signature } from '../models';
 import { parseNamespace } from './namespace';
 import { relativePathFromServiceToModel } from './path';
+import { parseGenerics } from './tree';
 
 export function serializeParameters(parameters: Parameter[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
@@ -31,13 +22,13 @@ export function createControllerToServiceMapper(solution: string, apiName: strin
 }
 
 export function createActionToImportsReducer(solution: string, namespace: string) {
-  const mapTypeDefToImport = createTypeDefToImportMapper(solution, namespace);
+  const mapTypeToImport = createTypeToImportMapper(solution, namespace);
 
   return (imports: Import[], action: Action) => {
-    const typeDefs = getTypeDefsFromAction(action);
+    const types = getTypesFromAction(action);
 
-    typeDefs.forEach(typeDef => {
-      const def = mapTypeDefToImport(typeDef);
+    types.forEach(type => {
+      const def = mapTypeToImport(type);
       if (!def) return;
 
       const existingImport = imports.find(
@@ -45,6 +36,7 @@ export function createActionToImportsReducer(solution: string, namespace: string
       );
       if (!existingImport) return imports.push(def);
 
+      existingImport.refs = [...new Set([...existingImport.refs, ...def.refs])];
       existingImport.specifiers = [
         ...new Set([...existingImport.specifiers, ...def.specifiers]),
       ].sort();
@@ -53,17 +45,20 @@ export function createActionToImportsReducer(solution: string, namespace: string
   };
 }
 
-export function createTypeDefToImportMapper(solution: string, namespace: string) {
+export function createTypeToImportMapper(solution: string, namespace: string) {
   const adaptType = createTypeAdapter(solution);
 
-  return ({ type, typeSimple }: TypeDef) => {
+  return (type: string) => {
     if (type.startsWith('System')) return;
+
     const modelNamespace = parseNamespace(solution, type);
     const path = type.startsWith('Volo.Abp.Application.Dtos')
       ? '@abp/ng.core'
       : relativePathFromServiceToModel(namespace, modelNamespace);
-    const specifiers = [adaptType(typeSimple.split('<')[0])];
-    return new Import({ keyword: eImportKeyword.Type, path, specifiers });
+    const refs = [type];
+    const specifiers = [adaptType(type.split('<')[0])];
+
+    return new Import({ keyword: eImportKeyword.Type, path, refs, specifiers });
   };
 }
 
@@ -114,36 +109,35 @@ function getMethodNameFromAction(action: Action): string {
 }
 
 function createTypeAdapter(solution: string) {
-  const optionalRegex = /\?/g;
-  const solutionRegex = new RegExp(solution.replace(/\./g, `\.`) + `\.`);
-  const voloRegex = /^Volo\.(Abp\.?)(Application\.?)/;
+  const removeNamespace = createNamespaceRemover(solution);
 
   return (typeSimple: string) => {
     if (typeSimple === 'System.Void') return 'void';
 
-    return parseGenerics(typeSimple).reduceRight((acc, type) => {
-      type = type.replace(voloRegex, '');
-      type = type.replace(solutionRegex, '');
-      type = type.replace(optionalRegex, '');
-      type = type.split('.').pop()!;
-      return acc ? `${type}<${acc}>` : type;
-    }, '');
+    return parseGenerics(typeSimple, node => removeNamespace(node.data)).toString();
   };
 }
 
-function parseGenerics(type: string) {
-  return type.replace(/>+$/, '').split('<');
+function createNamespaceRemover(solution: string) {
+  const optionalRegex = /\?/g;
+  const solutionRegex = new RegExp(solution.replace(/\./g, `\.`) + `\.`);
+  const voloRegex = /^Volo\.(Abp\.?)(Application\.?)/;
+
+  return (type: string) => {
+    type = type.replace(voloRegex, '');
+    type = type.replace(solutionRegex, '');
+    type = type.replace(optionalRegex, '');
+    type = type.split('.').pop()!;
+    return type;
+  };
 }
 
-function getTypeDefsFromAction({ parametersOnMethod, returnValue }: Action) {
-  const typeDefs: TypeDef[] = [];
+function getTypesFromAction({ parametersOnMethod, returnValue }: Action) {
+  return [returnValue, ...parametersOnMethod].reduce((types: string[], { type }) => {
+    parseGenerics(type)
+      .toGenerics()
+      .forEach(t => types.push(t));
 
-  [returnValue, ...parametersOnMethod].forEach(({ type, typeSimple }) => {
-    const types = parseGenerics(type);
-    const simpleTypes = parseGenerics(typeSimple);
-
-    types.forEach((type, i) => typeDefs.push({ type, typeSimple: simpleTypes[i] }));
-  });
-
-  return typeDefs;
+    return types;
+  }, []);
 }
