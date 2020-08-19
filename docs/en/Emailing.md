@@ -60,6 +60,8 @@ namespace MyProject
 * **from**: You can set this as the first argument to set a sender email address. If not provided, the default sender address is used (see the email settings below).
 * **isBodyHtml**: Indicates whether the email body may contain HTML tags. **Default: true**.
 
+> `IEmailSender` is the suggested way to send emails, since it makes your code provider independent.
+
 #### MailMessage
 
 In addition to primitive parameters, you can pass a **standard `MailMessage` object** ([see](https://docs.microsoft.com/en-us/dotnet/api/system.net.mail.mailmessage)) to the `SendAsync` method to set more options, like adding attachments.
@@ -68,7 +70,7 @@ In addition to primitive parameters, you can pass a **standard `MailMessage` obj
 
 Sending emails is implemented by the standard `SmtpClient` class ([see](https://docs.microsoft.com/en-us/dotnet/api/system.net.mail.smtpclient)) by default. The implementation class is the `SmtpEmailSender`. This class also expose the `ISmtpEmailSender` service (in addition to the `IEmailSender`).
 
-Most of the time you want to directly use the `ISmtpEmailSender` to make your code provider independent. However, if you want to create an `SmtpClient` easily with the same email settings, you can inject the `ISmtpEmailSender` and use its `BuildClientAsync` method to obtain a `SmtpClient` object and send the email yourself.
+Most of the time you want to directly use the `IEmailSender` to make your code provider independent. However, if you want to create an `SmtpClient` object with the same email settings, you can inject the `ISmtpEmailSender` and use its `BuildClientAsync` method to obtain a `SmtpClient` object and send the email yourself.
 
 ## Queueing Emails / Background Jobs
 
@@ -87,7 +89,7 @@ Email sending uses the [setting system](Settings.md) to define settings and get 
 * **Abp.Mailing.Smtp.Host**: The IP/Domain of the SMTP server (default: 127.0.0.1).
 * **Abp.Mailing.Smtp.Port**: The Port of the SMTP server (default: 25).
 * **Abp.Mailing.Smtp.UserName**: Username, if the SMTP server requires authentication.
-* **Abp.Mailing.Smtp.Password**: Password, if the SMTP server requires authentication.
+* **Abp.Mailing.Smtp.Password**: Password, if the SMTP server requires authentication. **This value is encrypted **(see the section below).
 * **Abp.Mailing.Smtp.Domain**: Domain for the username, if the SMTP server requires authentication.
 * **Abp.Mailing.Smtp.EnableSsl**: A value that indicates if the SMTP server uses SSL or not ("true" or "false". Default: "false").
 * **Abp.Mailing.Smtp.UseDefaultCredentials**: If true, uses default credentials instead of the provided username and password ("true" or "false". Default: "true").
@@ -108,7 +110,17 @@ The easiest way to define these settings it to add them to the `appsettings.json
 }
 ````
 
-See the [setting system document](Settings.md) to understand the setting system better.
+You can set/change these settings using the `ISettingManager` and store values in a database. See the [setting system document](Settings.md) to understand the setting system better.
+
+### Encrypt the SMTP Password
+
+*Abp.Mailing.Smtp.Password* must be an **encrypted** value. If you use the `ISettingManager` to set the password, you don't have to worry. It internally encrypts the values on set and decrypts on get.
+
+If you use the `appsettings.json` to store the password, you should manually inject the `ISettingEncryptionService` and use its `Encrypt` method to obtain an encrypted value. This can be done by creating a simple code in your application. Then you can delete the code. As better, you can create a UI in your application to configure the email settings. In this case, you can directly use the `ISettingManager` without worrying the encryption.
+
+### ISmtpEmailSenderConfiguration
+
+If you don't want to use the setting system to store the email sending configuration, you can replace the `ISmtpEmailSenderConfiguration` service with your own implementation to get the configuration from any other source. `ISmtpEmailSenderConfiguration` is implemented by the `SmtpEmailSenderConfiguration` by default, which gets the configuration from the setting system as explained above.
 
 ## Text Template Integration
 
