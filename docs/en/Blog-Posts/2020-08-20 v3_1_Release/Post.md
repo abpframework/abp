@@ -42,3 +42,35 @@ This command will create a new project with the latest RC/Preview version. Whene
 ### Existing Solutions
 
 If you already have a solution and want to use/test the latest RC/Preview version, use the `abp --switch-to-preview` command in the root folder of your solution. You can return back to the latest stable using the `abp --switch-to-stable ` command later.
+
+## What's New with the ABP Framework v3.1
+
+### Angular Service Proxies
+
+TODO
+
+### Global Feature System
+
+TODO
+
+### New Account Module Features
+
+TODO
+
+### New Identity Module Features
+
+TODO
+
+## What's New with the ABP Commercial v3.1
+
+### New Account Module Features
+
+TODO
+
+### New Identity Module Features
+
+TODO
+
+### Others
+
+TODO
