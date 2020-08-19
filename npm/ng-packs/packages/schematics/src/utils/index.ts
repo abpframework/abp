@@ -1,6 +1,7 @@
 export * from './angular';
 export * from './ast';
 export * from './common';
+export * from './model';
 export * from './namespace';
 export * from './path';
 export * from './rule';

@@ -1,7 +1,7 @@
 import { normalize, strings } from '@angular-devkit/core';
 import { applyTemplates, branchAndMerge, chain, move, SchematicContext, SchematicsException, Tree, url } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, createControllerToServiceMapper, interpolate, resolveProject, serializeParameters } from '../../utils';
+import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, createControllerToServiceMapper, createImportRefToModelMapper, interpolate, resolveProject, serializeParameters } from '../../utils';
 import * as cases from '../../utils/text';
 import type { Schema as GenerateProxySchema } from './schema';
 
@@ -20,14 +20,18 @@ export default function(params: GenerateProxySchema) {
 
       const mapControllerToService = createControllerToServiceMapper(solution, definition.remoteServiceName);
       const controllers = Object.values(definition.controllers || {});
+      const importRefs: string[] = [];
 
       const createServiceFiles = chain(
         controllers.map(controller => {
+          const service = mapControllerToService(controller);
+          service.imports.forEach(({refs}) => refs.forEach(ref => importRefs.push(ref)));
+
           return applyWithOverwrite(url('./files-service'), [
             applyTemplates({
               ...cases,
               serializeParameters,
-              ...mapControllerToService(controller),
+              ...service,
             }),
             move(normalize(targetPath)),
           ]);
@@ -35,7 +39,22 @@ export default function(params: GenerateProxySchema) {
         ),
       );
 
-      return branchAndMerge(chain([createServiceFiles]));
+      const mapImportRefToModel = createImportRefToModelMapper(solution);
+
+      const createModelFiles = chain(
+        importRefs.map(ref => {
+          return applyWithOverwrite(url('./files-model'), [
+            applyTemplates({
+              ...cases,
+              ...mapImportRefToModel(ref),
+            }),
+            move(normalize(targetPath)),
+          ]);
+        }
+        ),
+      );
+
+      return branchAndMerge(chain([createServiceFiles, createModelFiles]));
     },
   ]);
 }

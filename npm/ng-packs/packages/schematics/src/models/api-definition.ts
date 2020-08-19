@@ -11,10 +11,10 @@ export interface Type {
   enumNames: string[] | null;
   enumValues: number[] | null;
   genericArguments: string[] | null;
-  properties: Property[] | null;
+  properties: PropertyDef[] | null;
 }
 
-export interface Property {
+export interface PropertyDef {
   name: string;
   type: string;
   typeSimple: string;
@@ -29,11 +29,11 @@ export interface Module {
 export interface Controller {
   controllerName: string;
   type: string;
-  interfaces: Interface[];
+  interfaces: InterfaceDef[];
   actions: Record<string, Action>;
 }
 
-export interface Interface {
+export interface InterfaceDef {
   type: string;
 }
 

@@ -1,10 +1,10 @@
 import { eImportKeyword } from '../enums';
-import { Action, Body, Controller, Import, Method, Parameter, Service, Signature } from '../models';
+import { Action, Body, Controller, Import, Method, Property, Service, Signature } from '../models';
 import { parseNamespace } from './namespace';
 import { relativePathFromServiceToModel } from './path';
 import { parseGenerics } from './tree';
 
-export function serializeParameters(parameters: Parameter[]) {
+export function serializeParameters(parameters: Property[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
 }
 
@@ -113,7 +113,7 @@ export function createActionToSignatureMapper(solution: string) {
 
     signature.parameters = action.parametersOnMethod.map(p => {
       const type = adaptType(p.typeSimple);
-      const parameter = new Parameter({ name: p.name, type });
+      const parameter = new Property({ name: p.name, type });
       if (p.defaultValue) parameter.default = ` = ${p.defaultValue}`;
       else if (p.isOptional) parameter.optional = '?';
       return parameter;

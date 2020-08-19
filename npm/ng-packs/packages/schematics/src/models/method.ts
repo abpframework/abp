@@ -1,6 +1,7 @@
 import { strings } from '@angular-devkit/core';
 import { eBindingSourceId, eMethodModifier } from '../enums';
 import { ParameterInBody } from './api-definition';
+import { Property } from './model';
 import { Omissible } from './util';
 
 export class Method {
@@ -18,7 +19,7 @@ export class Signature {
   generics = '';
   modifier = eMethodModifier.Public;
   name: string;
-  parameters: Parameter[] = [];
+  parameters: Property[] = [];
   returnType = '';
 
   constructor(options: SignatureOptions) {
@@ -70,16 +71,3 @@ export type BodyOptions = Omissible<
   Omit<Body, 'registerActionParameter'>,
   'params' | 'requestType'
 >;
-
-export class Parameter {
-  name: string;
-  type: string;
-  default: string = ''; // convert actual value with JSON.stringify if not null
-  optional: '' | '?' = '';
-
-  constructor(options: ParameterOptions) {
-    Object.assign(this, options);
-  }
-}
-
-export type ParameterOptions = Omissible<Parameter, 'default' | 'optional'>;
