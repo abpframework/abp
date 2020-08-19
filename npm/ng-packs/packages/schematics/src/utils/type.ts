@@ -8,7 +8,7 @@ import { parseGenerics } from './tree';
 
 export function createTypeSimplifier(solution: string) {
   const solutionRegex = new RegExp(solution.replace(/\./g, `\.`) + `\.`);
-  const voloRegex = /^Volo\.(Abp\.?)(Application\.?)/;
+  const voloRegex = /^Volo\.(Abp\.?)(Application|ObjectExtending\.?)/;
 
   return createTypeParser(
     type =>
@@ -82,7 +82,7 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
     const modelNamespace = parseNamespace(solution, type);
     const refs = [type];
     const specifiers = [adaptType(type.split('<')[0])];
-    const path = type.startsWith('Volo.Abp.Application.Dtos')
+    const path = /^Volo\.Abp\.(Application\.Dtos|ObjectExtending)/.test(type)
       ? '@abp/ng.core'
       : isEnum
       ? relativePathToEnum(namespace, modelNamespace, specifiers[0])
