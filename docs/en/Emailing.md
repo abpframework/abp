@@ -118,6 +118,10 @@ You can set/change these settings using the `ISettingManager` and store values i
 
 If you use the `appsettings.json` to store the password, you should manually inject the `ISettingEncryptionService` and use its `Encrypt` method to obtain an encrypted value. This can be done by creating a simple code in your application. Then you can delete the code. As better, you can create a UI in your application to configure the email settings. In this case, you can directly use the `ISettingManager` without worrying the encryption.
 
+### ISmtpEmailSenderConfiguration
+
+If you don't want to use the setting system to store the email sending configuration, you can replace the `ISmtpEmailSenderConfiguration` service with your own implementation to get the configuration from any other source. `ISmtpEmailSenderConfiguration` is implemented by the `SmtpEmailSenderConfiguration` by default, which gets the configuration from the setting system as explained above.
+
 ## Text Template Integration
 
 ABP Framework provides a strong and flexible [text templating system](Text-Templating.md). You can use the text templating system to create dynamic email contents. Inject the `ITemplateRenderer` and use the `RenderAsync` to render a template. Then use the result as the email body.
