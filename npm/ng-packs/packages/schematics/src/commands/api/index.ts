@@ -20,14 +20,14 @@ export default function(params: GenerateProxySchema) {
 
       const mapControllerToService = createControllerToServiceMapper(solution, definition.remoteServiceName);
       const controllers = Object.values(definition.controllers || {});
-      const importRefs: Record<string, string[]> = {};
+      const serviceImports: Record<string, string[]> = {};
 
       const createServiceFiles = chain(
         controllers.map(controller => {
           const service = mapControllerToService(controller);
           service.imports.forEach(({refs, path}) => refs.forEach(ref => {
-            if (!importRefs[path]) return (importRefs[path] = [ref]);
-            importRefs[path] = [...new Set([...importRefs[path], ref])];
+            if (!serviceImports[path]) return (serviceImports[path] = [ref]);
+            serviceImports[path] = [...new Set([...serviceImports[path], ref])];
           }));
 
           return applyWithOverwrite(url('./files-service'), [
@@ -42,10 +42,10 @@ export default function(params: GenerateProxySchema) {
         ),
       );
 
-      const mapImportRefsToModel = createImportRefsToModelMapper(solution);
+      const mapImportRefsToModel = createImportRefsToModelMapper(solution, data.types);
 
       const createModelFiles = chain(
-        Object.values(importRefs).map(refs => {
+        Object.values(serviceImports).map(refs => {
           return applyWithOverwrite(url('./files-model'), [
             applyTemplates({
               ...cases,
