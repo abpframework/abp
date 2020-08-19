@@ -1,9 +1,9 @@
 import { strings } from '@angular-devkit/core';
 import { SYSTEM_TYPES } from '../constants';
 import { eImportKeyword } from '../enums';
-import { Import } from '../models';
+import { Import, TypeWithEnum } from '../models';
 import { parseNamespace } from './namespace';
-import { relativePathToModel } from './path';
+import { relativePathToEnum, relativePathToModel } from './path';
 import { parseGenerics } from './tree';
 
 export function createTypeSimplifier(solution: string) {
@@ -53,9 +53,9 @@ export function removeTypeModifiers(type: string) {
 export function createTypesToImportsReducer(solution: string, namespace: string) {
   const mapTypeToImport = createTypeToImportMapper(solution, namespace);
 
-  return (imports: Import[], types: string[]) => {
-    types.forEach(type => {
-      const newImport = mapTypeToImport(type);
+  return (imports: Import[], types: TypeWithEnum[]) => {
+    types.forEach(({ type, isEnum }) => {
+      const newImport = mapTypeToImport(type, isEnum);
       if (!newImport) return;
 
       const existingImport = imports.find(
@@ -76,15 +76,17 @@ export function createTypesToImportsReducer(solution: string, namespace: string)
 export function createTypeToImportMapper(solution: string, namespace: string) {
   const adaptType = createTypeAdapter(solution);
 
-  return (type: string) => {
+  return (type: string, isEnum: boolean) => {
     if (!type || type.startsWith('System')) return;
 
     const modelNamespace = parseNamespace(solution, type);
-    const path = type.startsWith('Volo.Abp.Application.Dtos')
-      ? '@abp/ng.core'
-      : relativePathToModel(namespace, modelNamespace);
     const refs = [type];
     const specifiers = [adaptType(type.split('<')[0])];
+    const path = type.startsWith('Volo.Abp.Application.Dtos')
+      ? '@abp/ng.core'
+      : isEnum
+      ? relativePathToEnum(namespace, modelNamespace, specifiers[0])
+      : relativePathToModel(namespace, modelNamespace);
 
     return new Import({ keyword: eImportKeyword.Type, path, refs, specifiers });
   };

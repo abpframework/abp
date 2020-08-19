@@ -1,5 +1,5 @@
 import { strings } from '@angular-devkit/core';
-import { Import, Interface, Model, Property, Type } from '../models';
+import { Import, Interface, Model, Property, Type, TypeWithEnum } from '../models';
 import { sortImports } from './import';
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
@@ -73,12 +73,12 @@ export function createImportRefToImportReducerCreator(
     return (imports: Import[], importRef: string) =>
       reduceTypesToImport(
         imports,
-        mergeBaseTypeWithProperties(types[importRef]).reduce((typeNames: string[], type) => {
-          parseGenerics(type)
+        mergeBaseTypeWithProperties(types[importRef]).reduce((acc: TypeWithEnum[], typeName) => {
+          parseGenerics(typeName)
             .toGenerics()
-            .forEach(t => typeNames.push(t));
+            .forEach(type => acc.push({ type, isEnum: types[type]?.isEnum }));
 
-          return typeNames;
+          return acc;
         }, []),
       );
   };

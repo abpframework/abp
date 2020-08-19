@@ -73,3 +73,8 @@ export interface TypeDef {
   type: string;
   typeSimple: string;
 }
+
+export interface TypeWithEnum {
+  isEnum: boolean;
+  type: string;
+}

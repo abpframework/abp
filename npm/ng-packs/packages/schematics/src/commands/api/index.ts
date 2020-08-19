@@ -15,10 +15,11 @@ export default function(params: GenerateProxySchema) {
       const targetPath = buildDefaultPath(target.definition);
       const readApiDefinition = createApiDefinitionReader(`${targetPath}/shared/api-definition.json`);
       const data = readApiDefinition(tree);
+      const types = data.types;
       const definition = data.modules[moduleName];
       if (!definition) throw new SchematicsException(interpolate(Exception.InvalidModule, moduleName));
 
-      const mapControllerToService = createControllerToServiceMapper(solution, definition.remoteServiceName);
+      const mapControllerToService = createControllerToServiceMapper(solution, types, definition.remoteServiceName);
       const controllers = Object.values(definition.controllers || {});
       const serviceImports: Record<string, string[]> = {};
 
@@ -43,7 +44,7 @@ export default function(params: GenerateProxySchema) {
         ),
       );
 
-      const mapImportRefsToModel = createImportRefsToModelMapper(solution, data.types);
+      const mapImportRefsToModel = createImportRefsToModelMapper(solution, types);
 
       const createModelFiles = chain(
         Object.values(serviceImports).map(refs => {
