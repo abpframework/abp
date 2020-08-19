@@ -4,7 +4,12 @@ import { sortImports } from './import';
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
 import { parseGenerics } from './tree';
-import { createTypeSimplifier, createTypesToImportsReducer } from './type';
+import {
+  createTypeSimplifier,
+  createTypesToImportsReducer,
+  flattenUnionTypes,
+  removeTypeModifiers,
+} from './type';
 
 export function createImportRefsToModelMapper(solution: string, types: Record<string, Type>) {
   const mapImportRefToInterface = createImportRefToInterfaceMapper(solution, types);
@@ -81,20 +86,11 @@ export function createImportRefToImportReducerCreator(
 
 export function mergeBaseTypeWithProperties({ baseType, genericArguments, properties }: Type) {
   const removeGenerics = createGenericRemover(genericArguments);
+  const clearTypes = (type: string) => removeTypeModifiers(removeGenerics(type));
   const baseTypes = baseType ? [baseType] : [];
   const propTypes = (properties ?? []).map(({ type }) => type);
 
-  return [...baseTypes, ...propTypes].reduce(flattenUnionTypes, []).map(removeGenerics);
-}
-
-export function flattenUnionTypes(types: string[], type: string) {
-  type
-    .replace(/^{/, '')
-    .replace(/}$/, '')
-    .split(':')
-    .forEach(t => types.push(t));
-
-  return types;
+  return [...baseTypes, ...propTypes].reduce(flattenUnionTypes, []).map(clearTypes);
 }
 
 export function createGenericRemover(genericArguments: string[] | null) {

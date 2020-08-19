@@ -21,26 +21,33 @@ export function createTypeSimplifier(solution: string) {
 }
 
 export function createTypeParser(replacerFn = (t: string) => t) {
-  const optionalRegex = /\?/g;
-
-  return (originalType: string) => {
-    const unionType = originalType
-      .replace(/^{/, '')
-      .replace(/}$/, '')
-      .split(':');
-
-    return unionType
+  return (originalType: string) =>
+    flattenUnionTypes([], originalType)
       .map(type => {
-        type = type.startsWith('[') ? type.slice(1, -1) + '[]' : type;
-        type = type.replace(optionalRegex, '');
+        type = removeTypeModifiers(type);
         type = type.replace(
           /System\.([0-9A-Za-z]+)/g,
           (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
         );
+
         return replacerFn(type);
       })
       .join(' | ');
-  };
+}
+
+export function flattenUnionTypes(types: string[], type: string) {
+  type
+    .replace(/^{/, '')
+    .replace(/}$/, '')
+    .split(':')
+    .forEach(t => types.push(t));
+
+  return types;
+}
+
+export function removeTypeModifiers(type: string) {
+  type = type.startsWith('[') ? type.slice(1, -1) + '[]' : type;
+  return type.replace(/\?/g, '');
 }
 
 export function createTypesToImportsReducer(solution: string, namespace: string) {
