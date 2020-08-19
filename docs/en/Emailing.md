@@ -87,7 +87,7 @@ Email sending uses the [setting system](Settings.md) to define settings and get 
 * **Abp.Mailing.Smtp.Host**: The IP/Domain of the SMTP server (default: 127.0.0.1).
 * **Abp.Mailing.Smtp.Port**: The Port of the SMTP server (default: 25).
 * **Abp.Mailing.Smtp.UserName**: Username, if the SMTP server requires authentication.
-* **Abp.Mailing.Smtp.Password**: Password, if the SMTP server requires authentication.
+* **Abp.Mailing.Smtp.Password**: Password, if the SMTP server requires authentication. **This value is encrypted **(see the section below).
 * **Abp.Mailing.Smtp.Domain**: Domain for the username, if the SMTP server requires authentication.
 * **Abp.Mailing.Smtp.EnableSsl**: A value that indicates if the SMTP server uses SSL or not ("true" or "false". Default: "false").
 * **Abp.Mailing.Smtp.UseDefaultCredentials**: If true, uses default credentials instead of the provided username and password ("true" or "false". Default: "true").
@@ -108,7 +108,13 @@ The easiest way to define these settings it to add them to the `appsettings.json
 }
 ````
 
-See the [setting system document](Settings.md) to understand the setting system better.
+You can set/change these settings using the `ISettingManager` and store values in a database. See the [setting system document](Settings.md) to understand the setting system better.
+
+### Encrypt the SMTP Password
+
+*Abp.Mailing.Smtp.Password* must be an **encrypted** value. If you use the `ISettingManager` to set the password, you don't have to worry. It internally encrypts the values on set and decrypts on get.
+
+If you use the `appsettings.json` to store the password, you should manually inject the `ISettingEncryptionService` and use its `Encrypt` method to obtain an encrypted value. This can be done by creating a simple code in your application. Then you can delete the code. As better, you can create a UI in your application to configure the email settings. In this case, you can directly use the `ISettingManager` without worrying the encryption.
 
 ## Text Template Integration
 
