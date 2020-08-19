@@ -1,21 +1,21 @@
-<% for (let _import of imports) {
-%><%= _import.keyword %> { <%= _import.specifiers.join(', ') %> } from '<%= _import.path %>';
+<% for (const {keyword, specifiers, path} of imports) {
+%><%= keyword %> { <%= specifiers.join(', ') %> } from '<%= path %>';
 <% } %>
 @Injectable({
   providedIn: 'root',
 })
 export class <%= name %>Service {
   apiName = '<%= apiName %>';<%
-  for (let method of methods) { %>
+  for (let {body, signature} of methods) { %>
 
-  <%= camel(method.signature.name) %> = (<%= serializeParameters(method.signature.parameters) %>) =>
-    this.restService.request<<%= method.body.requestType %>, <%= method.body.responseType %>>({
-      method: '<%= method.body.method %>',
-      url: `/<%= method.body.url %>`,<%
-      if (method.body.params.length) { %>
-      params: { <%= method.body.params.join(', ') %> }<% }
-      if (method.body.body) { %>
-      body: <%= method.body.body %>,<% } %>
+  <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
+    this.restService.request<<%= body.requestType %>, <%= body.responseType %>>({
+      method: '<%= body.method %>',
+      url: `/<%= body.url %>`,<%
+      if (body.params.length) { %>
+      params: { <%= body.params.join(', ') %> }<% }
+      if (body.body) { %>
+      body: <%= body.body %>,<% } %>
     },
     { apiName: this.apiName });<% } %>
 
