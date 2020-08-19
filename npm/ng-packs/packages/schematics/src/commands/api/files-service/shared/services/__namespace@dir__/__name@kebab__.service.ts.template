@@ -1,8 +1,6 @@
-import { RestService } from '@abp/ng.core';
-import { Injectable } from '@angular/core';<%
-for (let _import of imports) { %>
-import type { <%= _import.specifiers.join(', ') %> } from '<%= _import.path %>';<% } %>
-
+<% for (let _import of imports) {
+%><%= _import.keyword %> { <%= _import.specifiers.join(', ') %> } from '<%= _import.path %>';
+<% } %>
 @Injectable({
   providedIn: 'root',
 })

@@ -16,9 +16,27 @@ export function createControllerToServiceMapper(solution: string, apiName: strin
     const namespace = parseNamespace(solution, controller.type);
     const actions = Object.values(controller.actions);
     const imports = actions.reduce(createActionToImportsReducer(solution, namespace), []);
+    imports.push(new Import({ path: '@abp/ng.core', specifiers: ['RestService'] }));
+    imports.push(new Import({ path: '@angular/core', specifiers: ['Injectable'] }));
+    sortImports(imports);
     const methods = actions.map(mapActionToMethod);
+    sortMethods(methods);
     return new Service({ apiName, imports, methods, name, namespace });
   };
+}
+
+function sortImports(imports: Import[]) {
+  imports.sort((a, b) =>
+    removeRelative(a) > removeRelative(b) ? 1 : a.keyword > b.keyword ? 1 : -1,
+  );
+}
+
+function removeRelative(importDef: Import) {
+  return importDef.path.replace(/\.\.\//g, '');
+}
+
+function sortMethods(methods: Method[]) {
+  methods.sort((a, b) => (a.signature.name > b.signature.name ? 1 : -1));
 }
 
 export function createActionToImportsReducer(solution: string, namespace: string) {
@@ -41,6 +59,7 @@ export function createActionToImportsReducer(solution: string, namespace: string
         ...new Set([...existingImport.specifiers, ...def.specifiers]),
       ].sort();
     });
+
     return imports;
   };
 }
