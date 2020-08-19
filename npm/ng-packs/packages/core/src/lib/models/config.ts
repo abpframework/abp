@@ -42,9 +42,14 @@ export namespace Config {
   }
 
   export type LocalizationParam = string | LocalizationWithDefault;
+  export type customMergeFn = (
+    localEnv: Partial<Config.Environment>,
+    remoteEnv: any,
+  ) => Config.Environment;
 
   export interface RemoteEnv {
     url: string;
+    mergeStrategy: 'deepmerge' | 'overwrite' | customMergeFn;
     method?: string;
     headers?: ABP.Dictionary<string>;
   }
