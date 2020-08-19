@@ -179,3 +179,17 @@ public class MyWebAppModule : AbpModule
 The code above assumes that `MyWebAppModule` and `MyModule` are two different projects in a Visual Studio solution and `MyWebAppModule` depends on the `MyModule`.
 
 > The [application startup template](Startup-Templates/Application.md) already uses this technique for the localization files. So, when you change a localization file it automatically detects the change.
+
+## Replacing/Overriding Virtual Files
+
+Virtual File System creates a unified file system on runtime, where the actual files are distributed into different modules in the development time.
+
+If two modules adds a file to the same virtual path (like `my-path/my-file.css`), the one added later overrides/replaces the previous one ([module dependency](Module-Development-Basics.md) order determines the order of the files being added).
+
+This feature allows your application to override/replace any virtual file defined a module that is used by your application. This is one of the fundamental extensibility features of the ABP Framework.
+
+So, if you need to replace a file of a module, just create the file in the exactly same path in your module/application
+
+### Physical Files
+
+Physical files always override the virtual files. That means if you put a file under the `/wwwroot/my-folder/my-file.css`, it will override the file in the same location of the virtual file system. So, you need to know the file paths defined in the modules to override them.
