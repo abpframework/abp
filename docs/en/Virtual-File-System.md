@@ -135,6 +135,7 @@ By default, ASP.NET Core only allows the `wwwroot` folder to contain the static 
 
 * Pages
 * Views
+* Components
 * Themes
 
 This allows to add `.js`, `.css`... files near to your `.cshtml` file that is easier to develop and maintain your project.
