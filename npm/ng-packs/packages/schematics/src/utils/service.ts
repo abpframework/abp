@@ -1,9 +1,7 @@
-import { eImportKeyword } from '../enums';
 import { Action, Body, Controller, Import, Method, Property, Service, Signature } from '../models';
 import { parseNamespace } from './namespace';
-import { relativePathFromServiceToModel } from './path';
 import { parseGenerics } from './tree';
-import { createTypeSimplifier } from './type';
+import { createTypeAdapter, createTypesToImportsReducer } from './type';
 
 export function serializeParameters(parameters: Property[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
@@ -38,48 +36,6 @@ function removeRelative(importDef: Import) {
 
 function sortMethods(methods: Method[]) {
   methods.sort((a, b) => (a.signature.name > b.signature.name ? 1 : -1));
-}
-
-export function createActionToImportsReducer(solution: string, namespace: string) {
-  const mapTypeToImport = createTypeToImportMapper(solution, namespace);
-
-  return (imports: Import[], action: Action) => {
-    const types = getTypesFromAction(action);
-
-    types.forEach(type => {
-      const def = mapTypeToImport(type);
-      if (!def) return;
-
-      const existingImport = imports.find(
-        ({ keyword, path }) => keyword === def.keyword && path === def.path,
-      );
-      if (!existingImport) return imports.push(def);
-
-      existingImport.refs = [...new Set([...existingImport.refs, ...def.refs])];
-      existingImport.specifiers = [
-        ...new Set([...existingImport.specifiers, ...def.specifiers]),
-      ].sort();
-    });
-
-    return imports;
-  };
-}
-
-export function createTypeToImportMapper(solution: string, namespace: string) {
-  const adaptType = createTypeAdapter(solution);
-
-  return (type: string) => {
-    if (type.startsWith('System')) return;
-
-    const modelNamespace = parseNamespace(solution, type);
-    const path = type.startsWith('Volo.Abp.Application.Dtos')
-      ? '@abp/ng.core'
-      : relativePathFromServiceToModel(namespace, modelNamespace);
-    const refs = [type];
-    const specifiers = [adaptType(type.split('<')[0])];
-
-    return new Import({ keyword: eImportKeyword.Type, path, refs, specifiers });
-  };
 }
 
 export function createActionToMethodMapper(solution: string) {
@@ -128,22 +84,18 @@ function getMethodNameFromAction(action: Action): string {
   return action.uniqueName.split('Async')[0];
 }
 
-function createTypeAdapter(solution: string) {
-  const simplifyType = createTypeSimplifier(solution);
+function createActionToImportsReducer(solution: string, namespace: string) {
+  const mapTypesToImports = createTypesToImportsReducer(solution, namespace);
 
-  return (typeSimple: string) => {
-    if (typeSimple === 'System.Void') return 'void';
+  return (imports: Import[], { parametersOnMethod, returnValue }: Action) =>
+    mapTypesToImports(
+      imports,
+      [returnValue, ...parametersOnMethod].reduce((types: string[], { type }) => {
+        parseGenerics(type)
+          .toGenerics()
+          .forEach(t => types.push(t));
 
-    return parseGenerics(typeSimple, node => simplifyType(node.data)).toString();
-  };
-}
-
-function getTypesFromAction({ parametersOnMethod, returnValue }: Action) {
-  return [returnValue, ...parametersOnMethod].reduce((types: string[], { type }) => {
-    parseGenerics(type)
-      .toGenerics()
-      .forEach(t => types.push(t));
-
-    return types;
-  }, []);
+        return types;
+      }, []),
+    );
 }
