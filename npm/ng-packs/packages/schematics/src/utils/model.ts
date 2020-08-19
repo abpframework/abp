@@ -1,10 +1,10 @@
 import { Model } from '../models';
 import { parseNamespace } from './namespace';
 
-export function createImportRefToModelMapper(solution: string) {
-  return (importRef: string) => {
+export function createImportRefsToModelMapper(solution: string) {
+  return (importRefs: string[]) => {
     return new Model({
-      namespace: parseNamespace(solution, importRef),
+      namespace: parseNamespace(solution, importRefs[0]),
     });
   };
 }
