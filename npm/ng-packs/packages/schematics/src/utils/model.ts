@@ -68,7 +68,7 @@ export function createImportRefToImportReducerCreator(
     return (imports: Import[], importRef: string) =>
       reduceTypesToImport(
         imports,
-        mergeBaseTypeWithProperties(types[importRef]).reduce((typeNames: string[], { type }) => {
+        mergeBaseTypeWithProperties(types[importRef]).reduce((typeNames: string[], type) => {
           parseGenerics(type)
             .toGenerics()
             .forEach(t => typeNames.push(t));
@@ -81,27 +81,22 @@ export function createImportRefToImportReducerCreator(
 
 export function mergeBaseTypeWithProperties({ baseType, genericArguments, properties }: Type) {
   const removeGenerics = createGenericRemover(genericArguments);
-  const baseTypes = baseType ? [{ type: baseType }] : [];
-  const propTypes = (properties ?? []).map(({ type }) => ({ type }));
+  const baseTypes = baseType ? [baseType] : [];
+  const propTypes = (properties ?? []).map(({ type }) => type);
 
   return [...baseTypes, ...propTypes].map(removeGenerics);
 }
 
 export function createGenericRemover(genericArguments: string[] | null) {
-  if (!genericArguments) return (def: SimpleTypeDef) => def;
+  if (!genericArguments) return (type: string) => type;
 
-  return ({ type }: SimpleTypeDef) => ({
-    type: genericArguments.includes(type)
+  return (type: string) =>
+    genericArguments.includes(type)
       ? ''
       : type.replace(/<([^<>]+)>/, (_, match) => {
           return match
             .split(/,\s*/)
             .filter((t: string) => !genericArguments.includes(t))
             .join(',');
-        }),
-  });
-}
-
-interface SimpleTypeDef {
-  type: string;
+        });
 }
