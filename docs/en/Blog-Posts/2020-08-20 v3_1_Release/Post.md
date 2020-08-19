@@ -121,24 +121,54 @@ public class CommentController :  AbpController
 
 See the issue [#5061](https://github.com/abpframework/abp/issues/5061) until this is fully documented.
 
-### New Account Module Features
+### Social/External Logins
+
+Implemented the infrastructure for social/external logins in the account module. So, now you can easily configure your application to support social/external logins by [following the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Authentication/Social-External-Logins.md). Once you configure a provider, a button will appear on the login page to use this provider.
+
+### Forgot/Reset Password
 
 TODO
 
-### New Identity Module Features
+### External Login System
 
 TODO
+
+### User Security Logs
+
+TODO
+
+### New BLOB Storage Providers
+
+TODO: AWS & Aliyun
+
+### Other Features / Highlights
+
+* UOW level caching system
+* Console app template changes
+* Make Volo.Abp.Ldap support multi-tenancy.
+* Upgraded to AutoMapper 10.
+* Allow to put static resources (js/css) under the Components folder
+* [Introduce BasicAggregateRoot base class](https://github.com/abpframework/abp/issues/4808)
+* [Try to set GUID Id in the InsertAsync method of the EF Core repository](https://github.com/abpframework/abp/pull/4634)
+* [Added GetPagedListAsync methods to the repository](https://github.com/abpframework/abp/pull/4617)
+* [Configure Prettier for the solutions](https://github.com/abpframework/abp/issues/4318)
+* [Define new layout hooks: before page content & after page content](https://github.com/abpframework/abp/issues/4008)
 
 ## What's New with the ABP Commercial v3.1
 
-### New Account Module Features
+### Social/External Logins
 
 TODO
 
-### New Identity Module Features
+### LDAP Authentication
+
+TODO (with settings UI)
+
+### Security Logs UI
 
 TODO
 
 ### Others
 
-TODO
+* Lock a user for a while
+* Angular UI Code Generate re-written
