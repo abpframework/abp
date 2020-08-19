@@ -37,12 +37,11 @@
     "CreateArticleTitleInfo": "Title of the article to be shown on the article list.",
     "CreateArticleUrlInfo": "Original GitHub/External URL of the article.",
     "CreateArticleSummaryInfo": "A short summary of the article to be shown on the article list.",
-    "CreateArticleCoverInfo": "For creating an effective article, add a cover photo.",
+    "CreateArticleCoverInfo": "For creating an effective article, add a cover photo. Only 16:9 aspect ratio pictures will be accepted!",
     "ThisExtensionIsNotAllowed": "This extension is not allowed.",
     "TheFileIsTooLarge": "The file is too large.",
     "GoToTheArticle": "Go to the Article",
     "Contribute": "Contribute",
-    "CurrentMilestone": "Current Milestone",
     "OverallProgress": "Overall Progress",
     "Done": "Done",
     "Open": "Open",
@@ -50,11 +49,12 @@
     "LatestQuestionOnThe": "Latest Question On The",
     "StackOverflow": "StackOverflow",
     "Votes": "votes",
-    "Answer": "answer",
+    "Answer": "Answer",
     "Views": "views",
     "Answered": "Answered",
     "WaitingForYourAnswer": "Waiting for your answer",
     "Asked": "asked",
-    "SeeAllQuestions": "See All Questions"
+    "AllQuestions": "All Questions",
+    "NextVersion": "Next Version"
   }
 }
