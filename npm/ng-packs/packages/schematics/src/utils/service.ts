@@ -1,4 +1,5 @@
 import { Action, Body, Controller, Import, Method, Property, Service, Signature } from '../models';
+import { sortImports } from './import';
 import { parseNamespace } from './namespace';
 import { parseGenerics } from './tree';
 import { createTypeAdapter, createTypesToImportsReducer } from './type';
@@ -22,16 +23,6 @@ export function createControllerToServiceMapper(solution: string, apiName: strin
     sortMethods(methods);
     return new Service({ apiName, imports, methods, name, namespace });
   };
-}
-
-function sortImports(imports: Import[]) {
-  imports.sort((a, b) =>
-    removeRelative(a) > removeRelative(b) ? 1 : a.keyword > b.keyword ? 1 : -1,
-  );
-}
-
-function removeRelative(importDef: Import) {
-  return importDef.path.replace(/\.\.\//g, '');
 }
 
 function sortMethods(methods: Method[]) {
