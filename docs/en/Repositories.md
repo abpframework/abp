@@ -8,6 +8,8 @@ Repositories, in practice, are used to perform database operations for domain ob
 
 ABP can provide a **default generic repository** for each aggregate root or entity. You can [inject](Dependency-Injection.md) `IRepository<TEntity, TKey>` into your service and perform standard **CRUD** operations. Example usage:
 
+> According to use the **default generic repository** ,Please see the "Add Default Repositories" section in [Entity-Framework-Core](Entity-Framework-Core.md) or [MongoDB](MongoDB.md) , config the options.
+
 ````C#
 public class PersonAppService : ApplicationService
 {
