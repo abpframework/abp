@@ -172,26 +172,58 @@ Here, some other highlights from this release;
 * UOW level caching system [#4796](https://github.com/abpframework/abp/issues/4796)
 * Refactored the console application template to better integrate to the host builder [#5006](https://github.com/abpframework/abp/issues/5006)
 * [Volo.Abp.Ldap](https://www.nuget.org/packages/Volo.Abp.Ldap) package now supports multi-tenancy.
-* [Introduce BasicAggregateRoot base class](https://github.com/abpframework/abp/issues/4808)
-* [Try to set GUID Id in the InsertAsync method of the EF Core repository](https://github.com/abpframework/abp/pull/4634)
-* [Added GetPagedListAsync methods to the repository](https://github.com/abpframework/abp/pull/4617)
-* [Configure Prettier for the solutions](https://github.com/abpframework/abp/issues/4318)
-* [Define new layout hooks: before page content & after page content](https://github.com/abpframework/abp/issues/4008)
-* Upgraded to AutoMapper 10.
+* Introduce `BasicAggregateRoot` base class [#4808](https://github.com/abpframework/abp/issues/4808)
+* Sets GUID Id in the `InsertAsync` method of the EF Core repository if it was not set by the developer [#4634](https://github.com/abpframework/abp/pull/4634)
+* Added `GetPagedListAsync` methods to the repository to simplify paging [#4617](https://github.com/abpframework/abp/pull/4617)
+* Configured [Prettier](https://prettier.io/) for the startup template [#4318](https://github.com/abpframework/abp/issues/4318)
+* Defined new layout hooks for the MVC UI: before page content & after page content [#4008](https://github.com/abpframework/abp/issues/4008)
 * Allow to put static resources (js, css... files) under the Components folder for ASP.NET Core MVC UI.
+* Upgraded to AutoMapper 10 and Quartz 3.1 for the related integration packages.
 
 ## What's New with the ABP Commercial v3.1
 
 ### Security Logs UI
 
-TODO
+We've created a UI to report user security logs for authentication related operations, under the Identity Management menu:
+
+![security-logs-ui](security-logs-ui.png)
+
+Also, every user can see his/her own security logs by selecting the "My security logs" under the user menu:
+
+![my-security-logs](my-security-logs.png)
+
+
 
 ### LDAP Authentication
 
-TODO (with settings UI)
+We've implemented LDAP authentication using the new external login system explained above. Also, created a UI to configure the server settings:
+
+![ldap-settings-ui](ldap-settings-ui.png)
+
+In this way, you can simply check passwords of the users from LDAP in the login page. If given username / password doesn't exists on LDAP, then it fallbacks to the local database, just like before.
+
+Since it supports **multi-tenancy**, you can enable, disable and configure it for your tenants.
+
+### Email / Phone Number Verification
+
+User profile management page now supports to Email & Phone Number verification flow:
+
+![email-phone-verification](email-phone-verification.png)
+
+When user clicks to the **verify** button, a verification email/SMS (that has a verification code) sent to the user and the UI waits to submit this code.
+
+### User Lock
+
+Implemented to **lock a user** for a given period of time. Locked users can not login to the application for the given period of time:
+
+![user-lock](user-lock.png)
+
+### ABP Suite: Angular UI Code Generation Revisited
+
+Angular UI code generation has been re-written using the Angular Schematics for the ABP Suite. It is now more stable and produces a better application code.
+
+ABP Suite also supports code generation on module development.
 
 ### Others
 
 * **Social logins** and **authorization code flow** are also implemented for the ABP Commercial, just as described above.
-* Allow to **lock a user** for a given period of time (locked user can not login to the application).
-* **Angular UI code generate** has been re-written using the Angular Schematics for the **ABP Suite**.
