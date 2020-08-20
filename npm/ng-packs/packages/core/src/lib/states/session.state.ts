@@ -46,7 +46,7 @@ export class SessionState {
       .pipe(ofActionSuccessful(GetAppConfiguration))
       .pipe(take(1))
       .subscribe(() => {
-        const { sessionDetail } = this.store.selectSnapshot(SessionState) || { sessionDetail: {} };
+        const sessionDetail = this.store.selectSnapshot(SessionState)?.sessionDetail || {};
 
         const fiveMinutesBefore = new Date().valueOf() - 5 * 60 * 1000;
 
