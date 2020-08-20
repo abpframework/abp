@@ -4,6 +4,14 @@ import { Type } from '../models';
 import { interpolate } from './common';
 import { parseNamespace } from './namespace';
 
+export interface EnumGeneratorParams {
+  targetPath: string;
+  solution: string;
+  types: Record<string, Type>;
+  serviceImports: Record<string, string[]>;
+  modelImports: Record<string, string[]>;
+}
+
 export function getEnumNamesFromImports(serviceImports: Record<string, string[]>) {
   return Object.keys(serviceImports)
     .filter(path => path.includes('/enums/'))
@@ -13,7 +21,7 @@ export function getEnumNamesFromImports(serviceImports: Record<string, string[]>
     }, []);
 }
 
-export function createImportRefToEnumMapper(solution: string, types: Record<string, Type>) {
+export function createImportRefToEnumMapper({ solution, types }: EnumGeneratorParams) {
   return (ref: string) => {
     const { enumNames, enumValues } = types[ref];
     if (!enumNames || !enumValues)

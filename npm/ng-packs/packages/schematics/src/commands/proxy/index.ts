@@ -1,9 +1,21 @@
 import { strings } from '@angular-devkit/core';
-import { branchAndMerge, chain, schematic, SchematicContext, Tree } from '@angular-devkit/schematics';
+import {
+  branchAndMerge,
+  chain,
+  schematic,
+  SchematicContext,
+  Tree,
+} from '@angular-devkit/schematics';
 import { API_DEFINITION_ENDPOINT } from '../../constants';
 import { ApiDefinition } from '../../models';
-import { buildDefaultPath, createApiDefinitionSaver, getApiDefinition, getSourceUrl, resolveProject } from '../../utils';
-import type { Schema as GenerateProxySchema } from './schema';
+import {
+  buildDefaultPath,
+  createApiDefinitionSaver,
+  getApiDefinition,
+  getSourceUrl,
+  resolveProject,
+} from '../../utils';
+import { Schema as GenerateProxySchema } from './schema';
 
 export default function(params: GenerateProxySchema) {
   const moduleName = strings.camelize(params.module || 'app');
@@ -16,7 +28,10 @@ export default function(params: GenerateProxySchema) {
       const targetPath = buildDefaultPath(target.definition);
       const data: ApiDefinition = await getApiDefinition(sourceUrl + API_DEFINITION_ENDPOINT);
 
-      const saveApiDefinition = createApiDefinitionSaver(data, `${targetPath}/shared/api-definition.json`)
+      const saveApiDefinition = createApiDefinitionSaver(
+        data,
+        `${targetPath}/shared/api-definition.json`,
+      );
       const createApi = schematic('api', params);
 
       return branchAndMerge(chain([saveApiDefinition, createApi]));

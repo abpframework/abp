@@ -1,6 +1,5 @@
 import { experimental, strings, workspaces } from '@angular-devkit/core';
-import { SchematicsException } from '@angular-devkit/schematics';
-import type { Tree } from '@angular-devkit/schematics';
+import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { Exception } from '../enums';
 import { Project } from '../models';
 import { getWorkspace, ProjectType } from './angular';
@@ -35,10 +34,7 @@ export function readWorkspaceSchema(tree: Tree) {
   return workspaceSchema;
 }
 
-export async function resolveProject(
-  tree: Tree,
-  name: string,
-): Promise<Project> {
+export async function resolveProject(tree: Tree, name: string): Promise<Project> {
   name = name || readWorkspaceSchema(tree).defaultProject!;
   const workspace = await getWorkspace(tree);
   let definition: Project['definition'] | undefined;

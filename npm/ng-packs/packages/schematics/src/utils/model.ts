@@ -9,10 +9,19 @@ import {
   createTypesToImportsReducer,
   flattenUnionTypes,
   normalizeTypeAnnotations,
+  removeTypeModifiers,
 } from './type';
 
-export function createImportRefsToModelMapper(solution: string, types: Record<string, Type>) {
-  const mapImportRefToInterface = createImportRefToInterfaceMapper(solution, types);
+export interface ModelGeneratorParams {
+  targetPath: string;
+  solution: string;
+  types: Record<string, Type>;
+  serviceImports: Record<string, string[]>;
+  modelImports: Record<string, string[]>;
+}
+
+export function createImportRefsToModelMapper({ solution, types }: ModelGeneratorParams) {
+  const mapImportRefToInterface = createImportRefToInterfaceMapper(types);
   const createImportRefToImportReducer = createImportRefToImportReducerCreator(solution, types);
 
   return (importRefs: string[]) => {
@@ -53,8 +62,9 @@ function sortInterfaces(interfaces: Interface[]) {
   interfaces.sort((a, b) => (a.identifier > b.identifier ? 1 : -1));
 }
 
-export function createImportRefToInterfaceMapper(solution: string, types: Record<string, Type>) {
-  const simplifyType = createTypeSimplifier(solution);
+export function createImportRefToInterfaceMapper(types: Record<string, Type>) {
+  const simplifyType = createTypeSimplifier();
+  const getIdentifier = (type: string) => removeTypeModifiers(simplifyType(type));
 
   return (ref: string) => {
     const typeDef = types[ref];
@@ -62,10 +72,10 @@ export function createImportRefToInterfaceMapper(solution: string, types: Record
 
     const identifier = (typeDef.genericArguments ?? []).reduce(
       (acc, t, i) => acc.replace(`T${i}`, t),
-      simplifyType(ref),
+      getIdentifier(ref),
     );
 
-    const base = typeDef.baseType ? simplifyType(typeDef.baseType) : null;
+    const base = typeDef.baseType ? getIdentifier(typeDef.baseType) : null;
     const _interface = new Interface({ identifier, base, ref });
 
     typeDef.properties?.forEach(({ name, typeSimple }) => {

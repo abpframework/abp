@@ -6,25 +6,15 @@ import { parseNamespace } from './namespace';
 import { relativePathToEnum, relativePathToModel } from './path';
 import { parseGenerics } from './tree';
 
-export function createTypeSimplifier(solution: string) {
-  const solutionRegex = new RegExp(solution.replace(/\./g, `\.`) + `\.`);
-  const voloRegex = /^Volo\.(Abp\.?)(Application|ObjectExtending\.?)/;
-
-  return createTypeParser(
-    type =>
-      type
-        .replace(voloRegex, '')
-        .replace(solutionRegex, '')
-        .split('.')
-        .pop()!,
-  );
+export function createTypeSimplifier() {
+  return createTypeParser(type => type.split('.').pop()!);
 }
 
 export function createTypeParser(replacerFn = (t: string) => t) {
   return (originalType: string) =>
     flattenUnionTypes([], originalType)
       .map(type => {
-        type = removeTypeModifiers(normalizeTypeAnnotations(type));
+        type = normalizeTypeAnnotations(type);
         type = type.replace(
           /System\.([0-9A-Za-z]+)/g,
           (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
@@ -78,15 +68,15 @@ export function createTypesToImportsReducer(solution: string, namespace: string)
 }
 
 export function createTypeToImportMapper(solution: string, namespace: string) {
-  const adaptType = createTypeAdapter(solution);
-  const simplifyType = createTypeSimplifier(solution);
+  const adaptType = createTypeAdapter();
+  const simplifyType = createTypeSimplifier();
 
   return (type: string, isEnum: boolean) => {
     if (!type || type.startsWith('System')) return;
 
     const modelNamespace = parseNamespace(solution, type);
     const refs = [removeTypeModifiers(type)];
-    const specifiers = [adaptType(simplifyType(type).split('<')[0])];
+    const specifiers = [adaptType(simplifyType(refs[0]).split('<')[0])];
     const path = /^Volo\.Abp\.(Application\.Dtos|ObjectExtending)/.test(type)
       ? '@abp/ng.core'
       : isEnum
@@ -97,7 +87,7 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
   };
 }
 
-export function createTypeAdapter(solution: string) {
-  const simplifyType = createTypeSimplifier(solution);
+export function createTypeAdapter() {
+  const simplifyType = createTypeSimplifier();
   return (type: string) => parseGenerics(type, node => simplifyType(node.data)).toString();
 }

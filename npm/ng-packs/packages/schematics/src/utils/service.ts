@@ -6,6 +6,7 @@ import {
   Method,
   Property,
   Service,
+  ServiceGeneratorParams,
   Signature,
   Type,
   TypeWithEnum,
@@ -19,12 +20,12 @@ export function serializeParameters(parameters: Property[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
 }
 
-export function createControllerToServiceMapper(
-  solution: string,
-  types: Record<string, Type>,
-  apiName: string,
-) {
-  const mapActionToMethod = createActionToMethodMapper(solution);
+export function createControllerToServiceMapper({
+  solution,
+  types,
+  apiName,
+}: ServiceGeneratorParams) {
+  const mapActionToMethod = createActionToMethodMapper();
 
   return (controller: Controller) => {
     const name = controller.controllerName;
@@ -44,9 +45,9 @@ function sortMethods(methods: Method[]) {
   methods.sort((a, b) => (a.signature.name > b.signature.name ? 1 : -1));
 }
 
-export function createActionToMethodMapper(solution: string) {
-  const mapActionToBody = createActionToBodyMapper(solution);
-  const mapActionToSignature = createActionToSignatureMapper(solution);
+export function createActionToMethodMapper() {
+  const mapActionToBody = createActionToBodyMapper();
+  const mapActionToSignature = createActionToSignatureMapper();
 
   return (action: Action) => {
     const body = mapActionToBody(action);
@@ -55,8 +56,8 @@ export function createActionToMethodMapper(solution: string) {
   };
 }
 
-export function createActionToBodyMapper(solution: string) {
-  const adaptType = createTypeAdapter(solution);
+export function createActionToBodyMapper() {
+  const adaptType = createTypeAdapter();
 
   return ({ httpMethod, parameters, returnValue, url }: Action) => {
     const responseType = adaptType(returnValue.typeSimple);
@@ -68,8 +69,8 @@ export function createActionToBodyMapper(solution: string) {
   };
 }
 
-export function createActionToSignatureMapper(solution: string) {
-  const adaptType = createTypeAdapter(solution);
+export function createActionToSignatureMapper() {
+  const adaptType = createTypeAdapter();
 
   return (action: Action) => {
     const signature = new Signature({ name: getMethodNameFromAction(action) });
