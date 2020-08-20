@@ -1,7 +1,8 @@
-﻿using Volo.Abp.Identity;
+﻿using Volo.Abp.Emailing;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Account
@@ -9,7 +10,8 @@ namespace Volo.Abp.Account
     [DependsOn(
         typeof(AbpAccountApplicationContractsModule),
         typeof(AbpIdentityApplicationModule),
-        typeof(AbpUiNavigationModule)
+        typeof(AbpUiNavigationModule),
+        typeof(AbpEmailingModule)
     )]
     public class AbpAccountApplicationModule : AbpModule
     {
@@ -18,6 +20,11 @@ namespace Volo.Abp.Account
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountApplicationModule>();
+            });
+
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].Urls[AccountUrlNames.PasswordReset] = "Account/ResetPassword";
             });
         }
     }
