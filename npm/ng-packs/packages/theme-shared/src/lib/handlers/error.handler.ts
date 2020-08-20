@@ -87,7 +87,10 @@ export class ErrorHandler {
 
   private listenToRouterError() {
     this.actions
-      .pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors))
+      .pipe(
+        ofActionSuccessful(RouterError),
+        filter(this.filterRouteErrors),
+      )
       .subscribe(() => this.show404Page());
   }
 
@@ -131,11 +134,11 @@ export class ErrorHandler {
                 ? this.show401Page()
                 : this.showError(
                     {
-                      key: 'AbpAccount::DefaultErrorMessage401',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.title,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
                     },
                     {
-                      key: 'AbpAccount::DefaultErrorMessage401Detail',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.details,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
                     },
                   ).subscribe(() => this.navigateToLogin());
@@ -143,11 +146,11 @@ export class ErrorHandler {
             case 403:
               this.createErrorComponent({
                 title: {
-                  key: 'AbpAccount::DefaultErrorMessage403',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.title,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
                 },
                 details: {
-                  key: 'AbpAccount::DefaultErrorMessage403Detail',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.details,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
                 },
                 status: 403,
@@ -158,11 +161,11 @@ export class ErrorHandler {
                 ? this.show404Page()
                 : this.showError(
                     {
-                      key: 'AbpAccount::DefaultErrorMessage404',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.details,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
                     },
                     {
-                      key: 'AbpAccount::DefaultErrorMessage404Detail',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.title,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
                     },
                   );
@@ -170,11 +173,11 @@ export class ErrorHandler {
             case 500:
               this.createErrorComponent({
                 title: {
-                  key: 'AbpAccount::500Message',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.title,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
                 },
                 details: {
-                  key: 'AbpAccount::InternalServerErrorMessage',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.details,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
                 },
                 status: 500,
@@ -184,7 +187,7 @@ export class ErrorHandler {
               if (err.statusText === 'Unknown Error') {
                 this.createErrorComponent({
                   title: {
-                    key: 'AbpAccount::DefaultErrorMessage',
+                    key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
                     defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
                   },
                   details: err.message,
@@ -212,7 +215,7 @@ export class ErrorHandler {
   private show401Page() {
     this.createErrorComponent({
       title: {
-        key: 'AbpAccount::401Message',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
       },
       status: 401,
@@ -222,7 +225,7 @@ export class ErrorHandler {
   private show404Page() {
     this.createErrorComponent({
       title: {
-        key: 'AbpAccount::404Message',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
       },
       status: 404,
