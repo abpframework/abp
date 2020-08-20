@@ -31,33 +31,27 @@ export function createImportRefsToModelMapper({ solution, types }: ModelGenerato
     const imports: Import[] = [];
 
     const reduceImportRefToImport = createImportRefToImportReducer(namespace, _import => {
-      if (_import.path === model.path) {
-        _import.refs.forEach(ref => {
-          if (model.interfaces.some(i => i.ref === ref)) return;
+      if (_import.path !== model.path) return true;
 
-          const interfaceIndirect = mapImportRefToInterface(ref);
-          if (interfaceIndirect) model.interfaces.push(interfaceIndirect);
-          reduceImportRefToImport(imports, ref);
-        });
-
-        return false;
-      }
-
-      return true;
+      _import.refs.reduce(reduceImportRefsToImportsAndInterfaces, imports);
+      return false;
     });
 
     importRefs
-      .reduce((accumulatedImports, ref) => {
-        const interfaceDirect = mapImportRefToInterface(ref);
-        if (interfaceDirect && !types[ref].isEnum) model.interfaces.push(interfaceDirect);
-
-        return reduceImportRefToImport(accumulatedImports, ref);
-      }, imports)
+      .reduce(reduceImportRefsToImportsAndInterfaces, imports)
       .forEach(_import => model.imports.push(_import));
 
     sortInterfaces(model.interfaces);
 
     return model;
+
+    function reduceImportRefsToImportsAndInterfaces(accumulatedImports: Import[], ref: string) {
+      if (model.interfaces.some(i => i.ref === ref)) return accumulatedImports;
+
+      const _interface = mapImportRefToInterface(ref);
+      if (_interface && !types[ref].isEnum) model.interfaces.push(_interface);
+      return reduceImportRefToImport(accumulatedImports, ref);
+    }
   };
 }
 
