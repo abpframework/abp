@@ -8,48 +8,36 @@ describe('DeepMerge', () => {
     expect(deepMerge(null, null)).toEqual({});
   });
 
-  it('should correctly return when any of the inputs is null or undefined', () => {
-    const differentTestValues = [10, false, '', 'test-string', { a: 1 }, [1, 2, 3], {}];
-    differentTestValues.forEach(val => {
-      expect(deepMerge(undefined, val)).toEqual(val);
-      expect(deepMerge(null, val)).toEqual(val);
-      expect(deepMerge(val, undefined)).toEqual(val);
-      expect(deepMerge(val, null)).toEqual(val);
-    });
+  test.each`
+    value
+    ${10}
+    ${false}
+    ${''}
+    ${'test-string'}
+    ${{ a: 1 }}
+    ${[1, 2, 3]}
+    ${{}}
+  `('should correctly return when any of the inputs is null or undefined', val => {
+    expect(deepMerge(undefined, val)).toEqual(val);
+    expect(deepMerge(null, val)).toEqual(val);
+    expect(deepMerge(val, undefined)).toEqual(val);
+    expect(deepMerge(val, null)).toEqual(val);
   });
 
-  it('should correctly return source if one of them is primitive or an array', () => {
-    const differentTestValues = [
-      {
-        target: 10,
-        source: false,
-      },
-      {
-        target: false,
-        source: 20,
-      },
-      {
-        target: 'string',
-        source: { a: 5 },
-      },
-      {
-        target: { b: 10 },
-        source: 50,
-      },
-      {
-        target: [1, 2, 3],
-        source: 40,
-      },
-      {
-        target: { k: 60 },
-        source: [4, 5, 6],
-      },
-    ];
-
-    differentTestValues.forEach(val =>
-      expect(deepMerge(val.target, val.source)).toEqual(val.source),
-    );
-  });
+  test.each`
+    target           | source
+    ${10}            | ${false}
+    ${false}         | ${20}
+    ${'some-string'} | ${{ a: 5 }}
+    ${{ b: 10 }}     | ${50}
+    ${[1, 2, 3]}     | ${40}
+    ${{ k: 60 }}     | ${[4, 5, 6]}
+  `(
+    'should correctly return source if one of them is primitive or an array',
+    ({ target, source }) => {
+      expect(deepMerge(target, source)).toEqual(source);
+    },
+  );
 
   it('should correctly return when both inputs are objects with different fields', () => {
     const target = { a: 1 };

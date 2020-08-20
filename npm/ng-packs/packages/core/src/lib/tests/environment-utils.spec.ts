@@ -61,18 +61,20 @@ describe('EnvironmentUtils', () => {
       },
     };
 
-    it('should call the remoteEnv URL and dispatch the SetEnvironment action for overwrite', () => {
-      setupTestAndRun({ mergeStrategy: 'deepmerge' }, deepMerge(environment, customEnv));
-    });
+    const someEnv = { apiUrl: 'https://some-api-url' } as any;
+    const customFn = (_, __) => someEnv;
 
-    it('should call the remoteEnv URL and dispatch the SetEnvironment action for deepmerge', () => {
-      setupTestAndRun({ mergeStrategy: 'overwrite' }, customEnv);
-    });
-
-    it('should call the remoteEnv URL and dispatch the SetEnvironment action for customFn', () => {
-      const someEnv = { apiUrl: 'https://some-api-url' } as any;
-      setupTestAndRun({ mergeStrategy: (_, __) => someEnv }, someEnv);
-    });
+    test.each`
+      case           | strategy       | expected
+      ${'null'}      | ${null}        | ${customEnv}
+      ${'undefined'} | ${undefined}   | ${customEnv}
+      ${'overwrite'} | ${'overwrite'} | ${customEnv}
+      ${'deepmerge'} | ${'deepmerge'} | ${deepMerge(environment, customEnv)}
+      ${'customFn'}  | ${customFn}    | ${someEnv}
+    `(
+      'should call the remoteEnv URL and dispatch the SetEnvironment action for case $case ',
+      ({ strategy, expected }) => setupTestAndRun({ mergeStrategy: strategy }, expected),
+    );
 
     function setupTestAndRun(strategy: Pick<Config.RemoteEnv, 'mergeStrategy'>, expectedValue) {
       const injector = spectator.inject(Injector);
