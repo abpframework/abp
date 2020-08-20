@@ -55,8 +55,7 @@ export default function(params: GenerateProxySchema) {
             }),
             move(normalize(targetPath)),
           ]);
-        }
-        ),
+        }),
       );
 
       return branchAndMerge(chain([createServiceFiles, createModelFiles]));

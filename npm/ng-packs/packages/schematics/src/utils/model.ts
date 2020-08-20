@@ -21,22 +21,35 @@ export function createImportRefsToModelMapper(solution: string, types: Record<st
 
     const reduceImportRefToImport = createImportRefToImportReducer(namespace);
     const imports = importRefs.reduce((accumulatedImports, ref) => {
-      if (!types[ref].isEnum) model.interfaces.push(mapImportRefToInterface(ref));
+      const interfaceDirect = mapImportRefToInterface(ref);
+      if (interfaceDirect && !types[ref].isEnum) model.interfaces.push(interfaceDirect);
 
       return reduceImportRefToImport(accumulatedImports, ref);
     }, []);
 
     sortImports(imports);
+
     const selfPath = relativePathToModel(namespace, namespace);
-    imports.forEach(i => {
-      if (i.path === selfPath) return;
-      model.imports.push(i);
+    imports.forEach(_import => {
+      if (_import.path === selfPath)
+        return _import.refs.forEach(ref => {
+          if (model.interfaces.some(i => i.ref === ref)) return;
+
+          const interfaceIndirect = mapImportRefToInterface(ref);
+          if (interfaceIndirect) model.interfaces.push(interfaceIndirect);
+        });
+
+      model.imports.push(_import);
     });
 
-    model.interfaces.sort((a, b) => (a.identifier > b.identifier ? 1 : -1));
+    sortInterfaces(model.interfaces);
 
     return model;
   };
+}
+
+function sortInterfaces(interfaces: Interface[]) {
+  interfaces.sort((a, b) => (a.identifier > b.identifier ? 1 : -1));
 }
 
 export function createImportRefToInterfaceMapper(solution: string, types: Record<string, Type>) {
@@ -44,13 +57,15 @@ export function createImportRefToInterfaceMapper(solution: string, types: Record
 
   return (ref: string) => {
     const typeDef = types[ref];
+    if (!typeDef) return;
+
     const identifier = (typeDef.genericArguments ?? []).reduce(
       (acc, t, i) => acc.replace(`T${i}`, t),
       simplifyType(ref),
     );
 
     const base = typeDef.baseType ? simplifyType(typeDef.baseType) : null;
-    const _interface = new Interface({ identifier, base });
+    const _interface = new Interface({ identifier, base, ref });
 
     typeDef.properties?.forEach(({ name, typeSimple }) => {
       name = strings.camelize(name);

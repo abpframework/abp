@@ -17,6 +17,7 @@ export class Interface {
   base: string | null;
   identifier: string;
   properties: Property[] = [];
+  ref: string;
 
   constructor(options: InterfaceOptions) {
     Object.assign(this, options);
