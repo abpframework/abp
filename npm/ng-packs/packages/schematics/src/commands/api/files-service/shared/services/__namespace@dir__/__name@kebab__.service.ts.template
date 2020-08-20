@@ -13,7 +13,7 @@ export class <%= name %>Service {
       method: '<%= body.method %>',
       url: `/<%= body.url %>`,<%
       if (body.params.length) { %>
-      params: { <%= body.params.join(', ') %> }<% }
+      params: { <%= body.params.join(', ') %> },<% }
       if (body.body) { %>
       body: <%= body.body %>,<% } %>
     },
