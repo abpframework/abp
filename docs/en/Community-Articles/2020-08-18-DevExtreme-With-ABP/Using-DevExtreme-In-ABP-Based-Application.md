@@ -1,6 +1,6 @@
-## Using DevExtreme in ABP Based Application
+## Using DevExtreme with ABP Based Applications
 
-Hi, in this step-by-step article, I will show you how to integrate DevExtreme components into ABP Framework based applications.
+Hi, in this step by step article, I will show you how to integrate DevExtreme components into ABP Framework based applications.
 
 ## Install DevExtreme
 
@@ -10,49 +10,55 @@ You can follow [this documentation](https://js.devexpress.com/Documentation/17_1
 
 ### Startup template and the initial run
 
-Abp Framework offers startup templates to get into the business faster. We can download a new startup template using Abp CLI:
+ABP Framework offers startup templates to get into the business faster. We can download a new startup template using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
 
-`abp new DevExtremeSample -m none`
+````bash
+abp new DevExtremeSample
+````
 
-After the download is finished, we run `DevExtremeSample.DbMigrator` project to create the database and seed initial data (admin user, role, etc). Then we run `DevExtremeSample.Web` to see our application working.
-
-> _Default admin username is **admin** and password is **1q2w3E\***_
+After the download is finished, open the solution in the Visual Studio (or your favorite IDE):
 
 ![initial-project](initial-project.png)
 
-### Adding DevExtreme Nuget Packages
+Run the `DevExtremeSample.DbMigrator` application to create the database and seed initial data (which creates the admin user, admin role, related permissions, etc). Then we can run the `DevExtremeSample.Web` project to see our application working.
 
-Add the `DevExtreme.AspNet.Core` package to your `DevExtremeSample.Application.Contracts` project.
+> _Default admin username is **admin** and password is **1q2w3E\***_
+
+### Adding DevExtreme NuGet Packages
+
+Add the `DevExtreme.AspNet.Core` NuGet package to the `DevExtremeSample.Application.Contracts` project.
 
 ```
-dotnet add package DevExtreme.AspNet.Core
+Install-Package DevExtreme.AspNet.Core
 ```
 
 Add the `DevExtreme.AspNet.Data` package to your `DevExtremeSample.Web` project.
 
 ```
-dotnet add package DevExtreme.AspNet.Data
+Install-Package DevExtreme.AspNet.Data
 ```
 
-> Please remember that, you must add _"DevExpress NuGet Feed"_ to your **Nuget Package Sources**. Check [this documentation](https://js.devexpress.com/Documentation/17_1/Guide/ASP.NET_MVC_Controls/Prerequisites_and_Installation/) to more information.
+> Please remember that, you must add _"DevExpress NuGet Feed"_ to your **Nuget Package Sources**. Check [this documentation](https://js.devexpress.com/Documentation/17_1/Guide/ASP.NET_MVC_Controls/Prerequisites_and_Installation/) for more information.
 
 ### Adding DevExtreme NPM Depencies
 
-Open your `DevExtremeSample.Web` project folder with console and add `devextreme` package depency via `npm` or `yarn`.
+Open your `DevExtremeSample.Web` project folder with a command line and add `devextreme` NPM package:
 
-`npm install devextreme` or `yarn add devextreme`
-
-This will add the DevExtreme npm packages to our node_modules folder and `package.json` file as seen below.
+````bash
+npm install devextreme
+````
 
 ### Adding Resource Mappings
 
-The `devextreme` npm package is saved under `node_modules` folder. We need to move them in our `wwwroot/libs` folder to use them in our web project. To add packages in our application, we need to create some mappings by using **Abp Resource Mapping**.
+The `devextreme` NPM package is saved under `node_modules` folder. We need to move the needed files in our `wwwroot/libs` folder to use them in our web project. We can do it using the ABP [client side resource mapping](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Client-Side-Package-Management) system.
 
-Open `abp.resourcemapping.js` file in your `DevExtremeSample.Web` project and add following definition to inside `mappings` object.
+Open the `abp.resourcemapping.js` file in your `DevExtremeSample.Web` project and add the following definition to inside `mappings` object.
 
-`"@node_modules/devextreme/dist/**/*": "@libs/devextreme/"`
+````json
+"@node_modules/devextreme/dist/**/*": "@libs/devextreme/"
+````
 
-After that, the `abp.resourcemapping.js` file should looks like as following.
+The final `abp.resourcemapping.js` file should look like below:
 
 ```
 module.exports = {
@@ -63,19 +69,19 @@ module.exports = {
 };
 ```
 
-Open your `DevExtremeSample.Web` project folder with console and run `gulp` command. This action will do mappings as we described before.
+Open your `DevExtremeSample.Web` project folder with a command line and run the `gulp` command. This command will copy the needed library files into the ``/wwwroot/libs/devextreme/` folder.
 
 ![gulp](gulp.png)
 
-You can see `devextreme` folder in your `wwwroot/libs` folder.
+You can see `devextreme` folder inside the `wwwroot/libs`:
 
 ![wwwroot-lib](wwwroot-lib.png)
 
 ### Adding DevExtremeStyleContributor
 
-We will add DevExtreme css files as a `BundleContributor`. To get more information, please see this [documentation](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification).
+We will add DevExtreme CSS files to the global bundle by creating a [bundle contributor](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification). 
 
-Create `Bundling` folder in your `DevExtremeSample.Web` project. Then create `DevExtremeStyleContributor.cs` file and copy following code block to inside it.
+Create a `Bundling` folder in the `DevExtremeSample.Web` project and a `DevExtremeStyleContributor.cs` file with the following content:
 
 ```csharp
 using System.Collections.Generic;
@@ -94,7 +100,9 @@ namespace DevExtremeSample.Web.Bundling
 }
 ```
 
-Open your `DevExtremeSampleWebModule.cs` file in your `DevExtremeSample.Web` project and add following code to `ConfigureServices` method.
+> You can choose another theme than the light theme. Check the `/libs/devextreme/css/` folder and the DevExtreme documentation for other themes.
+
+Open your `DevExtremeSampleWebModule.cs` file in your `DevExtremeSample.Web` project and add following code into the `ConfigureServices` method:
 
 ```csharp
 Configure<AbpBundlingOptions>(options =>
