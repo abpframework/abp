@@ -33,6 +33,8 @@ function mergeEnvironments(
     case 'deepmerge':
       return new SetEnvironment(deepMerge(local, remote));
     case 'overwrite':
+    case null:
+    case undefined:
       return new SetEnvironment(remote);
     default:
       return new SetEnvironment(config.mergeStrategy(local, remote));
