@@ -11,6 +11,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 
         public static void Configure()
         {
+            MyProjectNameGlobalFeatureConfigurator.Configure();
             MyProjectNameModuleExtensionConfigurator.Configure();
 
             OneTimeRunner.Run(() =>

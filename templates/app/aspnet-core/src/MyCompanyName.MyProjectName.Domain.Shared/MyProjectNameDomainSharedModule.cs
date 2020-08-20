@@ -29,6 +29,7 @@ namespace MyCompanyName.MyProjectName
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            MyProjectNameGlobalFeatureConfigurator.Configure();
             MyProjectNameModuleExtensionConfigurator.Configure();
         }
 

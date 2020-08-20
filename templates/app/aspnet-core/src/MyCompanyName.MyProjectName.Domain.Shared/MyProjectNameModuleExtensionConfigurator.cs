@@ -30,6 +30,8 @@ namespace MyCompanyName.MyProjectName
 
              * Notice: It is not suggested to change property lengths
              * unless you really need it. Go with the standard values wherever possible.
+             *
+             * If you are using EF Core, you will need to run the add-migration command after your changes.
              */
         }
 
