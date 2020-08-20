@@ -11,27 +11,33 @@ This long development cycle brings a lot of new features, improvements and bug f
 
 As mentioned above, it is planned to release a new stable feature version (like 3.1, 3.2, 3.3...) in every 4-weeks.
 
-In addition, we are starting to deploy **Release Candidate (RC)** versions 2-weeks before the stable versions for every feature releases. You can think these releases as "**preview**" version.
+In addition, we are starting to deploy a **preview version** 2-weeks before the stable versions for every feature/major releases.
 
-Today, we've released `3.1.0-rc.1` as the first RC/Preview version. We may release more RC versions if it is needed until the stable version.
+Today, we've released `3.1.0-rc.1` as the first preview version. We may release more previews if it is needed until the stable 3.1.0 version.
 
-The stable `3.1.0` version will be released on September 3, 2020. Next RC version, `3.2.0-rc.1` was planned for September 17, 2020 (2 weeks after the stable 3.1 version and 2 weeks before the stable 3.2 version).
+The stable `3.1.0` version will be released on September 3, 2020. Next RC version, `3.2.0-rc.1` is planned for September 17, 2020 (2 weeks after the stable 3.1 version and 2 weeks before the stable 3.2 version).
 
-> We **won't add new features** to a version after publishing the RC/Preview version. We only will make **bug fixes** until the stable version. The new features being developed in this period will be available in the next version.
+We **won't add new features** to a version after publishing the preview version. We only will make **bug fixes** until the stable version. The new features being developed in this period will be available in the next version.
+
+> We will use `-rc.x` suffix (like `3.1.0-rc.1` and `3.1.0-rc.2`) for preview releases. However, we may also publish with `-preview.x` suffix before RC (Release Candidate) releases, especially for major versions (like 4.x, 5.x...).
 
 ### About the Nightly Builds
 
-Don't confuse RC/Preview versions and nightly builds. When we say RC or preview, we are mentioning the preview system explained above.
+Don't confuse preview versions vs nightly builds. When we say preview, we are mentioning the preview system explained above.
 
-We will continue to publish **nightly builds** for all the [ABP Framework packages](https://abp.io/packages). You can refer to [this document](https://docs.abp.io/en/abp/latest/Nightly-Builds) to learn how to use the nightly packages.
+We will continue to publish **nightly builds** for all the [ABP Framework packages](https://abp.io/packages). Nightly pages are built from the development branch. You can refer to [this document](https://docs.abp.io/en/abp/latest/Nightly-Builds) to learn how to use the nightly packages.
 
 ## Get Started with the RC Versions
 
-Please try the preview versions and provide feedback to us to release more stable versions. Please open an  issue on the [GitHub repository](https://github.com/abpframework/abp/issues/new) if you find a bug.
+Please try the preview versions and provide feedback to us to release more stable versions. Please open an  issue on the [GitHub repository](https://github.com/abpframework/abp/issues/new) if you find a bug or want to give feedback.
 
 ### Update the ABP CLI to the 3.1.0-rc.1
 
-***TODO***
+Since this is the first preview version, you need to upgrade the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) to the `3.1.0-rc.1` to be able to use the preview features:
+
+````bash
+dotnet tool update Volo.Abp.Cli -g --version 3.1.0-rc.1
+````
 
 ### New Solutions
 
@@ -73,7 +79,7 @@ Old behavior remains exist. If you want to switch to the new flow (which is reco
 
 4) Change the `oAuthConfig` section in the `src/environments/environment.ts` file of the Angular application.
 
-You can take [this new configuration](https://github.com/abpframework/abp/blob/dev/templates/app/angular/src/environments/environment.ts) as a reference. Main changes are;
+You can take [this new configuration](https://gist.github.com/hikalkan/e7f6ae7f507b201783682dccaeadc5e3) as a reference. Main changes are;
 
 * Added `responseType` as `code`.
 * Added `redirectUri`
@@ -125,38 +131,58 @@ See the issue [#5061](https://github.com/abpframework/abp/issues/5061) until thi
 
 Implemented the infrastructure for social/external logins in the account module. So, now you can easily configure your application to support social/external logins by [following the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Authentication/Social-External-Logins.md). Once you configure a provider, a button will appear on the login page to use this provider.
 
+The social logins will work as expected even if you are using the Angular UI, since the Angular UI uses the MVC login using the authorization code flow implemented with this new version (as explained above).
+
 ### Forgot/Reset Password
 
-TODO
+Implemented forgot password / password reset for the account module.
+
+You can now enter your email address to get an email containing a **password reset link**:
+
+![forgot-password](forgot-password.png)
+
+When you click to the link, you are redirected to a password reset page to determine your new password:
+
+![reset-password](reset-password.png)
 
 ### External Login System
 
-TODO
+The standard Social/External Login system (like Facebook login) works via OpenID Connect. That means the user is redirected to the login provider, logins there and redirected to your application.
+
+While this is pretty nice for most scenarios, sometimes you want a simpler external login mechanism: User enters username & password in your own application's login form and you check the username & password from another source, not from your own database.
+
+ABP v3.1 introduces an External Login System to check username & password from any source (from an external database, a REST service or from an LDAP / Active Directory server).
+
+You can check the [issue #4977](https://github.com/abpframework/abp/issues/4977#issuecomment-670006297) until it is fully documented.
+
+We've implemented LDAP authentication for the ABP Commercial, using this new login extension system (see the ABP Commercial section below).
 
 ### User Security Logs
 
-TODO
+The new [Security Log System](https://github.com/abpframework/abp/issues/4492) (of the Identity module) automatically logs all authentication related operations (login, logout, change password...) to a `AbpSecurityLogs` table in the database.
 
 ### New BLOB Storage Providers
 
-TODO: AWS & Aliyun
+Implemented [AWS](https://github.com/abpframework/abp/blob/dev/docs/en/Blob-Storing-Aws.md) and [Aliyun](https://github.com/abpframework/abp/blob/dev/docs/en/Blob-Storing-Aliyun.md) providers for the [BLOB storing](https://docs.abp.io/en/abp/latest/Blob-Storing) system with this version.
 
 ### Other Features / Highlights
 
-* UOW level caching system
-* Console app template changes
-* Make Volo.Abp.Ldap support multi-tenancy.
-* Upgraded to AutoMapper 10.
-* Allow to put static resources (js/css) under the Components folder
+Here, some other highlights from this release;
+
+* UOW level caching system [#4796](https://github.com/abpframework/abp/issues/4796)
+* Refactored the console application template to better integrate to the host builder [#5006](https://github.com/abpframework/abp/issues/5006)
+* [Volo.Abp.Ldap](https://www.nuget.org/packages/Volo.Abp.Ldap) package now supports multi-tenancy.
 * [Introduce BasicAggregateRoot base class](https://github.com/abpframework/abp/issues/4808)
 * [Try to set GUID Id in the InsertAsync method of the EF Core repository](https://github.com/abpframework/abp/pull/4634)
 * [Added GetPagedListAsync methods to the repository](https://github.com/abpframework/abp/pull/4617)
 * [Configure Prettier for the solutions](https://github.com/abpframework/abp/issues/4318)
 * [Define new layout hooks: before page content & after page content](https://github.com/abpframework/abp/issues/4008)
+* Upgraded to AutoMapper 10.
+* Allow to put static resources (js, css... files) under the Components folder for ASP.NET Core MVC UI.
 
 ## What's New with the ABP Commercial v3.1
 
-### Social/External Logins
+### Security Logs UI
 
 TODO
 
@@ -164,11 +190,8 @@ TODO
 
 TODO (with settings UI)
 
-### Security Logs UI
-
-TODO
-
 ### Others
 
-* Lock a user for a while
-* Angular UI Code Generate re-written
+* **Social logins** and **authorization code flow** are also implemented for the ABP Commercial, just as described above.
+* Allow to **lock a user** for a given period of time (locked user can not login to the application).
+* **Angular UI code generate** has been re-written using the Angular Schematics for the **ABP Suite**.
