@@ -20,7 +20,7 @@ On the page above, you can;
 You can switch between existing tenants by using the tenant switching component in the child pages of the `AccountLayoutComponent` (like Login page). Angular UI sends the selected tenant id to the backend as `__tenant` header on each request.
 
 
-## Domain Tenant Resolver
+<h2 id="domain-tenant-resolver">Domain Tenant Resolver</h2>
 
 Angular UI can get the tenant name from the app running URL. You can determine the current tenant by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). To do this, you need to set the `application.baseUrl` property in the environment:
 
