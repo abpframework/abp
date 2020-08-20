@@ -16,7 +16,7 @@ describe('CommonUtils', () => {
     });
   });
 
-  describe('#isUndefinedOrEmptyString & #exists', () => {
+  describe('#isUndefinedOrEmptyString', () => {
     test.each`
       value        | expected
       ${null}      | ${false}
