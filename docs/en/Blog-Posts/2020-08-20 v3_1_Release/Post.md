@@ -1,6 +1,8 @@
 # ABP Framework v3.1 RC.1 Has Been Released
 
-Today, we are releasing the **ABP Framework version 3.1 Release Candidate 1** (RC.1). The development cycle for this version was ~7 weeks. It was the longest development cycle for a feature version release ever. There were two main reasons of this long development cycle;
+Today, we are releasing the **ABP Framework version 3.1 Release Candidate 1** (RC.1). The development cycle for this version was **~7 weeks**. It was the longest development cycle for a feature version release ever. We have completed **~150 issues**, merged **~150 PRs** and made **~1,000 commits** only in the main [abp repository](https://github.com/abpframework/abp). See the related [milestone](https://github.com/abpframework/abp/milestone/38?closed=1) on GitHub.
+
+There were two main reasons of this long development cycle;
 
 * We've switched to **4-weeks** release cycle (was discussed in [this issue](https://github.com/abpframework/abp/issues/4692)).
 * We've [re-written](https://github.com/abpframework/abp/issues/4881) the Angular service proxy generation system using the Angular schematics to make it more stable. There were some problems with the previous implementation.
