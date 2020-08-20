@@ -227,6 +227,7 @@ ABP Suite also supports code generation on module development.
 ### Others
 
 * **Social logins** and **authorization code flow** are also implemented for the ABP Commercial, just as described above.
+* Added breadcrumb and file icons for the **file management module**.
 
 ## The ABP Community
 
