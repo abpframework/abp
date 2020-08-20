@@ -8,7 +8,7 @@ import {
   createTypeSimplifier,
   createTypesToImportsReducer,
   flattenUnionTypes,
-  removeTypeModifiers,
+  normalizeTypeAnnotations,
 } from './type';
 
 export function createImportRefsToModelMapper(solution: string, types: Record<string, Type>) {
@@ -37,6 +37,7 @@ export function createImportRefsToModelMapper(solution: string, types: Record<st
 
           const interfaceIndirect = mapImportRefToInterface(ref);
           if (interfaceIndirect) model.interfaces.push(interfaceIndirect);
+          reduceImportRefToImport(imports, ref);
         });
 
       model.imports.push(_import);
@@ -102,7 +103,7 @@ export function createImportRefToImportReducerCreator(
 
 export function mergeBaseTypeWithProperties({ baseType, genericArguments, properties }: Type) {
   const removeGenerics = createGenericRemover(genericArguments);
-  const clearTypes = (type: string) => removeTypeModifiers(removeGenerics(type));
+  const clearTypes = (type: string) => normalizeTypeAnnotations(removeGenerics(type));
   const baseTypes = baseType ? [baseType] : [];
   const propTypes = (properties ?? []).map(({ type }) => type);
 

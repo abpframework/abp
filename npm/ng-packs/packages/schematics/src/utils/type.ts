@@ -24,7 +24,7 @@ export function createTypeParser(replacerFn = (t: string) => t) {
   return (originalType: string) =>
     flattenUnionTypes([], originalType)
       .map(type => {
-        type = removeTypeModifiers(type);
+        type = removeTypeModifiers(normalizeTypeAnnotations(type));
         type = type.replace(
           /System\.([0-9A-Za-z]+)/g,
           (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
@@ -45,9 +45,13 @@ export function flattenUnionTypes(types: string[], type: string) {
   return types;
 }
 
-export function removeTypeModifiers(type: string) {
-  type = type.startsWith('[') ? type.slice(1, -1) + '[]' : type;
+export function normalizeTypeAnnotations(type: string) {
+  type = type.replace(/\[(.+)+\]/g, '$1[]');
   return type.replace(/\?/g, '');
+}
+
+export function removeTypeModifiers(type: string) {
+  return type.replace(/\[\]/g, '');
 }
 
 export function createTypesToImportsReducer(solution: string, namespace: string) {
@@ -75,13 +79,14 @@ export function createTypesToImportsReducer(solution: string, namespace: string)
 
 export function createTypeToImportMapper(solution: string, namespace: string) {
   const adaptType = createTypeAdapter(solution);
+  const simplifyType = createTypeSimplifier(solution);
 
   return (type: string, isEnum: boolean) => {
     if (!type || type.startsWith('System')) return;
 
     const modelNamespace = parseNamespace(solution, type);
-    const refs = [type];
-    const specifiers = [adaptType(type.split('<')[0])];
+    const refs = [removeTypeModifiers(type)];
+    const specifiers = [adaptType(simplifyType(type).split('<')[0])];
     const path = /^Volo\.Abp\.(Application\.Dtos|ObjectExtending)/.test(type)
       ? '@abp/ng.core'
       : isEnum
