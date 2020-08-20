@@ -55,6 +55,9 @@
     "WaitingForYourAnswer": "Waiting for your answer",
     "Asked": "asked",
     "AllQuestions": "All Questions",
-    "NextVersion": "Next Version"
+    "NextVersion": "Next Version",
+    "MilestoneErrorMessage": "Could not get the current milestone details from Github.",
+    "QuestionItemErrorMessage": "Could not get the latest question details from Stackoverflow.",
+    "Oops": "Oops!"
   }
 }
