@@ -28,18 +28,11 @@ export function createImportRefsToModelMapper({ solution, types }: ModelGenerato
     const namespace = parseNamespace(solution, importRefs[0]);
     const path = relativePathToModel(namespace, namespace);
     const model = new Model({ namespace, path });
+    const imports: Import[] = [];
 
-    const reduceImportRefToImport = createImportRefToImportReducer(namespace);
-    const imports = importRefs.reduce((accumulatedImports, ref) => {
-      const interfaceDirect = mapImportRefToInterface(ref);
-      if (interfaceDirect && !types[ref].isEnum) model.interfaces.push(interfaceDirect);
-
-      return reduceImportRefToImport(accumulatedImports, ref);
-    }, []);
-
-    imports.forEach(_import => {
-      if (_import.path === model.path)
-        return _import.refs.forEach(ref => {
+    const reduceImportRefToImport = createImportRefToImportReducer(namespace, _import => {
+      if (_import.path === model.path) {
+        _import.refs.forEach(ref => {
           if (model.interfaces.some(i => i.ref === ref)) return;
 
           const interfaceIndirect = mapImportRefToInterface(ref);
@@ -47,8 +40,20 @@ export function createImportRefsToModelMapper({ solution, types }: ModelGenerato
           reduceImportRefToImport(imports, ref);
         });
 
-      model.imports.push(_import);
+        return false;
+      }
+
+      return true;
     });
+
+    importRefs
+      .reduce((accumulatedImports, ref) => {
+        const interfaceDirect = mapImportRefToInterface(ref);
+        if (interfaceDirect && !types[ref].isEnum) model.interfaces.push(interfaceDirect);
+
+        return reduceImportRefToImport(accumulatedImports, ref);
+      }, imports)
+      .forEach(_import => model.imports.push(_import));
 
     sortInterfaces(model.interfaces);
 
@@ -92,7 +97,7 @@ export function createImportRefToImportReducerCreator(
   solution: string,
   types: Record<string, Type>,
 ) {
-  return (namespace: string) => {
+  return (namespace: string, filterFn: (imports: Import) => boolean) => {
     const reduceTypesToImport = createTypesToImportsReducer(solution, namespace);
 
     return (imports: Import[], importRef: string) =>
@@ -105,7 +110,7 @@ export function createImportRefToImportReducerCreator(
 
           return acc;
         }, []),
-      );
+      ).filter(filterFn);
   };
 }
 
