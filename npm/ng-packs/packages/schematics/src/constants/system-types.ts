@@ -10,6 +10,7 @@ export const SYSTEM_TYPES = new Map([
   ['Int16', 'number'],
   ['Int32', 'number'],
   ['Int64', 'number'],
+  ['Net.HttpStatusCode', 'number'],
   ['Object', 'object'],
   ['Sbyte', 'number'],
   ['Single', 'number'],

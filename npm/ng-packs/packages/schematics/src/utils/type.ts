@@ -16,7 +16,7 @@ export function createTypeParser(replacerFn = (t: string) => t) {
       .map(type => {
         type = normalizeTypeAnnotations(type);
         type = type.replace(
-          /System\.([0-9A-Za-z]+)/g,
+          /System\.([0-9A-Za-z.]+)/g,
           (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
         );
 
