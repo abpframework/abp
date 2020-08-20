@@ -1,6 +1,7 @@
 export * from './angular';
 export * from './ast';
 export * from './common';
+export * from './enum';
 export * from './import';
 export * from './model';
 export * from './namespace';

@@ -1,7 +1,7 @@
 import { normalize, strings } from '@angular-devkit/core';
 import { applyTemplates, branchAndMerge, chain, move, SchematicContext, SchematicsException, Tree, url } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, createControllerToServiceMapper, createImportRefsToModelMapper, interpolate, resolveProject, serializeParameters } from '../../utils';
+import { applyWithOverwrite, buildDefaultPath, createApiDefinitionReader, createControllerToServiceMapper, createImportRefsToModelMapper, createImportRefToEnumMapper, getEnumNamesFromImports, interpolate, resolveProject, serializeParameters } from '../../utils';
 import * as cases from '../../utils/text';
 import type { Schema as GenerateProxySchema } from './schema';
 
@@ -45,20 +45,46 @@ export default function(params: GenerateProxySchema) {
       );
 
       const mapImportRefsToModel = createImportRefsToModelMapper(solution, types);
+      const modelImports: Record<string, string[]> = {};
 
       const createModelFiles = chain(
         Object.values(serviceImports).map(refs => {
+          const model = mapImportRefsToModel(refs);
+          model.imports.forEach(({refs, path}) => refs.forEach(ref => {
+            if (path === '@abp/ng.core') return;
+            if (!modelImports[path]) return (modelImports[path] = [ref]);
+            modelImports[path] = [...new Set([...modelImports[path], ref])];
+          }));
+
           return applyWithOverwrite(url('./files-model'), [
             applyTemplates({
               ...cases,
-              ...mapImportRefsToModel(refs),
+              ...model,
             }),
             move(normalize(targetPath)),
           ]);
         }),
       );
 
-      return branchAndMerge(chain([createServiceFiles, createModelFiles]));
+      const mapImportRefToEnum = createImportRefToEnumMapper(solution, types);
+      const enumRefs = [...new Set([
+        ...getEnumNamesFromImports(serviceImports),
+        ...getEnumNamesFromImports(modelImports),
+      ])];
+
+      const createEnumFiles = chain(
+        enumRefs.map(ref => {
+          return applyWithOverwrite(url('./files-enum'), [
+            applyTemplates({
+              ...cases,
+              ...mapImportRefToEnum(ref),
+            }),
+            move(normalize(targetPath)),
+          ]);
+        }),
+      );
+
+      return branchAndMerge(chain([createServiceFiles, createModelFiles, createEnumFiles]));
     },
   ]);
 }
