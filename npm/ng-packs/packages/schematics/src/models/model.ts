@@ -5,6 +5,7 @@ export class Model {
   imports: Import[] = [];
   interfaces: Interface[] = [];
   namespace: string;
+  path: string;
 
   constructor(options: ModelOptions) {
     Object.assign(this, options);

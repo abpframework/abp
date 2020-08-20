@@ -1,6 +1,6 @@
 import { strings } from '@angular-devkit/core';
 import { Import, Interface, Model, Property, Type, TypeWithEnum } from '../models';
-import { sortImports } from './import';
+import { isEnumImport } from './enum';
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
 import { parseGenerics } from './tree';
@@ -26,7 +26,8 @@ export function createImportRefsToModelMapper({ solution, types }: ModelGenerato
 
   return (importRefs: string[]) => {
     const namespace = parseNamespace(solution, importRefs[0]);
-    const model = new Model({ namespace });
+    const path = relativePathToModel(namespace, namespace);
+    const model = new Model({ namespace, path });
 
     const reduceImportRefToImport = createImportRefToImportReducer(namespace);
     const imports = importRefs.reduce((accumulatedImports, ref) => {
@@ -36,11 +37,8 @@ export function createImportRefsToModelMapper({ solution, types }: ModelGenerato
       return reduceImportRefToImport(accumulatedImports, ref);
     }, []);
 
-    sortImports(imports);
-
-    const selfPath = relativePathToModel(namespace, namespace);
     imports.forEach(_import => {
-      if (_import.path === selfPath)
+      if (_import.path === model.path)
         return _import.refs.forEach(ref => {
           if (model.interfaces.some(i => i.ref === ref)) return;
 
@@ -132,4 +130,18 @@ export function createGenericRemover(genericArguments: string[] | null) {
             .filter((t: string) => !genericArguments.includes(t))
             .join(',');
         });
+}
+
+export function filterModelRefsToGenerate(
+  modelImports: Record<string, string[]>,
+  modelsCreated: Model[],
+) {
+  const created = modelsCreated.map(m => m.path);
+
+  return Object.entries(modelImports).reduce((acc: string[][], [path, refs]) => {
+    if (isEnumImport(path)) return acc;
+    if (created.includes(path)) return acc;
+    acc.push(refs);
+    return acc;
+  }, []);
 }

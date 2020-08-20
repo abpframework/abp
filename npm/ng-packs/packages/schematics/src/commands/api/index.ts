@@ -11,7 +11,7 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { ServiceGeneratorParams } from '../../models';
+import { Model, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildDefaultPath,
@@ -20,6 +20,7 @@ import {
   createImportRefsToModelMapper,
   createImportRefToEnumMapper,
   EnumGeneratorParams,
+  filterModelRefsToGenerate,
   getEnumNamesFromImports,
   interpolate,
   ModelGeneratorParams,
@@ -107,8 +108,12 @@ function createModelGenerator(params: ModelGeneratorParams) {
   const { targetPath, serviceImports, modelImports } = params;
   const mapImportRefsToModel = createImportRefsToModelMapper(params);
 
-  return chain(
-    Object.values(serviceImports).reduce((rules: Rule[], refs) => {
+  return chain(reduceImportRefsToRules(Object.values(serviceImports)));
+
+  function reduceImportRefsToRules(importRefs: string[][], models: Model[] = []): Rule[] {
+    if (!importRefs.length) return [];
+
+    const accumulatedRules = importRefs.reduce((rules: Rule[], refs) => {
       const model = mapImportRefsToModel(refs);
       model.imports.forEach(({ refs, path }) =>
         refs.forEach(ref => {
@@ -117,6 +122,7 @@ function createModelGenerator(params: ModelGeneratorParams) {
           modelImports[path] = [...new Set([...modelImports[path], ref])];
         }),
       );
+      models.push(model);
 
       const rule = applyWithOverwrite(url('./files-model'), [
         applyTemplates({
@@ -128,8 +134,13 @@ function createModelGenerator(params: ModelGeneratorParams) {
       rules.push(rule);
 
       return rules;
-    }, []),
-  );
+    }, []);
+
+    const refsToGenerate = filterModelRefsToGenerate(modelImports, models);
+    reduceImportRefsToRules(refsToGenerate).forEach(rule => accumulatedRules.push(rule));
+
+    return accumulatedRules;
+  }
 }
 
 function createServiceGenerator(params: ServiceGeneratorParams) {

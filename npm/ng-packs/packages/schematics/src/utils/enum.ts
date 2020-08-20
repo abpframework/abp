@@ -12,9 +12,13 @@ export interface EnumGeneratorParams {
   modelImports: Record<string, string[]>;
 }
 
+export function isEnumImport(path: string) {
+  return path.includes('/enums/');
+}
+
 export function getEnumNamesFromImports(serviceImports: Record<string, string[]>) {
   return Object.keys(serviceImports)
-    .filter(path => path.includes('/enums/'))
+    .filter(isEnumImport)
     .reduce((acc: string[], path) => {
       serviceImports[path].forEach(_import => acc.push(_import));
       return acc;
