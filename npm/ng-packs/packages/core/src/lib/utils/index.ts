@@ -10,6 +10,7 @@ export * from './lazy-load-utils';
 export * from './localization-utils';
 export * from './multi-tenancy-utils';
 export * from './number-utils';
+export * from './object-utils';
 export * from './route-utils';
 export * from './rxjs-utils';
 export * from './string-utils';
