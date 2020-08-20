@@ -325,13 +325,16 @@ This section only explains the EF Core related usage of the `ObjectExtensionMana
 ObjectExtensionManager.Instance
     .MapEfCoreProperty<IdentityRole, string>(
         "Title",
-        builder => { builder.HasMaxLength(64); }
+        (entityBuilder, propertyBuilder) =>
+        {
+            propertyBuilder.HasMaxLength(64);
+        }
     );
 ````
 
 If the related module has implemented this feature (by using the `ConfigureEfCoreEntity` explained below), then the new property is added to the model. Then you need to run the standard `Add-Migration` and `Update-Database` commands to update your database to add the new field.
 
->`MapEfCoreProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEntityExtensions` class that is safe to use this method inside.
+>`MapEfCoreProperty` method must be called before using the related `DbContext`. It is a static method. The best way is to use it in your application as earlier as possible. The application startup template has a `YourProjectNameEfCoreEntityExtensionMappings` class that is safe to use this method inside.
 
 ### ConfigureEfCoreEntity
 
