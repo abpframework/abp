@@ -15,7 +15,7 @@ In addition, we are starting to deploy a **preview version** 2-weeks before the 
 
 Today, we've released `3.1.0-rc.1` as the first preview version. We may release more previews if it is needed until the stable 3.1.0 version.
 
-The stable `3.1.0` version will be released on September 3, 2020. Next RC version, `3.2.0-rc.1` is planned for September 17, 2020 (2 weeks after the stable 3.1 version and 2 weeks before the stable 3.2 version).
+**The stable `3.1.0` version will be released on September 3, 2020.** Next RC version, `3.2.0-rc.1`, is planned for September 17, 2020 (2 weeks after the stable 3.1.0 and 2 weeks before the stable 3.2.0).
 
 We **won't add new features** to a version after publishing the preview version. We only will make **bug fixes** until the stable version. The new features being developed in this period will be available in the next version.
 
@@ -55,7 +55,7 @@ If you already have a solution and want to use/test the latest RC/Preview versio
 
 > Note that the `abp switch-to-preview` command was being used to switch to nightly builds before the v3.1. Now, you should use the `abp switch-to-nightly` for [nightly builds](https://docs.abp.io/en/abp/latest/Nightly-Builds).
 
-## What's New with the ABP Framework 3.1
+## What's New with the ABP Framework 3.1 RC.1
 
 ### Angular Service Proxies
 
@@ -93,7 +93,7 @@ The new "Global Features" system allows to **enable/disable features of an appli
 
 When you disable a feature;
 
-* The **database tables** related to that feature should not be included in the database.
+* The **database tables** related to that feature should not be created in the database.
 * The **HTTP APIs** related to that feature should not be exposed. They returns 404 if they are directly requested.
 
 So, the goal is that; when you disable a feature, it should behave like that feature doesn't exists in your system at all.
@@ -180,7 +180,7 @@ Here, some other highlights from this release;
 * Allow to put static resources (js, css... files) under the Components folder for ASP.NET Core MVC UI.
 * Upgraded to AutoMapper 10 and Quartz 3.1 for the related integration packages.
 
-## What's New with the ABP Commercial v3.1
+## What's New with the ABP Commercial v3.1 RC.1
 
 ### Security Logs UI
 
@@ -227,3 +227,18 @@ ABP Suite also supports code generation on module development.
 ### Others
 
 * **Social logins** and **authorization code flow** are also implemented for the ABP Commercial, just as described above.
+
+## The ABP Community
+
+We've lunched the [community.abp.io](https://community.abp.io/) ~two weeks ago with its initial version. It only has "Article submission" system for now. We are developing new exciting features. There will be an update in a few days and we'll publish a new blog post for it.
+
+## Conclusion
+
+The main goals of the 3.1 version were;
+
+* Complete the missing **authentication features** (like social logins, LDAP authentication, authorization code flow for the Angular UI...) for the ABP Framework & ABP Commercial.
+* Re-write a stable and feature complete **Angular service proxy generation** system for the ABP Framework and CRUD UI generation system for the ABP Commercial.
+* Develop a system to lunch **preview versions** of the platform. `3.1.0-rc.1` is the first preview version that has been published with this new system.
+* Complete the fundamental **documentation & tutorials** (we've even created a [video tutorial series](https://www.youtube.com/watch?v=cJzyIFfAlp8&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ)).
+
+ABP.IO platform will be more mature & stable with the v3.1. Enjoy Coding!
