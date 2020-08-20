@@ -4,7 +4,7 @@ export function deepMerge(target, source) {
   } else if (isNullOrUndefined(target) && isNullOrUndefined(source)) {
     return {};
   } else {
-    return isNullOrUndefined(source) ? target : source;
+    return exists(source) ? source : target;
   }
 }
 
@@ -15,14 +15,14 @@ function deepMergeRecursively(target, source) {
     isArray(target) ||
     isArray(source) || // at least one array
     !isObject(target) ||
-    !isObject(source); // at least one not an object;
+    !isObject(source); // at least one not an object
 
   /**
    * if we will not recurse any further,
    * we will prioritize source if it is a defined value.
    */
   if (shouldNotRecurse) {
-    return !isNullOrUndefined(source) ? source : target;
+    return exists(source) ? source : target;
   }
 
   const keysOfTarget = Object.keys(target);
@@ -36,6 +36,10 @@ function deepMergeRecursively(target, source) {
 
 function isNullOrUndefined(obj) {
   return obj === null || obj === undefined;
+}
+
+function exists(obj) {
+  return !isNullOrUndefined(obj);
 }
 
 function isObject(obj) {
