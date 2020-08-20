@@ -18,7 +18,7 @@ describe('DeepMerge', () => {
     });
   });
 
-  it('should correctly return source if one of them is primitive', () => {
+  it('should correctly return source if one of them is primitive or an array', () => {
     const differentTestValues = [
       {
         target: 10,
@@ -72,7 +72,7 @@ describe('DeepMerge', () => {
     expect(deepMerge(target, source)).toEqual({ a: 4, b: 2, c: 3, d: 5, e: 6 });
   });
 
-  it('should merge arrays', () => {
+  it('should not merge arrays and return the latter', () => {
     const firstArray = [1, 2, 3];
     const secondArray = [3, 4, 5, 6];
     expect(deepMerge(firstArray, secondArray)).toEqual(secondArray);
