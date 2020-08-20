@@ -135,6 +135,14 @@
                 });
             }
 
+            function focusOnHash($container) {
+                if (location.hash === ''){
+                    return;
+                }
+
+                $('html, body').animate({ scrollTop: $(location.hash).offset().top + $(this).height() / 2 }, 'slow');
+            }
+
             function init() {
                 registerReplyLinks($widget);
                 registerEditLinks($widget);
@@ -142,6 +150,8 @@
 
                 registerUpdateOfNewComment($widget);
                 registerSubmissionOfNewComment($widget);
+
+                focusOnHash($widget);
             }
 
             return {
