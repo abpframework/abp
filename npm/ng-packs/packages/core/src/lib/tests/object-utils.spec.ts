@@ -1,11 +1,14 @@
 import { deepMerge } from '../utils/object-utils';
 
 describe('DeepMerge', () => {
-  it('should return empty object when both inputs are null or undefined', () => {
-    expect(deepMerge(undefined, undefined)).toEqual({});
-    expect(deepMerge(undefined, null)).toEqual({});
-    expect(deepMerge(null, undefined)).toEqual({});
-    expect(deepMerge(null, null)).toEqual({});
+  test.each`
+    target       | source
+    ${null}      | ${null}
+    ${null}      | ${undefined}
+    ${undefined} | ${null}
+    ${undefined} | ${undefined}
+  `('should return empty object when both inputs are $target and $source', ({ target, source }) => {
+    expect(deepMerge(target, source)).toEqual({});
   });
 
   test.each`
