@@ -1,3 +1,5 @@
+import { isObjectAndNotArray, isNullOrUndefined, exists, isArray, isObject } from './common-utils';
+
 export function deepMerge(target, source) {
   if (isObjectAndNotArray(target) && isObjectAndNotArray(source)) {
     return deepMergeRecursively(target, source);
@@ -32,24 +34,4 @@ function deepMergeRecursively(target, source) {
     retVal[key] = deepMergeRecursively(target[key], source[key]);
     return retVal;
   }, {});
-}
-
-function isNullOrUndefined(obj) {
-  return obj === null || obj === undefined;
-}
-
-function exists(obj) {
-  return !isNullOrUndefined(obj);
-}
-
-function isObject(obj) {
-  return obj instanceof Object;
-}
-
-function isArray(obj) {
-  return Array.isArray(obj);
-}
-
-function isObjectAndNotArray(obj) {
-  return isObject(obj) && !isArray(obj);
 }
