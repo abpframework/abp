@@ -38,9 +38,7 @@ Add the `DevExtreme.AspNet.Data` package to your `DevExtremeSample.Web` project.
 Install-Package DevExtreme.AspNet.Data
 ```
 
-
-
-### Adding DevExtreme NPM Depencies
+### Adding DevExtreme NPM Dependencies
 
 Open your `DevExtremeSample.Web` project folder with a command line and add `devextreme` NPM package:
 
@@ -214,45 +212,37 @@ Example: A button and a progress bar component:
 
 This example has been created by following [this documentation](https://js.devexpress.com/Demos/WidgetsGallery/Demo/ProgressBar/Overview/NetCore/Light/).
 
-## Sample Application
+## The Sample Application
 
 We have created a sample application with [Tree List](https://demos.devexpress.com/ASPNetCore/Demo/TreeList/Overview/) and [Data Grid](https://demos.devexpress.com/ASPNetCore/Demo/DataGrid/Overview/) examples.
 
+### The Source Code
+
 You can download the source code from [here](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Mvc).
 
-We have some notes about this sample and general usages of DevExtreme at ABP based application.
+### Data Grid
 
-### Data Storage
+TODO: Screenshots, locations of the views/services on the sample solution.
 
-We will use an in-memory list for using data storage for this sample.
+### Tree List
 
-There is a `SampleDataService.cs` file in `Data` folder at `*.Application.Contracts` project. We store all sample data here.
+TODO: Screenshots, locations of the views/services on the sample solution.
 
-We did not create `Entities` etc. Because we want to show "How to use DevExtreme?", because of that, in this sample we focused to application and UI layer.
+### Additional Notes
 
-### JSON Serialization
+#### Data Storage
 
-You can see some `[JsonProperty(Name = "OrderId")]` attributes at DTO's. In this sample, we use that attribute on DTO's properties because DevExtreme official resource is suggesting to _disable the conversion in the JSON serializer_ [(ref)](https://js.devexpress.com/Documentation/19_1/Guide/Angular_Components/Visual_Studio_Integration/Add_DevExtreme_to_an_ASP.NET_Core_Angular_Application/#Troubleshooting). **DO NOT DO THAT!**
+I've used an in-memory list to store data for this example, instead of a real database. Because it is not related to DevExpress usage. There is a `SampleDataService.cs` file in `Data` folder at `.Application.Contracts` project. All the data is stored here.
 
-If you change **the conversion in the JSON serializer**, some pre-build abp modules may occur a problem.
+#### JSON Serialization
 
-### MVC
+You can see some `JsonProperty` attributes on the DTO properties. I uses these attributes because DevExtreme expects `PascalCase` property names in the serialized JSON that is sent to the client. But ABP Framework & ASP.NET Core conventionally uses `camelCase` property names on JSON serialization. Adding these `JsonProperty` attributes ensures that the related properties are serialized as `PascalCase`.
 
-You can use some DevExtreme functions to create UI. The following code blocks show you how you can use it with ABP Applicaion Services.
+#### DevExtreme Components vs Application Service Methods
 
-```csharp
-Html.DevExtreme().DataGrid<Order>()
-            .DataSource(d => d.Mvc()
-                .Controller("Order") // Application Service Name 'without **AppService**'
-                .LoadAction("GetOrders") // Method Name 'without **Async**'
-                .InsertAction("InsertOrder")
-                .UpdateAction("UpdateOrder")
-                .DeleteAction("DeleteOrder")
-                .Key("OrderID")
-            )
-```
+ABP Framework conventionally converts application services to API Controllers. For example, see the application service below:
 
-```csharp
+````csharp
 public class OrderAppService : DevExtremeSampleAppService, IOrderAppService
 {
     public async Task<LoadResult> GetOrdersAsync(DataSourceLoadOptions loadOptions)
@@ -266,4 +256,18 @@ public class OrderAppService : DevExtremeSampleAppService, IOrderAppService
     }
     ...
 }
+````
+
+You can use these service methods for your DevExtreme components as shown below:
+
+```csharp
+Html.DevExtreme().DataGrid<Order>()
+            .DataSource(d => d.Mvc()
+                .Controller("Order") // Application Service Name without 'AppService'
+                .LoadAction("GetOrders") // Method Name without 'Async'
+                .InsertAction("InsertOrder")
+                .UpdateAction("UpdateOrder")
+                .DeleteAction("DeleteOrder")
+                .Key("OrderID")
+            )
 ```
