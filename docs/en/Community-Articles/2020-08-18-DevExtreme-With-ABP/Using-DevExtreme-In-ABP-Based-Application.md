@@ -2,6 +2,8 @@
 
 Hi, in this step by step article, I will show you how to integrate DevExtreme components into ABP Framework based applications.
 
+![both-example-result](both-example-result.png)
+
 ## Create the Project
 
 ABP Framework offers startup templates to get into the business faster. We can download a new startup template using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
@@ -40,20 +42,25 @@ Install-Package DevExtreme.AspNet.Data
 
 ### Adding DevExtreme NPM Dependencies
 
-Open your `DevExtremeSample.Web` project folder with a command line and add `devextreme` NPM package:
+Open your `DevExtremeSample.Web` project folder with a command line and add `devextreme` and `devextreme-aspnet-data` NPM packages:
 
 ````bash
 npm install devextreme
 ````
 
+````bash
+npm install devextreme-aspnet-data
+````
+
 ### Adding Resource Mappings
 
-The `devextreme` NPM package is saved under `node_modules` folder. We need to move the needed files in our `wwwroot/libs` folder to use them in our web project. We can do it using the ABP [client side resource mapping](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Client-Side-Package-Management) system.
+The `devextreme` and `devextreme-aspnet-data` NPM packages are saved under `node_modules` folder. We need to move the needed files in our `wwwroot/libs` folder to use them in our web project. We can do it using the ABP [client side resource mapping](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Client-Side-Package-Management) system.
 
-Open the `abp.resourcemapping.js` file in your `DevExtremeSample.Web` project and add the following definition to inside `mappings` object.
+Open the `abp.resourcemapping.js` file in your `DevExtremeSample.Web` project and add the following definitions to inside `mappings` object.
 
 ````json
-"@node_modules/devextreme/dist/**/*": "@libs/devextreme/"
+"@node_modules/devextreme/dist/**/*": "@libs/devextreme/",
+"@node_modules/devextreme-aspnet-data/js/dx.aspnet.data.js": "@libs/devextreme/js/"
 ````
 
 The final `abp.resourcemapping.js` file should look like below:
@@ -63,6 +70,7 @@ module.exports = {
   aliases: {},
   mappings: {
     "@node_modules/devextreme/dist/**/*": "@libs/devextreme/",
+    "@node_modules/devextreme-aspnet-data/js/dx.aspnet.data.js": "@libs/devextreme/"
   },
 };
 ```
@@ -222,11 +230,32 @@ You can download the source code from [here](https://github.com/abpframework/abp
 
 ### Data Grid
 
-TODO: Screenshots, locations of the views/services on the sample solution.
+You can see the full working example of [Data Grid](https://demos.devexpress.com/ASPNetCore/Demo/DataGrid/Overview/).
+
+![data-grid-final](data-grid-final.png)
+
+The related files for this example are highlighted at the following screenshots.
+
+![data-grid-app-contract](data-grid-app-contract.png)
+
+![data-grid-application](data-grid-application.png)
+
+![data-grid-web](data-grid-web.png)
 
 ### Tree List
 
-TODO: Screenshots, locations of the views/services on the sample solution.
+
+You can see the full working example of [Tree List](https://demos.devexpress.com/ASPNetCore/Demo/TreeList/Overview/).
+
+![tree-list-final](tree-list-final.png)
+
+The related files for this example are highlighted at the following screenshots.
+
+![tree-list-app-contract](tree-list-app-contract.png)
+
+![tree-list-application](tree-list-application.png)
+
+![tree-list-web](tree-list-web.png)
 
 ### Additional Notes
 
@@ -236,7 +265,7 @@ I've used an in-memory list to store data for this example, instead of a real da
 
 #### JSON Serialization
 
-You can see some `JsonProperty` attributes on the DTO properties. I uses these attributes because DevExtreme expects `PascalCase` property names in the serialized JSON that is sent to the client. But ABP Framework & ASP.NET Core conventionally uses `camelCase` property names on JSON serialization. Adding these `JsonProperty` attributes ensures that the related properties are serialized as `PascalCase`.
+You can see some `JsonProperty` attributes on the DTO properties. I uses these attributes because DevExtreme example expects `PascalCase` property names in the serialized JSON that is sent to the client. But ABP Framework & ASP.NET Core conventionally uses `camelCase` property names on JSON serialization. Adding these `JsonProperty` attributes ensures that the related properties are serialized as `PascalCase`.
 
 #### DevExtreme Components vs Application Service Methods
 
