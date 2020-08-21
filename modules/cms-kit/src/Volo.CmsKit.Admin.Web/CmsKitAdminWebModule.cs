@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.CmsKit.Admin.Web.Menus;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -44,13 +43,7 @@ namespace Volo.CmsKit.Admin.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<CmsKitAdminWebModule>();
-            });
-
-            context.Services.AddAutoMapperObjectMapper<CmsKitAdminWebModule>();
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddMaps<CmsKitAdminWebModule>(validate: true);
+                options.FileSets.AddEmbedded<CmsKitAdminWebModule>("Volo.CmsKit.Admin.Web");
             });
 
             Configure<RazorPagesOptions>(options =>

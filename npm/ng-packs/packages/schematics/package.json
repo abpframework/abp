@@ -1,13 +1,13 @@
 {
   "name": "@abp/ng.schematics",
-  "version": "3.1.0-rc.1",
-  "description": "Schematics that works with ABP CLI",
+  "version": "3.0.5",
+  "description": "Schematics that works with ABP Backend",
   "keywords": [
     "schematics"
   ],
   "author": "",
   "license": "MIT",
-  "schematics": "./src/collection.json",
+  "schematics": "./collection.json",
   "dependencies": {
     "@angular-devkit/core": "~10.0.3",
     "@angular-devkit/schematics": "~10.0.3",

@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Public.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<CmsKitPublicWebModule>();
+                options.FileSets.AddEmbedded<CmsKitPublicWebModule>("Volo.CmsKit.Public.Web");
             });
 
             context.Services.AddAutoMapperObjectMapper<CmsKitPublicWebModule>();
