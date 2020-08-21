@@ -2,7 +2,7 @@ import { createTypeParser } from './type';
 
 export function parseNamespace(solution: string, type: string) {
   const parseType = createTypeParser();
-  let namespace = parseType(type)
+  let namespace = parseType(type)[0]
     .split('.')
     .slice(0, -1)
     .join('.');

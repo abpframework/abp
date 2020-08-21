@@ -1,14 +1,13 @@
 import { strings } from '@angular-devkit/core';
-import { Import, Interface, Model, Property, Type, TypeWithEnum } from '../models';
-import { isEnumImport } from './enum';
+import { VOLO_REGEX } from '../constants';
+import { Interface, Model, Property, Type, TypeWithEnum } from '../models';
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
 import { parseGenerics } from './tree';
 import {
+  createTypeParser,
   createTypeSimplifier,
   createTypesToImportsReducer,
-  flattenUnionTypes,
-  normalizeTypeAnnotations,
   removeTypeModifiers,
 } from './type';
 
@@ -20,38 +19,69 @@ export interface ModelGeneratorParams {
   modelImports: Record<string, string[]>;
 }
 
-export function createImportRefsToModelMapper({ solution, types }: ModelGeneratorParams) {
-  const mapImportRefToInterface = createImportRefToInterfaceMapper(types);
-  const createImportRefToImportReducer = createImportRefToImportReducerCreator(solution, types);
+export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
+  const reduceImportRefsToInterfaces = createImportRefToInterfaceReducerCreator(params);
+  const createRefToImportReducer = createRefToImportReducerCreator(params);
+  const { solution, types } = params;
 
-  return (importRefs: string[]) => {
-    const namespace = parseNamespace(solution, importRefs[0]);
-    const path = relativePathToModel(namespace, namespace);
-    const model = new Model({ namespace, path });
-    const imports: Import[] = [];
+  return (models: Model[], importRefs: string[]) => {
+    const enums: string[] = [];
+    const interfaces = importRefs.reduce(reduceImportRefsToInterfaces, []);
+    sortInterfaces(interfaces);
 
-    const reduceImportRefToImport = createImportRefToImportReducer(namespace, _import => {
-      if (_import.path !== model.path) return true;
+    interfaces.forEach(_interface => {
+      if (VOLO_REGEX.test(_interface.ref)) return;
 
-      _import.refs.reduce(reduceImportRefsToImportsAndInterfaces, imports);
-      return false;
+      if (types[_interface.ref]!.isEnum) {
+        if (!enums.includes(_interface.ref)) enums.push(_interface.ref);
+        return;
+      }
+
+      const index = models.findIndex(m => m.namespace === _interface.namespace);
+      if (index > -1) {
+        if (models[index].interfaces.some(i => i.identifier === _interface.identifier)) return;
+        models[index].interfaces.push(_interface);
+      } else {
+        const { namespace } = _interface;
+
+        models.push(
+          new Model({
+            interfaces: [_interface],
+            namespace,
+            path: relativePathToModel(namespace, namespace),
+          }),
+        );
+      }
     });
 
-    importRefs
-      .reduce(reduceImportRefsToImportsAndInterfaces, imports)
-      .forEach(_import => model.imports.push(_import));
+    models.forEach(model => {
+      let toBeImported: TypeWithEnum[] = [];
 
-    sortInterfaces(model.interfaces);
+      model.interfaces.forEach(_interface => {
+        const { baseType } = types[_interface.ref];
+        if (baseType && parseNamespace(solution, baseType) !== model.namespace)
+          toBeImported.push({
+            type: parseGenerics(baseType)
+              .toGenerics()
+              .join(''),
+            isEnum: false,
+          });
 
-    return model;
+        _interface.properties.forEach(prop => {
+          prop.refs.forEach(ref => {
+            if (parseNamespace(solution, ref) !== model.namespace)
+              toBeImported.push({ type: ref, isEnum: types[ref]?.isEnum });
+          });
+        });
+      });
 
-    function reduceImportRefsToImportsAndInterfaces(accumulatedImports: Import[], ref: string) {
-      if (model.interfaces.some(i => i.ref === ref)) return accumulatedImports;
+      if (!toBeImported.length) return;
 
-      const _interface = mapImportRefToInterface(ref);
-      if (_interface && !types[ref].isEnum) model.interfaces.push(_interface);
-      return reduceImportRefToImport(accumulatedImports, ref);
-    }
+      const reduceRefToImport = createRefToImportReducer(model.namespace);
+      reduceRefToImport(model.imports, toBeImported);
+    });
+
+    return models;
   };
 }
 
@@ -59,13 +89,19 @@ function sortInterfaces(interfaces: Interface[]) {
   interfaces.sort((a, b) => (a.identifier > b.identifier ? 1 : -1));
 }
 
-export function createImportRefToInterfaceMapper(types: Record<string, Type>) {
+export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorParams) {
+  const { solution, types } = params;
+  const parseType = createTypeParser(removeTypeModifiers);
   const simplifyType = createTypeSimplifier();
   const getIdentifier = (type: string) => removeTypeModifiers(simplifyType(type));
 
-  return (ref: string) => {
+  return reduceRefsToInterfaces;
+
+  function reduceRefsToInterfaces(interfaces: Interface[], ref: string) {
     const typeDef = types[ref];
-    if (!typeDef) return;
+    if (!typeDef) return interfaces;
+
+    const namespace = parseNamespace(solution, ref);
 
     const identifier = (typeDef.genericArguments ?? []).reduce(
       (acc, t, i) => acc.replace(`T${i}`, t),
@@ -73,74 +109,33 @@ export function createImportRefToInterfaceMapper(types: Record<string, Type>) {
     );
 
     const base = typeDef.baseType ? getIdentifier(typeDef.baseType) : null;
-    const _interface = new Interface({ identifier, base, ref });
+    const _interface = new Interface({ identifier, base, namespace, ref });
 
-    typeDef.properties?.forEach(({ name, typeSimple }) => {
-      name = strings.camelize(name);
-      const optional = typeSimple.endsWith('?') ? '?' : '';
-      const type = simplifyType(typeSimple);
+    typeDef.properties?.forEach(prop => {
+      const name = strings.camelize(prop.name);
+      const optional = prop.typeSimple.endsWith('?') ? '?' : '';
+      const type = simplifyType(prop.typeSimple);
+      const refs = parseType(prop.type).reduce(
+        (acc: string[], r) => acc.concat(parseGenerics(r).toGenerics()),
+        [],
+      );
 
-      _interface.properties.push(new Property({ name, optional, type }));
+      _interface.properties.push(new Property({ name, optional, type, refs }));
     });
 
-    return _interface;
-  };
+    interfaces.push(_interface);
+
+    return _interface.properties
+      .reduce<string[]>((refs, prop) => {
+        prop.refs.forEach(type => !types[type]?.isEnum && refs.push(type));
+        return refs;
+      }, [])
+      .concat(base || [])
+      .reduce<Interface[]>(reduceRefsToInterfaces, interfaces);
+  }
 }
 
-export function createImportRefToImportReducerCreator(
-  solution: string,
-  types: Record<string, Type>,
-) {
-  return (namespace: string, filterFn: (imports: Import) => boolean) => {
-    const reduceTypesToImport = createTypesToImportsReducer(solution, namespace);
-
-    return (imports: Import[], importRef: string) =>
-      reduceTypesToImport(
-        imports,
-        mergeBaseTypeWithProperties(types[importRef]).reduce((acc: TypeWithEnum[], typeName) => {
-          parseGenerics(typeName)
-            .toGenerics()
-            .forEach(type => acc.push({ type, isEnum: types[type]?.isEnum }));
-
-          return acc;
-        }, []),
-      ).filter(filterFn);
-  };
-}
-
-export function mergeBaseTypeWithProperties({ baseType, genericArguments, properties }: Type) {
-  const removeGenerics = createGenericRemover(genericArguments);
-  const clearTypes = (type: string) => normalizeTypeAnnotations(removeGenerics(type));
-  const baseTypes = baseType ? [baseType] : [];
-  const propTypes = (properties ?? []).map(({ type }) => type);
-
-  return [...baseTypes, ...propTypes].reduce(flattenUnionTypes, []).map(clearTypes);
-}
-
-export function createGenericRemover(genericArguments: string[] | null) {
-  if (!genericArguments) return (type: string) => type;
-
-  return (type: string) =>
-    genericArguments.includes(type)
-      ? ''
-      : type.replace(/<([^<>]+)>/, (_, match) => {
-          return match
-            .split(/,\s*/)
-            .filter((t: string) => !genericArguments.includes(t))
-            .join(',');
-        });
-}
-
-export function filterModelRefsToGenerate(
-  modelImports: Record<string, string[]>,
-  modelsCreated: Model[],
-) {
-  const created = modelsCreated.map(m => m.path);
-
-  return Object.entries(modelImports).reduce((acc: string[][], [path, refs]) => {
-    if (isEnumImport(path)) return acc;
-    if (created.includes(path)) return acc;
-    acc.push(refs);
-    return acc;
-  }, []);
+export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
+  const { solution } = params;
+  return (namespace: string) => createTypesToImportsReducer(solution, namespace);
 }

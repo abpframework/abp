@@ -4,23 +4,21 @@ import {
   branchAndMerge,
   chain,
   move,
-  Rule,
   SchematicContext,
   SchematicsException,
   Tree,
   url,
 } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { Model, ServiceGeneratorParams } from '../../models';
+import { ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildDefaultPath,
   createApiDefinitionReader,
   createControllerToServiceMapper,
-  createImportRefsToModelMapper,
+  createImportRefsToModelReducer,
   createImportRefToEnumMapper,
   EnumGeneratorParams,
-  filterModelRefsToGenerate,
   getEnumNamesFromImports,
   interpolate,
   ModelGeneratorParams,
@@ -106,41 +104,29 @@ function createEnumGenerator(params: EnumGeneratorParams) {
 
 function createModelGenerator(params: ModelGeneratorParams) {
   const { targetPath, serviceImports, modelImports } = params;
-  const mapImportRefsToModel = createImportRefsToModelMapper(params);
+  const reduceImportRefsToModels = createImportRefsToModelReducer(params);
+  const models = Object.values(serviceImports).reduce(reduceImportRefsToModels, []);
+  models.forEach(({ imports }) =>
+    imports.forEach(({ refs, path }) =>
+      refs.forEach(ref => {
+        if (path === '@abp/ng.core') return;
+        if (!modelImports[path]) return (modelImports[path] = [ref]);
+        modelImports[path] = [...new Set([...modelImports[path], ref])];
+      }),
+    ),
+  );
 
-  return chain(reduceImportRefsToRules(Object.values(serviceImports)));
-
-  function reduceImportRefsToRules(importRefs: string[][], models: Model[] = []): Rule[] {
-    if (!importRefs.length) return [];
-
-    const accumulatedRules = importRefs.reduce((rules: Rule[], refs) => {
-      const model = mapImportRefsToModel(refs);
-      model.imports.forEach(({ refs, path }) =>
-        refs.forEach(ref => {
-          if (path === '@abp/ng.core') return;
-          if (!modelImports[path]) return (modelImports[path] = [ref]);
-          modelImports[path] = [...new Set([...modelImports[path], ref])];
-        }),
-      );
-      models.push(model);
-
-      const rule = applyWithOverwrite(url('./files-model'), [
+  return chain(
+    models.map(model =>
+      applyWithOverwrite(url('./files-model'), [
         applyTemplates({
           ...cases,
           ...model,
         }),
         move(normalize(targetPath)),
-      ]);
-      rules.push(rule);
-
-      return rules;
-    }, []);
-
-    const refsToGenerate = filterModelRefsToGenerate(modelImports, models);
-    reduceImportRefsToRules(refsToGenerate).forEach(rule => accumulatedRules.push(rule));
-
-    return accumulatedRules;
-  }
+      ]),
+    ),
+  );
 }
 
 function createServiceGenerator(params: ServiceGeneratorParams) {

@@ -17,6 +17,7 @@ export type ModelOptions = Omissible<Model, 'imports' | 'interfaces'>;
 export class Interface {
   base: string | null;
   identifier: string;
+  namespace: string;
   properties: Property[] = [];
   ref: string;
 
@@ -32,10 +33,11 @@ export class Property {
   type: string;
   default: string = '';
   optional: '' | '?' = '';
+  refs: string[] = [];
 
   constructor(options: PropertyOptions) {
     Object.assign(this, options);
   }
 }
 
-export type PropertyOptions = Omissible<Property, 'default' | 'optional'>;
+export type PropertyOptions = Omissible<Property, 'default' | 'optional' | 'refs'>;

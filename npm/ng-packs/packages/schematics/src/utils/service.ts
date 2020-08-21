@@ -14,7 +14,12 @@ import {
 import { sortImports } from './import';
 import { parseNamespace } from './namespace';
 import { parseGenerics } from './tree';
-import { createTypeAdapter, createTypesToImportsReducer } from './type';
+import {
+  createTypeAdapter,
+  createTypeParser,
+  createTypesToImportsReducer,
+  removeTypeModifiers,
+} from './type';
 
 export function serializeParameters(parameters: Property[]) {
   return parameters.map(p => p.name + p.optional + ': ' + p.type + p.default, '').join(', ');
@@ -97,14 +102,19 @@ function createActionToImportsReducer(
   namespace: string,
 ) {
   const mapTypesToImports = createTypesToImportsReducer(solution, namespace);
+  const parseType = createTypeParser(removeTypeModifiers);
 
   return (imports: Import[], { parametersOnMethod, returnValue }: Action) =>
     mapTypesToImports(
       imports,
       [returnValue, ...parametersOnMethod].reduce((acc: TypeWithEnum[], param) => {
-        parseGenerics(param.type)
-          .toGenerics()
-          .forEach(type => acc.push({ type, isEnum: types[type]?.isEnum }));
+        parseType(param.type).forEach(paramType =>
+          parseGenerics(paramType)
+            .toGenerics()
+            .forEach(type => {
+              if (types[type]) acc.push({ type, isEnum: types[type].isEnum });
+            }),
+        );
 
         return acc;
       }, []),

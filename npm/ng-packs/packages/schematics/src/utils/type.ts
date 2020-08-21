@@ -1,5 +1,6 @@
 import { strings } from '@angular-devkit/core';
 import { SYSTEM_TYPES } from '../constants';
+import { VOLO_REGEX } from '../constants/volo';
 import { eImportKeyword } from '../enums';
 import { Import, TypeWithEnum } from '../models';
 import { parseNamespace } from './namespace';
@@ -7,22 +8,28 @@ import { relativePathToEnum, relativePathToModel } from './path';
 import { parseGenerics } from './tree';
 
 export function createTypeSimplifier() {
-  return createTypeParser(type => type.split('.').pop()!);
+  const parseType = createTypeParser(type => {
+    type = type.replace(
+      /System\.([0-9A-Za-z.]+)/g,
+      (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
+    );
+    return type.split('.').pop()!;
+  });
+  return (type: string) => parseType(type).join(' | ');
 }
 
 export function createTypeParser(replacerFn = (t: string) => t) {
-  return (originalType: string) =>
-    flattenUnionTypes([], originalType)
-      .map(type => {
-        type = normalizeTypeAnnotations(type);
-        type = type.replace(
-          /System\.([0-9A-Za-z.]+)/g,
-          (_, match) => SYSTEM_TYPES.get(match) ?? strings.camelize(match),
-        );
+  const normalizeType = createTypeNormalizer(replacerFn);
 
-        return replacerFn(type);
-      })
-      .join(' | ');
+  return (originalType: string) => flattenUnionTypes([], originalType).map(normalizeType);
+}
+
+export function createTypeNormalizer(replacerFn = (t: string) => t) {
+  return (type: string) => {
+    type = normalizeTypeAnnotations(type);
+
+    return replacerFn(type);
+  };
 }
 
 export function flattenUnionTypes(types: string[], type: string) {
@@ -77,7 +84,7 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
     const modelNamespace = parseNamespace(solution, type);
     const refs = [removeTypeModifiers(type)];
     const specifiers = [adaptType(simplifyType(refs[0]).split('<')[0])];
-    const path = /^Volo\.Abp\.(Application\.Dtos|ObjectExtending)/.test(type)
+    const path = VOLO_REGEX.test(type)
       ? '@abp/ng.core'
       : isEnum
       ? relativePathToEnum(namespace, modelNamespace, specifiers[0])
