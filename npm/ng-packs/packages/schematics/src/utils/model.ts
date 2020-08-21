@@ -61,9 +61,7 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
         const { baseType } = types[_interface.ref];
         if (baseType && parseNamespace(solution, baseType) !== model.namespace)
           toBeImported.push({
-            type: parseGenerics(baseType)
-              .toGenerics()
-              .join(''),
+            type: baseType.split('<')[0],
             isEnum: false,
           });
 
