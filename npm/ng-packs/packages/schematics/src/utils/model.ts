@@ -55,7 +55,7 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
     });
 
     models.forEach(model => {
-      let toBeImported: TypeWithEnum[] = [];
+      const toBeImported: TypeWithEnum[] = [];
 
       model.interfaces.forEach(_interface => {
         const { baseType } = types[_interface.ref];

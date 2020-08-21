@@ -41,20 +41,20 @@ export class Body {
   url: string;
 
   registerActionParameter = (param: ParameterInBody) => {
-    let { bindingSourceId, descriptorName, name, nameOnMethod } = param;
-    name = strings.camelize(name);
-    const value = descriptorName ? `${descriptorName}.${name}` : nameOnMethod;
+    const { bindingSourceId, descriptorName, name, nameOnMethod } = param;
+    const camelName = strings.camelize(name);
+    const value = descriptorName ? `${descriptorName}.${camelName}` : nameOnMethod;
 
     switch (bindingSourceId) {
       case eBindingSourceId.Model:
       case eBindingSourceId.Query:
-        this.params.push(`${name}: ${value}`);
+        this.params.push(`${camelName}: ${value}`);
         break;
       case eBindingSourceId.Body:
         this.body = value;
         break;
       case eBindingSourceId.Path:
-        const regex = new RegExp('{' + name + '}', 'g');
+        const regex = new RegExp('{' + camelName + '}', 'g');
         this.url = this.url.replace(regex, '${' + value + '}');
         break;
       default:

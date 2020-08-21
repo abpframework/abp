@@ -31,7 +31,7 @@ export type InterfaceOptions = Omissible<Interface, 'properties'>;
 export class Property {
   name: string;
   type: string;
-  default: string = '';
+  default = '';
   optional: '' | '?' = '';
   refs: string[] = [];
 
