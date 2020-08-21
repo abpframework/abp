@@ -1,7 +1,7 @@
 {
   "name": "@abp/ng.schematics",
-  "version": "3.0.5",
-  "description": "Schematics that works with ABP Suite",
+  "version": "3.1.0-rc.1",
+  "description": "Schematics that works with ABP CLI",
   "keywords": [
     "schematics"
   ],
@@ -12,13 +12,17 @@
     "@angular-devkit/core": "~10.0.3",
     "@angular-devkit/schematics": "~10.0.3",
     "got": "^11.5.2",
+    "jsonc-parser": "^2.3.0",
     "typescript": "~3.9.2"
   },
   "devDependencies": {
-    "@types/node": "^12.11.1",
+    "@schematics/angular": "~10.0.3",
     "@types/jest": "^26.0.0",
+    "@types/node": "^12.11.1",
     "jest": "^26.0.0",
-    "jest-preset-angular": "^8.2.0",
-    "@schematics/angular": "~10.0.3"
+    "jest-preset-angular": "^8.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
