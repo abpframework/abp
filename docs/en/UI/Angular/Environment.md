@@ -35,7 +35,7 @@ Take a look at example
 
 ```json
 {
-  ...
+  // ...
   "apis": {
     "default": {
       "url": "https://localhost:8080",
@@ -43,7 +43,8 @@ Take a look at example
     "AbpIdentity": {
       "url": "https://localhost:9090",
     }
-  }
+  },
+  // ...
 }
 ```
 
@@ -68,9 +69,9 @@ Everything else will be sent to `"https://localhost:8080"`
 
 You can read about `Localization` [here in detail](./Localization.md)
 
-## OAuthConfig
+## AuthConfig
 
-.....
+For authentication, we use [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc)
 
 ## RemoteEnvironment
 
