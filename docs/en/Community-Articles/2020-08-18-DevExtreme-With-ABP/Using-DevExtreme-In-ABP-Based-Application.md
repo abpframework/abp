@@ -2,13 +2,7 @@
 
 Hi, in this step by step article, I will show you how to integrate DevExtreme components into ABP Framework based applications.
 
-## Install DevExtreme
-
-You can follow [this documentation](https://js.devexpress.com/Documentation/17_1/Guide/ASP.NET_MVC_Controls/Prerequisites_and_Installation/) to install devexpress packages.
-
-## Preparing the Project
-
-### Startup template and the initial run
+## Create the Project
 
 ABP Framework offers startup templates to get into the business faster. We can download a new startup template using [ABP CLI](https://docs.abp.io/en/abp/latest/CLI):
 
@@ -24,6 +18,12 @@ Run the `DevExtremeSample.DbMigrator` application to create the database and see
 
 > _Default admin username is **admin** and password is **1q2w3E\***_
 
+## Install DevExtreme
+
+You can follow [this documentation](https://js.devexpress.com/Documentation/17_1/Guide/ASP.NET_MVC_Controls/Prerequisites_and_Installation/) to install DevExpress packages into your computer.
+
+> Don't forget to add _"DevExpress NuGet Feed"_ to your **Nuget Package Sources**.
+
 ### Adding DevExtreme NuGet Packages
 
 Add the `DevExtreme.AspNet.Core` NuGet package to the `DevExtremeSample.Application.Contracts` project.
@@ -38,7 +38,7 @@ Add the `DevExtreme.AspNet.Data` package to your `DevExtremeSample.Web` project.
 Install-Package DevExtreme.AspNet.Data
 ```
 
-> Please remember that, you must add _"DevExpress NuGet Feed"_ to your **Nuget Package Sources**. Check [this documentation](https://js.devexpress.com/Documentation/17_1/Guide/ASP.NET_MVC_Controls/Prerequisites_and_Installation/) for more information.
+
 
 ### Adding DevExtreme NPM Depencies
 
@@ -116,11 +116,11 @@ Configure<AbpBundlingOptions>(options =>
 
 ### Adding DevExtremeScriptContributor
 
-We cannot add DevExtreme js packages to `Global Script Bundles`, because DevExtreme is using some inline javascript codes and js packages requires to located in the `<head>` section.
+We can not add DevExtreme js packages to Global Script Bundles, just like done for the CSS files. Because DevExtreme requires to add its JavaScript files into the `<head>` section of the HTML document, while ABP Framework adds all JavaScript files to the end of the `<body>` (as a best practice).
 
-But we can create `ViewComponent` and render it at `<head>` section with `AbpLayoutHookOptions`.
+Fortunately, ABP Framework has a [layout hook system](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Customization-User-Interface#layout-hooks) that allows you to add any code into some specific positions in the HTML document. All you need to do is to create a `ViewComponent` and configure the layout hooks.
 
-First, create `DevExtremeScriptContributor.cs` file at your `Bundling` folder and copy following code block to inside it.
+Let's begin by creating a `DevExtremeScriptContributor.cs` file in the `Bundling` folder by copying the following code inside it:
 
 ```csharp
 using System.Collections.Generic;
@@ -145,26 +145,18 @@ namespace DevExtremeSample.Web.Bundling
 }
 ```
 
-As you see, the `DevExtremeScriptContributor` is depends on `JQueryScriptContributor`. All packages are `JQueryScriptContributor` will added before the `DevExtremeScriptContributor` packages.
+As you see, the `DevExtremeScriptContributor` is depends on `JQueryScriptContributor` which adds JQuery related files before the DevExpress packages (see the [bundling system](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification) for details).
 
 #### Create DevExtremeJsViewComponent
 
-Create `Components` folder in your `DevExtremeSample.Web` project. Then create `DevExtremeJs` folder under `Components` folder.
+Create a new view component, named `DevExtremeJsViewComponent` inside the `/Components/DevExtremeJs` folder of the Web project, by following the steps below:
 
-Create `Default.cshtml` file in your `DevExtremeJs` folder and paste following codes to your file.
-
-```csharp
-@using DevExtremeSample.Web.Bundling
-@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
-
-<!-- Devextreme -->
-<abp-script type="typeof(DevExtremeScriptContributor)" />
-
-```
-
-Create `DevExtremeJsViewComponent.cs` file in your `DevExtremeJs` folder and paste following codes to your file.
+1) Create a `DevExtremeJsViewComponent` class inside the `/Components/DevExtremeJs` (create the folders first):
 
 ```csharp
+using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
+
 namespace DevExtremeSample.Web.Components.DevExtremeJs
 {
     public class DevExtremeJsViewComponent : AbpViewComponent
@@ -177,13 +169,22 @@ namespace DevExtremeSample.Web.Components.DevExtremeJs
 }
 ```
 
-After that, your `*.Web` project should be like as following.
+2) Create `Default.cshtml` file in the same folder with the following content:
+
+```csharp
+@using DevExtremeSample.Web.Bundling
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
+
+<abp-script type="typeof(DevExtremeScriptContributor)" />
+```
+
+Your final Web project should be like as the following:
 
 ![devextreme-js](devextreme-js.png)
 
-Then we can add this view component to `<head>` section by using **hooks**.
+3) Now, we can add this view component to `<head>` section by using the layout hooks.
 
-Open your `DevExtremeSampleWebModule.cs` file in your `DevExtremeSample.Web` project and add following code to `ConfigureServices` method.
+Open your `DevExtremeSampleWebModule.cs` file in your `DevExtremeSample.Web` project and add following code into the `ConfigureServices` method:
 
 ```csharp
 Configure<AbpLayoutHookOptions>(options =>
@@ -197,25 +198,23 @@ Configure<AbpLayoutHookOptions>(options =>
 
 #### Known Issue: Uncaught TypeError: MutationObserver.observe: Argument 1 is not an object.
 
-> If you are using ABP 3.1 version or more, you can skip this section.
+> This issue does exists in the ABP Framework v3.0 and earlier versions. If you are using ABP Framework v3.1 or a latter version, you can skip this section.
 
 When you run your `*.Web` project, you will see an exception (`Uncaught TypeError: MutationObserver.observe: Argument 1 is not an object.`) at your console.
 
-This article is written in ABP Version 3.1 development cycle. We have fixed this issue [(ref)](https://github.com/abpframework/abp/issues/4566) in this development cycle.
-
-To fix that issue, download this file [abp.jquery.js](https://github.com/abpframework/abp/blob/dev/npm/packs/jquery/src/abp.jquery.js) and replace with `wwwroot / libs / abp / jquery / abp.jquery.js` file of your `*.Web` project.
+To fix that issue, download this file [abp.jquery.js](https://github.com/abpframework/abp/blob/dev/npm/packs/jquery/src/abp.jquery.js) and replace with the `wwwroot/libs/abp/jquery/abp.jquery.js` file of your Web project.
 
 ### Result
 
-After following this step-by-step article you can use all DevExtreme features in your project.
+The installation step was done. You can use any DevExtreme component in your application.
+
+Example: A button and a progress bar component:
 
 ![devexp-result](devexp-result.gif)
 
-> The result example is created by following [this documentation](https://js.devexpress.com/Demos/WidgetsGallery/Demo/ProgressBar/Overview/NetCore/Light/).
+This example has been created by following [this documentation](https://js.devexpress.com/Demos/WidgetsGallery/Demo/ProgressBar/Overview/NetCore/Light/).
 
----
-
-### Sample Application
+## Sample Application
 
 We have created a sample application with [Tree List](https://demos.devexpress.com/ASPNetCore/Demo/TreeList/Overview/) and [Data Grid](https://demos.devexpress.com/ASPNetCore/Demo/DataGrid/Overview/) examples.
 
