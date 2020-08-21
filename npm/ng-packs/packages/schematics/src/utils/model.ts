@@ -133,7 +133,13 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
         prop.refs.forEach(type => !types[type]?.isEnum && refs.push(type));
         return refs;
       }, [])
-      .concat(base || [])
+      .concat(
+        base
+          ? parseGenerics(typeDef.baseType!)
+              .toGenerics()
+              .join('')
+          : [],
+      )
       .reduce<Interface[]>(reduceRefsToInterfaces, interfaces);
   }
 }
