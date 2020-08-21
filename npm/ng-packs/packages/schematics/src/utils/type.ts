@@ -36,7 +36,10 @@ export function flattenUnionTypes(types: string[], type: string) {
   type
     .replace(/^{/, '')
     .replace(/}$/, '')
+    .replace(/{/, '(')
+    .replace(/}/, ')')
     .split(':')
+    .filter(Boolean)
     .forEach(t => types.push(t));
 
   return types;
