@@ -1,6 +1,8 @@
 # Environment
 
-Current `Environment` Configuration holds sub config classes. 
+Every application needs some ** environment ** variables. In Angular world, this is usually managed by `environment.ts`, `environment.prod.ts` and so on. It is the same for Abp as well. 
+
+Current `Environment` configuration holds sub config classes as follows:
 
 ```typescript
 export interface Environment {
@@ -31,7 +33,7 @@ export interface ApiConfig {
 Api config has to have a default config and it may have some additional ones for different modules.
 I.e. you may want to connect to different Apis for different modules. 
 
-Take a look at example
+Take a look at following example
 
 ```json
 {
@@ -62,7 +64,7 @@ Everything else will be sent to `"https://localhost:8080"`
 ```
 
 * `name`: Name of the backend Application. It is also used by `logo.component` if `logoUrl` is not provided.
-* `logoUrl`: Url of application logo. It is used by `logo.component`
+* `logoUrl`: Url of the application logo. It is used by `logo.component`
 * `baseUrl`: [For detailed information](./Multi-Tenancy.md#domain-tenant-resolver)
 
 ## Localization
@@ -71,11 +73,14 @@ You can read about `Localization` [here in detail](./Localization.md)
 
 ## AuthConfig
 
-For authentication, we use [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc)
+For authentication, we use angular-oauth2-oidc. Please check their [docs](https://github.com/manfredsteyer/angular-oauth2-oidc) out
 
 ## RemoteEnvironment
 
-To integrate an existing config json into environment, you need to set `remoteEnv`
+Some applications need to integrate an existing config into the `environment` used throughout the application. 
+Abp Framework supports this out of box.
+
+To integrate an existing config json into the `environment`, you need to set `remoteEnv`
 
 ```typescript
 export type customMergeFn = (
@@ -92,9 +97,9 @@ export interface RemoteEnv {
 ```
 
 * `url` *: Required. The url to be used to retrieve environment config
-* `mergeStrategy`: Defines how local and remote environment json will be merged
-  * `deepmerge`: Both local and remote environment json will be merged recursively. If both config has same nested path, remote environment will be prioritized. 
-  * `overwrite`: Remote environment will be used and local environment will be ignored.
+* `mergeStrategy` *: Required. Defines how the local and the remote `environment` json will be merged
+  * `deepmerge`: Both local and remote `environment` json will be merged recursively. If both configs have same nested path, the remote `environment` will be prioritized. 
+  * `overwrite`: Remote `environment` will be used and local environment will be ignored.
   * `customMergeFn`: You can also provide your own merge function as shown in the example. It will take two parameters, `localEnv: Partial<Config.Environment>` and `remoteEnv` and it needs to return a `Config.Environment` object.
 * `method`: HTTP method to be used when retrieving environment config. Default: `GET`
 * `headers`: If extra headers are needed for the request, it can be set through this field.
