@@ -1,4 +1,4 @@
-﻿# Module Development
+﻿# Modularity
 
 ## Introduction
 

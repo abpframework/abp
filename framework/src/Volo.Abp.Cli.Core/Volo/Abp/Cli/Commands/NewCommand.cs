@@ -294,7 +294,7 @@ namespace Volo.Abp.Cli.Commands
         protected virtual MobileApp GetMobilePreference(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.Mobile.Short, Options.Mobile.Long);
-            var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
+
             switch (optionValue)
             {
                 case "none":
@@ -302,7 +302,7 @@ namespace Volo.Abp.Cli.Commands
                 case "react-native":
                     return MobileApp.ReactNative;
                 default:
-                    return ConsoleTemplate.TemplateName == template ? MobileApp.None : MobileApp.ReactNative;
+                    return MobileApp.None;
             }
         }
 

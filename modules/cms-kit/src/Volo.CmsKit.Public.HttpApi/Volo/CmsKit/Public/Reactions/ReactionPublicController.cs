@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.Reactions
 {
+    [RequiresGlobalFeature(typeof(ReactionsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/reactions")]
@@ -25,15 +28,17 @@ namespace Volo.CmsKit.Public.Reactions
         }
 
         [HttpPut]
-        public virtual Task CreateAsync(CreateReactionDto input)
+        [Route("{entityType}/{entityId}/{reaction}")]
+        public virtual Task CreateAsync(string entityType, string entityId, string reaction)
         {
-            return ReactionPublicAppService.CreateAsync(input);
+            return ReactionPublicAppService.CreateAsync(entityType, entityId, reaction);
         }
 
         [HttpDelete]
-        public virtual Task DeleteAsync(DeleteReactionDto input)
+        [Route("{entityType}/{entityId}/{reaction}")]
+        public virtual Task DeleteAsync(string entityType, string entityId, string reaction)
         {
-            return ReactionPublicAppService.DeleteAsync(input);
+            return ReactionPublicAppService.DeleteAsync(entityType, entityId, reaction);
         }
     }
 }

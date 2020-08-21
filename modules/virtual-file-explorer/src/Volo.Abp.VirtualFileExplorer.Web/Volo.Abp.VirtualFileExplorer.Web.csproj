@@ -21,12 +21,16 @@
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
     <EmbeddedResource Include="wwwroot\**\*.*" />
 	<EmbeddedResource Include="Localization\**\*.json" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="wwwroot\**\*.*" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
     <Content Remove="Localization\**\*.json" />
   </ItemGroup>
 

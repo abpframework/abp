@@ -122,10 +122,12 @@
                         e.preventDefault();
                         var formAsObject = $form.serializeFormToObject();
                         volo.cmsKit.public.comments.commentPublic.create(
-                            $.extend(getFilters(), {
+                            $commentArea.attr('data-entity-type'),
+                            $commentArea.attr('data-entity-id'),
+                            {
                                 repliedCommentId: formAsObject.repliedCommentId,
                                 text: formAsObject.commentText
-                            })
+                            }
                         ).then(function () {
                             widgetManager.refresh($widget);
                         });

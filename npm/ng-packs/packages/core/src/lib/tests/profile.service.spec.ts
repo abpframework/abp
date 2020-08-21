@@ -37,6 +37,8 @@ describe('ProfileService', () => {
       name: 'John',
       surname: 'Doe',
       phoneNumber: '+123456',
+      isExternal: false,
+      hasPassword: false,
     };
     spectator.inject(Store).selectSnapshot.andReturn('https://abp.io');
     spectator.service.update(mock).subscribe();

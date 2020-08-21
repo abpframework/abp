@@ -1,15 +1,12 @@
 import { InjectionToken } from '@angular/core';
-import { ABP } from '../models/common';
 import differentLocales from '../constants/different-locales';
+import { ABP } from '../models/common';
 
 export const CORE_OPTIONS = new InjectionToken<ABP.Root>('CORE_OPTIONS');
 
-export function coreOptionsFactory({
-  cultureNameLocaleFileMap: localeNameMap = {},
-  ...options
-}: ABP.Root) {
+export function coreOptionsFactory({ cultureNameLocaleFileMap = {}, ...options }: ABP.Root) {
   return {
     ...options,
-    cultureNameLocaleFileMap: { ...differentLocales, ...localeNameMap },
+    cultureNameLocaleFileMap: { ...differentLocales, ...cultureNameLocaleFileMap },
   } as ABP.Root;
 }

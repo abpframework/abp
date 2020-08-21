@@ -33,9 +33,9 @@
                     $icon.click(function () {
                         var methodName = $icon.hasClass('cms-reaction-icon-selected') ? 'delete' : 'create';
                         volo.cmsKit.public.reactions.reactionPublic[methodName](
-                            $.extend(getFilters(), {
-                                reactionName: reactionName
-                            })
+                            $reactionArea.attr('data-entity-type'),
+                            $reactionArea.attr('data-entity-id'),
+                            reactionName
                         ).then(function () {
                             $selectIcon.popover('hide');
                             widgetManager.refresh($widget);

@@ -62,10 +62,10 @@ dotnet tool update -g Volo.Abp.Cli
 使用ABP CLI的 `new` 命令创建新项目:
 
 ````shell
-abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}}
+abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}} --mobile react-native
 ````
 
-* 此命令还会在解决方案文件夹内创建一个React Native移动应用程序. 如果你不想要它,可以安全地删除它,或者在 `abp new` 命令中指定 `-m none` 选项,以使其完全不包含在解决方案中.
+* 此命令还会在解决方案文件夹内创建一个React Native移动应用程序. 如果你不想要它,可以安全地删除它或从`abp new`命令中删除`--mobile react-native`选项, 以使其完全不包含在解决方案中.
 
 {{ if UI == "NG" }}
 
@@ -351,11 +351,8 @@ yarn start
 
 #### 移动开发
 
-当你创建一个新的应用程序时.该解决方案默认包含 `react-native`文件夹. 这是一个基础的[React Native](https://reactnative.dev/)启动模板,用于开发与基于ABP的后端集成的移动应用程序.
+当你创建一个新的应用程序时. 可以添加`-m react-native`选项以在解决方案中包含 `react-native`项目. 这是一个基础的[React Native](https://reactnative.dev/)启动模板,用于开发与基于ABP的后端集成的移动应用程序.
 
-如果你不计划使用React Native开发移动应用程序,你可以忽略并删除 `react-native` 文件夹.
-
-> 你可以在ABP CLI中指定 `-m none` 选项,以使 `react-native` 目录完全不包含在解决方案中
 
 请参阅"[React Native入门](Getting-Started-React-Native.md)"文档了解如何配置和运行React Native应用程序.
 

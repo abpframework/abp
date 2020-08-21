@@ -1,10 +1,12 @@
-﻿namespace Volo.CmsKit.Comments
+﻿using Volo.CmsKit.Entities;
+
+namespace Volo.CmsKit.Comments
 {
     public static class CommentConsts
     {
-        public static int EntityTypeLength { get; set; } = 64;
+        public static int MaxEntityTypeLength { get; set; } = CmsEntityConsts.MaxEntityTypeLength;
 
-        public static int EntityIdLength { get; set; } = 64;
+        public static int MaxEntityIdLength { get; set; } = CmsEntityConsts.MaxEntityIdLength;
 
         public static int MaxTextLength { get; set; } = 512;
     }

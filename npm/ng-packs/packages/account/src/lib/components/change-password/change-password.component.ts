@@ -1,7 +1,7 @@
-import { ChangePassword } from '@abp/ng.core';
+import { ChangePassword, ProfileState } from '@abp/ng.core';
 import { getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import { finalize } from 'rxjs/operators';
@@ -23,6 +23,8 @@ export class ChangePasswordComponent
 
   inProgress: boolean;
 
+  hideCurrentPassword: boolean;
+
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(String(control.name)) < 0) return errors;
 
@@ -36,6 +38,8 @@ export class ChangePasswordComponent
   ) {}
 
   ngOnInit(): void {
+    this.hideCurrentPassword = !this.store.selectSnapshot(ProfileState.getProfile).hasPassword;
+
     const passwordValidations = getPasswordValidators(this.store);
 
     this.form = this.fb.group(
@@ -58,6 +62,8 @@ export class ChangePasswordComponent
         validators: [comparePasswords(PASSWORD_FIELDS)],
       },
     );
+
+    if (this.hideCurrentPassword) this.form.removeControl('password');
   }
 
   onSubmit() {
@@ -66,7 +72,7 @@ export class ChangePasswordComponent
     this.store
       .dispatch(
         new ChangePassword({
-          currentPassword: this.form.get('password').value,
+          ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password').value }),
           newPassword: this.form.get('newPassword').value,
         }),
       )
@@ -74,17 +80,18 @@ export class ChangePasswordComponent
       .subscribe({
         next: () => {
           this.form.reset();
-          this.toasterService.success('AbpAccount::PasswordChangedMessage', 'Success', {
+          this.toasterService.success('AbpAccount::PasswordChangedMessage', '', {
             life: 5000,
           });
+
+          if (this.hideCurrentPassword) {
+            this.hideCurrentPassword = false;
+            this.form.addControl('password', new FormControl('', [required]));
+          }
         },
         error: err => {
           this.toasterService.error(
             snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
-            'Error',
-            {
-              life: 7000,
-            },
           );
         },
       });

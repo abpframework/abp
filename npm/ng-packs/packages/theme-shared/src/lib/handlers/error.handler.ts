@@ -43,6 +43,29 @@ export const DEFAULT_ERROR_MESSAGES = {
   },
 };
 
+export const DEFAULT_ERROR_LOCALIZATIONS = {
+  defaultError: {
+    title: 'AbpUi::DefaultErrorMessage',
+    details: 'AbpUi::DefaultErrorMessageDetail',
+  },
+  defaultError401: {
+    title: 'AbpUi::DefaultErrorMessage401',
+    details: 'AbpUi::DefaultErrorMessage401Detail',
+  },
+  defaultError403: {
+    title: 'AbpUi::DefaultErrorMessage403',
+    details: 'AbpUi::DefaultErrorMessage403Detail',
+  },
+  defaultError404: {
+    title: 'AbpUi::DefaultErrorMessage404',
+    details: 'AbpUi::DefaultErrorMessage404Detail',
+  },
+  defaultError500: {
+    title: 'AbpUi::500Message',
+    details: 'AbpUi::DefaultErrorMessage',
+  },
+};
+
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
   componentRef: ComponentRef<HttpErrorWrapperComponent>;
@@ -64,7 +87,10 @@ export class ErrorHandler {
 
   private listenToRouterError() {
     this.actions
-      .pipe(ofActionSuccessful(RouterError), filter(this.filterRouteErrors))
+      .pipe(
+        ofActionSuccessful(RouterError),
+        filter(this.filterRouteErrors),
+      )
       .subscribe(() => this.show404Page());
   }
 
@@ -88,7 +114,10 @@ export class ErrorHandler {
         filter(this.filterRestErrors),
       )
       .subscribe(err => {
-        const body = snq(() => err.error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
+        const body = snq(() => err.error.error, {
+          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+        });
 
         if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
           const confirmation$ = this.showError(null, null, body);
@@ -105,11 +134,11 @@ export class ErrorHandler {
                 ? this.show401Page()
                 : this.showError(
                     {
-                      key: 'AbpAccount::DefaultErrorMessage401',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.title,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
                     },
                     {
-                      key: 'AbpAccount::DefaultErrorMessage401Detail',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.details,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
                     },
                   ).subscribe(() => this.navigateToLogin());
@@ -117,11 +146,11 @@ export class ErrorHandler {
             case 403:
               this.createErrorComponent({
                 title: {
-                  key: 'AbpAccount::DefaultErrorMessage403',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.title,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
                 },
                 details: {
-                  key: 'AbpAccount::DefaultErrorMessage403Detail',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.details,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
                 },
                 status: 403,
@@ -132,11 +161,11 @@ export class ErrorHandler {
                 ? this.show404Page()
                 : this.showError(
                     {
-                      key: 'AbpAccount::DefaultErrorMessage404',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.details,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
                     },
                     {
-                      key: 'AbpAccount::DefaultErrorMessage404Detail',
+                      key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.title,
                       defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
                     },
                   );
@@ -144,11 +173,11 @@ export class ErrorHandler {
             case 500:
               this.createErrorComponent({
                 title: {
-                  key: 'AbpAccount::500Message',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.title,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
                 },
                 details: {
-                  key: 'AbpAccount::InternalServerErrorMessage',
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.details,
                   defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
                 },
                 status: 500,
@@ -158,7 +187,7 @@ export class ErrorHandler {
               if (err.statusText === 'Unknown Error') {
                 this.createErrorComponent({
                   title: {
-                    key: 'AbpAccount::DefaultErrorMessage',
+                    key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
                     defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
                   },
                   details: err.message,
@@ -168,8 +197,14 @@ export class ErrorHandler {
               break;
             default:
               this.showError(
-                DEFAULT_ERROR_MESSAGES.defaultError.details,
-                DEFAULT_ERROR_MESSAGES.defaultError.title,
+                {
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.details,
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.details,
+                },
+                {
+                  key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+                  defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+                },
               );
               break;
           }
@@ -180,7 +215,7 @@ export class ErrorHandler {
   private show401Page() {
     this.createErrorComponent({
       title: {
-        key: 'AbpAccount::401Message',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
       },
       status: 401,
@@ -190,7 +225,7 @@ export class ErrorHandler {
   private show404Page() {
     this.createErrorComponent({
       title: {
-        key: 'AbpAccount::404Message',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
       },
       status: 404,
@@ -207,10 +242,16 @@ export class ErrorHandler {
         message = body.details;
         title = body.message;
       } else if (body.message) {
-        title = DEFAULT_ERROR_MESSAGES.defaultError.title;
+        title = {
+          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+        };
         message = body.message;
       } else {
-        message = body.message || DEFAULT_ERROR_MESSAGES.defaultError.title;
+        message = body.message || {
+          key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+          defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+        };
       }
     }
 

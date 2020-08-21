@@ -17,9 +17,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.SecurityLog;
 using Volo.Abp.Settings;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {

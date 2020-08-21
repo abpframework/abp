@@ -10,7 +10,7 @@ ABP provides a basic infrastructure to make it easy and handle automatically whe
 
 `DateTime.Now` returns a `DateTime` object with the **local date & time of the server**. A `DateTime` object **doesn't store the time zone information**. So, you can not know the **absolute date & time** stored in this object. You can only make **assumptions**, like assuming that it was created in UTC+05 time zone. The things especially gets complicated when you save this value to a database and read later, or send it to a client in a **different time zone**.
 
-One solution to this problem is always use `DateTime.UtcNow` and assume all `DateTime` objects as UTC time. In this was, you can convert it to the time zone of the target client when needed.
+One solution to this problem is always use `DateTime.UtcNow` and assume all `DateTime` objects as UTC time. In this way, you can convert it to the time zone of the target client when needed.
 
 `IClock` provides an abstraction while getting the current time, so you can control the kind of the date time (UTC or local) in a single point in your application.
 

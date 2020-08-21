@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Users
-@using Volo.CmsKit.Comments
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Public.Comments
 @inject ICurrentUser CurrentUser
@@ -55,7 +54,7 @@
                 }
                 else
                 {
-                    <a href="@Model.LoginUrl"> @L["LoginToReply"]</a>
+                    <a href="@(Model.LoginUrl + "_" + id)"> @L["LoginToReply"]</a>
                 }
             }
             @if (authorId == CurrentUser.Id)

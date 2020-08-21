@@ -12,10 +12,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Account\Emailing\Templates\*.tpl" />
+    <None Remove="Volo\Abp\Account\Emailing\Templates\*.tpl" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="System.Text.Encodings.Web" Version="4.7.1" />
     <ProjectReference Include="..\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Emailing\Volo.Abp.Emailing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

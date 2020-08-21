@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
@@ -142,18 +143,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
             if (controller.ApiExplorer.IsVisible == null)
             {
-                var controllerType = controller.ControllerType.AsType();
-                var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType.GetTypeInfo());
-                if (remoteServiceAtt != null)
-                {
-                    controller.ApiExplorer.IsVisible =
-                        remoteServiceAtt.IsEnabledFor(controllerType) &&
-                        remoteServiceAtt.IsMetadataEnabledFor(controllerType);
-                }
-                else
-                {
-                    controller.ApiExplorer.IsVisible = true;
-                }
+                controller.ApiExplorer.IsVisible = IsVisibleRemoteService(controller.ControllerType);
             }
 
             foreach (var action in controller.Actions)
@@ -164,16 +154,18 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual void ConfigureApiExplorer(ActionModel action)
         {
-            if (action.ApiExplorer.IsVisible == null)
+            if (action.ApiExplorer.IsVisible != null)
             {
-                var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(action.ActionMethod);
-                if (remoteServiceAtt != null)
-                {
-                    action.ApiExplorer.IsVisible =
-                        remoteServiceAtt.IsEnabledFor(action.ActionMethod) &&
-                        remoteServiceAtt.IsMetadataEnabledFor(action.ActionMethod);
-                }
+                return;
             }
+
+            var visible = IsVisibleRemoteServiceMethod(action.ActionMethod);
+            if (visible == null)
+            {
+                return;
+            }
+
+            action.ApiExplorer.IsVisible = visible;
         }
 
         protected virtual void ConfigureSelector(ControllerModel controller, [CanBeNull] ConventionalControllerSetting configuration)
@@ -396,6 +388,46 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         protected virtual bool ImplementsRemoteServiceInterface(Type controllerType)
         {
             return typeof(IRemoteService).GetTypeInfo().IsAssignableFrom(controllerType);
+        }
+
+        protected virtual bool IsVisibleRemoteService(Type controllerType)
+        {
+            if (!IsGlobalFeatureEnabled(controllerType))
+            {
+                return false;
+            }
+
+            var attribute = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType);
+            if (attribute == null)
+            {
+                return true;
+            }
+
+            return attribute.IsEnabledFor(controllerType) &&
+                   attribute.IsMetadataEnabledFor(controllerType);
+        }
+
+        protected virtual bool? IsVisibleRemoteServiceMethod(MethodInfo method)
+        {
+            var attribute = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(method);
+            if (attribute == null)
+            {
+                return null;
+            }
+
+            return attribute.IsEnabledFor(method) &&
+                   attribute.IsMetadataEnabledFor(method);
+        }
+
+        protected virtual bool IsGlobalFeatureEnabled(Type controllerType)
+        {
+            var attribute = ReflectionHelper.GetSingleAttributeOrDefault<RequiresGlobalFeatureAttribute>(controllerType);
+            if (attribute == null)
+            {
+                return true;
+            }
+
+            return GlobalFeatureManager.Instance.IsEnabled(attribute.GetFeatureName());
         }
     }
 }

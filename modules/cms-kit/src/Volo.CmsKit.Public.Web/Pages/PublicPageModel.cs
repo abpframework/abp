@@ -3,11 +3,9 @@ using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit.Public.Web.Pages
 {
-    /* Inherit your PageModel classes from this class.
-     */
-    public abstract class PublicPageModel : AbpPageModel
+    public abstract class CmsKitPublicPageModelBase : AbpPageModel
     {
-        protected PublicPageModel()
+        protected CmsKitPublicPageModelBase()
         {
             LocalizationResourceType = typeof(CmsKitResource);
             ObjectMapperContext = typeof(CmsKitPublicWebModule);

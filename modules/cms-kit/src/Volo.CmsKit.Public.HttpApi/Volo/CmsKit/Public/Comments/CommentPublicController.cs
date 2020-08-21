@@ -3,9 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.Public.Comments
 {
+    [RequiresGlobalFeature(typeof(CommentsFeature))]
     [RemoteService(Name = CmsKitPublicRemoteServiceConsts.RemoteServiceName)]
     [Area("cms-kit")]
     [Route("api/cms-kit-public/comments")]
@@ -20,18 +23,19 @@ namespace Volo.CmsKit.Public.Comments
 
         [HttpGet]
         [Route("{entityType}/{entityId}")]
-        public Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
+        public Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
         {
-            return CommentPublicAppService.GetAllForEntityAsync(entityType, entityId);
+            return CommentPublicAppService.GetListAsync(entityType, entityId);
         }
 
         [HttpPost]
-        public Task<CommentDto> CreateAsync(CreateCommentInput input)
+        [Route("{entityType}/{entityId}")]
+        public Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
-            return CommentPublicAppService.CreateAsync(input);
+            return CommentPublicAppService.CreateAsync(entityType, entityId, input);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("{id}")]
         public Task<CommentDto> UpdateAsync(Guid id, UpdateCommentInput input)
         {
@@ -39,7 +43,7 @@ namespace Volo.CmsKit.Public.Comments
         }
 
         [HttpDelete]
-        [Route("update")]
+        [Route("{id}")]
         public Task DeleteAsync(Guid id)
         {
             return CommentPublicAppService.DeleteAsync(id);
