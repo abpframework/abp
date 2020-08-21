@@ -372,6 +372,12 @@
       "sourceRoot": "packages/schematics/src",
       "prefix": "abp",
       "architect": {
+        "build": {
+          "options": {
+            "tsConfig": "packages/schematics/tsconfig.lib.json",
+            "project": "packages/schematics/ng-package.json"
+          }
+        },
         "test": {
           "builder": "@angular-builders/jest:run",
           "options": {
