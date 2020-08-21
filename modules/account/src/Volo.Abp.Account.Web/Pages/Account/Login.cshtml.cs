@@ -13,11 +13,12 @@ using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
-using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -51,6 +52,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
         protected IAuthenticationSchemeProvider SchemeProvider { get; }
         protected AbpAccountOptions AccountOptions { get; }
 
+        public bool ShowCancelButton { get; set; }
+
         public LoginModel(
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions)
@@ -83,7 +86,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             ValidateModel();
 
             ExternalProviders = await GetExternalProviders();
-            
+
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
@@ -94,6 +97,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 LoginInput.RememberMe,
                 true
             );
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress
+            });
 
             if (result.RequiresTwoFactor)
             {
@@ -182,6 +192,15 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 bypassTwoFactor: true
             );
 
+            if (!result.Succeeded)
+            {
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
+                    Action = "Login" + result
+                });
+            }
+
             if (result.IsLockedOut)
             {
                 throw new UserFriendlyException("Cannot proceed because user is locked out!");
@@ -195,16 +214,39 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //TODO: Handle other cases for result!
 
             // Get the information about the user from the external login provider
-            var info = await SignInManager.GetExternalLoginInfoAsync();
-            if (info == null)
+            var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
+            if (externalLoginInfo == null)
             {
                 throw new ApplicationException("Error loading external login information during confirmation.");
             }
 
-            var user = await CreateExternalUserAsync(info);
+            if (!IsEmailRetrievedFromExternalLogin(externalLoginInfo))
+            {
+                return RedirectToPage("./Register", new
+                {
+                    IsExternalLogin = true,
+                    ExternalLoginAuthSchema = externalLoginInfo.LoginProvider,
+                    ReturnUrl = returnUrl
+                });
+            }
+
+            var user = await CreateExternalUserAsync(externalLoginInfo);
 
             await SignInManager.SignInAsync(user, false);
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = user.Name
+            });
+
             return RedirectSafely(returnUrl, returnUrlHash);
+        }
+
+        private static bool IsEmailRetrievedFromExternalLogin(ExternalLoginInfo externalLoginInfo)
+        {
+            return externalLoginInfo.Principal.FindFirstValue(AbpClaimTypes.Email) != null;
         }
 
         protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)

@@ -1,0 +1,146 @@
+﻿@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Users
+@using Volo.CmsKit.Localization
+@using Volo.CmsKit.Public.Comments
+@inject ICurrentUser CurrentUser
+@inject IHtmlLocalizer<CmsKitResource> L
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
+
+@{
+    Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
+        @<span>
+            @((string.IsNullOrWhiteSpace(author.Name)
+                ? author.UserName
+                : author.Name + " " + author.Surname).Trim())
+            <small>@creationTime.ToString()</small>
+        </span>;
+}
+@{
+    Func<dynamic, IHtmlContent> GetCommentArea(Guid? repliedCommentId, bool cancelButton = false) =>
+        @<div class="cms-comment-form-area @(repliedCommentId.HasValue ? "pl-5":"")"
+              data-reply-id="@(repliedCommentId?.ToString() ?? "")"
+              style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
+            <form class="cms-comment-form">
+                <input hidden value="@(repliedCommentId?.ToString() ?? "")" name="repliedCommentId"/>
+                <div class="form-group">
+                    <label> @(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? L["YourComment"] : L["YourReply"]) </label>
+                    <textarea class="form-control" name="commentText" rows="3"></textarea>
+                </div>
+                @if (cancelButton)
+                {
+                    <abp-button type="button" button-type="Secondary" class="reply-cancel-button" data-reply-id="@(repliedCommentId?.ToString() ?? "")"> @L["Cancel"] </abp-button>
+                }
+                <abp-button type="submit" button-type="Primary"> @L["Send"] </abp-button>
+            </form>
+        </div>;
+}
+@{
+    Func<dynamic, IHtmlContent> GetCommentContentArea(Guid id, Guid authorId, bool isReply, string text) =>
+        @<div>
+            <div class="cms-comment-content-area" data-id="@id.ToString()">
+                <p>
+                    @text
+                </p>
+            </div>
+
+            @if (!isReply)
+            {
+                @if (CurrentUser.IsAuthenticated)
+                {
+                    <a href="#" class="comment-reply-link" data-reply-id="@id.ToString()">
+                        <i class="fa fa-reply"></i> @L["Reply"]
+                    </a>
+                }
+                else
+                {
+                    <a href="@(Model.LoginUrl + "_" + id)"> @L["LoginToReply"]</a>
+                }
+            }
+            @if (authorId == CurrentUser.Id)
+            {
+                @if (!isReply)
+                {
+                    <span> | </span>
+                }
+
+                <a href="#" class="comment-delete-link" data-id="@id.ToString()">
+                    <i class="fa fa-trash"></i> @L["Delete"]
+                </a>
+
+                <span> | </span>
+
+                <a href="#" class="comment-edit-link" data-id="@id.ToString()">
+                    <i class="fa fa-pencil"></i> @L["Edit"]
+                </a>
+            }
+            <div class="cms-comment-edit-area" data-id="@id.ToString()" style="display:none">
+                <form class="cms-comment-update-form">
+                    <input hidden value="@id.ToString()" name="id"/>
+                    <div class="form-group">
+                        <textarea class="form-control" name="commentText" rows="3">@text</textarea>
+                    </div>
+                    <abp-button type="button" button-type="Secondary" class="comment-edit-cancel-button" data-id="@id.ToString()"> @L["Cancel"] </abp-button>
+                    <abp-button type="submit" button-type="Primary"> @L["Update"] </abp-button>
+                </form>
+            </div>
+        </div>;
+}
+
+<div class="cms-comment-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+
+    <div  class="pl-5 pt-3">
+        <h4>
+            <i class="fa fa-comment-o"></i>
+            @L["Comments"]
+         </h4>
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="comment pt-2 mt-1 mb-1">
+                <div class="border-bottom">
+                    <h5>
+                        @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
+                    </h5>
+
+                    @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
+
+                    @if (CurrentUser.IsAuthenticated)
+                    {
+                        @GetCommentArea(comment.Id, true).Invoke(null)
+                    }
+
+                    @if (comment.Replies.Any())
+                    {
+                        <div class="pl-5">
+                            @foreach (var reply in comment.Replies)
+                            {
+                                <div class="comment pt-3">
+                                    <div class="border-bottom">
+
+                                        <h6>
+                                            @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
+                                        </h6>
+
+                                        @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <div class="">
+            @if (CurrentUser.IsAuthenticated)
+            {
+                @GetCommentArea(null).Invoke(null)
+            }
+            else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
+            {
+                <div class="float-right mb-2">
+                    <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

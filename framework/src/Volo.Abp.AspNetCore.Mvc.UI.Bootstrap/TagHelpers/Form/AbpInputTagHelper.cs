@@ -36,6 +36,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public string Value { get; set; }
 
+        public bool SuppressLabel { get; set; }
+
         public AbpInputTagHelper(AbpInputTagHelperService tagHelperService)
             : base(tagHelperService)
         {

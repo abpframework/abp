@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -100,7 +101,20 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             urlBuilder.Append(isFirstParam ? "?" : "&");
 
-            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+            if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
+            {
+                var index = 0;
+                foreach (var item in (IEnumerable) value)
+                {
+                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
+                }
+                //remove & at the end of the urlBuilder.
+                urlBuilder.Remove(urlBuilder.Length - 1, 1);
+            }
+            else
+            {
+                urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+            }
         }
 
         private static string ConvertValueToString([NotNull] object value)

@@ -5,6 +5,8 @@ using Volo.Abp.Domain;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 
 namespace Volo.Abp.TenantManagement
 {
@@ -28,6 +30,15 @@ namespace Volo.Abp.TenantManagement
             {
                 options.EtoMappings.Add<Tenant, TenantEto>();
             });
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                TenantManagementModuleExtensionConsts.ModuleName,
+                TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                typeof(Tenant)
+            );
         }
     }
 }

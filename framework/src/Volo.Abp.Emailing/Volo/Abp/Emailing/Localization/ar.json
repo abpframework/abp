@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "ar",
   "texts": {
     "DisplayName:Abp.Mailing.DefaultFromAddress": "العنوان الإفتراضي",
@@ -18,6 +18,8 @@
     "Description:Abp.Mailing.Smtp.Password": "كلمة المرور لاسم المستخدم المرتبط ببيانات الاعتماد.",
     "Description:Abp.Mailing.Smtp.Domain": "اسم المجال أو الكمبيوتر الذي يتحقق من بيانات الاعتماد.",
     "Description:Abp.Mailing.Smtp.EnableSsl": "ما إذا كان SmtpClient يستخدم (SSL) لتشفير الاتصال.",
-    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "إرسال الصلاحيات الافتراضية مع الطلب."
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "إرسال الصلاحيات الافتراضية مع الطلب.",
+    "TextTemplate:StandardEmailTemplates.Layout": "نموذج تخطيط إفتراضي للبريد الإلكتروني",
+    "TextTemplate:StandardEmailTemplates.Message": "نموذج بسيط للرسائل الإلكترونية"
   }
 }

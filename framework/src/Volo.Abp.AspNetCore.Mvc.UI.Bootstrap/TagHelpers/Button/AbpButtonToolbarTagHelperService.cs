@@ -7,6 +7,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            output.TagName = "div";
             output.Attributes.AddClass("btn-toolbar");
             output.Attributes.Add("role","toolbar");
         }

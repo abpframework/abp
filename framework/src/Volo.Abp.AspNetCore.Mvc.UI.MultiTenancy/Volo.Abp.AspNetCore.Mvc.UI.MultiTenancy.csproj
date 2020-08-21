@@ -20,8 +20,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\*.json" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\*.json" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
   <ItemGroup>

@@ -56,7 +56,7 @@ An `IssueType` enum and an `IssueConsts` class (which may have some constant fie
 
 ### .Domain Project
 
-This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value types](../Value-Types.md), [repository interfaces](../Repositories.md) and other domain objects.
+This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), value types, [repository interfaces](../Repositories.md) and other domain objects.
 
 An `Issue` entity, an `IssueManager` domain service and an `IIssueRepository` interface are good candidates for this project.
 
@@ -148,6 +148,10 @@ The diagram below shows the relation of the applications:
 ![tiered-solution-applications](../images/tiered-solution-applications.png)
 
 `.Web.Host` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the `.IdentityServer`. Then uses the access token to call the `.HttpApi.Host`. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
+
+##### Pre-requirements
+
+* [Redis](https://redis.io/): The applications use Redis as as distributed cache. So, you need to have Redis installed & running.
 
 ##### How to Run?
 

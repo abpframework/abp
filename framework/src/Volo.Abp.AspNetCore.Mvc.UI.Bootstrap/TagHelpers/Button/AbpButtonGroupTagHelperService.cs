@@ -11,6 +11,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button
             AddButtonGroupClass(context, output);
             AddSizeClass(context, output);
             AddAttributes(context, output);
+
+            output.TagName = "div";
         }
 
         protected virtual void AddSizeClass(TagHelperContext context, TagHelperOutput output)

@@ -9,7 +9,7 @@ import { Actions, NgxsModule, ofActionDispatched, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
-import { DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
+import { DEFAULT_ERROR_MESSAGES, ErrorHandler, DEFAULT_ERROR_LOCALIZATIONS } from '../handlers';
 import { ConfirmationService } from '../services';
 import { httpErrorConfigFactory } from '../tokens/http-error.token';
 
@@ -52,7 +52,7 @@ describe('ErrorHandler', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     store.selectSnapshot = jest.fn(() => '/x');
   });
 
@@ -66,11 +66,11 @@ describe('ErrorHandler', () => {
     const error = new HttpErrorResponse({ status: 500 });
     const params = {
       title: {
-        key: 'AbpAccount::500Message',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.title,
       },
       details: {
-        key: 'AbpAccount::InternalServerErrorMessage',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError500.details,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError500.details,
       },
       status: 500,
@@ -95,11 +95,11 @@ describe('ErrorHandler', () => {
     const error = new HttpErrorResponse({ status: 403 });
     const params = {
       title: {
-        key: 'AbpAccount::DefaultErrorMessage403',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.title,
       },
       details: {
-        key: 'AbpAccount::DefaultErrorMessage403Detail',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError403.details,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError403.details,
       },
       status: 403,
@@ -124,7 +124,7 @@ describe('ErrorHandler', () => {
     const error = new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' });
     const params = {
       title: {
-        key: 'AbpAccount::DefaultErrorMessage',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
       },
       details: error.message,
@@ -150,11 +150,11 @@ describe('ErrorHandler', () => {
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       {
-        key: 'AbpAccount::DefaultErrorMessage404',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.details,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
       },
       {
-        key: 'AbpAccount::DefaultErrorMessage404Detail',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError404.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
       },
       CONFIRMATION_BUTTONS,
@@ -165,8 +165,14 @@ describe('ErrorHandler', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 412 })));
 
     expect(errorConfirmation).toHaveBeenCalledWith(
-      DEFAULT_ERROR_MESSAGES.defaultError.details,
-      DEFAULT_ERROR_MESSAGES.defaultError.title,
+      {
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.details,
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.details,
+      },
+      {
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+      },
       CONFIRMATION_BUTTONS,
     );
   });
@@ -176,11 +182,11 @@ describe('ErrorHandler', () => {
 
     expect(errorConfirmation).toHaveBeenCalledWith(
       {
-        key: 'AbpAccount::DefaultErrorMessage401',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.title,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.title,
       },
       {
-        key: 'AbpAccount::DefaultErrorMessage401Detail',
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError401.details,
         defaultValue: DEFAULT_ERROR_MESSAGES.defaultError401.details,
       },
       CONFIRMATION_BUTTONS,
@@ -189,7 +195,7 @@ describe('ErrorHandler', () => {
 
   test('should call error method of ConfirmationService when authenticated error occurs with _AbpErrorFormat header', done => {
     spectator
-      .get(Actions)
+      .inject(Actions)
       .pipe(ofActionDispatched(Navigate))
       .subscribe(({ path, queryParams, extras }) => {
         expect(path).toEqual(['/account/login']);
@@ -205,7 +211,10 @@ describe('ErrorHandler', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 401, headers })));
 
     expect(errorConfirmation).toHaveBeenCalledWith(
-      DEFAULT_ERROR_MESSAGES.defaultError.title,
+      {
+        key: DEFAULT_ERROR_LOCALIZATIONS.defaultError.title,
+        defaultValue: DEFAULT_ERROR_MESSAGES.defaultError.title,
+      },
       null,
       CONFIRMATION_BUTTONS,
     );
@@ -281,7 +290,7 @@ describe('ErrorHandler with custom error component', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     store.selectSnapshot = jest.fn(() => '/x');
   });
 

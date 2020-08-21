@@ -26,7 +26,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             _options = options.Value;
         }
 
-        public async Task CreateIndexIfNeededAsync(CancellationToken cancellationToken = default)
+        public virtual async Task CreateIndexIfNeededAsync(CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
 
@@ -54,7 +54,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             }
         }
 
-        public async Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default)
+        public virtual async Task AddOrUpdateAsync(Document document, CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
 
@@ -67,13 +67,13 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
             var esDocument = new EsDocument
             {
-                Id = document.Id,
-                ProjectId = document.ProjectId,
+                Id = NormalizeField(document.Id),
+                ProjectId = NormalizeField(document.ProjectId),
                 Name = document.Name,
                 FileName = document.FileName,
                 Content = document.Content,
-                LanguageCode = document.LanguageCode,
-                Version = document.Version
+                LanguageCode = NormalizeField(document.LanguageCode),
+                Version = NormalizeField(document.Version)
             };
 
             if (!existsResponse.Exists)
@@ -89,7 +89,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
 
@@ -97,7 +97,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteAsync(DocumentPath<Document>.Id(id), x => x.Index(_options.IndexName), cancellationToken));
         }
 
-        public async Task DeleteAllAsync(CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAllAsync(CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
 
@@ -110,7 +110,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteByQueryAsync(request, cancellationToken));
         }
 
-        public async Task DeleteAllByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAllByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
         {
             ValidateElasticSearchEnabled();
 
@@ -127,7 +127,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                                 new TermQuery
                                 {
                                     Field = "projectId",
-                                    Value = projectId
+                                    Value = NormalizeField(projectId)
                                 }
                             }
                         }
@@ -139,7 +139,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                 .DeleteByQueryAsync(request, cancellationToken));
         }
 
-        public async Task<List<EsDocument>> SearchAsync(string context, Guid projectId, string languageCode,
+        public virtual async Task<List<EsDocument>> SearchAsync(string context, Guid projectId, string languageCode,
             string version, int? skipCount = null, int? maxResultCount = null,
             CancellationToken cancellationToken = default)
         {
@@ -168,17 +168,17 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
                                 new TermQuery
                                 {
                                     Field = "projectId",
-                                    Value = projectId
+                                    Value = NormalizeField(projectId)
                                 },
                                 new TermQuery
                                 {
                                     Field = "version",
-                                    Value = version
+                                    Value = NormalizeField(version)
                                 },
                                 new TermQuery
                                 {
                                     Field = "languageCode",
-                                    Value = languageCode
+                                    Value = NormalizeField(languageCode)
                                 }
                             }
                         }
@@ -216,7 +216,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             return docs;
         }
 
-        protected void HandleError(IElasticsearchResponse response)
+        protected virtual void HandleError(IElasticsearchResponse response)
         {
             if (!response.ApiCall.Success)
             {
@@ -225,12 +225,22 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             }
         }
 
-        protected void ValidateElasticSearchEnabled()
+        protected virtual void ValidateElasticSearchEnabled()
         {
             if (!_options.Enable)
             {
                 throw new BusinessException(DocsDomainErrorCodes.ElasticSearchNotEnabled);
             }
+        }
+
+        protected virtual string NormalizeField(Guid field)
+        {
+            return NormalizeField(field.ToString("N"));
+        }
+
+        protected virtual string NormalizeField(string field)
+        {
+            return field.Replace("-", "").ToLower();
         }
     }
 }

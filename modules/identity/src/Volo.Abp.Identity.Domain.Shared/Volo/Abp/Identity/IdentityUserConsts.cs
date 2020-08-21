@@ -32,5 +32,10 @@ namespace Volo.Abp.Identity
         /// Default value: 256
         /// </summary>
         public static int MaxSecurityStampLength { get; set; } = 256;
+
+        /// <summary>
+        /// Default value: 16
+        /// </summary>
+        public static int MaxLoginProviderLength { get; set; } = 16;
     }
 }

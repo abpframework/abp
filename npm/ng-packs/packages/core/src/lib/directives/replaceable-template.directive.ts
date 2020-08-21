@@ -4,7 +4,6 @@ import {
   Injector,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
   SimpleChanges,
   TemplateRef,
@@ -12,17 +11,17 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { Store } from '@ngxs/store';
+import compare from 'just-compare';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import snq from 'snq';
 import { ABP } from '../models/common';
 import { ReplaceableComponents } from '../models/replaceable-components';
+import { SubscriptionService } from '../services/subscription.service';
 import { ReplaceableComponentsState } from '../states/replaceable-components.state';
-import { takeUntilDestroy } from '../utils/rxjs-utils';
-import compare from 'just-compare';
-import snq from 'snq';
 
-@Directive({ selector: '[abpReplaceableTemplate]' })
-export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChanges {
+@Directive({ selector: '[abpReplaceableTemplate]', providers: [SubscriptionService] })
+export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   @Input('abpReplaceableTemplate')
   data: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
 
@@ -47,6 +46,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
     private cfRes: ComponentFactoryResolver,
     private vcRef: ViewContainerRef,
     private store: Store,
+    private subscription: SubscriptionService,
   ) {
     this.context = {
       initTemplate: ref => {
@@ -58,16 +58,18 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
   }
 
   ngOnInit() {
-    this.store
+    const component$ = this.store
       .select(ReplaceableComponentsState.getComponent(this.data.componentKey))
       .pipe(
         filter(
           (res = {} as ReplaceableComponents.ReplaceableComponent) =>
             !this.initialized || !compare(res.component, this.externalComponent),
         ),
-        takeUntilDestroy(this),
-      )
-      .subscribe((res = {} as ReplaceableComponents.ReplaceableComponent) => {
+      );
+
+    this.subscription.addOne(
+      component$,
+      (res = {} as ReplaceableComponents.ReplaceableComponent) => {
         this.vcRef.clear();
         this.externalComponent = res.component;
         if (this.defaultComponentRef) {
@@ -90,7 +92,8 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
         }
 
         this.initialized = true;
-      });
+      },
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -98,8 +101,6 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
       this.setDefaultComponentInputs();
     }
   }
-
-  ngOnDestroy() {}
 
   setDefaultComponentInputs() {
     if (!this.defaultComponentRef || (!this.data.inputs && !this.data.outputs)) return;

@@ -1,9 +1,14 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Abp.Identity.Localization
-@model Volo.Abp.Identity.Web.Pages.Identity.Roles.CreateModalModel
+@using Volo.Abp.Identity.Web.Pages.Identity.Roles
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@model CreateModalModel
 @inject IHtmlLocalizer<IdentityResource> L
+@inject IStringLocalizerFactory StringLocalizerFactory
 @{
     Layout = null;
 }
@@ -12,8 +17,27 @@
         <abp-modal-header title="@L["NewRole"].Value"></abp-modal-header>
         <abp-modal-body>
             <abp-input asp-for="Role.Name" />
+            
             <abp-input asp-for="Role.IsDefault" />
+            
             <abp-input asp-for="Role.IsPublic" />
+            
+            @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<CreateModalModel.RoleInfoModel>())
+            {
+                if (propertyInfo.Type.IsEnum)
+                {
+                    <abp-select asp-for="Role.ExtraProperties[propertyInfo.Name]"
+                                label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"></abp-select>
+                }
+                else
+                {
+                    <abp-input type="@propertyInfo.GetInputType()"
+                               asp-for="Role.ExtraProperties[propertyInfo.Name]"
+                               label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                               asp-format="@propertyInfo.GetInputFormatOrNull()"
+                               value="@propertyInfo.GetInputValueOrNull(Model.Role.ExtraProperties[propertyInfo.Name])" />
+                }
+            }
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>

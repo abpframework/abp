@@ -4,7 +4,7 @@
 
 ABP Framework provides a simple, yet efficient text template system. Text templating is used to dynamically render contents based on a template and a model (a data object):
 
-***TEMPLATE + MODEL ==render==> RENDERED CONTENT***
+Template + Model =renderer=> Rendered Content
 
 It is very similar to an ASP.NET Core Razor View (or Page):
 
@@ -379,6 +379,112 @@ The rendering result will be:
 ````
 A global object value: TEST VALUE
 ````
+
+## Replacing the Existing Templates
+
+It is possible to replace a template defined by a module that used in your application. In this way, you can customize the templates based on your requirements without changing the module code.
+
+### Option-1: Using the Virtual File System
+
+The [Virtual File System](Virtual-File-System.md) allows you to override any file by placing the same file into the same path in your project.
+
+#### Example: Replace the Standard Email Layout Template
+
+ABP Framework provides an [email sending system](Emailing.md) that internally uses the text templating to render the email content. It defines a standard email layout template in the `/Volo/Abp/Emailing/Templates/Layout.tpl` path. The unique name of the template is `Abp.StandardEmailTemplates.Layout` and this string is defined as a constant on the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` static class.
+
+Do the following steps to replace the template file with your own;
+
+**1)** Add a new file into the same location (`/Volo/Abp/Emailing/Templates/Layout.tpl`) in your project:
+
+![replace-email-layout](images/replace-email-layout.png)
+
+**2)** Prepare your email layout template:
+
+````html
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>This my header</h1>
+
+    {%{{{content}}}%}
+
+    <footer>
+      This is my footer...
+    </footer>
+</body>
+</html>
+````
+
+This example simply adds a header and footer to the template and renders the content between them (see the *Layout Templates* section above to understand it).
+
+**3)** Configure the embedded resources in the `.csproj` file
+
+* Add [Microsoft.Extensions.FileProviders.Embedded](https://www.nuget.org/packages/Microsoft.Extensions.FileProviders.Embedded) NuGet package to the project.
+* Add `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` into the `<PropertyConfig>...</PropertyConfig>` section of your `.csproj` file.
+* Add the following code into your `.csproj` file:
+
+````xml
+<ItemGroup>
+  <None Remove="Volo\Abp\Emailing\Templates\*.tpl" />
+  <EmbeddedResource Include="Volo\Abp\Emailing\Templates\*.tpl" />
+</ItemGroup>
+````
+
+This makes the template files "embedded resource".
+
+**4)** Configure the virtual file system
+
+Configure the `AbpVirtualFileSystemOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) to add the embedded files into the virtual file system:
+
+```csharp
+Configure<AbpVirtualFileSystemOptions>(options =>
+{
+    options.FileSets.AddEmbedded<BookStoreDomainModule>();
+});
+```
+
+`BookStoreDomainModule` should be your module name, in this example code.
+
+> Be sure that your module (directly or indirectly) [depends on](Module-Development-Basics.md) the `AbpEmailingModule`. Because the VFS can override files based on the dependency order.
+
+Now, your template will be used when you want to render the email layout template.
+
+### Option-2: Using the Template Definition Provider
+
+You can create a template definition provider class that gets the email layout template and changes the virtual file path for the template.
+
+**Example: Use the `/MyTemplates/EmailLayout.tpl` file instead of the standard template**
+
+```csharp
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Emailing.Templates;
+using Volo.Abp.TextTemplating;
+
+namespace MyProject
+{
+    public class MyTemplateDefinitionProvider
+        : TemplateDefinitionProvider, ITransientDependency
+    {
+        public override void Define(ITemplateDefinitionContext context)
+        {
+            var emailLayoutTemplate = context.GetOrNull(StandardEmailTemplates.Layout);
+
+            emailLayoutTemplate
+                .WithVirtualFilePath(
+                    "/MyTemplates/EmailLayout.tpl",
+                    isInlineLocalized: true
+                );
+        }
+    }
+}
+```
+
+You should still add the file `/MyTemplates/EmailLayout.tpl` to the virtual file system as explained before. This approach allows you to locate templates in any folder instead of the folder defined by the depended module.
+
+Beside the template content, you can manipulate the template definition properties, like `DisplayName`, `Layout` or `LocalizationSource`.
 
 ## Advanced Features
 

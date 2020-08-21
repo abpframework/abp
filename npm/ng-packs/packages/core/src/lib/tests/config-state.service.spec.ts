@@ -102,7 +102,7 @@ describe('ConfigStateService', () => {
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
   });
   test('should have the all ConfigState static methods', () => {
     const reg = /(?<=static )(.*)(?=\()/gm;

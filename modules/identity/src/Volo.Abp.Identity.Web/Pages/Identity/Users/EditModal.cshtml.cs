@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
@@ -55,7 +56,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             return NoContent();
         }
 
-        public class UserInfoViewModel : IHasConcurrencyStamp
+        public class UserInfoViewModel : ExtensibleObject, IHasConcurrencyStamp
         {
             [HiddenInput]
             public Guid Id { get; set; }

@@ -1,4 +1,10 @@
-import { ListService } from '@abp/ng.core';
+import {
+  ListService,
+  ConfigStateService,
+  getShortDateFormat,
+  getShortDateShortTimeFormat,
+  getShortTimeFormat,
+} from '@abp/ng.core';
 import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -9,6 +15,11 @@ import {
   LOCALE_ID,
   TemplateRef,
   TrackByFunction,
+  Type,
+  InjectionToken,
+  InjectFlags,
+  SimpleChanges,
+  OnChanges,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,6 +28,7 @@ import { EntityProp, EntityPropList } from '../../models/entity-props';
 import { PropData } from '../../models/props';
 import { ExtensionsService } from '../../services/extensions.service';
 import { EXTENSIONS_IDENTIFIER } from '../../tokens/extensions.token';
+import { EntityActionList } from '../../models/entity-actions';
 const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 
 @Component({
@@ -25,8 +37,16 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
   templateUrl: './extensible-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExtensibleTableComponent<R = any> {
-  @Input() actionsText: string;
+export class ExtensibleTableComponent<R = any> implements OnChanges {
+  protected _actionsText: string;
+  @Input()
+  set actionsText(value: string) {
+    this._actionsText = value;
+  }
+  get actionsText(): string {
+    return this._actionsText ?? (this.actionList.length > 1 ? 'AbpUi::Actions' : '');
+  }
+
   @Input() data: R[];
   @Input() list: ListService;
   @Input() recordsTotal: number;
@@ -35,16 +55,28 @@ export class ExtensibleTableComponent<R = any> {
   }
   @Input() actionsTemplate: TemplateRef<any>;
 
+  getInjected: <T>(token: Type<T> | InjectionToken<T>, notFoundValue?: T, flags?: InjectFlags) => T;
+
   readonly columnWidths: number[];
 
   readonly propList: EntityPropList<R>;
 
+  readonly actionList: EntityActionList<R>;
+
   readonly trackByFn: TrackByFunction<EntityProp<R>> = (_, item) => item.name;
 
-  constructor(@Inject(LOCALE_ID) private locale: string, injector: Injector) {
+  constructor(
+    @Inject(LOCALE_ID) private locale: string,
+    private config: ConfigStateService,
+    injector: Injector,
+  ) {
+    // tslint:disable-next-line
+    this.getInjected = injector.get.bind(injector);
     const extensions = injector.get(ExtensionsService);
     const name = injector.get(EXTENSIONS_IDENTIFIER);
     this.propList = extensions.entityProps.get(name).props;
+    this.actionList = (extensions['entityActions'].get(name)
+      .actions as unknown) as EntityActionList<R>;
     this.setColumnWidths(DEFAULT_ACTIONS_COLUMN_WIDTH);
   }
 
@@ -73,16 +105,32 @@ export class ExtensibleTableComponent<R = any> {
           case ePropType.Boolean:
             return this.getIcon(value);
           case ePropType.Date:
-            return this.getDate(value, 'yyyy-MM-dd');
+            return this.getDate(value, getShortDateFormat(this.config));
           case ePropType.Time:
-            return this.getDate(value, 'HH:mm');
+            return this.getDate(value, getShortTimeFormat(this.config));
           case ePropType.DateTime:
-            return this.getDate(value, 'yyyy-MM-dd HH:mm:ss Z');
+            return this.getDate(value, getShortDateShortTimeFormat(this.config));
           default:
             return value;
           // More types can be handled in the future
         }
       }),
     );
+  }
+
+  ngOnChanges({ data }: SimpleChanges) {
+    if (!data?.currentValue) return;
+
+    this.data = data.currentValue.map((record, index) => {
+      this.propList.forEach(prop => {
+        const propData = { getInjected: this.getInjected, record, index } as any;
+        record[`_${prop.value.name}`] = {
+          visible: prop.value.visible(propData),
+          value: this.getContent(prop.value, propData),
+        };
+      });
+
+      return record;
+    });
   }
 }

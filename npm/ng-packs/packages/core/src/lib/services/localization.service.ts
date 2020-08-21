@@ -8,6 +8,7 @@ import { Config } from '../models/config';
 import { ConfigState } from '../states/config.state';
 import { registerLocale } from '../utils/initial-utils';
 import { createLocalizer, createLocalizerWithFallback } from '../utils/localization-utils';
+import { CORE_OPTIONS } from '../tokens/options.token';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
 
@@ -44,11 +45,12 @@ export class LocalizationService {
 
   registerLocale(locale: string) {
     const router = this.injector.get(Router);
+    const { cultureNameLocaleFileMap } = this.injector.get(CORE_OPTIONS);
     const { shouldReuseRoute } = router.routeReuseStrategy;
     router.routeReuseStrategy.shouldReuseRoute = () => false;
     router.navigated = false;
 
-    return registerLocale(locale).then(() => {
+    return registerLocale(locale, cultureNameLocaleFileMap).then(() => {
       this.ngZone.run(async () => {
         await router.navigateByUrl(router.url).catch(noop);
         router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;

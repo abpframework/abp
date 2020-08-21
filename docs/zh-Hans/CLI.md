@@ -79,7 +79,7 @@ abp new Acme.BookStore
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项:
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
-    * `--mobile` 或者 `-m`: 指定移动应用程序框架. 默认框架是 `react-native`. 其他选项:
+    * `--mobile` 或者 `-m`: 指定移动应用程序框架. 如果未指定,则不会创建任何移动应用程序,其他选项:
       * `none`: 不包含移动应用程序.
       * `react-native`: React Native.
     * `--database-provider` 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:
@@ -90,9 +90,10 @@ abp new Acme.BookStore
   * **`console`**: [Console template](Startup-Templates/Console.md).
 * `--output-folder` 或者 `-o`: 指定输出文件夹,默认是当前目录.
 * `--version` 或者 `-v`: 指定ABP和模板的版本.它可以是 [release tag](https://github.com/abpframework/abp/releases) 或者 [branch name](https://github.com/abpframework/abp/branches). 如果没有指定,则使用最新版本.大多数情况下,你会希望使用最新的版本.
-* `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D\localTemplate` 或 `https://<your url>.zip`).
+* `--preview`: 使用最新的预发行版本 (仅在未指定 `--version` 且最新稳定版本之后至少有一个预发行版时).
+* `--template-source` 或者 `-ts`: 指定自定义模板源用于生成项目,可以使用本地源和网络源(例如 `D:\local-templat` 或 `https://.../my-template-file.zip`).
 * `--create-solution-folder` 或者 `-csf`: 指定项目是在输出文件夹中的新文件夹中还是直接在输出文件夹中.
-* `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true`. 如果你不想使用默认,你可以设置自己的连接字符串. 默认的数据库提供程序是 `SQL Server`, 所以你只能输入SQL Server连接字符串!
+* `--connection-string` 或者 `-cs`:  重写所有 `appsettings.json` 文件的默认连接字符串. 默认连接字符串是 `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true`. 默认的数据库提供程序是 `SQL Server`. 如果你使用EF Core但需要更改DBMS,可以按[这里所述](Entity-Framework-Core-Other-DBMS.md)进行更改(创建解决方案之后).
 * `--local-framework-ref --abp-path`: 使用对项目的本地引用,而不是替换为NuGet包引用.
 
 ### add-package
@@ -173,15 +174,15 @@ abp update [options]
   
 ### 切换到每晚构建(预览)包
 
-想要切换到ABP框架的最新预览版可以使用此命令.
+想要切换到ABP框架的最新**每晚构建**预览版可以使用此命令.
 
 用法:
 
 ````bash
-abp switch-to-preview [options]
+abp switch-to-nightly [options]
 ````
 
-你也可以使用切换回稳定版本:
+你也可以使用切换回最新稳定版本:
 
 ````bash
 abp switch-to-stable [options]
