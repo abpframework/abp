@@ -366,6 +366,35 @@
         }
       }
     },
+    "schematics": {
+      "projectType": "library",
+      "root": "packages/schematics",
+      "sourceRoot": "packages/schematics/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "options": {
+            "tsConfig": "packages/schematics/tsconfig.lib.json",
+            "project": "packages/schematics/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "tsConfig": "tsconfig.json",
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["packages/schematics/tsconfig.json"],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
     "dev-app": {
       "projectType": "application",
       "schematics": {

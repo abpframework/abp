@@ -1,4 +1,22 @@
 {
+  "[typescriptreact]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
+  },
+  "[xml]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": false,
+      "source.organizeImports": false
+    }
+  },
+  "files.associations": {
+    "*.ts.template": "typescriptreact",
+    "*.html.template": "xml"
+  },
   "search.exclude": {
     "**/dist": true
   },
