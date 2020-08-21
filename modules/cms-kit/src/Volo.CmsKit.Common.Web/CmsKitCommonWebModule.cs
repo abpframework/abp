@@ -26,6 +26,8 @@ namespace Volo.CmsKit.Web
                 options.ReactionIcons[StandardReactions.Hooray] = new LocalizableIconDictionary("/cms-kit/icons/hooray.png");
                 options.ReactionIcons[StandardReactions.Rocket] = new LocalizableIconDictionary("/cms-kit/icons/rocket.png");
                 options.ReactionIcons[StandardReactions.ThumbsDown] = new LocalizableIconDictionary("/cms-kit/icons/thumbsdown.png");
+
+                options.CommentsOptions.IsReactionsEnabled = true;
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>

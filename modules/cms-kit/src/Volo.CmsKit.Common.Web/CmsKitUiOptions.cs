@@ -8,9 +8,12 @@ namespace Volo.CmsKit.Web
         [NotNull]
         public ReactionIconDictionary ReactionIcons { get; }
 
+        public CmsKitUiCommentOptions CommentsOptions { get; }
+
         public CmsKitUiOptions()
         {
             ReactionIcons = new ReactionIconDictionary();
+            CommentsOptions = new CmsKitUiCommentOptions();
         }
     }
 }
