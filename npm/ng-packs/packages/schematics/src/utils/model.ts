@@ -69,8 +69,9 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
 
         _interface.properties.forEach(prop => {
           prop.refs.forEach(ref => {
-            if (parseNamespace(solution, ref) !== model.namespace)
-              toBeImported.push({ type: ref, isEnum: types[ref]?.isEnum });
+            const propType = types[ref];
+            if (propType && parseNamespace(solution, ref) !== model.namespace)
+              toBeImported.push({ type: ref, isEnum: propType?.isEnum });
           });
         });
       });
