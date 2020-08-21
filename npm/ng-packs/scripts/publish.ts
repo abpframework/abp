@@ -53,7 +53,9 @@ const publish = async () => {
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
 
-    await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
+    await execa('yarn', ['build', '--noInstall', '--skipNgcc'], { stdout: 'inherit' });
+
+    await execa('yarn', ['build:schematics'], { stdout: 'inherit' });
 
     await fse.rename('../lerna.publish.json', '../lerna.json');
 
