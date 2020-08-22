@@ -33,13 +33,16 @@ namespace MyCompanyName.MyProjectName.Blazor
             context.Services.Configure<AbpIdentityClientOptions>(options =>
             {
                 //TODO: Get from config, automatically!
-                options.IdentityClients.Default.Authority = "https://localhost:44305";
-                options.IdentityClients.Default.GrantType = "password";
-                options.IdentityClients.Default.ClientId = "MyProjectName_App";
-                options.IdentityClients.Default.ClientSecret = "1q2w3e*";
-                options.IdentityClients.Default.UserName = "admin";
-                options.IdentityClients.Default.UserPassword = "1q2w3E*";
-                options.IdentityClients.Default.Scope = "MyProjectName";
+                options.IdentityClients.Default = new IdentityClientConfiguration
+                {
+                    Authority = "https://localhost:44305",
+                    GrantType = "password",
+                    ClientId = "MyProjectName_App",
+                    ClientSecret = "1q2w3e*",
+                    UserName = "admin",
+                    UserPassword = "1q2w3E*",
+                    Scope = "MyProjectName"
+                };
             });
         }
 
@@ -48,7 +51,10 @@ namespace MyCompanyName.MyProjectName.Blazor
             //TODO: Get from config, automatically!
             Configure<AbpRemoteServiceOptions>(options =>
             {
-                options.RemoteServices.Default.BaseUrl = "https://localhost:44305";
+                options.RemoteServices.Default = new RemoteServiceConfiguration
+                {
+                    BaseUrl = "https://localhost:44305"
+                };
             });
         }
 

@@ -15,7 +15,7 @@ namespace MyCompanyName.MyProjectName.Blazor
 
         public async Task<string> GetUserNameAsync()
         {
-            return "test";
+            return (await _profileAppService.GetAsync()).UserName;
         }
     }
 }
