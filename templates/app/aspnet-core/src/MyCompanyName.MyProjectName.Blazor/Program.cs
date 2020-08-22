@@ -1,7 +1,10 @@
 using System.Threading.Tasks;
+using Autofac;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.Autofac;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -11,11 +14,16 @@ namespace MyCompanyName.MyProjectName.Blazor
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-            //Should be done in the ABP framework!
+            //TODO: Should be done in the ABP framework!
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddSingleton(builder);
 
-            builder.Services.AddApplication<MyProjectNameBlazorModule>();
+            builder.Services.AddApplication<MyProjectNameBlazorModule>(opts =>
+            {
+                opts.UseAutofac();
+            });
+
+            builder.ConfigureContainer(builder.Services.GetSingletonInstance<IServiceProviderFactory<ContainerBuilder>>());
 
             await builder.Build().RunAsync();
         }
