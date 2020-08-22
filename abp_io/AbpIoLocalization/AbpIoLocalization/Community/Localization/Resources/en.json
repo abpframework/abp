@@ -64,6 +64,7 @@
     "PictureUploadedIsNotInExpectedAspectRatio": "The picture you uploaded is not in 16:9 aspect ratio!",
     "HeightAndWidthMustNotExceed": "Height and Width must not exceed 1920*1080.",
     "CoverImage": "Cover Image",
-    "ShareYourExperiencesWithTheABPFramework": "Share your experiences with the ABP Framework!"
+    "ShareYourExperiencesWithTheABPFramework": "Share your experiences with the ABP Framework!",
+    "Optional": "Optional"
   }
 }
