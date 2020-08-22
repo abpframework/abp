@@ -156,7 +156,7 @@
                     wrapper: $(this),
                 });
 
-                widgetManager.init();
+                widgetManager.init($(this));
             });
     });
 

@@ -1,15 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@using Volo.Abp.GlobalFeatures
 @using Volo.Abp.Users
+@using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Localization
 @using Volo.CmsKit.Public.Comments
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
+@using Volo.CmsKit.Web
 @inject ICurrentUser CurrentUser
+@inject IOptionsSnapshot<CmsKitUiOptions> cmsKitUiOptions;
 @inject IHtmlLocalizer<CmsKitResource> L
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting.CommentingViewComponent.CommentingViewModel
 
 @{
     Func<dynamic, IHtmlContent> GetCommentTitle(CmsUserDto author, DateTime creationTime) =>
         @<span>
+            <i class="fa fa-comment-o"></i>
             @((string.IsNullOrWhiteSpace(author.Name)
                 ? author.UserName
                 : author.Name + " " + author.Surname).Trim())
@@ -18,7 +25,7 @@
 }
 @{
     Func<dynamic, IHtmlContent> GetCommentArea(Guid? repliedCommentId, bool cancelButton = false) =>
-        @<div class="cms-comment-form-area @(repliedCommentId.HasValue ? "pl-5":"")"
+        @<div class="cms-comment-form-area @(repliedCommentId.HasValue ? "pl-5" : "pt-4")"
               data-reply-id="@(repliedCommentId?.ToString() ?? "")"
               style="@(string.IsNullOrEmpty(repliedCommentId?.ToString() ?? "") ? "" : "display:none")">
             <form class="cms-comment-form">
@@ -36,44 +43,50 @@
         </div>;
 }
 @{
-    Func<dynamic, IHtmlContent> GetCommentContentArea(Guid id, Guid authorId, bool isReply, string text) =>
+    Func<dynamic, IHtmlContent> GetCommentContentArea(Guid id, string text) =>
         @<div>
             <div class="cms-comment-content-area" data-id="@id.ToString()">
                 <p>
                     @text
                 </p>
             </div>
-
-            @if (!isReply)
-            {
-                @if (CurrentUser.IsAuthenticated)
-                {
-                    <a href="#" class="comment-reply-link" data-reply-id="@id.ToString()">
-                        <i class="fa fa-reply"></i> @L["Reply"]
-                    </a>
-                }
-                else
-                {
-                    <a href="@(Model.LoginUrl + "_" + id)"> @L["LoginToReply"]</a>
-                }
-            }
-            @if (authorId == CurrentUser.Id)
-            {
+        </div>;
+}
+@{
+    Func<dynamic, IHtmlContent> GetCommentActionArea(Guid id, Guid authorId, bool isReply, string text) =>
+        @<div class="pb-4">
+            <div class="float-right">
                 @if (!isReply)
                 {
-                    <span> | </span>
+                    @if (CurrentUser.IsAuthenticated)
+                    {
+                        <a href="#" class="comment-reply-link" data-reply-id="@id.ToString()">
+                            <i class="fa fa-reply"></i> @L["Reply"]
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@(Model.LoginUrl + "_" + id)"> @L["LoginToReply"]</a>
+                    }
                 }
+                @if (authorId == CurrentUser.Id)
+                {
+                    @if (!isReply)
+                    {
+                        <span> | </span>
+                    }
 
-                <a href="#" class="comment-delete-link" data-id="@id.ToString()">
-                    <i class="fa fa-trash"></i> @L["Delete"]
-                </a>
+                    <a href="#" class="comment-delete-link" data-id="@id.ToString()">
+                        <i class="fa fa-trash"></i> @L["Delete"]
+                    </a>
 
-                <span> | </span>
+                    <span> | </span>
 
-                <a href="#" class="comment-edit-link" data-id="@id.ToString()">
-                    <i class="fa fa-pencil"></i> @L["Edit"]
-                </a>
-            }
+                    <a href="#" class="comment-edit-link" data-id="@id.ToString()">
+                        <i class="fa fa-pencil"></i> @L["Edit"]
+                    </a>
+                }
+            </div>
             <div class="cms-comment-edit-area" data-id="@id.ToString()" style="display:none">
                 <form class="cms-comment-update-form">
                     <input hidden value="@id.ToString()" name="id"/>
@@ -89,11 +102,10 @@
 
 <div class="cms-comment-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
 
-    <div  class="pl-5 pt-3">
+    <div class="pl-5 pt-3">
         <h4>
-            <i class="fa fa-comment-o"></i>
             @L["Comments"]
-         </h4>
+        </h4>
         @foreach (var comment in Model.Comments)
         {
             <div class="comment pt-2 mt-1 mb-1">
@@ -102,7 +114,15 @@
                         @GetCommentTitle(comment.Author, comment.CreationTime).Invoke(null)
                     </h5>
 
-                    @GetCommentContentArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
+                    @GetCommentContentArea(comment.Id, comment.Text).Invoke(null)
+
+                    @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                    {
+                        @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent),
+                            new {entityType = "comment", entityId = comment.Id.ToString()})
+                    }
+
+                    @GetCommentActionArea(comment.Id, comment.Author.Id, false, comment.Text).Invoke(null)
 
                     @if (CurrentUser.IsAuthenticated)
                     {
@@ -121,7 +141,14 @@
                                             @GetCommentTitle(reply.Author, reply.CreationTime).Invoke(null)
                                         </h6>
 
-                                        @GetCommentContentArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
+                                        @GetCommentContentArea(reply.Id, reply.Text).Invoke(null)
+
+                                        @if (cmsKitUiOptions.Value.CommentsOptions.IsReactionsEnabled && GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+                                        {
+                                            @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent),
+                                                new {entityType = "comment", entityId = reply.Id.ToString()})
+                                        }
+                                        @GetCommentActionArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
                                     </div>
                                 </div>
                             }
@@ -130,7 +157,7 @@
                 </div>
             </div>
         }
-        <div class="">
+        <div>
             @if (CurrentUser.IsAuthenticated)
             {
                 @GetCommentArea(null).Invoke(null)
