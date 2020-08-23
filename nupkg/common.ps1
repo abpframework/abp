@@ -93,6 +93,7 @@ $projects = (
     "framework/src/Volo.Abp.Http.Client",
     "framework/src/Volo.Abp.Http.Client.IdentityModel",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.Web",
+    "framework/src/Volo.Abp.Http.Client.IdentityModel.WebAssembly",
     "framework/src/Volo.Abp.Http",
     "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Json",

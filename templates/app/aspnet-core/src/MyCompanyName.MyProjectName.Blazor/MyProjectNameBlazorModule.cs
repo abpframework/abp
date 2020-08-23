@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
-using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Http.Client.IdentityModel.WebAssembly;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName.Blazor
@@ -12,7 +12,7 @@ namespace MyCompanyName.MyProjectName.Blazor
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(MyProjectNameHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelModule)
+        typeof(AbpHttpClientIdentityModelWebAssemblyModule)
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {
@@ -31,6 +31,7 @@ namespace MyCompanyName.MyProjectName.Blazor
             builder.Services.AddOidcAuthentication(options =>
             {
                 builder.Configuration.Bind("AuthServer", options.ProviderOptions);
+                options.ProviderOptions.DefaultScopes.Add("MyProjectName");
             });
         }
 
