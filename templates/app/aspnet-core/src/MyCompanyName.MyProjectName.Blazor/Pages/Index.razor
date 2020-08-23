@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Volo.Abp.Identity
+@inject IProfileAppService ProfileAppService
 
 <h1>Hello, world!</h1>
 
@@ -8,4 +10,17 @@
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<h2>Remote Service Test</h2>
+
+<h4>Current user name: @_userName</h4>
+<button class="btn btn-primary" @onclick="GetUserNameAsync">Click me</button>
+
+@code
+{
+    private string _userName = "?";
+
+    private async Task GetUserNameAsync()
+    {
+        _userName = (await ProfileAppService.GetAsync()).UserName;
+    }
+}
