@@ -1,10 +1,9 @@
+using System;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Autofac;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
-using Volo.Abp.Autofac;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -13,17 +12,14 @@ namespace MyCompanyName.MyProjectName.Blazor
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add<App>("app");
 
-            //TODO: Should be done in the ABP framework!
-            builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-            builder.Services.AddSingleton(builder);
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddApplication<MyProjectNameBlazorModule>(opts =>
+            builder.Services.AddOidcAuthentication(options =>
             {
-                opts.UseAutofac();
+                builder.Configuration.Bind("AuthServer", options.ProviderOptions);
             });
-
-            builder.ConfigureContainer(builder.Services.GetSingletonInstance<IServiceProviderFactory<ContainerBuilder>>());
 
             await builder.Build().RunAsync();
         }
