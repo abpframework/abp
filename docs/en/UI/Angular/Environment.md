@@ -65,9 +65,6 @@ Everything else will be sent to `"https://localhost:8080"`
 * `logoUrl`: Url of the application logo. It is used by `logo.component`
 * `baseUrl`: [For detailed information](./Multi-Tenancy.md#domain-tenant-resolver)
 
-## Localization
-
-You can read about `Localization` [here in detail](./Localization.md)
 
 ## AuthConfig
 
