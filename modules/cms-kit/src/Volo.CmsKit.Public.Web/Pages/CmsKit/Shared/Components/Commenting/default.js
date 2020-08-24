@@ -136,11 +136,15 @@
             }
 
             function focusOnHash($container) {
-                if (location.hash === ''){
+                if (!location.hash.toLowerCase().startsWith('#cms-comment')){
                     return;
                 }
 
-                $('html, body').animate({ scrollTop: $(location.hash).offset().top + $(this).height() / 2 }, 'slow');
+                $('html, body').animate(
+                    {
+                        scrollTop: $(location.hash).offset().top + $(this).height() / 2
+                    },
+                    'slow');
             }
 
             function init() {
