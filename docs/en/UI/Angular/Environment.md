@@ -1,6 +1,6 @@
 # Environment
 
-Every application needs some ** environment ** variables. In Angular world, this is usually managed by `environment.ts`, `environment.prod.ts` and so on. It is the same for Abp as well. 
+Every application needs some ** environment ** variables. In Angular world, this is usually managed by `environment.ts`, `environment.prod.ts` and so on. It is the same for ABP as well. 
 
 Current `Environment` configuration holds sub config classes as follows:
 
@@ -8,8 +8,6 @@ Current `Environment` configuration holds sub config classes as follows:
 export interface Environment {
   apis: Apis;
   application: Application;
-  hmr?: boolean;
-  localization?: { defaultResourceName?: string };
   oAuthConfig: AuthConfig;
   production: boolean;
   remoteEnv?: RemoteEnv;
@@ -67,9 +65,6 @@ Everything else will be sent to `"https://localhost:8080"`
 * `logoUrl`: Url of the application logo. It is used by `logo.component`
 * `baseUrl`: [For detailed information](./Multi-Tenancy.md#domain-tenant-resolver)
 
-## Localization
-
-You can read about `Localization` [here in detail](./Localization.md)
 
 ## AuthConfig
 
