@@ -63,6 +63,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         [UnitOfWork]
         public virtual async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
+            var clientId = context.Request?.Client?.ClientId;
             using var scope = ServiceScopeFactory.CreateScope();
 
             await ReplaceEmailToUsernameOfInputIfNeeds(context);
@@ -90,7 +91,9 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     new IdentitySecurityLogContext
                     {
                         Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
-                        Action = IdentityServerSecurityLogActionConsts.LoginSucceeded
+                        Action = IdentityServerSecurityLogActionConsts.LoginSucceeded,
+                        UserName = context.UserName,
+                        ClientId = clientId
                     }
                 );
             }
@@ -153,7 +156,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 {
                     Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
                     Action = result.ToIdentitySecurityLogAction(),
-                    UserName = context.UserName
+                    UserName = context.UserName,
+                    ClientId = clientId
                 });
             }
             else
@@ -165,7 +169,9 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
                 {
                     Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
-                    Action = IdentityServerSecurityLogActionConsts.LoginInvalidUserName
+                    Action = IdentityServerSecurityLogActionConsts.LoginInvalidUserName,
+                    UserName = context.UserName,
+                    ClientId = clientId
                 });
             }
 

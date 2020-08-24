@@ -12,10 +12,10 @@
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.2" />
-    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
-    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
-    <ProjectReference Include="..\..\..\..\..\abp\framework\test\Volo.Abp.BlobStoring.Tests\Volo.Abp.BlobStoring.Tests.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\test\Volo.Abp.BlobStoring.Tests\Volo.Abp.BlobStoring.Tests.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.BlobStoring.Database.Domain\Volo.Abp.BlobStoring.Database.Domain.csproj" />
   </ItemGroup>
 

@@ -6,8 +6,8 @@ import { of } from 'rxjs';
 import { GetAppConfiguration } from '../actions';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { checkAccessToken, getInitialData, localeInitializer } from '../utils';
-import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 import * as environmentUtils from '../utils/environment-utils';
+import * as multiTenancyUtils from '../utils/multi-tenancy-utils';
 
 @Component({
   selector: 'abp-dummy',
@@ -40,6 +40,7 @@ describe('InitialUtils', () => {
 
       injectorSpy.mockReturnValueOnce(store);
       injectorSpy.mockReturnValueOnce({ skipGetAppConfiguration: false });
+      injectorSpy.mockReturnValueOnce({ init: () => null });
       injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => false });
       dispatchSpy.mockReturnValue(of('test'));
 

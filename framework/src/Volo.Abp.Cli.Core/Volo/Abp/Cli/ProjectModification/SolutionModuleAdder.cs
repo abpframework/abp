@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -214,6 +215,11 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             if (string.IsNullOrWhiteSpace(module.EfCoreConfigureMethodName))
             {
+                if (!skipDbMigrations)
+                {
+                    RunMigrator(projectFiles);
+                }
+
                 return;
             }
 
@@ -227,6 +233,12 @@ namespace Volo.Abp.Cli.ProjectModification
             if (dbMigrationsProject == null)
             {
                 Logger.LogDebug("Solution doesn't have a \".DbMigrations\" project.");
+
+                if (!skipDbMigrations)
+                {
+                    RunMigrator(projectFiles);
+                }
+
                 return;
             }
 
@@ -240,9 +252,24 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var addedNewBuilder = DbContextFileBuilderConfigureAdder.Add(dbContextFile, module.EfCoreConfigureMethodName);
 
-            if (addedNewBuilder && !skipDbMigrations)
+            if (!skipDbMigrations)
             {
-                EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject);
+                if (addedNewBuilder)
+                {
+                    EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject);
+                }
+
+                RunMigrator(projectFiles);
+            }
+        }
+
+        protected virtual async Task RunMigrator(string[] projectFiles)
+        {
+            var dbMigratorProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrator.csproj"));
+
+            if (!string.IsNullOrEmpty(dbMigratorProject))
+            {
+                CmdHelper.RunCmd("cd \"" + Path.GetDirectoryName(dbMigratorProject) + "\" && dotnet run");
             }
         }
 

@@ -22,12 +22,9 @@ namespace Volo.CmsKit.MongoDB
         {
             context.Services.AddMongoDbContext<CmsKitMongoDbContext>(options =>
             {
+                options.AddRepository<CmsUser, MongoCmsUserRepository>();
                 options.AddRepository<UserReaction, MongoUserReactionRepository>();
                 options.AddRepository<Comment, MongoCommentRepository>();
-                options.AddRepository<CmsUser, MongoCmsUserRepository>();
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, MongoQuestionRepository>();
-                 */
             });
         }
     }

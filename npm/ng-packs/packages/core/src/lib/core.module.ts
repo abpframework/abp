@@ -4,7 +4,11 @@ import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angul
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import {
+  NgxsStoragePluginModule,
+  NGXS_STORAGE_PLUGIN_OPTIONS,
+  StorageOption,
+} from '@ngxs/storage-plugin';
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
 import { OAuthModule, OAuthStorage } from 'angular-oauth2-oidc';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
@@ -118,7 +122,7 @@ export class BaseCoreModule {}
     LocalizationModule,
     NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
-    NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
+    NgxsStoragePluginModule.forRoot(),
     OAuthModule.forRoot(),
   ],
 })
@@ -216,7 +220,23 @@ export class CoreModule {
           useFactory: noop,
         },
         { provide: OAuthStorage, useFactory: storageFactory },
+        {
+          provide: NGXS_STORAGE_PLUGIN_OPTIONS,
+          useValue: {
+            storage: StorageOption.LocalStorage,
+            serialize: JSON.stringify,
+            deserialize: JSON.parse,
+            beforeSerialize: ngxsStoragePluginSerialize,
+            afterDeserialize: ngxsStoragePluginSerialize,
+            ...options.ngxsStoragePluginOptions,
+            key: [...(options.ngxsStoragePluginOptions?.key || []), 'SessionState'],
+          },
+        },
       ],
     };
   }
+}
+
+export function ngxsStoragePluginSerialize(data) {
+  return data;
 }

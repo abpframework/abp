@@ -149,6 +149,10 @@ The diagram below shows the relation of the applications:
 
 `.Web.Host` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the `.IdentityServer`. Then uses the access token to call the `.HttpApi.Host`. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
+##### Pre-requirements
+
+* [Redis](https://redis.io/): The applications use Redis as as distributed cache. So, you need to have Redis installed & running.
+
 ##### How to Run?
 
 You should run the application with the given order:

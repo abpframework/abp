@@ -13,7 +13,7 @@
     "DisplayName:Abp.Ldap.UserName": "Kullanıcı adı",
     "Description:Abp.Ldap.UserName": "Kullanıcı adı",
 
-    "DisplayName:Abp.Ldap.Password": "parola",
-    "Description:Abp.Ldap.Password": "parola"
+    "DisplayName:Abp.Ldap.Password": "Parola",
+    "Description:Abp.Ldap.Password": "Parola"
   }
 }

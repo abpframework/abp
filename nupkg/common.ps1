@@ -87,6 +87,7 @@ $projects = (
     "framework/src/Volo.Abp.EventBus.Kafka",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
+    "framework/src/Volo.Abp.GlobalFeatures",
     "framework/src/Volo.Abp.Guids",
     "framework/src/Volo.Abp.HangFire",
     "framework/src/Volo.Abp.Http.Abstractions",

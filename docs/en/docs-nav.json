@@ -215,6 +215,19 @@
           "path": "Object-To-Object-Mapping.md"
         },
         {
+          "text": "Email Sending",
+          "items": [
+            {
+              "text": "Email Sending System",
+              "path": "Emailing.md",
+            },
+            {
+              "text": "MailKit Integration",
+              "path": "MailKit.md",
+            }
+          ]
+        },
+        {
           "text": "BLOB Storing",
           "items": [
             {
@@ -650,6 +663,10 @@
     {
       "text": "Microservice Architecture",
       "path": "Microservice-Architecture.md"
+    },
+    {
+      "text": "Preview Releases",
+      "path": "Previews.md"
     },
     {
       "text": "Nightly Builds",

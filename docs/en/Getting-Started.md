@@ -65,8 +65,6 @@ Use the `new` command of the ABP CLI to create a new project:
 abp new Acme.BookStore{{if UI == "NG"}} -u angular {{end}}{{if DB == "Mongo"}} -d mongodb{{end}}{{if Tiered == "Yes" && UI != "NG"}} --tiered {{else if Tiered == "Yes" && UI == "NG"}}--separate-identity-server{{end}}
 ````
 
-> This command also creates a React Native mobile application inside the solution folder. If you don't want it, you can safely delete it or specify the `-m none` option to the `abp new` command to not include it in the solution at all.
-
 {{ if UI == "NG" }}
 
 * `-u` argument specifies the UI framework, `angular` in this case.
@@ -126,7 +124,6 @@ There are three folders in the created solution:
 
 * `angular` folder contains the Angular UI application.
 * `aspnet-core` folder contains the backend solution.
-* `react-native` folder contains the React Native UI application.
 
 Open the `.sln` (Visual Studio solution) file under the `aspnet-core` folder:
 
@@ -339,11 +336,7 @@ Enter **admin** as the username and **1q2w3E*** as the password to login to the 
 
 ## Mobile Development
 
-When you create a new application, the solution includes `react-native` folder by default. This is a basic [React Native](https://reactnative.dev/) startup template to develop mobile applications integrated to your ABP based backends.
-
-If you don't plan to develop a mobile application with React Native, you can safely delete the `react-native` folder.
-
-> You can specifying the `-m none` option to the ABP CLI to not create the `react-native` folder in the beginning.
+If you want to include a [React Native](https://reactnative.dev/) project in your solution, add `-m react-native` (or `--mobile react-native`) argument to project creation command. This is a basic React Native startup template to develop mobile applications integrated to your ABP based backends.
 
 See the "[Getting Started with the React Native](Getting-Started-React-Native.md)" document to learn how to configure and run the React Native application.
 

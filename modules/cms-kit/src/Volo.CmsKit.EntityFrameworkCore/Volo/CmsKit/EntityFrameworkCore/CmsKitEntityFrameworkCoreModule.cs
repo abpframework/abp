@@ -19,9 +19,9 @@ namespace Volo.CmsKit.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<CmsKitDbContext>(options =>
             {
+                options.AddRepository<CmsUser, EfCoreCmsUserRepository>();
                 options.AddRepository<UserReaction, EfCoreUserReactionRepository>();
                 options.AddRepository<Comment, EfCoreCommentRepository>();
-                options.AddRepository<CmsUser, EfCoreCmsUserRepository>();
             });
         }
     }

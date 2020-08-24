@@ -70,7 +70,43 @@ public class YourModule : AbpModule
 }
 ````
 
-Quartz stores job and scheduling information **in memory by default**. In the example, we use the pre-configuration of [options pattern](Options.md) to change it to the database. For more configuration of Quartz, please refer to the Quartz's [documentation](https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/index.html).
+Starting from ABP 3.1 version, we have added `Configurator` to `AbpQuartzOptions` to configure Quartz. For example:
+
+````csharp
+[DependsOn(
+    //...other dependencies
+    typeof(AbpBackgroundJobsQuartzModule) //Add the new module dependency
+    )]
+public class YourModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigure<AbpQuartzOptions>(options =>
+        {
+            options.Configurator = configure =>
+            {
+                configure.UsePersistentStore(storeOptions =>
+                {
+                    storeOptions.UseProperties = true;
+                    storeOptions.UseJsonSerializer();
+                    storeOptions.UseSqlServer(configuration.GetConnectionString("Quartz"));
+                    storeOptions.UseClustering(c =>
+                    {
+                        c.CheckinMisfireThreshold = TimeSpan.FromSeconds(20);
+                        c.CheckinInterval = TimeSpan.FromSeconds(10);
+                    });
+                });
+            };
+        });
+    }
+}
+````
+
+> You can choose the way you favorite to configure Quaratz.
+
+Quartz stores job and scheduling information **in memory by default**. In the example, we use the pre-configuration of [options pattern](Options.md) to change it to the database. For more configuration of Quartz, please refer to the Quartz's [documentation](https://www.quartz-scheduler.net/).
 
 ## Exception handling
 

@@ -400,7 +400,8 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
             {
                 "/Pages",
                 "/Views",
-                "/Themes"
+                "/Themes",
+                "/Components"
             };
 
             AllowedExtraWebContentFileExtensions = ContentTypeMaps.Select(x => x.Key).ToList();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
@@ -22,7 +23,8 @@ namespace Volo.CmsKit.Reactions
             Guid userId,
             string entityType,
             string entityId,
-            string reactionName)
+            string reactionName,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
@@ -34,13 +36,14 @@ namespace Volo.CmsKit.Reactions
                     x.EntityType == entityType &&
                     x.EntityId == entityId &&
                     x.ReactionName == reactionName)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<UserReaction>> GetListForUserAsync(
             Guid userId,
             string entityType,
-            string entityId)
+            string entityId,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
@@ -50,12 +53,13 @@ namespace Volo.CmsKit.Reactions
                     x.CreatorId == userId &&
                     x.EntityType == entityType &&
                     x.EntityId == entityId)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<ReactionSummaryQueryResultItem>> GetSummariesAsync(
             string entityType,
-            string entityId)
+            string entityId,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
@@ -70,7 +74,7 @@ namespace Volo.CmsKit.Reactions
                     ReactionName = g.Key,
                     Count = g.Count()
                 })
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

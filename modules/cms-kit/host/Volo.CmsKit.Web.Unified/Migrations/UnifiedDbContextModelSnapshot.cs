@@ -950,9 +950,9 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RepliedCommentId");
+                    b.HasIndex("TenantId", "RepliedCommentId");
 
-                    b.HasIndex("EntityType", "EntityId");
+                    b.HasIndex("TenantId", "EntityType", "EntityId");
 
                     b.ToTable("CmsComments");
                 });
@@ -992,9 +992,9 @@ namespace Volo.CmsKit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityType", "EntityId");
+                    b.HasIndex("TenantId", "EntityType", "EntityId", "ReactionName");
 
-                    b.HasIndex("CreatorId", "EntityType", "EntityId", "ReactionName");
+                    b.HasIndex("TenantId", "CreatorId", "EntityType", "EntityId", "ReactionName");
 
                     b.ToTable("CmsUserReactions");
                 });
@@ -1059,6 +1059,10 @@ namespace Volo.CmsKit.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "Email");
+
+                    b.HasIndex("TenantId", "UserName");
 
                     b.ToTable("CmsUsers");
                 });

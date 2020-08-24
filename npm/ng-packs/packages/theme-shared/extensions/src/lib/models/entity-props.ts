@@ -11,6 +11,7 @@ import {
   Props,
   PropsFactory,
 } from './props';
+import { ActionCallback } from './actions';
 
 export class EntityPropList<R = any> extends PropList<R, EntityProp<R>> {}
 
@@ -26,6 +27,7 @@ export class EntityProp<R = any> extends Prop<R> {
   readonly columnWidth: number | undefined;
   readonly sortable: boolean;
   readonly valueResolver: PropCallback<R, Observable<any>>;
+  readonly action: ActionCallback<R>;
 
   constructor(options: EntityPropOptions<R>) {
     super(
@@ -40,6 +42,7 @@ export class EntityProp<R = any> extends Prop<R> {
     this.columnWidth = options.columnWidth;
     this.sortable = options.sortable || false;
     this.valueResolver = options.valueResolver || (data => of(data.record[this.name]));
+    this.action = options.action || (_ => {});
   }
 
   static create<R = any>(options: EntityPropOptions<R>) {
@@ -60,6 +63,7 @@ export type EntityPropOptions<R = any> = O.Optional<
   | 'columnWidth'
   | 'sortable'
   | 'valueResolver'
+  | 'action'
 >;
 
 export type EntityPropDefaults<R = any> = Record<string, EntityProp<R>[]>;

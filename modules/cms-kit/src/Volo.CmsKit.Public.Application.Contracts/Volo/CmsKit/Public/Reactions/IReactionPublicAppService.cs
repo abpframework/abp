@@ -8,8 +8,8 @@ namespace Volo.CmsKit.Public.Reactions
     {
         Task<ListResultDto<ReactionWithSelectionDto>> GetForSelectionAsync(string entityType, string entityId);
 
-        Task CreateAsync(CreateReactionDto input);
+        Task CreateAsync(string entityType, string entityId, string reaction);
 
-        Task DeleteAsync(DeleteReactionDto input);
+        Task DeleteAsync(string entityType, string entityId, string reaction);
     }
 }

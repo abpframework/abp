@@ -149,6 +149,10 @@ abp new Acme.IssueManagement -t module --no-ui
 
 `.Web.Host` 项目使用OpenId Connect身份认证从`.IdentityServer`获取当前用户的身份和访问令牌. 然后使用访问令牌调用 `.HttpApi.Host`. HTTP API 服务器使用bearer token验证访问令牌获取当前用户声明并授权用户.
 
+##### 前置条件
+
+* [Redis](https://redis.io/): 应用程序使用Redis做分布式缓存,你需要安装并运行Redis.
+
 ##### 如何运行?
 
 你需要按照以下顺序运行应用程序:

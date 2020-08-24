@@ -30,9 +30,10 @@ namespace Volo.CmsKit.Comments
         }
 
         [Fact]
-        public async Task DeleteAsync()
+        public async Task DeleteWithRepliesAsync()
         {
-            await _commentRepository.DeleteAsync(_cmsKitTestData.CommentWithChildId);
+            var comment = await _commentRepository.GetAsync(_cmsKitTestData.CommentWithChildId);
+            await _commentRepository.DeleteWithRepliesAsync(comment);
 
             var list = await _commentRepository.GetListAsync();
 

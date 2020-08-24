@@ -63,6 +63,11 @@ namespace Volo.CmsKit
         )]
     public class CmsKitWebUnifiedModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            FeatureConfigurer.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -112,11 +117,6 @@ namespace Volo.CmsKit
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
-
-            Configure<CmsKitOptions>(options =>
-            {
-                options.PublicCommentEntities.Add("publicQuote");
             });
         }
 

@@ -26,7 +26,8 @@ Here, the list of all available commands before explaining their details:
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints on the server.
-* **`switch-to-preview`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
+* **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
+* **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
@@ -79,8 +80,7 @@ abp new Acme.BookStore
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `none`: Without UI. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
-    * `--mobile` or `-m`: Specifies the mobile application framework. Default framework is `react-native`. Available frameworks:
-      * `none`: no mobile application.
+    * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
       * `react-native`: React Native.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
@@ -90,7 +90,7 @@ abp new Acme.BookStore
   * **`console`**: [Console template](Startup-Templates/Console.md).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
-* `--preview`: Use latest pre-release version (Only if `--version ` is not specified and there is at least one pre-release after latest stable version).
+* `--preview`: Use latest preview version.
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D:\local-template` or `https://.../my-template-file.zip`).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
@@ -111,7 +111,6 @@ abp update [options]
 
 #### Options
 
-* `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
 * `--npm`: Only updates NPM packages.
 * `--nuget`: Only updates NuGet packages.
 * `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
@@ -197,7 +196,22 @@ abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
 
 ### switch-to-preview
 
-You can use this command to switch your project to latest **nightly** preview version of the ABP framework packages.
+You can use this command to switch your project to latest preview version of the ABP framework.
+
+Usage:
+
+````bash
+abp switch-to-preview [options]
+````
+
+#### Options
+
+`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+
+### switch-to-nightly
+
+You can use this command to switch your project to latest [nightly](Nightly-Builds.md) preview version of the ABP framework packages.
 
 Usage:
 
@@ -211,7 +225,7 @@ abp switch-to-nightly [options]
 
 ### switch-to-stable
 
-If you're using the ABP Framework preview packages, you can switch back to latest stable version using this command.
+If you're using the ABP Framework preview packages (including nightly previews), you can switch back to latest stable version using this command.
 
 Usage:
 
@@ -274,11 +288,13 @@ Then review changes on your source control system to be sure that it has changed
 Some features of the CLI requires to be logged in to abp.io platform. To login with your username write:
 
 ```bash
-abp login <username>                # Asks password separately
-abp login <username> -p <password>  # Specify the password as a parameter
+abp login <username>                                  # Allows you to enter your password hidden
+abp login <username> -p <password>                    # Specify the password as a parameter (password is visible)
+abp login <username> --organization <organization>    # If you have multiple organizations, you need set your active organization
+abp login <username> -p <password> -o <organization>  # You can enter both your password and organization in the same command
 ```
 
-> Using `-p` parameter might not be safe if someone is watching your screen :) It can be useful for automation purposes.
+> When using the -p parameter, be careful as your password will be visible. It's useful for CI/CD automation pipelines.
 
 A new login with an already active session overwrites the previous session.
 

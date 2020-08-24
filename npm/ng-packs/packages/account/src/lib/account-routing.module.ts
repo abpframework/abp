@@ -10,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ManageProfileComponent } from './components/manage-profile/manage-profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { eAccountComponents } from './enums/components';
+import { AuthenticationFlowGuard } from './guards/authentication-flow.guard';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -20,6 +21,7 @@ const routes: Routes = [
       {
         path: 'login',
         component: ReplaceableRouteContainerComponent,
+        canActivate: [AuthenticationFlowGuard],
         data: {
           replaceableComponent: {
             key: eAccountComponents.Login,
@@ -30,6 +32,7 @@ const routes: Routes = [
       {
         path: 'register',
         component: ReplaceableRouteContainerComponent,
+        canActivate: [AuthenticationFlowGuard],
         data: {
           replaceableComponent: {
             key: eAccountComponents.Register,

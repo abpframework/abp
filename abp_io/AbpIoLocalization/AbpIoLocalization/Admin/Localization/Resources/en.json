@@ -190,6 +190,7 @@
     "Enum:Status:1": "Rejected",
     "Enum:Status:2": "Approved",
     "Summary": "Summary",
-    "AuthorName": "Author name"
+    "AuthorName": "Author name",
+    "CoverImage": "Cover Image"
   }
 }
