@@ -8,8 +8,6 @@ Current `Environment` configuration holds sub config classes as follows:
 export interface Environment {
   apis: Apis;
   application: Application;
-  hmr?: boolean;
-  localization?: { defaultResourceName?: string };
   oAuthConfig: AuthConfig;
   production: boolean;
   remoteEnv?: RemoteEnv;
