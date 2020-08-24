@@ -29,7 +29,8 @@ $.extend( $.validator.messages, {
 	rangelength: $.validator.format( "Unesite vrednost dugačku između {0} i {1} karaktera." ),
 	range: $.validator.format( "Unesite vrednost između {0} i {1}." ),
 	max: $.validator.format( "Unesite vrednost manju ili jednaku {0}." ),
-	min: $.validator.format( "Unesite vrednost veću ili jednaku {0}." )
+	min: $.validator.format( "Unesite vrednost veću ili jednaku {0}." ),
+	step: $.validator.format( "Unesite vrednost koja je umnožak broja {0}." )
 } );
 return $;
 }));
