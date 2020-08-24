@@ -21,7 +21,7 @@ Today, we've released `3.1.0-rc.1` as the first preview version. We may release 
 
 We **won't add new features** to a version after publishing the preview version. We only will make **bug fixes** until the stable version. The new features being developed in this period will be available in the next version.
 
-> We will use `-rc.x` suffix (like `3.1.0-rc.1` and `3.1.0-rc.2`) for preview releases. However, we may also publish with `-preview.x` suffix before RC (Release Candidate) releases, especially for major versions (like 4.x, 5.x...).
+> We will use `-rc.x` suffix (like `3.1.0-rc.1` and `3.1.0-rc.2`) for preview releases. However, we may also publish with `-preview.x` suffix before RC (Release Candidate) releases, especially for major versions (like 4.0, 5.0...).
 
 ### About the Nightly Builds
 
