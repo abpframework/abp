@@ -1,6 +1,6 @@
-# ABP Framework v3.1 RC.1 Has Been Released
+# ABP Framework v3.1 RC Has Been Released
 
-Today, we are releasing the **ABP Framework version 3.1 Release Candidate 1** (RC.1). The development cycle for this version was **~7 weeks**. It was the longest development cycle for a feature version release ever. We have completed **~150 issues**, merged **~150 PRs** and made **~1,000 commits** only in the main [abp repository](https://github.com/abpframework/abp). See the related [milestone](https://github.com/abpframework/abp/milestone/38?closed=1) on GitHub.
+Today, we are releasing the **ABP Framework version 3.1 Release Candidate** (RC). The development cycle for this version was **~7 weeks**. It was the longest development cycle for a feature version release ever. We have completed **~150 issues**, merged **~150 PRs** and made **~1,000 commits** only in the main [abp repository](https://github.com/abpframework/abp). See the related [milestone](https://github.com/abpframework/abp/milestone/38?closed=1) on GitHub.
 
 There were two main reasons of this long development cycle;
 
