@@ -226,7 +226,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             else
             {
-                if (!switchToStable && SemanticVersion.Parse(currentVersion).IsPrerelease)
+                if (!switchToStable && SemanticVersion.Parse(currentVersion.TrimStart('^').TrimStart('~')).IsPrerelease)
                 {
                     version = await GetLatestVersion(package, true);
                 }
