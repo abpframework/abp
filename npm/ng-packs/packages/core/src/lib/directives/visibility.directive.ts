@@ -56,7 +56,7 @@ export class VisibilityDirective implements AfterViewInit {
   }
 
   disconnect() {
-    this.completed$.next();
+    this.completed$.next(false);
     this.completed$.complete();
   }
 

@@ -106,7 +106,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams> implements OnDes
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
+    this.destroy$.next(true);
   }
 }
 
