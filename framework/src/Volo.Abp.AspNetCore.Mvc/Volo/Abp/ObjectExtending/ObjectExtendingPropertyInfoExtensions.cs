@@ -9,7 +9,9 @@ namespace Volo.Abp.ObjectExtending
         private static readonly Type[] DateTimeTypes =
         {
             typeof(DateTime),
-            typeof(DateTimeOffset)
+            typeof(DateTime?),
+            typeof(DateTimeOffset),
+            typeof(DateTimeOffset?)
         };
 
         public static bool IsDate(this IBasicObjectExtensionPropertyInfo property)
