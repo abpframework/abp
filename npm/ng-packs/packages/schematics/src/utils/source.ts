@@ -25,6 +25,31 @@ export async function getApiDefinition(url: string) {
   return body;
 }
 
+export function getRootNamespace(tree: Tree, project: Project, moduleName: string) {
+  const environmentExpr = readEnvironment(tree, project.definition);
+
+  if (!environmentExpr)
+    throw new SchematicsException(interpolate(Exception.NoEnvironment, project.name));
+
+  let assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
+    'apis',
+    moduleName,
+    'rootNamespace',
+  ]);
+
+  if (!assignment)
+    assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
+      'apis',
+      'default',
+      'rootNamespace',
+    ]);
+
+  if (!assignment)
+    throw new SchematicsException(interpolate(Exception.NoRootNamespace, project.name, moduleName));
+
+  return assignment.replace(/[`'"]/g, '');
+}
+
 export function getSourceUrl(tree: Tree, project: Project, moduleName: string) {
   const environmentExpr = readEnvironment(tree, project.definition);
 

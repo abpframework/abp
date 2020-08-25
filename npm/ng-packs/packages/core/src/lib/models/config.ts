@@ -24,6 +24,7 @@ export namespace Config {
 
   export interface ApiConfig {
     [key: string]: string;
+    rootNamespace?: string;
     url: string;
   }
 
