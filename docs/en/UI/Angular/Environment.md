@@ -24,6 +24,7 @@ export interface Apis {
 
 export interface ApiConfig {
   [key: string]: string;
+  rootNamespace?: string;
   url: string;
 }
 ```
@@ -50,6 +51,8 @@ Take a look at following example
 
 When an api from `AbpIdentity` is called, the request will be sent to `"https://localhost:9090"`. 
 Everything else will be sent to `"https://localhost:8080"`
+
+* `rootNamespace` **(new)** : Root namespace of the related API. e.g. Acme.BookStore
 
 ## Application
 
