@@ -11,8 +11,8 @@ using Volo.CmsKit.EntityFrameworkCore;
 namespace Volo.CmsKit.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20200825083332_Rating_Added")]
-    partial class Rating_Added
+    [Migration("20200825101525_CmsRatings_Added")]
+    partial class CmsRatings_Added
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -973,7 +973,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<short>("Star")
+                    b.Property<short>("StarCount")
                         .HasColumnType("smallint");
 
                     b.HasKey("Id");

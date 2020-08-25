@@ -81,7 +81,7 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
                     r.ConfigureByConvention();
 
-                    r.Property(x => x.Star).IsRequired();
+                    r.Property(x => x.StarCount).IsRequired();
                 });    
             }
         }

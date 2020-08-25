@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Volo.CmsKit.Migrations
 {
-    public partial class Rating_Added : Migration
+    public partial class CmsRatings_Added : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace Volo.CmsKit.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Star = table.Column<short>(nullable: false),
+                    StarCount = table.Column<short>(nullable: false),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     CreatorId = table.Column<Guid>(nullable: false)
                 },

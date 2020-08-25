@@ -7,7 +7,7 @@ namespace Volo.CmsKit.Ratings
 {
     public class Rating : BasicAggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator
     {
-        public virtual short Star { get; protected set; }
+        public virtual short StarCount { get; protected set; }
 
         public virtual DateTime CreationTime { get; set; }
 
@@ -20,12 +20,12 @@ namespace Volo.CmsKit.Ratings
         
         public Rating(
             Guid id,
-            [NotNull] short star, 
+            [NotNull] short starCount, 
             Guid creatorId
         )
             : base(id)
         {
-            Star = star;
+            StarCount = starCount;
             CreatorId = creatorId;
         }
     }

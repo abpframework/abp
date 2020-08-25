@@ -971,7 +971,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<short>("Star")
+                    b.Property<short>("StarCount")
                         .HasColumnType("smallint");
 
                     b.HasKey("Id");
