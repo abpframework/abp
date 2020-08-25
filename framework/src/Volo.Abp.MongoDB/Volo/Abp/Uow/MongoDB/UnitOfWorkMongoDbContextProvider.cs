@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
@@ -25,7 +26,8 @@ namespace Volo.Abp.Uow.MongoDB
             var unitOfWork = _unitOfWorkManager.Current;
             if (unitOfWork == null)
             {
-                throw new AbpException($"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
+                throw new AbpException(
+                    $"A {nameof(IMongoDatabase)} instance can only be created inside a unit of work!");
             }
 
             var connectionString = _connectionStringResolver.Resolve<TMongoDbContext>();
@@ -41,18 +43,42 @@ namespace Volo.Abp.Uow.MongoDB
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
-                () =>
+                () => new MongoDbDatabaseApi<TMongoDbContext>(CreateDbContext(unitOfWork,mongoUrl,databaseName)));
+
+            return ((MongoDbDatabaseApi<TMongoDbContext>) databaseApi).DbContext;
+        }
+
+        private TMongoDbContext CreateDbContext(IUnitOfWork unitOfWork, MongoUrl mongoUrl, string databaseName)
+        {
+            var client = new MongoClient(mongoUrl);
+            var database = client.GetDatabase(databaseName);
+            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+
+            if (unitOfWork.Options.IsTransactional)
+            {
+                var session = client.StartSession();
+
+                if (unitOfWork.Options.Timeout.HasValue)
                 {
-                    var database = new MongoClient(mongoUrl).GetDatabase(databaseName);
+                    session.AdvanceOperationTime(new BsonTimestamp(unitOfWork.Options.Timeout.Value));
+                }
 
-                    var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+                session.StartTransaction();
 
-                    dbContext.ToAbpMongoDbContext().InitializeDatabase(database);
+                var transactionApiKey = $"MongoDb_{mongoUrl}";
+                unitOfWork.AddTransactionApi(
+                    transactionApiKey,
+                    new MongoDbTransactionApi(session)
+                );
 
-                    return new MongoDbDatabaseApi<TMongoDbContext>(dbContext);
-                });
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, session);
+            }
+            else
+            {
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, null);
+            }
 
-            return ((MongoDbDatabaseApi<TMongoDbContext>)databaseApi).DbContext;
+            return dbContext;
         }
     }
 }
