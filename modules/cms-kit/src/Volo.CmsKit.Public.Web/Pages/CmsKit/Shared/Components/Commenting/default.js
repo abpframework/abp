@@ -23,8 +23,8 @@
 
                         var commentId = $link.data('id');
 
-                        var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id='+ commentId +']');
-                        var $relatedCommentEditFormArea = $container.find('.cms-comment-edit-area[data-id='+ commentId +']');
+                        var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + commentId + ']');
+                        var $relatedCommentEditFormArea = $container.find('.cms-comment-edit-area[data-id=' + commentId + ']');
 
                         $relatedCommentContentArea.hide();
                         $relatedCommentEditFormArea.show();
@@ -38,13 +38,13 @@
 
                         var commentId = $button.data('id');
 
-                        var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id='+ commentId +']');
-                        var $relatedCommentEditFormArea = $container.find('.cms-comment-edit-area[data-id='+ commentId +']');
-                        var $link = $container.find('.comment-edit-link[data-id='+ commentId +']');
+                        var $relatedCommentContentArea = $container.find('.cms-comment-content-area[data-id=' + commentId + ']');
+                        var $relatedCommentEditFormArea = $container.find('.cms-comment-edit-area[data-id=' + commentId + ']');
+                        var $link = $container.find('.comment-edit-link[data-id=' + commentId + ']');
 
                         $relatedCommentContentArea.show();
                         $relatedCommentEditFormArea.hide();
-                        $link.attr('href','#');
+                        $link.attr('href', '#');
                     });
                 });
             }
@@ -57,9 +57,10 @@
 
                         var replyCommentId = $link.data('reply-id');
 
-                        var $relatedCommentArea = $container.find('.cms-comment-form-area[data-reply-id='+ replyCommentId +']');
+                        var $relatedCommentArea = $container.find('.cms-comment-form-area[data-reply-id=' + replyCommentId + ']');
 
                         $relatedCommentArea.show();
+                        $relatedCommentArea.find('textarea').focus();
                         $link.removeAttr('href');
                     });
                 });
@@ -70,11 +71,11 @@
 
                         var replyCommentId = $button.data('reply-id');
 
-                        var $relatedCommentArea = $container.find('.cms-comment-form-area[data-reply-id='+ replyCommentId +']');
-                        var $replyLink = $container.find('.comment-reply-link[data-reply-id='+ replyCommentId +']');
+                        var $relatedCommentArea = $container.find('.cms-comment-form-area[data-reply-id=' + replyCommentId + ']');
+                        var $replyLink = $container.find('.comment-reply-link[data-reply-id=' + replyCommentId + ']');
 
                         $relatedCommentArea.hide();
-                        $replyLink.attr('href','#');
+                        $replyLink.attr('href', '#');
                     });
                 });
             }
@@ -86,7 +87,7 @@
                         e.preventDefault();
 
                         abp.message.confirm(l("MessageDeletionConfirmationMessage"), function (ok) {
-                            if (ok){
+                            if (ok) {
                                 volo.cmsKit.public.comments.commentPublic.delete($link.data('id')
                                 ).then(function () {
                                     widgetManager.refresh($widget);
@@ -135,6 +136,21 @@
                 });
             }
 
+            function focusOnHash($container) {
+                if (!location.hash.toLowerCase().startsWith('#cms-comment')) {
+                    return;
+                }
+
+                var $link = $(location.hash + '_link');
+
+                if ($link.length > 0) {
+                    $link.click();
+                }
+                else {
+                    $(location.hash).find('textarea').focus();
+                }
+            }
+
             function init() {
                 registerReplyLinks($widget);
                 registerEditLinks($widget);
@@ -142,6 +158,8 @@
 
                 registerUpdateOfNewComment($widget);
                 registerSubmissionOfNewComment($widget);
+
+                focusOnHash($widget);
             }
 
             return {

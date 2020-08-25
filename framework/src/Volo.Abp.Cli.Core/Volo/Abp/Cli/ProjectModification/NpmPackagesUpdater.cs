@@ -226,7 +226,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             else
             {
-                if (!switchToStable && SemanticVersion.Parse(currentVersion).IsPrerelease)
+                if (!switchToStable && IsPrerelease(currentVersion))
                 {
                     version = await GetLatestVersion(package, true);
                 }
@@ -246,6 +246,16 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger.LogInformation(
                 $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
             return true;
+        }
+
+        protected virtual bool IsPrerelease(string version)
+        {
+            if (version == null)
+            {
+                return false;
+            }
+
+            return version.Split("-", StringSplitOptions.RemoveEmptyEntries).Length > 1;
         }
 
         protected virtual async Task<string> GetLatestVersion(
