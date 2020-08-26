@@ -5,7 +5,7 @@
 @using Volo.Abp.Application.Dtos
 @inject IIdentityRoleAppService RoleAppService
 
-<h1>Role Management</h1>
+<h1>Roles</h1>
 
 @if (_roles != null)
 {
@@ -15,7 +15,7 @@
             <li>
                 @role.Id / <strong>@role.Name</strong>
                 <AuthorizeView Policy="@IdentityPermissions.Roles.Delete">
-                    (<button class="btn btn-secondary btn-sm" @onclick="() => DeleteRoleAsync(role.Id)">delete</button>)
+                    (<button class="btn btn-secondary btn-sm" @onclick="() => DeleteRoleAsync(role.Id)">Delete</button>)
                 </AuthorizeView>
             </li>
         }
@@ -23,7 +23,7 @@
     <p>Total role count: @_roles.TotalCount</p>
 }
 
-<h2>Create New Role</h2>
+<h2>New Role</h2>
 
 <label>Name:</label>
 <input type="text" name="RoleName" @bind="_newRole.Name" />
