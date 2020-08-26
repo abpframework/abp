@@ -7,27 +7,48 @@
 
 <h1>Role Management</h1>
 
-<button class="btn btn-primary" @onclick="GetRolesAsync">Get role list</button>
-
 @if (_roles != null)
 {
     <ul class="mt-2">
-        @foreach (var role in _roles)
+        @foreach (var role in _roles.Items)
         {
-            <li>@role.Id / @role.Name</li>
+            <li>@role.Id / <strong>@role.Name</strong> (<button class="btn btn-secondary btn-sm" @onclick="() => DeleteRoleAsync(role.Id)">delete</button>)</li>
         }
     </ul>
-    <p>Total role count: @_totalRoleCount</p>
+    <p>Total role count: @_roles.TotalCount</p>
 }
 
+<h2>Create New Role</h2>
+
+<label>Name:</label>
+<input type="text" name="RoleName" @bind="_newRole.Name" />
+<button class="btn btn-primary" @onclick="CreateRoleAsync">Create!</button>
+
 @code {
-    private long _totalRoleCount = 0;
-    private IReadOnlyList<IdentityRoleDto> _roles;
+    private IdentityRoleCreateDto _newRole = new IdentityRoleCreateDto();
+
+    PagedResultDto<IdentityRoleDto> _roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetRolesAsync();
+    }
 
     private async Task GetRolesAsync()
     {
-        var result = await RoleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
-        _totalRoleCount = result.TotalCount;
-        _roles = result.Items;
+        _roles = await RoleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+    }
+
+    private async Task CreateRoleAsync()
+    {
+        await RoleAppService.CreateAsync(_newRole);
+        _newRole = new IdentityRoleCreateDto();
+        await GetRolesAsync();
+    }
+
+    private async Task DeleteRoleAsync(Guid id)
+    {
+        await RoleAppService.DeleteAsync(id);
+        await GetRolesAsync();
     }
 }
