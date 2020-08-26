@@ -82,6 +82,10 @@ namespace Volo.CmsKit.EntityFrameworkCore
                     r.ConfigureByConvention();
 
                     r.Property(x => x.StarCount).IsRequired();
+                    r.Property(x => x.EntityType).IsRequired().HasMaxLength(RatingConsts.MaxEntityTypeLength);
+                    r.Property(x => x.EntityId).IsRequired().HasMaxLength(RatingConsts.MaxEntityIdLength);
+
+                    r.HasIndex(x => new {x.TenantId, x.EntityType, x.EntityId});
                 });    
             }
         }
