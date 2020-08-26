@@ -35,23 +35,37 @@ namespace Volo.Abp.FeatureManagement
                 true
             );
         }
-        
-        public virtual Task<string> GetOrNullAsync(
-            string name, 
-            string providerName, 
-            string providerKey, 
+
+        public virtual async Task<string> GetOrNullAsync(
+            string name,
+            string providerName,
+            string providerKey,
             bool fallback = true)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(providerName, nameof(providerName));
 
-            return GetOrNullInternalAsync(name, providerName, providerKey, fallback);
+            return (await GetOrNullInternalAsync(name, providerName, providerKey, fallback)).Value;
         }
 
         public virtual async Task<List<FeatureNameValue>> GetAllAsync(
-            string providerName, 
-            string providerKey, 
+            string providerName,
+            string providerKey,
             bool fallback = true)
+        {
+            return (await GetAllWithProviderAsync(providerName, providerKey, fallback))
+                .Select(x => new FeatureNameValue(x.Name, x.Value)).ToList();
+        }
+
+        public async Task<FeatureNameValueWithGrantedProvider> GetOrNullWithProviderAsync(string name, string providerName, string providerKey, bool fallback = true)
+        {
+            Check.NotNull(name, nameof(name));
+            Check.NotNull(providerName, nameof(providerName));
+
+            return await GetOrNullInternalAsync(name, providerName, providerKey, fallback);
+        }
+
+        public async Task<List<FeatureNameValueWithGrantedProvider>> GetAllWithProviderAsync(string providerName, string providerKey, bool fallback = true)
         {
             Check.NotNull(providerName, nameof(providerName));
 
@@ -68,31 +82,35 @@ namespace Volo.Abp.FeatureManagement
 
             if (!providerList.Any())
             {
-                return new List<FeatureNameValue>();
+                return new List<FeatureNameValueWithGrantedProvider>();
             }
 
-            var featureValues = new Dictionary<string, FeatureNameValue>();
+            var featureValues = new Dictionary<string, FeatureNameValueWithGrantedProvider>();
 
             foreach (var feature in featureDefinitions)
             {
-                string value = null;
+                FeatureNameValueWithGrantedProvider value = null;
 
                 foreach (var provider in providerList)
                 {
+                    var pk = provider.Name == providerName ? providerKey : null;
                     var providerValue = await provider.GetOrNullAsync(
                         feature,
-                        provider.Name == providerName ? providerKey : null
+                        pk
                     );
 
                     if (providerValue != null)
                     {
-                        value = providerValue;
+                        value = new FeatureNameValueWithGrantedProvider(feature.Name, providerValue)
+                        {
+                            Provider = new FeatureValueProviderInfo(provider.Name, pk)
+                        };
                     }
                 }
 
                 if (value != null)
                 {
-                    featureValues[feature.Name] = new FeatureNameValue(feature.Name, value);
+                    featureValues[feature.Name] = value;
                 }
             }
 
@@ -100,10 +118,10 @@ namespace Volo.Abp.FeatureManagement
         }
 
         public virtual async Task SetAsync(
-            string name, 
-            string value, 
-            string providerName, 
-            string providerKey, 
+            string name,
+            string value,
+            string providerName,
+            string providerKey,
             bool forceToSet = false)
         {
             Check.NotNull(name, nameof(name));
@@ -120,11 +138,11 @@ namespace Volo.Abp.FeatureManagement
             {
                 return;
             }
-            
+
             if (providers.Count > 1 && !forceToSet && value != null)
             {
                 var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
-                if (fallbackValue == value)
+                if (fallbackValue.Value == value)
                 {
                     //Clear the value if it's same as it's fallback value
                     value = null;
@@ -151,10 +169,10 @@ namespace Volo.Abp.FeatureManagement
             }
         }
 
-        protected virtual async Task<string> GetOrNullInternalAsync(
-            string name, 
-            string providerName, 
-            string providerKey, 
+        protected virtual async Task<FeatureNameValueWithGrantedProvider> GetOrNullInternalAsync(
+            string name,
+            string providerName,
+            string providerKey,
             bool fallback = true) //TODO: Fallback is not used
         {
             var feature = FeatureDefinitionManager.Get(name);
@@ -166,21 +184,27 @@ namespace Volo.Abp.FeatureManagement
                 providers = providers.SkipWhile(c => c.Name != providerName);
             }
 
-            string value = null;
+            FeatureNameValueWithGrantedProvider featureNameValueWithGrantedProvider = null;
             foreach (var provider in providers)
             {
-                value = await provider.GetOrNullAsync(
-                    feature,
-                    provider.Name == providerName ? providerKey : null
-                );
+                string pk = null;
+                if (provider.Compatible(providerName))
+                {
+                    pk = providerKey;
+                }
 
+                var value = await provider.GetOrNullAsync(feature, pk);
                 if (value != null)
                 {
+                    featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(name, value)
+                    {
+                        Provider = new FeatureValueProviderInfo(provider.Name, pk)
+                    };
                     break;
                 }
             }
 
-            return value;
+            return featureNameValueWithGrantedProvider;
         }
     }
 }
