@@ -2,10 +2,13 @@
 @attribute [Authorize]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.Application.Dtos
+@using Volo.Abp.Identity.Localization
 @inject IIdentityRoleAppService RoleAppService
+@inject IStringLocalizer<IdentityResource> L
 
-<h1>Roles</h1>
+<h1>@L["Roles"]</h1>
 
 @if (_roles != null)
 {

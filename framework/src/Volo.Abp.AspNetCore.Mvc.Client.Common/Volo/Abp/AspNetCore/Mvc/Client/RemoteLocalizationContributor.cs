@@ -55,7 +55,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
         private Dictionary<string, string> GetResourceOrNull()
         {
-            var applicationConfigurationDto = AsyncHelper.RunSync(() => _applicationConfigurationClient.GetAsync());
+            var applicationConfigurationDto = _applicationConfigurationClient.Get();
 
             var resource = applicationConfigurationDto
                 .Localization.Values

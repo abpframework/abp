@@ -1,3 +1,5 @@
+@using Volo.Abp.AspNetCore.Mvc.Client
+@inject ICachedApplicationConfigurationClient ConfigurationClient
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
@@ -21,3 +23,10 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        await ConfigurationClient.InitializeAsync();
+    }
+}

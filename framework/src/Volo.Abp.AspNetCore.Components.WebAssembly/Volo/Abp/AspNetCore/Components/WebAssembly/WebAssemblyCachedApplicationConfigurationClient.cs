@@ -1,36 +1,53 @@
-﻿using System.Globalization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.DynamicProxying;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
     public class WebAssemblyCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
         protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }
-        protected ICurrentUser CurrentUser { get; }
+
+        protected IMemoryCache Cache { get; }
 
         public WebAssemblyCachedApplicationConfigurationClient(
             IHttpClientProxy<IAbpApplicationConfigurationAppService> proxy,
-            ICurrentUser currentUser)
+            IMemoryCache cache)
         {
             Proxy = proxy;
-            CurrentUser = currentUser;
+            Cache = cache;
+        }
+
+        public async Task InitializeAsync()
+        {
+            await GetAsync();
         }
 
         public async Task<ApplicationConfigurationDto> GetAsync()
         {
-            //TODO: Cache
+            return await Cache.GetOrCreateAsync(
+                CreateCacheKey(),
+                e => Proxy.Service.GetAsync()
+            );
+        }
 
-            return await Proxy.Service.GetAsync();
+        public ApplicationConfigurationDto Get()
+        {
+            var cacheKey = CreateCacheKey();
+            if(Cache.TryGetValue(cacheKey, out ApplicationConfigurationDto value))
+            {
+                return value;
+            }
+
+            throw new AbpException($"Should initialize the {nameof(ICachedApplicationConfigurationClient)} before getting the value!");
         }
 
         protected virtual string CreateCacheKey()
         {
-            return $"ApplicationConfiguration_{CurrentUser.Id?.ToString("N") ?? "Anonymous"}_{CultureInfo.CurrentUICulture.Name}";
+            return $"ApplicationConfiguration";
         }
     }
 }
