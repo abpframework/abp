@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client.IdentityModel.WebAssembly;
 using Volo.Abp.Modularity;
@@ -12,7 +13,8 @@ namespace MyCompanyName.MyProjectName.Blazor
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(MyProjectNameHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelWebAssemblyModule)
+        typeof(AbpHttpClientIdentityModelWebAssemblyModule),
+        typeof(AbpAspNetCoreComponentsWebAssemblyModule)
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {

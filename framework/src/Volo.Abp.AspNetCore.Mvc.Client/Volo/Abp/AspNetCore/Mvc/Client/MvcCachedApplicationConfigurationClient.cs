@@ -7,19 +7,18 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.DynamicProxying;
-using Volo.Abp.Threading;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    public class CachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
+    public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
         protected IHttpContextAccessor HttpContextAccessor { get; }
         protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }
         protected ICurrentUser CurrentUser { get; }
         protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
 
-        public CachedApplicationConfigurationClient(
+        public MvcCachedApplicationConfigurationClient(
             IDistributedCache<ApplicationConfigurationDto> cache,
             IHttpClientProxy<IAbpApplicationConfigurationAppService> proxy,
             ICurrentUser currentUser,

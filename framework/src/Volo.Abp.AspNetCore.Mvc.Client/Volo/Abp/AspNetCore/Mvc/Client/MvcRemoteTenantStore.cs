@@ -11,13 +11,13 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    public class RemoteTenantStore : ITenantStore, ITransientDependency
+    public class MvcRemoteTenantStore : ITenantStore, ITransientDependency
     {
         protected IHttpClientProxy<IAbpTenantAppService> Proxy { get; }
         protected IHttpContextAccessor HttpContextAccessor { get; }
         protected IDistributedCache<TenantConfiguration> Cache { get; }
 
-        public RemoteTenantStore(
+        public MvcRemoteTenantStore(
             IHttpClientProxy<IAbpTenantAppService> proxy,
             IHttpContextAccessor httpContextAccessor,
             IDistributedCache<TenantConfiguration> cache)
@@ -120,7 +120,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             {
                 return tenantConfiguration;
             }
-            
+
             tenantConfiguration = Cache.GetOrAdd(
                 cacheKey,
                 () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id))),
