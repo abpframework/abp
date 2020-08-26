@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement
@@ -11,7 +10,7 @@ namespace Volo.Abp.FeatureManagement
 
         public string Value { get; set; }
 
-        public string ProviderName { get; set; }
+        public FeatureProviderDto Provider { get; set; }
 
         public string Description { get; set; }
 

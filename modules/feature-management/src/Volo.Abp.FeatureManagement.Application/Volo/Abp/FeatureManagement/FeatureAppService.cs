@@ -42,7 +42,11 @@ namespace Volo.Abp.FeatureManagement
                     Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
                     ParentName = featureDefinition.Parent?.Name,
                     Value = feature.Value,
-                    ProviderName = feature.Provider?.Name
+                    Provider = new FeatureProviderDto
+                    {
+                        Name = feature.Provider?.Name,
+                        Key = feature.Provider?.Key
+                    }
                 });
             }
 
