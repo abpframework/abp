@@ -1,28 +1,12 @@
 ﻿@page "/"
 @using Volo.Abp.Identity
 @inject IProfileAppService ProfileAppService
-@inject IIdentityUserAppService UserAppService
 
 <h2>Profile Application Service Test</h2>
 
 <h4>Current user name: @_userName</h4>
 
 <button class="btn btn-primary" @onclick="GetUserNameAsync">Get Profile Data (requires login)</button>
-
-<h2>User Application Service Test</h2>
-
-<button class="btn btn-primary" @onclick="GetUsersAsync">Get User list (requires login)</button>
-
-@if (_users != null)
-{
-    <ul class="mt-2">
-        @foreach (var user in _users)
-        {
-            <li>@user.UserName / @user.Email</li>
-        }
-    </ul>
-    <p>Total user count: @_totalUserCount</p>
-}
 
 @code
 {
@@ -33,15 +17,5 @@
         // It calls the remote service via ABP Dynamic C# Proxies!
 
         _userName = (await ProfileAppService.GetAsync()).UserName;
-    }
-
-    private long _totalUserCount = 0;
-    private IReadOnlyList<IdentityUserDto> _users;
-
-    private async Task GetUsersAsync()
-    {
-        var result = await UserAppService.GetListAsync(new GetIdentityUsersInput());
-        _totalUserCount = result.TotalCount;
-        _users = result.Items;
     }
 }

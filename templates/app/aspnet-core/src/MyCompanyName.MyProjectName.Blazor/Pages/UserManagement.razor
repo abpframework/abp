@@ -1,0 +1,30 @@
+﻿@page "/user-management"
+@using Volo.Abp.Identity
+@inject IIdentityUserAppService UserAppService
+
+<h1>UserManagement</h1>
+
+<button class="btn btn-primary" @onclick="GetUsersAsync">Get User list (requires login)</button>
+
+@if (_users != null)
+{
+    <ul class="mt-2">
+        @foreach (var user in _users)
+        {
+            <li>@user.UserName / @user.Email</li>
+        }
+    </ul>
+    <p>Total user count: @_totalUserCount</p>
+}
+
+@code {
+    private long _totalUserCount = 0;
+    private IReadOnlyList<IdentityUserDto> _users;
+
+    private async Task GetUsersAsync()
+    {
+        var result = await UserAppService.GetListAsync(new GetIdentityUsersInput());
+        _totalUserCount = result.TotalCount;
+        _users = result.Items;
+    }
+}
