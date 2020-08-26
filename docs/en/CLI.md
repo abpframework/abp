@@ -25,7 +25,7 @@ Here, the list of all available commands before explaining their details:
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
-* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints on the server.
+* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
@@ -173,25 +173,15 @@ abp add-module Volo.Blogging
 
 ### generate-proxy
 
-Generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
+Generates Angular service proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
 
 Usage:
 
 ````bash
-abp generate-proxy [options] 
+abp generate-proxy
 ````
 
-#### Options
-
-* `--apiUrl` or `-a`: Specifies the root URL of the HTTP API. The default value is being retrieved from the `environment.ts` file for the Angular application. Make sure your host is up and running before running `abp generate-proxy`.
-* `--ui` or `-u`: Specifies the UI framework. Default value is `angular` and it is the only UI framework supported for now. Creates TypeScript code.
-* `--module` or `-m`: Specifies the module name. Default module name is `app`, which indicates your own application (you typically want this since every module is responsible to maintain its own client proxies). Set `all` for to generate proxies for all the modules.
-
-Example usage with the options:
-
-````bash
-abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
-````
+> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
 
 ### switch-to-preview

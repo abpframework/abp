@@ -88,7 +88,7 @@
     "snq": "^1.0.3",
     "symlink-manager": "^1.5.0",
     "ts-node": "~7.0.0",
-    "ts-toolbelt": "^6.9.9",
+    "ts-toolbelt": "6.15.4",
     "tsickle": "^0.38.1",
     "tslint": "~6.1.0",
     "typescript": "~3.9.5",
