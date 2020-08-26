@@ -12,7 +12,12 @@
     <ul class="mt-2">
         @foreach (var role in _roles.Items)
         {
-            <li>@role.Id / <strong>@role.Name</strong> (<button class="btn btn-secondary btn-sm" @onclick="() => DeleteRoleAsync(role.Id)">delete</button>)</li>
+            <li>
+                @role.Id / <strong>@role.Name</strong>
+                <AuthorizeView Policy="@IdentityPermissions.Roles.Delete">
+                    (<button class="btn btn-secondary btn-sm" @onclick="() => DeleteRoleAsync(role.Id)">delete</button>)
+                </AuthorizeView>
+            </li>
         }
     </ul>
     <p>Total role count: @_roles.TotalCount</p>
