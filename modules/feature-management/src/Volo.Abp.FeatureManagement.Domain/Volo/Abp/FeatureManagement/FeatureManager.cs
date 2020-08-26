@@ -184,7 +184,7 @@ namespace Volo.Abp.FeatureManagement
                 providers = providers.SkipWhile(c => c.Name != providerName);
             }
 
-            FeatureNameValueWithGrantedProvider featureNameValueWithGrantedProvider = null;
+            var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(name, null);
             foreach (var provider in providers)
             {
                 string pk = null;
@@ -196,10 +196,8 @@ namespace Volo.Abp.FeatureManagement
                 var value = await provider.GetOrNullAsync(feature, pk);
                 if (value != null)
                 {
-                    featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(name, value)
-                    {
-                        Provider = new FeatureValueProviderInfo(provider.Name, pk)
-                    };
+                    featureNameValueWithGrantedProvider.Value = value;
+                    featureNameValueWithGrantedProvider.Provider = new FeatureValueProviderInfo(provider.Name, pk);
                     break;
                 }
             }
