@@ -111,6 +111,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                     entity,
                     cancellationToken: GetCancellationToken(cancellationToken)
                 );
+
+
             }
             else
             {
@@ -248,9 +250,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public virtual IMongoQueryable<TEntity> GetMongoQueryable()
         {
-            return ApplyDataFilters(
-                Collection.AsQueryable()
-            );
+            return ApplyDataFilters(SessionHandle != null ? Collection.AsQueryable(SessionHandle) : Collection.AsQueryable());
         }
         protected virtual bool IsHardDeleted(TEntity entity)
         {

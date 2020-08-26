@@ -7,7 +7,7 @@ namespace Volo.Abp.MongoDB
     /// <summary>
     /// TODO It can be removed, when Mongo2Go solves this issue : https://github.com/Mongo2Go/Mongo2Go/issues/89
     /// </summary>
-     internal static class MongoClientExtension
+    public static class MongoClientExtension
     {
         private static readonly TimeSpan InitialDelay = TimeSpan.FromMilliseconds(500);
         private static readonly TimeSpan MaxDelay = TimeSpan.FromSeconds(5000);
@@ -37,9 +37,12 @@ namespace Volo.Abp.MongoDB
                         {
                             session.Dispose();
                         }
+
                         break;
                     }
-                    catch (NotSupportedException) { }
+                    catch (NotSupportedException)
+                    {
+                    }
 
                     Thread.Sleep(delay);
                     delay = Min(Double(delay), MaxDelay);

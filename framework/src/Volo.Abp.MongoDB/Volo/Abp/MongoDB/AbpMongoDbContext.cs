@@ -26,8 +26,6 @@ namespace Volo.Abp.MongoDB
 
         public virtual IMongoCollection<T> Collection<T>()
         {
-            CreateCollectionIfNotExists<T>();
-
             return Database.GetCollection<T>(GetCollectionName<T>());
         }
 
@@ -46,24 +44,6 @@ namespace Volo.Abp.MongoDB
             }
 
             return model;
-        }
-
-        protected virtual void CreateCollectionIfNotExists<T>()
-        {
-            var collectionName = GetCollectionName<T>();
-
-            if (!CollectionExists(collectionName))
-            {
-                Database.CreateCollection(collectionName);
-            }
-        }
-
-        protected virtual bool CollectionExists(string collectionName)
-        {
-            var filter = new BsonDocument("name", collectionName);
-            var options = new ListCollectionNamesOptions { Filter = filter };
-
-            return Database.ListCollectionNames(options).Any();
         }
     }
 }
