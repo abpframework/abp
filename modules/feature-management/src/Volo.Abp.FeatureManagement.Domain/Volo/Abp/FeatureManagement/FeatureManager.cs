@@ -89,28 +89,27 @@ namespace Volo.Abp.FeatureManagement
 
             foreach (var feature in featureDefinitions)
             {
-                FeatureNameValueWithGrantedProvider value = null;
-
+                var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(feature.Name, null);
                 foreach (var provider in providerList)
                 {
-                    var pk = provider.Name == providerName ? providerKey : null;
-                    var providerValue = await provider.GetOrNullAsync(
-                        feature,
-                        pk
-                    );
-
-                    if (providerValue != null)
+                    string pk = null;
+                    if (provider.Compatible(providerName))
                     {
-                        value = new FeatureNameValueWithGrantedProvider(feature.Name, providerValue)
-                        {
-                            Provider = new FeatureValueProviderInfo(provider.Name, pk)
-                        };
+                        pk = providerKey;
+                    }
+
+                    var value = await provider.GetOrNullAsync(feature, pk);
+                    if (value != null)
+                    {
+                        featureNameValueWithGrantedProvider.Value = value;
+                        featureNameValueWithGrantedProvider.Provider = new FeatureValueProviderInfo(provider.Name, pk);
+                        break;
                     }
                 }
 
-                if (value != null)
+                if (featureNameValueWithGrantedProvider.Value != null)
                 {
-                    featureValues[feature.Name] = value;
+                    featureValues[feature.Name] = featureNameValueWithGrantedProvider;
                 }
             }
 
