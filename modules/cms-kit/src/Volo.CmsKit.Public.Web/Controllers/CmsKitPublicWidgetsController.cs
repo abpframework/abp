@@ -18,9 +18,9 @@ namespace Volo.CmsKit.Public.Web.Controllers
             return Task.FromResult((IActionResult)ViewComponent(typeof(CommentingViewComponent), new {entityType, entityId}));
         }
 
-        public Task<IActionResult> Rating()
+        public Task<IActionResult> Rating(string entityType, string entityId)
         {
-            return Task.FromResult((IActionResult) ViewComponent(typeof(RatingViewComponent)));
+            return Task.FromResult((IActionResult) ViewComponent(typeof(RatingViewComponent), new {entityType, entityId}));
         }
     }
 }

@@ -78,5 +78,15 @@ namespace Volo.CmsKit.Public.Ratings
 
             await RatingRepository.DeleteAsync(id);
         }
+
+        [Authorize]
+        public virtual async Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId)
+        {
+            var currentUserId = CurrentUser.GetId();
+            
+            var rating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, currentUserId);
+
+            return ObjectMapper.Map<Rating, RatingDto>(rating);
+        }
     }
 }

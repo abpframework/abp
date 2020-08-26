@@ -28,5 +28,15 @@ namespace Volo.CmsKit.Ratings
 
             return ratings;
         }
+
+        public async Task<Rating> GetCurrentUserRatingAsync(string entityType, string entityId, Guid userId, CancellationToken cancellationToken = default)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
+
+            var rating = await DbSet.FirstOrDefaultAsync(r => r.EntityType == entityType && r.EntityId == entityId && r.CreatorId == userId, GetCancellationToken(cancellationToken));
+
+            return rating;
+        }
     }
 }

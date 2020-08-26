@@ -14,5 +14,12 @@ namespace Volo.CmsKit.Ratings
             [NotNull] string entityId,
             CancellationToken cancellationToken = default
         );
+
+        Task<Rating> GetCurrentUserRatingAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId,
+            Guid userId,
+            CancellationToken cancellationToken = default
+        );
     }
 }
