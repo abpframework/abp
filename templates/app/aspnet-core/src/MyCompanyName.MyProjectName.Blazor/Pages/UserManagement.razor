@@ -1,10 +1,12 @@
 ﻿@page "/user-management"
+@attribute [Authorize]
 @using Volo.Abp.Identity
+@using Microsoft.AspNetCore.Authorization
 @inject IIdentityUserAppService UserAppService
 
 <h1>UserManagement</h1>
 
-<button class="btn btn-primary" @onclick="GetUsersAsync">Get User list (requires login)</button>
+<button class="btn btn-primary" @onclick="GetUsersAsync">Get user list</button>
 
 @if (_users != null)
 {

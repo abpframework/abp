@@ -1,0 +1,33 @@
+﻿@page "/role-management"
+@attribute [Authorize]
+@using Volo.Abp.Identity
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.Application.Dtos
+@inject IIdentityRoleAppService RoleAppService
+
+<h1>Role Management</h1>
+
+<button class="btn btn-primary" @onclick="GetRolesAsync">Get role list</button>
+
+@if (_roles != null)
+{
+    <ul class="mt-2">
+        @foreach (var role in _roles)
+        {
+            <li>@role.Id / @role.Name</li>
+        }
+    </ul>
+    <p>Total role count: @_totalRoleCount</p>
+}
+
+@code {
+    private long _totalRoleCount = 0;
+    private IReadOnlyList<IdentityRoleDto> _roles;
+
+    private async Task GetRolesAsync()
+    {
+        var result = await RoleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+        _totalRoleCount = result.TotalCount;
+        _roles = result.Items;
+    }
+}
