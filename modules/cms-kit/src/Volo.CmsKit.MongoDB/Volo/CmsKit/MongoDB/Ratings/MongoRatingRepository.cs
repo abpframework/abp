@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Volo.Abp;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore;
-using Volo.CmsKit.EntityFrameworkCore;
+using Volo.Abp.Domain.Repositories.MongoDB;
+using Volo.Abp.MongoDB;
+using Volo.CmsKit.Ratings;
 
-namespace Volo.CmsKit.Ratings
+namespace Volo.CmsKit.MongoDB.Ratings
 {
-    public class EfCoreRatingRepository : EfCoreRepository<ICmsKitDbContext, Rating, Guid>, IRatingRepository
+    public class MongoRatingRepository : MongoDbRepository<ICmsKitMongoDbContext, Rating, Guid>, IRatingRepository
     {
-        public EfCoreRatingRepository(IDbContextProvider<ICmsKitDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoRatingRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
 
@@ -23,7 +22,7 @@ namespace Volo.CmsKit.Ratings
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var query = DbSet.Where(r => r.EntityType == entityType && r.EntityId == entityId);
+            var query = GetMongoQueryable().Where(r => r.EntityType == entityType && r.EntityId == entityId);
             var ratings = await query.ToListAsync(GetCancellationToken(cancellationToken));
 
             return ratings;

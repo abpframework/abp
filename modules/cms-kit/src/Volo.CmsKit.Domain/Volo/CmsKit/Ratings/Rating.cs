@@ -37,9 +37,21 @@ namespace Volo.CmsKit.Ratings
         {
             EntityType = Check.NotNullOrWhiteSpace(entityType, nameof(entityType), RatingConsts.MaxEntityTypeLength);
             EntityId = Check.NotNullOrWhiteSpace(entityId, nameof(entityId), RatingConsts.MaxEntityIdLength);
-            StarCount = starCount;
+            SetStarCount(starCount);
             CreatorId = creatorId;
             TenantId = tenantId;
+        }
+
+        public virtual void SetStarCount(short starCount)
+        {
+            if(starCount <= 5 && starCount > 0)
+            {
+                StarCount = starCount;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("Choosen star must between 1 and 5");
+            }
         }
     }
 }
