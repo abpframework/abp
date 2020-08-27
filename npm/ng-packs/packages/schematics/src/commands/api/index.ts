@@ -19,7 +19,9 @@ import {
   createImportRefsToModelReducer,
   createImportRefToEnumMapper,
   createProxyConfigReader,
+  createProxyConfigWriterCreator,
   EnumGeneratorParams,
+  generateProxyConfigJson,
   getEnumNamesFromImports,
   getRootNamespace,
   interpolate,
@@ -43,6 +45,7 @@ export default function(schema: GenerateProxySchema) {
       const targetPath = buildDefaultPath(target.definition);
       const definitionPath = targetPath + PROXY_CONFIG_PATH;
       const readProxyConfig = createProxyConfigReader(definitionPath);
+      const createProxyConfigWriter = createProxyConfigWriterCreator(definitionPath);
       const data = readProxyConfig(tree);
       const types = data.types;
       const modules = data.modules;
@@ -81,7 +84,14 @@ export default function(schema: GenerateProxySchema) {
         modelImports,
       });
 
-      return branchAndMerge(chain([generateServices, generateModels, generateEnums]));
+      if (!data.generated.includes(moduleName)) data.generated.push(moduleName);
+      data.generated.sort();
+      const json = generateProxyConfigJson(data);
+      const overwriteProxyConfig = createProxyConfigWriter('overwrite', json);
+
+      return branchAndMerge(
+        chain([generateServices, generateModels, generateEnums, overwriteProxyConfig]),
+      );
     },
   ]);
 }
