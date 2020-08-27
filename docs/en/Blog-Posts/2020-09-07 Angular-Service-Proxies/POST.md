@@ -387,8 +387,6 @@ export class OrderService {
 
 src/app/shared/models/orders/**index.ts**
 
-**TODO: FIX the ERROR**
-
 ````typescript
 import type { GenericDetailDto } from '../../models/orders';
 
@@ -404,3 +402,4 @@ export interface OrderDetailDto extends GenericDetailDto<number> {
 }
 ````
 
+NOTE: 3.1.0-rc2 was generating the code above, which is wrong. It will be fixed in the next RC versions.
