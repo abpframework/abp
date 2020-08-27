@@ -5,6 +5,7 @@
 @using Volo.CmsKit.GlobalFeatures
 @using Volo.CmsKit.Pages
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Commenting
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.ReactionSelection
 @model IndexModel
 @inject IStringLocalizer<AbpUiResource> Localizer
@@ -57,3 +58,7 @@
         }
     </abp-card-footer>
 </abp-card>
+
+<hr>
+@await Component.InvokeAsync(typeof(RatingViewComponent), new { entityType = "quote", entityId = "2" })
+<hr>

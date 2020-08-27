@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -39,6 +40,28 @@ namespace Volo.CmsKit.MongoDB.Ratings
                     GetCancellationToken(cancellationToken));
             
             return rating;
+        }
+
+        public async Task<List<RatingWithStarCountQueryResultItem>> GetGroupedStarCountsAsync(string entityType,
+            string entityId, CancellationToken cancellationToken = default)
+        {
+            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
+            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
+
+            var query = from rating in GetMongoQueryable()
+                where rating.EntityType == entityType && rating.EntityId == entityId
+                orderby rating.StarCount descending
+                group rating by rating.StarCount
+                into g
+                select new RatingWithStarCountQueryResultItem
+                {
+                    StarCount = g.Key,
+                    Count = g.Count()
+                };
+
+            var ratings = await query.ToListAsync(GetCancellationToken(cancellationToken));
+
+            return ratings;
         }
     }
 }

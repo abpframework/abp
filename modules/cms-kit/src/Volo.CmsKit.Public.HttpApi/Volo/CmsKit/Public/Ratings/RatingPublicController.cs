@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
@@ -44,16 +45,23 @@ namespace Volo.CmsKit.Public.Ratings
 
         [HttpDelete]
         [Route("{id}")]
-        public Task DeleteAsync(Guid id)
+        public virtual Task DeleteAsync(Guid id)
         {
             return RatingPublicAppService.DeleteAsync(id);
         }
 
         [HttpGet]
         [Route("{entityType}/{entityId}")]
-        public Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId)
+        public virtual Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId)
         {
             return RatingPublicAppService.GetCurrentUserRatingAsync(entityType, entityId);
+        }
+        
+        [HttpGet]
+        [Route("{entityType}/{entityId}")]
+        public virtual Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
+        {
+            return RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
         }
     }
 }

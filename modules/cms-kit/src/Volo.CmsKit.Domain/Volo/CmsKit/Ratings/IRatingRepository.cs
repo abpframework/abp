@@ -21,5 +21,11 @@ namespace Volo.CmsKit.Ratings
             Guid userId,
             CancellationToken cancellationToken = default
         );
+
+        Task<List<RatingWithStarCountQueryResultItem>> GetGroupedStarCountsAsync(
+            [NotNull] string entityType,
+            [NotNull] string entityId,
+            CancellationToken cancellationToken = default
+        );
     }
 }

@@ -31,7 +31,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
         
         public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId)
         {
-            var ratings = await RatingPublicAppService.GetListAsync(entityType, entityId);
+            var ratings = await RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
             
             RatingDto currentUserRating = null;
             if (CurrentUser.IsAuthenticated)
@@ -47,7 +47,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
                 EntityId = entityId,
                 EntityType = entityType,
                 LoginUrl = loginUrl,
-                Ratings = ratings.Items,
+                Ratings = ratings,
                 CurrentRating = currentUserRating
             };
             
@@ -63,7 +63,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 
         public string LoginUrl { get; set; }
 
-        public IReadOnlyList<RatingDto> Ratings { get; set; }
+        public List<RatingWithStarCountDto> Ratings { get; set; }
 
         public RatingDto CurrentRating { get; set; }
     }

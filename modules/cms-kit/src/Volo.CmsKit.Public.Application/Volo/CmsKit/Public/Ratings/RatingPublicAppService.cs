@@ -88,5 +88,12 @@ namespace Volo.CmsKit.Public.Ratings
 
             return ObjectMapper.Map<Rating, RatingDto>(rating);
         }
+
+        public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
+        {
+            var ratings = await RatingRepository.GetGroupedStarCountsAsync(entityType, entityId);
+
+            return ObjectMapper.Map<List<RatingWithStarCountQueryResultItem>, List<RatingWithStarCountDto>>(ratings);
+        }
     }
 }
