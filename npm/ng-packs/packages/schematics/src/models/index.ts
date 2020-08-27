@@ -5,4 +5,5 @@ export * from './model';
 export * from './project';
 export * from './proxy-config';
 export * from './service';
+export * from './tree';
 export * from './util';
