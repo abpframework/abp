@@ -63,18 +63,6 @@ namespace Volo.Abp.Cli.Commands
             if (string.IsNullOrEmpty(currentSuiteVersionAsString))
             {
                 await InstallSuiteAsync();
-                return;
-            }
-
-            var currentVersion = SemanticVersion.Parse(currentSuiteVersionAsString);
-
-            var preview = currentVersion.IsPrerelease;
-
-            var latestVersion = await GetLatestSuiteVersioAsync(preview);
-
-            if (latestVersion > currentVersion)
-            {
-                await UpdateSuiteAsync(preview);
             }
         }
 
