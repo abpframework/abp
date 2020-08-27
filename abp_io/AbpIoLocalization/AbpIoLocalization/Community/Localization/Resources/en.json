@@ -65,6 +65,22 @@
     "HeightAndWidthMustNotExceed": "Height and Width must not exceed 1920*1080.",
     "CoverImage": "Cover Image",
     "ShareYourExperiencesWithTheABPFramework": "Share your experiences with the ABP Framework!",
-    "Optional": "Optional"
+    "Optional": "Optional",
+    "UpdateUserWebSiteInfo": "Example: https://abp.io",
+    "UpdateUserTwitterInfo": "Example: https://twitter.com/abpframework",
+    "UpdateUserGithubInfo": "Example: https://github.com/abpframework/abp",
+    "UpdateUserLinkedinInfo": "Example: https://www.linkedin.com/company/volosoft",
+    "UpdateUserCompanyInfo": "Example: Volosoft Computer & Technology",
+    "UpdateUserJobTitleInfo": "Example: Software Engineer Intern",
+    "UpdateUserBiographyInfo": "About you",
+    "UserName": "UserName",
+    "Company": "Company",
+    "PersonalWebsite": "Personal Website",
+    "RegistrationDate": "Registration Date",
+    "Social": "Social",
+    "Biography": "Biography",
+    "HasNoPublishedArticlesYet": "has no published articles yet",
+    "Author": "Author",
+    "MyAccount": "My account"
   }
 }
