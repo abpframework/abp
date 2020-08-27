@@ -187,6 +187,13 @@ Usage:
 abp generate-proxy
 ````
 
+#### Options
+
+* `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
+* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+
 > See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
 
@@ -202,7 +209,7 @@ abp switch-to-preview [options]
 
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 
 ### switch-to-nightly
@@ -217,7 +224,7 @@ abp switch-to-nightly [options]
 
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-stable
 
@@ -230,7 +237,7 @@ abp switch-to-stable [options]
 ````
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### translate
 
