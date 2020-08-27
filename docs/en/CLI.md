@@ -16,6 +16,12 @@ To update an existing installation:
 dotnet tool update -g Volo.Abp.Cli
 ````
 
+## Global Options
+
+While each command may have a set of options, there are some global options those can be used with any command;
+
+* `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+
 ## Commands
 
 Here, the list of all available commands before explaining their details:
