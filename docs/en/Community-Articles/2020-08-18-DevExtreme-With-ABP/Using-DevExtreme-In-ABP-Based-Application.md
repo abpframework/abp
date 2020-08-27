@@ -1,4 +1,4 @@
-## Using DevExtreme with ABP Based Applications
+## Using DevExtreme Componenets With the ABP Fremework
 
 Hi, in this step by step article, I will show you how to integrate [DevExtreme](https://js.devexpress.com/) components into ABP Framework based applications.
 
