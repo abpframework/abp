@@ -14,11 +14,13 @@ namespace Volo.CmsKit.MongoDB.Ratings
 {
     public class MongoRatingRepository : MongoDbRepository<ICmsKitMongoDbContext, Rating, Guid>, IRatingRepository
     {
-        public MongoRatingRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(dbContextProvider)
+        public MongoRatingRepository(IMongoDbContextProvider<ICmsKitMongoDbContext> dbContextProvider) : base(
+            dbContextProvider)
         {
         }
 
-        public async Task<List<Rating>> GetListAsync(string entityType, string entityId, CancellationToken cancellationToken = default)
+        public async Task<List<Rating>> GetListAsync(string entityType, string entityId,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
@@ -38,7 +40,7 @@ namespace Volo.CmsKit.MongoDB.Ratings
             var rating = await GetMongoQueryable()
                 .FirstOrDefaultAsync(r => r.EntityType == entityType && r.EntityId == entityId && r.CreatorId == userId,
                     GetCancellationToken(cancellationToken));
-            
+
             return rating;
         }
 
@@ -48,16 +50,17 @@ namespace Volo.CmsKit.MongoDB.Ratings
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var query = from rating in GetMongoQueryable()
+            var query = (
+                from rating in GetMongoQueryable()
                 where rating.EntityType == entityType && rating.EntityId == entityId
-                orderby rating.StarCount descending
                 group rating by rating.StarCount
                 into g
                 select new RatingWithStarCountQueryResultItem
                 {
                     StarCount = g.Key,
                     Count = g.Count()
-                };
+                }
+            ).OrderByDescending(r => r.StarCount);
 
             var ratings = await query.ToListAsync(GetCancellationToken(cancellationToken));
 

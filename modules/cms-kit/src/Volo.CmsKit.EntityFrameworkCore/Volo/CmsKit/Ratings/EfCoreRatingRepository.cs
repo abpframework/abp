@@ -18,7 +18,8 @@ namespace Volo.CmsKit.Ratings
         {
         }
 
-        public async Task<List<Rating>> GetListAsync(string entityType, string entityId, CancellationToken cancellationToken = default)
+        public async Task<List<Rating>> GetListAsync(string entityType, string entityId,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
@@ -29,31 +30,36 @@ namespace Volo.CmsKit.Ratings
             return ratings;
         }
 
-        public async Task<Rating> GetCurrentUserRatingAsync(string entityType, string entityId, Guid userId, CancellationToken cancellationToken = default)
+        public async Task<Rating> GetCurrentUserRatingAsync(string entityType, string entityId, Guid userId,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var rating = await DbSet.FirstOrDefaultAsync(r => r.EntityType == entityType && r.EntityId == entityId && r.CreatorId == userId, GetCancellationToken(cancellationToken));
+            var rating = await DbSet.FirstOrDefaultAsync(
+                r => r.EntityType == entityType && r.EntityId == entityId && r.CreatorId == userId,
+                GetCancellationToken(cancellationToken));
 
             return rating;
         }
 
-        public async Task<List<RatingWithStarCountQueryResultItem>> GetGroupedStarCountsAsync(string entityType, string entityId, CancellationToken cancellationToken = default)
+        public async Task<List<RatingWithStarCountQueryResultItem>> GetGroupedStarCountsAsync(string entityType,
+            string entityId, CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
 
-            var query = from rating in DbSet
+            var query = (
+                from rating in DbSet
                 where rating.EntityType == entityType && rating.EntityId == entityId
-                orderby rating.StarCount descending
                 group rating by rating.StarCount
                 into g
                 select new RatingWithStarCountQueryResultItem
                 {
                     StarCount = g.Key,
                     Count = g.Count()
-                };
+                }
+            ).OrderByDescending(r => r.StarCount);
 
             var ratings = await query.ToListAsync(GetCancellationToken(cancellationToken));
 
