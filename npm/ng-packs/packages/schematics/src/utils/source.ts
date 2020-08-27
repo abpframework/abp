@@ -1,7 +1,7 @@
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
 import { Exception } from '../enums';
-import { ApiDefinition, Project, ProxyConfig } from '../models';
+import { ApiDefinition, Project, ProxyConfig, WriteOp } from '../models';
 import { getAssignedPropertyFromObjectliteral } from './ast';
 import { interpolate } from './common';
 import { readEnvironment } from './workspace';
@@ -83,16 +83,37 @@ export function createProxyConfigReader(targetPath: string) {
 }
 
 export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath: string) {
+  const createProxyConfigJson = createProxyConfigJsonCreator(apiDefinition);
   const readPreviousConfig = createProxyConfigReader(targetPath);
+  const writeNewConfig = createProxyConfigWriter(targetPath);
 
   return (tree: Tree) => {
+    const generated: string[] = [];
+    let op: WriteOp = 'create';
+
     if (tree.exists(targetPath)) {
-      const generated: string[] = [];
+      op = 'overwrite';
+
       try {
         readPreviousConfig(tree).generated.forEach(m => generated.push(m));
       } catch (_) {}
+    }
 
-      tree.overwrite(targetPath, JSON.stringify({ generated, ...apiDefinition }, null, 2));
-    } else tree.create(targetPath, JSON.stringify(apiDefinition, null, 2));
+    writeNewConfig(tree, op, createProxyConfigJson(generated));
   };
+}
+
+export function createProxyConfigWriter(targetPath: string) {
+  return (tree: Tree, op: WriteOp, data: string) => {
+    try {
+      tree[op](targetPath, data);
+      return tree;
+    } catch (_) {}
+
+    throw new SchematicsException(interpolate(Exception.FileWriteFailed, targetPath));
+  };
+}
+
+function createProxyConfigJsonCreator(apiDefinition: ApiDefinition) {
+  return (generated: string[]) => JSON.stringify({ generated, ...apiDefinition }, null, 2);
 }
