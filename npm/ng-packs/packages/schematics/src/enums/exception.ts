@@ -1,5 +1,6 @@
 export const enum Exception {
   FileNotFound = '[File Not Found] There is no file at "{0}" path.',
+  FileWriteFailed = '[File Write Failed] Cannot write file at "{0}".',
   InvalidModule = '[Invalid Module] Backend module "{0}" does not exist in API definition.',
   InvalidApiDefinition = '[Invalid API Definition] The provided API definition is invalid.',
   InvalidWorkspace = '[Invalid Workspace] The angular.json should be a valid JSON file.',
