@@ -1,7 +1,7 @@
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
 import { Exception } from '../enums';
-import { ApiDefinition, Project } from '../models';
+import { ApiDefinition, Project, ProxyConfig } from '../models';
 import { getAssignedPropertyFromObjectliteral } from './ast';
 import { interpolate } from './common';
 import { readEnvironment } from './workspace';
@@ -71,23 +71,28 @@ export function getSourceUrl(tree: Tree, project: Project, moduleName: string) {
   return assignment.replace(/[`'"]/g, '');
 }
 
-export function createApiDefinitionReader(targetPath: string) {
+export function createProxyConfigReader(targetPath: string) {
   return (tree: Tree) => {
     try {
       const buffer = tree.read(targetPath);
-      const apiDefinition: ApiDefinition = JSON.parse(buffer!.toString());
-      return apiDefinition;
+      return JSON.parse(buffer!.toString()) as ProxyConfig;
     } catch (_) {}
 
     throw new SchematicsException(interpolate(Exception.NoApiDefinition, targetPath));
   };
 }
 
-export function createApiDefinitionSaver(apiDefinition: ApiDefinition, targetPath: string) {
+export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath: string) {
+  const readPreviousConfig = createProxyConfigReader(targetPath);
+
   return (tree: Tree) => {
-    tree[tree.exists(targetPath) ? 'overwrite' : 'create'](
-      targetPath,
-      JSON.stringify(apiDefinition, null, 2),
-    );
+    if (tree.exists(targetPath)) {
+      const generated: string[] = [];
+      try {
+        readPreviousConfig(tree).generated.forEach(m => generated.push(m));
+      } catch (_) {}
+
+      tree.overwrite(targetPath, JSON.stringify({ generated, ...apiDefinition }, null, 2));
+    } else tree.create(targetPath, JSON.stringify(apiDefinition, null, 2));
   };
 }
