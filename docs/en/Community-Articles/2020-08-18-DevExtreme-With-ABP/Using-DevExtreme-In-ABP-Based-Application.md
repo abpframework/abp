@@ -1,8 +1,10 @@
 ## Using DevExtreme with ABP Based Applications
 
-Hi, in this step by step article, I will show you how to integrate DevExtreme components into ABP Framework based applications.
+Hi, in this step by step article, I will show you how to integrate [DevExtreme](https://js.devexpress.com/) components into ABP Framework based applications.
 
 ![both-example-result](both-example-result.png)
+
+*(A screenshot from the example application developed in this article)*
 
 ## Create the Project
 
@@ -300,3 +302,7 @@ Html.DevExtreme().DataGrid<Order>()
                 .Key("OrderID")
             )
 ```
+
+## Conclusion
+
+In this article, I've explained how to use [DevExtreme](https://js.devexpress.com/) components in your application. ABP Framework is designed so that it can work with any UI library/framework.
