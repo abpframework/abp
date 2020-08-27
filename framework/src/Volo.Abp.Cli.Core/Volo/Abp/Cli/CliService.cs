@@ -190,8 +190,7 @@ namespace Volo.Abp.Cli
                     break;
 
                 case UpdateChannel.Prerelease:
-                    Logger.LogWarning($"dotnet tool uninstall {toolPathArg} Volo.Abp.Cli");
-                    Logger.LogWarning($"dotnet tool install {toolPathArg} Volo.Abp.Cli --version {latestVersion}");
+                    Logger.LogWarning($"dotnet tool update {toolPathArg} Volo.Abp.Cli --version {latestVersion}");
                     break;
 
                 case UpdateChannel.Nightly:

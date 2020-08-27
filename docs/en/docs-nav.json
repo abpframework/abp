@@ -219,11 +219,11 @@
           "items": [
             {
               "text": "Email Sending System",
-              "path": "Emailing.md",
+              "path": "Emailing.md"
             },
             {
               "text": "MailKit Integration",
-              "path": "MailKit.md",
+              "path": "MailKit.md"
             }
           ]
         },
@@ -422,6 +422,10 @@
             {
               "text": "Migration Guide v2.x to v3",
               "path": "UI/Angular/Migration-Guide-v3.md"
+            },
+            {
+              "text": "Environment",
+              "path": "UI/Angular/Environment.md"
             },
             {
               "text": "Service Proxies",
