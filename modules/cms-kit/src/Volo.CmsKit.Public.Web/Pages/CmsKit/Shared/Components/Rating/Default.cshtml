@@ -1,27 +1,67 @@
-﻿@using Volo.Abp.Users
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Users
+@using Volo.CmsKit.Localization
 @inject ICurrentUser CurrentUser
+@model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating.RatingViewModel
+@inject IHtmlLocalizer<CmsKitResource> L
 
-@if (CurrentUser.IsAuthenticated)
-{
-    <div class="my-simple-widget">
-        <h2>My Simple Widget</h2>
-        <p>This is a simple widget!</p>
-    </div>
-}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-rating-svg@3.5.0/src/css/star-rating-svg.css">
 
-<div class="rate">
-    <input type="radio" id="star5" name="rate" value="5"/>
-    <label for="star5" title="5 stars"></label>
-
-    <input type="radio" id="star4" name="rate" value="4"/>
-    <label for="star4" title="4 stars"></label>
-
-    <input type="radio" id="star3" name="rate" value="3"/>
-    <label for="star3" title="3 stars"></label>
-
-    <input type="radio" id="star2" name="rate" value="2"/>
-    <label for="star2" title="2 stars"></label>
-
-    <input type="radio" id="star1" name="rate" value="1"/>
-    <label for="star1" title="1 star"></label>
+<div class="cms-rating-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+    @if (CurrentUser.IsAuthenticated)
+    {
+        <hr/>
+        <span class="my-rating-5" data-rating="@(Model.CurrentRating != null ? Model.CurrentRating.StarCount : 0)" data-authenticated="@(Model.CurrentRating != null)"></span>
+        <span class="live-rating">@(Model.CurrentRating != null ? Model.CurrentRating.StarCount : 0)</span>
+        if (Model.CurrentRating != null)
+        {
+            <a href="#" class="rating-undo-link" data-id="@Model.CurrentRating.Id">
+                <i class="fa fa-undo"></i> @L["Undo"]
+            </a>
+        }
+        <hr/>
+        <div class="container text-center">
+            <h2 class="mb-5">All Stars</h2>
+            @if (Model.Ratings != null)
+            {
+                <ul class="list-group">
+                    @foreach (var rating in Model.Ratings)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @rating.StarCount @L["Stars"]
+                            <span class="badge badge-primary badge-pill">@rating.Count</span>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="float-right mb-2">
+            <a href="@Model.LoginUrl" class="btn btn-primary">@L["LoginToRate"]</a>
+        </div>
+    }
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/star-rating-svg@3.5.0/dist/jquery.star-rating-svg.min.js"></script>
+<script>
+    var authenticated = $(".my-rating-5").attr("data-authenticated");
+    
+    $(".my-rating-5").starRating({
+    initialRating: 0,
+    disableAfterRate: true,
+    useFullStars: true,
+    readOnly: authenticated === "True",
+    onHover: function(currentIndex, currentRating, $el) {
+        $(".live-rating").text(currentIndex);
+    },
+    onLeave: function(currentIndex, currentRating, $el) {
+      $(".live-rating").text(currentRating);
+    },
+    callback: function(currentRating, $el) {
+      alert(currentRating);
+    }
+    });
+</script>
