@@ -40,10 +40,11 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
       const index = models.findIndex(m => m.namespace === _interface.namespace);
       if (index > -1) {
         if (models[index].interfaces.some(i => i.identifier === _interface.identifier)) return;
+        if (_interface.ref.startsWith(VOLO_NAME_VALUE.ref)) return;
 
         models[index].interfaces.push(_interface);
       } else {
-        if (_interface.ref === VOLO_NAME_VALUE.ref) _interface = VOLO_NAME_VALUE;
+        if (_interface.ref.startsWith(VOLO_NAME_VALUE.ref)) _interface = VOLO_NAME_VALUE;
 
         const { namespace } = _interface;
 
@@ -135,13 +136,7 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
         prop.refs.forEach(type => !types[type]?.isEnum && refs.push(type));
         return refs;
       }, [])
-      .concat(
-        base
-          ? parseGenerics(typeDef.baseType!)
-              .toGenerics()
-              .join('')
-          : [],
-      )
+      .concat(base ? parseGenerics(typeDef.baseType!).toGenerics() : [])
       .reduce<Interface[]>(reduceRefsToInterfaces, interfaces);
   }
 }
