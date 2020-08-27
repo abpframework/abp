@@ -9,15 +9,16 @@ import {
   Tree,
   url,
 } from '@angular-devkit/schematics';
+import { PROXY_CONFIG_PATH } from '../../constants';
 import { Exception } from '../../enums';
 import { ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildDefaultPath,
-  createApiDefinitionReader,
   createControllerToServiceMapper,
   createImportRefsToModelReducer,
   createImportRefToEnumMapper,
+  createProxyConfigReader,
   EnumGeneratorParams,
   getEnumNamesFromImports,
   getRootNamespace,
@@ -40,9 +41,9 @@ export default function(schema: GenerateProxySchema) {
       const target = await resolveProject(tree, params.target!);
       const solution = getRootNamespace(tree, source, moduleName);
       const targetPath = buildDefaultPath(target.definition);
-      const definitionPath = `${targetPath}/shared/api-definition.json`;
-      const readApiDefinition = createApiDefinitionReader(definitionPath);
-      const data = readApiDefinition(tree);
+      const definitionPath = targetPath + PROXY_CONFIG_PATH;
+      const readProxyConfig = createProxyConfigReader(definitionPath);
+      const data = readProxyConfig(tree);
       const types = data.types;
       const modules = data.modules;
       if (!types || !modules) throw new SchematicsException(Exception.InvalidApiDefinition);

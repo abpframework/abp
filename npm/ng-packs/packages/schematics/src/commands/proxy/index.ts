@@ -6,11 +6,11 @@ import {
   SchematicContext,
   Tree,
 } from '@angular-devkit/schematics';
-import { API_DEFINITION_ENDPOINT } from '../../constants';
+import { API_DEFINITION_ENDPOINT, PROXY_CONFIG_PATH } from '../../constants';
 import { ApiDefinition } from '../../models';
 import {
   buildDefaultPath,
-  createApiDefinitionSaver,
+  createProxyConfigSaver,
   getApiDefinition,
   getSourceUrl,
   removeDefaultPlaceholders,
@@ -30,13 +30,10 @@ export default function(schema: GenerateProxySchema) {
       const targetPath = buildDefaultPath(target.definition);
       const data: ApiDefinition = await getApiDefinition(sourceUrl + API_DEFINITION_ENDPOINT);
 
-      const saveApiDefinition = createApiDefinitionSaver(
-        data,
-        `${targetPath}/shared/api-definition.json`,
-      );
+      const saveProxyConfig = createProxyConfigSaver(data, targetPath + PROXY_CONFIG_PATH);
       const createApi = schematic('api', schema);
 
-      return branchAndMerge(chain([saveApiDefinition, createApi]));
+      return branchAndMerge(chain([saveProxyConfig, createApi]));
     },
   ]);
 }
