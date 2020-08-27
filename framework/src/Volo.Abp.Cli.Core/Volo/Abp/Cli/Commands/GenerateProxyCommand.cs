@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Utils;
@@ -17,7 +16,11 @@ namespace Volo.Abp.Cli.Commands
             CheckAngularJsonFile();
             CheckNgSchematics();
 
-            CmdHelper.RunCmd("npx ng g @abp/ng.schematics:proxy");
+            var module = commandLineArgs.Options.GetOrNull(Options.Module.Short, Options.Module.Long) ?? "__default";
+            var source = commandLineArgs.Options.GetOrNull(Options.Source.Short, Options.Source.Long) ?? "__default";
+            var target = commandLineArgs.Options.GetOrNull(Options.Target.Short, Options.Target.Long) ?? "__default";
+
+            CmdHelper.RunCmd($"npx ng g @abp/ng.schematics:proxy --module {module} --source {source} --target {target}");
 
             return Task.CompletedTask;
         }
@@ -29,20 +32,21 @@ namespace Volo.Abp.Cli.Commands
             if (!File.Exists(packageJsonPath))
             {
                 throw new CliUsageException(
-                                            "package.json file not found" +
-                                            Environment.NewLine +
-                                            GetUsageInfo()
+                    "package.json file not found" +
+                    Environment.NewLine +
+                    GetUsageInfo()
                 );
             }
 
-            var schematicsPackageNode = (string) JObject.Parse(File.ReadAllText(packageJsonPath))["devDependencies"]?["@abp/ng.schematics"];
+            var schematicsPackageNode =
+                (string) JObject.Parse(File.ReadAllText(packageJsonPath))["devDependencies"]?["@abp/ng.schematics"];
 
             if (schematicsPackageNode == null)
             {
                 throw new CliUsageException(
-                                             "\"@abp/ng.schematics\" NPM package should be installed to the devDependencies before running this command!" +
-                                             Environment.NewLine +
-                                             GetUsageInfo()
+                    "\"@abp/ng.schematics\" NPM package should be installed to the devDependencies before running this command!" +
+                    Environment.NewLine +
+                    GetUsageInfo()
                 );
             }
         }
@@ -81,6 +85,27 @@ namespace Volo.Abp.Cli.Commands
         public string GetShortDescription()
         {
             return "Generates Angular service proxies and DTOs to consume HTTP APIs.";
+        }
+
+        public static class Options
+        {
+            public static class Module
+            {
+                public const string Short = "m";
+                public const string Long = "module";
+            }
+
+            public static class Source
+            {
+                public const string Short = "s";
+                public const string Long = "source";
+            }
+
+            public static class Target
+            {
+                public const string Short = "t";
+                public const string Long = "target";
+            }
         }
     }
 }
