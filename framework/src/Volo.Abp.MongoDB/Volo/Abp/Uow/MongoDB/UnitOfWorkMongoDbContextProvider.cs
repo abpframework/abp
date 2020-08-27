@@ -43,7 +43,7 @@ namespace Volo.Abp.Uow.MongoDB
             //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
             var databaseApi = unitOfWork.GetOrAddDatabaseApi(
                 dbContextKey,
-                () => new MongoDbDatabaseApi<TMongoDbContext>(CreateDbContext(unitOfWork,mongoUrl,databaseName)));
+                () => new MongoDbDatabaseApi<TMongoDbContext>(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
 
             return ((MongoDbDatabaseApi<TMongoDbContext>) databaseApi).DbContext;
         }
@@ -52,9 +52,29 @@ namespace Volo.Abp.Uow.MongoDB
         {
             var client = new MongoClient(mongoUrl);
             var database = client.GetDatabase(databaseName);
-            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 
             if (unitOfWork.Options.IsTransactional)
+            {
+                return CreateDbContextWithTransaction(unitOfWork, mongoUrl, client, database);
+            }
+
+            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+            dbContext.ToAbpMongoDbContext().InitializeDatabase(database, null);
+
+            return dbContext;
+        }
+
+        public TMongoDbContext CreateDbContextWithTransaction(
+            IUnitOfWork unitOfWork,
+            MongoUrl url,
+            MongoClient client,
+            IMongoDatabase database)
+        {
+            var transactionApiKey = $"MongoDb_{url}";
+            var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
+            var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
+
+            if (activeTransaction?.SessionHandle == null)
             {
                 var session = client.StartSession();
 
@@ -65,7 +85,6 @@ namespace Volo.Abp.Uow.MongoDB
 
                 session.StartTransaction();
 
-                var transactionApiKey = $"MongoDb_{mongoUrl}";
                 unitOfWork.AddTransactionApi(
                     transactionApiKey,
                     new MongoDbTransactionApi(session)
@@ -75,7 +94,7 @@ namespace Volo.Abp.Uow.MongoDB
             }
             else
             {
-                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, null);
+                dbContext.ToAbpMongoDbContext().InitializeDatabase(database, activeTransaction.SessionHandle);
             }
 
             return dbContext;

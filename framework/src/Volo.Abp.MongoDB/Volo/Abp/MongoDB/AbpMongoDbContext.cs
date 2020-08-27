@@ -29,6 +29,12 @@ namespace Volo.Abp.MongoDB
             return Database.GetCollection<T>(GetCollectionName<T>());
         }
 
+        public virtual void InitializeCollections(IMongoDatabase database)
+        {
+            Database = database;
+            ModelSource.GetModel(this);
+        }
+
         protected virtual string GetCollectionName<T>()
         {
             return GetEntityModel<T>().CollectionName;
