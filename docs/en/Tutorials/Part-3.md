@@ -704,7 +704,7 @@ Open `/src/app/book/book.component.html` and make the following changes:
         <!-- Add the "new book" button here -->
         <div class="text-lg-right pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createBook()">
-            <i class="fa fa-plus mr-1"></i>
+            <i class="fa fa-plus mr-1" aria-hidden="true"></i>
             <span>{%{{{ "::NewBook" | abpLocalization }}}%}</span>
           </button>
         </div>
@@ -873,7 +873,7 @@ Also replace `<ng-template #abpFooter> </ng-template>` with the following code p
 
   <!--added save button-->
   <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
-        <i class="fa fa-check mr-1"></i>
+        <i class="fa fa-check mr-1" aria-hidden="true"></i>
         {%{{{ '::Save' | abpLocalization }}}%}
   </button>
 </ng-template>
@@ -1105,7 +1105,7 @@ Open the `/src/app/book/book.component.html`  and add the following `ngx-datata
         aria-haspopup="true"
         ngbDropdownToggle
       >
-        <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
+        <i class="fa fa-cog mr-1" aria-hidden="true"></i>{%{{{ '::Actions' | abpLocalization }}}%}
       </button>
       <div ngbDropdownMenu>
         <button ngbDropdownItem (click)="editBook(row.id)">

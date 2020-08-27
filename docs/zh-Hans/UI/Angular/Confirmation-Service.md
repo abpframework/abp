@@ -96,7 +96,7 @@ this.confirmation.warn(
 
 ```js
 const options: Partial<Confirmation.Options> = {
-  yesText: '<i class="fa fa-trash mr-1"></i>Yes, delete it',
+  yesText: '<i class="fa fa-trash mr-1" aria-hidden="true"></i>Yes, delete it',
 };
 
 this.confirmation.warn(

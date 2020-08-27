@@ -737,7 +737,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
       <div class="text-right col col-md-6">
         <div class="text-lg-right pt-2">
           <button id="create" class="btn btn-primary" type="button" (click)="createAuthor()">
-            <i class="fa fa-plus mr-1"></i>
+            <i class="fa fa-plus mr-1" aria-hidden="true"></i>
             <span>{%{{{ '::NewAuthor' | abpLocalization }}}%}</span>
           </button>
         </div>
@@ -759,7 +759,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
               aria-haspopup="true"
               ngbDropdownToggle
             >
-              <i class="fa fa-cog mr-1"></i>{%{{{ '::Actions' | abpLocalization }}}%}
+              <i class="fa fa-cog mr-1" aria-hidden="true"></i>{%{{{ '::Actions' | abpLocalization }}}%}
             </button>
             <div ngbDropdownMenu>
               <button ngbDropdownItem (click)="editAuthor(row.id)">
@@ -814,7 +814,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
     </button>
 
     <button class="btn btn-primary" (click)="save()" [disabled]="form.invalid">
-      <i class="fa fa-check mr-1"></i>
+      <i class="fa fa-check mr-1" aria-hidden="true"></i>
       {%{{{ '::Save' | abpLocalization }}}%}
     </button>
   </ng-template>

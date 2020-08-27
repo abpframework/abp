@@ -248,7 +248,7 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
             role="button"
             class="btn d-block text-left dropdown-toggle"
           >
-            <i class="fa fa-id-card-o"></i>
+            <i class="fa fa-id-card-o" aria-hidden="true"></i>
             {%{{{ 'AbpIdentity::Menu:IdentityManagement' | abpLocalization }}}%}
           </a>
         </div>
@@ -285,7 +285,7 @@ Open the generated `routes.component.html` in `src/app/routes` folder and replac
             role="button"
             class="btn d-block text-left dropdown-toggle"
           >
-            <i class="fa fa-users"></i>
+            <i class="fa fa-users" aria-hidden="true"></i>
             {%{{{ 'AbpTenantManagement::Menu:TenantManagement' | abpLocalization }}}%}
           </a>
         </div>
@@ -497,10 +497,10 @@ Open the generated `nav-items.component.html` in `src/app/nav-items` folder and 
         [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
         <a class="dropdown-item" routerLink="/account/manage-profile"
-          ><i class="fa fa-cog mr-1"></i>{%{{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}}%}</a
+          ><i class="fa fa-cog mr-1" aria-hidden="true"></i>{%{{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}}%}</a
         >
         <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
-          ><i class="fa fa-power-off mr-1"></i>{%{{{ 'AbpUi::Logout' | abpLocalization }}}%}</a
+          ><i class="fa fa-power-off mr-1" aria-hidden="true"></i>{%{{{ 'AbpUi::Logout' | abpLocalization }}}%}</a
         >
       </div>
     </div>

@@ -110,7 +110,7 @@ Adicione um bot√£o rotulado `New book`para mostrar o modal:
   </div>
   <div class="text-right col col-md-6">
     <button id="create-role" class="btn btn-primary" type="button" (click)="createBook()">
-      <i class="fa fa-plus mr-1"></i> <span>New book</span>
+      <i class="fa fa-plus mr-1" aria-hidden="true"></i> <span>New book</span>
     </button>
   </div>
 </div>
@@ -280,7 +280,7 @@ Abra o `book-list.component.html`e adicione um `abp-button`para salvar o formul√
     Cancel
   </button>
   <button class="btn btn-primary" (click)="save()">
-    <i class="fa fa-check mr-1"></i>
+    <i class="fa fa-check mr-1" aria-hidden="true"></i>
     Save
   </button>
 </ng-template>
@@ -448,7 +448,7 @@ Abra o `book-list.component.html` e adicione modifique o `p-table` como mostrado
             aria-haspopup="true"
             ngbDropdownToggle
           >
-            <i class="fa fa-cog mr-1"></i>Actions
+            <i class="fa fa-cog mr-1" aria-hidden="true"></i>Actions
           </button>
           <div ngbDropdownMenu>
             <button ngbDropdownItem (click)="editBook(data.id)">Edit</button>
