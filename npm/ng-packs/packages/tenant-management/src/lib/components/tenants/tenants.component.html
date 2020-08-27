@@ -12,7 +12,7 @@
           type="button"
           (click)="addTenant()"
         >
-          <i class="fa fa-plus mr-1"></i>
+          <i class="fa fa-plus mr-1" aria-hidden="true"></i>
           <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
         </button>
       </div>
@@ -45,7 +45,7 @@
               aria-haspopup="true"
               ngbDropdownToggle
             >
-              <i class="fa fa-cog mr-1"></i>{{ 'AbpTenantManagement::Actions' | abpLocalization }}
+              <i class="fa fa-cog mr-1" aria-hidden="true"></i>{{ 'AbpTenantManagement::Actions' | abpLocalization }}
             </button>
             <div ngbDropdownMenu>
               <button

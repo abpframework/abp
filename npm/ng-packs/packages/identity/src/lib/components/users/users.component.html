@@ -12,7 +12,7 @@
           type="button"
           (click)="add()"
         >
-          <i class="fa fa-plus mr-1"></i>
+          <i class="fa fa-plus mr-1" aria-hidden="true"></i>
           <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
         </button>
       </div>
@@ -44,7 +44,7 @@
               aria-haspopup="true"
               ngbDropdownToggle
             >
-              <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
+              <i class="fa fa-cog mr-1" aria-hidden="true"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
             </button>
             <div ngbDropdownMenu>
               <button
@@ -98,7 +98,7 @@
 
   <ng-template #abpBody>
     <ng-template #loaderRef
-      ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
+      ><div class="text-center"><i class="fa fa-pulse fa-spinner" aria-hidden="true"></i></div
     ></ng-template>
 
     <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
