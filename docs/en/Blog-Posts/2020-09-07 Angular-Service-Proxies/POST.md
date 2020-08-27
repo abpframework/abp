@@ -306,3 +306,101 @@ Added a new DTO class: `BookUpdateDto`.
 
 In this example, I want to show a DTO structure using inheritance, generics, arrays and dictionaries.
 
+I've created an `IOrderAppService` as shown below:
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+
+namespace AngularProxyDemo.Orders
+{
+    public interface IOrderAppService : IApplicationService
+    {
+        public Task CreateAsync(OrderCreateDto input);
+    }
+}
+````
+
+`OrderCreateDto` and the related DTOs are as the followings;
+
+````csharp
+using System;
+using System.Collections.Generic;
+using Volo.Abp.Data;
+
+namespace AngularProxyDemo.Orders
+{
+    public class OrderCreateDto : IHasExtraProperties
+    {
+        public Guid CustomerId { get; set; }
+
+        public DateTime CreationTime { get; set; }
+
+        //ARRAY of DTOs
+        public OrderDetailDto[] Details { get; set; }
+
+        //DICTIONARY
+        public Dictionary<string, object> ExtraProperties { get; set; }
+    }
+    
+    public class OrderDetailDto : GenericDetailDto<int> //INHERIT from GENERIC
+    {
+        public string Note { get; set; }
+    }
+    
+    //GENERIC class
+    public abstract class GenericDetailDto<TCount>
+    {
+        public Guid ProductId { get; set; }
+
+        public TCount Count { get; set; }
+    }
+}
+````
+
+When I run the `abp generate-proxy` command again, I see two new files have been created.
+
+src/app/shared/services/orders/**order.service.ts**
+
+````typescript
+import { RestService } from '@abp/ng.core';
+import { Injectable } from '@angular/core';
+import type { OrderCreateDto } from '../../models/orders';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OrderService {
+  apiName = 'Default';
+
+  create = (input: OrderCreateDto) =>
+    this.restService.request<any, void>({
+      method: 'POST',
+      url: `/api/app/order`,
+      body: input,
+    },
+    { apiName: this.apiName });
+
+  constructor(private restService: RestService) {}
+}
+````
+
+src/app/shared/models/orders/**index.ts**
+
+**TODO: FIX the ERROR**
+
+````typescript
+import type { GenericDetailDto } from '../../models/orders';
+
+export interface OrderCreateDto {
+  customerId: string;
+  creationTime: string;
+  details: OrderDetailDto[];
+  extraProperties: string | object;
+}
+
+export interface OrderDetailDto extends GenericDetailDto<number> {
+  note: string;
+}
+````
+
