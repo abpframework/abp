@@ -85,7 +85,7 @@ export function createProxyConfigReader(targetPath: string) {
 export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath: string) {
   const createProxyConfigJson = createProxyConfigJsonCreator(apiDefinition);
   const readPreviousConfig = createProxyConfigReader(targetPath);
-  const writeNewConfig = createProxyConfigWriter(targetPath);
+  const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
 
   return (tree: Tree) => {
     const generated: string[] = [];
@@ -99,12 +99,16 @@ export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath:
       } catch (_) {}
     }
 
-    writeNewConfig(tree, op, createProxyConfigJson(generated));
+    const json = createProxyConfigJson(generated);
+    const writeProxyConfig = createProxyConfigWriter(op, json);
+    writeProxyConfig(tree);
+
+    return tree;
   };
 }
 
-export function createProxyConfigWriter(targetPath: string) {
-  return (tree: Tree, op: WriteOp, data: string) => {
+export function createProxyConfigWriterCreator(targetPath: string) {
+  return (op: WriteOp, data: string) => (tree: Tree) => {
     try {
       tree[op](targetPath, data);
       return tree;
@@ -114,6 +118,10 @@ export function createProxyConfigWriter(targetPath: string) {
   };
 }
 
-function createProxyConfigJsonCreator(apiDefinition: ApiDefinition) {
-  return (generated: string[]) => JSON.stringify({ generated, ...apiDefinition }, null, 2);
+export function createProxyConfigJsonCreator(apiDefinition: ApiDefinition) {
+  return (generated: string[]) => generateProxyConfigJson({ generated, ...apiDefinition });
+}
+
+export function generateProxyConfigJson(proxyConfig: ProxyConfig) {
+  return JSON.stringify(proxyConfig, null, 2);
 }
