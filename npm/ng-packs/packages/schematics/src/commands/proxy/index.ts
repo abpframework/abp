@@ -13,11 +13,13 @@ import {
   createApiDefinitionSaver,
   getApiDefinition,
   getSourceUrl,
+  removeDefaultPlaceholders,
   resolveProject,
 } from '../../utils';
 import { Schema as GenerateProxySchema } from './schema';
 
-export default function(params: GenerateProxySchema) {
+export default function(schema: GenerateProxySchema) {
+  const params = removeDefaultPlaceholders(schema);
   const moduleName = strings.camelize(params.module || 'app');
 
   return chain([
@@ -32,7 +34,7 @@ export default function(params: GenerateProxySchema) {
         data,
         `${targetPath}/shared/api-definition.json`,
       );
-      const createApi = schematic('api', params);
+      const createApi = schematic('api', schema);
 
       return branchAndMerge(chain([saveApiDefinition, createApi]));
     },
