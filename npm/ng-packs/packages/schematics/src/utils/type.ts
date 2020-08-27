@@ -51,6 +51,10 @@ export function normalizeTypeAnnotations(type: string) {
   return type.replace(/\?/g, '');
 }
 
+export function removeGenerics(type: string) {
+  return type.replace(/<.+>/g, '');
+}
+
 export function removeTypeModifiers(type: string) {
   return type.replace(/\[\]/g, '');
 }
