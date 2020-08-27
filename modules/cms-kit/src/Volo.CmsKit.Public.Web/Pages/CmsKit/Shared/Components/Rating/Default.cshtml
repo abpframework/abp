@@ -1,52 +1,46 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Users
 @using Volo.CmsKit.Localization
-@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @inject ICurrentUser CurrentUser
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating.RatingViewModel
 @inject IHtmlLocalizer<CmsKitResource> L
 
-@section styles{
-    <abp-style type="typeof(RatingStyleBundleContributor)" />
-}
-
-@section scripts{
-    <abp-script type="typeof(RatingScriptBundleContributor)" />
-}
-
-<div class="cms-rating-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+<div class="cms-rating-area container" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
     @if (CurrentUser.IsAuthenticated)
     {
-        <hr/>
-        <span class="my-rating-5" data-rating="@(Model.CurrentRating != null ? Model.CurrentRating.StarCount : 0)" data-authenticated="@(Model.CurrentRating != null)"></span>
-        <span class="live-rating">@(Model.CurrentRating != null ? Model.CurrentRating.StarCount : 0)</span>
-        if (Model.CurrentRating != null)
-        {
-            <a href="#" class="rating-undo-link" data-id="@Model.CurrentRating.Id">
-                <i class="fa fa-undo"></i> @L["Undo"]
-            </a>
-        }
-        <hr/>
-        <div class="container text-center">
-            <h2 class="mb-5">All Stars</h2>
-            @if (Model.Ratings != null)
+        <div class="m-auto">
+            <span class="my-rating-5" data-rating="@(Model.CurrentRating != null ? Model.CurrentRating.StarCount : 0)" data-authenticated="@(Model.CurrentRating != null)"></span>
+            <span class="live-rating">@(Model.CurrentRating != null ? Model.CurrentRating.StarCount + " | " : 0 + "")</span>
+            @if (Model.CurrentRating != null)
             {
-                <ul class="list-group">
-                    @foreach (var rating in Model.Ratings)
-                    {
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            @rating.StarCount @L["Stars"]
-                            <span class="badge badge-primary badge-pill">@rating.Count</span>
-                        </li>
-                    }
-                </ul>
+                <a href="#" class="rating-undo-link m-auto" data-id="@Model.CurrentRating.Id">
+                    <i class="fa fa-undo"></i> @L["Undo"]
+                </a>
             }
         </div>
+        if (Model.Ratings != null)
+        {
+            <div class="row text-center col-6 mt-3">
+                @foreach (var rating in Model.Ratings)
+                {
+                    <div class="side col-2">
+                        <div>@rating.StarCount @L["Stars"]</div>
+                    </div>
+                    <div class="middle col-8">
+                        <div class="bar-container">
+                            <div class="bar bar-@rating.StarCount" style="width: @(rating.Count * 100 / Model.TotalRating)%"></div>
+                        </div>
+                    </div>
+                    <div class="side col-2">
+                        <div>@rating.Count</div>
+                    </div>
+                }
+            </div>
+        }
     }
     else
     {
-        <div class="float-right mb-2">
-            <a href="@Model.LoginUrl" class="btn btn-primary">@L["LoginToRate"]</a>
-        </div>
+        <span class="my-rating-5" data-authenticated="True" data-toggle="popover" data-placement="right" data-html="true" data-content="<div class='text-center'><a href='@Model.LoginUrl' class='btn btn-primary btn-block'>@L["LoginToRate"]</a></div>"></span>
+        <span class="rating-login"></span>
     }
 </div>

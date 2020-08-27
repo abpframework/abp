@@ -1,22 +1,4 @@
 ﻿(function () {
-    var authenticated = $(".my-rating-5").attr("data-authenticated");
-
-    $(".my-rating-5").starRating({
-        initialRating: 0,
-        disableAfterRate: true,
-        useFullStars: true,
-        readOnly: authenticated === "True",
-        onHover: function(currentIndex, currentRating, $el) {
-            $(".live-rating").text(currentIndex);
-        },
-        onLeave: function(currentIndex, currentRating, $el) {
-            $(".live-rating").text(currentRating);
-        },
-        callback: function(currentRating, $el) {
-            alert(currentRating);
-        }
-    });
-    
     var l = abp.localization.getResource("CmsKit");
     
     $(document).ready(function () {
@@ -32,6 +14,8 @@
             }
             
             function registerCreateOfNewRating() {
+                var authenticated = $(".my-rating-5").attr("data-authenticated");
+
                 $(".my-rating-5").starRating({
                     initialRating: 0,
                     disableAfterRate: true,
@@ -58,7 +42,6 @@
             }
             
             function registerUndoLink() {
-                console.log("asdf");
                 $(".rating-undo-link").on('click', '', function (e) {
                     e.preventDefault();
                     

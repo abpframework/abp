@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -32,6 +33,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
         public virtual async Task<IViewComponentResult> InvokeAsync(string entityType, string entityId)
         {
             var ratings = await RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
+            var totalRating = ratings.Sum(x => x.Count);
             
             RatingDto currentUserRating = null;
             if (CurrentUser.IsAuthenticated)
@@ -48,7 +50,8 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
                 EntityType = entityType,
                 LoginUrl = loginUrl,
                 Ratings = ratings,
-                CurrentRating = currentUserRating
+                CurrentRating = currentUserRating,
+                TotalRating = totalRating
             };
             
             return View("~/Pages/CmsKit/Shared/Components/Rating/Default.cshtml", viewModel);
@@ -66,5 +69,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
         public List<RatingWithStarCountDto> Ratings { get; set; }
 
         public RatingDto CurrentRating { get; set; }
+
+        public int TotalRating { get; set; }
     }
 }
