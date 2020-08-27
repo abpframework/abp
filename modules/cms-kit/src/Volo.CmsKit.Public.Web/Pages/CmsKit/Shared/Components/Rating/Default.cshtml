@@ -1,11 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Users
 @using Volo.CmsKit.Localization
+@using Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 @inject ICurrentUser CurrentUser
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating.RatingViewModel
 @inject IHtmlLocalizer<CmsKitResource> L
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-rating-svg@3.5.0/src/css/star-rating-svg.css">
+@section styles{
+    <abp-style type="typeof(RatingStyleBundleContributor)" />
+}
+
+@section scripts{
+    <abp-script type="typeof(RatingScriptBundleContributor)" />
+}
 
 <div class="cms-rating-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
     @if (CurrentUser.IsAuthenticated)
@@ -43,25 +50,3 @@
         </div>
     }
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/star-rating-svg@3.5.0/dist/jquery.star-rating-svg.min.js"></script>
-<script>
-    var authenticated = $(".my-rating-5").attr("data-authenticated");
-    
-    $(".my-rating-5").starRating({
-    initialRating: 0,
-    disableAfterRate: true,
-    useFullStars: true,
-    readOnly: authenticated === "True",
-    onHover: function(currentIndex, currentRating, $el) {
-        $(".live-rating").text(currentIndex);
-    },
-    onLeave: function(currentIndex, currentRating, $el) {
-      $(".live-rating").text(currentRating);
-    },
-    callback: function(currentRating, $el) {
-      alert(currentRating);
-    }
-    });
-</script>
