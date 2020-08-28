@@ -27,7 +27,7 @@ namespace Volo.Abp.Cli.Build
                 var configFile = GetClosestFile(directoryPath, _buildConfigName);
                 var configFileContent = File.ReadAllText(configFile);
                 buildArgs.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
-                
+
                 SetBranchNames(buildArgs.GitRepository);
 
                 return buildArgs;
@@ -37,7 +37,12 @@ namespace Volo.Abp.Cli.Build
             if (configFiles.Length == 1)
             {
                 var configFile = configFiles.First();
-                buildArgs.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFile);
+                var configFileContent = File.ReadAllText(configFile);
+                buildArgs.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
+
+                SetBranchNames(buildArgs.GitRepository);
+
+                return buildArgs;
             }
             else
             {
@@ -46,9 +51,7 @@ namespace Volo.Abp.Cli.Build
                 );
             }
 
-            SetBranchNames(buildArgs.GitRepository);
-
-            return buildArgs;
+            throw new Exception("There is no solution file (*.sln) or " + _buildConfigName + " in the working directory !");
         }
 
         private void SetBranchNames(GitRepository gitRepository)
