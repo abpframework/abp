@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 case "":
                 case null:
-                    await CheckVersion();
+                    await InstallSuiteIfNotInstalledAsync();
                     RunSuite();
                     break;
 
@@ -56,7 +56,7 @@ namespace Volo.Abp.Cli.Commands
             }
         }
 
-        private async Task CheckVersion()
+        private async Task InstallSuiteIfNotInstalledAsync()
         {
             var currentSuiteVersionAsString = GetCurrentSuiteVersion();
 
