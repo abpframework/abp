@@ -81,6 +81,8 @@
     "Biography": "Biography",
     "HasNoPublishedArticlesYet": "has no published articles yet",
     "Author": "Author",
-    "MyAccount": "My account"
+    "MyAccount": "My account",
+    "LatestGithubAnnouncements":  "Latest Github Announcements",
+    "SeeAllAnnouncements": "See All Announcements"
   }
 }
