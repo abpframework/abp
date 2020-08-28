@@ -17,14 +17,18 @@ namespace MyCompanyName.MyProjectName.Blazor
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
             builder.Services.AddSingleton(builder);
 
-            builder.Services.AddApplication<MyProjectNameBlazorModule>(opts =>
+            var application = builder.Services.AddApplication<MyProjectNameBlazorModule>(opts =>
             {
                 opts.UseAutofac();
             });
-
-            builder.ConfigureContainer(builder.Services.GetSingletonInstance<IServiceProviderFactory<ContainerBuilder>>());
             
-            await builder.Build().RunAsync();
+            builder.ConfigureContainer(builder.Services.GetSingletonInstance<IServiceProviderFactory<ContainerBuilder>>());
+
+            var host = builder.Build();
+
+            application.Initialize(host.Services);
+
+            await host.RunAsync();
         }
     }
 }
