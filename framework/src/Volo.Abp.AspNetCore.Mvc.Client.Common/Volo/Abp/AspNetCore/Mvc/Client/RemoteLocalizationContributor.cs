@@ -4,7 +4,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Localization;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {

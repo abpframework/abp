@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
@@ -11,43 +10,41 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
     {
         protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }
 
-        protected IMemoryCache Cache { get; }
+        protected ApplicationConfigurationCache Cache { get; }
 
         public WebAssemblyCachedApplicationConfigurationClient(
             IHttpClientProxy<IAbpApplicationConfigurationAppService> proxy,
-            IMemoryCache cache)
+            ApplicationConfigurationCache cache)
         {
             Proxy = proxy;
             Cache = cache;
         }
 
-        public async Task InitializeAsync()
+        public virtual async Task InitializeAsync()
         {
-            await GetAsync();
+            Cache.Set(await Proxy.Service.GetAsync());
         }
 
-        public async Task<ApplicationConfigurationDto> GetAsync()
+        public virtual Task<ApplicationConfigurationDto> GetAsync()
         {
-            return await Cache.GetOrCreateAsync(
-                CreateCacheKey(),
-                e => Proxy.Service.GetAsync()
-            );
+            return Task.FromResult(GetConfigurationByChecking());
         }
 
-        public ApplicationConfigurationDto Get()
+        public virtual ApplicationConfigurationDto Get()
         {
-            var cacheKey = CreateCacheKey();
-            if(Cache.TryGetValue(cacheKey, out ApplicationConfigurationDto value))
+            return GetConfigurationByChecking();
+        }
+
+        private ApplicationConfigurationDto GetConfigurationByChecking()
+        {
+            var configuration = Cache.Get();
+            if (configuration == null)
             {
-                return value;
+                throw new AbpException(
+                    $"{nameof(WebAssemblyCachedApplicationConfigurationClient)} should be initialized before using it.");
             }
 
-            throw new AbpException($"Should initialize the {nameof(ICachedApplicationConfigurationClient)} before getting the value!");
-        }
-
-        protected virtual string CreateCacheKey()
-        {
-            return $"ApplicationConfiguration";
+            return configuration;
         }
     }
 }
