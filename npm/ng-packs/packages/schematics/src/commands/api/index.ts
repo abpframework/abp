@@ -23,13 +23,15 @@ import {
   getRootNamespace,
   interpolate,
   ModelGeneratorParams,
+  removeDefaultPlaceholders,
   resolveProject,
   serializeParameters,
 } from '../../utils';
 import * as cases from '../../utils/text';
 import { Schema as GenerateProxySchema } from './schema';
 
-export default function(params: GenerateProxySchema) {
+export default function(schema: GenerateProxySchema) {
+  const params = removeDefaultPlaceholders(schema);
   const moduleName = strings.camelize(params.module || 'app');
 
   return chain([

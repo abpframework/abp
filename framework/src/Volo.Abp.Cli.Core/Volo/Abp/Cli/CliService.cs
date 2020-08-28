@@ -41,9 +41,13 @@ namespace Volo.Abp.Cli
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
 
-            await CheckCliVersionAsync();
-
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
+
+            if (!commandLineArgs.Options.ContainsKey("skip-cli-version-check"))
+            {
+                await CheckCliVersionAsync();
+            }
+
             var commandType = CommandSelector.Select(commandLineArgs);
 
             using (var scope = ServiceScopeFactory.CreateScope())
@@ -72,7 +76,7 @@ namespace Volo.Abp.Cli
             var currentCliVersion = await GetCurrentCliVersion(assembly);
             var updateChannel = GetUpdateChannel(currentCliVersion);
 
-            Logger.LogInformation($"Version {currentCliVersion} ({updateChannel} channel)");
+            Logger.LogInformation($"Version {currentCliVersion} ({updateChannel})");
 
             try
             {
