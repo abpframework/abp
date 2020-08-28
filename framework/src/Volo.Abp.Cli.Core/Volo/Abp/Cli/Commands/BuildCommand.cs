@@ -32,16 +32,23 @@ namespace Volo.Abp.Cli.Commands
             var sw = new Stopwatch();
             sw.Start();
 
-            var buildConfig = DotNetProjectBuildConfigReader.Read(Directory.GetCurrentDirectory());
-            
+            var workingDirectory = commandLineArgs.Options.GetOrNull(
+                Options.WorkingDirectory.Short,
+                Options.WorkingDirectory.Long
+            );
+
             var maxParallelBuild = commandLineArgs.Options.GetOrNull(
                 Options.MaxParallelBuild.Short,
                 Options.MaxParallelBuild.Long
             );
 
-            var dotnetBuildArguments = commandLineArgs.Options.GetOrNull(Options.DotnetBuildArguments.Short,
-                Options.DotnetBuildArguments.Long);
+            var dotnetBuildArguments = commandLineArgs.Options.GetOrNull(
+                Options.DotnetBuildArguments.Short,
+                Options.DotnetBuildArguments.Long
+            );
             
+            var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
+
             var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
 
             DotNetProjectDependencyFiller.Fill(changedProjectFiles);
@@ -54,7 +61,8 @@ namespace Volo.Abp.Cli.Commands
                 dotnetBuildArguments ?? ""
             );
 
-            var buildStatus = GenerateBuildStatus(buildConfig.GitRepository, changedProjectFiles, buildSucceededProjects);
+            var buildStatus =
+                GenerateBuildStatus(buildConfig.GitRepository, changedProjectFiles, buildSucceededProjects);
             RepositoryBuildStatusStore.Set(buildStatus);
 
             sw.Stop();
@@ -164,6 +172,12 @@ namespace Volo.Abp.Cli.Commands
 
         public static class Options
         {
+            public static class WorkingDirectory
+            {
+                public const string Short = "wd";
+                public const string Long = "working-directory";
+            }
+
             public static class MaxParallelBuild
             {
                 public const string Short = "m";
