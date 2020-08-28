@@ -1,4 +1,5 @@
 export * from './api-definition';
+export * from './generate-proxy-schema';
 export * from './import';
 export * from './method';
 export * from './model';
