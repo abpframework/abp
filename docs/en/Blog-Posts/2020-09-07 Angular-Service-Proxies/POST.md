@@ -26,34 +26,58 @@ dotnet tool update -g Volo.Abp.Cli
 
 > If you've created your project with version 3.1 or later, you can skip this part since it will be already installed in your solution.
 
+<<<<<<< HEAD
 For the solution was created before v3.1, follow the steps below to configure your angular project:
 
 * Add `@abp/ng.schematics` package to the `devDependencies` of the Angular project (run the following command in the root folder of the angular application):
+=======
+For a solution that was created before v3.1, follow the steps below to configure the angular application:
+
+* Add `@abp/ng.schematics` package to the `devDependencies` of the Angular project. Run the following command in the root folder of the angular application:
+>>>>>>> dev
 
 ````bash
 npm install @abp/ng.schematics --save-dev
 ````
 
+<<<<<<< HEAD
 - Add `rootNamespace` entry into the `/apis/default/` section in the `/src/environments/environment.ts`, as shown below:
+=======
+- Add `rootNamespace` entry into the `apis/default` section in the `/src/environments/environment.ts`, as shown below:
+>>>>>>> dev
 
 ```json
 apis: {
   default: {
     ...
+<<<<<<< HEAD
     rootNamespace: 'Acme.BookStore' //<-- ADD THIS
+=======
+    rootNamespace: 'Acme.BookStore'
+>>>>>>> dev
   },    
 }
 ```
 
+<<<<<<< HEAD
 `Acme.BookStore` should be replaced by the root namespace of your .NET project. This ensures to not create unnecessary nested folders while creating the service proxy code.
+=======
+`Acme.BookStore` should be replaced by the root namespace of your .NET project. This ensures to not create unnecessary nested folders while creating the service proxy code. This value is `AngularProxyDemo` for the example solution explained below.
+>>>>>>> dev
 
 ## Basic Usage
 
 ### Project Creation
 
+<<<<<<< HEAD
 Assuming you've created your project with the Angular UI.
 
 Example (using the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI)):
+=======
+> If you already have a solution, you can skip this section.
+
+You need to [create](https://abp.io/get-started) your solution with the Angular UI. You can use the [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) to create a new solution:
+>>>>>>> dev
 
 ````bash
 abp new AngularProxyDemo -u angular
@@ -63,7 +87,11 @@ abp new AngularProxyDemo -u angular
 
 The backend application must be up and running to be able to use the service proxy code generation system.
 
+<<<<<<< HEAD
 > See the [getting started](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No) guide if you don't know how create and to run the project.
+=======
+> See the [getting started](https://docs.abp.io/en/abp/latest/Getting-Started?UI=NG&DB=EF&Tiered=No) guide if you don't know details of creating and running the solution.
+>>>>>>> dev
 
 ### Backend
 
@@ -124,13 +152,21 @@ It simply returns a list of books. You probably want to get the books from a dat
 
 ### HTTP API
 
+<<<<<<< HEAD
 Thanks to the conventional API controllers system of the ABP Framework, we don't have too develop API controllers manually. Just **run the backend (*HttpApi.Host*) application** that shows the [Swagger UI](https://swagger.io/tools/swagger-ui/) by default. You will see the GET API for the books:
+=======
+Thanks to the [auto API controllers](https://docs.abp.io/en/abp/latest/API/Auto-API-Controllers) system of the ABP Framework, we don't have to develop API controllers manually. Just **run the backend (*HttpApi.Host*) application** that shows the [Swagger UI](https://swagger.io/tools/swagger-ui/) by default. You will see the **GET** API for the books:
+>>>>>>> dev
 
 ![swagger-book-list](swagger-book-list.png)
 
 ### Service Proxy Generation
 
+<<<<<<< HEAD
 Open a command line in the root folder of the Angular application and execute the following command:
+=======
+Open a **command line** in the **root folder of the Angular application** and execute the following command:
+>>>>>>> dev
 
 ````bash
 abp generate-proxy
