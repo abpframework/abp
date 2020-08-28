@@ -1,13 +1,26 @@
+import { strings } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
+import { API_DEFINITION_ENDPOINT, PROXY_CONFIG_PATH, PROXY_PATH } from '../constants';
 import { Exception } from '../enums';
-import { ApiDefinition, Project, ProxyConfig, WriteOp } from '../models';
+import { ApiDefinition, GenerateProxySchema, Project, ProxyConfig, WriteOp } from '../models';
 import { getAssignedPropertyFromObjectliteral } from './ast';
 import { interpolate } from './common';
-import { readEnvironment } from './workspace';
+import { readEnvironment, resolveProject } from './workspace';
 
-export async function getApiDefinition(url: string) {
-  let body: any;
+export function createApiDefinitionGetter(params: GenerateProxySchema) {
+  const moduleName = strings.camelize(params.module || 'app');
+
+  return async (host: Tree) => {
+    const source = await resolveProject(host, params.source!);
+    const sourceUrl = getSourceUrl(host, source, moduleName);
+    return await getApiDefinition(sourceUrl);
+  };
+}
+
+async function getApiDefinition(sourceUrl: string) {
+  const url = sourceUrl + API_DEFINITION_ENDPOINT;
+  let body: ApiDefinition;
 
   try {
     ({ body } = await got(url, {
@@ -17,9 +30,10 @@ export async function getApiDefinition(url: string) {
     }));
   } catch ({ response }) {
     // handle redirects
-    if (response?.body && response.statusCode < 400) return response.body;
+    if (response.statusCode >= 400 || !response?.body)
+      throw new SchematicsException(Exception.NoApi);
 
-    throw new SchematicsException(Exception.NoApi);
+    body = response.body;
   }
 
   return body;
@@ -72,13 +86,33 @@ export function getSourceUrl(tree: Tree, project: Project, moduleName: string) {
 }
 
 export function createProxyConfigReader(targetPath: string) {
+  targetPath += PROXY_CONFIG_PATH;
+
   return (tree: Tree) => {
     try {
       const buffer = tree.read(targetPath);
       return JSON.parse(buffer!.toString()) as ProxyConfig;
     } catch (_) {}
 
-    throw new SchematicsException(interpolate(Exception.NoApiDefinition, targetPath));
+    throw new SchematicsException(interpolate(Exception.NoProxyConfig, targetPath));
+  };
+}
+
+export function createProxyClearer(targetPath: string) {
+  targetPath += PROXY_PATH;
+
+  return (tree: Tree) => {
+    try {
+      tree.getDir(targetPath).subdirs.forEach(dirName => {
+        if (!['enums', 'models', 'services'].includes(dirName)) return;
+
+        tree.delete(`${targetPath}/${dirName}`);
+      });
+
+      return tree;
+    } catch (_) {
+      throw new SchematicsException(interpolate(Exception.DirRemoveFailed, targetPath));
+    }
   };
 }
 
@@ -86,6 +120,7 @@ export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath:
   const createProxyConfigJson = createProxyConfigJsonCreator(apiDefinition);
   const readPreviousConfig = createProxyConfigReader(targetPath);
   const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
+  targetPath += PROXY_CONFIG_PATH;
 
   return (tree: Tree) => {
     const generated: string[] = [];
@@ -108,6 +143,8 @@ export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath:
 }
 
 export function createProxyConfigWriterCreator(targetPath: string) {
+  targetPath += PROXY_CONFIG_PATH;
+
   return (op: WriteOp, data: string) => (tree: Tree) => {
     try {
       tree[op](targetPath, data);

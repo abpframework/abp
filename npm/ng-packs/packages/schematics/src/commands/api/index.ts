@@ -9,9 +9,8 @@ import {
   Tree,
   url,
 } from '@angular-devkit/schematics';
-import { PROXY_CONFIG_PATH } from '../../constants';
 import { Exception } from '../../enums';
-import { ServiceGeneratorParams } from '../../models';
+import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildDefaultPath,
@@ -31,7 +30,6 @@ import {
   serializeParameters,
 } from '../../utils';
 import * as cases from '../../utils/text';
-import { Schema as GenerateProxySchema } from './schema';
 
 export default function(schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
@@ -43,9 +41,8 @@ export default function(schema: GenerateProxySchema) {
       const target = await resolveProject(tree, params.target!);
       const solution = getRootNamespace(tree, source, moduleName);
       const targetPath = buildDefaultPath(target.definition);
-      const definitionPath = targetPath + PROXY_CONFIG_PATH;
-      const readProxyConfig = createProxyConfigReader(definitionPath);
-      const createProxyConfigWriter = createProxyConfigWriterCreator(definitionPath);
+      const readProxyConfig = createProxyConfigReader(targetPath);
+      const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
       const data = readProxyConfig(tree);
       const types = data.types;
       const modules = data.modules;
