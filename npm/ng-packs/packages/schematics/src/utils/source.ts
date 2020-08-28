@@ -1,7 +1,13 @@
 import { strings } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
-import { API_DEFINITION_ENDPOINT, PROXY_CONFIG_PATH, PROXY_PATH } from '../constants';
+import {
+  API_DEFINITION_ENDPOINT,
+  PROXY_CONFIG_PATH,
+  PROXY_PATH,
+  PROXY_WARNING,
+  PROXY_WARNING_PATH,
+} from '../constants';
 import { Exception } from '../enums';
 import { ApiDefinition, GenerateProxySchema, Project, ProxyConfig, WriteOp } from '../models';
 import { getAssignedPropertyFromObjectliteral } from './ast';
@@ -116,6 +122,19 @@ export function createProxyClearer(targetPath: string) {
   };
 }
 
+export function createProxyWarningSaver(targetPath: string) {
+  targetPath += PROXY_WARNING_PATH;
+  const createFileWriter = createFileWriterCreator(targetPath);
+
+  return (tree: Tree) => {
+    const op = tree.exists(targetPath) ? 'overwrite' : 'create';
+    const writeWarningMD = createFileWriter(op, PROXY_WARNING);
+    writeWarningMD(tree);
+
+    return tree;
+  };
+}
+
 export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath: string) {
   const createProxyConfigJson = createProxyConfigJsonCreator(apiDefinition);
   const readPreviousConfig = createProxyConfigReader(targetPath);
@@ -145,6 +164,10 @@ export function createProxyConfigSaver(apiDefinition: ApiDefinition, targetPath:
 export function createProxyConfigWriterCreator(targetPath: string) {
   targetPath += PROXY_CONFIG_PATH;
 
+  return createFileWriterCreator(targetPath);
+}
+
+export function createFileWriterCreator(targetPath: string) {
   return (op: WriteOp, data: string) => (tree: Tree) => {
     try {
       tree[op](targetPath, data);

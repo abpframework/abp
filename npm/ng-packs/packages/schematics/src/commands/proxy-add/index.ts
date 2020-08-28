@@ -9,6 +9,7 @@ import {
   createProxyClearer,
   createProxyConfigReader,
   createProxyConfigSaver,
+  createProxyWarningSaver,
   removeDefaultPlaceholders,
   resolveProject,
 } from '../../utils';
@@ -40,9 +41,11 @@ export default function(schema: GenerateProxySchema) {
 
       const saveProxyConfig = createProxyConfigSaver(data, targetPath);
 
+      const saveProxyWarning = createProxyWarningSaver(targetPath);
+
       const generateApis = createApisGenerator(schema, generated);
 
-      return chainAndMerge([clearProxy, saveProxyConfig, generateApis])(host);
+      return chainAndMerge([clearProxy, saveProxyConfig, saveProxyWarning, generateApis])(host);
     },
   ]);
 }
