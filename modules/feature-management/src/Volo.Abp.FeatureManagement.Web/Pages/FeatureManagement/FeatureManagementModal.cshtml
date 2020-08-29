@@ -4,6 +4,7 @@
 @using Volo.Abp.FeatureManagement.Localization
 @using Volo.Abp.Validation.StringValues
 @using Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
+@using Volo.Abp.Features
 @model FeatureManagementModal
 @inject IHtmlLocalizer<AbpFeatureManagementResource> L
 @{
@@ -20,20 +21,22 @@
                 @for (var i = 0; i < Model.FeatureListDto.Features.Count; i++)
                 {
                     var feature = Model.FeatureListDto.Features[i];
+                    var disabled = Model.IsDisabled(feature.Provider.Name);
                     <div class="mt-2" style="padding-left: @(feature.Depth * 20)px">
 
-                        <spam class="mr-2">@feature.DisplayName</spam>
+                        <spam class="mr-2">@feature.DisplayName @(disabled ? $"({feature.Provider.Name})" : "")</spam>
 
+                        <input type="text" name="Features[@i].ProviderName" value="@feature.Provider.Name" hidden />
                         <input type="text" name="Features[@i].Type" value="@feature.ValueType?.Name" hidden />
                         @if (feature.ValueType is FreeTextStringValueType)
                         {
                             <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
-                            <input type="text" name="Features[@i].Value" value="@feature.Value" />
+                            <input disabled="@disabled" type="text" name="Features[@i].Value" value="@feature.Value" />
                         }
                         @if (feature.ValueType is SelectionStringValueType)
                         {
                             <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
-                            <select name="Features[@i].Value">
+                            <select disabled="@disabled" name="Features[@i].Value">
                                 @foreach (var item in (feature.ValueType as SelectionStringValueType).ItemSource.Items)
                                 {
                                     if (item.Value == feature.Value)
@@ -50,7 +53,7 @@
                         @if (feature.ValueType is ToggleStringValueType)
                         {
                             <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
-                            <input type="checkbox" class="FeatureValueCheckbox" name="Features[@i].BoolValue" value="@feature.Value"
+                            <input disabled="@disabled" type="checkbox" class="FeatureValueCheckbox" name="Features[@i].BoolValue" value="@feature.Value"
                                    @Html.Raw(feature.Value == "True" ? "checked" : "") />
                         }
                     </div>

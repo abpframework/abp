@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Features;
 using Volo.Abp.Validation.StringValues;
 
 namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
@@ -55,6 +56,10 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             return NoContent();
         }
 
+        public virtual bool IsDisabled(string providerName)
+        {
+            return providerName != ProviderName && providerName != DefaultValueFeatureValueProvider.ProviderName;
+        }
 
         public class ProviderInfoViewModel
         {
@@ -68,6 +73,8 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             public string Name { get; set; }
 
             public string Value { get; set; }
+
+            public string ProviderName { get; set; }
 
             public bool BoolValue { get; set; }
 
