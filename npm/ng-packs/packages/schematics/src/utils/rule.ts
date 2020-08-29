@@ -1,6 +1,8 @@
 import {
   apply,
+  chain,
   forEach,
+  MergeStrategy,
   mergeWith,
   Rule,
   SchematicContext,
@@ -14,6 +16,14 @@ export function applyWithOverwrite(source: Source, rules: Rule[]): Rule {
 
     return rule(tree, _context);
   };
+}
+
+export function chainAndMerge(rules: Rule[]) {
+  return (host: Tree) => async (tree: Tree, context: SchematicContext) =>
+    host.merge(
+      (await (chain(rules)(tree, context) as any).toPromise()) as Tree,
+      MergeStrategy.AllowDeleteConflict,
+    );
 }
 
 export function overwriteFileIfExists(tree: Tree): Rule {

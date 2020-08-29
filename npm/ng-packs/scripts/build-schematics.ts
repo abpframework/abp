@@ -20,7 +20,9 @@ class FileCopy {
 
 const PACKAGE_TO_BUILD = 'schematics';
 const FILES_TO_COPY_AFTER_BUILD: (FileCopy | string)[] = [
-  { src: 'src/commands/proxy/schema.json', dest: 'commands/proxy/schema.json' },
+  { src: 'src/commands/proxy-add/schema.json', dest: 'commands/proxy-add/schema.json' },
+  { src: 'src/commands/proxy-refresh/schema.json', dest: 'commands/proxy-refresh/schema.json' },
+  { src: 'src/commands/proxy-remove/schema.json', dest: 'commands/proxy-remove/schema.json' },
   { src: 'src/commands/api/files-enum', dest: 'commands/api/files-enum' },
   { src: 'src/commands/api/files-model', dest: 'commands/api/files-model' },
   { src: 'src/commands/api/files-service', dest: 'commands/api/files-service' },
