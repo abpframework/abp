@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client.IdentityModel.WebAssembly;
+using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName.Blazor
@@ -14,7 +15,8 @@ namespace MyCompanyName.MyProjectName.Blazor
         typeof(AbpAutofacModule),
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpHttpClientIdentityModelWebAssemblyModule),
-        typeof(AbpAspNetCoreComponentsWebAssemblyModule)
+        typeof(AbpAspNetCoreComponentsWebAssemblyModule),
+        typeof(AbpIdentityBlazorModule)
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {

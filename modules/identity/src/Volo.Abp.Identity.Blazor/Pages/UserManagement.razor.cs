@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Volo.Abp.Identity;
 
-namespace MyCompanyName.MyProjectName.Blazor.Pages
+namespace Volo.Abp.Identity.Blazor.Pages
 {
     public partial class UserManagement : ComponentBase
     {

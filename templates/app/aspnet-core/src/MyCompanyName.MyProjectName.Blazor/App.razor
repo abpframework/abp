@@ -1,7 +1,9 @@
 @using Volo.Abp.AspNetCore.Mvc.Client
 @inject ICachedApplicationConfigurationClient ConfigurationClient
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly">
+    <Router 
+        AppAssembly="@typeof(Program).Assembly" 
+        AdditionalAssemblies="new []{ typeof(UserManagement).Assembly }">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>

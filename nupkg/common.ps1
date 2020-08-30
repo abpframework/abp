@@ -208,6 +208,7 @@ $projects = (
     "modules/identity/src/Volo.Abp.Identity.HttpApi",
     "modules/identity/src/Volo.Abp.Identity.MongoDB",
     "modules/identity/src/Volo.Abp.Identity.Web",
+    "modules/identity/src/Volo.Abp.Identity.Blazor",
     "modules/identity/src/Volo.Abp.PermissionManagement.Domain.Identity",
     
     # modules/identityserver
