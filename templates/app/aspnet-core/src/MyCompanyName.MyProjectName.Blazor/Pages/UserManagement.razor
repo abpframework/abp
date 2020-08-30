@@ -18,15 +18,3 @@
     </ul>
     <p>Total user count: @_totalUserCount</p>
 }
-
-@code {
-    private long _totalUserCount = 0;
-    private IReadOnlyList<IdentityUserDto> _users;
-
-    private async Task GetUsersAsync()
-    {
-        var result = await UserAppService.GetListAsync(new GetIdentityUsersInput());
-        _totalUserCount = result.TotalCount;
-        _users = result.Items;
-    }
-}
