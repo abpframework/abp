@@ -20,6 +20,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public DbSet<IdentitySecurityLog> IdentitySecurityLogs { get; set; }
 
+        public DbSet<IdentityLinkUser> IdentityLinkUsers { get; set; }
+
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
             : base(options)
         {
