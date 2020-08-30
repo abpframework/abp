@@ -1,22 +1,3 @@
 ﻿@page "/"
 
-@using Volo.Abp.Identity
-@inject IProfileAppService ProfileAppService
-
-<h2>Profile Application Service Test</h2>
-
-<h4>Current user name: @_userName</h4>
-
-<button class="btn btn-primary" @onclick="GetUserNameAsync">Get Profile Data (requires login)</button>
-
-@code
-{
-    private string _userName = "?";
-
-    private async Task GetUserNameAsync()
-    {
-        // It calls the remote service via ABP Dynamic C# Proxies!
-
-        _userName = (await ProfileAppService.GetAsync()).UserName;
-    }
-}
+<h1>Welcome to MyProjectName!</h1>
