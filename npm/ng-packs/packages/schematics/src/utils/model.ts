@@ -1,5 +1,5 @@
 import { strings } from '@angular-devkit/core';
-import { VOLO_REGEX } from '../constants';
+import { VOLO_NAME_VALUE, VOLO_REGEX } from '../constants';
 import { Interface, Model, Property, Type, TypeWithEnum } from '../models';
 import { parseNamespace } from './namespace';
 import { relativePathToModel } from './path';
@@ -40,8 +40,12 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
       const index = models.findIndex(m => m.namespace === _interface.namespace);
       if (index > -1) {
         if (models[index].interfaces.some(i => i.identifier === _interface.identifier)) return;
+        if (_interface.ref.startsWith(VOLO_NAME_VALUE.ref)) return;
+
         models[index].interfaces.push(_interface);
       } else {
+        if (_interface.ref.startsWith(VOLO_NAME_VALUE.ref)) _interface = VOLO_NAME_VALUE;
+
         const { namespace } = _interface;
 
         models.push(
@@ -59,6 +63,7 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
 
       model.interfaces.forEach(_interface => {
         const { baseType } = types[_interface.ref];
+
         if (baseType && parseNamespace(solution, baseType) !== model.namespace)
           toBeImported.push({
             type: baseType.split('<')[0],
@@ -131,13 +136,7 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
         prop.refs.forEach(type => !types[type]?.isEnum && refs.push(type));
         return refs;
       }, [])
-      .concat(
-        base
-          ? parseGenerics(typeDef.baseType!)
-              .toGenerics()
-              .join('')
-          : [],
-      )
+      .concat(base ? parseGenerics(typeDef.baseType!).toGenerics() : [])
       .reduce<Interface[]>(reduceRefsToInterfaces, interfaces);
   }
 }

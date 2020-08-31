@@ -1,8 +1,10 @@
-## Using DevExtreme with ABP Based Applications
+## Using DevExtreme Components With the ABP Framework
 
-Hi, in this step by step article, I will show you how to integrate DevExtreme components into ABP Framework based applications.
+Hi, in this step by step article, I will show you how to integrate [DevExtreme](https://js.devexpress.com/) components into ABP Framework-based applications.
 
 ![both-example-result](both-example-result.png)
+
+*(A screenshot from the example application developed in this article)*
 
 ## Create the Project
 
@@ -151,7 +153,7 @@ namespace DevExtremeSample.Web.Bundling
 }
 ```
 
-As you see, the `DevExtremeScriptContributor` is depends on `JQueryScriptContributor` which adds JQuery related files before the DevExpress packages (see the [bundling system](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification) for details).
+As you see, the `DevExtremeScriptContributor` depends on `JQueryScriptContributor` which adds JQuery related files before the DevExpress packages (see the [bundling system](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Bundling-Minification) for details).
 
 #### Create DevExtremeJsViewComponent
 
@@ -184,7 +186,7 @@ namespace DevExtremeSample.Web.Components.DevExtremeJs
 <abp-script type="typeof(DevExtremeScriptContributor)" />
 ```
 
-Your final Web project should be like as the following:
+Your final Web project should be like the following:
 
 ![devextreme-js](devextreme-js.png)
 
@@ -204,7 +206,7 @@ Configure<AbpLayoutHookOptions>(options =>
 
 #### Known Issue: Uncaught TypeError: MutationObserver.observe: Argument 1 is not an object.
 
-> This issue does exists in the ABP Framework v3.0 and earlier versions. If you are using ABP Framework v3.1 or a latter version, you can skip this section.
+> This issue does exist in the ABP Framework v3.0 and earlier versions. If you are using ABP Framework v3.1 or a later version, you can skip this section.
 
 When you run your `*.Web` project, you will see an exception (`Uncaught TypeError: MutationObserver.observe: Argument 1 is not an object.`) at your console.
 
@@ -265,7 +267,7 @@ I've used an in-memory list to store data for this example, instead of a real da
 
 #### JSON Serialization
 
-You can see some `JsonProperty` attributes on the DTO properties. I uses these attributes because DevExtreme example expects `PascalCase` property names in the serialized JSON that is sent to the client. But ABP Framework & ASP.NET Core conventionally uses `camelCase` property names on JSON serialization. Adding these `JsonProperty` attributes ensures that the related properties are serialized as `PascalCase`.
+You can see some `JsonProperty` attributes on the DTO properties. I use these attributes because DevExtreme example expects `PascalCase` property names in the serialized JSON that is sent to the client. But ABP Framework & ASP.NET Core conventionally uses `camelCase` property names on JSON serialization. Adding these `JsonProperty` attributes ensures that the related properties are serialized as `PascalCase`.
 
 #### DevExtreme Components vs Application Service Methods
 
@@ -300,3 +302,7 @@ Html.DevExtreme().DataGrid<Order>()
                 .Key("OrderID")
             )
 ```
+
+## Conclusion
+
+In this article, I've explained how to use [DevExtreme](https://js.devexpress.com/) components in your application. ABP Framework is designed so that it can work with any UI library/framework.
