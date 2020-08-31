@@ -1,6 +1,7 @@
 export * from './angular';
 export * from './api';
 export * from './ast';
+export * from './barrel';
 export * from './common';
 export * from './enum';
 export * from './file';
