@@ -20,6 +20,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
+using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.AspNetCore.Mvc.Localization;
@@ -50,6 +51,7 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpAspNetCoreAuthenticationOAuthModule),
+        typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
@@ -126,7 +128,7 @@ namespace MyCompanyName.MyProjectName.Web
                 {
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
-                .AddOpenIdConnect("oidc", options =>
+                .AddAbpOpenIdConnect("oidc", options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = true;
@@ -144,22 +146,6 @@ namespace MyCompanyName.MyProjectName.Web
                     options.Scope.Add("MyProjectName");
 
                     options.ClaimActions.MapAbpClaimTypes();
-
-                    options.Events = new OpenIdConnectEvents
-                    {
-                        OnAuthorizationCodeReceived = receivedContext =>
-                        {
-                            var tenantKey = receivedContext.HttpContext.RequestServices
-                                .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
-
-                            if (receivedContext.HttpContext.Request != null && receivedContext.Request.Cookies.ContainsKey(tenantKey))
-                            {
-                                receivedContext.TokenEndpointRequest.SetParameter(tenantKey, receivedContext.Request.Cookies[tenantKey]);
-                            }
-
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
         }
 

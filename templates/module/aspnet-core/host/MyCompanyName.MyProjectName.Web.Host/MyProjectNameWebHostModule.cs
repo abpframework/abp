@@ -139,7 +139,7 @@ namespace MyCompanyName.MyProjectName
                 {
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
-                .AddOpenIdConnect("oidc", options =>
+                .AddAbpOpenIdConnect("oidc", options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
@@ -158,22 +158,6 @@ namespace MyCompanyName.MyProjectName
 
                     options.ClaimActions.MapJsonKey(AbpClaimTypes.UserName, "name");
                     options.ClaimActions.DeleteClaim("name");
-
-                    options.Events = new OpenIdConnectEvents
-                    {
-                        OnAuthorizationCodeReceived = receivedContext =>
-                        {
-                            var tenantKey = receivedContext.HttpContext.RequestServices
-                                .GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
-
-                            if (receivedContext.HttpContext.Request != null && receivedContext.Request.Cookies.ContainsKey(tenantKey))
-                            {
-                                receivedContext.TokenEndpointRequest.SetParameter(tenantKey, receivedContext.Request.Cookies[tenantKey]);
-                            }
-
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
         }
 
