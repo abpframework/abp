@@ -29,3 +29,21 @@ Get back to ABP Suite, go to **Navigation Properties** tab. Click **Add Navigati
 That's it! Click **Save and generate** button to create your page. You'll see the following page if there's everything goes well. 
 
 ![final-page](final-page.jpg)
+
+
+
+Note this example is implemented with ABP Commercial 3.1.0-rc.3. This is a RC version. If you want to install the CLI and Suite RC version follow the next steps:
+
+1- Uninstall the current version of the CLI and install the specific RC version:
+
+```bash
+dotnet tool uninstall --global Volo.Abp.Cli && dotnet tool install --global Volo.Abp.Cli --version 3.1.0-rc.3
+```
+
+2- Uninstall the current version of the Suite and install the specific RC version:
+
+```bash
+dotnet tool uninstall --global Volo.Abp.Suite && dotnet tool install -g Volo.Abp.Suite --version 3.1.0-rc.3 --add-source https://nuget.abp.io/<YOUR-API-KEY>/v3/index.json
+```
+
+Don't forget to replace the `<YOUR-API-KEY>` with your own key!
