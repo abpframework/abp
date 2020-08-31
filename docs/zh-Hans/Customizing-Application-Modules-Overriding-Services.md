@@ -61,7 +61,7 @@ context.Services.Replace(
 ````csharp
 //[RemoteService(IsEnabled = false)] // 如果你在使用动态控制器,为了避免为应用服务创建重复的控制器, 你可以禁用远程访问.
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService), typeof(MyIdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...
