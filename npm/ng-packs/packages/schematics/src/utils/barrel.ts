@@ -18,13 +18,12 @@ export function generateBarrelFromPath(tree: Tree, indexPath: string) {
   const saveFile = createFileSaver(tree);
   const dir = tree.getDir(indexPath);
 
-  let _exports = '';
+  const _exports: string[] = [];
 
   dir.subfiles.forEach(fragment => {
     if (!fragment.endsWith('.ts')) return;
 
-    _exports += `export * from './${fragment.replace(/\.ts$/, '')}';
-`;
+    _exports.push(`export * from './${fragment.replace(/\.ts$/, '')}';`);
   });
 
   dir.subdirs.forEach(fragment => {
@@ -34,10 +33,16 @@ export function generateBarrelFromPath(tree: Tree, indexPath: string) {
     subDir.visit(() => (hasFiles = true));
     if (!hasFiles) return;
 
-    _exports += `export * as ${strings.classify(fragment)} from './${fragment}';
-`;
+    _exports.push(`export * as ${strings.classify(fragment)} from './${fragment}';`);
     generateBarrelFromPath(tree, subDirPath);
   });
 
-  if (_exports) saveFile(indexPath + '/index.ts', _exports);
+  _exports.sort();
+
+  if (_exports.length)
+    saveFile(
+      indexPath + '/index.ts',
+      _exports.join(`
+`),
+    );
 }
