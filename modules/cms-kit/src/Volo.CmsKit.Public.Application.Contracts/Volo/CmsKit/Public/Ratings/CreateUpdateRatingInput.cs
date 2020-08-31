@@ -2,9 +2,9 @@
 
 namespace Volo.CmsKit.Public.Ratings
 {
-    public class CreateRatingInput
+    public class CreateUpdateRatingInput
     {
-        [Required]
+        [Required, Range(1, 5)]
         public short StarCount { get; set; }
     }
 }

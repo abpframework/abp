@@ -22,8 +22,6 @@ namespace Volo.CmsKit.Public
                 .Ignore(x=> x.Author);
 
             CreateMap<Rating, RatingDto>();
-            
-            CreateMap<RatingWithStarCountQueryResultItem, RatingWithStarCountDto>();
         }
     }
 }

@@ -34,11 +34,11 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
         {
             var ratings = await RatingPublicAppService.GetGroupedStarCountsAsync(entityType, entityId);
             var totalRating = ratings.Sum(x => x.Count);
-            
-            RatingDto currentUserRating = null;
+
+            short? currentUserRating = null;
             if (CurrentUser.IsAuthenticated)
             {
-                currentUserRating = await RatingPublicAppService.GetCurrentUserRatingAsync(entityType, entityId);
+                currentUserRating = ratings.Find(x => x.IsSelectedByCurrentUser)?.StarCount;
             }
             
             var loginUrl =
@@ -68,7 +68,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
 
         public List<RatingWithStarCountDto> Ratings { get; set; }
 
-        public RatingDto CurrentRating { get; set; }
+        public short? CurrentRating { get; set; }
 
         public int TotalRating { get; set; }
     }

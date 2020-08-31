@@ -8,13 +8,9 @@ namespace Volo.CmsKit.Public.Ratings
 {
     public interface IRatingPublicAppService : IApplicationService
     {
-        Task<ListResultDto<RatingDto>> GetListAsync(string entityType, string entityId);
-        
-        Task<RatingDto> CreateAsync(string entityType, string entityId, CreateRatingInput input);
+        Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input);
 
-        Task<RatingDto> UpdateAsync(Guid id, UpdateRatingInput input);
-
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(string entityType, string entityId);
         
         Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId);
 

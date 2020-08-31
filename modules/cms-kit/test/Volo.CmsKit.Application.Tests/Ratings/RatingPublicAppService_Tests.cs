@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
@@ -34,8 +35,8 @@ namespace Volo.CmsKit.Ratings
 
             var newRating = await _ratingAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
-                _cmsKitTestData.EntityId1,
-                new CreateRatingInput
+                _cmsKitTestData.EntityId2,
+                new CreateUpdateRatingInput
                 {
                     StarCount = 4
                 });
@@ -44,53 +45,86 @@ namespace Volo.CmsKit.Ratings
             {
                 var ratings = context.Set<Rating>().Where(x =>
                     x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
-                
+
                 ratings
-                    .Any(c => c.Id == newRating.Id && c.CreatorId == newRating.CreatorId && c.StarCount == newRating.StarCount)
+                    .Any(c => c.Id == newRating.Id && c.CreatorId == newRating.CreatorId &&
+                              c.StarCount == newRating.StarCount)
                     .ShouldBeTrue();
             });
         }
 
         [Fact]
-        public async Task UpdateAsync()
+        public async Task CreateAsync_Should_Update_If_Rating_Is_Exist()
         {
             _currentUser.Id.Returns(_cmsKitTestData.User1Id);
 
-            var rating = await _ratingAppService.CreateAsync(
+            var entity =
+                await _ratingAppService.GetCurrentUserRatingAsync(_cmsKitTestData.EntityType1,
+                    _cmsKitTestData.EntityId1);
+
+            var updatedEntity = await _ratingAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
-                new CreateRatingInput
+                new CreateUpdateRatingInput
                 {
-                    StarCount = 4
+                    StarCount = 5
                 });
 
-            await _ratingAppService.UpdateAsync(rating.Id, new UpdateRatingInput
-            {
-                StarCount = 5
-            });
+            entity.Id.ShouldBe(updatedEntity.Id);
+            entity.EntityId.ShouldBe(updatedEntity.EntityId);
+            entity.EntityType.ShouldBe(updatedEntity.EntityType);
+            entity.StarCount.ShouldBe(updatedEntity.StarCount);
+        }
+
+        [Fact]
+        public async Task GetCurrentUserRatingAsync()
+        {
+            _currentUser.Id.Returns(_cmsKitTestData.User1Id);
+
+            var rating = await _ratingAppService.GetCurrentUserRatingAsync(
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1
+            );
 
             UsingDbContext(context =>
             {
-                var updatedRating = context.Set<Rating>().Single(x => x.Id == rating.Id);
-                
-                updatedRating.StarCount.ShouldBe((short)5);
+                var ratings = context.Set<Rating>().Where(x =>
+                    x.EntityId == _cmsKitTestData.EntityId1 && x.EntityType == _cmsKitTestData.EntityType1).ToList();
+
+                ratings
+                    .Any(c => c.Id == rating.Id && c.EntityId == rating.EntityId && c.EntityType == rating.EntityType)
+                    .ShouldBeTrue();
             });
+        }
+
+        [Fact]
+        public async Task GetGroupedStarCountsAsync()
+        {
+            _currentUser.Id.Returns(_cmsKitTestData.User1Id);
+
+            var ratings = await _ratingAppService.GetGroupedStarCountsAsync(
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1
+            );
+
+            ratings.ShouldNotBeNull();
+            ratings.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task DeleteAsync()
         {
             _currentUser.Id.Returns(_cmsKitTestData.User1Id);
-            
+
             var rating = await _ratingAppService.CreateAsync(
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
-                new CreateRatingInput
+                new CreateUpdateRatingInput
                 {
                     StarCount = 4
                 });
 
-            await _ratingAppService.DeleteAsync(rating.Id);
+            await _ratingAppService.DeleteAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
 
             UsingDbContext(context =>
             {

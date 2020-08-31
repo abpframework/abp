@@ -9,11 +9,11 @@
     @if (CurrentUser.IsAuthenticated)
     {
         <div class="m-auto">
-            <span class="my-rating-5" data-rating="@(Model.CurrentRating != null ? Model.CurrentRating.StarCount : 0)" data-authenticated="@(Model.CurrentRating != null)"></span>
-            <span class="live-rating">@(Model.CurrentRating != null ? Model.CurrentRating.StarCount + " | " : 0 + "")</span>
+            <span class="my-rating-5" data-rating="@(Model.CurrentRating ?? 0)" data-authenticated="@(Model.CurrentRating != null)"></span>
+            <span class="live-rating">@(Model.CurrentRating != null ? Model.CurrentRating + " | " : 0 + "")</span>
             @if (Model.CurrentRating != null)
             {
-                <a href="#" class="rating-undo-link m-auto" data-id="@Model.CurrentRating.Id">
+                <a href="#" class="rating-undo-link m-auto">
                     <i class="fa fa-undo"></i> @L["Undo"]
                 </a>
             }

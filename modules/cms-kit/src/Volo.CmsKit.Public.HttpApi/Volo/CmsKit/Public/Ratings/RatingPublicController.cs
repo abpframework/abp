@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.GlobalFeatures;
 
@@ -22,32 +20,18 @@ namespace Volo.CmsKit.Public.Ratings
             RatingPublicAppService = ratingPublicAppService;
         }
         
-        [HttpGet]
-        [Route("{entityType}/{entityId}")]
-        public virtual Task<ListResultDto<RatingDto>> GetListAsync(string entityType, string entityId)
-        {
-            return RatingPublicAppService.GetListAsync(entityType, entityId);
-        }
-
         [HttpPut]
         [Route("{entityType}/{entityId}")]
-        public virtual Task<RatingDto> CreateAsync(string entityType, string entityId, CreateRatingInput input)
+        public virtual Task<RatingDto> CreateAsync(string entityType, string entityId, CreateUpdateRatingInput input)
         {
             return RatingPublicAppService.CreateAsync(entityType, entityId, input);
         }
 
-        [HttpPut]
-        [Route("{id}")]
-        public virtual Task<RatingDto> UpdateAsync(Guid id, UpdateRatingInput input)
-        {
-            return RatingPublicAppService.UpdateAsync(id, input);
-        }
-
         [HttpDelete]
-        [Route("{id}")]
-        public virtual Task DeleteAsync(Guid id)
+        [Route("{entityType}/{entityId}")]
+        public virtual Task DeleteAsync(string entityType, string entityId)
         {
-            return RatingPublicAppService.DeleteAsync(id);
+            return RatingPublicAppService.DeleteAsync(entityType, entityId);
         }
 
         [HttpGet]

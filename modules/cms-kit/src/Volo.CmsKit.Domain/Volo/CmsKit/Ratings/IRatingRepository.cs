@@ -9,12 +9,6 @@ namespace Volo.CmsKit.Ratings
 {
     public interface IRatingRepository : IBasicRepository<Rating, Guid>
     {
-        Task<List<Rating>> GetListAsync(
-            [NotNull] string entityType,
-            [NotNull] string entityId,
-            CancellationToken cancellationToken = default
-        );
-
         Task<Rating> GetCurrentUserRatingAsync(
             [NotNull] string entityType,
             [NotNull] string entityId,

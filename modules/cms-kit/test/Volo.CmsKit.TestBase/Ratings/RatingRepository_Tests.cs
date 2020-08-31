@@ -18,14 +18,6 @@ namespace Volo.CmsKit.Ratings
         }
 
         [Fact]
-        public async Task GetListAsync()
-        {
-            var list = await _ratingRepository.GetListAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
-
-            list.Count.ShouldBeGreaterThan(0);
-        }
-
-        [Fact]
         public async Task GetCurrentUserRatingAsync()
         {
             var userRating = await _ratingRepository.GetCurrentUserRatingAsync(_cmsKitTestData.EntityType1,

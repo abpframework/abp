@@ -44,7 +44,7 @@ namespace Volo.CmsKit.Ratings
 
         public virtual void SetStarCount(short starCount)
         {
-            if(starCount <= 5 && starCount > 0)
+            if(starCount <= RatingConsts.MaxRating && starCount > RatingConsts.MinRating)
             {
                 StarCount = starCount;
             }

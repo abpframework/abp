@@ -22,18 +22,22 @@ namespace Volo.CmsKit.Public.Ratings
             CmsUserLookupService = cmsUserLookupService;
         }
 
-        public virtual async Task<ListResultDto<RatingDto>> GetListAsync(string entityType, string entityId)
-        {
-            var ratings = await RatingRepository.GetListAsync(entityType, entityId);
-            var ratingDto = ObjectMapper.Map<List<Rating>, List<RatingDto>>(ratings);
-
-            return new ListResultDto<RatingDto>(ratingDto);
-        }
-
         [Authorize]
-        public virtual async Task<RatingDto> CreateAsync(string entityType, string entityId, CreateRatingInput input)
+        public virtual async Task<RatingDto> CreateAsync(string entityType, string entityId,
+            CreateUpdateRatingInput input)
         {
-            var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
+            var userId = CurrentUser.GetId();
+            var user = await CmsUserLookupService.GetByIdAsync(userId);
+
+            var currentUserRating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, userId);
+
+            if (currentUserRating != null)
+            {
+                currentUserRating.SetStarCount(input.StarCount);
+                var updatedRating = await RatingRepository.UpdateAsync(currentUserRating);
+
+                return ObjectMapper.Map<Rating, RatingDto>(updatedRating);
+            }
 
             var rating = await RatingRepository.InsertAsync(
                 new Rating(
@@ -50,50 +54,51 @@ namespace Volo.CmsKit.Public.Ratings
         }
 
         [Authorize]
-        public virtual async Task<RatingDto> UpdateAsync(Guid id, UpdateRatingInput input)
+        public virtual async Task DeleteAsync(string entityType, string entityId)
         {
-            var rating = await RatingRepository.GetAsync(id);
-
-            if (rating.CreatorId != CurrentUser.GetId())
-            {
-                throw new AbpAuthorizationException();
-            }
-            
-            rating.SetStarCount(input.StarCount);
-
-            var updatedRating = await RatingRepository.UpdateAsync(rating);
-
-            return ObjectMapper.Map<Rating, RatingDto>(updatedRating);
-        }
-
-        [Authorize]
-        public virtual async Task DeleteAsync(Guid id)
-        {
-            var rating = await RatingRepository.GetAsync(id);
+            var rating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, CurrentUser.GetId());
 
             if (rating.CreatorId != CurrentUser.GetId())
             {
                 throw new AbpAuthorizationException();
             }
 
-            await RatingRepository.DeleteAsync(id);
+            await RatingRepository.DeleteAsync(rating.Id);
         }
 
         [Authorize]
         public virtual async Task<RatingDto> GetCurrentUserRatingAsync(string entityType, string entityId)
         {
             var currentUserId = CurrentUser.GetId();
-            
+
             var rating = await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, currentUserId);
 
             return ObjectMapper.Map<Rating, RatingDto>(rating);
         }
 
-        public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType, string entityId)
+        public virtual async Task<List<RatingWithStarCountDto>> GetGroupedStarCountsAsync(string entityType,
+            string entityId)
         {
             var ratings = await RatingRepository.GetGroupedStarCountsAsync(entityType, entityId);
 
-            return ObjectMapper.Map<List<RatingWithStarCountQueryResultItem>, List<RatingWithStarCountDto>>(ratings);
+            var userRatingOrNull = CurrentUser.IsAuthenticated
+                ? await RatingRepository.GetCurrentUserRatingAsync(entityType, entityId, CurrentUser.GetId())
+                : null;
+
+            var ratingWithStarCountDto = new List<RatingWithStarCountDto>();
+
+            foreach (var rating in ratings)
+            {
+                ratingWithStarCountDto.Add(
+                    new RatingWithStarCountDto
+                    {
+                        StarCount = rating.StarCount,
+                        Count = rating.Count,
+                        IsSelectedByCurrentUser = userRatingOrNull != null && userRatingOrNull.StarCount == rating.StarCount
+                    });
+            }
+
+            return ratingWithStarCountDto;
         }
     }
 }

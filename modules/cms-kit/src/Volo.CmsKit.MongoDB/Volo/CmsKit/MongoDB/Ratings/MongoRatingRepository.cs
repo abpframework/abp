@@ -19,18 +19,6 @@ namespace Volo.CmsKit.MongoDB.Ratings
         {
         }
 
-        public async Task<List<Rating>> GetListAsync(string entityType, string entityId,
-            CancellationToken cancellationToken = default)
-        {
-            Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
-            Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
-
-            var query = GetMongoQueryable().Where(r => r.EntityType == entityType && r.EntityId == entityId);
-            var ratings = await query.ToListAsync(GetCancellationToken(cancellationToken));
-
-            return ratings;
-        }
-
         public async Task<Rating> GetCurrentUserRatingAsync(string entityType, string entityId, Guid userId,
             CancellationToken cancellationToken = default)
         {
