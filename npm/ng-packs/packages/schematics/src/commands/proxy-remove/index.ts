@@ -8,6 +8,7 @@ import {
   createProxyClearer,
   createProxyConfigReader,
   createProxyConfigSaver,
+  createProxyIndexGenerator,
   mergeAndAllowDelete,
   removeDefaultPlaceholders,
   resolveProject,
@@ -38,6 +39,13 @@ export default function(schema: GenerateProxySchema) {
 
     const generateApis = createApisGenerator(schema, generated);
 
-    return chain([mergeAndAllowDelete(host, clearProxy), saveProxyConfig, generateApis]);
+    const generateIndex = createProxyIndexGenerator(targetPath);
+
+    return chain([
+      mergeAndAllowDelete(host, clearProxy),
+      saveProxyConfig,
+      generateApis,
+      generateIndex,
+    ]);
   };
 }
