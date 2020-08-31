@@ -10,15 +10,17 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { ServiceGeneratorParams } from '../../models';
+import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildDefaultPath,
-  createApiDefinitionReader,
   createControllerToServiceMapper,
   createImportRefsToModelReducer,
   createImportRefToEnumMapper,
+  createProxyConfigReader,
+  createProxyConfigWriterCreator,
   EnumGeneratorParams,
+  generateProxyConfigJson,
   getEnumNamesFromImports,
   getRootNamespace,
   interpolate,
@@ -28,7 +30,6 @@ import {
   serializeParameters,
 } from '../../utils';
 import * as cases from '../../utils/text';
-import { Schema as GenerateProxySchema } from './schema';
 
 export default function(schema: GenerateProxySchema) {
   const params = removeDefaultPlaceholders(schema);
@@ -40,9 +41,9 @@ export default function(schema: GenerateProxySchema) {
       const target = await resolveProject(tree, params.target!);
       const solution = getRootNamespace(tree, source, moduleName);
       const targetPath = buildDefaultPath(target.definition);
-      const definitionPath = `${targetPath}/shared/api-definition.json`;
-      const readApiDefinition = createApiDefinitionReader(definitionPath);
-      const data = readApiDefinition(tree);
+      const readProxyConfig = createProxyConfigReader(targetPath);
+      const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
+      const data = readProxyConfig(tree);
       const types = data.types;
       const modules = data.modules;
       if (!types || !modules) throw new SchematicsException(Exception.InvalidApiDefinition);
@@ -80,7 +81,14 @@ export default function(schema: GenerateProxySchema) {
         modelImports,
       });
 
-      return branchAndMerge(chain([generateServices, generateModels, generateEnums]));
+      if (!data.generated.includes(moduleName)) data.generated.push(moduleName);
+      data.generated.sort();
+      const json = generateProxyConfigJson(data);
+      const overwriteProxyConfig = createProxyConfigWriter('overwrite', json);
+
+      return branchAndMerge(
+        chain([generateServices, generateModels, generateEnums, overwriteProxyConfig]),
+      );
     },
   ]);
 }
