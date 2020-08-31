@@ -106,14 +106,17 @@ export function createProxyConfigReader(targetPath: string) {
 
 export function createProxyClearer(targetPath: string) {
   targetPath += PROXY_PATH;
+  const proxyIndexPath = `${targetPath}/index.ts`;
 
   return (tree: Tree) => {
     try {
       tree.getDir(targetPath).subdirs.forEach(dirName => {
-        if (!['enums', 'models', 'services'].includes(dirName)) return;
-
-        tree.delete(`${targetPath}/${dirName}`);
+        const dirPath = `${targetPath}/${dirName}`;
+        tree.getDir(dirPath).visit(filePath => tree.delete(filePath));
+        tree.delete(dirPath);
       });
+
+      if (tree.exists(proxyIndexPath)) tree.delete(proxyIndexPath);
 
       return tree;
     } catch (_) {
