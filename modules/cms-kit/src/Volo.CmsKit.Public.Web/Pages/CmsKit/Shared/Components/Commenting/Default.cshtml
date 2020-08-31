@@ -110,8 +110,22 @@
 <div class="cms-comment-area" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
     <div>
         <h5 class="mb-0 mt-4">
-           <i class="fas fa-comment-alt"></i> @L["Comments"]
+            <i class="fas fa-comment-alt"></i> @L["Comments"]
         </h5>
+        <div>
+            @if (CurrentUser.IsAuthenticated)
+            {
+                <div id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}")">
+                    @GetCommentArea(null).Invoke(null)
+                </div>
+            }
+            else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
+            {
+                <div class="text-right">
+                    <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
+                </div>
+            }
+        </div>
         @foreach (var comment in Model.Comments)
         {
             <div class="comment">
@@ -154,6 +168,7 @@
                                             @await Component.InvokeAsync(typeof(ReactionSelectionViewComponent),
                                                 new { entityType = "comment", entityId = reply.Id.ToString() })
                                         }
+
                                         @GetCommentActionArea(reply.Id, reply.Author.Id, true, reply.Text).Invoke(null)
                                     </div>
                                 </div>
@@ -163,19 +178,5 @@
                 </div>
             </div>
         }
-        <div>
-            @if (CurrentUser.IsAuthenticated)
-            {
-                <div id="@($"cms-comment_{Model.EntityType}_{Model.EntityId}")">
-                    @GetCommentArea(null).Invoke(null)
-                </div>
-            }
-            else if (!string.IsNullOrWhiteSpace(Model.LoginUrl))
-            {
-                <div class="text-right">
-                    <a href="@Model.LoginUrl" class="btn btn-primary"> @L["LoginToAddComment"]</a>
-                </div>
-            }
-        </div>
     </div>
 </div>
