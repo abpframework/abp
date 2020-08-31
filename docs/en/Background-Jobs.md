@@ -166,7 +166,7 @@ Background Jobs module implements `IBackgroundJobStore` using various data acces
 
 ## Integrations
 
-Background job system is extensible and you can change the default background job manager with your own implementation or on of the pre-built integrations.
+Background job system is extensible and you can change the default background job manager with your own implementation or one of the pre-built integrations.
 
 See pre-built job manager alternatives:
 
