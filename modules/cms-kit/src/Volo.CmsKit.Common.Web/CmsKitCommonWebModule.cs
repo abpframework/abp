@@ -18,14 +18,18 @@ namespace Volo.CmsKit.Web
         {
             Configure<CmsKitUiOptions>(options =>
             {
-                options.ReactionIcons[StandardReactions.Smile] = new LocalizableIconDictionary("/cms-kit/icons/smile.png");
-                options.ReactionIcons[StandardReactions.ThumbsUp] = new LocalizableIconDictionary("/cms-kit/icons/thumbsup.png");
-                options.ReactionIcons[StandardReactions.Confused] = new LocalizableIconDictionary("/cms-kit/icons/confused.png");
-                options.ReactionIcons[StandardReactions.Eyes] = new LocalizableIconDictionary("/cms-kit/icons/eyes.png");
-                options.ReactionIcons[StandardReactions.Heart] = new LocalizableIconDictionary("/cms-kit/icons/heart.png");
-                options.ReactionIcons[StandardReactions.Hooray] = new LocalizableIconDictionary("/cms-kit/icons/hooray.png");
-                options.ReactionIcons[StandardReactions.Rocket] = new LocalizableIconDictionary("/cms-kit/icons/rocket.png");
-                options.ReactionIcons[StandardReactions.ThumbsDown] = new LocalizableIconDictionary("/cms-kit/icons/thumbsdown.png");
+                options.ReactionIcons[StandardReactions.Smile] = new LocalizableIconDictionary("fas fa-smile text-warning");
+                options.ReactionIcons[StandardReactions.ThumbsUp] = new LocalizableIconDictionary("fa fa-thumbs-up text-primary");
+                options.ReactionIcons[StandardReactions.Confused] = new LocalizableIconDictionary("fas fa-surprise text-warning");
+                options.ReactionIcons[StandardReactions.Eyes] = new LocalizableIconDictionary("fas fa-meh-rolling-eyes text-warning");
+                options.ReactionIcons[StandardReactions.Heart] = new LocalizableIconDictionary("fa fa-heart text-danger");
+                options.ReactionIcons[StandardReactions.HeartBroken] = new LocalizableIconDictionary("fas fa-heart-broken text-danger");
+                options.ReactionIcons[StandardReactions.Wink] = new LocalizableIconDictionary("fas fa-grin-wink text-warning");
+                options.ReactionIcons[StandardReactions.Pray] = new LocalizableIconDictionary("fas fa-praying-hands text-info");
+                options.ReactionIcons[StandardReactions.Rocket] = new LocalizableIconDictionary("fa fa-rocket text-success");
+                options.ReactionIcons[StandardReactions.ThumbsDown] = new LocalizableIconDictionary("fa fa-thumbs-down text-secondary");
+                options.ReactionIcons[StandardReactions.Victory] = new LocalizableIconDictionary("fas fa-hand-peace text-warning");
+                options.ReactionIcons[StandardReactions.Rock] = new LocalizableIconDictionary("fas fa-hand-rock text-warning");
             });
 
             Configure<AbpVirtualFileSystemOptions>(options =>
@@ -35,3 +39,4 @@ namespace Volo.CmsKit.Web
         }
     }
 }
+

@@ -8,6 +8,11 @@ namespace Volo.Abp.FeatureManagement
     {
         public string Name => DefaultValueFeatureValueProvider.ProviderName;
 
+        public bool Compatible(string providerName)
+        {
+            return providerName == Name;
+        }
+
         public virtual Task<string> GetOrNullAsync(FeatureDefinition feature, string providerKey)
         {
             return Task.FromResult(feature.DefaultValue);

@@ -47,7 +47,7 @@
             function init() {
 
                 $selectIcon.popover({
-                    placement: 'right',
+                    placement: 'left',
                     html: true,
                     trigger: 'focus',
                     title: l('PickYourReaction'),

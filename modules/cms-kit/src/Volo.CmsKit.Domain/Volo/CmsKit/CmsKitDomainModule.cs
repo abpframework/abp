@@ -16,14 +16,18 @@ namespace Volo.CmsKit
         {
             Configure<CmsKitOptions>(options =>
             {
-                options.Reactions.AddOrReplace(StandardReactions.Smile);
                 options.Reactions.AddOrReplace(StandardReactions.ThumbsUp);
                 options.Reactions.AddOrReplace(StandardReactions.ThumbsDown);
+                options.Reactions.AddOrReplace(StandardReactions.Smile);
+                options.Reactions.AddOrReplace(StandardReactions.Wink);
                 options.Reactions.AddOrReplace(StandardReactions.Confused);
+                options.Reactions.AddOrReplace(StandardReactions.Victory);
+                options.Reactions.AddOrReplace(StandardReactions.Rock);
                 options.Reactions.AddOrReplace(StandardReactions.Eyes);
                 options.Reactions.AddOrReplace(StandardReactions.Heart);
-                options.Reactions.AddOrReplace(StandardReactions.Hooray);
+                options.Reactions.AddOrReplace(StandardReactions.HeartBroken);
                 options.Reactions.AddOrReplace(StandardReactions.Rocket);
+                options.Reactions.AddOrReplace(StandardReactions.Pray);
             });
         }
     }
