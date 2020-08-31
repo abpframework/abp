@@ -3,6 +3,7 @@ export * from './api';
 export * from './ast';
 export * from './common';
 export * from './enum';
+export * from './file';
 export * from './import';
 export * from './model';
 export * from './namespace';
