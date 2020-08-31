@@ -16,6 +16,7 @@ namespace Volo.Abp.Identity
         where TStartupModule : IAbpModule
     {
         private readonly IOrganizationUnitRepository _organizationUnitRepository;
+        private readonly IIdentityRoleRepository _identityRoleRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IdentityTestData _testData;
         private readonly IGuidGenerator _guidGenerator;
@@ -27,6 +28,7 @@ namespace Volo.Abp.Identity
         public OrganizationUnitRepository_Tests()
         {
             _organizationUnitRepository = ServiceProvider.GetRequiredService<IOrganizationUnitRepository>();
+            _identityRoleRepository = ServiceProvider.GetRequiredService<IIdentityRoleRepository>();
             _lookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
             _testData = GetRequiredService<IdentityTestData>();
             _guidGenerator = GetRequiredService<IGuidGenerator>();
@@ -80,6 +82,45 @@ namespace Volo.Abp.Identity
                 _lookupNormalizer.NormalizeName("david"));
             updatedUser.OrganizationUnits.Count.ShouldBe(2);
         }
+
+        [Fact]
+        public async Task AddRoleToOrganizationUnit()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou111 = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU111"));
+                ou111.Roles.Count.ShouldBe(2);
+                var roleSupporter = await _identityRoleRepository.FindByNormalizedNameAsync(
+                    _lookupNormalizer.NormalizeName("supporter"));
+
+                await _organizationUnitManager.AddRoleToOrganizationUnitAsync(roleSupporter.Id, ou111.Id);
+                await uow.CompleteAsync();
+            }
+
+            var ou111Updated = await _organizationUnitRepository.GetAsync(
+                _lookupNormalizer.NormalizeName("OU111"));
+            ou111Updated.Roles.Count.ShouldBeGreaterThan(2);
+        }
+
+        [Fact]
+        public async Task RemoveRoleFromOrganizationUnit()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou111 = await _organizationUnitRepository.GetAsync(
+                    _lookupNormalizer.NormalizeName("OU111"));
+                ou111.Roles.ShouldContain(q => q.RoleId == _testData.RoleModeratorId);
+
+                await _organizationUnitManager.RemoveRoleFromOrganizationUnitAsync(_testData.RoleModeratorId, ou111.Id);
+                await uow.CompleteAsync();
+            }
+
+            var ou111Updated = await _organizationUnitRepository.GetAsync(
+                _lookupNormalizer.NormalizeName("OU111"));
+            ou111Updated.Roles.ShouldNotContain(q => q.RoleId == _testData.RoleModeratorId);
+        }
+
         [Fact]
         public async Task RemoveOrganizationUnitFromUser()
         {
@@ -91,7 +132,7 @@ namespace Volo.Abp.Identity
                     _lookupNormalizer.NormalizeName("david"));
 
                 user.OrganizationUnits.Count.ShouldBe(1);
-                user.OrganizationUnits.ShouldContain(q=>q.OrganizationUnitId == ou112.Id);
+                user.OrganizationUnits.ShouldContain(q => q.OrganizationUnitId == ou112.Id);
 
                 await _identityUserManager.RemoveFromOrganizationUnitAsync(user.Id, ou112.Id);
                 await uow.CompleteAsync();
