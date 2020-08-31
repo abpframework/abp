@@ -32,6 +32,7 @@ Here, the list of all available commands before explaining their details:
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
+* **`remove-proxy`**: Removes previously generated client side proxies.
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
 * **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
@@ -179,7 +180,7 @@ abp add-module Volo.Blogging
 
 ### generate-proxy
 
-Generates Angular service proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
+Generates Angular service proxies for your HTTP APIs to make easy to consume your services from the client side. Your host (server) application must be up and running before running this command.
 
 Usage:
 
@@ -196,6 +197,26 @@ abp generate-proxy
 
 > See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
+### remove-proxy
+
+Removes previously generated proxy code from the Angular application. Your host (server) application must be up and running before running this command.
+
+This can be especially useful when you generate proxies for multiple modules before and need to remove one of them later.
+
+Usage:
+
+````bash
+abp remove-proxy
+````
+
+#### Options
+
+* `--module` or `-m`: Specifies the name of the backend module you wish to remove proxies for. Default value: `app`.
+* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+
+> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
 ### switch-to-preview
 
