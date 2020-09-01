@@ -180,6 +180,10 @@
             {
               "text": "RabbitMQ 集成",
               "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+            },
+            {
+              "text": "Kafka 集成",
+              "path": "Distributed-Event-Bus-Kafka-Integration.md"
             }
           ]
         }
