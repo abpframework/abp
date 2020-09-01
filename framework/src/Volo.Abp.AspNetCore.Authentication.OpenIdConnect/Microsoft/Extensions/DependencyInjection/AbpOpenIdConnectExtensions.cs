@@ -42,6 +42,8 @@ namespace Microsoft.Extensions.DependencyInjection
                         return Task.CompletedTask;
                     }
                 };
+
+                configureOptions?.Invoke(options);
             });
         }
     }
