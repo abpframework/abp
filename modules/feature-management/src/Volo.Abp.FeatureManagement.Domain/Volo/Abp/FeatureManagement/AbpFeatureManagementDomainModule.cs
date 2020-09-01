@@ -1,10 +1,8 @@
 ﻿using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Features;
-using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
-using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.FeatureManagement
 {
@@ -20,6 +18,7 @@ namespace Volo.Abp.FeatureManagement
             Configure<FeatureManagementOptions>(options =>
             {
                 options.Providers.Add<DefaultValueFeatureManagementProvider>();
+                options.Providers.Add<HostFeatureManagementProvider>();
                 options.Providers.Add<EditionFeatureManagementProvider>();
 
                 //TODO: Should be moved to the Tenant Management module
