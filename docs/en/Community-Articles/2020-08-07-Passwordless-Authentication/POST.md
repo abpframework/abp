@@ -2,17 +2,17 @@
 
 ## Introduction
 
-In this tutorial, we will show you how to add a custom token provider to authenticate a user with a link, instead of entering a password.
+In this tutorial, we will show you how to add a custom token provider to authenticate a user with a link, instead of entering the password.
 
-This can be especially useful if you want to make someone login to the application with your user, without sharing your secret password. The generated link will be for a single use.
+This can be useful especially if you want to make someone login to the application with your user, without sharing your secret password. The generated link will be for a single use.
 
 ### Source Code
 
-The completed sample is available on [the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/PasswordlessAuthentication).
+The completed sample is available on [GitHub repository](https://github.com/abpframework/abp-samples/tree/master/PasswordlessAuthentication).
 
 ## Creating the Solution
 
-Before starting to the development, create a new solution named `PasswordlessAuthentication` and run it by following the [getting started tutorial](https://docs.abp.io/en/abp/latest/Getting-Started?UI=MVC&DB=EF&Tiered=No).
+Before starting the development, create a new solution named `PasswordlessAuthentication` and run it by following the [getting started tutorial](https://docs.abp.io/en/abp/latest/Getting-Started?UI=MVC&DB=EF&Tiered=No).
 
 ## Step-1
 
@@ -272,4 +272,4 @@ That's all! We created a passwordless login with 7 steps.
 
 ## Source Code
 
-The completed sample is available on [the GitHub repository](https://github.com/abpframework/abp-samples/tree/master/PasswordlessAuthentication).
+The completed sample is available on [GitHub repository](https://github.com/abpframework/abp-samples/tree/master/PasswordlessAuthentication).
