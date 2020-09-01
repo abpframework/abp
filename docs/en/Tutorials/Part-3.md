@@ -1053,7 +1053,7 @@ export class BookComponent implements OnInit {
     }
 
     const request = this.selectedBook.id
-      ? this.bookService.update(this.form.value, this.selectedBook.id)
+      ? this.bookService.update(this.selectedBook.id, this.form.value)
       : this.bookService.create(this.form.value);
 
     request.subscribe(() => {
