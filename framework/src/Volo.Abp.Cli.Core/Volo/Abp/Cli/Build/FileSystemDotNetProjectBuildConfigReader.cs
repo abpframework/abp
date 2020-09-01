@@ -19,18 +19,18 @@ namespace Volo.Abp.Cli.Build
 
         public DotNetProjectBuildConfig Read(string directoryPath)
         {
-            var buildArgs = new DotNetProjectBuildConfig();
+            var buildConfig = new DotNetProjectBuildConfig();
             var solutionFiles = Directory.GetFiles(directoryPath, "*.sln", SearchOption.TopDirectoryOnly);
             if (solutionFiles.Length == 1)
             {
-                buildArgs.SlFilePath = solutionFiles.First();
+                buildConfig.SlFilePath = solutionFiles.First();
                 var configFile = GetClosestFile(directoryPath, _buildConfigName);
                 var configFileContent = File.ReadAllText(configFile);
-                buildArgs.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
+                buildConfig.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
 
-                SetBranchNames(buildArgs.GitRepository);
+                SetBranchNames(buildConfig.GitRepository);
 
-                return buildArgs;
+                return buildConfig;
             }
 
             var configFiles = Directory.GetFiles(directoryPath, _buildConfigName, SearchOption.TopDirectoryOnly);
@@ -38,18 +38,16 @@ namespace Volo.Abp.Cli.Build
             {
                 var configFile = configFiles.First();
                 var configFileContent = File.ReadAllText(configFile);
-                buildArgs.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
+                buildConfig.GitRepository = _jsonSerializer.Deserialize<GitRepository>(configFileContent);
 
-                SetBranchNames(buildArgs.GitRepository);
+                SetBranchNames(buildConfig.GitRepository);
 
-                return buildArgs;
+                return buildConfig;
             }
-            else
-            {
-                Console.WriteLine(
-                    "There are more than 1 config (abp-build-config.json) file in the directory!"
-                );
-            }
+
+            Console.WriteLine(
+                "There are more than 1 config (abp-build-config.json) file in the directory!"
+            );
 
             throw new Exception("There is no solution file (*.sln) or " + _buildConfigName + " in the working directory !");
         }

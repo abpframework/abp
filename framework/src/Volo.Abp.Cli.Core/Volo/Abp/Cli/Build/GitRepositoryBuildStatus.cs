@@ -8,7 +8,7 @@ namespace Volo.Abp.Cli.Build
         /// <summary>
         /// Name of the repository
         /// </summary>
-        public string Name { get; set; }
+        public string RepositoryName { get; set; }
 
         /// <summary>
         /// Branch of the repository
@@ -30,9 +30,9 @@ namespace Volo.Abp.Cli.Build
         /// </summary>
         public List<GitRepositoryBuildStatus> DependingRepositories { get; set; }
 
-        public GitRepositoryBuildStatus(string name, string branchName)
+        public GitRepositoryBuildStatus(string repositoryName, string branchName)
         {
-            Name = name;
+            RepositoryName = repositoryName;
             BranchName = branchName;
             SucceedProjects = new List<DotNetProjectBuildStatus>();
             DependingRepositories = new List<GitRepositoryBuildStatus>();
@@ -51,7 +51,7 @@ namespace Volo.Abp.Cli.Build
         private GitRepositoryBuildStatus GetChildInternal(GitRepositoryBuildStatus repositoryBuildStatus,
             string repositoryName)
         {
-            if (repositoryBuildStatus.Name == repositoryName)
+            if (repositoryBuildStatus.RepositoryName == repositoryName)
             {
                 return repositoryBuildStatus;
             }
@@ -64,20 +64,20 @@ namespace Volo.Abp.Cli.Build
             return null;
         }
 
-        public string GetUniqueName()
+        public string GetUniqueName(string uniqueName)
         {
-            var name = Name + "_" + BranchName;
+            var name = RepositoryName + "_" + BranchName;
             foreach (var dependingRepository in DependingRepositories)
             {
                 AddToUniqueName(dependingRepository, name);
             }
 
-            return name.ToMd5();
+            return (uniqueName.IsNullOrEmpty() ? "" : uniqueName + "_") + name.ToMd5();
         }
 
         private void AddToUniqueName(GitRepositoryBuildStatus gitRepository, string name)
         {
-            name += "_" + gitRepository.Name + "_" + gitRepository.BranchName;
+            name += "_" + gitRepository.RepositoryName + "_" + gitRepository.BranchName;
 
             foreach (var dependingRepository in gitRepository.DependingRepositories)
             {

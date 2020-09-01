@@ -33,7 +33,7 @@ namespace Volo.Abp.Cli.Build
             DependingRepositories = new List<GitRepository>();
         }
 
-        public string GetUniqueName()
+        public string GetUniqueName(string uniqueName)
         {
             var name = Name + "_" + BranchName;
             foreach (var dependingRepository in DependingRepositories)
@@ -41,7 +41,7 @@ namespace Volo.Abp.Cli.Build
                 AddToUniqueName(dependingRepository, name);
             }
 
-            return name.ToMd5();
+            return (uniqueName.IsNullOrEmpty() ? "" : uniqueName + "_") + name.ToMd5();
         }
 
         private void AddToUniqueName(GitRepository gitRepository, string name)

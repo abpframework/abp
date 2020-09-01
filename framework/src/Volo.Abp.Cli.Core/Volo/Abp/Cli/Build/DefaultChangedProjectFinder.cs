@@ -21,18 +21,18 @@ namespace Volo.Abp.Cli.Build
         {
             if (buildConfig.SlFilePath.IsNullOrEmpty())
             {
-                return FindByRepository(buildConfig.GitRepository);
+                return FindByRepository(buildConfig);
             }
 
             return FindBySlnFile(buildConfig.GitRepository, buildConfig.SlFilePath);
         }
         
-        private List<DotNetProjectInfo> FindByRepository(GitRepository gitRepository)
+        private List<DotNetProjectInfo> FindByRepository(DotNetProjectBuildConfig buildConfig)
         {
             var changedProjectList = new List<DotNetProjectInfo>();
-            var gitRepositoryBuildStatus = _repositoryBuildStatusStore.Get(gitRepository);
+            var gitRepositoryBuildStatus = _repositoryBuildStatusStore.Get(buildConfig.BuildName, buildConfig.GitRepository);
 
-            FindChangedFiles(gitRepository, gitRepositoryBuildStatus, changedProjectList);
+            FindChangedFiles(buildConfig.GitRepository, gitRepositoryBuildStatus, changedProjectList);
 
             return changedProjectList;
         }

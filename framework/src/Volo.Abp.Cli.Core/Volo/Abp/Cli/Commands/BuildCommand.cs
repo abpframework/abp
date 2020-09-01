@@ -46,8 +46,14 @@ namespace Volo.Abp.Cli.Commands
                 Options.DotnetBuildArguments.Short,
                 Options.DotnetBuildArguments.Long
             );
-            
+
+            var buildName = commandLineArgs.Options.GetOrNull(
+                Options.BuildName.Short,
+                Options.BuildName.Long
+            );
+
             var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
+            buildConfig.BuildName = buildName;
 
             var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
 
@@ -61,9 +67,13 @@ namespace Volo.Abp.Cli.Commands
                 dotnetBuildArguments ?? ""
             );
 
-            var buildStatus =
-                GenerateBuildStatus(buildConfig.GitRepository, changedProjectFiles, buildSucceededProjects);
-            RepositoryBuildStatusStore.Set(buildStatus);
+            var buildStatus = GenerateBuildStatus(
+                buildConfig.GitRepository,
+                changedProjectFiles,
+                buildSucceededProjects
+            );
+
+            RepositoryBuildStatusStore.Set(buildName, buildStatus);
 
             sw.Stop();
             Console.WriteLine("Build operation is completed in " + sw.ElapsedMilliseconds + " (ms)");
@@ -186,8 +196,14 @@ namespace Volo.Abp.Cli.Commands
 
             public static class DotnetBuildArguments
             {
-                public const string Short = "d";
+                public const string Short = "a";
                 public const string Long = "dotnet-build-arguments";
+            }
+
+            public static class BuildName
+            {
+                public const string Short = "n";
+                public const string Long = "build-name";
             }
         }
     }
