@@ -3,12 +3,12 @@ import { kebab } from './text';
 
 export function relativePathToEnum(namespace: string, enumNamespace: string, enumName: string) {
   const path = calculateRelativePath(namespace, enumNamespace);
-  return removeDoubleSlash(path + `/${kebab(enumName)}.enum`);
+  return path + `/${kebab(enumName)}.enum`;
 }
 
 export function relativePathToModel(namespace: string, modelNamespace: string) {
   const path = calculateRelativePath(namespace, modelNamespace);
-  return removeTrailingSlash(path + '/models');
+  return path + '/models';
 }
 
 function calculateRelativePath(ns1: string, ns2: string) {
