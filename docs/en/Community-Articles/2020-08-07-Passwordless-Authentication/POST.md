@@ -2,7 +2,9 @@
 
 ## Introduction
 
-To allow a user login with a magic URL, you need to implement a custom token provider. In this tutorial, we will show you how to add a custom token provider to authenticate a user with a link, instead of entering a password.
+In this tutorial, we will show you how to add a custom token provider to authenticate a user with a link, instead of entering a password.
+
+This can be especially useful if you want to make someone login to the application with your user, without sharing your secret password. The generated link will be for a single use.
 
 ### Source Code
 
