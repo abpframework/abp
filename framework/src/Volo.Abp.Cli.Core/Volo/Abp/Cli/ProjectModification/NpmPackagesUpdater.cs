@@ -226,7 +226,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
             else
             {
-                if (!switchToStable && SemanticVersion.Parse(currentVersion).IsPrerelease)
+                if (!switchToStable && IsPrerelease(currentVersion))
                 {
                     version = await GetLatestVersion(package, true);
                 }
@@ -236,7 +236,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
             }
 
-            if (version == currentVersion)
+            if (string.IsNullOrEmpty(version) || version == currentVersion)
             {
                 return false;
             }
@@ -246,6 +246,16 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger.LogInformation(
                 $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
             return true;
+        }
+
+        protected virtual bool IsPrerelease(string version)
+        {
+            if (version == null)
+            {
+                return false;
+            }
+
+            return version.Split("-", StringSplitOptions.RemoveEmptyEntries).Length > 1;
         }
 
         protected virtual async Task<string> GetLatestVersion(
@@ -264,6 +274,12 @@ namespace Volo.Abp.Cli.ProjectModification
             var newVersion = includeReleaseCandidates
                 ? versionList.First()
                 : versionList.FirstOrDefault(v => !SemanticVersion.Parse(v).IsPrerelease);
+
+            if (string.IsNullOrEmpty(newVersion))
+            {
+                _fileVersionStorage[package.Name] = newVersion;
+                return newVersion;
+            }
 
             var newVersionWithPrefix = $"~{newVersion}";
 

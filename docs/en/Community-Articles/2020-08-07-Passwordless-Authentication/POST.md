@@ -2,7 +2,9 @@
 
 ## Introduction
 
-To allow a user login with a magic URL, you need to implement a custom token provider. In this tutorial, we will show you how to add a custom token provider to authenticate a user with a link, instead of entering a password.
+In this tutorial, we will show you how to add a custom token provider to authenticate a user with a link, instead of entering a password.
+
+This can be especially useful if you want to make someone login to the application with your user, without sharing your secret password. The generated link will be for a single use.
 
 ### Source Code
 
@@ -155,36 +157,33 @@ Open your **Index.cshtml** and set the content as below. We added a form that po
 
 ```html
 @page
-@inject IHtmlLocalizer<PasswordlessAuthenticationResource> L
-@using Microsoft.AspNetCore.Mvc.Localization
-@using PasswordlessAuthentication.Localization
-@using PasswordlessAuthentication.Web.Menus
+@using MyBookStore.Web.Menus
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
-@model PasswordlessAuthentication.Web.Pages.IndexModel
-
+@model MyBookStore.Web.Pages.IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@using MyBookStore.Localization
+@inject IHtmlLocalizer<MyBookStoreResource> L
 @{
     ViewBag.PageTitle = "Home";
 }
-@inject IPageLayout PageLayout;
+@inject IPageLayout PageLayout
 @{
     PageLayout.Content.Title = L["Home"].Value;
     PageLayout.Content.BreadCrumb.Add(L["Menu:Home"].Value);
-    PageLayout.Content.MenuItemName = PasswordlessAuthenticationMenus.Home;
+    PageLayout.Content.MenuItemName = MyBookStoreMenus.Home;
 }
-
 <abp-card>
     <abp-card-body>
         <form asp-page-handler="GeneratePasswordlessToken" method="post">
-            
+
             <abp-button button-type="Dark" type="submit">Generate passwordless token link</abp-button>
 
             @if (Model.PasswordlessLoginUrl != null)
             {
                 <abp-card class="mt-3 p-3">
-                    [@Model.PasswordlessLoginUrl](/en/commercial/latest/how-to/@Model.PasswordlessLoginUrl)
+                    <a href="@Model.PasswordlessLoginUrl">@Model.PasswordlessLoginUrl</a>
                 </abp-card>
             }
-            
         </form>
     </abp-card-body>
 </abp-card>
