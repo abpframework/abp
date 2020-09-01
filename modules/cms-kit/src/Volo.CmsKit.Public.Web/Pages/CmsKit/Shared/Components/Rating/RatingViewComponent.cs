@@ -42,7 +42,7 @@ namespace Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating
             }
             
             var loginUrl =
-                $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-comment_{entityType}_{entityId}";
+                $"{AbpMvcUiOptions.LoginUrl}?returnUrl={HttpContext.Request.Path.ToString()}&returnUrlHash=#cms-rating_{entityType}_{entityId}";
 
             var viewModel = new RatingViewModel
             {

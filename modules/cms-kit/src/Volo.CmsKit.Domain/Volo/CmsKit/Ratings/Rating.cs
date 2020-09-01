@@ -44,13 +44,13 @@ namespace Volo.CmsKit.Ratings
 
         public virtual void SetStarCount(short starCount)
         {
-            if(starCount <= RatingConsts.MaxRating && starCount > RatingConsts.MinRating)
+            if(starCount <= RatingConsts.MaxStarCount && starCount >= RatingConsts.MinStarCount)
             {
                 StarCount = starCount;
             }
             else
             {
-                throw new ArgumentOutOfRangeException("Choosen star must between 1 and 5");
+                throw new ArgumentOutOfRangeException($"Choosen star must between {RatingConsts.MinStarCount} and {RatingConsts.MaxStarCount}");
             }
         }
     }

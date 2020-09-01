@@ -72,8 +72,7 @@
                 init: init,
                 getFilters: getFilters
             }
-        }
-        ;
+        };
 
         $('.abp-widget-wrapper[data-widget-name="CmsRating"]')
             .each(function () {
@@ -83,7 +82,6 @@
 
                 widgetManager.init($(this));
             });
-    })
-    ;
+    });
 })
 (jQuery);

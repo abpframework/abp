@@ -8,8 +8,8 @@ namespace Volo.CmsKit.Ratings
 
         public static int MaxEntityIdLength { get; set; } = CmsEntityConsts.MaxEntityIdLength;
 
-        public static int MaxRating { get; set; } = 5;
+        public const int MaxStarCount = 5;
 
-        public static int MinRating { get; set; } = 0;
+        public const int MinStarCount = 1;
     }
 }

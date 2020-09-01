@@ -5,7 +5,7 @@
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Components.Rating.RatingViewModel
 @inject IHtmlLocalizer<CmsKitResource> L
 
-<div class="cms-rating-area container" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId">
+<div class="cms-rating-area container" data-entity-type="@Model.EntityType" data-entity-id="@Model.EntityId" id="cms-rating_{@Model.EntityType}_{@Model.EntityId}">
     @if (CurrentUser.IsAuthenticated)
     {
         <div class="m-auto">
