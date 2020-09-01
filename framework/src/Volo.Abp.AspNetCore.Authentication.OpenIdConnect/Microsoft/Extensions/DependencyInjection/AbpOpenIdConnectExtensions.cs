@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -20,8 +21,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static AuthenticationBuilder AddAbpOpenIdConnect(this AuthenticationBuilder builder, string authenticationScheme, string displayName, Action<OpenIdConnectOptions> configureOptions)
         {
-            builder.AddOpenIdConnect(authenticationScheme, displayName, options =>
+            return builder.AddOpenIdConnect(authenticationScheme, displayName, options =>
             {
+                options.ClaimActions.MapAbpClaimTypes();
+
                 options.Events = new OpenIdConnectEvents
                 {
                     OnAuthorizationCodeReceived = receivedContext =>
@@ -40,8 +43,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 };
             });
-
-            return builder;
         }
     }
 }
