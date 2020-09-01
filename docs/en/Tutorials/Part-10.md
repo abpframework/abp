@@ -948,7 +948,7 @@ Added the Author dropdown as the first element in the form.
 
 Open the `/src/app/book/book.component.ts` and and change the content as shown below:
 
-````typescript
+````js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions, AuthorLookupDto } from '@proxy/books';
