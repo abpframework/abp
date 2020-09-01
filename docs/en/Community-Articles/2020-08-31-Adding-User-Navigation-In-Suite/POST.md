@@ -50,6 +50,8 @@ That's it! Click **Save and generate** button to create your page. You'll see th
 
 ![final-page](final-page.jpg)
 
+This is the new page that has been created by the ABP Suite. It can perform the fundamental CRUD operations. Also, it has the "App user" column that shows the related user name (you can easily change the automatically created "App user" title).
+
 ## About the ABP Commercial RC
 
 This example has been implemented with **ABP Commercial 3.1.0-rc.3**. This is a RC version. If you want to install the CLI and Suite RC version follow the next steps:
