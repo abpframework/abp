@@ -12,7 +12,13 @@
     "importHelpers": true,
     "target": "es2015",
     "typeRoots": ["node_modules/@types"],
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@proxy": ["src/app/proxy/index.ts"],
+      "@proxy/enums": ["src/app/proxy/enums/index.ts"],
+      "@proxy/models": ["src/app/proxy/models/index.ts"],
+      "@proxy/services": ["src/app/proxy/services/index.ts"]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
