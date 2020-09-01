@@ -6,7 +6,7 @@
 
 In this post, I'll show you how to add the user entity as a navigation property in your new entity, by the help of the ABP Suite.
 
-> This article uses the MVC UI, but the same steps are applicable to the Angular UI.
+> In the sample project MVC UI is used, but the same steps are applicable to the Angular UI as well.
 
 ## Code Generation
 
@@ -46,11 +46,21 @@ Get back to ABP Suite, open the **Navigation Properties** tab of the ABP Suite, 
 
 ### Generate the Code!
 
-That's it! Click **Save and generate** button to create your page. You'll see the following page if there's everything goes well. 
+That's it! Click **Save and generate** button to create your page. You'll see the following page if everything goes well. 
 
 ![final-page](final-page.jpg)
 
-This is the new page that has been created by the ABP Suite. It can perform the fundamental CRUD operations. Also, it has the "App user" column that shows the related user name (you can easily change the automatically created "App user" title).
+This is the new page that has been created by the ABP Suite. It can perform the fundamental CRUD operations. Also, it has the "App user" column that shows the related user name (you can easily change the automatically created "App user" title from the **Entity Name** field of the navigation property creation screen).
+
+**Picking Users from Look Up Table**
+
+We used dropdown element to select a user from the user list. If you have a lot of users, then it's good to pick a user from a look up table. A look up table is a modal window that lets you filter data and pick one. To do this, get back to Suite and click **Edit** button of user navigation which is set as `AppUserId`  name. Choose "Modal" from the "UI Pick Type" field. Then click **Save and generate** button to recreate your page. 
+
+![ui-pick-type-modal](ui-pick-type-modal.jpg)
+
+After successful code generation, you'll see the the user can be picked from user table.
+
+![ui-pick-type-modal2](ui-pick-type-modal2.jpg)
 
 ## About the ABP Commercial RC
 
