@@ -118,11 +118,11 @@ namespace MyCompanyName.MyProjectName
             });
 
             context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             Configure<AbpDistributedCacheOptions>(options =>
@@ -182,10 +182,10 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseCors(DefaultCorsPolicyName); 
+            app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
-            
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
