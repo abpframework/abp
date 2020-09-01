@@ -376,6 +376,8 @@ namespace Acme.BookStore.Books
 
         public override async Task<BookDto> GetAsync(Guid id)
         {
+            await CheckGetPolicyAsync();
+
             //Prepare a query to join books and authors
             var query = from book in Repository
                 join author in _authorRepository on book.AuthorId equals author.Id
@@ -397,6 +399,8 @@ namespace Acme.BookStore.Books
         public override async Task<PagedResultDto<BookDto>>
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
+            await CheckGetListPolicyAsync();
+
             //Prepare a query to join books and authors
             var query = from book in Repository
                 join author in _authorRepository on book.AuthorId equals author.Id
@@ -495,6 +499,8 @@ namespace Acme.BookStore.Books
 
         public override async Task<BookDto> GetAsync(Guid id)
         {
+            await CheckGetPolicyAsync();
+
             var book = await Repository.GetAsync(id);
             var bookDto = ObjectMapper.Map<Book, BookDto>(book);
 
@@ -507,6 +513,8 @@ namespace Acme.BookStore.Books
         public override async Task<PagedResultDto<BookDto>> 
             GetListAsync(PagedAndSortedResultRequestDto input)
         {
+            await CheckGetListPolicyAsync();
+
             //Set a default sorting, if not provided
             if (input.Sorting.IsNullOrWhiteSpace())
             {
