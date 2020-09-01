@@ -915,6 +915,19 @@ You can run the application and try to create a new book or update an existing b
 
 {{else if UI=="NG"}}
 
-***Angular UI is being prepared...***
+### The Book List
+
+Book list page change is trivial. Open the `/src/app/book/book.component.html` and add the following column definition between the `Name` and `Type` columns:
+
+````js
+<ngx-datatable-column
+  [name]="'::Author' | abpLocalization"
+  prop="authorName"
+></ngx-datatable-column>
+````
+
+When you run the application, you can see the *Author* column on the table:
+
+![bookstore-books-with-authorname-angular](images/bookstore-books-with-authorname-angular.png)
 
 {{end}}
