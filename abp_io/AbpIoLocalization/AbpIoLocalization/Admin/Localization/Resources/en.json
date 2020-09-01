@@ -192,8 +192,8 @@
     "Summary": "Summary",
     "AuthorName": "Author name",
     "CoverImage": "Cover Image",
-    "ClearCacheConfirmationMessage": "Are you sure you clear the cache for \"{0}\" Article?",
-    "SuccessfullyCleared": "Successfully cleared",
+    "RemoveCacheConfirmationMessage": "Are you sure you remove the cache for \"{0}\" article?",
+    "SuccessfullyRemoved": "Successfully cleared",
     "RemoveCache": "Remove Cache"
   }
 }
