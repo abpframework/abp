@@ -26,13 +26,21 @@ namespace Volo.Abp.Cli.Build
 
             return FindBySlnFile(buildConfig.GitRepository, buildConfig.SlFilePath);
         }
-        
+
         private List<DotNetProjectInfo> FindByRepository(DotNetProjectBuildConfig buildConfig)
         {
             var changedProjectList = new List<DotNetProjectInfo>();
-            var gitRepositoryBuildStatus = _repositoryBuildStatusStore.Get(buildConfig.BuildName, buildConfig.GitRepository);
+            var gitRepositoryBuildStatus = _repositoryBuildStatusStore.Get(
+                buildConfig.BuildName,
+                buildConfig.GitRepository
+            );
 
-            FindChangedFiles(buildConfig.GitRepository, gitRepositoryBuildStatus, changedProjectList);
+            FindChangedFiles(
+                buildConfig.GitRepository,
+                gitRepositoryBuildStatus,
+                changedProjectList,
+                buildConfig.ForceBuild
+            );
 
             return changedProjectList;
         }
@@ -72,7 +80,8 @@ namespace Volo.Abp.Cli.Build
             AddProjectDependencies(gitRepository, project, changedProjectList);
         }
 
-        private void AddProjectDependencies(GitRepository gitRepository, DotNetProjectInfo project, List<DotNetProjectInfo> changedProjectList)
+        private void AddProjectDependencies(GitRepository gitRepository, DotNetProjectInfo project,
+            List<DotNetProjectInfo> changedProjectList)
         {
             var projectNode = XElement.Load(project.CsProjPath);
             var referenceNodes = projectNode.Descendants("ItemGroup").Descendants("ProjectReference");
@@ -92,7 +101,7 @@ namespace Volo.Abp.Cli.Build
                 {
                     continue;
                 }
-                
+
                 var repositoryName = gitRepository.FindRepositoryOf(referenceProjectInfo.FullName);
                 var referenceProject = new DotNetProjectInfo(repositoryName, referenceProjectInfo.FullName);
                 changedProjectList.Add(referenceProject);
@@ -104,23 +113,34 @@ namespace Volo.Abp.Cli.Build
         private void FindChangedFiles(
             GitRepository repository,
             GitRepositoryBuildStatus repositoryBuildStatus,
-            List<DotNetProjectInfo> changedProjectList)
+            List<DotNetProjectInfo> changedProjectList,
+            bool forceBuild)
         {
-            if (repositoryBuildStatus.CommitId.IsNullOrEmpty())
+            if (forceBuild || repositoryBuildStatus.CommitId.IsNullOrEmpty())
             {
                 AddAllCsProjFiles(repository, changedProjectList);
             }
             else
             {
-                AddChangedCsProjFiles(repository, changedProjectList, repositoryBuildStatus);
+                AddChangedCsProjFiles(
+                    repository,
+                    changedProjectList,
+                    repositoryBuildStatus,
+                    false
+                );
             }
 
             if (repository.DependingRepositories.Any())
             {
                 foreach (var dependingRepository in repository.DependingRepositories)
                 {
-                    var dependingRepositoryBuildStatus = repositoryBuildStatus.GetChild(dependingRepository.Name);
-                    FindChangedFiles(dependingRepository, dependingRepositoryBuildStatus, changedProjectList);
+                    var dependingRepositoryBuildStatus = repositoryBuildStatus?.GetChild(dependingRepository.Name);
+                    FindChangedFiles(
+                        dependingRepository,
+                        dependingRepositoryBuildStatus,
+                        changedProjectList,
+                        forceBuild
+                    );
                 }
             }
         }
@@ -144,7 +164,8 @@ namespace Volo.Abp.Cli.Build
         private void AddChangedCsProjFiles(
             GitRepository repository,
             List<DotNetProjectInfo> changedFiles,
-            GitRepositoryBuildStatus status)
+            GitRepositoryBuildStatus status,
+            bool forceBuild)
         {
             using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
             {
@@ -180,7 +201,12 @@ namespace Volo.Abp.Cli.Build
                 foreach (var subRepository in repository.DependingRepositories)
                 {
                     var subRepositoryBuildStatus = status.GetChild(subRepository.Name);
-                    FindChangedFiles(subRepository, subRepositoryBuildStatus, changedFiles);
+                    FindChangedFiles(
+                        subRepository,
+                        subRepositoryBuildStatus,
+                        changedFiles,
+                        forceBuild
+                    );
                 }
             }
         }

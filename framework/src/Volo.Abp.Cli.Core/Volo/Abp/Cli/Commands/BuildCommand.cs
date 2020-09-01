@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Build;
@@ -26,6 +24,8 @@ namespace Volo.Abp.Cli.Commands
         public IRepositoryBuildStatusStore RepositoryBuildStatusStore { get; set; }
 
         public IDotNetProjectBuildConfigReader DotNetProjectBuildConfigReader { get; set; }
+
+        public IBuildStatusGenerator BuildStatusGenerator { get; set; }
 
         public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
@@ -52,8 +52,11 @@ namespace Volo.Abp.Cli.Commands
                 Options.BuildName.Long
             );
 
+            var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
+
             var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
             buildConfig.BuildName = buildName;
+            buildConfig.ForceBuild = forceBuild;
 
             var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
 
@@ -67,7 +70,7 @@ namespace Volo.Abp.Cli.Commands
                 dotnetBuildArguments ?? ""
             );
 
-            var buildStatus = GenerateBuildStatus(
+            var buildStatus = BuildStatusGenerator.Generate(
                 buildConfig.GitRepository,
                 changedProjectFiles,
                 buildSucceededProjects
@@ -79,82 +82,6 @@ namespace Volo.Abp.Cli.Commands
             Console.WriteLine("Build operation is completed in " + sw.ElapsedMilliseconds + " (ms)");
 
             return Task.CompletedTask;
-        }
-
-        private GitRepositoryBuildStatus GenerateBuildStatus(
-            GitRepository gitRepository,
-            List<DotNetProjectInfo> changedProjects,
-            List<string> buildSucceededProjects)
-        {
-            using (var repo = new Repository(string.Concat(gitRepository.RootPath, @"\.git")))
-            {
-                var lastCommitId = repo.Head.Tip.Id.ToString();
-                var status = new GitRepositoryBuildStatus(
-                    gitRepository.Name,
-                    repo.Head.FriendlyName
-                )
-                {
-                    CommitId = lastCommitId
-                };
-
-                status.SucceedProjects = changedProjects.Where(p =>
-                        p.RepositoryName == gitRepository.Name &&
-                        buildSucceededProjects.Contains(p.CsProjPath)
-                    )
-                    .Select(e => new DotNetProjectBuildStatus()
-                    {
-                        CsProjPath = e.CsProjPath,
-                        CommitId = lastCommitId
-                    }).ToList();
-
-                foreach (var dependingRepository in gitRepository.DependingRepositories)
-                {
-                    GenerateBuildStatusInternal(dependingRepository, changedProjects, buildSucceededProjects, status);
-                }
-
-                return status;
-            }
-        }
-
-        private void GenerateBuildStatusInternal(
-            GitRepository gitRepository,
-            List<DotNetProjectInfo> changedProjects,
-            List<string> buildSucceededProjects,
-            GitRepositoryBuildStatus status)
-        {
-            using (var repo = new Repository(string.Concat(gitRepository.RootPath, @"\.git")))
-            {
-                var lastCommitId = repo.Head.Tip.Id.ToString();
-                var dependingRepositoryStatus = new GitRepositoryBuildStatus(
-                    gitRepository.Name,
-                    repo.Head.FriendlyName
-                )
-                {
-                    CommitId = lastCommitId
-                };
-
-                dependingRepositoryStatus.SucceedProjects = changedProjects.Where(p =>
-                        p.RepositoryName == gitRepository.Name &&
-                        buildSucceededProjects.Contains(p.CsProjPath)
-                    )
-                    .Select(e => new DotNetProjectBuildStatus()
-                    {
-                        CsProjPath = e.CsProjPath,
-                        CommitId = lastCommitId
-                    }).ToList();
-
-                foreach (var dependingRepository in gitRepository.DependingRepositories)
-                {
-                    GenerateBuildStatusInternal(
-                        dependingRepository,
-                        changedProjects,
-                        buildSucceededProjects,
-                        dependingRepositoryStatus
-                    );
-                }
-
-                status.DependingRepositories.Add(dependingRepositoryStatus);
-            }
         }
 
         public string GetUsageInfo()
@@ -204,6 +131,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "n";
                 public const string Long = "build-name";
+            }
+
+            public static class ForceBuild
+            {
+                public const string Long = "force";
             }
         }
     }

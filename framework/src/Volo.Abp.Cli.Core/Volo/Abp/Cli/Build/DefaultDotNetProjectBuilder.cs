@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -53,7 +54,7 @@ namespace Volo.Abp.Cli.Build
         {
             Console.WriteLine("Building...: dotnet build " + project.CsProjPath + " " + arguments);
 
-            CmdHelper.RunCmdAndGetOutput(
+            var output = CmdHelper.RunCmdAndGetOutput(
                 "dotnet build " + project.CsProjPath + " " + arguments,
                 out int buildStatus
             );
@@ -61,12 +62,22 @@ namespace Volo.Abp.Cli.Build
             if (buildStatus == 0)
             {
                 builtProjects.Add(project.CsProjPath);
+                WriteOutput(output, ConsoleColor.Green);
             }
             else
             {
-                // TODO: throw exception and stop build process.
+                WriteOutput(output, ConsoleColor.Red);
                 Console.WriteLine("Build failed for :" + project.CsProjPath);
+                throw new Exception("Build failed!");
             }
+        }
+
+        private void WriteOutput(string text, ConsoleColor color)
+        {
+            var currentConsoleColor = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ForegroundColor = currentConsoleColor;
         }
     }
 }
