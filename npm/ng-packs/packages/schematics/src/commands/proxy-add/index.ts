@@ -3,13 +3,14 @@ import { chain, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { GenerateProxySchema } from '../../models';
 import {
   buildDefaultPath,
-  chainAndMerge,
   createApiDefinitionGetter,
   createApisGenerator,
   createProxyClearer,
   createProxyConfigReader,
   createProxyConfigSaver,
+  createProxyIndexGenerator,
   createProxyWarningSaver,
+  mergeAndAllowDelete,
   removeDefaultPlaceholders,
   resolveProject,
 } from '../../utils';
@@ -45,7 +46,15 @@ export default function(schema: GenerateProxySchema) {
 
       const generateApis = createApisGenerator(schema, generated);
 
-      return chainAndMerge([clearProxy, saveProxyConfig, saveProxyWarning, generateApis])(host);
+      const generateIndex = createProxyIndexGenerator(targetPath);
+
+      return chain([
+        mergeAndAllowDelete(host, clearProxy),
+        saveProxyConfig,
+        saveProxyWarning,
+        generateApis,
+        generateIndex,
+      ]);
     },
   ]);
 }
