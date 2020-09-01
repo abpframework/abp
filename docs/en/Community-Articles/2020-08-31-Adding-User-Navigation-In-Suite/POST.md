@@ -67,5 +67,3 @@ dotnet tool uninstall --global Volo.Abp.Suite && dotnet tool install -g Volo.Abp
 ```
 
 Don't forget to replace the `<YOUR-API-KEY>` with your own key!
-
-## Conclusion
