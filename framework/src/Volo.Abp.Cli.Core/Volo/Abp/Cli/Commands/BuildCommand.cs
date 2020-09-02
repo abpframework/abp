@@ -51,7 +51,7 @@ namespace Volo.Abp.Cli.Commands
                 Options.BuildName.Short,
                 Options.BuildName.Long
             );
-
+            
             var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
 
             var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());

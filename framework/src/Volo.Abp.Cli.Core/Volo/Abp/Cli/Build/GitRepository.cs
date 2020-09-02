@@ -24,6 +24,8 @@ namespace Volo.Abp.Cli.Build
         public string RootPath { get; set; }
 
         public List<GitRepository> DependingRepositories { get; set; }
+        
+        public List<string> IgnoredDirectories { get; set; }
 
         public GitRepository(string name, string branchName, string rootPath)
         {
@@ -31,6 +33,7 @@ namespace Volo.Abp.Cli.Build
             BranchName = branchName;
             RootPath = rootPath;
             DependingRepositories = new List<GitRepository>();
+            IgnoredDirectories = new List<string>();
         }
 
         public string GetUniqueName(string uniqueName)

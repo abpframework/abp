@@ -143,6 +143,13 @@ namespace Volo.Abp.Cli.Build
                     );
                 }
             }
+            
+            // Filter ignored directories
+            foreach (var ignoredDirectory in repository.IgnoredDirectories)
+            {
+                changedProjectList = changedProjectList.Where(e => !e.CsProjPath.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)))
+                    .ToList();
+            }
         }
 
         private void AddAllCsProjFiles(GitRepository repository, List<DotNetProjectInfo> changedFiles)
@@ -151,7 +158,7 @@ namespace Volo.Abp.Cli.Build
                 repository.RootPath,
                 "*.csproj",
                 SearchOption.AllDirectories
-            );
+            ).ToList();
 
             foreach (var file in allCsProjFiles)
             {
