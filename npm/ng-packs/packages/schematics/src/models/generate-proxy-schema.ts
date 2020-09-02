@@ -19,5 +19,3 @@ export interface GenerateProxySchema {
    */
   target?: string;
 }
-
-export type GenerateApiSchema = Omit<GenerateProxySchema, 'api-name'>;
