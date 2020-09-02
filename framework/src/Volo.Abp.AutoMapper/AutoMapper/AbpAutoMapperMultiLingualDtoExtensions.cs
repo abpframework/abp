@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Localization;
-using Volo.Abp.MultiLingualEntities;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
 

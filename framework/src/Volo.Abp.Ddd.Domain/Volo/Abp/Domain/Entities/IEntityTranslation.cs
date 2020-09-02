@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.MultiLingualEntities
+﻿namespace Volo.Abp.Domain.Entities
 {
     public interface IEntityTranslation
     {
@@ -6,6 +6,7 @@
     }
 
     public interface IEntityTranslation<TEntity, TPrimaryKeyOfMultiLingualEntity> : IEntityTranslation
+        where TEntity : IEntity<TPrimaryKeyOfMultiLingualEntity>
     {
         TEntity Core { get; set; }
 
@@ -13,6 +14,7 @@
     }
 
     public interface IEntityTranslation<TEntity>: IEntityTranslation<TEntity, int>
+        where TEntity : IEntity<int>
     {
 
     }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.MultiLingualEntities
+namespace Volo.Abp.Domain.Entities
 {
     public interface IMultiLingualEntity<TTranslation>
         where TTranslation : class, IEntityTranslation

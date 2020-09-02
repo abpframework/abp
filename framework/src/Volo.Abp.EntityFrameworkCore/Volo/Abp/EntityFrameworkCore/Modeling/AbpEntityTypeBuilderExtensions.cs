@@ -7,7 +7,6 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
-using Volo.Abp.MultiLingualEntities;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
