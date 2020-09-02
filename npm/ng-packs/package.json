@@ -30,6 +30,7 @@
     "@abp/ng.feature-management": "~3.1.0-rc.4",
     "@abp/ng.identity": "~3.1.0-rc.4",
     "@abp/ng.permission-management": "~3.1.0-rc.4",
+    "@abp/ng.schematics": "~3.1.0-rc.4",
     "@abp/ng.setting-management": "~3.1.0-rc.4",
     "@abp/ng.tenant-management": "~3.1.0-rc.4",
     "@abp/ng.theme.basic": "~3.1.0-rc.4",
