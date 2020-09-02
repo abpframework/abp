@@ -10,7 +10,7 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { Exception } from '../../enums';
-import { GenerateProxySchema, ServiceGeneratorParams } from '../../models';
+import { GenerateApiSchema, ServiceGeneratorParams } from '../../models';
 import {
   applyWithOverwrite,
   buildDefaultPath,
@@ -31,7 +31,7 @@ import {
 } from '../../utils';
 import * as cases from '../../utils/text';
 
-export default function(schema: GenerateProxySchema) {
+export default function(schema: GenerateApiSchema) {
   const params = removeDefaultPlaceholders(schema);
   const moduleName = strings.camelize(params.module || 'app');
 
