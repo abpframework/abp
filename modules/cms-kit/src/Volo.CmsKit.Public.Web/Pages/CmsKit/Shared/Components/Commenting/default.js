@@ -58,10 +58,11 @@
                         var replyCommentId = $link.data('reply-id');
 
                         var $relatedCommentArea = $container.find('.cms-comment-form-area[data-reply-id=' + replyCommentId + ']');
+                        var $links = $container.find('.comment-reply-link[data-reply-id=' + replyCommentId + ']');
 
                         $relatedCommentArea.show();
                         $relatedCommentArea.find('textarea').focus();
-                        $link.removeAttr('href');
+                        $links.addClass('disabled');
                     });
                 });
                 $container.find('.reply-cancel-button').each(function () {
@@ -72,10 +73,10 @@
                         var replyCommentId = $button.data('reply-id');
 
                         var $relatedCommentArea = $container.find('.cms-comment-form-area[data-reply-id=' + replyCommentId + ']');
-                        var $replyLink = $container.find('.comment-reply-link[data-reply-id=' + replyCommentId + ']');
+                        var $links = $container.find('.comment-reply-link[data-reply-id=' + replyCommentId + ']');
 
                         $relatedCommentArea.hide();
-                        $replyLink.attr('href', '#');
+                        $links.removeClass('disabled');
                     });
                 });
             }
