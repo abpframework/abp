@@ -27,9 +27,9 @@ namespace Volo.Abp.Validation
         }
 
         /// <param name="sourceType">A type to get the values of the properties</param>
+        /// <param name="operandType">The type of the range parameters. Must implement IComparable. <see cref="RangeAttribute.OperandType"/></param>
         /// <param name="minimumPropertyName">The name of the public static property for the <see cref="RangeAttribute.Minimum"/></param>
         /// <param name="maximumPropertyName">The name of the public static property for the <see cref="RangeAttribute.Maximum"/></param>
-        /// <param name="operandType">The type of the range parameters. Must implement IComparable. <see cref="RangeAttribute.OperandType"/></param>
         public DynamicRangeAttribute(
             [NotNull] Type sourceType,
             [NotNull] Type operandType,

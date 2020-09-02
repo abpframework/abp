@@ -17,8 +17,8 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
             IStringLocalizer stringLocalizer)
             : base(attribute, stringLocalizer)
         {
-            _min = Attribute.Minimum.ToString()?.ToString(CultureInfo.InvariantCulture);
-            _max = Attribute.Maximum.ToString()?.ToString(CultureInfo.InvariantCulture);
+            _min = Convert.ToString(Attribute.Minimum,CultureInfo.InvariantCulture);
+            _max = Convert.ToString(Attribute.Maximum,CultureInfo.InvariantCulture);
         }
 
         public override void AddValidation(ClientModelValidationContext context)
@@ -26,9 +26,9 @@ namespace Volo.Abp.AspNetCore.Mvc.DataAnnotations
             Check.NotNull(context, nameof(context));
 
             MergeAttribute(context.Attributes, "data-val", "true");
-            MergeAttribute(context.Attributes, "data-val-length", GetErrorMessage(context));
-            MergeAttribute(context.Attributes, "data-val-length-min", _min);
-            MergeAttribute(context.Attributes, "data-val-length-max", _max);
+            MergeAttribute(context.Attributes, "data-val-range", GetErrorMessage(context));
+            MergeAttribute(context.Attributes, "data-val-range-min", _min);
+            MergeAttribute(context.Attributes, "data-val-range-max", _max);
         }
 
         public override string GetErrorMessage(ModelValidationContextBase validationContext)
