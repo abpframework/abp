@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
@@ -62,6 +63,51 @@ namespace Volo.Abp.FeatureManagement
             foreach (var feature in input.Features)
             {
                 await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
+            }
+        }
+
+        [Authorize(FeatureManagementPermissions.ManageHostFeatures)]
+        public async Task<FeatureListDto> GetHostAsync()
+        {
+            var featureDefinitions = FeatureDefinitionManager.GetAll().Where(x => x.IsAvailableToHost);
+            var features = new List<FeatureDto>();
+
+            foreach (var featureDefinition in featureDefinitions)
+            {
+                var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, HostFeatureValueProvider.ProviderName, null);
+                features.Add(new FeatureDto
+                {
+                    Name = featureDefinition.Name,
+                    DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
+                    ValueType = featureDefinition.ValueType,
+                    Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
+                    ParentName = featureDefinition.Parent?.Name,
+                    Value = feature.Value,
+                    Provider = new FeatureProviderDto
+                    {
+                        Name = feature.Provider?.Name,
+                        Key = feature.Provider?.Key
+                    }
+                });
+            }
+
+            SetFeatureDepth(features, HostFeatureValueProvider.ProviderName, null);
+
+            return new FeatureListDto { Features = features };
+        }
+
+        [Authorize(FeatureManagementPermissions.ManageHostFeatures)]
+        public async Task UpdateHostAsync(UpdateFeaturesDto input)
+        {
+            foreach (var feature in input.Features)
+            {
+                var featureDefinition = FeatureDefinitionManager.GetOrNull(feature.Name);
+                if (featureDefinition == null || !featureDefinition.IsAvailableToHost)
+                {
+                    throw new UserFriendlyException(L["FeatureNotAvailable"]);
+                }
+
+                await FeatureManager.SetAsync(feature.Name, feature.Value, HostFeatureValueProvider.ProviderName, null);
             }
         }
 

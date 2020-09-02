@@ -27,5 +27,19 @@ namespace Volo.Abp.FeatureManagement
         {
             return FeatureAppService.UpdateAsync(providerName, providerKey, input);
         }
+
+        [HttpGet]
+        [Route("host")]
+        public virtual Task<FeatureListDto> GetHostAsync()
+        {
+            return FeatureAppService.GetHostAsync();
+        }
+
+        [HttpPut]
+        [Route("host")]
+        public virtual Task UpdateHostAsync(UpdateFeaturesDto input)
+        {
+            return FeatureAppService.UpdateHostAsync(input);
+        }
     }
 }

@@ -2,6 +2,9 @@
   "culture": "tr",
   "texts": {
     "Features": "Özellikler",
-    "NoFeatureFoundMessage": "Hiç özellik yok."
+    "NoFeatureFoundMessage": "Hiç özellik yok.",
+    "FeatureNotAvailable": "özelliği mevcut değil.",
+    "Permission:FeatureManagement": "Özellik yönetimi",
+    "Permission:FeatureManagement.ManageHostFeatures": "Yönetilen Ana Bilgisayar özellikleri"
   }
 }
