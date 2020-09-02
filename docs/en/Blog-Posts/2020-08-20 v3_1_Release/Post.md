@@ -1,6 +1,6 @@
-# ABP Framework v3.1 RC.1 Has Been Released
+# ABP Framework v3.1 RC Has Been Released
 
-Today, we are releasing the **ABP Framework version 3.1 Release Candidate 1** (RC.1). The development cycle for this version was **~7 weeks**. It was the longest development cycle for a feature version release ever. We have completed **~150 issues**, merged **~150 PRs** and made **~1,000 commits** only in the main [abp repository](https://github.com/abpframework/abp). See the related [milestone](https://github.com/abpframework/abp/milestone/38?closed=1) on GitHub.
+Today, we are releasing the **ABP Framework version 3.1 Release Candidate** (RC). The development cycle for this version was **~7 weeks**. It was the longest development cycle for a feature version release ever. We have completed **~150 issues**, merged **~150 PRs** and made **~1,000 commits** only in the main [abp repository](https://github.com/abpframework/abp). See the related [milestone](https://github.com/abpframework/abp/milestone/38?closed=1) on GitHub.
 
 There were two main reasons of this long development cycle;
 
@@ -66,7 +66,7 @@ If you already have a solution and want to use/test the latest RC/Preview versio
 
 ### ABP Commercial Only
 
-* We've **moved favicons** into `/wwwroot/images/favicon/` folder for the ASP.NET Core **MVC / Razor Page UI** applications. There are 10 favicon related files (including the `favicon.ico`) under this directory to better work with different browser and cases. You can create a new application to check this folder and copy the files into your own application. Then you can customize the icons for your own brand.
+* We've **moved favicons** into `/wwwroot/images/favicon/` folder for the ASP.NET Core **MVC / Razor Page UI** applications. There are 10 favicon related files (including the `favicon.ico`) under this directory to better work with different browser and cases. You can create a new application to check this folder and copy the files into your own application. Then you can customize the icons for your own brand (hint: you can use a tool [like that](https://realfavicongenerator.net/) to create the favicons with various formats).
 * Removed direct **Twitter & Facebook social login integrations** from the [account module](https://commercial.abp.io/modules/Volo.Account.Pro), for **MVC / Razor Pages UI**. Follow [this documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Authentication/Social-External-Logins.md) to easily add social logins to your applications if you need. The account module provides all the infrastructure to handle social/external logins, you just need to configure it.
 
 ## What's New with the ABP Framework 3.1 RC.1

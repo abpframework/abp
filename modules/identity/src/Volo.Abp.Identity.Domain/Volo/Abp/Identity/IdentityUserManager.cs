@@ -43,15 +43,15 @@ namespace Volo.Abp.Identity
             IOrganizationUnitRepository organizationUnitRepository,
             ISettingProvider settingProvider)
             : base(
-                  store,
-                  optionsAccessor,
-                  passwordHasher,
-                  userValidators,
-                  passwordValidators,
-                  keyNormalizer,
-                  errors,
-                  services,
-                  logger)
+                store,
+                optionsAccessor,
+                passwordHasher,
+                userValidators,
+                passwordValidators,
+                keyNormalizer,
+                errors,
+                services,
+                logger)
         {
             OrganizationUnitRepository = organizationUnitRepository;
             SettingProvider = settingProvider;
@@ -71,7 +71,8 @@ namespace Volo.Abp.Identity
             return user;
         }
 
-        public virtual async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<string> roleNames)
+        public virtual async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user,
+            [NotNull] IEnumerable<string> roleNames)
         {
             Check.NotNull(user, nameof(user));
             Check.NotNull(roleNames, nameof(roleNames));
@@ -101,7 +102,8 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
+                CancellationTokenProvider.Token);
             return user.IsInOrganizationUnit(ou.Id);
         }
 
@@ -110,12 +112,13 @@ namespace Volo.Abp.Identity
             await AddToOrganizationUnitAsync(
                 await UserRepository.GetAsync(userId, cancellationToken: CancellationToken),
                 await OrganizationUnitRepository.GetAsync(ouId, cancellationToken: CancellationToken)
-                );
+            );
         }
 
         public virtual async Task AddToOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
+                CancellationTokenProvider.Token);
 
             if (user.OrganizationUnits.Any(cou => cou.OrganizationUnitId == ou.Id))
             {
@@ -125,19 +128,23 @@ namespace Volo.Abp.Identity
             await CheckMaxUserOrganizationUnitMembershipCountAsync(user.OrganizationUnits.Count + 1);
 
             user.AddOrganizationUnit(ou.Id);
+            await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
         }
 
         public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             var user = await UserRepository.GetAsync(userId, cancellationToken: CancellationToken);
             user.RemoveOrganizationUnit(ouId);
+            await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
         }
 
         public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
         {
-            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
+                CancellationTokenProvider.Token);
 
             user.RemoveOrganizationUnit(ou.Id);
+            await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
         }
 
         public virtual async Task SetOrganizationUnitsAsync(Guid userId, params Guid[] organizationUnitIds)
@@ -155,7 +162,8 @@ namespace Volo.Abp.Identity
 
             await CheckMaxUserOrganizationUnitMembershipCountAsync(organizationUnitIds.Length);
 
-            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
+                CancellationTokenProvider.Token);
 
             //Remove from removed OUs
             foreach (var ouId in user.OrganizationUnits.Select(uou => uou.OrganizationUnitId).ToArray())
@@ -174,11 +182,14 @@ namespace Volo.Abp.Identity
                     user.AddOrganizationUnit(organizationUnitId);
                 }
             }
+
+            await UserRepository.UpdateAsync(user, cancellationToken: CancellationToken);
         }
 
         private async Task CheckMaxUserOrganizationUnitMembershipCountAsync(int requestedCount)
         {
-            var maxCount = await SettingProvider.GetAsync<int>(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount);
+            var maxCount =
+                await SettingProvider.GetAsync<int>(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount);
             if (requestedCount > maxCount)
             {
                 throw new BusinessException(IdentityErrorCodes.MaxAllowedOuMembership)
@@ -187,9 +198,11 @@ namespace Volo.Abp.Identity
         }
 
         [UnitOfWork]
-        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user, bool includeDetails = false)
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user,
+            bool includeDetails = false)
         {
-            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, CancellationTokenProvider.Token);
+            await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
+                CancellationTokenProvider.Token);
 
             return await OrganizationUnitRepository.GetListAsync(
                 user.OrganizationUnits.Select(t => t.OrganizationUnitId),

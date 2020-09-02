@@ -7,7 +7,9 @@
       ],
       "@my-company-name/my-project-name/config": [
         "projects/my-project-name/config/src/public-api.ts"
-      ]
+      ],
+      "@proxy": ["projects/my-project-name/src/lib/proxy/index.ts"],
+      "@proxy/*": ["projects/my-project-name/src/lib/proxy/*"]
     }
   }
 }

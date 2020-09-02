@@ -31,6 +31,7 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
+            var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
                 solutionPath,
@@ -40,42 +41,74 @@ namespace Volo.Abp.Cli.ProjectModification
                 solutionFolder,
                 false,
                 true);
+
+            if (solutionAngularFolder != null)
+            {
+                await _npmPackagesUpdater.Update(
+                    solutionAngularFolder,
+                    false,
+                    true);
+            }
         }
 
         public async Task SwitchToNightlyPreview(CommandLineArgs commandLineArgs)
         {
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
+            var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             _packageSourceManager.Add(solutionFolder, "ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
 
-            await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
-                solutionPath,
-                true);
+            if (solutionPath != null)
+            {
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
+                    solutionPath,
+                    true);
+            }
 
             await _npmPackagesUpdater.Update(
                 solutionFolder,
                 true);
+
+            if (solutionAngularFolder != null)
+            {
+                await _npmPackagesUpdater.Update(
+                    solutionAngularFolder,
+                    true);
+            }
         }
 
         public async Task SwitchToStable(CommandLineArgs commandLineArgs)
         {
             var solutionPath = GetSolutionPath(commandLineArgs);
             var solutionFolder = GetSolutionFolder(commandLineArgs);
+            var solutionAngularFolder = GetSolutionAngularFolder(solutionFolder);
 
             _packageSourceManager.Remove(solutionFolder, "ABP Nightly");
 
-            await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
-                solutionPath,
-                false,
-                false,
-                true);
+            if (solutionPath != null)
+            {
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
+                    solutionPath,
+                    false,
+                    false,
+                    true);
+            }
 
             await _npmPackagesUpdater.Update(
                 solutionFolder,
                 false,
                 false,
                 true);
+
+            if (solutionAngularFolder != null)
+            {
+                await _npmPackagesUpdater.Update(
+                    solutionAngularFolder,
+                    false,
+                    false,
+                    true);
+            }
         }
 
         private string GetSolutionPath(CommandLineArgs commandLineArgs)
@@ -99,7 +132,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     }
                 }
 
-                Logger.LogError("There is no solution or more that one solution in current directory.");
+                Logger.LogWarning("There is no solution or more that one solution in current directory.");
                 return null;
             }
 
@@ -110,6 +143,23 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             return commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
                    ?? Directory.GetCurrentDirectory();
+        }
+
+        private string GetSolutionAngularFolder(string solutionFolder)
+        {
+            var upperAngularPath = Path.Combine(Directory.GetParent(solutionFolder)?.FullName ?? "", "angular");
+            if (Directory.Exists(upperAngularPath))
+            {
+                return upperAngularPath;
+            }
+
+            var innerAngularPath = Path.Combine(solutionFolder, "angular");
+            if (Directory.Exists(innerAngularPath))
+            {
+                return innerAngularPath;
+            }
+
+            return null;
         }
 
         public static class Options
