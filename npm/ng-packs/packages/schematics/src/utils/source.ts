@@ -1,4 +1,3 @@
-import { strings } from '@angular-devkit/core';
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import got from 'got';
 import {
@@ -15,11 +14,11 @@ import { interpolate } from './common';
 import { readEnvironment, resolveProject } from './workspace';
 
 export function createApiDefinitionGetter(params: GenerateProxySchema) {
-  const moduleName = strings.camelize(params.module || 'app');
+  const apiName = params['api-name'] || 'default';
 
   return async (host: Tree) => {
     const source = await resolveProject(host, params.source!);
-    const sourceUrl = getSourceUrl(host, source, moduleName);
+    const sourceUrl = getSourceUrl(host, source, apiName);
     return await getApiDefinition(sourceUrl);
   };
 }
@@ -36,7 +35,7 @@ async function getApiDefinition(sourceUrl: string) {
     }));
   } catch ({ response }) {
     // handle redirects
-    if (response.statusCode >= 400 || !response?.body)
+    if (!response?.body || response.statusCode >= 400)
       throw new SchematicsException(Exception.NoApi);
 
     body = response.body;
@@ -45,48 +44,49 @@ async function getApiDefinition(sourceUrl: string) {
   return body;
 }
 
-export function getRootNamespace(tree: Tree, project: Project, moduleName: string) {
-  const environmentExpr = readEnvironment(tree, project.definition);
+export function createRootNamespaceGetter(params: GenerateProxySchema) {
+  const apiName = params['api-name'] || 'default';
 
-  if (!environmentExpr)
-    throw new SchematicsException(interpolate(Exception.NoEnvironment, project.name));
+  return async (tree: Tree) => {
+    const project = await resolveProject(tree, params.source!);
+    const environmentExpr = readEnvironment(tree, project.definition);
 
-  let assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
-    'apis',
-    moduleName,
-    'rootNamespace',
-  ]);
+    if (!environmentExpr)
+      throw new SchematicsException(interpolate(Exception.NoEnvironment, project.name));
 
-  if (!assignment)
-    assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
+    let assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
       'apis',
-      'default',
+      apiName,
       'rootNamespace',
     ]);
 
-  if (!assignment)
-    throw new SchematicsException(interpolate(Exception.NoRootNamespace, project.name, moduleName));
+    if (!assignment)
+      assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
+        'apis',
+        'default',
+        'rootNamespace',
+      ]);
 
-  return assignment.replace(/[`'"]/g, '');
+    if (!assignment)
+      throw new SchematicsException(interpolate(Exception.NoRootNamespace, project.name, apiName));
+
+    return assignment.replace(/[`'"]/g, '');
+  };
 }
 
-export function getSourceUrl(tree: Tree, project: Project, moduleName: string) {
+export function getSourceUrl(tree: Tree, project: Project, apiName: string) {
   const environmentExpr = readEnvironment(tree, project.definition);
 
   if (!environmentExpr)
     throw new SchematicsException(interpolate(Exception.NoEnvironment, project.name));
 
-  let assignment = getAssignedPropertyFromObjectliteral(environmentExpr, [
-    'apis',
-    moduleName,
-    'url',
-  ]);
+  let assignment = getAssignedPropertyFromObjectliteral(environmentExpr, ['apis', apiName, 'url']);
 
   if (!assignment)
     assignment = getAssignedPropertyFromObjectliteral(environmentExpr, ['apis', 'default', 'url']);
 
   if (!assignment)
-    throw new SchematicsException(interpolate(Exception.NoApiUrl, project.name, moduleName));
+    throw new SchematicsException(interpolate(Exception.NoApiUrl, project.name, apiName));
 
   return assignment.replace(/[`'"]/g, '');
 }
