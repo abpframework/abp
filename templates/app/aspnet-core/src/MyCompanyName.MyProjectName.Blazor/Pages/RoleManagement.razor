@@ -14,7 +14,9 @@
           ReadData="OnDataGridReadAsync"
           TotalItems="_totalCount"
           ShowPager="true">
-    <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name" />
+    <DataGridColumns>
+        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name" />
+    </DataGridColumns>
 </DataGrid>
 
 <h2>New Role</h2>
