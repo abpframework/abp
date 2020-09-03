@@ -7,6 +7,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EntityFrameworkCore.ValueComparers;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
+using Volo.Abp.MultiLingualObject;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectExtending;
 
@@ -304,21 +305,21 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureMultiLingual<T, TTranslation>(this EntityTypeBuilder<T> b)
-            where T : class, IMultiLingualEntity<TTranslation>
-            where TTranslation : class, IEntityTranslation
+            where T : class, IHasMultiLingual<TTranslation>
+            where TTranslation : class, IMultiLingualTranslation
         {
             b.As<EntityTypeBuilder>().TryConfigureEntityTranslation();
         }
 
         public static void TryConfigureEntityTranslation(this EntityTypeBuilder b)
         {
-            if (b.Metadata.ClrType.IsAssignableTo<IEntityTranslation>())
+            if (b.Metadata.ClrType.IsAssignableTo<IMultiLingualTranslation>())
             {
-                b.HasIndex(nameof(IEntityTranslation.Language))
+                b.HasIndex(nameof(IMultiLingualTranslation.Language))
                     .IsUnique();
-                b.Property(nameof(IEntityTranslation.Language))
+                b.Property(nameof(IMultiLingualTranslation.Language))
                     .IsRequired()
-                    .HasColumnName(nameof(IEntityTranslation.Language));
+                    .HasColumnName(nameof(IMultiLingualTranslation.Language));
             }
         }
 
