@@ -36,58 +36,8 @@ namespace Volo.Abp.Cli.Build
                 var referenceProjectInfo = new FileInfo(Path.Combine(file.Directory.FullName, relativePath));
 
                 var referenceProject = new DotNetProjectInfo(project.RepositoryName, referenceProjectInfo.FullName);
-
                 project.Dependencies.Add(referenceProject);
             }
-        }
-
-        private void GetProjectsOfRepository(GitRepository repository, List<string> projectPaths)
-        {
-            Logger.LogInformation("repo name:" + repository.Name);
-            Logger.LogInformation("directoryPath:" + repository.RootPath);
-            
-            GetProjectsOfADirectory(repository.RootPath, projectPaths, new List<string>());
-
-            if (!repository.DependingRepositories.Any())
-            {
-                return;
-            }
-
-            foreach (var dependantRepository in repository.DependingRepositories)
-            {
-                GetProjectsOfRepository(dependantRepository, projectPaths);
-            }
-        }
-
-        private void GetProjectsOfADirectory(
-            string directoryPath, 
-            List<string> projectPaths,
-            List<string> ignoredDirectories)
-        {
-            Logger.LogInformation("directoryPath:" + directoryPath);
-            
-            var files = Directory.GetFiles(directoryPath, "*.csproj", SearchOption.AllDirectories)
-                .Select(f => f)
-                .ToList();
-
-            // foreach (var ignoredDirectory in ignoredDirectories)
-            // {
-            //     files = files.Where(e => !e.StartsWith(Path.Combine(directoryPath, ignoredDirectory)))
-            //         .ToList();
-            // }
-
-            projectPaths.AddRange(files);
-
-            // foreach (var projectFile in files)
-            // {
-            //     var projectNode = XElement.Load(projectFile);
-            //     if (projectNode.Attribute("Sdk") == null)
-            //     {
-            //         continue;
-            //     }
-            //
-            //     projectPaths.Add(projectFile);
-            // }
         }
     }
 }

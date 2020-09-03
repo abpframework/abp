@@ -116,7 +116,7 @@ namespace Volo.Abp.Cli.Build
             List<DotNetProjectInfo> changedProjectList,
             bool forceBuild)
         {
-            if (forceBuild || repositoryBuildStatus.CommitId.IsNullOrEmpty())
+            if (forceBuild || repositoryBuildStatus == null || repositoryBuildStatus.CommitId.IsNullOrEmpty())
             {
                 AddAllCsProjFiles(repository, changedProjectList);
             }
@@ -143,13 +143,6 @@ namespace Volo.Abp.Cli.Build
                     );
                 }
             }
-            
-            // Filter ignored directories
-            foreach (var ignoredDirectory in repository.IgnoredDirectories)
-            {
-                changedProjectList = changedProjectList.Where(e => !e.CsProjPath.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)))
-                    .ToList();
-            }
         }
 
         private void AddAllCsProjFiles(GitRepository repository, List<DotNetProjectInfo> changedFiles)
@@ -159,6 +152,14 @@ namespace Volo.Abp.Cli.Build
                 "*.csproj",
                 SearchOption.AllDirectories
             ).ToList();
+
+            // Filter ignored directories
+            foreach (var ignoredDirectory in repository.IgnoredDirectories)
+            {
+                allCsProjFiles = allCsProjFiles.Where(e =>
+                        !e.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)))
+                    .ToList();
+            }
 
             foreach (var file in allCsProjFiles)
             {
@@ -187,12 +188,23 @@ namespace Volo.Abp.Cli.Build
                     .Select(e => e)
                     .ToList();
 
-                foreach (var file in files)
+                var affectedCsProjFiles = FindAffectedCsProjFiles(repository.RootPath, files);
+
+                foreach (var file in affectedCsProjFiles)
                 {
-                    var csProjPath = Path.Combine(repository.RootPath, file.Path);
+                    var csProjPath = Path.Combine(repository.RootPath, file);
                     if (status.SucceedProjects.Any(p => p.CsProjPath == csProjPath && p.CommitId == "1"))
                     {
                         continue;
+                    }
+
+                    // Filter ignored directories
+                    foreach (var ignoredDirectory in repository.IgnoredDirectories)
+                    {
+                        if (csProjPath.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)))
+                        {
+                            continue;
+                        }
                     }
 
                     changedFiles.Add(
@@ -216,6 +228,53 @@ namespace Volo.Abp.Cli.Build
                     );
                 }
             }
+        }
+
+        private List<string> FindAffectedCsProjFiles(string repositoryPath, List<PatchEntryChanges> files)
+        {
+            var affectedProjectFiles = new List<string>();
+            foreach (var file in files)
+            {
+                var filePath = Path.Combine(repositoryPath, file.Path);
+                if (filePath.EndsWith(".csproj"))
+                {
+                    affectedProjectFiles.Add(filePath);
+                }
+
+                if (!filePath.EndsWith(".cs"))
+                {
+                    continue;
+                }
+
+                var classFile = new FileInfo(filePath);
+                var csProjPath = FindBelongingProjectPathOfClass(classFile.Directory?.FullName);
+                if (csProjPath.IsNullOrEmpty() || affectedProjectFiles.Contains(csProjPath))
+                {
+                    continue;
+                }
+
+                affectedProjectFiles.Add(csProjPath);
+            }
+
+            return affectedProjectFiles;
+        }
+
+        private string FindBelongingProjectPathOfClass(string directoryPath)
+        {
+            var files = Directory.GetFiles(directoryPath, "*.csproj", SearchOption.TopDirectoryOnly);
+            if (files.Length == 1)
+            {
+                return files.First();
+            }
+
+            var directoryInfo = new DirectoryInfo(directoryPath);
+
+            if (directoryInfo.Parent == null)
+            {
+                return null;
+            }
+
+            return FindBelongingProjectPathOfClass(directoryInfo.Parent.FullName);
         }
     }
 }

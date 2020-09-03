@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -51,7 +52,7 @@ namespace Volo.Abp.Cli.Commands
                 Options.BuildName.Short,
                 Options.BuildName.Long
             );
-            
+
             var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
 
             var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
@@ -62,7 +63,10 @@ namespace Volo.Abp.Cli.Commands
 
             DotNetProjectDependencyFiller.Fill(changedProjectFiles);
 
-            var sortedProjects = changedProjectFiles.SortByDependencies(p => p.Dependencies);
+            var sortedProjects = SortByDependencies(
+                changedProjectFiles,
+                new DotNetProjectInfoEqualityComparer()
+            );
 
             var buildSucceededProjects = DotNetProjectBuilder.Build(
                 sortedProjects,
@@ -82,6 +86,60 @@ namespace Volo.Abp.Cli.Commands
             Console.WriteLine("Build operation is completed in " + sw.ElapsedMilliseconds + " (ms)");
 
             return Task.CompletedTask;
+        }
+
+        private List<DotNetProjectInfo> SortByDependencies(
+            List<DotNetProjectInfo> source,
+            IEqualityComparer<DotNetProjectInfo> comparer = null)
+        {
+            /* See: http://www.codeproject.com/Articles/869059/Topological-sorting-in-Csharp
+             *      http://en.wikipedia.org/wiki/Topological_sorting
+             */
+
+            var sorted = new List<DotNetProjectInfo>();
+            var visited = new Dictionary<DotNetProjectInfo, bool>(comparer);
+
+            foreach (var item in source)
+            {
+                SortByDependenciesVisit(source, item, sorted, visited);
+            }
+
+            return sorted;
+        }
+
+        private void SortByDependenciesVisit(
+            List<DotNetProjectInfo> source,
+            DotNetProjectInfo item,
+            List<DotNetProjectInfo> sorted,
+            Dictionary<DotNetProjectInfo, bool> visited)
+        {
+            bool inProcess;
+            var alreadyVisited = visited.TryGetValue(item, out inProcess);
+
+            if (alreadyVisited)
+            {
+                if (inProcess)
+                {
+                    throw new ArgumentException("Cyclic dependency found! Item: " + item);
+                }
+            }
+            else
+            {
+                visited[item] = true;
+
+                var dependencies = item.Dependencies;
+                if (dependencies != null)
+                {
+                    foreach (var dependency in dependencies)
+                    {
+                        var dependencyItem = source.FirstOrDefault(e => e.CsProjPath == dependency.CsProjPath);
+                        SortByDependenciesVisit(source, dependencyItem, sorted, visited);
+                    }
+                }
+
+                visited[item] = false;
+                sorted.Add(item);
+            }
         }
 
         public string GetUsageInfo()
