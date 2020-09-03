@@ -118,7 +118,7 @@ namespace Volo.Abp.Cli.Build
         {
             if (forceBuild || repositoryBuildStatus == null || repositoryBuildStatus.CommitId.IsNullOrEmpty())
             {
-                AddAllCsProjFiles(repository, changedProjectList);
+                AddAllCsProjFiles(repository, changedProjectList, repositoryBuildStatus);
             }
             else
             {
@@ -145,7 +145,10 @@ namespace Volo.Abp.Cli.Build
             }
         }
 
-        private void AddAllCsProjFiles(GitRepository repository, List<DotNetProjectInfo> changedFiles)
+        private void AddAllCsProjFiles(
+            GitRepository repository, 
+            List<DotNetProjectInfo> changedFiles,
+            GitRepositoryBuildStatus status)
         {
             var allCsProjFiles = Directory.GetFiles(
                 repository.RootPath,
@@ -161,8 +164,21 @@ namespace Volo.Abp.Cli.Build
                     .ToList();
             }
 
+            // Filter already built files.
+            // TODO: create a class for repository extensions like getting last commitId
+            var lastCommitId = string.Empty;
+            using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
+            {
+                lastCommitId = repo.Head.Tip.Id.ToString();
+            }
+
             foreach (var file in allCsProjFiles)
             {
+                if (status.GetSelfOrChild(repository.Name).SucceedProjects.Any(e=> e.CsProjPath == file))
+                {
+                    continue;
+                }
+                
                 changedFiles.Add(
                     new DotNetProjectInfo(repository.Name, Path.Combine(repository.RootPath, file))
                 );

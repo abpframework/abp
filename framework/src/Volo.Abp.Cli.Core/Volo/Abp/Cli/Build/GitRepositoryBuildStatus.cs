@@ -38,6 +38,16 @@ namespace Volo.Abp.Cli.Build
             DependingRepositories = new List<GitRepositoryBuildStatus>();
         }
 
+        public GitRepositoryBuildStatus GetSelfOrChild(string repositoryName)
+        {
+            if (RepositoryName == repositoryName)
+            {
+                return this;
+            }
+
+            return GetChild(repositoryName);
+        }
+        
         public GitRepositoryBuildStatus GetChild(string repositoryName)
         {
             foreach (var dependingRepository in DependingRepositories)

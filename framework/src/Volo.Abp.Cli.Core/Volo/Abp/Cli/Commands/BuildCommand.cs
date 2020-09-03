@@ -73,7 +73,7 @@ namespace Volo.Abp.Cli.Commands
                 string.IsNullOrEmpty(maxParallelBuild) ? 1 : Convert.ToInt32(maxParallelBuild),
                 dotnetBuildArguments ?? ""
             );
-
+            
             var buildStatus = BuildStatusGenerator.Generate(
                 buildConfig.GitRepository,
                 changedProjectFiles,
