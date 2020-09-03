@@ -3,7 +3,6 @@
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
-@using Volo.Abp.Application.Dtos
 @using Volo.Abp.Identity.Localization
 @inject IIdentityRoleAppService RoleAppService
 @inject IStringLocalizer<IdentityResource> L
@@ -11,9 +10,9 @@
 <h1>@L["Roles"]</h1>
 
 <DataGrid TItem="IdentityRoleDto"
-          Data="roles"
-          ReadData="OnReadGridData"
-          TotalItems="totalCount"
+          Data="_roles"
+          ReadData="OnDataGridReadAsync"
+          TotalItems="_totalCount"
           ShowPager="true">
     <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name" />
 </DataGrid>
@@ -23,51 +22,3 @@
 <label>Name:</label>
 <input type="text" name="RoleName" @bind="_newRole.Name" />
 <button class="btn btn-primary" @onclick="CreateRoleAsync">Create!</button>
-
-@code {
-
-    async Task OnReadGridData(DataGridReadDataEventArgs<IdentityRoleDto> e)
-    {
-        currentPage = e.Page - 1;
-        await GetRolesAsync();
-        StateHasChanged();
-    }
-
-    private IdentityRoleCreateDto _newRole = new IdentityRoleCreateDto();
-
-    int currentPage = 0;
-    readonly int pageSize = LimitedResultRequestDto.DefaultMaxResultCount;
-    int? totalCount = 0;
-    IReadOnlyList<IdentityRoleDto> roles = Array.Empty<IdentityRoleDto>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        await GetRolesAsync();
-    }
-
-    private async Task GetRolesAsync()
-    {
-        var result = await RoleAppService.GetListAsync(
-            new PagedAndSortedResultRequestDto
-            {
-                SkipCount = currentPage * pageSize,
-                MaxResultCount = pageSize
-            });
-
-        roles = result.Items;
-        totalCount = (int?)result.TotalCount;
-    }
-
-    private async Task CreateRoleAsync()
-    {
-        await RoleAppService.CreateAsync(_newRole);
-        _newRole = new IdentityRoleCreateDto();
-        await GetRolesAsync();
-    }
-
-    private async Task DeleteRoleAsync(Guid id)
-    {
-        await RoleAppService.DeleteAsync(id);
-        await GetRolesAsync();
-    }
-}
