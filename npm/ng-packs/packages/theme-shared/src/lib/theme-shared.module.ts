@@ -29,6 +29,8 @@ import { THEME_SHARED_ROUTE_PROVIDERS } from './providers/route.provider';
 import { THEME_SHARED_APPEND_CONTENT } from './tokens/append-content.token';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
+import { NgbDatepickerDefaultDirective } from './directives/ngb-datepicker-default.directive';
+import { themeSharedOptionsFactory, THEME_SHARED_OPTIONS } from './tokens/options.token';
 
 @NgModule({
   imports: [CoreModule, NgxDatatableModule, NgxValidateCoreModule, NgbPaginationModule],
@@ -51,6 +53,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    NgbDatepickerDefaultDirective,
   ],
   exports: [
     NgxDatatableModule,
@@ -70,6 +73,7 @@ import { DateParserFormatter } from './utils/date-parser-formatter';
     NgxDatatableListDirective,
     LoadingDirective,
     TableSortDirective,
+    NgbDatepickerDefaultDirective,
   ],
   providers: [DatePipe],
   entryComponents: [
@@ -88,6 +92,15 @@ export class ThemeSharedModule {
       ngModule: ThemeSharedModule,
       providers: [
         THEME_SHARED_ROUTE_PROVIDERS,
+        {
+          provide: 'THEME_SHARED_OPTIONS',
+          useValue: options,
+        },
+        {
+          provide: THEME_SHARED_OPTIONS,
+          useFactory: themeSharedOptionsFactory,
+          deps: ['THEME_SHARED_OPTIONS'],
+        },
         {
           provide: APP_INITIALIZER,
           multi: true,
