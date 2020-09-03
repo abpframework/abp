@@ -10,21 +10,13 @@
 
 <h1>@L["Roles"]</h1>
 
-@if (_roles != null)
-{
-    <ul class="mt-2">
-        @foreach (var role in _roles.Items)
-        {
-            <li>
-                @role.Id / <strong>@role.Name</strong>
-                <AuthorizeView Policy="@IdentityPermissions.Roles.Delete">
-                    (<button class="btn btn-secondary btn-sm" @onclick="() => DeleteRoleAsync(role.Id)">Delete</button>)
-                </AuthorizeView>
-            </li>
-        }
-    </ul>
-    <p>Total role count: @_roles.TotalCount</p>
-}
+<DataGrid TItem="IdentityRoleDto"
+          Data="roles"
+          ReadData="OnReadGridData"
+          TotalItems="totalCount"
+          ShowPager="true">
+    <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name" />
+</DataGrid>
 
 <h2>New Role</h2>
 
@@ -33,9 +25,20 @@
 <button class="btn btn-primary" @onclick="CreateRoleAsync">Create!</button>
 
 @code {
+
+    async Task OnReadGridData(DataGridReadDataEventArgs<IdentityRoleDto> e)
+    {
+        currentPage = e.Page - 1;
+        await GetRolesAsync();
+        StateHasChanged();
+    }
+
     private IdentityRoleCreateDto _newRole = new IdentityRoleCreateDto();
 
-    PagedResultDto<IdentityRoleDto> _roles;
+    int currentPage = 0;
+    readonly int pageSize = LimitedResultRequestDto.DefaultMaxResultCount;
+    int? totalCount = 0;
+    IReadOnlyList<IdentityRoleDto> roles = Array.Empty<IdentityRoleDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,7 +47,15 @@
 
     private async Task GetRolesAsync()
     {
-        _roles = await RoleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+        var result = await RoleAppService.GetListAsync(
+            new PagedAndSortedResultRequestDto
+            {
+                SkipCount = currentPage * pageSize,
+                MaxResultCount = pageSize
+            });
+
+        roles = result.Items;
+        totalCount = (int?)result.TotalCount;
     }
 
     private async Task CreateRoleAsync()
