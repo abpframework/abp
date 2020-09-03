@@ -393,7 +393,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             return RemoveVersionPrefix(Document.Version) == LatestVersionInfo.Version ?
                 DocsAppConsts.Latest :
-                Document.Version;
+                RemoveVersionPrefix(Document.Version);
         }
 
         private async Task SetDocumentAsync()
