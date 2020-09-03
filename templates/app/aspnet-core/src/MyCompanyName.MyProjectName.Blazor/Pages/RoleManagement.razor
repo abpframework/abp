@@ -15,7 +15,22 @@
           TotalItems="_totalCount"
           ShowPager="true">
     <DataGridColumns>
-        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name" />
+        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Actions">
+            <DisplayTemplate>
+                <Dropdown>
+                    <DropdownToggle Color="Color.Primary">
+                        Actions
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem>Edit</DropdownItem>
+                        <DropdownItem>Manage Permissions</DropdownItem>
+                        <DropdownDivider />
+                        <DropdownItem Clicked="() => DeleteRoleAsync(context.As<IdentityRoleDto>().Id)">Delete</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </DisplayTemplate>
+        </DataGridColumn>
+        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name"/>
     </DataGridColumns>
 </DataGrid>
 
