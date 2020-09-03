@@ -28,7 +28,6 @@ export class EntityProp<R = any> extends Prop<R> {
   readonly sortable: boolean;
   readonly valueResolver: PropCallback<R, Observable<any>>;
   readonly action: ActionCallback<R>;
-  readonly actionProvided: boolean;
 
   constructor(options: EntityPropOptions<R>) {
     super(
@@ -43,8 +42,7 @@ export class EntityProp<R = any> extends Prop<R> {
     this.columnWidth = options.columnWidth;
     this.sortable = options.sortable || false;
     this.valueResolver = options.valueResolver || (data => of(data.record[this.name]));
-    this.action = options.action || (_ => {});
-    this.actionProvided = !!options.action;
+    this.action = options.action;
   }
 
   static create<R = any>(options: EntityPropOptions<R>) {
