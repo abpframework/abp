@@ -603,6 +603,15 @@ var abp = abp || {};
 
                     qs = qs + parameterInfo.name + '[' + j + ']=' + encodeURIComponent(parameterInfo.value[j]);
                 }
+            } else if (typeof parameterInfo.value === 'object' && parameterInfo.value !== null) {
+                var index = 0;
+                for (var propertyName in parameterInfo.value) {
+                    if (index > 0) {
+                        addSeperator();
+                    }
+                    qs = qs + parameterInfo.name + '.' + propertyName + '=' + encodeURIComponent(parameterInfo.value[propertyName]);
+                    index++;
+                }
             } else {
                 qs = qs + parameterInfo.name + '=' + encodeURIComponent(parameterInfo.value);
             }
