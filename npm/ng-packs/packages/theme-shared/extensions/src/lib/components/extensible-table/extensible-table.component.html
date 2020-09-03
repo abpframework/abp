@@ -33,6 +33,7 @@
             *ngIf="row['_' + prop.name].visible"
             [innerHTML]="row['_' + prop.name].value | async"
             (click)="prop.action({ getInjected: getInjected, record: row, index: i })"
+            [class.pointer]="prop.actionProvided"
           ></div>
         </ng-container>
       </ng-template>
