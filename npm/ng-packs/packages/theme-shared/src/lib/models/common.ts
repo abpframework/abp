@@ -1,7 +1,12 @@
 import { Type } from '@angular/core';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 export interface RootParams {
-  httpErrorConfig: HttpErrorConfig;
+  httpErrorConfig?: HttpErrorConfig;
+  ngbDatepickerOptions?: {
+    minDate?: NgbDateStruct;
+    maxDate?: NgbDateStruct;
+  };
 }
 
 export type ErrorScreenErrorCodes = 401 | 403 | 404 | 500;
