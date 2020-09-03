@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Net.Http;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client.IdentityModel.WebAssembly;
@@ -27,7 +31,16 @@ namespace MyCompanyName.MyProjectName.Blazor
 
             ConfigureAuthentication(builder);
             ConfigureHttpClient(context, environment);
+            ConfigureBlazorise(context);
             ConfigureUI(builder);
+        }
+
+        private void ConfigureBlazorise(ServiceConfigurationContext context)
+        {
+            context.Services
+                .AddBlazorise()
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
         }
 
         private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
@@ -50,6 +63,13 @@ namespace MyCompanyName.MyProjectName.Blazor
             {
                 BaseAddress = new Uri(environment.BaseAddress)
             });
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            context.ServiceProvider
+                .UseBootstrapProviders()
+                .UseFontAwesomeIcons();
         }
     }
 }
