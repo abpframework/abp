@@ -347,9 +347,9 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 ## Install NPM packages
 
-> Notice: This tutorial is based on the ABP Framework v3.0.3+ If your project version is older, then please upgrade your solution. See the [migration guide](../UI/Angular/Migration-Guide-v3.md) if you are upgrading an existing project with v2.x.
+> Notice: This tutorial is based on the ABP Framework v3.1.0+ If your project version is older, then please upgrade your solution. See the [migration guide](../UI/Angular/Migration-Guide-v3.md) if you are upgrading an existing project with v2.x.
 
-If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install NPM packages:
+If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run `yarn` command to install the NPM packages:
 
 ```bash
 yarn
@@ -473,9 +473,9 @@ Run the following command in the `angular` folder:
 abp generate-proxy
 ```
 
-The generated files looks like below:
+This command will create the following files under the `/src/app/proxy/books` folder:
 
-![Generated files](./images/generated-proxies-2.png)
+![Generated files](./images/generated-proxies-3.png)
 
 ### BookComponent
 
@@ -484,8 +484,7 @@ Open the `/src/app/book/book.component.ts` file and replace the content as below
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
-import { BookDto } from './models';
-import { BookService } from './services';
+import { BookService, BookDto } from '@proxy/books';
 
 @Component({
   selector: 'app-book',
@@ -499,7 +498,7 @@ export class BookComponent implements OnInit {
   constructor(public readonly list: ListService, private bookService: BookService) {}
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getListByInput(query);
+    const bookStreamCreator = (query) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
       this.book = response;

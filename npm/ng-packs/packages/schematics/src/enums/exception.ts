@@ -11,6 +11,6 @@ export const enum Exception {
   NoTypeDefinition = '[Type Definition Not Found] There is no type definition for "{0}".',
   NoWorkspace = '[Workspace Not Found] Make sure you are running schematics at the root directory of your workspace and it has an angular.json file.',
   NoEnvironment = '[Environment Not Found] An environment file cannot be located in "{0}" project.',
-  NoApiUrl = '[API URL Not Found] Cannot resolve API URL for "{1}" module from "{0}" project.',
-  NoRootNamespace = '[Root Namespace Not Found] Cannot resolve root namespace for "{1}" module from "{0}" project.',
+  NoApiUrl = '[API URL Not Found] Cannot resolve API URL for "{1}" remote service name from "{0}" project.',
+  NoRootNamespace = '[Root Namespace Not Found] Cannot resolve root namespace for "{1}" api from "{0}" project.',
 }
