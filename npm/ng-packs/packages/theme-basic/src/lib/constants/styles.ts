@@ -72,7 +72,7 @@ export default `
     border: 1px solid #c8c8c8;
   }
 .abp-loading {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.05);
 }
 .modal-backdrop {
 background-color: rgba(0, 0, 0, 0.6);
