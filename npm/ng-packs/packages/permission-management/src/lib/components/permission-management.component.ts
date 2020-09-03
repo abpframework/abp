@@ -6,6 +6,7 @@ import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
+import { LocaleDirection } from '@abp/ng.theme.shared';
 
 type PermissionWithMargin = PermissionManagement.Permission & {
   margin: number;
@@ -285,6 +286,12 @@ export class PermissionManagementComponent
     if (this.providerName === 'U') return currentUser.id === this.providerKey;
 
     return false;
+  }
+
+  getMarginStyle(margin: number) {
+    return {
+      [`margin-${(document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'}.px`]: margin,
+    };
   }
 }
 
