@@ -23,17 +23,17 @@ jobs:
         run: yarn install
         working-directory: npm/ng-packs
 
-      - name: Run lint
-        run: yarn ng lint
-        working-directory: npm/ng-packs
+      # - name: Run lint
+      #   run: yarn ng lint
+      #   working-directory: npm/ng-packs
 
-      - name: Run prepare workspace
-        run: yarn prepare:workspace
-        working-directory: npm/ng-packs
+      # - name: Run prepare workspace
+      #   run: yarn prepare:workspace
+      #   working-directory: npm/ng-packs
 
-      - name: Run test
-        run: yarn ci:test
-        working-directory: npm/ng-packs
+      # - name: Run test
+      #   run: yarn ci:test
+      #   working-directory: npm/ng-packs
 
       - name: Run prod build
         run: yarn ci:build
