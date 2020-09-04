@@ -35,6 +35,6 @@ jobs:
         run: yarn ci:test
         working-directory: npm/ng-packs
 
-      - name: Run build
+      - name: Run prod build
         run: yarn ci:build
         working-directory: npm/ng-packs
