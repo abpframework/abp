@@ -6,18 +6,19 @@
 @using Volo.Abp.Identity.Localization
 @inject IIdentityRoleAppService RoleAppService
 @inject IStringLocalizer<IdentityResource> L
-
+@* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
         <h1>@L["Roles"]</h1>
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
         <Paragraph Alignment="TextAlignment.Right">
-            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">+ New Role</Button>
+            <Button Color="Color.Primary" Clicked="OpenCreateModal">+ New Role</Button>
         </Paragraph>
     </Column>
 </Row>
 
+@* ************************* DATA GRID ************************* *@
 <DataGrid TItem="IdentityRoleDto"
           Data="_roles"
           ReadData="OnDataGridReadAsync"
@@ -31,7 +32,7 @@
                         Actions
                     </DropdownToggle>
                     <DropdownMenu>
-                        <DropdownItem>Edit</DropdownItem>
+                        <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityRoleDto>().Id)">Edit</DropdownItem>
                         <DropdownItem>Manage Permissions</DropdownItem>
                         <DropdownDivider />
                         <DropdownItem Clicked="() => DeleteRoleAsync(context.As<IdentityRoleDto>().Id)">Delete</DropdownItem>
@@ -39,10 +40,11 @@
                 </Dropdown>
             </DisplayTemplate>
         </DataGridColumn>
-        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name"/>
+        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name" />
     </DataGridColumns>
 </DataGrid>
 
+@* ************************* CREATE MODAL ************************* *@
 <Modal @ref="_createModal">
     <ModalBackdrop />
     <ModalContent IsCentered="true">
@@ -53,7 +55,7 @@
         <ModalBody>
             <Field>
                 <FieldLabel>Name</FieldLabel>
-                <TextEdit Placeholder="Enter name..." @bind-text="_newRole.Name" />
+                <TextEdit @bind-text="_newRole.Name" />
             </Field>
             <Field>
                 <Check TValue="bool" @bind-checked="_newRole.IsDefault">Default</Check>
@@ -63,6 +65,32 @@
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="CloseCreateModal">Cancel</Button>
             <Button Color="Color.Primary" Clicked="CreateRoleAsync">Save</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@* ************************* EDIT MODAL ************************* *@
+<Modal @ref="_editModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>Edit role</ModalTitle>
+            <CloseButton Clicked="CloseEditModal" />
+        </ModalHeader>
+        <ModalBody>
+            <input type="hidden" name="ConcurrencyStamp" @bind-value="_editingRole.ConcurrencyStamp" />
+            <Field>
+                <FieldLabel>Name</FieldLabel>
+                <TextEdit @bind-text="_editingRole.Name" />
+            </Field>
+            <Field>
+                <Check TValue="bool" @bind-checked="_editingRole.IsDefault">Default</Check>
+                <Check TValue="bool" @bind-checked="_editingRole.IsPublic">Public</Check>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseEditModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="UpdateRoleAsync">Save</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
