@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Blazorise;
 using Blazorise.DataGrid;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
@@ -15,6 +16,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
         private int? _totalCount;
         private IReadOnlyList<IdentityRoleDto> _roles;
         private IdentityRoleCreateDto _newRole;
+        private Modal _createModal;
 
         public RoleManagement()
         {
@@ -45,12 +47,23 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
             await GetRolesAsync();
             StateHasChanged();
         }
-        
+
+        private async Task OpenCreateModalAsync()
+        {
+            _newRole = new IdentityRoleCreateDto();
+            _createModal.Show();
+        }
+
+        private void CloseCreateModal()
+        {
+            _createModal.Hide();
+        }
+
         private async Task CreateRoleAsync()
         {
             await RoleAppService.CreateAsync(_newRole);
-            _newRole = new IdentityRoleCreateDto();
             await GetRolesAsync();
+            _createModal.Hide();
         }
 
         private async Task DeleteRoleAsync(Guid id)

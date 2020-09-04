@@ -7,7 +7,16 @@
 @inject IIdentityRoleAppService RoleAppService
 @inject IStringLocalizer<IdentityResource> L
 
-<h1>@L["Roles"]</h1>
+<Row>
+    <Column ColumnSize="ColumnSize.Is6">
+        <h1>@L["Roles"]</h1>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is6">
+        <Paragraph Alignment="TextAlignment.Right">
+            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">+ New Role</Button>
+        </Paragraph>
+    </Column>
+</Row>
 
 <DataGrid TItem="IdentityRoleDto"
           Data="_roles"
@@ -34,8 +43,26 @@
     </DataGridColumns>
 </DataGrid>
 
-<h2>New Role</h2>
-
-<label>Name:</label>
-<input type="text" name="RoleName" @bind="_newRole.Name" />
-<button class="btn btn-primary" @onclick="CreateRoleAsync">Create!</button>
+<Modal @ref="_createModal">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <ModalHeader>
+            <ModalTitle>Create a new role</ModalTitle>
+            <CloseButton Clicked="CloseCreateModal" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Name</FieldLabel>
+                <TextEdit Placeholder="Enter name..." @bind-text="_newRole.Name" />
+            </Field>
+            <Field>
+                <Check TValue="bool" @bind-checked="_newRole.IsDefault">Default</Check>
+                <Check TValue="bool" @bind-checked="_newRole.IsPublic">Public</Check>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CloseCreateModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="CreateRoleAsync">Save</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
