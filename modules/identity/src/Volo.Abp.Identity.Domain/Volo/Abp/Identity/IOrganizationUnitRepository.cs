@@ -31,6 +31,7 @@ namespace Volo.Abp.Identity
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );

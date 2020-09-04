@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq.Dynamic.Core;
 using System.Linq;
 using System.Threading;
@@ -12,7 +13,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public class EfCoreOrganizationUnitRepository
         : EfCoreRepository<IIdentityDbContext, OrganizationUnit, Guid>,
-          IOrganizationUnitRepository
+            IOrganizationUnitRepository
     {
         public EfCoreOrganizationUnitRepository(
             IDbContextProvider<IIdentityDbContext> dbContextProvider)
@@ -47,15 +48,20 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
+            string filter = null,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    ou => ou.DisplayName.Contains(filter) ||
+                          ou.Code.Contains(filter))
                 .OrderBy(sorting ?? nameof(OrganizationUnit.DisplayName))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
+
         public virtual async Task<List<OrganizationUnit>> GetListAsync(
             IEnumerable<Guid> ids,
             bool includeDetails = false,
@@ -89,9 +95,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default)
         {
             var query = from organizationRole in DbContext.Set<OrganizationUnitRole>()
-                        join role in DbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
-                        where organizationRole.OrganizationUnitId == organizationUnit.Id
-                        select role;
+                join role in DbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
+                where organizationRole.OrganizationUnitId == organizationUnit.Id
+                select role;
             query = query
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .PageBy(skipCount, maxResultCount);
@@ -104,9 +110,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default)
         {
             var query = from organizationRole in DbContext.Set<OrganizationUnitRole>()
-                        join role in DbContext.Roles on organizationRole.RoleId equals role.Id
-                        where organizationRole.OrganizationUnitId == organizationUnit.Id
-                        select role;
+                join role in DbContext.Roles on organizationRole.RoleId equals role.Id
+                where organizationRole.OrganizationUnitId == organizationUnit.Id
+                select role;
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
@@ -119,13 +125,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
-            )
+        )
         {
             var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
             return await query.IncludeDetails(includeDetails).OrderBy(sorting ?? nameof(IdentityUser.UserName))
-                        .PageBy(skipCount, maxResultCount)
-                        .ToListAsync(GetCancellationToken(cancellationToken));
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<int> GetMembersCountAsync(
@@ -162,7 +168,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             DbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
         }
 
-        protected virtual IQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit, string filter = null)
+        protected virtual IQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit,
+            string filter = null)
         {
             var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
                 join user in DbContext.Users on userOu.UserId equals user.Id
