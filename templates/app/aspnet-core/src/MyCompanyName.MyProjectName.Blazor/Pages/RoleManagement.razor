@@ -3,6 +3,7 @@
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.Application.Dtos
 @using Volo.Abp.Identity.Localization
 @inject IIdentityRoleAppService RoleAppService
 @inject IStringLocalizer<IdentityResource> L
@@ -24,7 +25,8 @@
           Data="_roles"
           ReadData="OnDataGridReadAsync"
           TotalItems="_totalCount"
-          ShowPager="true">
+          ShowPager="true"
+          PageSize="@LimitedResultRequestDto.DefaultMaxResultCount">
     <DataGridColumns>
         <DataGridColumn Width="150px" TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Sortable="false" Caption="Actions">
             <DisplayTemplate>
@@ -41,7 +43,19 @@
                 </Dropdown>
             </DisplayTemplate>
         </DataGridColumn>
-        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name" />
+        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Name">
+            <DisplayTemplate>
+                @(context.As<IdentityRoleDto>().Name)
+                @if (context.As<IdentityRoleDto>().IsDefault)
+                {
+                    <Badge Color="Color.Primary">default</Badge>
+                }
+                @if (context.As<IdentityRoleDto>().IsPublic)
+                {
+                    <Badge Color="Color.Light">public</Badge>
+                }
+            </DisplayTemplate>
+        </DataGridColumn>
     </DataGridColumns>
 </DataGrid>
 
