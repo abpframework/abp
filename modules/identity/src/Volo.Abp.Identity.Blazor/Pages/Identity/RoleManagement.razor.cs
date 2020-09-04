@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.DataGrid;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.Application.Dtos;
 
-namespace MyCompanyName.MyProjectName.Blazor.Pages
+namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
     public partial class RoleManagement
     {

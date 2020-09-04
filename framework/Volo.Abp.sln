@@ -337,6 +337,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.WebAssembly", "src\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj", "{E1A62D10-F2FB-4040-BD60-11A3934058DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Blazorise", "src\Volo.Abp.Blazorise\Volo.Abp.Blazorise.csproj", "{D97028EB-A66C-4739-B5C8-1F035F7228E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1003,6 +1005,10 @@ Global
 		{E1A62D10-F2FB-4040-BD60-11A3934058DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1A62D10-F2FB-4040-BD60-11A3934058DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1A62D10-F2FB-4040-BD60-11A3934058DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D97028EB-A66C-4739-B5C8-1F035F7228E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D97028EB-A66C-4739-B5C8-1F035F7228E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D97028EB-A66C-4739-B5C8-1F035F7228E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D97028EB-A66C-4739-B5C8-1F035F7228E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1173,6 +1179,7 @@ Global
 		{3D35A1E0-A9A1-404F-9B55-5F1A7EB6D5B8} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{8A22D962-016E-474A-8BB7-F831F0ABF3AC} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{E1A62D10-F2FB-4040-BD60-11A3934058DF} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{D97028EB-A66C-4739-B5C8-1F035F7228E7} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
