@@ -4,6 +4,12 @@ It is exciting for us to announce that we've released the ABP Framework & ABP Co
 
 Since all the new features are already explained in details with the [3.1 RC Announcement Post](https://blog.abp.io/abp/ABP-Framework-v3.1-RC-Has-Been-Released), I will not repeat all the details here. Please read [the RC post](https://blog.abp.io/abp/ABP-Framework-v3.1-RC-Has-Been-Released) for **new feature and changes** you may need to do for your solution while upgrading to the version 3.1.
 
+## Creating New Solutions
+
+You can create a new solution with the ABP Framework version 3.1 by either using the `abp new` command or using the **direct download** tab on the [get started page](https://abp.io/get-started).
+
+> See the [getting started document](https://docs.abp.io/en/abp/latest/Getting-Started) for details.
+
 ## How to Upgrade an Existing Solution
 
 ### Install/Update the ABP CLI
@@ -32,7 +38,7 @@ abp update
 
 After the update command, check [the RC blog post](https://blog.abp.io/abp/ABP-Framework-v3.1-RC-Has-Been-Released) to learn if you need to make any changes in your solution.
 
-> You may want to see the new [upgrading document](https://docs.abp.io/en/abp/3.1/Upgrading).
+> You may want to see the new [upgrading document](https://docs.abp.io/en/abp/latest/Upgrading).
 
 ## About the version 3.2
 
