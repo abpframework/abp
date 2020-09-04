@@ -6,6 +6,7 @@
 @using Volo.Abp.Identity.Localization
 @inject IIdentityRoleAppService RoleAppService
 @inject IStringLocalizer<IdentityResource> L
+@inject IUiMessageService UiMessageService
 @* ************************* PAGE HEADER ************************* *@
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
@@ -35,7 +36,7 @@
                         <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityRoleDto>().Id)">Edit</DropdownItem>
                         <DropdownItem>Manage Permissions</DropdownItem>
                         <DropdownDivider />
-                        <DropdownItem Clicked="() => DeleteRoleAsync(context.As<IdentityRoleDto>().Id)">Delete</DropdownItem>
+                        <DropdownItem Clicked="() => DeleteRoleAsync(context.As<IdentityRoleDto>())">Delete</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </DisplayTemplate>

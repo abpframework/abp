@@ -107,9 +107,14 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
             _editModal.Hide();
         }
 
-        private async Task DeleteRoleAsync(Guid id)
+        private async Task DeleteRoleAsync(IdentityRoleDto role)
         {
-            await RoleAppService.DeleteAsync(id);
+            if (!await UiMessageService.ConfirmAsync("Are you sure to delete the role " + role.Name))
+            {
+                return;
+            }
+
+            await RoleAppService.DeleteAsync(role.Id);
             await GetRolesAsync();
         }
     }
