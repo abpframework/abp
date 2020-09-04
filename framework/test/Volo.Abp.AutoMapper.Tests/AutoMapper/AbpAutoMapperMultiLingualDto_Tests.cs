@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
+using Volo.Abp.MultiLingualObject;
 using Volo.Abp.MultiLingualObject.TestObjects;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.Testing;
 using Xunit;
 
-namespace Volo.Abp.MultiLingualObject
+namespace AutoMapper
 {
-    public class MultiLingualObject_Tests : AbpIntegratedTest<AbpMultiLingualObjectTestModule>
+    public class AbpAutoMapperMultiLingualDto_Tests : AbpIntegratedTest<AutoMapperTestModule>
     {
-        private readonly IObjectMapper _objectMapper;
+        private readonly Volo.Abp.ObjectMapping.IObjectMapper _objectMapper;
         private readonly IMultiLingualObjectManager _multiLingualObjectManager;
         private readonly MultiLingualBook _book;
 
-        public MultiLingualObject_Tests()
+        public AbpAutoMapperMultiLingualDto_Tests()
         {
-            _objectMapper = ServiceProvider.GetRequiredService<IObjectMapper>();
             _multiLingualObjectManager = ServiceProvider.GetRequiredService<IMultiLingualObjectManager>();
+            _objectMapper = ServiceProvider.GetRequiredService<Volo.Abp.ObjectMapping.IObjectMapper>();
 
             var id = Guid.NewGuid();
             _book = new MultiLingualBook(id, 100)
@@ -58,8 +59,11 @@ namespace Volo.Abp.MultiLingualObject
         {
             using (CultureHelper.Use("zh-Hans"))
             {
-                var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
-                var bookDto = _objectMapper.Map<MultiLingualBookTranslation,MultiLingualBookDto>(translation);
+                var translation =
+                    await _multiLingualObjectManager
+                        .GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
+
+                var bookDto = _objectMapper.Map<MultiLingualBookTranslation, MultiLingualBookDto>(translation);
 
                 bookDto.Name.ShouldBe("深入理解C#");
                 bookDto.Price.ShouldBe(_book.Price);
@@ -72,8 +76,11 @@ namespace Volo.Abp.MultiLingualObject
         {
             using (CultureHelper.Use("en-us"))
             {
-                var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
-                var bookDto = _objectMapper.Map<MultiLingualBookTranslation,MultiLingualBookDto>(translation);
+                var translation =
+                    await _multiLingualObjectManager
+                        .GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
+
+                var bookDto = _objectMapper.Map<MultiLingualBookTranslation, MultiLingualBookDto>(translation);
 
                 bookDto.Name.ShouldBe("C# in Depth");
                 bookDto.Price.ShouldBe(_book.Price);
@@ -86,8 +93,11 @@ namespace Volo.Abp.MultiLingualObject
         {
             using (CultureHelper.Use("tr"))
             {
-                var translation = await _multiLingualObjectManager.GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
-                var bookDto = _objectMapper.Map<MultiLingualBookTranslation,MultiLingualBookDto>(translation);
+                var translation =
+                    await _multiLingualObjectManager
+                        .GetTranslationAsync<MultiLingualBook, MultiLingualBookTranslation>(_book);
+
+                var bookDto = _objectMapper.Map<MultiLingualBookTranslation, MultiLingualBookDto>(translation);
 
                 bookDto.Name.ShouldBe("C# in Depth");
                 bookDto.Price.ShouldBe(_book.Price);
@@ -110,23 +120,13 @@ namespace Volo.Abp.MultiLingualObject
         }
     }
 
-    public class MultiLingualBookObjectMapper : IObjectMapper<MultiLingualBookTranslation, MultiLingualBookDto>,
-        ITransientDependency
+    public class BookProfile : Profile
     {
-
-        public MultiLingualBookDto Map(MultiLingualBookTranslation source)
+        public BookProfile()
         {
-            return new MultiLingualBookDto
-            {
-                Price = source.Core.Price,
-                Id = source.CoreId,
-                Name = source.Name
-            };
-        }
-
-        public MultiLingualBookDto Map(MultiLingualBookTranslation source, MultiLingualBookDto destination)
-        {
-            return default;
+            CreateMap<MultiLingualBookTranslation, MultiLingualBookDto>()
+                .ForMember(d => d.Price, m => m.MapFrom(s => s.Core.Price))
+                .ForMember(d => d.Id, m => m.MapFrom(s => s.CoreId));
         }
     }
 }
