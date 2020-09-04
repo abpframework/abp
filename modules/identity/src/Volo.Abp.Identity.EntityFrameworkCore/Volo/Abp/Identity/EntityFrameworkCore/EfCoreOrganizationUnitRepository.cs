@@ -168,6 +168,16 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             DbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
         }
 
+        public virtual async Task<long> GetLongCountAsync(Guid? parentId, string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .WhereIf(!filter.IsNullOrWhiteSpace(), ou =>
+                    ou.DisplayName.Contains(filter) ||
+                    ou.Code.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
         protected virtual IQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit,
             string filter = null)
         {

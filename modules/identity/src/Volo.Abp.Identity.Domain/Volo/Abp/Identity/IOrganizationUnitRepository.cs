@@ -81,5 +81,10 @@ namespace Volo.Abp.Identity
             OrganizationUnit organizationUnit,
             CancellationToken cancellationToken = default
         );
+
+        Task<long> GetLongCountAsync(
+            Guid? parentId,
+            string filter = null,
+            CancellationToken cancellationToken = default);
     }
 }
