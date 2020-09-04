@@ -10,8 +10,6 @@ using Volo.Abp.ObjectExtending;
 
 namespace MyCompanyName.MyProjectName.Blazor.Pages
 {
-    //TODO: Idea: Can we create a base class to simplify all these, like CrudPage<...>..?
-
     public partial class RoleManagement
     {
         private int _currentPage;
@@ -116,7 +114,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
 
         private async Task DeleteRoleAsync(IdentityRoleDto role)
         {
-            if (!await UiMessageService.ConfirmAsync("Are you sure to delete the role " + role.Name))
+            if (!await UiMessageService.ConfirmAsync(L["RoleDeletionConfirmationMessage", role.Name]))
             {
                 return;
             }
