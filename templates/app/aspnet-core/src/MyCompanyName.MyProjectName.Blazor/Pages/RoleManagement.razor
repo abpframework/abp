@@ -26,7 +26,7 @@
           TotalItems="_totalCount"
           ShowPager="true">
     <DataGridColumns>
-        <DataGridColumn TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Caption="Actions">
+        <DataGridColumn Width="150px" TItem="IdentityRoleDto" Field="@nameof(IdentityRoleDto.Name)" Sortable="false" Caption="Actions">
             <DisplayTemplate>
                 <Dropdown>
                     <DropdownToggle Color="Color.Primary">

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.DataGrid;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 
@@ -15,6 +15,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
     public partial class RoleManagement
     {
         private int _currentPage;
+        private string _currentSorting;
         private int? _totalCount;
         
         private IReadOnlyList<IdentityRoleDto> _roles;
@@ -43,7 +44,8 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
                 new PagedAndSortedResultRequestDto
                 {
                     SkipCount = _currentPage * LimitedResultRequestDto.DefaultMaxResultCount,
-                    MaxResultCount = LimitedResultRequestDto.DefaultMaxResultCount
+                    MaxResultCount = LimitedResultRequestDto.DefaultMaxResultCount,
+                    Sorting = _currentSorting
                 });
 
             _roles = result.Items;
@@ -52,6 +54,11 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages
 
         private async Task OnDataGridReadAsync(DataGridReadDataEventArgs<IdentityRoleDto> e)
         {
+            _currentSorting = e.Columns
+                .Where(c => c.Direction != SortDirection.None)
+                .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
+                .JoinAsString(",");
+
             _currentPage = e.Page - 1;
             await GetRolesAsync();
             StateHasChanged();
