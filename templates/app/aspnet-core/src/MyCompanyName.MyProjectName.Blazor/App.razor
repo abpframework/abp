@@ -1,6 +1,4 @@
-@using Volo.Abp.AspNetCore.Mvc.Client
 @using Volo.Abp.Identity.Blazor.Pages
-@inject ICachedApplicationConfigurationClient ConfigurationClient
 <CascadingAuthenticationState>
     <Router 
         AppAssembly="@typeof(Program).Assembly" 
@@ -26,10 +24,3 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
-@code
-{
-    protected override async Task OnInitializedAsync()
-    {
-        await ConfigurationClient.InitializeAsync();
-    }
-}
