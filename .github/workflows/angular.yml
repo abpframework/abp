@@ -18,5 +18,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - run: yarn && yarn ci
+
+      - name: Install packages
+        run: yarn install
+        working-directory: npm/ng-packs
+
+      - name: Run lint
+        run: yarn ng lint
         working-directory: npm/ng-packs
