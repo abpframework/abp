@@ -9,8 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BlazoriseUI\Volo.Abp.BlazoriseUI.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj" />
   </ItemGroup>
 
 </Project>

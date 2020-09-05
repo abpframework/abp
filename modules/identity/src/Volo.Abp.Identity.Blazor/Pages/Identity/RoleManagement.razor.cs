@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
+using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
@@ -15,6 +16,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
     {
         [Inject] private IIdentityRoleAppService RoleAppService { get; set; }
         [Inject] private IUiMessageService UiMessageService { get; set; }
+        [Inject] private IObjectMapper<AbpIdentityBlazorModule> ObjectMapper { get; set; }
 
         private int _currentPage;
         private string _currentSorting;
@@ -22,17 +24,17 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         private IReadOnlyList<IdentityRoleDto> _roles;
 
-        private IdentityRoleCreateDto _newRole;
+        private IdentityRoleCreateDto _newRole; //TODO: Would be better to create a UI model class
         private Guid _editingRoleId;
-        private IdentityRoleUpdateDto _editingRole;
+        private IdentityRoleUpdateDto _editingRole; //TODO: Would be better to create a UI model class
 
         private Modal _createModal;
         private Modal _editModal;
 
         public RoleManagement()
         {
-            _newRole = new IdentityRoleCreateDto();
-            _editingRole = new IdentityRoleUpdateDto();
+            _newRole = new IdentityRoleCreateDto(); //TODO: Can we discard this (create on modal opening)?
+            _editingRole = new IdentityRoleUpdateDto(); //TODO: Can we discard this (create on modal opening)?
         }
 
         protected override async Task OnInitializedAsync()
@@ -62,6 +64,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
                 .JoinAsString(",");
 
             _currentPage = e.Page - 1;
+
             await GetRolesAsync();
             StateHasChanged();
         }
@@ -69,6 +72,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         private void OpenCreateModal()
         {
             _newRole = new IdentityRoleCreateDto();
+
             _createModal.Show();
         }
 
@@ -82,18 +86,8 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             var role = await RoleAppService.GetAsync(id);
 
             _editingRoleId = id;
-
-            //TODO: User AutoMapper!
-            _editingRole = new IdentityRoleUpdateDto
-            {
-                Name = role.Name,
-                ConcurrencyStamp = role.ConcurrencyStamp,
-                IsDefault = role.IsDefault,
-                IsPublic = role.IsPublic
-            };
-
-            role.MapExtraPropertiesTo(_editingRole);
-
+            _editingRole = ObjectMapper.Map<IdentityRoleDto, IdentityRoleUpdateDto>(role);
+            
             _editModal.Show();
         }
 
@@ -106,6 +100,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         {
             await RoleAppService.CreateAsync(_newRole);
             await GetRolesAsync();
+
             _createModal.Hide();
         }
 
@@ -113,6 +108,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         {
             await RoleAppService.UpdateAsync(_editingRoleId, _editingRole);
             await GetRolesAsync();
+
             _editModal.Hide();
         }
 
