@@ -1,10 +1,10 @@
-﻿@page "/user-management"
+﻿@page "/identity/users"
 @attribute [Authorize]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
 @inject IIdentityUserAppService UserAppService
 
-<h1>UserManagement (in the Identity Module)</h1>
+<h1>Users</h1>
 
 <button class="btn btn-primary" @onclick="GetUsersAsync">Get user list</button>
 
@@ -16,5 +16,6 @@
             <li>@user.UserName / @user.Email</li>
         }
     </ul>
+
     <p>Total user count: @_totalUserCount</p>
 }

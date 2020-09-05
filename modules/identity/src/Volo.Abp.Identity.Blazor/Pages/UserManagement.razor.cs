@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages
 {
-    public partial class UserManagement : ComponentBase
+    public partial class UserManagement
     {
         private long _totalUserCount;
         private IReadOnlyList<IdentityUserDto> _users;
