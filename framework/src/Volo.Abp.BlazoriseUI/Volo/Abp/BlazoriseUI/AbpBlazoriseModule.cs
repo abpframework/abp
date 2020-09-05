@@ -2,12 +2,12 @@
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.BlazoriseLib
+namespace Volo.Abp.BlazoriseUI
 {
     [DependsOn(
         typeof(AbpAspNetCoreComponentsWebAssemblyModule)
         )]
-    public class AbpBlazoriseModule : AbpModule
+    public class AbpBlazoriseUIModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

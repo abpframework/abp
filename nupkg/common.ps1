@@ -58,6 +58,7 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundJobs.Quartz",
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.BackgroundWorkers.Quartz",
+    "framework/src/Volo.Abp.BlazoriseUI",
     "framework/src/Volo.Abp.BlobStoring",
     "framework/src/Volo.Abp.BlobStoring.FileSystem",
     "framework/src/Volo.Abp.BlobStoring.Aliyun",

@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Identity.HttpApi.Client\Volo.Abp.Identity.HttpApi.Client.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Blazorise\Volo.Abp.Blazorise.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BlazoriseUI\Volo.Abp.BlazoriseUI.csproj" />
   </ItemGroup>
 
 </Project>

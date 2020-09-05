@@ -1,11 +1,11 @@
 ﻿using Volo.Abp.Modularity;
-using Volo.Abp.BlazoriseLib;
+using Volo.Abp.BlazoriseUI;
 
 namespace Volo.Abp.Identity.Blazor
 {
     [DependsOn(
         typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpBlazoriseModule)
+        typeof(AbpBlazoriseUIModule)
         )]
     public class AbpIdentityBlazorModule : AbpModule
     {
