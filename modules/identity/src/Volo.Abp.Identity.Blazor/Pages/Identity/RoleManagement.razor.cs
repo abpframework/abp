@@ -4,23 +4,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.DataGrid;
+using Microsoft.AspNetCore.Components;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.AspNetCore.Components.WebAssembly;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
     public partial class RoleManagement
     {
+        [Inject] private IIdentityRoleAppService RoleAppService { get; set; }
+        [Inject] private IUiMessageService UiMessageService { get; set; }
+
         private int _currentPage;
         private string _currentSorting;
         private int? _totalCount;
-        
+
         private IReadOnlyList<IdentityRoleDto> _roles;
-        
+
         private IdentityRoleCreateDto _newRole;
         private Guid _editingRoleId;
         private IdentityRoleUpdateDto _editingRole;
-        
+
         private Modal _createModal;
         private Modal _editModal;
 
