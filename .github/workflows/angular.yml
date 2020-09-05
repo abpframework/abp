@@ -12,7 +12,9 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: '*/*/node_modules'
+          path: |
+            npm/ng-packs/node_modules
+            templates/app/angular/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
 
       - uses: actions/setup-node@v1
@@ -43,6 +45,6 @@ jobs:
         run: yarn install
         working-directory: templates/app/angular
 
-      - name: Build app template
-        run: yarn build --prod
-        working-directory: templates/app/angular
+      # - name: Build app template
+      #   run: yarn build --prod
+      #   working-directory: templates/app/angular
