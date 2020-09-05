@@ -24,8 +24,8 @@ namespace Volo.Abp.Identity.Blazor.Pages
         where TUpdateInput : new()
         where TGetListInput : PagedAndSortedResultRequestDto, new()
     {
-        [Inject] protected abstract TAppService AppService { get; }
-        [Inject] protected abstract IObjectMapper<AbpIdentityBlazorModule> ObjectMapper { get; }
+        [Inject] protected TAppService AppService { get; set; }
+        [Inject] protected IObjectMapper<AbpIdentityBlazorModule> ObjectMapper { get; set; }
 
         protected int _currentPage;
         protected string _currentSorting;
