@@ -190,6 +190,10 @@
     "Enum:Status:1": "Rejected",
     "Enum:Status:2": "Approved",
     "Summary": "Summary",
-    "AuthorName": "Author name"
+    "AuthorName": "Author name",
+    "CoverImage": "Cover Image",
+    "RemoveCacheConfirmationMessage": "Are you sure you remove the cache for \"{0}\" article?",
+    "SuccessfullyRemoved": "Successfully cleared",
+    "RemoveCache": "Remove Cache"
   }
 }

@@ -2,7 +2,7 @@
 
 ABP platform provide basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated to your ABP based backends**.
 
-When you **create a new application** as described in the [getting started document](Getting-Started.md), the solution includes the React Native application in the `react-native` folder as default.
+When you **create a new application** as described in the [getting started document](Getting-Started.md), you have to add `-m react-native` option to include `react-native` project in your solution.
 
 ## Configure Your Local IP Address
 

@@ -29,7 +29,8 @@ namespace MyCompanyName.MyProjectName
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            MyProjectNameModulePropertyConfigurator.Configure();
+            MyProjectNameGlobalFeatureConfigurator.Configure();
+            MyProjectNameModuleExtensionConfigurator.Configure();
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -48,7 +49,7 @@ namespace MyCompanyName.MyProjectName
 
                 options.DefaultResourceType = typeof(MyProjectNameResource);
             });
-            
+
             Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));

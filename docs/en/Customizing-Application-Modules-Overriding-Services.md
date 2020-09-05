@@ -61,7 +61,7 @@ In most cases, you will want to change one or a few methods of the current imple
 ````csharp
 //[RemoteService(IsEnabled = false)] // If you use dynamic controller feature you can disable remote service. Prevent creating duplicate controller for the application service.
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService))]
+[ExposeServices(typeof(IIdentityUserAppService), typeof(IdentityUserAppService), typeof(MyIdentityUserAppService))]
 public class MyIdentityUserAppService : IdentityUserAppService
 {
     //...

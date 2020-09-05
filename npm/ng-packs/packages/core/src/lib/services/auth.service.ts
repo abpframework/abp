@@ -57,16 +57,13 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     const tenant = this.store.selectSnapshot(SessionState.getTenant);
 
-    return from(this.oAuthService.loadDiscoveryDocument()).pipe(
-      switchMap(() =>
-        from(
-          this.oAuthService.fetchTokenUsingPasswordFlow(
-            username,
-            password,
-            new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
-          ),
-        ),
+    return from(
+      this.oAuthService.fetchTokenUsingPasswordFlow(
+        username,
+        password,
+        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
       ),
+    ).pipe(
       switchMap(() => this.store.dispatch(new GetAppConfiguration())),
       tap(() => {
         const redirectUrl =

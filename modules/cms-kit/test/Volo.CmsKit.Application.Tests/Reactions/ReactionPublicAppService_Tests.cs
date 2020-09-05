@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -60,16 +57,15 @@ namespace Volo.CmsKit.Reactions
         {
             _currentUser.Id.Returns(_cmsKitTestData.User1Id);
 
-            await _reactionPublicAppService.CreateAsync(new CreateReactionDto
-            {
-                EntityType = _cmsKitTestData.EntityType2,
-                EntityId = _cmsKitTestData.EntityId2,
-                ReactionName = StandardReactions.Hooray
-            });
+            await _reactionPublicAppService.CreateAsync(
+                _cmsKitTestData.EntityType2,
+                _cmsKitTestData.EntityId2,
+                StandardReactions.Hooray
+            );
 
             UsingDbContext(context =>
             {
-                var reaction = context.UserReactions.FirstOrDefault(x =>
+                var reaction = context.Set<UserReaction>().FirstOrDefault(x =>
                     x.CreatorId == _cmsKitTestData.User1Id &&
                     x.ReactionName == StandardReactions.Hooray &&
                     x.EntityId == _cmsKitTestData.EntityId2 &&
@@ -84,16 +80,15 @@ namespace Volo.CmsKit.Reactions
         {
             _currentUser.Id.Returns(_cmsKitTestData.User1Id);
 
-            await _reactionPublicAppService.DeleteAsync(new DeleteReactionDto
-            {
-                EntityType = _cmsKitTestData.EntityType1,
-                EntityId = _cmsKitTestData.EntityId1,
-                ReactionName = StandardReactions.Confused
-            });
+            await _reactionPublicAppService.DeleteAsync(
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1,
+                StandardReactions.Confused
+            );
 
             UsingDbContext(context =>
             {
-                var reaction = context.UserReactions.FirstOrDefault(x =>
+                var reaction = context.Set<UserReaction>().FirstOrDefault(x =>
                     x.CreatorId == _cmsKitTestData.User1Id &&
                     x.ReactionName == StandardReactions.Confused &&
                     x.EntityId == _cmsKitTestData.EntityId1 &&

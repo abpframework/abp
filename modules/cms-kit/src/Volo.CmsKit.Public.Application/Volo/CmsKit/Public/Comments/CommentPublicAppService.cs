@@ -7,8 +7,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Authorization;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Users;
@@ -31,34 +29,32 @@ namespace Volo.CmsKit.Public.Comments
             CmsUserLookupService = cmsUserLookupService;
         }
 
-        public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetAllForEntityAsync(string entityType, string entityId)
+        public virtual async Task<ListResultDto<CommentWithDetailsDto>> GetListAsync(string entityType, string entityId)
         {
-            var commentsWithAuthor = await CommentRepository.GetListWithAuthorsAsync(entityType, entityId);
+            var commentsWithAuthor = await CommentRepository
+                .GetListWithAuthorsAsync(entityType, entityId);
 
             return new ListResultDto<CommentWithDetailsDto>(
                 ConvertCommentsToNestedStructure(commentsWithAuthor)
-                );
+            );
         }
 
         [Authorize]
-        public virtual async Task<CommentDto> CreateAsync(CreateCommentInput input)
+        public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
         {
-            var user = await CmsUserLookupService.FindByIdAsync(CurrentUser.GetId());
+            var user = await CmsUserLookupService.GetByIdAsync(CurrentUser.GetId());
 
-            if (user == null)
-            {
-                throw new BusinessException(message: "User Not found!");
-            }
-
-            var comment = await CommentRepository.InsertAsync(new Comment(
-                GuidGenerator.Create(),
-                input.EntityType,
-                input.EntityId,
-                input.Text,
-                input.RepliedCommentId,
-                user.Id,
-                CurrentTenant.Id
-            ));
+            var comment = await CommentRepository.InsertAsync(
+                new Comment(
+                    GuidGenerator.Create(),
+                    entityType,
+                    entityId,
+                    input.Text,
+                    input.RepliedCommentId,
+                    user.Id,
+                    CurrentTenant.Id
+                )
+            );
 
             return ObjectMapper.Map<Comment, CommentDto>(comment);
         }
@@ -70,7 +66,7 @@ namespace Volo.CmsKit.Public.Comments
 
             if (comment.CreatorId != CurrentUser.GetId())
             {
-                throw new BusinessException();
+                throw new BusinessException(); //TODO: AbpAuthorizationException!
             }
 
             comment.SetText(input.Text);
@@ -87,14 +83,16 @@ namespace Volo.CmsKit.Public.Comments
 
             if (comment.CreatorId != CurrentUser.GetId())
             {
-                throw new BusinessException();
+                throw new BusinessException(); //TODO: AbpAuthorizationException!
             }
 
-            await CommentRepository.DeleteAsync(id);
+            await CommentRepository.DeleteWithRepliesAsync(comment);
         }
 
         private List<CommentWithDetailsDto> ConvertCommentsToNestedStructure(List<CommentWithAuthorQueryResultItem> comments)
         {
+            //TODO: I think this method can be optimized if you use dictionaries instead of straight search
+
             var parentComments = comments
                 .Where(c=> c.Comment.RepliedCommentId == null)
                 .Select(c=> ObjectMapper.Map<Comment, CommentWithDetailsDto>(c.Comment))

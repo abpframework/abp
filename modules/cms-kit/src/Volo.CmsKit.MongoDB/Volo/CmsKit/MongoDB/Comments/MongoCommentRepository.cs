@@ -20,7 +20,8 @@ namespace Volo.CmsKit.MongoDB.Comments
 
         public async Task<List<CommentWithAuthorQueryResultItem>> GetListWithAuthorsAsync(
             string entityType,
-            string entityId)
+            string entityId,
+            CancellationToken cancellationToken = default)
         {
             Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
             Check.NotNullOrWhiteSpace(entityId, nameof(entityId));
@@ -31,11 +32,12 @@ namespace Volo.CmsKit.MongoDB.Comments
                 orderby comment.CreationTime
                 select user;
 
-            var authors = await authorsQuery.ToListAsync();
+            var authors = await authorsQuery.ToListAsync(GetCancellationToken(cancellationToken));
 
             var comments = await GetMongoQueryable()
                 .Where(c => c.EntityId == entityId && c.EntityType == entityType)
-                .OrderBy(c => c.CreationTime).ToListAsync();
+                .OrderBy(c => c.CreationTime)
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return comments
                 .Select(
@@ -47,19 +49,26 @@ namespace Volo.CmsKit.MongoDB.Comments
                         }).ToList();
         }
 
-        public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
+        public async Task DeleteWithRepliesAsync(
+            Comment comment,
+            CancellationToken cancellationToken = default)
         {
             var replies = await GetMongoQueryable()
-                .Where(x => x.RepliedCommentId == id)
+                .Where(x => x.RepliedCommentId == comment.Id)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
             foreach (var reply in replies)
             {
-                //TODO: Discuss if it is better to mark it as deleted and show in the ui as "This is deleted" instead of deleting it and replies completely
-                await base.DeleteAsync(reply.Id, autoSave, GetCancellationToken(cancellationToken));
+                await base.DeleteAsync(
+                    reply,
+                    cancellationToken: GetCancellationToken(cancellationToken)
+                );
             }
 
-            await base.DeleteAsync(id, autoSave, GetCancellationToken(cancellationToken));
+            await base.DeleteAsync(
+                comment,
+                cancellationToken: GetCancellationToken(cancellationToken)
+            );
         }
     }
 }

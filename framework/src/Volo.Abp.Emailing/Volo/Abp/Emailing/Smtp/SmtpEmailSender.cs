@@ -4,7 +4,6 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Emailing.Smtp
 {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyCompanyName.MyProjectName.MultiTenancy;
-using MyCompanyName.MyProjectName.ObjectExtending;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
@@ -32,11 +31,6 @@ namespace MyCompanyName.MyProjectName
     )]
     public class MyProjectNameDomainModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            MyProjectNameDomainObjectExtensions.Configure();
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpMultiTenancyOptions>(options =>

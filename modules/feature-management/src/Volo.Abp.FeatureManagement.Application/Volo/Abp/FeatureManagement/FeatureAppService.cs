@@ -33,6 +33,7 @@ namespace Volo.Abp.FeatureManagement
 
             foreach (var featureDefinition in featureDefinitions)
             {
+                var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, providerName, providerKey);
                 features.Add(new FeatureDto
                 {
                     Name = featureDefinition.Name,
@@ -40,7 +41,12 @@ namespace Volo.Abp.FeatureManagement
                     ValueType = featureDefinition.ValueType,
                     Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
                     ParentName = featureDefinition.Parent?.Name,
-                    Value = await FeatureManager.GetOrNullAsync(featureDefinition.Name, providerName, providerKey)
+                    Value = feature.Value,
+                    Provider = new FeatureProviderDto
+                    {
+                        Name = feature.Provider?.Name,
+                        Key = feature.Provider?.Key
+                    }
                 });
             }
 

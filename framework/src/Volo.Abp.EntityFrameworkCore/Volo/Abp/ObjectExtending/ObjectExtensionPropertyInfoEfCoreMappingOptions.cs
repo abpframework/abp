@@ -12,12 +12,14 @@ namespace Volo.Abp.ObjectExtending
         [NotNull]
         public ObjectExtensionInfo ObjectExtension => ExtensionProperty.ObjectExtension;
 
+        [Obsolete("Use EntityTypeAndPropertyBuildAction property.")]
         [CanBeNull]
         public Action<PropertyBuilder> PropertyBuildAction { get; set; }
 
         [CanBeNull]
         public Action<EntityTypeBuilder, PropertyBuilder> EntityTypeAndPropertyBuildAction { get; set; }
 
+        [Obsolete("Use other constructors.")]
         public ObjectExtensionPropertyInfoEfCoreMappingOptions(
             [NotNull] ObjectExtensionPropertyInfo extensionProperty,
             [CanBeNull] Action<PropertyBuilder> propertyBuildAction = null,
@@ -26,6 +28,21 @@ namespace Volo.Abp.ObjectExtending
             ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
 
             PropertyBuildAction = propertyBuildAction;
+            EntityTypeAndPropertyBuildAction = entityTypeAndPropertyBuildAction;
+        }
+
+        public ObjectExtensionPropertyInfoEfCoreMappingOptions(
+            [NotNull] ObjectExtensionPropertyInfo extensionProperty)
+        {
+            ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
+        }
+
+        public ObjectExtensionPropertyInfoEfCoreMappingOptions(
+            [NotNull] ObjectExtensionPropertyInfo extensionProperty,
+            [CanBeNull] Action<EntityTypeBuilder, PropertyBuilder> entityTypeAndPropertyBuildAction)
+        {
+            ExtensionProperty = Check.NotNull(extensionProperty, nameof(extensionProperty));
+
             EntityTypeAndPropertyBuildAction = entityTypeAndPropertyBuildAction;
         }
     }

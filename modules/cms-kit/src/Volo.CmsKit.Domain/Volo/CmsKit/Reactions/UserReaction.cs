@@ -7,7 +7,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.CmsKit.Reactions
 {
-    public class UserReaction : Entity<Guid>, IAggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, IMultiTenant
+    public class UserReaction : BasicAggregateRoot<Guid>, IHasCreationTime, IMustHaveCreator, IMultiTenant
     {
         public virtual Guid? TenantId { get; protected set; }
 

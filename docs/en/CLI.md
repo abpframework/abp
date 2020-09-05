@@ -16,6 +16,12 @@ To update an existing installation:
 dotnet tool update -g Volo.Abp.Cli
 ````
 
+## Global Options
+
+While each command may have a set of options, there are some global options those can be used with any command;
+
+* `--skip-cli-version-check`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+
 ## Commands
 
 Here, the list of all available commands before explaining their details:
@@ -25,8 +31,10 @@ Here, the list of all available commands before explaining their details:
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
-* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints on the server.
-* **`switch-to-preview`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
+* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
+* **`remove-proxy`**: Removes previously generated client side proxies.
+* **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
+* **`switch-to-nightly`**: Switches to the latest [nightly builds](Nightly-Builds.md) of the ABP related packages on a solution.
 * **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
@@ -79,8 +87,7 @@ abp new Acme.BookStore
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `none`: Without UI. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
-    * `--mobile` or `-m`: Specifies the mobile application framework. Default framework is `react-native`. Available frameworks:
-      * `none`: no mobile application.
+    * `--mobile` or `-m`: Specifies the mobile application framework. If not specified, no mobile application will be created. Available options:
       * `react-native`: React Native.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
         * `ef`: Entity Framework Core.
@@ -90,7 +97,7 @@ abp new Acme.BookStore
   * **`console`**: [Console template](Startup-Templates/Console.md).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 * `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
-* `--preview`: Use latest pre-release version (Only if `--version ` is not specified and there is at least one pre-release after latest stable version).
+* `--preview`: Use latest preview version.
 * `--template-source` or `-ts`: Specifies a custom template source to use to build the project. Local and network sources can be used(Like `D:\local-template` or `https://.../my-template-file.zip`).
 * `--create-solution-folder` or `-csf`: Specifies if the project will be in a new folder in the output folder or directly the output folder.
 * `--connection-string` or `-cs`:  Overwrites the default connection strings in all `appsettings.json` files. The default connection string is `Server=localhost;Database=MyProjectName;Trusted_Connection=True;MultipleActiveResultSets=true` for EF Core and it is configured to use the SQL Server. If you want to use the EF Core, but need to change the DBMS, you can change it as [described here](Entity-Framework-Core-Other-DBMS.md) (after creating the solution).
@@ -111,7 +118,6 @@ abp update [options]
 
 #### Options
 
-* `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
 * `--npm`: Only updates NPM packages.
 * `--nuget`: Only updates NuGet packages.
 * `--solution-path` or `-sp`: Specify the solution path. Use the current directory by default
@@ -174,30 +180,64 @@ abp add-module Volo.Blogging
 
 ### generate-proxy
 
-Generates client proxies for your HTTP APIs to make easy to consume your services from the client side. Before running `generate-proxy` command, your host must be up and running.
+Generates Angular service proxies for your HTTP APIs to make easy to consume your services from the client side. Your host (server) application must be up and running before running this command.
 
 Usage:
 
 ````bash
-abp generate-proxy [options] 
+abp generate-proxy
 ````
 
 #### Options
 
-* `--apiUrl` or `-a`: Specifies the root URL of the HTTP API. The default value is being retrieved from the `environment.ts` file for the Angular application. Make sure your host is up and running before running `abp generate-proxy`.
-* `--ui` or `-u`: Specifies the UI framework. Default value is `angular` and it is the only UI framework supported for now. Creates TypeScript code.
-* `--module` or `-m`: Specifies the module name. Default module name is `app`, which indicates your own application (you typically want this since every module is responsible to maintain its own client proxies). Set `all` for to generate proxies for all the modules.
+* `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
+* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
+* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
 
-Example usage with the options:
+> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
+
+### remove-proxy
+
+Removes previously generated proxy code from the Angular application. Your host (server) application must be up and running before running this command.
+
+This can be especially useful when you generate proxies for multiple modules before and need to remove one of them later.
+
+Usage:
 
 ````bash
-abp generate-proxy --apiUrl https://localhost:44305 --ui angular --module all
+abp remove-proxy
 ````
 
+#### Options
+
+* `--module` or `-m`: Specifies the name of the backend module you wish to remove proxies for. Default value: `app`.
+* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
+* `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+* `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+* `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+
+> See the [Angular Service Proxies document](UI/Angular/Service-Proxies.md) for more.
 
 ### switch-to-preview
 
-You can use this command to switch your project to latest **nightly** preview version of the ABP framework packages.
+You can use this command to switch your project to latest preview version of the ABP framework.
+
+Usage:
+
+````bash
+abp switch-to-preview [options]
+````
+
+#### Options
+
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+
+
+### switch-to-nightly
+
+You can use this command to switch your project to latest [nightly](Nightly-Builds.md) preview version of the ABP framework packages.
 
 Usage:
 
@@ -207,11 +247,11 @@ abp switch-to-nightly [options]
 
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### switch-to-stable
 
-If you're using the ABP Framework preview packages, you can switch back to latest stable version using this command.
+If you're using the ABP Framework preview packages (including nightly previews), you can switch back to latest stable version using this command.
 
 Usage:
 
@@ -220,7 +260,7 @@ abp switch-to-stable [options]
 ````
 #### Options
 
-`--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
+* `--solution-directory` or `-sd`: Specifies the directory. The solution should be in that directory or in any of its sub directories. If not specified, default is the current directory.
 
 ### translate
 

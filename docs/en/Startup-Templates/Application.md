@@ -54,6 +54,20 @@ Use `-d` (or `--database-provider`) option to specify the database provider:
 abp new Acme.BookStore -d mongodb
 ````
 
+### Specify the Mobile Application Framework
+
+This template supports the following mobile application frameworks:
+
+- `react-native`: React Native
+
+Use `-m` (or `--mobile`) option to specify the mobile application framework:
+
+````bash
+abp new Acme.BookStore -m react-native
+````
+
+If not specified, no mobile application will be created.
+
 ## Solution Structure
 
 Based on the options you've specified, you will get a slightly different solution structure.
@@ -261,11 +275,10 @@ You should run the application with the given order:
 
 ### Angular UI
 
-If you choose `Angular` as the UI framework (using the `-u angular` option), the solution is being separated into three folders:
+If you choose `Angular` as the UI framework (using the `-u angular` option), the solution is being separated into two folders:
 
 * `angular` folder contains the Angular UI application, the client-side code.
 * `aspnet-core` folder contains the ASP.NET Core solution, the server-side code.
-* `react-native` folder contains the React Native UI application, the client-side code for mobile.
 
 The server-side is similar to the solution described above. `*.HttpApi.Host` project serves the API, so the `Angular` application consumes it.
 
@@ -356,7 +369,7 @@ See the [testing document](https://angular.io/guide/testing).
 
 ### React Native
 
-The solution includes the [React Native](https://reactnative.dev/) application in the `react-native` folder as default.
+if `-m react-native` option is spesified in new project command, the solution includes the [React Native](https://reactnative.dev/) application in the `react-native` folder.
 
 The server-side is similar to the solution described above. `*.HttpApi.Host` project serves the API, so the React Native application consumes it.
 

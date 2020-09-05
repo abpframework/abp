@@ -158,7 +158,7 @@ Just as explained above, you can replace any component, layout or c# class of th
 
 ## Overriding Static Resources
 
-Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the Virtual File System to handle it.
+Overriding a static embedded resource (like JavaScript, Css or image files) of a module is pretty easy. Just place a file in the same path in your solution and let the [Virtual File System](../../Virtual-File-System.md) to handle it.
 
 ## Manipulating the Bundles
 

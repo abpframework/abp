@@ -39,6 +39,7 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
+        [Obsolete("Use MapEfCoreProperty with EntityTypeAndPropertyBuildAction parameters.")]
         public static ObjectExtensionManager MapEfCoreProperty<TEntity, TProperty>(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] string propertyName,
@@ -53,6 +54,7 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
+        [Obsolete("Use MapEfCoreProperty with EntityTypeAndPropertyBuildAction parameters.")]
         public static ObjectExtensionManager MapEfCoreProperty(
             [NotNull] this ObjectExtensionManager objectExtensionManager,
             [NotNull] Type entityType,

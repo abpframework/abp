@@ -8,7 +8,9 @@ program
     '-v, --nextVersion <version>',
     'next semantic version. Available versions: ["major", "minor", "patch", "premajor", "preminor", "prepatch", "prerelease", "or type a custom version"]',
   )
-  .option('-p, --preview', 'publish with preview tag');
+  .option('-p, --preview', 'publishes with preview tag')
+  .option('-r, --rc', 'publishes with next tag')
+  .option('-g, --skipGit', 'skips git push');
 
 program.parse(process.argv);
 
@@ -51,18 +53,19 @@ const publish = async () => {
 
     if (program.preview) await replaceWithPreview(program.nextVersion);
 
-    await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
+    await execa('yarn', ['build', '--noInstall', '--skipNgcc'], { stdout: 'inherit' });
+
+    await execa('yarn', ['build:schematics'], { stdout: 'inherit' });
 
     await fse.rename('../lerna.publish.json', '../lerna.json');
 
+    let tag: string;
+    if (program.preview) tag = 'preview';
+    if (program.rc) tag = 'next';
+
     await execa(
       'yarn',
-      [
-        'lerna',
-        'exec',
-        '--',
-        `"npm publish --registry ${registry}${program.preview ? ' --tag preview' : ''}"`,
-      ],
+      ['lerna', 'exec', '--', `"npm publish --registry ${registry}${tag ? ` --tag ${tag}` : ''}"`],
       {
         stdout: 'inherit',
         cwd: '../',
@@ -71,7 +74,7 @@ const publish = async () => {
 
     await fse.rename('../lerna.json', '../lerna.publish.json');
 
-    if (!program.preview) {
+    if (!program.preview && !program.skipGit) {
       await execa('git', ['add', '../packages/*', '../package.json', '../lerna.version.json'], {
         stdout: 'inherit',
       });

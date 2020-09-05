@@ -1,4 +1,5 @@
 import { ApplicationConfiguration, ConfigState, GetAppConfiguration } from '@abp/ng.core';
+import { LocaleDirection } from '@abp/ng.theme.shared';
 import { Component, EventEmitter, Input, Output, Renderer2, TrackByFunction } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
@@ -7,8 +8,8 @@ import { GetPermissions, UpdatePermissions } from '../actions/permission-managem
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
 
-type PermissionWithMargin = PermissionManagement.Permission & {
-  margin: number;
+type PermissionWithStyle = PermissionManagement.Permission & {
+  style: string;
 };
 
 @Component({
@@ -79,21 +80,25 @@ export class PermissionManagementComponent
 
   trackByFn: TrackByFunction<PermissionManagement.Group> = (_, item) => item.name;
 
-  get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
+  get selectedGroupPermissions$(): Observable<PermissionWithStyle[]> {
+    const margin = `margin-${
+      (document.body.dir as LocaleDirection) === 'rtl' ? 'right' : 'left'
+    }.px`;
+
     return this.groups$.pipe(
       map(groups =>
         this.selectedGroup
           ? groups.find(group => group.name === this.selectedGroup.name).permissions
           : [],
       ),
-      map<PermissionManagement.Permission[], PermissionWithMargin[]>(permissions =>
+      map<PermissionManagement.Permission[], PermissionWithStyle[]>(permissions =>
         permissions.map(
           permission =>
             (({
               ...permission,
-              margin: findMargin(permissions, permission),
+              style: { [margin]: findMargin(permissions, permission) },
               isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
-            } as any) as PermissionWithMargin),
+            } as any) as PermissionWithStyle),
         ),
       ),
     );

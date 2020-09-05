@@ -7,5 +7,9 @@ namespace Volo.Abp.Account
     public interface IAccountAppService : IApplicationService
     {
         Task<IdentityUserDto> RegisterAsync(RegisterDto input);
+
+        Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input);
+
+        Task ResetPasswordAsync(ResetPasswordDto input);
     }
 }

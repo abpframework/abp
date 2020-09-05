@@ -198,6 +198,10 @@
             {
               "text": "RabbitMQ Integration",
               "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+            },
+            {
+              "text": "Kafka Integration",
+              "path": "Distributed-Event-Bus-Kafka-Integration.md"
             }
           ]
         }
@@ -213,6 +217,19 @@
         {
           "text": "Object to object mapping",
           "path": "Object-To-Object-Mapping.md"
+        },
+        {
+          "text": "Email Sending",
+          "items": [
+            {
+              "text": "Email Sending System",
+              "path": "Emailing.md"
+            },
+            {
+              "text": "MailKit Integration",
+              "path": "MailKit.md"
+            }
+          ]
         },
         {
           "text": "BLOB Storing",
@@ -409,6 +426,10 @@
             {
               "text": "Migration Guide v2.x to v3",
               "path": "UI/Angular/Migration-Guide-v3.md"
+            },
+            {
+              "text": "Environment",
+              "path": "UI/Angular/Environment.md"
             },
             {
               "text": "Service Proxies",
@@ -652,12 +673,20 @@
       "path": "Microservice-Architecture.md"
     },
     {
+      "text": "Preview Releases",
+      "path": "Previews.md"
+    },
+    {
       "text": "Nightly Builds",
       "path": "Nightly-Builds.md"
     },
     {
       "text": "Road Map",
       "path": "Road-Map.md"
+    },
+    {
+      "text": "Upgrading",
+      "path": "Upgrading.md"
     },
     {
       "text": "Contribution Guide",

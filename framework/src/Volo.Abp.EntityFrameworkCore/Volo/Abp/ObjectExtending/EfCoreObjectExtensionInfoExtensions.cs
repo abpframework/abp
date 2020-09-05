@@ -6,6 +6,7 @@ namespace Volo.Abp.ObjectExtending
 {
     public static class EfCoreObjectExtensionInfoExtensions
     {
+        [Obsolete("Use MapEfCoreProperty with EntityTypeAndPropertyBuildAction parameters.")]
         public static ObjectExtensionInfo MapEfCoreProperty<TProperty>(
             [NotNull] this ObjectExtensionInfo objectExtensionInfo,
             [NotNull] string propertyName,
@@ -18,6 +19,7 @@ namespace Volo.Abp.ObjectExtending
             );
         }
 
+        [Obsolete("Use MapEfCoreProperty with EntityTypeAndPropertyBuildAction parameters.")]
         public static ObjectExtensionInfo MapEfCoreProperty(
             [NotNull] this ObjectExtensionInfo objectExtensionInfo,
             [NotNull] Type propertyType,

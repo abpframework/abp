@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { eLayoutType } from '../enums/common';
 import { Config } from './config';
+import { NgxsStoragePluginOptions } from '@ngxs/storage-plugin';
 
 export namespace ABP {
   export interface Root {
@@ -10,6 +11,7 @@ export namespace ABP {
     skipGetAppConfiguration?: boolean;
     sendNullsAsQueryParam?: boolean;
     cultureNameLocaleFileMap?: Dictionary<string>;
+    ngxsStoragePluginOptions?: NgxsStoragePluginOptions & { key?: string[] };
   }
 
   export interface Test {

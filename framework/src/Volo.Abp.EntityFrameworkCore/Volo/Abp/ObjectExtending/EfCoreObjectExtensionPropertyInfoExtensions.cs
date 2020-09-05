@@ -23,6 +23,7 @@ namespace Volo.Abp.ObjectExtending
             return propertyExtension;
         }
 
+        [Obsolete("Use MapEfCore with EntityTypeAndPropertyBuildAction parameters.")]
         [NotNull]
         public static ObjectExtensionPropertyInfo MapEfCore(
             [NotNull] this ObjectExtensionPropertyInfo propertyExtension,
@@ -49,7 +50,7 @@ namespace Volo.Abp.ObjectExtending
             propertyExtension.Configuration[EfCorePropertyConfigurationName] =
                 new ObjectExtensionPropertyInfoEfCoreMappingOptions(
                     propertyExtension,
-                    entityTypeAndPropertyBuildAction: entityTypeAndPropertyBuildAction
+                    entityTypeAndPropertyBuildAction
                 );
 
             return propertyExtension;

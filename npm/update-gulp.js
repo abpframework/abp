@@ -3,6 +3,11 @@ var path = require('path');
 const childProcess = require('child_process');
 const execa = require('execa');
 const fse = require('fs-extra');
+const { program } = require('commander');
+
+program.version('0.0.1');
+program.option('-r, --rc', 'whether version is rc');
+program.parse(process.argv);
 
 const gulp = (folderPath) => {
   if (
@@ -23,7 +28,11 @@ const gulp = (folderPath) => {
 const updatePackages = (pkgJsonPath) => {
   try {
     const result = childProcess
-      .execSync(`ncu "/^@abp.*$/" --packageFile ${pkgJsonPath} -u`)
+      .execSync(
+        `ncu "/^@abp.*$/" --packageFile ${pkgJsonPath} -u${
+          program.rc ? ' --greatest' : ''
+        }`
+      )
       .toString();
     console.log('\x1b[0m', result);
   } catch (error) {
