@@ -198,6 +198,10 @@
             {
               "text": "RabbitMQ Integration",
               "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+            },
+            {
+              "text": "Kafka Integration",
+              "path": "Distributed-Event-Bus-Kafka-Integration.md"
             }
           ]
         }
@@ -679,6 +683,10 @@
     {
       "text": "Road Map",
       "path": "Road-Map.md"
+    },
+    {
+      "text": "Upgrading",
+      "path": "Upgrading.md"
     },
     {
       "text": "Contribution Guide",

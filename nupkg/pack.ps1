@@ -12,8 +12,6 @@ foreach($project in $projects) {
     
     $projectFolder = Join-Path $rootFolder $project
 	
-	Copy-Item (Join-Path $rootFolder "LICENSE.md") -Destination $projectFolder
-
     # Create nuget pack
     Set-Location $projectFolder
     Remove-Item -Recurse (Join-Path $projectFolder "bin/Release")
@@ -28,8 +26,6 @@ foreach($project in $projects) {
     $projectName = $project.Substring($project.LastIndexOf("/") + 1)
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $projectName + ".*.nupkg")
     Move-Item $projectPackPath $packFolder
-	
-	Remove-Item (Join-Path $projectFolder "LICENSE.md")	
 }
 
 # Go back to the pack folder
