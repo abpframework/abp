@@ -102,12 +102,11 @@ namespace Volo.Abp.Identity
             var result = await _roleAppService.CreateAsync(input);
 
             await _organization.CreateAsync(orgInput);
-            
-            await _organization.AddRoleToOrganizationUnitAsync(result.Id,orgInput.Id);
-            
-            var orgRolesCount=await _organizationUnitRepository.GetRolesCountAsync(orgInput);
+
+            var role = await _roleRepository.GetAsync(result.Id);
+            await _organization.AddRoleToOrganizationUnitAsync(role,orgInput);
             //Assert
-            orgRolesCount.ShouldBeGreaterThan(0);
+            orgInput.Roles.Count.ShouldBeGreaterThan(0);
         }
         
         [Fact]
