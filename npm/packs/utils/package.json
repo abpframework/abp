@@ -1,6 +1,6 @@
 {
   "name": "@abp/utils",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "scripts": {
     "prepublish": "yarn install --ignore-scripts && node prepublish.js",
     "ng": "ng",
@@ -13,11 +13,11 @@
     "access": "public"
   },
   "main": "dist/bundles/abp-utils.umd.js",
-  "module": "dist/fesm5/abp-utils.js",
+  "module": "dist/fesm2015/abp-utils.js",
+  "es2015_ivy_ngcc": "__ivy_ngcc__/dist/fesm2015/abp-utils.js",
   "es2015": "dist/fesm2015/abp-utils.js",
-  "esm5": "dist/esm5/abp-utils.js",
   "esm2015": "dist/esm2015/abp-utils.js",
-  "fesm5": "dist/fesm5/abp-utils.js",
+  "fesm2015_ivy_ngcc": "__ivy_ngcc__/dist/fesm2015/abp-utils.js",
   "fesm2015": "dist/fesm2015/abp-utils.js",
   "typings": "dist/abp-utils.d.ts",
   "metadata": "dist/abp-utils.metadata.json",

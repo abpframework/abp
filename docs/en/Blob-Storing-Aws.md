@@ -23,23 +23,27 @@ Configuration is done in the `ConfigureServices` method of your [module](Module-
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAws(Aws =>
+    options.Containers.ConfigureDefault(container =>
     {
-        Aws.AccessKeyId = "your Aws access key id";
-        Aws.SecretAccessKey = "your Aws access key secret";
-        Aws.UseCredentials = "set true to use credentials";
-        Aws.UseTemporaryCredentials = "set true to use temporary credentials";
-        Aws.UseTemporaryFederatedCredentials = "set true to use temporary federated credentials";
-        Aws.ProfileName = "the name of the profile to get credentials from";
-        Aws.ProfilesLocation = "the path to the aws credentials file to look at";
-        Aws.Region = "the system name of the service";
-        Aws.Name = "the name of the federated user";
-        Aws.Policy = "policy";
-        Aws.DurationSeconds = "expiration date";
-        Aws.ContainerName = "your Aws container name";
-        Aws.CreateContainerIfNotExists = false;
+        container.UseAws(Aws =>
+        {
+            Aws.AccessKeyId = "your Aws access key id";
+            Aws.SecretAccessKey = "your Aws access key secret";
+            Aws.UseCredentials = "set true to use credentials";
+            Aws.UseTemporaryCredentials = "set true to use temporary credentials";
+            Aws.UseTemporaryFederatedCredentials = "set true to use temporary federated credentials";
+            Aws.ProfileName = "the name of the profile to get credentials from";
+            Aws.ProfilesLocation = "the path to the aws credentials file to look at";
+            Aws.Region = "the system name of the service";
+            Aws.Name = "the name of the federated user";
+            Aws.Policy = "policy";
+            Aws.DurationSeconds = "expiration date";
+            Aws.ContainerName = "your Aws container name";
+            Aws.CreateContainerIfNotExists = false;
+        });
     });
 });
+
 ````
 
 > See the [BLOB Storing document](Blob-Storing.md) to learn how to configure this provider for a specific container.

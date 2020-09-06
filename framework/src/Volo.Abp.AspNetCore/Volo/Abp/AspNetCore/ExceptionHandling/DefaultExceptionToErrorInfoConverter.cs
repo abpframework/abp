@@ -19,20 +19,21 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConverter, ITransientDependency
     {
-        public bool SendAllExceptionsToClients { get; set; } = false;
-
         protected AbpExceptionLocalizationOptions LocalizationOptions { get; }
+        protected AbpExceptionHandlingOptions ExceptionHandlingOptions { get; }
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
         protected IStringLocalizer<AbpUiResource> L { get; }
         protected IServiceProvider ServiceProvider { get; }
 
         public DefaultExceptionToErrorInfoConverter(
             IOptions<AbpExceptionLocalizationOptions> localizationOptions,
+            IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions,
             IStringLocalizerFactory stringLocalizerFactory,
             IStringLocalizer<AbpUiResource> abpUiStringLocalizer,
             IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;
+            ExceptionHandlingOptions = exceptionHandlingOptions.Value;
             StringLocalizerFactory = stringLocalizerFactory;
             L = abpUiStringLocalizer;
             LocalizationOptions = localizationOptions.Value;
@@ -52,7 +53,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
 
         protected virtual RemoteServiceErrorInfo CreateErrorInfoWithoutCode(Exception exception)
         {
-            if (SendAllExceptionsToClients)
+            if (ExceptionHandlingOptions.SendExceptionsDetailsToClients)
             {
                 return CreateDetailedErrorInfoFromException(exception);
             }

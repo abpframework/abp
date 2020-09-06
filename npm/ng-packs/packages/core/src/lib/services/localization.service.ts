@@ -45,12 +45,12 @@ export class LocalizationService {
 
   registerLocale(locale: string) {
     const router = this.injector.get(Router);
-    const { cultureNameToLocaleFileNameMapping: localeNameMap } = this.injector.get(CORE_OPTIONS);
+    const { cultureNameLocaleFileMap } = this.injector.get(CORE_OPTIONS);
     const { shouldReuseRoute } = router.routeReuseStrategy;
     router.routeReuseStrategy.shouldReuseRoute = () => false;
     router.navigated = false;
 
-    return registerLocale(locale, localeNameMap).then(() => {
+    return registerLocale(locale, cultureNameLocaleFileMap).then(() => {
       this.ngZone.run(async () => {
         await router.navigateByUrl(router.url).catch(noop);
         router.routeReuseStrategy.shouldReuseRoute = shouldReuseRoute;

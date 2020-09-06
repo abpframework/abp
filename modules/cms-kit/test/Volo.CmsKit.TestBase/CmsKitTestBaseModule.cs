@@ -3,6 +3,7 @@ using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -16,8 +17,15 @@ namespace Volo.CmsKit
         )]
     public class CmsKitTestBaseModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            OneTimeRunner.Run(() =>
+            {
+                GlobalFeatureManager.Instance.Modules.CmsKit().EnableAll();
+            });
+
             context.Services.AddAlwaysAllowAuthorization();
         }
 

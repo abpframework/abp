@@ -54,8 +54,8 @@ namespace Volo.Abp.Identity
                 return OrganizationUnit.CalculateNextCode(lastChild.Code);
             }
 
-            var parentCode = parentId != null 
-                ? await GetCodeOrDefaultAsync(parentId.Value) 
+            var parentCode = parentId != null
+                ? await GetCodeOrDefaultAsync(parentId.Value)
                 : null;
 
             return OrganizationUnit.AppendCode(
@@ -174,7 +174,7 @@ namespace Volo.Abp.Identity
                 return Task.FromResult(0);
             }
             ou.AddRole(role.Id);
-            return Task.FromResult(0);
+            return OrganizationUnitRepository.UpdateAsync(ou);
         }
 
         public virtual async Task RemoveRoleFromOrganizationUnitAsync(Guid roleId, Guid ouId)
@@ -188,7 +188,7 @@ namespace Volo.Abp.Identity
         public virtual Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
         {
             organizationUnit.RemoveRole(role.Id);
-            return Task.FromResult(0);
+            return OrganizationUnitRepository.UpdateAsync(organizationUnit);
         }
     }
 }

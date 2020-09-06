@@ -4,21 +4,16 @@
       "text": "Getting Started",
       "items": [
         {
-          "text": "From Startup Templates",
+          "text": "Web Application",
           "path": "Getting-Started.md"
         },
         {
-          "text": "From Empty Projects",
-          "items": [
-            {
-              "text": "With ASP.NET Core Web Application",
-              "path": "Getting-Started-AspNetCore-Application.md"
-            },
-            {
-              "text": "With Console Application",
-              "path": "Getting-Started-Console-Application.md"
-            }
-          ]
+          "text": "Console Application",
+          "path": "Startup-Templates/Console.md"
+        },
+        {
+          "text": "Empty Web Project",
+          "path": "Getting-Started-AspNetCore-Application.md"
         }
       ]
     },
@@ -92,10 +87,6 @@
               "path": "Customizing-Application-Modules-Overriding-User-Interface.md"
             }
           ]
-        },
-        {
-          "text": "\"How to\" Guides",
-          "path": "How-To/Index.md"
         },
         {
           "text": "Migrating from the ASP.NET Boilerplate",
@@ -207,6 +198,10 @@
             {
               "text": "RabbitMQ Integration",
               "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+            },
+            {
+              "text": "Kafka Integration",
+              "path": "Distributed-Event-Bus-Kafka-Integration.md"
             }
           ]
         }
@@ -222,6 +217,19 @@
         {
           "text": "Object to object mapping",
           "path": "Object-To-Object-Mapping.md"
+        },
+        {
+          "text": "Email Sending",
+          "items": [
+            {
+              "text": "Email Sending System",
+              "path": "Emailing.md"
+            },
+            {
+              "text": "MailKit Integration",
+              "path": "MailKit.md"
+            }
+          ]
         },
         {
           "text": "BLOB Storing",
@@ -262,7 +270,7 @@
                   "path": "Blob-Storing-Custom-Provider.md"
                 }
               ]
-            }            
+            }
           ]
         },
         {
@@ -420,6 +428,10 @@
               "path": "UI/Angular/Migration-Guide-v3.md"
             },
             {
+              "text": "Environment",
+              "path": "UI/Angular/Environment.md"
+            },
+            {
               "text": "Service Proxies",
               "path": "UI/Angular/Service-Proxies.md"
             },
@@ -434,6 +446,10 @@
             {
               "text": "Permission Management",
               "path": "UI/Angular/Permission-Management.md"
+            },
+            {
+              "text": "Multi Tenancy",
+              "path": "UI/Angular/Multi-Tenancy.md"
             },
             {
               "text": "Confirmation Popup",
@@ -657,12 +673,20 @@
       "path": "Microservice-Architecture.md"
     },
     {
+      "text": "Preview Releases",
+      "path": "Previews.md"
+    },
+    {
       "text": "Nightly Builds",
       "path": "Nightly-Builds.md"
     },
     {
       "text": "Road Map",
       "path": "Road-Map.md"
+    },
+    {
+      "text": "Upgrading",
+      "path": "Upgrading.md"
     },
     {
       "text": "Contribution Guide",

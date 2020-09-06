@@ -23,18 +23,21 @@ BLOB存储Aliyun提供程序可以将BLOB存储在[Aliyun Blob storage](https://
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
 {
-    options.Containerscontainer.UseAliyun(aliyun =>
+    options.Containers.ConfigureDefault(container =>
     {
-        aliyun.AccessKeyId = "your aliyun access key id";
-        aliyun.AccessKeySecret = "your aliyun access key secret";
-        aliyun.Endpoint = "your oss endpoint";
-        aliyun.RegionId = "your sts region id";
-        aliyun.RoleArn = "the arn of ram role";
-        aliyun.RoleSessionName = "the name of the certificate";
-        aliyun.Policy = "policy";
-        aliyun.DurationSeconds = "expiration date";
-        aliyun.ContainerName = "your aliyun container name";
-        aliyun.CreateContainerIfNotExists = false;
+        container.UseAliyun(aliyun =>
+        {
+            aliyun.AccessKeyId = "your aliyun access key id";
+            aliyun.AccessKeySecret = "your aliyun access key secret";
+            aliyun.Endpoint = "your oss endpoint";
+            aliyun.RegionId = "your sts region id";
+            aliyun.RoleArn = "the arn of ram role";
+            aliyun.RoleSessionName = "the name of the certificate";
+            aliyun.Policy = "policy";
+            aliyun.DurationSeconds = "expiration date";
+            aliyun.ContainerName = "your aliyun container name";
+            aliyun.CreateContainerIfNotExists = false;
+        });
     });
 });
 ````

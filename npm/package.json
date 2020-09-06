@@ -13,6 +13,7 @@
     "npm-check-updates": "^3.1.25"
   },
   "dependencies": {
+    "commander": "^6.0.0",
     "execa": "^3.4.0",
     "fs-extra": "^8.1.0"
   }

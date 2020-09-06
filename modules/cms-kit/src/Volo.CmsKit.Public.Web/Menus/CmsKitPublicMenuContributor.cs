@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.CmsKit.Web.Menus
+namespace Volo.CmsKit.Public.Web.Menus
 {
     public class CmsKitPublicMenuContributor : IMenuContributor
     {

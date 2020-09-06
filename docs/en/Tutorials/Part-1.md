@@ -45,10 +45,18 @@ This tutorial is organized as the following parts;
 
 ### Download the Source Code
 
-This tutorials has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
+This tutorial has multiple versions based on your **UI** and **Database** preferences. We've prepared two combinations of the source code to be downloaded:
 
 * [MVC (Razor Pages) UI with EF Core](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
 * [Angular UI with MongoDB](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+
+{{if UI == "MVC" && DB == "EF"}}
+
+### Video Tutorial
+
+This part is also recorded as a video tutorial and **<a href="https://www.youtube.com/watch?v=cJzyIFfAlp8&list=PLsNclT2aHJcPNaCf7Io3DbMN6yAk_DgWJ&index=1" target="_blank">published on YouTube</a>**.
+
+{{end}}
 
 ## Creating the Solution
 
@@ -92,7 +100,7 @@ namespace Acme.BookStore.Books
 
 ### BookType Enum
 
-The `Book` entity uses the `BookType` enum. Create the `BookType` in the `Acme.BookStore.Domain.Shared` project:
+The `Book` entity uses the `BookType` enum. Create a `Books` folder (namespace) in the `Acme.BookStore.Domain.Shared` project and add a `BookType` inside it:
 
 ````csharp
 namespace Acme.BookStore.Books
@@ -293,7 +301,7 @@ In this section, you will create an application service to get, create, update a
 
 ### BookDto
 
-`CrudAppService` base class requires to define the fundamental DTOs for the entity. Create a DTO class named `BookDto` into the `Acme.BookStore.Application.Contracts` project:
+`CrudAppService` base class requires to define the fundamental DTOs for the entity. Create a `Books` folder (namespace) in the `Acme.BookStore.Application.Contracts` project and add a `BookDto` class inside it:
 
 ````csharp
 using System;
@@ -340,7 +348,7 @@ namespace Acme.BookStore
 
 ### CreateUpdateBookDto
 
-Create another DTO class named `CreateUpdateBookDto` into the `Acme.BookStore.Application.Contracts` project:
+Create a `CreateUpdateBookDto` class in the `Books` folder (namespace) of the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
@@ -391,7 +399,7 @@ namespace Acme.BookStore
 
 ### IBookAppService
 
-Next step is to define an interface for the application service. Create an interface named `IBookAppService` in the `Acme.BookStore.Application.Contracts` project:
+Next step is to define an interface for the application service. Create an `IBookAppService` interface in the `Books` folder (namespace) of the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
@@ -418,7 +426,7 @@ namespace Acme.BookStore.Books
 
 ### BookAppService
 
-Implement the `IBookAppService`, as named `BookAppService`, in the `Acme.BookStore.Application` project:
+It is time to implement the `IBookAppService` interface. Create a new class, named `BookAppService` in the `Books` namespace (folder) of the Acme.BookStore.Application project:
 
 ````csharp
 using System;

@@ -24,8 +24,7 @@
     <ProjectReference Include="..\Volo.Docs.HttpApi\Volo.Docs.HttpApi.csproj" />
     <PackageReference Include="Markdig.Signed" Version="0.20.0" />
     <PackageReference Include="Scriban" Version="2.1.3" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
-    <PackageReference Include="NuGet.Versioning" Version="5.6.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
   </ItemGroup>
 
 
@@ -39,6 +38,10 @@
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <None Include="compilerconfig.json" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
 </Project>

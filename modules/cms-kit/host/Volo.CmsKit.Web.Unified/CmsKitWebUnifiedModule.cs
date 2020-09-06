@@ -34,6 +34,7 @@ using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Admin.Web;
+using Volo.CmsKit.Public.Web;
 
 namespace Volo.CmsKit
 {
@@ -62,6 +63,11 @@ namespace Volo.CmsKit
         )]
     public class CmsKitWebUnifiedModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            FeatureConfigurer.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();

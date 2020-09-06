@@ -4,36 +4,17 @@ A permission is a simple policy that is granted or prohibited for a particular u
 
 You can get permission of authenticated user using `getGrantedPolicy` selector of `ConfigState`.
 
-You can get permission as boolean value from store:
-
-```js
-import { Store } from '@ngxs/store';
-import { ConfigState } from '@abp/ng.core';
-
-export class YourComponent {
-  constructor(private store: Store) {}
-
-  ngOnInit(): void {
-    const canCreate = this.store.selectSnapshot(ConfigState.getGrantedPolicy('AbpIdentity.Roles.Create'));
-  }
-
-  // ...
-}
-```
-
-Or you can get it via `ConfigStateService`:
+You can get permission as boolean value:
 
 ```js
 import { ConfigStateService } from '@abp/ng.core';
 
 export class YourComponent {
-  constructor(private configStateService: ConfigStateService) {}
+  constructor(private config: ConfigStateService) {}
 
   ngOnInit(): void {
-    const canCreate = this.configStateService.getGrantedPolicy('AbpIdentity.Roles.Create');
+    const canCreate = this.config.getGrantedPolicy('AbpIdentity.Roles.Create');
   }
-
-  // ...
 }
 ```
 
@@ -78,4 +59,4 @@ Granted Policies are stored in the `auth` property of `ConfigState`.
 
 ## What's Next?
 
-- [Confirmation Popup](./Confirmation-Service.md)
+* [Multi Tenancy](./Multi-Tenancy.md)

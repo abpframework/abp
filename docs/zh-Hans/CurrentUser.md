@@ -86,7 +86,7 @@ namespace AbpDemo
 
 ## ICurrentPrincipalAccessor
 
-`ICurrentPrincipalAccessor` 是当需要当前用户的principle时使用的服务(由ABP框架和你的应用程序代码使用).
+`ICurrentPrincipalAccessor` 是当需要当前用户的Principal时使用的服务(由ABP框架和你的应用程序代码使用).
 
 对于Web应用程序, 它获取当前 `HttpContext` 的 `User` 属性,对于非Web应用程序它将返回 `Thread.CurrentPrincipal`.
 
@@ -114,9 +114,9 @@ public class MyService : ITransientDependency
 }
 ````
 
-### 更改当前Principle
+### 更改当前Principal
 
-除了某些高级场景外,你不需要设置或更改当前principle. 如果需要可以使用 `ICurrentPrincipalAccessor` 的 `Change` 方法. 它接受一个 `ClaimsPrinciple` 对象并使其成为作用域的"当前"对象.
+除了某些高级场景外,你不需要设置或更改当前Principal. 如果需要可以使用 `ICurrentPrincipalAccessor` 的 `Change` 方法. 它接受一个 `ClaimsPrincipal` 对象并使其成为作用域的"当前"对象.
 
 示例:
 
@@ -132,7 +132,7 @@ public class MyAppService : ApplicationService
 
     public void Foo()
     {
-        var newPrinciple = new ClaimsPrincipal(
+        var newPrincipal = new ClaimsPrincipal(
             new ClaimsIdentity(
                 new Claim[]
                 {
@@ -143,7 +143,7 @@ public class MyAppService : ApplicationService
             )
         );
 
-        using (_currentPrincipalAccessor.Change(newPrinciple))
+        using (_currentPrincipalAccessor.Change(newPrincipal))
         {
             var userName = CurrentUser.UserName; //returns "john"
             //...

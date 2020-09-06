@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Volo.Abp.Account.Emailing;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Identity;
@@ -12,12 +13,18 @@ namespace Volo.Abp.Account
     {
         protected IIdentityRoleRepository RoleRepository { get; }
         protected IdentityUserManager UserManager { get; }
+        protected IAccountEmailer AccountEmailer { get; }
+        protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
 
         public AccountAppService(
             IdentityUserManager userManager,
-            IIdentityRoleRepository roleRepository)
+            IIdentityRoleRepository roleRepository,
+            IAccountEmailer accountEmailer,
+            IdentitySecurityLogManager identitySecurityLogManager)
         {
             RoleRepository = roleRepository;
+            AccountEmailer = accountEmailer;
+            IdentitySecurityLogManager = identitySecurityLogManager;
             UserManager = userManager;
         }
 
@@ -33,6 +40,37 @@ namespace Volo.Abp.Account
             await UserManager.AddDefaultRolesAsync(user);
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
+
+        public virtual async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
+        {
+            var user = await GetUserByEmail(input.Email);
+            var resetToken = await UserManager.GeneratePasswordResetTokenAsync(user);
+            await AccountEmailer.SendPasswordResetLinkAsync(user, resetToken, input.AppName, input.ReturnUrl, input.ReturnUrlHash);
+        }
+
+        public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
+        {
+            var user = await UserManager.GetByIdAsync(input.UserId);
+            (await UserManager.ResetPasswordAsync(user, input.ResetToken, input.Password)).CheckErrors();
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = IdentitySecurityLogActionConsts.ChangePassword
+            });
+        }
+
+        protected virtual async Task<IdentityUser> GetUserByEmail(string email)
+        {
+            var user = await UserManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new BusinessException("Volo.Account:InvalidEmailAddress")
+                    .WithData("Email", email);
+            }
+
+            return user;
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()

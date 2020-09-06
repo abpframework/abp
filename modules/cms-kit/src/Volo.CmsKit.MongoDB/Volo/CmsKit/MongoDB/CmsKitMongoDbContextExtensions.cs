@@ -1,6 +1,9 @@
 ﻿using System;
 using Volo.Abp;
 using Volo.Abp.MongoDB;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.MongoDB
 {
@@ -17,6 +20,21 @@ namespace Volo.CmsKit.MongoDB
             );
 
             optionsAction?.Invoke(options);
+
+            builder.Entity<CmsUser>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Users";
+            });
+
+            builder.Entity<UserReaction>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "UserReactions";
+            });
+
+            builder.Entity<Comment>(x =>
+            {
+                x.CollectionName = CmsKitDbProperties.DbTablePrefix + "Comments";
+            });
         }
     }
 }

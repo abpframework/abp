@@ -20,7 +20,7 @@ namespace Volo.CmsKit.Reactions
             return Task.FromResult(Options.Reactions.Values.ToList());
         }
 
-        public Task<ReactionDefinition> GetReactionOrNullAsync(string reactionName, string entityType = null)
+        public virtual Task<ReactionDefinition> GetReactionOrNullAsync(string reactionName, string entityType = null)
         {
             return Task.FromResult(Options.Reactions.GetOrDefault(reactionName));
         }

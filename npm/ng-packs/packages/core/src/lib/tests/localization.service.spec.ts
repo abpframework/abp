@@ -16,7 +16,7 @@ describe('LocalizationService', () => {
     mocks: [Store, Router],
     providers: [
       { provide: Actions, useValue: new Subject() },
-      { provide: CORE_OPTIONS, useValue: { cultureNameToLocaleFileNameMapping: {} } },
+      { provide: CORE_OPTIONS, useValue: { cultureNameLocaleFileMap: {} } },
     ],
   });
 

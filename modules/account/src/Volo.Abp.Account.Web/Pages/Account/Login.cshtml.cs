@@ -107,12 +107,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("./SendSecurityCode", new
-                {
-                    returnUrl = ReturnUrl,
-                    returnUrlHash = ReturnUrlHash,
-                    rememberMe = LoginInput.RememberMe
-                });
+                return await TwoFactorLoginResultAsync();
             }
 
             if (result.IsLockedOut)
@@ -140,6 +135,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             Debug.Assert(user != null, nameof(user) + " != null");
 
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
+        }
+
+        /// <summary>
+        /// Override this method to add 2FA for your application.
+        /// </summary>
+        protected virtual Task<IActionResult> TwoFactorLoginResultAsync()
+        {
+            throw new NotImplementedException();
         }
 
         protected virtual async Task<List<ExternalProviderModel>> GetExternalProviders()

@@ -2,7 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Users;
+using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.CmsKit.GlobalFeatures;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
@@ -21,19 +26,51 @@ namespace Volo.CmsKit.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            builder.Entity<UserReaction>(b =>
+            builder.Entity<CmsUser>(b =>
             {
-                b.ToTable(options.TablePrefix + "UserReactions", options.Schema);
+                b.ToTable(options.TablePrefix + "Users", options.Schema);
+
                 b.ConfigureByConvention();
+                b.ConfigureAbpUser();
 
-                b.Property(x => x.EntityType).IsRequired().HasMaxLength(UserReactionConsts.EntityTypeLength);
-                b.Property(x => x.EntityId).IsRequired().HasMaxLength(UserReactionConsts.EntityIdLength);
-                b.Property(x => x.ReactionName).IsRequired().HasMaxLength(UserReactionConsts.ReactionNameLength);
-                b.Property(x => x.CreationTime);
-
-                b.HasIndex(x => new { x.EntityType, x.EntityId });
-                b.HasIndex(x => new { x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
+                b.HasIndex(x => new {x.TenantId, x.UserName});
+                b.HasIndex(x => new {x.TenantId, x.Email});
             });
+
+            if (GlobalFeatureManager.Instance.IsEnabled<ReactionsFeature>())
+            {
+                builder.Entity<UserReaction>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "UserReactions", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(UserReactionConsts.MaxEntityTypeLength);
+                    b.Property(x => x.EntityId).IsRequired().HasMaxLength(UserReactionConsts.MaxEntityIdLength);
+                    b.Property(x => x.ReactionName).IsRequired().HasMaxLength(UserReactionConsts.MaxReactionNameLength);
+
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId, x.ReactionName });
+                    b.HasIndex(x => new { x.TenantId, x.CreatorId, x.EntityType, x.EntityId, x.ReactionName });
+                });
+            }
+
+            if (GlobalFeatureManager.Instance.IsEnabled<CommentsFeature>())
+            {
+                builder.Entity<Comment>(b =>
+                {
+                    b.ToTable(options.TablePrefix + "Comments", options.Schema);
+
+                    b.ConfigureByConvention();
+
+                    b.Property(x => x.EntityType).IsRequired().HasMaxLength(CommentConsts.MaxEntityTypeLength);
+                    b.Property(x => x.EntityId).IsRequired().HasMaxLength(CommentConsts.MaxEntityIdLength);
+                    b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength);
+                    b.Property(x => x.RepliedCommentId);
+
+                    b.HasIndex(x => new { x.TenantId, x.EntityType, x.EntityId });
+                    b.HasIndex(x => new { x.TenantId, x.RepliedCommentId });
+                });
+            }
         }
     }
 }

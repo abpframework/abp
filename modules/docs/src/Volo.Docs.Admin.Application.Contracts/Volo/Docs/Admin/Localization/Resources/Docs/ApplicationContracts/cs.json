@@ -31,6 +31,8 @@
     "DisplayName:GitHubRootUrl": "GitHub kořenové URL",
     "DisplayName:GitHubAccessToken": "GitHub přístupový token",
     "DisplayName:GitHubUserAgent": "GitHub user agent",
+    "DisplayName:GithubVersionProviderSource": "GitHub version provider source",
+    "DisplayName:VersionBranchPrefix": "Version branch prefix",
     "DisplayName:All": "Pull všeho",
     "DisplayName:LanguageCode": "Kód jazyka",
     "DisplayName:Version": "Verze",

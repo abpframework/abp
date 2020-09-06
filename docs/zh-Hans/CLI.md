@@ -79,7 +79,7 @@ abp new Acme.BookStore
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项:
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
-    * `--mobile` 或者 `-m`: 指定移动应用程序框架. 默认框架是 `react-native`. 其他选项:
+    * `--mobile` 或者 `-m`: 指定移动应用程序框架. 如果未指定,则不会创建任何移动应用程序,其他选项:
       * `none`: 不包含移动应用程序.
       * `react-native`: React Native.
     * `--database-provider` 或者 `-d`: 指定数据库提供程序.默认是 `ef`.其他选项:

@@ -1,13 +1,19 @@
-﻿using Volo.Abp.Data;
+﻿using MongoDB.Driver;
+using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.MongoDB
 {
     [ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
     public interface ICmsKitMongoDbContext : IAbpMongoDbContext
     {
-        /* Define mongo collections here. Example:
-         * IMongoCollection<Question> Questions { get; }
-         */
+        IMongoCollection<UserReaction> UserReactions { get; }
+
+        IMongoCollection<Comment> Comments { get; }
+
+        IMongoCollection<CmsUser> CmsUsers { get; }
     }
 }

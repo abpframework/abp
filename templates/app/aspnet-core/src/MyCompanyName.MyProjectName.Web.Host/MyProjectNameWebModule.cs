@@ -215,7 +215,10 @@ namespace MyCompanyName.MyProjectName.Web
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+
+            app.UseAbpRequestLocalization();
+
+            if (!env.IsDevelopment())
             {
                 app.UseErrorPage();
             }
@@ -230,7 +233,6 @@ namespace MyCompanyName.MyProjectName.Web
                 app.UseMultiTenancy();
             }
 
-            app.UseAbpRequestLocalization();
             app.UseAuthorization();
 
             app.UseSwagger();
