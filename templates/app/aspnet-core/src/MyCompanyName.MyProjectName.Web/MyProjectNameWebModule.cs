@@ -94,11 +94,11 @@ namespace MyCompanyName.MyProjectName.Web
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "MyProjectName";
+                    options.Audience = "MyProjectName";
                 });
         }
 

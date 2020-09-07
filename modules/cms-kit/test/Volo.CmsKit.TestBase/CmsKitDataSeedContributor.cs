@@ -4,6 +4,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Users;
 using Volo.CmsKit.Comments;
+using Volo.CmsKit.Ratings;
 using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Users;
 
@@ -16,19 +17,22 @@ namespace Volo.CmsKit
         private readonly CmsKitTestData _cmsKitTestData;
         private readonly ICommentRepository _commentRepository;
         private readonly ReactionManager _reactionManager;
+        private readonly IRatingRepository _ratingRepository;
 
         public CmsKitDataSeedContributor(
             IGuidGenerator guidGenerator,
             ICmsUserRepository cmsUserRepository,
             CmsKitTestData cmsKitTestData,
             ICommentRepository commentRepository,
-            ReactionManager reactionManager)
+            ReactionManager reactionManager,
+            IRatingRepository ratingRepository)
         {
             _guidGenerator = guidGenerator;
             _cmsUserRepository = cmsUserRepository;
             _cmsKitTestData = cmsKitTestData;
             _commentRepository = commentRepository;
             _reactionManager = reactionManager;
+            _ratingRepository = ratingRepository;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -38,13 +42,17 @@ namespace Volo.CmsKit
             await SeedCommentsAsync();
 
             await SeedReactionsAsync();
+
+            await SeedRatingsAsync();
         }
 
         private async Task SeedUsersAsync()
         {
-            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1", "user1@volo.com",
+            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User1Id, "user1",
+                "user1@volo.com",
                 "user", "1")));
-            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2", "user2@volo.com",
+            await _cmsUserRepository.InsertAsync(new CmsUser(new UserData(_cmsKitTestData.User2Id, "user2",
+                "user2@volo.com",
                 "user", "2")));
         }
 
@@ -130,6 +138,37 @@ namespace Volo.CmsKit
                 _cmsKitTestData.EntityType1,
                 _cmsKitTestData.EntityId1,
                 StandardReactions.ThumbsUp);
+        }
+
+        private async Task SeedRatingsAsync()
+        {
+            await _ratingRepository.InsertAsync(new Rating(_guidGenerator.Create(),
+                    _cmsKitTestData.EntityType1,
+                    _cmsKitTestData.EntityId1,
+                    4,
+                    _cmsKitTestData.User1Id
+                ));
+            
+            await _ratingRepository.InsertAsync(new Rating(_guidGenerator.Create(),
+                _cmsKitTestData.EntityType1,
+                _cmsKitTestData.EntityId1,
+                5,
+                _cmsKitTestData.User1Id
+            ));
+            
+            await _ratingRepository.InsertAsync(new Rating(_guidGenerator.Create(),
+                _cmsKitTestData.EntityType2,
+                _cmsKitTestData.EntityId2,
+                5,
+                _cmsKitTestData.User2Id
+            ));
+            
+            await _ratingRepository.InsertAsync(new Rating(_guidGenerator.Create(),
+                _cmsKitTestData.EntityType2,
+                _cmsKitTestData.EntityId2,
+                1,
+                _cmsKitTestData.User2Id
+            ));
         }
     }
 }
