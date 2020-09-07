@@ -8,6 +8,15 @@ import { Component, Input, TrackByFunction } from '@angular/core';
 export class RoutesComponent {
   @Input() smallScreen: boolean;
 
+  private _navigating = false;
+  set navigating(value: boolean) {
+    this._navigating = true;
+    setTimeout(() => (this._navigating = false), 0);
+  }
+  get navigating(): boolean {
+    return this._navigating;
+  }
+
   trackByFn: TrackByFunction<TreeNode<ABP.Route>> = (_, item) => item.name;
 
   constructor(public readonly routes: RoutesService) {}
