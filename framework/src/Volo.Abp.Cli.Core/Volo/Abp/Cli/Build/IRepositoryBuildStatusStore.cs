@@ -4,6 +4,6 @@
     {
         GitRepositoryBuildStatus Get(string buildNamePrefix, GitRepository repository);
 
-        void Set(string buildNamePrefix, GitRepositoryBuildStatus status);
+        void Set(string buildNamePrefix, GitRepository repository, GitRepositoryBuildStatus status);
     }
 }

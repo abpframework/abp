@@ -17,7 +17,8 @@ namespace Volo.Abp.Cli.Build
                 Directory.CreateDirectory(BaseBuildStatusStorePath);
             }
 
-            var buildStatusFile = Path.Combine(BaseBuildStatusStorePath, repository.GetUniqueName(buildNamePrefix)) + ".json";
+            var buildStatusFile = Path.Combine(BaseBuildStatusStorePath, repository.GetUniqueName(buildNamePrefix)) +
+                                  ".json";
 
             if (!File.Exists(buildStatusFile))
             {
@@ -29,12 +30,9 @@ namespace Volo.Abp.Cli.Build
             return JsonConvert.DeserializeObject<GitRepositoryBuildStatus>(buildStatusText);
         }
 
-        public void Set(string buildNamePrefix, GitRepositoryBuildStatus status)
+        public void Set(string buildNamePrefix, GitRepository repository, GitRepositoryBuildStatus status)
         {
-            if (!Directory.Exists(BaseBuildStatusStorePath))
-            {
-                Directory.CreateDirectory(BaseBuildStatusStorePath);
-            }
+            var existingRepositoryStatus = Get(buildNamePrefix, repository);
 
             var buildStatusFile = Path.Combine(BaseBuildStatusStorePath, status.GetUniqueName(buildNamePrefix)) + ".json";
             if (File.Exists(buildStatusFile))
@@ -42,10 +40,28 @@ namespace Volo.Abp.Cli.Build
                 FileHelper.DeleteIfExists(buildStatusFile);
             }
 
+            existingRepositoryStatus.MergeWith(status);
+
             using (var file = File.CreateText(buildStatusFile))
             {
-                new JsonSerializer {Formatting = Formatting.Indented}.Serialize(file, status);
+                new JsonSerializer {Formatting = Formatting.Indented}.Serialize(file, existingRepositoryStatus);
             }
         }
+
+        // private void UpdateBuildStatus(
+        //     GitRepositoryBuildStatus existingBuildStatus,
+        //     GitRepositoryBuildStatus newBuildStatus)
+        // {
+        //
+        //     foreach (var succeedProject in newBuildStatus.SucceedProjects)
+        //     {
+        //         existingBuildStatus.UpdateProjectStatus(succeedProject);
+        //
+        //         foreach (var dependingRepositoryBuildStatus in newBuildStatus.DependingRepositories)
+        //         {
+        //             UpdateBuildStatus(existingBuildStatus, dependingRepositoryBuildStatus);
+        //         }
+        //     }
+        // }
     }
 }

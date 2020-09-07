@@ -174,6 +174,15 @@ namespace Volo.Abp.Cli.Build
 
             foreach (var file in allCsProjFiles)
             {
+                if (status == null)
+                {
+                    changedFiles.Add(
+                        new DotNetProjectInfo(repository.Name, Path.Combine(repository.RootPath, file))
+                    );
+                    
+                    continue;
+                }
+                
                 if (status.GetSelfOrChild(repository.Name).SucceedProjects.Any(e=> e.CsProjPath == file))
                 {
                     continue;

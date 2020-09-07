@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Volo.Abp.Cli.Build
 {
@@ -58,6 +59,48 @@ namespace Volo.Abp.Cli.Build
             return null;
         }
 
+        public string GetUniqueName(string uniqueName)
+        {
+            var name = RepositoryName + "_" + BranchName;
+            foreach (var dependingRepository in DependingRepositories)
+            {
+                AddToUniqueName(dependingRepository, name);
+            }
+
+            return (uniqueName.IsNullOrEmpty() ? "" : uniqueName + "_") + name.ToMd5();
+        }
+
+        public void AddOrUpdateProjectStatus(DotNetProjectBuildStatus status)
+        {
+            var existingProjectStatus = SucceedProjects.FirstOrDefault(p => p.CsProjPath == status.CsProjPath);
+            if (existingProjectStatus != null)
+            {
+                existingProjectStatus.CommitId = status.CommitId;
+            }
+            else
+            {
+                SucceedProjects.Add(status);
+            }
+
+            foreach (var dependingRepository in DependingRepositories)
+            {
+                dependingRepository.AddOrUpdateProjectStatus(status);
+            }
+        }
+        
+        public void MergeWith(GitRepositoryBuildStatus newBuildStatus)
+        {
+            foreach (var succeedProject in newBuildStatus.SucceedProjects)
+            {
+                AddOrUpdateProjectStatus(succeedProject);
+            
+                foreach (var dependingRepositoryBuildStatus in newBuildStatus.DependingRepositories)
+                {
+                    MergeWith(dependingRepositoryBuildStatus);
+                }
+            }
+        }
+        
         private GitRepositoryBuildStatus GetChildInternal(GitRepositoryBuildStatus repositoryBuildStatus,
             string repositoryName)
         {
@@ -73,18 +116,7 @@ namespace Volo.Abp.Cli.Build
 
             return null;
         }
-
-        public string GetUniqueName(string uniqueName)
-        {
-            var name = RepositoryName + "_" + BranchName;
-            foreach (var dependingRepository in DependingRepositories)
-            {
-                AddToUniqueName(dependingRepository, name);
-            }
-
-            return (uniqueName.IsNullOrEmpty() ? "" : uniqueName + "_") + name.ToMd5();
-        }
-
+        
         private void AddToUniqueName(GitRepositoryBuildStatus gitRepository, string name)
         {
             name += "_" + gitRepository.RepositoryName + "_" + gitRepository.BranchName;
