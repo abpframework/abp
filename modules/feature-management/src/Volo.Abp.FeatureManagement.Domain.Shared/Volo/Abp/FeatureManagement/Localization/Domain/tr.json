@@ -3,7 +3,7 @@
   "texts": {
     "Features": "Özellikler",
     "NoFeatureFoundMessage": "Hiç özellik yok.",
-    "FeatureNotAvailable": "özelliği mevcut değil.",
+    "FeatureNotAvailable": "Özellik bulunamadı.",
     "Permission:FeatureManagement": "Özellik yönetimi",
     "Permission:FeatureManagement.ManageHostFeatures": "Yönetilen Ana Bilgisayar özellikleri"
   }
