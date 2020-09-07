@@ -23,7 +23,7 @@ namespace Volo.Abp.Authorization
                                 new Claim(AbpClaimTypes.Role, "MyRole")
                             };
 
-            var identity = new ClaimsIdentity(claims);
+            var identity = new ClaimsIdentity(claims,null, AbpClaimTypes.UserName, AbpClaimTypes.Role);
             var claimsPrincipal = new ClaimsPrincipal(identity);
             var principalAccessor = Substitute.For<ICurrentPrincipalAccessor>();
             principalAccessor.Principal.Returns(ci => claimsPrincipal);
