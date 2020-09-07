@@ -34,34 +34,32 @@ namespace Volo.Abp.Cli.Build
         {
             var existingRepositoryStatus = Get(buildNamePrefix, repository);
 
-            var buildStatusFile = Path.Combine(BaseBuildStatusStorePath, status.GetUniqueName(buildNamePrefix)) + ".json";
+            var buildStatusFile = Path.Combine(
+                BaseBuildStatusStorePath,
+                status.GetUniqueName(buildNamePrefix)
+            ) + ".json";
+            
             if (File.Exists(buildStatusFile))
             {
                 FileHelper.DeleteIfExists(buildStatusFile);
             }
 
-            existingRepositoryStatus.MergeWith(status);
-
-            using (var file = File.CreateText(buildStatusFile))
+            if (existingRepositoryStatus != null)
             {
-                new JsonSerializer {Formatting = Formatting.Indented}.Serialize(file, existingRepositoryStatus);
+                existingRepositoryStatus.MergeWith(status);
+
+                using (var file = File.CreateText(buildStatusFile))
+                {
+                    new JsonSerializer {Formatting = Formatting.Indented}.Serialize(file, existingRepositoryStatus);
+                }
+            }
+            else
+            {
+                using (var file = File.CreateText(buildStatusFile))
+                {
+                    new JsonSerializer {Formatting = Formatting.Indented}.Serialize(file, status);
+                }
             }
         }
-
-        // private void UpdateBuildStatus(
-        //     GitRepositoryBuildStatus existingBuildStatus,
-        //     GitRepositoryBuildStatus newBuildStatus)
-        // {
-        //
-        //     foreach (var succeedProject in newBuildStatus.SucceedProjects)
-        //     {
-        //         existingBuildStatus.UpdateProjectStatus(succeedProject);
-        //
-        //         foreach (var dependingRepositoryBuildStatus in newBuildStatus.DependingRepositories)
-        //         {
-        //             UpdateBuildStatus(existingBuildStatus, dependingRepositoryBuildStatus);
-        //         }
-        //     }
-        // }
     }
 }

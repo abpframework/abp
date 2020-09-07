@@ -48,7 +48,7 @@ namespace Volo.Abp.Cli.Build
 
             return GetChild(repositoryName);
         }
-        
+
         public GitRepositoryBuildStatus GetChild(string repositoryName)
         {
             foreach (var dependingRepository in DependingRepositories)
@@ -81,26 +81,26 @@ namespace Volo.Abp.Cli.Build
             {
                 SucceedProjects.Add(status);
             }
-
-            foreach (var dependingRepository in DependingRepositories)
-            {
-                dependingRepository.AddOrUpdateProjectStatus(status);
-            }
         }
-        
+
         public void MergeWith(GitRepositoryBuildStatus newBuildStatus)
         {
             foreach (var succeedProject in newBuildStatus.SucceedProjects)
             {
                 AddOrUpdateProjectStatus(succeedProject);
-            
-                foreach (var dependingRepositoryBuildStatus in newBuildStatus.DependingRepositories)
-                {
-                    MergeWith(dependingRepositoryBuildStatus);
-                }
+            }
+
+            foreach (var dependingRepositoryBuildStatus in newBuildStatus.DependingRepositories)
+            {
+                var existingDependingRepositoryBuildStatus = GetChild(dependingRepositoryBuildStatus.RepositoryName);
+                var newDependingRepositoryBuildStatus = newBuildStatus.GetChild(
+                    dependingRepositoryBuildStatus.RepositoryName
+                );
+
+                existingDependingRepositoryBuildStatus.MergeWith(newDependingRepositoryBuildStatus);
             }
         }
-        
+
         private GitRepositoryBuildStatus GetChildInternal(GitRepositoryBuildStatus repositoryBuildStatus,
             string repositoryName)
         {
@@ -116,7 +116,7 @@ namespace Volo.Abp.Cli.Build
 
             return null;
         }
-        
+
         private void AddToUniqueName(GitRepositoryBuildStatus gitRepository, string name)
         {
             name += "_" + gitRepository.RepositoryName + "_" + gitRepository.BranchName;
