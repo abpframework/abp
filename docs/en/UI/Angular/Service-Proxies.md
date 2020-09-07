@@ -1,5 +1,7 @@
 ## Service Proxies
 
+> THIS DOCUMENT IS OUTDATED. IT IS BEING UPDATED. MEANWHILE, YOU CAN [SEE THIS ARTICLE](https://github.com/abpframework/abp/blob/dev/docs/en/Blog-Posts/2020-09-07%20Angular-Service-Proxies/POST.md) TO LEARN HOW TO USE THE ABP ANGULAR SERVICE PROXIES.
+
 It is common to call a REST endpoint in the server from our Angular applications. In this case, we generally create **services** (those have methods for each service method on the server side) and **model objects** (matches to [DTOs](../../Data-Transfer-Objects) in the server side).
 
 In addition to manually creating such server-interacting services, we could use tools like [NSWAG](https://github.com/RicoSuter/NSwag) to generate service proxies for us. But NSWAG has the following problems we've experienced:
