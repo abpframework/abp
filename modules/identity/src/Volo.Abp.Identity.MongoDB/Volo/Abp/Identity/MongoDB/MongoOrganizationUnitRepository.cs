@@ -107,6 +107,22 @@ namespace Volo.Abp.Identity.MongoDB
                 .CountAsync(cancellationToken);
         }
 
+        public async Task<List<IdentityRole>> GetUnaddedRolesAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            string sorting = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+            return await DbContext.Roles.AsQueryable()
+                .Where(r => !roleIds.Contains(r.Id))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .As<IMongoQueryable<IdentityRole>>()
+                .ToListAsync(cancellationToken);
+        }
+
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
@@ -133,6 +149,27 @@ namespace Volo.Abp.Identity.MongoDB
             var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<IdentityUser>> GetUnaddedUsersAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            string sorting = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbContext.Users.AsQueryable()
+                .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                )
+                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .As<IMongoQueryable<IdentityUser>>()
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual Task RemoveAllRolesAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
