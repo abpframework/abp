@@ -12,10 +12,13 @@ jobs:
 
       - uses: actions/cache@v2
         with:
-          path: |
-            npm/ng-packs/node_modules
-            templates/app/angular/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          path: 'npm/ng-packs/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('npm/ng-packs/yarn.lock') }}
+
+      - uses: actions/cache@v2
+        with:
+          path: 'templates/app/angular/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('templates/app/angular/yarn.lock') }}
 
       - name: Install packages
         run: yarn install
