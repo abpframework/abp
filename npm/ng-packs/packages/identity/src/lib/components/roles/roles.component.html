@@ -63,10 +63,17 @@
           </div>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column
-        [name]="'AbpIdentity::RoleName' | abpLocalization"
-        prop="name"
-      ></ngx-datatable-column>
+      <ngx-datatable-column [name]="'AbpIdentity::RoleName' | abpLocalization" prop="name">
+        <ng-template let-row="row" ngx-datatable-cell-template>
+          {{ row.name }}
+          <span *ngIf="row.isDefault" class="badge badge-pill badge-success ml-1">{{
+            'AbpIdentity::DisplayName:IsDefault' | abpLocalization
+          }}</span>
+          <span *ngIf="row.isPublic" class="badge badge-pill badge-info ml-1">{{
+            'AbpIdentity::DisplayName:IsPublic' | abpLocalization
+          }}</span>
+        </ng-template>
+      </ngx-datatable-column>
     </ngx-datatable>
   </div>
 </div>
