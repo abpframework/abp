@@ -222,7 +222,6 @@ namespace FeaturesDemo
         }
     }
 }
-
 ```
 
 * `FeaturesDemoResource` is the project name in this example code. See the [localization document](Localization.md) for details about the localization system.
@@ -257,7 +256,51 @@ See the *Feature Management* section below to learn more about managing the feat
 
 A feature may have child features. This is especially useful if you want to create a feature that is selectable only if another feature was enabled.
 
-TODO
+**Example: Defining child features**
+
+```csharp
+using FeaturesDemo.Localization;
+using Volo.Abp.Features;
+using Volo.Abp.Localization;
+using Volo.Abp.Validation.StringValues;
+
+namespace FeaturesDemo
+{
+    public class MyFeatureDefinitionProvider : FeatureDefinitionProvider
+    {
+        public override void Define(IFeatureDefinitionContext context)
+        {
+            var myGroup = context.AddGroup("MyApp");
+
+            var reportingFeature = myGroup.AddFeature(
+                "MyApp.Reporting",
+                defaultValue: "false",
+                displayName: LocalizableString
+                                 .Create<FeaturesDemoResource>("Reporting"),
+                valueType: new ToggleStringValueType()
+            );
+
+            reportingFeature.CreateChild(
+                "MyApp.PdfReporting",
+                defaultValue: "false",
+                displayName: LocalizableString
+                                 .Create<FeaturesDemoResource>("PdfReporting"),
+                valueType: new ToggleStringValueType()
+            );
+
+            reportingFeature.CreateChild(
+                "MyApp.ExcelReporting",
+                defaultValue: "false",
+                displayName: LocalizableString
+                                 .Create<FeaturesDemoResource>("ExcelReporting"),
+                valueType: new ToggleStringValueType()
+            );
+        }
+    }
+}
+```
+
+The example above defines a *Reporting* feature with two children: *PDF Reporting* and *Excel Reporting*.
 
 ### Changing Features Definitions of a Depended Module
 
