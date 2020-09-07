@@ -32,14 +32,21 @@ namespace Volo.Abp.Identity
 
         public virtual string LocalizeMessage(LocalizationContext context)
         {
-            var values = IdentityResult.GetValuesFromErrorMessage(context.LocalizerFactory.Create<IdentityResource>());
+            var localizer = context.LocalizerFactory.Create<IdentityResource>();
+
+            SetData(localizer);
+
+            return IdentityResult.LocalizeErrors(localizer);
+        }
+
+        protected virtual void SetData(IStringLocalizer localizer)
+        {
+            var values = IdentityResult.GetValuesFromErrorMessage(localizer);
 
             for (var index = 0; index < values.Length; index++)
             {
                 Data[index.ToString()] = values[index];
             }
-
-            return IdentityResult.LocalizeErrors(context.LocalizerFactory.Create<IdentityResource>());
         }
     }
 }

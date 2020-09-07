@@ -29,7 +29,7 @@ namespace Volo.Abp.Http.Client
         {
             Error = error;
 
-            if (error?.Data != null)
+            if (error.Data != null)
             {
                 foreach (var dataKey in error.Data.Keys)
                 {
