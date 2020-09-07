@@ -306,7 +306,7 @@ The example above defines a *Reporting* feature with two children: *PDF Reportin
 
 TODO
 
-### Check a Permission in the Client Side
+## Check a Permission in the Client Side
 
 TODO
 
@@ -324,4 +324,4 @@ TODO
 
 ### Feature Store
 
-TODO
+`IFeatureStore` is the only interface that needs to be implemented to read the value of features from a persistence source, generally a database system. The Feature Management module implements it and pre-installed in the application startup template. See the [feature management module documentation](https://docs.abp.io/en/abp/latest/Modules/Feature-Management) for more information
