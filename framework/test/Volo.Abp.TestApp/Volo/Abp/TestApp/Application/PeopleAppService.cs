@@ -30,13 +30,20 @@ namespace Volo.Abp.TestApp.Application
             );
         }
 
-        public Task<List<string>> GetParams(IEnumerable<Guid> ids, string[] names)
+        public Task<List<string>> GetEnumerableParams(IEnumerable<Guid> ids, string[] names)
         {
             var @params = ids.Select(id => id.ToString("N")).ToList();
             @params.AddRange(names);
             return Task.FromResult(@params.ToList());
         }
 
+ 
+        public Task<List<string>> GetDictionaryParams(Dictionary<string, string> filters)
+        {
+            var @params = filters.Select(kv => $"{kv.Key}:{kv.Value}");
+            return Task.FromResult(@params.ToList());
+        }
+        
         public async Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto)
         {
             var person = await GetEntityByIdAsync(id);
@@ -64,5 +71,7 @@ namespace Volo.Abp.TestApp.Application
         {
             return Task.FromResult(input);
         }
+        
+        // public Task<string> GetParams
     }
 }

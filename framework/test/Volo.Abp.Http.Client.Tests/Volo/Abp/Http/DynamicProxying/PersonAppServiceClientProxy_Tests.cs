@@ -47,12 +47,12 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [Fact]
-        public async Task GetParams()
+        public async Task GetEnumerableParams()
         {
             var id1 = Guid.NewGuid();
             var id2 = Guid.NewGuid();
 
-            var @params = await _peopleAppService.GetParams(new List<Guid>
+            var @params = await _peopleAppService.GetEnumerableParams(new List<Guid>
             {
                 id1,
                 id2
@@ -64,6 +64,24 @@ namespace Volo.Abp.Http.DynamicProxying
             @params.ShouldContain("name2");
         }
 
+
+        [Fact]
+        public async Task GetDictionaryParams()
+        {
+            var id = Guid.NewGuid();
+
+            var @params = await _peopleAppService.GetDictionaryParams(new Dictionary<string, string>
+            {
+                {"Id", id.ToString()},
+                {"Name", "John"},
+                {"Age", 36.ToString()},
+            });
+
+            @params.ShouldContain($"Id:{id}");
+            @params.ShouldContain("Name:John");
+            @params.ShouldContain("Age:36");
+        }
+        
         [Fact]
         public async Task Delete()
         {

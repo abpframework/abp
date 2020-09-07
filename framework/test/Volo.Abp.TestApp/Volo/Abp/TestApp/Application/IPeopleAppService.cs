@@ -11,8 +11,10 @@ namespace Volo.Abp.TestApp.Application
     {
         Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter);
 
-        Task<List<string>> GetParams(IEnumerable<Guid> ids, string[] names);
+        Task<List<string>> GetEnumerableParams(IEnumerable<Guid> ids, string[] names);
 
+        Task<List<string>> GetDictionaryParams(Dictionary<string, string> filters);
+        
         Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto);
 
         Task RemovePhone(Guid id, string number);

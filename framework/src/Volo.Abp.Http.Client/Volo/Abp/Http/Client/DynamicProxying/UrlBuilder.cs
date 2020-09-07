@@ -101,22 +101,21 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             urlBuilder.Append(isFirstParam ? "?" : "&");
 
-            if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
-            {
-                var index = 0;
-                foreach (var item in (IEnumerable) value)
-                {
-                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
-                }
-                //remove & at the end of the urlBuilder.
-                urlBuilder.Remove(urlBuilder.Length - 1, 1);
-            }
-
             if (value is IDictionary dict && value.GetType().IsGenericType && value.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>)))
             {
                 foreach (DictionaryEntry kv in dict)
                 {
                     urlBuilder.Append(name + "." + kv.Key + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(kv.Value)) + "&");
+                }
+                //remove & at the end of the urlBuilder.
+                urlBuilder.Remove(urlBuilder.Length - 1, 1);
+            }
+            else if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
+            {
+                var index = 0;
+                foreach (var item in (IEnumerable) value)
+                {
+                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
                 }
                 //remove & at the end of the urlBuilder.
                 urlBuilder.Remove(urlBuilder.Length - 1, 1);
