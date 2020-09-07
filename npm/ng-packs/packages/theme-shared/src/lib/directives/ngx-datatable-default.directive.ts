@@ -21,7 +21,7 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
     return `ngx-datatable ${this.class}`;
   }
 
-  constructor(private table: DatatableComponent, @Inject(DOCUMENT) private document: Document) {
+  constructor(private table: DatatableComponent, @Inject(DOCUMENT) private document: MockDocument) {
     this.table.columnMode = ColumnMode.force;
     this.table.footerHeight = 50;
     this.table.headerHeight = 50;
@@ -66,4 +66,19 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+}
+
+// fix: https://github.com/angular/angular/issues/20351
+interface MockDocument {
+  body: MockBody;
+  documentElement: MockDocumentElement;
+}
+
+interface MockBody {
+  offsetWidth: number;
+}
+
+interface MockDocumentElement {
+  clientHeight: number;
+  scrollHeight: number;
 }
