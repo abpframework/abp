@@ -4,7 +4,7 @@ ABP Feature system is used to **enable**, **disable** or **change the behavior**
 
 The runtime value for a feature is generally a `boolean` value, like `true` (enabled) or `false` (disabled). However, you can get/set **any kind** of value for feature.
 
-Feature system was originally designed to control the tenant features in a **multi-tenant** application. However, it is **extensible** and capable of determining the features by any condition.
+Feature system was originally designed to control the tenant features in a **[multi-tenant](Multi-Tenancy.md)** application. However, it is **extensible** and capable of determining the features by any condition.
 
 > The feature system is implemented with the [Volo.Abp.Features](https://www.nuget.org/packages/Volo.Abp.Features) NuGet package. Most of the times you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Features) since it comes pre-installed with the [application startup template](Startup-Templates/Application.md).
 
@@ -141,6 +141,129 @@ There are some useful extension methods for the `IFeatureChecker` interface;
 * `CheckEnabledAsync(string name)`: Checks if given feature is enabled. Throws an `AbpAuthorizationException` if the feature was not `true` (enabled).
 
 ## Defining the Features
+
+A feature should be defined to be able to check it.
+
+### FeatureDefinitionProvider
+
+Create a class inheriting the `FeatureDefinitionProvider` to define permissions.
+
+**Example: Defining permissions**
+
+```csharp
+using Volo.Abp.Features;
+
+namespace FeaturesDemo
+{
+    public class MyFeatureDefinitionProvider : FeatureDefinitionProvider
+    {
+        public override void Define(IFeatureDefinitionContext context)
+        {
+            var myGroup = context.AddGroup("MyApp");
+
+            myGroup.AddFeature("MyApp.PdfReporting", defaultValue: "false");
+            myGroup.AddFeature("MyApp.MaxProductCount", defaultValue: "10");
+        }
+    }
+}
+```
+
+> ABP automatically discovers this class and registers the features. No additional configuration required.
+
+* In the `Define` method, you first need to add a **feature group** for your application/module or get an existing group then add **features** to this group.
+* First feature, named `MyApp.PdfReporting`, is a `boolean` feature with `false` as the default value.
+* Second feature, named `MyApp.MaxProductCount`, is a numeric feature with `10` as the default value.
+
+### Other Feature Properties
+
+While these minimal definitions are enough to make the feature system working, you can specify the **optional properties** for the features;
+
+* `DisplayName`: A localizable string that will be used to show the feature name on the user interface.
+* `Description`: A longer localizable text to describe the feature.
+* `ValueType`: Type of the feature value. Can be a class implementing the `IStringValueType`. Built-in types:
+  * `ToggleStringValueType`: Used to define `true`/`false`, `on`/`off`, `enabled`/`disabled` style features. A checkbox is shown on the UI.
+  * `FreeTextStringValueType`: Used to define free text values. A textbox is shown on the UI.
+  * `SelectionStringValueType`: Used to force the value to be selected from a list. A dropdown list is shown on the UI.
+* `IsVisibleToClients` (default: `true`): Set false to hide the value of this feature from clients (browsers). Sharing the value with the clients helps them to conditionally show/hide/change the UI parts based on the feature value.
+* `Properties`: A dictionary to set/get arbitrary key-value pairs related to this feature. This can be a point for customization.
+
+So, based on these descriptions, it would be better to define these features as shown below:
+
+```csharp
+using FeaturesDemo.Localization;
+using Volo.Abp.Features;
+using Volo.Abp.Localization;
+using Volo.Abp.Validation.StringValues;
+
+namespace FeaturesDemo
+{
+    public class MyFeatureDefinitionProvider : FeatureDefinitionProvider
+    {
+        public override void Define(IFeatureDefinitionContext context)
+        {
+            var myGroup = context.AddGroup("MyApp");
+
+            myGroup.AddFeature(
+                "MyApp.PdfReporting",
+                defaultValue: "false",
+                displayName: LocalizableString
+                                 .Create<FeaturesDemoResource>("PdfReporting"),
+                valueType: new ToggleStringValueType()
+            );
+
+            myGroup.AddFeature(
+                "MyApp.MaxProductCount",
+                defaultValue: "10",
+                displayName: LocalizableString
+                                 .Create<FeaturesDemoResource>("MaxProductCount"),
+                valueType: new FreeTextStringValueType(
+                               new NumericValueValidator(0, 1000000))
+            );
+        }
+    }
+}
+
+```
+
+* `FeaturesDemoResource` is the project name in this example code. See the [localization document](Localization.md) for details about the localization system.
+* First feature is set to `ToggleStringValueType`, while the second one is set to `FreeTextStringValueType` with a numeric validator that allows to the values from `0` to `1,000,000`.
+
+Remember to define the localization the keys in your localization file:
+
+````json
+"PdfReporting": "PDF Reporting",
+"MaxProductCount": "Maximum number of products"
+````
+
+See the [localization document](Localization.md) for details about the localization system.
+
+### Feature Management Modal
+
+The [application startup template](Startup-Templates/Application.md) comes with the [tenant management](Modules/Tenant-Management.md) and the [feature management](Modules/Feature-Management.md) modules pre-installed.
+
+Whenever you define a new feature, it will be available on the **feature management modal**. To open this modal, navigate to the **tenant management page** and select the `Features` action for a tenant (create a new tenant if there is no tenant yet):
+
+![features-action](images/features-action.png)
+
+This action opens a modal to manage the feature values for the selected tenant:
+
+![features-modal](images/features-modal.png)
+
+So, you can enable, disable and set values for a tenant. These values will be used whenever a user of this tenant uses the application.
+
+See the *Feature Management* section below to learn more about managing the features.
+
+### Child Features
+
+A feature may have child features. This is especially useful if you want to create a feature that is selectable only if another feature was enabled.
+
+TODO
+
+### Changing Features Definitions of a Depended Module
+
+TODO
+
+### Check a Permission in the Client Side
 
 TODO
 
