@@ -11,10 +11,14 @@ namespace Volo.Abp.Cli.Build
     public class DefaultChangedProjectFinder : IChangedProjectFinder, ITransientDependency
     {
         private readonly IRepositoryBuildStatusStore _repositoryBuildStatusStore;
-
-        public DefaultChangedProjectFinder(IRepositoryBuildStatusStore repositoryBuildStatusStore)
+        private readonly IGitRepositoryHelper _gitRepositoryHelper;
+        
+        public DefaultChangedProjectFinder(
+            IRepositoryBuildStatusStore repositoryBuildStatusStore,
+            IGitRepositoryHelper gitRepositoryHelper)
         {
             _repositoryBuildStatusStore = repositoryBuildStatusStore;
+            _gitRepositoryHelper = gitRepositoryHelper;
         }
 
         public List<DotNetProjectInfo> Find(DotNetProjectBuildConfig buildConfig)
@@ -23,7 +27,7 @@ namespace Volo.Abp.Cli.Build
             {
                 return FindByRepository(buildConfig);
             }
-
+        
             return FindBySlnFile(buildConfig.GitRepository, buildConfig.SlFilePath);
         }
 
@@ -146,7 +150,7 @@ namespace Volo.Abp.Cli.Build
         }
 
         private void AddAllCsProjFiles(
-            GitRepository repository, 
+            GitRepository repository,
             List<DotNetProjectInfo> changedFiles,
             GitRepositoryBuildStatus status)
         {
@@ -165,12 +169,7 @@ namespace Volo.Abp.Cli.Build
             }
 
             // Filter already built files.
-            // TODO: create a class for repository extensions like getting last commitId
-            var lastCommitId = string.Empty;
-            using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
-            {
-                lastCommitId = repo.Head.Tip.Id.ToString();
-            }
+            var lastCommitId = _gitRepositoryHelper.GetLastCommitId(repository);
 
             foreach (var file in allCsProjFiles)
             {
@@ -179,21 +178,21 @@ namespace Volo.Abp.Cli.Build
                     changedFiles.Add(
                         new DotNetProjectInfo(repository.Name, Path.Combine(repository.RootPath, file))
                     );
-                    
+
                     continue;
                 }
-                
-                if (status.GetSelfOrChild(repository.Name).SucceedProjects.Any(e=> e.CsProjPath == file))
+
+                if (status.GetSelfOrChild(repository.Name).SucceedProjects.Any(e => e.CsProjPath == file && e.CommitId == lastCommitId))
                 {
                     continue;
                 }
-                
+
                 changedFiles.Add(
                     new DotNetProjectInfo(repository.Name, Path.Combine(repository.RootPath, file))
                 );
             }
         }
-
+        
         private void AddChangedCsProjFiles(
             GitRepository repository,
             List<DotNetProjectInfo> changedFiles,

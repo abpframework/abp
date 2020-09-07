@@ -5,7 +5,7 @@ namespace Volo.Abp.Cli.Build
     public interface IBuildStatusGenerator
     {
         GitRepositoryBuildStatus Generate(
-            GitRepository gitRepository,
+            DotNetProjectBuildConfig buildConfig,
             List<DotNetProjectInfo> changedProjects,
             List<string> buildSucceededProjects
         );

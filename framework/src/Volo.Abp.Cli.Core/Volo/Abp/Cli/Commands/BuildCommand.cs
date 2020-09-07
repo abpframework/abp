@@ -75,7 +75,7 @@ namespace Volo.Abp.Cli.Commands
             );
             
             var buildStatus = BuildStatusGenerator.Generate(
-                buildConfig.GitRepository,
+                buildConfig,
                 changedProjectFiles,
                 buildSucceededProjects
             );
