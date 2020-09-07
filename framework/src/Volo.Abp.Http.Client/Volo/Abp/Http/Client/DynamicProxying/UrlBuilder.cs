@@ -111,6 +111,16 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 //remove & at the end of the urlBuilder.
                 urlBuilder.Remove(urlBuilder.Length - 1, 1);
             }
+
+            if (value is IDictionary dict && value.GetType().IsGenericType && value.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>)))
+            {
+                foreach (DictionaryEntry kv in dict)
+                {
+                    urlBuilder.Append(name + "." + kv.Key + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(kv.Value)) + "&");
+                }
+                //remove & at the end of the urlBuilder.
+                urlBuilder.Remove(urlBuilder.Length - 1, 1);
+            }
             else
             {
                 urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
