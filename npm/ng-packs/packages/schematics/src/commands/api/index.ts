@@ -19,10 +19,10 @@ import {
   createImportRefToEnumMapper,
   createProxyConfigReader,
   createProxyConfigWriterCreator,
+  createRootNamespaceGetter,
   EnumGeneratorParams,
   generateProxyConfigJson,
   getEnumNamesFromImports,
-  getRootNamespace,
   interpolate,
   ModelGeneratorParams,
   removeDefaultPlaceholders,
@@ -37,9 +37,10 @@ export default function(schema: GenerateProxySchema) {
 
   return chain([
     async (tree: Tree, _context: SchematicContext) => {
-      const source = await resolveProject(tree, params.source!);
+      const getRootNamespace = createRootNamespaceGetter(params);
+      const solution = await getRootNamespace(tree);
+
       const target = await resolveProject(tree, params.target!);
-      const solution = getRootNamespace(tree, source, moduleName);
       const targetPath = buildDefaultPath(target.definition);
       const readProxyConfig = createProxyConfigReader(targetPath);
       const createProxyConfigWriter = createProxyConfigWriterCreator(targetPath);
