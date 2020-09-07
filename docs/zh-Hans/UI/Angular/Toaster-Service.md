@@ -24,7 +24,7 @@ class DemoComponent {
 ### 如何显示一个Toast Overlay
 
 ```js
-this.toast.success('Message', 'Title');
+this.toaster.success('Message', 'Title');
 ```
 
 - `ToasterService` 方法接收三个参数,分别是 `message`, `title`, 和 `options`.
@@ -70,9 +70,9 @@ const options: Partial<Toaster.ToastOptions> = {
 已打开的toast overlay可以通过手动调用 `remove` 方法传递指定的 toast `id`删除.
 
 ```js
-const toastId = this.toast.success('Message', 'Title')
+const toastId = this.toaster.success('Message', 'Title')
 
-this.toast.remove(toastId);
+this.toaster.remove(toastId);
 ```
 
 ### 如何删除所有的Toasts
@@ -80,7 +80,7 @@ this.toast.remove(toastId);
 可以手动调用 `clear` 方法删除所有的已打开的toasts.
 
 ```js
-this.toast.clear();
+this.toaster.clear();
 ```
 
 ## API
