@@ -54,7 +54,7 @@ namespace Volo.Abp.Identity
         {
             if (role.IsStatic && role.Name != name)
             {
-                throw new BusinessException("Volo.Abp.Identity:010005");
+                throw new BusinessException(IdentityErrorCodes.StaticRoleRenaming);
             }
 
             return await base.SetRoleNameAsync(role, name);
@@ -64,7 +64,7 @@ namespace Volo.Abp.Identity
         {
             if (role.IsStatic)
             {
-                throw new BusinessException("Volo.Abp.Identity:010006");
+                throw new BusinessException(IdentityErrorCodes.StaticRoleDeletion);
             }
 
             return await base.DeleteAsync(role);

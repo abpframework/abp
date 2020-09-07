@@ -131,7 +131,7 @@ namespace Volo.Abp.Identity
 
             if (siblings.Any(ou => ou.DisplayName == organizationUnit.DisplayName))
             {
-                throw new BusinessException("Volo.Abp.Identity:010004")
+                throw new BusinessException(IdentityErrorCodes.DuplicateOrganizationUnitDisplayName)
                     .WithData("0", organizationUnit.DisplayName);
             }
         }
