@@ -71,7 +71,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             output.PostContent.AppendHtml($"<a class=\"nav-link active\" id=\"tag-helper-tab-{tagHelperCodeBlockId}\" data-toggle=\"pill\" href=\"#tag-helper-{tagHelperCodeBlockId}\" role=\"tab\" aria-controls=\"tag-helper-{tagHelperCodeBlockId}\" aria-selected=\"true\">Abp Tag Helper</a>");
             output.PostContent.AppendHtml("</li>");
             output.PostContent.AppendHtml("<li class=\"nav-item\">");
-            output.PostContent.AppendHtml($"<a class=\"nav-link\" id=\"bootstrap-tab-{bootstrapCodeBlockId}\" data-toggle=\"pill\" href=\"#bootstrap-{bootstrapCodeBlockId}\" role=\"tab\" aria-controls=\"bootstrap-{tagHelperCodeBlockId}\" aria-selected=\"true\">Bootstrap Render</a>");
+            output.PostContent.AppendHtml($"<a class=\"nav-link\" id=\"bootstrap-tab-{bootstrapCodeBlockId}\" data-toggle=\"pill\" href=\"#bootstrap-{bootstrapCodeBlockId}\" role=\"tab\" aria-controls=\"bootstrap-{tagHelperCodeBlockId}\" aria-selected=\"true\">Bootstrap</a>");
             output.PostContent.AppendHtml("</li>");
             output.PostContent.AppendHtml("</ul>");
             output.PostContent.AppendHtml($"<div class=\"tab-content\" id=\"code-block-tabContent-{codeBlockTabId}\">");
