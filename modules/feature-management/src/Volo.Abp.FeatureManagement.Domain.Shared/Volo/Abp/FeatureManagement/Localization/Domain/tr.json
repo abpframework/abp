@@ -5,6 +5,6 @@
     "NoFeatureFoundMessage": "Hiç özellik yok.",
     "FeatureNotAvailable": "Özellik bulunamadı.",
     "Permission:FeatureManagement": "Özellik yönetimi",
-    "Permission:FeatureManagement.ManageHostFeatures": "Yönetilen Ana Bilgisayar özellikleri"
+    "Permission:FeatureManagement.ManageHostFeatures": "Host özelliklerini düzenle"
   }
 }
