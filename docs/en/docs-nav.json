@@ -198,6 +198,10 @@
             {
               "text": "RabbitMQ Integration",
               "path": "Distributed-Event-Bus-RabbitMQ-Integration.md"
+            },
+            {
+              "text": "Kafka Integration",
+              "path": "Distributed-Event-Bus-Kafka-Integration.md"
             }
           ]
         }
@@ -219,11 +223,11 @@
           "items": [
             {
               "text": "Email Sending System",
-              "path": "Emailing.md",
+              "path": "Emailing.md"
             },
             {
               "text": "MailKit Integration",
-              "path": "MailKit.md",
+              "path": "MailKit.md"
             }
           ]
         },
@@ -422,6 +426,10 @@
             {
               "text": "Migration Guide v2.x to v3",
               "path": "UI/Angular/Migration-Guide-v3.md"
+            },
+            {
+              "text": "Environment",
+              "path": "UI/Angular/Environment.md"
             },
             {
               "text": "Service Proxies",
@@ -675,6 +683,10 @@
     {
       "text": "Road Map",
       "path": "Road-Map.md"
+    },
+    {
+      "text": "Upgrading",
+      "path": "Upgrading.md"
     },
     {
       "text": "Contribution Guide",

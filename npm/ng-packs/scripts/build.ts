@@ -38,7 +38,7 @@ import fse from 'fs-extra';
         '--no-watch',
         '--all-packages',
         '--excluded-packages',
-        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management',
+        '@abp/ng.schematics,@abp/ng.core,@abp/ng.theme.shared,@abp/ng.components,@abp/ng.feature-management,@abp/ng.permission-management',
       ],
       { stdout: 'inherit', cwd: '../' },
     );

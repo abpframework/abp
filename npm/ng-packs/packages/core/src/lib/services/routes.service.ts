@@ -133,8 +133,8 @@ export abstract class AbstractNavTreeService<T extends ABP.Nav> extends Abstract
   readonly parentId = 'parentName';
   readonly hide = (item: T) => item.invisible || !this.isGranted(item);
   readonly sort = (a: T, b: T) => {
-    if (!a.order) return 1;
-    if (!b.order) return -1;
+    if (!Number.isInteger(a.order)) return 1;
+    if (!Number.isInteger(b.order)) return -1;
 
     return a.order - b.order;
   };

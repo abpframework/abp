@@ -19,7 +19,7 @@ $IsRc = $(node publish-utils.js --rc) -eq "true";
 
 if ($IsRc) { 
   $NgPacksPublishCommand += " --rc"
-  $UpdateGulpCommand += " --rc"
+  $UpdateGulpCommand += " -- --rc"
   $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag next'"
 }
 

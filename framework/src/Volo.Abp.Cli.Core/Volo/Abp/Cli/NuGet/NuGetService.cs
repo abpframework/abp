@@ -86,8 +86,7 @@ namespace Volo.Abp.Cli.NuGet
                     versions = versions.Where(x => !x.IsPrerelease).ToList();
                 }
 
-                var semanticVersions = versions.ToList();
-                return semanticVersions.Any() ? semanticVersions.Max() : null;
+                return versions.Any() ? versions.Max() : null;
             }
         }
 

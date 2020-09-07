@@ -6,6 +6,7 @@ namespace Volo.CmsKit.Admin
 {
     [DependsOn(
         typeof(CmsKitAdminApplicationContractsModule),
+        typeof(AbpAutoMapperModule),
         typeof(CmsKitCommonApplicationModule)
         )]
     public class CmsKitAdminApplicationModule : AbpModule

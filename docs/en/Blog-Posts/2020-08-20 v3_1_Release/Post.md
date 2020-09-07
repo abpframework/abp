@@ -1,6 +1,6 @@
-# ABP Framework v3.1 RC.1 Has Been Released
+# ABP Framework v3.1 RC Has Been Released
 
-Today, we are releasing the **ABP Framework version 3.1 Release Candidate 1** (RC.1). The development cycle for this version was **~7 weeks**. It was the longest development cycle for a feature version release ever. We have completed **~150 issues**, merged **~150 PRs** and made **~1,000 commits** only in the main [abp repository](https://github.com/abpframework/abp). See the related [milestone](https://github.com/abpframework/abp/milestone/38?closed=1) on GitHub.
+Today, we are releasing the **ABP Framework version 3.1 Release Candidate** (RC). The development cycle for this version was **~7 weeks**. It was the longest development cycle for a feature version release ever. We have completed **~150 issues**, merged **~150 PRs** and made **~1,000 commits** only in the main [abp repository](https://github.com/abpframework/abp). See the related [milestone](https://github.com/abpframework/abp/milestone/38?closed=1) on GitHub.
 
 There were two main reasons of this long development cycle;
 
@@ -21,7 +21,7 @@ Today, we've released `3.1.0-rc.1` as the first preview version. We may release 
 
 We **won't add new features** to a version after publishing the preview version. We only will make **bug fixes** until the stable version. The new features being developed in this period will be available in the next version.
 
-> We will use `-rc.x` suffix (like `3.1.0-rc.1` and `3.1.0-rc.2`) for preview releases. However, we may also publish with `-preview.x` suffix before RC (Release Candidate) releases, especially for major versions (like 4.x, 5.x...).
+> We will use `-rc.x` suffix (like `3.1.0-rc.1` and `3.1.0-rc.2`) for preview releases. However, we may also publish with `-preview.x` suffix before RC (Release Candidate) releases, especially for major versions (like 4.0, 5.0...).
 
 ### About the Nightly Builds
 
@@ -56,6 +56,18 @@ This command will create a new project with the latest RC/Preview version. Whene
 If you already have a solution and want to use/test the latest RC/Preview version, use the `abp switch-to-preview` command in the root folder of your solution. You can return back to the latest stable using the `abp switch-to-stable ` command later.
 
 > Note that the `abp switch-to-preview` command was being used to switch to nightly builds before the v3.1. Now, you should use the `abp switch-to-nightly` for [nightly builds](https://docs.abp.io/en/abp/latest/Nightly-Builds).
+
+## Breaking Changes / Special Notes
+
+### ABP & ABP Commercial
+
+* If you are using **EF Core**, you may need to **add a new migration** after upgrading the packages. Just run the standard "Add-Migration" command, check the generated migration code and execute the "Update-Database" command to apply changes to the database.
+* If you have implemented **social/external logins** for your MVC / Razor Page UI application before, you may want to check [this issue](https://github.com/abpframework/abp/issues/4981). We made some improvements and changes that you may want to take action for your application. Beginning from v3.1, the users created their accounts via social login can still set a local password to login with local username/email & password.
+
+### ABP Commercial Only
+
+* We've **moved favicons** into `/wwwroot/images/favicon/` folder for the ASP.NET Core **MVC / Razor Page UI** applications. There are 10 favicon related files (including the `favicon.ico`) under this directory to better work with different browser and cases. You can create a new application to check this folder and copy the files into your own application. Then you can customize the icons for your own brand (hint: you can use a tool [like that](https://realfavicongenerator.net/) to create the favicons with various formats).
+* Removed direct **Twitter & Facebook social login integrations** from the [account module](https://commercial.abp.io/modules/Volo.Account.Pro), for **MVC / Razor Pages UI**. Follow [this documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Authentication/Social-External-Logins.md) to easily add social logins to your applications if you need. The account module provides all the infrastructure to handle social/external logins, you just need to configure it.
 
 ## What's New with the ABP Framework 3.1 RC.1
 
@@ -166,6 +178,10 @@ The new [Security Log System](https://github.com/abpframework/abp/issues/4492) (
 ### New BLOB Storage Providers
 
 Implemented [AWS](https://github.com/abpframework/abp/blob/dev/docs/en/Blob-Storing-Aws.md) and [Aliyun](https://github.com/abpframework/abp/blob/dev/docs/en/Blob-Storing-Aliyun.md) providers for the [BLOB storing](https://docs.abp.io/en/abp/latest/Blob-Storing) system with this version.
+
+### Module Entity Extensibility
+
+We had introduced a entity extension system that allows to add new properties to existing entities of depended modules by a simple configuration. When you add a new property, it appears on the create, edit and list views on the UI and created a new field in the related database table. We've implemented this system for the identity and tenant management modules, so you can extend entities of these modules. See [the documentation](https://github.com/abpframework/abp/blob/dev/docs/en/Module-Entity-Extensions.md).
 
 ### Other Features / Highlights
 

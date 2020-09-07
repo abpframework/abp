@@ -19,7 +19,7 @@ $solutions = (
     "modules/tenant-management",
     "modules/users",
     "modules/virtual-file-explorer",
-	"modules/blob-storing-database"
+    "modules/blob-storing-database"
 )
 
 # List of projects
@@ -84,6 +84,7 @@ $projects = (
     "framework/src/Volo.Abp.EntityFrameworkCore.SqlServer",
     "framework/src/Volo.Abp.EventBus",
     "framework/src/Volo.Abp.EventBus.RabbitMQ",
+    "framework/src/Volo.Abp.EventBus.Kafka",
     "framework/src/Volo.Abp.Features",
     "framework/src/Volo.Abp.FluentValidation",
     "framework/src/Volo.Abp.GlobalFeatures",
@@ -123,6 +124,7 @@ $projects = (
     "framework/src/Volo.Abp.Validation.Abstractions",
     "framework/src/Volo.Abp.Validation",
     "framework/src/Volo.Abp.VirtualFileSystem",
+    "framework/src/Volo.Abp.Kafka",
 
     # modules/account
     "modules/account/src/Volo.Abp.Account.Application.Contracts",

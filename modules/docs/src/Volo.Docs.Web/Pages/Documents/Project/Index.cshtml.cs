@@ -64,7 +64,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool ShowProjectsCombobox { get; set; }
 
-        public bool DocumentLanguageIsDifferent { get; set; }
+        public string DocumentLanguageCode { get; set; }
 
         public DocumentParametersDto DocumentPreferences { get; set; }
 
@@ -393,7 +393,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             return RemoveVersionPrefix(Document.Version) == LatestVersionInfo.Version ?
                 DocsAppConsts.Latest :
-                Document.Version;
+                RemoveVersionPrefix(Document.Version);
         }
 
         private async Task SetDocumentAsync()
@@ -403,6 +403,7 @@ namespace Volo.Docs.Pages.Documents.Project
             try
             {
                 Document = await GetSpecificDocumentOrDefaultAsync(LanguageCode);
+                DocumentLanguageCode = LanguageCode;
             }
             catch (DocumentNotFoundException)
             {
@@ -410,7 +411,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 {
                     Document = await GetSpecificDocumentOrDefaultAsync(DefaultLanguageCode);
 
-                    DocumentLanguageIsDifferent = true;
+                    DocumentLanguageCode = DefaultLanguageCode;
                 }
                 else
                 {
@@ -500,7 +501,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 var content = (await _documentAppService.GetAsync(new GetDocumentInput
                 {
-                    LanguageCode = LanguageCode,
+                    LanguageCode = DocumentLanguageCode,
                     Name = partialTemplate.Path,
                     ProjectId = Project.Id,
                     Version = Version
@@ -518,7 +519,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private void SetUserPreferences()
         {
-            UserPreferences.Add("Document_Language_Code", LanguageCode);
+            UserPreferences.Add("Document_Language_Code", DocumentLanguageCode);
             UserPreferences.Add("Document_Version", Version);
 
             var cookie = Request.Cookies["AbpDocsPreferences"];
@@ -608,7 +609,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     new GetParametersDocumentInput
                     {
                         ProjectId = Project.Id,
-                        LanguageCode = LanguageCode,
+                        LanguageCode = DocumentLanguageCode,
                         Version = Version
                     });
 
