@@ -2,19 +2,19 @@
 
 ABP Feature system is used to **enable**, **disable** or **change the behavior** of the application features **on runtime**.
 
-The runtime value for a feature can simply be a `boolean`, like enabled (`true`) or disabled (`false`). However, you can store **any kind** of runtime value for feature.
+The runtime value for a feature is generally a `boolean` value, like `true` (enabled) or `false` (disabled). However, you can get/set **any kind** of value for feature.
 
-Feature system was originally designed to control the tenant features in a **multi-tenant** application. However, it is **extensible** and capable of determining features by any condition.
+Feature system was originally designed to control the tenant features in a **multi-tenant** application. However, it is **extensible** and capable of determining the features by any condition.
 
 > The feature system is implemented with the [Volo.Abp.Features](https://www.nuget.org/packages/Volo.Abp.Features) NuGet package. Most of the times you don't need to manually [install it](https://abp.io/package-detail/Volo.Abp.Features) since it comes pre-installed with the [application startup template](Startup-Templates/Application.md).
 
 ## Checking for the Features
 
-Before starting to explain how to define features, let's see how to check a feature in your application code.
+Before explaining to define features, let's see how to check a feature value in your application code.
 
 ### RequiresFeature Attribute
 
-`[RequiresFeature]` attribute (defined in the `Volo.Abp.Features` namespace) is used to declaratively check if a feature is enabled or not. It is a useful shortcut for the `boolean` features.
+`[RequiresFeature]` attribute (defined in the `Volo.Abp.Features` namespace) is used to declaratively check if a feature is `true` (enabled) or not. It is a useful shortcut for the `boolean` features.
 
 **Example: Check if the "PDF Reporting" feature enabled**
 
@@ -42,10 +42,10 @@ ABP Framework uses the interception system to make the `[RequiresFeature]` attri
 
 However, there are **some rules should be followed** in order to make it working;
 
-* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, [dynamic proxy / interception](Dynamic-Proxying-Interceptors.md) system can not work).
+* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](Dynamic-Proxying-Interceptors.md) system can not work.
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted.
 
-> There is an exception for the controllers and razor pages. They don't require the following rules since ABP Framework uses action/page filters to implement the feature checking in this case.
+> There is an exception for the **controller and razor page methods**. They **don't require** the following the rules above, since ABP Framework uses the action/page filters to implement the feature checking in this case.
 
 ### IFeatureChecker Service
 
@@ -125,7 +125,7 @@ public class ProductController : AbpController
 }
 ```
 
-In this way, you can create numeric limits in your SaaS application depending on the current user or tenant.
+This example uses a numeric value as a feature limit product counts for a user/tenant in a SaaS application.
 
 Instead of manually converting the value to `int`, you can use the generic overload of the `GetAsync` method:
 
@@ -134,5 +134,28 @@ var maxProductCountLimit = await _featureChecker.GetAsync<int>("MyApp.MaxProduct
 ```
 
 #### Extension Methods
+
+There are some useful extension methods for the `IFeatureChecker` interface;
+
+* `Task<T> GetAsync<T>(string name, T defaultValue = default)`: Used to get a value of a feature with the given type `T`. Allows to specify a `defaultValue` that is returned when the feature value is `null`.
+* `CheckEnabledAsync(string name)`: Checks if given feature is enabled. Throws an `AbpAuthorizationException` if the feature was not `true` (enabled).
+
+## Defining the Features
+
+TODO
+
+## Feature Management
+
+TODO
+
+## Advanced Topics
+
+TODO
+
+### Feature Value Providers
+
+TODO
+
+### Feature Store
 
 TODO
