@@ -8,71 +8,69 @@ namespace Volo.Abp.Security.Claims
     /// </summary>
     public static class AbpClaimTypes
     {
-        public const string ClaimTypeNamespace = "abp_";
+        /// <summary>
+        /// Default: <see cref="ClaimTypes.Name"/>
+        /// </summary>
+        public static string UserName { get; set; } = ClaimTypes.Name;
 
         /// <summary>
-        /// Default: abp_username
+        /// Default: <see cref="ClaimTypes.GivenName"/>
         /// </summary>
-        public static string UserName { get; set; } = ClaimTypeNamespace + "username";
+        public static string Name { get; set; } = ClaimTypes.GivenName;
 
         /// <summary>
-        /// Default: abp_name
+        /// Default: <see cref="ClaimTypes.Surname"/>
         /// </summary>
-        public static string Name { get; set; } = ClaimTypeNamespace + "name";
+        public static string SurName { get; set; } = ClaimTypes.Surname;
 
         /// <summary>
-        /// Default: abp_surname
+        /// Default: security_stamp
         /// </summary>
-        public static string SurName { get; set; } = ClaimTypeNamespace + "surname";
+        public static string SecurityStamp { get; set; } =  "security_stamp";
 
         /// <summary>
-        /// Default: abp_user_id
+        /// Default: <see cref="ClaimTypes.NameIdentifier"/>
         /// </summary>
-        public static string UserId { get; set; } = ClaimTypeNamespace + "user_id";
+        public static string UserId { get; set; } = ClaimTypes.NameIdentifier;
 
         /// <summary>
-        /// Default: abp_role
+        /// Default: <see cref="ClaimTypes.Role"/>
         /// </summary>
-        public static string Role { get; set; } = ClaimTypeNamespace + "role";
+        public static string Role { get; set; } = ClaimTypes.Role;
 
         /// <summary>
-        /// Default: abp_security_stamp
+        /// Default: <see cref="ClaimTypes.Email"/>
         /// </summary>
-        public static string SecurityStamp { get; set; } =  ClaimTypeNamespace + "security_stamp";
+        public static string Email { get; set; } = ClaimTypes.Email;
 
         /// <summary>
-        /// Default: abp_email
+        /// Default: "email_verified".
         /// </summary>
-        public static string Email { get; set; } = ClaimTypeNamespace + "email";
+        public static string EmailVerified { get; set; } = "email_verified";
 
         /// <summary>
-        /// Default: abp_email_verified
+        /// Default: "phone_number".
         /// </summary>
-        public static string EmailVerified { get; set; } = ClaimTypeNamespace + "email_verified";
+        public static string PhoneNumber { get; set; } = "phone_number";
 
         /// <summary>
-        /// Default: abp_phone_number
+        /// Default: "phone_number_verified".
         /// </summary>
-        public static string PhoneNumber { get; set; } = ClaimTypeNamespace + "phone_number";
+        public static string PhoneNumberVerified { get; set; } = "phone_number_verified";
 
         /// <summary>
-        /// Default: abp_phone_number_verified
+        /// Default: "tenantid".
         /// </summary>
-        public static string PhoneNumberVerified { get; set; } = ClaimTypeNamespace + "phone_number_verified";
+        public static string TenantId { get; set; } = "tenant_id";
 
         /// <summary>
-        /// Default: abp_tenant_id
+        /// Default: "editionid".
         /// </summary>
-        public static string TenantId { get; set; } = ClaimTypeNamespace + "tenant_id";
+        public static string EditionId { get; set; } = "edition_id";
 
         /// <summary>
-        /// Default: abp_edition_id
+        /// Default: "client_id".
         /// </summary>
-        public static string EditionId { get; set; } = ClaimTypeNamespace + "edition_id";
-
-        /// <summary>
-        /// Default: abp_client_id
-        /// </summary>
-        public static string ClientId { get; set; } = ClaimTypeNamespace + "client_id";
+        public static string ClientId { get; set; } = "client_id";
     }
 }
