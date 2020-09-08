@@ -170,6 +170,8 @@ namespace FeaturesDemo
 
 > ABP automatically discovers this class and registers the features. No additional configuration required.
 
+> This class is generally created in the `Application.Contracts` project of your solution.
+
 * In the `Define` method, you first need to add a **feature group** for your application/module or get an existing group then add **features** to this group.
 * First feature, named `MyApp.PdfReporting`, is a `boolean` feature with `false` as the default value.
 * Second feature, named `MyApp.MaxProductCount`, is a numeric feature with `10` as the default value.
@@ -339,7 +341,38 @@ See the [features](Features.md) document for the Angular UI.
 
 ## Feature Management
 
-TODO
+Feature management is normally done by an admin user using the feature management modal:
+
+![features-modal](images/features-modal.png)
+
+This modal is available on the related entities, like tenants in a multi-tenant application. To open it, navigate to the **Tenant Management** page (for a multi-tenant application), click to the **Actions** button left to the Tenant and select the **Features** action.
+
+If you need to manage features by code, inject the `IFeatureManager` service.
+
+**Example: Enable PDF reporting for a tenant**
+
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly IFeatureManager _featureManager;
+
+    public MyService(IFeatureManager featureManager)
+    {
+        _featureManager = featureManager;
+    }
+
+    public async Task EnablePdfReporting(Guid tenantId)
+    {
+        await _featureManager.SetForTenantAsync(
+            tenantId,
+            "MyApp.PdfReporting",
+            true.ToString()
+        );
+    }
+}
+```
+
+`IFeatureManager` is defined by the Feature Management module. It comes pre-installed with the application startup template. See the [feature management module documentation](Modules/Feature-Management.md) for more information.
 
 ## Advanced Topics
 
