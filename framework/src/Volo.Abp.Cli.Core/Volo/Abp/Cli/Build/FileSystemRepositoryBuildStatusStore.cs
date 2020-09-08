@@ -19,8 +19,7 @@ namespace Volo.Abp.Cli.Build
 
             if (!File.Exists(buildStatusFile))
             {
-                // TODO: this is wrong
-                return new GitRepositoryBuildStatus(repository.Name, repository.BranchName);
+                return null;
             }
 
             var buildStatusText = File.ReadAllText(buildStatusFile);
