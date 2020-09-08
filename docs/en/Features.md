@@ -304,11 +304,38 @@ The example above defines a *Reporting* feature with two children: *PDF Reportin
 
 ### Changing Features Definitions of a Depended Module
 
-TODO
+A class deriving from the `FeatureDefinitionProvider` (just like the example above) can also get the existing permission definitions (defined by the depended [modules](Module-Development-Basics.md)) and change their definitions.
 
-## Check a Permission in the Client Side
+**Example: Manipulate an existing feature definition**
 
-TODO
+```csharp
+var someGroup = context.GetGroupOrNull("SomeModule");
+var feature = someGroup.Features.FirstOrDefault(f => f.Name == "SomeFeature");
+if (feature != null)
+{
+    feature.Description = ...
+    feature.CreateChild(...);
+}
+```
+
+## Check a Feature in the Client Side
+
+A feature value is available at the client side too, unless you set `IsVisibleToClients` to `false` on the feature definition. The feature values are exposed from the [Application Configuration API](API/Application-Configuration.md) and usable via some services on the UI.
+
+### ASP.NET Core MVC / Razor Pages UI
+
+Use `abp.features` API to get the feature values.
+
+**Example: Get feature values in the JavaScript code**
+
+````js
+var isEnabled = abp.features.values["MyApp.ExcelReporting"] === "true";
+var count = abp.features.values["MyApp.MaxProductCount"];
+````
+
+### Angular UI
+
+See the [features](Features.md) document for the Angular UI.
 
 ## Feature Management
 
