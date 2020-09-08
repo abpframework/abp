@@ -59,12 +59,12 @@ namespace Volo.Abp.Security.Claims
         public static string PhoneNumberVerified { get; set; } = "phone_number_verified";
 
         /// <summary>
-        /// Default: "tenantid".
+        /// Default: "tenant_id".
         /// </summary>
         public static string TenantId { get; set; } = "tenant_id";
 
         /// <summary>
-        /// Default: "editionid".
+        /// Default: "edition_id".
         /// </summary>
         public static string EditionId { get; set; } = "edition_id";
 
