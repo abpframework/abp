@@ -176,6 +176,8 @@ namespace FeaturesDemo
 * First feature, named `MyApp.PdfReporting`, is a `boolean` feature with `false` as the default value.
 * Second feature, named `MyApp.MaxProductCount`, is a numeric feature with `10` as the default value.
 
+Default value is used if there is no other value set for the current user/tenant.
+
 ### Other Feature Properties
 
 While these minimal definitions are enough to make the feature system working, you can specify the **optional properties** for the features;
@@ -376,11 +378,70 @@ public class MyService : ITransientDependency
 
 ## Advanced Topics
 
-TODO
-
 ### Feature Value Providers
 
-TODO
+Feature system is extensible. Any class derived from `FeatureValueProvider` (or implements `IFeatureValueProvider`) can contribute to the feature system. A value provider is responsible to **obtain the current value** of a given feature.
+
+Feature value providers are **executed one by one**. If one of them return a non-null value, then this feature value is used and the other providers are not executed.
+
+There are three pre-defined value providers, executed by the given order:
+
+* `TenantFeatureValueProvider` tries to get if the feature value is explicitly set for the **current tenant**.
+* `EditionFeatureValueProvider` tries to get the feature value for the current edition. Edition Id is obtained from the current principal identity (`ICurrentPrincipalAccessor`) with the claim name `editionid` (a constant defined as`AbpClaimTypes.EditionId`). Editions are not implemented for the [tenant management](Modules/Tenant-Management.md) module. You can implement it yourself or consider to use the [SaaS module](https://commercial.abp.io/modules/Volo.Saas) of the ABP Commercial.
+* `DefaultValueFeatureValueProvider` gets the default value of the feature.
+
+You can write your own provider by inheriting the `FeatureValueProvider`.
+
+**Example: Enable all features for a user with "SystemAdmin" as a "User_Type" claim value**
+
+```csharp
+using System.Threading.Tasks;
+using Volo.Abp.Features;
+using Volo.Abp.Security.Claims;
+using Volo.Abp.Validation.StringValues;
+
+namespace FeaturesDemo
+{
+    public class SystemAdminFeatureValueProvider : FeatureValueProvider
+    {
+        public override string Name => "SA";
+
+        private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
+
+        public SystemAdminFeatureValueProvider(
+            IFeatureStore featureStore,
+            ICurrentPrincipalAccessor currentPrincipalAccessor)
+            : base(featureStore)
+        {
+            _currentPrincipalAccessor = currentPrincipalAccessor;
+        }
+
+        public override Task<string> GetOrNullAsync(FeatureDefinition feature)
+        {
+            if (feature.ValueType is ToggleStringValueType &&
+                _currentPrincipalAccessor.Principal?.FindFirst("User_Type")?.Value == "SystemAdmin")
+            {
+                return Task.FromResult("true");
+            }
+
+            return null;
+        }
+    }
+}
+```
+
+If a provider returns `null`, then the next provider is executed.
+
+Once a provider is defined, it should be added to the `AbpFeatureOptions` as shown below:
+
+```csharp
+Configure<AbpFeatureOptions>(options =>
+{
+    options.ValueProviders.Add<SystemAdminFeatureValueProvider>();
+});
+```
+
+Use this code inside the `ConfigureServices` of your [module](Module-Development-Basics.md) class.
 
 ### Feature Store
 
