@@ -114,8 +114,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -126,6 +128,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }
 
@@ -157,8 +160,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public virtual async Task<List<IdentityUser>> GetUnaddedUsersAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -181,6 +186,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query
                 .IncludeDetails(includeDetails)
                 .OrderBy(sorting ?? nameof(IdentityUser.Name))
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }
 

@@ -109,8 +109,10 @@ namespace Volo.Abp.Identity.MongoDB
 
         public async Task<List<IdentityRole>> GetUnaddedRolesAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -120,6 +122,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .As<IMongoQueryable<IdentityRole>>()
+                .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
         }
 
@@ -153,8 +156,10 @@ namespace Volo.Abp.Identity.MongoDB
 
         public async Task<List<IdentityUser>> GetUnaddedUsersAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -169,6 +174,7 @@ namespace Volo.Abp.Identity.MongoDB
                 )
                 .OrderBy(sorting ?? nameof(IdentityUser.UserName))
                 .As<IMongoQueryable<IdentityUser>>()
+                .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
