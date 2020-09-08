@@ -9,11 +9,14 @@ using Volo.Abp.ObjectExtending;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
     public partial class RoleManagement
     {
+        private const string PermissionProviderName = "R";
+
         [Inject] private IIdentityRoleAppService RoleAppService { get; set; }
         [Inject] private IUiMessageService UiMessageService { get; set; }
         [Inject] private IObjectMapper<AbpIdentityBlazorModule> ObjectMapper { get; set; }
@@ -30,6 +33,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         private Modal _createModal;
         private Modal _editModal;
+        private PermissionManagementModal _permissionManagementModal;
 
         public RoleManagement()
         {
