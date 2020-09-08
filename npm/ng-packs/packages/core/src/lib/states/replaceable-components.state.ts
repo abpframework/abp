@@ -56,7 +56,6 @@ export class ReplaceableComponentsState {
       replaceableComponents,
     });
 
-    console.log(this.service);
     this.service.add(payload, reload);
   }
 }
