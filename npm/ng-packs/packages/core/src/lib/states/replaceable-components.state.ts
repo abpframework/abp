@@ -1,9 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext } from '@ngxs/store';
 import snq from 'snq';
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
+
+function logDeprecationMsg() {
+  if (isDevMode()) {
+    console.warn(`
+     ReplacableComponentsState has been deprecated. Use ReplaceableComponentsService instead.
+     See the doc https://docs.abp.io/en/abp/latest/UI/Angular/Component-Replacement
+     `);
+  }
+}
 
 // tslint:disable: max-line-length
 /**
@@ -19,6 +28,7 @@ export class ReplaceableComponentsState {
   static getAll({
     replaceableComponents,
   }: ReplaceableComponents.State): ReplaceableComponents.ReplaceableComponent[] {
+    logDeprecationMsg();
     return replaceableComponents || [];
   }
 
@@ -26,6 +36,7 @@ export class ReplaceableComponentsState {
     const selector = createSelector(
       [ReplaceableComponentsState],
       (state: ReplaceableComponents.State): ReplaceableComponents.ReplaceableComponent => {
+        logDeprecationMsg();
         return snq(() => state.replaceableComponents.find(component => component.key === key));
       },
     );
@@ -40,6 +51,8 @@ export class ReplaceableComponentsState {
     { getState, patchState }: StateContext<ReplaceableComponents.State>,
     { payload, reload }: AddReplaceableComponent,
   ) {
+    logDeprecationMsg();
+
     let { replaceableComponents } = getState();
 
     const index = snq(
