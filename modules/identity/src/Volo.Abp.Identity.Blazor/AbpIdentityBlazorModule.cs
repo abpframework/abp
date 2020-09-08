@@ -2,13 +2,15 @@
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.BlazoriseUI;
+using Volo.Abp.PermissionManagement.Blazor;
 
 namespace Volo.Abp.Identity.Blazor
 {
     [DependsOn(
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpBlazoriseUIModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpAutoMapperModule),
+        typeof(AbpPermissionManagementBlazorModule)
         )]
     public class AbpIdentityBlazorModule : AbpModule
     {
