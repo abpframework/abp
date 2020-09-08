@@ -231,7 +231,7 @@
     (function () {
         datatables.createAjax = function (serverMethod, inputAction) {
             return function (requestData, callback, settings) {
-                var input = inputAction ? inputAction() : {};
+                var input = inputAction ? inputAction(requestData, settings) : {};
 
                 //Paging
                 if (settings.oInit.paging) {
