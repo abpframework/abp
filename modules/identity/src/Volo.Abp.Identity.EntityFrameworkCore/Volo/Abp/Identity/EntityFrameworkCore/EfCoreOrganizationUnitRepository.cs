@@ -12,7 +12,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public class EfCoreOrganizationUnitRepository
         : EfCoreRepository<IIdentityDbContext, OrganizationUnit, Guid>,
-          IOrganizationUnitRepository
+            IOrganizationUnitRepository
     {
         public EfCoreOrganizationUnitRepository(
             IDbContextProvider<IIdentityDbContext> dbContextProvider)
@@ -56,6 +56,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
+
         public virtual async Task<List<OrganizationUnit>> GetListAsync(
             IEnumerable<Guid> ids,
             bool includeDetails = false,
@@ -111,6 +112,23 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
 
+        public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            string sorting = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToList();
+
+            return await DbContext.Roles
+                .Where(r => !roleIds.Contains(r.Id))
+                .IncludeDetails(includeDetails)
+                .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .ToListAsync(cancellationToken);
+        }
+
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
@@ -118,8 +136,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             int skipCount = 0,
             string filter = null,
             bool includeDetails = false,
-            CancellationToken cancellationToken = default
-            )
+            CancellationToken cancellationToken = default)
         {
             var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
@@ -136,6 +153,35 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<IdentityUser>> GetUnaddedUsersAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            string sorting = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var userIdsInOrganizationUnit = DbContext.Set<IdentityUserOrganizationUnit>()
+                .Where(uou => uou.OrganizationUnitId == organizationUnit.Id)
+                .Select(uou => uou.UserId);
+
+            var query = DbContext.Users
+                .Where(u => !userIdsInOrganizationUnit.Contains(u.Id));
+
+            if (!filter.IsNullOrWhiteSpace())
+            {
+                query = query.Where(u =>
+                    u.UserName.Contains(filter) ||
+                    u.Email.Contains(filter) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                );
+            }
+
+            return await query
+                .IncludeDetails(includeDetails)
+                .OrderBy(sorting ?? nameof(IdentityUser.Name))
+                .ToListAsync(cancellationToken);
         }
 
         public override IQueryable<OrganizationUnit> WithDetails()

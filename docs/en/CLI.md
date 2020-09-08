@@ -191,6 +191,7 @@ abp generate-proxy
 #### Options
 
 * `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
+* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
 * `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
 * `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
 * `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
@@ -212,6 +213,7 @@ abp remove-proxy
 #### Options
 
 * `--module` or `-m`: Specifies the name of the backend module you wish to remove proxies for. Default value: `app`.
+* `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
 * `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
 * `--target` or `-t`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
 * `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).

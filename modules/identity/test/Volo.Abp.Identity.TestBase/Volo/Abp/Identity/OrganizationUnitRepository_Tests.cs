@@ -284,5 +284,26 @@ namespace Volo.Abp.Identity
                 await uow.CompleteAsync();
             }
         }
+
+        [Fact]
+        public async Task GetUnaddedUsersOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var unaddedUsers = await _organizationUnitRepository.GetUnaddedUsersAsync(ou);
+
+            unaddedUsers.ShouldNotContain(u => u.UserName == "john.nash");
+            unaddedUsers.ShouldContain(u => u.UserName == "administrator");
+        }
+
+        [Fact]
+        public async Task GetUnaddedRolesOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var unaddedRoles = await _organizationUnitRepository.GetUnaddedRolesAsync(ou);
+
+            unaddedRoles.ShouldNotContain(u => u.Name == "manager");
+            unaddedRoles.ShouldNotContain(u => u.Name == "moderator");
+            unaddedRoles.ShouldContain(u => u.Name.Contains("admin"));
+        }
     }
 }

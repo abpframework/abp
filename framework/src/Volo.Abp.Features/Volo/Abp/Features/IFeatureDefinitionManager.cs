@@ -11,5 +11,7 @@ namespace Volo.Abp.Features
         IReadOnlyList<FeatureDefinition> GetAll();
 
         FeatureDefinition GetOrNull(string name);
+
+        IReadOnlyList<FeatureGroupDefinition> GetGroups();
     }
 }

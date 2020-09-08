@@ -9,6 +9,7 @@ import { RestOccurError } from '../actions/rest.actions';
 import { SetLanguage } from '../actions/session.actions';
 import { ApplicationConfiguration } from '../models/application-configuration';
 import { Config } from '../models/config';
+import { interpolate } from '../utils/string-utils';
 import { SessionState } from './session.state';
 
 @State<Config.State>({
@@ -180,14 +181,12 @@ export class ConfigState {
         return defaultValue || sourceKey;
       }
 
+      // [TODO]: next line should be removed in v3.2, breaking change!!!
       interpolateParams = interpolateParams.filter(params => params != null);
-      if (localization && interpolateParams && interpolateParams.length) {
-        interpolateParams.forEach(param => {
-          localization = localization.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
-        });
-      }
+      if (localization) localization = interpolate(localization, interpolateParams);
 
       if (typeof localization !== 'string') localization = '';
+
       return localization || defaultValue || (key as string);
     });
 

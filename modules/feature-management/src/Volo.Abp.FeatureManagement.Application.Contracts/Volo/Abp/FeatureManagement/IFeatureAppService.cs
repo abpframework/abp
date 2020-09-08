@@ -6,7 +6,7 @@ namespace Volo.Abp.FeatureManagement
 {
     public interface IFeatureAppService : IApplicationService
     {
-        Task<FeatureListDto> GetAsync([NotNull] string providerName, string providerKey);
+        Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, string providerKey); 
 
         Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input);
     }

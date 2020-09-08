@@ -25,7 +25,7 @@ export abstract class AuthFlowStrategy {
   constructor(protected injector: Injector) {
     this.store = injector.get(Store);
     this.oAuthService = injector.get(OAuthService);
-    this.oAuthConfig = injector.get(Store).selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
+    this.oAuthConfig = this.store.selectSnapshot(ConfigState.getDeep('environment.oAuthConfig'));
   }
 
   async init(): Promise<any> {
@@ -41,7 +41,14 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     return super
       .init()
       .then(() => this.oAuthService.tryLogin())
-      .then(() => this.oAuthService.setupAutomaticSilentRefresh());
+      .then(() => {
+        if (this.oAuthService.hasValidAccessToken() || !this.oAuthService.getRefreshToken()) {
+          return Promise.resolve();
+        }
+
+        return this.oAuthService.refreshToken() as Promise<any>;
+      })
+      .then(() => this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token'));
   }
 
   login() {
@@ -88,7 +95,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
       )
       .pipe(
         tap(() => this.oAuthService.logOut()),
-        switchMap(() =>  this.store.dispatch(new GetAppConfiguration())),
+        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
       );
   }
 
