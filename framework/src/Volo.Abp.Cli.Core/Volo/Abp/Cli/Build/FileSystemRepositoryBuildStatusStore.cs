@@ -7,17 +7,14 @@ namespace Volo.Abp.Cli.Build
 {
     public class FileSystemRepositoryBuildStatusStore : IRepositoryBuildStatusStore, ITransientDependency
     {
-        // TODO: change this ?
-        private string BaseBuildStatusStorePath = @"C:\Users\ismai\.abp\build";
-
         public GitRepositoryBuildStatus Get(string buildNamePrefix, GitRepository repository)
         {
-            if (!Directory.Exists(BaseBuildStatusStorePath))
+            if (!Directory.Exists(CliPaths.Build))
             {
-                Directory.CreateDirectory(BaseBuildStatusStorePath);
+                Directory.CreateDirectory(CliPaths.Build);
             }
 
-            var buildStatusFile = Path.Combine(BaseBuildStatusStorePath, repository.GetUniqueName(buildNamePrefix)) +
+            var buildStatusFile = Path.Combine(CliPaths.Build, repository.GetUniqueName(buildNamePrefix)) +
                                   ".json";
 
             if (!File.Exists(buildStatusFile))
@@ -35,10 +32,10 @@ namespace Volo.Abp.Cli.Build
             var existingRepositoryStatus = Get(buildNamePrefix, repository);
 
             var buildStatusFile = Path.Combine(
-                BaseBuildStatusStorePath,
+                CliPaths.Build,
                 status.GetUniqueName(buildNamePrefix)
             ) + ".json";
-            
+
             if (File.Exists(buildStatusFile))
             {
                 FileHelper.DeleteIfExists(buildStatusFile);
