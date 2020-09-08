@@ -114,8 +114,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -126,7 +128,21 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
+        }
+
+        public virtual async Task<int> GetUnaddedRolesCountAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToList();
+
+            return await DbContext.Roles
+                .Where(r => !roleIds.Contains(r.Id))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+                .CountAsync(cancellationToken);
         }
 
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
@@ -157,8 +173,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public virtual async Task<List<IdentityUser>> GetUnaddedUsersAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -181,7 +199,26 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query
                 .IncludeDetails(includeDetails)
                 .OrderBy(sorting ?? nameof(IdentityUser.Name))
+                .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
+        }
+
+        public virtual async Task<int> GetUnaddedUsersCountAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            var userIdsInOrganizationUnit = DbContext.Set<IdentityUserOrganizationUnit>()
+                .Where(uou => uou.OrganizationUnitId == organizationUnit.Id)
+                .Select(uou => uou.UserId);
+
+            return await DbContext.Users
+                .Where(u => !userIdsInOrganizationUnit.Contains(u.Id))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), u =>
+                    u.UserName.Contains(filter) ||
+                    u.Email.Contains(filter) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)))
+                .CountAsync(cancellationToken);
         }
 
         public override IQueryable<OrganizationUnit> WithDetails()

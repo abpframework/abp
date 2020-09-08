@@ -305,5 +305,22 @@ namespace Volo.Abp.Identity
             unaddedRoles.ShouldNotContain(u => u.Name == "moderator");
             unaddedRoles.ShouldContain(u => u.Name.Contains("admin"));
         }
+
+        [Fact]
+        public async Task GetUnaddedUsersCountOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var count = await _organizationUnitRepository.GetUnaddedUsersCountAsync(ou);
+            count.ShouldBeGreaterThan(0);
+
+        }
+
+        [Fact]
+        public async Task GetUnaddedRolesCountOfOrganizationUnitAsync()
+        {
+            var ou = await _organizationUnitRepository.GetAsync("OU111", true);
+            var count = await _organizationUnitRepository.GetUnaddedRolesCountAsync(ou);
+            count.ShouldBeGreaterThan(0);
+        }
     }
 }

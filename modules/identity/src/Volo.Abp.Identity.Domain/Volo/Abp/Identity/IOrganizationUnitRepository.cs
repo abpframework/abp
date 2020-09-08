@@ -57,9 +57,17 @@ namespace Volo.Abp.Identity
 
         Task<List<IdentityRole>> GetUnaddedRolesAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<int> GetUnaddedRolesCountAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
             CancellationToken cancellationToken = default
         );
 
@@ -81,9 +89,17 @@ namespace Volo.Abp.Identity
 
         Task<List<IdentityUser>> GetUnaddedUsersAsync(
             OrganizationUnit organizationUnit,
-            string filter = null,
             string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<int> GetUnaddedUsersCountAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
             CancellationToken cancellationToken = default
         );
 
