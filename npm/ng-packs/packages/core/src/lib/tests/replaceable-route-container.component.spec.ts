@@ -5,6 +5,7 @@ import { Store } from '@ngxs/store';
 import { of, Subject, BehaviorSubject } from 'rxjs';
 import { ReplaceableRouteContainerComponent } from '../components/replaceable-route-container.component';
 import { ReplaceableComponentsState } from '../states';
+import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 
 @Component({
   selector: 'abp-external-component',
@@ -30,16 +31,15 @@ const activatedRouteMock = {
 };
 
 describe('ReplaceableRouteContainerComponent', () => {
-  const selectResponse = new BehaviorSubject(undefined);
-  const mockSelect = jest.fn(() => selectResponse);
-
   let spectator: SpectatorHost<ReplaceableRouteContainerComponent>;
+  const get$Res = new BehaviorSubject(undefined);
+  const replaceableComponents = spectator.inject(ReplaceableComponentsService);
+  const spy = jest.spyOn(replaceableComponents, 'get$');
+  spy.mockReturnValue(get$Res as any);
+
   const createHost = createHostFactory({
     component: ReplaceableRouteContainerComponent,
-    providers: [
-      { provide: ActivatedRoute, useValue: activatedRouteMock },
-      { provide: Store, useValue: { select: mockSelect } },
-    ],
+    providers: [{ provide: ActivatedRoute, useValue: activatedRouteMock }],
     declarations: [ExternalComponent, DefaultComponent],
     entryComponents: [DefaultComponent, ExternalComponent],
   });
@@ -55,11 +55,11 @@ describe('ReplaceableRouteContainerComponent', () => {
   });
 
   it("should display the external component if it's available in store.", () => {
-    selectResponse.next({ component: ExternalComponent });
+    get$Res.next({ component: ExternalComponent });
     spectator.detectChanges();
     expect(spectator.query('p')).toHaveText('external');
 
-    selectResponse.next({ component: null });
+    get$Res.next({ component: null });
     spectator.detectChanges();
     expect(spectator.query('p')).toHaveText('default');
   });
