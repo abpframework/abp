@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -29,16 +30,17 @@ namespace Volo.Abp.Cli.Build
                     {
                         continue;
                     }
-                    
-                    foreach (var projectDependency in project.Dependencies)
-                    {
-                        if (builtProjects.Contains(project.CsProjPath))
-                        {
-                            continue;
-                        }
 
-                        BuildInternal(projectDependency, arguments, builtProjects);
-                    }
+                    Parallel.ForEach(
+                        project.Dependencies,
+                        new ParallelOptions {MaxDegreeOfParallelism = maxParallelBuildCount},
+                        (projectDependency) =>
+                        {
+                            if (!builtProjects.Contains(project.CsProjPath))
+                            {
+                                BuildInternal(projectDependency, arguments, builtProjects);
+                            }
+                        });
                 }
             }
             catch (Exception e)
@@ -51,10 +53,11 @@ namespace Volo.Abp.Cli.Build
 
         private void BuildInternal(DotNetProjectInfo project, string arguments, ConcurrentBag<string> builtProjects)
         {
-            Console.WriteLine("Building...: dotnet build " + project.CsProjPath + " " + arguments);
+            var buildArguments = arguments.TrimStart('"').TrimEnd('"');
+            Console.WriteLine("Building...: dotnet build " + project.CsProjPath + " " + buildArguments);
 
             var output = CmdHelper.RunCmdAndGetOutput(
-                "dotnet build " + project.CsProjPath + " " + arguments,
+                "dotnet build " + project.CsProjPath + " " + buildArguments,
                 out int buildStatus
             );
 
