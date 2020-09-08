@@ -177,5 +177,27 @@ namespace Volo.Abp.Cli.Build
             
             existingBuildStatus.CommitId.ShouldBe("21");
         }
+
+        [Fact]
+        public void GetChild_Test()
+        {
+            var existingBuildStatus = new GitRepositoryBuildStatus("repo-1", "dev")
+            {
+                DependingRepositories = new List<GitRepositoryBuildStatus>()
+                {
+                    new GitRepositoryBuildStatus("repo-2", "dev")
+                    {
+                        DependingRepositories = new List<GitRepositoryBuildStatus>()
+                        {
+                            new GitRepositoryBuildStatus("repo-3", "dev")
+                        }
+                    },
+                    new GitRepositoryBuildStatus("repo-4", "dev")
+                }
+            };
+            
+            existingBuildStatus.GetChild("repo-3").RepositoryName.ShouldBe("repo-3");
+            existingBuildStatus.GetChild("repo-4").RepositoryName.ShouldBe("repo-4");
+        }
     }
 }

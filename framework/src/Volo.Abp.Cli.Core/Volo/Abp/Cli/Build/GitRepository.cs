@@ -36,7 +36,7 @@ namespace Volo.Abp.Cli.Build
             IgnoredDirectories = new List<string>();
         }
 
-        public string GetUniqueName(string uniqueName)
+        public string GetUniqueName(string prefix)
         {
             var name = Name + "_" + BranchName;
             foreach (var dependingRepository in DependingRepositories)
@@ -44,7 +44,7 @@ namespace Volo.Abp.Cli.Build
                 AddToUniqueName(dependingRepository, name);
             }
 
-            return (uniqueName.IsNullOrEmpty() ? "" : uniqueName + "_") + name.ToMd5();
+            return (prefix.IsNullOrEmpty() ? "" : prefix + "_") + name.ToMd5();
         }
 
         private void AddToUniqueName(GitRepository gitRepository, string name)
