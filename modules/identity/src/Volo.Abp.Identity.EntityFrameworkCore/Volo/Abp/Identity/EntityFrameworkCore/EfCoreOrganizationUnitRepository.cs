@@ -132,6 +132,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(cancellationToken);
         }
 
+        public virtual async Task<int> GetUnaddedRolesCountAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToList();
+
+            return await DbContext.Roles
+                .Where(r => !roleIds.Contains(r.Id))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+                .CountAsync(cancellationToken);
+        }
+
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
@@ -188,6 +201,24 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .OrderBy(sorting ?? nameof(IdentityUser.Name))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(cancellationToken);
+        }
+
+        public virtual async Task<int> GetUnaddedUsersCountAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            var userIdsInOrganizationUnit = DbContext.Set<IdentityUserOrganizationUnit>()
+                .Where(uou => uou.OrganizationUnitId == organizationUnit.Id)
+                .Select(uou => uou.UserId);
+
+            return await DbContext.Users
+                .Where(u => !userIdsInOrganizationUnit.Contains(u.Id))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), u =>
+                    u.UserName.Contains(filter) ||
+                    u.Email.Contains(filter) ||
+                    (u.PhoneNumber != null && u.PhoneNumber.Contains(filter)))
+                .CountAsync(cancellationToken);
         }
 
         public override IQueryable<OrganizationUnit> WithDetails()
