@@ -16,7 +16,6 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
         [BindProperty(SupportsGet = true)]
         public string ProviderName { get; set; }
 
-        [Required]
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
         public string ProviderKey { get; set; }
@@ -37,14 +36,7 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
 
         public virtual async Task OnGetAsync()
         {
-            if (ProviderName == HostFeatureValueProvider.ProviderName)
-            {
-                FeatureListDto = await FeatureAppService.GetHostAsync();
-            }
-            else
-            {
-                FeatureListDto = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
-            }
+            FeatureListDto = await FeatureAppService.GetAsync(ProviderName, ProviderKey);
         }
 
         public virtual async Task<IActionResult> OnPostAsync()
@@ -58,14 +50,7 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
                 }).ToList()
             };
 
-            if (ProviderName == HostFeatureValueProvider.ProviderName)
-            {
-                await FeatureAppService.UpdateHostAsync(features);
-            }
-            else
-            {
-                await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
-            }
+            await FeatureAppService.UpdateAsync(ProviderName, ProviderKey, features);
 
             return NoContent();
         }
@@ -87,8 +72,6 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             public string Name { get; set; }
 
             public string Value { get; set; }
-
-            public string ProviderName { get; set; }
 
             public bool BoolValue { get; set; }
 

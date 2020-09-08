@@ -25,12 +25,17 @@ namespace Volo.Abp.FeatureManagement
             Options = options.Value;
         }
 
-        public virtual async Task<FeatureListDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
+        public virtual async Task<FeatureListDto> GetAsync([NotNull] string providerName, string providerKey)
         {
             await CheckProviderPolicy(providerName);
 
             var featureDefinitions = FeatureDefinitionManager.GetAll();
             var features = new List<FeatureDto>();
+
+            if (providerName == HostFeatureValueProvider.ProviderName)
+            {
+                featureDefinitions = featureDefinitions.Where(x => x.IsAvailableToHost).ToList();
+            }
 
             foreach (var featureDefinition in featureDefinitions)
             {
@@ -56,58 +61,19 @@ namespace Volo.Abp.FeatureManagement
             return new FeatureListDto { Features = features };
         }
 
-        public virtual async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateFeaturesDto input)
+        public virtual async Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input)
         {
             await CheckProviderPolicy(providerName);
 
             foreach (var feature in input.Features)
             {
-                await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
-            }
-        }
-
-        [Authorize(FeatureManagementPermissions.ManageHostFeatures)]
-        public async Task<FeatureListDto> GetHostAsync()
-        {
-            var featureDefinitions = FeatureDefinitionManager.GetAll().Where(x => x.IsAvailableToHost);
-            var features = new List<FeatureDto>();
-
-            foreach (var featureDefinition in featureDefinitions)
-            {
-                var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, HostFeatureValueProvider.ProviderName, null);
-                features.Add(new FeatureDto
-                {
-                    Name = featureDefinition.Name,
-                    DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
-                    ValueType = featureDefinition.ValueType,
-                    Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
-                    ParentName = featureDefinition.Parent?.Name,
-                    Value = feature.Value,
-                    Provider = new FeatureProviderDto
-                    {
-                        Name = feature.Provider?.Name,
-                        Key = feature.Provider?.Key
-                    }
-                });
-            }
-
-            SetFeatureDepth(features, HostFeatureValueProvider.ProviderName, null);
-
-            return new FeatureListDto { Features = features };
-        }
-
-        [Authorize(FeatureManagementPermissions.ManageHostFeatures)]
-        public async Task UpdateHostAsync(UpdateFeaturesDto input)
-        {
-            foreach (var feature in input.Features)
-            {
                 var featureDefinition = FeatureDefinitionManager.GetOrNull(feature.Name);
-                if (featureDefinition == null || !featureDefinition.IsAvailableToHost)
+                if (featureDefinition == null || (providerName == HostFeatureValueProvider.ProviderName && !featureDefinition.IsAvailableToHost))
                 {
                     throw new UserFriendlyException(L["FeatureNotAvailable"]);
                 }
 
-                await FeatureManager.SetAsync(feature.Name, feature.Value, HostFeatureValueProvider.ProviderName, null);
+                await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
             }
         }
 

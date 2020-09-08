@@ -19,6 +19,7 @@ namespace Volo.Abp.FeatureManagement
             {
                 options.Providers.Add<DefaultValueFeatureManagementProvider>();
                 options.Providers.Add<HostFeatureManagementProvider>();
+                options.ProviderPolicies[HostFeatureValueProvider.ProviderName] = "FeatureManagement.ManageHostFeatures";
                 options.Providers.Add<EditionFeatureManagementProvider>();
 
                 //TODO: Should be moved to the Tenant Management module
