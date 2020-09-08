@@ -28,7 +28,7 @@ namespace Volo.Abp.FeatureManagement
 
         public virtual async Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, string providerKey)
         {
-            await CheckProviderPolicy(providerName);
+            await CheckProviderPolicy(providerName, providerKey);
 
             var result = new GetFeatureListResultDto
             {
@@ -46,7 +46,10 @@ namespace Volo.Abp.FeatureManagement
 
                 foreach (var featureDefinition in group.GetFeaturesWithChildren())
                 {
-                    if (providerName == HostFeatureValueProvider.ProviderName && !featureDefinition.IsAvailableToHost)
+                    if (providerName == TenantFeatureValueProvider.ProviderName &&
+                        CurrentTenant.Id == null &&
+                        providerKey == null &&
+                        !featureDefinition.IsAvailableToHost)
                     {
                         continue;
                     }
@@ -78,16 +81,10 @@ namespace Volo.Abp.FeatureManagement
 
         public virtual async Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input)
         {
-            await CheckProviderPolicy(providerName);
+            await CheckProviderPolicy(providerName, providerKey);
 
             foreach (var feature in input.Features)
             {
-                var featureDefinition = FeatureDefinitionManager.GetOrNull(feature.Name);
-                if (featureDefinition == null || (providerName == HostFeatureValueProvider.ProviderName && !featureDefinition.IsAvailableToHost))
-                {
-                    throw new UserFriendlyException(L["FeatureNotAvailable"]);
-                }
-
                 await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
             }
         }
@@ -105,12 +102,22 @@ namespace Volo.Abp.FeatureManagement
             }
         }
 
-        protected virtual async Task CheckProviderPolicy(string providerName)
+        protected virtual async Task CheckProviderPolicy(string providerName, string providerKey)
         {
-            var policyName = Options.ProviderPolicies.GetOrDefault(providerName);
-            if (policyName.IsNullOrEmpty())
+            string policyName;
+            if (providerName == TenantFeatureValueProvider.ProviderName)
             {
-                throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(FeatureManagementOptions)} to map the policy.");
+                policyName = CurrentTenant.Id == null && providerKey == null ?
+                    "FeatureManagement.ManageHostFeatures" :
+                    "AbpTenantManagement.Tenants.ManageFeatures";
+            }
+            else
+            {
+                policyName = Options.ProviderPolicies.GetOrDefault(providerName);
+                if (policyName.IsNullOrEmpty())
+                {
+                    throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(FeatureManagementOptions)} to map the policy.");
+                }
             }
 
             await AuthorizationService.CheckAsync(policyName);

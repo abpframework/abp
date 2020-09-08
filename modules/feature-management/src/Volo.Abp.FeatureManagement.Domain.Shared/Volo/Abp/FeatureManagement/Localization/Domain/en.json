@@ -3,7 +3,6 @@
   "texts": {
     "Features": "Features",
     "NoFeatureFoundMessage": "There isn't any available feature.",
-    "FeatureNotAvailable": "Feature not available.",
     "Permission:FeatureManagement": "Feature management",
     "Permission:FeatureManagement.ManageHostFeatures": "Manage Host features"
   }

@@ -26,7 +26,6 @@ namespace Volo.Abp.Features
             context.Services.Configure<AbpFeatureOptions>(options =>
             {
                 options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
-                options.ValueProviders.Add<HostFeatureValueProvider>();
                 options.ValueProviders.Add<EditionFeatureValueProvider>();
                 options.ValueProviders.Add<TenantFeatureValueProvider>();
             });

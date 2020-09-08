@@ -132,7 +132,7 @@
         _$wrapper.find('button[name=ManageHostFeatures]').click(function (e) {
             e.preventDefault();
             _featuresModal.open({
-                providerName: 'H'
+                providerName: 'T'
             });
         });
     });

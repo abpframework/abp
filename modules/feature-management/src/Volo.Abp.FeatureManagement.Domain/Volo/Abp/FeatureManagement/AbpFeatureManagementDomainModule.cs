@@ -18,13 +18,10 @@ namespace Volo.Abp.FeatureManagement
             Configure<FeatureManagementOptions>(options =>
             {
                 options.Providers.Add<DefaultValueFeatureManagementProvider>();
-                options.Providers.Add<HostFeatureManagementProvider>();
-                options.ProviderPolicies[HostFeatureValueProvider.ProviderName] = "FeatureManagement.ManageHostFeatures";
                 options.Providers.Add<EditionFeatureManagementProvider>();
 
                 //TODO: Should be moved to the Tenant Management module
                 options.Providers.Add<TenantFeatureManagementProvider>();
-                options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "AbpTenantManagement.Tenants.ManageFeatures";
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>
