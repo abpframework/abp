@@ -99,7 +99,11 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("");
-            // TODO: Explain extra parameters
+            sb.AppendLine("-wd|--working-directory <directory-path>                (default: empty)");
+            sb.AppendLine("-m |--max-parallel-builds <parallel-build-count>        (default: 1)");
+            sb.AppendLine("-a |--dotnet-build-arguments <arguments>                (default: empty)");
+            sb.AppendLine("-n |--build-name <name>                                 (default: empty)");
+            sb.AppendLine("--force                                                 (default: false)");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -122,7 +126,7 @@ namespace Volo.Abp.Cli.Commands
             public static class MaxParallelBuild
             {
                 public const string Short = "m";
-                public const string Long = "max-paralel-builds";
+                public const string Long = "max-parallel-builds";
             }
 
             public static class DotnetBuildArguments
