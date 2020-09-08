@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Shouldly;
 using Xunit;
 
@@ -7,6 +9,14 @@ namespace Volo.Abp.Cli.Build
 {
     public class GitRepositoryBuildStatus_Tests : AbpCliTestBase
     {
+        private IGitRepositoryHelper _gitRepositoryHelper;
+
+        protected override void AfterAddApplication(IServiceCollection services)
+        {
+            _gitRepositoryHelper = Substitute.For<IGitRepositoryHelper>();
+            services.AddTransient(provider => _gitRepositoryHelper);
+        }
+        
         [Fact]
         public void Add_New_Build_Status_Test()
         {
@@ -127,6 +137,45 @@ namespace Volo.Abp.Cli.Build
 
             existingBuildStatus.MergeWith(newBuildStatus);
             existingBuildStatus.GetChild("abp").SucceedProjects.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public void Should_Update_Repository_CommitId_When_New_CommitId_Is_Not_Empty()
+        {
+            var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev");
+
+            var newBuildStatus = new GitRepositoryBuildStatus(
+                existingBuildStatus.RepositoryName,
+                existingBuildStatus.BranchName
+            )
+            {
+                CommitId = "42"
+            };
+            
+            existingBuildStatus.MergeWith(newBuildStatus);
+            
+            existingBuildStatus.CommitId.ShouldBe("42");
+        }
+        
+        [Fact]
+        public void Should_Not_Update_Repository_CommitId_When_New_CommitId_Is_Empty()
+        {
+            var existingBuildStatus = new GitRepositoryBuildStatus("volo", "dev")
+            {
+                CommitId = "21"
+            };
+
+            var newBuildStatus = new GitRepositoryBuildStatus(
+                existingBuildStatus.RepositoryName,
+                existingBuildStatus.BranchName
+            )
+            {
+                CommitId = ""
+            };
+            
+            existingBuildStatus.MergeWith(newBuildStatus);
+            
+            existingBuildStatus.CommitId.ShouldBe("21");
         }
     }
 }

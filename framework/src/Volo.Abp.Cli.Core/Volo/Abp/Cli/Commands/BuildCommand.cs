@@ -27,7 +27,7 @@ namespace Volo.Abp.Cli.Commands
         public IBuildStatusGenerator BuildStatusGenerator { get; set; }
 
         public IBuildProjectListSorter BuildProjectListSorter { get; set; }
-        
+
         public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             var sw = new Stopwatch();
@@ -73,13 +73,13 @@ namespace Volo.Abp.Cli.Commands
                 string.IsNullOrEmpty(maxParallelBuild) ? 1 : Convert.ToInt32(maxParallelBuild),
                 dotnetBuildArguments ?? ""
             );
-            
+
             var buildStatus = BuildStatusGenerator.Generate(
                 buildConfig,
                 changedProjectFiles,
                 buildSucceededProjects
             );
-
+            
             RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
 
             sw.Stop();
@@ -87,7 +87,7 @@ namespace Volo.Abp.Cli.Commands
 
             return Task.CompletedTask;
         }
-        
+
         public string GetUsageInfo()
         {
             var sb = new StringBuilder();

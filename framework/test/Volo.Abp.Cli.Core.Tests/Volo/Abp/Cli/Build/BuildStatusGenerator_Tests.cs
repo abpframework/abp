@@ -54,6 +54,7 @@ namespace Volo.Abp.Cli.Build
             status.CommitId.ShouldBe(lastCommitId);
         }
         
+        
         [Fact]
         public void Should_Set_Repository_CommitId_When_All_Projects_Built_For_Child_Repository()
         {

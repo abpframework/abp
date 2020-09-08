@@ -85,6 +85,11 @@ namespace Volo.Abp.Cli.Build
 
         public void MergeWith(GitRepositoryBuildStatus newBuildStatus)
         {
+            if (!newBuildStatus.CommitId.IsNullOrEmpty())
+            {
+                CommitId = newBuildStatus.CommitId;
+            }
+
             foreach (var succeedProject in newBuildStatus.SucceedProjects)
             {
                 AddOrUpdateProjectStatus(succeedProject);

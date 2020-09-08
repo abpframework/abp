@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.Build
                     p.RepositoryName == buildConfig.GitRepository.Name &&
                     buildSucceededProjects.Contains(p.CsProjPath)
                 )
-                .Select(e => new DotNetProjectBuildStatus()
+                .Select(e => new DotNetProjectBuildStatus
                 {
                     CsProjPath = e.CsProjPath,
                     CommitId = lastCommitId

@@ -29,8 +29,7 @@ namespace Volo.Abp.Cli.Build
                     {
                         continue;
                     }
-
-                    // TODO: use parallel foreach here.
+                    
                     foreach (var projectDependency in project.Dependencies)
                     {
                         if (builtProjects.Contains(project.CsProjPath))
