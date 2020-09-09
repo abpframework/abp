@@ -1,13 +1,12 @@
 import { Component, Injector, Optional, SkipSelf, Type } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { LocalizationService } from '../services/localization.service';
+import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 import { RoutesService } from '../services/routes.service';
 import { SubscriptionService } from '../services/subscription.service';
-import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 import { TreeNode } from '../utils/tree-utils';
 
@@ -37,7 +36,7 @@ export class DynamicLayoutComponent {
   constructor(
     injector: Injector,
     private localizationService: LocalizationService,
-    private store: Store,
+    private replaceableComponents: ReplaceableComponentsService,
     private subscription: SubscriptionService,
     @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
   ) {
@@ -67,7 +66,7 @@ export class DynamicLayoutComponent {
         if (!expectedLayout) expectedLayout = eLayoutType.empty;
 
         const key = this.layouts.get(expectedLayout);
-        this.layout = this.getComponent(key).component;
+        this.layout = this.getComponent(key)?.component;
       }
     });
 
@@ -82,6 +81,6 @@ export class DynamicLayoutComponent {
   }
 
   private getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
-    return this.store.selectSnapshot(ReplaceableComponentsState.getComponent(key));
+    return this.replaceableComponents.get(key);
   }
 }
