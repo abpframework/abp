@@ -212,6 +212,12 @@ namespace Volo.Abp.Identity.MongoDB
                 .CountAsync(GetCancellationToken(cancellationToken));
         }
 
+        public virtual Task RemoveAllRolesAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        {
+            organizationUnit.Roles.Clear();
+            return Task.FromResult(0);
+        }
+
         public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit,
             CancellationToken cancellationToken = default)
         {
