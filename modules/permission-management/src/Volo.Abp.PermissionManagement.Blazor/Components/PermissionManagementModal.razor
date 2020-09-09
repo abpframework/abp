@@ -17,7 +17,7 @@
 
                     @foreach (var permission in group.Permissions)
                     {
-                        <Field>
+                        <Field Margin="permission.ParentName != null ? Blazorise.Margin.Is3.OnAll : Blazorise.Margin.Is0.OnAll">
                             <Check @bind-checked="@permission.IsGranted" TValue="bool">@permission.DisplayName</Check>
                         </Field>
                     }
