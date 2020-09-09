@@ -1,22 +1,22 @@
-﻿using System;
+using System;
+using System.Linq;
 using System.Text;
-using CommonMark;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
-using Microsoft.AspNetCore.Mvc.Razor.Internal;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Markdig;
+using Volo.Abp.DependencyInjection;
 using Volo.Blogging.Localization;
 
 namespace Volo.Blogging.Pages.Blog
 {
-    public abstract class BloggingPage : AbpPage
+    public class BloggingPageHelper : ITransientDependency
     {
-        [RazorInject]
         public IHtmlLocalizer<BloggingResource> L { get; set; }
 
         public const string DefaultTitle = "Blog";
 
-        public const int MaxShortContentLength = 128;
+        public const int MaxShortContentLength = 200;
 
         public string GetTitle(string title = null)
         {
@@ -28,32 +28,33 @@ namespace Volo.Blogging.Pages.Blog
             return title;
         }
 
-        public string GetShortContent(string content) //TODO: This should be moved to its own place!
+        public string GetShortContent(string content)
         {
-            var openingTag = "<p>";
-            var closingTag = "</p>";
+            var html = RenderMarkdownToHtmlAsString(content);
+            var plainText = Regex.Replace(html, "<[^>]*>", "");
 
-            var html = RenderMarkdownToString(content);
-            if (string.IsNullOrWhiteSpace(html))
-            {
-                return "";
-            }
-            var splittedHtml = html.Split(closingTag);
-
-            if (splittedHtml.Length < 1)
+            if (string.IsNullOrWhiteSpace(plainText))
             {
                 return "";
             }
 
-            var firstHtmlPart = splittedHtml[0];
-            var paragraphStartIndex = firstHtmlPart.IndexOf(openingTag, StringComparison.Ordinal) + openingTag.Length;
+            var shortContent = new StringBuilder();
+            var lines = plainText.Split(Environment.NewLine).Where(s => !string.IsNullOrWhiteSpace(s));
 
-            if (firstHtmlPart.Length - paragraphStartIndex <= MaxShortContentLength)
+            foreach (var line in lines)
             {
-                return firstHtmlPart.Substring(paragraphStartIndex);
+                if (shortContent.Length < MaxShortContentLength)
+                {
+                    shortContent.Append($" {line}");
+                }
+
+                if(shortContent.Length >= MaxShortContentLength)
+                {
+                    return shortContent.ToString().Substring(0, MaxShortContentLength) + "...";
+                }
             }
 
-            return firstHtmlPart.Substring(paragraphStartIndex, MaxShortContentLength) + "...";
+            return shortContent.ToString();
         }
 
         public IHtmlContent RenderMarkdownToHtml(string content)
@@ -62,26 +63,37 @@ namespace Volo.Blogging.Pages.Blog
             {
                 return new HtmlString("");
             }
-            
-            byte[] bytes = Encoding.Default.GetBytes(content);
-            var utf8Content = Encoding.UTF8.GetString(bytes);
 
-            var html = CommonMarkConverter.Convert(utf8Content);
+            var html = RenderMarkdownToHtmlAsString(content);
+
+            html = ReplaceCodeBlocksLanguage(
+                html,
+                "language-C#",
+                "language-csharp"
+            );
 
             return new HtmlString(html);
         }
 
-        public string RenderMarkdownToString(string content)
+        protected string ReplaceCodeBlocksLanguage(string content, string currentLanguage, string newLanguage)
+        {
+            return Regex.Replace(content, "<code class=\"" + currentLanguage + "\">", "<code class=\"" + newLanguage + "\">", RegexOptions.IgnoreCase);
+        }
+
+        public string RenderMarkdownToHtmlAsString(string content)
         {
             if (content.IsNullOrWhiteSpace())
             {
                 return "";
             }
 
-            byte[] bytes = Encoding.Default.GetBytes(content);
-            var utf8Content = Encoding.UTF8.GetString(bytes);
-
-            return CommonMarkConverter.Convert(utf8Content);
+            return Markdig.Markdown.ToHtml(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)),
+                new MarkdownPipelineBuilder()
+                    .UseAutoLinks()
+                    .UseBootstrap()
+                    .UseGridTables()
+                    .UsePipeTables()
+                    .Build());
         }
 
         public LocalizedHtmlString ConvertDatetimeToTimeAgo(DateTime dt)

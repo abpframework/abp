@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
+using Volo.Abp.Localization;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
@@ -88,10 +93,41 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private static void AddQueryStringParameter(StringBuilder urlBuilder, bool isFirstParam, string name, object value)
+        private static void AddQueryStringParameter(
+            StringBuilder urlBuilder,
+            bool isFirstParam,
+            string name,
+            [NotNull] object value)
         {
             urlBuilder.Append(isFirstParam ? "?" : "&");
-            urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(value.ToString()));
+
+            if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
+            {
+                var index = 0;
+                foreach (var item in (IEnumerable) value)
+                {
+                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
+                }
+                //remove & at the end of the urlBuilder.
+                urlBuilder.Remove(urlBuilder.Length - 1, 1);
+            }
+            else
+            {
+                urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
+            }
+        }
+
+        private static string ConvertValueToString([NotNull] object value)
+        {
+            using (CultureHelper.Use(CultureInfo.InvariantCulture))
+            {
+                if (value is DateTime dateTimeValue)
+                {
+                    return dateTimeValue.ToUniversalTime().ToString("u");
+                }
+
+                return value.ToString();
+            }
         }
     }
 }

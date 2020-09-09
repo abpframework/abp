@@ -8,7 +8,7 @@ Esta é a terceira parte da série de tutoriais Angular. Veja todas as peças:
 - [Parte II: Criar, atualizar e excluir livros](Part-II.md)
 - **Parte III: Testes de Integração (este tutorial)**
 
-Esta parte abrange os testes do **lado** do **servidor** . Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb) .
+Esta parte abrange os testes do **lado** do **servidor** . Você pode acessar o **código fonte** do aplicativo no [repositório GitHub](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb) .
 
 ### Testar projetos na solução
 

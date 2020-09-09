@@ -25,7 +25,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "AuditLogs", options.Schema);
 
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.ApplicationName).HasMaxLength(AuditLogConsts.MaxApplicationNameLength).HasColumnName(nameof(AuditLog.ApplicationName));
                 b.Property(x => x.ClientIpAddress).HasMaxLength(AuditLogConsts.MaxClientIpAddressLength).HasColumnName(nameof(AuditLog.ClientIpAddress));
@@ -36,7 +36,10 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 b.Property(x => x.HttpMethod).HasMaxLength(AuditLogConsts.MaxHttpMethodLength).HasColumnName(nameof(AuditLog.HttpMethod));
                 b.Property(x => x.Url).HasMaxLength(AuditLogConsts.MaxUrlLength).HasColumnName(nameof(AuditLog.Url));
                 b.Property(x => x.HttpStatusCode).HasColumnName(nameof(AuditLog.HttpStatusCode));
-                b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionsLength).HasColumnName(nameof(AuditLog.Exceptions));
+
+                if (builder.IsUsingOracle()) { AuditLogConsts.MaxExceptionsLengthValue = 2000; }
+                b.Property(x => x.Exceptions).HasMaxLength(AuditLogConsts.MaxExceptionsLengthValue).HasColumnName(nameof(AuditLog.Exceptions));
+                
                 b.Property(x => x.Comments).HasMaxLength(AuditLogConsts.MaxCommentsLength).HasColumnName(nameof(AuditLog.Comments));
                 b.Property(x => x.ExecutionDuration).HasColumnName(nameof(AuditLog.ExecutionDuration));
                 b.Property(x => x.ImpersonatorTenantId).HasColumnName(nameof(AuditLog.ImpersonatorTenantId));
@@ -56,7 +59,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "AuditLogActions", options.Schema);
 
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.AuditLogId).HasColumnName(nameof(AuditLogAction.AuditLogId));
                 b.Property(x => x.ServiceName).HasMaxLength(AuditLogActionConsts.MaxServiceNameLength).HasColumnName(nameof(AuditLogAction.ServiceName));
@@ -73,7 +76,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "EntityChanges", options.Schema);
 
-                b.ConfigureExtraProperties();
+                b.ConfigureByConvention();
 
                 b.Property(x => x.EntityTypeFullName).HasMaxLength(EntityChangeConsts.MaxEntityTypeFullNameLength).IsRequired().HasColumnName(nameof(EntityChange.EntityTypeFullName));
                 b.Property(x => x.EntityId).HasMaxLength(EntityChangeConsts.MaxEntityIdLength).IsRequired().HasColumnName(nameof(EntityChange.EntityId));
@@ -91,6 +94,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             builder.Entity<EntityPropertyChange>(b =>
             {
                 b.ToTable(options.TablePrefix + "EntityPropertyChanges", options.Schema);
+
+                b.ConfigureByConvention();
 
                 b.Property(x => x.NewValue).HasMaxLength(EntityPropertyChangeConsts.MaxNewValueLength).HasColumnName(nameof(EntityPropertyChange.NewValue));
                 b.Property(x => x.PropertyName).HasMaxLength(EntityPropertyChangeConsts.MaxPropertyNameLength).IsRequired().HasColumnName(nameof(EntityPropertyChange.PropertyName));

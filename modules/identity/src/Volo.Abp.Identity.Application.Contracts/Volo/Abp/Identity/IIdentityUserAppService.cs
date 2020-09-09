@@ -9,6 +9,8 @@ namespace Volo.Abp.Identity
     {
         Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
 
+        Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync();
+
         Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
 
         Task<IdentityUserDto> FindByUsernameAsync(string username);

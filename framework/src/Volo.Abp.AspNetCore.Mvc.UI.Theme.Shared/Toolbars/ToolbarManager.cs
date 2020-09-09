@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
 
                 foreach (var contributor in Options.Contributors)
                 {
-                    await contributor.ConfigureToolbarAsync(context).ConfigureAwait(false);
+                    await contributor.ConfigureToolbarAsync(context);
                 }
             }
 

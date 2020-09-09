@@ -1,75 +1,87 @@
-import { Component, Input, OnDestroy, Type } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import snq from 'snq';
+import { Component, Injector, Optional, SkipSelf, Type } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngxs/store';
 import { eLayoutType } from '../enums/common';
-import { Config } from '../models/config';
-import { ABP } from '../models/common';
-import { ConfigState } from '../states/config.state';
-import { takeUntilDestroy } from '../utils/rxjs-utils';
+import { ABP } from '../models';
+import { ReplaceableComponents } from '../models/replaceable-components';
+import { LocalizationService } from '../services/localization.service';
+import { RoutesService } from '../services/routes.service';
+import { SubscriptionService } from '../services/subscription.service';
+import { ReplaceableComponentsState } from '../states/replaceable-components.state';
+import { findRoute, getRoutePath } from '../utils/route-utils';
+import { TreeNode } from '../utils/tree-utils';
 
 @Component({
   selector: 'abp-dynamic-layout',
   template: `
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
-    <ng-template #componentOutlet><ng-container *ngComponentOutlet="layout"></ng-container></ng-template>
-  `
+    <ng-template #componentOutlet
+      ><ng-container *ngIf="isLayoutVisible" [ngComponentOutlet]="layout"></ng-container
+    ></ng-template>
+  `,
+  providers: [SubscriptionService],
 })
-export class DynamicLayoutComponent implements OnDestroy {
-  @Select(ConfigState.getOne('requirements')) requirements$: Observable<Config.Requirements>;
-
+export class DynamicLayoutComponent {
   layout: Type<any>;
 
-  constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
-    const {
-      requirements: { layouts },
-      routes
-    } = this.store.selectSnapshot(ConfigState.getAll);
+  // TODO: Consider a shared enum (eThemeSharedComponents) for known layouts
+  readonly layouts = new Map([
+    ['application', 'Theme.ApplicationLayoutComponent'],
+    ['account', 'Theme.AccountLayoutComponent'],
+    ['empty', 'Theme.EmptyLayoutComponent'],
+  ]);
 
-    if ((this.route.snapshot.data || {}).layout) {
-      this.layout = layouts
-        .filter(l => !!l)
-        .find((l: any) => snq(() => l.type.toLowerCase().indexOf(this.route.snapshot.data.layout), -1) > -1);
-    }
+  isLayoutVisible = true;
 
-    this.router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
+  constructor(
+    injector: Injector,
+    private localizationService: LocalizationService,
+    private store: Store,
+    private subscription: SubscriptionService,
+    @Optional() @SkipSelf() dynamicLayoutComponent: DynamicLayoutComponent,
+  ) {
+    if (dynamicLayoutComponent) return;
+    const route = injector.get(ActivatedRoute);
+    const router = injector.get(Router);
+    const routes = injector.get(RoutesService);
+
+    this.subscription.addOne(router.events, event => {
       if (event instanceof NavigationEnd) {
-        const { segments } = this.router.parseUrl(event.url).root.children.primary;
+        let expectedLayout = (route.snapshot.data || {}).layout;
 
-        const layout = (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
+        if (!expectedLayout) {
+          let node = findRoute(routes, getRoutePath(router));
+          node = { parent: node } as TreeNode<ABP.Route>;
 
-        this.layout = layouts
-          .filter(l => !!l)
-          .find((l: any) => snq(() => l.type.toLowerCase().indexOf(layout), -1) > -1);
+          while (node.parent) {
+            node = node.parent;
+
+            if (node.layout) {
+              expectedLayout = node.layout;
+              break;
+            }
+          }
+        }
+
+        if (!expectedLayout) expectedLayout = eLayoutType.empty;
+
+        const key = this.layouts.get(expectedLayout);
+        this.layout = this.getComponent(key).component;
       }
+    });
+
+    this.listenToLanguageChange();
+  }
+
+  private listenToLanguageChange() {
+    this.subscription.addOne(this.localizationService.languageChange, () => {
+      this.isLayoutVisible = false;
+      setTimeout(() => (this.isLayoutVisible = true), 0);
     });
   }
 
-  ngOnDestroy() {}
-}
-
-function findLayout(segments: UrlSegment[], routes: ABP.FullRoute[]): eLayoutType {
-  let layout = eLayoutType.empty;
-
-  const route = routes
-    .reduce((acc, val) => (val.wrapper ? [...acc, ...val.children] : [...acc, val]), [])
-    .find(r => r.path === segments[0].path);
-
-  if (route) {
-    if (route.layout) {
-      layout = route.layout;
-    }
-
-    if (route.children && route.children.length && segments.length > 1) {
-      const child = route.children.find(c => c.path === segments[1].path);
-
-      if (child && child.layout) {
-        layout = child.layout;
-      }
-    }
+  private getComponent(key: string): ReplaceableComponents.ReplaceableComponent {
+    return this.store.selectSnapshot(ReplaceableComponentsState.getComponent(key));
   }
-
-  return layout;
 }

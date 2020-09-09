@@ -15,19 +15,19 @@ namespace Volo.Abp.SettingManagement
             SettingManagementStore = settingManagementStore;
         }
 
-        public async Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
+        public virtual async Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey)
         {
-            return await SettingManagementStore.GetOrNullAsync(setting.Name, Name, NormalizeProviderKey(providerKey)).ConfigureAwait(false);
+            return await SettingManagementStore.GetOrNullAsync(setting.Name, Name, NormalizeProviderKey(providerKey));
         }
 
         public virtual async Task SetAsync(SettingDefinition setting, string value, string providerKey)
         {
-            await SettingManagementStore.SetAsync(setting.Name, value, Name, NormalizeProviderKey(providerKey)).ConfigureAwait(false);
+            await SettingManagementStore.SetAsync(setting.Name, value, Name, NormalizeProviderKey(providerKey));
         }
 
         public virtual async Task ClearAsync(SettingDefinition setting, string providerKey)
         {
-            await SettingManagementStore.DeleteAsync(setting.Name, Name, NormalizeProviderKey(providerKey)).ConfigureAwait(false);
+            await SettingManagementStore.DeleteAsync(setting.Name, Name, NormalizeProviderKey(providerKey));
         }
 
         protected virtual string NormalizeProviderKey(string providerKey)

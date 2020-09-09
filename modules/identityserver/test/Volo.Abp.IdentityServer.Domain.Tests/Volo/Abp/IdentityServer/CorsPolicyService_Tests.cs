@@ -23,27 +23,27 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task IsOriginAllowedAsync()
         {
-            (await _corsPolicyService.IsOriginAllowedAsync("https://client1-origin.com").ConfigureAwait(false)).ShouldBeTrue();
-            (await _corsPolicyService.IsOriginAllowedAsync("https://unknown-origin.com").ConfigureAwait(false)).ShouldBeFalse();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://client1-origin.com")).ShouldBeTrue();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://unknown-origin.com")).ShouldBeFalse();
         }
 
         [Fact]
         public async Task IsOriginAllowedAsync_Should_Invalidate_Cache_On_Update()
         {
             //It does not exists before
-            (await _corsPolicyService.IsOriginAllowedAsync("https://new-origin.com").ConfigureAwait(false)).ShouldBeFalse();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://new-origin.com")).ShouldBeFalse();
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var client1 = await _clientRepository.FindByCliendIdAsync("ClientId1").ConfigureAwait(false);
+                var client1 = await _clientRepository.FindByCliendIdAsync("ClientId1");
                 client1.AddCorsOrigin("https://new-origin.com");
-                await _clientRepository.UpdateAsync(client1).ConfigureAwait(false);
+                await _clientRepository.UpdateAsync(client1);
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
 
             //It does exists now
-            (await _corsPolicyService.IsOriginAllowedAsync("https://new-origin.com").ConfigureAwait(false)).ShouldBeTrue();
+            (await _corsPolicyService.IsOriginAllowedAsync("https://new-origin.com")).ShouldBeTrue();
         }
     }
 }

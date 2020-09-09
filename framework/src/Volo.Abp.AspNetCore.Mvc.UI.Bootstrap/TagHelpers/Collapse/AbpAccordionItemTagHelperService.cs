@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
         {
             SetRandomIdIfNotProvided();
 
-            var innerContent = (await output.GetChildContentAsync().ConfigureAwait(false)).GetContent();
+            var innerContent = (await output.GetChildContentAsync()).GetContent();
 
             var html = GetAccordionHeaderItem(context, output) + GetAccordionContentItem(context, output, innerContent);
 
@@ -22,8 +22,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 
             output.SuppressOutput();
         }
-
-
 
         protected virtual string GetAccordionHeaderItem(TagHelperContext context, TagHelperOutput output)
         {

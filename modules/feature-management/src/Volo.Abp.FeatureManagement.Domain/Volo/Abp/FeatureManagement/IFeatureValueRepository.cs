@@ -9,6 +9,8 @@ namespace Volo.Abp.FeatureManagement
     {
         Task<FeatureValue> FindAsync(string name, string providerName, string providerKey);
 
+        Task<List<FeatureValue>> FindAllAsync(string name, string providerName, string providerKey);
+
         Task<List<FeatureValue>> GetListAsync(string providerName, string providerKey);
     }
 }

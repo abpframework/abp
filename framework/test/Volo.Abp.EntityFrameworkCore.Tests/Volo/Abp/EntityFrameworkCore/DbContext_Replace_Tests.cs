@@ -31,7 +31,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 (_dummyRepository.GetDbContext() is IThirdDbContext).ShouldBeTrue();
                 (_dummyRepository.GetDbContext() is TestAppDbContext).ShouldBeTrue();
 
-                await _unitOfWorkManager.Current.CompleteAsync().ConfigureAwait(false);
+                await _unitOfWorkManager.Current.CompleteAsync();
             }
         }
     }

@@ -7,16 +7,23 @@ import { PermissionManagement } from '../models/permission-management';
   providedIn: 'root',
 })
 export class PermissionManagementService {
+  apiName = 'AbpPermissionManagement';
+
   constructor(private rest: RestService) {}
 
-  getPermissions(params: PermissionManagement.GrantedProvider): Observable<PermissionManagement.Response> {
+  getPermissions(
+    params: PermissionManagement.GrantedProvider,
+  ): Observable<PermissionManagement.Response> {
     const request: Rest.Request<PermissionManagement.GrantedProvider> = {
       method: 'GET',
-      url: '/api/abp/permissions',
+      url: '/api/permission-management/permissions',
       params,
     };
 
-    return this.rest.request<PermissionManagement.GrantedProvider, PermissionManagement.Response>(request);
+    return this.rest.request<PermissionManagement.GrantedProvider, PermissionManagement.Response>(
+      request,
+      { apiName: this.apiName },
+    );
   }
 
   updatePermissions({
@@ -26,11 +33,13 @@ export class PermissionManagementService {
   }: PermissionManagement.GrantedProvider & PermissionManagement.UpdateRequest): Observable<null> {
     const request: Rest.Request<PermissionManagement.UpdateRequest> = {
       method: 'PUT',
-      url: '/api/abp/permissions',
+      url: '/api/permission-management/permissions',
       body: { permissions },
       params: { providerKey, providerName },
     };
 
-    return this.rest.request<PermissionManagement.UpdateRequest, null>(request);
+    return this.rest.request<PermissionManagement.UpdateRequest, null>(request, {
+      apiName: this.apiName,
+    });
   }
 }

@@ -26,10 +26,10 @@ Příkaz `new` vytvoří **vrstvenou MVC aplikaci** s **Entity Framework Core** 
 
 Vytvořené řešení vyžaduje;
 
-* [Visual Studio 2019 (v16.3+)](https://visualstudio.microsoft.com/vs/)
+* [Visual Studio 2019 (v16.4.0+)](https://visualstudio.microsoft.com/vs/)
 * [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
 * [Node v12+](https://nodejs.org)
-* [Yarn v1.19+](https://yarnpkg.com/)
+* [Yarn v1.19+](https://classic.yarnpkg.com/)
 
 ### Struktura řešení
 

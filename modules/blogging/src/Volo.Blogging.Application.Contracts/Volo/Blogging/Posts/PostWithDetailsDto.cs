@@ -18,6 +18,8 @@ namespace Volo.Blogging.Posts
 
         public string Content { get; set; }
 
+        public string Description { get; set; }
+
         public int ReadCount { get; set; }
 
         public int CommentCount { get; set; }

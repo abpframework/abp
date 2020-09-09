@@ -1,15 +1,23 @@
 ﻿$(function () {
-
-    var $container = $("#qa-new-post-container");
-    var $editorContainer = $container.find(".new-post-editor");
-    var $submitButton = $container.find("button[type=submit]");
-    var $form = $container.find("form#new-post-form");
-    var editorDataKey = "tuiEditor";
+    var $container = $('#qa-new-post-container');
+    var $editorContainer = $container.find('.new-post-editor');
+    var $submitButton = $container.find('button[type=submit]');
+    var $form = $container.find('form#new-post-form');
+    var editorDataKey = 'tuiEditor';
+    var $titleLengthWarning = $('#title-length-warning');
+    var maxTitleLength = parseInt($titleLengthWarning.data('max-length'));
+    var $title = $('#Post_Title');
+    var $url = $('#Post_Url');
+    var $coverImage = $('#CoverImage');
+    var $postCoverImage = $('#Post_CoverImage');
+    var $coverImageFile = $('#CoverImageFile');
+    var $postFormSubmitButton = $('#PostFormSubmitButton');
 
     var setCoverImage = function (file) {
-        $('#Post_CoverImage').val(file.fileUrl);
-        $("#CoverImage").attr("src", file.fileUrl);
-        $("#CoverImage").show();
+        $postCoverImage.val(file.fileUrl);
+        $coverImage.attr('src', file.fileUrl);
+        $coverImage.show();
+        $postFormSubmitButton.removeAttr('disabled');
     };
 
     var uploadCoverImage = function (file) {
@@ -17,22 +25,23 @@
         formData.append('file', file);
 
         $.ajax({
-            type: "POST",
-            url: "/api/blogging/files/images/upload",
+            type: 'POST',
+            url: '/api/blogging/files/images/upload',
             data: formData,
             contentType: false,
             processData: false,
             success: function (response) {
                 setCoverImage(response);
-            }
+            },
         });
     };
 
-    $('#CoverImageFile').change(function () {
-        if (!$('#CoverImageFile').prop('files').length) {
+    $coverImageFile.change(function () {
+        if (!$coverImageFile.prop('files').length) {
             return;
         }
-        var file = $('#CoverImageFile').prop('files')[0];
+        $postFormSubmitButton.attr('disabled', true);
+        var file = $coverImageFile.prop('files')[0];
         uploadCoverImage(file);
     });
 
@@ -40,44 +49,45 @@
         var formData = new FormData();
         formData.append('file', file);
 
-        $.ajax({ 
-            type: "POST",
-            url: "/api/blogging/files/images/upload",
+        $.ajax({
+            type: 'POST',
+            url: '/api/blogging/files/images/upload',
             data: formData,
             contentType: false,
             processData: false,
             success: function (response) {
                 callbackFn(response.fileUrl);
-            }
+            },
         });
     };
 
-    var newPostEditor = $editorContainer.tuiEditor({
-        usageStatistics: false,
-        initialEditType: 'markdown',
-        previewStyle: 'tab',
-        height: "auto",
-        hooks: {
-            addImageBlobHook: function (blob, callback, source) {
-                var imageAltText = blob.name;
+    var newPostEditor = $editorContainer
+        .tuiEditor({
+            usageStatistics: false,
+            initialEditType: 'markdown',
+            previewStyle: 'tab',
+            height: 'auto',
+            hooks: {
+                addImageBlobHook: function (blob, callback, source) {
+                    var imageAltText = blob.name;
 
-                uploadImage(blob,
-                    function (fileUrl) {
+                    uploadImage(blob, function (fileUrl) {
                         callback(fileUrl, imageAltText);
                     });
-            }
-        },
-        events: {
-            load: function () {
-                $editorContainer.find(".loading-cover").remove();
-                $submitButton.prop("disabled", false);
-                $form.data("validator").settings.ignore = '.ignore';
-                $editorContainer.find(':input').addClass('ignore');
-            }
-        }
-    }).data(editorDataKey);
+                },
+            },
+            events: {
+                load: function () {
+                    $editorContainer.find('.loading-cover').remove();
+                    $submitButton.prop('disabled', false);
+                    $form.data('validator').settings.ignore = '.ignore';
+                    $editorContainer.find(':input').addClass('ignore');
+                },
+            },
+        })
+        .data(editorDataKey);
 
-    $container.find("form#new-post-form").submit(function (e) {
+    $container.find('form#new-post-form').submit(function (e) {
         var $postTextInput = $form.find("input[name='Post.Content']");
 
         var postText = newPostEditor.getMarkdown();
@@ -87,38 +97,44 @@
             var validationResult = $form.validate();
             abp.message.warn(validationResult.errorList[0].message); //TODO: errors can be merged into lines. make sweetalert accept HTML.
             e.preventDefault();
-            return false; //for old browsers 
+            return false; //for old browsers
         }
 
         $submitButton.buttonBusy();
         $(this).off('submit').submit();
+        return true;
     });
 
     var urlEdited = false;
     var reflectedChange = false;
 
-    $('#Post_Title').on("change paste keyup", function () {
+    $title.on('change paste keyup', function () {
         if (urlEdited) {
             return;
         }
 
-        var title = $('#Post_Title').val();
+        var title = $title.val();
 
-        if (title.length > 64) {
-            title = title.substring(0, 64);
+        if (title.length > maxTitleLength) {
+            $titleLengthWarning.show();
+        } else {
+            $titleLengthWarning.hide();
         }
 
+        title = title.replace(' &', ' ');
+        title = title.replace('& ', ' ');
+        title = title.replace('&', '');
         title = title.replace(' ', '-');
+        title = title.replace('/', '-');
         title = title.replace(new RegExp(' ', 'g'), '-');
         reflectedChange = true;
-        $('#Post_Url').val(title);
+        $url.val(title);
         reflectedChange = false;
     });
 
-    $('#Post_Url').change(function () {
+    $url.change(function () {
         if (!reflectedChange) {
             urlEdited = true;
         }
     });
-
 });

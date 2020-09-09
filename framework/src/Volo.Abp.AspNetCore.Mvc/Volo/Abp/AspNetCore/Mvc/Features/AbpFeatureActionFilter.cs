@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
         {
             if (!context.ActionDescriptor.IsControllerAction())
             {
-                await next().ConfigureAwait(false);
+                await next();
                 return;
             }
 
@@ -33,9 +33,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
             {
                 await _methodInvocationAuthorizationService.CheckAsync(
                     new MethodInvocationFeatureCheckerContext(methodInfo)
-                ).ConfigureAwait(false);
+                );
 
-                await next().ConfigureAwait(false);
+                await next();
             }
         }
     }

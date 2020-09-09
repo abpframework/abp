@@ -26,9 +26,9 @@ namespace Volo.Abp.BackgroundJobs
 
             await _backgroundJobStore.InsertAsync(
                 jobInfo
-            ).ConfigureAwait(false);
+            );
 
-            var jobInfo2 = await _backgroundJobStore.FindAsync(jobInfo.Id).ConfigureAwait(false);
+            var jobInfo2 = await _backgroundJobStore.FindAsync(jobInfo.Id);
             jobInfo2.ShouldNotBeNull();
             jobInfo2.Id.ShouldBe(jobInfo.Id);
             jobInfo2.JobArgs.ShouldBe(jobInfo.JobArgs);

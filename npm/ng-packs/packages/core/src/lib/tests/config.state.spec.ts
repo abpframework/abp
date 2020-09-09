@@ -1,12 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { ReplaySubject, timer, Subject, of } from 'rxjs';
+import { of, ReplaySubject, timer } from 'rxjs';
+import { SetLanguage } from '../actions';
 import { Config } from '../models/config';
 import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
-import { SetLanguage, PatchRouteByName, AddRoute } from '../actions';
-import clone from 'just-clone';
-import { ABP } from '../models';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -32,61 +31,6 @@ export const CONFIG_STATE_DATA = {
   requirements: {
     layouts: [null, null, null],
   },
-  routes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-          parentName: 'AbpAccount::Menu:Account',
-        },
-      ],
-      url: '/account',
-    },
-  ],
-  flattedRoutes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-          parentName: 'AbpAccount::Menu:Account',
-        },
-      ],
-      url: '/account',
-    },
-    {
-      path: 'login',
-      name: 'AbpAccount::Login',
-      order: 1,
-      url: '/account/login',
-      parentName: 'AbpAccount::Menu:Account',
-    },
-  ],
   localization: {
     values: {
       MyProjectName: {
@@ -104,6 +48,26 @@ export const CONFIG_STATE_DATA = {
         flagIcon: null,
       },
     ],
+    currentCulture: {
+      displayName: 'English',
+      englishName: 'English',
+      threeLetterIsoLanguageName: 'eng',
+      twoLetterIsoLanguageName: 'en',
+      isRightToLeft: false,
+      cultureName: 'en',
+      name: 'en',
+      nativeName: 'English',
+      dateTimeFormat: {
+        calendarAlgorithmType: 'SolarCalendar',
+        dateTimeFormatLong: 'dddd, MMMM d, yyyy',
+        shortDatePattern: 'M/d/yyyy',
+        fullDateTimePattern: 'dddd, MMMM d, yyyy h:mm:ss tt',
+        dateSeparator: '/',
+        shortTimePattern: 'h:mm tt',
+        longTimePattern: 'h:mm:ss tt',
+      },
+    },
+    defaultResourceName: null,
   },
   auth: {
     policies: {
@@ -116,6 +80,7 @@ export const CONFIG_STATE_DATA = {
   },
   setting: {
     values: {
+      'Abp.Custom.SomeSetting': 'X',
       'Abp.Localization.DefaultLanguage': 'en',
     },
   },
@@ -124,9 +89,13 @@ export const CONFIG_STATE_DATA = {
     id: null,
     tenantId: null,
     userName: null,
+    email: null,
+    roles: [],
   },
   features: {
-    values: {},
+    values: {
+      'Chat.Enable': 'True',
+    },
   },
 } as Config.State;
 
@@ -135,19 +104,17 @@ describe('ConfigState', () => {
   let store: SpyObject<Store>;
   let service: ConfigStateService;
   let state: ConfigState;
-  let appConfigService: SpyObject<ApplicationConfigurationService>;
 
   const createService = createServiceFactory({
     service: ConfigStateService,
-    mocks: [ApplicationConfigurationService, Store],
+    mocks: [ApplicationConfigurationService, Store, HttpClient],
   });
 
   beforeEach(() => {
     spectator = createService();
-    store = spectator.get(Store);
+    store = spectator.inject(Store);
     service = spectator.service;
-    appConfigService = spectator.get(ApplicationConfigurationService);
-    state = new ConfigState(spectator.get(ApplicationConfigurationService), store);
+    state = new ConfigState(spectator.inject(HttpClient), store);
   });
 
   describe('#getAll', () => {
@@ -187,17 +154,6 @@ describe('ConfigState', () => {
     });
   });
 
-  describe('#getRoute', () => {
-    it('should return route', () => {
-      expect(ConfigState.getRoute(null, '::Menu:Home')(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.flattedRoutes[0],
-      );
-      expect(ConfigState.getRoute('account')(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.flattedRoutes[1],
-      );
-    });
-  });
-
   describe('#getApiUrl', () => {
     it('should return api url', () => {
       expect(ConfigState.getApiUrl('other')(CONFIG_STATE_DATA)).toEqual(
@@ -205,6 +161,14 @@ describe('ConfigState', () => {
       );
       expect(ConfigState.getApiUrl()(CONFIG_STATE_DATA)).toEqual(
         CONFIG_STATE_DATA.environment.apis.default.url,
+      );
+    });
+  });
+
+  describe('#getFeature', () => {
+    it('should return a setting', () => {
+      expect(ConfigState.getFeature('Chat.Enable')(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.features.values['Chat.Enable'],
       );
     });
   });
@@ -218,14 +182,14 @@ describe('ConfigState', () => {
   });
 
   describe('#getSettings', () => {
-    it('should return settings', () => {
-      expect(ConfigState.getSettings('Localization')(CONFIG_STATE_DATA)).toEqual({
-        'Abp.Localization.DefaultLanguage': 'en',
-      });
-
-      expect(ConfigState.getSettings('AllSettings')(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.setting.values,
-      );
+    test.each`
+      keyword           | expected
+      ${undefined}      | ${CONFIG_STATE_DATA.setting.values}
+      ${'Localization'} | ${{ 'Abp.Localization.DefaultLanguage': 'en' }}
+      ${'X'}            | ${{}}
+      ${'localization'} | ${{}}
+    `('should return $expected when keyword is given as $keyword', ({ keyword, expected }) => {
+      expect(ConfigState.getSettings(keyword)(CONFIG_STATE_DATA)).toEqual(expected);
     });
   });
 
@@ -251,7 +215,7 @@ describe('ConfigState', () => {
       );
 
       expect(ConfigState.getLocalization('AbpIdentity::NoIdentity')(CONFIG_STATE_DATA)).toBe(
-        'AbpIdentity::NoIdentity',
+        'NoIdentity',
       );
 
       expect(
@@ -266,28 +230,26 @@ describe('ConfigState', () => {
         )(CONFIG_STATE_DATA),
       ).toBe('first and second do not match.');
 
-      try {
+      expect(
         ConfigState.getLocalization('::Test')({
           ...CONFIG_STATE_DATA,
           environment: {
             ...CONFIG_STATE_DATA.environment,
             localization: {} as any,
           },
-        });
-        expect(false).toBeTruthy(); // fail
-      } catch (error) {
-        expect((error as Error).message).toContain('Please check your environment');
-      }
+        }),
+      ).toBe('Test');
     });
   });
 
   describe('#GetAppConfiguration', () => {
-    it('should call the getConfiguration of ApplicationConfigurationService and patch the state', done => {
+    it('should call the app-configuration API and patch the state', done => {
       let patchStateArg;
       let dispatchArg;
 
       const configuration = {
         setting: { values: { 'Abp.Localization.DefaultLanguage': 'tr;TR' } },
+        localization: { currentCulture: {} },
       };
 
       const res$ = new ReplaySubject(1);
@@ -298,132 +260,17 @@ describe('ConfigState', () => {
         dispatchArg = a;
         return of(a);
       });
-      appConfigService.getConfiguration.andReturn(res$);
+      const httpClient = spectator.inject(HttpClient);
+      httpClient.get.andReturn(res$);
 
       state.addData({ patchState, dispatch } as any).subscribe();
 
       timer(0).subscribe(() => {
         expect(patchStateArg).toEqual(configuration);
         expect(dispatchArg instanceof SetLanguage).toBeTruthy();
-        expect(dispatchArg).toEqual({ payload: 'tr' });
+        expect(dispatchArg).toEqual({ payload: 'tr', dispatchAppConfiguration: false });
         done();
       });
-    });
-  });
-
-  describe('#PatchRouteByName', () => {
-    it('should patch the route', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.patchRoute(
-        { patchState, getState } as any,
-        new PatchRouteByName('::Menu:Home', {
-          name: 'Home',
-          path: 'home',
-          children: [{ path: 'dashboard', name: 'Dashboard' }],
-        }),
-      );
-
-      expect(patchStateArg.routes[0]).toEqual({
-        name: 'Home',
-        path: 'home',
-        url: '/home',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/home/dashboard' }],
-      });
-      expect(patchStateArg.flattedRoutes[0]).toEqual({
-        name: 'Home',
-        path: 'home',
-        url: '/home',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/home/dashboard' }],
-      });
-    });
-
-    it('should patch the route without path', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.patchRoute(
-        { patchState, getState } as any,
-        new PatchRouteByName('::Menu:Home', {
-          name: 'Main',
-          children: [{ path: 'dashboard', name: 'Dashboard' }],
-        }),
-      );
-
-      expect(patchStateArg.routes[0]).toEqual({
-        name: 'Main',
-        path: '',
-        url: '/',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/dashboard' }],
-      });
-
-      expect(patchStateArg.flattedRoutes[0]).toEqual({
-        name: 'Main',
-        path: '',
-        url: '/',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/dashboard' }],
-      });
-    });
-  });
-
-  describe('#AddRoute', () => {
-    const newRoute = {
-      name: 'My new page',
-      iconClass: 'fa fa-dashboard',
-      path: 'page',
-      invisible: false,
-      order: 2,
-      requiredPolicy: 'MyProjectName::MyNewPage',
-    } as Omit<ABP.Route, 'children'>;
-
-    test('should add a new route', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.addRoute({ patchState, getState } as any, new AddRoute(newRoute));
-
-      expect(patchStateArg.routes[CONFIG_STATE_DATA.routes.length]).toEqual({
-        ...newRoute,
-        url: '/page',
-      });
-      expect(patchStateArg.flattedRoutes[CONFIG_STATE_DATA.flattedRoutes.length]).toEqual(
-        patchStateArg.routes[CONFIG_STATE_DATA.routes.length],
-      );
-    });
-
-    it('should add a new child route', () => {
-      let patchStateArg;
-
-      const patchState = jest.fn(s => (patchStateArg = s));
-      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
-
-      state.addRoute(
-        { patchState, getState } as any,
-        new AddRoute({ ...newRoute, parentName: 'AbpAccount::Login' }),
-      );
-
-      expect(patchStateArg.routes[1].children[0].children[0]).toEqual({
-        ...newRoute,
-        parentName: 'AbpAccount::Login',
-        url: '/account/login/page',
-      });
-
-      expect(patchStateArg.flattedRoutes[CONFIG_STATE_DATA.flattedRoutes.length]).toEqual(
-        patchStateArg.routes[1].children[0].children[0],
-      );
-
-      expect(
-        patchStateArg.flattedRoutes[
-          CONFIG_STATE_DATA.flattedRoutes.findIndex(route => route.name === 'AbpAccount::Login')
-        ],
-      ).toEqual(patchStateArg.routes[1].children[0]);
     });
   });
 });

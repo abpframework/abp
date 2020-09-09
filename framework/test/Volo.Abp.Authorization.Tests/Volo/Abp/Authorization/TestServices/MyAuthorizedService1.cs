@@ -16,7 +16,7 @@ namespace Volo.Abp.Authorization.TestServices
         [AllowAnonymous]
         public virtual async Task<int> AnonymousAsync()
         {
-            await Task.Delay(10).ConfigureAwait(false);
+            await Task.Delay(10);
             return 42;
         }
 
@@ -27,7 +27,7 @@ namespace Volo.Abp.Authorization.TestServices
 
         public virtual async Task<int> ProtectedByClassAsync()
         {
-            await Task.Delay(10).ConfigureAwait(false);
+            await Task.Delay(10);
             return 42;
         }
     }

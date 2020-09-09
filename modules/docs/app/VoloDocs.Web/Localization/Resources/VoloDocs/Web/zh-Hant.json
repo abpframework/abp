@@ -1,0 +1,10 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "DocsTitle": "VoloDocs",
+    "WelcomeVoloDocs": "歡迎使用VoloDocs!",
+    "NoProjectWarning": "目前沒有專案!",
+    "CreateYourFirstProject": "建立您的第一個專案",
+    "NoProject": "沒有專案!"
+  }
+}

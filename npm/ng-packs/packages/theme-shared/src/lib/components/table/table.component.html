@@ -3,12 +3,17 @@
     <ng-container
       *ngTemplateOutlet="scrollable ? scrollableTemplate : defaultTemplate"
     ></ng-container>
-    <abp-pagination
-      *ngIf="rows"
-      [totalPages]="totalPages"
-      [(value)]="page"
-      (valueChange)="pageChange.emit($event)"
-    ></abp-pagination>
+    <div class="pagination-wrapper">
+      <ngb-pagination
+        [class.op-0]="!totalPages"
+        [collectionSize]="totalPages"
+        [pageSize]="1"
+        [page]="page"
+        (pageChange)="pageChange.emit($event)"
+        [maxSize]="3"
+        [rotate]="true"
+      ></ngb-pagination>
+    </div>
   </div>
 </div>
 
@@ -16,7 +21,7 @@
   <div class="ui-table-scrollable-wrapper">
     <div class="ui-table-scrollable-view"></div>
     <div class="ui-table-scrollable-header ui-widget-header">
-      <div [style.margin-left.px]="-bodyScrollLeft" class="ui-table-scrollable-header-box">
+      <div #header class="ui-table-scrollable-header-box">
         <table class="ui-table-scrollable-header-table">
           <ng-container *ngTemplateOutlet="colGroup"></ng-container>
           <ng-container *ngTemplateOutlet="head"></ng-container>
@@ -26,7 +31,7 @@
     </div>
     <div
       #scrollableBody
-      (scroll)="bodyScrollLeft = scrollableBody.scrollLeft"
+      (scroll)="header.style.margin = marginCalculator(scrollableBody)"
       class="ui-table-scrollable-body"
       [style.max-height]="scrollHeight"
     >
@@ -57,22 +62,20 @@
 </ng-template>
 
 <ng-template #body>
-  <tbody class="ui-table-tbody">
-    <ng-container *ngIf="value && value.length; else emptyTemplate">
-      <ng-template
-        #bodyTemplateWrapper
-        *ngFor="let val of slicedValue; let index = index; trackBy: trackByFn"
-        [ngTemplateOutlet]="bodyTemplate"
-        [ngTemplateOutletContext]="{ $implicit: val, rowIndex: index }"
-      ></ng-template>
-    </ng-container>
+  <tbody class="ui-table-tbody" *ngIf="value && value.length; else emptyTemplate">
+    <ng-template
+      #bodyTemplateWrapper
+      *ngFor="let val of slicedValue; let index = index; trackBy: trackByFn"
+      [ngTemplateOutlet]="bodyTemplate"
+      [ngTemplateOutletContext]="{ $implicit: val, rowIndex: index }"
+    ></ng-template>
   </tbody>
 </ng-template>
 
 <ng-template #emptyTemplate>
-  <tr class="empty-row" #emptyRow>
-    <div class="empty-row-content" [style.width.px]="emptyRow.offsetWidth">
-      {{ emptyMessage | abpLocalization }}
-    </div>
-  </tr>
+  <caption class="ui-table-empty">
+    {{
+      emptyMessage | abpLocalization
+    }}
+  </caption>
 </ng-template>

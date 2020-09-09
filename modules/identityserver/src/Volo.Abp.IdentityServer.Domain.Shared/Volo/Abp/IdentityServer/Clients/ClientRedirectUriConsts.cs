@@ -2,6 +2,10 @@
 {
     public class ClientRedirectUriConsts
     {
-        public const int RedirectUriMaxLength = 2000;
+        /// <summary>
+        /// Default value: 2000
+        /// </summary>
+        public static int RedirectUriMaxLength { get; set; } = 2000;
+        public static int RedirectUriMaxLengthValue { get; set; } = 2000;
     }
 }

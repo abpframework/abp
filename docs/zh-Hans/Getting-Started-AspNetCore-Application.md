@@ -2,7 +2,7 @@
 
 本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. 
 
-通常情况下你需要下载一个 ***[启动模板](https://abp.io/Templates)***
+通常情况下你需要下载一个 ***[启动模板](Getting-Started-AspNetCore-MVC-Template.md)***
 
 ### 创建一个新项目
 
@@ -30,10 +30,8 @@ ABP是一个模块化框架,它需要一个**启动 (根) 模块**继承自``Abp
 
 ````C#
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 
@@ -42,7 +40,8 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public override void OnApplicationInitialization(
+            ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
@@ -51,8 +50,14 @@ namespace BasicAspNetCoreApplication
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
-            app.UseMvcWithDefaultRoute();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseConfiguredEndpoints();
         }
     }
 }
@@ -156,7 +161,7 @@ services.AddApplication<AppModule>(options =>
 });
 ````
 
-4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器)：
+4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器):
 
  ````csharp
 public class Program
@@ -186,4 +191,4 @@ public class Program
 
 ### 源码
 
-从[此处](https://github.com/abpframework/abp/tree/dev/samples/BasicAspNetCoreApplication)获取本教程中创建的示例项目的源代码.
+从[此处](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)获取本教程中创建的示例项目的源代码.

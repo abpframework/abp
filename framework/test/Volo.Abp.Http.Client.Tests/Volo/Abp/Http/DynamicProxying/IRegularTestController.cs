@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
@@ -7,6 +8,10 @@ namespace Volo.Abp.Http.DynamicProxying
         Task<int> IncrementValueAsync(int value);
 
         Task GetException1Async();
+
+        Task GetException2Async();
+
+        Task<DateTime> GetWithDateTimeParameterAsync(DateTime dateTime1);
 
         Task<string> PostValueWithHeaderAndQueryStringAsync(string headerValue, string qsValue);
 

@@ -2,7 +2,7 @@
 
 Application services are used to implement the **use cases** of an application. They are used to **expose domain logic to the presentation layer**.
 
-An Application Service is called from the presentation layer (optionally) with a **DTO (Data Transfer Object)** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
+An Application Service is called from the presentation layer (optionally) with a **DTO ([Data Transfer Object](Data-Transfer-Objects.md))** as the parameter. It uses domain objects to **perform some specific business logic** and (optionally) returns a DTO back to the presentation layer. Thus, the presentation layer is completely **isolated** from domain layer.
 
 ## Example
 
@@ -132,6 +132,8 @@ The `CreateAsync` method above manually creates a `Book` entity from given `Crea
 
 However, in many cases, it's very practical to use **auto object mapping** to set properties of an object from a similar object. ABP provides an [object to object mapping](Object-To-Object-Mapping.md) infrastructure to make this even easier.
 
+Object to object mapping provides abstractions and it is implemented by the [AutoMapper](https://automapper.org/) library by default.
+
 Let's create another method to get a book. First, define the method in the `IBookAppService` interface:
 
 ````csharp
@@ -146,7 +148,6 @@ public interface IBookAppService : IApplicationService
 `BookDto` is a simple [DTO](Data-Transfer-Objects.md) class defined as below:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))] //Defines the mapping
 public class BookDto
 {
     public Guid Id { get; set; }
@@ -159,21 +160,38 @@ public class BookDto
 }
 ````
 
-* `BookDto` defines `[AbpAutoMapFrom(typeof(Book))]` attribute to create the object mapping from `Book` to `BookDto`.
-
-Then you can implement the `GetAsync` method as shown below:
+AutoMapper requires to create a mapping [profile class](https://docs.automapper.org/en/stable/Configuration.html#profile-instances). Example:
 
 ````csharp
-public async Task<BookDto> GetAsync(Guid id)
+public class MyProfile : Profile
 {
-    var book = await _bookRepository.GetAsync(id);
-    return book.MapTo<BookDto>();
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+    }
 }
 ````
 
-`MapTo` extension method converts `Book` object to `BookDto` object by copying all properties with the same naming.
+You should then register profiles using the `AbpAutoMapperOptions`:
 
-An alternative to the `MapTo` is using the `IObjectMapper` service:
+````csharp
+[DependsOn(typeof(AbpAutoMapperModule))]
+public class MyModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<AbpAutoMapperOptions>(options =>
+        {
+            //Add all mappings defined in the assembly of the MyModule class
+            options.AddMaps<MyModule>();
+        });
+    }
+}
+````
+
+`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html).
+
+Then you can implement the `GetAsync` method as shown below:
 
 ````csharp
 public async Task<BookDto> GetAsync(Guid id)
@@ -183,13 +201,11 @@ public async Task<BookDto> GetAsync(Guid id)
 }
 ````
 
-While the second syntax is a bit harder to write, it better works if you write unit tests.
-
 See the [object to object mapping document](Object-To-Object-Mapping.md) for more.
 
 ## Validation
 
-Inputs of application service methods are automatically validated (like ASP.NET Core controller actions). You can use the standard data annotation attributes or custom validation method to perform the validation. ABP also ensures that the input is not null.
+Inputs of application service methods are automatically validated (like ASP.NET Core controller actions). You can use the standard data annotation attributes or a custom validation method to perform the validation. ABP also ensures that the input is not null.
 
 See the [validation document](Validation.md) for more.
 
@@ -201,7 +217,7 @@ See the [authorization document](Authorization.md) for more.
 
 ## CRUD Application Services
 
-If you need to create a simple **CRUD application service** which has Create, Update, Delete and Get methods, you can use ABP's **base classes** to easily build your services. You can inherit from `CrudAppService`.
+If you need to create a simple **CRUD application service** which has Create, Update, Delete and Get methods, you can use ABP's **base classes** to easily build your services. You can inherit from the `CrudAppService`.
 
 ### Example
 
@@ -219,7 +235,9 @@ public interface IBookAppService :
 }
 ````
 
-* `ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
+`ICrudAppService` has generic arguments to get the primary key type of the entity and the DTO types for the CRUD operations (it does not get the entity type since the entity type is not exposed to the clients use this interface).
+
+> Creating interface for an application service is a good practice, but not required by the ABP Framework. You can skip the interface part.
 
 `ICrudAppService` declares the following methods:
 
@@ -248,7 +266,6 @@ public interface ICrudAppService<
 DTO classes used in this example are `BookDto` and `CreateUpdateBookDto`:
 
 ````csharp
-[AbpAutoMapFrom(typeof(Book))]
 public class BookDto : AuditedEntityDto<Guid>
 {
     public string Name { get; set; }
@@ -258,7 +275,6 @@ public class BookDto : AuditedEntityDto<Guid>
     public float Price { get; set; }
 }
 
-[AbpAutoMapTo(typeof(Book))]
 public class CreateUpdateBookDto
 {
     [Required]
@@ -272,6 +288,19 @@ public class CreateUpdateBookDto
     public float Price { get; set; }
 }
 ````
+
+[Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class of DTO class.
+
+```csharp
+public class MyProfile : Profile
+{
+    public MyProfile()
+    {
+        CreateMap<Book, BookDto>();
+        CreateMap<CreateUpdateBookDto, Book>();
+    }
+}
+```
 
 * `CreateUpdateBookDto` is shared by create and update operations, but you could use separated DTO classes as well.
 
@@ -291,6 +320,130 @@ public class BookAppService :
 ````
 
 `CrudAppService` implements all methods declared in the `ICrudAppService` interface. You can then add your own custom methods or override and customize base methods.
+
+> `CrudAppService` has different versions gets different number of generic arguments. Use the one suitable for you.
+
+### AbstractKeyCrudAppService
+
+`CrudAppService` requires to have an Id property as the primary key of your entity. If you are using composite keys then you can not utilize it.
+
+`AbstractKeyCrudAppService` implements the same `ICrudAppService` interface, but this time without making assumption about your primary key.
+
+#### Example
+
+Assume that you have a `District` entity with `CityId` and `Name` as a composite primary key. Using `AbstractKeyCrudAppService` requires to implement `DeleteByIdAsync` and `GetEntityByIdAsync` methods yourself:
+
+````csharp
+public class DistrictAppService
+    : AbstractKeyCrudAppService<District, DistrictDto, DistrictKey>
+{
+    public DistrictAppService(IRepository<District> repository) 
+        : base(repository)
+    {
+    }
+
+    protected override async Task DeleteByIdAsync(DistrictKey id)
+    {
+        await Repository.DeleteAsync(d => d.CityId == id.CityId && d.Name == id.Name);
+    }
+
+    protected override async Task<District> GetEntityByIdAsync(DistrictKey id)
+    {
+        return await AsyncQueryableExecuter.FirstOrDefaultAsync(
+            Repository.Where(d => d.CityId == id.CityId && d.Name == id.Name)
+        );
+    }
+}
+````
+
+This implementation requires you to create a class represents your composite key:
+
+````csharp
+public class DistrictKey
+{
+    public Guid CityId { get; set; }
+
+    public string Name { get; set; }
+}
+````
+
+### Authorization (for CRUD App Services)
+
+There are two ways of authorizing the base application service methods;
+
+1. You can set the policy properties (xxxPolicyName) in the constructor of your service. Example:
+
+```csharp
+public class MyPeopleAppService : CrudAppService<Person, PersonDto, Guid>
+{
+    public MyPeopleAppService(IRepository<Person, Guid> repository) 
+        : base(repository)
+    {
+        GetPolicyName = "...";
+        GetListPolicyName = "...";
+        CreatePolicyName = "...";
+        UpdatePolicyName = "...";
+        DeletePolicyName = "...";
+    }
+}
+```
+
+`CreatePolicyName` is checked by the `CreateAsync` method and so on... You should specify a policy (permission) name defined in your application.
+
+2. You can override the check methods (CheckXxxPolicyAsync) in your service. Example:
+
+```csharp
+public class MyPeopleAppService : CrudAppService<Person, PersonDto, Guid>
+{
+    public MyPeopleAppService(IRepository<Person, Guid> repository) 
+        : base(repository)
+    {
+    }
+
+    protected override async Task CheckDeletePolicyAsync()
+    {
+        await AuthorizationService.CheckAsync("...");
+    }
+}
+```
+
+You can perform any logic in the `CheckDeletePolicyAsync` method. It is expected to throw an `AbpAuthorizationException` in any unauthorized case, like `AuthorizationService.CheckAsync` already does.
+
+### Base Properties & Methods
+
+CRUD application service base class provides many useful base methods that **you can override** to customize it based on your requirements.
+
+#### CRUD Methods
+
+These are the essential CRUD methods. You can override any of them to completely customize the operation. Here, the definitions of the methods:
+
+````csharp
+Task<TGetOutputDto> GetAsync(TKey id);
+Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input);
+Task<TGetOutputDto> CreateAsync(TCreateInput input);
+Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input);
+Task DeleteAsync(TKey id);
+````
+
+#### Querying
+
+These methods are low level methods those can be control how to query entities from the database.
+
+* `CreateFilteredQuery` can be overridden to create an `IQueryable<TEntity>` that is filtered by the given input. If your `TGetListInput` class contains any filter, it is proper to override this method and filter the query. It returns the (unfiltered) repository (which is already `IQueryable<TEntity>`) by default.
+* `ApplyPaging` is used to make paging on the query. If your `TGetListInput` already implements `IPagedResultRequest`, you don't need to override this since the ABP Framework automatically understands it and performs the paging.
+* `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP Framework automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creating time, if your entity implements the standard `IHasCreationTime` interface.
+* `GetEntityByIdAsync` is used to get an entity by id, which calls `Repository.GetAsync(id)` by default.
+* `DeleteByIdAsync` is used to delete an entity by id, which calls `Repository.DeleteAsync(id)` by default.
+
+#### Object to Object Mapping
+
+These methods are used to convert Entities to DTOs and vice verse. They uses the [IObjectMapper](Object-To-Object-Mapping.md) by default.
+
+* `MapToGetOutputDtoAsync` is used to map the entity to the DTO returned from the `GetAsync`, `CreateAsync` and `UpdateAsync` methods. Alternatively, you can override the `MapToGetOutputDto` if you don't need to perform any async operation.
+* `MapToGetListOutputDtosAsync` is used to map a list of entities to a list of DTOs returned from the `GetListAsync` method. It uses the `MapToGetListOutputDtoAsync` to map each entity in the list. You can override one of them based on your case. Alternatively, you can override the `MapToGetListOutputDto` if you don't need to perform any async operation.
+* `MapToEntityAsync` method has two overloads;
+  * `MapToEntityAsync(TCreateInput)` is used to create an entity from `TCreateInput`.
+  * `MapToEntityAsync(TUpdateInput, TEntity)` is used to update an existing entity from `TUpdateInput`.
 
 ## Lifetime
 

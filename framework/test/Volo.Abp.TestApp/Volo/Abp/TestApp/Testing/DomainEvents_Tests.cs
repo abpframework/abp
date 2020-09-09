@@ -55,8 +55,8 @@ namespace Volo.Abp.TestApp.Testing
             {
                 var dougles = PersonRepository.Single(b => b.Name == "Douglas");
                 dougles.ChangeName("Douglas-Changed");
-                await PersonRepository.UpdateAsync(dougles).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await PersonRepository.UpdateAsync(dougles);
+            });
 
             //Assert
 

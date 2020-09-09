@@ -10,7 +10,7 @@
         public AppProTemplate()
             : base(TemplateName)
         {
-            
+            DocumentUrl = CliConsts.DocsLink + "/en/commercial/latest";
         }
     }
 }

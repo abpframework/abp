@@ -25,7 +25,7 @@ describe('SessionState', () => {
 
   beforeEach(() => {
     spectator = createService();
-    state = new SessionState(spectator.get(LocalizationService), null, null, new Subject());
+    state = new SessionState(null, null, new Subject());
   });
 
   describe('#getLanguage', () => {
@@ -49,13 +49,11 @@ describe('SessionState', () => {
         dispatchedData = action;
         return of({});
       });
-      const spy = jest.spyOn(spectator.get(LocalizationService), 'registerLocale');
 
       state.setLanguage({ patchState, dispatch } as any, { payload: 'en' }).subscribe();
 
       expect(patchedData).toEqual({ language: 'en' });
       expect(dispatchedData instanceof GetAppConfiguration).toBeTruthy();
-      expect(spy).toHaveBeenCalledWith('en');
     });
   });
 

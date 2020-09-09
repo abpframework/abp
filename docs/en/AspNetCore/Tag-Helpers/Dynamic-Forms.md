@@ -1,3 +1,3 @@
-## Dynamic Forms
+This document has moved. 
 
-This is not documented yet. You can see a [demo](http://bootstrap-taghelpers.abp.io/Components/DynamicForms) for now.
+[Click to navigate to Dynamic Forms document](../../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md)

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Services;
 using Volo.Abp.AspNetCore.Mvc;
@@ -25,6 +27,22 @@ namespace Volo.Abp.Http.DynamicProxying
             throw new UserFriendlyException("This is an error message!");
         }
 
+        [HttpGet]
+        [Route("get-exception2")]
+        public Task GetException2Async()
+        {
+            throw new BusinessException("Volo.Abp.Http.DynamicProxying:10001")
+                .WithData("0","TEST");
+        }
+
+        [HttpGet]
+        [Route("get-with-datetime-parameter")]
+        public Task<DateTime> GetWithDateTimeParameterAsync(DateTime dateTime1)
+        {
+            var culture = CultureInfo.CurrentCulture;
+            return Task.FromResult(dateTime1);
+        }
+
         [HttpPost]
         [Route("post-with-header-and-qs")]
         public Task<string> PostValueWithHeaderAndQueryStringAsync([FromHeader] string headerValue, [FromQuery] string qsValue)
@@ -48,7 +66,7 @@ namespace Volo.Abp.Http.DynamicProxying
 
         [HttpPost]
         [Route("post-object-with-query")]
-        public Task<Car> PostObjectWithQueryAsync( Car bodyValue)
+        public Task<Car> PostObjectWithQueryAsync(Car bodyValue)
         {
             return Task.FromResult(bodyValue);
         }
@@ -59,7 +77,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             return Task.FromResult(bodyValue);
         }
-        
+
         [HttpGet]
         [Route("post-object-and-id-with-url/{id}")]
         public Task<Car> GetObjectandIdAsync(int id, [FromBody] Car bodyValue)
@@ -67,7 +85,7 @@ namespace Volo.Abp.Http.DynamicProxying
             bodyValue.Year = id;
             return Task.FromResult(bodyValue);
         }
-        
+
         [HttpGet]
         [Route("post-object-and-id-with-url-and-query/{id}")]
         public Task<Car> GetObjectAndIdWithQueryAsync(int id, Car bodyValue)
@@ -116,7 +134,11 @@ namespace Volo.Abp.Http.DynamicProxying
     {
         [FromQuery]
         public int Year { get; set; }
+
         [FromQuery]
         public string Model { get; set; }
+
+        [FromQuery]
+        public DateTime FirstReleaseDate { get; set; }
     }
 }

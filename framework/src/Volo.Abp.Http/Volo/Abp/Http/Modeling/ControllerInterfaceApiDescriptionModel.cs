@@ -5,7 +5,7 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class ControllerInterfaceApiDescriptionModel
     {
-        public string TypeAsString { get; set; }
+        public string Type { get; set; }
 
         private ControllerInterfaceApiDescriptionModel()
         {
@@ -16,7 +16,7 @@ namespace Volo.Abp.Http.Modeling
         {
             return new ControllerInterfaceApiDescriptionModel
             {
-                TypeAsString = type.GetFullNameWithAssemblyName()
+                Type = type.FullName
             };
         }
     }

@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <Import Project="..\..\..\..\configureawait.props" />
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
@@ -8,6 +9,7 @@
     <PackageId>Volo.Docs.Web</PackageId>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace>Volo.Docs</RootNamespace>
     <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
@@ -17,26 +19,29 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\Volo.Docs.Domain\Volo.Docs.Domain.csproj" />
     <ProjectReference Include="..\Volo.Docs.HttpApi\Volo.Docs.HttpApi.csproj" />
-    <PackageReference Include="Markdig.Signed" Version="0.18.0" />
-    <PackageReference Include="Scriban" Version="2.1.1" />
+    <PackageReference Include="Markdig.Signed" Version="0.20.0" />
+    <PackageReference Include="Scriban" Version="2.1.3" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
   </ItemGroup>
-  
-  
+
+
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Localization\Resources\**\*.json" />
-    <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Localization\Resources\**\*.json" />
-    <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <None Include="compilerconfig.json" />
-    <None Include="Properties\launchSettings.json" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
 </Project>

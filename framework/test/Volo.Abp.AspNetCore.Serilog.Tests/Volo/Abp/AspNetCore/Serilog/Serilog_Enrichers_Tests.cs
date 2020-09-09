@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Serilog
         public async Task TenantId_Not_Set_Test()
         {
             var url = GetUrl<SerilogTestController>(nameof(SerilogTestController.Index));
-            var result = await GetResponseAsStringAsync(url).ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync(url);
 
             var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 
@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Serilog
             var url =
                 GetUrl<SerilogTestController>(nameof(SerilogTestController.Index)) +
                 $"?{_tenancyOptions.TenantKey}={_testTenantName}";
-            var result = await GetResponseAsStringAsync(url).ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync(url);
 
             var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 
@@ -81,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Serilog
         public async Task CorrelationId_Enrichers_Test()
         {
             var url = GetUrl<SerilogTestController>(nameof(SerilogTestController.CorrelationId));
-            var result = await GetResponseAsStringAsync(url).ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync(url);
 
             var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 

@@ -30,17 +30,17 @@ namespace Volo.Abp.FeatureManagement
                         TestFeatureDefinitionProvider.SocialLogins,
                         EditionFeatureValueProvider.ProviderName,
                         TestEditionIds.Regular.ToString()
-                    ).ConfigureAwait(false)
+                    )
                 ).ShouldNotBeNull();
 
             var feature = await _featureValueRepository.FindAsync(
                 TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
                 TestEditionIds.Regular.ToString()
-            ).ConfigureAwait(false);
+            );
 
             // Act
-            await _featureValueRepository.DeleteAsync(feature).ConfigureAwait(false);
+            await _featureValueRepository.DeleteAsync(feature);
 
             // Assert
             (await _cache.GetAsync(
@@ -49,7 +49,7 @@ namespace Volo.Abp.FeatureManagement
                             EditionFeatureValueProvider.ProviderName,
                             TestEditionIds.Regular.ToString()
                         )
-                    ).ConfigureAwait(false)
+                    )
                 ).ShouldBeNull();
 
         }

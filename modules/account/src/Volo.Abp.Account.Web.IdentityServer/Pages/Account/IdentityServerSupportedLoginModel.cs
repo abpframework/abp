@@ -14,9 +14,10 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -29,12 +30,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public IdentityServerSupportedLoginModel(
             IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions, 
-            IIdentityServerInteractionService interaction, 
-            IClientStore clientStore, 
+            IOptions<AbpAccountOptions> accountOptions,
+            IIdentityServerInteractionService interaction,
+            IClientStore clientStore,
             IEventService identityServerEvents)
             :base(
-                schemeProvider, 
+                schemeProvider,
                 accountOptions)
         {
             Interaction = interaction;
@@ -46,10 +47,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             LoginInput = new LoginInputModel();
 
-            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl).ConfigureAwait(false);
+            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
 
             if (context != null)
             {
+                ShowCancelButton = true;
+
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
@@ -68,21 +71,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return Page();
             }
 
-            var schemes = await _schemeProvider.GetAllSchemesAsync().ConfigureAwait(false);
+            var providers = await GetExternalProviders();
+            ExternalProviders = providers.ToList();
 
-            var providers = schemes
-                .Where(x => x.DisplayName != null || x.Name.Equals(_accountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ExternalProviderModel
-                {
-                    DisplayName = x.DisplayName,
-                    AuthenticationScheme = x.Name
-                })
-                .ToList();
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
             if (context?.ClientId != null)
             {
-                var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId).ConfigureAwait(false);
+                var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
                 if (client != null)
                 {
                     EnableLocalLogin = client.EnableLocalLogin;
@@ -94,53 +90,56 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 }
             }
 
-            ExternalProviders = providers.ToArray();
-
             if (IsExternalLoginOnly)
             {
-                return await base.OnPostExternalLogin(providers.First().AuthenticationScheme).ConfigureAwait(false);
+                return await base.OnPostExternalLogin(providers.First().AuthenticationScheme);
             }
 
             return Page();
         }
 
-        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public override async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
-
             if (action == "Cancel")
             {
-                var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl).ConfigureAwait(false);
+                var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
                 if (context == null)
                 {
                     return Redirect("~/");
                 }
 
-                await Interaction.GrantConsentAsync(context, ConsentResponse.Denied).ConfigureAwait(false);
+                await Interaction.GrantConsentAsync(context, ConsentResponse.Denied);
 
                 return Redirect(ReturnUrl);
             }
 
+            await CheckLocalLoginAsync();
+
             ValidateModel();
 
-            await ReplaceEmailToUsernameOfInputIfNeeds().ConfigureAwait(false);
+            ExternalProviders = await GetExternalProviders();
+
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
+            await ReplaceEmailToUsernameOfInputIfNeeds();
 
             var result = await SignInManager.PasswordSignInAsync(
                 LoginInput.UserNameOrEmailAddress,
                 LoginInput.Password,
                 LoginInput.RememberMe,
                 true
-            ).ConfigureAwait(false);
+            );
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress
+            });
 
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("./SendSecurityCode", new
-                {
-                    returnUrl = ReturnUrl,
-                    returnUrlHash = ReturnUrlHash,
-                    rememberMe = LoginInput.RememberMe
-                });
+                return await TwoFactorLoginResultAsync();
             }
 
             if (result.IsLockedOut)
@@ -162,32 +161,31 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
 
             //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false) ??
-                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false);
+            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
 
             Debug.Assert(user != null, nameof(user) + " != null");
-            await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)).ConfigureAwait(false); //TODO: Use user's name once implemented
+            await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
 
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
 
-        [UnitOfWork]
         public override async Task<IActionResult> OnPostExternalLogin(string provider)
         {
-            if (_accountOptions.WindowsAuthenticationSchemeName == provider)
+            if (AccountOptions.WindowsAuthenticationSchemeName == provider)
             {
-                return await ProcessWindowsLoginAsync().ConfigureAwait(false);
+                return await ProcessWindowsLoginAsync();
             }
 
-            return await base.OnPostExternalLogin(provider).ConfigureAwait(false);
+            return await base.OnPostExternalLogin(provider);
         }
 
         private async Task<IActionResult> ProcessWindowsLoginAsync()
         {
-            var result = await HttpContext.AuthenticateAsync(_accountOptions.WindowsAuthenticationSchemeName).ConfigureAwait(false);
+            var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
             if (!(result?.Principal is WindowsPrincipal windowsPrincipal))
             {
-                return Challenge(_accountOptions.WindowsAuthenticationSchemeName);
+                return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
             }
 
             var props = new AuthenticationProperties
@@ -195,11 +193,11 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 RedirectUri = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash }),
                 Items =
                 {
-                    {"scheme", _accountOptions.WindowsAuthenticationSchemeName},
+                    {"scheme", AccountOptions.WindowsAuthenticationSchemeName},
                 }
             };
 
-            var identity = new ClaimsIdentity(_accountOptions.WindowsAuthenticationSchemeName);
+            var identity = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
             identity.AddClaim(new Claim(JwtClaimTypes.Subject, windowsPrincipal.Identity.Name));
             identity.AddClaim(new Claim(JwtClaimTypes.Name, windowsPrincipal.Identity.Name));
 
@@ -219,7 +217,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme,
                 new ClaimsPrincipal(identity),
                 props
-            ).ConfigureAwait(false);
+            );
 
             return RedirectSafely(props.RedirectUri);
         }

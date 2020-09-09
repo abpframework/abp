@@ -22,7 +22,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
                 output.Attributes.AddClass("multi-collapse");
             }
 
-            var innerContent = (await output.GetChildContentAsync().ConfigureAwait(false)).GetContent();
+            var innerContent = (await output.GetChildContentAsync()).GetContent();
 
             output.Content.SetHtmlContent(innerContent);
         }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
@@ -19,7 +18,7 @@ namespace Volo.Blogging.Pages.Blog
             _blogAppService = blogAppService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             var result = await _blogAppService.GetListAsync();
 

@@ -116,24 +116,30 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                  * solution. Otherwise, you can delete this client. */
 
                 await CreateClientAsync(
-                    webClientId,
-                    commonScopes,
-                    new[] { "hybrid" },
-                    (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
+                    name: webClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] {"hybrid"},
+                    secret: (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
-                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
+                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc",
+                    frontChannelLogoutUri: $"{webClientRootUrl}Account/FrontChannelLogout"
                 );
             }
 
-            //Console Test Client
-            var consoleClientId = configurationSection["MyProjectName_App:ClientId"];
-            if (!consoleClientId.IsNullOrWhiteSpace())
+            //Console Test / Angular Client
+            var consoleAndAngularClientId = configurationSection["MyProjectName_App:ClientId"];
+            if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
             {
+                var webClientRootUrl = configurationSection["MyProjectName_App:RootUrl"]?.TrimEnd('/');
+
                 await CreateClientAsync(
-                    consoleClientId,
-                    commonScopes,
-                    new[] { "password", "client_credentials" },
-                    (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256()
+                    name: consoleAndAngularClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] {"password", "client_credentials", "authorization_code"},
+                    secret: (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
+                    requireClientSecret: false,
+                    redirectUri: webClientRootUrl,
+                    postLogoutRedirectUri: webClientRootUrl
                 );
             }
         }
@@ -145,6 +151,9 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             string secret,
             string redirectUri = null,
             string postLogoutRedirectUri = null,
+            string frontChannelLogoutUri = null,
+            bool requireClientSecret = true,
+            bool requirePkce = false,
             IEnumerable<string> permissions = null)
         {
             var client = await _clientRepository.FindByCliendIdAsync(name);
@@ -165,7 +174,10 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                         AccessTokenLifetime = 31536000, //365 days
                         AuthorizationCodeLifetime = 300,
                         IdentityTokenLifetime = 300,
-                        RequireConsent = false
+                        RequireConsent = false,
+                        FrontChannelLogoutUri = frontChannelLogoutUri,
+                        RequireClientSecret = requireClientSecret,
+                        RequirePkce = requirePkce
                     },
                     autoSave: true
                 );

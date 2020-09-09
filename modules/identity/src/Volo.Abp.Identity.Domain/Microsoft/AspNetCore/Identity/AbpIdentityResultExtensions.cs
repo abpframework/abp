@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Identity;
+using Volo.Abp.Localization;
 using Volo.Abp.Text.Formatting;
 
 namespace Microsoft.AspNetCore.Identity
@@ -25,6 +27,41 @@ namespace Microsoft.AspNetCore.Identity
             throw new AbpIdentityResultException(identityResult);
         }
 
+        public static string[] GetValuesFromErrorMessage(this IdentityResult identityResult, IStringLocalizer localizer)
+        {
+            if (identityResult.Succeeded)
+            {
+                throw new ArgumentException(
+                    "identityResult.Succeeded should be false in order to get values from error.");
+            }
+
+            if (identityResult.Errors == null)
+            {
+                throw new ArgumentException("identityResult.Errors should not be null.");
+            }
+
+            var error = identityResult.Errors.First();
+            var key = $"Volo.Abp.Identity:{error.Code}";
+
+            using (CultureHelper.Use(CultureInfo.GetCultureInfo("en")))
+            {
+                var englishLocalizedString = localizer[key];
+
+                if (englishLocalizedString.ResourceNotFound)
+                {
+                    return Array.Empty<string>();
+                }
+
+                if (FormattedStringValueExtracter.IsMatch(error.Description, englishLocalizedString.Value,
+                    out var values))
+                {
+                    return values;
+                }
+
+                return Array.Empty<string>();
+            }
+        }
+
         public static string LocalizeErrors(this IdentityResult identityResult, IStringLocalizer localizer)
         {
             if (identityResult.Succeeded)
@@ -42,18 +79,22 @@ namespace Microsoft.AspNetCore.Identity
 
         public static string LocalizeErrorMessage(this IdentityError error, IStringLocalizer localizer)
         {
-            var key = $"Identity.{error.Code}";
+            var key = $"Volo.Abp.Identity:{error.Code}";
 
             var localizedString = localizer[key];
 
             if (!localizedString.ResourceNotFound)
             {
-                var englishLocalizedString = localizer.WithCulture(CultureInfo.GetCultureInfo("en"))[key];
-                if (!englishLocalizedString.ResourceNotFound)
+                using (CultureHelper.Use(CultureInfo.GetCultureInfo("en")))
                 {
-                    if (FormattedStringValueExtracter.IsMatch(error.Description, englishLocalizedString.Value, out var values))
+                    var englishLocalizedString = localizer[key];
+                    if (!englishLocalizedString.ResourceNotFound)
                     {
-                        return string.Format(localizedString.Value, values.Cast<object>().ToArray());
+                        if (FormattedStringValueExtracter.IsMatch(error.Description, englishLocalizedString.Value,
+                            out var values))
+                        {
+                            return string.Format(localizedString.Value, values.Cast<object>().ToArray());
+                        }
                     }
                 }
             }

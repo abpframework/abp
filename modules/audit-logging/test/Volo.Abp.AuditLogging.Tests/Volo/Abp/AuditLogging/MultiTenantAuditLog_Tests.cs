@@ -59,12 +59,12 @@ namespace Volo.Abp.AuditLogging
                     }
                 );
 
-                await scope.SaveAsync().ConfigureAwait(false);
+                await scope.SaveAsync();
             }
 
             //Assert
 
-            var auditLogs = await _auditLogRepository.GetListAsync(applicationName: applicationName, includeDetails: true).ConfigureAwait(false);
+            var auditLogs = await _auditLogRepository.GetListAsync(applicationName: applicationName, includeDetails: true);
             auditLogs.Count.ShouldBe(1);
             var auditLog = auditLogs.First();
             auditLog.EntityChanges.ShouldNotBeNull();

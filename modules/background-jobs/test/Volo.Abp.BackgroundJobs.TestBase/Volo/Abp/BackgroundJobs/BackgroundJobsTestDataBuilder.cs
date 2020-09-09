@@ -35,7 +35,7 @@ namespace Volo.Abp.BackgroundJobs
                     CreationTime = _clock.Now.Subtract(TimeSpan.FromMinutes(2)),
                     TryCount = 0
                 }
-            ).ConfigureAwait(false);
+            );
 
             await _backgroundJobRepository.InsertAsync(
                 new BackgroundJobRecord(_testData.JobId2)
@@ -49,7 +49,7 @@ namespace Volo.Abp.BackgroundJobs
                     CreationTime = _clock.Now.Subtract(TimeSpan.FromDays(2)),
                     TryCount = 3
                 }
-            ).ConfigureAwait(false);
+            );
 
             await _backgroundJobRepository.InsertAsync(
                 new BackgroundJobRecord(_testData.JobId3)
@@ -63,7 +63,7 @@ namespace Volo.Abp.BackgroundJobs
                     CreationTime = _clock.Now.Subtract(TimeSpan.FromMinutes(90)),
                     TryCount = 2
                 }
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

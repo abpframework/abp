@@ -4,10 +4,12 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -24,12 +26,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected IJsonSerializer JsonSerializer { get; }
         protected IApiKeyService ApiKeyService { get; }
 
-        public TemplateProjectBuilder(ISourceCodeStore sourceCodeStore, 
+        private readonly IConfiguration _configuration;
+
+        public TemplateProjectBuilder(ISourceCodeStore sourceCodeStore,
             ITemplateInfoProvider templateInfoProvider,
-            ICliAnalyticsCollect cliAnalyticsCollect, 
+            ICliAnalyticsCollect cliAnalyticsCollect,
             IOptions<AbpCliOptions> options,
-            IJsonSerializer jsonSerializer, 
-            IApiKeyService apiKeyService)
+            IJsonSerializer jsonSerializer,
+            IApiKeyService apiKeyService,
+            IConfiguration configuration)
         {
             SourceCodeStore = sourceCodeStore;
             TemplateInfoProvider = templateInfoProvider;
@@ -37,10 +42,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
             Options = options.Value;
             JsonSerializer = jsonSerializer;
             ApiKeyService = apiKeyService;
+            _configuration = configuration;
 
             Logger = NullLogger<TemplateProjectBuilder>.Instance;
         }
-        
+
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
         {
             var templateInfo = GetTemplateInfo(args);
@@ -50,13 +56,45 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
                 SourceCodeTypes.Template,
-                args.Version
-            ).ConfigureAwait(false);
-             
-            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync().ConfigureAwait(false);
-            if (apiKeyResult?.ApiKey != null)
+                args.Version,
+                args.TemplateSource,
+                args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long)
+            );
+
+            DeveloperApiKeyResult apiKeyResult = null;
+
+#if DEBUG
+            try
             {
-                args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
+                var apiKeyResultSection = _configuration.GetSection("apiKeyResult");
+                if (apiKeyResultSection.Exists())
+                {
+                    apiKeyResult = apiKeyResultSection.Get<DeveloperApiKeyResult>(); //you can use user secrets
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            if (apiKeyResult == null)
+            {
+                apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
+            }
+#else
+            apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
+#endif
+
+            if (apiKeyResult != null)
+            {
+                if (apiKeyResult.ApiKey != null)
+                {
+                    args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
+                }
+                else if (templateInfo.Name == AppProTemplate.TemplateName)
+                {
+                    throw new UserFriendlyException(apiKeyResult.ErrorMessage);
+                }
             }
 
             if (apiKeyResult?.LicenseCode != null)
@@ -81,15 +119,20 @@ namespace Volo.Abp.Cli.ProjectBuilding
             // Exclude unwanted or known options.
             var options = args.ExtraProperties
                 .Where(x => !x.Key.Equals(CliConsts.Command, StringComparison.InvariantCultureIgnoreCase))
-                .Where(x => !x.Key.Equals("tiered", StringComparison.InvariantCultureIgnoreCase))
-                .Where(x => !x.Key.Equals(NewCommand.Options.DatabaseProvider.Long, StringComparison.InvariantCultureIgnoreCase) && 
+                .Where(x => !x.Key.Equals(NewCommand.Options.Tiered.Long, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.Preview.Long, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.DatabaseProvider.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.DatabaseProvider.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.OutputFolder.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.OutputFolder.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.UiFramework.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.UiFramework.Short, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.Mobile.Long, StringComparison.InvariantCultureIgnoreCase) &&
+                            !x.Key.Equals(NewCommand.Options.Mobile.Short, StringComparison.InvariantCultureIgnoreCase))
                 .Where(x => !x.Key.Equals(NewCommand.Options.Version.Long, StringComparison.InvariantCultureIgnoreCase) &&
                             !x.Key.Equals(NewCommand.Options.Version.Short, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => !x.Key.Equals(NewCommand.Options.TemplateSource.Short, StringComparison.InvariantCultureIgnoreCase) &&
+                            !x.Key.Equals(NewCommand.Options.TemplateSource.Long, StringComparison.InvariantCultureIgnoreCase))
                 .Select(x => x.Key).ToList();
 
             await CliAnalyticsCollect.CollectAsync(new CliAnalyticsCollectInputDto
@@ -97,13 +140,13 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 Tool = Options.ToolName,
                 Command = args.ExtraProperties.ContainsKey(CliConsts.Command) ? args.ExtraProperties[CliConsts.Command] : "",
                 DatabaseProvider = args.DatabaseProvider.ToProviderName(),
-                IsTiered = args.ExtraProperties.ContainsKey("tiered"),
+                IsTiered = args.ExtraProperties.ContainsKey(NewCommand.Options.Tiered.Long),
                 UiFramework = args.UiFramework.ToFrameworkName(),
                 Options = JsonSerializer.Serialize(options),
                 ProjectName = args.SolutionName.FullName,
                 TemplateName = args.TemplateName,
                 TemplateVersion = templateFile.Version
-            }).ConfigureAwait(false);
+            });
 
             return new ProjectBuildResult(context.Result.ZipContent, args.SolutionName.ProjectName);
         }

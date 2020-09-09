@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
 
         public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            await _simpleTypeModelBinder.BindModelAsync(bindingContext).ConfigureAwait(false);
+            await _simpleTypeModelBinder.BindModelAsync(bindingContext);
 
             if (!bindingContext.Result.IsModelSet)
             {

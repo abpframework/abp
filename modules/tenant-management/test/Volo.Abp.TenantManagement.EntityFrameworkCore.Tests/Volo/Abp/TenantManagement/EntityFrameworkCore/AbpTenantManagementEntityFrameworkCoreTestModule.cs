@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 
@@ -11,7 +12,8 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
     [DependsOn(
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementTestBaseModule)
+        typeof(AbpTenantManagementTestBaseModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class AbpTenantManagementEntityFrameworkCoreTestModule : AbpModule
     {

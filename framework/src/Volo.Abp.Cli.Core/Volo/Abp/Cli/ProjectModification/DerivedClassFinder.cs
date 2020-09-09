@@ -53,7 +53,6 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected bool IsDerived(string csFile, string baseClass)
         {
-            Logger.LogDebug(csFile);
             var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
             var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().First();
             var classDeclaration = (namespaceSyntax.DescendantNodes().OfType<ClassDeclarationSyntax>()).First();

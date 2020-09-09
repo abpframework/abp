@@ -19,33 +19,31 @@ namespace Volo.Abp.IdentityServer.Devices
 
         }
 
-        public async Task<DeviceFlowCodes> FindByUserCodeAsync(
+        public virtual async Task<DeviceFlowCodes> FindByUserCodeAsync(
             string userCode,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .FirstOrDefaultAsync(d => d.UserCode == userCode, GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                ;
         }
 
-        public async Task<DeviceFlowCodes> FindByDeviceCodeAsync(
+        public virtual async Task<DeviceFlowCodes> FindByDeviceCodeAsync(
             string deviceCode, 
             CancellationToken cancellationToken = default)
         {
             return await DbSet
-                .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
+        public virtual async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

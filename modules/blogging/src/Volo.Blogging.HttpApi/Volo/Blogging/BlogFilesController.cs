@@ -10,7 +10,7 @@ using Volo.Blogging.Files;
 
 namespace Volo.Blogging
 {
-    [RemoteService]
+    [RemoteService(Name = BloggingRemoteServiceConsts.RemoteServiceName)]
     [Area("blogging")]
     [Route("api/blogging/files")]
     public class BlogFilesController : AbpController, IFileAppService

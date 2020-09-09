@@ -37,32 +37,36 @@ namespace Volo.Abp.Cli.Commands
 
             if (updateNuget || !updateNpm)
             {
-                await UpdateNugetPackages(commandLineArgs, directory).ConfigureAwait(false);
+                await UpdateNugetPackages(commandLineArgs, directory);
             }
 
             if (updateNpm || !updateNuget)
             {
-                UpdateNpmPackages(directory);
+                await UpdateNpmPackages(directory);
             }
         }
 
-        private void UpdateNpmPackages(string directory)
+        private async Task UpdateNpmPackages(string directory)
         {
-            _npmPackagesUpdater.Update(directory);
+            await _npmPackagesUpdater.Update(directory);
         }
 
         private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)
         {
-            var includePreviews =
-                commandLineArgs.Options.GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
 
-            var solution = Directory.GetFiles(directory, "*.sln").FirstOrDefault();
+            var solution = commandLineArgs.Options.GetOrNull(Options.SolutionName.Short, Options.SolutionName.Long);
+            if (solution.IsNullOrWhiteSpace())
+            {
+                solution = Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories).FirstOrDefault();
+            }
+
+            var checkAll = commandLineArgs.Options.ContainsKey(Options.CheckAll.Long);
 
             if (solution != null)
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews).ConfigureAwait(false);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, checkAll: checkAll);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -74,7 +78,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews).ConfigureAwait(false);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, checkAll: checkAll);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
@@ -94,17 +98,21 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Usage:");
             sb.AppendLine("");
-            sb.AppendLine("  abp update  [options]");
+            sb.AppendLine("  abp update [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("-p|--include-previews                       (if supported by the template)");
             sb.AppendLine("--npm                                       (Only updates NPM packages)");
             sb.AppendLine("--nuget                                     (Only updates Nuget packages)");
+            sb.AppendLine("-sp|--solution-path                         (Specify the solution path)");
+            sb.AppendLine("-sn|--solution-name                         (Specify the solution name)");
+            sb.AppendLine("--check-all                                 (Check the new version of each package separately)");
             sb.AppendLine("");
             sb.AppendLine("Some examples:");
             sb.AppendLine("");
             sb.AppendLine("  abp update");
             sb.AppendLine("  abp update -p");
+            sb.AppendLine("  abp update -sp \"D:\\projects\\\" -sn Acme.BookStore");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -123,17 +131,22 @@ namespace Volo.Abp.Cli.Commands
                 public const string Short = "sp";
                 public const string Long = "solution-path";
             }
-            
-            public static class IncludePreviews
+
+            public static class SolutionName
             {
-                public const string Short = "p";
-                public const string Long = "include-previews";
+                public const string Short = "sn";
+                public const string Long = "solution-name";
             }
 
             public static class Packages
             {
                 public const string Npm = "npm";
                 public const string NuGet = "nuget";
+            }
+
+            public static class CheckAll
+            {
+                public const string Long = "check-all";
             }
         }
     }

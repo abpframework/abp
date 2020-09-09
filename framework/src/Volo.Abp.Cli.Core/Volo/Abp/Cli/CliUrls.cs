@@ -3,18 +3,26 @@
     public static class CliUrls
     {
 #if DEBUG
-        public const string WwwAbpIo = "https://localhost:44328/";
+        public const string WwwAbpIo = WwwAbpIoDevelopment;
 
-        public const string AccountAbpIo = "https://localhost:44333/";
+        public const string AccountAbpIo = AccountAbpIoDevelopment;
 
-        public const string NuGetRootPath = "https://localhost:44373/";
+        public const string NuGetRootPath = NuGetRootPathDevelopment;
 #else
-        public const string WwwAbpIo = "https://abp.io/";
+        public const string WwwAbpIo = WwwAbpIoProduction;
         
-        public const string AccountAbpIo = "https://account.abp.io/";
+        public const string AccountAbpIo = AccountAbpIoProduction;
        
-        public const string NuGetRootPath = "https://nuget.abp.io/";
+        public const string NuGetRootPath = NuGetRootPathProduction;
 #endif
+
+        public const string WwwAbpIoProduction = "https://abp.io/";
+        public const string AccountAbpIoProduction = "https://account.abp.io/";
+        public const string NuGetRootPathProduction = "https://nuget.abp.io/";
+
+        public const string WwwAbpIoDevelopment = "https://localhost:44328/";
+        public const string AccountAbpIoDevelopment = "https://localhost:44333/";
+        public const string NuGetRootPathDevelopment = "https://localhost:44373/";
 
         public static string GetNuGetServiceIndexUrl(string apiKey)
         {

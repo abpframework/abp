@@ -38,8 +38,13 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Settings", options.Schema);
 
+                b.ConfigureByConvention();
+
                 b.Property(x => x.Name).HasMaxLength(SettingConsts.MaxNameLength).IsRequired();
-                b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLength).IsRequired();
+
+                if (builder.IsUsingOracle()) { SettingConsts.MaxValueLengthValue = 2000; }
+                b.Property(x => x.Value).HasMaxLength(SettingConsts.MaxValueLengthValue).IsRequired();
+                
                 b.Property(x => x.ProviderName).HasMaxLength(SettingConsts.MaxProviderNameLength);
                 b.Property(x => x.ProviderKey).HasMaxLength(SettingConsts.MaxProviderKeyLength);
 

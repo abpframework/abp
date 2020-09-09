@@ -30,7 +30,7 @@ namespace Volo.Abp.SettingManagement
                     "42",
                     GlobalSettingValueProvider.ProviderName
                 )
-            ).ConfigureAwait(false);
+            );
 
             await _settingRepository.InsertAsync(
                 new Setting(
@@ -39,7 +39,7 @@ namespace Volo.Abp.SettingManagement
                     "default-store-value",
                     GlobalSettingValueProvider.ProviderName
                 )
-            ).ConfigureAwait(false);
+            );
 
             await _settingRepository.InsertAsync(
                 new Setting(
@@ -49,7 +49,7 @@ namespace Volo.Abp.SettingManagement
                     UserSettingValueProvider.ProviderName,
                     _testData.User1Id.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             await _settingRepository.InsertAsync(
                 new Setting(
@@ -59,7 +59,7 @@ namespace Volo.Abp.SettingManagement
                     UserSettingValueProvider.ProviderName,
                     _testData.User2Id.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             await _settingRepository.InsertAsync(
                 new Setting(
@@ -68,7 +68,7 @@ namespace Volo.Abp.SettingManagement
                     "default-store-value",
                     GlobalSettingValueProvider.ProviderName
                 )
-            ).ConfigureAwait(false);
+            );
 
             await _settingRepository.InsertAsync(
                 new Setting(
@@ -78,7 +78,7 @@ namespace Volo.Abp.SettingManagement
                     UserSettingValueProvider.ProviderName,
                     _testData.User1Id.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

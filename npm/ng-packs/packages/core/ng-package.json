@@ -6,12 +6,15 @@
   },
   "deleteDestPath": false,
   "whitelistedNonPeerDependencies": [
+    "@abp/utils",
+    "@angular/localize",
     "@ngxs/router-plugin",
     "@ngxs/storage-plugin",
     "@ngxs/store",
     "angular-oauth2-oidc",
     "just-compare",
     "just-clone",
-    "snq"
+    "snq",
+    "ts-toolbelt"
   ]
 }

@@ -17,6 +17,13 @@ namespace Volo.Abp
         /// </summary>
         public bool IsMetadataEnabled { get; set; }
 
+        /// <summary>
+        /// Group name of the remote service.
+        /// Group names of all services of a module expected to be the same.
+        /// This name is also used to distinguish the service endpoint of this group.
+        /// </summary>
+        public string Name { get; set; }
+
         public RemoteServiceAttribute(bool isEnabled = true)
         {
             IsEnabled = isEnabled;

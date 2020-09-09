@@ -1,0 +1,11 @@
+{
+  "culture": "de",
+  "texts": {
+    "Hello <b>{0}</b>.": "Hallo <b>{0}</b>.",
+    "Car": "Auto",
+    "CarPlural": "Autos",
+    "MaxLenghtErrorMessage": "Die Länge dieses Feldes kann maximal '{0}'-Zeichen betragen",
+    "Universe": "Universum",
+    "FortyTwo": "Zweiundvierzig"
+  }
+}

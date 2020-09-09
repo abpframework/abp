@@ -1,4 +1,4 @@
-﻿//#define MONGODB
+//#define MONGODB
 
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -33,6 +34,7 @@ using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
+using Volo.Blogging.Admin;
 using Volo.Blogging.Files;
 using Volo.BloggingTestApp.EntityFrameworkCore;
 using Volo.BloggingTestApp.MongoDB;
@@ -42,12 +44,15 @@ namespace Volo.BloggingTestApp
     [DependsOn(
         typeof(BloggingWebModule),
         typeof(BloggingApplicationModule),
+        typeof(BloggingAdminWebModule),
+        typeof(BloggingAdminApplicationModule),
 #if MONGODB
                typeof(BloggingTestAppMongoDbModule),
 #else
         typeof(BloggingTestAppEntityFrameworkCoreModule),
 #endif
         typeof(AbpAccountWebModule),
+        typeof(AbpAccountApplicationModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
@@ -105,12 +110,12 @@ namespace Volo.BloggingTestApp
                     options.CustomSchemaIds(type => type.FullName);
                 });
 
-            var cultures = new List<CultureInfo> 
-            { 
-                new CultureInfo("cs"), 
-                new CultureInfo("en"), 
-                new CultureInfo("tr"), 
-                new CultureInfo("zh-Hans") 
+            var cultures = new List<CultureInfo>
+            {
+                new CultureInfo("cs"),
+                new CultureInfo("en"),
+                new CultureInfo("tr"),
+                new CultureInfo("zh-Hans")
             };
 
             Configure<RequestLocalizationOptions>(options =>
@@ -158,7 +163,7 @@ namespace Volo.BloggingTestApp
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
 
             using (var scope = context.ServiceProvider.CreateScope())

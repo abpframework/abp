@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "myProjectName": {
+    "MyProjectName": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,42 +17,52 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/myProjectName",
+            "outputPath": "dist/MyProjectName",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "extractCss": true,
+            "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-                "lazy": true,
+                "inject": true,
                 "bundleName": "fontawesome-all.min"
               },
               {
                 "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
-                "lazy": true,
+                "inject": true,
                 "bundleName": "fontawesome-v4-shims.min"
               },
               {
-                "input": "node_modules/primeng/resources/themes/nova-light/theme.css",
-                "lazy": true,
-                "bundleName": "primeng-nova-light-theme"
+                "input": "node_modules/@swimlane/ngx-datatable/index.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-index"
               },
               {
-                "input": "node_modules/primeicons/primeicons.css",
-                "lazy": true,
-                "bundleName": "primeicons"
+                "input": "node_modules/@swimlane/ngx-datatable/assets/icons.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-icons"
               },
               {
-                "input": "node_modules/primeng/resources/primeng.min.css",
-                "lazy": true,
-                "bundleName": "primeng.min"
-              }
+                "input": "node_modules/@swimlane/ngx-datatable/themes/material.css",
+                "inject": true,
+                "bundleName": "ngx-datatable-material"
+              },
+              {
+                "input": "node_modules/@abp/ng.theme.shared/styles/bootstrap-rtl.min.css",
+                "inject": false,
+                "bundleName": "bootstrap-rtl.min"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap-ltr.min"
+              },
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -69,7 +79,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -78,14 +87,11 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
-                }
-              ]
-            },
-            "hmr": {
-              "fileReplacements": [
+                },
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hmr.ts"
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
             }
@@ -94,22 +100,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "myProjectName:build"
+            "browserTarget": "MyProjectName:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "myProjectName:build:production"
-            },
-            "hmr": {
-              "hmr": true,
-              "browserTarget": "myProjectName:build:hmr"
+              "browserTarget": "MyProjectName:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "myProjectName:build"
+            "browserTarget": "MyProjectName:build"
           }
         },
         "test": {
@@ -121,12 +123,22 @@
             "karmaConfig": "karma.conf.js",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                "inject": true,
+                "bundleName": "bootstrap.min"
+              },
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "inject": false,
+                "bundleName": "fontawesome-v4-shims.min"
+              }
             ],
             "scripts": []
           }
@@ -142,16 +154,19 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "myProjectName:serve"
+            "devServerTarget": "MyProjectName:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "myProjectName:serve:production"
+              "devServerTarget": "MyProjectName:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "myProjectName"
+  "defaultProject": "MyProjectName",
+  "cli": {
+    "analytics": false
+  }
 }

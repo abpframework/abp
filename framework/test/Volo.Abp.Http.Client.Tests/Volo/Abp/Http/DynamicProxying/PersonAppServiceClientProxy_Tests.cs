@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            var person = await _peopleAppService.GetAsync(firstPerson.Id).ConfigureAwait(false);
+            var person = await _peopleAppService.GetAsync(firstPerson.Id);
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
             person.Name.ShouldBe(firstPerson.Name);
@@ -40,10 +41,27 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetList()
         {
-            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto())
-                .ConfigureAwait(false);
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.TotalCount.ShouldBeGreaterThan(0);
             people.Items.Count.ShouldBe((int) people.TotalCount);
+        }
+
+        [Fact]
+        public async Task GetParams()
+        {
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+
+            var @params = await _peopleAppService.GetParams(new List<Guid>
+            {
+                id1,
+                id2
+            }, new[] {"name1", "name2"});
+
+            @params.ShouldContain(id1.ToString("N"));
+            @params.ShouldContain(id2.ToString("N"));
+            @params.ShouldContain("name1");
+            @params.ShouldContain("name2");
         }
 
         [Fact]
@@ -51,7 +69,7 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            await _peopleAppService.DeleteAsync(firstPerson.Id).ConfigureAwait(false);
+            await _peopleAppService.DeleteAsync(firstPerson.Id);
 
             firstPerson = (await _personRepository.GetListAsync()).FirstOrDefault(p => p.Id == firstPerson.Id);
             firstPerson.ShouldBeNull();
@@ -67,7 +85,7 @@ namespace Volo.Abp.Http.DynamicProxying
                     Name = uniquePersonName,
                     Age = 42
                 }
-            ).ConfigureAwait(false);
+            );
 
             person.ShouldNotBeNull();
             person.Id.ShouldNotBe(Guid.Empty);
@@ -87,8 +105,8 @@ namespace Volo.Abp.Http.DynamicProxying
                     {
                         Age = 42
                     }
-                ).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                );
+            });
         }
 
         [Fact]
@@ -105,7 +123,7 @@ namespace Volo.Abp.Http.DynamicProxying
                     Name = uniquePersonName,
                     Age = firstPerson.Age
                 }
-            ).ConfigureAwait(false);
+            );
 
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
@@ -124,8 +142,8 @@ namespace Volo.Abp.Http.DynamicProxying
         {
             await Assert.ThrowsAnyAsync<Exception>(async () =>
             {
-                await _peopleAppService.GetWithAuthorized().ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await _peopleAppService.GetWithAuthorized();
+            });
         }
 
         [Fact]
@@ -144,7 +162,7 @@ namespace Volo.Abp.Http.DynamicProxying
                         }
                     }
                 }
-            ).ConfigureAwait(false);
+            );
 
             result.Value1.ShouldBe("value one");
             result.Inner1.Value2.ShouldBe("value two");

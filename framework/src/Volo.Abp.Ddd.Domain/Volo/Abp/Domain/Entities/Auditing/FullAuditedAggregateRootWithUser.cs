@@ -15,10 +15,10 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual TUser Deleter { get; set; }
 
         /// <inheritdoc />
-        public TUser Creator { get; set; }
+        public virtual TUser Creator { get; set; }
 
         /// <inheritdoc />
-        public TUser LastModifier { get; set; }
+        public virtual TUser LastModifier { get; set; }
     }
 
     /// <summary>
@@ -34,10 +34,10 @@ namespace Volo.Abp.Domain.Entities.Auditing
         public virtual TUser Deleter { get; set; }
 
         /// <inheritdoc />
-        public TUser Creator { get; set; }
+        public virtual TUser Creator { get; set; }
 
         /// <inheritdoc />
-        public TUser LastModifier { get; set; }
+        public virtual TUser LastModifier { get; set; }
 
         protected FullAuditedAggregateRootWithUser()
         {

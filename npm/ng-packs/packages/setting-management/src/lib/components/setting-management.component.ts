@@ -1,43 +1,42 @@
-import { Component, TrackByFunction, OnInit } from '@angular/core';
-import { SettingTab, getSettingTabs } from '@abp/ng.theme.shared';
-import { Router } from '@angular/router';
+import { ABP, SettingTabsService } from '@abp/ng.core';
+import { Component, OnDestroy, OnInit, TrackByFunction } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ConfigState } from '@abp/ng.core';
-import { SettingManagementState } from '../states/setting-management.state';
+import { Subscription } from 'rxjs';
 import { SetSelectedSettingTab } from '../actions/setting-management.actions';
-import { RouterState } from '@ngxs/router-plugin';
+import { SettingManagementState } from '../states/setting-management.state';
 
 @Component({
   selector: 'abp-setting-management',
   templateUrl: './setting-management.component.html',
 })
-export class SettingManagementComponent implements OnInit {
-  settings: SettingTab[] = [];
+export class SettingManagementComponent implements OnDestroy, OnInit {
+  private subscription = new Subscription();
+  settings: ABP.Tab[] = [];
 
-  set selected(value: SettingTab) {
+  set selected(value: ABP.Tab) {
     this.store.dispatch(new SetSelectedSettingTab(value));
   }
-  get selected(): SettingTab {
+  get selected(): ABP.Tab {
     const value = this.store.selectSnapshot(SettingManagementState.getSelectedTab);
 
-    if ((!value || !value.component) && this.settings.length) {
-      return this.settings[0];
-    }
-
-    return value;
+    return value?.component ? value : this.settings[0] || ({} as ABP.Tab);
   }
 
-  trackByFn: TrackByFunction<SettingTab> = (_, item) => item.name;
+  trackByFn: TrackByFunction<ABP.Tab> = (_, item) => item.name;
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private store: Store, private settingTabs: SettingTabsService) {}
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit() {
-    this.settings = getSettingTabs()
-      .filter(setting => this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy)))
-      .sort((a, b) => a.order - b.order);
+    this.subscription.add(
+      this.settingTabs.visible$.subscribe(settings => {
+        this.settings = settings;
 
-    if (!this.selected && this.settings.length) {
-      this.selected = this.settings[0];
-    }
+        if (!this.selected) this.selected = this.settings[0];
+      }),
+    );
   }
 }

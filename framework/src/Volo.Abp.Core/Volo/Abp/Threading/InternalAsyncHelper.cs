@@ -15,7 +15,7 @@ namespace Volo.Abp.Threading
 
 			try
 			{
-                await actualReturnValue.ConfigureAwait(false);
+                await actualReturnValue;
 			}
 			catch (Exception ex)
 			{
@@ -34,8 +34,8 @@ namespace Volo.Abp.Threading
 
 			try
 			{
-                await actualReturnValue.ConfigureAwait(false);
-                await postAction().ConfigureAwait(false);
+                await actualReturnValue;
+                await postAction();
 			}
 			catch (Exception ex)
 			{
@@ -56,14 +56,14 @@ namespace Volo.Abp.Threading
 			{
 				if (preAction != null)
 				{
-                    await preAction().ConfigureAwait(false);
+                    await preAction();
 				}
 
-                await actualReturnValue().ConfigureAwait(false);
+                await actualReturnValue();
 
 				if (postAction != null)
 				{
-                    await postAction().ConfigureAwait(false);
+                    await postAction();
 				}
 			}
 			catch (Exception ex)
@@ -86,7 +86,7 @@ namespace Volo.Abp.Threading
 
 			try
 			{
-				return await actualReturnValue.ConfigureAwait(false);
+				return await actualReturnValue;
 			}
 			catch (Exception ex)
 			{
@@ -114,8 +114,8 @@ namespace Volo.Abp.Threading
 
 			try
 			{
-				var result = await actualReturnValue.ConfigureAwait(false);
-                await postAction().ConfigureAwait(false);
+				var result = await actualReturnValue;
+                await postAction();
 				return result;
 			}
 			catch (Exception ex)
@@ -146,14 +146,14 @@ namespace Volo.Abp.Threading
 			{
 				if (preAction != null)
 				{
-                    await preAction().ConfigureAwait(false);
+                    await preAction();
 				}
 
-				var result = await actualReturnValue().ConfigureAwait(false);
+				var result = await actualReturnValue();
 
 				if (postAction != null)
 				{
-                    await postAction().ConfigureAwait(false);
+                    await postAction();
 				}
 
 				return result;

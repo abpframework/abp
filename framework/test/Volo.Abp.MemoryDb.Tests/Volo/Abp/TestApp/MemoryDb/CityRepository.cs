@@ -22,7 +22,7 @@ namespace Volo.Abp.TestApp.MemoryDb
 
         public async Task<List<Person>> GetPeopleInTheCityAsync(string cityName)
         {
-            var city = await FindByNameAsync(cityName).ConfigureAwait(false);
+            var city = await FindByNameAsync(cityName);
 
             return Database.Collection<Person>().Where(p => p.CityId == city.Id).ToList();
         }

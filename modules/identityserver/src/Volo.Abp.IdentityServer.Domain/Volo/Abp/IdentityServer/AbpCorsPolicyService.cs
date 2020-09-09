@@ -26,9 +26,9 @@ namespace Volo.Abp.IdentityServer
             Logger = NullLogger<AbpCorsPolicyService>.Instance;
         }
 
-        public async Task<bool> IsOriginAllowedAsync(string origin)
+        public virtual async Task<bool> IsOriginAllowedAsync(string origin)
         {
-            var cacheItem = await Cache.GetOrAddAsync(AllowedCorsOriginsCacheItem.AllOrigins, CreateCacheItemAsync).ConfigureAwait(false);
+            var cacheItem = await Cache.GetOrAddAsync(AllowedCorsOriginsCacheItem.AllOrigins, CreateCacheItemAsync);
 
             var isAllowed = cacheItem.AllowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase);
 
@@ -49,7 +49,7 @@ namespace Volo.Abp.IdentityServer
 
                 return new AllowedCorsOriginsCacheItem
                 {
-                    AllowedOrigins = (await clientRepository.GetAllDistinctAllowedCorsOriginsAsync().ConfigureAwait(false)).ToArray()
+                    AllowedOrigins = (await clientRepository.GetAllDistinctAllowedCorsOriginsAsync()).ToArray()
                 };
             }
         }

@@ -18,7 +18,7 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
         public async Task<PersonView> GetViewAsync(string name)
         {
-            return await DbContext.PersonView.Where(x => x.Name == name).FirstOrDefaultAsync().ConfigureAwait(false);
+            return await DbContext.PersonView.Where(x => x.Name == name).FirstOrDefaultAsync();
         }
     }
 }

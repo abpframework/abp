@@ -29,18 +29,18 @@ namespace Volo.Abp.Features
             {
                 await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    await _classFeatureTestService.NoAdditionalFeatureAsync().ConfigureAwait(false);
-                }).ConfigureAwait(false);
+                    await _classFeatureTestService.NoAdditionalFeatureAsync();
+                });
 
                 await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    await _classFeatureTestService.Feature2Async().ConfigureAwait(false);
-                }).ConfigureAwait(false);
+                    await _classFeatureTestService.Feature2Async();
+                });
 
                 await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    await _methodFeatureTestService.Feature1Async().ConfigureAwait(false);
-                }).ConfigureAwait(false);
+                    await _methodFeatureTestService.Feature1Async();
+                });
             }
         }
 
@@ -50,9 +50,9 @@ namespace Volo.Abp.Features
             //Features were enabled for Tenant 1
             using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
             {
-                await _classFeatureTestService.NoAdditionalFeatureAsync().ConfigureAwait(false);
-                (await _classFeatureTestService.Feature2Async().ConfigureAwait(false)).ShouldBe(42);
-                (await _methodFeatureTestService.Feature1Async().ConfigureAwait(false)).ShouldBe(42);
+                await _classFeatureTestService.NoAdditionalFeatureAsync();
+                (await _classFeatureTestService.Feature2Async()).ShouldBe(42);
+                (await _methodFeatureTestService.Feature1Async()).ShouldBe(42);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Volo.Abp.Features
         {
             using (_currentTenant.Change(ParseNullableGuid(tenantIdValue)))
             {
-                await _methodFeatureTestService.NonFeatureAsync().ConfigureAwait(false);
+                await _methodFeatureTestService.NonFeatureAsync();
             }
         }
 

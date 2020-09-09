@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Tracing
 
             try
             {
-                await next(context).ConfigureAwait(false);
+                await next(context);
             }
             finally
             {

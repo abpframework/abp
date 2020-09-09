@@ -25,7 +25,7 @@ namespace Volo.Abp.FeatureManagement
                 eventData.Entity.ProviderKey
             );
 
-            await Cache.RemoveAsync(cacheKey).ConfigureAwait(false);
+            await Cache.RemoveAsync(cacheKey);
         }
 
         protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)

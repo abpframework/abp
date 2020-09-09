@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var result = await GetResponseAsStringAsync(
                 GetUrl<SimpleController>(nameof(SimpleController.Index))
-            ).ConfigureAwait(false);
+            );
 
             result.ShouldBe("Index-Result");
         }
@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             var result = await GetResponseAsStringAsync(
                 GetUrl<SimpleController>(nameof(SimpleController.About))
-            ).ConfigureAwait(false);
+            );
 
             result.Trim().ShouldBe("<h2>About</h2>");
         }
@@ -35,8 +35,8 @@ namespace Volo.Abp.AspNetCore.Mvc
             {
                 await GetResponseAsStringAsync(
                     GetUrl<SimpleController>(nameof(SimpleController.ExceptionOnRazor))
-                ).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                );
+            });
         }
     }
 }

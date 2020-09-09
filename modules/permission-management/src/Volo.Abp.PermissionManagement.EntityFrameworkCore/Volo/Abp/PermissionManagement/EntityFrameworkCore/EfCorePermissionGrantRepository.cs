@@ -18,7 +18,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 
         }
 
-        public async Task<PermissionGrant> FindAsync(
+        public virtual async Task<PermissionGrant> FindAsync(
             string name, 
             string providerName, 
             string providerKey,
@@ -30,10 +30,10 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey,
                     GetCancellationToken(cancellationToken)
-                ).ConfigureAwait(false);
+                );
         }
 
-        public async Task<List<PermissionGrant>> GetListAsync(
+        public virtual async Task<List<PermissionGrant>> GetListAsync(
             string providerName,
             string providerKey,
             CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
                 .Where(s =>
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey
-                ).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                ).ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

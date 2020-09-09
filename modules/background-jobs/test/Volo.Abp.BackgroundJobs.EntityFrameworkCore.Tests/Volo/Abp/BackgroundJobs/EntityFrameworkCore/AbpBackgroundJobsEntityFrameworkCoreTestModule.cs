@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
     [DependsOn(
         typeof(AbpBackgroundJobsTestBaseModule),
-        typeof(AbpBackgroundJobsEntityFrameworkCoreModule)
+        typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqliteModule)
         )]
     public class AbpBackgroundJobsEntityFrameworkCoreTestModule : AbpModule
     {

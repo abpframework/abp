@@ -8,15 +8,18 @@ using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories
 {
-    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>
+    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
         where TEntity : class, IEntity
     {
         public IDataFilter DataFilter { get; set; }
 
         public ICurrentTenant CurrentTenant { get; set; }
+
+        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
         public virtual Type ElementType => GetQueryable().ElementType;
 
@@ -45,6 +48,26 @@ namespace Volo.Abp.Domain.Repositories
         }
 
         protected abstract IQueryable<TEntity> GetQueryable();
+
+        public abstract Task<TEntity> FindAsync(
+            Expression<Func<TEntity, bool>> predicate, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default);
+
+        public async Task<TEntity> GetAsync(
+            Expression<Func<TEntity, bool>> predicate, 
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
+        {
+            var entity = await FindAsync(predicate, includeDetails, cancellationToken);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity));
+            }
+
+            return entity;
+        }
 
         public abstract Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default);
 
@@ -75,13 +98,13 @@ namespace Volo.Abp.Domain.Repositories
 
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var entity = await FindAsync(id, cancellationToken: cancellationToken);
             if (entity == null)
             {
                 return;
             }
 
-            await DeleteAsync(entity, autoSave, cancellationToken).ConfigureAwait(false);
+            await DeleteAsync(entity, autoSave, cancellationToken);
         }
     }
 }

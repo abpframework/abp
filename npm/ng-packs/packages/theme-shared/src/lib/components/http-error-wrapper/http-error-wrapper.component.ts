@@ -1,4 +1,4 @@
-import { Config, takeUntilDestroy } from '@abp/ng.core';
+import { Config, SubscriptionService } from '@abp/ng.core';
 import {
   AfterViewInit,
   ApplicationRef,
@@ -20,6 +20,7 @@ import snq from 'snq';
   selector: 'abp-http-error-wrapper',
   templateUrl: './http-error-wrapper.component.html',
   styleUrls: ['http-error-wrapper.component.scss'],
+  providers: [SubscriptionService],
 })
 export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnInit {
   appRef: ApplicationRef;
@@ -42,6 +43,8 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   backgroundColor: string;
 
+  isHomeShow = true;
+
   @ViewChild('container', { static: false })
   containerRef: ElementRef<HTMLDivElement>;
 
@@ -49,30 +52,33 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
     return this.status ? `[${this.status}]` : '';
   }
 
+  constructor(private subscription: SubscriptionService) {}
+
   ngOnInit() {
     this.backgroundColor =
-      snq(() => window.getComputedStyle(document.body).getPropertyValue('background-color')) || '#fff';
+      snq(() => window.getComputedStyle(document.body).getPropertyValue('background-color')) ||
+      '#fff';
   }
 
   ngAfterViewInit() {
     if (this.customComponent) {
-      const customComponentRef = this.cfRes.resolveComponentFactory(this.customComponent).create(this.injector);
+      const customComponentRef = this.cfRes
+        .resolveComponentFactory(this.customComponent)
+        .create(this.injector);
       customComponentRef.instance.errorStatus = this.status;
       customComponentRef.instance.destroy$ = this.destroy$;
       this.appRef.attachView(customComponentRef.hostView);
-      this.containerRef.nativeElement.appendChild((customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
+      this.containerRef.nativeElement.appendChild(
+        (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
+      );
       customComponentRef.changeDetectorRef.detectChanges();
     }
 
-    fromEvent(document, 'keyup')
-      .pipe(
-        takeUntilDestroy(this),
-        debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
-      )
-      .subscribe(() => {
-        this.destroy();
-      });
+    const keyup$ = fromEvent(document, 'keyup').pipe(
+      debounceTime(150),
+      filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+    );
+    this.subscription.addOne(keyup$, () => this.destroy());
   }
 
   ngOnDestroy() {}

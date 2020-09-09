@@ -25,18 +25,18 @@ namespace Volo.Abp.PermissionManagement.Identity
             PermissionGrantRepository = permissionGrantRepository;
         }
 
-        public async Task HandleEventAsync(IdentityRoleNameChangedEvent eventData)
+        public virtual async Task HandleEventAsync(IdentityRoleNameChangedEvent eventData)
         {
-            var role = await RoleRepository.FindAsync(eventData.IdentityRole.Id, false).ConfigureAwait(false);
+            var role = await RoleRepository.FindAsync(eventData.IdentityRole.Id, false);
             if (role == null)
             {
                 return;
             }
 
-            var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync(RolePermissionValueProvider.ProviderName, eventData.OldName).ConfigureAwait(false);
+            var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync(RolePermissionValueProvider.ProviderName, eventData.OldName);
             foreach (var permissionGrant in permissionGrantsInRole)
             {
-                await PermissionManager.UpdateProviderKeyAsync(permissionGrant, eventData.IdentityRole.Name).ConfigureAwait(false);
+                await PermissionManager.UpdateProviderKeyAsync(permissionGrant, eventData.IdentityRole.Name);
             }
         }
     }

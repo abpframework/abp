@@ -20,14 +20,14 @@ namespace Volo.Abp.TenantManagement
         public async Task GetAsync()
         {
             var tenantInDb = UsingDbContext(dbContext => dbContext.Tenants.First());
-            var tenant = await _tenantAppService.GetAsync(tenantInDb.Id).ConfigureAwait(false);
+            var tenant = await _tenantAppService.GetAsync(tenantInDb.Id);
             tenant.Name.ShouldBe(tenantInDb.Name);
         }
 
         [Fact]
         public async Task GetListAsync()
         {
-            var result = await _tenantAppService.GetListAsync(new GetTenantsInput()).ConfigureAwait(false);
+            var result = await _tenantAppService.GetListAsync(new GetTenantsInput());
             result.TotalCount.ShouldBeGreaterThan(0);
             result.Items.ShouldContain(t => t.Name == "acme");
             result.Items.ShouldContain(t => t.Name == "volosoft");
@@ -36,7 +36,7 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task GetListAsync_Filtered()
         {
-            var result = await _tenantAppService.GetListAsync(new GetTenantsInput { Filter = "volo" }).ConfigureAwait(false);
+            var result = await _tenantAppService.GetListAsync(new GetTenantsInput { Filter = "volo" });
             result.TotalCount.ShouldBeGreaterThan(0);
             result.Items.ShouldNotContain(t => t.Name == "acme");
             result.Items.ShouldContain(t => t.Name == "volosoft");
@@ -45,7 +45,7 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task GetListAsync_Sorted_Descending_By_Name()
         {
-            var result = await _tenantAppService.GetListAsync(new GetTenantsInput { Sorting = "Name DESC" }).ConfigureAwait(false);
+            var result = await _tenantAppService.GetListAsync(new GetTenantsInput { Sorting = "Name DESC" });
             result.TotalCount.ShouldBeGreaterThan(0);
             var tenants = result.Items.ToList();
 
@@ -59,7 +59,7 @@ namespace Volo.Abp.TenantManagement
         public async Task CreateAsync()
         {
             var tenancyName = Guid.NewGuid().ToString("N").ToLowerInvariant();
-            var tenant = await _tenantAppService.CreateAsync(new TenantCreateDto { Name = tenancyName }).ConfigureAwait(false);
+            var tenant = await _tenantAppService.CreateAsync(new TenantCreateDto { Name = tenancyName , AdminEmailAddress = "admin@admin.com", AdminPassword = "123456"});
             tenant.Name.ShouldBe(tenancyName);
             tenant.Id.ShouldNotBe(default(Guid));
         }
@@ -69,8 +69,8 @@ namespace Volo.Abp.TenantManagement
         {
             await Assert.ThrowsAsync<UserFriendlyException>(async () =>
             {
-                await _tenantAppService.CreateAsync(new TenantCreateDto { Name = "acme" }).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await _tenantAppService.CreateAsync(new TenantCreateDto { Name = "acme", AdminEmailAddress = "admin@admin.com", AdminPassword = "123456" });
+            });
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace Volo.Abp.TenantManagement
         {
             var acme = UsingDbContext(dbContext => dbContext.Tenants.Single(t => t.Name == "acme"));
 
-            var result = await _tenantAppService.UpdateAsync(acme.Id, new TenantUpdateDto { Name = "acme-renamed" }).ConfigureAwait(false);
+            var result = await _tenantAppService.UpdateAsync(acme.Id, new TenantUpdateDto { Name = "acme-renamed" });
             result.Id.ShouldBe(acme.Id);
             result.Name.ShouldBe("acme-renamed");
 
@@ -93,8 +93,8 @@ namespace Volo.Abp.TenantManagement
 
             await Assert.ThrowsAsync<UserFriendlyException>(async () =>
             {
-                await _tenantAppService.UpdateAsync(acme.Id, new TenantUpdateDto { Name = "volosoft" }).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await _tenantAppService.UpdateAsync(acme.Id, new TenantUpdateDto { Name = "volosoft" });
+            });
         }
 
         [Fact]
@@ -102,7 +102,7 @@ namespace Volo.Abp.TenantManagement
         {
             var acme = UsingDbContext(dbContext => dbContext.Tenants.Single(t => t.Name == "acme"));
 
-            await _tenantAppService.DeleteAsync(acme.Id).ConfigureAwait(false);
+            await _tenantAppService.DeleteAsync(acme.Id);
 
             UsingDbContext(dbContext =>
             {

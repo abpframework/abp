@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { ConfirmationService } from '../../services/confirmation.service';
+import { ReplaySubject } from 'rxjs';
 import { Confirmation } from '../../models/confirmation';
-import { LocalizationService } from '@abp/ng.core';
-import { Toaster } from '../../models/toaster';
 
 @Component({
   selector: 'abp-confirmation',
@@ -10,16 +8,20 @@ import { Toaster } from '../../models/toaster';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent {
-  confirm = Toaster.Status.confirm;
-  reject = Toaster.Status.reject;
-  dismiss = Toaster.Status.dismiss;
+  confirm = Confirmation.Status.confirm;
+  reject = Confirmation.Status.reject;
+  dismiss = Confirmation.Status.dismiss;
 
-  visible = false;
+  confirmation$: ReplaySubject<Confirmation.DialogData>;
 
-  data: Confirmation.DialogData;
+  clear: (status: Confirmation.Status) => void;
 
-  get iconClass(): string {
-    switch (this.data.severity) {
+  close(status: Confirmation.Status) {
+    this.clear(status);
+  }
+
+  getIconClass({ severity }: Confirmation.DialogData): string {
+    switch (severity) {
       case 'info':
         return 'fa-info-circle';
       case 'success':
@@ -31,19 +33,5 @@ export class ConfirmationComponent {
       default:
         return 'fa-question-circle';
     }
-  }
-
-  constructor(
-    private confirmationService: ConfirmationService,
-    private localizationService: LocalizationService,
-  ) {
-    this.confirmationService.confirmation$.subscribe(confirmation => {
-      this.data = confirmation;
-      this.visible = !!confirmation;
-    });
-  }
-
-  close(status: Toaster.Status) {
-    this.confirmationService.clear(status);
   }
 }

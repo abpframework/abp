@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
         public async Task Should_Set_No_Content_For_Void_Action()
         {
             var result = await GetResponseAsync("/api/NoContent-Test/TestMethod", HttpStatusCode.NoContent)
-                .ConfigureAwait(false);
+                ;
             result.StatusCode.ShouldBe(HttpStatusCode.NoContent);
         }
 
@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
         public async Task Should_Not_Set_No_Content_For_Not_Void_Action()
         {
             var result = await GetResponseAsync("/api/NoContent-Test/TestMethodWithReturn")
-                .ConfigureAwait(false);
+                ;
             result.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
         public async Task Should_Not_Set_No_Content_For_Custom_Http_Status_Code_Action()
         {
             var result = await GetResponseAsync("/api/NoContent-Test/TestCustomHttpStatusCodeMethod", HttpStatusCode.Redirect)
-                .ConfigureAwait(false);
+                ;
             result.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         }
 
@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
         public async Task Should_Set_No_Content_For_Task_Action()
         {
             var result = await GetResponseAsync("/api/NoContent-Test/TestAsyncMethod", HttpStatusCode.NoContent)
-                .ConfigureAwait(false);
+                ;
             result.StatusCode.ShouldBe(HttpStatusCode.NoContent);
         }
 
@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
         public async Task Should_Not_Set_No_Content_For_Not_Task_Action()
         {
             var result = await GetResponseAsync("/api/NoContent-Test/TestAsyncMethodWithReturn")
-                .ConfigureAwait(false);
+                ;
             result.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Response
         public async Task Should_Not_Set_No_Content_For_Custom_Http_Status_Code_Async_Action()
         {
             var result = await GetResponseAsync("/api/NoContent-Test/TestAsyncCustomHttpStatusCodeMethod", HttpStatusCode.Redirect)
-                .ConfigureAwait(false);
+                ;
             result.StatusCode.ShouldBe(HttpStatusCode.Redirect);
         }
     }

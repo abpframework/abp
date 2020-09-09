@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -16,17 +17,20 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    public abstract class AbpDbContext<TDbContext> : DbContext, IEfCoreDbContext, ITransientDependency
+    public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext, ITransientDependency
         where TDbContext : DbContext
     {
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
@@ -48,6 +52,8 @@ namespace Volo.Abp.EntityFrameworkCore
         public IEntityHistoryHelper EntityHistoryHelper { get; set; }
 
         public IAuditingManager AuditingManager { get; set; }
+
+        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
         public IClock Clock { get; set; }
 
@@ -87,6 +93,8 @@ namespace Volo.Abp.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
+            TrySetDatabaseProvider(modelBuilder);
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 ConfigureBasePropertiesMethodInfo
@@ -102,7 +110,42 @@ namespace Volo.Abp.EntityFrameworkCore
                     .Invoke(this, new object[] { modelBuilder, entityType });
             }
         }
-        
+
+        protected virtual void TrySetDatabaseProvider(ModelBuilder modelBuilder)
+        {
+            var provider = GetDatabaseProviderOrNull(modelBuilder);
+            if (provider != null)
+            {
+                modelBuilder.SetDatabaseProvider(provider.Value);
+            }
+        }
+
+        protected virtual EfCoreDatabaseProvider? GetDatabaseProviderOrNull(ModelBuilder modelBuilder)
+        {
+            switch (Database.ProviderName)
+            {
+                case "Microsoft.EntityFrameworkCore.SqlServer":
+                    return EfCoreDatabaseProvider.SqlServer;
+                case "Npgsql.EntityFrameworkCore.PostgreSQL":
+                    return EfCoreDatabaseProvider.PostgreSql;
+                case "Pomelo.EntityFrameworkCore.MySql":
+                    return EfCoreDatabaseProvider.MySql;
+                case "Oracle.EntityFrameworkCore":
+                case "Devart.Data.Oracle.Entity.EFCore":
+                    return EfCoreDatabaseProvider.Oracle;
+                case "Microsoft.EntityFrameworkCore.Sqlite":
+                    return EfCoreDatabaseProvider.Sqlite;
+                case "Microsoft.EntityFrameworkCore.InMemory":
+                    return EfCoreDatabaseProvider.InMemory;
+                case "FirebirdSql.EntityFrameworkCore.Firebird":
+                    return EfCoreDatabaseProvider.Firebird;
+                case "Microsoft.EntityFrameworkCore.Cosmos":
+                    return EfCoreDatabaseProvider.Cosmos;
+                default:
+                    return null;
+            }
+        }
+
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             try
@@ -117,9 +160,9 @@ namespace Volo.Abp.EntityFrameworkCore
 
                 var changeReport = ApplyAbpConcepts();
 
-                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(false);
+                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 
-                await EntityChangeEventHelper.TriggerEventsAsync(changeReport).ConfigureAwait(false);
+                await EntityChangeEventHelper.TriggerEventsAsync(changeReport);
 
                 if (auditLog != null)
                 {
@@ -137,6 +180,79 @@ namespace Volo.Abp.EntityFrameworkCore
             finally
             {
                 ChangeTracker.AutoDetectChangesEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// This method will call the DbContext <see cref="SaveChangesAsync(bool, CancellationToken)"/> method directly of EF Core, which doesn't apply concepts of abp.
+        /// </summary>
+        public virtual Task<int> SaveChangesOnDbContextAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public virtual void Initialize(AbpEfCoreDbContextInitializationContext initializationContext)
+        {
+            if (initializationContext.UnitOfWork.Options.Timeout.HasValue &&
+                Database.IsRelational() &&
+                !Database.GetCommandTimeout().HasValue)
+            {
+                Database.SetCommandTimeout(TimeSpan.FromMilliseconds(initializationContext.UnitOfWork.Options.Timeout.Value));
+            }
+
+            ChangeTracker.CascadeDeleteTiming = CascadeTiming.OnSaveChanges;
+
+            ChangeTracker.Tracked += ChangeTracker_Tracked;
+        }
+
+        protected virtual void ChangeTracker_Tracked(object sender, EntityTrackedEventArgs e)
+        {
+            FillExtraPropertiesForTrackedEntities(e);
+        }
+
+        protected virtual void FillExtraPropertiesForTrackedEntities(EntityTrackedEventArgs e)
+        {
+            var entityType = e.Entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(e.Entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+
+            if (!e.FromQuery)
+            {
+                return;
+            }
+
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            foreach (var property in objectExtension.GetProperties())
+            {
+                if (!property.IsMappedToFieldForEfCore())
+                {
+                    continue;
+                }
+
+                /* Checking "currentValue != null" has a good advantage:
+                 * Assume that you we already using a named extra property,
+                 * then decided to create a field (entity extension) for it.
+                 * In this way, it prevents to delete old value in the JSON and
+                 * updates the field on the next save!
+                 */
+
+                var currentValue = e.Entry.CurrentValues[property.Name];
+                if (currentValue != null)
+                {
+                    entity.ExtraProperties[property.Name] = currentValue;
+                }
             }
         }
 
@@ -167,7 +283,66 @@ namespace Volo.Abp.EntityFrameworkCore
                     break;
             }
 
+            HandleExtraPropertiesOnSave(entry);
+
             AddDomainEvents(changeReport, entry.Entity);
+        }
+
+        protected virtual void HandleExtraPropertiesOnSave(EntityEntry entry)
+        {
+            if (entry.State.IsIn(EntityState.Deleted, EntityState.Unchanged))
+            {
+                return;
+            }
+
+            var entityType = entry.Metadata.ClrType;
+            if (entityType == null)
+            {
+                return;
+            }
+
+            if (!(entry.Entity is IHasExtraProperties entity))
+            {
+                return;
+            }
+
+            var objectExtension = ObjectExtensionManager.Instance.GetOrNull(entityType);
+            if (objectExtension == null)
+            {
+                return;
+            }
+
+            var efMappedProperties = ObjectExtensionManager.Instance
+                .GetProperties(entityType)
+                .Where(p => p.IsMappedToFieldForEfCore());
+
+            foreach (var property in efMappedProperties)
+            {
+                if (!entity.HasProperty(property.Name))
+                {
+                    continue;
+                }
+
+                var entryProperty = entry.Property(property.Name);
+                var entityProperty = entity.GetProperty(property.Name);
+                if (entityProperty == null)
+                {
+                    entryProperty.CurrentValue = null;
+                    continue;
+                }
+
+                if (entryProperty.Metadata.ClrType == entityProperty.GetType())
+                {
+                    entryProperty.CurrentValue = entityProperty;
+                }
+                else
+                {
+                    if (TypeHelper.IsPrimitiveExtended(entryProperty.Metadata.ClrType, includeEnums: true))
+                    {
+                        entryProperty.CurrentValue = Convert.ChangeType(entityProperty, entryProperty.Metadata.ClrType, CultureInfo.InvariantCulture);
+                    }
+                }
+            }
         }
 
         protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, EntityChangeReport changeReport)
@@ -196,10 +371,24 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
-            CancelDeletionForSoftDelete(entry);
-            UpdateConcurrencyStamp(entry);
-            SetDeletionAuditProperties(entry);
+            if (TryCancelDeletionForSoftDelete(entry))
+            {
+                UpdateConcurrencyStamp(entry);
+                SetDeletionAuditProperties(entry);
+            }
+
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
+        }
+
+        protected virtual bool IsHardDeleted(EntityEntry entry)
+        {
+            var hardDeletedEntities = UnitOfWorkManager?.Current?.Items.GetOrDefault(UnitOfWorkItemNames.HardDeletedEntities) as HashSet<IEntity>;
+            if (hardDeletedEntities == null)
+            {
+                return false;
+            }
+
+            return hardDeletedEntities.Contains(entry.Entity);
         }
 
         protected virtual void AddDomainEvents(EntityChangeReport changeReport, object entityAsObj)
@@ -253,16 +442,22 @@ namespace Volo.Abp.EntityFrameworkCore
             entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
 
-        protected virtual void CancelDeletionForSoftDelete(EntityEntry entry)
+        protected virtual bool TryCancelDeletionForSoftDelete(EntityEntry entry)
         {
             if (!(entry.Entity is ISoftDelete))
             {
-                return;
+                return false;
+            }
+
+            if (IsHardDeleted(entry))
+            {
+                return false;
             }
 
             entry.Reload();
             entry.State = EntityState.Modified;
             entry.Entity.As<ISoftDelete>().IsDeleted = true;
+            return true;
         }
 
         protected virtual void CheckAndSetId(EntityEntry entry)
@@ -319,6 +514,11 @@ namespace Volo.Abp.EntityFrameworkCore
             where TEntity : class
         {
             if (mutableEntityType.IsOwned())
+            {
+                return;
+            }
+
+            if (!typeof(IEntity).IsAssignableFrom(typeof(TEntity)))
             {
                 return;
             }
@@ -382,7 +582,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>) x).Id);
+            var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>)x).Id);
             if (idPropertyBuilder.Metadata.PropertyInfo.IsDefined(typeof(DatabaseGeneratedAttribute), true))
             {
                 return;

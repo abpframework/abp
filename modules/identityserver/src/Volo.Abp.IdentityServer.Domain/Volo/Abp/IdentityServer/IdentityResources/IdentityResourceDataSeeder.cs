@@ -37,16 +37,16 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             {
                 foreach (var claimType in resource.UserClaims)
                 {
-                    await AddClaimTypeIfNotExistsAsync(claimType).ConfigureAwait(false);
+                    await AddClaimTypeIfNotExistsAsync(claimType);
                 }
 
-                await AddIdentityResourceIfNotExistsAsync(resource).ConfigureAwait(false);
+                await AddIdentityResourceIfNotExistsAsync(resource);
             }
         }
 
         protected virtual async Task AddIdentityResourceIfNotExistsAsync(IdentityServer4.Models.IdentityResource resource)
         {
-            if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name).ConfigureAwait(false))
+            if (await IdentityResourceRepository.CheckNameExistAsync(resource.Name))
             {
                 return;
             }
@@ -56,12 +56,12 @@ namespace Volo.Abp.IdentityServer.IdentityResources
                     GuidGenerator.Create(),
                     resource
                 )
-            ).ConfigureAwait(false);
+            );
         }
 
         protected virtual async Task AddClaimTypeIfNotExistsAsync(string claimType)
         {
-            if (await ClaimTypeRepository.AnyAsync(claimType).ConfigureAwait(false))
+            if (await ClaimTypeRepository.AnyAsync(claimType))
             {
                 return;
             }
@@ -72,7 +72,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
                     claimType,
                     isStatic: true
                 )
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

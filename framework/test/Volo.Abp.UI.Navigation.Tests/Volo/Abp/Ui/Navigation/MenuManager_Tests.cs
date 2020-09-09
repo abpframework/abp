@@ -19,7 +19,7 @@ namespace Volo.Abp.UI.Navigation
         [Fact]
         public async Task Should_Get_Menu()
         {
-            var mainMenu = await _menuManager.GetAsync(StandardMenus.Main).ConfigureAwait(false);
+            var mainMenu = await _menuManager.GetAsync(StandardMenus.Main);
 
             mainMenu.Name.ShouldBe(StandardMenus.Main);
             mainMenu.DisplayName.ShouldBe("Main Menu");

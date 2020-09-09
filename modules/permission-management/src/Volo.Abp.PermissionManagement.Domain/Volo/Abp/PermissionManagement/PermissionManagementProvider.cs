@@ -46,7 +46,7 @@ namespace Volo.Abp.PermissionManagement
 
         protected virtual async Task GrantAsync(string name, string providerKey)
         {
-            var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, providerKey).ConfigureAwait(false);
+            var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, providerKey);
             if (permissionGrant != null)
             {
                 return;
@@ -60,18 +60,18 @@ namespace Volo.Abp.PermissionManagement
                     providerKey,
                     CurrentTenant.Id
                 )
-            ).ConfigureAwait(false);
+            );
         }
 
         protected virtual async Task RevokeAsync(string name, string providerKey)
         {
-            var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, providerKey).ConfigureAwait(false);
+            var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, providerKey);
             if (permissionGrant == null)
             {
                 return;
             }
 
-            await PermissionGrantRepository.DeleteAsync(permissionGrant).ConfigureAwait(false);
+            await PermissionGrantRepository.DeleteAsync(permissionGrant);
         }
     }
 }

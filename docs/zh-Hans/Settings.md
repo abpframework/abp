@@ -226,6 +226,6 @@ Configure<AbpSettingOptions>(options =>
 
 ## 设置管理模块
 
-设置系统核心是相当独立的,不做任何关于如何管理(更改)设置值的假设. 默认的`ISettingStore`实现也是`NullSettingStore`，它为所有设置值返回null.
+设置系统核心是相当独立的,不做任何关于如何管理(更改)设置值的假设. 默认的`ISettingStore`实现也是`NullSettingStore`,它为所有设置值返回null.
 
 设置管理模块通过管理数据库中的设置值来完成逻辑(实现`ISettingStore`).有关更多信息参阅[设置管理模块](Modules/Setting-Management.md)学习更多.

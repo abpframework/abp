@@ -1,12 +1,16 @@
-import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
+import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
+import { Action, createSelector, Selector, State, StateContext } from '@ngxs/store';
+import snq from 'snq';
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
-import snq from 'snq';
+import { noop } from '../utils/common-utils';
 
 @State<ReplaceableComponents.State>({
   name: 'ReplaceableComponentsState',
   defaults: { replaceableComponents: [] } as ReplaceableComponents.State,
 })
+@Injectable()
 export class ReplaceableComponentsState {
   @Selector()
   static getAll({
@@ -26,10 +30,28 @@ export class ReplaceableComponentsState {
     return selector;
   }
 
+  constructor(private ngZone: NgZone, private router: Router) {}
+
+  // TODO: Create a shared service for route reload and more
+  private reloadRoute() {
+    const { shouldReuseRoute } = this.router.routeReuseStrategy;
+    const setRouteReuse = (reuse: typeof shouldReuseRoute) => {
+      this.router.routeReuseStrategy.shouldReuseRoute = reuse;
+    };
+
+    setRouteReuse(() => false);
+    this.router.navigated = false;
+
+    this.ngZone.run(async () => {
+      await this.router.navigateByUrl(this.router.url).catch(noop);
+      setRouteReuse(shouldReuseRoute);
+    });
+  }
+
   @Action(AddReplaceableComponent)
   replaceableComponentsAction(
     { getState, patchState }: StateContext<ReplaceableComponents.State>,
-    { payload }: AddReplaceableComponent,
+    { payload, reload }: AddReplaceableComponent,
   ) {
     let { replaceableComponents } = getState();
 
@@ -46,5 +68,7 @@ export class ReplaceableComponentsState {
     patchState({
       replaceableComponents,
     });
+
+    if (reload) this.reloadRoute();
   }
 }

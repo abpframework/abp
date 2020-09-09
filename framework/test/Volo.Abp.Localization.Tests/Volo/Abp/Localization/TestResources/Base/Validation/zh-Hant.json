@@ -1,0 +1,7 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "ThisFieldIsRequired": "此欄位為必填欄位",
+    "MaxLenghtErrorMessage": "此欄位最多可包含'{0}'個字元"
+  }
+}

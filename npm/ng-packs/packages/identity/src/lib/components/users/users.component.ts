@@ -1,5 +1,6 @@
-import { ABP, ConfigState } from '@abp/ng.core';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { ListService } from '@abp/ng.core';
+import { ePermissionManagementComponents } from '@abp/ng.permission-management';
+import { Confirmation, ConfirmationService, getPasswordValidators } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
   AbstractControl,
@@ -9,7 +10,6 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { PasswordRules, validatePassword } from '@ngx-validate/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
@@ -17,17 +17,19 @@ import snq from 'snq';
 import {
   CreateUser,
   DeleteUser,
-  GetRoles,
   GetUserById,
   GetUserRoles,
   GetUsers,
   UpdateUser,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
+import { IdentityService } from '../../services/identity.service';
 import { IdentityState } from '../../states/identity.state';
+
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
+  providers: [ListService],
 })
 export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsers)
@@ -51,21 +53,11 @@ export class UsersComponent implements OnInit {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
-
   isModalVisible: boolean;
-
-  loading = false;
 
   modalBusy = false;
 
-  sortOrder = '';
-
-  sortKey = '';
-
-  passwordRulesArr = [] as PasswordRules;
-
-  requiredPasswordLength = 1;
+  permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -78,47 +70,20 @@ export class UsersComponent implements OnInit {
   }
 
   constructor(
+    public readonly list: ListService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private store: Store,
+    private identityService: IdentityService,
   ) {}
 
   ngOnInit() {
-    this.get();
-
-    const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
-      ConfigState.getSettings('Identity.Password'),
-    );
-
-    if ((passwordRules['Abp.Identity.Password.RequireDigit'] || '').toLowerCase() === 'true') {
-      this.passwordRulesArr.push('number');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireLowercase'] || '').toLowerCase() === 'true') {
-      this.passwordRulesArr.push('small');
-    }
-
-    if ((passwordRules['Abp.Identity.Password.RequireUppercase'] || '').toLowerCase() === 'true') {
-      this.passwordRulesArr.push('capital');
-    }
-
-    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
-      this.passwordRulesArr.push('special');
-    }
-
-    if (Number.isInteger(+passwordRules['Abp.Identity.Password.RequiredLength'])) {
-      this.requiredPasswordLength = +passwordRules['Abp.Identity.Password.RequiredLength'];
-    }
-  }
-
-  onSearch(value: string) {
-    this.pageQuery.filter = value;
-    this.get();
+    this.hookToQuery();
   }
 
   buildForm() {
-    this.store.dispatch(new GetRoles()).subscribe(() => {
-      this.roles = this.store.selectSnapshot(IdentityState.getRoles);
+    this.identityService.getUserAssingableRoles().subscribe(({ items }) => {
+      this.roles = items;
       this.form = this.fb.group({
         userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
         email: [
@@ -134,7 +99,7 @@ export class UsersComponent implements OnInit {
           this.roles.map(role =>
             this.fb.group({
               [role.name]: [
-                this.selectedUserRoles.length
+                this.selected.id
                   ? !!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))
                   : role.isDefault,
               ],
@@ -143,11 +108,7 @@ export class UsersComponent implements OnInit {
         ),
       });
 
-      const passwordValidators = [
-        validatePassword(this.passwordRulesArr),
-        Validators.minLength(this.requiredPasswordLength),
-        Validators.maxLength(128),
-      ];
+      const passwordValidators = getPasswordValidators(this.store);
 
       this.form.addControl('password', new FormControl('', [...passwordValidators]));
 
@@ -179,7 +140,7 @@ export class UsersComponent implements OnInit {
       )
       .subscribe((state: Identity.State) => {
         this.selected = state.selectedUser;
-        this.selectedUserRoles = state.selectedUserRoles;
+        this.selectedUserRoles = state.selectedUserRoles || [];
         this.openModal();
       });
   }
@@ -212,7 +173,7 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
-        this.get();
+        this.list.get();
       });
   }
 
@@ -221,24 +182,27 @@ export class UsersComponent implements OnInit {
       .warn('AbpIdentity::UserDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
         messageLocalizationParams: [userName],
       })
-      .subscribe((status: Toaster.Status) => {
-        if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.get());
+      .subscribe((status: Confirmation.Status) => {
+        if (status === Confirmation.Status.confirm) {
+          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.list.get());
         }
       });
   }
 
-  onPageChange(page: number) {
-    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
-
-    this.get();
+  sort(data) {
+    const { prop, dir } = data.sorts[0];
+    this.list.sortKey = prop;
+    this.list.sortOrder = dir;
   }
 
-  get() {
-    this.loading = true;
-    this.store
-      .dispatch(new GetUsers(this.pageQuery))
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe();
+  private hookToQuery() {
+    this.list.hookToQuery(query => this.store.dispatch(new GetUsers(query))).subscribe();
+  }
+
+  openPermissionsModal(providerKey: string) {
+    this.providerKey = providerKey;
+    setTimeout(() => {
+      this.visiblePermissions = true;
+    }, 0);
   }
 }

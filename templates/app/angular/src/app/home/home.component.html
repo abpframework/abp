@@ -8,13 +8,7 @@
     </div>
   </div>
   <a href="https://abp.io?ref=tmpl" target="_blank" class="btn btn-primary px-4">abp.io</a>
-  <a
-    *ngIf="!hasLoggedIn"
-    routerLink="/account/login"
-    [state]="{ redirectUrl: '/' }"
-    class="px-4 btn btn-primary ml-1"
-    role="button"
-    id="login-button"
+  <a *ngIf="!hasLoggedIn" (click)="login()" class="px-4 btn btn-primary ml-1" role="button"
     ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
   >
 </div>

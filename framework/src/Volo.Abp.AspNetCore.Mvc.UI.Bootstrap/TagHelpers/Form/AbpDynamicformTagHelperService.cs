@@ -37,17 +37,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             NormalizeTagMode(context, output);
 
-            var childContent = (await output.GetChildContentAsync().ConfigureAwait(false)).GetContent();
+            var childContent = (await output.GetChildContentAsync()).GetContent();
 
-            await ConvertToMvcForm(context, output).ConfigureAwait(false);
+            await ConvertToMvcForm(context, output);
 
-            await ProcessFieldsAsync(context, output).ConfigureAwait(false);
+            await ProcessFieldsAsync(context, output);
+
+            RemoveFormGroupItemsNotInModel(context, output, list);
 
             SetContent(context, output, list, childContent);
 
             SetFormAttributes(context, output);
 
-            SetSubmitButton(context, output);
+            await SetSubmitButton(context, output);
         }
 
         protected virtual async Task ConvertToMvcForm(TagHelperContext context, TagHelperOutput output)
@@ -67,9 +69,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var formTagOutput = await formTagHelper.ProcessAndGetOutputAsync(output.Attributes, context, "form", TagMode.StartTagAndEndTag).ConfigureAwait(false);
+            var formTagOutput = await formTagHelper.ProcessAndGetOutputAsync(output.Attributes, context, "form", TagMode.StartTagAndEndTag);
 
-            await formTagOutput.GetChildContentAsync().ConfigureAwait(false);
+            await formTagOutput.GetChildContentAsync();
 
             output.PostContent.SetHtmlContent(output.PostContent.GetContent() + formTagOutput.PostContent.GetContent());
             output.PreContent.SetHtmlContent(output.PreContent.GetContent() + formTagOutput.PreContent.GetContent());
@@ -107,14 +109,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             output.Content.SetHtmlContent(childContent);
         }
 
-        protected virtual void SetSubmitButton(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task SetSubmitButton(TagHelperContext context, TagHelperOutput output)
         {
             if (!TagHelper.SubmitButton ?? true)
             {
                 return;
             }
 
-            var buttonHtml = ProcessSubmitButtonAndGetContentAsync(context, output);
+            var buttonHtml = await ProcessSubmitButtonAndGetContentAsync(context, output);
 
             output.PostContent.SetHtmlContent(output.PostContent.GetContent() + buttonHtml);
         }
@@ -134,25 +136,32 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             {
                 if (IsSelectGroup(context, model))
                 {
-                    await ProcessSelectGroupAsync(context, output, model).ConfigureAwait(false);
+                    await ProcessSelectGroupAsync(context, output, model);
                 }
                 else
                 {
-                    await ProcessInputGroupAsync(context, output, model).ConfigureAwait(false);
+                    await ProcessInputGroupAsync(context, output, model);
                 }
             }
+        }
+        
+        protected virtual void RemoveFormGroupItemsNotInModel(TagHelperContext context, TagHelperOutput output, List<FormGroupItem> items)
+        {
+            var models = GetModels(context, output);
+
+            items.RemoveAll(x => models.All(m => !m.Name.Equals(x.PropertyName, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         protected virtual async Task ProcessSelectGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
             var abpSelectTagHelper = GetSelectGroupTagHelper(context, output, model);
 
-            await abpSelectTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag).ConfigureAwait(false);
+            await abpSelectTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual AbpTagHelper GetSelectGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
         {
-            return IsRadioGroup(model.ModelExplorer) ? 
+            return IsRadioGroup(model.ModelExplorer) ?
                 GetAbpRadioInputTagHelper(model) :
                 GetSelectTagHelper(model);
         }
@@ -185,7 +194,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             abpButtonTagHelper.Text = "Submit";
             abpButtonTagHelper.ButtonType = AbpButtonType.Primary;
 
-            return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag).ConfigureAwait(false);
+            return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
         }
 
         protected virtual async Task ProcessInputGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
@@ -195,7 +204,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             abpInputTagHelper.ViewContext = TagHelper.ViewContext;
             abpInputTagHelper.DisplayRequiredSymbol = TagHelper.RequiredSymbols ?? true;
 
-            await abpInputTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag).ConfigureAwait(false);
+            await abpInputTagHelper.RenderAsync(new TagHelperAttributeList(), context, _htmlEncoder, "div", TagMode.StartTagAndEndTag);
         }
 
         protected virtual List<ModelExpression> GetModels(TagHelperContext context, TagHelperOutput output)

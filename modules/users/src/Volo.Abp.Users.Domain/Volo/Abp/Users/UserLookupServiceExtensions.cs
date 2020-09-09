@@ -10,7 +10,7 @@ namespace Volo.Abp.Users
         public static async Task<TUser> GetByIdAsync<TUser>(this IUserLookupService<TUser> userLookupService, Guid id, CancellationToken cancellationToken = default)
             where TUser : class, IUser
         {
-            var user = await userLookupService.FindByIdAsync(id, cancellationToken).ConfigureAwait(false);
+            var user = await userLookupService.FindByIdAsync(id, cancellationToken);
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(TUser), id);
@@ -22,7 +22,7 @@ namespace Volo.Abp.Users
         public static async Task<TUser> GetByUserNameAsync<TUser>(this IUserLookupService<TUser> userLookupService, string userName, CancellationToken cancellationToken = default)
             where TUser : class, IUser
         {
-            var user = await userLookupService.FindByUserNameAsync(userName, cancellationToken).ConfigureAwait(false);
+            var user = await userLookupService.FindByUserNameAsync(userName, cancellationToken);
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(TUser), userName);

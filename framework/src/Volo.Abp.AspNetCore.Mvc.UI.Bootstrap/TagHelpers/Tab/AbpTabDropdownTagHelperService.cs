@@ -15,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 throw new Exception("Name of tab dropdown tag can not bu null or empty.");
             }
 
-            await output.GetChildContentAsync().ConfigureAwait(false);
+            await output.GetChildContentAsync();
             var tabHeader = GetTabHeaderItem(context, output);
 
             var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);

@@ -67,7 +67,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
         {
             var app = context.GetApplicationBuilder();
             app.UseRouting();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

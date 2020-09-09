@@ -30,13 +30,13 @@ namespace Volo.Abp.Uow
                     _unitOfWorkManager.Current.ShouldNotBeNull();
                     _unitOfWorkManager.Current.Id.ShouldNotBe(uow1.Id);
 
-                    await uow2.CompleteAsync().ConfigureAwait(false);
+                    await uow2.CompleteAsync();
                 }
 
                 _unitOfWorkManager.Current.ShouldNotBeNull();
                 _unitOfWorkManager.Current.ShouldBe(uow1);
 
-                await uow1.CompleteAsync().ConfigureAwait(false);
+                await uow1.CompleteAsync();
             }
 
             _unitOfWorkManager.Current.ShouldBeNull();

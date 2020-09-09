@@ -1,3 +1,3 @@
-# IdentityServer Module
+# Blogging Module
 
 TODO

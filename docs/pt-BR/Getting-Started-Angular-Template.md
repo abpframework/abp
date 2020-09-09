@@ -26,10 +26,10 @@ abp new Acme.BookStore -u angular
 
 A solução criada requer;
 
-* [Visual Studio 2019 (v16.3+)](https://visualstudio.microsoft.com/vs/)
+* [Visual Studio 2019 (v16.4+)](https://visualstudio.microsoft.com/vs/)
 * [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
 * [Node v12+](https://nodejs.org)
-* [Yarn v1.19+](https://yarnpkg.com/)
+* [Yarn v1.19+](https://classic.yarnpkg.com/)
 
 ### A Estrutura da Solução
 
@@ -103,7 +103,7 @@ A maioria das APIs de aplicativos requer autenticação e autorização. Se voc�
 
 #### Execute o aplicativo angular (lado do cliente)
 
-Vá para a `angular`pasta, abra um terminal de linha de comando, digite o `yarn`comando (sugerimos ao gerenciador de pacotes do [yarn](https://yarnpkg.com/) enquanto o npm install também funcionará na maioria dos casos):
+Vá para a `angular`pasta, abra um terminal de linha de comando, digite o `yarn`comando (sugerimos ao gerenciador de pacotes do [yarn](https://classic.yarnpkg.com/) enquanto o npm install também funcionará na maioria dos casos):
 
 ```bash
 yarn

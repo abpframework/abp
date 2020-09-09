@@ -5,6 +5,7 @@ namespace Volo.Abp.Application.Dtos
 {
     /// <summary>
     /// This class can be inherited by DTO classes to implement <see cref="ICreationAuditedObject{TCreator}"/> interface.
+    /// It also has the <see cref="Creator"/> object as a DTO represents the user.
     /// </summary>
     /// <typeparam name="TUserDto">Type of the User DTO</typeparam>
     [Serializable]
@@ -14,7 +15,8 @@ namespace Volo.Abp.Application.Dtos
     }
 
     /// <summary>
-    /// This class can be inherited by DTO classes to implement <see cref="ICreationAuditedObjectObject{TCreator}"/> interface.
+    /// This class can be inherited by DTO classes to implement <see cref="ICreationAuditedObject{TCreator}"/> interface.
+    /// It also has the <see cref="Creator"/> object as a DTO represents the user.
     /// </summary>
     /// <typeparam name="TPrimaryKey">Type of primary key</typeparam>
     /// <typeparam name="TUserDto">Type of the User DTO</typeparam>

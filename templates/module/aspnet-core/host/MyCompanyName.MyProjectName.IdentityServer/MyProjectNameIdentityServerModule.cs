@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
@@ -17,15 +17,18 @@ using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
@@ -52,6 +55,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
+        typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityApplicationModule),
@@ -62,7 +66,9 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementApplicationModule),
+        typeof(AbpFeatureManagementHttpApiModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
@@ -97,8 +103,10 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
             });
 
             Configure<AbpAuditingOptions>(options =>
@@ -113,11 +121,11 @@ namespace MyCompanyName.MyProjectName
             });
 
             context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             Configure<AbpDistributedCacheOptions>(options =>
@@ -128,11 +136,6 @@ namespace MyCompanyName.MyProjectName
             Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
-            });
-
-            context.Services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = configuration["Redis:Configuration"];
             });
 
             if (!hostingEnvironment.IsDevelopment())
@@ -166,11 +169,18 @@ namespace MyCompanyName.MyProjectName
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+            var env = context.GetEnvironment();
 
-            if (!context.GetEnvironment().IsDevelopment())
+            if (env.IsDevelopment())
             {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseErrorPage();
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseCorrelationId();
             app.UseVirtualFiles();
@@ -178,13 +188,15 @@ namespace MyCompanyName.MyProjectName
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
+
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
-            app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -192,7 +204,7 @@ namespace MyCompanyName.MyProjectName
             });
             app.UseAuditing();
             app.UseAbpSerilogEnrichers();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
 
             SeedData(context);
         }

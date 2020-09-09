@@ -8,6 +8,7 @@ using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.Modularity;
 using Volo.Abp.Testing;
 using Xunit;
@@ -31,15 +32,15 @@ namespace Volo.Abp.Validation
         [Fact]
         public async Task Should_Work_Proper_With_Right_Inputs()
         {
-            var output = await _myAppService.MyMethod(new MyMethodInput { MyStringValue = "test" }).ConfigureAwait(false);
+            var output = await _myAppService.MyMethod(new MyMethodInput { MyStringValue = "test" });
             output.Result.ShouldBe(42);
         }
 
         [Fact]
         public async Task Should_Not_Work_With_Wrong_Inputs()
         {
-            await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethod(new MyMethodInput()).ConfigureAwait(false)).ConfigureAwait(false); //MyStringValue is not supplied!
-            await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethod(new MyMethodInput { MyStringValue = "a" }).ConfigureAwait(false)).ConfigureAwait(false); //MyStringValue's min length should be 3!
+            await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethod(new MyMethodInput())); //MyStringValue is not supplied!
+            await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethod(new MyMethodInput { MyStringValue = "a" })); //MyStringValue's min length should be 3!
         }
 
         [Fact]
@@ -50,7 +51,7 @@ namespace Volo.Abp.Validation
                 MyStringValue2 = "test 1",
                 Input1 = new MyMethodInput { MyStringValue = "test 2" },
                 DateTimeValue = DateTime.Now
-            }).ConfigureAwait(false);
+            });
 
             output.Result.ShouldBe(42);
         }
@@ -63,7 +64,7 @@ namespace Volo.Abp.Validation
                 {
                     MyStringValue2 = "test 1",
                     Input1 = new MyMethodInput() //MyStringValue is not set
-                }).ConfigureAwait(false)).ConfigureAwait(false);
+                }));
         }
 
         [Fact]
@@ -73,7 +74,7 @@ namespace Volo.Abp.Validation
                 await _myAppService.MyMethod2(new MyMethod2Input //Input1 is not set
                 {
                     MyStringValue2 = "test 1"
-                }).ConfigureAwait(false)).ConfigureAwait(false);
+                }));
         }
 
         [Fact]
@@ -88,7 +89,7 @@ namespace Volo.Abp.Validation
                                     {
                                         new MyClassInList {ValueInList = null}
                                     }
-                    }).ConfigureAwait(false)).ConfigureAwait(false);
+                    }));
         }
 
         [Fact]
@@ -103,7 +104,7 @@ namespace Volo.Abp.Validation
                                      {
                                          new MyClassInList {ValueInList = null}
                                      }
-                    }).ConfigureAwait(false)).ConfigureAwait(false);
+                    }));
         }
 
         [Fact]
@@ -111,19 +112,19 @@ namespace Volo.Abp.Validation
         {
             await Assert.ThrowsAsync<AbpValidationException>(async () =>
                 await _myAppService.MyMethod4(new MyMethod4Input()) //ArrayItems is null!
-.ConfigureAwait(false)).ConfigureAwait(false);
+            );
         }
 
         [Fact]
         public async Task Should_Work_If_Array_Is_Null_But_DisabledValidation_For_Method()
         {
-            await _myAppService.MyMethod4_2(new MyMethod4Input()).ConfigureAwait(false);
+            await _myAppService.MyMethod4_2(new MyMethod4Input());
         }
 
         [Fact]
         public async Task Should_Work_If_Array_Is_Null_But_DisabledValidation_For_Property()
         {
-            await _myAppService.MyMethod5(new MyMethod5Input()).ConfigureAwait(false);
+            await _myAppService.MyMethod5(new MyMethod5Input());
         }
 
         [Fact]
@@ -134,8 +135,8 @@ namespace Volo.Abp.Validation
                 await _myAppService.MyMethod6(new MyMethod6Input
                 {
                     MyStringValue = "test value" //MyIntValue has not set!
-                }).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                });
+            });
         }
 
         //TODO: Create a Volo.Abp.Ddd.Application.Contracts.Tests project and move this to there and remove Volo.Abp.Ddd.Application.Contracts dependency from this project.
@@ -147,8 +148,8 @@ namespace Volo.Abp.Validation
                 await _myAppService.MyMethodWithLimitedResult(new LimitedResultRequestDto
                 {
                     MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount + 1
-                }).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                });
+            });
 
             exception.ValidationErrors.ShouldContain(e => e.MemberNames.Contains(nameof(LimitedResultRequestDto.MaxResultCount)));
         }
@@ -159,19 +160,19 @@ namespace Volo.Abp.Validation
             await _myAppService.MyMethodWithLimitedResult(new LimitedResultRequestDto
             {
                 MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount - 1
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
         public async Task Should_Stop_Recursive_Validation_In_A_Constant_Depth()
         {
-            (await _myAppService.MyMethod8(new MyClassWithRecursiveReference { Value = "42" }).ConfigureAwait(false)).Result.ShouldBe(42);
+            (await _myAppService.MyMethod8(new MyClassWithRecursiveReference { Value = "42" })).Result.ShouldBe(42);
         }
 
         [Fact]
         public async Task Should_Allow_Null_For_Nullable_Enums()
         {
-            await _myAppService.MyMethodWithNullableEnum(null).ConfigureAwait(false);
+            await _myAppService.MyMethodWithNullableEnum(null);
         }
 
         [Fact]
@@ -198,7 +199,8 @@ namespace Volo.Abp.Validation
             {
                 context.Services.OnRegistred(onServiceRegistredContext =>
                 {
-                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType))
+                    if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType) &&
+                        !DynamicProxyIgnoreTypes.Contains(onServiceRegistredContext.ImplementationType))
                     {
                         onServiceRegistredContext.Interceptors.TryAdd<ValidationInterceptor>();
                     }

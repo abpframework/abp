@@ -10,7 +10,7 @@
         public AppTemplate() 
             : base(TemplateName)
         {
-
+            DocumentUrl = CliConsts.DocsLink + "/en/abp/latest/Startup-Templates/Application";
         }
     }
 }

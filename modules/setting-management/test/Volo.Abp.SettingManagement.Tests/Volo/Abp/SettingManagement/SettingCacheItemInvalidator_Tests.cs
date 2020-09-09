@@ -29,9 +29,9 @@ namespace Volo.Abp.SettingManagement
         public async Task GetOrNullAsync_Should_Cached()
         {
             // Act
-            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString())).ConfigureAwait(false)).ShouldBeNull();
-            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()).ConfigureAwait(false);
-            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString())).ConfigureAwait(false)).ShouldNotBeNull();
+            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()))).ShouldBeNull();
+            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString());
+            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()))).ShouldNotBeNull();
         }
 
         [Fact]
@@ -39,15 +39,15 @@ namespace Volo.Abp.SettingManagement
         {
             // Arrange
             // GetOrNullAsync will cache language.
-            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()).ConfigureAwait(false);
+            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString());
 
             // Act
-            var lang = await _settingRepository.FindAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()).ConfigureAwait(false);
-            await _settingRepository.DeleteAsync(lang).ConfigureAwait(false);
+            var lang = await _settingRepository.FindAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString());
+            await _settingRepository.DeleteAsync(lang);
 
             // Assert
             (await _cache.GetAsync(
-                SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString())).ConfigureAwait(false)).ShouldBeNull();
+                SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()))).ShouldBeNull();
         }
 
         [Fact]
@@ -60,15 +60,14 @@ namespace Volo.Abp.SettingManagement
                 // GetOrNullAsync will cache language.
                 await _settingManagementStore
                     .GetOrNullAsync("MySetting2", GlobalSettingValueProvider.ProviderName, null)
-                    .ConfigureAwait(false);
+                    ;
             }
 
             using (_currentTenant.Change(null))
             {
                 // SetAsync will make cache invalid.
                 await _settingManagementStore
-                    .SetAsync("MySetting2", "MySetting2Value", GlobalSettingValueProvider.ProviderName, null)
-                    .ConfigureAwait(false);
+                    .SetAsync("MySetting2", "MySetting2Value", GlobalSettingValueProvider.ProviderName, null);
             }
 
             using (_currentTenant.Change(tenantId))
@@ -76,7 +75,7 @@ namespace Volo.Abp.SettingManagement
                 // Assert
                 (await _cache.GetAsync(
                         SettingCacheItem.CalculateCacheKey("MySetting2", GlobalSettingValueProvider.ProviderName, null))
-                    .ConfigureAwait(false)).ShouldBeNull();
+                    ).ShouldBeNull();
             }
         }
     }

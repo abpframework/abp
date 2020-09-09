@@ -25,15 +25,15 @@ namespace Volo.Abp.TestApp.Testing
             using (var uow = _unitOfWorkManager.Begin())
             {
                 //Perform an arbitrary database operation
-                await _cityRepository.InsertAsync(new City(Guid.NewGuid(), Guid.NewGuid().ToString())).ConfigureAwait(false);
+                await _cityRepository.InsertAsync(new City(Guid.NewGuid(), Guid.NewGuid().ToString()));
 
                 uow.OnCompleted(async () =>
                 {
                     //Perform another database operation inside the OnCompleted handler
-                    await _cityRepository.InsertAsync(new City(Guid.NewGuid(), Guid.NewGuid().ToString())).ConfigureAwait(false);
+                    await _cityRepository.InsertAsync(new City(Guid.NewGuid(), Guid.NewGuid().ToString()));
                 });
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
         }
     }

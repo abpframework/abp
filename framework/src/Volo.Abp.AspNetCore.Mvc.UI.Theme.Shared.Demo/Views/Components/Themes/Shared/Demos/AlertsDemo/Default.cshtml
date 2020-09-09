@@ -1,0 +1,70 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.Shared.Demos.AlertsDemo
+
+<abp-component-demo-section title="Examples" view-path="@AlertsDemoViewComponent.ViewPath">
+    <abp-alert alert-type="Primary">
+        A simple primary alert—check it out!
+    </abp-alert>
+    <abp-alert alert-type="Secondary">
+        A simple secondary  alert—check it out!
+    </abp-alert>
+    <abp-alert alert-type="Success">
+        A simple success  alert—check it out!
+    </abp-alert>
+    <abp-alert alert-type="Danger">
+        A simple danger  alert—check it out!
+    </abp-alert>
+    <abp-alert alert-type="Warning">
+        A simple warning  alert—check it out!
+    </abp-alert>
+    <abp-alert alert-type="Info">
+        A simple info  alert—check it out!
+    </abp-alert>
+    <abp-alert alert-type="Light">
+        A simple light  alert—check it out!
+    </abp-alert>
+    <abp-alert alert-type="Dark">
+        A simple dark  alert—check it out!
+    </abp-alert>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Link color" view-path="@AlertsDemoViewComponent.ViewPath">
+    <abp-alert alert-type="Primary">
+        A simple primary alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+    <abp-alert alert-type="Secondary">
+        A simple secondary alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+    <abp-alert alert-type="Success">
+        A simple success alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+    <abp-alert alert-type="Danger">
+        A simple danger alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+    <abp-alert alert-type="Warning">
+        A simple warning alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+    <abp-alert alert-type="Info">
+        A simple info alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+    <abp-alert alert-type="Light">
+        A simple light alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+    <abp-alert alert-type="Dark">
+        A simple dark alert with <a abp-alert-link href="#">an example link</a>. Give it a click if you like.
+    </abp-alert>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Additional content" view-path="@AlertsDemoViewComponent.ViewPath">
+    <abp-alert alert-type="Success">
+        <h4>Well done!</h4>
+        <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+        <hr>
+        <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+    </abp-alert>
+</abp-component-demo-section>
+
+<abp-component-demo-section title="Dismissing" view-path="@AlertsDemoViewComponent.ViewPath">
+    <abp-alert alert-type="Warning" dismissible="true">
+        Holy guacamole! You should check in on some of those fields below.
+    </abp-alert>
+</abp-component-demo-section>

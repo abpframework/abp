@@ -19,10 +19,10 @@ namespace Volo.Abp.EventBus.Local
                     return Task.CompletedTask;
                 });
 
-            await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(2)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(3)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(4)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(10, totalData);
         }
@@ -39,10 +39,10 @@ namespace Volo.Abp.EventBus.Local
                     return Task.CompletedTask;
                 });
 
-            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(1)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(2)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(3)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(4)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(typeof(MySimpleEventData), new MySimpleEventData(4));
 
             Assert.Equal(10, totalData);
         }
@@ -59,13 +59,13 @@ namespace Volo.Abp.EventBus.Local
                     return Task.CompletedTask;
                 });
 
-            await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(2)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(3)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
 
             registerDisposer.Dispose();
 
-            await LocalEventBus.PublishAsync(new MySimpleEventData(4)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(6, totalData);
         }
@@ -84,13 +84,13 @@ namespace Volo.Abp.EventBus.Local
 
             LocalEventBus.Subscribe(action);
 
-            await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(2)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(3)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
 
             LocalEventBus.Unsubscribe(action);
 
-            await LocalEventBus.PublishAsync(new MySimpleEventData(4)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(6, totalData);
         }
@@ -103,15 +103,15 @@ namespace Volo.Abp.EventBus.Local
             LocalEventBus.Subscribe<MySimpleEventData>(
                 async eventData =>
                 {
-                    await Task.Delay(20).ConfigureAwait(false);
+                    await Task.Delay(20);
                     Interlocked.Add(ref totalData, eventData.Value);
-                    await Task.Delay(20).ConfigureAwait(false);
+                    await Task.Delay(20);
                 });
 
-            await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(2)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(3)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(4)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             Assert.Equal(10, totalData);
         }

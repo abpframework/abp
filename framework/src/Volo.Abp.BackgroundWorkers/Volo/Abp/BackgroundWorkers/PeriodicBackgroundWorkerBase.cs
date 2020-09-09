@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers
@@ -26,28 +27,33 @@ namespace Volo.Abp.BackgroundWorkers
 
         public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            await base.StartAsync(cancellationToken).ConfigureAwait(false);
+            await base.StartAsync(cancellationToken);
             Timer.Start(cancellationToken);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             Timer.Stop(cancellationToken);
-            await base.StopAsync(cancellationToken).ConfigureAwait(false);
+            await base.StopAsync(cancellationToken);
         }
 
         private void Timer_Elapsed(object sender, System.EventArgs e)
         {
-            try
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                using (var scope = ServiceScopeFactory.CreateScope())
+                try
                 {
+
                     DoWork(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
+                catch (Exception ex)
+                {
+                    scope.ServiceProvider
+                        .GetRequiredService<IExceptionNotifier>()
+                        .NotifyAsync(new ExceptionNotificationContext(ex));
+
+                    Logger.LogException(ex);
+                }
             }
         }
 

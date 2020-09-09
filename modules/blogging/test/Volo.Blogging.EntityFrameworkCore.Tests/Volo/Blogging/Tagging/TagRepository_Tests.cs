@@ -1,4 +1,5 @@
-﻿using Volo.Blogging.Tagging;
+﻿using Volo.Blogging.EntityFrameworkCore;
+using Volo.Blogging.Tagging;
 
 namespace Volo.Blogging
 {

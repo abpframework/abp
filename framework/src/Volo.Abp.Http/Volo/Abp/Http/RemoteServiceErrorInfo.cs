@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Volo.Abp.Http
 {
@@ -22,6 +24,8 @@ namespace Volo.Abp.Http
         /// Error details.
         /// </summary>
         public string Details { get; set; }
+
+        public IDictionary Data { get; set; }
 
         /// <summary>
         /// Validation errors if exists.

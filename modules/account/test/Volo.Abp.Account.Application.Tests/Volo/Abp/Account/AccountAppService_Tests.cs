@@ -32,16 +32,16 @@ namespace Volo.Abp.Account
                 AppName = "MVC"
             };
 
-            await _accountAppService.RegisterAsync(registerDto).ConfigureAwait(false);
+            await _accountAppService.RegisterAsync(registerDto);
 
             var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                _lookupNormalizer.NormalizeName("bob.lee")).ConfigureAwait(false);
+                _lookupNormalizer.NormalizeName("bob.lee"));
 
             user.ShouldNotBeNull();
             user.UserName.ShouldBe("bob.lee");
             user.Email.ShouldBe("bob.lee@abp.io");
 
-            (await _userManager.CheckPasswordAsync(user, "P@ssW0rd").ConfigureAwait(false)).ShouldBeTrue();
+            (await _userManager.CheckPasswordAsync(user, "P@ssW0rd")).ShouldBeTrue();
         }
     }
 }

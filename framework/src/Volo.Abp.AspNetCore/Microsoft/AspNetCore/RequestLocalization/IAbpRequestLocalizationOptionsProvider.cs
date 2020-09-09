@@ -8,6 +8,8 @@ namespace Microsoft.AspNetCore.RequestLocalization
     {
         void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null);
 
+        RequestLocalizationOptions GetLocalizationOptions();
+
         Task<RequestLocalizationOptions> GetLocalizationOptionsAsync();
     }
 }

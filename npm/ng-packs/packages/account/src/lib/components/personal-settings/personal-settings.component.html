@@ -27,7 +27,8 @@
   </div>
   <div class="form-group">
     <label for="email-address">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label
-    ><span> * </span><input type="text" id="email-address" class="form-control" formControlName="email" />
+    ><span> * </span
+    ><input type="text" id="email-address" class="form-control" formControlName="email" />
   </div>
   <div class="form-group">
     <label for="phone-number">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label
@@ -38,7 +39,7 @@
     iconClass="fa fa-check"
     buttonClass="btn btn-primary color-white"
     [loading]="inProgress"
-    [disabled]="form?.invalid || form?.pristine"
+    [disabled]="form?.invalid"
   >
     {{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
   >

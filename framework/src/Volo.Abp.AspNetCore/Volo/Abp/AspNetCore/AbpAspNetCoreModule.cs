@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
 using Volo.Abp.Authorization;
@@ -38,6 +41,8 @@ namespace Volo.Abp.AspNetCore
 
             AddAspNetServices(context.Services);
             context.Services.AddObjectAccessor<IApplicationBuilder>();
+
+            context.Services.Replace(ServiceDescriptor.Transient<IOptionsFactory<RequestLocalizationOptions>, AbpRequestLocalizationOptionsFactory>());
         }
 
         private static void AddAspNetServices(IServiceCollection services)

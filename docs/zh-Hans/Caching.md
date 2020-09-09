@@ -2,6 +2,32 @@
 
 ABP框架扩展了ASP.NET Core的分布式缓存系统.
 
+## Volo.Abp.Caching Package
+
+> 默认情况下启动模板已经安装了这个包,所以大部分情况下你不需要手动安装.
+
+Volo.Abp.Caching是缓存系统的核心包.使用包管理控制台(PMC)安装到项目:
+
+```
+Install-Package Volo.Abp.Caching
+```
+
+然后将 **AbpCachingModule** 依赖添加到你的模块:
+
+```c#
+using Volo.Abp.Modularity;
+using Volo.Abp.Caching;
+
+namespace MyCompany.MyProject
+{
+    [DependsOn(typeof(AbpCachingModule))]
+    public class MyModule : AbpModule
+    {
+        //...
+    }
+}
+```
+
 ## `IDistributedCache` 接口
 
 ASP.NET Core 定义了 `IDistributedCache` 接口用于 get/set 缓存值 . 但是会有以下问题:

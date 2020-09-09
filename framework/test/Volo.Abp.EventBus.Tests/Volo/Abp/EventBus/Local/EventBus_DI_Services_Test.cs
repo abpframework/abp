@@ -9,10 +9,10 @@ namespace Volo.Abp.EventBus.Local
         [Fact]
         public async Task Should_Automatically_Register_EventHandlers_From_Services()
         {
-            await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(2)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(3)).ConfigureAwait(false);
-            await LocalEventBus.PublishAsync(new MySimpleEventData(4)).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(2));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(3));
+            await LocalEventBus.PublishAsync(new MySimpleEventData(4));
 
             GetRequiredService<MySimpleEventDataHandler>().TotalData.ShouldBe(10);
         }

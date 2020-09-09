@@ -26,9 +26,9 @@ public class Book : Entity<Guid>
 If your entity's Id type is `Guid`, there are some good practices to implement:
 
 * Create a constructor that gets the Id as a parameter and passes to the base class.
-  * If you don't set a GUID Id, ABP Framework sets it on save, but it is good to have a valid Id on the entity even before saving it to the database.
-* If you create an entity with a constructor that takes parameters, also create a `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
-* Don't use the `Guid.NewGuid()` to set the Id! Use [the `IGuidGenerator` service](Guid-Generation.md) while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
+  * If you don't set a GUID Id, **ABP Framework sets it on save**, but it is good to have a valid Id on the entity even before saving it to the database.
+* If you create an entity with a constructor that takes parameters, also create a `private` or `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
+* Don't use the `Guid.NewGuid()` to set the Id! **Use [the `IGuidGenerator` service](Guid-Generation.md)** while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
 
 An example entity:
 
@@ -234,6 +234,12 @@ ABP Framework does not force you to apply any DDD rule or patterns. However, it 
 
 While it's not common (and not suggested) for aggregate roots, it is in fact possible to define composite keys in the same way as defined for the mentioned entities above. Use non-generic `AggregateRoot` base class in that case.
 
+### BasicAggregateRoot Class
+
+`AggregateRoot` class implements the `IHasExtraProperties` and `IHasConcurrencyStamp` interfaces which brings two properties to the derived class. `IHasExtraProperties` makes the entity extensible (see the *Extra Properties* section below) and `IHasConcurrencyStamp` adds a `ConcurrencyStamp` property that is managed by the ABP Framework to implement the [optimistic concurrency](https://docs.microsoft.com/en-us/ef/core/saving/concurrency). In most cases, these are wanted features for aggregate roots.
+
+However, if you don't need these features, you can inherit from the `BasicAggregateRoot<TKey>` (or `BasicAggregateRoot`) for your aggregate root.
+
 ## Base Classes & Interfaces for Audit Properties
 
 There are some properties like `CreationTime`, `CreatorId`, `LastModificationTime`... which are very common in all applications. ABP Framework provides some interfaces and base classes to **standardize** these properties and also **sets their values automatically**.
@@ -293,7 +299,103 @@ While you can manually implement any of the interfaces defined above, it is sugg
 
 All these base classes also have non-generic versions to take `AuditedEntity` and `FullAuditedAggregateRoot` to support the composite primary keys.
 
-All these base classes also have `...WithUser` pairs, like `FullAuditedAggregateRootWithUser<TUser>`  and`FullAuditedAggregateRootWithUser<TKey, TUser>`. This makes possible to add a navigation property to your user entity. However, it is not a good practice to add navigation properties between aggregate roots, so this usage is not suggested (unless you are using an ORM, like EF Core, that well supports this scenario and you really need it - otherwise remember that this approach doesn't work for NoSQL databases like MongoDB where you must truly implement the aggregate pattern).
+All these base classes also have `...WithUser` pairs, like `FullAuditedAggregateRootWithUser<TUser>`  and `FullAuditedAggregateRootWithUser<TKey, TUser>`. This makes possible to add a navigation property to your user entity. However, it is not a good practice to add navigation properties between aggregate roots, so this usage is not suggested (unless you are using an ORM, like EF Core, that well supports this scenario and you really need it - otherwise remember that this approach doesn't work for NoSQL databases like MongoDB where you must truly implement the aggregate pattern). Also, if you add navigation properties to the AppUser class that comes with the startup template, consider to handle (ignore/map) it on the migration dbcontext (see [the EF Core migration document](Entity-Framework-Core-Migrations.md)). 
+
+## Extra Properties
+
+ABP defines the `IHasExtraProperties` interface that can be implemented by an entity to be able to dynamically set and get properties for the entity. `AggregateRoot` base class already implements the `IHasExtraProperties` interface. If you've derived from this class (or one of the related audit class defined above), you can directly use the API.
+
+### GetProperty & SetProperty Extension Methods
+
+These extension methods are the recommended way to get and set data for an entity. Example:
+
+````csharp
+public class ExtraPropertiesDemoService : ITransientDependency
+{
+    private readonly IIdentityUserRepository _identityUserRepository;
+
+    public ExtraPropertiesDemoService(IIdentityUserRepository identityUserRepository)
+    {
+        _identityUserRepository = identityUserRepository;
+    }
+
+    public async Task SetTitle(Guid userId, string title)
+    {
+        var user = await _identityUserRepository.GetAsync(userId);
+        
+        //SET A PROPERTY
+        user.SetProperty("Title", title);
+        
+        await _identityUserRepository.UpdateAsync(user);
+    }
+
+    public async Task<string> GetTitle(Guid userId)
+    {
+        var user = await _identityUserRepository.GetAsync(userId);
+
+        //GET A PROPERTY
+        return user.GetProperty<string>("Title");
+    }
+}
+````
+
+* Property's **value is object** and can be any type of object (string, int, bool... etc).
+* `GetProperty` returns `null` if given property was not set before.
+* You can store more than one property at the same time by using different **property names** (like `Title` here).
+
+It would be a good practice to **define a constant** for the property name to prevent typo errors. It would be even a better practice to **define extension methods** to take the advantage of the intellisense. Example:
+
+````csharp
+public static class IdentityUserExtensions
+{
+    private const string TitlePropertyName = "Title";
+
+    public static void SetTitle(this IdentityUser user, string title)
+    {
+        user.SetProperty(TitlePropertyName, title);
+    }
+
+    public static string GetTitle(this IdentityUser user)
+    {
+        return user.GetProperty<string>(TitlePropertyName);
+    }
+}
+````
+
+Then you can directly use `user.SetTitle("...")` and `user.GetTitle()` for an `IdentityUser` object.
+
+### HasProperty & RemoveProperty Extension Methods
+
+* `HasProperty` is used to check if the object has a property set before.
+* `RemoveProperty` is used to remove a property from the object. You can use this instead of setting a `null` value.
+
+### How it is Implemented?
+
+`IHasExtraProperties` interface requires to define a `Dictionary<string, object>` property, named `ExtraProperties`, for the implemented class.
+
+So, you can directly use the `ExtraProperties` property to use  the dictionary API, if you like. However, `SetProperty` and `GetProperty` methods are the recommended ways since they also check for `null`s.
+
+#### How is it Stored?
+
+The way to store this dictionary in the database depends on the database provider you're using.
+
+* For [Entity Framework Core](Entity-Framework-Core.md), here are two type of configurations;
+  * By default, it is stored in a single `ExtraProperties` field as a `JSON` string (that means all extra properties stored in a single database table field). Serializing to `JSON` and deserializing from the `JSON` are automatically done by the ABP Framework using the [value conversions](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions) system of the EF Core.
+  * If you want, you can use the `ObjectExtensionManager` to define a separate table field for a desired extra property. Properties those are not configured through the `ObjectExtensionManager` will continue to use a single `JSON` field as described above. This feature is especially useful when you are using a pre-built [application module](Modules/Index.md) and want to [extend its entities](Customizing-Application-Modules-Extending-Entities.md). See the [EF Core integration document](Entity-Framework-Core.md) to learn how to use the `ObjectExtensionManager`.
+* For [MongoDB](MongoDB.md), it is stored as a **regular field**, since MongoDB naturally supports this kind of [extra elements](https://mongodb.github.io/mongo-csharp-driver/1.11/serialization/#supporting-extra-elements) system.
+
+### Discussion for the Extra Properties
+
+Extra Properties system is especially useful if you are using a **re-usable module** that defines an entity inside and you want to get/set some data related to this entity in an easy way.
+
+You typically **don't need** to use this system for your own entities, because it has the following drawbacks:
+
+* It is **not fully type safe** since it works with strings as property names.
+* It is **not easy to [auto map](Object-To-Object-Mapping.md)** these properties from/to other objects.
+
+### Extra Properties Behind Entities
+
+`IHasExtraProperties` is not restricted to be used with entities. You can implement this interface for any kind of class and use the `GetProperty`, `SetProperty` and other related methods.
 
 ## See Also
 

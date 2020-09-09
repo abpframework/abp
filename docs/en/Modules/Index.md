@@ -14,14 +14,16 @@ There are some **free and open source** application modules developed and mainta
 * **Account**: Provides UI for the account management and allows user to login/register to the application.
 * [**Audit Logging**](Audit-Logging.md): Persists audit logs to a database.
 * **Background Jobs**: Persist background jobs when using the default background job manager.
-* **Blogging**: Used to create fancy blogs. ABP's [own blog](https://abp.io/blog/abp/) already using this module.
+* **Blogging**: Used to create fancy blogs. ABP's [own blog](https://blog.abp.io/) already using this module.
 * [**Docs**](Docs.md): Used to create technical documentation pages. ABP's [own documentation](https://docs.abp.io) already using this module.
-* **Identity**: Manages roles, users and their permissions, based on the Microsoft Identity library.
+* **Feature Management**: Used to persist and manage the [features](../Features.md).
+* **[Identity](Identity.md)**: Manages organization units, roles, users and their permissions, based on the Microsoft Identity library.
 * **IdentityServer**: Integrates to IdentityServer4.
 * **Permission Management**: Used to persist permissions.
 * **[Setting Management](Setting-Management.md)**: Used to persist and manage the [settings](../Settings.md).
 * **Tenant Management**: Manages tenants for a [multi-tenant](../Multi-Tenancy.md) application.
 * **Users**: Abstract users, so other modules can depend on this module instead of the Identity module.
+* [**Virtual File Explorer**](Virtual-File-Explorer.md): Provided a simple UI to view files in [virtual file system](../Virtual-File-System.md).
 
 See [the GitHub repository](https://github.com/abpframework/abp/tree/master/modules) for source code of all modules.
 

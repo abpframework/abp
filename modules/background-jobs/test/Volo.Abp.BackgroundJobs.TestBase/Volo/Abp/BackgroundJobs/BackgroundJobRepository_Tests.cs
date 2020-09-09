@@ -23,7 +23,7 @@ namespace Volo.Abp.BackgroundJobs
         [InlineData(5)]
         public async Task GetWaitingListAsync(int maxResultCount)
         {
-            var backgroundJobs = await _backgroundJobRepository.GetWaitingListAsync(maxResultCount).ConfigureAwait(false);
+            var backgroundJobs = await _backgroundJobRepository.GetWaitingListAsync(maxResultCount);
 
             backgroundJobs.Count.ShouldBeGreaterThan(0);
             backgroundJobs.Count.ShouldBeLessThanOrEqualTo(maxResultCount);

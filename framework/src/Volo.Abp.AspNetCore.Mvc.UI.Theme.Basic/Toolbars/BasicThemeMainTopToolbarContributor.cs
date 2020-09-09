@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars
             var languageProvider = context.ServiceProvider.GetService<ILanguageProvider>();
 
             //TODO: This duplicates GetLanguages() usage. Can we eleminate this?
-            var languages = await languageProvider.GetLanguagesAsync().ConfigureAwait(false);
+            var languages = await languageProvider.GetLanguagesAsync();
             if (languages.Count > 1)
             {
                 context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitchViewComponent)));

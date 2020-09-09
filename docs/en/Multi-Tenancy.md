@@ -4,7 +4,7 @@ ABP Multi-tenancy module provides base functionality to create multi tenant appl
 
 Wikipedia [defines](https://en.wikipedia.org/wiki/Multitenancy) multi-tenancy as like that:
 
-> Software **Multi-tenancy** refers to a software **architecture** in which a **single instance** of a software runs on a server and serves **multiple tenants**. A tenant is a group of users who share a common access with specific privileges to the software instance. With a multitenant architecture, a software application is designed to provide every tenant a **dedicated share of the instance including its data**, configuration, user management, tenant individual functionality and non-functional properties. Multi-tenancy contrasts with multi-instance architectures, where separate software instances operate on behalf of different tenants.
+> Software **Multi-tenancy** refers to a software **architecture** in which a **single instance** of software runs on a server and serves **multiple tenants**. A tenant is a group of users who share a common access with specific privileges to the software instance. With a multitenant architecture, a software application is designed to provide every tenant a **dedicated share of the instance including its data**, configuration, user management, tenant individual functionality and non-functional properties. Multi-tenancy contrasts with multi-instance architectures, where separate software instances operate on behalf of different tenants.
 
 ### Volo.Abp.MultiTenancy Package
 
@@ -98,7 +98,7 @@ The first thing for a multi-tenant application is to determine the current tenan
 
 ##### Custom Tenant Resolvers
 
-You can add your custom tenant resolver to **TenantResolveOptions** in your module's ConfigureServices method as like below:
+You can add your custom tenant resolver to **AbpTenantResolveOptions** in your module's ConfigureServices method as like below:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -112,7 +112,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
                 options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
@@ -168,15 +168,15 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ConfigurationTenantStoreOptions>(options =>
+            Configure<AbpDefaultTenantStoreOptions>(options =>
             {
                 options.Tenants = new[]
                 {
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"), //Id
                         "tenant1" //Name
                     ),
-                    new TenantInformation(
+                    new TenantConfiguration(
                         Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"), //Id
                         "tenant2" //Name
                     )
@@ -214,7 +214,7 @@ namespace MyCompany.MyProject
         {
             var configuration = BuildConfiguration();
 
-            Configure<ConfigurationTenantStoreOptions>(configuration);
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
         }
 
         private static IConfigurationRoot BuildConfiguration()
@@ -252,7 +252,7 @@ TODO: This package implements ITenantStore using a real database...
 
 #### Tenant Information
 
-ITenantStore works with **TenantInformation** class that has several properties for a tenant:
+ITenantStore works with **TenantConfiguration** class that has several properties for a tenant:
 
 * **Id**: Unique Id of the tenant.
 * **Name**: Unique name of the tenant.
@@ -302,10 +302,11 @@ TODO:...
 
 Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to determine current tenant from current web request (ordered by priority). These resolvers are added and work out of the box:
 
-* **QueryStringTenantResolver**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
-* **RouteTenantResolver**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
-* **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
-* **CookieTenantResolver**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
+* **CurrentUserTenantResolveContributor**: Gets the tenant id from claims of the current user, if the current user has logged in. **This should always be the first contributor for security**.
+* **QueryStringTenantResolveContributor**: Tries to find current tenant id from query string parameter. Parameter name is "__tenant" by default.
+* **RouteTenantResolveContributor**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
+* **HeaderTenantResolveContributor**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
+* **CookieTenantResolveContributor**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
 
 > If you use nginx as a reverse proxy server, please note that if `TenantKey` contains an underscore or other special characters, there may be a problem, please refer to: 
 http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
@@ -323,7 +324,7 @@ services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 
 ##### Domain Tenant Resolver
 
-In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure TenantResolveOptions to add a domain tenant resolver.
+In a real application, most of times you will want to determine current tenant either by subdomain (like mytenant1.mydomain.com) or by the whole domain (like mytenant.com). If so, you can configure AbpTenantResolveOptions to add a domain tenant resolver.
 
 ###### Example: Add a subdomain resolver
 
@@ -340,10 +341,12 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<TenantResolveOptions>(options =>
+            Configure<AbpTenantResolveOptions>(options =>
             {
-                //Subdomain format: {0}.mydomain.com (adding as the highest priority resolver)
-                options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));
+                //Subdomain format: {0}.mydomain.com 
+                //Adding as the second highest priority resolver after 'CurrentUserTenantResolveContributor' to
+                //ensure the user cannot impersonate a different tenant.
+                options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));
             });
 
             //...
@@ -352,9 +355,9 @@ namespace MyCompany.MyProject
 }
 ````
 
-{0} is the the placeholder to determine current tenant's unique name.
+{0} is the placeholder to determine current tenant's unique name.
 
-Instead of ``options.TenantResolvers.Insert(0, new DomainTenantResolver("{0}.mydomain.com"));`` you can use this shortcut:
+Instead of ``options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));`` you can use this shortcut:
 
 ````C#
 options.AddDomainTenantResolver("{0}.mydomain.com");
@@ -366,3 +369,6 @@ options.AddDomainTenantResolver("{0}.mydomain.com");
 options.AddDomainTenantResolver("{0}.com");
 ````
 
+## See Also
+
+* [Features](Features.md)

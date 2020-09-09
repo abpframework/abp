@@ -28,7 +28,7 @@ namespace Volo.Abp.TestApp.Testing
             {
                 CityRepository.Count(new CitySpecification().ToExpression()).ShouldBe(1);
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
     }
 

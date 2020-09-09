@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
+using Volo.Abp.EntityFrameworkCore.Domain;
+using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
@@ -15,12 +17,17 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    [DependsOn(typeof(AbpEntityFrameworkCoreSqliteModule))]
     [DependsOn(typeof(TestAppModule))]
     [DependsOn(typeof(AbpAutofacModule))]
     [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
     public class AbpEntityFrameworkCoreTestModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            TestEntityExtensionConfigurator.Configure();
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddAbpDbContext<TestAppDbContext>(options =>
@@ -31,6 +38,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 options.Entity<Person>(opt =>
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
+                });
+                
+                options.Entity<Author>(opt =>
+                {
+                    opt.DefaultWithDetailsFunc = q => q.Include(p => p.Books);
                 });
             });
 

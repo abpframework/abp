@@ -1,0 +1,22 @@
+{
+  "culture": "tr",
+  "texts": {
+    "PickYourReaction": "Tepkinizi seçin",
+    "YourComment": "Yorumunuz",
+    "YourReply": "Cevabınız",
+    "Comments": "Yorumlar",
+    "Send": "Gönder",
+    "Delete": "Sil",
+    "Reply": "Cevapla",
+    "Update": "Güncelle",
+    "Edit": "Düzenle",
+    "LoginToAddComment": "Yorum yapmak için giriş yap",
+    "LoginToReply": "Cevap vermek için giriş yap",
+    "MessageDeletionConfirmationMessage": "Bu yorum tamamen silinecektir",
+    "CommentAuthorizationExceptionMessage": "Bu yorumları görebilmek için yetki gerekir.",
+    "Undo": "Geri al",
+    "RatingUndoMessage": "Oylamanız geri alınacak.",
+    "LoginToRate": "Oylamak için giriş yapın",
+    "Star": "Yıldız"
+  }
+}

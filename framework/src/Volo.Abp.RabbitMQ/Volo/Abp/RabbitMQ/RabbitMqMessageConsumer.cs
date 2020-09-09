@@ -7,6 +7,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.RabbitMQ
@@ -16,6 +17,8 @@ namespace Volo.Abp.RabbitMQ
         public ILogger<RabbitMqMessageConsumer> Logger { get; set; }
 
         protected IConnectionPool ConnectionPool { get; }
+
+        protected IExceptionNotifier ExceptionNotifier { get; }
 
         protected AbpTimer Timer { get; }
 
@@ -35,10 +38,12 @@ namespace Volo.Abp.RabbitMQ
 
         public RabbitMqMessageConsumer(
             IConnectionPool connectionPool,
-            AbpTimer timer)
+            AbpTimer timer, 
+            IExceptionNotifier exceptionNotifier)
         {
             ConnectionPool = connectionPool;
             Timer = timer;
+            ExceptionNotifier = exceptionNotifier;
             Logger = NullLogger<RabbitMqMessageConsumer>.Instance;
 
             QueueBindCommands = new ConcurrentQueue<QueueBindCommand>();
@@ -63,13 +68,13 @@ namespace Volo.Abp.RabbitMQ
         public virtual async Task BindAsync(string routingKey)
         {
             QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Bind, routingKey));
-            await TrySendQueueBindCommandsAsync().ConfigureAwait(false);
+            await TrySendQueueBindCommandsAsync();
         }
 
         public virtual async Task UnbindAsync(string routingKey)
         {
             QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Unbind, routingKey));
-            await TrySendQueueBindCommandsAsync().ConfigureAwait(false);
+            await TrySendQueueBindCommandsAsync();
         }
 
         protected virtual void TrySendQueueBindCommands()
@@ -114,6 +119,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
+                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
             }
         }
 
@@ -166,7 +172,7 @@ namespace Volo.Abp.RabbitMQ
                 var consumer = new EventingBasicConsumer(channel);
                 consumer.Received += async (model, basicDeliverEventArgs) =>
                 {
-                    await HandleIncomingMessage(channel, basicDeliverEventArgs).ConfigureAwait(false);
+                    await HandleIncomingMessage(channel, basicDeliverEventArgs);
                 };
 
                 channel.BasicConsume(
@@ -180,6 +186,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
+                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
             }
         }
 
@@ -189,7 +196,7 @@ namespace Volo.Abp.RabbitMQ
             {
                 foreach (var callback in Callbacks)
                 {
-                    await callback(channel, basicDeliverEventArgs).ConfigureAwait(false);
+                    await callback(channel, basicDeliverEventArgs);
                 }
 
                 channel.BasicAck(basicDeliverEventArgs.DeliveryTag, multiple: false);
@@ -197,6 +204,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex);
+                await ExceptionNotifier.NotifyAsync(ex);
             }
         }
 
@@ -214,6 +222,7 @@ namespace Volo.Abp.RabbitMQ
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Warning);
+                AsyncHelper.RunSync(() => ExceptionNotifier.NotifyAsync(ex, logLevel: LogLevel.Warning));
             }
         }
 

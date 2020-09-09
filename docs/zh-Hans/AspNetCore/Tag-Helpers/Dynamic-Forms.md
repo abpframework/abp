@@ -1,3 +1,3 @@
-## Dynamic Forms
+文档已经移动到其他位置.
 
-目前还没有文档. 你现在可以看到[组件演示](http://bootstrap-taghelpers.abp.io/Components/DynamicForms).
+[点击链接跳转到Dynamic Forms文档](../../UI/AspNetCore/Tag-Helpers/Dynamic-Forms.md)

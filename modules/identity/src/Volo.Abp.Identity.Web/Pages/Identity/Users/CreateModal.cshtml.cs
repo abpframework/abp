@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Auditing;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
@@ -15,64 +18,65 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         [BindProperty]
         public AssignedRoleViewModel[] Roles { get; set; }
 
-        private readonly IIdentityUserAppService _identityUserAppService;
-        private readonly IIdentityRoleAppService _identityRoleAppService;
+        protected IIdentityUserAppService IdentityUserAppService { get; }
 
-        public CreateModalModel(IIdentityUserAppService identityUserAppService, IIdentityRoleAppService identityRoleAppService)
+        public CreateModalModel(IIdentityUserAppService identityUserAppService)
         {
-            _identityUserAppService = identityUserAppService;
-            _identityRoleAppService = identityRoleAppService;
+            IdentityUserAppService = identityUserAppService;
         }
 
-        public async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             UserInfo = new UserInfoViewModel();
 
-            var roleDtoList = await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto()).ConfigureAwait(false);
+            var roleDtoList = (await IdentityUserAppService.GetAssignableRolesAsync()).Items;
 
-            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList.Items);
+            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList);
 
             foreach (var role in Roles)
             {
                 role.IsAssigned = role.IsDefault;
             }
+
+            return Page();
         }
 
-        public async Task<NoContentResult> OnPostAsync()
+        public virtual async Task<NoContentResult> OnPostAsync()
         {
             ValidateModel();
 
             var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
             input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
 
-            await _identityUserAppService.CreateAsync(input).ConfigureAwait(false);
+            await IdentityUserAppService.CreateAsync(input);
 
             return NoContent();
         }
 
-        public class UserInfoViewModel
+        public class UserInfoViewModel : ExtensibleObject
         {
             [Required]
-            [StringLength(IdentityUserConsts.MaxUserNameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
             public string UserName { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxNameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
             public string Name { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxSurnameLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
             public string Surname { get; set; }
 
             [Required]
-            [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
             public string Password { get; set; }
 
             [Required]
             [EmailAddress]
-            [StringLength(IdentityUserConsts.MaxEmailLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
             public string Email { get; set; }
 
-            [StringLength(IdentityUserConsts.MaxPhoneNumberLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
             public string PhoneNumber { get; set; }
 
             public bool TwoFactorEnabled { get; set; } = true;

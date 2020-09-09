@@ -15,8 +15,8 @@ namespace Volo.Abp.Authorization
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-            await AuthorizeAsync(invocation).ConfigureAwait(false);
-            await invocation.ProceedAsync().ConfigureAwait(false);
+            await AuthorizeAsync(invocation);
+            await invocation.ProceedAsync();
         }
 
         protected virtual async Task AuthorizeAsync(IAbpMethodInvocation invocation)
@@ -25,7 +25,7 @@ namespace Volo.Abp.Authorization
                 new MethodInvocationAuthorizationContext(
                     invocation.Method
                 )
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

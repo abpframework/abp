@@ -1,40 +1,39 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.UI;
 
 namespace Volo.Abp.TenantManagement
 {
     public class TenantManager : DomainService, ITenantManager
     {
-        private readonly ITenantRepository _tenantRepository;
+        protected ITenantRepository TenantRepository { get; }
 
         public TenantManager(ITenantRepository tenantRepository)
         {
-            _tenantRepository = tenantRepository;
+            TenantRepository = tenantRepository;
 
         }
 
-        public async Task<Tenant> CreateAsync(string name)
+        public virtual async Task<Tenant> CreateAsync(string name)
         {
             Check.NotNull(name, nameof(name));
 
-            await ValidateNameAsync(name).ConfigureAwait(false);
+            await ValidateNameAsync(name);
             return new Tenant(GuidGenerator.Create(), name);
         }
 
-        public async Task ChangeNameAsync(Tenant tenant, string name)
+        public virtual async Task ChangeNameAsync(Tenant tenant, string name)
         {
             Check.NotNull(tenant, nameof(tenant));
             Check.NotNull(name, nameof(name));
 
-            await ValidateNameAsync(name, tenant.Id).ConfigureAwait(false);
+            await ValidateNameAsync(name, tenant.Id);
             tenant.SetName(name);
         }
 
         protected virtual async Task ValidateNameAsync(string name, Guid? expectedId = null)
         {
-            var tenant = await _tenantRepository.FindByNameAsync(name).ConfigureAwait(false);
+            var tenant = await TenantRepository.FindByNameAsync(name);
             if (tenant != null && tenant.Id != expectedId)
             {
                 throw new UserFriendlyException("Duplicate tenancy name: " + name); //TODO: A domain exception would be better..?

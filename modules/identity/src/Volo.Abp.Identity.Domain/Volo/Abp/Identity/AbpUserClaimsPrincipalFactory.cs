@@ -25,7 +25,7 @@ namespace Volo.Abp.Identity
         [UnitOfWork]
         public override async Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
         {
-            var principal = await base.CreateAsync(user).ConfigureAwait(false);
+            var principal = await base.CreateAsync(user);
 
             if (user.TenantId.HasValue)
             {

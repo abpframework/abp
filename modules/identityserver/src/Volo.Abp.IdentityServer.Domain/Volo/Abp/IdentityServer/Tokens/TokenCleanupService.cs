@@ -30,10 +30,9 @@ namespace Volo.Abp.IdentityServer.Tokens
         public virtual async Task CleanAsync()
         {
             await RemoveGrantsAsync()
-                .ConfigureAwait(false);
+                ;
             
-            await RemoveDeviceCodesAsync()
-                .ConfigureAwait(false);
+            await RemoveDeviceCodesAsync();
         }
 
         [UnitOfWork]
@@ -42,15 +41,13 @@ namespace Volo.Abp.IdentityServer.Tokens
             for (int i = 0; i < Options.CleanupLoopCount; i++)
             {
                 var persistentGrants = await PersistentGrantRepository
-                    .GetListByExpirationAsync(Clock.Now, Options.CleanupBatchSize)
-                    .ConfigureAwait(false);
+                    .GetListByExpirationAsync(Clock.Now, Options.CleanupBatchSize);
 
                 //TODO: Can be optimized if the repository implements the batch deletion
                 foreach (var persistentGrant in persistentGrants)
                 {
                     await PersistentGrantRepository
-                        .DeleteAsync(persistentGrant)
-                        .ConfigureAwait(false);
+                        .DeleteAsync(persistentGrant);
                 }
 
                 //No need to continue to query if it gets more than max items.
@@ -66,15 +63,13 @@ namespace Volo.Abp.IdentityServer.Tokens
             for (int i = 0; i < Options.CleanupLoopCount; i++)
             {
                 var deviceFlowCodeses = await DeviceFlowCodesRepository
-                    .GetListByExpirationAsync(Clock.Now, Options.CleanupBatchSize)
-                    .ConfigureAwait(false);
+                    .GetListByExpirationAsync(Clock.Now, Options.CleanupBatchSize);
 
                 //TODO: Can be optimized if the repository implements the batch deletion
                 foreach (var deviceFlowCodes in deviceFlowCodeses)
                 {
                     await DeviceFlowCodesRepository
-                        .DeleteAsync(deviceFlowCodes)
-                        .ConfigureAwait(false);
+                        .DeleteAsync(deviceFlowCodes);
                 }
 
                 //No need to continue to query if it gets more than max items.

@@ -12,7 +12,7 @@ namespace Volo.Abp.Settings
             Check.NotNull(name, nameof(name));
 
             return string.Equals(
-                await settingProvider.GetOrNullAsync(name).ConfigureAwait(false),
+                await settingProvider.GetOrNullAsync(name),
                 "true",
                 StringComparison.OrdinalIgnoreCase
             );
@@ -24,7 +24,7 @@ namespace Volo.Abp.Settings
             Check.NotNull(settingProvider, nameof(settingProvider));
             Check.NotNull(name, nameof(name));
 
-            var value = await settingProvider.GetOrNullAsync(name).ConfigureAwait(false);
+            var value = await settingProvider.GetOrNullAsync(name);
             return value?.To<T>() ?? defaultValue;
         }
     }

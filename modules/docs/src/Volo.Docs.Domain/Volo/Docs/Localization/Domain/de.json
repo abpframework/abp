@@ -1,0 +1,31 @@
+{
+  "culture": "de",
+  "texts": {
+    "Documents": "Dokumente",
+    "BackToWebsite": "Zurück zur Website",
+    "Contributors": "Mitwirkende",
+    "ShareOn": "Teilen auf",
+    "Version": "Version",
+    "Edit": "Bearbeiten",
+    "LastEditTime": "Letzte Bearbeitung",
+    "Delete": "Löschen",
+    "ClearCache": "Cache leeren",
+    "ClearCacheConfirmationMessage": "Sind Sie sicher, dass Sie alle Caches für das Projekt löschen \"{0}\"",
+    "InThisDocument": "In diesem Dokument",
+    "GoToTop": "Nach oben",
+    "Projects": "Projekt(e)",
+    "NoProjectWarning": "Es gibt noch keine Projekte!",
+    "DocumentNotFound": "Hoppla, das angeforderte Dokument wurde nicht gefunden!",
+    "NavigationDocumentNotFound": "Diese Version hat kein Navigationsdokument!",
+    "DocumentNotFoundInSelectedLanguage": "Das Dokument wurde nicht in der von Ihnen gewünschten Sprache gefunden. Das Dokument wird in der Standardsprache angezeigt.",
+    "FilterTopics": "Themen filtern",
+    "FullSearch": "Suche in Dokumenten",
+    "Volo.Docs.Domain:010001": "Elastic search ist nicht aktiviert.",
+    "MultipleVersionDocumentInfo": "Dieses Dokument hat mehrere Versionen. Wählen Sie die für Sie am besten geeigneten Optionen aus.",
+    "New": "Neu",
+    "Upd": "Upd",
+    "NewExplanation": "Erstellt in den letzten zwei Wochen.",
+    "UpdatedExplanation": "Aktualisiert in den letzten zwei Wochen.",
+    "Volo.Docs.Domain:010002": "Kurzname {ShortName} existiert bereits."
+  }
+}

@@ -34,7 +34,7 @@ namespace Volo.Abp.Identity
             _currentUser.IsAuthenticated.Returns(true);
             
             //Act
-            var result = await _profileAppService.GetAsync().ConfigureAwait(false);
+            var result = await _profileAppService.GetAsync();
 
             //Assert
             var johnNash = GetUser("john.nash");
@@ -62,7 +62,7 @@ namespace Volo.Abp.Identity
             };
 
             //Act
-            var result = await _profileAppService.UpdateAsync(input).ConfigureAwait(false);
+            var result = await _profileAppService.UpdateAsync(input);
 
             //Assert
             result.UserName.ShouldBe(input.UserName);

@@ -1,0 +1,80 @@
+<div class="form-group" [abpPermission]="prop.permission" [ngSwitch]="getComponent(prop)">
+  <ng-template ngSwitchCase="input">
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
+    <input
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [autocomplete]="prop.autocomplete"
+      [type]="getType(prop)"
+      [abpDisabled]="disabled"
+      [readonly]="readonly"
+      class="form-control"
+    />
+  </ng-template>
+
+  <ng-template ngSwitchCase="checkbox">
+    <div class="custom-checkbox custom-control" validationTarget>
+      <input
+        [id]="prop.id"
+        [formControlName]="prop.name"
+        [abpDisabled]="disabled"
+        type="checkbox"
+        class="custom-control-input"
+      />
+      <label [htmlFor]="prop.id" class="custom-control-label"
+        >{{ prop.displayName | abpLocalization }} {{ asterisk }}</label
+      >
+    </div>
+  </ng-template>
+
+  <ng-template ngSwitchCase="select">
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
+    <select
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [abpDisabled]="disabled"
+      class="custom-select form-control"
+    >
+      <option
+        *ngFor="let option of options$ | async; trackBy: track.by('value')"
+        [ngValue]="option.value"
+        >{{ option.key }}</option
+      >
+    </select>
+  </ng-template>
+
+  <ng-template ngSwitchCase="date">
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
+    <input
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      (click)="datepicker.open()"
+      (keyup.space)="datepicker.open()"
+      ngbDatepicker
+      #datepicker="ngbDatepicker"
+      type="text"
+      class="form-control"
+    />
+  </ng-template>
+
+  <ng-template ngSwitchCase="time">
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
+    <ngb-timepicker [formControlName]="prop.name"></ngb-timepicker>
+  </ng-template>
+
+  <ng-template ngSwitchCase="dateTime">
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
+    <abp-date-time-picker [prop]="prop"></abp-date-time-picker>
+  </ng-template>
+
+  <ng-template ngSwitchCase="textarea">
+    <label [htmlFor]="prop.id">{{ prop.displayName | abpLocalization }} {{ asterisk }}</label>
+    <textarea
+      [id]="prop.id"
+      [formControlName]="prop.name"
+      [abpDisabled]="disabled"
+      [readonly]="readonly"
+      class="form-control"
+    ></textarea>
+  </ng-template>
+</div>

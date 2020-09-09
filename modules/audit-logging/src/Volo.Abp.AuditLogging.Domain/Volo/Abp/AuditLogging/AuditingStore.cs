@@ -14,10 +14,10 @@ namespace Volo.Abp.AuditLogging
     {
         public ILogger<AuditingStore> Logger { get; set; }
 
-        private readonly IAuditLogRepository _auditLogRepository;
-        private readonly IGuidGenerator _guidGenerator;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly AbpAuditingOptions Options;
+        protected IAuditLogRepository AuditLogRepository { get; }
+        protected IGuidGenerator GuidGenerator { get; }
+        protected IUnitOfWorkManager UnitOfWorkManager { get; }
+        protected AbpAuditingOptions Options { get; }
 
         public AuditingStore(
             IAuditLogRepository auditLogRepository,
@@ -25,25 +25,25 @@ namespace Volo.Abp.AuditLogging
             IUnitOfWorkManager unitOfWorkManager,
             IOptions<AbpAuditingOptions> options)
         {
-            _auditLogRepository = auditLogRepository;
-            _guidGenerator = guidGenerator;
-            _unitOfWorkManager = unitOfWorkManager;
+            AuditLogRepository = auditLogRepository;
+            GuidGenerator = guidGenerator;
+            UnitOfWorkManager = unitOfWorkManager;
             Options = options.Value;
 
             Logger = NullLogger<AuditingStore>.Instance;
         }
 
-        public async Task SaveAsync(AuditLogInfo auditInfo)
+        public virtual async Task SaveAsync(AuditLogInfo auditInfo)
         {
             if (!Options.HideErrors)
             {
-                await SaveLogAsync(auditInfo).ConfigureAwait(false);
+                await SaveLogAsync(auditInfo);
                 return;
             }
 
             try
             {
-                await SaveLogAsync(auditInfo).ConfigureAwait(false);
+                await SaveLogAsync(auditInfo);
             }
             catch (Exception ex)
             {
@@ -54,10 +54,10 @@ namespace Volo.Abp.AuditLogging
 
         protected virtual async Task SaveLogAsync(AuditLogInfo auditInfo)
         {
-            using (var uow = _unitOfWorkManager.Begin(true))
+            using (var uow = UnitOfWorkManager.Begin(true))
             {
-                await _auditLogRepository.InsertAsync(new AuditLog(_guidGenerator, auditInfo)).ConfigureAwait(false);
-                await uow.SaveChangesAsync().ConfigureAwait(false);
+                await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, auditInfo));
+                await uow.CompleteAsync();
             }
         }
     }

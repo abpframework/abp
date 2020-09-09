@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
+using Volo.Abp.Cli.Utils;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -20,15 +22,18 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     return;
                 }
 
+                var localVoloRepoPath = context.BuildArgs.VoloGitHubLocalRepositoryPath;
+
                 new ProjectReferenceReplacer.LocalProjectPathReferenceReplacer(
                     context.Files,
                     context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
-                    localAbpRepoPath
+                    localAbpRepoPath,
+                    localVoloRepoPath
                 ).Run();
             }
             else
             {
-                var nugetPackageVersion = context.TemplateFile.Version;
+                var nugetPackageVersion = context.TemplateFile.RepositoryNugetVersion;
 
                 if (IsBranchName(nugetPackageVersion))
                 {
@@ -92,7 +97,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 var doc = new XmlDocument() { PreserveWhitespace = true };
 
-                doc.Load(GenerateStreamFromString(content));
+                doc.Load(StreamHelper.GenerateStreamFromString(content));
 
                 return ProcessReferenceNodes(doc, content);
             }
@@ -108,7 +113,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains(_projectName))
+                    if (oldNodeIncludeValue.Contains(_projectName) && _entries.Any(e=>e.Name.EndsWith(GetProjectNameWithExtensionFromProjectReference(oldNodeIncludeValue))))
                     {
                         continue;
                     }
@@ -123,17 +128,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 return doc.OuterXml;
             }
 
-            protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
-
-            private static Stream GenerateStreamFromString(string s)
+            private string GetProjectNameWithExtensionFromProjectReference(string oldNodeIncludeValue)
             {
-                var stream = new MemoryStream();
-                var writer = new StreamWriter(stream);
-                writer.Write(s);
-                writer.Flush();
-                stream.Position = 0;
-                return stream;
+                if (string.IsNullOrWhiteSpace(oldNodeIncludeValue))
+                {
+                    return oldNodeIncludeValue;
+                }
+
+                return oldNodeIncludeValue.Split('\\', '/').Last();
             }
+
+            protected abstract XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue);
 
 
             public class NugetReferenceReplacer : ProjectReferenceReplacer
@@ -175,12 +180,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
             public class LocalProjectPathReferenceReplacer : ProjectReferenceReplacer
             {
-                private readonly string _gitHubLocalRepositoryPath;
+                private readonly string _gitHubAbpLocalRepositoryPath;
+                private readonly string _gitHubVoloLocalRepositoryPath;
 
-                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string projectName, string gitHubLocalRepositoryPath)
+                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string projectName, string gitHubAbpLocalRepositoryPath, string gitHubVoloLocalRepositoryPath)
                     : base(entries, projectName)
                 {
-                    _gitHubLocalRepositoryPath = gitHubLocalRepositoryPath;
+                    _gitHubAbpLocalRepositoryPath = gitHubAbpLocalRepositoryPath;
+                    _gitHubVoloLocalRepositoryPath = gitHubVoloLocalRepositoryPath;
                 }
 
                 protected override XmlElement GetNewReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
@@ -202,9 +209,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                         includeValue = includeValue.TrimStart('\\');
                     }
 
-                    includeValue = _gitHubLocalRepositoryPath.EnsureEndsWith('\\') + includeValue;
+                    if (!string.IsNullOrWhiteSpace(_gitHubVoloLocalRepositoryPath))
+                    {
+                        if (includeValue.StartsWith("abp\\", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue.Substring("abp\\".Length);
+                        }
 
-                    return includeValue;
+                        return _gitHubVoloLocalRepositoryPath.EnsureEndsWith('\\') + "abp\\" + includeValue;
+                    }
+
+                    return _gitHubAbpLocalRepositoryPath.EnsureEndsWith('\\') + includeValue;
                 }
             }
         }

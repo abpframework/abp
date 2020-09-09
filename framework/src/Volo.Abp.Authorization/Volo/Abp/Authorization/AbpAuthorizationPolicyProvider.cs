@@ -25,7 +25,7 @@ namespace Volo.Abp.Authorization
 
         public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
-            var policy = await base.GetPolicyAsync(policyName).ConfigureAwait(false);
+            var policy = await base.GetPolicyAsync(policyName);
             if (policy != null)
             {
                 return policy;

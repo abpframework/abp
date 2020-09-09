@@ -7,6 +7,7 @@ export function httpErrorConfigFactory(config = {} as HttpErrorConfig) {
   }
 
   return {
+    skipHandledErrorCodes: [],
     errorScreen: {},
     ...config,
   } as HttpErrorConfig;

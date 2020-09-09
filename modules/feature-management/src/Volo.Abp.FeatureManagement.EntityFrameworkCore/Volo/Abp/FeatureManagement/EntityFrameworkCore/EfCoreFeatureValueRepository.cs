@@ -15,20 +15,28 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
         }
 
-        public async Task<FeatureValue> FindAsync(string name, string providerName, string providerKey)
+        public virtual async Task<FeatureValue> FindAsync(string name, string providerName, string providerKey)
         {
             return await DbSet
                 .FirstOrDefaultAsync(
                     s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey
-                ).ConfigureAwait(false);
+                );
         }
 
-        public async Task<List<FeatureValue>> GetListAsync(string providerName, string providerKey)
+        public async Task<List<FeatureValue>> FindAllAsync(string name, string providerName, string providerKey)
+        {
+            return await DbSet
+                .Where(
+                    s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey
+                ).ToListAsync();
+        }
+
+        public virtual async Task<List<FeatureValue>> GetListAsync(string providerName, string providerKey)
         {
             return await DbSet
                 .Where(
                     s => s.ProviderName == providerName && s.ProviderKey == providerKey
-                ).ToListAsync().ConfigureAwait(false);
+                ).ToListAsync();
         }
     }
 }

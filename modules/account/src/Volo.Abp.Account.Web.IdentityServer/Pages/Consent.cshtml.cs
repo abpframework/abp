@@ -42,21 +42,21 @@ namespace Volo.Abp.Account.Web.Pages
             _resourceStore = resourceStore;
         }
 
-        public virtual async Task OnGet()
+        public virtual async Task<IActionResult> OnGet()
         {
-            var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl).ConfigureAwait(false);
+            var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
             if (request == null)
             {
                 throw new ApplicationException($"No consent request matching request: {ReturnUrl}");
             }
 
-            var client = await _clientStore.FindEnabledClientByIdAsync(request.ClientId).ConfigureAwait(false);
+            var client = await _clientStore.FindEnabledClientByIdAsync(request.ClientId);
             if (client == null)
             {
                 throw new ApplicationException($"Invalid client id: {request.ClientId}");
             }
 
-            var resources = await _resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested).ConfigureAwait(false);
+            var resources = await _resourceStore.FindEnabledResourcesByScopeAsync(request.ScopesRequested);
             if (resources == null || (!resources.IdentityResources.Any() && !resources.ApiResources.Any()))
             {
                 throw new ApplicationException($"No scopes matching: {request.ScopesRequested.Aggregate((x, y) => x + ", " + y)}");
@@ -74,11 +74,13 @@ namespace Volo.Abp.Account.Web.Pages
             {
                 ConsentInput.ApiScopes.Add(GetOfflineAccessScope(true));
             }
+
+            return Page();
         }
 
         public virtual async Task<IActionResult> OnPost(string userDecision)
         {
-            var result = await ProcessConsentAsync().ConfigureAwait(false);
+            var result = await ProcessConsentAsync();
 
             if (result.IsRedirect)
             {
@@ -106,7 +108,7 @@ namespace Volo.Abp.Account.Web.Pages
             }
             else
             {
-                if (ConsentInput.IdentityScopes.Any() || ConsentInput.ApiScopes.Any())
+                if (!ConsentInput.IdentityScopes.IsNullOrEmpty() || !ConsentInput.ApiScopes.IsNullOrEmpty())
                 {
                     grantedConsent = new ConsentResponse
                     {
@@ -122,13 +124,13 @@ namespace Volo.Abp.Account.Web.Pages
 
             if (grantedConsent != null)
             {
-                var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl).ConfigureAwait(false);
+                var request = await _interaction.GetAuthorizationContextAsync(ReturnUrl);
                 if (request == null)
                 {
                     return result;
                 }
 
-                await _interaction.GrantConsentAsync(request, grantedConsent).ConfigureAwait(false);
+                await _interaction.GrantConsentAsync(request, grantedConsent);
 
                 result.RedirectUri = ReturnUrl; //TODO: ReturnUrlHash?
             }
@@ -187,7 +189,9 @@ namespace Volo.Abp.Account.Web.Pages
 
             public List<string> GetAllowedScopeNames()
             {
-                return IdentityScopes.Union(ApiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
+                var identityScopes = IdentityScopes ?? new List<ConsentModel.ScopeViewModel>();
+                var apiScopes = ApiScopes ?? new List<ConsentModel.ScopeViewModel>();
+                return identityScopes.Union(apiScopes).Where(s => s.Checked).Select(s => s.Name).ToList();
             }
         }
 

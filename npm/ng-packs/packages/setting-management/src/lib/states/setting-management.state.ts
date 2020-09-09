@@ -1,11 +1,13 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { SetSelectedSettingTab } from '../actions/setting-management.actions';
 import { SettingManagement } from '../models/setting-management';
 
 @State<SettingManagement.State>({
   name: 'SettingManagementState',
-  defaults: { selectedTab: {} } as SettingManagement.State,
+  defaults: {},
 })
+@Injectable()
 export class SettingManagementState {
   @Selector()
   static getSelectedTab({ selectedTab }: SettingManagement.State) {
@@ -13,7 +15,10 @@ export class SettingManagementState {
   }
 
   @Action(SetSelectedSettingTab)
-  settingManagementAction({ patchState }: StateContext<SettingManagement.State>, { payload }: SetSelectedSettingTab) {
+  settingManagementAction(
+    { patchState }: StateContext<SettingManagement.State>,
+    { payload }: SetSelectedSettingTab,
+  ) {
     patchState({
       selectedTab: payload,
     });

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.AuditLogging
@@ -44,5 +45,33 @@ namespace Volo.Abp.AuditLogging
         Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(
             DateTime startDate,
             DateTime endDate);
+
+        Task<EntityChange> GetEntityChange(Guid entityChangeId);
+
+        Task<List<EntityChange>> GetEntityChangeListAsync(
+            string sorting = null,
+            int maxResultCount = 50,
+            int skipCount = 0,
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default);
+
+        Task<long> GetEntityChangeCountAsync(
+            Guid? auditLogId = null,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
+            EntityChangeType? changeType = null,
+            string entityId = null,
+            string entityTypeFullName = null,
+            CancellationToken cancellationToken = default);
+
+        Task<EntityChangeWithUsername> GetEntityChangeWithUsernameAsync(Guid entityChangeId);
+
+        Task<List<EntityChangeWithUsername>> GetEntityChangesWithUsernameAsync(string entityId, string entityTypeFullName);
     }
 }

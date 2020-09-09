@@ -7,6 +7,8 @@ using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.Modularity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -42,7 +44,7 @@ namespace Volo.Abp.Identity.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
+                options.FileSets.AddEmbedded<AbpIdentityWebModule>();
             });
 
             context.Services.AddAutoMapperObjectMapper<AbpIdentityWebModule>();
@@ -61,6 +63,25 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
             });
+        }
+
+        public override void PostConfigureServices(ServiceConfigurationContext context)
+        {
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.Role,
+                    createFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.CreateModalModel.RoleInfoModel) },
+                    editFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Roles.EditModalModel.RoleInfoModel) }
+                );
+            
+            ModuleExtensionConfigurationHelper
+                .ApplyEntityConfigurationToUi(
+                    IdentityModuleExtensionConsts.ModuleName,
+                    IdentityModuleExtensionConsts.EntityNames.User,
+                    createFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.CreateModalModel.UserInfoViewModel) },
+                    editFormTypes: new[] { typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel.UserInfoViewModel) }
+                );
         }
     }
 }

@@ -1,60 +1,16 @@
-﻿var abp = abp;
-
+﻿var abp = abp || {};
 (function ($) {
 
-    /************************************************************************
-    * RECORD-ACTIONS extension for datatables                               
-     ---------------------------------------------------------------
-    * SINGLE BUTTON USAGE (creates the given JQuery element)
-       {
-            targets: 0,  //optional
-            rowAction: 
-            {
-                element: $("<button/>")
-                    .addClass("btn btn-primary btn-sm m-btn--icon")
-                    .text("My button")
-                    .prepend($("<i/>").addClass("la la-sign-in"))
-                    .click(function () {
-                        console.log($(this).data());
-                    })
-            },
-        },
+    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
 
-     ---------------------------------------------------------------
-     * LIST OF ITEMS USAGE
-       {
-           targets: 0, //optional
-           rowAction: 
-           {
-                text: 'My actions', //optional. default value: Actions
-                icon: 'bolt' //optional. default value: cog. See fa icon set https://fontawesome.com/v4.7.0/icons/
-                items:
-                    [
-                        {
-                            text: "My first action", //mandatory
-                            icon: "thumbs-o-down",  //optional.
-                            visible: true //optional. default value: true. Accepts boolean returning function too. Eg: function(){ return true/false;} ,
-                            action: function (data) {
-                                console.log(data.record);
-                            }
-                        },
-                         {
-                            text: "My second action",
-                            icon: "thumbs-o-up",
-                            visible: true, 
-                            action: function (data) {
-                                console.log(data.record);
-                            }
-                        }
-                    ]
-           }
-        },
-    *************************************************************************/
     var localize = function (key) {
         return abp.localization.getResource('AbpUi')(key);
     };
 
-    var recordActions = function () {
+    /************************************************************************
+     * RECORD-ACTIONS extension for datatables                               *
+     *************************************************************************/
+    (function () {
         if (!$.fn.dataTableExt) {
             return;
         }
@@ -117,7 +73,7 @@
                 .addClass('action-button');
 
             var $dropdownButton = $('<button/>');
-            
+
             if (field.icon !== undefined) {
                 if (field.icon) {
                     $dropdownButton.append($("<i>").addClass("fa fa-" + field.icon + " mr-1"));
@@ -267,17 +223,15 @@
                 }
             });
 
-    }();
+    })();
 
     /************************************************************************
-    * AJAX extension for datatables                                         *
-    *************************************************************************/
-    var datatables = abp.utils.createNamespace(abp, 'libs.datatables');
-
-    var ajaxActions = function () {
+     * AJAX extension for datatables                                         *
+     *************************************************************************/
+    (function () {
         datatables.createAjax = function (serverMethod, inputAction) {
             return function (requestData, callback, settings) {
-                var input = inputAction ? inputAction() : {};
+                var input = inputAction ? inputAction(requestData, settings) : {};
 
                 //Paging
                 if (settings.oInit.paging) {
@@ -318,14 +272,14 @@
                 }
             };
         };
-    }();
+    })();
 
     /************************************************************************
-    * Configuration/Options normalizer for datatables                       *
-    *************************************************************************/
-    var optionNormalizer = function () {
+     * Configuration/Options normalizer for datatables                       *
+     *************************************************************************/
+    (function () {
 
-        var customizeRowActionColumn = function(column) {
+        var customizeRowActionColumn = function (column) {
             column.data = null;
             column.orderable = false;
             column.defaultContent = "";
@@ -336,10 +290,20 @@
         };
 
         datatables.normalizeConfiguration = function (configuration) {
+
+            configuration.scrollX = datatables.defaultConfigurations.scrollX;
+
             for (var i = 0; i < configuration.columnDefs.length; i++) {
                 var column = configuration.columnDefs[i];
                 if (!column.targets) {
                     column.targets = i;
+                }
+
+                if (!column.render && column.dataFormat) {
+                    var render = datatables.defaultRenderers[column.dataFormat];
+                    if (render) {
+                        column.render = render;
+                    }
                 }
 
                 if (column.rowAction) {
@@ -347,28 +311,78 @@
                 }
             }
 
-            configuration.language = {
-                info: localize("PagerInfo"),
-                infoFiltered: localize("PagerInfoFiltered"),
-                infoEmpty: localize("PagerInfoEmpty"),
-                search: localize("PagerSearch"),
-                processing: localize("ProcessingWithThreeDot"),
-                loadingRecords: localize("LoadingWithThreeDot"),
-                lengthMenu: localize("PagerShowMenuEntries"),
-                emptyTable: localize("NoDataAvailableInDatatable"),
-                paginate: {
-                    first: localize("PagerFirst"),
-                    last: localize("PagerLast"),
-                    previous: localize("PagerPrevious"),
-                    next: localize("PagerNext")
-                }
-            };
+            configuration.language = datatables.defaultConfigurations.language();
 
-            configuration.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>';
+            if(configuration.dom){
+                configuration.dom += datatables.defaultConfigurations.dom;
+            }else{
+                configuration.dom = datatables.defaultConfigurations.dom;
+            }
 
             return configuration;
         };
+    })();
 
-    }();
+    /************************************************************************
+     * Default Renderers                                                     *
+     *************************************************************************/
+
+    datatables.defaultRenderers = datatables.defaultRenderers || {};
+
+    datatables.defaultRenderers['boolean'] = function(value) {
+        if (value) {
+            return '<i class="fa fa-check"></i>';
+        } else {
+            return '<i class="fa fa-times"></i>';
+        }
+    };
+
+    var ISOStringToDateTimeLocaleString = function (format) {
+        return function(data) {
+            var date = luxon
+                .DateTime
+                .fromISO(data, {
+                    locale: abp.localization.currentCulture.name
+                });
+            return format ? date.toLocaleString(format) : date.toLocaleString();
+        };
+    };
+
+    datatables.defaultRenderers['date'] = function (value) {
+        return (ISOStringToDateTimeLocaleString())(value);
+    };
+
+    datatables.defaultRenderers['datetime'] = function (value) {
+        return (ISOStringToDateTimeLocaleString(luxon.DateTime.DATETIME_SHORT))(value);
+    };
+
+    /************************************************************************
+     * Default Configurations                                                *
+     *************************************************************************/
+
+    datatables.defaultConfigurations = datatables.defaultConfigurations || {};
+
+    datatables.defaultConfigurations.scrollX = true;
+
+    datatables.defaultConfigurations.language = function () {
+        return {
+            info: localize("PagerInfo"),
+            infoFiltered: localize("PagerInfoFiltered"),
+            infoEmpty: localize("PagerInfoEmpty"),
+            search: localize("PagerSearch"),
+            processing: localize("ProcessingWithThreeDot"),
+            loadingRecords: localize("LoadingWithThreeDot"),
+            lengthMenu: localize("PagerShowMenuEntries"),
+            emptyTable: localize("NoDataAvailableInDatatable"),
+            paginate: {
+                first: localize("PagerFirst"),
+                last: localize("PagerLast"),
+                previous: localize("PagerPrevious"),
+                next: localize("PagerNext")
+            }
+        };
+    };
+
+    datatables.defaultConfigurations.dom = '<"dataTable_filters"f>rt<"row dataTable_footer"<"col-auto"l><"col-auto"i><"col"p>>';
 
 })(jQuery);

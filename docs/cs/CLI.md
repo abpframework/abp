@@ -1,4 +1,4 @@
-﻿# ABP CLI
+# ABP CLI
 
 ABP CLI (Command Line Interface) je nástroj v příkazovém řádku k provádění některých běžných úkonů v řešeních založených na ABP.
 
@@ -109,6 +109,7 @@ abp add-module Volo.Blogging
 * `--solution` nebo `-s`: Určuje cestu k řešení (.sln). Pokud není zadáno, CLI se pokusí najít soubor .sln v aktuálním adresáři.
 * `--skip-db-migrations`: Pro poskytovatele databáze EF Core automaticky přidá nový kód první migrace (`Add-Migration`) a v případě potřeby aktualizuje databázi (`Update-Database`). Tuto možnost určete k vynechání této operace.
 * `-sp` nebo `--startup-project`: Relativní cesta ke složce spouštěcího projektu. Výchozí hodnota je aktuální adresář.
+* `--with-source-code`: Místo balíčků NuGet/NPM přidejte zdrojový kód modulu.
 
 ### update
 

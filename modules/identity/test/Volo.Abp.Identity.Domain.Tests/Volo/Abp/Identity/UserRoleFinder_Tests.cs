@@ -21,7 +21,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetRolesAsync()
         {
-            var roleNames = await _userRoleFinder.GetRolesAsync(_testData.UserJohnId).ConfigureAwait(false);
+            var roleNames = await _userRoleFinder.GetRolesAsync(_testData.UserJohnId);
             roleNames.ShouldNotBeEmpty();
             roleNames.ShouldContain(x => x == "moderator");
             roleNames.ShouldContain(x => x == "supporter");

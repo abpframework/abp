@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp;
 using Volo.Abp.MongoDB;
+using Volo.Docs.Documents;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.MongoDB
@@ -22,6 +23,11 @@ namespace Volo.Docs.MongoDB
             builder.Entity<Project>(b =>
             {
                 b.CollectionName = options.CollectionPrefix + "Projects";
+            });
+
+            builder.Entity<Document>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "DocumentS";
             });
         }
     }

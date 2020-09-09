@@ -16,5 +16,15 @@ namespace Volo.Abp.FeatureManagement
         {
             return featureManager.GetAllAsync(DefaultValueFeatureValueProvider.ProviderName, null, fallback);
         }
+
+        public static Task<FeatureNameValueWithGrantedProvider> GetOrNullWithProviderAsync(this IFeatureManager featureManager, [NotNull] string name, bool fallback = true)
+        {
+            return featureManager.GetOrNullWithProviderAsync(name, DefaultValueFeatureValueProvider.ProviderName, null, fallback);
+        }
+
+        public static Task<List<FeatureNameValueWithGrantedProvider>> GetAllWithProviderAsync(this IFeatureManager featureManager, bool fallback = true)
+        {
+            return featureManager.GetAllWithProviderAsync(DefaultValueFeatureValueProvider.ProviderName, null, fallback);
+        }
     }
 }

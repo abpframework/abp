@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { GetAppConfiguration, SetEnvironment } from '../actions/config.actions';
 import { ConfigState } from '../states';
-import { GetAppConfiguration, PatchRouteByName, AddRoute } from '../actions/config.actions';
-import { ABP } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -26,12 +25,12 @@ export class ConfigStateService {
     return this.store.selectSnapshot(ConfigState.getDeep(...args));
   }
 
-  getRoute(...args: Parameters<typeof ConfigState.getRoute>) {
-    return this.store.selectSnapshot(ConfigState.getRoute(...args));
-  }
-
   getApiUrl(...args: Parameters<typeof ConfigState.getApiUrl>) {
     return this.store.selectSnapshot(ConfigState.getApiUrl(...args));
+  }
+
+  getFeature(...args: Parameters<typeof ConfigState.getFeature>) {
+    return this.store.selectSnapshot(ConfigState.getFeature(...args));
   }
 
   getSetting(...args: Parameters<typeof ConfigState.getSetting>) {
@@ -54,11 +53,7 @@ export class ConfigStateService {
     return this.store.dispatch(new GetAppConfiguration());
   }
 
-  dispatchPatchRouteByName(...args: ConstructorParameters<typeof PatchRouteByName>) {
-    return this.store.dispatch(new PatchRouteByName(...args));
-  }
-
-  dispatchAddRoute(...args: ConstructorParameters<typeof AddRoute>) {
-    return this.store.dispatch(new AddRoute(...args));
+  dispatchSetEnvironment(...args: ConstructorParameters<typeof SetEnvironment>) {
+    return this.store.dispatch(new SetEnvironment(...args));
   }
 }

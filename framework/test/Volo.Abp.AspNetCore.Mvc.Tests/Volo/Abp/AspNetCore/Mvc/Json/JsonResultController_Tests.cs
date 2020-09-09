@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
         {
             var time = await GetResponseAsStringAsync(
                 "/api/json-result-test/json-result-action"
-            ).ConfigureAwait(false);
+            );
 
             time.ShouldContain("2019*01*01");
         }

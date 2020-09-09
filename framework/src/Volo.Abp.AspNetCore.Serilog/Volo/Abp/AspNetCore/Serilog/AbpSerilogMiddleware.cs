@@ -62,7 +62,7 @@ namespace Volo.Abp.AspNetCore.Serilog
 
             using (LogContext.Push(enrichers.ToArray()))
             {
-                await next(context).ConfigureAwait(false);
+                await next(context);
             }
         }
     }

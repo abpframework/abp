@@ -11,12 +11,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
-using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -47,35 +49,26 @@ namespace Volo.Abp.Account.Web.Pages.Account
         //public IClientStore ClientStore { get; set; }
         //public IEventService IdentityServerEvents { get; set; }
 
-        protected IAuthenticationSchemeProvider _schemeProvider;
-        protected AbpAccountOptions _accountOptions;
+        protected IAuthenticationSchemeProvider SchemeProvider { get; }
+        protected AbpAccountOptions AccountOptions { get; }
+
+        public bool ShowCancelButton { get; set; }
 
         public LoginModel(
             IAuthenticationSchemeProvider schemeProvider,
             IOptions<AbpAccountOptions> accountOptions)
         {
-            _schemeProvider = schemeProvider;
-            _accountOptions = accountOptions.Value;
+            SchemeProvider = schemeProvider;
+            AccountOptions = accountOptions.Value;
         }
 
         public virtual async Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
-            var schemes = await _schemeProvider.GetAllSchemesAsync().ConfigureAwait(false);
+            ExternalProviders = await GetExternalProviders();
 
-            var providers = schemes
-                .Where(x => x.DisplayName != null || x.Name.Equals(_accountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
-                .Select(x => new ExternalProviderModel
-                {
-                    DisplayName = x.DisplayName,
-                    AuthenticationScheme = x.Name
-                })
-                .ToList();
-
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
-
-            ExternalProviders = providers.ToArray();
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             if (IsExternalLoginOnly)
             {
@@ -86,30 +79,35 @@ namespace Volo.Abp.Account.Web.Pages.Account
             return Page();
         }
 
-        [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
+            await CheckLocalLoginAsync();
 
             ValidateModel();
 
-            await ReplaceEmailToUsernameOfInputIfNeeds().ConfigureAwait(false);
+            ExternalProviders = await GetExternalProviders();
+
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
+            await ReplaceEmailToUsernameOfInputIfNeeds();
 
             var result = await SignInManager.PasswordSignInAsync(
                 LoginInput.UserNameOrEmailAddress,
                 LoginInput.Password,
                 LoginInput.RememberMe,
                 true
-            ).ConfigureAwait(false);
+            );
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = LoginInput.UserNameOrEmailAddress
+            });
 
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("./SendSecurityCode", new
-                {
-                    returnUrl = ReturnUrl,
-                    returnUrlHash = ReturnUrlHash,
-                    rememberMe = LoginInput.RememberMe
-                });
+                return await TwoFactorLoginResultAsync();
             }
 
             if (result.IsLockedOut)
@@ -131,25 +129,45 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
 
             //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false) ??
-                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false);
+            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
 
             Debug.Assert(user != null, nameof(user) + " != null");
 
             return RedirectSafely(ReturnUrl, ReturnUrlHash);
         }
 
-        [UnitOfWork]
+        /// <summary>
+        /// Override this method to add 2FA for your application.
+        /// </summary>
+        protected virtual Task<IActionResult> TwoFactorLoginResultAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual async Task<List<ExternalProviderModel>> GetExternalProviders()
+        {
+            var schemes = await SchemeProvider.GetAllSchemesAsync();
+
+            return schemes
+                .Where(x => x.DisplayName != null || x.Name.Equals(AccountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
+                .Select(x => new ExternalProviderModel
+                {
+                    DisplayName = x.DisplayName,
+                    AuthenticationScheme = x.Name
+                })
+                .ToList();
+        }
+
         public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
         {
             var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
             var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             properties.Items["scheme"] = provider;
 
-            return Challenge(properties, provider);
+            return await Task.FromResult(Challenge(properties, provider));
         }
 
-        [UnitOfWork]
         public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string remoteError = null)
         {
             //TODO: Did not implemented Identity Server 4 sample for this method (see ExternalLoginCallback in Quickstart of IDS4 sample)
@@ -163,7 +181,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return RedirectToPage("./Login");
             }
 
-            var loginInfo = await SignInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
+            var loginInfo = await SignInManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
                 Logger.LogWarning("External login info is not available");
@@ -175,7 +193,16 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 loginInfo.ProviderKey,
                 isPersistent: false,
                 bypassTwoFactor: true
-            ).ConfigureAwait(false);
+            );
+
+            if (!result.Succeeded)
+            {
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
+                    Action = "Login" + result
+                });
+            }
 
             if (result.IsLockedOut)
             {
@@ -190,16 +217,39 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //TODO: Handle other cases for result!
 
             // Get the information about the user from the external login provider
-            var info = await SignInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
-            if (info == null)
+            var externalLoginInfo = await SignInManager.GetExternalLoginInfoAsync();
+            if (externalLoginInfo == null)
             {
                 throw new ApplicationException("Error loading external login information during confirmation.");
             }
 
-            var user = await CreateExternalUserAsync(info).ConfigureAwait(false);
+            if (!IsEmailRetrievedFromExternalLogin(externalLoginInfo))
+            {
+                return RedirectToPage("./Register", new
+                {
+                    IsExternalLogin = true,
+                    ExternalLoginAuthSchema = externalLoginInfo.LoginProvider,
+                    ReturnUrl = returnUrl
+                });
+            }
 
-            await SignInManager.SignInAsync(user, false).ConfigureAwait(false);
+            var user = await CreateExternalUserAsync(externalLoginInfo);
+
+            await SignInManager.SignInAsync(user, false);
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = user.Name
+            });
+
             return RedirectSafely(returnUrl, returnUrlHash);
+        }
+
+        private static bool IsEmailRetrievedFromExternalLogin(ExternalLoginInfo externalLoginInfo)
+        {
+            return externalLoginInfo.Principal.FindFirstValue(AbpClaimTypes.Email) != null;
         }
 
         protected virtual async Task<IdentityUser> CreateExternalUserAsync(ExternalLoginInfo info)
@@ -208,9 +258,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
 
-            CheckIdentityErrors(await UserManager.CreateAsync(user).ConfigureAwait(false));
-            CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress).ConfigureAwait(false));
-            CheckIdentityErrors(await UserManager.AddLoginAsync(user, info).ConfigureAwait(false));
+            CheckIdentityErrors(await UserManager.CreateAsync(user));
+            CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
+            CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
+            CheckIdentityErrors(await UserManager.AddDefaultRolesAsync(user));
 
             return user;
         }
@@ -222,13 +273,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return;
             }
 
-            var userByUsername = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false);
+            var userByUsername = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress);
             if (userByUsername != null)
             {
                 return;
             }
 
-            var userByEmail = await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false);
+            var userByEmail = await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
             if (userByEmail == null)
             {
                 return;
@@ -237,15 +288,24 @@ namespace Volo.Abp.Account.Web.Pages.Account
             LoginInput.UserNameOrEmailAddress = userByEmail.UserName;
         }
 
+        protected virtual async Task CheckLocalLoginAsync()
+        {
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
+            {
+                throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+            }
+        }
+
         public class LoginInputModel
         {
             [Required]
-            [StringLength(IdentityUserConsts.MaxEmailLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
             public string UserNameOrEmailAddress { get; set; }
 
             [Required]
-            [StringLength(IdentityUserConsts.MaxPasswordLength)]
+            [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
 
             public bool RememberMe { get; set; }

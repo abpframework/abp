@@ -9,7 +9,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
     /// <typeparam name="TUser">Type of the user</typeparam>
     [Serializable]
     public abstract class AuditedEntityWithUser<TUser> : AuditedEntity, IAuditedObject<TUser>
-        where TUser : IEntity<long>
+        where TUser : IEntity<Guid>
     {
         /// <inheritdoc />
         public virtual TUser Creator { get; set; }
@@ -25,7 +25,7 @@ namespace Volo.Abp.Domain.Entities.Auditing
     /// <typeparam name="TUser">Type of the user</typeparam>
     [Serializable]
     public abstract class AuditedEntityWithUser<TKey, TUser> : AuditedEntity<TKey>, IAuditedObject<TUser>
-        where TUser : IEntity<long>
+        where TUser : IEntity<Guid>
     {
         /// <inheritdoc />
         public virtual TUser Creator { get; set; }

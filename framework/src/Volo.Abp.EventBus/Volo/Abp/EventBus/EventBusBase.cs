@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Collections;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.EventBus
@@ -16,9 +17,12 @@ namespace Volo.Abp.EventBus
     {
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        protected EventBusBase(IServiceScopeFactory serviceScopeFactory)
+        protected ICurrentTenant CurrentTenant { get; }
+
+        protected EventBusBase(IServiceScopeFactory serviceScopeFactory, ICurrentTenant currentTenant)
         {
             ServiceScopeFactory = serviceScopeFactory;
+            CurrentTenant = currentTenant;
         }
 
         /// <inheritdoc/>
@@ -89,7 +93,7 @@ namespace Volo.Abp.EventBus
         {
             var exceptions = new List<Exception>();
 
-            await TriggerHandlersAsync(eventType, eventData, exceptions).ConfigureAwait(false);
+            await TriggerHandlersAsync(eventType, eventData, exceptions);
 
             if (exceptions.Any())
             {
@@ -110,7 +114,7 @@ namespace Volo.Abp.EventBus
             {
                 foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
                 {
-                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions).ConfigureAwait(false);
+                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions);
                 }
             }
 
@@ -126,7 +130,7 @@ namespace Volo.Abp.EventBus
                     var baseEventType = eventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
                     var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
                     var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs);
-                    await PublishAsync(baseEventType, baseEventData).ConfigureAwait(false);
+                    await PublishAsync(baseEventType, baseEventData);
                 }
             }
         }
@@ -162,31 +166,34 @@ namespace Volo.Abp.EventBus
                 {
                     var handlerType = eventHandlerWrapper.EventHandler.GetType();
 
-                    if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)))
+                    using (CurrentTenant.Change(GetEventDataTenantId(eventData)))
                     {
-                        var method = typeof(ILocalEventHandler<>)
-                            .MakeGenericType(eventType)
-                            .GetMethod(
-                                nameof(ILocalEventHandler<object>.HandleEventAsync),
-                                new[] { eventType }
-                            );
+                        if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(ILocalEventHandler<>)))
+                        {
+                            var method = typeof(ILocalEventHandler<>)
+                                .MakeGenericType(eventType)
+                                .GetMethod(
+                                    nameof(ILocalEventHandler<object>.HandleEventAsync),
+                                    new[] { eventType }
+                                );
 
-                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData })).ConfigureAwait(false);
-                    }
-                    else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
-                    {
-                        var method = typeof(IDistributedEventHandler<>)
-                            .MakeGenericType(eventType)
-                            .GetMethod(
-                                nameof(IDistributedEventHandler<object>.HandleEventAsync),
-                                new[] { eventType }
-                            );
+                            await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
+                        }
+                        else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
+                        {
+                            var method = typeof(IDistributedEventHandler<>)
+                                .MakeGenericType(eventType)
+                                .GetMethod(
+                                    nameof(IDistributedEventHandler<object>.HandleEventAsync),
+                                    new[] { eventType }
+                                );
 
-                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData })).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        throw new AbpException("The object instance is not an event handler. Object type: " + handlerType.AssemblyQualifiedName);
+                            await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData }));
+                        }
+                        else
+                        {
+                            throw new AbpException("The object instance is not an event handler. Object type: " + handlerType.AssemblyQualifiedName);
+                        }
                     }
                 }
                 catch (TargetInvocationException ex)
@@ -198,6 +205,16 @@ namespace Volo.Abp.EventBus
                     exceptions.Add(ex);
                 }
             }
+        }
+
+        protected virtual Guid? GetEventDataTenantId(object eventData)
+        {
+            return eventData switch
+            {
+                IMultiTenant multiTenantEventData => multiTenantEventData.TenantId,
+                IEventDataMayHaveTenantId eventDataMayHaveTenantId when eventDataMayHaveTenantId.IsMultiTenant(out var tenantId) => tenantId,
+                _ => CurrentTenant.Id
+            };
         }
 
         protected class EventTypeWithEventHandlerFactories

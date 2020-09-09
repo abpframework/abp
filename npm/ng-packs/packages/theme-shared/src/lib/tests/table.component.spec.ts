@@ -1,7 +1,7 @@
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
-import { PaginationComponent, TableComponent } from '../components';
-
 import { Pipe, PipeTransform } from '@angular/core';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
+import { TableComponent } from '../components';
 
 @Pipe({
   name: 'abpLocalization',
@@ -16,7 +16,8 @@ describe('TableComponent', () => {
   let spectator: SpectatorHost<TableComponent>;
   const createHost = createHostFactory({
     component: TableComponent,
-    declarations: [PaginationComponent, DummyLocalizationPipe],
+    declarations: [DummyLocalizationPipe],
+    imports: [NgbPaginationModule],
   });
 
   describe('without value', () => {
@@ -38,7 +39,7 @@ describe('TableComponent', () => {
     });
 
     it('should display the empty message', () => {
-      expect(spectator.query('tr.empty-row>div')).toHaveText(
+      expect(spectator.query('caption.ui-table-empty')).toHaveText(
         'AbpAccount::NoDataAvailableInDatatable',
       );
     });

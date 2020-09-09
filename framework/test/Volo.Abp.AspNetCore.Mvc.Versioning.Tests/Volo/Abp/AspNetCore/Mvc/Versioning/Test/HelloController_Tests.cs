@@ -18,19 +18,19 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test
         [Fact]
         public async Task GetAsync()
         {
-            (await _helloController.GetAsync().ConfigureAwait(false)).ShouldBe("Get-2.0");
+            (await _helloController.GetAsync()).ShouldBe("Get-2.0");
         }
 
         [Fact]
         public async Task PostAsyncV1()
         {
-            (await _helloController.PostAsyncV1().ConfigureAwait(false)).ShouldBe("Post-1.0");
+            (await _helloController.PostAsyncV1()).ShouldBe("Post-1.0");
         }
 
         [Fact]
         public async Task PostAsyncV2()
         {
-            (await _helloController.PostAsyncV2().ConfigureAwait(false)).ShouldBe("Post-2.0");
+            (await _helloController.PostAsyncV2()).ShouldBe("Post-2.0");
         }
     }
 }

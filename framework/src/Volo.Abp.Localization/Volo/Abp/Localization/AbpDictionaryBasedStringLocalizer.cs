@@ -104,7 +104,7 @@ namespace Volo.Abp.Localization
             //Try to get from same language dictionary (without country code)
             if (cultureName.Contains("-")) //Example: "tr-TR" (length=5)
             {
-                var strLang = Resource.Contributors.GetOrNull(GetBaseCultureName(cultureName), name);
+                var strLang = Resource.Contributors.GetOrNull(CultureHelper.GetBaseCultureName(cultureName), name);
                 if (strLang != null)
                 {
                     return strLang;
@@ -168,7 +168,7 @@ namespace Volo.Abp.Localization
                 //Overwrite all strings from the language based on country culture
                 if (cultureName.Contains("-"))
                 {
-                    Resource.Contributors.Fill(GetBaseCultureName(cultureName), allStrings);
+                    Resource.Contributors.Fill(CultureHelper.GetBaseCultureName(cultureName), allStrings);
                 }
             }
 
@@ -177,14 +177,7 @@ namespace Volo.Abp.Localization
 
             return allStrings.Values.ToImmutableList();
         }
-
-        protected virtual string GetBaseCultureName(string cultureName)
-        {
-            return cultureName.Contains("-")
-                ? cultureName.Left(cultureName.IndexOf("-", StringComparison.Ordinal))
-                : cultureName;
-        }
-
+        
         public class CultureWrapperStringLocalizer : IStringLocalizer, IStringLocalizerSupportsInheritance
         {
             private readonly string _cultureName;

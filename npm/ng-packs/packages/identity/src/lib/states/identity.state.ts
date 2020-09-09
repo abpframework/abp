@@ -15,11 +15,13 @@ import {
 } from '../actions/identity.actions';
 import { Identity } from '../models/identity';
 import { IdentityService } from '../services/identity.service';
+import { Injectable } from '@angular/core';
 
 @State<Identity.State>({
   name: 'IdentityState',
   defaults: { roles: {}, selectedRole: {}, users: {}, selectedUser: {} } as Identity.State,
 })
+@Injectable()
 export class IdentityState {
   @Selector()
   static getRoles({ roles }: Identity.State): Identity.RoleItem[] {

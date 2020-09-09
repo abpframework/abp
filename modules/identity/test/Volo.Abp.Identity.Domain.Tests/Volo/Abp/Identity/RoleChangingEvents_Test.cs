@@ -33,25 +33,25 @@ namespace Volo.Abp.Identity
         {
             var role = await RoleRepository
                                 .FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"))
-                                .ConfigureAwait(false);
+                                ;
 
-            var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync("R", role.Name).ConfigureAwait(false);
+            var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync("R", role.Name);
             permissionGrantsInRole.ShouldNotBeNull();
             permissionGrantsInRole.Count.ShouldBeGreaterThan(0);
             var count = permissionGrantsInRole.Count;
 
             using (var uow = UowManager.Begin())
             {
-                var identityResult = await RoleManager.SetRoleNameAsync(role, "TestModerator").ConfigureAwait(false);
+                var identityResult = await RoleManager.SetRoleNameAsync(role, "TestModerator");
                 identityResult.Succeeded.ShouldBeTrue();
-                var xx = await RoleRepository.UpdateAsync(role).ConfigureAwait(false);
-                await uow.CompleteAsync().ConfigureAwait(false);
+                var xx = await RoleRepository.UpdateAsync(role);
+                await uow.CompleteAsync();
             }
 
-            role = await RoleRepository.GetAsync(role.Id).ConfigureAwait(false);
+            role = await RoleRepository.GetAsync(role.Id);
             role.Name.ShouldBe("TestModerator");
 
-            permissionGrantsInRole = await PermissionGrantRepository.GetListAsync("R", role.Name).ConfigureAwait(false);
+            permissionGrantsInRole = await PermissionGrantRepository.GetListAsync("R", role.Name);
             permissionGrantsInRole.Count.ShouldBe(count);
         }
     }

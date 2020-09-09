@@ -15,10 +15,10 @@ namespace Volo.Abp.Identity
 {
     public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
     {
-        protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
+        protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
-        private readonly IStringLocalizer<IdentityResource> _localizer;
-        private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        protected IStringLocalizer<IdentityResource> Localizer { get; }
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public IdentityRoleManager(
             IdentityRoleStore store,
@@ -29,19 +29,19 @@ namespace Volo.Abp.Identity
             IStringLocalizer<IdentityResource> localizer,
             ICancellationTokenProvider cancellationTokenProvider)
             : base(
-                  store, 
-                  roleValidators, 
-                  keyNormalizer, 
-                  errors, 
+                  store,
+                  roleValidators,
+                  keyNormalizer,
+                  errors,
                   logger)
         {
-            _localizer = localizer;
-            _cancellationTokenProvider = cancellationTokenProvider;
+            Localizer = localizer;
+            CancellationTokenProvider = cancellationTokenProvider;
         }
 
         public virtual async Task<IdentityRole> GetByIdAsync(Guid id)
         {
-            var role = await Store.FindByIdAsync(id.ToString(), CancellationToken).ConfigureAwait(false);
+            var role = await Store.FindByIdAsync(id.ToString(), CancellationToken);
             if (role == null)
             {
                 throw new EntityNotFoundException(typeof(IdentityRole), id);
@@ -54,20 +54,20 @@ namespace Volo.Abp.Identity
         {
             if (role.IsStatic && role.Name != name)
             {
-                throw new BusinessException(_localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
+                throw new BusinessException(IdentityErrorCodes.StaticRoleRenaming);
             }
 
-            return await base.SetRoleNameAsync(role, name).ConfigureAwait(false);
+            return await base.SetRoleNameAsync(role, name);
         }
 
         public override async Task<IdentityResult> DeleteAsync(IdentityRole role)
         {
             if (role.IsStatic)
             {
-                throw new BusinessException(_localizer["Identity.StaticRoleDeletionErrorMessage"]); // TODO: localize & change exception type
+                throw new BusinessException(IdentityErrorCodes.StaticRoleDeletion);
             }
 
-            return await base.DeleteAsync(role).ConfigureAwait(false);
+            return await base.DeleteAsync(role);
         }
     }
 }

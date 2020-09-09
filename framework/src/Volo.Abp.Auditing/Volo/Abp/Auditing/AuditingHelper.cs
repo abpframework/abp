@@ -36,7 +36,7 @@ namespace Volo.Abp.Auditing
             IClock clock,
             IAuditingStore auditingStore,
             ILogger<AuditingHelper> logger,
-            IServiceProvider serviceProvider, 
+            IServiceProvider serviceProvider,
             ICorrelationIdProvider correlationIdProvider)
         {
             Options = options.Value;
@@ -77,10 +77,49 @@ namespace Volo.Abp.Auditing
             var classType = methodInfo.DeclaringType;
             if (classType != null)
             {
-                if (AuditingInterceptorRegistrar.ShouldAuditTypeByDefault(classType))
+                var shouldAudit = AuditingInterceptorRegistrar.ShouldAuditTypeByDefaultOrNull(classType);
+                if (shouldAudit != null)
+                {
+                    return shouldAudit.Value;
+                }
+            }
+
+            return defaultValue;
+        }
+
+        public virtual bool IsEntityHistoryEnabled(Type entityType, bool defaultValue = false)
+        {
+            if (!entityType.IsPublic)
+            {
+                return false;
+            }
+
+            if (Options.IgnoredTypes.Any(t => t.IsAssignableFrom(entityType)))
+            {
+                return false;
+            }
+
+            if (entityType.IsDefined(typeof(AuditedAttribute), true))
+            {
+                return true;
+            }
+
+            foreach (var propertyInfo in entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                if(propertyInfo.IsDefined(typeof(AuditedAttribute)))
                 {
                     return true;
                 }
+            }
+
+            if (entityType.IsDefined(typeof(DisableAuditingAttribute), true))
+            {
+                return false;
+            }
+
+            if (Options.EntityHistorySelectors.Any(selector => selector.Predicate(entityType)))
+            {
+                return true;
             }
 
             return defaultValue;
@@ -109,8 +148,8 @@ namespace Volo.Abp.Auditing
 
         public virtual AuditLogActionInfo CreateAuditLogAction(
             AuditLogInfo auditLog,
-            Type type, 
-            MethodInfo method, 
+            Type type,
+            MethodInfo method,
             object[] arguments)
         {
             return CreateAuditLogAction(auditLog, type, method, CreateArgumentsDictionary(method, arguments));
@@ -118,8 +157,8 @@ namespace Volo.Abp.Auditing
 
         public virtual AuditLogActionInfo CreateAuditLogAction(
             AuditLogInfo auditLog,
-            Type type, 
-            MethodInfo method, 
+            Type type,
+            MethodInfo method,
             IDictionary<string, object> arguments)
         {
             var actionInfo = new AuditLogActionInfo

@@ -15,7 +15,6 @@ using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
-using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore.EntityHistory
 {
@@ -26,6 +25,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
         protected IAuditingStore AuditingStore { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected AbpAuditingOptions Options { get; }
+        protected IAuditingHelper AuditingHelper { get; }
 
         private readonly IClock _clock;
 
@@ -33,11 +33,13 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             IAuditingStore auditingStore,
             IOptions<AbpAuditingOptions> options,
             IClock clock,
-            IJsonSerializer jsonSerializer)
+            IJsonSerializer jsonSerializer,
+            IAuditingHelper auditingHelper)
         {
             _clock = clock;
             AuditingStore = auditingStore;
             JsonSerializer = jsonSerializer;
+            AuditingHelper = auditingHelper;
             Options = options.Value;
 
             Logger = NullLogger<EntityHistoryHelper>.Instance;
@@ -203,39 +205,14 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 return false;
             }
 
-            if (Options.IgnoredTypes.Any(t => t.IsInstanceOfType(entityEntry.Entity)))
-            {
-                return false;
-            }
+            var entityType = entityEntry.Metadata.ClrType;
 
-            var entityType = entityEntry.Entity.GetType();
             if (!EntityHelper.IsEntity(entityType))
             {
                 return false;
             }
 
-            if (!entityType.IsPublic)
-            {
-                return false;
-            }
-
-            if (entityType.IsDefined(typeof(AuditedAttribute), true))
-            {
-                return true;
-            }
-
-            if (entityType.IsDefined(typeof(DisableAuditingAttribute), true))
-            {
-                return false;
-            }
-
-            if (Options.EntityHistorySelectors.Any(selector => selector.Predicate(entityType)))
-            {
-                return true;
-            }
-
-            var properties = entityEntry.Metadata.GetProperties();
-            if (properties.Any(p => p.PropertyInfo?.IsDefined(typeof(AuditedAttribute)) ?? false))
+            if (AuditingHelper.IsEntityHistoryEnabled(entityType))
             {
                 return true;
             }
@@ -265,6 +242,11 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 }
             }
 
+            if (propertyInfo != null && IsBaseAuditProperty(propertyInfo, entityType))
+            {
+                return false;
+            }
+
             var isModified = !(propertyEntry.OriginalValue?.Equals(propertyEntry.CurrentValue) ?? propertyEntry.CurrentValue == null);
             if (isModified)
             {
@@ -274,6 +256,59 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
             return defaultValue;
         }
 
+        private bool IsBaseAuditProperty(PropertyInfo propertyInfo, Type entityType)
+        {
+            if (entityType.IsAssignableTo<IHasCreationTime>()
+                && propertyInfo.Name == nameof(IHasCreationTime.CreationTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IMayHaveCreator>()
+                && propertyInfo.Name == nameof(IMayHaveCreator.CreatorId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IMustHaveCreator>()
+                && propertyInfo.Name == nameof(IMustHaveCreator.CreatorId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IHasModificationTime>()
+                && propertyInfo.Name == nameof(IHasModificationTime.LastModificationTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IModificationAuditedObject>()
+                && propertyInfo.Name == nameof(IModificationAuditedObject.LastModifierId))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<ISoftDelete>()
+                && propertyInfo.Name == nameof(ISoftDelete.IsDeleted))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IHasDeletionTime>()
+                && propertyInfo.Name == nameof(IHasDeletionTime.DeletionTime))
+            {
+                return true;
+            }
+
+            if (entityType.IsAssignableTo<IDeletionAuditedObject>()
+                && propertyInfo.Name == nameof(IDeletionAuditedObject.DeleterId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
         /// <summary>
         /// Updates change time, entity id and foreign keys after SaveChanges is called.
         /// </summary>

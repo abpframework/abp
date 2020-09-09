@@ -1,5 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\configureawait.props" />
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
@@ -27,5 +28,4 @@
     <ProjectReference Include="..\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
     <ProjectReference Include="..\Volo.Abp.VirtualFileSystem\Volo.Abp.VirtualFileSystem.csproj" />
   </ItemGroup>
-
 </Project>

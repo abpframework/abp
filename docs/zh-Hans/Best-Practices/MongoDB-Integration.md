@@ -1,4 +1,4 @@
-﻿## MongoDB 集成
+## MongoDB 集成
 
 * **推荐** 为每个模块定义一个独立的 `MongoDbContext` 接口与实现类.
 
@@ -90,11 +90,11 @@ public static class AbpIdentityMongoDbContextExtensions
 }
 ```
 
-- **推荐** 通过继承 `MongoModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 示例:
+- **推荐** 通过继承 `AbpMongoModelBuilderConfigurationOptions` 来创建 **configuration Options** 类. 示例:
 
 ```c#
 public class IdentityMongoModelBuilderConfigurationOptions
-    : MongoModelBuilderConfigurationOptions
+    : AbpMongoModelBuilderConfigurationOptions
 {
     public IdentityMongoModelBuilderConfigurationOptions()
         : base(AbpIdentityConsts.DefaultDbTablePrefix)

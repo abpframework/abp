@@ -8,6 +8,7 @@ using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
 using Volo.Blogging.Comments;
 using Volo.Blogging.Comments.Dtos;
+using Volo.Blogging.Pages.Blogs.Shared.Helpers;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
@@ -46,12 +47,19 @@ namespace Volo.Blogging.Pages.Blog.Posts
             _commentAppService = commentAppService;
         }
 
-        public async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
+            if (BlogNameControlHelper.IsProhibitedFileFormatName(BlogShortName))
+            {
+                return NotFound();
+            }
+
             await GetData();
+
+            return Page();
         }
 
-        public async Task OnPostAsync()
+        public virtual async Task<IActionResult> OnPostAsync()
         {
             var comment = await _commentAppService.CreateAsync(new CreateCommentDto()
             {
@@ -63,6 +71,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
             FocusCommentId = comment.Id;
 
             await GetData();
+
+            return Page();
         }
 
         private async Task GetData()

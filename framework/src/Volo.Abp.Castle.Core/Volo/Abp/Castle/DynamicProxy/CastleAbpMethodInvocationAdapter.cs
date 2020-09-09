@@ -20,7 +20,7 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         public override async Task ProceedAsync()
         {
-            await Proceed(Invocation, ProceedInfo).ConfigureAwait(false);
+            await Proceed(Invocation, ProceedInfo);
         }
     }
 }

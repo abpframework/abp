@@ -20,8 +20,8 @@ namespace Volo.Abp.AspNetCore.Uow
         {
             using (var uow = _unitOfWorkManager.Reserve(UnitOfWorkReservationName))
             {
-                await next(context).ConfigureAwait(false);
-                await uow.CompleteAsync(context.RequestAborted).ConfigureAwait(false);
+                await next(context);
+                await uow.CompleteAsync(context.RequestAborted);
             }
         }
     }

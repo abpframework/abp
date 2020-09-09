@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         {
             if (!ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
             {
-                await next().ConfigureAwait(false);
+                await next();
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
                 try
                 {
-                    var result = await next().ConfigureAwait(false);
+                    var result = await next();
 
                     if (result.Exception != null && !result.ExceptionHandled)
                     {
@@ -80,12 +80,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             }
 
             if (!_auditingHelper.ShouldSaveAudit(context.ActionDescriptor.GetMethodInfo(), true))
-            {
-                return false;
-            }
-
-            //TODO: This is partially duplication of AuditHelper.ShouldSaveAudit method. Check why it does not work for controllers
-            if (!AuditingInterceptorRegistrar.ShouldAuditTypeByDefault(context.Controller.GetType()))
             {
                 return false;
             }

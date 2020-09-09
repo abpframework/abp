@@ -24,19 +24,19 @@ namespace Volo.Abp.Identity
         public async Task Roles_Should_Have_Configured_Permissions()
         {
             //admin
-            var grantInfos = await _permissionManager.GetAllForRoleAsync("admin").ConfigureAwait(false);
+            var grantInfos = await _permissionManager.GetAllForRoleAsync("admin");
             RoleShouldHavePermission(grantInfos, "admin", TestPermissionNames.MyPermission1);
             RoleShouldHavePermission(grantInfos, "admin", TestPermissionNames.MyPermission2);
             RoleShouldHavePermission(grantInfos, "admin", TestPermissionNames.MyPermission2_ChildPermission1);
 
             //moderator
-            grantInfos = await _permissionManager.GetAllForRoleAsync("moderator").ConfigureAwait(false);
+            grantInfos = await _permissionManager.GetAllForRoleAsync("moderator");
             RoleShouldHavePermission(grantInfos, "moderator", TestPermissionNames.MyPermission1);
             RoleShouldHavePermission(grantInfos, "moderator", TestPermissionNames.MyPermission2);
             ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2_ChildPermission1);
 
             //supporter
-            grantInfos = await _permissionManager.GetAllForRoleAsync("supporter").ConfigureAwait(false);
+            grantInfos = await _permissionManager.GetAllForRoleAsync("supporter");
             RoleShouldHavePermission(grantInfos, "supporter", TestPermissionNames.MyPermission1);
             ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2);
             ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2_ChildPermission1);
@@ -45,21 +45,21 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task Should_Grant_Permission_To_Role()
         {
-            (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2).ConfigureAwait(false)).IsGranted.ShouldBeFalse();
-            (await _permissionStore.IsGrantedAsync(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "supporter").ConfigureAwait(false)).ShouldBeFalse();
+            (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2)).IsGranted.ShouldBeFalse();
+            (await _permissionStore.IsGrantedAsync(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "supporter")).ShouldBeFalse();
 
-            await _permissionManager.SetForRoleAsync("supporter", TestPermissionNames.MyPermission2, true).ConfigureAwait(false);
+            await _permissionManager.SetForRoleAsync("supporter", TestPermissionNames.MyPermission2, true);
 
-            (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2).ConfigureAwait(false)).IsGranted.ShouldBeTrue();
-            (await _permissionStore.IsGrantedAsync(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "supporter").ConfigureAwait(false)).ShouldBeTrue();
+            (await _permissionManager.GetForRoleAsync("supporter", TestPermissionNames.MyPermission2)).IsGranted.ShouldBeTrue();
+            (await _permissionStore.IsGrantedAsync(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "supporter")).ShouldBeTrue();
         }
 
         [Fact]
         public async Task Should_Revoke_Permission_From_Role()
         {
-            (await _permissionManager.GetForRoleAsync("moderator", TestPermissionNames.MyPermission1).ConfigureAwait(false)).IsGranted.ShouldBeTrue();
-            await _permissionManager.SetForRoleAsync("moderator", TestPermissionNames.MyPermission1, false).ConfigureAwait(false);
-            (await _permissionManager.GetForRoleAsync("moderator", TestPermissionNames.MyPermission1).ConfigureAwait(false)).IsGranted.ShouldBeFalse();
+            (await _permissionManager.GetForRoleAsync("moderator", TestPermissionNames.MyPermission1)).IsGranted.ShouldBeTrue();
+            await _permissionManager.SetForRoleAsync("moderator", TestPermissionNames.MyPermission1, false);
+            (await _permissionManager.GetForRoleAsync("moderator", TestPermissionNames.MyPermission1)).IsGranted.ShouldBeFalse();
         }
 
         [Fact]
@@ -67,21 +67,21 @@ namespace Volo.Abp.Identity
         {
             //administrator
             var user = GetUser("administrator");
-            var grantInfos = await _permissionManager.GetAllForUserAsync(user.Id).ConfigureAwait(false);
+            var grantInfos = await _permissionManager.GetAllForUserAsync(user.Id);
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission1, "admin");
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission2, "admin");
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission2_ChildPermission1, "admin");
 
             //john.nash
             user = GetUser("john.nash");
-            grantInfos = await _permissionManager.GetAllForUserAsync(user.Id).ConfigureAwait(false);
+            grantInfos = await _permissionManager.GetAllForUserAsync(user.Id);
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission1, "moderator", "supporter");
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission2, "moderator");
             ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2_ChildPermission1);
 
             //john.nash
             user = GetUser("david");
-            grantInfos = await _permissionManager.GetAllForUserAsync(user.Id).ConfigureAwait(false);
+            grantInfos = await _permissionManager.GetAllForUserAsync(user.Id);
             UserShouldHavePermission(grantInfos, user.Id, TestPermissionNames.MyPermission1);
             ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2);
             ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2_ChildPermission1);

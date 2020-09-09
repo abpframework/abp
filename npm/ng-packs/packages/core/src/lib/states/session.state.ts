@@ -1,30 +1,30 @@
+import { Injectable } from '@angular/core';
 import {
   Action,
+  Actions,
+  ofActionSuccessful,
   Selector,
   State,
   StateContext,
   Store,
-  NgxsOnInit,
-  Actions,
-  ofActionSuccessful,
 } from '@ngxs/store';
-import { from, fromEvent } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { fromEvent } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { GetAppConfiguration } from '../actions/config.actions';
 import {
-  SetLanguage,
-  SetTenant,
   ModifyOpenedTabCount,
+  SetLanguage,
   SetRemember,
+  SetTenant,
 } from '../actions/session.actions';
 import { ABP, Session } from '../models';
-import { LocalizationService } from '../services/localization.service';
-import { OAuthService } from 'angular-oauth2-oidc';
 
 @State<Session.State>({
   name: 'SessionState',
   defaults: { sessionDetail: { openedTabCount: 0 } } as Session.State,
 })
+@Injectable()
 export class SessionState {
   @Selector()
   static getLanguage({ language }: Session.State): string {
@@ -41,17 +41,12 @@ export class SessionState {
     return sessionDetail;
   }
 
-  constructor(
-    private localizationService: LocalizationService,
-    private oAuthService: OAuthService,
-    private store: Store,
-    private actions: Actions,
-  ) {
+  constructor(private oAuthService: OAuthService, private store: Store, private actions: Actions) {
     actions
       .pipe(ofActionSuccessful(GetAppConfiguration))
       .pipe(take(1))
       .subscribe(() => {
-        const { sessionDetail } = this.store.selectSnapshot(SessionState) || { sessionDetail: {} };
+        const sessionDetail = this.store.selectSnapshot(SessionState)?.sessionDetail || {};
 
         const fiveMinutesBefore = new Date().valueOf() - 5 * 60 * 1000;
 
@@ -74,14 +69,15 @@ export class SessionState {
   }
 
   @Action(SetLanguage)
-  setLanguage({ patchState, dispatch }: StateContext<Session.State>, { payload }: SetLanguage) {
+  setLanguage(
+    { patchState, dispatch }: StateContext<Session.State>,
+    { payload, dispatchAppConfiguration = true }: SetLanguage,
+  ) {
     patchState({
       language: payload,
     });
 
-    return dispatch(new GetAppConfiguration()).pipe(
-      switchMap(() => from(this.localizationService.registerLocale(payload))),
-    );
+    if (dispatchAppConfiguration) return dispatch(new GetAppConfiguration());
   }
 
   @Action(SetTenant)

@@ -11,6 +11,8 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
     {
         public MyProjectNameMigrationsDbContext CreateDbContext(string[] args)
         {
+            MyProjectNameEfCoreEntityExtensionMappings.Configure();
+
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<MyProjectNameMigrationsDbContext>()
@@ -22,7 +24,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         private static IConfigurationRoot BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../MyCompanyName.MyProjectName.DbMigrator/"))
                 .AddJsonFile("appsettings.json", optional: false);
 
             return builder.Build();

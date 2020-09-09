@@ -25,17 +25,17 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
         }
 
-        public Tenant FindByName(string name, bool includeDetails = true)
+        public virtual Tenant FindByName(string name, bool includeDetails = true)
         {
             return DbSet
                 .IncludeDetails(includeDetails)
                 .FirstOrDefault(t => t.Name == name);
         }
 
-        public Tenant FindById(Guid id, bool includeDetails = true)
+        public virtual Tenant FindById(Guid id, bool includeDetails = true)
         {
             return DbSet
                 .IncludeDetails(includeDetails)
@@ -59,10 +59,10 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 )
                 .OrderBy(sorting ?? nameof(Tenant.Name))
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
             return await this
                 .WhereIf(

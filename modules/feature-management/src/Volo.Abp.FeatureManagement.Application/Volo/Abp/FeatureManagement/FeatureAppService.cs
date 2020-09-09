@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
 
 namespace Volo.Abp.FeatureManagement
@@ -16,58 +13,74 @@ namespace Volo.Abp.FeatureManagement
     public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppService
     {
         protected FeatureManagementOptions Options { get; }
-
-        private readonly IFeatureManager _featureManager;
-        private readonly IFeatureDefinitionManager _featureDefinitionManager;
-        private readonly IStringLocalizerFactory _stringLocalizerFactory;
+        protected IFeatureManager FeatureManager { get; }
+        protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
 
         public FeatureAppService(IFeatureManager featureManager,
             IFeatureDefinitionManager featureDefinitionManager,
-            IStringLocalizerFactory stringLocalizerFactory,
             IOptions<FeatureManagementOptions> options)
         {
-            _featureManager = featureManager;
-            _featureDefinitionManager = featureDefinitionManager;
-            _stringLocalizerFactory = stringLocalizerFactory;
+            FeatureManager = featureManager;
+            FeatureDefinitionManager = featureDefinitionManager;
             Options = options.Value;
         }
 
-        public virtual async Task<FeatureListDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
+        public virtual async Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
         {
-            await CheckProviderPolicy(providerName).ConfigureAwait(false);
+            await CheckProviderPolicy(providerName);
 
-            var featureDefinitions = _featureDefinitionManager.GetAll();
-            var features = new List<FeatureDto>();
-
-            foreach (var featureDefinition in featureDefinitions)
+            var result = new GetFeatureListResultDto
             {
-                features.Add(new FeatureDto
+                Groups = new List<FeatureGroupDto>()
+            };
+
+            foreach (var group in FeatureDefinitionManager.GetGroups())
+            {
+                var groupDto = new FeatureGroupDto
                 {
-                    Name = featureDefinition.Name,
-                    DisplayName = featureDefinition.DisplayName?.Localize(_stringLocalizerFactory),
-                    ValueType = featureDefinition.ValueType,
-                    Description = featureDefinition.Description?.Localize(_stringLocalizerFactory),
-                    ParentName = featureDefinition.Parent?.Name,
-                    Value = await _featureManager.GetOrNullAsync(featureDefinition.Name, providerName, providerKey).ConfigureAwait(false)
-                });
+                    Name = group.Name,
+                    DisplayName = group.DisplayName.Localize(StringLocalizerFactory),
+                    Features = new List<FeatureDto>()
+                };
+
+                foreach (var featureDefinition in group.GetFeaturesWithChildren())
+                {
+                    var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, providerName, providerKey);
+                    groupDto.Features.Add(new FeatureDto
+                    {
+                        Name = featureDefinition.Name,
+                        DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
+                        ValueType = featureDefinition.ValueType,
+                        Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
+                        ParentName = featureDefinition.Parent?.Name,
+                        Value = feature.Value,
+                        Provider = new FeatureProviderDto
+                        {
+                            Name = feature.Provider?.Name,
+                            Key = feature.Provider?.Key
+                        }
+                    });
+                }
+
+                SetFeatureDepth(groupDto.Features, providerName, providerKey);
+
+                result.Groups.Add(groupDto);
             }
 
-            SetFeatureDepth(features, providerName, providerKey);
-
-            return new FeatureListDto { Features = features };
+            return result;
         }
 
         public virtual async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateFeaturesDto input)
         {
-            await CheckProviderPolicy(providerName).ConfigureAwait(false);
+            await CheckProviderPolicy(providerName);
 
             foreach (var feature in input.Features)
             {
-                await _featureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey).ConfigureAwait(false);
+                await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
             }
         }
 
-        private void SetFeatureDepth(List<FeatureDto> features, string providerName, string providerKey,
+        protected virtual void SetFeatureDepth(List<FeatureDto> features, string providerName, string providerKey,
             FeatureDto parentFeature = null, int depth = 0)
         {
             foreach (var feature in features)
@@ -88,7 +101,7 @@ namespace Volo.Abp.FeatureManagement
                 throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(FeatureManagementOptions)} to map the policy.");
             }
 
-            await AuthorizationService.CheckAsync(policyName).ConfigureAwait(false);
+            await AuthorizationService.CheckAsync(policyName);
         }
     }
 }

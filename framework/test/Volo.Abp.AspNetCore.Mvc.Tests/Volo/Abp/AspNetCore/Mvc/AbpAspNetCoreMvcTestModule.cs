@@ -1,16 +1,23 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Authorization;
+using Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
+using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
+using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
+using Volo.Abp.Threading;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -24,6 +31,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         )]
     public class AbpAspNetCoreMvcTestModule : AbpModule
     {
+        private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -37,6 +46,13 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            OneTimeRunner.Run(() =>
+            {
+                GlobalFeatureManager.Instance.Modules.GetOrAdd(AbpAspNetCoreMvcTestFeatures.ModuleName,
+                    () => new AbpAspNetCoreMvcTestFeatures(GlobalFeatureManager.Instance))
+                    .EnableAll();
+            });
+
             context.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("MyClaimTestPolicy", policy =>
@@ -73,6 +89,17 @@ namespace Volo.Abp.AspNetCore.Mvc
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
+
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.RootDirectory = "/Volo/Abp/AspNetCore/Mvc";
+            });
+
+            Configure<AbpClaimsMapOptions>(options =>
+            {
+                options.Maps.Add("SerialNumber", () => ClaimTypes.SerialNumber);
+                options.Maps.Add("DateOfBirth", () => ClaimTypes.DateOfBirth);
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -84,10 +111,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
+            app.UseAbpClaimsMap();
             app.UseAuthorization();
             app.UseAuditing();
             app.UseUnitOfWork();
-            app.UseMvcWithDefaultRouteAndArea();
+            app.UseConfiguredEndpoints();
         }
     }
 }

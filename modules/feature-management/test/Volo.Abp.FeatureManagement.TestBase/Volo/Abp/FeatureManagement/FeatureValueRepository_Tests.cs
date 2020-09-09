@@ -25,7 +25,7 @@ namespace Volo.Abp.FeatureManagement
                 TestFeatureDefinitionProvider.ProjectCount,
                 EditionFeatureValueProvider.ProviderName,
                 TestEditionIds.Enterprise.ToString()
-            ).ConfigureAwait(false);
+            );
 
             featureValue.ShouldNotBeNull();
             featureValue.Value.ShouldBe("3");
@@ -35,9 +35,21 @@ namespace Volo.Abp.FeatureManagement
                 TestFeatureDefinitionProvider.ProjectCount,
                 EditionFeatureValueProvider.ProviderName,
                 "undefined-edition-id"
-            ).ConfigureAwait(false);
+            );
 
             featureValue.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task FindAAllsync()
+        {
+            var featureValues = await Repository.FindAllAsync(
+                TestFeatureDefinitionProvider.ProjectCount,
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString()
+            );
+
+            featureValues.Count.ShouldBe(1);
         }
 
         [Fact]
@@ -46,7 +58,7 @@ namespace Volo.Abp.FeatureManagement
             var featureValues = await Repository.GetListAsync(
                 EditionFeatureValueProvider.ProviderName,
                 TestEditionIds.Enterprise.ToString()
-            ).ConfigureAwait(false);
+            );
 
             featureValues.Count.ShouldBeGreaterThan(0);
 

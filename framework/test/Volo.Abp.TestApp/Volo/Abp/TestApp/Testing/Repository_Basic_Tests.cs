@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Volo.Abp.TestApp.Testing
 {
-    public abstract class Repository_Basic_Tests<TStartupModule> : TestAppTestBase<TStartupModule> 
+    public abstract class Repository_Basic_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected readonly IRepository<Person, Guid> PersonRepository;
@@ -23,7 +23,36 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task GetAsync()
         {
-            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            person.Name.ShouldBe("Douglas");
+            person.Phones.Count.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task GetListAsync()
+        {
+            var persons = await PersonRepository.GetListAsync();
+            persons.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetPagedListAsync()
+        {
+            var persons = await PersonRepository.GetPagedListAsync(0, 10, "name");
+            persons.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetPagedListAsync_Should_Return_Empty()
+        {
+            var persons = await PersonRepository.GetPagedListAsync(1, 10, "name");
+            persons.Count.ShouldBe(0);
+        }
+
+        [Fact]
+        public async Task GetAsync_With_Predicate()
+        {
+            var person = await PersonRepository.GetAsync(p => p.Name == "Douglas");
             person.Name.ShouldBe("Douglas");
             person.Phones.Count.ShouldBe(2);
         }
@@ -31,29 +60,37 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity()
         {
-            var person = await PersonRepository.FindAsync(Guid.NewGuid()).ConfigureAwait(false);
+            var person = await PersonRepository.FindAsync(Guid.NewGuid());
+            person.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity_With_Predicate()
+        {
+            var randomName = Guid.NewGuid().ToString();
+            var person = await PersonRepository.FindAsync(p => p.Name == randomName);
             person.ShouldBeNull();
         }
 
         [Fact]
         public async Task DeleteAsync()
         {
-            await PersonRepository.DeleteAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
+            await PersonRepository.DeleteAsync(TestDataBuilder.UserDouglasId);
 
-            (await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false)).ShouldBeNull();
+            (await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId)).ShouldBeNull();
         }
 
         [Fact]
         public async Task Should_Access_To_Other_Collections_In_Same_Context_In_A_Custom_Method()
         {
-            var people = await CityRepository.GetPeopleInTheCityAsync("London").ConfigureAwait(false);
+            var people = await CityRepository.GetPeopleInTheCityAsync("London");
             people.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task Custom_Repository_Method()
         {
-            var city = await CityRepository.FindByNameAsync("Istanbul").ConfigureAwait(false);
+            var city = await CityRepository.FindByNameAsync("Istanbul");
             city.ShouldNotBeNull();
             city.Name.ShouldBe("Istanbul");
         }
@@ -63,10 +100,20 @@ namespace Volo.Abp.TestApp.Testing
         {
             var personId = Guid.NewGuid();
 
-            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
+            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42));
 
-            var person = await PersonRepository.FindAsync(personId).ConfigureAwait(false);
+            var person = await PersonRepository.FindAsync(personId);
             person.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task Insert_Should_Set_Guid_Id()
+        {
+            var person = new Person(Guid.Empty, "New Person", 35);
+
+            await PersonRepository.InsertAsync(person);
+
+            person.Id.ShouldNotBe(Guid.Empty);
         }
     }
 }

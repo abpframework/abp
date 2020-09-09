@@ -7,6 +7,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
@@ -15,12 +16,14 @@ namespace Volo.Abp.Cli.Commands
 {
     public class GetSourceCommand : IConsoleCommand, ITransientDependency
     {
+        private readonly SourceCodeDownloadService _sourceCodeDownloadService;
         public ModuleProjectBuilder ModuleProjectBuilder { get; }
 
         public ILogger<NewCommand> Logger { get; set; }
 
-        public GetSourceCommand(ModuleProjectBuilder moduleProjectBuilder)
+        public GetSourceCommand(ModuleProjectBuilder moduleProjectBuilder, SourceCodeDownloadService sourceCodeDownloadService)
         {
+            _sourceCodeDownloadService = sourceCodeDownloadService;
             ModuleProjectBuilder = moduleProjectBuilder;
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -36,14 +39,35 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            Logger.LogInformation("Downloading source code of " + commandLineArgs.Target);
-
             var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
             if (version != null)
             {
                 Logger.LogInformation("Version: " + version);
             }
 
+            var outputFolder = GetOutPutFolder(commandLineArgs);
+            Logger.LogInformation("Output folder: " + outputFolder);
+
+            var gitHubAbpLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubAbpLocalRepositoryPath.Long);
+            if (gitHubAbpLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Abp Local Repository Path: " + gitHubAbpLocalRepositoryPath);
+            }
+
+            var gitHubVoloLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubVoloLocalRepositoryPath.Long);
+            if (gitHubVoloLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Volo Local Repository Path: " + gitHubVoloLocalRepositoryPath);
+            }
+
+            commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+
+            await _sourceCodeDownloadService.DownloadAsync(
+                commandLineArgs.Target, outputFolder, version, gitHubAbpLocalRepositoryPath, gitHubVoloLocalRepositoryPath, commandLineArgs.Options);
+        }
+
+        private static string GetOutPutFolder(CommandLineArgs commandLineArgs)
+        {
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
             if (outputFolder != null)
             {
@@ -59,62 +83,7 @@ namespace Volo.Abp.Cli.Commands
                 outputFolder = Directory.GetCurrentDirectory();
             }
 
-            Logger.LogInformation("Output folder: " + outputFolder);
-
-            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
-            if (gitHubLocalRepositoryPath != null)
-            {
-                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
-            }
-
-            commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
-
-            var result = await ModuleProjectBuilder.BuildAsync(
-                new ProjectBuildArgs(
-                    SolutionName.Parse(commandLineArgs.Target),
-                    commandLineArgs.Target,
-                    version,
-                    DatabaseProvider.NotSpecified,
-                    UiFramework.NotSpecified,
-                    gitHubLocalRepositoryPath,
-                    commandLineArgs.Options
-                )
-            ).ConfigureAwait(false);
-
-            using (var templateFileStream = new MemoryStream(result.ZipContent))
-            {
-                using (var zipInputStream = new ZipInputStream(templateFileStream))
-                {
-                    var zipEntry = zipInputStream.GetNextEntry();
-                    while (zipEntry != null)
-                    {
-                        var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
-                        var directoryName = Path.GetDirectoryName(fullZipToPath);
-
-                        if (!string.IsNullOrEmpty(directoryName))
-                        {
-                            Directory.CreateDirectory(directoryName);
-                        }
-
-                        var fileName = Path.GetFileName(fullZipToPath);
-                        if (fileName.Length == 0)
-                        {
-                            zipEntry = zipInputStream.GetNextEntry();
-                            continue;
-                        }
-
-                        var buffer = new byte[4096]; // 4K is optimum
-                        using (var streamWriter = File.Create(fullZipToPath))
-                        {
-                            StreamUtils.Copy(zipInputStream, streamWriter, buffer);
-                        }
-
-                        zipEntry = zipInputStream.GetNextEntry();
-                    }
-                }
-            }
-
-            Logger.LogInformation($"'{commandLineArgs.Target}' has been successfully downloaded to '{outputFolder}'");
+            return outputFolder;
         }
 
         public string GetUsageInfo()
@@ -130,6 +99,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
+            sb.AppendLine("--preview                                   (Use latest pre-release version if there is at least one pre-release after latest stable version)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
@@ -154,15 +124,25 @@ namespace Volo.Abp.Cli.Commands
                 public const string Long = "output-folder";
             }
 
-            public static class GitHubLocalRepositoryPath
+            public static class GitHubAbpLocalRepositoryPath
             {
                 public const string Long = "abp-path";
+            }
+
+            public static class GitHubVoloLocalRepositoryPath
+            {
+                public const string Long = "volo-path";
             }
 
             public static class Version
             {
                 public const string Short = "v";
                 public const string Long = "version";
+            }
+
+            public static class Preview
+            {
+                public const string Long = "preview";
             }
         }
     }

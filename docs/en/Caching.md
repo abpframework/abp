@@ -2,6 +2,32 @@
 
 ABP framework extends ASP.NET Core's distributed caching system.
 
+## Volo.Abp.Caching Package
+
+> This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
+
+Volo.Abp.Caching is the core package of the caching system. Install it to your project using the package manager console (PMC):
+
+```
+Install-Package Volo.Abp.Caching
+```
+
+Then you can add **AbpCachingModule** dependency to your module:
+
+```c#
+using Volo.Abp.Modularity;
+using Volo.Abp.Caching;
+
+namespace MyCompany.MyProject
+{
+    [DependsOn(typeof(AbpCachingModule))]
+    public class MyModule : AbpModule
+    {
+        //...
+    }
+}
+```
+
 ## `IDistributedCache` Interface
 
 ASP.NET Core defines the `IDistributedCache` interface to get/set cache values. But it has some difficulties:

@@ -27,7 +27,7 @@ namespace Volo.Abp.TestApp.Testing
             {
                 PersonRepository.Any().ShouldBeTrue();
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace Volo.Abp.TestApp.Testing
                 var person = PersonRepository.Single(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Volo.Abp.TestApp.Testing
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Volo.Abp.TestApp.Testing
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
     }
 }

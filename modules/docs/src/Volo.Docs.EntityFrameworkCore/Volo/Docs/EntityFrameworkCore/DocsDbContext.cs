@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Docs.Documents;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.EntityFrameworkCore
@@ -9,6 +10,10 @@ namespace Volo.Docs.EntityFrameworkCore
     public class DocsDbContext: AbpDbContext<DocsDbContext>, IDocsDbContext
     {
         public DbSet<Project> Projects { get; set; }
+
+        public DbSet<Document> Documents { get; set; }
+
+        public DbSet<DocumentContributor> DocumentContributors { get; set; }
 
         public DocsDbContext(DbContextOptions<DocsDbContext> options) 
             : base(options)

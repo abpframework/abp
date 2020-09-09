@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "未找到资源!",
     "DefaultErrorMessage404Detail": "未在服务中找到请求的资源!",
     "EntityNotFoundErrorMessage": "实体 {0} 不存在,id = {1}!",
+    "Languages": "语言",
     "Error": "错误",
     "AreYouSure": "你确定吗?",
     "Cancel": "取消",
@@ -39,10 +40,11 @@
     "PagerFirst": "首页",
     "PagerLast": "尾页",
     "PagerInfo": "显示 _TOTAL_ 个条目中的 _START_ 到 _END_ 个.",
+    "PagerInfo{0}{1}{2}": "显示 {2} 个条目中的 {0} 到 {1} 个.",
     "PagerInfoEmpty": "显示0个条目中的0到0",
     "PagerInfoFiltered": "(从 _MAX_ 总条目中过滤掉)",
     "NoDataAvailableInDatatable": "表中没有数据",
-    "PagerShowMenuEntries": "显示 _MENU_ 实体",
+    "PagerShowMenuEntries": "显示 _MENU_ 条数据",
     "DatatableActionDropdownDefaultText": "操作",
     "ChangePassword": "修改密码",
     "PersonalInfo": "个人信息",
@@ -53,6 +55,7 @@
     "404Message": "网页未找到",
     "500Message": "内部服务器错误",
     "GoHomePage": "返回主页",
-    "GoBack": "返回"
+    "GoBack": "返回",
+    "Search" : "搜索"
   }
 }

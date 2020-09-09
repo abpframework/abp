@@ -84,6 +84,16 @@ namespace System
         }
 
         [Fact]
+        public void ToSnakeCase_Test()
+        {
+            (null as string).ToSnakeCase().ShouldBe(null);
+            "helloMoon".ToSnakeCase().ShouldBe("hello_moon");
+            "HelloWorld".ToSnakeCase().ShouldBe("hello_world");
+            "HelloIsparta".ToSnakeCase().ShouldBe("hello_isparta");
+            "ThisIsSampleText".ToSnakeCase().ShouldBe("this_is_sample_text");
+        }
+
+        [Fact]
         public void ToSentenceCase_Test()
         {
             (null as string).ToSentenceCase().ShouldBe(null);

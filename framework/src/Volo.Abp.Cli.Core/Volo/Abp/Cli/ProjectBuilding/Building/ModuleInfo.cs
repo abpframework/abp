@@ -7,5 +7,19 @@
         public string Namespace { get; set; }
 
         public string DocumentUrl { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public string ShortDescription { get; set; }
+
+        public bool IsPro { get; set; }
+
+        public bool EfCoreSupport { get; set; }
+
+        public bool MongoDBSupport { get; set; }
+
+        public bool AngularUi { get; set; }
+
+        public bool MvcUi { get; set; }
     }
 }

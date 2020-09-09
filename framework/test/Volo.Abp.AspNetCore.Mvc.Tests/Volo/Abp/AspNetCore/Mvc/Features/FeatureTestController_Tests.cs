@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
         {
             await GetResponseAsStringAsync(
                 "/api/feature-test/allowed-feature", HttpStatusCode.NoContent
-            ).ConfigureAwait(false);
+            );
         }
 
         [Fact]
@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
             await GetResponseAsStringAsync(
                 "/api/feature-test/not-allowed-feature",
                 HttpStatusCode.Unauthorized
-            ).ConfigureAwait(false);
+            );
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Features
         {
             await GetResponseAsStringAsync(
                 "/api/feature-test/no-feature"
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

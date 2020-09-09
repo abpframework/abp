@@ -13,6 +13,10 @@ export default `
   text-align: right;
 }
 
+[dir=rtl] .data-tables-filter {
+  text-align: left;
+}
+
 .pointer {
   cursor: pointer;
 }
@@ -132,6 +136,9 @@ export default `
 .sorting_asc:after {
   opacity: .3;
 }
+.ngx-datatable.material {
+  box-shadow: none;
+}
 
 @keyframes fadeInTop {
   from {
@@ -155,3 +162,5 @@ export default `
 /* </animations */
 
 `;
+
+export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';

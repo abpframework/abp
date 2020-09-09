@@ -18,26 +18,25 @@ namespace Volo.Abp.IdentityServer.Grants
 
         }
 
-        public async Task<PersistedGrant> FindByKeyAsync(
+        public virtual async Task<PersistedGrant> FindByKeyAsync(
             string key,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                ;
         }
 
-        public async Task<List<PersistedGrant>> GetListBySubjectIdAsync(
+        public virtual async Task<List<PersistedGrant>> GetListBySubjectIdAsync(
             string subjectId,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .Where(x => x.SubjectId == subjectId)
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<List<PersistedGrant>> GetListByExpirationAsync(
+        public virtual async Task<List<PersistedGrant>> GetListByExpirationAsync(
             DateTime maxExpirationDate, 
             int maxResultCount,
             CancellationToken cancellationToken = default)
@@ -46,11 +45,10 @@ namespace Volo.Abp.IdentityServer.Grants
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task DeleteAsync(
+        public virtual async Task DeleteAsync(
             string subjectId, 
             string clientId,
             CancellationToken cancellationToken = default)
@@ -58,10 +56,10 @@ namespace Volo.Abp.IdentityServer.Grants
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            ).ConfigureAwait(false);
+            );
         }
 
-        public async Task DeleteAsync(
+        public virtual async Task DeleteAsync(
             string subjectId, 
             string clientId, 
             string type,
@@ -70,7 +68,7 @@ namespace Volo.Abp.IdentityServer.Grants
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId && x.Type == type,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

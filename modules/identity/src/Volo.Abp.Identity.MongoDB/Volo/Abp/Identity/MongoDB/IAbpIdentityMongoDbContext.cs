@@ -12,5 +12,9 @@ namespace Volo.Abp.Identity.MongoDB
         IMongoCollection<IdentityRole> Roles { get; }
 
         IMongoCollection<IdentityClaimType> ClaimTypes { get; }
+
+        IMongoCollection<OrganizationUnit> OrganizationUnits { get; }
+
+        IMongoCollection<IdentitySecurityLog> IdentitySecurityLogs { get; }
     }
 }

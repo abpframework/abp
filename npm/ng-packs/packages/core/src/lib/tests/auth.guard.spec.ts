@@ -10,7 +10,7 @@ describe('AuthGuard', () => {
   let guard: AuthGuard;
   const createService = createServiceFactory({
     service: AuthGuard,
-    mocks: [OAuthService],
+    mocks: [OAuthService, Router],
     imports: [RouterModule.forRoot([{ path: '', component: RouterOutletComponent }])],
     declarations: [RouterOutletComponent],
     providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
@@ -22,14 +22,17 @@ describe('AuthGuard', () => {
   });
 
   it('should return true when user logged in', () => {
-    spectator.get(OAuthService).hasValidAccessToken.andReturn(true);
+    spectator.inject(OAuthService).hasValidAccessToken.andReturn(true);
     expect(guard.canActivate(null, null)).toBe(true);
   });
 
-  it('should return url tree when user not logged in', () => {
-    const router = spectator.get(Router);
-    const expectedUrlTree = router.createUrlTree(['/account/login'], { state: { redirectUrl: '/' } });
-    spectator.get(OAuthService).hasValidAccessToken.andReturn(false);
-    expect(guard.canActivate(null, { url: '/' } as any) as UrlTree).toEqual(expectedUrlTree);
+  it('should return navigate to login page with redirectUrl state', () => {
+    const router = spectator.inject(Router);
+    spectator.inject(OAuthService).hasValidAccessToken.andReturn(false);
+
+    expect(guard.canActivate(null, { url: '/' } as any)).toBe(true);
+    expect(router.navigate).toHaveBeenCalledWith(['/account/login'], {
+      state: { redirectUrl: '/' },
+    });
   });
 });
