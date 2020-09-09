@@ -22,6 +22,7 @@ namespace Volo.Abp.FeatureManagement
 
                 //TODO: Should be moved to the Tenant Management module
                 options.Providers.Add<TenantFeatureManagementProvider>();
+                options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "AbpTenantManagement.Tenants.ManageFeatures";
             });
 
             Configure<AbpExceptionLocalizationOptions>(options =>

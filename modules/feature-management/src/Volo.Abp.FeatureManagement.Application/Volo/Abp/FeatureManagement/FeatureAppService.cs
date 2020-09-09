@@ -105,11 +105,9 @@ namespace Volo.Abp.FeatureManagement
         protected virtual async Task CheckProviderPolicy(string providerName, string providerKey)
         {
             string policyName;
-            if (providerName == TenantFeatureValueProvider.ProviderName)
+            if (providerName == TenantFeatureValueProvider.ProviderName && CurrentTenant.Id == null && providerKey == null )
             {
-                policyName = CurrentTenant.Id == null && providerKey == null ?
-                    "FeatureManagement.ManageHostFeatures" :
-                    "AbpTenantManagement.Tenants.ManageFeatures";
+                policyName = "FeatureManagement.ManageHostFeatures";
             }
             else
             {
