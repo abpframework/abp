@@ -6,13 +6,13 @@ Explore the navigation menu to deep dive in the documentation.
 
 ## Getting Started
 
-The easiest way to start a new web application with the ABP Framework is to use the [getting started](Getting-Started.md) tutorial.
+The easiest way to start a new web application with the ABP Framework is to use the [getting started](Getting-Started.md) guide.
 
 ## Tutorials / Articles
 
 ### Web Application Development
 
-[Web application development tutorial](Tutorials/Part-1.md) is a complete guide to develop application using the ABP Framework.
+[Web application development tutorial](Tutorials/Part-1.md) is a complete tutorial to develop a full stack application using the ABP Framework.
 
 ### ABP Community Articles
 
