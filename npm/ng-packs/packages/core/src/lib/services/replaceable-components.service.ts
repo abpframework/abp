@@ -43,7 +43,7 @@ export class ReplaceableComponentsService {
   }
 
   add(replaceableComponent: ReplaceableComponents.ReplaceableComponent, reload?: boolean): void {
-    let replaceableComponents = this.store.state;
+    const replaceableComponents = [...this.store.state];
 
     const index = replaceableComponents.findIndex(
       component => component.key === replaceableComponent.key,
@@ -52,7 +52,7 @@ export class ReplaceableComponentsService {
     if (index > -1) {
       replaceableComponents[index] = replaceableComponent;
     } else {
-      replaceableComponents = [...replaceableComponents, replaceableComponent];
+      replaceableComponents.push(replaceableComponent);
     }
 
     this.store.patch(replaceableComponents);
