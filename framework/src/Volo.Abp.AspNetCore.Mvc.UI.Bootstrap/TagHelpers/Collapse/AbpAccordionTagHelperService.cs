@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -30,26 +30,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 
             await output.GetChildContentAsync();
 
-            var content = GetContent(items);
-
-            output.Content.SetHtmlContent(content);
+            ProcessItems(context, output, items);
         }
 
-        protected virtual string GetContent(List<string> items)
+        protected virtual void ProcessItems(TagHelperContext context, TagHelperOutput output, List<string> items)
         {
-            var html = new StringBuilder("");
             foreach (var item in items)
             {
                 var content = item.Replace(AbpAccordionParentIdPlaceholder, HtmlGenerator.Encode(TagHelper.Id));
 
-                html.AppendLine(
-                    "<div class=\"card\">" + Environment.NewLine + 
-                        content
-                    + "</div>" + Environment.NewLine
-                );
-            }
+                var wrapper = new TagBuilder("div");
+                wrapper.AddCssClass("card");
+                wrapper.InnerHtml.AppendHtml(content);
 
-            return html.ToString();
+                output.Content.AppendHtml(wrapper);
+            }
         }
 
         protected virtual List<string> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)

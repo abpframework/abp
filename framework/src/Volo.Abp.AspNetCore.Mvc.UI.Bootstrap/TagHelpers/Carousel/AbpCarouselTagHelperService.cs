@@ -5,7 +5,6 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -32,6 +31,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             await output.GetChildContentAsync();
 
             SetOneItemAsActive(context, output, itemList);
+
+
             SetItems(context, output, itemList);
             SetControls(context, output, itemList);
             SetIndicators(context, output, itemList);
@@ -47,18 +48,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
         protected virtual void SetItems(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)
         {
-            var itemsHtml = new StringBuilder("");
-            itemsHtml.Append("<div class= \"carousel-inner\">");
+            var wrapper = new TagBuilder("div");
+            wrapper.AddCssClass("carousel-inner");
 
             foreach (var carouselItem in itemList)
             {
                 SetActiveIfActive(carouselItem);
 
-                itemsHtml.AppendLine(carouselItem.Html);
+                wrapper.InnerHtml.AppendHtml(carouselItem.Html);
             }
 
-            itemsHtml.Append("</div>");
-            output.Content.SetHtmlContent(itemsHtml.ToString());
+            output.Content.SetHtmlContent(wrapper);
         }
 
         protected virtual void SetControls(TagHelperContext context, TagHelperOutput output, List<CarouselItem> itemList)

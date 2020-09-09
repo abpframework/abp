@@ -33,26 +33,26 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             switch (TagHelper.Buttons) 
             {
                 case AbpModalButtons.Cancel:
-                    output.PostContent.AppendHtml(GetCancelButton());
+                    AddCancelButton(context, output);
                     break;
                 case AbpModalButtons.Close:
-                    output.PostContent.AppendHtml(GetCloseButton());
+                    AddCloseButton(context, output);
                     break;
                 case AbpModalButtons.Save:
-                    output.PostContent.AppendHtml(GetSaveButton());
+                    AddSaveButton(context, output);
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Cancel:
-                    output.PostContent.AppendHtml(GetSaveButton());
-                    output.PostContent.AppendHtml(GetCancelButton());
+                    AddSaveButton(context, output);
+                    AddCancelButton(context, output);
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Close:
-                    output.PostContent.AppendHtml(GetSaveButton());
-                    output.PostContent.AppendHtml(GetCloseButton());
+                    AddSaveButton(context, output);
+                    AddCloseButton(context, output);
                     break;
             }
         }
 
-        protected virtual string GetSaveButton() 
+        protected virtual void AddSaveButton(TagHelperContext context, TagHelperOutput output) 
         {
             var icon = new TagBuilder("i");
             icon.AddCssClass("fa");
@@ -69,10 +69,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             button.InnerHtml.AppendHtml(icon);
             button.InnerHtml.AppendHtml(span);
 
-            return RenderHtml(button);
+            output.PostContent.AppendHtml(button);
         }
 
-        protected virtual string GetCloseButton() 
+        protected virtual void AddCloseButton(TagHelperContext context, TagHelperOutput output) 
         {
             var button = new TagBuilder("button");
             button.Attributes.Add("type", "button");
@@ -81,10 +81,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             button.AddCssClass("btn-secondary");
             button.InnerHtml.Append(_localizer["Close"]);
 
-            return RenderHtml(button);
+            output.PostContent.AppendHtml(button);
         }
 
-        protected virtual string GetCancelButton() 
+        protected virtual void AddCancelButton(TagHelperContext context, TagHelperOutput output) 
         {
             var button = new TagBuilder("button");
             button.Attributes.Add("type", "button");
@@ -93,7 +93,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             button.AddCssClass("btn-secondary");
             button.InnerHtml.Append(_localizer["Cancel"]);
 
-            return RenderHtml(button);
+            output.PostContent.AppendHtml(button);
         }
 
         protected virtual void ProcessButtonsAlignment(TagHelperOutput output)

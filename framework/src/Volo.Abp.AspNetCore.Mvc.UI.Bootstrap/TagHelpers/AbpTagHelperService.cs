@@ -53,7 +53,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
             return Task.CompletedTask;
         }
 
-        protected string RenderHtml(IHtmlContent content)
+        protected virtual string RenderHtml(IHtmlContent content)
         {
             using (var writer = new StringWriter())
             {

@@ -1,38 +1,52 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Text;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
     public class AbpModalHeaderTagHelperService : AbpTagHelperService<AbpModalHeaderTagHelper>
     {
+        protected IStringLocalizer<AbpUiResource> L { get; }
+
+        public AbpModalHeaderTagHelperService(IStringLocalizer<AbpUiResource> localizer)
+        {
+            L = localizer;
+        }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
             output.Attributes.AddClass("modal-header");
-            output.PreContent.SetHtmlContent(CreatePreContent());
-            output.PostContent.SetHtmlContent(CreatePostContent());
+
+            AddTitle(context, output);
+            AddCloseButton(context, output);
         }
 
-        protected virtual string CreatePreContent()
+        protected virtual void AddTitle(TagHelperContext context, TagHelperOutput output)
         {
             var title = new TagBuilder("h5");
             title.AddCssClass("modal-title");
             title.InnerHtml.Append(TagHelper.Title);
 
-            return RenderHtml(title);
+            output.PreContent.SetHtmlContent(title);
         }
 
-        protected virtual string CreatePostContent()
+        protected virtual void AddCloseButton(TagHelperContext context, TagHelperOutput output)
         {
-            var sb = new StringBuilder();
-            
-            sb.AppendLine("    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">");
-            sb.AppendLine("        <span aria-hidden=\"true\">&times;</span>");
-            sb.AppendLine("    </button>");
+            var span = new TagBuilder("span");
+            span.Attributes.Add("aria-hidden", "true");
+            span.InnerHtml.AppendHtml("&times;");
 
-            return sb.ToString();
+            var button = new TagBuilder("button");
+            button.AddCssClass("close");
+            button.Attributes.Add("type", "button");
+            button.Attributes.Add("data-dismiss", "modal");
+            button.Attributes.Add("aria-label", L["Close"].Value);
+            button.InnerHtml.AppendHtml(span);
+
+            output.PostContent.AppendHtml(button);
         }
     }
 }
