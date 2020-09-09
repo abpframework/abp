@@ -123,11 +123,11 @@ namespace Volo.CmsKit
             });
 
             context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = configuration["AuthServer:ApiName"];
+                    options.Audience = configuration["AuthServer:ApiName"];
                 });
 
             Configure<AbpDistributedCacheOptions>(options =>

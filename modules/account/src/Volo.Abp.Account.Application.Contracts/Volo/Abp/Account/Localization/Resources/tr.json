@@ -52,6 +52,8 @@
     "ResetPassword_Information": "Lütfen yeni şifrenizi belirleyin.",
     "YourPasswordIsSuccessfullyReset": "Şifreniz başarıyla sıfırlandı.",
     "GoToTheApplication": "Uygulamaya git",
-    "BackToLogin": "Girişe dön"
+    "BackToLogin": "Girişe dön",
+    "ProfileTab:Password": "Şifre değiştir",
+    "ProfileTab:PersonalInfo": "Kişisel bilgiler"
   }
 }

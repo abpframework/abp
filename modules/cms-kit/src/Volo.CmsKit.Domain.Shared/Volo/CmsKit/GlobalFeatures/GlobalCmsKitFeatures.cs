@@ -11,11 +11,14 @@ namespace Volo.CmsKit.GlobalFeatures
 
         public CommentsFeature Comments => GetFeature<CommentsFeature>();
 
+        public RatingsFeature Ratings => GetFeature<RatingsFeature>();
+
         public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)
             : base(featureManager)
         {
             AddFeature(new ReactionsFeature(this));
             AddFeature(new CommentsFeature(this));
+            AddFeature(new RatingsFeature(this));
         }
     }
 }

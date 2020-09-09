@@ -957,6 +957,43 @@ namespace Volo.CmsKit.Migrations
                     b.ToTable("CmsComments");
                 });
 
+            modelBuilder.Entity("Volo.CmsKit.Ratings.Rating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnName("CreatorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<short>("StarCount")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "EntityType", "EntityId");
+
+                    b.ToTable("CmsRatings");
+                });
+
             modelBuilder.Entity("Volo.CmsKit.Reactions.UserReaction", b =>
                 {
                     b.Property<Guid>("Id")

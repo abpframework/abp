@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Http\Localization\en.json" />
+  </ItemGroup>
+
 </Project>
