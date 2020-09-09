@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             output.PreContent.AppendHtml($"<div class=\"col\"><h4 class=\"card-title my-1\">{Title}</h4></div>");
             output.PreContent.AppendHtml("<div class=\"col-auto\">");
             output.PreContent.AppendHtml("<nav>");
-            output.PreContent.AppendHtml("<div class=\"nav nav-tabs nav-pills\" role=\"tablist\">");
+            output.PreContent.AppendHtml("<div class=\"nav nav-pills\" role=\"tablist\">");
             output.PreContent.AppendHtml($"<a class=\"nav-item nav-link active\" id=\"nav-preview-tab-{previewId}\" data-toggle=\"tab\" href=\"#nav-preview-{previewId}\" role=\"tab\" aria-controls=\"nav-preview-{previewId}\" aria-selected=\"true\">Preview</a>");
             output.PreContent.AppendHtml($"<a class=\"nav-item nav-link\" id=\"nav-code-tab-{codeBlockId}\" data-toggle=\"tab\" href=\"#nav-code-{codeBlockId}\" role=\"tab\" aria-controls=\"nav-code-{codeBlockId}\" aria-selected=\"false\">Code</a>");
             output.PreContent.AppendHtml("</div>");
@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             
             /* CodeBlock tabs */
             
-            output.PostContent.AppendHtml($"<ul class=\"nav nav-tabs mb-3\" id=\"code-block-tab-{codeBlockTabId}\" role=\"tablist\">");
+            output.PostContent.AppendHtml($"<ul class=\"nav nav-tabs\" id=\"code-block-tab-{codeBlockTabId}\" role=\"tablist\">");
             output.PostContent.AppendHtml("<li class=\"nav-item\">");
             output.PostContent.AppendHtml($"<a class=\"nav-link active\" id=\"tag-helper-tab-{tagHelperCodeBlockId}\" data-toggle=\"pill\" href=\"#tag-helper-{tagHelperCodeBlockId}\" role=\"tab\" aria-controls=\"tag-helper-{tagHelperCodeBlockId}\" aria-selected=\"true\">Abp Tag Helper</a>");
             output.PostContent.AppendHtml("</li>");
@@ -77,7 +77,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             output.PostContent.AppendHtml($"<div class=\"tab-content\" id=\"code-block-tabContent-{codeBlockTabId}\">");
             
             output.PostContent.AppendHtml($"<div class=\"tab-pane fade show active\" id=\"tag-helper-{tagHelperCodeBlockId}\" role=\"tabpanel\" aria-labelledby=\"tag-helper-tab-{tagHelperCodeBlockId}\">");
-            output.PostContent.AppendHtml("<pre>");
+            output.PostContent.AppendHtml("<pre class=\"p-4\">");
             output.PostContent.AppendHtml("<code>");
             output.PostContent.Append(GetRawDemoSource());
             output.PostContent.AppendHtml("</code>");
@@ -85,7 +85,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             output.PostContent.AppendHtml("</div>");
             
             output.PostContent.AppendHtml($"<div class=\"tab-pane fade\" id=\"bootstrap-{bootstrapCodeBlockId}\" role=\"tabpanel\" aria-labelledby=\"bootstrap-tab-{bootstrapCodeBlockId}\">");
-            output.PostContent.AppendHtml("<pre>");
+            output.PostContent.AppendHtml("<pre class=\"p-4\">");
             output.PostContent.AppendHtml("<code>");
             output.PostContent.Append(content.GetContent());
             output.PostContent.AppendHtml("</code>");
