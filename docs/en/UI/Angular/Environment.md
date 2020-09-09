@@ -1,6 +1,6 @@
 # Environment
 
-Every application needs some ** environment ** variables. In Angular world, this is usually managed by `environment.ts`, `environment.prod.ts` and so on. It is the same for ABP as well. 
+Every application needs some **environment** variables. In Angular world, this is usually managed by `environment.ts`, `environment.prod.ts` and so on. It is the same for ABP as well. 
 
 Current `Environment` configuration holds sub config classes as follows:
 

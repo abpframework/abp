@@ -72,7 +72,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             }
 
             var errorInfo = new RemoteServiceErrorInfo();
-            
+
             if (exception is IUserFriendlyException)
             {
                 errorInfo.Message = exception.Message;
@@ -100,6 +100,8 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             {
                 errorInfo.Message = L["InternalServerErrorMessage"];
             }
+
+            errorInfo.Data = exception.Data;
 
             return errorInfo;
         }
@@ -190,7 +192,6 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             return exception;
         }
 
-
         protected virtual RemoteServiceErrorInfo CreateDetailedErrorInfoFromException(Exception exception)
         {
             var detailBuilder = new StringBuilder();
@@ -213,7 +214,7 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
             detailBuilder.AppendLine(exception.GetType().Name + ": " + exception.Message);
 
             //Additional info for UserFriendlyException
-            if (exception is IUserFriendlyException && 
+            if (exception is IUserFriendlyException &&
                 exception is IHasErrorDetails)
             {
                 var details = ((IHasErrorDetails) exception).Details;
