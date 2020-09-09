@@ -8,22 +8,22 @@ import { InternalStore } from '../utils/internal-store-utils';
 
 @Injectable({ providedIn: 'root' })
 export class ReplaceableComponentsService {
-  private state: InternalStore<ReplaceableComponents.ReplaceableComponent[]>;
+  private store: InternalStore<ReplaceableComponents.ReplaceableComponent[]>;
 
   get replaceableComponents$(): Observable<ReplaceableComponents.ReplaceableComponent[]> {
-    return this.state.sliceState(state => state);
+    return this.store.sliceState(state => state);
   }
 
   get replaceableComponents(): ReplaceableComponents.ReplaceableComponent[] {
-    return this.state.state;
+    return this.store.state;
   }
 
   get onUpdate$(): Observable<ReplaceableComponents.ReplaceableComponent[]> {
-    return this.state.sliceUpdate(state => state);
+    return this.store.sliceUpdate(state => state);
   }
 
   constructor(private ngZone: NgZone, private router: Router) {
-    this.state = new InternalStore([]);
+    this.store = new InternalStore([]);
   }
 
   // TODO: Create a shared service for route reload and more
@@ -43,7 +43,7 @@ export class ReplaceableComponentsService {
   }
 
   add(replaceableComponent: ReplaceableComponents.ReplaceableComponent, reload?: boolean): void {
-    let replaceableComponents = this.state.state;
+    let replaceableComponents = this.store.state;
 
     const index = replaceableComponents.findIndex(
       component => component.key === replaceableComponent.key,
@@ -55,7 +55,7 @@ export class ReplaceableComponentsService {
       replaceableComponents = [...replaceableComponents, replaceableComponent];
     }
 
-    this.state.patch(replaceableComponents);
+    this.store.patch(replaceableComponents);
 
     if (reload) this.reloadRoute();
   }
