@@ -1,4 +1,4 @@
-﻿namespace Volo.CmsKit.Web.Menus
+﻿namespace Volo.CmsKit.Public.Web.Menus
 {
     public class CmsKitPublicMenus
     {
@@ -6,6 +6,5 @@
 
         //Add your menu items here...
         //public const string Home = Prefix + ".MyNewMenuItem";
-
     }
 }

@@ -144,7 +144,10 @@ namespace MyCompanyName.MyProjectName
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+
+            app.UseAbpRequestLocalization();
+
+            if (!env.IsDevelopment())
             {
                 app.UseErrorPage();
             }
@@ -160,7 +163,6 @@ namespace MyCompanyName.MyProjectName
                 app.UseMultiTenancy();
             }
 
-            app.UseAbpRequestLocalization();
             app.UseIdentityServer();
             app.UseAuthorization();
             app.UseAuditing();

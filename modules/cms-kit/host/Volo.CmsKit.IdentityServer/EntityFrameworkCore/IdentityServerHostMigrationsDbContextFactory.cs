@@ -9,6 +9,8 @@ namespace Volo.CmsKit.EntityFrameworkCore
     {
         public IdentityServerHostMigrationsDbContext CreateDbContext(string[] args)
         {
+            FeatureConfigurer.Configure();
+
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<IdentityServerHostMigrationsDbContext>()

@@ -1,4 +1,4 @@
-import { ConfigState, SubscriptionService } from '@abp/ng.core';
+import { ConfigState, SubscriptionService, MultiTenancyService } from '@abp/ng.core';
 import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -26,7 +26,11 @@ export class AuthWrapperComponent
 
   tenantBoxKey = eAccountComponents.TenantBox;
 
-  constructor(private store: Store, private subscription: SubscriptionService) {}
+  constructor(
+    public readonly multiTenancy: MultiTenancyService,
+    private store: Store,
+    private subscription: SubscriptionService,
+  ) {}
 
   ngOnInit() {
     this.subscription.addOne(

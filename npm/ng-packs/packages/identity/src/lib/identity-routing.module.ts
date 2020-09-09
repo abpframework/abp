@@ -2,12 +2,11 @@ import {
   AuthGuard,
   DynamicLayoutComponent,
   PermissionGuard,
-  CoreModule,
-  ReplaceableRouteContainerComponent,
   ReplaceableComponents,
+  ReplaceableRouteContainerComponent,
 } from '@abp/ng.core';
-import { NgModule, Type } from '@angular/core';
-import { RouterModule, Routes, Router, ActivatedRoute } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
 import { eIdentityComponents } from './enums/components';
@@ -46,7 +45,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes), CoreModule],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
 export class IdentityRoutingModule {}

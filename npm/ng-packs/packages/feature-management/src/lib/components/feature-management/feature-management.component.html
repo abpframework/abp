@@ -10,11 +10,11 @@
         *ngFor="let feature of features$ | async; let i = index"
         [ngSwitch]="feature.valueType.name"
       >
-        <div class="col-4">{{ feature.name }}</div>
-        <div class="col-8" *ngSwitchCase="'ToggleStringValueType'">
+        <div class="mr-2">{{ feature.displayName }}</div>
+        <div *ngSwitchCase="'ToggleStringValueType'">
           <input type="checkbox" name="feature.name" [formControlName]="i" />
         </div>
-        <div class="col-8" *ngSwitchCase="'FreeTextStringValueType'">
+        <div *ngSwitchCase="'FreeTextStringValueType'">
           <input type="text" name="feature.name" [formControlName]="i" />
         </div>
       </div>

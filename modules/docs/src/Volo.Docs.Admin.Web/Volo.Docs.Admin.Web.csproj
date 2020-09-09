@@ -17,7 +17,7 @@
   <ItemGroup>
       <PackageReference Include="CommonMark.NET" Version="0.15.1" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
@@ -27,17 +27,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="compilerconfig.json" />
-    <Content Remove="compilerconfig.json.defaults" />  
+    <Content Remove="compilerconfig.json.defaults" />
     <None Include="compilerconfig.json" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
 </Project>

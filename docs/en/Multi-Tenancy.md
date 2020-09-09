@@ -355,7 +355,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-{0} is the the placeholder to determine current tenant's unique name.
+{0} is the placeholder to determine current tenant's unique name.
 
 Instead of ``options.TenantResolvers.Insert(1, new DomainTenantResolveContributor("{0}.mydomain.com"));`` you can use this shortcut:
 
@@ -369,3 +369,6 @@ options.AddDomainTenantResolver("{0}.mydomain.com");
 options.AddDomainTenantResolver("{0}.com");
 ````
 
+## See Also
+
+* [Features](Features.md)

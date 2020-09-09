@@ -4,13 +4,14 @@
   <Import Project="..\..\..\..\configureawait.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Domain\Volo.CmsKit.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\users\src\Volo.Abp.Users.MongoDB\Volo.Abp.Users.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>

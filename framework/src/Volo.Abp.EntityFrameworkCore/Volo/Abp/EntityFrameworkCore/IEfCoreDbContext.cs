@@ -24,6 +24,11 @@ namespace Volo.Abp.EntityFrameworkCore
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// This method will call the DbContext <see cref="SaveChangesAsync(bool, CancellationToken)"/> method directly of EF Core, which doesn't apply concepts of abp.
+        /// </summary>
+        Task<int> SaveChangesOnDbContextAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
+
         DbSet<T> Set<T>()
             where T: class;
 
@@ -50,7 +55,7 @@ namespace Volo.Abp.EntityFrameworkCore
         void AttachRange([NotNull] IEnumerable<object> entities);
 
         void AttachRange([NotNull] params object[] entities);
-        
+
         EntityEntry<TEntity> Entry<TEntity>([NotNull] TEntity entity) where TEntity : class;
 
         EntityEntry Entry([NotNull] object entity);

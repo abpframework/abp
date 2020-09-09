@@ -17,7 +17,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -273,6 +273,37 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.ToTable("AbpEntityPropertyChanges");
                 });
 
+            modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ProviderName")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+
+                    b.ToTable("AbpFeatureValues");
+                });
+
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -525,6 +556,12 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("IsDeleted")
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsExternal")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsExternal")
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 

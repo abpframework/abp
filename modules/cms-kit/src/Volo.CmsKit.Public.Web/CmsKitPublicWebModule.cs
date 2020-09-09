@@ -6,9 +6,10 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.CmsKit.Localization;
-using Volo.CmsKit.Web.Menus;
+using Volo.CmsKit.Public.Web.Menus;
+using Volo.CmsKit.Web;
 
-namespace Volo.CmsKit.Web
+namespace Volo.CmsKit.Public.Web
 {
     [DependsOn(
         typeof(CmsKitPublicHttpApiModule),
@@ -20,7 +21,12 @@ namespace Volo.CmsKit.Web
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(CmsKitResource), typeof(CmsKitPublicWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(CmsKitResource),
+                    typeof(CmsKitPublicWebModule).Assembly,
+                    typeof(CmsKitPublicApplicationContractsModule).Assembly,
+                    typeof(CmsKitCommonApplicationContractsModule).Assembly
+                );
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>
@@ -38,10 +44,11 @@ namespace Volo.CmsKit.Web
 
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<CmsKitPublicWebModule>();
+                options.FileSets.AddEmbedded<CmsKitPublicWebModule>("Volo.CmsKit.Public.Web");
             });
 
             context.Services.AddAutoMapperObjectMapper<CmsKitPublicWebModule>();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<CmsKitPublicWebModule>(validate: true);
@@ -49,7 +56,7 @@ namespace Volo.CmsKit.Web
 
             Configure<RazorPagesOptions>(options =>
             {
-                //Configure authorization.
+                //...
             });
         }
     }

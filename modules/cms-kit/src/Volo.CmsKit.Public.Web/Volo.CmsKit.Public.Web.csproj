@@ -8,14 +8,14 @@
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
-    <RootNamespace>Volo.CmsKit.Web</RootNamespace>
+    <RootNamespace>Volo.CmsKit.Public.Web</RootNamespace>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.CmsKit.Common.Web\Volo.CmsKit.Common.Web.csproj" />
     <ProjectReference Include="..\Volo.CmsKit.Public.HttpApi\Volo.CmsKit.Public.HttpApi.csproj" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="3.1.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +23,10 @@
     <EmbeddedResource Include="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.js" />
+    <EmbeddedResource Include="Components\**\*.css" />
+    <Content Remove="Components\**\*.js" />
+    <Content Remove="Components\**\*.css" />
   </ItemGroup>
 
 </Project>

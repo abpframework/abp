@@ -199,7 +199,7 @@ Some of the culture names defined in .NET do not match Angular locales. In such 
 
 ![locale-error](./images/locale-error.png)
 
-If you see an error like this, you should pass the `cultureNameToLocaleFileNameMapping` property like below to CoreModule's forRoot static method.
+If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to CoreModule's forRoot static method.
 
 ```js
 // app.module.ts
@@ -209,7 +209,7 @@ If you see an error like this, you should pass the `cultureNameToLocaleFileNameM
     // other imports
      CoreModule.forRoot({
       // other options
-      cultureNameToLocaleFileNameMapping: { 
+      cultureNameLocaleFileMap: { 
         "DotnetCultureName": "AngularLocaleFileName",
         "pt-BR": "pt"  // example
       }

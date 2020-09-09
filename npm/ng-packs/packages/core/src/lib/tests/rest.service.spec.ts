@@ -6,6 +6,7 @@ import { Rest } from '../models';
 import { RestService } from '../services/rest.service';
 import { ConfigState } from '../states/config.state';
 import { CORE_OPTIONS } from '../tokens';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 describe('HttpClient testing', () => {
   let spectator: SpectatorHttp<RestService>;
@@ -16,6 +17,7 @@ describe('HttpClient testing', () => {
     dataService: RestService,
     imports: [NgxsModule.forRoot([ConfigState])],
     providers: [{ provide: CORE_OPTIONS, useValue: { environment: {} } }],
+    mocks: [OAuthService],
   });
 
   beforeEach(() => {

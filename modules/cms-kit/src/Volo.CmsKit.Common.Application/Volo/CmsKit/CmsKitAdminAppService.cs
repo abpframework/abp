@@ -3,9 +3,9 @@ using Volo.CmsKit.Localization;
 
 namespace Volo.CmsKit
 {
-    public abstract class CmsKitAppService : ApplicationService
+    public abstract class CmsKitAppServiceBase : ApplicationService
     {
-        protected CmsKitAppService()
+        protected CmsKitAppServiceBase()
         {
             LocalizationResource = typeof(CmsKitResource);
         }

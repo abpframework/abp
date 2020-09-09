@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BlobStoring.Database
 {
@@ -11,15 +12,18 @@ namespace Volo.Abp.BlobStoring.Database
         protected IDatabaseBlobRepository DatabaseBlobRepository { get; }
         protected IDatabaseBlobContainerRepository DatabaseBlobContainerRepository { get; }
         protected IGuidGenerator GuidGenerator { get; }
+        protected ICurrentTenant CurrentTenant { get; }
 
         public DatabaseBlobProvider(
             IDatabaseBlobRepository databaseBlobRepository,
             IDatabaseBlobContainerRepository databaseBlobContainerRepository,
-            IGuidGenerator guidGenerator)
+            IGuidGenerator guidGenerator,
+            ICurrentTenant currentTenant)
         {
             DatabaseBlobRepository = databaseBlobRepository;
             DatabaseBlobContainerRepository = databaseBlobContainerRepository;
             GuidGenerator = guidGenerator;
+            CurrentTenant = currentTenant;
         }
 
         public override async Task SaveAsync(BlobProviderSaveArgs args)
@@ -48,7 +52,7 @@ namespace Volo.Abp.BlobStoring.Database
             }
             else
             {
-                blob = new DatabaseBlob(GuidGenerator.Create(), container.Id, args.BlobName, content);
+                blob = new DatabaseBlob(GuidGenerator.Create(), container.Id, args.BlobName, content, CurrentTenant.Id);
                 await DatabaseBlobRepository.InsertAsync(blob, autoSave: true);
             }
         }
@@ -128,7 +132,7 @@ namespace Volo.Abp.BlobStoring.Database
                 return container;
             }
 
-            container = new DatabaseBlobContainer(GuidGenerator.Create(), name);
+            container = new DatabaseBlobContainer(GuidGenerator.Create(), name, CurrentTenant.Id);
             await DatabaseBlobContainerRepository.InsertAsync(container, cancellationToken: cancellationToken);
 
             return container;

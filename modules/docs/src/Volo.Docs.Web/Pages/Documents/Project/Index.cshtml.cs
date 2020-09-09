@@ -16,9 +16,7 @@ using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
-using Volo.Docs.Utils;
-using NuGet.Versioning;
-using Volo.Docs.Version;
+using Volo.Docs.GitHub.Documents.Version;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -60,13 +58,13 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public NavigationNode Navigation { get; private set; }
 
-        public VersionInfoViewModel LatestStableVersionInfo { get; private set; }
+        public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
         public string DocumentsUrlPrefix { get; set; }
 
         public bool ShowProjectsCombobox { get; set; }
 
-        public bool DocumentLanguageIsDifferent { get; set; }
+        public string DocumentLanguageCode { get; set; }
 
         public DocumentParametersDto DocumentPreferences { get; set; }
 
@@ -207,7 +205,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private IActionResult ReloadPageWithCulture()
         {
             var returnUrl = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/"
-                            + (LatestStableVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" +
+                            + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" +
                             DocumentName;
 
             return Redirect("/Abp/Languages/Switch?culture=" + LanguageCode + "&uiCulture=" + LanguageCode + "&returnUrl=" + returnUrl);
@@ -218,7 +216,7 @@ namespace Volo.Docs.Pages.Documents.Project
             return RedirectToPage(new
             {
                 projectName = ProjectName,
-                version = (LatestStableVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
+                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 languageCode = DefaultLanguageCode,
                 documentName = DocumentName
             });
@@ -229,7 +227,7 @@ namespace Volo.Docs.Pages.Documents.Project
             return RedirectToPage(new
             {
                 projectName = ProjectName,
-                version = (LatestStableVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
+                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 documentName = "",
                 languageCode = DefaultLanguageCode
             });
@@ -256,22 +254,22 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var output = await _projectAppService.GetVersionsAsync(Project.ShortName);
-            var versions = _versionHelper.OrderByDescending(output.Items.ToList())
+            var versions = output.Items.ToList()
                 .Select(v => new VersionInfoViewModel(v.DisplayName, v.Name))
                 .ToList();
 
             if (versions.Any())
             {
-                LatestStableVersionInfo = versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Version)) ?? versions.First();
+                LatestVersionInfo = GetLatestVersionInfo(versions);
 
                 SetLatestVersionBranchName(versions);
 
-                LatestStableVersionInfo.DisplayText = $"{LatestStableVersionInfo.DisplayText} ({DocsAppConsts.Latest})";
+                LatestVersionInfo.DisplayText = $"{LatestVersionInfo.DisplayText} ({DocsAppConsts.Latest})";
 
                 if (string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
                 {
-                    LatestStableVersionInfo.IsSelected = true;
-                    Version = LatestStableVersionInfo.Version;
+                    LatestVersionInfo.IsSelected = true;
+                    Version = LatestVersionInfo.Version;
                 }
                 else
                 {
@@ -283,8 +281,8 @@ namespace Volo.Docs.Pages.Documents.Project
                     }
                     else
                     {
-                        LatestStableVersionInfo.IsSelected = true;
-                        Version = LatestStableVersionInfo.Version;
+                        LatestVersionInfo.IsSelected = true;
+                        Version = LatestVersionInfo.Version;
                     }
                 }
             }
@@ -292,7 +290,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 SetLatestVersionBranchName(versions);
 
-                LatestStableVersionInfo = new VersionInfoViewModel(
+                LatestVersionInfo = new VersionInfoViewModel(
                     $"{DocsAppConsts.Latest}",
                     DocsAppConsts.Latest,
                     true);
@@ -301,14 +299,50 @@ namespace Volo.Docs.Pages.Documents.Project
             VersionSelectItems = versions.Select(v => new SelectListItem
             {
                 Text = v.DisplayText,
-                Value = CreateVersionLink(LatestStableVersionInfo, v.Version, DocumentName),
+                Value = CreateVersionLink(LatestVersionInfo, v.Version, DocumentName),
                 Selected = v.IsSelected
             }).ToList();
         }
 
+        private VersionInfoViewModel GetLatestVersionInfo(List<VersionInfoViewModel> versions)
+        {
+            if (Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
+                && (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Branches)
+            {
+                var LatestVersionBranchNameWithoutPrefix = RemoveVersionPrefix(Project.LatestVersionBranchName);
+
+                var latest = versions.FirstOrDefault(v=> v.Version == LatestVersionBranchNameWithoutPrefix);
+
+                if (latest != null)
+                {
+                    return latest;
+                }
+            }
+
+            return versions.FirstOrDefault(v => !_versionHelper.IsPreRelease(v.Version)) ?? versions.First();
+        }
+
+        private string RemoveVersionPrefix(string version)
+        {
+            if (!Project.ExtraProperties.ContainsKey("VersionBranchPrefix"))
+            {
+                return version;
+            }
+
+            var prefix = Project.ExtraProperties["VersionBranchPrefix"].ToString();
+
+            if (string.IsNullOrWhiteSpace(version) || !version.StartsWith(prefix) || version.Length <= prefix.Length)
+            {
+                return version;
+            }
+
+            return version.Substring(prefix.Length);
+        }
+
         private void SetLatestVersionBranchName(List<VersionInfoViewModel> versions)
         {
-            if (versions.Any() && !string.IsNullOrEmpty(Project.LatestVersionBranchName))
+            if (!Project.ExtraProperties.ContainsKey("GithubVersionProviderSource")
+                || (GithubVersionProviderSource) (long) Project.ExtraProperties["GithubVersionProviderSource"] == GithubVersionProviderSource.Releases)
             {
                 versions.First(v=> !_versionHelper.IsPreRelease(v.Version)).Version = Project.LatestVersionBranchName;
             }
@@ -357,9 +391,9 @@ namespace Volo.Docs.Pages.Documents.Project
                 return DocsAppConsts.Latest;
             }
 
-            return Document.Version == LatestStableVersionInfo.Version ?
+            return RemoveVersionPrefix(Document.Version) == LatestVersionInfo.Version ?
                 DocsAppConsts.Latest :
-                Document.Version;
+                RemoveVersionPrefix(Document.Version);
         }
 
         private async Task SetDocumentAsync()
@@ -369,6 +403,7 @@ namespace Volo.Docs.Pages.Documents.Project
             try
             {
                 Document = await GetSpecificDocumentOrDefaultAsync(LanguageCode);
+                DocumentLanguageCode = LanguageCode;
             }
             catch (DocumentNotFoundException)
             {
@@ -376,7 +411,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 {
                     Document = await GetSpecificDocumentOrDefaultAsync(DefaultLanguageCode);
 
-                    DocumentLanguageIsDifferent = true;
+                    DocumentLanguageCode = DefaultLanguageCode;
                 }
                 else
                 {
@@ -396,7 +431,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + (LatestStableVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" + DocumentName,
+                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" + DocumentName,
                         language.Code == LanguageCode
                         )
                     );
@@ -466,7 +501,7 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 var content = (await _documentAppService.GetAsync(new GetDocumentInput
                 {
-                    LanguageCode = LanguageCode,
+                    LanguageCode = DocumentLanguageCode,
                     Name = partialTemplate.Path,
                     ProjectId = Project.Id,
                     Version = Version
@@ -484,7 +519,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private void SetUserPreferences()
         {
-            UserPreferences.Add("Document_Language_Code", LanguageCode);
+            UserPreferences.Add("Document_Language_Code", DocumentLanguageCode);
             UserPreferences.Add("Document_Version", Version);
 
             var cookie = Request.Cookies["AbpDocsPreferences"];
@@ -574,7 +609,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     new GetParametersDocumentInput
                     {
                         ProjectId = Project.Id,
-                        LanguageCode = LanguageCode,
+                        LanguageCode = DocumentLanguageCode,
                         Version = Version
                     });
 

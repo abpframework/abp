@@ -8,8 +8,8 @@ param(
 
 npm install
 
-$NextVersion = $(node get-version.js)
-$rootFolder = (Get-Item -Path "./" -Verbose).FullName
+$NextVersion = $(node publish-utils.js --nextVersion)
+$RootFolder = (Get-Item -Path "./" -Verbose).FullName
 
 if(-Not $Version) {
 $Version = $NextVersion;
@@ -34,7 +34,7 @@ foreach ($command in $commands) {
   Invoke-Expression $command
   if($LASTEXITCODE -ne '0' -And $command -notlike '*cd *'){
     Write-Host ("Process failed! " + $command)
-    Set-Location $rootFolder
+    Set-Location $RootFolder
     exit $LASTEXITCODE
   }
 }

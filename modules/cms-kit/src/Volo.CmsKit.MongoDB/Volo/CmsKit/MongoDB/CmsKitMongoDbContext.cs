@@ -1,14 +1,23 @@
-﻿using Volo.Abp.Data;
+﻿using MongoDB.Driver;
+using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.MongoDB
 {
     [ConnectionStringName(CmsKitDbProperties.ConnectionStringName)]
     public class CmsKitMongoDbContext : AbpMongoDbContext, ICmsKitMongoDbContext
     {
-        /* Add mongo collections here. Example:
-         * public IMongoCollection<Question> Questions => Collection<Question>();
-         */
+        public IMongoCollection<Comment> Comments => Collection<Comment>();
+
+        public IMongoCollection<UserReaction> UserReactions => Collection<UserReaction>();
+
+        public IMongoCollection<CmsUser> CmsUsers => Collection<CmsUser>();
+
+        public IMongoCollection<Rating> Ratings => Collection<Rating>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

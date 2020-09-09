@@ -320,3 +320,14 @@ Some exception types are automatically thrown by the framework:
 - `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](Repositories.md).
 
 You can also throw these type of exceptions in your code (although it's rarely needed).
+
+## Send exception details to the client
+
+You can send exceptions to the client via the `SendExceptionsDetailsToClients` property of the `AbpExceptionHandlingOptions` class:
+
+````csharp
+services.Configure<AbpExceptionHandlingOptions>(options =>
+{
+    options.SendExceptionsDetailsToClients = true;
+});
+````

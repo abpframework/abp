@@ -107,6 +107,38 @@ namespace Volo.Abp.Identity.MongoDB
                 .CountAsync(cancellationToken);
         }
 
+        public async Task<List<IdentityRole>> GetUnaddedRolesAsync(
+            OrganizationUnit organizationUnit,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+            return await DbContext.Roles.AsQueryable()
+                .Where(r => !roleIds.Contains(r.Id))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+                .OrderBy(sorting ?? nameof(IdentityRole.Name))
+                .As<IMongoQueryable<IdentityRole>>()
+                .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<int> GetUnaddedRolesCountAsync(
+            OrganizationUnit organizationUnit,
+            string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            var roleIds = organizationUnit.Roles.Select(r => r.RoleId).ToArray();
+            return await DbContext.Roles.AsQueryable()
+                .Where(r => !roleIds.Contains(r.Id))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), r => r.Name.Contains(filter))
+                .As<IMongoQueryable<IdentityRole>>()
+                .CountAsync(cancellationToken);
+        }
+
         public virtual async Task<List<IdentityUser>> GetMembersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
@@ -133,6 +165,46 @@ namespace Volo.Abp.Identity.MongoDB
             var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<List<IdentityUser>> GetUnaddedUsersAsync(
+            OrganizationUnit organizationUnit,
+            string sorting = null,
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbContext.Users.AsQueryable()
+                .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                )
+                .OrderBy(sorting ?? nameof(IdentityUser.UserName))
+                .As<IMongoQueryable<IdentityUser>>()
+                .PageBy<IdentityUser, IMongoQueryable<IdentityUser>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<int> GetUnaddedUsersCountAsync(OrganizationUnit organizationUnit, string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbContext.Users.AsQueryable()
+                .Where(u => !u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
+                .WhereIf<IdentityUser, IMongoQueryable<IdentityUser>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.UserName.Contains(filter) ||
+                        u.Email.Contains(filter) ||
+                        (u.PhoneNumber != null && u.PhoneNumber.Contains(filter))
+                )
+                .As<IMongoQueryable<IdentityUser>>()
+                .CountAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual Task RemoveAllRolesAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)

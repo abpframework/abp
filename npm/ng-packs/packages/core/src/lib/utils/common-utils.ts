@@ -7,3 +7,23 @@ export function noop() {
 export function isUndefinedOrEmptyString(value: unknown): boolean {
   return value === undefined || value === '';
 }
+
+export function isNullOrUndefined(obj) {
+  return obj === null || obj === undefined;
+}
+
+export function exists(obj) {
+  return !isNullOrUndefined(obj);
+}
+
+export function isObject(obj) {
+  return obj instanceof Object;
+}
+
+export function isArray(obj) {
+  return Array.isArray(obj);
+}
+
+export function isObjectAndNotArray(obj) {
+  return isObject(obj) && !isArray(obj);
+}

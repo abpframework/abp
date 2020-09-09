@@ -1,11 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.CmsKit.Comments;
+using Volo.CmsKit.Ratings;
+using Volo.CmsKit.Reactions;
+using Volo.CmsKit.Users;
 
 namespace Volo.CmsKit.EntityFrameworkCore
 {
     [DependsOn(
         typeof(CmsKitDomainModule),
+        typeof(AbpUsersEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreModule)
     )]
     public class CmsKitEntityFrameworkCoreModule : AbpModule
@@ -14,9 +20,10 @@ namespace Volo.CmsKit.EntityFrameworkCore
         {
             context.Services.AddAbpDbContext<CmsKitDbContext>(options =>
             {
-                /* Add custom repositories here. Example:
-                 * options.AddRepository<Question, EfCoreQuestionRepository>();
-                 */
+                options.AddRepository<CmsUser, EfCoreCmsUserRepository>();
+                options.AddRepository<UserReaction, EfCoreUserReactionRepository>();
+                options.AddRepository<Comment, EfCoreCommentRepository>();
+                options.AddRepository<Rating, EfCoreRatingRepository>();
             });
         }
     }

@@ -1,4 +1,4 @@
-﻿# Current User
+# Current User
 
 It is very common to retrieve the information about the logged in user in a web application. The current user is the active user related to the current request in a web application.
 
@@ -86,7 +86,7 @@ Beside these standard methods, there are some extension methods:
 
 ## ICurrentPrincipalAccessor
 
-`ICurrentPrincipalAccessor` is the service that should be used (by the ABP Framework and your application code) whenever the current principle of the current user is needed.
+`ICurrentPrincipalAccessor` is the service that should be used (by the ABP Framework and your application code) whenever the current principal of the current user is needed.
 
 For a web application, it gets the `User` property of the current `HttpContext`. For a non-web application, it returns the `Thread.CurrentPrincipal`.
 
@@ -114,9 +114,9 @@ public class MyService : ITransientDependency
 }
 ````
 
-### Changing the Current Principle
+### Changing the Current Principal
 
-Current principle is not something you want to set or change, except at some advanced scenarios. If you need it, use the `Change` method of the `ICurrentPrincipalAccessor`. It takes a `ClaimsPrinciple` object and makes it "current" for a scope.
+Current principal is not something you want to set or change, except at some advanced scenarios. If you need it, use the `Change` method of the `ICurrentPrincipalAccessor`. It takes a `ClaimsPrincipal` object and makes it "current" for a scope.
 
 Example:
 
@@ -132,7 +132,7 @@ public class MyAppService : ApplicationService
 
     public void Foo()
     {
-        var newPrinciple = new ClaimsPrincipal(
+        var newPrincipal = new ClaimsPrincipal(
             new ClaimsIdentity(
                 new Claim[]
                 {
@@ -143,7 +143,7 @@ public class MyAppService : ApplicationService
             )
         );
 
-        using (_currentPrincipalAccessor.Change(newPrinciple))
+        using (_currentPrincipalAccessor.Change(newPrincipal))
         {
             var userName = CurrentUser.UserName; //returns "john"
             //...
