@@ -24,11 +24,6 @@ namespace Volo.Abp.Security.Claims
         public static string SurName { get; set; } = ClaimTypes.Surname;
 
         /// <summary>
-        /// Default: security_stamp
-        /// </summary>
-        public static string SecurityStamp { get; set; } =  "security_stamp";
-
-        /// <summary>
         /// Default: <see cref="ClaimTypes.NameIdentifier"/>
         /// </summary>
         public static string UserId { get; set; } = ClaimTypes.NameIdentifier;
@@ -59,14 +54,14 @@ namespace Volo.Abp.Security.Claims
         public static string PhoneNumberVerified { get; set; } = "phone_number_verified";
 
         /// <summary>
-        /// Default: "tenant_id".
+        /// Default: "tenantid".
         /// </summary>
-        public static string TenantId { get; set; } = "tenant_id";
+        public static string TenantId { get; set; } = "tenantid";
 
         /// <summary>
-        /// Default: "edition_id".
+        /// Default: "editionid".
         /// </summary>
-        public static string EditionId { get; set; } = "edition_id";
+        public static string EditionId { get; set; } = "editionid";
 
         /// <summary>
         /// Default: "client_id".

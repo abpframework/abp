@@ -51,7 +51,6 @@ namespace Volo.Abp.Identity
                 options.ClaimsIdentity.UserIdClaimType = AbpClaimTypes.UserId;
                 options.ClaimsIdentity.UserNameClaimType = AbpClaimTypes.UserName;
                 options.ClaimsIdentity.RoleClaimType = AbpClaimTypes.Role;
-                options.ClaimsIdentity.SecurityStampClaimType = AbpClaimTypes.SecurityStamp;
             });
 
             AddAbpIdentityOptionsFactory(context.Services);
