@@ -27,8 +27,6 @@ export class ReplaceableComponentsService {
     this.store = new InternalStore([]);
   }
 
-  // TODO: Create a shared service for route reload and more
-
   add(replaceableComponent: ReplaceableComponents.ReplaceableComponent, reload?: boolean): void {
     const replaceableComponents = [...this.store.state];
 
