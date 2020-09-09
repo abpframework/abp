@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output } from '@angular/core';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ReplaceableTemplateDirective } from '../directives';
 import { ReplaceableComponents } from '../models';
 import { Router } from '@angular/router';
@@ -51,16 +51,14 @@ class ExternalComponent {
 
 describe('ReplaceableTemplateDirective', () => {
   let spectator: SpectatorDirective<ReplaceableTemplateDirective>;
-  const get$Res = new Subject();
+  const get$Res = new BehaviorSubject(undefined);
 
-  const replaceableComponents = spectator.inject(ReplaceableComponentsService);
-  const spy = jest.spyOn(replaceableComponents, 'get$');
-  spy.mockReturnValue(get$Res as any);
   const createDirective = createDirectiveFactory({
     directive: ReplaceableTemplateDirective,
     declarations: [DefaultComponent, ExternalComponent],
     entryComponents: [ExternalComponent],
     mocks: [Router],
+    providers: [{ provide: ReplaceableComponentsService, useValue: { get$: () => get$Res } }],
   });
 
   describe('without external component', () => {
@@ -76,7 +74,7 @@ describe('ReplaceableTemplateDirective', () => {
         `,
         { hostProps: { oneWay: { label: 'Test' }, twoWay: false, twoWayChange, someOutput } },
       );
-      get$Res.next(undefined);
+
       const component = spectator.query(DefaultComponent);
       spectator.directive.context.initTemplate(component);
       spectator.detectChanges();
@@ -118,6 +116,7 @@ describe('ReplaceableTemplateDirective', () => {
         `,
         { hostProps: { oneWay: { label: 'Test' }, twoWay: false, twoWayChange, someOutput } },
       );
+
       get$Res.next({ component: ExternalComponent, key: 'TestModule.TestComponent' });
     });
 

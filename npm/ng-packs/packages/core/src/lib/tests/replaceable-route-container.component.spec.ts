@@ -1,10 +1,8 @@
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngxs/store';
-import { of, Subject, BehaviorSubject } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
+import { BehaviorSubject } from 'rxjs';
 import { ReplaceableRouteContainerComponent } from '../components/replaceable-route-container.component';
-import { ReplaceableComponentsState } from '../states';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 
 @Component({
@@ -33,15 +31,16 @@ const activatedRouteMock = {
 describe('ReplaceableRouteContainerComponent', () => {
   let spectator: SpectatorHost<ReplaceableRouteContainerComponent>;
   const get$Res = new BehaviorSubject(undefined);
-  const replaceableComponents = spectator.inject(ReplaceableComponentsService);
-  const spy = jest.spyOn(replaceableComponents, 'get$');
-  spy.mockReturnValue(get$Res as any);
 
   const createHost = createHostFactory({
     component: ReplaceableRouteContainerComponent,
-    providers: [{ provide: ActivatedRoute, useValue: activatedRouteMock }],
+    providers: [
+      { provide: ActivatedRoute, useValue: activatedRouteMock },
+      { provide: ReplaceableComponentsService, useValue: { get$: () => get$Res } },
+    ],
     declarations: [ExternalComponent, DefaultComponent],
     entryComponents: [DefaultComponent, ExternalComponent],
+    mocks: [Router],
   });
 
   beforeEach(() => {
