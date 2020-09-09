@@ -13,50 +13,45 @@ namespace Volo.Abp.Identity
 {
     public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>, ITransientDependency
     {
-        protected ICurrentImpersonatorUser CurrentImpersonatorUser { get; }
-        protected ICurrentImpersonatorTenant CurrentImpersonatorTenant  { get; }
+        protected ICurrentUser CurrentUser { get; }
+        protected ICurrentTenant CurrentTenant  { get; }
 
         public AbpUserClaimsPrincipalFactory(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> options,
-            ICurrentImpersonatorUser currentImpersonatorUser,
-            ICurrentImpersonatorTenant currentImpersonatorTenant)
+            ICurrentUser currentUser,
+            ICurrentTenant currentTenant)
             : base(
                   userManager,
                   roleManager,
                   options)
         {
-            CurrentImpersonatorUser = currentImpersonatorUser;
-            CurrentImpersonatorTenant = currentImpersonatorTenant;
+            CurrentUser = currentUser;
+            CurrentTenant = currentTenant;
         }
 
         [UnitOfWork]
         public override async Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
         {
             var principal = await base.CreateAsync(user);
+            var identity = principal.Identities.First();
 
             if (user.TenantId.HasValue)
             {
-                principal.Identities
-                    .First()
-                    .AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+                identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
             }
 
-            if (CurrentImpersonatorUser.Id != user.Id || CurrentImpersonatorTenant.Id != user.TenantId)
+            if (CurrentUser.ImpersonatorId != user.Id || CurrentTenant.ImpersonatorId != user.TenantId)
             {
-                if (CurrentImpersonatorUser.Id.HasValue)
+                if (CurrentUser.ImpersonatorId.HasValue)
                 {
-                    principal.Identities
-                        .First()
-                        .AddClaim(new Claim(AbpClaimTypes.ImpersonatorUserId, CurrentImpersonatorUser.Id.ToString()));
+                    identity.AddClaim(new Claim(AbpClaimTypes.UserImpersonatorId, CurrentUser.ImpersonatorId.ToString()));
                 }
 
-                if (CurrentImpersonatorTenant.Id.HasValue)
+                if (CurrentTenant.ImpersonatorId.HasValue)
                 {
-                    principal.Identities
-                        .First()
-                        .AddClaim(new Claim(AbpClaimTypes.ImpersonatorTenantId, CurrentImpersonatorTenant.Id.ToString()));
+                    identity.AddClaim(new Claim(AbpClaimTypes.TenantImpersonatorId, CurrentTenant.ImpersonatorId.ToString()));
                 }
             }
 

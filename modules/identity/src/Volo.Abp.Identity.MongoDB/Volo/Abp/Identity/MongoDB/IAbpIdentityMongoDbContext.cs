@@ -15,8 +15,8 @@ namespace Volo.Abp.Identity.MongoDB
 
         IMongoCollection<OrganizationUnit> OrganizationUnits { get; }
 
-        IMongoCollection<IdentitySecurityLog> IdentitySecurityLogs { get; }
+        IMongoCollection<IdentitySecurityLog> SecurityLogs { get; }
 
-        IMongoCollection<IdentityLinkUser> IdentityLinkUsers { get; }
+        IMongoCollection<IdentityLinkUser> LinkUsers { get; }
     }
 }

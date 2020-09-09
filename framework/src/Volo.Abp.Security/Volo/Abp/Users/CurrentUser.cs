@@ -15,6 +15,8 @@ namespace Volo.Abp.Users
 
         public virtual Guid? Id => _principalAccessor.Principal?.FindUserId();
 
+        public virtual Guid? ImpersonatorId => _principalAccessor.Principal?.FindUserImpersonatorId();
+
         public virtual string UserName => this.FindClaimValue(AbpClaimTypes.UserName);
 
         public virtual string PhoneNumber => this.FindClaimValue(AbpClaimTypes.PhoneNumber);

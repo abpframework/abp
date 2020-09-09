@@ -39,35 +39,35 @@ namespace System.Security.Principal
             return Guid.Parse(userIdOrNull.Value);
         }
 
-        public static Guid? FindImpersonatorUserId([NotNull] this ClaimsPrincipal principal)
+        public static Guid? FindUserImpersonatorId([NotNull] this ClaimsPrincipal principal)
         {
             Check.NotNull(principal, nameof(principal));
 
-            var impersonatorUserIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorUserId);
-            if (impersonatorUserIdOrNull == null || impersonatorUserIdOrNull.Value.IsNullOrWhiteSpace())
+            var userImpersonatorIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.UserImpersonatorId);
+            if (userImpersonatorIdOrNull == null || userImpersonatorIdOrNull.Value.IsNullOrWhiteSpace())
             {
                 return null;
             }
-            if (Guid.TryParse(impersonatorUserIdOrNull.Value, out Guid result))
+            if (Guid.TryParse(userImpersonatorIdOrNull.Value, out Guid result))
             {
                 return result;
             }
             return null;
         }
 
-        public static Guid? FindImpersonatorUserId([NotNull] this IIdentity identity)
+        public static Guid? FindUserImpersonatorId([NotNull] this IIdentity identity)
         {
             Check.NotNull(identity, nameof(identity));
 
             var claimsIdentity = identity as ClaimsIdentity;
 
-            var impersonatorUserIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorUserId);
-            if (impersonatorUserIdOrNull == null || impersonatorUserIdOrNull.Value.IsNullOrWhiteSpace())
+            var userImpersonatorIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.UserImpersonatorId);
+            if (userImpersonatorIdOrNull == null || userImpersonatorIdOrNull.Value.IsNullOrWhiteSpace())
             {
                 return null;
             }
 
-            return Guid.Parse(impersonatorUserIdOrNull.Value);
+            return Guid.Parse(userImpersonatorIdOrNull.Value);
         }
 
         public static Guid? FindTenantId([NotNull] this ClaimsPrincipal principal)
@@ -98,32 +98,32 @@ namespace System.Security.Principal
             return Guid.Parse(tenantIdOrNull.Value);
         }
 
-        public static Guid? FindImpersonatorTenantId([NotNull] this ClaimsPrincipal principal)
+        public static Guid? FindTenantImpersonatorId([NotNull] this ClaimsPrincipal principal)
         {
             Check.NotNull(principal, nameof(principal));
 
-            var impersonatorTenantIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorTenantId);
-            if (impersonatorTenantIdOrNull == null || impersonatorTenantIdOrNull.Value.IsNullOrWhiteSpace())
+            var tenantImpersonatorIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.TenantImpersonatorId);
+            if (tenantImpersonatorIdOrNull == null || tenantImpersonatorIdOrNull.Value.IsNullOrWhiteSpace())
             {
                 return null;
             }
 
-            return Guid.Parse(impersonatorTenantIdOrNull.Value);
+            return Guid.Parse(tenantImpersonatorIdOrNull.Value);
         }
 
-        public static Guid? FindImpersonatorTenantId([NotNull] this IIdentity identity)
+        public static Guid? FindTenantImpersonatorId([NotNull] this IIdentity identity)
         {
             Check.NotNull(identity, nameof(identity));
 
             var claimsIdentity = identity as ClaimsIdentity;
 
-            var impersonatorTenantIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorTenantId);
-            if (impersonatorTenantIdOrNull == null || impersonatorTenantIdOrNull.Value.IsNullOrWhiteSpace())
+            var tenantImpersonatorIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == AbpClaimTypes.TenantImpersonatorId);
+            if (tenantImpersonatorIdOrNull == null || tenantImpersonatorIdOrNull.Value.IsNullOrWhiteSpace())
             {
                 return null;
             }
 
-            return Guid.Parse(impersonatorTenantIdOrNull.Value);
+            return Guid.Parse(tenantImpersonatorIdOrNull.Value);
         }
 
         public static string FindClientId([NotNull] this ClaimsPrincipal principal)
