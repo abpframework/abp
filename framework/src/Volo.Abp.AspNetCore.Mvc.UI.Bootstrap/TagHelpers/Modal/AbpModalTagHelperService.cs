@@ -1,11 +1,19 @@
-﻿using System.Linq;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Linq;
+using System.Text;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 {
     public class AbpModalTagHelperService : AbpTagHelperService<AbpModalTagHelper>
     {
+        protected IHtmlGenerator HtmlGenerator { get; }
+
+        public AbpModalTagHelperService(IHtmlGenerator htmlGenerator)
+        {
+            HtmlGenerator = htmlGenerator;
+        }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = null;
@@ -17,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             var sb = new StringBuilder();
 
-            var attritubutes = output.Attributes.Select(a => " " + a.Name + "=\"" + a.Value + "\" ").ToList();
+            var attritubutes = output.Attributes.Select(a => " " + HtmlGenerator.Encode(a.Name) + "=\"" + HtmlGenerator.Encode(a.Value) + "\" ").ToList();
             var attritubutesAsJoin = string.Join(" ", attritubutes.ToArray());
 
             sb.AppendLine("<div class=\"" + GetModalClasses() + "\" tabindex=\"-1\" role=\"dialog\" aria-hidden=\"true\" " + attritubutesAsJoin + GetDataAttributes() + ">");

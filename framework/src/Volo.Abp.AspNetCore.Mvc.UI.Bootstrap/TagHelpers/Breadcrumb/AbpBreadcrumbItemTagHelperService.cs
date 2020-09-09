@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text.Encodings.Web;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -14,6 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
         {
             _encoder = encoder;
         }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "li";
@@ -23,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 
             var list = context.GetValue<List<BreadcrumbItem>>(BreadcrumbItemsContent);
 
-            output.Content.SetHtmlContent(GetInnerHtml(context, output));
+            ProcessContent(context, output);
             
             list.Add(new BreadcrumbItem
             {
@@ -34,15 +36,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
             output.SuppressOutput();
         }
 
-        protected virtual string GetInnerHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual void ProcessContent(TagHelperContext context, TagHelperOutput output)
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Href))
             {
                 output.Attributes.Add("aria-current", "page");
-                return TagHelper.Title;
+                output.Content.Append(TagHelper.Title);
             }
-            return "<a href=\"" + TagHelper.Href + "\">" + TagHelper.Title + "</a>";
-        }
+            else
+            {
+                var link = new TagBuilder("a");
+                link.Attributes.Add("href", TagHelper.Href);
+                link.InnerHtml.Append(TagHelper.Title);
 
+                output.Content.AppendHtml(link);
+            }
+        }
     }
 }

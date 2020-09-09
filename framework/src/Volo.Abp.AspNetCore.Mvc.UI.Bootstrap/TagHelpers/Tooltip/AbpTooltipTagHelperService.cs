@@ -1,11 +1,19 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
 {
     public class AbpTooltipTagHelperService : AbpTagHelperService<AbpTooltipTagHelper>
     {
+        protected IHtmlGenerator HtmlGenerator { get; }
+
+        public AbpTooltipTagHelperService(IHtmlGenerator htmlGenerator)
+        {
+            HtmlGenerator = htmlGenerator;
+        }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (IsButtonDisabled(context, output))
@@ -26,8 +34,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
 
             output.PreElement.SetHtmlContent(
                 "<span class=\"d-inline-block\" tabindex=\"0\" data-toggle=\"tooltip\" " +
-                "data-placement=\"" + directory.ToString().ToLowerInvariant() +
-                "\" title=\"" + GetTitle() + "\">" + Environment.NewLine);
+                "data-placement=\"" + HtmlGenerator.Encode(directory.ToString().ToLowerInvariant()) +
+                "\" title=\"" + HtmlGenerator.Encode(GetTitle()) + "\">" + Environment.NewLine);
 
             output.PostElement.SetHtmlContent(Environment.NewLine + "</span>");
 

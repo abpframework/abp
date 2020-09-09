@@ -1,14 +1,22 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 {
     public class AbpAccordionTagHelperService : AbpTagHelperService<AbpAccordionTagHelper>
     {
+        protected IHtmlGenerator HtmlGenerator { get; }
+
+        public AbpAccordionTagHelperService(IHtmlGenerator htmlGenerator)
+        {
+            HtmlGenerator = htmlGenerator;
+        }
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetRandomIdIfNotProvided();
@@ -32,7 +40,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             var html = new StringBuilder("");
             foreach (var item in items)
             {
-                var content = item.Replace(AbpAccordionParentIdPlaceholder, TagHelper.Id);
+                var content = item.Replace(AbpAccordionParentIdPlaceholder, HtmlGenerator.Encode(TagHelper.Id));
 
                 html.AppendLine(
                     "<div class=\"card\">" + Environment.NewLine + 

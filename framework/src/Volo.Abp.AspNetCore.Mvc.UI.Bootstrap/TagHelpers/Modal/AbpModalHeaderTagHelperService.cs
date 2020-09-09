@@ -1,5 +1,6 @@
-﻿using System.Text;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Text;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
@@ -16,11 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 
         protected virtual string CreatePreContent()
         {
-            var sb = new StringBuilder();
+            var title = new TagBuilder("h5");
+            title.AddCssClass("modal-title");
+            title.InnerHtml.Append(TagHelper.Title);
 
-            sb.AppendLine("    <h5 class=\"modal-title\">" + TagHelper.Title + "</h5>");
-
-            return sb.ToString();
+            return RenderHtml(title);
         }
 
         protected virtual string CreatePostContent()

@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Localization.Resources.AbpUi;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
@@ -22,37 +22,78 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 
             if (TagHelper.Buttons != AbpModalButtons.None)
             {
-                output.PostContent.SetHtmlContent(CreateContent());
+                ProcessButtons(context, output);
             }
+
             ProcessButtonsAlignment(output);
         }
 
-        protected virtual string CreateContent()
+        protected virtual void ProcessButtons(TagHelperContext context, TagHelperOutput output) 
         {
-            var sb = new StringBuilder();
-
-            switch (TagHelper.Buttons)
+            switch (TagHelper.Buttons) 
             {
                 case AbpModalButtons.Cancel:
-                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Cancel"] + "</button>");
+                    output.PostContent.AppendHtml(GetCancelButton());
                     break;
                 case AbpModalButtons.Close:
-                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Close"] + "</button>");
+                    output.PostContent.AppendHtml(GetCloseButton());
                     break;
                 case AbpModalButtons.Save:
-                    sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
+                    output.PostContent.AppendHtml(GetSaveButton());
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Cancel:
-                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Cancel"] + "</button>");
-                    sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
+                    output.PostContent.AppendHtml(GetSaveButton());
+                    output.PostContent.AppendHtml(GetCancelButton());
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Close:
-                    sb.AppendLine("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">" + _localizer["Close"] + "</button>");
-                    sb.AppendLine("<button type=\"submit\" class=\"btn btn-primary\" data-busy-text=\"" + _localizer["SavingWithThreeDot"] + "\"><i class=\"fa fa-check\"></i> <span>" + _localizer["Save"] + "</span></button>");
+                    output.PostContent.AppendHtml(GetSaveButton());
+                    output.PostContent.AppendHtml(GetCloseButton());
                     break;
             }
+        }
 
-            return sb.ToString();
+        protected virtual string GetSaveButton() 
+        {
+            var icon = new TagBuilder("i");
+            icon.AddCssClass("fa");
+            icon.AddCssClass("fa-check");
+
+            var span = new TagBuilder("span");
+            span.InnerHtml.Append(_localizer["Save"]);
+
+            var button = new TagBuilder("button");
+            button.Attributes.Add("type", "submit");
+            button.AddCssClass("btn");
+            button.AddCssClass("btn-primary");
+            button.Attributes.Add("data-busy-text", _localizer["SavingWithThreeDot"]);
+            button.InnerHtml.AppendHtml(icon);
+            button.InnerHtml.AppendHtml(span);
+
+            return RenderHtml(button);
+        }
+
+        protected virtual string GetCloseButton() 
+        {
+            var button = new TagBuilder("button");
+            button.Attributes.Add("type", "button");
+            button.Attributes.Add("data-dismiss", "modal");
+            button.AddCssClass("btn");
+            button.AddCssClass("btn-secondary");
+            button.InnerHtml.Append(_localizer["Close"]);
+
+            return RenderHtml(button);
+        }
+
+        protected virtual string GetCancelButton() 
+        {
+            var button = new TagBuilder("button");
+            button.Attributes.Add("type", "button");
+            button.Attributes.Add("data-dismiss", "modal");
+            button.AddCssClass("btn");
+            button.AddCssClass("btn-secondary");
+            button.InnerHtml.Append(_localizer["Cancel"]);
+
+            return RenderHtml(button);
         }
 
         protected virtual void ProcessButtonsAlignment(TagHelperOutput output)

@@ -1,11 +1,18 @@
-﻿using System;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Linq;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 {
     public class AbpPopoverTagHelperService : AbpTagHelperService<AbpPopoverTagHelper>
     {
+        protected IHtmlGenerator HtmlGenerator { get; }
+
+        public AbpPopoverTagHelperService(IHtmlGenerator htmlGenerator)
+        {
+            HtmlGenerator = htmlGenerator;
+        }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             if (!TagHelper.Disabled ?? true)
@@ -44,8 +51,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
                 dataPlacementAsHtml = dataPlacementAsHtml.Replace("default", "top");
             }
             var titleAttribute = output.Attributes.FirstOrDefault(at => at.Name == "title");
-            var titleAsHtml = titleAttribute == null ? "" : "title=\"" + titleAttribute.Value + "\" ";
-            var preElementHtml = "<span tabindex=\"0\" class=\"d-inline-block\" " + titleAsHtml + triggerAsHtml + dataPlacementAsHtml + "data-toggle=\"popover\" data-content=\"" + GetDataContent() + "\">";
+            var titleAsHtml = titleAttribute == null ? "" : "title=\"" + HtmlGenerator.Encode(titleAttribute.Value) + "\" ";
+            var preElementHtml = "<span tabindex=\"0\" class=\"d-inline-block\" " + titleAsHtml + triggerAsHtml + dataPlacementAsHtml + "data-toggle=\"popover\" data-content=\"" + HtmlGenerator.Encode(GetDataContent()) + "\">";
             var postElementHtml = "</span>";
 
             output.PreElement.SetHtmlContent(preElementHtml);
