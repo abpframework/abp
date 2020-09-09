@@ -6,6 +6,7 @@ export * from './factory-utils';
 export * from './form-utils';
 export * from './generator-utils';
 export * from './initial-utils';
+export * from './internal-store-utils';
 export * from './lazy-load-utils';
 export * from './localization-utils';
 export * from './multi-tenancy-utils';
