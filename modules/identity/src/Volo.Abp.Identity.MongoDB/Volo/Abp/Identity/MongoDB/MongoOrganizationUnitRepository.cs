@@ -56,6 +56,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public virtual async Task<List<OrganizationUnit>> GetListAsync(
+            Guid? parentId,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
@@ -64,6 +65,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .Where(ou=>ou.ParentId==parentId)
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                     ou => ou.DisplayName.Contains(filter) ||
                           ou.Code.Contains(filter))
@@ -165,6 +167,7 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
+                .Where(ou=>ou.ParentId==parentId)
                 .WhereIf<OrganizationUnit, IMongoQueryable<OrganizationUnit>>(!filter.IsNullOrWhiteSpace(), ou =>
                     ou.DisplayName.Contains(filter) ||
                     ou.Code.Contains(filter))

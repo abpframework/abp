@@ -28,6 +28,7 @@ namespace Volo.Abp.Identity
         );
 
         Task<List<OrganizationUnit>> GetListAsync(
+            Guid? parentId,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,

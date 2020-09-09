@@ -45,6 +45,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<OrganizationUnit>> GetListAsync(
+            Guid? parentId,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
@@ -54,6 +55,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .Where(ou=>ou.ParentId==parentId)
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                     ou => ou.DisplayName.Contains(filter) ||
                           ou.Code.Contains(filter))
@@ -172,6 +174,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default)
         {
             return await DbSet
+                .Where(ou=>ou.ParentId==parentId)
                 .WhereIf(!filter.IsNullOrWhiteSpace(), ou =>
                     ou.DisplayName.Contains(filter) ||
                     ou.Code.Contains(filter))
