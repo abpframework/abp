@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { noop } from '../utils/common-utils';
 import { map, filter } from 'rxjs/operators';
 import { InternalStore } from '../utils/internal-store-utils';
+import { reloadRoute } from '../utils/route-utils';
 
 @Injectable({ providedIn: 'root' })
 export class ReplaceableComponentsService {
@@ -27,20 +28,6 @@ export class ReplaceableComponentsService {
   }
 
   // TODO: Create a shared service for route reload and more
-  private reloadRoute() {
-    const { shouldReuseRoute } = this.router.routeReuseStrategy;
-    const setRouteReuse = (reuse: typeof shouldReuseRoute) => {
-      this.router.routeReuseStrategy.shouldReuseRoute = reuse;
-    };
-
-    setRouteReuse(() => false);
-    this.router.navigated = false;
-
-    this.ngZone.run(async () => {
-      await this.router.navigateByUrl(this.router.url).catch(noop);
-      setRouteReuse(shouldReuseRoute);
-    });
-  }
 
   add(replaceableComponent: ReplaceableComponents.ReplaceableComponent, reload?: boolean): void {
     const replaceableComponents = [...this.store.state];
@@ -57,7 +44,7 @@ export class ReplaceableComponentsService {
 
     this.store.patch(replaceableComponents);
 
-    if (reload) this.reloadRoute();
+    if (reload) reloadRoute(this.router, this.ngZone);
   }
 
   get(replaceableComponentKey: string): ReplaceableComponents.ReplaceableComponent {
