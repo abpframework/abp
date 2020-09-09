@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
@@ -16,7 +17,7 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
 
         private string _entityDisplayName;
         private List<PermissionGroupDto> _groups;
-        
+
         public async Task OpenAsync(string providerName, string providerKey)
         {
             _providerName = providerName;
@@ -37,7 +38,17 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
 
         private async Task SaveAsync()
         {
-            
+            var updateDto = new UpdatePermissionsDto
+            {
+                Permissions = _groups
+                    .SelectMany(g => g.Permissions)
+                    .Select(p => new UpdatePermissionDto {IsGranted = p.IsGranted, Name = p.Name})
+                    .ToArray()
+            };
+
+            await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
+
+            _modal.Hide();
         }
 
         public string GetNormalizedGroupName(string name)

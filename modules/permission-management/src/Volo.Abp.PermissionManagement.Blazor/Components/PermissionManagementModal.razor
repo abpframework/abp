@@ -8,28 +8,20 @@
             <ModalTitle>Edit role</ModalTitle>
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
-        <ModalBody>
+        <ModalBody MaxHeight="50">
             @if (_groups != null)
             {
-                <Tabs Pills="true">
-                    <Items>
-                        @foreach (var group in _groups)
-                        {
-                            <Tab Name="@GetNormalizedGroupName(group.Name)">@group.DisplayName</Tab>
-                        }
-                    </Items>
-                    <Content>
-                        @foreach (var group in _groups)
-                        {
-                            <TabPanel Name="@GetNormalizedGroupName(group.Name)">
-                                @foreach (var permission in group.Permissions)
-                                {
-                                    <Check @bind-checked="@permission.IsGranted" TValue="bool">@permission.DisplayName (@permission.IsGranted.ToString())</Check>
-                                }
-                            </TabPanel>
-                        }
-                    </Content>
-                </Tabs>
+                @foreach (var group in _groups)
+                {
+                    <h3>@group.DisplayName</h3>
+
+                    @foreach (var permission in group.Permissions)
+                    {
+                        <Field>
+                            <Check @bind-checked="@permission.IsGranted" TValue="bool">@permission.DisplayName</Check>
+                        </Field>
+                    }
+                }
             }
         </ModalBody>
         <ModalFooter>
