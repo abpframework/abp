@@ -25,8 +25,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 
             var list = context.GetValue<List<BreadcrumbItem>>(BreadcrumbItemsContent);
 
-            ProcessContent(context, output);
-            
+            output.Content.SetHtmlContent(GetInnerHtml(context, output));
+
             list.Add(new BreadcrumbItem
             {
                 Html = output.Render(_encoder),
@@ -36,21 +36,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
             output.SuppressOutput();
         }
 
-        protected virtual void ProcessContent(TagHelperContext context, TagHelperOutput output)
+        protected virtual string GetInnerHtml(TagHelperContext context, TagHelperOutput output)
         {
             if (string.IsNullOrWhiteSpace(TagHelper.Href))
             {
                 output.Attributes.Add("aria-current", "page");
-                output.Content.Append(TagHelper.Title);
+                return _encoder.Encode(TagHelper.Title);
             }
-            else
-            {
-                var link = new TagBuilder("a");
-                link.Attributes.Add("href", TagHelper.Href);
-                link.InnerHtml.Append(TagHelper.Title);
 
-                output.Content.AppendHtml(link);
-            }
+            var link = new TagBuilder("a");
+            link.Attributes.Add("href", TagHelper.Href);
+            link.InnerHtml.Append(TagHelper.Title);
+            return RenderHtml(link);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
+using System.Text;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
@@ -22,37 +23,41 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 
             if (TagHelper.Buttons != AbpModalButtons.None)
             {
-                ProcessButtons(context, output);
+                output.PostContent.SetHtmlContent(CreateContent());
             }
 
             ProcessButtonsAlignment(output);
         }
 
-        protected virtual void ProcessButtons(TagHelperContext context, TagHelperOutput output) 
+        protected virtual string CreateContent() 
         {
+            var sb = new StringBuilder();
+
             switch (TagHelper.Buttons) 
             {
                 case AbpModalButtons.Cancel:
-                    AddCancelButton(context, output);
+                    sb.AppendLine(GetCancelButton());
                     break;
                 case AbpModalButtons.Close:
-                    AddCloseButton(context, output);
+                    sb.AppendLine(GetCloseButton());
                     break;
                 case AbpModalButtons.Save:
-                    AddSaveButton(context, output);
+                    sb.AppendLine(GetSaveButton());
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Cancel:
-                    AddSaveButton(context, output);
-                    AddCancelButton(context, output);
+                    sb.AppendLine(GetSaveButton());
+                    sb.AppendLine(GetCancelButton());
                     break;
                 case AbpModalButtons.Save | AbpModalButtons.Close:
-                    AddSaveButton(context, output);
-                    AddCloseButton(context, output);
+                    sb.AppendLine(GetSaveButton());
+                    sb.AppendLine(GetCloseButton());
                     break;
             }
+
+            return sb.ToString();
         }
 
-        protected virtual void AddSaveButton(TagHelperContext context, TagHelperOutput output) 
+        protected virtual string GetSaveButton() 
         {
             var icon = new TagBuilder("i");
             icon.AddCssClass("fa");
@@ -61,39 +66,39 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             var span = new TagBuilder("span");
             span.InnerHtml.Append(_localizer["Save"]);
 
-            var button = new TagBuilder("button");
-            button.Attributes.Add("type", "submit");
-            button.AddCssClass("btn");
-            button.AddCssClass("btn-primary");
-            button.Attributes.Add("data-busy-text", _localizer["SavingWithThreeDot"]);
-            button.InnerHtml.AppendHtml(icon);
-            button.InnerHtml.AppendHtml(span);
+            var element = new TagBuilder("button");
+            element.Attributes.Add("type", "submit");
+            element.AddCssClass("btn");
+            element.AddCssClass("btn-primary");
+            element.Attributes.Add("data-busy-text", _localizer["SavingWithThreeDot"]);
+            element.InnerHtml.AppendHtml(icon);
+            element.InnerHtml.AppendHtml(span);
 
-            output.PostContent.AppendHtml(button);
+            return RenderHtml(element);
         }
 
-        protected virtual void AddCloseButton(TagHelperContext context, TagHelperOutput output) 
+        protected virtual string GetCloseButton() 
         {
-            var button = new TagBuilder("button");
-            button.Attributes.Add("type", "button");
-            button.Attributes.Add("data-dismiss", "modal");
-            button.AddCssClass("btn");
-            button.AddCssClass("btn-secondary");
-            button.InnerHtml.Append(_localizer["Close"]);
+            var element = new TagBuilder("button");
+            element.Attributes.Add("type", "button");
+            element.Attributes.Add("data-dismiss", "modal");
+            element.AddCssClass("btn");
+            element.AddCssClass("btn-secondary");
+            element.InnerHtml.Append(_localizer["Close"]);
 
-            output.PostContent.AppendHtml(button);
+            return RenderHtml(element);
         }
 
-        protected virtual void AddCancelButton(TagHelperContext context, TagHelperOutput output) 
+        protected virtual string GetCancelButton() 
         {
-            var button = new TagBuilder("button");
-            button.Attributes.Add("type", "button");
-            button.Attributes.Add("data-dismiss", "modal");
-            button.AddCssClass("btn");
-            button.AddCssClass("btn-secondary");
-            button.InnerHtml.Append(_localizer["Cancel"]);
+            var element = new TagBuilder("button");
+            element.Attributes.Add("type", "button");
+            element.Attributes.Add("data-dismiss", "modal");
+            element.AddCssClass("btn");
+            element.AddCssClass("btn-secondary");
+            element.InnerHtml.Append(_localizer["Cancel"]);
 
-            output.PostContent.AppendHtml(button);
+            return RenderHtml(element);
         }
 
         protected virtual void ProcessButtonsAlignment(TagHelperOutput output)
