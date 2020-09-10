@@ -92,12 +92,12 @@ namespace MyCompanyName.MyProjectName
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication()
-                .AddIdentityServerAuthentication(options =>
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = "MyProjectName";
-                    options.JwtBackChannelHandler = new HttpClientHandler()
+                    options.Audience = "MyProjectName";
+                    options.BackchannelHttpHandler = new HttpClientHandler()
                     {
                         ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                     };

@@ -1,0 +1,39 @@
+﻿@using Volo.Abp.Account.Localization
+@using Volo.Abp.Users
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.Identity.Settings
+@using Volo.Abp.Settings
+@inject IHtmlLocalizer<AccountResource> L
+@inject ICurrentUser CurrentUser
+@inject ISettingProvider SettingManager
+@inject IThemeManager ThemeManager
+@model Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo.AccountProfilePersonalInfoManagementGroupViewComponent.PersonalInfoModel
+@{
+    var isUserNameUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled), "true",
+        StringComparison.OrdinalIgnoreCase);
+
+    var isEmailUpdateEnabled = string.Equals(await SettingManager.GetOrNullAsync(IdentitySettingNames.User.IsEmailUpdateEnabled), "true",
+        StringComparison.OrdinalIgnoreCase);
+}
+
+<h4>@L["PersonalSettings"]</h4><hr/>
+<form method="post" id="PersonalSettingsForm">
+
+    <abp-input asp-for="UserName" readonly="!isUserNameUpdateEnabled"/>
+
+    <abp-row>
+        <abp-column size-md="_6">
+            <abp-input asp-for="Name"/>
+        </abp-column>
+        <abp-column size-md="_6">
+            <abp-input asp-for="Surname"/>
+        </abp-column>
+    </abp-row>
+
+    <abp-input asp-for="Email" readonly="!isEmailUpdateEnabled"/>
+
+    <abp-input asp-for="PhoneNumber"/>
+
+    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value"/>
+</form>

@@ -1,4 +1,4 @@
-import { AddReplaceableComponent, CONTENT_STRATEGY, DomInsertionService } from '@abp/ng.core';
+import { ReplaceableComponentsService, CONTENT_STRATEGY, DomInsertionService } from '@abp/ng.core';
 import { APP_INITIALIZER } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { AccountLayoutComponent } from '../components/account-layout/account-layout.component';
@@ -11,32 +11,33 @@ export const BASIC_THEME_STYLES_PROVIDERS = [
   {
     provide: APP_INITIALIZER,
     useFactory: configureStyles,
-    deps: [DomInsertionService, Store],
+    deps: [DomInsertionService, ReplaceableComponentsService],
     multi: true,
   },
 ];
 
-export function configureStyles(domInsertion: DomInsertionService, store: Store) {
+export function configureStyles(
+  domInsertion: DomInsertionService,
+  replaceableComponents: ReplaceableComponentsService,
+) {
   return () => {
     domInsertion.insertContent(CONTENT_STRATEGY.AppendStyleToHead(styles));
 
-    initLayouts(store);
+    initLayouts(replaceableComponents);
   };
 }
 
-function initLayouts(store: Store) {
-  store.dispatch([
-    new AddReplaceableComponent({
-      key: eThemeBasicComponents.ApplicationLayout,
-      component: ApplicationLayoutComponent,
-    }),
-    new AddReplaceableComponent({
-      key: eThemeBasicComponents.AccountLayout,
-      component: AccountLayoutComponent,
-    }),
-    new AddReplaceableComponent({
-      key: eThemeBasicComponents.EmptyLayout,
-      component: EmptyLayoutComponent,
-    }),
-  ]);
+function initLayouts(replaceableComponents: ReplaceableComponentsService) {
+  replaceableComponents.add({
+    key: eThemeBasicComponents.ApplicationLayout,
+    component: ApplicationLayoutComponent,
+  });
+  replaceableComponents.add({
+    key: eThemeBasicComponents.AccountLayout,
+    component: AccountLayoutComponent,
+  });
+  replaceableComponents.add({
+    key: eThemeBasicComponents.EmptyLayout,
+    component: EmptyLayoutComponent,
+  });
 }

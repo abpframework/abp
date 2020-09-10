@@ -74,6 +74,68 @@ Configure<AbpVirtualFileSystemOptions>(options =>
 * 你的项目有一个名为 `MyFiles` 的目录.
 * 你只想添加 `MyFiles` 目录到虚拟文件系统.
 
+## IVirtualFileProvider
+
+将文件嵌入到程序集中并注册到虚拟文件系统后,可以使用 `IVirtualFileProvider` 接口来获取文件或目录内容:
+
+````C#
+public class MyService : ITransientDependency
+{
+    private readonly IVirtualFileProvider _virtualFileProvider;
+
+    public MyService(IVirtualFileProvider virtualFileProvider)
+    {
+        _virtualFileProvider = virtualFileProvider;
+    }
+
+    public void Test()
+    {
+        //Getting a single file
+        var file = _virtualFileProvider
+            .GetFileInfo("/MyResources/js/test.js");
+
+        var fileContent = file.ReadAsString();
+
+        //Getting all files/directories under a directory
+        var directoryContents = _virtualFileProvider
+            .GetDirectoryContents("/MyResources/js");
+    }
+}
+````
+
+### ASP.NET Core 集成
+
+虚拟文件系统与 ASP.NET Core 无缝集成:
+
+* 虚拟文件可以像Web应用程序上的物理(静态)文件一样使用.
+* Js, css, 图像文件和所有其他Web内容可以嵌入到程序集中并像物理文件一样使用.
+* 应用程序(或其他模块)可以**覆盖模块的虚拟文件**, 就像将具有相同名称和扩展名的文件放入虚拟文件的同一文件夹中一样.
+
+#### 虚拟文件中间件
+
+虚拟文件中间件用于向客户端/浏览器提供嵌入式(js, css, image ...)文件, 就像 **wwwroot** 文件夹中的物理(静态)文件一样. 它同时涵盖了物理文件.
+
+在你ASP.NET Core中间件配置中替换 `app.UseStaticFiles()` 为 `app.UseVirtualFiles()`:
+
+````C#
+app.UseVirtualFiles();
+````
+
+在静态文件中间件之后添加虚拟文件中间件, 使得通过在虚拟文件相同的位置放置物理文件, 从而用物理文件覆盖虚拟文件成为可能.
+
+> [应用程序启动模板](Startup-Templates/Application.md)已经配置了 `UseVirtualFiles()`.
+
+#### 静态虚拟文件夹
+
+默认情况下,ASP.NET Core仅允许 `wwwroot` 文件夹包含客户端使用的静态文件. 当你使用 `UseVirtualFiles` 中间件时以下文件夹也可以包含静态文件:
+
+* Pages
+* Views
+* Components
+* Themes
+
+这允许你可以在 `.cshtml` 文件附近添加 `.js`, `.css`... 文件,更易于开发和维护你的项目.
+
 #### 在开发过程中处理嵌入式文件
 
 将文件嵌入到模块程序集中并能够通过引用程序集(或添加nuget包)在另一个项目中使用它对于创建可重用模块非常有价值. 但是, 这使得开发模块本身变得有点困难.
@@ -115,61 +177,16 @@ public class MyWebAppModule : AbpModule
 
 > [应用程序启动模板]已经为本地化文件应用这个方法,所以当你更改一个本地化文件时,它会自动检测到更改.
 
-## IVirtualFileProvider
+## 替换/重写虚拟文件
 
-将文件嵌入到程序集中并注册到虚拟文件系统后,可以使用 `IVirtualFileProvider` 接口来获取文件或目录内容:
+虚拟文件系统在运行时创建一个统一的文件系统,其中实际的文件在开发时被分配到不同的模块中.
 
-````C#
-public class MyService
-{
-    private readonly IVirtualFileProvider _virtualFileProvider;
+如果两个模块将文件添加到相同的虚拟路径(如`my-path/my-file.css`),之后添加的模块将替换/替换前一个([模块依赖](Module-Development-Basics.md)顺序决定了添加文件的顺序).
 
-    public MyService(IVirtualFileProvider virtualFileProvider)
-    {
-        _virtualFileProvider = virtualFileProvider;
-    }
+此功能允许你的应用程序可以覆盖/替换定义应用程序所使用的模块的任何虚拟文件. 这是ABP框架的基本可扩展性功能之一.
 
-    public void Foo()
-    {
-        //Getting a single file
-        var file = _virtualFileProvider
-            .GetFileInfo("/MyResources/js/test.js");
+因此,如果需要替换模块的文件,只需在模块/应用程序中完全相同的路径中创建该文件.
 
-        var fileContent = file.ReadAsString();
+### 物理文件
 
-        //Getting all files/directories under a directory
-        var directoryContents = _virtualFileProvider
-            .GetDirectoryContents("/MyResources/js");
-    }
-}
-````
-
-### ASP.NET Core 集成
-
-虚拟文件系统与 ASP.NET Core 无缝集成:
-
-* 虚拟文件可以像Web应用程序上的物理(静态)文件一样使用.
-* Js, css, 图像文件和所有其他Web内容可以嵌入到程序集中并像物理文件一样使用.
-* 应用程序(或其他模块)可以**覆盖模块的虚拟文件**, 就像将具有相同名称和扩展名的文件放入虚拟文件的同一文件夹中一样.
-
-#### 虚拟文件中间件
-
-虚拟文件中间件用于向客户端/浏览器提供嵌入式(js, css, image ...)文件, 就像 **wwwroot** 文件夹中的物理(静态)文件一样. 在静态文件中间件之后添加它, 如下所示:
-
-````C#
-app.UseVirtualFiles();
-````
-
-在静态文件中间件之后添加虚拟文件中间件, 使得通过在虚拟文件相同的位置放置物理文件, 从而用物理文件覆盖虚拟文件成为可能.
-
-> [应用程序启动模板](Startup-Templates/Application.md)已经配置了 `UseVirtualFiles()`.
-
-#### 静态虚拟文件夹
-
-默认情况下,ASP.NET Core仅允许 `wwwroot` 文件夹包含客户端使用的静态文件. 当你使用 `UseVirtualFiles` 中间件时以下文件夹也可以包含静态文件:
-
-* Pages
-* Views
-* Themes
-
-这允许你可以在 `.cshtml` 文件附近添加 `.js`, `.css`... 文件,更易于开发和维护你的项目.
+物理文件总是覆盖虚拟文件. 这意味着如果你把一个文件放在 `/wwwroot/my-folder/my-file.css`,它将覆盖虚拟文件系统相同位置的文件.因此你需要知道在模块中定义的文件路径来覆盖它们.

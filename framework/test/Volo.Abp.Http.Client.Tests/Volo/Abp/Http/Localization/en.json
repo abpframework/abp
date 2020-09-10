@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Volo.Abp.Http.DynamicProxying:10001": "Business exception with data: {0}"
+  }
+}
