@@ -61,11 +61,13 @@
     "Volo.Abp.Identity:UserNameNotFound": "User {0} does not exist.",
     "Volo.Abp.Identity:UserNotInRole": "User is not in role '{0}'.",
     "Volo.Abp.Identity:PasswordConfirmationFailed": "Password does not match the confirm password.",
-    "Volo.Abp.Identity:StaticRoleRenamingErrorMessage": "Static roles can not be renamed.",
-    "Volo.Abp.Identity:StaticRoleDeletionErrorMessage": "Static roles can not be deleted.",
-    "Identity.OrganizationUnit.DuplicateDisplayNameWarning": "There is already an organization unit with name {0}. Two units with same name can not be created in same level.",
-    "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
     "Volo.Abp.Identity:010001": "You can not delete your own account!",
+    "Volo.Abp.Identity:010002": "Can not set more than {MaxUserMembershipCount} organization unit for a user!",
+    "Volo.Abp.Identity:010003": "Can not change password of an externally logged in user!",
+    "Volo.Abp.Identity:010004": "There is already an organization unit with name {0}. Two units with same name can not be created in same level.",
+    "Volo.Abp.Identity:010005": "Static roles can not be renamed.",
+    "Volo.Abp.Identity:010006": "Static roles can not be deleted.",
+    "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
     "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",
     "Permission:Create": "Create",
@@ -101,8 +103,6 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Whether the phoneNumber can be confirmed by the user.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Whether a confirmed telephone number is required to sign in.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Whether the username can be updated by the user.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user.",
-    "Volo.Abp.Identity:010002": "Can not set more than {MaxUserMembershipCount} organization unit for a user!",
-    "Volo.Abp.Identity:010003": "Can not change password of an externally logged in user!"
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user."
   }
 }
