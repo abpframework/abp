@@ -21,7 +21,7 @@ export class FeatureManagementState {
   @Action(GetFeatures)
   getFeatures({ patchState }: StateContext<FeatureManagement.State>, { payload }: GetFeatures) {
     return this.featureManagementService.getFeatures(payload).pipe(
-      tap(({ features }) =>
+      tap(({ features = [] }) =>
         patchState({
           features,
         }),
