@@ -117,7 +117,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 Id = _currentUser.Id,
                 TenantId = _currentUser.TenantId,
                 UserName = _currentUser.UserName,
+                SurName = _currentUser.SurName,
+                Name = _currentUser.Name,
                 Email = _currentUser.Email,
+                EmailVerified = _currentUser.EmailVerified,
+                PhoneNumber = _currentUser.PhoneNumber,
+                PhoneNumberVerified = _currentUser.PhoneNumberVerified,
                 Roles = _currentUser.Roles
             };
         }

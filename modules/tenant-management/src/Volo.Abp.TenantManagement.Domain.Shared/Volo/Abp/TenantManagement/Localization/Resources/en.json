@@ -10,13 +10,14 @@
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Default Connection String",
     "DisplayName:UseSharedDatabase": "Use the Shared Database",
+    "ManageHostFeatures": "Manage Host features",
     "Permission:TenantManagement": "Tenant management",
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",
     "Permission:ManageConnectionStrings": "Manage connection strings",
     "Permission:ManageFeatures": "Manage features",
-    "DisplayName:AdminEmailAddress": "Admin Email Address", 
-    "DisplayName:AdminPassword": "Admin Password" 
+    "DisplayName:AdminEmailAddress": "Admin Email Address",
+    "DisplayName:AdminPassword": "Admin Password"
   }
 }
