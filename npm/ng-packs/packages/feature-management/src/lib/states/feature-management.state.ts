@@ -5,6 +5,9 @@ import { FeatureManagement } from '../models/feature-management';
 import { FeatureManagementService } from '../services/feature-management.service';
 import { Injectable } from '@angular/core';
 
+/**
+ * @deprecated To be deleted in v4.0.
+ */
 @State<FeatureManagement.State>({
   name: 'FeatureManagementState',
   defaults: { features: {} } as FeatureManagement.State,
