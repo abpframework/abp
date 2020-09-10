@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Linq;
+using System.Web;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 {
@@ -65,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 
             if (titleAttribute != null)
             {
-                span.Attributes.Add("title", titleAttribute.Value.ToString());
+                span.Attributes.Add("title", HttpUtility.HtmlDecode(titleAttribute.Value.ToString()));
             }
 
             output.PreElement.SetHtmlContent(span.RenderStartTag());
