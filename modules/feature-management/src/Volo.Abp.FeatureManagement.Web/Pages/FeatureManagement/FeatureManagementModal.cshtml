@@ -51,9 +51,16 @@
 
                                             @if (feature.ValueType is FreeTextStringValueType)
                                             {
+                                                var type = "text";
+                                                if(feature.ValueType.Validator is NumericValueValidator)
+                                                {
+                                                    type = "number";
+                                                }
+
                                                 <abp-input asp-for="@featureGroups[i].Features[j].Value"
                                                            label="@feature.DisplayName"
                                                            disabled="@disabled"
+                                                           type="@type"
                                                            group-data-feature-name="@feature.Name"
                                                            group-data-parent-name="@(feature.ParentName ?? "")"
                                                            group-style="margin-left: @(feature.Depth * 25)px"/>
@@ -80,7 +87,7 @@
                                                 </div>
                                             }
 
-                                             <input value="@feature.Name" name="FeatureGroups[@i].Features[@j].Name" hidden=""/>
+                                            <input value="@feature.Name" name="FeatureGroups[@i].Features[@j].Name" hidden=""/>
                                         </div>
                                     }
                                 </div>
