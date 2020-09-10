@@ -339,6 +339,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Compone
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.BlazoriseUI", "src\Volo.Abp.BlazoriseUI\Volo.Abp.BlazoriseUI.csproj", "{4EBDDB1B-D6C5-4FAE-B5A7-2171B18CDFA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme", "src\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme\Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.csproj", "{ABC27C10-C0FF-44CB-B4FF-A09C0B79F695}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1009,6 +1011,10 @@ Global
 		{4EBDDB1B-D6C5-4FAE-B5A7-2171B18CDFA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EBDDB1B-D6C5-4FAE-B5A7-2171B18CDFA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EBDDB1B-D6C5-4FAE-B5A7-2171B18CDFA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABC27C10-C0FF-44CB-B4FF-A09C0B79F695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC27C10-C0FF-44CB-B4FF-A09C0B79F695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC27C10-C0FF-44CB-B4FF-A09C0B79F695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC27C10-C0FF-44CB-B4FF-A09C0B79F695}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1180,6 +1186,7 @@ Global
 		{8A22D962-016E-474A-8BB7-F831F0ABF3AC} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{E1A62D10-F2FB-4040-BD60-11A3934058DF} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{4EBDDB1B-D6C5-4FAE-B5A7-2171B18CDFA5} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{ABC27C10-C0FF-44CB-B4FF-A09C0B79F695} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
