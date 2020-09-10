@@ -1,8 +1,8 @@
-@using Volo.Abp.Identity.Blazor.Pages
+@using Volo.Abp.Identity.Blazor
 <CascadingAuthenticationState>
     <Router 
         AppAssembly="@typeof(Program).Assembly" 
-        AdditionalAssemblies="new []{ typeof(UserManagement).Assembly }">
+        AdditionalAssemblies="new []{ typeof(AbpIdentityBlazorModule).Assembly }">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>

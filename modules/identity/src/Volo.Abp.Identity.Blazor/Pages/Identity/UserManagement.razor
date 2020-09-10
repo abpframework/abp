@@ -1,0 +1,14 @@
+﻿@page "/identity/users"
+@inherits BlazorisePageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
+
+<h3>UserManagement</h3>
+
+@if (Entities != null)
+{
+    <ul>
+        @foreach (var user in Entities)
+        {
+            <li>@user.UserName</li>
+        }
+    </ul>
+}
