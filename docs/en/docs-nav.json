@@ -171,6 +171,10 @@
           "path": "Settings.md"
         },
         {
+          "text": "Features",
+          "path": "Features.md"
+        },
+        {
           "text": "Data Filtering",
           "path": "Data-Filtering.md"
         },

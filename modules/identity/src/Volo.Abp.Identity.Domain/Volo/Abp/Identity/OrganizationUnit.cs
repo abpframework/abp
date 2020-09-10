@@ -23,13 +23,13 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Hierarchical Code of this organization unit.
         /// Example: "00001.00042.00005".
-        /// This is a unique code for a Tenant.
+        /// This is a unique code for an OrganizationUnit.
         /// It's changeable if OU hierarchy is changed.
         /// </summary>
         public virtual string Code { get; internal set; }
 
         /// <summary>
-        /// Display name of this role.
+        /// Display name of this OrganizationUnit.
         /// </summary>
         public virtual string DisplayName { get; set; }
 
@@ -77,7 +77,7 @@ namespace Volo.Abp.Identity
         }
 
         /// <summary>
-        /// Appends a child code to a parent code. 
+        /// Appends a child code to a parent code.
         /// Example: if parentCode = "00001", childCode = "00042" then returns "00001.00042".
         /// </summary>
         /// <param name="parentCode">Parent code. Can be null or empty if parent is a root.</param>

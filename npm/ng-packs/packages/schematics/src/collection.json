@@ -5,6 +5,11 @@
       "factory": "./commands/proxy-add",
       "schema": "./commands/proxy-add/schema.json"
     },
+    "proxy-index": {
+      "description": "ABP Proxy Generator Index Schematics",
+      "factory": "./commands/proxy-index",
+      "schema": "./commands/proxy-index/schema.json"
+    },
     "proxy-refresh": {
       "description": "ABP Proxy Generator Refresh Schematics",
       "factory": "./commands/proxy-refresh",
