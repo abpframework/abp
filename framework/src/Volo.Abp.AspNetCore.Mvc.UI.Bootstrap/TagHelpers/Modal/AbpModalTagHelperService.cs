@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,40 +14,54 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 
             var childContent = await output.GetChildContentAsync();
 
-            Process(context, output, childContent);
+            SetContent(context, output, childContent);
         }
 
-        protected virtual void Process(TagHelperContext context, TagHelperOutput output, TagHelperContent content)
+        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
         {
-            var modalContent = new TagBuilder("div");
-            modalContent.AddCssClass(GetModalContentClasses());
-            modalContent.InnerHtml.AppendHtml(content);
-
-            var modalDialog = new TagBuilder("div");
-            modalDialog.AddCssClass(GetModalDialogClasses());
-            modalDialog.Attributes.Add("role", "document");
-            modalDialog.InnerHtml.AppendHtml(modalContent);
-
-            var modal = new TagBuilder("div");
-            modal.AddCssClass(GetModalClasses());
-            modal.Attributes.Add("tabindex", "-1");
-            modal.Attributes.Add("role", "dialog");
-            modal.Attributes.Add("aria-hidden", "true");
-
-            foreach (var attr in output.Attributes)
-            {
-                modal.Attributes.Add(attr.Name, attr.Value.ToString());
-            }
-
-            if (TagHelper.Static == true)
-            {
-                modal.Attributes.Add("data-backdrop", "static");
-            }
-
-            modal.InnerHtml.AppendHtml(modalDialog);
+            var modalContent = GetModalContentElement(context, output, childContent);
+            var modalDialog = GetModalDialogElement(context, output, modalContent);
+            var modal = GetModal(context, output, modalDialog);
 
             output.Content.SetHtmlContent(modal);
         } 
+
+        protected virtual TagBuilder GetModalContentElement(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
+        {
+            var element = new TagBuilder("div");
+            element.AddCssClass(GetModalContentClasses());
+            element.InnerHtml.SetHtmlContent(childContent);
+            return element;
+        }
+
+        protected virtual TagBuilder GetModalDialogElement(TagHelperContext context, TagHelperOutput output, IHtmlContent innerHtml)
+        {
+            var element = new TagBuilder("div");
+            element.AddCssClass(GetModalDialogClasses());
+            element.Attributes.Add("role", "document");
+            element.InnerHtml.SetHtmlContent(innerHtml);
+            return element;
+        }
+
+        protected virtual TagBuilder GetModal(TagHelperContext context, TagHelperOutput output, IHtmlContent innerHtml)
+        {
+            var element = new TagBuilder("div");
+            element.AddCssClass(GetModalClasses());
+            element.Attributes.Add("tabindex", "-1");
+            element.Attributes.Add("role", "dialog");
+            element.Attributes.Add("aria-hidden", "true");
+
+            foreach (var attr in output.Attributes)
+            {
+                element.Attributes.Add(attr.Name, attr.Value.ToString());
+            }
+
+            SetDataAttributes(element);
+
+            element.InnerHtml.SetHtmlContent(innerHtml);
+
+            return element;
+        }
 
         protected virtual string GetModalClasses()
         {
@@ -75,6 +90,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         protected virtual string GetModalContentClasses()
         {
             return "modal-content";
+        }
+
+        protected virtual string GetDataAttributes()
+        {
+            if (TagHelper.Static == true)
+            {
+                return "data-backdrop=\"static\" ";
+            }
+            return string.Empty;
+        }
+
+        protected virtual void SetDataAttributes(TagBuilder builder)
+        {
+            if (TagHelper.Static == true)
+            {
+                builder.Attributes.Add("data-backdrop", "static");
+            }
         }
     }
 }

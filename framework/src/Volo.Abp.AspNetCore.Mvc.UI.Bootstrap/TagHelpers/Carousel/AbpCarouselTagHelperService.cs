@@ -31,8 +31,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
             await output.GetChildContentAsync();
 
             SetOneItemAsActive(context, output, itemList);
-
-
             SetItems(context, output, itemList);
             SetControls(context, output, itemList);
             SetIndicators(context, output, itemList);

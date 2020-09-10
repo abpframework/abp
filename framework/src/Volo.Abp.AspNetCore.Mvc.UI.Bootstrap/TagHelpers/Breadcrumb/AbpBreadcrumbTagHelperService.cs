@@ -17,24 +17,30 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 
             await output.GetChildContentAsync();
 
-            ProcessItems(context, output, list);
+            var listTagBulder = GetOlTagBuilder();
+
+            SetInnerList(context, output, list, listTagBulder);
+
+            output.Content.SetHtmlContent(listTagBulder);
         }
 
-        protected virtual void ProcessItems(TagHelperContext context, TagHelperOutput output, List<BreadcrumbItem> list)
+        protected virtual TagBuilder GetOlTagBuilder()
+        {
+            var builder = new TagBuilder("ol");
+            builder.AddCssClass("breadcrumb");
+            return builder;
+        }
+
+        protected virtual void SetInnerList(TagHelperContext context, TagHelperOutput output, List<BreadcrumbItem> list, TagBuilder listTagBuilder)
         {
             SetLastOneActiveIfThereIsNotAny(context, output, list);
-
-            var listElement = new TagBuilder("ol");
-            listElement.AddCssClass("breadcrumb");
 
             foreach (var breadcrumbItem in list)
             {
                 var htmlPart = SetActiveClassIfActiveAndGetHtml(breadcrumbItem);
 
-                listElement.InnerHtml.AppendHtml(htmlPart);
+                listTagBuilder.InnerHtml.AppendHtml(htmlPart);
             }
-
-            output.Content.SetHtmlContent(listElement);
         }
 
         protected virtual List<BreadcrumbItem> InitilizeFormGroupContentsContext(TagHelperContext context, TagHelperOutput output)

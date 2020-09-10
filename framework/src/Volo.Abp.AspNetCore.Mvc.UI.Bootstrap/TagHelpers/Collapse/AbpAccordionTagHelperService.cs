@@ -30,10 +30,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 
             await output.GetChildContentAsync();
 
-            ProcessItems(context, output, items);
+            SetContent(context, output, items);
         }
 
-        protected virtual void ProcessItems(TagHelperContext context, TagHelperOutput output, List<string> items)
+        protected virtual void SetContent(TagHelperContext context, TagHelperOutput output, List<string> items)
         {
             foreach (var item in items)
             {

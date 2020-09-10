@@ -19,21 +19,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
         {
             output.TagName = "div";
             output.Attributes.AddClass("modal-header");
-
-            AddTitle(context, output);
-            AddCloseButton(context, output);
+            output.PreContent.SetHtmlContent(CreatePreContent());
+            output.PostContent.SetHtmlContent(CreatePostContent());
         }
 
-        protected virtual void AddTitle(TagHelperContext context, TagHelperOutput output)
+        protected virtual string CreatePreContent()
         {
             var title = new TagBuilder("h5");
             title.AddCssClass("modal-title");
             title.InnerHtml.Append(TagHelper.Title);
 
-            output.PreContent.SetHtmlContent(title);
+            return RenderHtml(title);
         }
 
-        protected virtual void AddCloseButton(TagHelperContext context, TagHelperOutput output)
+        protected virtual string CreatePostContent()
         {
             var span = new TagBuilder("span");
             span.Attributes.Add("aria-hidden", "true");
@@ -46,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             button.Attributes.Add("aria-label", L["Close"].Value);
             button.InnerHtml.AppendHtml(span);
 
-            output.PostContent.AppendHtml(button);
+            return RenderHtml(button);
         }
     }
 }

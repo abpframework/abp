@@ -349,6 +349,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return idAttr != null ? idAttr.Value.ToString() : string.Empty;
         }
 
+        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
+        {
+            var id = GetIdAttributeValue(inputTag);
+
+            return !string.IsNullOrWhiteSpace(id) ? "for=\"" + id + "\"" : string.Empty;
+        }
+
         protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
         {
             var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
