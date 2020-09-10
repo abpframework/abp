@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.FeatureManagement
 {
@@ -57,7 +58,8 @@ namespace Volo.Abp.FeatureManagement
                 .Select(x => new FeatureNameValue(x.Name, x.Value)).ToList();
         }
 
-        public async Task<FeatureNameValueWithGrantedProvider> GetOrNullWithProviderAsync(string name, string providerName, string providerKey, bool fallback = true)
+        public async Task<FeatureNameValueWithGrantedProvider> GetOrNullWithProviderAsync(string name,
+            string providerName, string providerKey, bool fallback = true)
         {
             Check.NotNull(name, nameof(name));
             Check.NotNull(providerName, nameof(providerName));
@@ -65,7 +67,8 @@ namespace Volo.Abp.FeatureManagement
             return await GetOrNullInternalAsync(name, providerName, providerKey, fallback);
         }
 
-        public async Task<List<FeatureNameValueWithGrantedProvider>> GetAllWithProviderAsync(string providerName, string providerKey, bool fallback = true)
+        public async Task<List<FeatureNameValueWithGrantedProvider>> GetAllWithProviderAsync(string providerName,
+            string providerKey, bool fallback = true)
         {
             Check.NotNull(providerName, nameof(providerName));
 
@@ -127,6 +130,11 @@ namespace Volo.Abp.FeatureManagement
             Check.NotNull(providerName, nameof(providerName));
 
             var feature = FeatureDefinitionManager.Get(name);
+
+            if (feature.ValueType.Validator != null && !feature.ValueType.Validator.IsValid(value))
+            {
+                throw new BusinessException($"{feature.Name} value is invalid");
+            }
 
             var providers = Enumerable
                 .Reverse(Providers)
