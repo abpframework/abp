@@ -9,6 +9,7 @@ export * from './localization.service';
 export * from './multi-tenancy.service';
 export * from './profile-state.service';
 export * from './profile.service';
+export * from './replaceable-components.service';
 export * from './rest.service';
 export * from './routes.service';
 export * from './session-state.service';

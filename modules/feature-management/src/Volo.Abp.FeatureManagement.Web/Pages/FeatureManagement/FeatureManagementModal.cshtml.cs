@@ -16,7 +16,6 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
         [BindProperty(SupportsGet = true)]
         public string ProviderName { get; set; }
 
-        [Required]
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
         public string ProviderKey { get; set; }
@@ -82,8 +81,6 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
             public string Name { get; set; }
 
             public string Value { get; set; }
-
-            public string ProviderName { get; set; }
 
             public bool BoolValue { get; set; }
 
