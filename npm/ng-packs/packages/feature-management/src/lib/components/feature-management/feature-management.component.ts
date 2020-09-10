@@ -48,8 +48,8 @@ export class FeatureManagementComponent
   constructor(private store: Store) {}
 
   openModal() {
-    if (!this.providerKey || !this.providerName) {
-      throw new Error('Provider Key and Provider Name are required.');
+    if (!this.providerName) {
+      throw new Error('providerName is required.');
     }
 
     this.getFeatures();
