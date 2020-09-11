@@ -31,6 +31,8 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
     "framework/src/Volo.Abp.AspNetCore",
     "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming",
+    "framework/src/Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client",
     "framework/src/Volo.Abp.AspNetCore.Mvc.Client.Common",
@@ -229,6 +231,7 @@ $projects = (
     "modules/permission-management/src/Volo.Abp.PermissionManagement.HttpApi",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.MongoDB",
     "modules/permission-management/src/Volo.Abp.PermissionManagement.Web",
+    "modules/permission-management/src/Volo.Abp.PermissionManagement.Blazor",
 
     # modules/setting-management
     "modules/setting-management/src/Volo.Abp.SettingManagement.Domain",
