@@ -27,6 +27,10 @@
             }
         };
 
+        var appendEncoded = function ($element, unencoded) {
+            $element.append($('<div/>').text(unencoded).html());
+        };
+
         var _createDropdownItem = function (record, fieldItem) {
             var $li = $('<li/>');
             var $a = $('<a/>');
@@ -41,7 +45,7 @@
                     $a.append($("<i>").addClass(fieldItem.iconClass + " mr-1"));
                 }
 
-                $a.append(fieldItem.text);
+                appendEncoded($a, fieldItem.text);
             }
 
             if (fieldItem.action) {
@@ -85,9 +89,9 @@
             }
 
             if (field.text) {
-                $dropdownButton.append(field.text);
+                appendEncoded($dropdownButton, field.text);
             } else {
-                $dropdownButton.append(localize("DatatableActionDropdownDefaultText"));
+                appendEncoded($dropdownButton, localize("DatatableActionDropdownDefaultText"));
             }
 
             $dropdownButton
