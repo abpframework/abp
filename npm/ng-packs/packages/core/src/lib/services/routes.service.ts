@@ -51,9 +51,16 @@ export abstract class AbstractTreeService<T extends object> {
   }
 
   private filterWith(setOrMap: Set<string> | Map<string, T>): T[] {
-    return this._flat$.value.filter(
-      item => !setOrMap.has(item[this.id]) && !setOrMap.has(item[this.parentId]),
-    );
+    return this._flat$.value.filter(item => !setOrMap.has(item[this.id]));
+  }
+
+  private findItemsToRemove(set: Set<string>): Set<string> {
+    return this._flat$.value.reduce((acc, item) => {
+      if (!acc.has(item[this.parentId])) return acc;
+      const childSet = new Set([item[this.id]]);
+      const children = this.findItemsToRemove(childSet);
+      return new Set([...acc, ...children]);
+    }, set);
   }
 
   private publish(flatItems: T[], visibleItems: T[]): T[] {
@@ -104,7 +111,8 @@ export abstract class AbstractTreeService<T extends object> {
     const set = new Set<string>();
     identifiers.forEach(id => set.add(id));
 
-    const flatItems = this.filterWith(set);
+    const setToRemove = this.findItemsToRemove(set);
+    const flatItems = this.filterWith(setToRemove);
     const visibleItems = flatItems.filter(item => !this.hide(item));
 
     return this.publish(flatItems, visibleItems);
