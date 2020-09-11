@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Volo.Abp.DependencyInjection;
 
-namespace MyCompanyName.MyProjectName.Blazor
+namespace Volo.Abp.AspNetCore.Components.WebAssembly
 {
-    public class BlazorClientHttpMessageHandler : DelegatingHandler, ITransientDependency
+    public class AbpBlazorClientHttpMessageHandler : DelegatingHandler, ITransientDependency
     {
         private readonly IJSRuntime _jsRuntime;
 
-        public BlazorClientHttpMessageHandler(IJSRuntime jsRuntime)
+        public AbpBlazorClientHttpMessageHandler(IJSRuntime jsRuntime)
         {
             _jsRuntime = jsRuntime;
         }

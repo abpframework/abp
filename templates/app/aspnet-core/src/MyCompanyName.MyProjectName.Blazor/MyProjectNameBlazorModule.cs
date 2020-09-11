@@ -8,30 +8,21 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Autofac;
-using Volo.Abp.Http.Client;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
 using Volo.Abp.Modularity;
+using Volo.Abp.UI.Navigation;
+using Volo.Abp.Identity.Blazor;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(MyProjectNameHttpApiClientModule),
+        typeof(AbpIdentityBlazorModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule)
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            PreConfigure<AbpHttpClientBuilderOptions>(options =>
-            {
-                options.ProxyClientBuildActions.Add((_, builder) =>
-                {
-                    builder.AddHttpMessageHandler<BlazorClientHttpMessageHandler>();
-                });
-            });
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var environment = context.Services.GetSingletonInstance<IWebAssemblyHostEnvironment>();
@@ -41,6 +32,15 @@ namespace MyCompanyName.MyProjectName.Blazor
             ConfigureHttpClient(context, environment);
             ConfigureBlazorise(context);
             ConfigureUI(builder);
+            ConfigureMenu(context);
+        }
+
+        private void ConfigureMenu(ServiceConfigurationContext context)
+        {
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+            });
         }
 
         private void ConfigureBlazorise(ServiceConfigurationContext context)

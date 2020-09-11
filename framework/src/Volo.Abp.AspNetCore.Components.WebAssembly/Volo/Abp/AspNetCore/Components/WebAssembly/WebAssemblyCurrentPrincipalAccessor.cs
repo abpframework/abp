@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using Volo.Abp.AspNetCore.Mvc.Client;
 using Volo.Abp.DependencyInjection;
@@ -10,23 +11,37 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
     {
         protected ICachedApplicationConfigurationClient ConfigurationClient { get; }
 
-        public WebAssemblyCurrentPrincipalAccessor(ICachedApplicationConfigurationClient configurationClient)
+        public WebAssemblyCurrentPrincipalAccessor(
+            ICachedApplicationConfigurationClient configurationClient)
         {
             ConfigurationClient = configurationClient;
         }
 
         protected override ClaimsPrincipal GetClaimsPrincipal()
         {
-            //TODO: Should be optimized! Or should be replaced?
-
             var configuration = ConfigurationClient.Get();
 
             var claims = new List<Claim>();
 
-            claims.Add(new Claim(AbpClaimTypes.UserName,configuration.CurrentUser.UserName));
-            claims.Add(new Claim(AbpClaimTypes.Email,configuration.CurrentUser.Email));
-            claims.Add(new Claim(AbpClaimTypes.UserId,configuration.CurrentUser.Id.ToString()));
-            claims.Add(new Claim(AbpClaimTypes.TenantId,configuration.CurrentUser.TenantId.ToString()));
+            if (!configuration.CurrentUser.UserName.IsNullOrWhiteSpace())
+            {
+                claims.Add(new Claim(AbpClaimTypes.UserName,configuration.CurrentUser.UserName));
+            }
+
+            if (!configuration.CurrentUser.Email.IsNullOrWhiteSpace())
+            {
+                claims.Add(new Claim(AbpClaimTypes.Email,configuration.CurrentUser.Email));
+            }
+
+            if (configuration.CurrentUser.Id != null)
+            {
+                claims.Add(new Claim(AbpClaimTypes.UserId,configuration.CurrentUser.Id.ToString()));
+            }
+
+            if (configuration.CurrentUser.TenantId != null)
+            {
+                claims.Add(new Claim(AbpClaimTypes.TenantId,configuration.CurrentUser.TenantId.ToString()));
+            }
 
             foreach (var role in configuration.CurrentUser.Roles)
             {

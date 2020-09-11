@@ -1,28 +1,24 @@
 ﻿@using Volo.Abp.Localization
 @using System.Globalization
+@using System.Collections.Immutable
 @inject ILanguageProvider LanguageProvider
 @inject IJSRuntime JsRuntime
-@if (_languages != null && _languages.Count > 1)
+@if (_otherLanguages != null && _otherLanguages.Any())
 {
     <Dropdown>
         <DropdownToggle Color="Color.None">
             @_currentLanguage.DisplayName
         </DropdownToggle>
         <DropdownMenu>
-            @foreach (var language in _languages)
+            @foreach (var language in _otherLanguages)
             {
-                if (language == _currentLanguage)
-                {
-                    continue;
-                }
-
                 <DropdownItem Clicked="() => ChangeLanguageAsync(language)">@language.DisplayName</DropdownItem>
             }
         </DropdownMenu>
     </Dropdown>
 }
 @code {
-    private IReadOnlyList<LanguageInfo> _languages;
+    private IReadOnlyList<LanguageInfo> _otherLanguages;
     private LanguageInfo _currentLanguage;
 
     protected override async Task OnInitializedAsync()
@@ -32,27 +28,29 @@
             "Abp.SelectedLanguage"
             );
 
-        _languages = await LanguageProvider.GetLanguagesAsync();
+        _otherLanguages = await LanguageProvider.GetLanguagesAsync();
 
-        if (!_languages.Any())
+        if (!_otherLanguages.Any())
         {
             return;
         }
 
         if (!selectedLanguageName.IsNullOrWhiteSpace())
         {
-            _currentLanguage = _languages.FirstOrDefault(l => l.UiCultureName == selectedLanguageName);
+            _currentLanguage = _otherLanguages.FirstOrDefault(l => l.UiCultureName == selectedLanguageName);
         }
 
         if (_currentLanguage == null)
         {
-            _currentLanguage = _languages.FirstOrDefault(l => l.UiCultureName == CultureInfo.CurrentUICulture.Name);
+            _currentLanguage = _otherLanguages.FirstOrDefault(l => l.UiCultureName == CultureInfo.CurrentUICulture.Name);
         }
 
         if (_currentLanguage == null)
         {
-            _currentLanguage = _languages.FirstOrDefault();
+            _currentLanguage = _otherLanguages.FirstOrDefault();
         }
+
+        _otherLanguages = _otherLanguages.Where(l => l != _currentLanguage).ToImmutableList();
     }
 
     private async Task ChangeLanguageAsync(LanguageInfo language)

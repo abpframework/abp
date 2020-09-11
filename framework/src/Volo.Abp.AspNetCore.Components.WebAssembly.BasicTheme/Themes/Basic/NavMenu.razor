@@ -1,37 +1,7 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">MyProjectName</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <i class="fas fa-home" aria-hidden="true"></i> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="identity/users">
-                <i class="fas fa-users" aria-hidden="true"></i> Users
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="identity/roles">
-                <i class="fas fa-user-tag" aria-hidden="true"></i> Roles
-            </NavLink>
-        </li>
-    </ul>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+﻿@if (Menu != null)
+{
+    foreach (var menuItem in Menu.Items)
     {
-        collapseNavMenu = !collapseNavMenu;
+        <NavMenuItem MenuItem="@menuItem" />
     }
 }

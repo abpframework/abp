@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-using Volo.Abp.BlazoriseUI;
 using Volo.Abp.PermissionManagement.Blazor;
+using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.Identity.Blazor
 {
     [DependsOn(
         typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpBlazoriseUIModule),
         typeof(AbpAutoMapperModule),
         typeof(AbpPermissionManagementBlazorModule)
         )]
@@ -21,6 +20,11 @@ namespace Volo.Abp.Identity.Blazor
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpIdentityBlazorAutoMapperProfile>(validate: true);
+            });
+
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
             });
         }
     }
