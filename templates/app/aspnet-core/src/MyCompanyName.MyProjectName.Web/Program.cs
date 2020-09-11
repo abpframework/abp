@@ -21,7 +21,7 @@ namespace MyCompanyName.MyProjectName.Web
                 .Enrich.FromLogContext()
                 .WriteTo.Async(c => c.File("Logs/logs.txt"))
 #if DEBUG
-                .WriteTo.Console()
+                .WriteTo.Async(c => c.Console())
 #endif
                 .CreateLogger();
 
