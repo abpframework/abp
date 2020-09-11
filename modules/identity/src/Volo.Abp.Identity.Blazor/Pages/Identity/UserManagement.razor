@@ -68,36 +68,58 @@
             <CloseButton Clicked="CloseCreateModal" />
         </ModalHeader>
         <ModalBody>
-            <Field>
-                <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                <TextEdit @bind-text="NewEntity.UserName" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
-                <TextEdit @bind-text="NewEntity.Name" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
-                <TextEdit @bind-text="NewEntity.Surname" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                <TextEdit @bind-text="NewEntity.Password" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
-                <TextEdit @bind-text="NewEntity.Email" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
-                <TextEdit @bind-text="NewEntity.PhoneNumber" />
-            </Field>
-            <Field>
-                <Check TValue="bool" @bind-checked="NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-            </Field>
-            <Field>
-                <Check TValue="bool" @bind-checked="NewEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
-            </Field>
+            <Tabs SelectedTab="UserInformations">
+                <Items>
+                    <Tab Name="UserInformations">@L["UserInformations"]</Tab>
+                    <Tab Name="Roles">@L["Roles"]</Tab>
+                </Items>
+                <Content>
+                    <TabPanel Name="UserInformations">
+                        <Field>
+                            <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                            <TextEdit @bind-text="NewEntity.UserName" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
+                            <TextEdit @bind-text="NewEntity.Name" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
+                            <TextEdit @bind-text="NewEntity.Surname" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
+                            <TextEdit @bind-text="NewEntity.Password" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                            <TextEdit @bind-text="NewEntity.Email" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
+                            <TextEdit @bind-text="NewEntity.PhoneNumber" />
+                        </Field>
+                        <Field>
+                            <Check TValue="bool" @bind-checked="NewEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
+                        </Field>
+                        <Field>
+                            <Check TValue="bool" @bind-checked="NewEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
+                        </Field>
+                    </TabPanel>
+                    <TabPanel Name="Roles">
+                        @if (NewEntityRoles != null)
+                        {
+                            @foreach (var role in NewEntityRoles)
+                            {
+                                <Field>
+                                    <input type="hidden" @bind-value="@role.Name" />
+                                    <Check TValue="bool" @bind-checked="@role.IsAssigned">@role.Name</Check>
+                                </Field>
+                            }
+                        }
+                    </TabPanel>
+                </Content>
+            </Tabs>
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="CloseCreateModal">@L["Cancel"]</Button>
@@ -116,36 +138,59 @@
         </ModalHeader>
         <ModalBody>
             <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-            <Field>
-                <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                <TextEdit @bind-text="EditingEntity.UserName" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
-                <TextEdit @bind-text="EditingEntity.Name" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
-                <TextEdit @bind-text="EditingEntity.Surname" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                <TextEdit @bind-text="EditingEntity.Password" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
-                <TextEdit @bind-text="EditingEntity.Email" />
-            </Field>
-            <Field>
-                <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
-                <TextEdit @bind-text="EditingEntity.PhoneNumber" />
-            </Field>
-            <Field>
-                <Check TValue="bool" @bind-checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
-            </Field>
-            <Field>
-                <Check TValue="bool" @bind-checked="EditingEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
-            </Field>
+            
+            <Tabs SelectedTab="UserInformations">
+                <Items>
+                    <Tab Name="UserInformations">@L["UserInformations"]</Tab>
+                    <Tab Name="Roles">@L["Roles"]</Tab>
+                </Items>
+                <Content>
+                    <TabPanel Name="UserInformations">
+                        <Field>
+                            <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
+                            <TextEdit @bind-text="EditingEntity.UserName" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
+                            <TextEdit @bind-text="EditingEntity.Name" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
+                            <TextEdit @bind-text="EditingEntity.Surname" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
+                            <TextEdit @bind-text="EditingEntity.Password" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
+                            <TextEdit @bind-text="EditingEntity.Email" />
+                        </Field>
+                        <Field>
+                            <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
+                            <TextEdit @bind-text="EditingEntity.PhoneNumber" />
+                        </Field>
+                        <Field>
+                            <Check TValue="bool" @bind-checked="EditingEntity.LockoutEnabled">@L["DisplayName:LockoutEnabled"]</Check>
+                        </Field>
+                        <Field>
+                            <Check TValue="bool" @bind-checked="EditingEntity.TwoFactorEnabled">@L["DisplayName:TwoFactorEnabled"]</Check>
+                        </Field>
+                    </TabPanel>
+                    <TabPanel Name="Roles">
+                        @if (EditEntityRoles != null)
+                        {
+                            @foreach (var role in EditEntityRoles)
+                            {
+                                <Field>
+                                    <input type="hidden" @bind-value="@role.Name" />
+                                    <Check TValue="bool" @bind-checked="@role.IsAssigned">@role.Name</Check>
+                                </Field>
+                            }
+                        }
+                    </TabPanel>
+                </Content>
+            </Tabs>
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Secondary" Clicked="CloseEditModal">@L["Cancel"]</Button>
