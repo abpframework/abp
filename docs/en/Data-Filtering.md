@@ -156,14 +156,14 @@ Best way to implement a custom filter is to override  `ShouldFilterEntity` and `
 ````csharp
 protected bool IsActiveFilterEnabled => DataFilter?.IsEnabled<IIsActive>() ?? false;
 
-protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType) where TEntity : class
+protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
 {
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
         return true;
     }
 
-    return base.ShouldFilterEntity<TEntity>();
+    return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
 protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
