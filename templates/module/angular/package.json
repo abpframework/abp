@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve dev-app --open",
-    "build": "ng build MyProjectName --prod",
+    "build": "ng build my-project-name --prod",
     "build:app": "npm run symlink:copy -- --no-watch && ng build dev-app --prod",
     "symlink:copy": "symlink copy --angular --packages @my-company-name/my-project-name --prod",
     "test": "ng test",
