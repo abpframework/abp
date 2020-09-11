@@ -4,6 +4,7 @@
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.Application.Dtos
 @using Volo.Abp.Identity.Localization
+@using Volo.Abp.PermissionManagement.Blazor.Components
 @inherits BlazorisePageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
 @inject IStringLocalizer<IdentityResource> L
 
@@ -35,6 +36,7 @@
                     </DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem Clicked="() => OpenEditModalAsync(context.As<IdentityUserDto>().Id)">@L["Edit"]</DropdownItem>
+                        <DropdownItem Clicked="() => PermissionManagementModal.OpenAsync(PermissionProviderName,context.As<IdentityUserDto>().Id.ToString())">@L["Permissions"]</DropdownItem>
                         <DropdownDivider/>
                         <DropdownItem Clicked="() => DeleteEntityAsync(context.As<IdentityUserDto>())">@L["Delete"]</DropdownItem>
                     </DropdownMenu>
@@ -89,7 +91,7 @@
                         </Field>
                         <Field>
                             <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                            <TextEdit @bind-text="NewEntity.Password" />
+                            <TextEdit Role="TextRole.Password" @bind-text="NewEntity.Password" />
                         </Field>
                         <Field>
                             <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
@@ -107,9 +109,9 @@
                         </Field>
                     </TabPanel>
                     <TabPanel Name="Roles">
-                        @if (NewEntityRoles != null)
+                        @if (NewUserRoles != null)
                         {
-                            @foreach (var role in NewEntityRoles)
+                            @foreach (var role in NewUserRoles)
                             {
                                 <Field>
                                     <input type="hidden" @bind-value="@role.Name" />
@@ -160,7 +162,7 @@
                         </Field>
                         <Field>
                             <FieldLabel>@L["DisplayName:Password"]</FieldLabel>
-                            <TextEdit @bind-text="EditingEntity.Password" />
+                            <TextEdit Role="TextRole.Password" @bind-text="EditingEntity.Password" />
                         </Field>
                         <Field>
                             <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
@@ -178,9 +180,9 @@
                         </Field>
                     </TabPanel>
                     <TabPanel Name="Roles">
-                        @if (EditEntityRoles != null)
+                        @if (EditUserRoles != null)
                         {
-                            @foreach (var role in EditEntityRoles)
+                            @foreach (var role in EditUserRoles)
                             {
                                 <Field>
                                     <input type="hidden" @bind-value="@role.Name" />
@@ -198,3 +200,5 @@
         </ModalFooter>
     </ModalContent>
 </Modal>
+
+<PermissionManagementModal @ref="PermissionManagementModal"/>
