@@ -16,6 +16,9 @@ namespace MyCompanyName.MyProjectName
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
+#if DEBUG
+                .WriteTo.Console()
+#endif
                 .CreateLogger();
 
             try
