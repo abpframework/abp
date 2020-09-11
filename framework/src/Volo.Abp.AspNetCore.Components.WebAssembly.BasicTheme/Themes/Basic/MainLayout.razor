@@ -1,9 +1,9 @@
 ﻿@inherits LayoutComponentBase
-@using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
-
+@using Volo.Abp.Ui.Branding
+@inject IBrandingProvider BrandingProvider
 <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4" id="main-navbar" style="min-height: 4rem;">
     <div class="container">
-        <a class="navbar-brand" href="~/">My Application (TODO)</a>
+        <a class="navbar-brand" href="/">@BrandingProvider.AppName</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#main-navbar-collapse" aria-controls="main-navbar-collapse"
                 aria-expanded="false" aria-label="Toggle navigation">
