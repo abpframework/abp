@@ -15,9 +15,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected IReadOnlyList<IdentityRoleDto> Roles;
 
-        protected AssignedRoleViewModel[] NewEntityRoles;
+        protected AssignedRoleViewModel[] NewUserRoles;
         
-        protected AssignedRoleViewModel[] EditEntityRoles;
+        protected AssignedRoleViewModel[] EditUserRoles;
         
         public UserManagement()
         {
@@ -34,7 +34,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         protected override void OpenCreateModal()
         {
             
-            NewEntityRoles = Roles.Select(x => new AssignedRoleViewModel
+            NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
                             {
                                 Name = x.Name,
                                 IsAssigned = x.IsDefault
@@ -45,7 +45,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override Task CreateEntityAsync()
         {
-            NewEntity.RoleNames = NewEntityRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
+            NewEntity.RoleNames = NewUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
             
             return base.CreateEntityAsync();
         }
@@ -54,7 +54,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         {
             var userRoleNames = (await AppService.GetRolesAsync(id)).Items.Select(r => r.Name).ToList();
             
-            EditEntityRoles = Roles.Select(x => new AssignedRoleViewModel
+            EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
                                 {
                                     Name = x.Name,
                                     IsAssigned = userRoleNames.Contains(x.Name)
@@ -65,7 +65,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
 
         protected override Task UpdateEntityAsync()
         {
-            EditingEntity.RoleNames = EditEntityRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
+            EditingEntity.RoleNames = EditUserRoles.Where(x => x.IsAssigned).Select(x => x.Name).ToArray();
             
             return base.UpdateEntityAsync();
         }
