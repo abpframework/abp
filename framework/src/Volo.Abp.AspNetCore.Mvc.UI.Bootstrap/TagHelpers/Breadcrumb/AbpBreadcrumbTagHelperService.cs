@@ -17,11 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 
             await output.GetChildContentAsync();
 
-            var listTagBulder = GetOlTagBuilder();
+            var listTagBuilder = GetOlTagBuilder();
 
-            SetInnerList(context, output, list, listTagBulder);
+            SetInnerList(context, output, list, listTagBuilder);
 
-            output.Content.SetHtmlContent(listTagBulder);
+            output.Content.SetHtmlContent(listTagBuilder);
         }
 
         protected virtual TagBuilder GetOlTagBuilder()
