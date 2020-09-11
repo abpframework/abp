@@ -156,14 +156,14 @@ Best way to implement a custom filter is to override  `ShouldFilterEntity` and `
 ````csharp
 protected bool IsActiveFilterEnabled => DataFilter?.IsEnabled<IIsActive>() ?? false;
 
-protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType) where TEntity : class
+protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType)
 {
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
         return true;
     }
 
-    return base.ShouldFilterEntity<TEntity>();
+    return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
 protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>()
@@ -184,7 +184,7 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 ````
 
 * Added a `IsActiveFilterEnabled` property to check if `IIsActive` is enabled or not. It internally uses the `IDataFilter` service introduced before.
-* Overrided the `ShouldFilterEntity` and `CreateFilterExpression` method, checked if given entity implements the `IIsActive` interface and combines the expressions if necessary.
+* Overrided the `ShouldFilterEntity` and `CreateFilterExpression` methods, checked if given entity implements the `IIsActive` interface and combines the expressions if necessary.
 
 ### MongoDB
 
