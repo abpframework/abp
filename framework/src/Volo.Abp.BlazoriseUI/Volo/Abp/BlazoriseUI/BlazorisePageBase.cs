@@ -127,7 +127,18 @@ namespace Volo.Abp.BlazoriseUI
             CreateModal.Show();
         }
 
+        protected virtual async Task OpenCreateModalAsync()
+        {
+            NewEntity = new TCreateInput();
+            CreateModal.Show();
+        }
+
         protected virtual void CloseCreateModal()
+        {
+            CreateModal.Hide();
+        }
+        
+        protected virtual async Task CloseCreateModalAsync()
         {
             CreateModal.Hide();
         }
@@ -143,6 +154,11 @@ namespace Volo.Abp.BlazoriseUI
         }
 
         protected virtual void CloseEditModal()
+        {
+            EditModal.Hide();
+        }
+        
+        protected virtual async Task CloseEditModalAsync()
         {
             EditModal.Hide();
         }
