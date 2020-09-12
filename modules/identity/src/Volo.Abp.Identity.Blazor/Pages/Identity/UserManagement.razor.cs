@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.BlazoriseUI;
 using Volo.Abp.PermissionManagement.Blazor.Components;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public partial class UserManagement
+    public class UserManagementBase : BlazorisePageBase<IIdentityUserAppService, IdentityUserDto, Guid, GetIdentityUsersInput, IdentityUserCreateDto, IdentityUserUpdateDto>
     {
-        private const string PermissionProviderName = "U";
+        protected const string PermissionProviderName = "U";
 
-        private PermissionManagementModal PermissionManagementModal;
+        protected PermissionManagementModal PermissionManagementModal;
 
         protected IReadOnlyList<IdentityRoleDto> Roles;
 
@@ -19,7 +20,7 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         
         protected AssignedRoleViewModel[] EditUserRoles;
         
-        public UserManagement()
+        public UserManagementBase()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
         }
