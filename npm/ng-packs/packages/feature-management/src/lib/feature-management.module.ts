@@ -5,6 +5,7 @@ import { FeatureManagementComponent } from './components/feature-management/feat
 import { NgxsModule } from '@ngxs/store';
 import { FeatureManagementState } from './states/feature-management.state';
 import { TreeModule } from '@abp/ng.components/tree';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [FeatureManagementComponent],
@@ -12,6 +13,7 @@ import { TreeModule } from '@abp/ng.components/tree';
     CoreModule,
     ThemeSharedModule,
     TreeModule,
+    NgbNavModule,
     NgxsModule.forFeature([FeatureManagementState]),
   ],
   exports: [FeatureManagementComponent],
