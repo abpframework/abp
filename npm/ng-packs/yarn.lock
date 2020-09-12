@@ -10,14 +10,6 @@
     "@abp/ng.theme.shared" "~3.1.1"
     tslib "^2.0.0"
 
-"@abp/ng.components@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.components/-/ng.components-3.1.1.tgz#d2a4c50339d38f0c67448bc891af8a6cb2d3971a"
-  integrity sha512-EJ7WkDZ099X79LbGzKNPL0Np5U4N+0qJnAvZc/JSb3CCVLMkS5pyNMoOSthOaCwtwZ8gt1d+s7zl6wh1PcbQ3w==
-  dependencies:
-    ng-zorro-antd "^9.3.0"
-    tslib "^2.0.0"
-
 "@abp/ng.core@~3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@abp/ng.core/-/ng.core-3.1.1.tgz#2ff4cb23925ef9d42af1d561bfb7842e610c06ea"
