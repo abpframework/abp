@@ -1,3 +1,33 @@
 ﻿@page "/"
+@using Volo.Abp.Users
+@using Volo.Abp.MultiTenancy
+@inject ICurrentUser CurrentUser
+@inject ICurrentTenant CurrentTenant
 
 <h1>Welcome to MyProjectName!</h1>
+
+@if (CurrentUser.IsAuthenticated)
+{
+    <h3>Current User</h3>
+    <ul>
+        <li>Id: <strong>@CurrentUser.Id</strong></li>
+        <li>TenantId: <strong>@CurrentUser.TenantId</strong></li>
+        <li>UserName: <strong>@CurrentUser.UserName</strong></li>
+        <li>Name: <strong>@CurrentUser.Name</strong></li>
+        <li>SurName: <strong>@CurrentUser.SurName</strong></li>
+        <li>Email: <strong>@CurrentUser.Email</strong></li>
+        <li>EmailVerified: <strong>@CurrentUser.EmailVerified</strong></li>
+        <li>PhoneNumber: <strong>@CurrentUser.PhoneNumber</strong></li>
+        <li>PhoneNumberVerified: <strong>@CurrentUser.PhoneNumberVerified</strong></li>
+        <li>Roles: <strong>@CurrentUser.Roles.JoinAsString(", ")</strong></li>
+    </ul>
+}
+
+@if (CurrentTenant.IsAvailable)
+{
+    <h3>Current Tenant</h3>
+    <ul>
+        <li>Id: <strong>@CurrentTenant.Id</strong></li>
+        <li>Name: <strong>@CurrentTenant.Name</strong></li>
+    </ul>
+}
