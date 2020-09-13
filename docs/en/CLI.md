@@ -31,6 +31,7 @@ Here, the list of all available commands before explaining their details:
 * **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
 * **`add-package`**: Adds an ABP package to a project.
 * **`add-module`**: Adds a [multi-package application module](https://docs.abp.io/en/abp/latest/Modules/Index) to a solution.
+* **`get-source`**: Downloads the source code of a module.
 * **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
 * **`remove-proxy`**: Removes previously generated client side proxies.
 * **`switch-to-preview`**: Switches to the latest preview version of the ABP Framework.
@@ -177,6 +178,31 @@ abp add-module Volo.Blogging
 * `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
 * `-sp` or `--startup-project`: Relative path to the project folder of the startup project. Default value is the current folder.
 * `--with-source-code`: Add source code of the module instead of NuGet/NPM packages.
+
+### get-source
+
+Downloads the source code of a module to your computer.
+
+Usage
+
+````bash
+abp get-source <module-name> [options]
+````
+
+Example:
+
+```bash
+abp get-source Volo.Blogging
+
+abp get-source Volo.Blogging --local-framework-ref --abp-path D:\GitHub\abp
+```
+
+#### Options
+
+* `--output-folder` or `-o`: Specifies the directory that source code will be downloaded in. If not specified, current directory is used.
+* `--version` or `-v`: Specifies the version of the  source code that will be downloaded. If not specified, latest version is used.
+* `--preview`: If no version option is specified, this option specifies if latest [preview version](Previews.md) will be used instead of latest stable version.
+* `-- local-framework-ref --abp-path`: Path of [ABP Framework GitHub repository](https://github.com/abpframework/abp) in your computer. This will be used for converting project references to your local system. If this is not specified, project references will be converted to NuGet references.
 
 ### generate-proxy
 
