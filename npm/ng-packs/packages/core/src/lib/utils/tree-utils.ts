@@ -1,7 +1,7 @@
 export class BaseTreeNode<T extends object> {
   children: TreeNode<T>[] = [];
   isLeaf = true;
-  parent: TreeNode<T>;
+  parent?: TreeNode<T>;
 
   constructor(props: T) {
     Object.assign(this, props);
@@ -14,7 +14,7 @@ export class BaseTreeNode<T extends object> {
 
 export function createTreeFromList<T extends object, R extends unknown>(
   list: T[],
-  keySelector: (item: T) => number | string | symbol,
+  keySelector: (item: T) => NodeKey,
   parentKeySelector: typeof keySelector,
   valueMapper: (item: T) => R,
 ) {
@@ -25,6 +25,8 @@ export function createTreeFromList<T extends object, R extends unknown>(
     const id = keySelector(row);
     const parentId = parentKeySelector(row);
     const node = map.get(id);
+
+    if (!node) return;
 
     if (parentId) {
       const parent = map.get(parentId);
@@ -42,7 +44,7 @@ export function createTreeFromList<T extends object, R extends unknown>(
 
 export function createMapFromList<T extends object, R extends unknown>(
   list: T[],
-  keySelector: (item: T) => number | string | symbol,
+  keySelector: (item: T) => NodeKey,
   valueMapper: (item: T) => R,
 ) {
   type Key = ReturnType<typeof keySelector>;
@@ -59,6 +61,8 @@ export type TreeNode<T extends object> = {
   isLeaf: boolean;
   parent?: TreeNode<T>;
 };
+
+type NodeKey = number | string | symbol | undefined | null;
 
 type NodeValue<T extends object, F extends (...args: any) => any> = F extends undefined
   ? TreeNode<T>

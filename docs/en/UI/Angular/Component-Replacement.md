@@ -145,9 +145,7 @@ The final UI looks like below:
 Run the following command in `angular` folder to create a new component called `RoutesComponent`.
 
 ```bash
-yarn ng generate component routes --entryComponent
-
-# You don't need the --entryComponent option in Angular 9
+yarn ng generate component routes
 ```
 
 Open the generated `routes.component.ts` in `src/app/routes` folder and replace its content with the following:
@@ -185,6 +183,21 @@ export class RoutesComponent implements AfterViewInit {
       });
   }
 }
+```
+
+Import the `SharedModule` to the `imports` array of `AppModule`:
+
+```js
+// app.module.ts
+
+import { SharedModule } from './shared/shared.module';
+
+@NgModule({
+  imports: [
+    //...
+    SharedModule
+  ]
+)}
 ```
 
 Open the generated `routes.component.html` in `src/app/routes` folder and replace its content with the following:
@@ -327,9 +340,7 @@ The final UI looks like below:
 Run the following command in `angular` folder to create a new component called `NavItemsComponent`.
 
 ```bash
-yarn ng generate component nav-items --entryComponent
-
-# You don't need the --entryComponent option in Angular 9
+yarn ng generate component nav-items
 ```
 
 Open the generated `nav-items.component.ts` in `src/app/nav-items` folder and replace the content with the following:
@@ -412,6 +423,21 @@ export class NavItemsComponent implements AfterViewInit {
     });
   }
 }
+```
+
+Import the `SharedModule` to the `imports` array of `AppModule`:
+
+```js
+// app.module.ts
+
+import { SharedModule } from './shared/shared.module';
+
+@NgModule({
+  imports: [
+    //...
+    SharedModule
+  ]
+)}
 ```
 
 Open the generated `nav-items.component.html` in `src/app/nav-items` folder and replace the content with the following:
