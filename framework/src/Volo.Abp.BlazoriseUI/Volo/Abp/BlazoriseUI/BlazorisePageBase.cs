@@ -15,29 +15,65 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
 {
-    public abstract class BlazorisePageBase<
-            TAppService,
-            TEntityDto,
-            TKey,
-            TGetListInput,
-            TCreateInput,
-            TUpdateInput>
-        : OwningComponentBase
+    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey>
+        : BlazorisePageBase<TAppService, TEntityDto, TKey, PagedAndSortedResultRequestDto>
+        where TAppService : ICrudAppService<TEntityDto, TKey>
+        where TEntityDto : IEntityDto<TKey>, new()
+    {
+
+    }
+
+    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput>
+        : BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TEntityDto>
+        where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput>
+        where TEntityDto : IEntityDto<TKey>, new()
+        where TGetListInput : new()
+    {
+
+    }
+
+
+    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput>
+        : BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
+        where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput>
+        where TEntityDto : IEntityDto<TKey>
+        where TCreateInput : new()
+        where TGetListInput : new()
+    {
+
+    }
+
+    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : BlazorisePageBase<TAppService, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntityDto : IEntityDto<TKey>
         where TCreateInput : new()
         where TUpdateInput : new()
-        where TGetListInput : PagedAndSortedResultRequestDto, new()
+        where TGetListInput : new()
+    {
+
+    }
+
+    public abstract class BlazorisePageBase<TAppService, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : OwningComponentBase
+        where TAppService : ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        where TGetOutputDto : IEntityDto<TKey>
+        where TGetListOutputDto : IEntityDto<TKey>
+        where TCreateInput : new()
+        where TUpdateInput : new()
+        where TGetListInput : new()
     {
         [Inject] protected TAppService AppService { get; set; }
         [Inject] protected IUiMessageService UiMessageService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
 
+        protected virtual int PageSize => LimitedResultRequestDto.DefaultMaxResultCount;
+
         protected int CurrentPage;
         protected string CurrentSorting;
         protected int? TotalCount;
 
-        protected IReadOnlyList<TEntityDto> Entities;
+        protected IReadOnlyList<TGetListOutputDto> Entities;
 
         protected TCreateInput NewEntity;
         protected TKey EditingEntityId;
@@ -97,19 +133,30 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task GetEntitiesAsync()
         {
-            var result = await AppService.GetListAsync(
-                new TGetListInput
-                {
-                    SkipCount = CurrentPage * LimitedResultRequestDto.DefaultMaxResultCount,
-                    MaxResultCount = LimitedResultRequestDto.DefaultMaxResultCount,
-                    Sorting = CurrentSorting
-                });
+            var input = new TGetListInput();
+
+            if (input is ISortedResultRequest sortedResultRequestInput)
+            {
+                sortedResultRequestInput.Sorting = CurrentSorting;
+            }
+
+            if (input is IPagedResultRequest pagedResultRequestInput)
+            {
+                pagedResultRequestInput.SkipCount = CurrentPage * PageSize;
+            }
+
+            if (input is ILimitedResultRequest limitedResultRequestInput)
+            {
+                limitedResultRequestInput.MaxResultCount = PageSize;
+            }
+
+            var result = await AppService.GetListAsync(input);
 
             Entities = result.Items;
             TotalCount = (int?) result.TotalCount;
         }
 
-        protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TEntityDto> e)
+        protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TGetListOutputDto> e)
         {
             CurrentSorting = e.Columns
                 .Where(c => c.Direction != SortDirection.None)
@@ -137,7 +184,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             CreateModal.Hide();
         }
-        
+
         protected virtual async Task CloseCreateModalAsync()
         {
             CreateModal.Hide();
@@ -148,7 +195,7 @@ namespace Volo.Abp.BlazoriseUI
             var entityDto = await AppService.GetAsync(id);
 
             EditingEntityId = id;
-            EditingEntity = ObjectMapper.Map<TEntityDto, TUpdateInput>(entityDto);
+            EditingEntity = ObjectMapper.Map<TGetOutputDto, TUpdateInput>(entityDto);
 
             EditModal.Show();
         }
@@ -157,7 +204,7 @@ namespace Volo.Abp.BlazoriseUI
         {
             EditModal.Hide();
         }
-        
+
         protected virtual async Task CloseEditModalAsync()
         {
             EditModal.Hide();
@@ -177,7 +224,7 @@ namespace Volo.Abp.BlazoriseUI
             EditModal.Hide();
         }
 
-        protected virtual async Task DeleteEntityAsync(TEntityDto entity)
+        protected virtual async Task DeleteEntityAsync(TGetListOutputDto entity)
         {
             if (!await UiMessageService.ConfirmAsync(GetDeleteConfirmationMessage(entity)))
             {
@@ -188,7 +235,7 @@ namespace Volo.Abp.BlazoriseUI
             await GetEntitiesAsync();
         }
 
-        protected virtual string GetDeleteConfirmationMessage(TEntityDto entity)
+        protected virtual string GetDeleteConfirmationMessage(TGetListOutputDto entity)
         {
             return UiLocalizer["ItemWillBeDeletedMessage"];
         }
