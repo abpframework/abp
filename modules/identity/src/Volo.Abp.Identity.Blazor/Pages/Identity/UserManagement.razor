@@ -26,7 +26,7 @@
           ReadData="OnDataGridReadAsync"
           TotalItems="TotalCount"
           ShowPager="true"
-          PageSize="@LimitedResultRequestDto.DefaultMaxResultCount">
+          PageSize="PageSize">
     <DataGridColumns>
         <DataGridColumn Width="150px" TItem="IdentityUserDto" Field="@nameof(IdentityUserDto.UserName)" Sortable="false" Caption="@L["Actions"].Value">
             <DisplayTemplate>

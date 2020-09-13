@@ -11,6 +11,6 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
         public RoleManagement()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
-        }        
+        }
     }
 }

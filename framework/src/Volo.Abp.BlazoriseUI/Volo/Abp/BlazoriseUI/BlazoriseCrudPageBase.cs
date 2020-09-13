@@ -67,7 +67,7 @@ namespace Volo.Abp.BlazoriseUI
         [Inject] protected IUiMessageService UiMessageService { get; set; }
         [Inject] protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; }
 
-        protected virtual int PageSize => LimitedResultRequestDto.DefaultMaxResultCount;
+        protected virtual int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
         protected int CurrentPage;
         protected string CurrentSorting;
