@@ -1,14 +1,17 @@
-﻿using Volo.Abp.PermissionManagement.Blazor.Components;
+﻿using System;
+using Volo.Abp.Application.Dtos;
+using Volo.Abp.BlazoriseUI;
+using Volo.Abp.PermissionManagement.Blazor.Components;
 
 namespace Volo.Abp.Identity.Blazor.Pages.Identity
 {
-    public partial class RoleManagement
+    public class RoleManagementBase : BlazoriseCrudPageBase<IIdentityRoleAppService,IdentityRoleDto, Guid, PagedAndSortedResultRequestDto, IdentityRoleCreateDto, IdentityRoleUpdateDto>
     {
-        private const string PermissionProviderName = "R";
+        protected const string PermissionProviderName = "R";
 
-        private PermissionManagementModal PermissionManagementModal;
+        protected PermissionManagementModal PermissionManagementModal;
 
-        public RoleManagement()
+        public RoleManagementBase()
         {
             ObjectMapperContext = typeof(AbpIdentityBlazorModule);
         }

@@ -3,10 +3,9 @@
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
-@using Volo.Abp.Application.Dtos
 @using Volo.Abp.Identity.Localization
 @using Volo.Abp.PermissionManagement.Blazor.Components
-@inherits BlazoriseCrudPageBase<IIdentityRoleAppService,IdentityRoleDto, Guid, PagedAndSortedResultRequestDto, IdentityRoleCreateDto, IdentityRoleUpdateDto>
+@inherits RoleManagementBase
 @inject IStringLocalizer<IdentityResource> L
 @* ************************* PAGE HEADER ************************* *@
 <Row>
