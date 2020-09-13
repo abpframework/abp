@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { NzFormatEmitEvent, NzFormatBeforeDropEvent } from 'ng-zorro-antd/tree';
 import { of } from 'rxjs';
+import { TreeNodeTemplateDirective } from '../templates/tree-node-template.directive';
 
 export type DropEvent = NzFormatEmitEvent & { pos: number };
 
@@ -25,6 +26,7 @@ export class TreeComponent {
   dropPosition: number;
 
   @ContentChild('menu') menu: TemplateRef<any>;
+  @ContentChild(TreeNodeTemplateDirective) customNodeTemplate: TreeNodeTemplateDirective;
   @Output() readonly checkedKeysChange = new EventEmitter();
   @Output() readonly expandedKeysChange = new EventEmitter<string[]>();
   @Output() readonly selectedNodeChange = new EventEmitter();

@@ -18,7 +18,14 @@
     [title]="node.title"
     (click)="onSelectedNodeChange(node)"
   >
-    <span>{{ node.title }}</span>
+    <ng-container *ngIf="customNodeTemplate; else defaultNodeTemplate">
+      <ng-container
+        *ngTemplateOutlet="customNodeTemplate.template; context: { $implicit: node }"
+      ></ng-container>
+    </ng-container>
+    <ng-template #defaultNodeTemplate>
+      <span>{{ node.title }}</span>
+    </ng-template>
 
     <div *ngIf="menu" class="ellipsis" ngbDropdown placement="bottom" container="body">
       <i class="fas fa-ellipsis-h" ngbDropdownToggle [class.dropdown-toggle]="false"></i>
