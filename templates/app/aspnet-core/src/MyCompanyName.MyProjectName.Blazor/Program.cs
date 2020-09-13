@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AspNetCore.Mvc.Client;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
@@ -18,14 +16,7 @@ namespace MyCompanyName.MyProjectName.Blazor
 
             var host = builder.Build();
 
-            application.Initialize(host.Services);
-
-            using (var scope = host.Services.CreateScope())
-            {
-                await scope.ServiceProvider
-                    .GetRequiredService<ICachedApplicationConfigurationClient>()
-                    .InitializeAsync();
-            }
+            await application.InitializeAsync(host.Services);
 
             await host.RunAsync();
         }
