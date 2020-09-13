@@ -2,7 +2,7 @@
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
-    public class BrandingProvider : DefaultBrandingProvider
+    public class MyProjectNameBrandingProvider : DefaultBrandingProvider
     {
         public override string AppName => "MyProjectName";
     }
