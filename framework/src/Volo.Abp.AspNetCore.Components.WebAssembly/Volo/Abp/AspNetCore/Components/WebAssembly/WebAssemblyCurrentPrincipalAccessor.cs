@@ -42,6 +42,10 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly
             {
                 claims.Add(new Claim(AbpClaimTypes.TenantId,configuration.CurrentUser.TenantId.ToString()));
             }
+            else if (configuration.CurrentTenant.Id != null)
+            {
+                claims.Add(new Claim(AbpClaimTypes.TenantId,configuration.CurrentTenant.Id.ToString()));
+            }
 
             foreach (var role in configuration.CurrentUser.Roles)
             {
