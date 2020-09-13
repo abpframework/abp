@@ -15,16 +15,16 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.BlazoriseUI
 {
-    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey>
-        : BlazorisePageBase<TAppService, TEntityDto, TKey, PagedAndSortedResultRequestDto>
+    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey>
+        : BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, PagedAndSortedResultRequestDto>
         where TAppService : ICrudAppService<TEntityDto, TKey>
         where TEntityDto : IEntityDto<TKey>, new()
     {
 
     }
 
-    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput>
-        : BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TEntityDto>
+    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput>
+        : BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TEntityDto>
         where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput>
         where TEntityDto : IEntityDto<TKey>, new()
         where TGetListInput : new()
@@ -33,8 +33,8 @@ namespace Volo.Abp.BlazoriseUI
     }
 
 
-    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput>
-        : BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
+    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput>
+        : BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
         where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput>
         where TEntityDto : IEntityDto<TKey>
         where TCreateInput : new()
@@ -43,8 +43,8 @@ namespace Volo.Abp.BlazoriseUI
 
     }
 
-    public abstract class BlazorisePageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        : BlazorisePageBase<TAppService, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : BlazoriseCrudPageBase<TAppService, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntityDto : IEntityDto<TKey>
         where TCreateInput : new()
@@ -54,7 +54,7 @@ namespace Volo.Abp.BlazoriseUI
 
     }
 
-    public abstract class BlazorisePageBase<TAppService, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public abstract class BlazoriseCrudPageBase<TAppService, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         : OwningComponentBase
         where TAppService : ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TGetOutputDto : IEntityDto<TKey>
@@ -120,7 +120,7 @@ namespace Volo.Abp.BlazoriseUI
             return reference;
         }
 
-        protected BlazorisePageBase()
+        protected BlazoriseCrudPageBase()
         {
             NewEntity = new TCreateInput();
             EditingEntity = new TUpdateInput();
