@@ -32,16 +32,15 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity
             Roles = (await AppService.GetAssignableRolesAsync()).Items;
         }
 
-        protected override void OpenCreateModal()
+        protected override Task OpenCreateModalAsync()
         {
-
             NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
                             {
                                 Name = x.Name,
                                 IsAssigned = x.IsDefault
                             }).ToArray();
 
-            base.OpenCreateModal();
+            return base.OpenCreateModalAsync();
         }
 
         protected override Task CreateEntityAsync()

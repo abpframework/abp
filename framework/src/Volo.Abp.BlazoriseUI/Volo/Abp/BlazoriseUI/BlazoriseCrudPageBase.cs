@@ -168,22 +168,11 @@ namespace Volo.Abp.BlazoriseUI
             StateHasChanged();
         }
 
-        protected virtual void OpenCreateModal()
-        {
-            NewEntity = new TCreateInput();
-            CreateModal.Show();
-        }
-
         protected virtual Task OpenCreateModalAsync()
         {
             NewEntity = new TCreateInput();
             CreateModal.Show();
             return Task.CompletedTask;
-        }
-
-        protected virtual void CloseCreateModal()
-        {
-            CreateModal.Hide();
         }
 
         protected virtual Task CloseCreateModalAsync()
@@ -200,11 +189,6 @@ namespace Volo.Abp.BlazoriseUI
             EditingEntity = ObjectMapper.Map<TGetOutputDto, TUpdateInput>(entityDto);
 
             EditModal.Show();
-        }
-
-        protected virtual void CloseEditModal()
-        {
-            EditModal.Hide();
         }
 
         protected virtual Task CloseEditModalAsync()

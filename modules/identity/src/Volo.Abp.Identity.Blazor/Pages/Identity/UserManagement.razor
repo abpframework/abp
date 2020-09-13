@@ -15,7 +15,7 @@
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
         <Paragraph Alignment="TextAlignment.Right">
-            <Button Color="Color.Primary" Clicked="OpenCreateModal">@L["NewUser"]</Button>
+            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewUser"]</Button>
         </Paragraph>
     </Column>
 </Row>
@@ -67,7 +67,7 @@
     <ModalContent IsCentered="true">
         <ModalHeader>
             <ModalTitle>@L["NewUser"]</ModalTitle>
-            <CloseButton Clicked="CloseCreateModal" />
+            <CloseButton Clicked="CloseCreateModalAsync" />
         </ModalHeader>
         <ModalBody>
             <Tabs SelectedTab="UserInformations">
@@ -124,7 +124,7 @@
             </Tabs>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseCreateModal">@L["Cancel"]</Button>
+            <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
             <Button Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
         </ModalFooter>
     </ModalContent>
@@ -136,11 +136,11 @@
     <ModalContent IsCentered="true">
         <ModalHeader>
             <ModalTitle>role</ModalTitle>
-            <CloseButton Clicked="CloseEditModal" />
+            <CloseButton Clicked="CloseEditModalAsync" />
         </ModalHeader>
         <ModalBody>
             <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
-            
+
             <Tabs SelectedTab="UserInformations">
                 <Items>
                     <Tab Name="UserInformations">@L["UserInformations"]</Tab>
@@ -195,7 +195,7 @@
             </Tabs>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseEditModal">@L["Cancel"]</Button>
+            <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
             <Button Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
         </ModalFooter>
     </ModalContent>

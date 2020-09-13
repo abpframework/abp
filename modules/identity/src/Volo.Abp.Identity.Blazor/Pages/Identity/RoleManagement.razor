@@ -15,7 +15,7 @@
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
         <Paragraph Alignment="TextAlignment.Right">
-            <Button Color="Color.Primary" Clicked="OpenCreateModal">@L["NewRole"]</Button>
+            <Button Color="Color.Primary" Clicked="OpenCreateModalAsync">@L["NewRole"]</Button>
         </Paragraph>
     </Column>
 </Row>
@@ -65,7 +65,7 @@
     <ModalContent IsCentered="true">
         <ModalHeader>
             <ModalTitle>@L["NewRole"]</ModalTitle>
-            <CloseButton Clicked="CloseCreateModal" />
+            <CloseButton Clicked="CloseCreateModalAsync" />
         </ModalHeader>
         <ModalBody>
             <Field>
@@ -78,7 +78,7 @@
             </Field>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseCreateModal">@L["Cancel"]</Button>
+            <Button Color="Color.Secondary" Clicked="CloseCreateModalAsync">@L["Cancel"]</Button>
             <Button Color="Color.Primary" Clicked="CreateEntityAsync">@L["Save"]</Button>
         </ModalFooter>
     </ModalContent>
@@ -90,7 +90,7 @@
     <ModalContent IsCentered="true">
         <ModalHeader>
             <ModalTitle>Edit role</ModalTitle>
-            <CloseButton Clicked="CloseEditModal" />
+            <CloseButton Clicked="CloseEditModalAsync" />
         </ModalHeader>
         <ModalBody>
             <input type="hidden" name="ConcurrencyStamp" @bind-value="EditingEntity.ConcurrencyStamp" />
@@ -104,7 +104,7 @@
             </Field>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="CloseEditModal">@L["Cancel"]</Button>
+            <Button Color="Color.Secondary" Clicked="CloseEditModalAsync">@L["Cancel"]</Button>
             <Button Color="Color.Primary" Clicked="UpdateEntityAsync">@L["Save"]</Button>
         </ModalFooter>
     </ModalContent>
