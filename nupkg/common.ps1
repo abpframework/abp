@@ -52,6 +52,7 @@ $projects = (
     "framework/src/Volo.Abp.Auditing",
     "framework/src/Volo.Abp.Authorization",
     "framework/src/Volo.Abp.Autofac",
+    "framework/src/Volo.Abp.Autofac.WebAssembly",
     "framework/src/Volo.Abp.AutoMapper",
     "framework/src/Volo.Abp.BackgroundJobs.Abstractions",
     "framework/src/Volo.Abp.BackgroundJobs",

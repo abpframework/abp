@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
-using Volo.Abp.Autofac;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic;
 using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
+using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
@@ -18,7 +18,7 @@ using Volo.Abp.Identity.Blazor;
 namespace MyCompanyName.MyProjectName.Blazor
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
+        typeof(AbpAutofacWebAssemblyModule),
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpIdentityBlazorModule),
         typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule)

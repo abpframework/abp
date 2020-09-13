@@ -1,9 +1,6 @@
 using System.Threading.Tasks;
-using Autofac;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Client;
 
 namespace MyCompanyName.MyProjectName.Blazor
@@ -14,16 +11,10 @@ namespace MyCompanyName.MyProjectName.Blazor
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-            //TODO: Should be done in the ABP framework!
-            builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-            builder.Services.AddSingleton(builder);
-
-            var application = builder.Services.AddApplication<MyProjectNameBlazorModule>(opts =>
+            var application = builder.AddApplication<MyProjectNameBlazorModule>(options =>
             {
-                opts.UseAutofac();
+                options.UseAutofac();
             });
-            
-            builder.ConfigureContainer(builder.Services.GetSingletonInstance<IServiceProviderFactory<ContainerBuilder>>());
 
             var host = builder.Build();
 
@@ -35,7 +26,7 @@ namespace MyCompanyName.MyProjectName.Blazor
                     .GetRequiredService<ICachedApplicationConfigurationClient>()
                     .InitializeAsync();
             }
-            
+
             await host.RunAsync();
         }
     }
