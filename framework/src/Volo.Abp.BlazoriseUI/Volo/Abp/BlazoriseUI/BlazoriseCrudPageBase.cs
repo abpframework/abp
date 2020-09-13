@@ -72,13 +72,10 @@ namespace Volo.Abp.BlazoriseUI
         protected int CurrentPage;
         protected string CurrentSorting;
         protected int? TotalCount;
-
-        protected IReadOnlyList<TGetListOutputDto> Entities;
-
+        protected IReadOnlyList<TGetListOutputDto> Entities = Array.Empty<TGetListOutputDto>();
         protected TCreateInput NewEntity;
         protected TKey EditingEntityId;
         protected TUpdateInput EditingEntity;
-
         protected Modal CreateModal;
         protected Modal EditModal;
 
@@ -133,6 +130,14 @@ namespace Volo.Abp.BlazoriseUI
 
         protected virtual async Task GetEntitiesAsync()
         {
+            var input = await CreateGetListInputAsync();
+            var result = await AppService.GetListAsync(input);
+            Entities = result.Items;
+            TotalCount = (int?) result.TotalCount;
+        }
+
+        protected virtual Task<TGetListInput> CreateGetListInputAsync()
+        {
             var input = new TGetListInput();
 
             if (input is ISortedResultRequest sortedResultRequestInput)
@@ -150,10 +155,7 @@ namespace Volo.Abp.BlazoriseUI
                 limitedResultRequestInput.MaxResultCount = PageSize;
             }
 
-            var result = await AppService.GetListAsync(input);
-
-            Entities = result.Items;
-            TotalCount = (int?) result.TotalCount;
+            return Task.FromResult(input);
         }
 
         protected virtual async Task OnDataGridReadAsync(DataGridReadDataEventArgs<TGetListOutputDto> e)
@@ -162,9 +164,10 @@ namespace Volo.Abp.BlazoriseUI
                 .Where(c => c.Direction != SortDirection.None)
                 .Select(c => c.Field + (c.Direction == SortDirection.Descending ? " DESC" : ""))
                 .JoinAsString(",");
-
             CurrentPage = e.Page - 1;
+
             await GetEntitiesAsync();
+
             StateHasChanged();
         }
 
@@ -184,10 +187,8 @@ namespace Volo.Abp.BlazoriseUI
         protected virtual async Task OpenEditModalAsync(TKey id)
         {
             var entityDto = await AppService.GetAsync(id);
-
             EditingEntityId = id;
             EditingEntity = ObjectMapper.Map<TGetOutputDto, TUpdateInput>(entityDto);
-
             EditModal.Show();
         }
 
