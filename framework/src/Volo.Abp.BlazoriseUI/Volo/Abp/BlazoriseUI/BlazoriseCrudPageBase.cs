@@ -174,10 +174,11 @@ namespace Volo.Abp.BlazoriseUI
             CreateModal.Show();
         }
 
-        protected virtual async Task OpenCreateModalAsync()
+        protected virtual Task OpenCreateModalAsync()
         {
             NewEntity = new TCreateInput();
             CreateModal.Show();
+            return Task.CompletedTask;
         }
 
         protected virtual void CloseCreateModal()
@@ -185,9 +186,10 @@ namespace Volo.Abp.BlazoriseUI
             CreateModal.Hide();
         }
 
-        protected virtual async Task CloseCreateModalAsync()
+        protected virtual Task CloseCreateModalAsync()
         {
             CreateModal.Hide();
+            return Task.CompletedTask;
         }
 
         protected virtual async Task OpenEditModalAsync(TKey id)
@@ -205,9 +207,10 @@ namespace Volo.Abp.BlazoriseUI
             EditModal.Hide();
         }
 
-        protected virtual async Task CloseEditModalAsync()
+        protected virtual Task CloseEditModalAsync()
         {
             EditModal.Hide();
+            return Task.CompletedTask;
         }
 
         protected virtual async Task CreateEntityAsync()
