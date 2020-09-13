@@ -1,9 +1,9 @@
-@using Volo.Abp.Identity.Blazor
-@using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
-@using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic
+@using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing
+@using Microsoft.Extensions.Options
+@inject IOptions<AbpRouterOptions> RouterOptions
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly"
-            AdditionalAssemblies="new []{ typeof(AbpIdentityBlazorModule).Assembly, typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule).Assembly }">
+    <Router AppAssembly="RouterOptions.Value.AppAssembly"
+            AdditionalAssemblies="RouterOptions.Value.AdditionalAssemblies">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>

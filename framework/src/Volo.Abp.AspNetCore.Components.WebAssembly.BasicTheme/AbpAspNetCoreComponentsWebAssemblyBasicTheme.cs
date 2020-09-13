@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
+using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
@@ -8,6 +9,12 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme
         )]
     public class AbpAspNetCoreComponentsWebAssemblyBasicThemeModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpRouterOptions>(options =>
+            {
+                options.AdditionalAssemblies.Add(typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule).Assembly);
+            });
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Blazor;
@@ -25,6 +26,11 @@ namespace Volo.Abp.Identity.Blazor
             Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
+            });
+
+            Configure<AbpRouterOptions>(options =>
+            {
+                options.AdditionalAssemblies.Add(typeof(AbpIdentityBlazorModule).Assembly);
             });
         }
     }

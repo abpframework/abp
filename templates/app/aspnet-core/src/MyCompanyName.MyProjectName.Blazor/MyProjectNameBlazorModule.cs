@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
+using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic;
+using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Routing;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
@@ -31,8 +33,17 @@ namespace MyCompanyName.MyProjectName.Blazor
             ConfigureAuthentication(builder);
             ConfigureHttpClient(context, environment);
             ConfigureBlazorise(context);
+            ConfigureRouter(context);
             ConfigureUI(builder);
             ConfigureMenu(context);
+        }
+
+        private void ConfigureRouter(ServiceConfigurationContext context)
+        {
+            Configure<AbpRouterOptions>(options =>
+            {
+                options.AppAssembly = typeof(MyProjectNameBlazorModule).Assembly;
+            });
         }
 
         private void ConfigureMenu(ServiceConfigurationContext context)
