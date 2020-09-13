@@ -32,7 +32,6 @@ namespace Volo.Abp.BlazoriseUI
 
     }
 
-
     public abstract class BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput>
         : BlazoriseCrudPageBase<TAppService, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
         where TAppService : ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput>
