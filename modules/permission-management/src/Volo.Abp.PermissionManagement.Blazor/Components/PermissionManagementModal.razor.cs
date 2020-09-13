@@ -18,6 +18,29 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
         private string _entityDisplayName;
         private List<PermissionGroupDto> _groups;
 
+        private bool GrantAll
+        {
+            get
+            {
+                return _groups != null && _groups.All(x => x.Permissions.All(y => y.IsGranted));
+            }
+            set
+            {
+                if (_groups == null)
+                {
+                    return;
+                }
+                
+                foreach (var permissionGroupDto in _groups)
+                {
+                    foreach (var permission in permissionGroupDto.Permissions)
+                    {
+                        permission.IsGranted = value;
+                    }
+                }
+            }
+        }
+        
         public async Task OpenAsync(string providerName, string providerKey)
         {
             _providerName = providerName;
@@ -54,6 +77,11 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
         public string GetNormalizedGroupName(string name)
         {
             return "PermissionGroup_" + name.Replace(".", "_");
+        }
+
+        public void GrantAllChanged(bool value)
+        {
+            GrantAll = value;
         }
     }
 }
