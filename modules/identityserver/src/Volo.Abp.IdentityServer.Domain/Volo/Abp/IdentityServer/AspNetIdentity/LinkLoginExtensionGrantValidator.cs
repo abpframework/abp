@@ -93,7 +93,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 Guid? linkTenantId = null;
                 if (!context.Request.Raw["LinkTenantId"].IsNullOrWhiteSpace())
                 {
-                    if (!Guid.TryParse(context.Request.Raw["LinkUserId"], out var parsedGuid))
+                    if (!Guid.TryParse(context.Request.Raw["LinkTenantId"], out var parsedGuid))
                     {
                         context.Result = new GrantValidationResult
                         {
