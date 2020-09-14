@@ -17,7 +17,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
 {
     public class LinkLoginExtensionGrantValidator : IExtensionGrantValidator
     {
-        public const string ExtensionGrantType = "LinkUserLogin";
+        public const string ExtensionGrantType = "LinkLogin";
 
         public string GrantType => ExtensionGrantType;
 
@@ -80,8 +80,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
 
             using (CurrentPrincipalAccessor.Change(result.Claims))
             {
-                var linkUserId = Guid.Empty;;
-                if (!StringToGuid(context.Request.Raw["LinkUserId"], ref linkUserId))
+                if (!Guid.TryParse(context.Request.Raw["LinkUserId"], out var linkUserId))
                 {
                     context.Result = new GrantValidationResult
                     {
@@ -94,7 +93,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                 Guid? linkTenantId = null;
                 if (!context.Request.Raw["LinkTenantId"].IsNullOrWhiteSpace())
                 {
-                    if (!StringToGuid(context.Request.Raw["LinkTenantId"], ref linkTenantId))
+                    if (!Guid.TryParse(context.Request.Raw["LinkUserId"], out var parsedGuid))
                     {
                         context.Result = new GrantValidationResult
                         {
@@ -103,6 +102,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                         };
                         return;
                     }
+
+                    linkTenantId = parsedGuid;
                 }
 
                 var isLinked = await IdentityLinkUserManager.IsLinkedAsync(
@@ -131,8 +132,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     context.Result = new GrantValidationResult
                     {
                         IsError = true,
-                        //TODO: Localizer error message.
-                        Error = "The_Target_User_Is_Not_Linked_ToYou"
+                        Error = Localizer["TheTargetUserIsNotLinkedToYou"]
                     };
                 }
             }
@@ -146,34 +146,6 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             }
 
             return Task.CompletedTask;
-        }
-
-        protected virtual bool StringToGuid(string str, ref Guid guid)
-        {
-            if (str.IsNullOrWhiteSpace())
-            {
-                return false;
-            }
-
-            if (Guid.TryParse(str, out var g))
-            {
-                guid = g;
-                return true;
-            }
-
-            return false;
-        }
-
-        protected virtual bool StringToGuid(string str, ref Guid? guid)
-        {
-            var g = Guid.Empty;
-            if (StringToGuid(str, ref g))
-            {
-                guid = g;
-                return true;
-            }
-
-            return false;
         }
     }
 }

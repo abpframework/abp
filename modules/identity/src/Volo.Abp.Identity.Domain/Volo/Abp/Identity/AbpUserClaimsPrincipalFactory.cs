@@ -5,31 +5,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
     public class AbpUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>, ITransientDependency
     {
-        protected ICurrentUser CurrentUser { get; }
-        protected ICurrentTenant CurrentTenant  { get; }
-
         public AbpUserClaimsPrincipalFactory(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IOptions<IdentityOptions> options,
-            ICurrentUser currentUser,
-            ICurrentTenant currentTenant)
+            IOptions<IdentityOptions> options)
             : base(
                   userManager,
                   roleManager,
                   options)
         {
-            CurrentUser = currentUser;
-            CurrentTenant = currentTenant;
         }
 
         [UnitOfWork]
