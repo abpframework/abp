@@ -30,5 +30,13 @@ export const environment = {
       url: 'https://localhost:44305',
       rootNamespace: 'Volo.Abp',
     },
+    AbpTenantManagement: {
+      url: 'https://localhost:44305',
+      rootNamespace: 'Volo.Abp',
+    },
+    AbpIdentity: {
+      url: 'https://localhost:44305',
+      rootNamespace: 'Volo.Abp',
+    },
   },
 } as Config.Environment;
