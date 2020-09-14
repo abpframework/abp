@@ -1,11 +1,15 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { GetFeatures, UpdateFeatures } from '../../actions';
+import { TrackByService } from '@abp/ng.core';
+import { LocaleDirection } from '@abp/ng.theme.shared';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
-import { FeatureManagementState } from '../../states';
-import { FormGroup, FormControl } from '@angular/forms';
-import { pluck, finalize } from 'rxjs/operators';
+import { FeatureDto, FeaturesService, UpdateFeatureDto } from '../../proxy/feature-management';
+
+enum ValueTypes {
+  ToggleStringValueType = 'ToggleStringValueType',
+  FreeTextStringValueType = 'FreeTextStringValueType',
+  SelectionStringValueType = 'SelectionStringValueType',
+}
 
 @Component({
   selector: 'abp-feature-management',
@@ -22,6 +26,16 @@ export class FeatureManagementComponent
   @Input()
   providerName: string;
 
+  selectedGroup: string;
+
+  groups: string[] = [];
+
+  features: {
+    [group: string]: Array<FeatureDto & { style?: { [key: string]: number }; initialValue: any }>;
+  };
+
+  valueTypes = ValueTypes;
+
   protected _visible;
 
   @Input()
@@ -30,78 +44,82 @@ export class FeatureManagementComponent
   }
 
   set visible(value: boolean) {
+    if (this._visible === value) return;
+
     this._visible = value;
     this.visibleChange.emit(value);
-
     if (value) this.openModal();
   }
 
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
-  @Select(FeatureManagementState.getFeatures)
-  features$: Observable<FeatureManagement.Feature[]>;
-
   modalBusy = false;
 
-  form: FormGroup;
-
-  constructor(private store: Store) {}
+  constructor(public readonly track: TrackByService, private service: FeaturesService) {}
 
   openModal() {
-    if (!this.providerKey || !this.providerName) {
-      throw new Error('Provider Key and Provider Name are required.');
+    if (!this.providerName) {
+      throw new Error('providerName is required.');
     }
 
     this.getFeatures();
   }
 
   getFeatures() {
-    this.store
-      .dispatch(
-        new GetFeatures({
-          providerKey: this.providerKey,
-          providerName: this.providerName,
+    this.service.get(this.providerName, this.providerKey).subscribe(res => {
+      this.groups = res.groups.map(group => group.displayName);
+      this.selectedGroup = this.groups[0];
+      this.features = res.groups.reduce(
+        (acc, val) => ({
+          ...acc,
+          [val.name]: mapFeatures(val.features, document.body.dir as LocaleDirection),
         }),
-      )
-      .pipe(pluck('FeatureManagementState', 'features'))
-      .subscribe(features => {
-        this.buildForm(features);
-      });
-  }
-
-  buildForm(features) {
-    const formGroupObj = {};
-
-    for (let i = 0; i < features.length; i++) {
-      formGroupObj[i] = new FormControl(features[i].value === 'false' ? null : features[i].value);
-    }
-
-    this.form = new FormGroup(formGroupObj);
+        {},
+      );
+    });
   }
 
   save() {
     if (this.modalBusy) return;
 
+    const changedFeatures = [] as UpdateFeatureDto[];
+
+    Object.keys(this.features).forEach(key => {
+      this.features[key].forEach(feature => {
+        if (feature.value !== feature.initialValue)
+          changedFeatures.push({ name: feature.name, value: feature.value });
+      });
+    });
+
+    if (!changedFeatures.length) {
+      this.visible = false;
+      return;
+    }
+
     this.modalBusy = true;
-
-    let features = this.store.selectSnapshot(FeatureManagementState.getFeatures);
-
-    features = features.map((feature, i) => ({
-      ...feature,
-      value: this.form.value[i],
-    }));
-
-    this.store
-      .dispatch(
-        new UpdateFeatures({
-          providerKey: this.providerKey,
-          providerName: this.providerName,
-          features,
-        }),
-      )
+    this.service
+      .update(this.providerName, this.providerKey, { features: changedFeatures })
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.visible = false;
       });
   }
+}
+
+function mapFeatures(features: FeatureDto[], dir: LocaleDirection) {
+  const margin = `margin-${dir === 'rtl' ? 'right' : 'left'}.px`;
+
+  return features.map(feature => {
+    const value =
+      feature.valueType?.name === ValueTypes.ToggleStringValueType
+        ? (feature.value || '').toLowerCase() === 'true'
+        : feature.value;
+
+    return {
+      ...feature,
+      value,
+      initialValue: value,
+      style: { [margin]: feature.depth * 20 },
+    };
+  });
 }
