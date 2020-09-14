@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { FeatureManagementComponent } from './components/feature-management/feature-management.component';
 import { NgxsModule } from '@ngxs/store';
 import { FeatureManagementState } from './states/feature-management.state';
-import { TreeModule } from '@abp/ng.components/tree';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
@@ -12,7 +11,6 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     CoreModule,
     ThemeSharedModule,
-    TreeModule,
     NgbNavModule,
     NgxsModule.forFeature([FeatureManagementState]),
   ],
