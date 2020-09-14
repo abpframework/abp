@@ -31,7 +31,7 @@
                                         var disabled = Model.IsDisabled(feature.Provider.Name);
                                         <div class="mt-2" style="padding-left: @(feature.Depth * 20)px">
 
-                                            <spam class="mr-2">@feature.DisplayName @(disabled ? $"({feature.Provider.Name})" : "")</spam>
+                                            <span class="mr-2">@feature.DisplayName @(disabled ? $"({feature.Provider.Name})" : "")</span>
 
                                             <input type="text" name="FeatureGroups[@i].Features[@j].ProviderName" value="@feature.Provider.Name" hidden/>
                                             <input type="text" name="FeatureGroups[@i].Features[@j].Type" value="@feature.ValueType?.Name" hidden/>
