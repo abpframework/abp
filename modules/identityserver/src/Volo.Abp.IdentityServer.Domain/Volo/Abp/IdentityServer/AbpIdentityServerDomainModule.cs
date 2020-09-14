@@ -9,6 +9,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.AspNetIdentity;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.IdentityResources;
@@ -94,6 +95,8 @@ namespace Volo.Abp.IdentityServer
                 identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
                 identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
             }
+
+            identityServerBuilder.AddExtensionGrantValidator<LinkLoginExtensionGrantValidator>();
         }
 
         public override void PostConfigureServices(ServiceConfigurationContext context)
