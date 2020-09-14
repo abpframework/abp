@@ -19,6 +19,8 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
         private List<PermissionGroupDto> _groups;
 
         private List<PermissionGrantInfoDto> _disabledPermissions;
+
+        private string _selectedTabName;
         
         private bool GrantAll
         {
@@ -62,6 +64,8 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
                             x => x.IsGranted &&
                             x.GrantedProviders.All(y => y.ProviderName != _providerName)
                             ).ToList();
+
+            _selectedTabName = GetNormalizedGroupName(_groups.First().Name);
             
             _modal.Show();
         }
