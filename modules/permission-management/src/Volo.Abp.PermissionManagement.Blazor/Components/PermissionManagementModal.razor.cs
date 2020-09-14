@@ -18,6 +18,8 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
         private string _entityDisplayName;
         private List<PermissionGroupDto> _groups;
 
+        private List<PermissionGrantInfoDto> _disabledPermissions;
+        
         private bool GrantAll
         {
             get
@@ -35,7 +37,10 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
                 {
                     foreach (var permission in permissionGroupDto.Permissions)
                     {
-                        permission.IsGranted = value;
+                        if (!IsDisabledPermission(permission))
+                        {
+                            permission.IsGranted = value;
+                        }
                     }
                 }
             }
@@ -51,6 +56,13 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             _entityDisplayName = result.EntityDisplayName;
             _groups = result.Groups;
 
+            _disabledPermissions = 
+                _groups.SelectMany(x => x.Permissions)
+                        .Where(
+                            x => x.IsGranted &&
+                            x.GrantedProviders.All(y => y.ProviderName != _providerName)
+                            ).ToList();
+            
             _modal.Show();
         }
 
@@ -74,14 +86,30 @@ namespace Volo.Abp.PermissionManagement.Blazor.Components
             _modal.Hide();
         }
 
-        public string GetNormalizedGroupName(string name)
+        private string GetNormalizedGroupName(string name)
         {
             return "PermissionGroup_" + name.Replace(".", "_");
         }
 
-        public void GrantAllChanged(bool value)
+        private void GrantAllChanged(bool value)
         {
             GrantAll = value;
+        }
+
+        private void GroupGrantAllChanged(bool value, string groupName)
+        {
+            foreach (var permission in _groups.First(x => x.Name == groupName).Permissions)
+            {
+                if (!IsDisabledPermission(permission))
+                {
+                    permission.IsGranted = value;
+                }
+            }
+        }
+
+        private bool IsDisabledPermission(PermissionGrantInfoDto permissionGrantInfo)
+        {
+            return _disabledPermissions.Any(x => x == permissionGrantInfo);
         }
     }
 }

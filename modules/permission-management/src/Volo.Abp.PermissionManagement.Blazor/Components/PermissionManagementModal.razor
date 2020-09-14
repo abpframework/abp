@@ -5,13 +5,13 @@
     <ModalBackdrop />
     <ModalContent Size="ModalSize.Large" IsCentered="true">
         <ModalHeader>
-            <ModalTitle>@L["Permissions"] - @_providerKey</ModalTitle>
+            <ModalTitle>@L["Permissions"] - @_entityDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
         </ModalHeader>
         <ModalBody MaxHeight="50">
             
             <Field>
-                <Check Cursor="Cursor.Pointer" Checked="@GrantAll" CheckedChanged="GrantAllChanged" TValue="bool">@L["SelectAllInAllTabs"]</Check>
+                <Check Cursor="Cursor.Pointer" Checked="@GrantAll" CheckedChanged="@GrantAllChanged" TValue="bool">@L["SelectAllInAllTabs"]</Check>
             </Field>
             
             <Divider />
@@ -44,23 +44,24 @@
                             <TabPanel Name="@GetNormalizedGroupName(group.Name)">
                                 <h4>@group.DisplayName</h4>
                                 
-                                @{
-                                    /* TODO: add Select All In This Tab 
                                 <Divider />
                                 
                                 <Field>
-                                    <Check Cursor="Cursor.Pointer" TValue="bool">@L["SelectAllInThisTab"]</Check>
+                                    <Check Checked="@(group.Permissions.All(x => x.IsGranted))" Cursor="Cursor.Pointer" CheckedChanged="@(b => GroupGrantAllChanged(b, group.Name))" TValue="bool">@L["SelectAllInThisTab"]</Check>
                                 </Field>
 
                                 <Divider />
-                                     */
-                                }
-                                
                                 
                                 @foreach (var permission in group.Permissions)
                                 {
                                     <Field Margin="permission.ParentName != null ? Blazorise.Margin.Is3.OnAll : Blazorise.Margin.Is0.OnAll">
-                                        <Check Cursor="Cursor.Pointer" @bind-checked="@permission.IsGranted" TValue="bool">@permission.DisplayName</Check>
+                                        <Check
+                                            Disabled="@(IsDisabledPermission(permission))"
+                                            Cursor="Cursor.Pointer"
+                                            @bind-checked="@permission.IsGranted"
+                                            TValue="bool">
+                                            @permission.DisplayName
+                                        </Check>
                                     </Field>
                                 }
                                 
