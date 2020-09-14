@@ -9,6 +9,7 @@ export interface GetIdentityUsersInput extends PagedAndSortedResultRequestDto {
   filter: string;
 }
 
+// tslint:disable-next-line: no-empty-interface
 export interface IdentityRoleCreateDto extends IdentityRoleCreateOrUpdateDtoBase {
 }
 
