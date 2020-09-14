@@ -11,9 +11,6 @@ namespace Volo.Abp.MultiTenancy
         Guid? Id { get; }
 
         [CanBeNull]
-        Guid? ImpersonatorId { get; }
-
-        [CanBeNull]
         string Name { get; }
 
         IDisposable Change(Guid? id, string name = null);

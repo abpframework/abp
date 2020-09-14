@@ -64,19 +64,6 @@ namespace Volo.Abp.Identity
             }
             identity.AddIfNotContains(new Claim(AbpClaimTypes.EmailVerified, user.EmailConfirmed.ToString()));
 
-            if (CurrentUser.ImpersonatorId != user.Id || CurrentTenant.ImpersonatorId != user.TenantId)
-            {
-                if (CurrentUser.ImpersonatorId.HasValue)
-                {
-                    identity.AddClaim(new Claim(AbpClaimTypes.UserImpersonatorId, CurrentUser.ImpersonatorId.ToString()));
-                }
-
-                if (CurrentTenant.ImpersonatorId.HasValue)
-                {
-                    identity.AddClaim(new Claim(AbpClaimTypes.TenantImpersonatorId, CurrentTenant.ImpersonatorId.ToString()));
-                }
-            }
-
             return principal;
         }
     }

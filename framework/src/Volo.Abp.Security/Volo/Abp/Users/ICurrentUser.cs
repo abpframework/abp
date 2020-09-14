@@ -12,9 +12,6 @@ namespace Volo.Abp.Users
         Guid? Id { get; }
 
         [CanBeNull]
-        Guid? ImpersonatorId { get; }
-
-        [CanBeNull]
         string UserName { get; }
 
         [CanBeNull]

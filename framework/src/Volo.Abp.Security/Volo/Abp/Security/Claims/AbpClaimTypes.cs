@@ -29,11 +29,6 @@ namespace Volo.Abp.Security.Claims
         public static string UserId { get; set; } = ClaimTypes.NameIdentifier;
 
         /// <summary>
-        /// Default: "user_impersonator_id".
-        /// </summary>
-        public static string UserImpersonatorId { get; set; } = "user_impersonator_id";
-
-        /// <summary>
         /// Default: <see cref="ClaimTypes.Role"/>
         /// </summary>
         public static string Role { get; set; } = ClaimTypes.Role;
@@ -62,11 +57,6 @@ namespace Volo.Abp.Security.Claims
         /// Default: "tenantid".
         /// </summary>
         public static string TenantId { get; set; } = "tenantid";
-
-        /// <summary>
-        /// Default: "tenant_impersonator_id".
-        /// </summary>
-        public static string TenantImpersonatorId { get; set; } = "tenant_impersonator_id";
 
         /// <summary>
         /// Default: "editionid".
