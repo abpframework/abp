@@ -41,17 +41,15 @@ export class TreeAdapter<T extends BaseNode = BaseNode> {
     return this.tree;
   }
 
-  handleDrop(node: TreeNode<T>) {
-    const { key, parentNode } = node;
+  handleDrop({ key, parentNode }: TreeNode<T>) {
     const index = this.list.findIndex(({ id }) => id === key);
     this.list[index].parentId = parentNode ? parentNode.key : null;
     this.tree = createTreeFromList(this.list);
   }
 
-  handleRemove(node: TreeNode<T>) {
-    const { key, parentNode } = node;
-    this.list = this.list.filter(({ id, parentId }) => id !== key && parentId !== key);
-    this.tree = createTreeFromList(this.list);
+  handleRemove({ key }: TreeNode<T>) {
+    this.tree = createTreeFromList(this.list.filter(item => item.id !== key));
+    this.list = createListFromTree(this.tree);
   }
 }
 
@@ -66,6 +64,7 @@ function createTreeFromList<T extends BaseNode>(list: T[]): TreeNode<T>[] {
     const node = map.get(row.id);
     if (parentId) {
       const parent = map.get(parentId);
+      if (!parent) return;
       parent.children.push(node);
       parent.isLeaf = false;
     } else {

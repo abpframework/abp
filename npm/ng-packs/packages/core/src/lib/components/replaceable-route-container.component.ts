@@ -1,10 +1,9 @@
 import { Component, OnInit, Type } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngxs/store';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReplaceableComponents } from '../models/replaceable-components';
+import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 import { SubscriptionService } from '../services/subscription.service';
-import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 
 @Component({
   selector: 'abp-replaceable-route-container',
@@ -22,7 +21,7 @@ export class ReplaceableRouteContainerComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store,
+    private replaceableComponents: ReplaceableComponentsService,
     private subscription: SubscriptionService,
   ) {}
 
@@ -31,8 +30,8 @@ export class ReplaceableRouteContainerComponent implements OnInit {
     this.componentKey = (this.route.snapshot.data
       .replaceableComponent as ReplaceableComponents.RouteData).key;
 
-    const component$ = this.store
-      .select(ReplaceableComponentsState.getComponent(this.componentKey))
+    const component$ = this.replaceableComponents
+      .get$(this.componentKey)
       .pipe(distinctUntilChanged());
 
     this.subscription.addOne(

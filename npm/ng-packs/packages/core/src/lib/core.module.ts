@@ -43,9 +43,10 @@ import { coreOptionsFactory, CORE_OPTIONS } from './tokens/options.token';
 import { noop } from './utils/common-utils';
 import './utils/date-extensions';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { oAuthStorage } from './strategies/auth-flow.strategy';
 
 export function storageFactory(): OAuthStorage {
-  return localStorage;
+  return oAuthStorage;
 }
 
 /**
