@@ -5,6 +5,7 @@
         NotSpecified = 0,
         None = 1,
         Mvc = 2,
-        Angular = 3
+        Angular = 3,
+        Blazor = 4
     }
 }
