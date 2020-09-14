@@ -1,9 +1,9 @@
-import type { 
+import type {
   GetIdentityUsersInput,
   IdentityRoleDto,
-  IdentityUserCreateDto, 
-  IdentityUserDto, 
-  IdentityUserUpdateDto, 
+  IdentityUserCreateDto,
+  IdentityUserDto,
+  IdentityUserUpdateDto,
   IdentityUserUpdateRolesDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
