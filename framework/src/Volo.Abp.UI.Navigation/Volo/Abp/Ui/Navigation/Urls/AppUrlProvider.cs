@@ -87,13 +87,16 @@ namespace Volo.Abp.UI.Navigation.Urls
                 tenantNamePlaceHolder = TenantNamePlaceHolder + '.';
             }
 
-            if (CurrentTenant.Id.HasValue)
+            if (url.Contains(tenantNamePlaceHolder))
             {
-                url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync());
-            }
-            else
-            {
-                url = url.Replace(tenantNamePlaceHolder, "");
+                if (CurrentTenant.Id.HasValue)
+                {
+                    url = url.Replace(tenantNamePlaceHolder, await GetCurrentTenantNameAsync());
+                }
+                else
+                {
+                    url = url.Replace(tenantNamePlaceHolder, "");
+                }
             }
 
             return url;

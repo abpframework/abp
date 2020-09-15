@@ -62,6 +62,8 @@
     "500Message": "Sunucu tarafında hata",
     "GoHomePage": "Ana sayfaya git",
     "GoBack": "Geri dön",
-    "Search": "Arama"
+    "Search": "Arama",
+    "ItemWillBeDeletedMessageWithFormat": "{0} silinecektir!",
+    "ItemWillBeDeletedMessage": "Bu nesne silinecektir!"
   }
 }

@@ -70,6 +70,10 @@ export class LocalizationService {
     return this.store.select(ConfigState.getLocalization(key, ...interpolateParams));
   }
 
+  getResource(resourceName: string) {
+    return this.store.select(ConfigState.getLocalizationResource(resourceName));
+  }
+
   /**
    * Returns localized text with the given interpolation parameters in current language.
    * @param key Localization key to replace with localized text

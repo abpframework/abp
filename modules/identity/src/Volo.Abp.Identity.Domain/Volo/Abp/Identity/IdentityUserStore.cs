@@ -11,7 +11,10 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Features;
 using Volo.Abp.Guids;
+using Volo.Abp.Identity.Features;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.Identity
 {
@@ -56,12 +59,17 @@ namespace Volo.Abp.Identity
         protected ILookupNormalizer LookupNormalizer { get; }
         protected IIdentityUserRepository UserRepository { get; }
 
+        protected IFeatureChecker FeatureChecker { get; }
+        protected ISettingProvider SettingProvider { get; }
+
         public IdentityUserStore(
             IIdentityUserRepository userRepository,
             IIdentityRoleRepository roleRepository,
             IGuidGenerator guidGenerator,
             ILogger<IdentityRoleStore> logger,
             ILookupNormalizer lookupNormalizer,
+            IFeatureChecker featureChecker,
+            ISettingProvider settingProvider,
             IdentityErrorDescriber describer = null)
         {
             UserRepository = userRepository;
@@ -69,6 +77,8 @@ namespace Volo.Abp.Identity
             GuidGenerator = guidGenerator;
             Logger = logger;
             LookupNormalizer = lookupNormalizer;
+            FeatureChecker = featureChecker;
+            SettingProvider = settingProvider;
 
             ErrorDescriber = describer ?? new IdentityErrorDescriber();
         }
@@ -931,13 +941,33 @@ namespace Volo.Abp.Identity
         /// The <see cref="Task"/> that represents the asynchronous operation, containing a flag indicating whether the specified
         /// <paramref name="user"/> has two factor authentication enabled or not.
         /// </returns>
-        public virtual Task<bool> GetTwoFactorEnabledAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> GetTwoFactorEnabledAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
 
-            return Task.FromResult(user.TwoFactorEnabled);
+            var feature = await FeatureChecker.GetIdentityTwoFactorBehaviour();
+            if (feature == IdentityTwoFactorBehaviour.Disabled)
+            {
+                return false;
+            }
+            if (feature == IdentityTwoFactorBehaviour.Forced)
+            {
+                return true;
+            }
+
+            var setting = await SettingProvider.GetIdentityTwoFactorBehaviour();
+            if (setting == IdentityTwoFactorBehaviour.Disabled)
+            {
+                return false;
+            }
+            if (setting == IdentityTwoFactorBehaviour.Forced)
+            {
+                return true;
+            }
+
+            return user.TwoFactorEnabled;
         }
 
         /// <summary>
