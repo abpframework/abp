@@ -1,7 +1,5 @@
 using System;
 using Mongo2Go;
-using MongoDB.Driver;
-using Volo.Abp.MongoDB;
 
 namespace MyCompanyName.MyProjectName.MongoDB
 {
@@ -14,9 +12,6 @@ namespace MyCompanyName.MyProjectName.MongoDB
         {
             MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 10);
             ConnectionString = MongoDbRunner.ConnectionString;
-
-            var client = new MongoClient(MongoDbRunner.ConnectionString);
-            client.EnsureReplicationSetReady();
         }
 
         public void Dispose()

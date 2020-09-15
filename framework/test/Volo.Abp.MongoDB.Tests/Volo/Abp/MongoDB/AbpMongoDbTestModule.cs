@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
+using MongoDB.Driver.Core.Servers;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp;
@@ -32,6 +36,14 @@ namespace Volo.Abp.MongoDB
                 options.AddDefaultRepositories<ITestAppMongoDbContext>();
                 options.AddRepository<City, CityRepository>();
             });
+
+            //TODO It can be removed, when Mongo2Go solves this issue : https://github.com/Mongo2Go/Mongo2Go/issues/100
+            EnsureTransactionIsReady(new MongoClient(connectionString));
+        }
+
+        private void EnsureTransactionIsReady(MongoClient client)
+        {
+            SpinWait.SpinUntil(() => client.Cluster.Description.Servers.Any(s => s.State == ServerState.Connected && s.IsDataBearing));
         }
     }
 }
