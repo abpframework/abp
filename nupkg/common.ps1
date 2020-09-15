@@ -200,6 +200,7 @@ $projects = (
     "modules/feature-management/src/Volo.Abp.FeatureManagement.HttpApi",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.MongoDB",
     "modules/feature-management/src/Volo.Abp.FeatureManagement.Web",
+    "modules/feature-management/src/Volo.Abp.FeatureManagement.Blazor",
 
     # modules/identity
     "modules/identity/src/Volo.Abp.Identity.Application.Contracts",
