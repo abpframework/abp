@@ -12,7 +12,7 @@
             <DropdownMenu>
                 @if (Menu != null)
                 {
-                    @foreach (var menuItem in Menu.Items.Skip(1))
+                    @foreach (var menuItem in Menu.Items)
                     {
                         <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
                     }
