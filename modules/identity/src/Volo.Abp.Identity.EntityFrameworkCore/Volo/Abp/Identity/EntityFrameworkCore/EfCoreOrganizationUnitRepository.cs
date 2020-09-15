@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq.Dynamic.Core;
 using System.Linq;
 using System.Threading;
@@ -44,14 +45,20 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         }
 
         public virtual async Task<List<OrganizationUnit>> GetListAsync(
+            Guid? parentId,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
+            string filter = null,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
+                .Where(ou=>ou.ParentId==parentId)
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    ou => ou.DisplayName.Contains(filter) ||
+                          ou.Code.Contains(filter))
                 .OrderBy(sorting ?? nameof(OrganizationUnit.DisplayName))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -90,9 +97,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default)
         {
             var query = from organizationRole in DbContext.Set<OrganizationUnitRole>()
-                        join role in DbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
-                        where organizationRole.OrganizationUnitId == organizationUnit.Id
-                        select role;
+                join role in DbContext.Roles.IncludeDetails(includeDetails) on organizationRole.RoleId equals role.Id
+                where organizationRole.OrganizationUnitId == organizationUnit.Id
+                select role;
             query = query
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .PageBy(skipCount, maxResultCount);
@@ -105,9 +112,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             CancellationToken cancellationToken = default)
         {
             var query = from organizationRole in DbContext.Set<OrganizationUnitRole>()
-                        join role in DbContext.Roles on organizationRole.RoleId equals role.Id
-                        where organizationRole.OrganizationUnitId == organizationUnit.Id
-                        select role;
+                join role in DbContext.Roles on organizationRole.RoleId equals role.Id
+                where organizationRole.OrganizationUnitId == organizationUnit.Id
+                select role;
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
@@ -157,8 +164,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             var query = CreateGetMembersFilteredQuery(organizationUnit, filter);
 
             return await query.IncludeDetails(includeDetails).OrderBy(sorting ?? nameof(IdentityUser.UserName))
-                        .PageBy(skipCount, maxResultCount)
-                        .ToListAsync(GetCancellationToken(cancellationToken));
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<int> GetMembersCountAsync(
@@ -245,7 +252,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             DbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
         }
 
-        protected virtual IQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit, string filter = null)
+        public virtual async Task<long> GetLongCountAsync(Guid? parentId, string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .Where(ou=>ou.ParentId==parentId)
+                .WhereIf(!filter.IsNullOrWhiteSpace(), ou =>
+                    ou.DisplayName.Contains(filter) ||
+                    ou.Code.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        protected virtual IQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit,
+            string filter = null)
         {
             var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
                 join user in DbContext.Users on userOu.UserId equals user.Id

@@ -47,26 +47,24 @@ namespace MyCompanyName.MyProjectName.Data
             var migratedDatabaseSchemas = new HashSet<string>();
             foreach (var tenant in tenants)
             {
-                if (!tenant.ConnectionStrings.Any())
+                if (tenant.ConnectionStrings.Any())
                 {
-                    continue;
-                }
-
-                using (_currentTenant.Change(tenant.Id))
-                {
-                    var tenantConnectionStrings = tenant.ConnectionStrings
-                        .Select(x => x.Value)
-                        .ToList();
-
-                    if (!migratedDatabaseSchemas.IsSupersetOf(tenantConnectionStrings))
+                    using (_currentTenant.Change(tenant.Id))
                     {
-                        await MigrateDatabaseSchemaAsync(tenant);
+                        var tenantConnectionStrings = tenant.ConnectionStrings
+                            .Select(x => x.Value)
+                            .ToList();
 
-                        migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
+                        if (!migratedDatabaseSchemas.IsSupersetOf(tenantConnectionStrings))
+                        {
+                            await MigrateDatabaseSchemaAsync(tenant);
+
+                            migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
+                        }
                     }
-
-                    await SeedDataAsync(tenant);
                 }
+
+                await SeedDataAsync(tenant);
 
                 Logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
             }

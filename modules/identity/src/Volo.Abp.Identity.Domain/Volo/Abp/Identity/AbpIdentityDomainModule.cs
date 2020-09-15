@@ -8,6 +8,7 @@ using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
@@ -36,7 +37,7 @@ namespace Volo.Abp.Identity
                 options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(AbpIdentityDomainModule));
                 options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(AbpIdentityDomainModule));
             });
-            
+
             var identityBuilder = context.Services.AddAbpIdentity(options =>
             {
                 options.User.RequireUniqueEmail = true;
@@ -44,6 +45,13 @@ namespace Volo.Abp.Identity
 
             context.Services.AddObjectAccessor(identityBuilder);
             context.Services.ExecutePreConfiguredActions(identityBuilder);
+
+            Configure<IdentityOptions>(options =>
+            {
+                options.ClaimsIdentity.UserIdClaimType = AbpClaimTypes.UserId;
+                options.ClaimsIdentity.UserNameClaimType = AbpClaimTypes.UserName;
+                options.ClaimsIdentity.RoleClaimType = AbpClaimTypes.Role;
+            });
 
             AddAbpIdentityOptionsFactory(context.Services);
         }
@@ -67,7 +75,7 @@ namespace Volo.Abp.Identity
                 IdentityModuleExtensionConsts.EntityNames.ClaimType,
                 typeof(IdentityClaimType)
             );
-            
+
             ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
                 IdentityModuleExtensionConsts.ModuleName,
                 IdentityModuleExtensionConsts.EntityNames.OrganizationUnit,
