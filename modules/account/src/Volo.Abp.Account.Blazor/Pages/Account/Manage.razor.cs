@@ -68,6 +68,8 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
                 CurrentPassword = ChangePasswordModel.CurrentPassword,
                 NewPassword = ChangePasswordModel.NewPassword
             });
+            
+            await UiMessageService.SuccessAsync(L["PasswordChanged"]);
         }
 
         protected async Task UpdatePersonalInfoAsync()
@@ -80,6 +82,8 @@ namespace Volo.Abp.Account.Blazor.Pages.Account
             await ProfileAppService.UpdateAsync(
                 ObjectMapper.Map<PersonalInfoModel, UpdateProfileDto>(PersonalInfoModel)
                 );
+            
+            await UiMessageService.SuccessAsync(L["PersonalSettingsSaved"]);
         }
     }
 

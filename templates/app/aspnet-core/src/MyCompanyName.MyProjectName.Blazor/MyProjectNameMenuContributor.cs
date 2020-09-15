@@ -8,6 +8,11 @@ namespace MyCompanyName.MyProjectName.Blazor
     {
         public Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
+            if(context.Menu.DisplayName != StandardMenus.Main)
+            {
+                return Task.CompletedTask;
+            }
+
             var l = context.GetLocalizer<MyProjectNameResource>();
 
             context.Menu.Items.Insert(
