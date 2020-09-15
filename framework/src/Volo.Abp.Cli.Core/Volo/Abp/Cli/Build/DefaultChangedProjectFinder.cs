@@ -108,6 +108,8 @@ namespace Volo.Abp.Cli.Build
                 AddDependantProjectsToList(gitRepository, csProjFile, changedProjectList);
             }
 
+            _dotNetProjectDependencyFiller.Fill(changedProjectList);
+            
             return changedProjectList;
         }
 
