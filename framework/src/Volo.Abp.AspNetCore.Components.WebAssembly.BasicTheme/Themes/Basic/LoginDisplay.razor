@@ -12,15 +12,12 @@
             <DropdownMenu>
                 @if (Menu != null)
                 {
-                    @foreach (var menuItem in Menu.Items)
+                    @foreach (var menuItem in Menu.Items.Skip(1))
                     {
-                        <DropdownItem>
-                            <a href="@menuItem.Url" target="@menuItem.Target">
-                                @menuItem.DisplayName
-                            </a>
-                        </DropdownItem>
+                        <DropdownItem Clicked="@(() => NavigateTo(menuItem.Url))">@menuItem.DisplayName</DropdownItem>
                     }
                 }
+                <Divider />
                 <DropdownItem Clicked="BeginSignOut">Logout</DropdownItem>
             </DropdownMenu>
         </Dropdown>
