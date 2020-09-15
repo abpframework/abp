@@ -37,6 +37,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         protected AbpHttpClientOptions ClientOptions { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
+        
+        protected IObjectToQueryStringConverter ObjectToQueryStringConverter { get; }
 
         public ILogger<DynamicHttpProxyInterceptor<TService>> Logger { get; set; }
 
@@ -57,11 +59,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider,
             IOptions<AbpCorrelationIdOptions> correlationIdOptions,
-            ICurrentTenant currentTenant)
+            ICurrentTenant currentTenant, 
+            IObjectToQueryStringConverter objectToQueryStringConverter)
         {
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;
             CurrentTenant = currentTenant;
+            ObjectToQueryStringConverter = objectToQueryStringConverter;
             AbpCorrelationIdOptions = correlationIdOptions.Value;
             HttpClientFactory = httpClientFactory;
             ApiDescriptionFinder = apiDescriptionFinder;
@@ -123,7 +127,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             var action = await ApiDescriptionFinder.FindActionAsync(client, remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
             var apiVersion = GetApiVersionInfo(action);
-            var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+            var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion, ObjectToQueryStringConverter);
 
             var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
             {

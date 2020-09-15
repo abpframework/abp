@@ -81,7 +81,7 @@ namespace Volo.Abp.Http.DynamicProxying
             @params.ShouldContain("Name:John");
             @params.ShouldContain("Age:36");
         }
-        
+
         [Fact]
         public async Task Delete()
         {
@@ -158,10 +158,7 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetWithAuthorized()
         {
-            await Assert.ThrowsAnyAsync<Exception>(async () =>
-            {
-                await _peopleAppService.GetWithAuthorized();
-            });
+            await Assert.ThrowsAnyAsync<Exception>(async () => { await _peopleAppService.GetWithAuthorized(); });
         }
 
         [Fact]
@@ -176,8 +173,42 @@ namespace Volo.Abp.Http.DynamicProxying
                         Value2 = "value two",
                         Inner2 = new GetWithComplexTypeInput.GetWithComplexTypeInnerInner
                         {
-                            Value3 = "value three"
-                        }
+                            Value3 = "value three",
+                            Value4 = new Dictionary<string, string>
+                            {
+                                {"name", "john"},
+                                {"age", "36"},
+                            }
+                        },
+                    },
+                    ListInner = new List<GetWithComplexTypeInput.GetWithComplexTypeInner>
+                    {
+                        new GetWithComplexTypeInput.GetWithComplexTypeInner
+                        {
+                            Value2 = "list0 value two",
+                            Inner2 = new GetWithComplexTypeInput.GetWithComplexTypeInnerInner
+                            {
+                                Value3 = "list0 value three",
+                                Value4 = new Dictionary<string, string>
+                                {
+                                    {"name", "list0 john"},
+                                    {"age", "list0 36"},
+                                }
+                            },
+                        },
+                        new GetWithComplexTypeInput.GetWithComplexTypeInner
+                        {
+                            Value2 = "list1 value two",
+                            Inner2 = new GetWithComplexTypeInput.GetWithComplexTypeInnerInner
+                            {
+                                Value3 = "list1 value three",
+                                Value4 = new Dictionary<string, string>
+                                {
+                                    {"name", "list1 bob"},
+                                    {"age", "list1 42"},
+                                }
+                            },
+                        },
                     }
                 }
             );
@@ -185,6 +216,17 @@ namespace Volo.Abp.Http.DynamicProxying
             result.Value1.ShouldBe("value one");
             result.Inner1.Value2.ShouldBe("value two");
             result.Inner1.Inner2.Value3.ShouldBe("value three");
+            result.Inner1.Inner2.Value4.ShouldContain(kv => kv.Key == "name" && kv.Value == "john");
+            result.Inner1.Inner2.Value4.ShouldContain(kv => kv.Key == "age" && kv.Value == "36");
+            result.ListInner.Count.ShouldBe(2);
+            result.ListInner[0].Value2.ShouldBe("list0 value two");
+            result.ListInner[0].Inner2.Value3.ShouldBe("list0 value three");
+            result.ListInner[0].Inner2.Value4.ShouldContain(kv => kv.Key == "name" && kv.Value == "list0 john");
+            result.ListInner[0].Inner2.Value4.ShouldContain(kv => kv.Key == "age" && kv.Value == "list0 36");
+            result.ListInner[1].Value2.ShouldBe("list1 value two");
+            result.ListInner[1].Inner2.Value3.ShouldBe("list1 value three");
+            result.ListInner[1].Inner2.Value4.ShouldContain(kv => kv.Key == "name" && kv.Value == "list1 bob");
+            result.ListInner[1].Inner2.Value4.ShouldContain(kv => kv.Key == "age" && kv.Value == "list1 42");
         }
     }
 }

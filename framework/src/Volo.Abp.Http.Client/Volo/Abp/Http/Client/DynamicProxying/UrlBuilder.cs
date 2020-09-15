@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
-using Volo.Abp.Localization;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
     internal static class UrlBuilder
     {
-        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion, IObjectToQueryStringConverter objectToQueryStringConverter)
         {
             var urlBuilder = new StringBuilder(action.Url);
 
             ReplacePathVariables(urlBuilder, action.Parameters, methodArguments, apiVersion);
-            AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion);
+            AddQueryStringParameters(urlBuilder, action.Parameters, methodArguments, apiVersion, objectToQueryStringConverter);
 
             return urlBuilder.ToString();
         }
@@ -66,7 +62,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
         }
 
-        private static void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion)
+        private static void AddQueryStringParameters(StringBuilder urlBuilder, IList<ParameterApiDescriptionModel> actionParameters, IReadOnlyDictionary<string, object> methodArguments, ApiVersionInfo apiVersion, IObjectToQueryStringConverter objectToQueryStringConverter)
         {
             var queryStringParameters = actionParameters
                 .Where(p => p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query))
@@ -82,14 +78,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     continue;
                 }
 
-                AddQueryStringParameter(urlBuilder, isFirstParam, queryStringParameter.Name, value);
+                AddQueryStringParameter(urlBuilder, isFirstParam, queryStringParameter.Name, value, objectToQueryStringConverter);
 
                 isFirstParam = false;
             }
 
             if (apiVersion.ShouldSendInQueryString())
             {
-                AddQueryStringParameter(urlBuilder, isFirstParam, "api-version", apiVersion.Version);  //TODO: Constant!
+                AddQueryStringParameter(urlBuilder, isFirstParam, "api-version", apiVersion.Version, objectToQueryStringConverter);  //TODO: Constant!
             }
         }
 
@@ -97,46 +93,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             StringBuilder urlBuilder,
             bool isFirstParam,
             string name,
-            [NotNull] object value)
+            [NotNull] object value, 
+            IObjectToQueryStringConverter objectToQueryStringConverter)
         {
             urlBuilder.Append(isFirstParam ? "?" : "&");
-
-            if (value is IDictionary dict && value.GetType().IsGenericType && value.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(Dictionary<,>)))
-            {
-                foreach (DictionaryEntry kv in dict)
-                {
-                    urlBuilder.Append(name + "." + kv.Key + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(kv.Value)) + "&");
-                }
-                //remove & at the end of the urlBuilder.
-                urlBuilder.Remove(urlBuilder.Length - 1, 1);
-            }
-            else if (value.GetType().IsArray || (value.GetType().IsGenericType && value is IEnumerable))
-            {
-                var index = 0;
-                foreach (var item in (IEnumerable) value)
-                {
-                    urlBuilder.Append(name + $"[{index++}]=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(item)) + "&");
-                }
-                //remove & at the end of the urlBuilder.
-                urlBuilder.Remove(urlBuilder.Length - 1, 1);
-            }
-            else
-            {
-                urlBuilder.Append(name + "=" + System.Net.WebUtility.UrlEncode(ConvertValueToString(value)));
-            }
-        }
-
-        private static string ConvertValueToString([NotNull] object value)
-        {
-            using (CultureHelper.Use(CultureInfo.InvariantCulture))
-            {
-                if (value is DateTime dateTimeValue)
-                {
-                    return dateTimeValue.ToUniversalTime().ToString("u");
-                }
-
-                return value.ToString();
-            }
+            urlBuilder.Append(objectToQueryStringConverter.ConvertObjectToQueryString(name, value));
         }
     }
 }
