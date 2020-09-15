@@ -129,9 +129,13 @@ export class ConfigState {
   }
 
   static getLocalizationResource(resourceName: string) {
-    return createSelector([ConfigState], (state: Config.State) => {
+    const selector = createSelector([ConfigState], (state: Config.State): {
+      [key: string]: string;
+    } => {
       return state.localization.values[resourceName];
     });
+
+    return selector;
   }
 
   static getLocalization(
