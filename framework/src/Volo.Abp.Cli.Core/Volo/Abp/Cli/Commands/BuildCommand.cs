@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Build;
 using Volo.Abp.DependencyInjection;
@@ -12,8 +11,6 @@ namespace Volo.Abp.Cli.Commands
 {
     public class BuildCommand : IConsoleCommand, ITransientDependency
     {
-        public ILogger<BuildCommand> Logger { get; set; }
-
         public IDotNetProjectDependencyFiller DotNetProjectDependencyFiller { get; set; }
 
         public IChangedProjectFinder ChangedProjectFinder { get; set; }
@@ -79,7 +76,7 @@ namespace Volo.Abp.Cli.Commands
                 changedProjectFiles,
                 buildSucceededProjects
             );
-            
+
             RepositoryBuildStatusStore.Set(buildName, buildConfig.GitRepository, buildStatus);
 
             sw.Stop();

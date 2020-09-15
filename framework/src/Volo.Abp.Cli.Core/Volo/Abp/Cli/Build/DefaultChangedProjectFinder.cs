@@ -12,7 +12,13 @@ namespace Volo.Abp.Cli.Build
     {
         private readonly IRepositoryBuildStatusStore _repositoryBuildStatusStore;
         private readonly IGitRepositoryHelper _gitRepositoryHelper;
-        
+        private readonly List<string> _changeDetectionFileExtensions = new List<string>
+        {
+            ".cs",
+            ".csproj",
+            ".cshtml"
+        };
+
         public DefaultChangedProjectFinder(
             IRepositoryBuildStatusStore repositoryBuildStatusStore,
             IGitRepositoryHelper gitRepositoryHelper)
@@ -205,19 +211,27 @@ namespace Volo.Abp.Cli.Build
                     ? null
                     : repo.Lookup<Commit>(status.CommitId);
                 var repoDifferences = repo.Diff.Compare<Patch>(firstCommit?.Tree, repo.Head.Tip.Tree);
+                
+                var fileExtensionPredicate = PredicateBuilder.New<PatchEntryChanges>(true);
 
+                foreach (var changeDetectionFileExtension in _changeDetectionFileExtensions)
+                {
+                    fileExtensionPredicate = fileExtensionPredicate.And(e => e.Path.EndsWith(changeDetectionFileExtension));
+                }
+                
                 var files = repoDifferences
-                    .Where(e => e.Path.EndsWith(".cs") || e.Path.EndsWith(".csproj"))
+                    .Where(fileExtensionPredicate)
                     .Where(e => e.Status != ChangeKind.Deleted)
                     .Select(e => e)
                     .ToList();
 
                 var affectedCsProjFiles = FindAffectedCsProjFiles(repository.RootPath, files);
-
+                var lastCommitId = _gitRepositoryHelper.GetLastCommitId(repository);
+                
                 foreach (var file in affectedCsProjFiles)
                 {
                     var csProjPath = Path.Combine(repository.RootPath, file);
-                    if (status.SucceedProjects.Any(p => p.CsProjPath == csProjPath && p.CommitId == "1"))
+                    if (status.SucceedProjects.Any(p => p.CsProjPath == csProjPath && p.CommitId == lastCommitId))
                     {
                         continue;
                     }
