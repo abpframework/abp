@@ -25,7 +25,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
     public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientDependency
     {
         // ReSharper disable once StaticMemberInGenericType
-        protected static MethodInfo GenericInterceptAsyncMethod { get; }
+        protected static MethodInfo MakeRequestAndGetResultAsyncMethod { get; }
 
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
@@ -42,7 +42,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         static DynamicHttpProxyInterceptor()
         {
-            GenericInterceptAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
+            MakeRequestAndGetResultAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
                 .First(m => m.Name == nameof(MakeRequestAndGetResultAsync) && m.IsGenericMethodDefinition);
         }
@@ -81,7 +81,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
             else
             {
-                var result = (Task)GenericInterceptAsyncMethod
+                var result = (Task)MakeRequestAndGetResultAsyncMethod
                     .MakeGenericMethod(invocation.Method.ReturnType.GenericTypeArguments[0])
                     .Invoke(this, new object[] { invocation });
 
@@ -90,7 +90,6 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     invocation.Method.ReturnType.GetGenericArguments()[0]
                 );
             }
-
         }
 
         private async Task<object> GetResultAsync(Task task, Type resultType)

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <RazorLangVersion>3.0</RazorLangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.BlazoriseUI\Volo.Abp.BlazoriseUI.csproj" />
+        <ProjectReference Include="..\Volo.Abp.Http.Client.IdentityModel.WebAssembly\Volo.Abp.Http.Client.IdentityModel.WebAssembly.csproj" />
+        <ProjectReference Include="..\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
+    </ItemGroup>
+
+</Project>
