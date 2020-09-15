@@ -12,6 +12,9 @@ namespace Volo.Abp.Cli.Build
     {
         private readonly IRepositoryBuildStatusStore _repositoryBuildStatusStore;
         private readonly IGitRepositoryHelper _gitRepositoryHelper;
+
+        private readonly IDotNetProjectDependencyFiller _dotNetProjectDependencyFiller;
+
         private readonly List<string> _changeDetectionFileExtensions = new List<string>
         {
             ".cs",
@@ -21,10 +24,12 @@ namespace Volo.Abp.Cli.Build
 
         public DefaultChangedProjectFinder(
             IRepositoryBuildStatusStore repositoryBuildStatusStore,
-            IGitRepositoryHelper gitRepositoryHelper)
+            IGitRepositoryHelper gitRepositoryHelper,
+            IDotNetProjectDependencyFiller dotNetProjectDependencyFiller)
         {
             _repositoryBuildStatusStore = repositoryBuildStatusStore;
             _gitRepositoryHelper = gitRepositoryHelper;
+            _dotNetProjectDependencyFiller = dotNetProjectDependencyFiller;
         }
 
         public List<DotNetProjectInfo> Find(DotNetProjectBuildConfig buildConfig)
@@ -33,9 +38,38 @@ namespace Volo.Abp.Cli.Build
             {
                 return FindByRepository(buildConfig);
             }
-        
+
             return FindBySlnFile(buildConfig.GitRepository, buildConfig.SlFilePath);
         }
+
+        private List<DotNetProjectInfo> FindAllProjects(GitRepository gitRepository)
+        {
+            var projects = new List<DotNetProjectInfo>();
+
+            AddProjectsOfRepository(gitRepository, projects);
+            _dotNetProjectDependencyFiller.Fill(projects);
+
+            return projects;
+        }
+
+        private void AddProjectsOfRepository(GitRepository gitRepository, List<DotNetProjectInfo> projects)
+        {
+            var allCsProjFiles = Directory.GetFiles(
+                gitRepository.RootPath,
+                "*.csproj",
+                SearchOption.AllDirectories
+            ).ToList();
+
+            projects.AddRange(
+                allCsProjFiles.Select(csProjPath => new DotNetProjectInfo(gitRepository.Name, csProjPath))
+            );
+
+            foreach (var dependingRepository in gitRepository.DependingRepositories)
+            {
+                AddProjectsOfRepository(dependingRepository, projects);
+            }
+        }
+
 
         private List<DotNetProjectInfo> FindByRepository(DotNetProjectBuildConfig buildConfig)
         {
@@ -45,11 +79,15 @@ namespace Volo.Abp.Cli.Build
                 buildConfig.GitRepository
             );
 
+            // Create a List which contains all csproj files and their 1-level dependencies
+            var allProjectList = FindAllProjects(buildConfig.GitRepository);
+
             FindChangedFiles(
                 buildConfig.GitRepository,
                 gitRepositoryBuildStatus,
                 changedProjectList,
-                buildConfig.ForceBuild
+                buildConfig.ForceBuild,
+                allProjectList
             );
 
             return changedProjectList;
@@ -67,13 +105,13 @@ namespace Volo.Abp.Cli.Build
 
             foreach (var csProjFile in csProjFiles)
             {
-                AddDependingProjectsToList(gitRepository, csProjFile, changedProjectList);
+                AddDependantProjectsToList(gitRepository, csProjFile, changedProjectList);
             }
 
             return changedProjectList;
         }
 
-        private void AddDependingProjectsToList(
+        private void AddDependantProjectsToList(
             GitRepository gitRepository,
             string csProjFilePath,
             List<DotNetProjectInfo> changedProjectList)
@@ -86,11 +124,12 @@ namespace Volo.Abp.Cli.Build
             }
 
             changedProjectList.Add(project);
-
             AddProjectDependencies(gitRepository, project, changedProjectList);
         }
 
-        private void AddProjectDependencies(GitRepository gitRepository, DotNetProjectInfo project,
+        private void AddProjectDependencies(
+            GitRepository gitRepository,
+            DotNetProjectInfo project,
             List<DotNetProjectInfo> changedProjectList)
         {
             var projectNode = XElement.Load(project.CsProjPath);
@@ -124,7 +163,8 @@ namespace Volo.Abp.Cli.Build
             GitRepository repository,
             GitRepositoryBuildStatus repositoryBuildStatus,
             List<DotNetProjectInfo> changedProjectList,
-            bool forceBuild)
+            bool forceBuild,
+            List<DotNetProjectInfo> allProjectList)
         {
             if (forceBuild || repositoryBuildStatus == null || repositoryBuildStatus.CommitId.IsNullOrEmpty())
             {
@@ -136,7 +176,8 @@ namespace Volo.Abp.Cli.Build
                     repository,
                     changedProjectList,
                     repositoryBuildStatus,
-                    false
+                    false,
+                    allProjectList
                 );
             }
 
@@ -149,7 +190,8 @@ namespace Volo.Abp.Cli.Build
                         dependingRepository,
                         dependingRepositoryBuildStatus,
                         changedProjectList,
-                        forceBuild
+                        forceBuild,
+                        allProjectList
                     );
                 }
             }
@@ -188,7 +230,8 @@ namespace Volo.Abp.Cli.Build
                     continue;
                 }
 
-                if (status.GetSelfOrChild(repository.Name).SucceedProjects.Any(e => e.CsProjPath == file && e.CommitId == lastCommitId))
+                if (status.GetSelfOrChild(repository.Name).SucceedProjects
+                    .Any(e => e.CsProjPath == file && e.CommitId == lastCommitId))
                 {
                     continue;
                 }
@@ -198,12 +241,13 @@ namespace Volo.Abp.Cli.Build
                 );
             }
         }
-        
+
         private void AddChangedCsProjFiles(
             GitRepository repository,
-            List<DotNetProjectInfo> changedFiles,
+            List<DotNetProjectInfo> changedProjectList,
             GitRepositoryBuildStatus status,
-            bool forceBuild)
+            bool forceBuild,
+            List<DotNetProjectInfo> allProjectList)
         {
             using (var repo = new Repository(string.Concat(repository.RootPath, @"\.git")))
             {
@@ -211,14 +255,16 @@ namespace Volo.Abp.Cli.Build
                     ? null
                     : repo.Lookup<Commit>(status.CommitId);
                 var repoDifferences = repo.Diff.Compare<Patch>(firstCommit?.Tree, repo.Head.Tip.Tree);
-                
+
                 var fileExtensionPredicate = PredicateBuilder.New<PatchEntryChanges>(true);
 
                 foreach (var changeDetectionFileExtension in _changeDetectionFileExtensions)
                 {
-                    fileExtensionPredicate = fileExtensionPredicate.And(e => e.Path.EndsWith(changeDetectionFileExtension));
+                    fileExtensionPredicate = fileExtensionPredicate.Or(
+                        e => e.Path.EndsWith(changeDetectionFileExtension)
+                    );
                 }
-                
+
                 var files = repoDifferences
                     .Where(fileExtensionPredicate)
                     .Where(e => e.Status != ChangeKind.Deleted)
@@ -227,7 +273,7 @@ namespace Volo.Abp.Cli.Build
 
                 var affectedCsProjFiles = FindAffectedCsProjFiles(repository.RootPath, files);
                 var lastCommitId = _gitRepositoryHelper.GetLastCommitId(repository);
-                
+
                 foreach (var file in affectedCsProjFiles)
                 {
                     var csProjPath = Path.Combine(repository.RootPath, file);
@@ -237,17 +283,17 @@ namespace Volo.Abp.Cli.Build
                     }
 
                     // Filter ignored directories
-                    foreach (var ignoredDirectory in repository.IgnoredDirectories)
+                    var isIgnored = repository.IgnoredDirectories.Any(ignoredDirectory =>
+                        csProjPath.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)));
+                    if (isIgnored)
                     {
-                        if (csProjPath.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)))
-                        {
-                            continue;
-                        }
+                        continue;
                     }
 
-                    changedFiles.Add(
-                        new DotNetProjectInfo(repository.Name, csProjPath)
-                    );
+                    var project = new DotNetProjectInfo(repository.Name, csProjPath);
+                    changedProjectList.Add(project);
+
+                    AddDependingProjectsToList(project, changedProjectList, allProjectList);
                 }
 
                 if (!repository.DependingRepositories.Any())
@@ -261,10 +307,32 @@ namespace Volo.Abp.Cli.Build
                     FindChangedFiles(
                         subRepository,
                         subRepositoryBuildStatus,
-                        changedFiles,
-                        forceBuild
+                        changedProjectList,
+                        forceBuild,
+                        allProjectList
                     );
                 }
+            }
+        }
+
+        private void AddDependingProjectsToList(DotNetProjectInfo project, List<DotNetProjectInfo> changedProjectList,
+            List<DotNetProjectInfo> allProjectList)
+        {
+            var dependingProjects = allProjectList.Where(
+                    e => e.Dependencies.Any(d => d.CsProjPath == project.CsProjPath)
+                ).Select(e => new DotNetProjectInfo(e.RepositoryName, e.CsProjPath)) // don't get dependencies
+                .ToList();
+
+            if (!dependingProjects.Any())
+            {
+                return;
+            }
+
+            changedProjectList.AddRange(dependingProjects);
+
+            foreach (var dependingProject in dependingProjects)
+            {
+                AddDependingProjectsToList(dependingProject, changedProjectList, allProjectList);
             }
         }
 

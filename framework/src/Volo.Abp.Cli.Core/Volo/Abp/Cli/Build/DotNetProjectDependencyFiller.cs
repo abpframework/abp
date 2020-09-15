@@ -9,8 +9,6 @@ namespace Volo.Abp.Cli.Build
 {
     public class DotNetProjectDependencyFiller : IDotNetProjectDependencyFiller, ITransientDependency
     {
-        public ILogger<DotNetProjectDependencyFiller> Logger { get; set; }
-        
         public void Fill(List<DotNetProjectInfo> projects)
         {
             foreach (var project in projects)

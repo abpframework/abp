@@ -58,8 +58,6 @@ namespace Volo.Abp.Cli.Commands
 
             var changedProjectFiles = ChangedProjectFinder.Find(buildConfig);
 
-            DotNetProjectDependencyFiller.Fill(changedProjectFiles);
-
             var sortedProjects = BuildProjectListSorter.SortByDependencies(
                 changedProjectFiles,
                 new DotNetProjectInfoEqualityComparer()
