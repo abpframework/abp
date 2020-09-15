@@ -72,8 +72,8 @@
                 <TextEdit @bind-text="NewEntity.Name" />
             </Field>
             <Field>
-                <Check TValue="bool" @bind-checked="NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                <Check TValue="bool" @bind-checked="NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                <Check TValue="bool" @bind-checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                <Check TValue="bool" @bind-checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
             </Field>
         </ModalBody>
         <ModalFooter>
@@ -98,8 +98,8 @@
                 <TextEdit @bind-text="EditingEntity.Name" />
             </Field>
             <Field>
-                <Check TValue="bool" @bind-checked="EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                <Check TValue="bool" @bind-checked="EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                <Check TValue="bool" @bind-checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                <Check TValue="bool" @bind-checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
             </Field>
         </ModalBody>
         <ModalFooter>
