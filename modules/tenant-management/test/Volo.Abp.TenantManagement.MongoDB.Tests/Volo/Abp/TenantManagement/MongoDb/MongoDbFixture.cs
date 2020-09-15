@@ -12,7 +12,7 @@ namespace Volo.Abp.TenantManagement.MongoDB
 
         static MongoDbFixture()
         {
-            MongoDbRunner = MongoDbRunner.Start(singleNodeReplSet: true, singleNodeReplSetWaitTimeout: 10);
+            MongoDbRunner = MongoDbRunner.Start();
             ConnectionString = MongoDbRunner.ConnectionString;
         }
 
