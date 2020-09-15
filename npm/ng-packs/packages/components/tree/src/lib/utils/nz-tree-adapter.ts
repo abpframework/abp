@@ -48,7 +48,18 @@ export class TreeAdapter<T extends BaseNode = BaseNode> {
   }
 
   handleRemove({ key }: TreeNode<T>) {
-    this.tree = createTreeFromList(this.list.filter(item => item.id !== key));
+    this.updateTreeFromList(this.list.filter(item => item.id !== key));
+  }
+
+  handleUpdate({ key, children }: { key: string; children: T[] }) {
+    // remove current children and update tree
+    this.updateTreeFromList(this.list.filter(item => item.parentId !== key));
+    // add new children and update tree
+    this.updateTreeFromList(this.list.concat(children));
+  }
+
+  updateTreeFromList(list: T[]) {
+    this.tree = createTreeFromList(list);
     this.list = createListFromTree(this.tree);
   }
 }
