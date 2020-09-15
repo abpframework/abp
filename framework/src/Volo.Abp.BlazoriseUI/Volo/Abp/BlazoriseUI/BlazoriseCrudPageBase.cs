@@ -187,8 +187,13 @@ namespace Volo.Abp.BlazoriseUI
         {
             var entityDto = await AppService.GetAsync(id);
             EditingEntityId = id;
-            EditingEntity = ObjectMapper.Map<TGetOutputDto, TUpdateInput>(entityDto);
+            EditingEntity = MapToEditingEntity(entityDto);
             EditModal.Show();
+        }
+
+        protected virtual TUpdateInput MapToEditingEntity(TGetOutputDto entityDto)
+        {
+            return ObjectMapper.Map<TGetOutputDto, TUpdateInput>(entityDto);
         }
 
         protected virtual Task CloseEditModalAsync()
