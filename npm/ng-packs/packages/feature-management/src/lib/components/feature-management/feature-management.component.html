@@ -9,19 +9,22 @@
         <ul
           ngbNav
           #nav="ngbNav"
-          [(activeId)]="selectedGroup"
+          [(activeId)]="selectedGroupDisplayName"
           class="nav-pills"
           orientation="vertical"
         >
-          <li *ngFor="let groupName of groups" [ngbNavItem]="groupName">
-            <a ngbNavLink>{{ groupName }}</a>
+          <li
+            *ngFor="let group of groups; trackBy: track.by('name')"
+            [ngbNavItem]="selectedGroupDisplayName"
+          >
+            <a ngbNavLink>{{ group.displayName }}</a>
             <ng-template ngbNavContent>
-              <h4>{{ selectedGroup }}</h4>
+              <h4>{{ selectedGroupDisplayName }}</h4>
               <hr class="mt-2 mb-3" />
 
               <div
                 class="row my-3"
-                *ngFor="let feature of features[groupName]; let i = index; trackBy: track.by('id')"
+                *ngFor="let feature of features[group.name]; let i = index; trackBy: track.by('id')"
                 [ngStyle]="feature.style"
                 [ngSwitch]="feature.valueType?.name"
                 (keyup.enter)="save()"
