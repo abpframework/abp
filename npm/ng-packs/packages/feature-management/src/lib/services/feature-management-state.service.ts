@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { FeatureManagementState } from '../states';
-import { FeatureManagement } from '../models';
-import { GetFeatures, UpdateFeatures } from '../actions';
+import { GetFeatures, UpdateFeatures } from '../actions/feature-management.actions';
+import { FeatureManagementState } from '../states/feature-management.state';
 
 @Injectable({
   providedIn: 'root',

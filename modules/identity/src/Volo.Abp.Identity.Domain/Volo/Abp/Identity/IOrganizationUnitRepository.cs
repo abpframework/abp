@@ -28,9 +28,11 @@ namespace Volo.Abp.Identity
         );
 
         Task<List<OrganizationUnit>> GetListAsync(
+            Guid? parentId,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
@@ -112,5 +114,10 @@ namespace Volo.Abp.Identity
             OrganizationUnit organizationUnit,
             CancellationToken cancellationToken = default
         );
+
+        Task<long> GetLongCountAsync(
+            Guid? parentId,
+            string filter = null,
+            CancellationToken cancellationToken = default);
     }
 }
