@@ -19,7 +19,7 @@ await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
 });
 ```
 
-Configure `AbpSecurityLogOptions `to provide the application name for the log or disable this feature. **enabed** by default.
+Configure `AbpSecurityLogOptions` to provide the application name for the log or disable this feature. **Enabled** by default.
 
 ```cs
 Configure<AbpSecurityLogOptions>(options =>
