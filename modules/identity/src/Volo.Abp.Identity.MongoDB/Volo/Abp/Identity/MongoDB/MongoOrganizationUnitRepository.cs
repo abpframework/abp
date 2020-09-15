@@ -16,7 +16,7 @@ namespace Volo.Abp.Identity.MongoDB
 {
     public class MongoOrganizationUnitRepository
         : MongoDbRepository<IAbpIdentityMongoDbContext, OrganizationUnit, Guid>,
-        IOrganizationUnitRepository
+            IOrganizationUnitRepository
     {
         public MongoOrganizationUnitRepository(
             IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
@@ -41,8 +41,8 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                    .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
-                    .ToListAsync(GetCancellationToken(cancellationToken));
+                .Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<OrganizationUnit>> GetListAsync(
@@ -51,22 +51,28 @@ namespace Volo.Abp.Identity.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                    .Where(t => ids.Contains(t.Id))
-                    .ToListAsync(GetCancellationToken(cancellationToken));
+                .Where(t => ids.Contains(t.Id))
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<OrganizationUnit>> GetListAsync(
+            Guid? parentId,
             string sorting = null,
             int maxResultCount = int.MaxValue,
             int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                    .OrderBy(sorting ?? nameof(OrganizationUnit.DisplayName))
-                    .As<IMongoQueryable<OrganizationUnit>>()
-                    .PageBy<OrganizationUnit, IMongoQueryable<OrganizationUnit>>(skipCount, maxResultCount)
-                    .ToListAsync(GetCancellationToken(cancellationToken));
+                .Where(ou=>ou.ParentId==parentId)
+                .WhereIf(!filter.IsNullOrWhiteSpace(),
+                    ou => ou.DisplayName.Contains(filter) ||
+                          ou.Code.Contains(filter))
+                .OrderBy(sorting ?? nameof(OrganizationUnit.DisplayName))
+                .As<IMongoQueryable<OrganizationUnit>>()
+                .PageBy<OrganizationUnit, IMongoQueryable<OrganizationUnit>>(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<OrganizationUnit> GetAsync(
@@ -166,7 +172,6 @@ namespace Volo.Abp.Identity.MongoDB
 
             return await query.CountAsync(GetCancellationToken(cancellationToken));
         }
-
         public async Task<List<IdentityUser>> GetUnaddedUsersAsync(
             OrganizationUnit organizationUnit,
             string sorting = null,
@@ -213,7 +218,8 @@ namespace Volo.Abp.Identity.MongoDB
             return Task.FromResult(0);
         }
 
-        public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit, CancellationToken cancellationToken = default)
+        public virtual async Task RemoveAllMembersAsync(OrganizationUnit organizationUnit,
+            CancellationToken cancellationToken = default)
         {
             var users = await DbContext.Users.AsQueryable()
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
@@ -227,7 +233,19 @@ namespace Volo.Abp.Identity.MongoDB
             }
         }
 
-        protected virtual IMongoQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit, string filter = null)
+        public virtual async Task<long> GetLongCountAsync(Guid? parentId, string filter = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .Where(ou=>ou.ParentId==parentId)
+                .WhereIf<OrganizationUnit, IMongoQueryable<OrganizationUnit>>(!filter.IsNullOrWhiteSpace(), ou =>
+                    ou.DisplayName.Contains(filter) ||
+                    ou.Code.Contains(filter))
+                .LongCountAsync(GetCancellationToken(cancellationToken));
+        }
+
+        protected virtual IMongoQueryable<IdentityUser> CreateGetMembersFilteredQuery(OrganizationUnit organizationUnit,
+            string filter = null)
         {
             return DbContext.Users.AsQueryable()
                 .Where(u => u.OrganizationUnits.Any(uou => uou.OrganizationUnitId == organizationUnit.Id))
