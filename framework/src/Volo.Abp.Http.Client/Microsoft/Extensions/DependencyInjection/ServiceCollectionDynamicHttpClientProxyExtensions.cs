@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
 using JetBrains.Annotations;
-using Polly;
 using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
@@ -30,23 +29,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="asDefaultServices">
         /// True, to register the HTTP client proxy as the default implementation for the services.
         /// </param>
-        /// <param name="configureHttpClientBuilder">
-        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
-        /// </param>
         public static IServiceCollection AddHttpClientProxies(
             [NotNull] this IServiceCollection services,
             [NotNull] Assembly assembly,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            bool asDefaultServices = true,
-            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
+            bool asDefaultServices = true)
         {
             Check.NotNull(services, nameof(assembly));
 
-            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName, configureHttpClientBuilder);
-
-            //TODO: Make a configuration option and add remoteServiceName inside it!
-
-            var serviceTypes = assembly.GetTypes().Where(IsSuitableForDynamicClientProxying);
+            var serviceTypes = assembly.GetTypes().Where(IsSuitableForDynamicClientProxying).ToArray();
 
             foreach (var serviceType in serviceTypes)
             {
@@ -72,53 +63,16 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="asDefaultService">
         /// True, to register the HTTP client proxy as the default implementation for the service <typeparamref name="T"/>.
         /// </param>
-        /// <param name="configureHttpClientBuilder">
-        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
-        /// </param>
         public static IServiceCollection AddHttpClientProxy<T>(
             [NotNull] this IServiceCollection services,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            bool asDefaultService = true,
-            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
+            bool asDefaultService = true)
         {
-            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName, configureHttpClientBuilder);
-
             return services.AddHttpClientProxy(
                 typeof(T),
                 remoteServiceConfigurationName,
                 asDefaultService
             );
-        }
-
-        /// <summary>
-        /// Use IHttpClientFactory and polly
-        /// </summary>
-        /// <param name="services">Service collection</param>
-        /// <param name="remoteServiceConfigurationName">
-        /// The name of the remote service configuration to be used by the HTTP Client proxies.
-        /// See <see cref="AbpRemoteServiceOptions"/>.
-        /// </param>
-        /// <param name="configureHttpClientBuilder">
-        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
-        /// </param>
-        public static IServiceCollection AddHttpClientFactoryAndPolicy(
-            [NotNull] this IServiceCollection services,
-            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
-        {
-            var httpClientBuilder = services.AddHttpClient(remoteServiceConfigurationName);
-            if (configureHttpClientBuilder == null)
-            {
-                httpClientBuilder.AddTransientHttpErrorPolicy(builder =>
-                    // retry 3 times
-                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
-            }
-            else
-            {
-                configureHttpClientBuilder.Invoke(httpClientBuilder);
-            }
-
-            return services;
         }
 
         /// <summary>
@@ -142,6 +96,8 @@ namespace Microsoft.Extensions.DependencyInjection
             Check.NotNull(services, nameof(services));
             Check.NotNull(type, nameof(type));
             Check.NotNullOrWhiteSpace(remoteServiceConfigurationName, nameof(remoteServiceConfigurationName));
+
+            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName);
 
             services.Configure<AbpHttpClientOptions>(options =>
             {
@@ -189,13 +145,36 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        private static IServiceCollection AddHttpClientFactoryAndPolicy(
+            [NotNull] this IServiceCollection services,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName)
+        {
+            var preOptions = services.ExecutePreConfiguredActions<AbpHttpClientBuilderOptions>();
+
+            if (preOptions.ConfiguredProxyClients.Contains(remoteServiceConfigurationName))
+            {
+                return services;
+            }
+
+            var clientBuilder = services.AddHttpClient(remoteServiceConfigurationName);
+
+            foreach (var clientBuildAction in preOptions.ProxyClientBuildActions)
+            {
+                clientBuildAction(remoteServiceConfigurationName, clientBuilder);
+            }
+
+            preOptions.ConfiguredProxyClients.Add(remoteServiceConfigurationName);
+
+            return services;
+        }
+
         /// <summary>
         /// Checks wether the type is suitable to use with the dynamic proxying.
         /// Currently the type is checked statically against some fixed conditions.
         /// </summary>
         /// <param name="type">Type to check</param>
         /// <returns>True, if the type is suitable for dynamic proxying. Otherwise false.</returns>
-        static bool IsSuitableForDynamicClientProxying(Type type)
+        private static bool IsSuitableForDynamicClientProxying(Type type)
         {
             //TODO: Add option to change type filter
 
