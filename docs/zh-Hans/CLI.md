@@ -85,6 +85,8 @@ abp new Acme.BookStore
         * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的.如果未指定会创建一个分层的解决方案,此解决方案没有那么复杂,适合大多数场景.
       * `angular`: Angular. 这个模板还有一些额外的选项:
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
+      * `blazor`: Blazor. 这个模板还有一些额外的选项:
+        * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
       * `none`: 无UI. 这个模板还有一些额外的选项:
         * `--separate-identity-server`: 将Identity Server应用程序与API host应用程序分开. 如果未指定,则服务器端将只有一个端点.
     * `--mobile` 或者 `-m`: 指定移动应用程序框架. 如果未指定,则不会创建任何移动应用程序,其他选项:
