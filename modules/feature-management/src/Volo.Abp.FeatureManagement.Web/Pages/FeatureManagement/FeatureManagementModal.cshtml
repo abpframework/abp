@@ -1,13 +1,23 @@
-﻿@page
+@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Abp.FeatureManagement.Localization
 @using Volo.Abp.Validation.StringValues
 @using Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
+@using Volo.Abp.Localization
 @model FeatureManagementModal
 @inject IHtmlLocalizer<AbpFeatureManagementResource> L
+@inject IHtmlLocalizerFactory HtmlLocalizerFactory
+@inject IOptions<AbpLocalizationOptions> LocalizationOptions
 @{
     Layout = null;
+
+    IHtmlLocalizer CreateHtmlLocalizer(string resourceName)
+    {
+        var resource = LocalizationOptions.Value.Resources.Values.FirstOrDefault(x => x.ResourceName == resourceName);
+        return HtmlLocalizerFactory.Create(resource != null ? resource.ResourceType : LocalizationOptions.Value.DefaultResourceType);
+    }
 }
 <form method="post" asp-page="/FeatureManagement/FeatureManagementModal" data-script-class="abp.modals.FeatureManagement">
     <abp-modal size="Large">
@@ -48,11 +58,11 @@
                                                     {
                                                         if (item.Value == feature.Value)
                                                         {
-                                                            <option value="@item.Value" selected="selected"> @L.GetString(item.DisplayText.Name) </option>
+                                                            <option value="@item.Value" selected="selected"> @CreateHtmlLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name) </option>
                                                         }
                                                         else
                                                         {
-                                                            <option value="@item.Value"> @L.GetString(item.DisplayText.Name) </option>
+                                                            <option value="@item.Value"> @CreateHtmlLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name) </option>
                                                         }
                                                     }
                                                 </select>
