@@ -153,7 +153,7 @@ var abp = abp || {};
 
         for (var i = 0; i < packageMap.length; i++) {
             var map = packageMap[i];
-            if (map.name === language){
+            if (map.name === language) {
                 return map.value;
             }
         }
@@ -595,29 +595,42 @@ var abp = abp || {};
 
             if (parameterInfo.value.toJSON && typeof parameterInfo.value.toJSON === "function") {
                 qs = qs + parameterInfo.name + '=' + encodeURIComponent(parameterInfo.value.toJSON());
-            } else if (Array.isArray(parameterInfo.value) && parameterInfo.value.length) {
-                for (var j = 0; j < parameterInfo.value.length; j++) {
-                    if (j > 0) {
-                        addSeperator();
-                    }
-
-                    qs = qs + parameterInfo.name + '[' + j + ']=' + encodeURIComponent(parameterInfo.value[j]);
-                }
-            } else if (typeof parameterInfo.value === 'object' && parameterInfo.value !== null) {
-                var index = 0;
-                for (var propertyName in parameterInfo.value) {
-                    if (index > 0) {
-                        addSeperator();
-                    }
-                    qs = qs + parameterInfo.name + '.' + propertyName + '=' + encodeURIComponent(parameterInfo.value[propertyName]);
-                    index++;
-                }
+            } else if (typeof parameterInfo.value === 'object') {
+                qs = qs + abp.utils.serializeToQueryString(parameterInfo.value, parameterInfo.name);
             } else {
                 qs = qs + parameterInfo.name + '=' + encodeURIComponent(parameterInfo.value);
             }
         }
 
         return qs;
+    }
+
+    /**
+     * Serialize any object to a query string
+     * @param obj
+     * @param prefix
+     */
+    abp.utils.serializeToQueryString = function (obj, prefix) {
+        var str = [];
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                var name;
+                if (prefix) {
+                    if (Array.isArray(obj)) {
+                        name = prefix + "[" + prop + "]";
+                    } else {
+                        name = prefix + "." + prop;
+                    }
+                } else {
+                    name = prop;
+                }
+                var value = obj[prop];
+                str.push((value !== null && typeof value === "object") ?
+                    abp.utils.serializeToQueryString(value, name) :
+                    encodeURIComponent(name) + "=" + encodeURIComponent(value));
+            }
+        }
+        return str.join("&");
     }
 
     /**
