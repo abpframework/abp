@@ -11,14 +11,11 @@ namespace Volo.Abp.Identity
     {
         private readonly IIdentityRoleAppService _roleAppService;
         private readonly IIdentityRoleRepository _roleRepository;
-        private readonly IOrganizationUnitRepository _organizationUnitRepository;
-        private readonly OrganizationUnitManager _organization;
+
         public IdentityRoleAppService_Tests()
         {
             _roleAppService = GetRequiredService<IIdentityRoleAppService>();
             _roleRepository = GetRequiredService<IIdentityRoleRepository>();
-            _organization = GetRequiredService<OrganizationUnitManager>();
-            _organizationUnitRepository=GetRequiredService<IOrganizationUnitRepository>();
         }
 
         [Fact]
@@ -84,31 +81,6 @@ namespace Volo.Abp.Identity
             role.Name.ShouldBe(input.Name);
         }
 
-        [Fact]
-        public async Task CreateWithDetailsAsync()
-        {
-            //Arrange
-            var input = new IdentityRoleCreateDto
-            {
-                Name = Guid.NewGuid().ToString("N").Left(8)
-            };
-            
-            var orgInput=new OrganizationUnit(
-                    _organization.GuidGenerator.Create(),
-                    Guid.NewGuid().ToString("N").Left(8)
-            );
-            
-            //Act
-            var result = await _roleAppService.CreateAsync(input);
-
-            await _organization.CreateAsync(orgInput);
-
-            var role = await _roleRepository.GetAsync(result.Id);
-            await _organization.AddRoleToOrganizationUnitAsync(role,orgInput);
-            //Assert
-            orgInput.Roles.Count.ShouldBeGreaterThan(0);
-        }
-        
         [Fact]
         public async Task UpdateAsync()
         {
