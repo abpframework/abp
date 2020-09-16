@@ -6,7 +6,9 @@ import { SessionState } from '../states';
 import { StartLoader, StopLoader } from '../actions/loader.actions';
 import { finalize } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ApiInterceptor implements HttpInterceptor {
   constructor(private oAuthService: OAuthService, private store: Store) {}
 
