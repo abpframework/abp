@@ -7,5 +7,7 @@ namespace Volo.Abp.MongoDB
         IMongoDatabase Database { get; }
 
         IMongoCollection<T> Collection<T>();
+
+        IClientSessionHandle SessionHandle { get; }
     }
 }

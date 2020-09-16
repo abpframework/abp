@@ -48,8 +48,26 @@ export class TreeAdapter<T extends BaseNode = BaseNode> {
   }
 
   handleRemove({ key }: TreeNode<T>) {
-    this.tree = createTreeFromList(this.list.filter(item => item.id !== key));
+    this.updateTreeFromList(this.list.filter(item => item.id !== key));
+  }
+
+  handleUpdate({ key, children }: { key: string; children: T[] }) {
+    /**
+     * When we need to update a node with new children, first we need to remove any descendant nodes.
+     * If we remove immediate children and create a new tree, any other descendant nodes will be removed
+     * and we won't need to recursively remove sub children.
+     * Then, you simply add back the new children and create a new tree.
+     */
+    const listWithDescendantNodesRemoved = this.updateTreeFromList(
+      this.list.filter(item => item.parentId !== key),
+    );
+    this.updateTreeFromList(listWithDescendantNodesRemoved.concat(children));
+  }
+
+  updateTreeFromList(list: T[]) {
+    this.tree = createTreeFromList(list);
     this.list = createListFromTree(this.tree);
+    return this.list;
   }
 }
 

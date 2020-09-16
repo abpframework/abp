@@ -4,7 +4,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { FeatureManagement } from '../../models/feature-management';
 import { FeaturesService } from '../../proxy/feature-management/features.service';
-import { FeatureDto, UpdateFeatureDto } from '../../proxy/feature-management/models';
+import {
+  FeatureDto,
+  FeatureGroupDto,
+  UpdateFeatureDto,
+} from '../../proxy/feature-management/models';
 
 enum ValueTypes {
   ToggleStringValueType = 'ToggleStringValueType',
@@ -27,9 +31,9 @@ export class FeatureManagementComponent
   @Input()
   providerName: string;
 
-  selectedGroup: string;
+  selectedGroupDisplayName: string;
 
-  groups: string[] = [];
+  groups: Pick<FeatureGroupDto, 'name' | 'displayName'>[] = [];
 
   features: {
     [group: string]: Array<FeatureDto & { style?: { [key: string]: number }; initialValue: any }>;
@@ -68,8 +72,8 @@ export class FeatureManagementComponent
 
   getFeatures() {
     this.service.get(this.providerName, this.providerKey).subscribe(res => {
-      this.groups = res.groups.map(group => group.displayName);
-      this.selectedGroup = this.groups[0];
+      this.groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
+      this.selectedGroupDisplayName = this.groups[0].displayName;
       this.features = res.groups.reduce(
         (acc, val) => ({
           ...acc,

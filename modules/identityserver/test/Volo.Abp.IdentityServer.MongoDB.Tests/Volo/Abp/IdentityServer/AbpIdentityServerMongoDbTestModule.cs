@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Identity.MongoDB;
 using Volo.Abp.IdentityServer.MongoDB;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -16,7 +17,7 @@ namespace Volo.Abp.IdentityServer
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var connectionString = MongoDbFixture.ConnectionString.EnsureEndsWith('/') +
+            var connectionString = MongoDbFixture.ConnectionString.EnsureEndsWith('/')  +
                                    "Db_" +
                                    Guid.NewGuid().ToString("N");
 
@@ -24,6 +25,11 @@ namespace Volo.Abp.IdentityServer
             {
                 options.ConnectionStrings.Default = connectionString;
             });
+
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
+            {
+                options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+            });   
         }
     }
 }
