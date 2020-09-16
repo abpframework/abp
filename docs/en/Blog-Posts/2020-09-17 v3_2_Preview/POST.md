@@ -119,3 +119,7 @@ We will use this command to build the abp repository or a solution inside it. Ho
 * Improvements and optimizations for the [Angular service proxy generation](https://blog.abp.io/abp/Introducing-the-Angular-Service-Proxy-Generation).
 
 And a lot of minor improvements and bug fixes. You can see [the milestone 3.2](https://github.com/abpframework/abp/milestone/39?closed=1) for all issues & PRs closed with this version.
+
+## What's New with the ABP Commercial 3.2
+
+TODO
