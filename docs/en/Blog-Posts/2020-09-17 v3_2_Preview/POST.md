@@ -145,4 +145,52 @@ And a lot of minor improvements and bug fixes. You can see [the milestone 3.2](h
 
 ## What's New with the ABP Commercial 3.2
 
-TODO
+### The Blazor UI
+
+The **experimental** Blazor UI is also available for the ABP Commercial. The [Lepton Theme](https://commercial.abp.io/themes) hasn't been implemented with this initial preview, however we are working on it with the highest priority.
+
+You can use the [ABP Suite](https://docs.abp.io/en/commercial/latest/abp-suite/index) or the following ABP CLI command to create a new solution with the Blazor UI:
+
+````bash
+abp new AbpBlazorDemo -u blazor -t app-pro
+````
+
+Please try it and provide feedback to us. Thanks in advance.
+
+### File Management Angular UI
+
+Angular UI for the [File Management](https://commercial.abp.io/modules/Volo.FileManagement) module is available with the version 3.2. You can add it to your solution using the ABP Suite.
+
+TODO: Screenshot
+
+### Profile Picture Management
+
+We've added profile picture management for the account module, so the user can pick an image as the profile picture.
+
+TODO: Screenshot
+
+### Two Factor Authentication Features
+
+Created [features](https://docs.abp.io/en/abp/latest/Features) and [settings](https://docs.abp.io/en/abp/latest/Settings) to disable, enable or force to use 2FA on login for the tenants and users.
+
+TODO: Screenshot
+
+## Other News
+
+### The ABP Community
+
+**ABP Community** web site is constantly being improved. We will add "**commenting**" and "**rating**" features soon to increase the interactivity between the people.
+
+If you have something to share with the ABP community or want to follow the project progress, please check the [community.abp.io](https://community.abp.io/)!
+
+### CMS Kit Project
+
+We are silently working on a project, named [CMS Kit](https://github.com/abpframework/abp/tree/dev/modules/cms-kit), for a few months. CMS Kit is a set of reusable CMS (Content Management System) components based on the ABP Framework. Some of the components currently being developed:
+
+* **Comments**; Allows users to comment under something (a blog post, a document, an image... etc).
+* **Reactions**; Allows users to give reactions to something (a comment, a picture... etc.) using simple emoji icons.
+* **Rating**; Allows users to rate some content from 1 to 5.
+* **Newsletter**; Allows you to put a newsletter box to your web site to collect emails from users.
+* **Contact**; Put a form to get message from the web site visitors.
+
+There are more planned components like articles, tags, votes, favorites, portfolio, image gallery, FAQ... etc. We will document and deploy these components when they get matured and ready to use. Some of them will be open source & free while some of them are paid (included in the [ABP Commercial](https://commercial.abp.io/) license).
