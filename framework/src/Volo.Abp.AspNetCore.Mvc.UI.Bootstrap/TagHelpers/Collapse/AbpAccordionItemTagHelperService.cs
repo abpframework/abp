@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             header.Attributes.Add("id", GetHeadingId());
             header.InnerHtml.AppendHtml(h5);
 
-            return RenderHtml(header);
+            return header.ToHtmlString();
         }
 
         protected virtual string GetAccordionContentItem(TagHelperContext context, TagHelperOutput output, string content)
@@ -61,7 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
             wrapper.Attributes.Add("data-parent", "#" + AbpAccordionParentIdPlaceholder);
             wrapper.InnerHtml.AppendHtml(cardBody);
 
-            return RenderHtml(wrapper);
+            return wrapper.ToHtmlString();
         }
 
         protected virtual string GetHeadingId()

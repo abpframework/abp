@@ -81,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 wrapper.InnerHtml.AppendHtml(input);
                 wrapper.InnerHtml.AppendHtml(label);
 
-                html.AppendLine(RenderHtml(wrapper));
+                html.AppendLine(wrapper.ToHtmlString());
             }
 
             return html.ToString();

@@ -44,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             }
 
         }
-        
+
         protected virtual string CombineHeadersAndContents(TagHelperContext context, TagHelperOutput output, string headers, string contents)
         {
             var combined = new StringBuilder();
@@ -76,7 +76,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             listElement.Attributes.Add("role", "tablist");
             listElement.InnerHtml.AppendHtml(headers);
 
-            return RenderHtml(listElement);
+            return listElement.ToHtmlString();
         }
 
         protected virtual string SurroundContents(TagHelperContext context, TagHelperOutput output, string contents)
@@ -88,7 +88,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             wrapper.Attributes.Add("id", id);
             wrapper.InnerHtml.AppendHtml(contents);
 
-            return RenderHtml(wrapper);
+            return wrapper.ToHtmlString();
         }
 
         protected virtual string PlaceInsideColumn(string contents, int columnSize)
@@ -97,7 +97,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             wrapper.AddCssClass("col-md-" + columnSize);
             wrapper.InnerHtml.AppendHtml(contents);
 
-            return RenderHtml(wrapper);
+            return wrapper.ToHtmlString();
         }
 
         protected virtual void PlaceInsideRow(TagHelperOutput output)

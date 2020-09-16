@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             title.AddCssClass("modal-title");
             title.InnerHtml.Append(TagHelper.Title);
 
-            return RenderHtml(title);
+            return title.ToHtmlString();
         }
 
         protected virtual string CreatePostContent()
@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             button.Attributes.Add("aria-label", L["Close"].Value);
             button.InnerHtml.AppendHtml(span);
 
-            return RenderHtml(button);
+            return button.ToHtmlString();
         }
     }
 }

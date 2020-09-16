@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
-using System.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
@@ -45,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
         {
             var img = new TagBuilder("img");
             img.AddCssClass("d-block w-100");
-            img.Attributes.Add("src", HttpUtility.HtmlDecode(TagHelper.Src));
+            img.Attributes.Add("src", TagHelper.Src);
             img.Attributes.Add("alt", TagHelper.Alt);
 
             output.Content.SetHtmlContent(img);

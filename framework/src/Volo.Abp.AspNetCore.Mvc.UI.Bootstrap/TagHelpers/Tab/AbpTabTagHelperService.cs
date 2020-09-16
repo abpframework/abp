@@ -55,7 +55,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
                 anchor.InnerHtml.Append(title);
 
-                return RenderHtml(anchor);
+                return anchor.ToHtmlString();
             }
             else
             {
@@ -79,7 +79,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 listItem.AddCssClass("nav-item");
                 listItem.InnerHtml.AppendHtml(anchor);
 
-                return RenderHtml(listItem);
+                return listItem.ToHtmlString();
             }
         }
 
@@ -105,7 +105,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
             wrapper.InnerHtml.AppendHtml(content);
 
-            return RenderHtml(wrapper);
+            return wrapper.ToHtmlString();
         }
 
         protected virtual void SetPlaceholderForNameIfNotProvided()

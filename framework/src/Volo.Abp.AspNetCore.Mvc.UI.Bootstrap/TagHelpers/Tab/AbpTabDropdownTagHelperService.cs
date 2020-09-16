@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             listItem.InnerHtml.AppendHtml(anchor);
             listItem.InnerHtml.AppendHtml(menu);
 
-            return RenderHtml(listItem);
+            return listItem.ToHtmlString();
         }
     }
 }

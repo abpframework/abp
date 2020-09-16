@@ -24,9 +24,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         private readonly IStringLocalizerFactory _stringLocalizerFactory;
 
         public AbpSelectTagHelperService(
-            IHtmlGenerator generator, 
-            HtmlEncoder encoder, 
-            IAbpTagHelperLocalizer tagHelperLocalizer, 
+            IHtmlGenerator generator,
+            HtmlEncoder encoder,
+            IAbpTagHelperLocalizer tagHelperLocalizer,
             IStringLocalizerFactory stringLocalizerFactory)
         {
             _generator = generator;
@@ -142,7 +142,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 label.Attributes.Add("for", GetIdAttributeValue(selectTag));
                 label.InnerHtml.Append(TagHelper.Label);
 
-                return RenderHtml(label) + GetRequiredSymbol(context, output);
+                return label.ToHtmlString() + GetRequiredSymbol(context, output);
             }
 
             return await GetLabelAsHtmlUsingTagHelperAsync(context, output) + GetRequiredSymbol(context, output);
@@ -205,7 +205,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
             small.AddCssClass("form-text text-muted");
 
-            return RenderHtml(small);
+            return small.ToHtmlString();
         }
 
         protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)

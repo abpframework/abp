@@ -29,11 +29,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             ProcessButtonsAlignment(output);
         }
 
-        protected virtual string CreateContent() 
+        protected virtual string CreateContent()
         {
             var sb = new StringBuilder();
 
-            switch (TagHelper.Buttons) 
+            switch (TagHelper.Buttons)
             {
                 case AbpModalButtons.Cancel:
                     sb.AppendLine(GetCancelButton());
@@ -57,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             return sb.ToString();
         }
 
-        protected virtual string GetSaveButton() 
+        protected virtual string GetSaveButton()
         {
             var icon = new TagBuilder("i");
             icon.AddCssClass("fa");
@@ -74,10 +74,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             element.InnerHtml.AppendHtml(icon);
             element.InnerHtml.AppendHtml(span);
 
-            return RenderHtml(element);
+            return element.ToHtmlString();
         }
 
-        protected virtual string GetCloseButton() 
+        protected virtual string GetCloseButton()
         {
             var element = new TagBuilder("button");
             element.Attributes.Add("type", "button");
@@ -86,10 +86,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             element.AddCssClass("btn-secondary");
             element.InnerHtml.Append(_localizer["Close"]);
 
-            return RenderHtml(element);
+            return element.ToHtmlString();
         }
 
-        protected virtual string GetCancelButton() 
+        protected virtual string GetCancelButton()
         {
             var element = new TagBuilder("button");
             element.Attributes.Add("type", "button");
@@ -98,7 +98,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
             element.AddCssClass("btn-secondary");
             element.InnerHtml.Append(_localizer["Cancel"]);
 
-            return RenderHtml(element);
+            return element.ToHtmlString();
         }
 
         protected virtual void ProcessButtonsAlignment(TagHelperOutput output)

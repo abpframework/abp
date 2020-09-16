@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             SetPlaceholderForNameIfNotProvided();
-            
+
             var tabHeader = GetTabHeaderItem(context, output);
 
             var tabHeaderItems = context.GetValue<List<TabItem>>(TabItems);
@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 anchor.Attributes.Add("href", href);
                 anchor.InnerHtml.Append(title);
 
-                return RenderHtml(anchor);
+                return anchor.ToHtmlString();
             }
             else
             {
@@ -51,7 +51,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 listItem.AddCssClass("nav-item");
                 listItem.InnerHtml.AppendHtml(anchor);
 
-                return RenderHtml(listItem);
+                return listItem.ToHtmlString();
             }
         }
 

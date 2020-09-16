@@ -267,7 +267,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 label.AddCssClass("custom-control-label");
             }
 
-            return RenderHtml(label);
+            return label.ToHtmlString();
         }
 
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
@@ -318,7 +318,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
             small.AddCssClass("form-text text-muted");
 
-            return RenderHtml(small);
+            return small.ToHtmlString();
         }
 
         protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output, bool isCheckbox)

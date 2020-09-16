@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
             var link = new TagBuilder("a");
             link.Attributes.Add("href", TagHelper.Href);
             link.InnerHtml.Append(TagHelper.Title);
-            return RenderHtml(link);
+            return link.ToHtmlString();
         }
     }
 }
