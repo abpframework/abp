@@ -14,6 +14,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity.Features;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Identity
@@ -947,7 +948,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(user, nameof(user));
 
-            var feature = await FeatureChecker.GetIdentityTwoFactorBehaviour();
+            var feature = await IdentityTwoFactorBehaviourFeatureHelper.Get(FeatureChecker);
             if (feature == IdentityTwoFactorBehaviour.Disabled)
             {
                 return false;
@@ -957,7 +958,7 @@ namespace Volo.Abp.Identity
                 return true;
             }
 
-            var setting = await SettingProvider.GetIdentityTwoFactorBehaviour();
+            var setting = await IdentityTwoFactorBehaviourSettingHelper.Get(SettingProvider);
             if (setting == IdentityTwoFactorBehaviour.Disabled)
             {
                 return false;

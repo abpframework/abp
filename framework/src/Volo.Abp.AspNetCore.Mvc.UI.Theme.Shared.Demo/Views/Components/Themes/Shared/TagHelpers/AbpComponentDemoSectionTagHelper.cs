@@ -78,7 +78,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             
             output.PostContent.AppendHtml($"<div class=\"tab-pane fade show active\" id=\"tag-helper-{tagHelperCodeBlockId}\" role=\"tabpanel\" aria-labelledby=\"tag-helper-tab-{tagHelperCodeBlockId}\">");
             output.PostContent.AppendHtml("<pre class=\"p-4\">");
-            output.PostContent.AppendHtml("<code>");
+            output.PostContent.AppendHtml("<code class=\"language-html\">");
             output.PostContent.Append(GetRawDemoSource());
             output.PostContent.AppendHtml("</code>");
             output.PostContent.AppendHtml("</pre>");
@@ -86,7 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Demo.Views.Components.Themes.S
             
             output.PostContent.AppendHtml($"<div class=\"tab-pane fade\" id=\"bootstrap-{bootstrapCodeBlockId}\" role=\"tabpanel\" aria-labelledby=\"bootstrap-tab-{bootstrapCodeBlockId}\">");
             output.PostContent.AppendHtml("<pre class=\"p-4\">");
-            output.PostContent.AppendHtml("<code>");
+            output.PostContent.AppendHtml("<code class=\"language-html\">");
             output.PostContent.Append(content.GetContent());
             output.PostContent.AppendHtml("</code>");
             output.PostContent.AppendHtml("</pre>");

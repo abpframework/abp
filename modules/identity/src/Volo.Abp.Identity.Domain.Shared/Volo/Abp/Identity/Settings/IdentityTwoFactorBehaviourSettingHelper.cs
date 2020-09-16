@@ -2,14 +2,13 @@
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Identity.Features;
-using Volo.Abp.Identity.Settings;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity.Settings
 {
-    public static class IdentitySettingProviderExtensions
+    public static class IdentityTwoFactorBehaviourSettingHelper
     {
-        public static async Task<IdentityTwoFactorBehaviour> GetIdentityTwoFactorBehaviour([NotNull] this ISettingProvider settingProvider)
+        public static async Task<IdentityTwoFactorBehaviour> Get([NotNull] ISettingProvider settingProvider)
         {
             Check.NotNull(settingProvider, nameof(settingProvider));
 
