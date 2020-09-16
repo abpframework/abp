@@ -86,11 +86,37 @@ See the [Kafka integration documentation](https://docs.abp.io/en/abp/latest/Dist
 
 ### Host Features
 
-TODO
+[ABP Feature System](https://docs.abp.io/en/abp/latest/Features) allows you to define features in your application. Then you can enable/disable a feature dynamically on the runtime. It is generally used in a [multi-tenant](https://docs.abp.io/en/abp/latest/Multi-Tenancy) system to restrict features for tenants, so you can charge extra money for some features in a SaaS application.
+
+In some cases, you may want to use the same features in the host side (host is you as you are managing the tenants). For this case, we've added a "**Manage Host Features**" button to the Tenant Management page so you can open a modal dialog to select the features for the host side.
+
+![host-features](host-features.png)
 
 ### AbpHttpClientBuilderOptions
 
-TODO
+ABP Framework provides a system to dynamically create C# proxies to consume HTTP APIs from your client applications. `AbpHttpClientBuilderOptions` is a new option class to configure the `HttpClient`s used by the proxy system.
+
+**Example: Use the [Polly](https://github.com/App-vNext/Polly) library to retry up to 3 times for a failed HTTP request**
+
+````csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<AbpHttpClientBuilderOptions>(options =>
+    {
+        options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
+        {
+            clientBuilder.AddTransientHttpErrorPolicy(policyBuilder =>
+                policyBuilder.WaitAndRetryAsync(
+                    3,
+                    i => TimeSpan.FromSeconds(Math.Pow(2, i))
+                )
+            );
+        });
+    });
+}
+````
+
+See the issue [#5304](https://github.com/abpframework/abp/issues/5304) for the details.
 
 ### Account Module: Profile Management Page Extensions
 
