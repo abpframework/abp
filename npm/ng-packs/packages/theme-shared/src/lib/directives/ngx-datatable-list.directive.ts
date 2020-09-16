@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 })
 export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   private subscription = new Subscription();
-  private querySubscription: Subscription;
+  private querySubscription = new Subscription();
 
   @Input() list: ListService;
 
@@ -68,9 +68,11 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
   }
 
   private subscribeToQuery() {
-    this.querySubscription = this.list.query$.subscribe(() => {
-      if (this.list.page !== this.table.offset) this.table.offset = this.list.page;
-    });
+    this.querySubscription.add(
+      this.list.query$.subscribe(() => {
+        if (this.list.page !== this.table.offset) this.table.offset = this.list.page;
+      }),
+    );
   }
 
   ngOnChanges({ list }: SimpleChanges) {
@@ -80,12 +82,13 @@ export class NgxDatatableListDirective implements OnChanges, OnDestroy, OnInit {
     this.table.limit = maxResultCount;
     this.table.offset = page;
 
-    if (this.querySubscription) this.querySubscription.unsubscribe();
+    this.querySubscription.unsubscribe();
     this.subscribeToQuery();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.querySubscription.unsubscribe();
   }
 
   ngOnInit() {
