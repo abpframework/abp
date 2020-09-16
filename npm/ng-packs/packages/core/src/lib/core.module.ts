@@ -187,7 +187,7 @@ export class CoreModule {
         },
         {
           provide: HTTP_INTERCEPTORS,
-          useClass: ApiInterceptor,
+          useExisting: ApiInterceptor,
           multi: true,
         },
         {
