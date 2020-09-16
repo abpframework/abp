@@ -39,6 +39,7 @@
     "@angular-builders/jest": "^10.0.0",
     "@angular-devkit/build-angular": "~0.1000.6",
     "@angular-devkit/build-ng-packagr": "~0.1000.6",
+    "@angular-devkit/schematics-cli": "^0.1001.1",
     "@angular/animations": "~10.0.10",
     "@angular/cli": "~10.0.6",
     "@angular/common": "~10.0.10",

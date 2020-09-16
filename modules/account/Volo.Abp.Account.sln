@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{12FAE513-7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Account.Application.Tests", "test\Volo.Abp.Account.Application.Tests\Volo.Abp.Account.Application.Tests.csproj", "{356EAC51-5D55-4852-A8A5-2F90EAC8DAE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Account.Blazor", "src\Volo.Abp.Account.Blazor\Volo.Abp.Account.Blazor.csproj", "{EE8858B3-A638-481B-8EB9-74F5E7D43D80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{356EAC51-5D55-4852-A8A5-2F90EAC8DAE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{356EAC51-5D55-4852-A8A5-2F90EAC8DAE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{356EAC51-5D55-4852-A8A5-2F90EAC8DAE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE8858B3-A638-481B-8EB9-74F5E7D43D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE8858B3-A638-481B-8EB9-74F5E7D43D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE8858B3-A638-481B-8EB9-74F5E7D43D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE8858B3-A638-481B-8EB9-74F5E7D43D80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{EBF0C2B3-14CB-4DFC-9753-ECBF959CBA2E} = {B5881429-EFF7-4F30-8C0B-0AC41E36B74E}
 		{7BCA5955-B3F6-41E8-9D5D-D115195C6098} = {B5881429-EFF7-4F30-8C0B-0AC41E36B74E}
 		{356EAC51-5D55-4852-A8A5-2F90EAC8DAE3} = {12FAE513-7575-4235-89DF-277BA1A3B098}
+		{EE8858B3-A638-481B-8EB9-74F5E7D43D80} = {B5881429-EFF7-4F30-8C0B-0AC41E36B74E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B054393-D2B2-4EA8-8A15-D60CBCF3E7A9}

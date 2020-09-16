@@ -14,14 +14,16 @@ using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.Identity.Blazor;
+using Volo.Abp.Account.Blazor;
 
 namespace MyCompanyName.MyProjectName.Blazor
 {
     [DependsOn(
         typeof(AbpAutofacWebAssemblyModule),
         typeof(MyProjectNameHttpApiClientModule),
+        typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
         typeof(AbpIdentityBlazorModule),
-        typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule)
+        typeof(AbpAccountBlazorModule)
     )]
     public class MyProjectNameBlazorModule : AbpModule
     {
