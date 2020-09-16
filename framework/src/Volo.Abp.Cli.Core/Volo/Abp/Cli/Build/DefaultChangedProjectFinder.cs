@@ -23,8 +23,6 @@ namespace Volo.Abp.Cli.Build
             ".cshtml"
         };
 
-        // TODO: consider ignored folders !
-
         public DefaultChangedProjectFinder(
             IRepositoryBuildStatusStore repositoryBuildStatusStore,
             IGitRepositoryHelper gitRepositoryHelper,
@@ -39,14 +37,19 @@ namespace Volo.Abp.Cli.Build
 
         public List<DotNetProjectInfo> Find(DotNetProjectBuildConfig buildConfig)
         {
-            if (buildConfig.SlFilePath.IsNullOrEmpty())
+            if (!buildConfig.SlFilePath.IsNullOrEmpty())
             {
-                return FindByRepository(buildConfig);
+                return FindBySlnFile(buildConfig);
             }
 
-            return FindBySlnFile(buildConfig);
+            return FindByRepository(buildConfig);
         }
 
+        /// <summary>
+        /// Returns list of projects in a repository and its depending repositories sorted by dependencies
+        /// </summary>
+        /// <param name="buildConfig"></param>
+        /// <returns></returns>
         private List<DotNetProjectInfo> FindAllProjects(DotNetProjectBuildConfig buildConfig)
         {
             var projects = new List<DotNetProjectInfo>();
@@ -104,8 +107,7 @@ namespace Volo.Abp.Cli.Build
                 buildConfig.BuildName,
                 buildConfig.GitRepository
             );
-
-            // Create a List which contains all csproj files and their 1-level dependencies
+            
             var allSortedProjectList = FindAllProjects(buildConfig);
             
             MarkProjectsForBuild(
@@ -210,7 +212,6 @@ namespace Volo.Abp.Cli.Build
 
         private List<DotNetProjectInfo> FindBySlnFile(DotNetProjectBuildConfig buildConfig)
         {
-            // Create a List which contains all csproj files and their 1-level dependencies
             var allProjectList = FindAllProjects(buildConfig);
 
             var slFine = new FileInfo(buildConfig.SlFilePath);
