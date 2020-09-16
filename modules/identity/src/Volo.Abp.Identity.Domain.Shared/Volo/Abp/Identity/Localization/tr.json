@@ -81,7 +81,7 @@
     "Feature:TwoFactorDescription": "İki faktörlü kimlik doğrulama",
     "Feature:TwoFactor.Optional": "İsteğe bağlı",
     "Feature:TwoFactor.Disabled": "Devre dışı",
-    "Feature:TwoFactor.Forced": "Zorla etkinleştirildi",
+    "Feature:TwoFactor.Forced": "Zorunlu",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Uzunluk gerekli",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Tekil karakter gerekli",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Alfasayısal olmayan karakter gerekli",
@@ -112,7 +112,7 @@
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "E-posta alanının, kullanıcının kendisi tarafından güncellenebilirliği",
     "DisplayName:Abp.Identity.TwoFactorBehaviour": "İki faktörlü kimlik doğrulama davranışı",
     "Description:Abp.Identity.TwoFactorBehaviour": "İki faktörlü kimlik doğrulama davranışı",
-    "DisplayName:Abp.Identity.UsersCanChange": "Kullanıcıların faktör kimlik doğrulamasını değiştirmesine izin verin.",
-    "Description:Abp.Identity.UsersCanChange": "Kullanıcıların faktör kimlik doğrulamasını değiştirmesine izin verin."
+    "DisplayName:Abp.Identity.UsersCanChange": "Kullanıcıların iki faktörlü kimlik doğrulama davranışını değiştirmelerine izin verin.",
+    "Description:Abp.Identity.UsersCanChange": "Kullanıcıların iki faktörlü kimlik doğrulama davranışını değiştirmelerine izin verin"
   }
 }
