@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
+import { HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders } from '@angular/common/http';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Store } from '@ngxs/store';
 import { SessionState } from '../states';
@@ -13,48 +13,30 @@ export class ApiInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler) {
     this.store.dispatch(new StartLoader(request));
 
-    const headers = {} as any;
-
-    // TODO: utilize getHeaders method here WITH GREAT CARE!
-    const token = this.oAuthService.getAccessToken();
-    if (!request.headers.has('Authorization') && token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    const lang = this.store.selectSnapshot(SessionState.getLanguage);
-    if (!request.headers.has('Accept-Language') && lang) {
-      headers['Accept-Language'] = lang;
-    }
-
-    const tenant = this.store.selectSnapshot(SessionState.getTenant);
-    if (!request.headers.has('__tenant') && tenant) {
-      headers['__tenant'] = tenant.id;
-    }
-
     return next
       .handle(
         request.clone({
-          setHeaders: headers,
+          setHeaders: this.getHeaders(request.headers),
         }),
       )
       .pipe(finalize(() => this.store.dispatch(new StopLoader(request))));
   }
 
-  getHeaders() {
+  getHeaders(existingHeaders?: HttpHeaders) {
     const headers = {} as any;
 
     const token = this.oAuthService.getAccessToken();
-    if (token) {
+    if (!existingHeaders?.has('Authorization') && token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
     const lang = this.store.selectSnapshot(SessionState.getLanguage);
-    if (lang) {
+    if (!existingHeaders?.has('Accept-Language') && lang) {
       headers['Accept-Language'] = lang;
     }
 
     const tenant = this.store.selectSnapshot(SessionState.getTenant);
-    if (tenant) {
+    if (!existingHeaders?.has('__tenant') && tenant) {
       headers['__tenant'] = tenant.id;
     }
 
