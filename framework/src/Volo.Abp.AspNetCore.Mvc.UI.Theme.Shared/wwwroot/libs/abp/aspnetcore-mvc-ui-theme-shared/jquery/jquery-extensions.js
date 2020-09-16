@@ -35,7 +35,12 @@
                 //change text
                 if ($buttonInnerSpan.length && $button.attr('data-busy-text')) {
                     $button.data('buttonOriginalText', $buttonInnerSpan.html());
-                    $buttonInnerSpan.text($button.attr('data-busy-text'));
+                    
+                    if ($button.data('busy-text-is-html')) {
+                        $buttonInnerSpan.html($button.attr('data-busy-text'));
+                    } else {
+                        $buttonInnerSpan.text($button.attr('data-busy-text'));
+                    }
                 }
 
                 $button.addClass('button-busy');
@@ -55,7 +60,7 @@
 
                 //restore text
                 if ($buttonInnerSpan.length && $button.data('buttonOriginalText')) {
-                    $buttonInnerSpan.text($button.data('buttonOriginalText'));
+                    $buttonInnerSpan.html($button.data('buttonOriginalText'));
                 }
 
                 $button.removeClass('button-busy');
