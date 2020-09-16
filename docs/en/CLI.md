@@ -366,7 +366,7 @@ abp logout
 This command builds a GIT repository and it's depending repositories or a single .NET solution File. In order ```build``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain one of;
 
 * A .NET solution file (*.sln)
-* abp-build-config.json
+* abp-build-config.json (suggested to add this to .gitignore)
 
 Usage:
 
