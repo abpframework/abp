@@ -45,7 +45,8 @@ namespace Volo.Abp.Cli.Commands
                 Options.BuildName.Long
             );
 
-            var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
+            var forceBuild = commandLineArgs.Options.ContainsKey(Options.ForceBuild.Short) ||
+                             commandLineArgs.Options.ContainsKey(Options.ForceBuild.Long);
 
             var buildConfig = DotNetProjectBuildConfigReader.Read(workingDirectory ?? Directory.GetCurrentDirectory());
             buildConfig.BuildName = buildName;
@@ -59,7 +60,7 @@ namespace Volo.Abp.Cli.Commands
                 changedProjectFiles,
                 dotnetBuildArguments ?? ""
             );
-            
+
             var buildStatus = BuildStatusGenerator.Generate(
                 buildConfig,
                 changedProjectFiles,
@@ -89,7 +90,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-m |--max-parallel-builds <parallel-build-count>        (default: 1)");
             sb.AppendLine("-a |--dotnet-build-arguments <arguments>                (default: empty)");
             sb.AppendLine("-n |--build-name <name>                                 (default: empty)");
-            sb.AppendLine("--force                                                 (default: false)");
+            sb.AppendLine("-f | --force                                            (default: false)");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -123,6 +124,7 @@ namespace Volo.Abp.Cli.Commands
 
             public static class ForceBuild
             {
+                public const string Short = "f";
                 public const string Long = "force";
             }
         }
