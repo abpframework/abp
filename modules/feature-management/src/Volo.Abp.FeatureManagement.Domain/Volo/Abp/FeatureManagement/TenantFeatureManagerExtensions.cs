@@ -18,6 +18,16 @@ namespace Volo.Abp.FeatureManagement
             return featureManager.GetAllAsync(TenantFeatureValueProvider.ProviderName, tenantId.ToString(), fallback);
         }
 
+        public static Task<FeatureNameValueWithGrantedProvider> GetOrNullWithProviderForTenantAsync(this IFeatureManager featureManager, [NotNull] string name, Guid tenantId, bool fallback = true)
+        {
+            return featureManager.GetOrNullWithProviderAsync(name, TenantFeatureValueProvider.ProviderName, tenantId.ToString(), fallback);
+        }
+
+        public static Task<List<FeatureNameValueWithGrantedProvider>> GetAllWithProviderForTenantAsync(this IFeatureManager featureManager, Guid tenantId, bool fallback = true)
+        {
+            return featureManager.GetAllWithProviderAsync(TenantFeatureValueProvider.ProviderName, tenantId.ToString(), fallback);
+        }
+
         public static Task SetForTenantAsync(this IFeatureManager featureManager, Guid tenantId, [NotNull] string name, [CanBeNull] string value, bool forceToSet = false)
         {
             return featureManager.SetAsync(name, value, TenantFeatureValueProvider.ProviderName, tenantId.ToString(), forceToSet);

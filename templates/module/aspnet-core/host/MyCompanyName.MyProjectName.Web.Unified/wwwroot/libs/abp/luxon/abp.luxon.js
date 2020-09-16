@@ -9,8 +9,6 @@ var abp = abp || {};
 
     abp.timing = abp.timing || {};
 
-    /* NOTIFICATION *********************************************/
-
     var setObjectValue = function (obj, property, value) {
         if (typeof property === "string") {
             property = property.split('.');

@@ -157,7 +157,7 @@ public class MyLoginModel : LoginModel
 
 ## 重写静态资源
 
-重写模块的静态资源(像JavaScript,Css或图片文件)是很简单的. 只需要在解决方案的相同路径创建文件,虚拟文件系统会自动处理它.
+重写模块的静态资源(像JavaScript,Css或图片文件)是很简单的. 只需要在解决方案的相同路径创建文件,[虚拟文件系统](../../Virtual-File-System.md)会自动处理它.
 
 ## 操作捆绑
 

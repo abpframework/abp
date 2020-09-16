@@ -20,6 +20,11 @@ export const environment = {
   apis: {
     default: {
       url: 'https://localhost:44305',
+      rootNamespace: 'MyCompanyName.MyProjectName',
+    },
+    AbpFeatureManagement: {
+      url: 'https://localhost:44305',
+      rootNamespace: 'Volo.Abp',
     },
   },
 } as Config.Environment;

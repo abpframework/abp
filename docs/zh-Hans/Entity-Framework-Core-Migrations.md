@@ -414,7 +414,10 @@ public static class MyProjectNameEntityExtensions
             ObjectExtensionManager.Instance
                 .MapEfCoreProperty<IdentityRole, string>(
                     "Title",
-                    builder => { builder.HasMaxLength(64); }
+                    (entityBuilder, propertyBuilder) =>
+                    {
+                        propertyBuilder.HasMaxLength(128);
+                    }
                 );
         });
     }
