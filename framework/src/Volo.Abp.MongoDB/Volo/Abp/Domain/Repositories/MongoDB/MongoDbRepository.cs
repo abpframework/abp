@@ -29,6 +29,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public virtual IMongoDatabase Database => DbContext.Database;
 
+        public virtual IClientSessionHandle SessionHandle => DbContext.SessionHandle;
+
         public virtual TMongoDbContext DbContext => DbContextProvider.GetDbContext();
 
         protected IMongoDbContextProvider<TMongoDbContext> DbContextProvider { get; }
@@ -60,10 +62,21 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         {
             await ApplyAbpConceptsForAddedEntityAsync(entity);
 
-            await Collection.InsertOneAsync(
-                entity,
-                cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            if (SessionHandle != null)
+            {
+                await Collection.InsertOneAsync(
+                    SessionHandle,
+                    entity,
+                    cancellationToken: GetCancellationToken(cancellationToken)
+                );
+            }
+            else
+            {
+                await Collection.InsertOneAsync(
+                    entity,
+                    cancellationToken: GetCancellationToken(cancellationToken)
+                );
+            }
 
             return entity;
         }
@@ -88,12 +101,27 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             await TriggerDomainEventsAsync(entity);
 
             var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
+            ReplaceOneResult result;
 
-            var result = await Collection.ReplaceOneAsync(
-                CreateEntityFilter(entity, true, oldConcurrencyStamp),
-                entity,
-                cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            if (SessionHandle != null)
+            {
+                result = await Collection.ReplaceOneAsync(
+                    SessionHandle,
+                    CreateEntityFilter(entity, true, oldConcurrencyStamp),
+                    entity,
+                    cancellationToken: GetCancellationToken(cancellationToken)
+                );
+
+
+            }
+            else
+            {
+                result = await Collection.ReplaceOneAsync(
+                    CreateEntityFilter(entity, true, oldConcurrencyStamp),
+                    entity,
+                    cancellationToken: GetCancellationToken(cancellationToken)
+                );
+            }
 
             if (result.MatchedCount <= 0)
             {
@@ -114,11 +142,25 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
             {
                 softDeleteEntity.IsDeleted = true;
-                var result = await Collection.ReplaceOneAsync(
-                    CreateEntityFilter(entity, true, oldConcurrencyStamp),
-                    entity,
-                    cancellationToken: GetCancellationToken(cancellationToken)
-                );
+                ReplaceOneResult result;
+
+                if (SessionHandle != null)
+                {
+                    result = await Collection.ReplaceOneAsync(
+                        SessionHandle,
+                        CreateEntityFilter(entity, true, oldConcurrencyStamp),
+                        entity,
+                        cancellationToken: GetCancellationToken(cancellationToken)
+                    );
+                }
+                else
+                {
+                    result = await Collection.ReplaceOneAsync(
+                        CreateEntityFilter(entity, true, oldConcurrencyStamp),
+                        entity,
+                        cancellationToken: GetCancellationToken(cancellationToken)
+                    );
+                }
 
                 if (result.MatchedCount <= 0)
                 {
@@ -127,10 +169,23 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             }
             else
             {
-                var result = await Collection.DeleteOneAsync(
-                    CreateEntityFilter(entity, true, oldConcurrencyStamp),
-                    GetCancellationToken(cancellationToken)
-                );
+                DeleteResult result;
+
+                if (SessionHandle != null)
+                {
+                    result = await Collection.DeleteOneAsync(
+                        SessionHandle,
+                        CreateEntityFilter(entity, true, oldConcurrencyStamp),
+                        cancellationToken: GetCancellationToken(cancellationToken)
+                    );
+                }
+                else
+                {
+                    result = await Collection.DeleteOneAsync(
+                        CreateEntityFilter(entity, true, oldConcurrencyStamp),
+                        GetCancellationToken(cancellationToken)
+                    );
+                }
 
                 if (result.DeletedCount <= 0)
                 {
@@ -195,9 +250,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         public virtual IMongoQueryable<TEntity> GetMongoQueryable()
         {
-            return ApplyDataFilters(
-                Collection.AsQueryable()
-            );
+            return ApplyDataFilters(SessionHandle != null ? Collection.AsQueryable(SessionHandle) : Collection.AsQueryable());
         }
         protected virtual bool IsHardDeleted(TEntity entity)
         {
@@ -404,6 +457,13 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
+            if (SessionHandle != null)
+            {
+                return await Collection
+                    .Find(SessionHandle, RepositoryFilterer.CreateEntityFilter(id, true))
+                    .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            }
+
             return await Collection
                 .Find(RepositoryFilterer.CreateEntityFilter(id, true))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));

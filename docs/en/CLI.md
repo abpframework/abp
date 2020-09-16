@@ -40,6 +40,7 @@ Here, the list of all available commands before explaining their details:
 * **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](Localization.md) files in a source control repository.
 * **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
 * **`logout`**: Logouts from your computer if you've authenticated before.
+* **`build`**: Builds a GIT repository and depending repositories or a single .NET solution.
 
 ### help
 
@@ -85,6 +86,8 @@ abp new Acme.BookStore
       * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
       * `angular`: Angular. There are some additional options for this template:
+        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
+      * `blazor`: Blazor. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
       * `none`: Without UI. There are some additional options for this template:
         * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
@@ -357,4 +360,32 @@ Logs you out by removing the session token from your computer.
 ```
 abp logout
 ```
+
+### build
+
+This command builds a GIT repository and it's depending repositories or a single .NET solution File. In order ```build``` command to work, its **executing directory** or passed ```--working-directory``` parameter's directory must contain one of;
+
+* A .NET solution file (*.sln)
+* abp-build-config.json (suggested to add this to .gitignore)
+
+Usage:
+
+````bash
+abp build [options]
+````
+
+Example:
+
+```
+abp build --build-name "prod" --dotnet-build-arguments "\"--no-dependencies\""
+```
+
+#### Options
+
+* ```--working-directory``` or ```-w```: Specifies the working directory. This option is useful when the command is executed outside of a GIT repository or when executing directory doesn't contain a .NET solution file.
+* ```--build-name``` or ```-n```: Specifies a name for the build. This option is useful when same repository is used for more than one different builds. 
+* ```--dotnet-build-arguments``` or ```-a```: Arguments to pass ```dotnet build``` when building project files.  This parameter must be passed like ```"\"{params}\""``` .
+* ```--force``` or ```-f```: Forces to build projects even they are not changed from the last successful build.
+
+For more details, see [build command documentation](CLI-BuildCommand.md).
 
