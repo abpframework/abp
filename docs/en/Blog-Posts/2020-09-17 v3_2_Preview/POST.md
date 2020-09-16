@@ -30,7 +30,33 @@ And some modules have been implemented;
 
 We've selected the [Blazorise](https://blazorise.com/) as a fundamental UI library for the Blazor UI. It already support different HTML/CSS frameworks and significantly increases the developer productivity.
 
+We also have a good news: **[Mladen Macanović](https://github.com/stsrki)**, the creator of the Blazorise, is **joining to the core ABP Framework team** in the next weeks. We are excited to work with him to bring the power of these two successfully projects together.
+
 ### Get started with the Blazor UI
+
+If you want to try the Blazor UI today, follow the instructions below.
+
+First, install the the latest [ABP CLI](https://docs.abp.io/en/abp/latest/CLI) preview version:
+
+````bash
+dotnet tool update Volo.Abp.Cli -g --version 3.2.0-rc.1
+````
+
+Then you can create a new solution using the *abp new* command:
+
+````bash
+abp new AbpBlazorDemo -u blazor
+````
+
+> See the ABP CLI documentation for the additional options, like MongoDB database or separated authentication server.
+
+Open the generated solution using the latest Visual Studio 2019. You will see a solution structure like the picture below:
+
+TODO
+
+* Run the `.DbMigrator` project to create the database and seed the initial data.
+* Run the `HttpApi.Host` project for the server side.
+* Run the `.Blazor` project to start the Blazor UI.
 
 TODO
 
