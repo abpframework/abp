@@ -49,6 +49,10 @@ export class ConfigStateService {
     return this.store.selectSnapshot(ConfigState.getLocalization(...args));
   }
 
+  getLocalizationResource(...args: Parameters<typeof ConfigState.getLocalizationResource>) {
+    return this.store.selectSnapshot(ConfigState.getLocalizationResource(...args));
+  }
+
   dispatchGetAppConfiguration() {
     return this.store.dispatch(new GetAppConfiguration());
   }

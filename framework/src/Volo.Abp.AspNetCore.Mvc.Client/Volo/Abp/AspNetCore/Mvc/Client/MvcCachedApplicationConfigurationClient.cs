@@ -12,14 +12,14 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
 {
-    public class CachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
+    public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
     {
         protected IHttpContextAccessor HttpContextAccessor { get; }
         protected IHttpClientProxy<IAbpApplicationConfigurationAppService> Proxy { get; }
         protected ICurrentUser CurrentUser { get; }
         protected IDistributedCache<ApplicationConfigurationDto> Cache { get; }
 
-        public CachedApplicationConfigurationClient(
+        public MvcCachedApplicationConfigurationClient(
             IDistributedCache<ApplicationConfigurationDto> cache,
             IHttpClientProxy<IAbpApplicationConfigurationAppService> proxy,
             ICurrentUser currentUser,
@@ -29,6 +29,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             CurrentUser = currentUser;
             HttpContextAccessor = httpContextAccessor;
             Cache = cache;
+        }
+
+        public async Task InitializeAsync()
+        {
+            await GetAsync();
         }
 
         public async Task<ApplicationConfigurationDto> GetAsync()
@@ -56,6 +61,19 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             }
 
             return configuration;
+        }
+
+        public ApplicationConfigurationDto Get()
+        {
+            var cacheKey = CreateCacheKey();
+            var httpContext = HttpContextAccessor?.HttpContext;
+
+            if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
+            {
+                return configuration;
+            }
+
+            return AsyncHelper.RunSync(GetAsync);
         }
 
         protected virtual string CreateCacheKey()

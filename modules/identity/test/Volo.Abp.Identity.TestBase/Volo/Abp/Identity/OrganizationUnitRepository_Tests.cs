@@ -59,22 +59,6 @@ namespace Volo.Abp.Identity
             var ous = await _organizationUnitRepository.GetListAsync(ouIds);
             ous.Count.ShouldBe(2);
             ous.ShouldContain(ou => ou.Id == ouIds.First());
-
-            var ou11 = await _organizationUnitRepository.GetAsync("OU11");
-            ou11.ShouldNotBeNull();
-            var ou11Children = await _organizationUnitRepository.GetListAsync(ou11.Id, includeDetails: true);
-            ou11Children.Count.ShouldBe(2);
-        }
-
-        [Fact]
-        public async Task GetLongCountAsync()
-        {
-            (await _organizationUnitRepository.GetLongCountAsync(_guidGenerator.Create(), filter: "11")).ShouldBe(0);
-            var countRoot = await _organizationUnitRepository.GetLongCountAsync(null, filter: "1");
-            countRoot.ShouldBe(1);
-            var ou11 = await _organizationUnitRepository.GetAsync("OU11");
-            ou11.ShouldNotBeNull();
-            (await _organizationUnitRepository.GetLongCountAsync(ou11.Id, "2")).ShouldBe(1);
         }
 
         [Fact]
@@ -208,7 +192,7 @@ namespace Volo.Abp.Identity
         {
             OrganizationUnit ou1 = await _organizationUnitRepository.GetAsync("OU111", true);
             OrganizationUnit ou2 = await _organizationUnitRepository.GetAsync("OU112", true);
-            var users = await _identityUserRepository.GetUsersInOrganizationsListAsync(new List<Guid> { ou1.Id, ou2.Id });
+            var users = await _identityUserRepository.GetUsersInOrganizationsListAsync(new List<Guid> {ou1.Id, ou2.Id});
             users.Count.ShouldBeGreaterThan(0);
         }
 

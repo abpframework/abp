@@ -76,6 +76,12 @@
     "Permission:ChangePermissions": "Change permissions",
     "Permission:UserManagement": "User management",
     "Permission:UserLookup": "User lookup",
+    "Feature:IdentityGroup": "Identity",
+    "Feature:TwoFactor": "Two Factor",
+    "Feature:TwoFactorDescription": "Two Factor",
+    "Feature:TwoFactor.Optional": "Optional",
+    "Feature:TwoFactor.Disabled": "Disabled",
+    "Feature:TwoFactor.Forced": "Forced",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Required length",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Required unique characters number",
     "DisplayName:Abp.Identity.Password.RequireNonAlphanumeric": "Required non-alphanumeric character",
@@ -103,6 +109,10 @@
     "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "Whether the phoneNumber can be confirmed by the user.",
     "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "Whether a confirmed telephone number is required to sign in.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "Whether the username can be updated by the user.",
-    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user."
+    "Description:Abp.Identity.User.IsEmailUpdateEnabled": "Whether the email can be updated by the user.",
+    "DisplayName:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
+    "Description:Abp.Identity.TwoFactorBehaviour": "Two Factor behaviour",
+    "DisplayName:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor.",
+    "Description:Abp.Identity.UsersCanChange": "Allow users to change their Two Factor."
   }
 }
