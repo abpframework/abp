@@ -1,5 +1,5 @@
 import { PermissionManagement } from '../models/permission-management';
-import { UpdatePermissionsDto } from '../proxy/permission-management/models';
+import { UpdatePermissionsDto } from '../proxy/models';
 
 export class GetPermissions {
   static readonly type = '[PermissionManagement] Get Permissions';

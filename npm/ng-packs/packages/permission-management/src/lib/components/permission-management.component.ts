@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
-import { UpdatePermissionDto } from '../proxy/permission-management/models';
+import { UpdatePermissionDto } from '../proxy/models';
 import { PermissionManagementState } from '../states/permission-management.state';
 
 type PermissionWithStyle = PermissionManagement.Permission & {

@@ -1,10 +1,9 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
-import { PermissionManagementService } from '../services/permission-management.service';
-import { tap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { PermissionsService } from '../proxy/permission-management/permissions.service';
+import { PermissionsService } from '../proxy/permissions.service';
 
 @State<PermissionManagement.State>({
   name: 'PermissionManagementState',
