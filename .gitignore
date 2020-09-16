@@ -303,4 +303,4 @@ modules/virtual-file-explorer/app/Volo.Abp.VirtualFileExplorer.DemoApp/Logs/
 /templates/app/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/package-lock.json
 /templates/app/angular/package-lock.json
 /modules/client-simulation/demo/Volo.ClientSimulation.Demo/package-lock.json
-
+abp-build-config.json
