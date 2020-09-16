@@ -12,7 +12,7 @@ namespace Volo.Abp.MongoDB
     public class MongoModelSource : IMongoModelSource, ISingletonDependency
     {
         protected readonly ConcurrentDictionary<Type, MongoDbContextModel> ModelCache = new ConcurrentDictionary<Type, MongoDbContextModel>();
-        
+
         public virtual MongoDbContextModel GetModel(AbpMongoDbContext dbContext)
         {
             return ModelCache.GetOrAdd(
@@ -26,7 +26,7 @@ namespace Volo.Abp.MongoDB
             var modelBuilder = CreateModelBuilder();
             BuildModelFromDbContextType(modelBuilder, dbContext.GetType());
             BuildModelFromDbContextInstance(modelBuilder, dbContext);
-            return modelBuilder.Build();
+            return modelBuilder.Build(dbContext);
         }
 
         protected virtual MongoModelBuilder CreateModelBuilder()
