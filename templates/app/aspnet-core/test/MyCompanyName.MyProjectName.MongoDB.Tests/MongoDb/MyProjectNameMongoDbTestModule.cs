@@ -13,7 +13,7 @@ namespace MyCompanyName.MyProjectName.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var connectionString = MongoDbFixture.ConnectionString.EnsureEndsWith('/')  +
+            var connectionString = MyProjectNameMongoDbFixture.ConnectionString.EnsureEndsWith('/')  +
                                    "Db_" +
                                    Guid.NewGuid().ToString("N");
 

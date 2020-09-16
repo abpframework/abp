@@ -4,11 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using MyCompanyName.MyProjectName.Data;
 using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.MongoDB;
 
 namespace MyCompanyName.MyProjectName.MongoDB
 {
-    public class MongoDbMyProjectNameDbSchemaMigrator : IMyProjectNameDbSchemaMigrator
+    public class MongoDbMyProjectNameDbSchemaMigrator : IMyProjectNameDbSchemaMigrator , ITransientDependency
     {
         private readonly IServiceProvider _serviceProvider;
 
