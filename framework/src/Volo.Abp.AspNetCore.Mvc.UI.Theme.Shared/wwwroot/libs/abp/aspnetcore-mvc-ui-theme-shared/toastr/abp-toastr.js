@@ -12,12 +12,6 @@
     /* NOTIFICATION *********************************************/
 
     var showNotification = function (type, message, title, options) {
-        if (!options) {
-            options = {};
-        }
-        if (options.escapeHtml === undefined) {
-            options.escapeHtml = true;
-        }
         toastr[type](message, title, options);
     };
 
