@@ -5,9 +5,9 @@ using Volo.Abp.Features;
 
 namespace Volo.Abp.Identity.Features
 {
-    public static class IdentityFeatureCheckerExtensions
+    public static class IdentityTwoFactorBehaviourFeatureHelper
     {
-        public static async Task<IdentityTwoFactorBehaviour> GetIdentityTwoFactorBehaviour([NotNull] this IFeatureChecker featureChecker)
+        public static async Task<IdentityTwoFactorBehaviour> Get([NotNull] IFeatureChecker featureChecker)
         {
             Check.NotNull(featureChecker, nameof(featureChecker));
 
