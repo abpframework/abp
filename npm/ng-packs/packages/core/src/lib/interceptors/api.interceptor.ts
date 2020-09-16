@@ -15,6 +15,7 @@ export class ApiInterceptor implements HttpInterceptor {
 
     const headers = {} as any;
 
+    // TODO: utilize getHeaders method here WITH GREAT CARE!
     const token = this.oAuthService.getAccessToken();
     if (!request.headers.has('Authorization') && token) {
       headers['Authorization'] = `Bearer ${token}`;
@@ -37,5 +38,26 @@ export class ApiInterceptor implements HttpInterceptor {
         }),
       )
       .pipe(finalize(() => this.store.dispatch(new StopLoader(request))));
+  }
+
+  getHeaders() {
+    const headers = {} as any;
+
+    const token = this.oAuthService.getAccessToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const lang = this.store.selectSnapshot(SessionState.getLanguage);
+    if (lang) {
+      headers['Accept-Language'] = lang;
+    }
+
+    const tenant = this.store.selectSnapshot(SessionState.getTenant);
+    if (tenant) {
+      headers['__tenant'] = tenant.id;
+    }
+
+    return headers;
   }
 }
