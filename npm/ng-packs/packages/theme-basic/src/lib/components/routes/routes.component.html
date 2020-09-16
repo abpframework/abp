@@ -8,7 +8,7 @@
 
   <ng-template #defaultLink let-route>
     <li class="nav-item" *abpPermission="route.requiredPolicy">
-      <a (click)="navigating = true" class="nav-link" [routerLink]="[route.path]"
+      <a class="nav-link" [routerLink]="[route.path]"
         ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
         {{ route.name | abpLocalization }}</a
       >
@@ -60,7 +60,7 @@
 
   <ng-template #defaultChild let-child>
     <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
-      <a (click)="navigating = true" class="dropdown-item" [routerLink]="[child.path]">
+      <a class="dropdown-item" [routerLink]="[child.path]" (click)="closeDropdown()">
         <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
         {{ child.name | abpLocalization }}</a
       >
@@ -91,7 +91,6 @@
         #childrenContainer
         class="dropdown-menu border-0 shadow-sm"
         [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
-        [class.d-none]="navigating"
       >
         <ng-container *ngTemplateOutlet="forTemplate; context: { $implicit: child }"></ng-container>
       </div>
