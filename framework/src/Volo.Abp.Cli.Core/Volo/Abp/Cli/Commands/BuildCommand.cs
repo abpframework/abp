@@ -59,7 +59,7 @@ namespace Volo.Abp.Cli.Commands
                 changedProjectFiles,
                 dotnetBuildArguments ?? ""
             );
-
+            
             var buildStatus = BuildStatusGenerator.Generate(
                 buildConfig,
                 changedProjectFiles,

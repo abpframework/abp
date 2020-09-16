@@ -45,7 +45,13 @@ namespace Volo.Abp.Cli.Build
 
             foreach (var dependingRepository in buildConfig.GitRepository.DependingRepositories)
             {
-                GenerateBuildStatusInternal(dependingRepository, changedProjects, buildSucceededProjects, status);
+                GenerateBuildStatusInternal(
+                    buildConfig,
+                    dependingRepository,
+                    changedProjects,
+                    buildSucceededProjects,
+                    status
+                );
             }
 
             return status;
@@ -60,7 +66,7 @@ namespace Volo.Abp.Cli.Build
             {
                 return false;
             }
-
+            
             if (changedProjects.Count == 0 || buildSucceededProjects.Count == 0)
             {
                 return false;
@@ -70,6 +76,7 @@ namespace Volo.Abp.Cli.Build
         }
 
         private void GenerateBuildStatusInternal(
+            DotNetProjectBuildConfig buildConfig,
             GitRepository gitRepository,
             List<DotNetProjectInfo> changedProjects,
             List<string> buildSucceededProjects,
@@ -81,10 +88,12 @@ namespace Volo.Abp.Cli.Build
             var dependingRepositoryStatus = new GitRepositoryBuildStatus(
                 gitRepository.Name,
                 repoFriendlyName
-            )
+            );
+            
+            if (ShouldUpdateRepositoryCommitId(buildConfig, changedProjects, buildSucceededProjects))
             {
-                CommitId = lastCommitId
-            };
+                dependingRepositoryStatus.CommitId = lastCommitId;
+            }
 
             dependingRepositoryStatus.SucceedProjects = changedProjects.Where(p =>
                     p.RepositoryName == gitRepository.Name &&
@@ -99,6 +108,7 @@ namespace Volo.Abp.Cli.Build
             foreach (var dependingRepository in gitRepository.DependingRepositories)
             {
                 GenerateBuildStatusInternal(
+                    buildConfig,
                     dependingRepository,
                     changedProjects,
                     buildSucceededProjects,

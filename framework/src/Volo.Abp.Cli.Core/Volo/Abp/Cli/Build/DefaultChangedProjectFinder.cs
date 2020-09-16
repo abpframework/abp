@@ -194,8 +194,6 @@ namespace Volo.Abp.Cli.Build
                         continue;
                     }
 
-                    x = 5;
-                    
                     // Filter ignored directories
                     var isIgnored = repository.IgnoredDirectories.Any(ignoredDirectory =>
                         csProjPath.StartsWith(Path.Combine(repository.RootPath, ignoredDirectory)));
