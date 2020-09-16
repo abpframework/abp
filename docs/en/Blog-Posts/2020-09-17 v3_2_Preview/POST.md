@@ -56,15 +56,15 @@ abp new AbpBlazorDemo -u blazor
 
 Open the generated solution using the latest Visual Studio 2019. You will see a solution structure like the picture below:
 
-TODO
+TODO: Screenshot
 
 * Run the `.DbMigrator` project to create the database and seed the initial data.
 * Run the `HttpApi.Host` project for the server side.
 * Run the `.Blazor` project to start the Blazor UI.
 
-Use `admin` as the username as `1q2w3E*` as the password to login to the application.
+Use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
-TODO
+TODO: Screenshot
 
 ## What's New with the ABP Framework 3.2
 
@@ -118,10 +118,6 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 See the issue [#5304](https://github.com/abpframework/abp/issues/5304) for the details.
 
-### Account Module: Profile Management Page Extensions
-
-TODO
-
 ### ABP Build Command
 
 We are using **mono repository** approach and the [abp repository](https://github.com/abpframework/abp) has tens of solutions and hundreds of projects (the framework, modules, tooling, templates...) with all of them are referencing to each other.
@@ -142,6 +138,7 @@ We will use this command to build the abp repository or a solution inside it. Ho
 * Improved the feature management modal for multi-tenant applications to group features on the UI and show hierarchically.
 * Added `--skip-cli-version-check` option to ABP CLI to improve the performance by bypassing the online version check.
 * Angular UI now redirect to MVC UI (the authentication server side) for profile management page, if the authorization code flow is used (which is the default).
+* Account module profile management page is now extensible. You can implement the `IProfileManagementPageContributor` interface and register it using the `ProfileManagementPageOptions` class.
 * Improvements and optimizations for the [Angular service proxy generation](https://blog.abp.io/abp/Introducing-the-Angular-Service-Proxy-Generation).
 
 And a lot of minor improvements and bug fixes. You can see [the milestone 3.2](https://github.com/abpframework/abp/milestone/39?closed=1) for all issues & PRs closed with this version.
